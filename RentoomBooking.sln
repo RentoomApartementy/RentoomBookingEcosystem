@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36327.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.Api", "Api\RentoomBooking.Api.csproj", "{D911E029-F295-4090-9205-78B66F84E132}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.SharedFrontend", "SharedFrontend\RentoomBooking.SharedFrontend.csproj", "{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.SharedClasses", "SharedClasses\RentoomBooking.SharedClasses.csproj", "{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.StayWell", "StayWell\RentoomBooking.StayWell.csproj", "{34705C9D-DF8F-2680-5A79-BD24397458D8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE} = {2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}
+		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84} = {9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomWebsite", "RentoomWebsite\RentoomWebsite.csproj", "{B579876F-152A-42D7-8C9E-A8844F58513D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D911E029-F295-4090-9205-78B66F84E132}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D911E029-F295-4090-9205-78B66F84E132}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D911E029-F295-4090-9205-78B66F84E132}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D911E029-F295-4090-9205-78B66F84E132}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34705C9D-DF8F-2680-5A79-BD24397458D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34705C9D-DF8F-2680-5A79-BD24397458D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34705C9D-DF8F-2680-5A79-BD24397458D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34705C9D-DF8F-2680-5A79-BD24397458D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B579876F-152A-42D7-8C9E-A8844F58513D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B579876F-152A-42D7-8C9E-A8844F58513D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B579876F-152A-42D7-8C9E-A8844F58513D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B579876F-152A-42D7-8C9E-A8844F58513D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0D0D443B-5F7D-4816-A8B4-CCD042EABAA3}
+	EndGlobalSection
+EndGlobal
