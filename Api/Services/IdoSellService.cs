@@ -22,6 +22,7 @@ namespace RentoomBooking.Api.Services
     {
         private string? baseAPIUrl;
         private string? systemUser;
+        private string? systemPwd;
 
         private readonly HttpClient _httpClient;
         private readonly Container _objectsContainer;
@@ -40,6 +41,7 @@ namespace RentoomBooking.Api.Services
 
             baseAPIUrl = configuration["IDOBOOKING_BASE_API_URL"];
             systemUser = configuration["IDOBOOKING_API_USER"];
+            systemPwd = configuration["IDOBOOKING_API_PWD"];
             if (string.IsNullOrEmpty(baseAPIUrl))
             {
                 _logger.LogError("IDOBOOKING_BASE_API_URL is not configured in local.settings.json or environment variables.");
@@ -177,7 +179,7 @@ namespace RentoomBooking.Api.Services
             _logger.LogInformation($"FetchApartmentsFromIdoSellAsync page={page}");
             var request = new
             {
-                authenticate = new  { systemKey = GenerateKey(HashPassword("Apibnb1234")), systemLogin = systemUser, lang = "eng" },
+                authenticate = new  { systemKey = GenerateKey(HashPassword(systemPwd)), systemLogin = systemUser, lang = "eng" },
                 result = new  { page = page, number = 100 },
             
             };
