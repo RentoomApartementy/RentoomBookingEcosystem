@@ -2,11 +2,12 @@
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Services;
+using System.Net.Http;
 using System.Text;
 
 namespace RentoomWebsite.Services
 {
-    public interface xxIApartmentsService
+    public interface IApartmentsService
     {
         Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
             string? continuationToken = null,
@@ -23,11 +24,11 @@ namespace RentoomWebsite.Services
      
     
 
-    public class xxApartmentsService : xxIApartmentsService
+    public class ApartmentsService : IApartmentsService
     {
         private readonly IHttpClientFactory _factory;
         BookingDatabase _bd;
-        public xxApartmentsService(IHttpClientFactory factory, BookingDatabase bd)
+        public ApartmentsService(IHttpClientFactory factory, BookingDatabase bd)
         {
             _factory = factory;
             _bd = bd;
