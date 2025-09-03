@@ -1,0 +1,26 @@
+nav {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+ul {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    justify-content: space-evenly;
+    text-decoration: none;
+    list-style: none;
+    margin: 0;
+}
+
+li {
+    margin-right: auto;
+}
+
+.bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

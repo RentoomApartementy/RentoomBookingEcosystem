@@ -1,0 +1,34 @@
+@inherits ComponentBase;
+@using RentoomWebsite.Shared
+
+<nav
+    aria-label="Główne menu strony">
+    <img src="/assets/svgs/logo-white.svg" alt="Ikona Rentoom">
+    <ul>
+        <li>
+            <NavLink href="/" class="nav-link" ActiveClass="nav-link" title="Przejdź na podstrone apartamenty">Apartamenty</NavLink>
+        </li>
+        <li>
+            <NavLink href="/o-nas" class="nav-link" ActiveClass="nav-link" title="Przejdź na podstrone o nas">O nas</NavLink>
+        </li>
+        <li>
+            <NavLink href="/wspolpraca" class="nav-link" ActiveClass="nav-link" title="Przejdź na podstrone współpraca">Współpraca</NavLink>
+        </li>
+        <li>
+            <NavLink href="/kontakt" class="nav-link" ActiveClass="nav-link" title="Przejdź na podstrone kontakt">Kontakt</NavLink>
+        </li>
+        <li>
+            <NavLink href="/rentoom-designer" class="nav-link" ActiveClass="nav-link" title="Przejdź na podstrone Rentoom Designer">Rentoom Designer</NavLink>
+        </li>
+        <li>
+            <NavLink href="/inne" class="nav-link" ActiveClass="nav-link" title="Przejdź na podstrone inne">Inne</NavLink>
+        </li>
+    </ul>
+    
+    <div class="bar">
+        <Button>Zadzwoń</Button>
+        <img src="/assets/svgs/search-white.svg" alt="Ikona lupy">
+        <img src="/assets/svgs/fb-white.svg" alt="Ikona Facebook">
+        <img src="/assets/svgs/ig-white.svg" alt="Ikona Instagram">
+    </div>
+</nav>
