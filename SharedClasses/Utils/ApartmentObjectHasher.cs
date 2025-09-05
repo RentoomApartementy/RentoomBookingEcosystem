@@ -3,7 +3,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 
-namespace RentoomBooking.Api.Utils
+namespace RentoomBooking.SharedClasses.Utils
 {
     public static class ApartmentObjectHasher
     {

@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RentoomBooking.Api.Database;
-using RentoomBooking.Api.Models;
-using RentoomBooking.Api.Utils;
 using RentoomBooking.SharedClasses;
+using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,9 +13,9 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using static RentoomBooking.Api.Database.BookingDatabase;
 
-namespace RentoomBooking.Api.Services
+
+namespace RentoomBooking.SharedClasses.Services
 {
     public  class IdoSellService
     {
@@ -31,12 +30,12 @@ namespace RentoomBooking.Api.Services
         private const string HashDocumentId = "all-object-hashes"; // ID for the hash document
         private const string HashPartitionKey = "/id"; // Partition key for the hash container
         private BookingDatabase _bookingDatabase;
-        private ILogger<GetAllApartmentObjectsFunction> _logger;
+        private ILogger<IdoSellService> _logger;
 
-        public IdoSellService(HttpClient httpClient, ILogger<GetAllApartmentObjectsFunction> logger, BookingDatabase bookingDatabase, IConfiguration configuration)//, CosmosClient cosmosClient)
+        public IdoSellService(HttpClient httpClient,BookingDatabase bookingDatabase,  IConfiguration configuration)//, CosmosClient cosmosClient)
         {
             _httpClient = httpClient;
-            _logger = logger;
+
             _bookingDatabase = bookingDatabase;
 
             baseAPIUrl = configuration["IDOBOOKING_BASE_API_URL"];
