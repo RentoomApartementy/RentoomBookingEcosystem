@@ -1,0 +1,90 @@
+@inherits ComponentBase
+@inject IJSRuntime JS
+
+<nav class="@NavState.NavClass" aria-label="Główne menu strony">
+    <img src="@NavState.Logo" alt="Ikona Rentoom">
+    <ul>
+        <li>
+            <NavLink href="/" class="@NavState.NavLinkClass" ActiveClass="nav-link">Apartamenty</NavLink>
+        </li>
+        <li>
+            <NavLink href="/o-nas" class="@NavState.NavLinkClass" ActiveClass="nav-link">O nas</NavLink>
+        </li>
+        <li>
+            <NavLink href="/wspolpraca" class="@NavState.NavLinkClass" ActiveClass="nav-link">Współpraca</NavLink>
+        </li>
+        <li>
+            <NavLink href="/kontakt" class="@NavState.NavLinkClass" ActiveClass="nav-link">Kontakt</NavLink>
+        </li>
+        <li>
+            <NavLink href="/rentoom-designer" class="@NavState.NavLinkClass" ActiveClass="nav-link">Rentoom Designer</NavLink>
+        </li>
+        <li>
+            <NavLink href="/inne" class="@NavState.NavLinkClass" ActiveClass="nav-link">Inne</NavLink>
+        </li>
+    </ul>
+
+    <div class="bar">
+        <Button>Zadzwoń</Button>
+        <img src="@NavState.Search" alt="Ikona lupy">
+        <img src="@NavState.Facebook" alt="Ikona Facebook">
+        <img src="@NavState.Instagram" alt="Ikona Instagram">
+    </div>
+</nav>
+
+@code {
+    private DotNetObjectReference<Menu>? objRef;
+
+    private MenuVisualState NavState { get; set; } = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
+            await module.InvokeVoidAsync("init", objRef);
+        }
+    }
+
+    [JSInvokable]
+    public void OnScrollChanged(double scrollTop)
+    {
+        NavState = scrollTop > 0
+            ? new MenuVisualState
+            {
+                NavClass = "scrolled-nav",
+                NavLinkClass = "scrolled-nav-link nav-link",
+                Logo = "/assets/svgs/logo-color.svg",
+                Search = "/assets/svgs/search-green.svg",
+                Facebook = "/assets/svgs/fb-green.svg",
+                Instagram = "/assets/svgs/ig-green.svg"
+            }
+            : new MenuVisualState
+            {
+                NavClass = "top-nav",
+                NavLinkClass = "nav-link",
+                Logo = "/assets/svgs/logo-white.svg",
+                Search = "/assets/svgs/search-white.svg",
+                Facebook = "/assets/svgs/fb-white.svg",
+                Instagram = "/assets/svgs/ig-white.svg"
+            };
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        objRef?.Dispose();
+    }
+
+    private class MenuVisualState
+    {
+        public string NavClass { get; set; } = "top-nav";
+        public string NavLinkClass { get; set; } = "nav-link";
+        public string Logo { get; set; } = "/assets/svgs/logo-white.svg";
+        public string Search { get; set; } = "/assets/svgs/search-white.svg";
+        public string Facebook { get; set; } = "/assets/svgs/fb-white.svg";
+        public string Instagram { get; set; } = "/assets/svgs/ig-white.svg";
+    }
+}
