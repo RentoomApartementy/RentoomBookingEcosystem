@@ -21,6 +21,12 @@ ul {
     margin: 0;
 }
 
+@media (max-width: 1050px) {
+    ul {
+        display: none;
+    }
+}
+
 li {
     margin-right: auto;
 }
