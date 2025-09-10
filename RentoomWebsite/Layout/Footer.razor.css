@@ -48,9 +48,8 @@
     text-align: center;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
     .footer-section {
-        padding-left: 3rem;
         align-items: start;
         text-align: left;
     }
@@ -159,7 +158,5 @@
         border-right: 2px solid #ffffff;
         padding-bottom: 0;
     }
-    
-    
     
 }
