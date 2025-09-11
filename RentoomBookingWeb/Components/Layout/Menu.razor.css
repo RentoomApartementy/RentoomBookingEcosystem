@@ -4,6 +4,7 @@ nav {
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1rem;
+    z-index: 10;
 }
 
 .scrolled-nav {
@@ -21,6 +22,35 @@ ul {
     margin: 0;
 }
 
+.menu-icon {
+    cursor: pointer;
+    user-select: none;
+}
+
+@media (max-width: 1050px) {
+    ul {
+        display: none;
+    }
+
+    .menu-button {
+        display: none;
+    }
+    
+    .fb {
+        display: none !important;
+    }
+
+    .ig {
+        display: none !important;
+    }
+}
+
+@media (min-width: 1050px) {
+    .burger {
+        display: none !important;
+    }
+}
+
 li {
     margin-right: auto;
 }
@@ -29,4 +59,18 @@ li {
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+.mobile-nav {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #20553E;
+    z-index: -1;
 }
