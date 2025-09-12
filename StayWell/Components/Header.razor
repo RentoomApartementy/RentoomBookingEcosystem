@@ -1,0 +1,19 @@
+﻿<div class="header">
+    <div class="parent">
+        <div class="logo">LOGO</div>
+        <div class="name">StayWell</div>
+        <div class="reservation-id"> @reservationId </div>
+        <div class="contact">
+            <NavLink>
+                <img src="/icons/phone.svg" />
+            </NavLink>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public string reservationId { get; set; } = "26495";
+
+
+}
