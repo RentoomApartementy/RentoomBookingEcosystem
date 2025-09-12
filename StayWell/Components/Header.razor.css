@@ -1,0 +1,42 @@
+﻿.header {
+    background-color: indianred;
+    width: 100%;
+    height: 100%;
+}
+
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+}
+
+.logo {
+    grid-row: span 2 / span 2;
+    background-color: hotpink;
+}
+
+
+.name {
+    align-content: center;
+    grid-column-start: 2;
+    grid-row-start: 1;
+}
+
+.reservation-id {
+    grid-column-start: 2;
+    grid-row-start: 2;
+    text-decoration: underline;
+}
+
+.contact {
+    align-content: center;
+    background-color: mediumpurple;
+    grid-row: span 2 / span 2;
+    grid-column-start: 4;
+    grid-row-start: 1;
+}
+        
