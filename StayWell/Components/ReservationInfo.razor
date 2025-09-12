@@ -1,0 +1,19 @@
+﻿<div class="parent">
+    <div class="apartment-name">@apartmentName</div>
+    <div class="apartment-full-adress">@apartmentAdress #@apartmentNumber</div>
+    <div class="check-in">Zameldowanie:</div>
+    <div class="check-out">Wymeldowanie:</div>
+    <div class="check-in-date">@reservationCheckInDate</div>
+    <div class="check-out-date">@reservationCheckOutDate</div>
+</div>
+
+
+
+
+@code {
+    [Parameter] public string? apartmentName { get; set; } = "Apartament A'Trapa";
+    [Parameter] public string? apartmentAdress { get; set; } = "Szerokosci 6";
+    [Parameter] public string? apartmentNumber { get; set; } = "9";
+    [Parameter] public string? reservationCheckInDate { get; set; } = "20.05.2025, 15:00";
+    [Parameter] public string? reservationCheckOutDate { get; set; } = "30.05.2025, 11:00";
+}

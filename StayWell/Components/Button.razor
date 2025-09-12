@@ -1,0 +1,16 @@
+﻿<button class="button" @onclick=@OnClick style="@ButtonStyle">
+    <span class="icon">
+        @Icon
+    </span>
+    <span class="text">
+        @Text
+    </span>
+</button>
+
+@code {
+    [Parameter] public string Text { get; set; } = string.Empty;
+    [Parameter] public RenderFragment? Icon { get; set; }
+    [Parameter] public string? ButtonStyle { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; } = EventCallback.Empty;
+
+}
