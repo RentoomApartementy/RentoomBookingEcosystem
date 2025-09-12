@@ -44,3 +44,19 @@
     justify-content: center;
     z-index: 10;
 }
+
+@media (min-width: 700px) {
+
+    .layout-header{
+        width: 700px;
+    }
+
+    .layout-body {
+        width: 700px;
+    }
+
+    .layout-footer-nav{
+        width: 700px;
+    }
+
+}

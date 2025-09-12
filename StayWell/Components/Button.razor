@@ -1,4 +1,4 @@
-﻿<button class="button" @onclick=@OnClick style="@ButtonStyle">
+﻿<button class="button" @onclick=@OnClick style="@ButtonStyle" disabled="@Disabled">
     <span class="icon">
         @Icon
     </span>
@@ -12,5 +12,5 @@
     [Parameter] public RenderFragment? Icon { get; set; }
     [Parameter] public string? ButtonStyle { get; set; }
     [Parameter] public EventCallback OnClick { get; set; } = EventCallback.Empty;
-
+    [Parameter] public bool Disabled { get; set; } = false;
 }

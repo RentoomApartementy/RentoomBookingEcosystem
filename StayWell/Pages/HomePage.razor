@@ -1,5 +1,6 @@
-﻿@page "/"
+﻿@page "/HomePage"
 @using RentoomBooking.StayWell.Components
+@inject NavigationManager Navigation
 
 <PageTitle>Main</PageTitle>
 
@@ -16,31 +17,32 @@
 </div>
 
 <div class="buttons-wrapper">
-    <Button Text="Klub Korzyści Rentoom" ButtonStyle="background-color: #21573e; margin-bottom: 2rem;">
+
+    <Button OnClick="@(() => Navigation.NavigateTo("/"))" Text="Klub Korzyści Rentoom" ButtonStyle="border-color: #F9B806; color: #F9B806; background-color: #21573e; margin-bottom: 2rem;">
         <Icon>
             <img src="/icons/hand-coins.svg">
         </Icon>
     </Button>
 
-    <Button Text="Instrukcja Zameldowania">
+    <Button OnClick="@(() => Navigation.NavigateTo("/Instructions"))" Text="Instrukcja Zameldowania">
         <Icon>
             <img src="/icons/book.svg">
         </Icon>
     </Button>
 
-    <Button Text="Otwórz Apartament">
+    <Button OnClick="@(() => Navigation.NavigateTo("/OpenApartment"))" Text="Otwórz Apartament">
         <Icon>
             <img src="/icons/door-open.svg">
         </Icon>
     </Button>
 
-    <Button Text="O rezerwacji">
+    <Button OnClick="@(() => Navigation.NavigateTo("/AboutReservation"))" Text="O rezerwacji">
         <Icon>
             <img src="/icons/info.svg">
         </Icon>
     </Button>
 
-    <Button Text="Zarządzaj pobytem">
+    <Button OnClick="@(() => Navigation.NavigateTo("/ManageStay"))" Text="Zarządzaj pobytem">
         <Icon>
             <img src="/icons/lamp.svg">
         </Icon>

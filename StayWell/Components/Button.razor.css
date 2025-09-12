@@ -43,3 +43,14 @@
 /*    button:active .icon {
                 filter: invert(1);
     }*/
+
+    button:disabled {
+        background-color: lightgray;
+        border-color: gray;
+        color: gray;
+        cursor: not-allowed;
+    }
+
+    button:disabled .icon {
+        filter: grayscale(1);
+    }

@@ -1,0 +1,17 @@
+﻿
+<div class="parent">
+    <div class="icon">
+        @Icon
+    </div>
+    <div class="description">
+        <span>
+            @DescriptionText
+        </span>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public string DescriptionText { get; set; } = string.Empty;
+    [Parameter] public RenderFragment? Icon { get; set; }
+}
