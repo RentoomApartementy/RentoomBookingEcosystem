@@ -3,15 +3,27 @@
     <div class="icon">
         @Icon
     </div>
-    <div class="description">
-        <span>
-            @DescriptionText
-        </span>
-    </div>
+    @if(DescriptionContent is not null)
+    {
+        <div class="description">
+            <span>
+                @DescriptionContent
+            </span>
+        </div>
+    }
+    @if(DescriptionText != string.Empty)
+    {
+        <div class="description">
+            <span>
+                @DescriptionText
+            </span>
+        </div>
+    }
 </div>
 
 
 @code {
     [Parameter] public string DescriptionText { get; set; } = string.Empty;
     [Parameter] public RenderFragment? Icon { get; set; }
+    [Parameter] public RenderFragment? DescriptionContent { get; set; }
 }
