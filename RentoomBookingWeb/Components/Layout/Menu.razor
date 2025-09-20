@@ -4,10 +4,12 @@
 
 <div>
     <nav class="@NavState.NavClass" aria-label="Główne menu strony">
-        <img src="@NavState.Logo" alt="Ikona Rentoom">
+        <NavLink href="/">
+            <img src="@NavState.Logo" alt="Ikona Rentoom">
+        </NavLink>
         <ul>
             <li>
-                <NavLink href="/" class="@NavState.NavLinkClass" ActiveClass="nav-link">Apartamenty</NavLink>
+                <NavLink href="/apartments" class="@NavState.NavLinkClass" ActiveClass="nav-link">Apartamenty</NavLink>
             </li>
             <li>
                 <NavLink href="/o-nas" class="@NavState.NavLinkClass" ActiveClass="nav-link">O nas</NavLink>
@@ -41,7 +43,7 @@
             {
                 <img @onclick="OnBurgerClick" src="@NavState.Burger" class="menu-icon burger" alt="Ikona Burger">
             }
- 
+
         </div>
     </nav>
 

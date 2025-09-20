@@ -1,0 +1,26 @@
+<div class="custom-input">
+    @if (!string.IsNullOrEmpty(IconPath))
+    {
+        <img src="@IconPath" alt="" class="input-icon" />
+    }
+    <input 
+        type="@Type" 
+        value="@Value" 
+        @oninput="OnValueChanged" 
+        placeholder="@Placeholder" 
+    />
+</div>
+
+@code {
+    [Parameter] public string Value { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public string? IconPath { get; set; }
+    [Parameter] public string Placeholder { get; set; } = "";
+    [Parameter] public string Type { get; set; } = "text";
+
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString() ?? "";
+        await ValueChanged.InvokeAsync(Value);
+    }
+}
