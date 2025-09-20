@@ -1,0 +1,21 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 925px;
+    height: 110px;
+    border: 1px solid #8B9B8C;
+    border-radius: 21px;
+    background-color: #F7F7F7;
+    padding: 0 2rem;
+}
+
+@media (max-width: 910px) {
+    .search-container {
+        flex-direction: column;
+        height: auto;
+        padding: 1.2rem 1.2rem;
+        gap: .7rem;
+    }
+}
