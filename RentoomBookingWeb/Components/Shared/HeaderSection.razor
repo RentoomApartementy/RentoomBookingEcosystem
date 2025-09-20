@@ -1,0 +1,16 @@
+<section class="header-section" style="@BackgroundStyle" aria-label="@Title">
+    <h1>@Title</h1>
+</section>
+
+@code {
+    [Parameter] public string ImagePath { get; set; } = string.Empty;
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string Height { get; set; } = "250px"; // domyślna wysokość
+
+    private string BackgroundStyle =>
+        $"background-image: url('{ImagePath}'); " +
+        "background-repeat: no-repeat; " +
+        "background-position: center center; " +
+        "background-size: cover; " +
+        $"height: {Height};";
+}
