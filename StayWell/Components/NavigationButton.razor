@@ -1,17 +1,26 @@
 ﻿@inject NavigationManager Navigation
 
 <div class="footer-nav-btn-wrapper">
-    <button class="footer-nav-btn @(active ? "active" : "")" @onclick="Navigate">
-        <span class="footer-nav-icon">
-            <img src="@icon" alt="Ikona" />
-        </span>
+    <button class="footer-nav-btn" @onclick="Navigate">
+        <div class="footer-nav-icon">
+            @Icon
+        </div>
     </button>
 </div>
 
 @code {
     [Parameter] public string href { get; set; }
-    [Parameter] public string icon { get; set; }
+    [Parameter] public RenderFragment? Icon { get; set; }
     [Parameter] public bool active { get; set; }
 
-    private void Navigate() => Navigation.NavigateTo(href);
+    private void Navigate()
+    {
+        Navigation.NavigateTo(href);
+
+    }
+
+
+
+
+
 }
