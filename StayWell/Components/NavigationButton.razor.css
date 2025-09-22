@@ -20,6 +20,14 @@
     padding: 0;
 }
 
+    .footer-nav-btn:disabled {
+        background-color: lightgray;
+        border-color: gray;
+        color: gray;
+        cursor: not-allowed;
+    }
+
+
 .footer-nav-icon img {
     width: 70%;
     height: 70%;

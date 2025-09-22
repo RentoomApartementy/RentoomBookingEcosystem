@@ -1,8 +1,11 @@
 ﻿
 <div class="parent">
-    <div class="icon">
-        @Icon
-    </div>
+    @if(Icon is not null)
+    {
+        <div class="icon">
+            @Icon
+        </div>
+    }
     @if(DescriptionContent is not null)
     {
         <div class="description">

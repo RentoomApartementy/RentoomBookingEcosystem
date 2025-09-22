@@ -1,19 +1,21 @@
 ﻿<div class="header">
-    <div class="parent">
-        <div class="logo">LOGO</div>
-        <div class="name">StayWell</div>
-        <div class="reservation-id"> @reservationId </div>
-        <div class="contact">
-            <NavLink>
-                <img src="/icons/phone.svg" />
-            </NavLink>
+    <div class="left">
+        <img class="logo" src="/icons/building.svg"/>
+        <div class="texts">
+            <span class="name">StayWell</span>
+            <span class="reservation-id">numer rezerwacji: <span style="text-decoration: underline">@reservationId</span></span>
         </div>
+    </div>
+    <div class="contact">
+        <NavLink href="/ContactUsPage">
+            <img src="/icons/phone.svg" alt="Kontakt" />
+        </NavLink>
     </div>
 </div>
 
 @code {
 
-    [Parameter] public string reservationId { get; set; } = "26495";
+    [Parameter] public string reservationId { get; set; } = string.Empty;
 
 
 }
