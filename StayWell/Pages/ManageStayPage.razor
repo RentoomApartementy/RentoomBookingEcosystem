@@ -1,46 +1,47 @@
 ﻿@page "/ManageStayPage"
+@using RentoomBooking.StayWell.Components
 
 
 <PageTitle>Manage Stay</PageTitle>
 
 <div class="page-info-wrapper">
-    <RentoomBooking.StayWell.Components.PageInfo Title="Szeroka Premier No 2A" Subtitle="Zarządzaj pobytem"></RentoomBooking.StayWell.Components.PageInfo>
+    <PageInfo Title="Szeroka Premier No 2A" Subtitle="Zarządzaj pobytem"></PageInfo>
 </div>
 
 <div class="buttons-wrapper">
-    <RentoomBooking.StayWell.Components.Button Text="Zgłoś usterkę">
+    <Button Text="Zgłoś usterkę">
         <Icon>
             <img src="/icons/frown.svg">
         </Icon>
-    </RentoomBooking.StayWell.Components.Button>
-    <RentoomBooking.StayWell.Components.Button Text="Wczesne zameldowanie">
+    </Button>
+    <Button Text="Wczesne zameldowanie">
         <Icon>
             <img src="/icons/alarm-clock-check.svg">
         </Icon>
-    </RentoomBooking.StayWell.Components.Button>
-        <RentoomBooking.StayWell.Components.Button Text="Późne wymeldowanie">
+    </Button>
+        <Button Text="Późne wymeldowanie">
         <Icon>
             <img src="/icons/alarm-clock-minus.svg">
         </Icon>
-    </RentoomBooking.StayWell.Components.Button>
-    <RentoomBooking.StayWell.Components.Button Disabled=true Text="Przedłuż rezerwację">
+    </Button>
+    <Button Disabled=true Text="Przedłuż rezerwację">
         <Icon>
             <img src="/icons/calendar-plus.svg">
         </Icon>
-    </RentoomBooking.StayWell.Components.Button>
-        <RentoomBooking.StayWell.Components.Button Text="Dodatkowe sprzątanie apartamentu">
+    </Button>
+        <Button Text="Dodatkowe sprzątanie apartamentu">
         <Icon>
             <img src="/icons/brush-cleaning.svg">
         </Icon>
-    </RentoomBooking.StayWell.Components.Button>
-    <RentoomBooking.StayWell.Components.Button Text="Łóżeczko dziecięce">
+    </Button>
+    <Button Text="Łóżeczko dziecięce">
         <Icon>
             <img src="/icons/baby.svg">
         </Icon>
-    </RentoomBooking.StayWell.Components.Button>
-    <RentoomBooking.StayWell.Components.Button ButtonStyle="color: red; border-color: red; margin-top: 30px;" Text="Wymelduj się">
+    </Button>
+    <Button ButtonStyle="color: red; border-color: red; margin-top: 30px;" Text="Wymelduj się">
         <Icon>
             <img src="/icons/door-closed.svg">
         </Icon>
-    </RentoomBooking.StayWell.Components.Button>
+    </Button>
 </div>
