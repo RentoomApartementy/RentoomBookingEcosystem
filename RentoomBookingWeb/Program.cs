@@ -1,7 +1,7 @@
 using Microsoft.Azure.Cosmos;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBookingWeb.Components;
-using RentoomWebsite.Services;
+using RentoomBooking.SharedClasses.Services;
 
 namespace RentoomBookingWeb
 {
