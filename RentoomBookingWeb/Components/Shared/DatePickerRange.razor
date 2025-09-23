@@ -1,0 +1,33 @@
+<div class="date-range-container">
+    @if (!string.IsNullOrEmpty(IconPath))
+    {
+        <img src="@IconPath" alt="Calendar Icon" class="date-range-icon" />
+    }
+    <div class="date-range-input-wrapper">
+        <input type="date" value="@StartDateValue" @onchange="OnStartDateChanged" class="date-input" />
+        <div class="date-separator"></div>
+        <input type="date" value="@EndDateValue" @onchange="OnEndDateChanged" class="date-input" />
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? IconPath { get; set; }
+
+    [Parameter] public string StartDateValue { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> StartDateValueChanged { get; set; }
+
+    [Parameter] public string EndDateValue { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> EndDateValueChanged { get; set; }
+
+    private async Task OnStartDateChanged(ChangeEventArgs e)
+    {
+        StartDateValue = e.Value?.ToString() ?? string.Empty;
+        await StartDateValueChanged.InvokeAsync(StartDateValue);
+    }
+
+    private async Task OnEndDateChanged(ChangeEventArgs e)
+    {
+        EndDateValue = e.Value?.ToString() ?? string.Empty;
+        await EndDateValueChanged.InvokeAsync(EndDateValue);
+    }
+}

@@ -1,13 +1,16 @@
 @inherits ComponentBase
 @inject IJSRuntime JS
+@inject NavigationManager Navigation
 @using RentoomBookingWeb.Components.Enums;
 
 <div>
     <nav class="@NavState.NavClass" aria-label="Główne menu strony">
-        <img src="@NavState.Logo" alt="Ikona Rentoom">
+        <NavLink href="/">
+            <img src="@NavState.Logo" alt="Ikona Rentoom">
+        </NavLink>
         <ul>
             <li>
-                <NavLink href="/" class="@NavState.NavLinkClass" ActiveClass="nav-link">Apartamenty</NavLink>
+                <NavLink href="/apartments" class="@NavState.NavLinkClass" ActiveClass="nav-link">Apartamenty</NavLink>
             </li>
             <li>
                 <NavLink href="/o-nas" class="@NavState.NavLinkClass" ActiveClass="nav-link">O nas</NavLink>
@@ -41,39 +44,38 @@
             {
                 <img @onclick="OnBurgerClick" src="@NavState.Burger" class="menu-icon burger" alt="Ikona Burger">
             }
- 
         </div>
     </nav>
 
     @if (ShowMenu)
     {
         <div class="mobile-nav">
-                <div>
-                    <NavLink href="/" class="nav-link" ActiveClass="nav-link">Apartamenty</NavLink>
-                </div>
-                <div>
-                    <NavLink href="/o-nas" class="nav-link" ActiveClass="nav-link">O nas</NavLink>
-                </div>
-                <div>
-                    <NavLink href="/wspolpraca" class="nav-link" ActiveClass="nav-link">Współpraca</NavLink>
-                </div>
-                <div>
-                    <NavLink href="/kontakt" class="nav-link" ActiveClass="nav-link">Kontakt</NavLink>
-                </div>
-                <div>
-                    <NavLink href="/rentoom-designer" class="nav-link" ActiveClass="nav-link">Rentoom Designer</NavLink>
-                </div>
-                <div>
-                    <NavLink href="/inne" class="nav-link" ActiveClass="nav-link">Inne</NavLink>
-                </div>
+            <div>
+                <NavLink href="/apartments" class="nav-link" ActiveClass="nav-link">Apartamenty</NavLink>
+            </div>
+            <div>
+                <NavLink href="/o-nas" class="nav-link" ActiveClass="nav-link">O nas</NavLink>
+            </div>
+            <div>
+                <NavLink href="/wspolpraca" class="nav-link" ActiveClass="nav-link">Współpraca</NavLink>
+            </div>
+            <div>
+                <NavLink href="/kontakt" class="nav-link" ActiveClass="nav-link">Kontakt</NavLink>
+            </div>
+            <div>
+                <NavLink href="/rentoom-designer" class="nav-link" ActiveClass="nav-link">Rentoom Designer</NavLink>
+            </div>
+            <div>
+                <NavLink href="/inne" class="nav-link" ActiveClass="nav-link">Inne</NavLink>
+            </div>
         </div>
     }
 </div>
 
 @code {
-    // change styles on scroll
     private DotNetObjectReference<Menu>? objRef;
     private MenuVisualState NavState { get; set; } = new();
+    private bool ShowMenu = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -82,6 +84,9 @@
             objRef = DotNetObjectReference.Create(this);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
             await module.InvokeVoidAsync("init", objRef);
+
+            // subskrypcja nawigacji
+            Navigation.LocationChanged += OnLocationChanged;
         }
     }
 
@@ -117,9 +122,24 @@
         StateHasChanged();
     }
 
+    private void OnBurgerClick()
+    {
+        ShowMenu = !ShowMenu;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        if (ShowMenu)
+        {
+            ShowMenu = false;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
     public void Dispose()
     {
         objRef?.Dispose();
+        Navigation.LocationChanged -= OnLocationChanged;
     }
 
     private class MenuVisualState
@@ -133,13 +153,5 @@
         public string Burger { get; set; } = "/assets/svgs/burger-white.svg";
         public string XIcon { get; set; } = "/assets/svgs/x-white.svg";
         public ButtonType ButtonTypeClass { get; set; } = ButtonType.Primary;
-    }
-    
-    // show menu on burger click
-    private bool ShowMenu = false;
-
-    private void OnBurgerClick()
-    {
-        ShowMenu = !ShowMenu;
     }
 }

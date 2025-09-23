@@ -1,0 +1,22 @@
+<div class="search-container">
+    <DatePickerRange 
+        IconPath="/assets/svgs/calendar.svg"
+        @bind-StartDateValue="_startDate"
+        @bind-EndDateValue="_endDate"
+    />
+    <Input IconPath="/assets/svgs/bed.svg" Placeholder="Ilość pokoi" Type="number" @bind-Value="_rooms"/>
+    <Input IconPath="/assets/svgs/person.svg" Placeholder="Ilość osób" Type="number" @bind-Value="_guests"/>
+    <Button @onclick="Search">Wyszukaj</Button>
+</div>
+
+@code {
+    private string _startDate = ""; 
+    private string _endDate = "";    
+    private string _rooms = "";
+    private string _guests = "";
+
+    private void Search()
+    {
+        Console.WriteLine($"Start: {_startDate}, End: {_endDate}, Pokoje: {_rooms}, Osoby: {_guests}");
+    }
+}
