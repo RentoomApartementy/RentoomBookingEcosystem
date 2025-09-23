@@ -5,7 +5,7 @@
             @Icon
         </div>
     }
-    @if(Text != string.Empty)
+    @if(!string.IsNullOrWhiteSpace(Text))
     {
         <span class="text">
             @Text

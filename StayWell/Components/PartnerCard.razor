@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager Navigation
 
 <div class="card" @onclick=Navigate>
-    @if(Offer != string.Empty)
+    @if (!string.IsNullOrWhiteSpace(Offer))
     {
         <div class="discount">
             <span>
@@ -21,6 +21,7 @@
     <div class="image-wrapper">
         <img src="@Image" class="image"/>
     </div>
+
     <div class="footer">
         <h1>@PartnerName</h1>
         <span>@PartnerDescription</span>

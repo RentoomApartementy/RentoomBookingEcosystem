@@ -14,7 +14,7 @@
             </span>
         </div>
     }
-    @if(DescriptionText != string.Empty)
+    @if (!string.IsNullOrWhiteSpace(DescriptionText))
     {
         <div class="description">
             <span>
