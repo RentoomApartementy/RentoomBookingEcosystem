@@ -20,7 +20,7 @@
         text-align: center;
     }
 
-    button .icon {
+    button:enabled   .icon {
         position: absolute;
         left: 12px;
         top: 40%;
@@ -29,11 +29,11 @@
         height: 20px;
     }
 
-    button:hover {
+    button:hover:enabled {
         cursor: pointer;
     }
 
-    button:active {
+    button:active:enabled {
         filter: invert(1);
 /*        color: white;
         border-color: white;
@@ -43,3 +43,14 @@
 /*    button:active .icon {
                 filter: invert(1);
     }*/
+
+    button:disabled {
+        background-color: lightgray;
+        border-color: gray;
+        color: gray;
+        cursor: not-allowed;
+    }
+
+    button:disabled .icon {
+      visibility: hidden;
+    }

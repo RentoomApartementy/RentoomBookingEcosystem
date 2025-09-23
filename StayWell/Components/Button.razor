@@ -1,10 +1,16 @@
-﻿<button class="button" @onclick=@OnClick style="@ButtonStyle">
-    <span class="icon">
-        @Icon
-    </span>
-    <span class="text">
-        @Text
-    </span>
+﻿<button class="button" @onclick=@OnClick style="@ButtonStyle" disabled="@Disabled">
+    @if(Icon is not null)
+    {
+        <div class="icon">
+            @Icon
+        </div>
+    }
+    @if(!string.IsNullOrWhiteSpace(Text))
+    {
+        <span class="text">
+            @Text
+        </span>
+    }
 </button>
 
 @code {
@@ -12,5 +18,5 @@
     [Parameter] public RenderFragment? Icon { get; set; }
     [Parameter] public string? ButtonStyle { get; set; }
     [Parameter] public EventCallback OnClick { get; set; } = EventCallback.Empty;
-
+    [Parameter] public bool Disabled { get; set; } = false;
 }

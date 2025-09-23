@@ -1,0 +1,21 @@
+﻿<div class="parent">
+    <div class="partner-name">@partnerName</div>
+    <div class="adress-wrapper">
+        <span class="adress-label">
+            <img src="/icons/map-pin.svg"/>
+            Adres:
+        </span>
+        <span class="adress">
+            @partnerAdress
+        </span>
+    </div>
+</div>
+
+
+
+
+@code {
+    [Parameter] public string? partnerName { get; set; } = string.Empty;
+    [Parameter] public string? partnerAdress { get; set; } = string.Empty;
+    [Parameter] public string? offer { get; set; } = string.Empty;
+}

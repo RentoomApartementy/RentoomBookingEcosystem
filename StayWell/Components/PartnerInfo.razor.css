@@ -1,0 +1,42 @@
+﻿.parent {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+}
+
+.partner-name {
+    grid-column: span 3 / span 2;
+    font-size: 24px;
+    padding-bottom: 0px;
+
+}
+
+.offer {
+    background-color: seagreen;
+    border-radius: 15px;
+    text-align: center;
+    align-content: center;
+    color: white;
+    font-weight: bold;
+    height: 30px;
+    width: auto;
+    max-width: 300px;
+    min-width: 130px;
+    text-wrap: nowrap;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.adress-label{
+    font-weight: bold;
+}
+
+.adress-wrapper {
+    grid-column-start: 1;
+    grid-row-start: 2;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    text-wrap: nowrap;
+}

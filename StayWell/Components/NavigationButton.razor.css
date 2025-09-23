@@ -7,11 +7,11 @@
     background: white;
     border: 1.75px solid black;
     border-radius: 15px;
-    height: 4.5vw;
-    width: 4.5vw;
+    height: 12vw;
+    width: 12vw;
     min-width: 48px;
     min-height: 48px;
-    max-width: 64px;
+    max-width: 100px;
     max-height: 64px;
     margin: 0 6px;
     position: relative;
@@ -19,6 +19,14 @@
     outline: none;
     padding: 0;
 }
+
+    .footer-nav-btn:disabled {
+        background-color: lightgray;
+        border-color: gray;
+        color: gray;
+        cursor: not-allowed;
+    }
+
 
 .footer-nav-icon img {
     width: 70%;
