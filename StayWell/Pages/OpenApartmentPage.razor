@@ -1,6 +1,47 @@
 ﻿@page "/OpenApartmentPage"
+@using RentoomBooking.StayWell.Components
 
-<PageTitle>Main</PageTitle>
+<PageTitle>OpenApartmentPage</PageTitle>
 
-<WebSiteComponent Text="Nazwa: " />
-<SolutionLabel Text="@SolutionNameClass.SolutionName_2" />
+<div class="page-info-wrapper">
+    <PageInfo Title="Szeroka Premier No 2A" Subtitle="Otwórz apartament"></PageInfo>
+</div>
+
+<div class="description-wrapper">
+    <Description>
+        <Icon><img src="/icons/info.svg" /></Icon>
+        <DescriptionContent>
+            <span>Jeżeli dostępne, <img src="/icons/radio.svg"/> 
+                <span style="font-weight: bold">Otwórz zdalnie</span> drzwi pozwala na otwieranie drzwi bez potrzeby wpisywania kodu.
+                Wystarczy wcisnąć przycisk.</span>
+        </DescriptionContent>
+    </Description>
+    <Description DescriptionText="Indywidualny kod jest zawszę funkcjonalny niezależnie od dostępności zdalnego otwierania drzwi.">
+        <Icon><img src="/icons/binary.svg" /></Icon>
+    </Description>
+</div>
+
+<div class="buttons-wrapper">
+    <Button Text="Otwórz drzwi zdalnie" ButtonStyle="margin-bottom: 30px;">
+        <Icon>
+            <img src="/icons/radio.svg">
+        </Icon>
+    </Button>
+
+    <Description>
+        <DescriptionContent>
+            <div style="font-weight: bold;">
+                <img src="/icons/binary.svg"/>
+            Twój indywidualny kod do apartamentu:</div>
+        </DescriptionContent>
+    </Description>
+
+    <div style="font-size: calc(0.25vw + 1.25rem);">
+        <span style ="font-weight: bold">567850</span> 
+        potwierdź
+        <span style="font-weight: bold">#</span>
+        lub
+        <img src="/icons/key-round.svg" />
+    </div>
+
+</div>

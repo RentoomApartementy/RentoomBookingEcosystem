@@ -1,17 +1,32 @@
 ﻿
 <div class="parent">
-    <div class="icon">
-        @Icon
-    </div>
-    <div class="description">
-        <span>
-            @DescriptionText
-        </span>
-    </div>
+    @if(Icon is not null)
+    {
+        <div class="icon">
+            @Icon
+        </div>
+    }
+    @if(DescriptionContent is not null)
+    {
+        <div class="description">
+            <span>
+                @DescriptionContent
+            </span>
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(DescriptionText))
+    {
+        <div class="description">
+            <span>
+                @DescriptionText
+            </span>
+        </div>
+    }
 </div>
 
 
 @code {
     [Parameter] public string DescriptionText { get; set; } = string.Empty;
     [Parameter] public RenderFragment? Icon { get; set; }
+    [Parameter] public RenderFragment? DescriptionContent { get; set; }
 }

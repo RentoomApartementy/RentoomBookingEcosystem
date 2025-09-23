@@ -1,10 +1,16 @@
 ﻿<button class="button" @onclick=@OnClick style="@ButtonStyle" disabled="@Disabled">
-    <span class="icon">
-        @Icon
-    </span>
-    <span class="text">
-        @Text
-    </span>
+    @if(Icon is not null)
+    {
+        <div class="icon">
+            @Icon
+        </div>
+    }
+    @if(!string.IsNullOrWhiteSpace(Text))
+    {
+        <span class="text">
+            @Text
+        </span>
+    }
 </button>
 
 @code {

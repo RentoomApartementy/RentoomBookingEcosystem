@@ -1,14 +1,35 @@
 ﻿@inject NavigationManager Navigation
 
+
 <div class="footer-navigation-row">
-    <NavigationButton href="/InstructionsPage" icon="/icons/book.svg" active="@IsActive("/InstructionsPage")" />
-    <NavigationButton href="/OpenApartmentPage" icon="/icons/door-open.svg" active="@IsActive("/OpenApartmentPage")" />
-    <NavigationButton href="/HomePage" icon="/icons/house.svg" active="@IsActive("/HomePage")" />
-    <NavigationButton href="/ManageStayPage" icon="/icons/lamp.svg" active="@IsActive("/ManageStayPage")" />
-    <NavigationButton href="/ReservationInfoPage" icon="/icons/info.svg" active="@IsActive("/ReservationInfoPage")" />
+    <NavigationButton href="/InstructionsPage">
+        <Icon>
+            <img src="/icons/book.svg">
+        </Icon>
+    </NavigationButton>
+    <NavigationButton href="/OpenApartmentPage">
+        <Icon>
+            <img src="/icons/door-open.svg">
+        </Icon>
+    </NavigationButton>
+    <NavigationButton href="/HomePage">
+        <Icon>
+            <img src="/icons/house.svg">
+        </Icon>
+    </NavigationButton>
+    <NavigationButton href="/ManageStayPage">
+        <Icon>
+            <img src="/icons/lamp.svg">
+        </Icon>
+    </NavigationButton>
+    <NavigationButton href="/AboutReservationPage">
+        <Icon>
+            <img src="/icons/info.svg">
+        </Icon>
+    </NavigationButton>
 </div>
 
 @code {
-    private bool IsActive(string href)
-        => Navigation.ToBaseRelativePath(Navigation.Uri).Equals(href.TrimStart('/'), StringComparison.OrdinalIgnoreCase);
+
+
 }

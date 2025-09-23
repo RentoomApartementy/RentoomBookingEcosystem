@@ -1,22 +1,16 @@
-﻿.description-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.page-info-wrapper {
+﻿.page-info-wrapper {
 
     width: 100%;
     background-color: white;
 
 }
 
-.buttons-wrapper {
+.cards-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
     margin: 2rem 0;
+    margin-bottom: 0;
 }
