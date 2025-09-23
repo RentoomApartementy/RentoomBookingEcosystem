@@ -1,4 +1,5 @@
 @page "/apartments"
+@using RentoomBookingWeb.Components.Features.Apartments.Components;
 
 <PageTitle>Apartamenty</PageTitle>
 
@@ -7,6 +8,23 @@
     
     <div class="apartments-search-wrapper">
         <SearchBar />
+    </div>
+    
+    <div class="apartments-items">
+        
+        <Filters />
+        
+        <div class="apartments-items-wrapper">
+            <h4>115 apartamenty/ów</h4>
+            <div class="apartments-items-container">
+                <Apartment/>
+                <Apartment/>
+                <Apartment/>
+                <Apartment/>
+                <Apartment/>
+                <Apartment/>
+            </div>
+        </div>
     </div>
 </div>
 
