@@ -1,7 +1,7 @@
-<div class="custom-input">
+<div class="custom-input" style="@((IsFull) ? "width: 100%;" : null)">
     @if (!string.IsNullOrEmpty(IconPath))
     {
-        <img src="@IconPath" alt="" class="input-icon" />
+        <img src="@IconPath" alt="" class="input-icon"/>
     }
     <input 
         type="@Type" 
@@ -17,6 +17,7 @@
     [Parameter] public string? IconPath { get; set; }
     [Parameter] public string Placeholder { get; set; } = "";
     [Parameter] public string Type { get; set; } = "text";
+    [Parameter] public bool IsFull { get; set; } = false;
 
     private async Task OnValueChanged(ChangeEventArgs e)
     {
