@@ -1,0 +1,69 @@
+@namespace RentoomBookingWeb.Components.Shared
+
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+<div class="slider-container">
+    <div class="slider-wrapper @TransitionClass" style="transform: translateX(-@(CurrentIndex * 100)%)">
+        @foreach (var chunk in ChunkedItems)
+        {
+            <div class="slider-page">
+                @foreach (var fragment in chunk)
+                {
+                    @fragment
+                }
+            </div>
+        }
+    </div>
+
+    <div class="slider-dots">
+        @for (int i = 0; i < ChunkedItems.Count; i++)
+        {
+            var index = i; 
+            <button class="dot @(index == CurrentIndex ? "active" : "")"
+                    @onclick="() => GoToSlide(index)">
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public int ItemsPerPage { get; set; } = 3;
+    [Parameter] public string TransitionClass { get; set; } = "slide-transition";
+
+    internal List<RenderFragment> _items { get; set; } = new();
+    private List<List<RenderFragment>> ChunkedItems { get; set; } = new();
+    private int CurrentIndex { get; set; } = 0;
+
+    internal void RegisterItem(RenderFragment fragment)
+    {
+        _items.Add(fragment);
+        Console.WriteLine($"RegisterItem: dodano element, _items.Count = {_items.Count}");
+        SplitIntoChunks();
+        StateHasChanged();
+    }
+
+    private void SplitIntoChunks()
+    {
+        ChunkedItems = _items
+            .Select((x, i) => new { x, i })
+            .GroupBy(x => x.i / ItemsPerPage)
+            .Select(g => g.Select(v => v.x).ToList())
+            .ToList();
+        Console.WriteLine($"SplitIntoChunks: ChunkedItems.Count = {ChunkedItems.Count}");
+        if (CurrentIndex >= ChunkedItems.Count)
+        {
+            CurrentIndex = 0;
+        }
+    }
+
+    private void GoToSlide(int index)
+    {
+        if (ChunkedItems.Count == 0) return;
+        Console.WriteLine($"GoToSlide: kliknięto {index}, ChunkedItems.Count = {ChunkedItems.Count}");
+        CurrentIndex = Math.Clamp(index, 0, ChunkedItems.Count - 1);
+        Console.WriteLine($"CurrentIndex ustawiony na: {CurrentIndex}");
+    }
+}
