@@ -1,4 +1,5 @@
 @namespace RentoomBookingWeb.Components.Shared
+@inject IJSRuntime JS
 
 <CascadingValue Value="this">
     @ChildContent
@@ -40,7 +41,6 @@
     internal void RegisterItem(RenderFragment fragment)
     {
         _items.Add(fragment);
-        Console.WriteLine($"RegisterItem: dodano element, _items.Count = {_items.Count}");
         SplitIntoChunks();
         StateHasChanged();
     }
@@ -52,7 +52,6 @@
             .GroupBy(x => x.i / ItemsPerPage)
             .Select(g => g.Select(v => v.x).ToList())
             .ToList();
-        Console.WriteLine($"SplitIntoChunks: ChunkedItems.Count = {ChunkedItems.Count}");
         if (CurrentIndex >= ChunkedItems.Count)
         {
             CurrentIndex = 0;
@@ -62,8 +61,25 @@
     private void GoToSlide(int index)
     {
         if (ChunkedItems.Count == 0) return;
-        Console.WriteLine($"GoToSlide: kliknięto {index}, ChunkedItems.Count = {ChunkedItems.Count}");
         CurrentIndex = Math.Clamp(index, 0, ChunkedItems.Count - 1);
-        Console.WriteLine($"CurrentIndex ustawiony na: {CurrentIndex}");
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("registerResizeHandler", DotNetObjectReference.Create(this));
+            await UpdateItemPerPageAsync();
+        }
+    }
+
+    [JSInvokable]
+    public async Task UpdateItemPerPageAsync()
+    {
+        var width = await JS.InvokeAsync<int>("getWindowWidth");
+        ItemsPerPage = width < 780 ? 1 : 3;
+        SplitIntoChunks();
+        StateHasChanged();
+    }
+
 }
