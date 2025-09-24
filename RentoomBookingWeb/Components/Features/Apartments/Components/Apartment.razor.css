@@ -61,3 +61,35 @@
     align-items: center;
     justify-content: end;
 }
+
+@media (max-width: 600px) {
+    .apartment-card {
+        max-width: 100%;
+    }
+
+    .apartment-info h2 {
+        font-size: 1.2rem;
+    }
+
+    .apartment-details {
+        gap: 0.5rem;
+    }
+
+    .apartment-details li {
+        gap: 0.3rem;
+    }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .btn-reservation {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    .apartment-button-wrapper {
+        justify-content: center;
+    }
+}

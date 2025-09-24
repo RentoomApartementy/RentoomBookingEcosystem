@@ -1,0 +1,27 @@
+.apartments-section-container {
+    width: 100%;
+}
+
+.apartments-section-container-text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #1F5A41;
+}
+
+.city-title {
+    text-align: center;
+    color: #1F5A41;
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+}
+
+.city-subtitle {
+    text-align: center;
+    color: #1F5A41;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    font-weight: normal;
+}
