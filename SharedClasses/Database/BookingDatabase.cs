@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RentoomBooking.Api.Models;
 using RentoomBooking.SharedClasses.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentoomBooking.Api.Database
+namespace RentoomBooking.SharedClasses.Database
 {
     public class BookingDatabase
     {
@@ -31,7 +30,7 @@ namespace RentoomBooking.Api.Database
              private async Task InitializeAsync(CosmosClient client, IConfiguration configuration)
         {
             
-            var databaseName = configuration["AZURE_COSMOS_DATABASE_NAME"];
+            var databaseName = configuration["ConnectionStrings:AZURE_COSMOS_ENDPOINT"];
             var containerName = "ApartmentInfo";
             var containerNameForHashes = "ApartmentsHashes";
 

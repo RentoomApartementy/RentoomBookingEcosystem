@@ -1,13 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Razor;
-using RentoomBooking.SharedClasses.Models;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RentoomBooking.Api.Models
+﻿
+namespace RentoomBooking.SharedClasses.Models
 {
   
     public class ApartmentResponseType

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using RentoomBooking.SharedClasses.Database;
 using RentoomWebsite.Services;
 
 
@@ -22,8 +23,10 @@ namespace RentoomWebsite
             });
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-           // builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            // builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            builder.Services.AddScoped<BookingDatabase>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
+
 
 
             var host = builder.Build();
