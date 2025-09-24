@@ -1,0 +1,157 @@
+@inherits ComponentBase
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@using RentoomBookingWeb.Components.Enums;
+
+<div>
+    <nav class="@NavState.NavClass" aria-label="Główne menu strony">
+        <NavLink href="/">
+            <img src="@NavState.Logo" alt="Ikona Rentoom">
+        </NavLink>
+        <ul>
+            <li>
+                <NavLink href="/apartments" class="@NavState.NavLinkClass" ActiveClass="nav-link">Apartamenty</NavLink>
+            </li>
+            <li>
+                <NavLink href="/o-nas" class="@NavState.NavLinkClass" ActiveClass="nav-link">O nas</NavLink>
+            </li>
+            <li>
+                <NavLink href="/wspolpraca" class="@NavState.NavLinkClass" ActiveClass="nav-link">Współpraca</NavLink>
+            </li>
+            <li>
+                <NavLink href="/kontakt" class="@NavState.NavLinkClass" ActiveClass="nav-link">Kontakt</NavLink>
+            </li>
+            <li>
+                <NavLink href="/rentoom-designer" class="@NavState.NavLinkClass" ActiveClass="nav-link">Rentoom Designer</NavLink>
+            </li>
+            <li>
+                <NavLink href="/inne" class="@NavState.NavLinkClass" ActiveClass="nav-link">Inne</NavLink>
+            </li>
+        </ul>
+
+        <div class="bar">
+            <div class="menu-button">
+                <Button Type="@NavState.ButtonTypeClass">Zadzwoń</Button>
+            </div>
+            <img src="@NavState.Search" class="menu-icon" alt="Ikona lupy">
+            <img src="@NavState.Facebook" class="menu-icon fb" alt="Ikona Facebook">
+            <img src="@NavState.Instagram" class="menu-icon ig" alt="Ikona Instagram">
+            @if (ShowMenu)
+            {
+                <img @onclick="OnBurgerClick" src="@NavState.XIcon" class="menu-icon burger" alt="Ikona X">
+            }
+            else
+            {
+                <img @onclick="OnBurgerClick" src="@NavState.Burger" class="menu-icon burger" alt="Ikona Burger">
+            }
+        </div>
+    </nav>
+
+    @if (ShowMenu)
+    {
+        <div class="mobile-nav">
+            <div>
+                <NavLink href="/apartments" class="nav-link" ActiveClass="nav-link">Apartamenty</NavLink>
+            </div>
+            <div>
+                <NavLink href="/o-nas" class="nav-link" ActiveClass="nav-link">O nas</NavLink>
+            </div>
+            <div>
+                <NavLink href="/wspolpraca" class="nav-link" ActiveClass="nav-link">Współpraca</NavLink>
+            </div>
+            <div>
+                <NavLink href="/kontakt" class="nav-link" ActiveClass="nav-link">Kontakt</NavLink>
+            </div>
+            <div>
+                <NavLink href="/rentoom-designer" class="nav-link" ActiveClass="nav-link">Rentoom Designer</NavLink>
+            </div>
+            <div>
+                <NavLink href="/inne" class="nav-link" ActiveClass="nav-link">Inne</NavLink>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private DotNetObjectReference<Menu>? objRef;
+    private MenuVisualState NavState { get; set; } = new();
+    private bool ShowMenu = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
+            await module.InvokeVoidAsync("init", objRef);
+
+            // subskrypcja nawigacji
+            Navigation.LocationChanged += OnLocationChanged;
+        }
+    }
+
+    [JSInvokable]
+    public void OnScrollChanged(double scrollTop)
+    {
+        NavState = scrollTop > 0
+            ? new MenuVisualState
+            {
+                NavClass = "scrolled-nav",
+                NavLinkClass = "scrolled-nav-link nav-link",
+                Logo = "/assets/svgs/logo-color.svg",
+                Search = "/assets/svgs/search-green.svg",
+                Facebook = "/assets/svgs/fb-green.svg",
+                Instagram = "/assets/svgs/ig-green.svg",
+                Burger = "/assets/svgs/burger-green.svg",
+                XIcon = "/assets/svgs/x-green.svg",
+                ButtonTypeClass = ButtonType.Secondary,
+            }
+            : new MenuVisualState
+            {
+                NavClass = "top-nav",
+                NavLinkClass = "nav-link",
+                Logo = "/assets/svgs/logo-white.svg",
+                Search = "/assets/svgs/search-white.svg",
+                Facebook = "/assets/svgs/fb-white.svg",
+                Instagram = "/assets/svgs/ig-white.svg",
+                Burger = "/assets/svgs/burger-white.svg",
+                XIcon = "/assets/svgs/x-white.svg",
+                ButtonTypeClass = ButtonType.Primary,
+            };
+
+        StateHasChanged();
+    }
+
+    private void OnBurgerClick()
+    {
+        ShowMenu = !ShowMenu;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        if (ShowMenu)
+        {
+            ShowMenu = false;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        objRef?.Dispose();
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+    private class MenuVisualState
+    {
+        public string NavClass { get; set; } = "top-nav";
+        public string NavLinkClass { get; set; } = "nav-link";
+        public string Logo { get; set; } = "/assets/svgs/logo-white.svg";
+        public string Search { get; set; } = "/assets/svgs/search-white.svg";
+        public string Facebook { get; set; } = "/assets/svgs/fb-white.svg";
+        public string Instagram { get; set; } = "/assets/svgs/ig-white.svg";
+        public string Burger { get; set; } = "/assets/svgs/burger-white.svg";
+        public string XIcon { get; set; } = "/assets/svgs/x-white.svg";
+        public ButtonType ButtonTypeClass { get; set; } = ButtonType.Primary;
+    }
+}

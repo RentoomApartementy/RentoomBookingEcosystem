@@ -5,7 +5,7 @@ using RentoomBooking.SharedClasses.Services;
 using System.Net.Http;
 using System.Text;
 
-namespace RentoomWebsite.Services
+namespace RentoomBooking.SharedClasses.Services
 {
     public interface IApartmentsService
     {
