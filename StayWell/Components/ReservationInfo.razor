@@ -1,0 +1,19 @@
+﻿<div class="parent">
+    <div class="apartment-name">@apartmentName</div>
+    <div class="apartment-full-adress">@apartmentAdress #@apartmentNumber</div>
+    <div class="check-in">Zameldowanie:</div>
+    <div class="check-out">Wymeldowanie:</div>
+    <div class="check-in-date">@reservationCheckInDate</div>
+    <div class="check-out-date">@reservationCheckOutDate</div>
+</div>
+
+
+
+
+@code {
+    [Parameter] public string? apartmentName { get; set; } = string.Empty;
+    [Parameter] public string? apartmentAdress { get; set; } = string.Empty;
+    [Parameter] public string? apartmentNumber { get; set; } = string.Empty;
+    [Parameter] public string? reservationCheckInDate { get; set; } = string.Empty;
+    [Parameter] public string? reservationCheckOutDate { get; set; } = string.Empty;
+}

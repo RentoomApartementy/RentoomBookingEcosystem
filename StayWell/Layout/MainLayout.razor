@@ -1,16 +1,20 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<div class="layout-page">
+    <div class="layout-header">
+        <RentoomBooking.StayWell.Components.Header
+        reservationId="12345">
+          
+        </RentoomBooking.StayWell.Components.Header>
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+    <div class="layout-body">
+        @Body
+    </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+    <div class="layout-footer-nav">
+        <RentoomBooking.StayWell.Components.FooterNavigation>
+
+        </RentoomBooking.StayWell.Components.FooterNavigation>
+    </div>
 </div>
+

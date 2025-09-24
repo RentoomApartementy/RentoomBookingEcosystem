@@ -1,0 +1,42 @@
+﻿@inject NavigationManager Navigation
+
+<div class="card" @onclick=Navigate>
+    @if (!string.IsNullOrWhiteSpace(Offer))
+    {
+        <div class="discount">
+            <span>
+                @Offer
+            </span>
+        </div>
+    }
+
+
+    @if (Category != PartnerCategories.Empty)
+    {
+        <div class="category">
+            <img src="@PartnerCategory.ToSVGPath(@Category)" />
+        </div>
+    }
+
+    <div class="image-wrapper">
+        <img src="@Image" class="image"/>
+    </div>
+
+    <div class="footer">
+        <h1>@PartnerName</h1>
+        <span>@PartnerDescription</span>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public string? PartnerName { get; set; } = string.Empty;
+    [Parameter] public string? PartnerDescription { get; set; } = string.Empty;
+    [Parameter] public PartnerCategories Category { get; set; } = PartnerCategories.Empty;
+    [Parameter] public string? Offer { get; set; } = string.Empty;
+    [Parameter] public string? Image { get; set; }
+    [Parameter] public string Href { get; set; } = "/404";
+
+    public void Navigate() => Navigation.NavigateTo(Href);
+
+}

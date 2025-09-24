@@ -1,0 +1,67 @@
+﻿.footer-nav-btn {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1.75px solid black;
+    border-radius: 15px;
+    height: 12vw;
+    width: 12vw;
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 100px;
+    max-height: 64px;
+    margin: 0 6px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+}
+
+    .footer-nav-btn:disabled {
+        background-color: lightgray;
+        border-color: gray;
+        color: gray;
+        cursor: not-allowed;
+    }
+
+
+.footer-nav-icon img {
+    width: 70%;
+    height: 70%;
+    min-width: 28px;
+    min-height: 28px;
+    max-width: 48px;
+    max-height: 48px;
+    display: block;
+    margin: 0 auto;
+}
+
+.footer-nav-indicator {
+    height: 8px;
+    width: 80%;
+    border-radius: 15px;
+    background: #000;
+    margin-top: 8px;
+}
+
+@media (max-width: 500px) {
+    .footer-nav-btn {
+        height: 12vw;
+        width: 12vw;
+        min-width: 40px;
+        min-height: 40px;
+        max-width: 56px;
+        max-height: 56px;
+    }
+    .footer-nav-icon img {
+        width: 80%;
+        height: 80%;
+        min-width: 24px;
+        min-height: 24px;
+        max-width: 40px;
+        max-height: 40px;
+    }
+}
