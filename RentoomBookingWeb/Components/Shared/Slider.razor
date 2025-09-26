@@ -31,12 +31,13 @@
 
 @code {
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public int ItemsPerPage { get; set; } = 3;
     [Parameter] public string TransitionClass { get; set; } = "slide-transition";
+    [Parameter] public int ItemsPerPage { get; set; } = 3;
 
     internal List<RenderFragment> _items { get; set; } = new();
     private List<List<RenderFragment>> ChunkedItems { get; set; } = new();
     private int CurrentIndex { get; set; } = 0;
+    private DotNetObjectReference<Slider>? objRef;
 
     internal void RegisterItem(RenderFragment fragment)
     {
@@ -52,10 +53,8 @@
             .GroupBy(x => x.i / ItemsPerPage)
             .Select(g => g.Select(v => v.x).ToList())
             .ToList();
-        if (CurrentIndex >= ChunkedItems.Count)
-        {
-            CurrentIndex = 0;
-        }
+
+        CurrentIndex = Math.Clamp(CurrentIndex, 0, ChunkedItems.Count - 1);
     }
 
     private void GoToSlide(int index)
@@ -68,18 +67,22 @@
     {
         if (firstRender)
         {
-            await JS.InvokeVoidAsync("registerResizeHandler", DotNetObjectReference.Create(this));
-            await UpdateItemPerPageAsync();
+            objRef = DotNetObjectReference.Create(this);
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/resizePage.js");
+            await module.InvokeVoidAsync("init", objRef);
         }
     }
 
     [JSInvokable]
-    public async Task UpdateItemPerPageAsync()
+    public void UpdateItemPerPageAsync(int width)
     {
-        var width = await JS.InvokeAsync<int>("getWindowWidth");
-        ItemsPerPage = width < 780 ? 1 : 3;
+        ItemsPerPage = width < 850 ? 1 : 3;
         SplitIntoChunks();
         StateHasChanged();
     }
 
+    public void Dispose()
+    {
+        objRef?.Dispose();
+    }
 }

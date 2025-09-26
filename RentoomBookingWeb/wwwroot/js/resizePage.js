@@ -1,7 +1,10 @@
-window.getWindowWidth = () => window.innerWidth;
+export function init(dotNetHelper) {
+    const updateItemsPerPage = () => {
+        const width = window.innerWidth;
+        dotNetHelper.invokeMethodAsync('UpdateItemPerPageAsync', width);
+    };
 
-window.registerResizeHandler = (dotNetHelper) => {
-    window.addEventListener('resize', () => {
-        dotNetHelper.invokeMethodAsync('UpdateItemsPerPageAsync');
-    });
-};
+    updateItemsPerPage();
+
+    window.addEventListener('resize', updateItemsPerPage);
+}
