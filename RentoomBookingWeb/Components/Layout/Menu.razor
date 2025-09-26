@@ -85,7 +85,6 @@
             var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
             await module.InvokeVoidAsync("init", objRef);
 
-            // subskrypcja nawigacji
             Navigation.LocationChanged += OnLocationChanged;
         }
     }
