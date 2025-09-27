@@ -16,3 +16,9 @@
     border: 1px solid #8B9B8C;
     color: #1F5A41 !important;
 }
+
+.tertiary {
+    background-color: #1F5A41 !important;
+    border: 1px solid #8B9B8C;
+    color: white !important;
+}
