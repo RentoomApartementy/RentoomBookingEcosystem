@@ -76,7 +76,7 @@
     [JSInvokable]
     public void UpdateItemPerPageAsync(int width)
     {
-        ItemsPerPage = width < 850 ? 1 : 3;
+        ItemsPerPage = width < 850 ? 1 : ItemsPerPage;
         SplitIntoChunks();
         StateHasChanged();
     }
