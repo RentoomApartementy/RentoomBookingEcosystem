@@ -1,0 +1,11 @@
+.opinions-title {
+    text-align: center;
+    color: #1F5A41;
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+}
+
+.options-slider-wrapper {
+    width: 100%;
+    padding: 0 1rem;
+}
