@@ -36,6 +36,12 @@
     margin-top: 1rem;
 }
 
+@media (max-width: 910px) {
+    .city-image {
+        max-width: 100%;
+    }
+}
+
 .city-text {
     flex: 1 1 50%;
     font-size: 1rem;
