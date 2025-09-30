@@ -1,0 +1,81 @@
+﻿@* /Pages/ApartmentsList.razor *@
+@page "/apartments-list"
+@using RentoomBooking.SharedClasses.Models
+@using RentoomBooking.SharedClasses.Services
+@inject IApartmentsService ApartmentsApiService
+
+<h3>Apartamenty</h3>
+
+<div class="mb-3">
+    <button @onclick="LoadMore"
+            disabled="@(!hasMore || loading)">
+        @(items.Count == 0 ? "Załaduj 50" : "Załaduj kolejne 50")
+    </button>
+
+    @if (loading)
+    {
+        <span class="ml-2">Ładowanie…</span>
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p class="text-red-600">@error</p>
+}
+
+@if (items.Count > 0)
+{
+    <p>Wyświetlono: @items.Count</p>
+    <ul>
+        @foreach (var a in items)
+        {
+            <li>@a.Name (@a.Id)</li>
+        }
+    </ul>
+}
+
+@if (!loading && !hasMore && items.Count > 0)
+{
+    <p>Koniec wyników.</p>
+}
+
+@code {
+    private const int PageSize = 50;
+    private readonly List<ApartmentObject> items = new();
+    private string? token;
+    private bool loading;
+    private bool hasMore = true;
+    private string? error;
+
+    private async Task LoadMore()
+    {
+        if (loading || !hasMore) return;
+
+        loading = true;
+        error = null;
+
+        try
+        {
+            var page = await ApartmentsApiService.GetApartmentsByPageAsyncDirect(token, top: PageSize);
+            if (page?.Items is { Count: > 0 })
+            {
+                items.AddRange(page.Items);
+                token = page.ContinuationToken;
+                hasMore = !string.IsNullOrEmpty(token);
+            }
+            else
+            {
+                hasMore = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+            hasMore = false; // optional: keep true if you want to retry
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}

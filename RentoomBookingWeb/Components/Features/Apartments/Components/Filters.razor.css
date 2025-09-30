@@ -1,0 +1,25 @@
+.filters-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #C1C1C1;
+    padding: 1rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.filters-title {
+    width: 100%;
+    text-align: center;
+}
+
+@media (max-width: 1400px) {
+    .filters-container {
+        max-width: 340px;
+    }
+}
+
+@media (max-width: 900px) {
+    .filters-container {
+        display: none;
+    }
+}

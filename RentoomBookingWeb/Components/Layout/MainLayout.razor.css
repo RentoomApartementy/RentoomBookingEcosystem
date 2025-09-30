@@ -1,0 +1,21 @@
+.layout {
+    width: 100%;
+    min-height: 50vh;
+    background-color: #9f9f9f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.layout-container {
+    width: 100%;
+    max-width: 1920px;
+}
+
+.menu {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    /*padding: 1rem 1rem;*/
+}

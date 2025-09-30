@@ -56,7 +56,7 @@
 
         try
         {
-            var page = await ApartmentsApiService.GetApartmentsByPageAsync(token, top: PageSize);
+            var page = await ApartmentsApiService.GetApartmentsByPageAsyncDirect(token, top: PageSize);
             if (page?.Items is { Count: > 0 })
             {
                 items.AddRange(page.Items);

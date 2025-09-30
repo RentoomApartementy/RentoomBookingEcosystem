@@ -1,6 +1,26 @@
 ﻿@page "/ReportPage"
+@using RentoomBooking.StayWell.Components
 
-<PageTitle>Main</PageTitle>
 
-<WebSiteComponent Text="Nazwa: " />
-<SolutionLabel Text="@SolutionNameClass.SolutionName_2" />
+<PageTitle>Manage Stay</PageTitle>
+
+<div class="page-info-wrapper">
+    <PageInfo Title="Szeroka Premier No 2A" Subtitle="Zgłoś usterkę"></PageInfo>
+</div>
+
+<div class="buttons-wrapper">
+    <div class="description-wrapper" style="padding-bottom: 30px;">
+        <Description>
+            <Icon><img src="/icons/info.svg"/></Icon>
+            <DescriptionContent>
+                <span>Abyśmy mogli szybko pomóc, prosimy o dokładny opis usterki. Wskaż, co konkretnie nie działa i jeśli to możliwe, dodaj zdjęcia – to znacząco przyspieszy rozwiązanie problemu.</span>
+            </DescriptionContent>
+        </Description>
+    </div>
+
+    <Button Text="Przejdź na stronę zgłoszeń">
+        <Icon>
+            <img src="/icons/external-link.svg">
+        </Icon>
+    </Button>
+</div>

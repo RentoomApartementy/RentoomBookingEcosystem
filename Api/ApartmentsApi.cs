@@ -1,8 +1,7 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.Models;
-using RentoomBooking.Api.Services;
+using RentoomBooking.SharedClasses.Services;
 using System.Net;
 using System.Text.Json;
 

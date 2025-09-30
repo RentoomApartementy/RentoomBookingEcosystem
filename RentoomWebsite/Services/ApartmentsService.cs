@@ -1,24 +1,36 @@
-﻿using Newtonsoft.Json; 
+﻿using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Services;
 using System.Text;
 
 namespace RentoomWebsite.Services
 {
-    public interface IApartmentsService
+    public interface xxIApartmentsService
     {
         Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
             string? continuationToken = null,
             int top = 50,
             CancellationToken ct = default);
+
+
+        Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncDirect(
+           string? continuationToken = null,
+           int top = 50,
+           CancellationToken ct = default);
     }
 
-    public class ApartmentsService : IApartmentsService
+     
+    
+
+    public class xxApartmentsService : xxIApartmentsService
     {
         private readonly IHttpClientFactory _factory;
-
-        public ApartmentsService(IHttpClientFactory factory)
+        BookingDatabase _bd;
+        public xxApartmentsService(IHttpClientFactory factory, BookingDatabase bd)
         {
             _factory = factory;
+            _bd = bd;
         }
 
         public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
@@ -39,6 +51,17 @@ namespace RentoomWebsite.Services
 
             // Deserialize using Newtonsoft
             return JsonConvert.DeserializeObject<PagedResult<ApartmentObject>>(jsonString);
+        }
+
+
+        public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncDirect(
+           string? continuationToken = null,
+           int top = 50,
+           CancellationToken ct = default)
+        {
+            var result = await _bd.QueryApartmentsAsync(continuationToken, top);
+
+            return result;
         }
     }
 }

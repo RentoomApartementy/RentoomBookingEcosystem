@@ -6,8 +6,8 @@ using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RentoomBooking.Api.Database;
-using RentoomBooking.Api.Services;
+using RentoomBooking.SharedClasses.Database;
+using RentoomBooking.SharedClasses.Services;
 
 
 TokenCredential credential = new DefaultAzureCredential();

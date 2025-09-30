@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.Services;
+using RentoomBooking.SharedClasses.Services;
 
 namespace RentoomBooking.Api;
 
