@@ -1,0 +1,58 @@
+@using System.Timers
+<div class="carousel">
+    <div class="slider" style="transform: translateX(calc(-@(index*100)%))">
+        @for (int i = 0; i < imageUrls.Length; i++)
+        {
+            <div class="slide">
+                <img src="@imageUrls[i]" loading="lazy"/>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter] public string[] imageUrls { get; set; } = Array.Empty<string>();
+    [Parameter] public int TransitionIntervalMs { get; set; } = 2000;
+
+    private int index = 0;
+    private System.Timers.Timer timer;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender) StartTimer();
+    }
+
+    private void NextSlide()
+    {
+        if (index < imageUrls.Length - 1)
+        {
+            index++;
+        }
+        else
+        {
+            index = 0;
+        }
+    }
+
+    private void StartTimer()
+    {
+        if (TransitionIntervalMs == 0) return;
+        timer = new Timer();
+        timer.Interval = TransitionIntervalMs;
+        timer.Elapsed += async (sender, args) =>
+        {
+            NextSlide();
+            await InvokeAsync(StateHasChanged);
+        };
+        timer.AutoReset = true;
+        timer.Start();
+
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+
+}
