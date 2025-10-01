@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Services;
 
 namespace RentoomBooking.Api;
@@ -10,22 +12,23 @@ public class GetReservationsFunction
 {
 
     private readonly IdoSellService _bookingObjectService;
-
+    private readonly BookingDatabase _bookingDatabase;
     private readonly ILogger<GetReservationsFunction> _logger;
 
-  
 
-    public GetReservationsFunction(ILogger<GetReservationsFunction> logger, IdoSellService bookingObjectService)
+
+    public GetReservationsFunction(ILogger<GetReservationsFunction> logger, IdoSellService bookingObjectService, BookingDatabase bookingDatabase)
     {
         _logger = logger;
         _bookingObjectService = bookingObjectService;
+        _bookingDatabase = bookingDatabase;
     }
 
-    [Function("GetReservationsById")]
-    public async Task<HttpResponseData> GetReservationById(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "reservations/{reservationId}")]
+    [Function("GetReservationsByIdFromIdoBooking")]
+    public async Task<HttpResponseData> GetReservationsByIdFromIdoBooking(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ido/reservations/{reservationId:int?}/{save:bool?}")]
     HttpRequestData req,
-        int? reservationId)
+        int? reservationId, bool? save)
     {
         _logger.LogInformation("GetReservationById started at: {time}", DateTime.UtcNow);
 
@@ -33,8 +36,8 @@ public class GetReservationsFunction
 
         try
         {
-            var id = reservationId
-                     ?? TryParseQuery(req, "reservationId");
+            var id = reservationId;
+            var saveToDb = save ?? false;
 
             if (id is null)
             {
@@ -43,9 +46,9 @@ public class GetReservationsFunction
                 return res;
             }
 
-            var reservation = await _bookingObjectService.FetchReservationByIDFromIdoSellAsync(id.Value);
+            var ret = await _bookingObjectService.FetchReservationByIDFromIdoSellAsync(id.Value, saveToDb);
 
-            if (reservation == null || reservation.result == null)
+            if (ret.ReservationResponse.result.Reservations == null)
             {
                 res.StatusCode = System.Net.HttpStatusCode.NotFound;
                 await res.WriteStringAsync($"Reservation with id {id.Value} not found.");
@@ -54,7 +57,9 @@ public class GetReservationsFunction
 
             res.StatusCode = System.Net.HttpStatusCode.OK;
             res.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            await res.WriteStringAsync(System.Text.Json.JsonSerializer.Serialize(reservation));
+
+            await res.WriteStringAsync(JsonConvert.SerializeObject(ret));
+
             return res;
         }
         catch (Exception ex)
@@ -70,10 +75,45 @@ public class GetReservationsFunction
         }
     }
 
-    private static int? TryParseQuery(HttpRequestData req, string key)
+     
+    [Function("GetReservationsByTokenFromDb")]
+    public async Task<HttpResponseData> GetReservationsByIdFromDb(
+      [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "db/reservations/{reservationToken}")] HttpRequestData req, string? reservationToken)
     {
-        var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
-        return int.TryParse(query.Get(key), out var v) ? v : (int?)null;
-    }
+        _logger.LogInformation("GetReservationsByIdFromDb started at: {time}", DateTime.UtcNow);
+        var res = req.CreateResponse();
+        try
+        {
+            var token = reservationToken;
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                res.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                await res.WriteStringAsync("Provide reservationToken in path (/reservations/{reservationToken}), query (?reservationToken=).");
+                return res;
+            }
+            var ret = await _bookingDatabase.GetRentoomReservationByResTokenAsync(token, _logger);
+            if (ret == null)
+            {
+                res.StatusCode = System.Net.HttpStatusCode.NotFound;
+                await res.WriteStringAsync($"Reservation with token {token} not found in database.");
+                return res;
+            }
+            res.StatusCode = System.Net.HttpStatusCode.OK;
+            res.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await res.WriteStringAsync(JsonConvert.SerializeObject(ret));
+            return res;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected error during GetReservationsByIdFromDb.");
+            res.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            await res.WriteStringAsync("Internal server error.");
+            return res;
+        }
+        finally
+        {
+            _logger.LogInformation("GetReservationsByIdFromDb finished at: {time}", DateTime.UtcNow);
+        }
+    }  
 
 }
