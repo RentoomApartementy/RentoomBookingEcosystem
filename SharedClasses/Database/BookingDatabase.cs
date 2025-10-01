@@ -30,7 +30,7 @@ namespace RentoomBooking.SharedClasses.Database
              private async Task InitializeAsync(CosmosClient client, IConfiguration configuration)
         {
             
-            var databaseName = configuration["ConnectionStrings:AZURE_COSMOS_ENDPOINT"];
+            var databaseName = configuration["AZURE_COSMOS_DATABASE_NAME"];
             var containerName = "ApartmentInfo";
             var containerNameForHashes = "ApartmentsHashes";
 
