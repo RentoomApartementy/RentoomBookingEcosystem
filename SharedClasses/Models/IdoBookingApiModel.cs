@@ -51,4 +51,13 @@ namespace RentoomBooking.SharedClasses.Models
     }
 
 
+    public class IdoPaginationData
+    {
+        public int page { get; set; }
+        public int countOnPage { get; set; }
+        public int pageAll { get; set; }
+        public int countAll { get; set; }
+    }
+
+
 }

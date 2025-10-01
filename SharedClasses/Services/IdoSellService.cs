@@ -28,14 +28,14 @@ namespace RentoomBooking.SharedClasses.Services
         private readonly Container _hashesContainer;
 
         private const string HashDocumentId = "all-object-hashes"; // ID for the hash document
-        private const string HashPartitionKey = "/id"; // Partition key for the hash container
+        private const string HashPartitionKey = "id"; // Partition key for the hash container
         private BookingDatabase _bookingDatabase;
         private ILogger<IdoSellService> _logger;
 
-        public IdoSellService(HttpClient httpClient,BookingDatabase bookingDatabase,  IConfiguration configuration)//, CosmosClient cosmosClient)
+        public IdoSellService(ILogger<IdoSellService> logger, HttpClient httpClient,BookingDatabase bookingDatabase,  IConfiguration configuration)//, CosmosClient cosmosClient)
         {
             _httpClient = httpClient;
-
+            _logger = logger;
             _bookingDatabase = bookingDatabase;
 
             baseAPIUrl = configuration["IDOBOOKING_BASE_API_URL"];
@@ -44,7 +44,11 @@ namespace RentoomBooking.SharedClasses.Services
             if (string.IsNullOrEmpty(baseAPIUrl))
             {
                 _logger.LogError("IDOBOOKING_BASE_API_URL is not configured in local.settings.json or environment variables.");
-               
+
+            }
+            else
+            {
+                _logger.LogError("IDOBOOKING_BASE_API_URL found and ok.");
             }
 
         }
@@ -202,6 +206,33 @@ namespace RentoomBooking.SharedClasses.Services
 
         }
 
+        public async Task<ReservationResponseFromIdoSellAPI> FetchReservationByIDFromIdoSellAsync(int ReservationId)
+        {
+            string address = baseAPIUrl + "reservations/get/34/json";
+            _logger.LogInformation($"FetchReservationByIDIdoSellAsync id={ReservationId}");
+            
+            ReservationRequestIDOSellAPI request = new ReservationRequestIDOSellAPI
+            {
+                authenticate = new AuthenticateType { SystemKey = GenerateKey(HashPassword(systemPwd)), SystemLogin = systemUser, Lang = "eng" },
+                result = new ResultSetup { page = 1, number = 100 },
+                paramsSearch = new ReservationsParamsSearch { ids = [ReservationId] }
+            };
+
+            HttpClient? client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+            var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
+            var content = new StringContent(jsonRequest, System.Text.Encoding.UTF8, "application/json");
+            
+            HttpResponseMessage response = await client.PostAsync(address, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            ReservationResponseFromIdoSellAPI ret = JsonConvert.DeserializeObject<ReservationResponseFromIdoSellAPI>(responseContent);
+
+            client.Dispose();
+            return ret;
+        }
+
         public static string GenerateKey(string hashedPassword)
         {
             System.Security.Cryptography.HashAlgorithm hash = System.Security.Cryptography.SHA1.Create();
@@ -239,6 +270,8 @@ namespace RentoomBooking.SharedClasses.Services
         string? continuationToken = null,
         int pageSize = 50)
         => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
+
+
 
 
     }
