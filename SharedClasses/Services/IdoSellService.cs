@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Azure.Cosmos.Scripts;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses;
@@ -206,7 +207,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         }
 
-        public async Task<ReservationResponseFromIdoSellAPI> FetchReservationByIDFromIdoSellAsync(int ReservationId)
+        public async Task<(ReservationResponseFromIdoSellAPI? ReservationResponse, string? resToken)> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb)
         {
             string address = baseAPIUrl + "reservations/get/34/json";
             _logger.LogInformation($"FetchReservationByIDIdoSellAsync id={ReservationId}");
@@ -228,9 +229,28 @@ namespace RentoomBooking.SharedClasses.Services
             var responseContent = await response.Content.ReadAsStringAsync();
 
             ReservationResponseFromIdoSellAPI ret = JsonConvert.DeserializeObject<ReservationResponseFromIdoSellAPI>(responseContent);
+            
+            string? stored = null;
+            
+            if (saveToDb && ret?.result?.Reservations != null && ret.result.Reservations.Count > 0)
+            {
+                var reservation = ret.result.Reservations[0];
+                
+                stored = await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger);
+
+                if (stored !=null)
+                {
+                    _logger.LogInformation("Reservation {stored} stored in DB.", stored);
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to store reservation {stored} in DB.", stored);
+                }
+            }
 
             client.Dispose();
-            return ret;
+
+            return (ret,stored);
         }
 
         public static string GenerateKey(string hashedPassword)
