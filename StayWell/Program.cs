@@ -4,6 +4,7 @@ using RentoomBooking.SharedClasses;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace RentoomBooking.StayWell
 {
@@ -26,7 +27,6 @@ namespace RentoomBooking.StayWell
 
             
             builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
             
             builder.Logging.SetMinimumLevel(LogLevel.Information);
 
