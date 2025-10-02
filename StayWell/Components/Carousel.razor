@@ -1,10 +1,12 @@
 @using System.Timers
+@implements IDisposable
+
 <div class="carousel">
-    <div class="slider" style="transform: translateX(calc(-@(index*100)%))">
-        @for (int i = 0; i < imageUrls.Length; i++)
+    <div class="slider" style="transform: translateX(calc(-@(_index*100)%))">
+        @for (int i = 0; i < ImageUrls.Length; i++)
         {
             <div class="slide">
-                <img src="@imageUrls[i]" loading="lazy"/>
+                <img src="@ImageUrls[i]" loading="lazy" alt="slide-@i"/>
             </div>
         }
     </div>
@@ -12,11 +14,11 @@
 
 @code {
 
-    [Parameter] public string[] imageUrls { get; set; } = Array.Empty<string>();
+    [Parameter] public string[] ImageUrls { get; set; } = Array.Empty<string>();
     [Parameter] public int TransitionIntervalMs { get; set; } = 2000;
 
-    private int index = 0;
-    private System.Timers.Timer timer;
+    private int _index = 0;
+    private System.Timers.Timer? _timer;
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -25,34 +27,36 @@
 
     private void NextSlide()
     {
-        if (index < imageUrls.Length - 1)
+        
+        if (_index < ImageUrls.Length - 1)
         {
-            index++;
+            _index++;
         }
         else
         {
-            index = 0;
+            _index = 0;
         }
     }
 
     private void StartTimer()
     {
         if (TransitionIntervalMs == 0) return;
-        timer = new Timer();
-        timer.Interval = TransitionIntervalMs;
-        timer.Elapsed += async (sender, args) =>
+        _timer = new Timer();
+        _timer.Interval = TransitionIntervalMs;
+        _timer.Elapsed += async (sender, args) =>
         {
             NextSlide();
             await InvokeAsync(StateHasChanged);
         };
-        timer.AutoReset = true;
-        timer.Start();
+        _timer.AutoReset = true;
+        _timer.Start();
 
     }
 
     public void Dispose()
     {
-        timer?.Dispose();
+        _timer?.Stop();
+        _timer?.Dispose();
     }
 
 }
