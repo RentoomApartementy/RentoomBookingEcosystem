@@ -17,10 +17,11 @@ namespace RentoomBooking.SharedClasses.Database
     {
         private  Container _apartmentInfoContainer;
         private  Container _hashesContainer;
-
+        private  Container _reservationsContainer;
         private const string HashDocumentId = "all-object-hashes"; // ID for the hash document
         private const string HashPartitionKey = "/id"; // Partition
         private const string ApartmentPartitionKey = "/id"; // PartitionPaged
+        private const string ReservationPartitionKey = "/resToken"; // Partition for reservations
         public BookingDatabase(CosmosClient client, IConfiguration configuration)
         {
             InitializeAsync(client, configuration).Wait();
@@ -30,7 +31,7 @@ namespace RentoomBooking.SharedClasses.Database
              private async Task InitializeAsync(CosmosClient client, IConfiguration configuration)
         {
             
-            var databaseName = configuration["ConnectionStrings:AZURE_COSMOS_ENDPOINT"];
+            var databaseName = configuration["AZURE_COSMOS_DATABASE_NAME"];
             var containerName = "ApartmentInfo";
             var containerNameForHashes = "ApartmentsHashes";
 
@@ -41,6 +42,9 @@ namespace RentoomBooking.SharedClasses.Database
 
             _hashesContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties(containerNameForHashes, "/id"));
+            
+            _reservationsContainer = await database.Database.CreateContainerIfNotExistsAsync(
+                new ContainerProperties("Reservations", ReservationPartitionKey));
         }
 
         public async Task<bool> HasRecordsAsync()
@@ -335,7 +339,54 @@ namespace RentoomBooking.SharedClasses.Database
             return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken);
         }
 
+
+        public async Task<RentoomReservation> GetRentoomReservationByResTokenAsync(string resToken, ILogger log)
+        {
+            try
+            {
+
+                var response = await _reservationsContainer.ReadItemAsync<RentoomReservation>(
+                    id: resToken,
+                    partitionKey: new PartitionKey(resToken));
+
+
+                return response.Resource;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                log?.LogWarning("Reservation with resId {resToken} not found.", resToken);
+                return null;
+            }
+        }
+
+
+        public async Task<string?> SaveReservationJsonAsync(Reservation payloadReservation, ILogger log)
+        {
+            // Create a new, app-specific token for this saved reservation
+            string resToken = Guid.NewGuid().ToString("N");
+
+            var doc = new RentoomReservation
+            {
+                Id = resToken,                 // Cosmos 'id'
+                ResToken = resToken,              // Partition key
+                Reservation  = payloadReservation
+            };
+
+            try
+            {
+                await _reservationsContainer.CreateItemAsync(doc, new PartitionKey(resToken));
+                log.LogInformation("Saved reservation {SourceReservationId} as resId {resToken}.", payloadReservation.id, resToken);
+                return resToken;
+            }
+            catch (CosmosException ex)
+            {
+                log.LogError(ex, "Failed to save reservation {0} to Cosmos.", payloadReservation.id);
+               return null;
+            }
+        }
+
       
+
 
     }
 }
