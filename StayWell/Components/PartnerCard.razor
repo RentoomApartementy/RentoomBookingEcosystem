@@ -34,7 +34,7 @@
     [Parameter] public string? PartnerDescription { get; set; } = string.Empty;
     [Parameter] public PartnerCategories Category { get; set; } = PartnerCategories.Empty;
     [Parameter] public string? Offer { get; set; } = string.Empty;
-    [Parameter] public string? Image { get; set; }
+    [Parameter] public string? Image { get; set; } = "/images/placeholders/partner_placeholder.png";
     [Parameter] public string Href { get; set; } = "/404";
 
     public void Navigate() => Navigation.NavigateTo(Href);
