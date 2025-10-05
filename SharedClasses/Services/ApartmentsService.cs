@@ -19,6 +19,8 @@ namespace RentoomBooking.SharedClasses.Services
            string? continuationToken = null,
            int top = 50,
            CancellationToken ct = default);
+
+        Task<long> GetApartmentsCountAsync();
     }
 
      
@@ -28,10 +30,12 @@ namespace RentoomBooking.SharedClasses.Services
     {
         private readonly IHttpClientFactory _factory;
         BookingDatabase _bd;
-        public ApartmentsService(IHttpClientFactory factory, BookingDatabase bd)
+        ApartmentRepository _apartmentsRepository;
+        public ApartmentsService(IHttpClientFactory factory, BookingDatabase bd, ApartmentRepository apartmentsRepository)
         {
             _factory = factory;
             _bd = bd;
+            _apartmentsRepository = apartmentsRepository;
         }
 
         public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
@@ -63,6 +67,11 @@ namespace RentoomBooking.SharedClasses.Services
             var result = await _bd.QueryApartmentsAsync(continuationToken, top);
 
             return result;
+        }
+
+        public async Task<long> GetApartmentsCountAsync()
+        {
+            return await _apartmentsRepository.GetApartmentCountAsync();
         }
     }
 }

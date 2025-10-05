@@ -1,5 +1,7 @@
 @page "/apartments"
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
+@using RentoomBooking.SharedClasses.Services;
+@inject IApartmentsService ApartmentsApiService;
 
 <PageTitle>Apartamenty</PageTitle>
 
@@ -15,7 +17,7 @@
         <Filters />
         
         <div class="apartments-items-wrapper">
-            <h4>115 apartamenty/ów</h4>
+            <h4>@ApartmentsCount apartamenty/ów</h4>
             <div class="apartments-items-container">
                 <Apartment/>
                 <Apartment/>
@@ -28,4 +30,27 @@
     </div>
 </div>
 
+@code {
 
+    private long? ApartmentsCount;
+    private bool IsLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        try
+        {
+            ApartmentsCount = await ApartmentsApiService.GetApartmentsCountAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+            ApartmentsCount = null;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+}
