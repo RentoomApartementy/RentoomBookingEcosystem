@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using RentoomBooking.SharedClasses.Models;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace RentoomBooking.StayWell.Services
@@ -15,8 +16,13 @@ namespace RentoomBooking.StayWell.Services
             _json = json;
         }
 
+        public async Task<RentoomReservation?> GetReservationByTokenAsync(string token)
+        {
+            return await _http.GetFromJsonAsync<RentoomReservation>($"db/reservations/{token}", _json);
+        }
 
-      
+
+
 
 
     }
