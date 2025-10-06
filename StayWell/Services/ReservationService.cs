@@ -3,15 +3,10 @@ using System.Net.Http.Json;
 
 namespace RentoomBooking.StayWell.Services
 {
-    public class ReservationService
+    public class ReservationService(BackendApi backendApi, ILogger<ReservationService> logger)
     {
-        private readonly BackendApi _backendApi;
-        private readonly ILogger<ReservationService> _logger;
-        public ReservationService(BackendApi backendApi, ILogger<ReservationService> logger)
-        {
-            _backendApi = backendApi;
-            _logger = logger;
-        }
+        private readonly BackendApi _backendApi = backendApi;
+        private readonly ILogger<ReservationService> _logger = logger;
 
         public async Task<RentoomReservation?> GetReservationByTokenAsync(string token)
         {

@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
-@using RentoomBooking.StayWell.ReservationState
 @using RentoomBooking.SharedClasses.Models;
+@using RentoomBooking.StayWell.States
 @inject ReservationState ReservationState
 @implements IDisposable
 
@@ -41,12 +41,8 @@ else
     protected override void OnInitialized()
     {
         ReservationState.OnChange += StateHasChanged;
-
-        Task.Delay(100).ContinueWith(_ =>
-        {
-            isLoading = false;
-            InvokeAsync(StateHasChanged);
-        });
+        isLoading = false;
+        InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()

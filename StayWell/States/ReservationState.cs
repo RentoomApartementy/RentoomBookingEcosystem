@@ -1,6 +1,6 @@
 ﻿using RentoomBooking.SharedClasses.Models;
 
-namespace RentoomBooking.StayWell.ReservationState
+namespace RentoomBooking.StayWell.States
 {
 /* https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-9.0#url */
     public class ReservationState
