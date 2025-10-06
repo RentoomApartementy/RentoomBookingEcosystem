@@ -6,8 +6,7 @@ using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses;
 using RentoomBooking.StayWell.Services;
 using System.Text.Json;
-
-using RentoomBooking.StayWell.ReservationState;
+using RentoomBooking.StayWell.States;
 
 
 namespace RentoomBooking.StayWell
@@ -20,7 +19,7 @@ namespace RentoomBooking.StayWell
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped<ReservationState.ReservationState>();
+            builder.Services.AddScoped<ReservationState>();
 
             var apiBase = builder.Configuration["ApiBaseUrl"] ?? "/api/";
 
