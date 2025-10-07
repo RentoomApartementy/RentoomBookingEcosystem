@@ -2,6 +2,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services;
 using System.Net;
@@ -173,6 +174,58 @@ public class ApartmentsApi
         finally
         {
             _logger.LogInformation("GetApartmentDescriptions finished for objectId={ObjectId} at {Time}", objectId, DateTime.UtcNow);
+        }
+    }
+
+
+    [Function("GetAmenitiesForObjectTypes")]
+    public async Task<HttpResponseData> GetAmenitiesForObjectTypes(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "amenities/getForObjects")] HttpRequestData req)
+    {
+        var response = req.CreateResponse();
+
+        try
+        {
+            var queryParams = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+            var objectTypesQuery = queryParams.Get("objectTypesIds");
+
+            List<IdoBookingObjectType> objectTypes = new();
+
+            if (!string.IsNullOrWhiteSpace(objectTypesQuery))
+            {
+                foreach (var token in objectTypesQuery.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var trimmed = token.Trim();
+                    if (int.TryParse(trimmed, out var id) && Enum.IsDefined(typeof(IdoBookingObjectType), id))
+                    {
+                        objectTypes.Add((IdoBookingObjectType)id);
+                    }
+                    else if (Enum.TryParse(trimmed, true, out IdoBookingObjectType enumValue))
+                    {
+                        objectTypes.Add(enumValue);
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.BadRequest;
+                        await response.WriteStringAsync($"Invalid objectTypesIds value: {trimmed}.");
+                        return response;
+                    }
+                }
+            }
+
+            var result = await _service.FetchAmenitiesForObjectTypesAsync(objectTypes);
+
+            response.StatusCode = HttpStatusCode.OK;
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync(JsonConvert.SerializeObject(result ?? new List<ObjectTypesAmenities>()));
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching amenities for object types");
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal server error.");
+            return response;
         }
     }
 
