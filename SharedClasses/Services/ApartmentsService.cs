@@ -24,6 +24,7 @@ namespace RentoomBooking.SharedClasses.Services
         Task<long> GetApartmentsCountAsync();
 
         Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
+        Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
     }
 
       
@@ -88,5 +89,30 @@ namespace RentoomBooking.SharedClasses.Services
             var jsonString = await resp.Content.ReadAsStringAsync(ct);
             return JsonConvert.DeserializeObject<ObjectMediaResponseType>(jsonString);
         }
+
+        public async Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default)
+        {
+            var http = _factory.CreateClient("FunctionsApi");
+            var urlBuilder = new StringBuilder($"apartments/{objectId}/descriptions");
+
+            if (!string.IsNullOrWhiteSpace(language))
+            {
+                urlBuilder.Append("?language=").Append(Uri.EscapeDataString(language));
+            }
+
+            using var resp = await http.GetAsync(urlBuilder.ToString(), ct);
+
+            if (resp.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            resp.EnsureSuccessStatusCode();
+
+            var jsonString = await resp.Content.ReadAsStringAsync(ct);
+            return JsonConvert.DeserializeObject<List<ObjectDescription>>(jsonString);
+        }
+
+
     }
 }

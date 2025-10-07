@@ -378,5 +378,54 @@ namespace RentoomBooking.SharedClasses.Services
             return ret?.Result.ObjectAmenities;
         }
 
+        public async Task<List<ObjectDescription>?> FetchObjectDescriptionsAsync(int objectId, string? language = null)
+        {
+            if (string.IsNullOrWhiteSpace(baseAPIUrl) || string.IsNullOrWhiteSpace(systemUser) || string.IsNullOrWhiteSpace(systemPwd))
+            {
+                _logger.LogError("Cannot fetch descriptions. Required configuration values are missing.");
+                return null;
+            }
+
+            var address = baseAPIUrl + "objects/getDescriptions/34/json";
+
+            _logger.LogInformation("Fetching descriptions for object {ObjectId} and language {Language}", objectId, language ?? "default");
+
+            var request = new ObjectDescriptionsRequestType
+            {
+                Authenticate = new AuthenticateType
+                {
+                    SystemKey = GenerateKey(HashPassword(systemPwd)),
+                    SystemLogin = systemUser,
+                    Lang = "eng",
+                },
+                ParamsSearch = new ObjectDescriptionParamsSearch
+                {
+                    ObjectId = objectId,
+                    Language = language,
+                }
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
+            var requestString = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync(address, requestString);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Failed to fetch descriptions for object {ObjectId}. StatusCode: {StatusCode}. Content: {Content}", objectId, response.StatusCode, responseContent);
+                response.EnsureSuccessStatusCode();
+            }
+
+            var ret = JsonConvert.DeserializeObject<ObjectDescriptionsResponseType>(responseContent);
+            return ret?.Result.ObjectDescriptions;
+        }
+
+
+
+
     }
 }
