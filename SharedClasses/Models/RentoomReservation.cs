@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
