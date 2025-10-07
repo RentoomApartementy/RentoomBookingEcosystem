@@ -9,7 +9,7 @@ namespace RentoomBooking.SharedClasses.Services
 {
     public interface IApartmentsService
     {
-        Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
+        Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncWithFunctionApi(
             string? continuationToken = null,
             int top = 50,
             CancellationToken ct = default);
@@ -38,7 +38,7 @@ namespace RentoomBooking.SharedClasses.Services
             _apartmentsRepository = apartmentsRepository;
         }
 
-        public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
+        public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncWithFunctionApi(
             string? continuationToken = null,
             int top = 50,
             CancellationToken ct = default)
@@ -54,7 +54,7 @@ namespace RentoomBooking.SharedClasses.Services
 
             var jsonString = await resp.Content.ReadAsStringAsync(ct);
 
-            // Deserialize using Newtonsoft
+            
             return JsonConvert.DeserializeObject<PagedResult<ApartmentObject>>(jsonString);
         }
 
