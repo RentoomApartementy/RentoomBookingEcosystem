@@ -6,6 +6,7 @@ using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Utils;
 using System;
@@ -424,7 +425,49 @@ namespace RentoomBooking.SharedClasses.Services
             return ret?.Result.ObjectDescriptions;
         }
 
+        public async Task<List<ObjectTypesAmenities>?> FetchAmenitiesForObjectTypesAsync(IEnumerable<IdoBookingObjectType> objectTypes)
+        {
+            if (string.IsNullOrWhiteSpace(baseAPIUrl) || string.IsNullOrWhiteSpace(systemUser) || string.IsNullOrWhiteSpace(systemPwd))
+            {
+                _logger.LogError("Cannot fetch amenities for object types. Required configuration values are missing.");
+                return null;
+            }
 
+            var address = baseAPIUrl + "amenities/getForObjects/34/json";
+
+            var objectTypeIds = objectTypes?.Select(t => (int)t).ToList();
+
+            _logger.LogInformation("Fetching amenities for object types: {ObjectTypes}", objectTypeIds == null ? "all" : string.Join(",", objectTypeIds));
+
+            var request = new AmenitiesForObjectsRequestType
+            {
+                Authenticate = new AuthenticateType
+                {
+                    SystemKey = GenerateKey(HashPassword(systemPwd)),
+                    SystemLogin = systemUser,
+                    Lang = "eng",
+                },
+                ObjectTypesIds = objectTypeIds != null && objectTypeIds.Count > 0 ? objectTypeIds : null
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
+            var requestString = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(address, requestString);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Failed to fetch amenities for object types. StatusCode: {StatusCode}. Content: {Content}", response.StatusCode, responseContent);
+                response.EnsureSuccessStatusCode();
+            }
+
+            var ret = JsonConvert.DeserializeObject<AmenitiesForObjectsResponseType>(responseContent);
+            return ret?.Result.ObjectTypesAmenities;
+        }
 
 
     }
