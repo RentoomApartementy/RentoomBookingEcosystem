@@ -1,3 +1,6 @@
+@using RentoomBooking.SharedClasses.Models;
+@using System.Text.Json
+
 <article class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
     <header>
         <img src="@ImageUrl"
@@ -8,7 +11,7 @@
     </header>
 
     <div class="apartment-info">
-        <h2 itemprop="name">Apartament Ralf</h2>
+        <h2 itemprop="name">@Item?.Name</h2>
         <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
             <span itemprop="streetAddress">Kazimierza Jagiellończyka 8</span>, 
             <span itemprop="postalCode">87-100</span> 
@@ -18,11 +21,11 @@
         <ul class="apartment-details">
             <li>
                 <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon" />
-                <span itemprop="occupancy">4</span>
+                <span itemprop="occupancy">@Item?.MinCapacity - @Item?.Capacity</span>
             </li>
             <li>
-                <img src="assets/svgs/bed.svg" alt="Liczba sypialni" class="icon" />
-                2
+                <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
+                @BedsCount
             </li>
             <li>
                 <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
@@ -30,7 +33,7 @@
             </li>
             <li>
                 <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
-                <span itemprop="floorSize">30 m²</span>
+                <span itemprop="floorSize">@Item?.Area m²</span>
             </li>
         </ul>
 
@@ -42,4 +45,11 @@
 
 @code {
     [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
+    [Parameter] public ApartmentObject? Item { get; set;} = null;
+    private int? BedsCount = null;
+    
+    protected override void OnInitialized()
+    {
+        BedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
+    }
 }
