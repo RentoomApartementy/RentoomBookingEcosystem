@@ -130,6 +130,50 @@ public class ApartmentsApi
         }
     }
 
+    [Function("GetApartmentDescriptions")]
+    public async Task<HttpResponseData> GetApartmentDescriptions(
+      [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "apartments/{objectId:int}/descriptions")] HttpRequestData req,
+      int objectId)
+    {
+        var language = System.Web.HttpUtility.ParseQueryString(req.Url.Query).Get("language");
 
+        _logger.LogInformation("GetApartmentDescriptions started for objectId={ObjectId}, language={Language} at {Time}", objectId, language, DateTime.UtcNow);
+        var response = req.CreateResponse();
+
+        try
+        {
+            if (objectId <= 0)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                await response.WriteStringAsync("ObjectId is missing.");
+                return response;
+            }
+
+            var descriptions = await _service.FetchObjectDescriptionsAsync(objectId, language);
+
+            if (descriptions == null || descriptions.Count == 0)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                await response.WriteStringAsync($"Descriptions not found for objectId {objectId}.");
+                return response;
+            }
+
+            response.StatusCode = HttpStatusCode.OK;
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync(JsonConvert.SerializeObject(descriptions));
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching descriptions for objectId={ObjectId}", objectId);
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal server error.");
+            return response;
+        }
+        finally
+        {
+            _logger.LogInformation("GetApartmentDescriptions finished for objectId={ObjectId} at {Time}", objectId, DateTime.UtcNow);
+        }
+    }
 
 }
