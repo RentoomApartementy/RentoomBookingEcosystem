@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentoomBooking.SharedClasses.Models
+namespace RentoomBooking.SharedClasses.Models.IdoBooking
 {
+
+
 
     //REQUEST
     public class ReservationRequestIDOSellAPI
@@ -95,9 +97,9 @@ namespace RentoomBooking.SharedClasses.Models
 
         public int getDuration()
         {
-            DateTime dateStart = DateTime.ParseExact(this.dateFrom, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-            DateTime dateEnd = DateTime.ParseExact(this.dateTo, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-            var days = (int)dateEnd.Subtract(dateStart).Days;
+            DateTime dateStart = DateTime.ParseExact(dateFrom, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+            DateTime dateEnd = DateTime.ParseExact(dateTo, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+            var days = dateEnd.Subtract(dateStart).Days;
             return days + 1;
 
 

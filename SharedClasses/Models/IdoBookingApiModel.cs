@@ -1,4 +1,5 @@
-﻿
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
+
 namespace RentoomBooking.SharedClasses.Models
 {
   

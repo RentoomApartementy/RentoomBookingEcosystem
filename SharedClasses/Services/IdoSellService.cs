@@ -2,9 +2,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Enum;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Utils;
 using System;
 using System.Collections.Generic;
@@ -18,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Services
 {
-    public  class IdoSellService
+    public class IdoSellService
     {
         private string? baseAPIUrl;
         private string? systemUser;
@@ -33,7 +36,7 @@ namespace RentoomBooking.SharedClasses.Services
         private BookingDatabase _bookingDatabase;
         private ILogger<IdoSellService> _logger;
 
-        public IdoSellService(ILogger<IdoSellService> logger, HttpClient httpClient,BookingDatabase bookingDatabase,  IConfiguration configuration)//, CosmosClient cosmosClient)
+        public IdoSellService(ILogger<IdoSellService> logger, HttpClient httpClient, BookingDatabase bookingDatabase, IConfiguration configuration)//, CosmosClient cosmosClient)
         {
             _httpClient = httpClient;
             _logger = logger;
@@ -57,7 +60,7 @@ namespace RentoomBooking.SharedClasses.Services
         public async Task SyncAndStoreObjectsAsync()
         {
 
-            var x= await _bookingDatabase.HasRecordsAsync();
+            var x = await _bookingDatabase.HasRecordsAsync();
             _logger.LogInformation($" found records: {x} ");
             _logger.LogInformation($"Syncing and storing apartment objects... ");
             var solutionname = SolutionNameClass.SolutionName_1;
@@ -82,7 +85,7 @@ namespace RentoomBooking.SharedClasses.Services
                 {
                     var apiResponse = await FetchApartmentsByPageFromIdoSellAsync(currentPage);
 
-                  
+
                     pageAll = apiResponse.Result?.Result?.PageAll ?? 0;
                     if (pageAll == 0)
                     {
@@ -92,33 +95,33 @@ namespace RentoomBooking.SharedClasses.Services
 
                     if (apiResponse?.Result?.Objects == null || apiResponse.Result.Objects.Count == 0)
                     {
-                    _logger.LogInformation($"No apartments found on page {currentPage}. Ending sync.");
-                    break;
+                        _logger.LogInformation($"No apartments found on page {currentPage}. Ending sync.");
+                        break;
                     }
-               
-
-                pageAll = apiResponse.Result.Result.PageAll;
 
 
-                foreach (var obj in apiResponse.Result.Objects)
-                {
-                    obj.Id = obj.Id.ToString();
-                    var obj_hash = ApartmentObjectHasher.ComputeHash(obj);
-                 //   _logger.LogInformation($"apartments {obj.Name} hash {obj_hash}.");
-                    allNewHashes.Add(new ItemHash { objectId = obj.Id, hash = obj_hash });
+                    pageAll = apiResponse.Result.Result.PageAll;
 
-                    if (existingHashesDict.TryGetValue(obj.Id, out var existingHash))
+
+                    foreach (var obj in apiResponse.Result.Objects)
                     {
-                        if (existingHash != obj_hash)
+                        obj.Id = obj.Id.ToString();
+                        var obj_hash = ApartmentObjectHasher.ComputeHash(obj);
+                        //   _logger.LogInformation($"apartments {obj.Name} hash {obj_hash}.");
+                        allNewHashes.Add(new ItemHash { objectId = obj.Id, hash = obj_hash });
+
+                        if (existingHashesDict.TryGetValue(obj.Id, out var existingHash))
                         {
-                            objectsToReplace.Add(obj);
+                            if (existingHash != obj_hash)
+                            {
+                                objectsToReplace.Add(obj);
+                            }
+                        }
+                        else
+                        {
+                            objectsToCreate.Add(obj);
                         }
                     }
-                    else
-                    {
-                        objectsToCreate.Add(obj);
-                    }
-                }
                 }
                 catch (Exception ex)
                 {
@@ -148,8 +151,8 @@ namespace RentoomBooking.SharedClasses.Services
                 _logger.LogInformation("All Apartments are up to date.  Nothing to replace.");
             }
 
-                // Update the hash document in a single operation
-                await _bookingDatabase.UpdateHashesDocumentAsync(allNewHashes, _logger);
+            // Update the hash document in a single operation
+            await _bookingDatabase.UpdateHashesDocumentAsync(allNewHashes, _logger);
 
 
             _logger.LogInformation("Apartment objects synced and stored successfully.");
@@ -158,7 +161,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         public async Task<List<ApartmentObject>> FetchApartmentsFromIdoSellAsync()
         {
-           
+
 
             List<ApartmentObject> retList = new();
 
@@ -178,24 +181,24 @@ namespace RentoomBooking.SharedClasses.Services
 
         public async Task<ApartmentResponseType> FetchApartmentsByPageFromIdoSellAsync(int page)
         {
-            
+
             string address = baseAPIUrl + "objects/getAll/34/json";
             _logger.LogInformation($"FetchApartmentsFromIdoSellAsync page={page}");
             var request = new
             {
-                authenticate = new  { systemKey = GenerateKey(HashPassword(systemPwd)), systemLogin = systemUser, lang = "eng" },
-                result = new  { page = page, number = 100 },
-            
+                authenticate = new { systemKey = GenerateKey(HashPassword(systemPwd)), systemLogin = systemUser, lang = "eng" },
+                result = new { page = page, number = 100 },
+
             };
             _logger.LogInformation($"pwd: {request.authenticate.systemKey}");
 
             HttpClient? client = new HttpClient();
-            
+
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var requestString = new StringContent(System.Text.Json.JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.PostAsync(address, requestString);
-            
+
             var responseContent = await response.Content.ReadAsStringAsync();
 
 
@@ -211,34 +214,34 @@ namespace RentoomBooking.SharedClasses.Services
         {
             string address = baseAPIUrl + "reservations/get/34/json";
             _logger.LogInformation($"FetchReservationByIDIdoSellAsync id={ReservationId}");
-            
+
             ReservationRequestIDOSellAPI request = new ReservationRequestIDOSellAPI
             {
                 authenticate = new AuthenticateType { SystemKey = GenerateKey(HashPassword(systemPwd)), SystemLogin = systemUser, Lang = "eng" },
                 result = new ResultSetup { page = 1, number = 100 },
                 paramsSearch = new ReservationsParamsSearch { ids = [ReservationId] }
             };
-
+            
             HttpClient? client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
+
             var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
             var content = new StringContent(jsonRequest, System.Text.Encoding.UTF8, "application/json");
-            
+
             HttpResponseMessage response = await client.PostAsync(address, content);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             ReservationResponseFromIdoSellAPI ret = JsonConvert.DeserializeObject<ReservationResponseFromIdoSellAPI>(responseContent);
-            
+
             string? stored = null;
-            
+
             if (saveToDb && ret?.result?.Reservations != null && ret.result.Reservations.Count > 0)
             {
                 var reservation = ret.result.Reservations[0];
-                
+
                 stored = await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger);
 
-                if (stored !=null)
+                if (stored != null)
                 {
                     _logger.LogInformation("Reservation {stored} stored in DB.", stored);
                 }
@@ -250,7 +253,7 @@ namespace RentoomBooking.SharedClasses.Services
 
             client.Dispose();
 
-            return (ret,stored);
+            return (ret, stored);
         }
 
         public static string GenerateKey(string hashedPassword)
@@ -266,7 +269,7 @@ namespace RentoomBooking.SharedClasses.Services
             {
                 hashedString += String.Format("{0:x2}", b);
             }
-
+            Console.WriteLine("pwd " + hashedString);
             return hashedString;
         }
 
@@ -292,6 +295,179 @@ namespace RentoomBooking.SharedClasses.Services
         => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
 
 
+
+        public async Task<List<ObjectMedium>?> FetchObjectMediaFromIdoSellAsync(int objectId)
+        {
+            string address = baseAPIUrl + "objects/getMedia/34/json";
+            _logger.LogInformation("FetchObjectMediaFromIdoSellAsync objectId={ObjectId}", objectId);
+
+            if (string.IsNullOrWhiteSpace(systemPwd) || string.IsNullOrWhiteSpace(systemUser))
+            {
+                _logger.LogError("Missing IDOBOOKING credentials.");
+                throw new InvalidOperationException("Missing IDOBOOKING credentials.");
+            }
+
+            var request = new ObjectMediaRequestType
+            {
+                Authenticate = new AuthenticateType
+                {
+                    SystemKey = GenerateKey(HashPassword(systemPwd)),
+                    SystemLogin = systemUser,
+                    Lang = "eng"
+                },
+                ObjectId = objectId
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
+            var requestString = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync(address, requestString);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Failed to fetch media for object {ObjectId}. StatusCode: {StatusCode}. Content: {Content}", objectId, response.StatusCode, responseContent);
+                response.EnsureSuccessStatusCode();
+            }
+
+            ObjectMediaResponseType ret = JsonConvert.DeserializeObject<ObjectMediaResponseType>(responseContent);
+            return ret?.Result.ObjectMedia;
+        }
+
+        public async Task<List<ObjectAmenity>?> FetchObjectAmenitiesAsync(int objectId)
+        {
+            if (string.IsNullOrWhiteSpace(baseAPIUrl) || string.IsNullOrWhiteSpace(systemUser) || string.IsNullOrWhiteSpace(systemPwd))
+            {
+                _logger.LogError("Cannot fetch amenities. Required configuration values are missing.");
+                return null;
+            }
+
+            var address = baseAPIUrl + "objects/getAmenities/34/json";
+
+            _logger.LogInformation("Fetching amenities for object {ObjectId}", objectId);
+
+            var request = new ObjectAmenitiesRequestType
+            {
+                Authenticate = new AuthenticateType
+                {
+                    SystemKey = GenerateKey(HashPassword(systemPwd)),
+                    SystemLogin = systemUser,
+                    Lang = "eng"
+                },
+                ObjectId = objectId
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
+            var requestString = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync(address, requestString);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Failed to fetch media for object {ObjectId}. StatusCode: {StatusCode}. Content: {Content}", objectId, response.StatusCode, responseContent);
+                response.EnsureSuccessStatusCode();
+            }
+
+            ObjectAmenitiesResponseType ret = JsonConvert.DeserializeObject<ObjectAmenitiesResponseType>(responseContent);
+            return ret?.Result.ObjectAmenities;
+        }
+
+        public async Task<List<ObjectDescription>?> FetchObjectDescriptionsAsync(int objectId, string? language = null)
+        {
+            if (string.IsNullOrWhiteSpace(baseAPIUrl) || string.IsNullOrWhiteSpace(systemUser) || string.IsNullOrWhiteSpace(systemPwd))
+            {
+                _logger.LogError("Cannot fetch descriptions. Required configuration values are missing.");
+                return null;
+            }
+
+            var address = baseAPIUrl + "objects/getDescriptions/34/json";
+
+            _logger.LogInformation("Fetching descriptions for object {ObjectId} and language {Language}", objectId, language ?? "default");
+
+            var request = new ObjectDescriptionsRequestType
+            {
+                Authenticate = new AuthenticateType
+                {
+                    SystemKey = GenerateKey(HashPassword(systemPwd)),
+                    SystemLogin = systemUser,
+                    Lang = "eng",
+                },
+                ParamsSearch = new ObjectDescriptionParamsSearch
+                {
+                    ObjectId = objectId,
+                    Language = language,
+                }
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
+            var requestString = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync(address, requestString);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Failed to fetch descriptions for object {ObjectId}. StatusCode: {StatusCode}. Content: {Content}", objectId, response.StatusCode, responseContent);
+                response.EnsureSuccessStatusCode();
+            }
+
+            var ret = JsonConvert.DeserializeObject<ObjectDescriptionsResponseType>(responseContent);
+            return ret?.Result.ObjectDescriptions;
+        }
+
+        public async Task<List<ObjectTypesAmenities>?> FetchAmenitiesForObjectTypesAsync(IEnumerable<IdoBookingObjectType> objectTypes)
+        {
+            if (string.IsNullOrWhiteSpace(baseAPIUrl) || string.IsNullOrWhiteSpace(systemUser) || string.IsNullOrWhiteSpace(systemPwd))
+            {
+                _logger.LogError("Cannot fetch amenities for object types. Required configuration values are missing.");
+                return null;
+            }
+
+            var address = baseAPIUrl + "amenities/getForObjects/34/json";
+
+            var objectTypeIds = objectTypes?.Select(t => (int)t).ToList();
+
+            _logger.LogInformation("Fetching amenities for object types: {ObjectTypes}", objectTypeIds == null ? "all" : string.Join(",", objectTypeIds));
+
+            var request = new AmenitiesForObjectsRequestType
+            {
+                Authenticate = new AuthenticateType
+                {
+                    SystemKey = GenerateKey(HashPassword(systemPwd)),
+                    SystemLogin = systemUser,
+                    Lang = "eng",
+                },
+                ObjectTypesIds = objectTypeIds != null && objectTypeIds.Count > 0 ? objectTypeIds : null
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
+            var requestString = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(address, requestString);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Failed to fetch amenities for object types. StatusCode: {StatusCode}. Content: {Content}", response.StatusCode, responseContent);
+                response.EnsureSuccessStatusCode();
+            }
+
+            var ret = JsonConvert.DeserializeObject<AmenitiesForObjectsResponseType>(responseContent);
+            return ret?.Result.ObjectTypesAmenities;
+        }
 
 
     }
