@@ -1,19 +1,48 @@
 ﻿<div class="parent">
     <div class="apartment-name">@apartmentName</div>
-    <div class="apartment-full-adress">@apartmentAdress #@apartmentNumber</div>
+    <div class="apartment-full-adress">@apartmentAddress #@apartmentNumber</div>
     <div class="check-in">Zameldowanie:</div>
     <div class="check-out">Wymeldowanie:</div>
-    <div class="check-in-date">@reservationCheckInDate</div>
-    <div class="check-out-date">@reservationCheckOutDate</div>
+    <div class="check-in-date">@formattedCheckInDate</div>
+    <div class="check-out-date">@formattedCheckOutDate</div>
 </div>
 
 
 
 
 @code {
+    private string? formattedCheckInDate;
+    private string? formattedCheckOutDate;
+
     [Parameter] public string? apartmentName { get; set; } = string.Empty;
-    [Parameter] public string? apartmentAdress { get; set; } = string.Empty;
+    [Parameter] public string? apartmentAddress { get; set; } = string.Empty;
     [Parameter] public string? apartmentNumber { get; set; } = string.Empty;
     [Parameter] public string? reservationCheckInDate { get; set; } = string.Empty;
     [Parameter] public string? reservationCheckOutDate { get; set; } = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        formattedCheckInDate = FormatDate(reservationCheckInDate);
+        formattedCheckOutDate = FormatDate(reservationCheckOutDate);
+    }
+
+    private string? FormatDate(string? date)
+    {
+        if (string.IsNullOrWhiteSpace(date)) return null;
+
+        if (DateTime.TryParseExact(date, "yyyy-MM-dd HH:mm", null, System.Globalization.DateTimeStyles.None, out var dt))
+        {
+            return dt.ToString("dd.MM.yyyy");
+        }
+        return date;
+    }
+
+    private string? FormatApartmentNumber(string? number) // Dodać dla np. "1 A" 
+    {
+        if(string.IsNullOrWhiteSpace(number)) return null;
+        var match = System.Text.RegularExpressions.Regex.Match(number, @"\d+");
+        return match.Success ? match.Value : number;
+    }
+
+
 }

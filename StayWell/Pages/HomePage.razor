@@ -1,22 +1,24 @@
 ﻿@page "/HomePage"
 @using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
+@inject ReservationState ReservationState
 
 <PageTitle>Main</PageTitle>
 
     <div class="image-wrapper">
-        <ApartmentImage Source="https://rentoom.pl/wp-content/uploads/2020/05/DSC00717-Edit-1920x1080.jpg">
+        <ApartmentImage>
 
         </ApartmentImage>
     </div>
 
 
 <div class="reservation-info-wrapper">
-    <ReservationInfo apartmentName="Szeroka Premier No 2A"
-        apartmentAdress="Szeroka 31"
-        apartmentNumber="2A"
-        reservationCheckInDate="20.05.2025, 15:00"
-        reservationCheckOutDate="30.05.2025, 11:00">
+    <ReservationInfo apartmentName="@ApartmentName"
+        apartmentAddress="(apartmentAddress)"
+        apartmentNumber="@ApartmentNumber"
+        reservationCheckInDate="@ReservationDateFrom"
+        reservationCheckOutDate="@ReservationDateTo">
     </ReservationInfo>
 </div>
 
@@ -24,32 +26,49 @@
 
     <Button OnClick="@(() => Navigation.NavigateTo("/ClubPage"))" Text="Klub Korzyści Rentoom" ButtonStyle="border-color: #F9B806; color: #F9B806; background-color: #21573e; margin-bottom: 2rem;">
         <Icon>
-            <img src="/icons/hand-coins.svg">
+            <img src="/icons/hand-coins.svg" alt="ClubPaged">
         </Icon>
     </Button>
 
     <Button OnClick="@(() => Navigation.NavigateTo("/InstructionsPage"))" Text="Instrukcja Zameldowania">
         <Icon>
-            <img src="/icons/book.svg">
+            <img src="/icons/book.svg" alt="InstructionsPage">
         </Icon>
     </Button>
 
     <Button OnClick="@(() => Navigation.NavigateTo("/OpenApartmentPage"))" Text="Otwórz Apartament">
         <Icon>
-            <img src="/icons/door-open.svg">
+            <img src="/icons/door-open.svg" alt="OpenApartmentPage">
         </Icon>
     </Button>
 
     <Button OnClick="@(() => Navigation.NavigateTo("/AboutReservationPage"))" Text="O rezerwacji">
         <Icon>
-            <img src="/icons/info.svg">
+            <img src="/icons/info.svg" alt="AboutReservationPage">
         </Icon>
     </Button>
 
     <Button OnClick="@(() => Navigation.NavigateTo("/ManageStayPage"))" Text="Zarządzaj pobytem">
         <Icon>
-            <img src="/icons/lamp.svg">
+            <img src="/icons/lamp.svg" alt="ManageStayPage">
         </Icon>
     </Button>
 
 </div>
+
+@code
+{
+    public string? ApartmentName;
+    public string? ApartmentNumber;
+    public string? ReservationDateFrom;
+    public string? ReservationDateTo;
+
+    protected override void OnInitialized()
+    {
+        RentoomReservation? currentReservation = ReservationState.CurrentReservation;
+        ApartmentName = currentReservation?.Reservation.Items?.FirstOrDefault()?.objectName;
+        ApartmentNumber = currentReservation?.Reservation.Items?.FirstOrDefault()?.itemCode;
+        ReservationDateFrom = currentReservation?.Reservation.ReservationDetails?.dateFrom;
+        ReservationDateTo = currentReservation?.Reservation.ReservationDetails?.dateTo;
+    }
+}

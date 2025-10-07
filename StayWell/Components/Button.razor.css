@@ -9,24 +9,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     margin-bottom: 10px;
-    /*    padding-left: 50px;*/
+    white-space: normal;
+    overflow-wrap: break-word;
+    padding: 8px 12px;
+    line-height: 1.2;
 }
 
     button .text {
         text-align: center;
+        flex: 1 1 auto;
+        max-width: calc(100% - 70px);
     }
 
     button:enabled   .icon {
         position: absolute;
         left: 12px;
-        top: 40%;
+        top: 50%;
         transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
     }
 
     button:hover:enabled {
@@ -35,14 +40,7 @@
 
     button:active:enabled {
         filter: invert(1);
-/*        color: white;
-        border-color: white;
-        background-color: black;*/
     }
-
-/*    button:active .icon {
-                filter: invert(1);
-    }*/
 
     button:disabled {
         background-color: lightgray;

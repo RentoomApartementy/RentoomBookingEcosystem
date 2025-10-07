@@ -1,0 +1,74 @@
+﻿@page "/reservation/{Token}"
+@implements IDisposable
+@using RentoomBooking.StayWell.States;
+@using RentoomBooking.StayWell.Services;
+@inject ReservationService ReservationService
+@inject BackendApi BackendApi
+@inject ReservationState ReservationState
+@layout ReservationLayout
+@inject NavigationManager Navigation
+<h3>ReservationPage</h3>
+
+@if (isLoading)
+{
+    <h1>Ladowanie...</h1>
+}
+else if (ReservationState.CurrentReservation == null)
+{
+    <h3>Nie ma takiej rezerwacji</h3>
+}
+else
+{
+    Navigation.NavigateTo($"/HomePage");
+}
+
+
+@code {
+    [Parameter]
+    public string? Token { get; set; }
+
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ReservationState.OnChange += StateHasChanged;
+        await LoadReservationAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadReservationAsync();
+    }
+
+    private async Task LoadReservationAsync()
+    {
+        isLoading = true;
+        ReservationState.SetLoading(true);
+
+        try
+        {
+            var reservation = await BackendApi
+                .GetReservationByTokenAsync(Token);
+
+            if (reservation is not null)
+            {
+                ReservationState.SetReservation(reservation);
+            }
+            else
+            {
+                ReservationState.ClearReservation();
+            }
+        }
+        finally
+        {
+            isLoading = false;
+            ReservationState.SetLoading(false);
+        }
+    }
+
+
+    public void Dispose()
+    {
+        ReservationState.OnChange -= StateHasChanged;
+    }
+}

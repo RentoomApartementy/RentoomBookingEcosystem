@@ -1,6 +1,6 @@
 ﻿@page "/ManageStayPage"
 @using RentoomBooking.StayWell.Components
-
+@inject NavigationManager Navigation
 
 <PageTitle>Manage Stay</PageTitle>
 
@@ -9,7 +9,7 @@
 </div>
 
 <div class="buttons-wrapper">
-    <Button Text="Zgłoś usterkę">
+    <Button Text="Zgłoś usterkę" OnClick="@(() => Navigation.NavigateTo("/ReportPage"))">
         <Icon>
             <img src="/icons/frown.svg">
         </Icon>
