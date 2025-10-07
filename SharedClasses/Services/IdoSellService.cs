@@ -220,7 +220,7 @@ namespace RentoomBooking.SharedClasses.Services
                 result = new ResultSetup { page = 1, number = 100 },
                 paramsSearch = new ReservationsParamsSearch { ids = [ReservationId] }
             };
-
+            
             HttpClient? client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -268,7 +268,7 @@ namespace RentoomBooking.SharedClasses.Services
             {
                 hashedString += String.Format("{0:x2}", b);
             }
-
+            Console.WriteLine("pwd " + hashedString);
             return hashedString;
         }
 
@@ -336,6 +336,47 @@ namespace RentoomBooking.SharedClasses.Services
             return ret?.Result.ObjectMedia;
         }
 
+        public async Task<List<ObjectAmenity>?> FetchObjectAmenitiesAsync(int objectId)
+        {
+            if (string.IsNullOrWhiteSpace(baseAPIUrl) || string.IsNullOrWhiteSpace(systemUser) || string.IsNullOrWhiteSpace(systemPwd))
+            {
+                _logger.LogError("Cannot fetch amenities. Required configuration values are missing.");
+                return null;
+            }
+
+            var address = baseAPIUrl + "objects/getAmenities/34/json";
+
+            _logger.LogInformation("Fetching amenities for object {ObjectId}", objectId);
+
+            var request = new ObjectAmenitiesRequestType
+            {
+                Authenticate = new AuthenticateType
+                {
+                    SystemKey = GenerateKey(HashPassword(systemPwd)),
+                    SystemLogin = systemUser,
+                    Lang = "eng"
+                },
+                ObjectId = objectId
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var jsonRequest = JsonHelper.SerializeOnlyNonNullProperties(request);
+            var requestString = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync(address, requestString);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Failed to fetch media for object {ObjectId}. StatusCode: {StatusCode}. Content: {Content}", objectId, response.StatusCode, responseContent);
+                response.EnsureSuccessStatusCode();
+            }
+
+            ObjectAmenitiesResponseType ret = JsonConvert.DeserializeObject<ObjectAmenitiesResponseType>(responseContent);
+            return ret?.Result.ObjectAmenities;
+        }
 
     }
 }
