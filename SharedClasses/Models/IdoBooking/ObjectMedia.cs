@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Models.IdoBooking
 {
-    public class ObjectMediaRequestType
+    public class ObjectDefaultRequestType
     {
         public AuthenticateType Authenticate { get; set; } = new AuthenticateType();
         public int? ObjectId { get; set; }
+    }
+    
+    public class ObjectMediaRequestType :ObjectDefaultRequestType
+    {
+        
     }
 
     public class ObjectMediaResponseType
