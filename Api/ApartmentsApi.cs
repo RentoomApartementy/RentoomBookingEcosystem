@@ -178,7 +178,7 @@ public class ApartmentsApi
     }
 
 
-    [Function("GetAmenitiesForObjectTypes")]
+    /*[Function("GetAmenitiesForObjectTypes")]
     public async Task<HttpResponseData> GetAmenitiesForObjectTypes(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "amenities/getForObjects")] HttpRequestData req)
     {
@@ -228,5 +228,5 @@ public class ApartmentsApi
             return response;
         }
     }
-
+    */
 }
