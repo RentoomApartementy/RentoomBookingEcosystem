@@ -41,6 +41,10 @@ namespace RentoomBooking.SharedClasses.Database
 
             _amenitiesFilterContainer = await database.Database.CreateContainerIfNotExistsAsync(
                new ContainerProperties(ContainerName, PartitionKey));
+
+           // int[] list = [205, 204, 132, 205, 204, 132, 206, 152, 96, 86];
+          //  await SaveAmenitiesFilterAsync(list);
+
         }
 
         public async Task SaveAmenitiesFilterAsync(int[] filterValues, ILogger? log = null)

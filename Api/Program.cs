@@ -25,6 +25,9 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<IdoSellService>();
 builder.Services.AddSingleton<BookingDatabase>();
+builder.Services.AddSingleton<IAmenitiesService, AmenitiesService>();
+builder.Services.AddSingleton<AmenitiesRepository>();
+
 
 var cosendpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
 //cosendpoint = builder.Configuration["AZURE_COSMOS_ENDPOINT"];

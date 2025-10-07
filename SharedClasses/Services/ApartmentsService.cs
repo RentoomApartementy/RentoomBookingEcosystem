@@ -26,7 +26,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
         Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
-        Task<List<ObjectTypesAmenities>?> GetAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes, CancellationToken ct = default);
+      
     }
 
       
@@ -115,28 +115,6 @@ namespace RentoomBooking.SharedClasses.Services
             return JsonConvert.DeserializeObject<List<ObjectDescription>>(jsonString);
         }
 
-        public async Task<List<ObjectTypesAmenities>?> GetAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes, CancellationToken ct = default)
-        {
-            var http = _factory.CreateClient("FunctionsApi");
-
-            var ids = objectTypes?.Select(x => ((int)x).ToString()).ToArray() ?? Array.Empty<string>();
-            var urlBuilder = new StringBuilder("amenities/getForObjects");
-            if (ids.Length > 0)
-            {
-                urlBuilder.Append("?objectTypesIds=").Append(Uri.EscapeDataString(string.Join(",", ids)));
-            }
-
-            using var resp = await http.GetAsync(urlBuilder.ToString(), ct);
-            resp.EnsureSuccessStatusCode();
-
-            var jsonString = await resp.Content.ReadAsStringAsync(ct);
-            return JsonConvert.DeserializeObject<List<ObjectTypesAmenities>>(jsonString);
-        }
-
-        /*public Task<List<ObjectTypesAmenities>?> GetAmenitiesForObjectsSelectedAsFilter(CancellationToken ct = default)
-        {
-            return await _apartmentsRepository.GetApartmentCountAsync();
-
-        }*/
+      
     }
 }
