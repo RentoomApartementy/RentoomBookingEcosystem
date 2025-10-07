@@ -20,7 +20,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
     public class ObjectMediaResponseType
     {
         public ObjectMediaResponse Result { get; set; } = new();
-        public string Id { get; set; } = string.Empty;
+        public string? Id { get; set; }
     }
 
     public class ObjectMediaResponse

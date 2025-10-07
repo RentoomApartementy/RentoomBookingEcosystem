@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 namespace RentoomBooking.SharedClasses.Models
 {
 
+
+
     //REQUEST
     public class ReservationRequestIDOSellAPI
     {
