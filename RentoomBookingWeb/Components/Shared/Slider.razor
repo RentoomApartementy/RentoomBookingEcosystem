@@ -1,0 +1,88 @@
+@namespace RentoomBookingWeb.Components.Shared
+@inject IJSRuntime JS
+
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+<div class="slider-container">
+    <div class="slider-wrapper @TransitionClass" style="transform: translateX(-@(CurrentIndex * 100)%)">
+        @foreach (var chunk in ChunkedItems)
+        {
+            <div class="slider-page">
+                @foreach (var fragment in chunk)
+                {
+                    @fragment
+                }
+            </div>
+        }
+    </div>
+
+    <div class="slider-dots">
+        @for (int i = 0; i < ChunkedItems.Count; i++)
+        {
+            var index = i; 
+            <button class="dot @(index == CurrentIndex ? "active" : "")"
+                    @onclick="() => GoToSlide(index)">
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string TransitionClass { get; set; } = "slide-transition";
+    [Parameter] public int ItemsPerPage { get; set; } = 3;
+
+    internal List<RenderFragment> _items { get; set; } = new();
+    private List<List<RenderFragment>> ChunkedItems { get; set; } = new();
+    private int CurrentIndex { get; set; } = 0;
+    private DotNetObjectReference<Slider>? objRef;
+
+    internal void RegisterItem(RenderFragment fragment)
+    {
+        _items.Add(fragment);
+        SplitIntoChunks();
+        StateHasChanged();
+    }
+
+    private void SplitIntoChunks()
+    {
+        ChunkedItems = _items
+            .Select((x, i) => new { x, i })
+            .GroupBy(x => x.i / ItemsPerPage)
+            .Select(g => g.Select(v => v.x).ToList())
+            .ToList();
+
+        CurrentIndex = Math.Clamp(CurrentIndex, 0, ChunkedItems.Count - 1);
+    }
+
+    private void GoToSlide(int index)
+    {
+        if (ChunkedItems.Count == 0) return;
+        CurrentIndex = Math.Clamp(index, 0, ChunkedItems.Count - 1);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/resizePage.js");
+            await module.InvokeVoidAsync("init", objRef);
+        }
+    }
+
+    [JSInvokable]
+    public void UpdateItemPerPageAsync(int width)
+    {
+        ItemsPerPage = width < 850 ? 1 : ItemsPerPage;
+        SplitIntoChunks();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        objRef?.Dispose();
+    }
+}

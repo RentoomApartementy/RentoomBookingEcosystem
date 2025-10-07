@@ -1,10 +1,11 @@
 nav {
+    position: relative;
     display: flex;
     width: 100%;
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1rem;
-    z-index: 10;
+    z-index: 1000;
 }
 
 .scrolled-nav {
