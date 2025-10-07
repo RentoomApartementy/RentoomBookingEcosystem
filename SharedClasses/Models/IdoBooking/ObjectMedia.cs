@@ -14,11 +14,18 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
 
     public class ObjectMediaResponseType
     {
+        public ObjectMediaResponse Result { get; set; } = new();
+        public string Id { get; set; } = string.Empty;
+    }
+
+    public class ObjectMediaResponse
+    {
         public AuthenticateType? Authenticate { get; set; }
         public List<GateErrorType>? Errors { get; set; }
         public bool? Success { get; set; }
         public List<ObjectMedium>? ObjectMedia { get; set; }
     }
+
 
     public class ObjectMedium
     {

@@ -6,6 +6,8 @@ using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Services;
 
@@ -19,8 +21,6 @@ builder.ConfigureFunctionsWebApplication();
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
-
-
 builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<IdoSellService>();
@@ -44,6 +44,10 @@ var cosmosClient = new CosmosClient( cosendpoint, new CosmosClientOptions()
 
 builder.Services.AddSingleton(cosmosClient);
 
+JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+{
+    ContractResolver = new CamelCasePropertyNamesContractResolver()
+};
 
 
 builder.Build().Run();

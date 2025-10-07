@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services;
 using System.Net.Http;
 using System.Text;
@@ -21,10 +22,13 @@ namespace RentoomBooking.SharedClasses.Services
            CancellationToken ct = default);
 
         Task<long> GetApartmentsCountAsync();
+
+        Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
     }
 
-     
-    
+      
+
+
 
     public class ApartmentsService : IApartmentsService
     {
@@ -72,6 +76,17 @@ namespace RentoomBooking.SharedClasses.Services
         public async Task<long> GetApartmentsCountAsync()
         {
             return await _apartmentsRepository.GetApartmentCountAsync();
+        }
+
+
+        public async Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default)
+        {
+            var http = _factory.CreateClient("FunctionsApi");
+            using var resp = await http.GetAsync($"apartments/{objectId}/media", ct);
+            resp.EnsureSuccessStatusCode();
+
+            var jsonString = await resp.Content.ReadAsStringAsync(ct);
+            return JsonConvert.DeserializeObject<ObjectMediaResponseType>(jsonString);
         }
     }
 }
