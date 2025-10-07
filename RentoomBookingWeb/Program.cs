@@ -1,7 +1,7 @@
 using Microsoft.Azure.Cosmos;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBookingWeb.Components;
-using RentoomWebsite.Services;
+using RentoomBooking.SharedClasses.Services;
 
 namespace RentoomBookingWeb
 {
@@ -33,6 +33,7 @@ namespace RentoomBookingWeb
 
             var cosmosClient = new CosmosClient(cosendpoint, new CosmosClientOptions()
             {
+                //ConnectionMode = ConnectionMode.Gateway,
                 SerializerOptions = new CosmosSerializationOptions
                 {
                     PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
@@ -44,8 +45,8 @@ namespace RentoomBookingWeb
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             // builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
             builder.Services.AddScoped<BookingDatabase>();
+            builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
-
 
 
             var app = builder.Build();

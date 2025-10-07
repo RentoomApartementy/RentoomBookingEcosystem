@@ -1,0 +1,62 @@
+﻿
+.parent {
+/*    padding-left: 25px;*/
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 0px;
+}
+
+.apartment-name {
+    grid-column: span 4 / span 4;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.apartment-full-adress{
+    grid-column: span 4 / span 4;
+    grid-row-start: 2;
+    font-size: 0.9rem;
+}
+
+.check-in,
+.check-out {
+    font-size: 0.8rem;
+}
+
+.check-in {
+    grid-column: span 2 / span 2;
+    grid-row-start: 3;
+}
+
+.check-out {
+    grid-column: span 2 / span 2;
+    grid-column-start: 3;
+    grid-row-start: 3;
+}
+
+
+.check-in-date,
+.check-out-date {
+    font-size: 0.7rem;
+}
+
+.check-in-date {
+    grid-column: span 2 / span 2;
+    grid-row-start: 4;
+}
+
+.check-out-date {
+    grid-column: span 2 / span 2;
+    grid-column-start: 3;
+    grid-row-start: 4;
+}
+
+
+.check-out,
+.check-out-date {
+    text-align: right;
+    padding-right: 10px;
+}
+

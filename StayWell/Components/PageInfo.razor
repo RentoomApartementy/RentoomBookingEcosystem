@@ -1,0 +1,11 @@
+﻿<div class="parent">
+    <div class="title">@Title</div>
+    <div class="subtitle">@Subtitle</div>
+</div>
+
+
+@code {
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string Subtitle { get; set; } = string.Empty;
+
+}

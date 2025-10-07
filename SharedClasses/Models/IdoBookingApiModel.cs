@@ -1,4 +1,5 @@
-﻿
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
+
 namespace RentoomBooking.SharedClasses.Models
 {
   
@@ -48,6 +49,15 @@ namespace RentoomBooking.SharedClasses.Models
         public int Page { get; set; }
      
         public int Number { get; set; }
+    }
+
+
+    public class IdoPaginationData
+    {
+        public int page { get; set; }
+        public int countOnPage { get; set; }
+        public int pageAll { get; set; }
+        public int countAll { get; set; }
     }
 
 

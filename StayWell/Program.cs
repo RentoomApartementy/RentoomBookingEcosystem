@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using RentoomBooking.SharedClasses;
-using System.Text.Json;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using RentoomBooking.SharedClasses;
+using RentoomBooking.StayWell.Services;
+using System.Text.Json;
+using RentoomBooking.StayWell.States;
+
 
 namespace RentoomBooking.StayWell
 {
@@ -15,7 +19,7 @@ namespace RentoomBooking.StayWell
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped<ReservationState>();
 
             var apiBase = builder.Configuration["ApiBaseUrl"] ?? "/api/";
 
@@ -24,9 +28,10 @@ namespace RentoomBooking.StayWell
                 c.BaseAddress = new Uri(apiBase);
             });
 
-            
-            builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            builder.Services.AddScoped<BackendApi>();
+            builder.Services.AddScoped<ReservationService>();
 
+            builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
             
             builder.Logging.SetMinimumLevel(LogLevel.Information);
 

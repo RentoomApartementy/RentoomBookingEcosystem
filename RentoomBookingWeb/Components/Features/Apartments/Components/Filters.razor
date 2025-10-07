@@ -1,0 +1,85 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="filters-container">
+    <p class="filters-title">Gdzie chcesz się zameldować?</p>
+
+    <div>
+        @foreach (var option in Locations)
+        {
+            <div>
+                <InputCheckbox @bind-Value="option.IsSelected" id="@option.Name" />
+                <label for="@option.Name">@option.Name</label>
+            </div>
+        }
+    </div>
+
+    <hr />
+
+    <p class="filters-title">Liczba osób</p>
+    <Input IconPath="/assets/svgs/person.svg" Placeholder="Ilość osób" Type="number" @bind-Value="FormData.PeopleCount" IsFull="true"/>
+
+    <hr />
+
+    <p class="filters-title">Filtry</p>
+    <div>
+        @foreach (var filter in FilterOptions)
+        {
+            <div>
+                <InputCheckbox @bind-Value="filter.IsSelected" id="@filter.Name" />
+                <label for="@filter.Name">@filter.Name</label>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private ReservationForm FormData = new ReservationForm();
+
+    private List<LocationOption> Locations = new()
+    {
+        new LocationOption("Serce starówki"),
+        new LocationOption("Poza starówką"),
+        new LocationOption("Na obrzeżach starówki")
+    };
+
+    private List<FilterOption> FilterOptions = new()
+    {
+        new FilterOption("Balkon"),
+        new FilterOption("Dla rodzin z dziećmi"),
+        new FilterOption("Parking"),
+        new FilterOption("Plac zabaw"),
+        new FilterOption("Pobyt biznesowy"),
+        new FilterOption("Podróż z pupilem"),
+        new FilterOption("Winda"),
+        new FilterOption("Osobne łóżka"),
+        new FilterOption("Klimatyzacja"),
+        new FilterOption("Udogodnienia dla niepełnosprawnych")
+    };
+
+    public class ReservationForm
+    {
+        public string PeopleCount { get; set; } = string.Empty;
+    }
+
+    public class LocationOption
+    {
+        public string Name { get; }
+        public bool IsSelected { get; set; }
+
+        public LocationOption(string name)
+        {
+            Name = name;
+        }
+    }
+
+    public class FilterOption
+    {
+        public string Name { get; }
+        public bool IsSelected { get; set; }
+
+        public FilterOption(string name)
+        {
+            Name = name;
+        }
+    }
+}

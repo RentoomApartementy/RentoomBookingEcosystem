@@ -1,16 +1,52 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@using RentoomBooking.SharedClasses.Models;
+@using RentoomBooking.StayWell.States
+@inject ReservationState ReservationState
+@implements IDisposable
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+@if (isLoading)
+{
+    <div>
+        <p>Ładowanie rezerwacji...</p>
+    </div>
+}
+else if (ReservationState.CurrentReservation is null)
+{
+    <div>
+        <p> Nie masz dostępu do tej strony. </p>
+    </div>
+}
+else
+{
+    <div class="layout-page">
+        <div class="layout-header">
+            <RentoomBooking.StayWell.Components.Header reservationId="@ReservationState.CurrentReservation.Reservation.id.ToString()">
+            </RentoomBooking.StayWell.Components.Header>
         </div>
 
-        <article class="content px-4">
+        <div class="layout-body">
             @Body
-        </article>
-    </main>
-</div>
+        </div>
+
+        <div class="layout-footer-nav">
+            <RentoomBooking.StayWell.Components.FooterNavigation>
+            </RentoomBooking.StayWell.Components.FooterNavigation>
+        </div>
+    </div>
+}
+
+@code {
+    private bool isLoading = true;
+
+    protected override void OnInitialized()
+    {
+        ReservationState.OnChange += StateHasChanged;
+        isLoading = false;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        ReservationState.OnChange -= StateHasChanged;
+    }
+}

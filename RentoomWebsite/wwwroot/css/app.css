@@ -101,3 +101,17 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+}
+
+.active-link {
+    color: yellow; 
+}
+
+.nav-link:hover {
+    color: white;
+    text-decoration: underline;
+}

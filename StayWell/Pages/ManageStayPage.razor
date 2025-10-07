@@ -1,0 +1,47 @@
+﻿@page "/ManageStayPage"
+@using RentoomBooking.StayWell.Components
+@inject NavigationManager Navigation
+
+<PageTitle>Manage Stay</PageTitle>
+
+<div class="page-info-wrapper">
+    <PageInfo Title="Szeroka Premier No 2A" Subtitle="Zarządzaj pobytem"></PageInfo>
+</div>
+
+<div class="buttons-wrapper">
+    <Button Text="Zgłoś usterkę" OnClick="@(() => Navigation.NavigateTo("/ReportPage"))">
+        <Icon>
+            <img src="/icons/frown.svg">
+        </Icon>
+    </Button>
+    <Button Text="Wczesne zameldowanie">
+        <Icon>
+            <img src="/icons/alarm-clock-check.svg">
+        </Icon>
+    </Button>
+        <Button Text="Późne wymeldowanie">
+        <Icon>
+            <img src="/icons/alarm-clock-minus.svg">
+        </Icon>
+    </Button>
+    <Button Disabled=true Text="Przedłuż rezerwację">
+        <Icon>
+            <img src="/icons/calendar-plus.svg">
+        </Icon>
+    </Button>
+        <Button Text="Dodatkowe sprzątanie apartamentu">
+        <Icon>
+            <img src="/icons/brush-cleaning.svg">
+        </Icon>
+    </Button>
+    <Button Text="Łóżeczko dziecięce">
+        <Icon>
+            <img src="/icons/baby.svg">
+        </Icon>
+    </Button>
+    <Button ButtonStyle="color: red; border-color: red; margin-top: 30px;" Text="Wymelduj się">
+        <Icon>
+            <img src="/icons/door-closed.svg">
+        </Icon>
+    </Button>
+</div>

@@ -1,0 +1,44 @@
+﻿@page "/ClubPage"
+@using RentoomBooking.StayWell.Components
+
+
+<PageTitle>Club Page</PageTitle>
+
+<div class="page-info-wrapper">
+    <PageInfo Title="Klub Korzyści Rentoom" Subtitle="Nasi Partnerzy!"></PageInfo>
+</div>
+
+<div class="cards-wrapper">
+
+    <PartnerCard
+    Href="/PartnerPage"
+    Offer="-10%"
+    Category=PartnerCategories.Food
+    Image="https://scontent-waw2-2.xx.fbcdn.net/v/t51.75761-15/485733286_17971326416840429_1605928777056025707_n.jpg?stp=dst-jpegr_tt6&_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=3Xc3Y4kQ0pkQ7kNvwFUjzd9&_nc_oc=Adkf0Q98mIziOvGO8fSq8-AJhkUnK2f3rWhJwWr1UW-2D9_OyoZWdnnTdT2MH16zIZE&_nc_zt=23&se=-1&_nc_ht=scontent-waw2-2.xx&_nc_gid=lDTST2cnO_9fwBAk5jvSZg&oh=00_AfaY3u7VQs4rK8z5HfMGTIH725EnhGwrJQsXw6ab7V3uug&oe=68D76EFD"
+    PartnerName="Dom Pizzy i Tapas"
+    PartnerDescription="Unikatowe połączenie hiszpańskiej kuchni i pizzy neapolitańskiej.">
+    </PartnerCard>
+
+    <PartnerCard 
+    Offer="-10%, śniadanie za 39 pln"
+    Category=PartnerCategories.Sweet
+    Image="https://omnikaiser.pl/wp-content/uploads/2023/08/9W5A2077-kopia-scaled-e1693253082136.jpg"
+    PartnerName="Omni Kaiser Patisserie"
+    PartnerDescription="Tworzymy słodkie delicje, by zachwycać pięknem, którego doznasz wszystkimi zmysłami.">
+    </PartnerCard>
+
+    <PartnerCard 
+        Offer="oferta"
+                 Category=PartnerCategories.Sweet
+                 PartnerName="nazwa"
+                 PartnerDescription="opis">
+    </PartnerCard>
+
+    <PartnerCard 
+    Offer="oferta"
+    Category=PartnerCategories.Sweet
+    PartnerName="nazwa"
+    PartnerDescription="opis">
+    </PartnerCard>
+
+</div>
