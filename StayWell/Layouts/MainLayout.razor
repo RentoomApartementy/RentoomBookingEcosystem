@@ -2,18 +2,17 @@
 @using RentoomBooking.SharedClasses.Models;
 @using RentoomBooking.StayWell.States
 @inject ReservationState ReservationState
-@implements IDisposable
+@inject MediaState MediaState
 
-@if (isLoading)
+@if (ReservationState.IsLoading)
 {
     <div>
         <p>Ładowanie rezerwacji...</p>
     </div>
-}
-else if (ReservationState.CurrentReservation is null)
+}else if (ReservationState.CurrentReservation?.Reservation == null)
 {
     <div>
-        <p> Nie masz dostępu do tej strony. </p>
+        <p>Nie ma takiej rezerwaji.</p>
     </div>
 }
 else
@@ -36,12 +35,10 @@ else
 }
 
 @code {
-    private bool isLoading = true;
 
     protected override void OnInitialized()
     {
         ReservationState.OnChange += StateHasChanged;
-        isLoading = false;
         InvokeAsync(StateHasChanged);
     }
 

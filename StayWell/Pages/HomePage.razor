@@ -1,13 +1,16 @@
 ﻿@page "/HomePage"
+@using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
 @inject ReservationState ReservationState
+@inject MediaState MediaState
+@implements IDisposable
 
 <PageTitle>Main</PageTitle>
 
     <div class="image-wrapper">
-        <ApartmentImage>
+    <ApartmentImage Source="@ImageUrl">
 
         </ApartmentImage>
     </div>
@@ -62,13 +65,33 @@
     public string? ApartmentNumber;
     public string? ReservationDateFrom;
     public string? ReservationDateTo;
+    public string? ImageUrl;
 
     protected override void OnInitialized()
     {
+        ReservationState.OnChange += StateHasChanged;
+        MediaState.OnChange += StateHasChanged;
+        LoadData();
+    }
+
+    private void LoadData()
+    {
         RentoomReservation? currentReservation = ReservationState.CurrentReservation;
+        List<ObjectMedium>? currentMedia = MediaState.CurrentMedia;
+        if(currentMedia?[0].Extension == "jpg")
+        {   
+            ImageUrl = currentMedia?[0].Url;
+        }
         ApartmentName = currentReservation?.Reservation.Items?.FirstOrDefault()?.objectName;
         ApartmentNumber = currentReservation?.Reservation.Items?.FirstOrDefault()?.itemCode;
         ReservationDateFrom = currentReservation?.Reservation.ReservationDetails?.dateFrom;
         ReservationDateTo = currentReservation?.Reservation.ReservationDetails?.dateTo;
     }
+
+    public void Dispose()
+    {
+        ReservationState.OnChange -= StateHasChanged;
+        MediaState.OnChange -= StateHasChanged;
+    }
+
 }
