@@ -2,8 +2,9 @@
 @using RentoomBooking.SharedClasses.Services;
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @inject IdoSellService IdoSellService;
+@inject NavigationManager Navigation;
 
-<article class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
+<article @onclick="GoToApartment" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
     <header>
         @if (_objectMediumFirst == null)
         {
@@ -83,6 +84,14 @@
         {
             _objectMediums = await IdoSellService.FetchObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
             _objectMediumFirst = _objectMediums.FirstOrDefault();
+        }
+    }
+    
+    private void GoToApartment()
+    {
+        if (Item != null && int.TryParse(Item.Id, out int id))
+        {
+            Navigation.NavigateTo($"/apartments/{id}");
         }
     }
 }
