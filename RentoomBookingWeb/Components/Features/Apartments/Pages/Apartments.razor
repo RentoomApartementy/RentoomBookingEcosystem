@@ -1,7 +1,9 @@
 @page "/apartments"
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
 @using RentoomBooking.SharedClasses.Services;
+@using RentoomBooking.SharedClasses.Models;
 @inject IApartmentsService ApartmentsApiService;
+@inject IJSRuntime JS;
 
 <PageTitle>Apartamenty</PageTitle>
 
@@ -19,12 +21,17 @@
         <div class="apartments-items-wrapper">
             <h4>@ApartmentsCount apartamenty/ów</h4>
             <div class="apartments-items-container">
-                <Apartment/>
-                <Apartment/>
-                <Apartment/>
-                <Apartment/>
-                <Apartment/>
-                <Apartment/>
+                @if (!string.IsNullOrEmpty(Error))
+                {
+                    <p class="text-red-600">@Error</p>
+                }
+                
+                @if (Items.Count > 0)
+                {
+                    @foreach (var item in Items) { 
+                        <Apartment Item="@item"/>
+                    }
+                }
             </div>
         </div>
     </div>
@@ -34,8 +41,22 @@
 
     private long? ApartmentsCount;
     private bool IsLoading = true;
+    private const int PageSize = 6;
+    private readonly List<ApartmentObject> Items = new();
+    private string? Token;
+    private bool ApartmentsIsloading;
+    private bool HasMore = true;
+    private string? Error;
+    private DotNetObjectReference<Apartments>? ObjRef;
+    private IJSObjectReference? JsModule;
 
     protected override async Task OnInitializedAsync()
+    {
+        await GetApartmentsCount();
+        await LoadMore();
+    }
+
+    private async Task GetApartmentsCount()
     {
         IsLoading = true;
         try
@@ -51,6 +72,69 @@
         {
             IsLoading = false;
         }
+    }
+    
+    private async Task LoadMore()
+    {
+        if (IsLoading || !HasMore) return;
+
+        IsLoading = true;
+        Error = null;
+
+        try
+        {
+            var page = await ApartmentsApiService.GetApartmentsByPageAsyncDirect(Token, top: PageSize);
+            if (page?.Items is { Count: > 0 })
+            {
+                Items.AddRange(page.Items);
+                Token = page.ContinuationToken;
+                HasMore = !string.IsNullOrEmpty(Token);
+            }
+            else
+            {
+                HasMore = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+            HasMore = false; 
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            ObjRef = DotNetObjectReference.Create(this);
+            JsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/infiniteScroll.js");
+            await JsModule.InvokeVoidAsync("init", ObjRef);
+        }
+    }
+    
+    [JSInvokable]
+    public async Task LoadMoreOnScroll()
+    {
+        if (!ApartmentsIsloading && HasMore)
+        {
+            await LoadMore();
+            StateHasChanged();
+        }
+    }
+    
+    public async ValueTask DisposeAsync()
+    {
+        if (JsModule is not null && ObjRef is not null)
+        {
+            await JsModule.InvokeVoidAsync("unregister", ObjRef);
+        }
+
+        ObjRef?.Dispose();
+        JsModule?.DisposeAsync();
     }
 
 }
