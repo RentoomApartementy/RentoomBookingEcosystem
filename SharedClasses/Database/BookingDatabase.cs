@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using System;
 using System.Collections.Generic;
 using System.Linq;

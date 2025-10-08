@@ -1,22 +1,22 @@
-﻿using System.Net.Http.Json;
+﻿using RentoomBooking.SharedClasses.Models;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace RentoomBooking.StayWell.Services
 {
-    public class BackendApi
+    public class BackendApi(IHttpClientFactory factory, JsonSerializerOptions json)
     {
 
-        private readonly HttpClient _http;
-        private readonly JsonSerializerOptions _json;
+        private readonly HttpClient _http = factory.CreateClient("FunctionsApi");
+        private readonly JsonSerializerOptions _json = json;
 
-        public BackendApi(IHttpClientFactory factory, JsonSerializerOptions json)
+        public async Task<RentoomReservation?> GetReservationByTokenAsync(string token)
         {
-            _http = factory.CreateClient("FunctionsApi");
-            _json = json;
+            return await _http.GetFromJsonAsync<RentoomReservation>($"db/reservations/{token}", _json);
         }
 
 
-      
+
 
 
     }
