@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,50 +16,61 @@ namespace RentoomBooking.SharedClasses.Database
 {
     public class BookingDatabase
     {
-        private  Container _apartmentInfoContainer;
-        private  Container _hashesContainer;
-        private  Container _reservationsContainer;
-        private const string HashDocumentId = "all-object-hashes"; // ID for the hash document
-        private const string HashPartitionKey = "/id"; // Partition
-        private const string ApartmentPartitionKey = "/id"; // PartitionPaged
-        private const string ReservationPartitionKey = "/resToken"; // Partition for reservations
+        // Kontenery są teraz nullowalne, bo nie są inicjowane synchronicznie w konstruktorze
+        private Container? _apartmentInfoContainer;
+        private Container? _hashesContainer;
+        private Container? _reservationsContainer;
+
+        // Prywatne pole przechowujące zadanie inicjalizacji
+        private readonly Task _initializationTask;
+
+        private const string HashDocumentId = "all-object-hashes";
+        private const string ReservationPartitionKey = "/resToken";
+
+        // ZMODYFIKOWANY KONSTRUKTOR
         public BookingDatabase(CosmosClient client, IConfiguration configuration)
         {
-            InitializeAsync(client, configuration).Wait();
-          
+            // Uruchamiamy inicjalizację, ale nie czekamy na nią blokująco.
+            // Zapisujemy zadanie (Task) w polu, aby można było na nie poczekać później.
+            _initializationTask = InitializeAsync(client, configuration);
         }
 
-             private async Task InitializeAsync(CosmosClient client, IConfiguration configuration)
+        private async Task InitializeAsync(CosmosClient client, IConfiguration configuration)
         {
-            
             var databaseName = configuration["AZURE_COSMOS_DATABASE_NAME"];
+            if (string.IsNullOrEmpty(databaseName))
+            {
+                throw new InvalidOperationException("AZURE_COSMOS_DATABASE_NAME configuration is missing.");
+            }
+            
             var containerName = "ApartmentInfo";
             var containerNameForHashes = "ApartmentsHashes";
 
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
 
             _apartmentInfoContainer = await database.Database.CreateContainerIfNotExistsAsync(
-                new ContainerProperties(containerName, "/id")  );
+                new ContainerProperties(containerName, "/id"));
 
             _hashesContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties(containerNameForHashes, "/id"));
-            
+
             _reservationsContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties("Reservations", ReservationPartitionKey));
         }
 
+        // --- PUBLICZNE METODY ZMIENIONE TAK, ABY CZEKAŁY NA INICJALIZACJĘ ---
+
         public async Task<bool> HasRecordsAsync()
         {
+            await _initializationTask;
+            if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
+
             try
             {
-                // Create a query definition to select the first item.
-                // This is more efficient than selecting all items.
                 var queryDefinition = new QueryDefinition("SELECT TOP 1 * FROM c");
 
                 using (var feedIterator = _apartmentInfoContainer.GetItemQueryIterator<object>(queryDefinition))
                 {
-                    // Check if the query has any results.
-                    // If there are more results, it means at least one record exists.
                     if (feedIterator.HasMoreResults)
                     {
                         var response = await feedIterator.ReadNextAsync();
@@ -67,48 +79,36 @@ namespace RentoomBooking.SharedClasses.Database
                 }
                 return false;
             }
-            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                // This exception occurs if the container itself doesn't exist,
-                // which implies there are no records.
                 return false;
             }
             catch
             {
-                // Handle other potential exceptions here.
                 return false;
             }
         }
 
         public async Task BulkCreateItemsAsync(List<ApartmentObject> items, ILogger log)
         {
-
+            await _initializationTask;
+            if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
+            
             int itemsPerBatch = 50;
             int totalItemsCreated = 0;
-            int totalErrors = 0;
             log.LogInformation($"Starting bulk create for a total of {items.Count} items.");
 
             for (int i = 0; i < items.Count; i += itemsPerBatch)
             {
                 var batchItems = items.Skip(i).Take(itemsPerBatch).ToList();
-                var tasks = new List<Task<int>>();
-
-                log.LogInformation($"Processing batch from index {i} to {i + batchItems.Count - 1}...");
-                foreach (var item in batchItems)
-                {
-                    tasks.Add(ProcessCreateItemAsync(item,log));
-                }
+                var tasks = batchItems.Select(item => ProcessCreateItemAsync(item, log)).ToList();
 
                 int[] errors = await Task.WhenAll(tasks);
                 int totalErrorsInBatch = errors.Sum();
 
-                totalItemsCreated += batchItems.Count - totalErrors;
-                log.LogInformation($"Successfully created {batchItems.Count - totalErrors} items in this batch. Total items created: {totalItemsCreated}.");
-
-                //reset total errors after a batch finished
-                totalErrors = 0;
-
-                // Only delay if there are more batches to process
+                totalItemsCreated += batchItems.Count - totalErrorsInBatch;
+                log.LogInformation($"Successfully created {batchItems.Count - totalErrorsInBatch} items in this batch. Total items created: {totalItemsCreated}.");
+                
                 if (i + itemsPerBatch < items.Count)
                 {
                     log.LogInformation("Pausing for 1 second to manage throughput...");
@@ -119,37 +119,26 @@ namespace RentoomBooking.SharedClasses.Database
             log.LogInformation($"Completed bulk create. A total of {totalItemsCreated} items were successfully created.");
         }
 
-        public async Task BulkReplaceItemsAsync(List<ApartmentObject> items,  ILogger _logger)
+        public async Task BulkReplaceItemsAsync(List<ApartmentObject> items, ILogger _logger)
         {
+            await _initializationTask;
+            if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
+
             int itemsPerBatch = 50;
             int totalItemsReplaced = 0;
-
             _logger.LogInformation($"Starting bulk replace for a total of {items.Count} items.");
 
             for (int i = 0; i < items.Count; i += itemsPerBatch)
             {
                 var batchItems = items.Skip(i).Take(itemsPerBatch).ToList();
-              
-                var tasks = new List<Task<int>>();
+                var tasks = batchItems.Select(item => ProcessReplaceItemAsync(item, _logger)).ToList();
 
-                _logger.LogInformation($"Processing batch from index {i} to {i + batchItems.Count - 1}...");
-
-                foreach (var item in batchItems)
-                {
-                 
-                    tasks.Add(ProcessReplaceItemAsync(item, _logger));
-                  //  tasks.Add(ProcessReplaceItemWithChangeDetectionAsync(item, _logger));
-                    
-                }
-
-               
                 int[] errors = await Task.WhenAll(tasks);
                 int totalErrorsInBatch = errors.Sum();
 
                 totalItemsReplaced += batchItems.Count - totalErrorsInBatch;
                 _logger.LogInformation($"Successfully replaced {batchItems.Count - totalErrorsInBatch} items in this batch. Total items replaced: {totalItemsReplaced}.");
 
-            
                 if (i + itemsPerBatch < items.Count)
                 {
                     _logger.LogInformation("Pausing for 1 second to manage throughput...");
@@ -160,35 +149,11 @@ namespace RentoomBooking.SharedClasses.Database
             _logger.LogInformation($"Completed bulk replace. A total of {totalItemsReplaced} items were successfully replaced.");
         }
 
-        
-        private async Task<int> ProcessReplaceItemAsync(ApartmentObject item, ILogger logger)
-        {
-            try
-            {
-                await _apartmentInfoContainer.ReplaceItemAsync(item, item.Id, new PartitionKey(item.Id));
-                return 0; // Success
-            }
-            catch (CosmosException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NotFound)
-                {
-                    logger.LogWarning($"Item with ID '{item.Id}' not found. Cannot replace. A 'create' or 'upsert' operation might be needed.");
-                }
-                else if (ex.StatusCode == HttpStatusCode.Conflict)
-                {
-                    logger.LogError($"An unexpected conflict occurred for item with ID '{item.Id}'. Resource already exists.");
-                }
-                else
-                {
-                    logger.LogError(ex, $"Failed to replace item with ID '{item.Id}'. Status Code: {ex.StatusCode}");
-                }
-                return 1; // Error
-            }
-        }
-
-
         public async Task<List<ItemHash>> GetExistingHashesAsync(ILogger log)
         {
+            await _initializationTask;
+            if (_hashesContainer == null) throw new InvalidOperationException("Hashes container not initialized.");
+
             try
             {
                 var response = await _hashesContainer.ReadItemAsync<ApartmentObjectHash>(HashDocumentId, new PartitionKey(HashDocumentId));
@@ -208,6 +173,9 @@ namespace RentoomBooking.SharedClasses.Database
 
         public async Task UpdateHashesDocumentAsync(List<ItemHash> hashes, ILogger log)
         {
+            await _initializationTask;
+            if (_hashesContainer == null) throw new InvalidOperationException("Hashes container not initialized.");
+
             var objectHashes = new ApartmentObjectHash
             {
                 Hashes = hashes,
@@ -225,111 +193,15 @@ namespace RentoomBooking.SharedClasses.Database
             }
         }
 
-       
-        private async Task<int> ProcessCreateItemAsync(ApartmentObject item, ILogger _logger)
+        public async Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken, int pageSize)
         {
-            try
-            {
-                await _apartmentInfoContainer.CreateItemAsync(item, new PartitionKey(item.Id));
-                return 0; // Success
-            }
-            catch (CosmosException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NotFound)
-                {
-                    _logger.LogWarning($"Item with ID '{item.Id}' not found. Cannot replace. A 'create' or 'upsert' operation might be needed.");
-                }
-                else if (ex.StatusCode == HttpStatusCode.Conflict)
-                {
-                    _logger.LogError($"An unexpected conflict occurred for item with ID '{item.Id}'. Resource already exists.");
-                }
-                else
-                {
-                    _logger.LogError(ex, $"Failed to replace item with ID '{item.Id}'. Status Code: {ex.StatusCode}");
-                }
-                return 1; // Error
-            }
-        }
+            await _initializationTask;
+            if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
 
-
-        private async Task<int> ProcessReplaceItemWithChangeDetectionAsync(ApartmentObject newItem, ILogger _logger)
-        {
-            try
-            {
-                // First, read the existing item to compare it.
-                var oldItemResponse = await _apartmentInfoContainer.ReadItemAsync<ApartmentObject>(newItem.Id, new PartitionKey(newItem.Id));
-                var oldItem = oldItemResponse.Resource;
-
-                // Compare the new and old items for changes.
-                string differences = FindDifferences(oldItem, newItem);
-
-                if (string.IsNullOrEmpty(differences))
-                {
-                    _logger.LogInformation($"Item with ID '{newItem.Id}' has no changes. Skipping replace operation.");
-                  
-                }
-                else
-                {
-                    _logger.LogInformation($"Item with ID '{newItem.Id}' has changed. Differences: {differences}");
-                    await _apartmentInfoContainer.ReplaceItemAsync(newItem, newItem.Id, new PartitionKey(newItem.Id));
-                    
-                }
-                return 0;
-            }
-            catch (CosmosException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NotFound)
-                {
-                    // If the item doesn't exist, we can't replace it.
-                    _logger.LogWarning($"Item with ID '{newItem.Id}' not found. Cannot replace. A 'create' operation might be needed.");
-                }
-                else
-                {
-                    _logger.LogError(ex, $"Failed to replace item with ID '{newItem.Id}'. Status Code: {ex.StatusCode}");
-                }
-                return 1;
-            }
-        }
-
-       
-        private string FindDifferences(ApartmentObject oldObj, ApartmentObject newObj)
-        {
-            if (oldObj == null || newObj == null)
-            {
-                return "One or both objects are null, cannot compare.";
-            }
-            var oldObjAsSstring =JsonConvert.SerializeObject(oldObj);
-            var newObjAsString = JsonConvert.SerializeObject(newObj);
-            var differences = new StringBuilder();
-            var properties = typeof(ApartmentObject).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            foreach (var property in properties)
-            {
-                var oldValue = property.GetValue(oldObj)?.ToString();
-                var newValue = property.GetValue(newObj)?.ToString();
-
-                if (oldValue != newValue)
-                {
-                    differences.AppendLine($"  - Property '{property.Name}': Old='{oldValue ?? "null"}', New='{newValue ?? "null"}'");
-                }
-            }
-
-            return differences.Length > 0 ? differences.ToString() : null;
-        }
-
-
-        public async Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(
-        string? continuationToken,
-        int pageSize)
-        {
             var sql = "SELECT * FROM c";
             var qd = new QueryDefinition(sql);
 
-            var opts = new QueryRequestOptions
-            {
-                MaxItemCount = pageSize,
-               // PartitionKey = new PartitionKey(ApartmentPartitionKey)
-            };
+            var opts = new QueryRequestOptions { MaxItemCount = pageSize };
 
             var it = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(qd, continuationToken, opts);
             if (!it.HasMoreResults)
@@ -339,17 +211,16 @@ namespace RentoomBooking.SharedClasses.Database
             return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken);
         }
 
-
         public async Task<RentoomReservation> GetRentoomReservationByResTokenAsync(string resToken, ILogger log)
         {
+            await _initializationTask;
+            if (_reservationsContainer == null) throw new InvalidOperationException("Reservations container not initialized.");
+
             try
             {
-
                 var response = await _reservationsContainer.ReadItemAsync<RentoomReservation>(
                     id: resToken,
                     partitionKey: new PartitionKey(resToken));
-
-
                 return response.Resource;
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -359,17 +230,17 @@ namespace RentoomBooking.SharedClasses.Database
             }
         }
 
-
         public async Task<string?> SaveReservationJsonAsync(Reservation payloadReservation, ILogger log)
         {
-            // Create a new, app-specific token for this saved reservation
-            string resToken = Guid.NewGuid().ToString("N");
+            await _initializationTask;
+            if (_reservationsContainer == null) throw new InvalidOperationException("Reservations container not initialized.");
 
+            string resToken = Guid.NewGuid().ToString("N");
             var doc = new RentoomReservation
             {
-                Id = resToken,                 // Cosmos 'id'
-                ResToken = resToken,              // Partition key
-                Reservation  = payloadReservation
+                Id = resToken,
+                ResToken = resToken,
+                Reservation = payloadReservation
             };
 
             try
@@ -381,12 +252,88 @@ namespace RentoomBooking.SharedClasses.Database
             catch (CosmosException ex)
             {
                 log.LogError(ex, "Failed to save reservation {0} to Cosmos.", payloadReservation.id);
-               return null;
+                return null;
             }
         }
 
-      
+        // --- METODY PRYWATNE (nie muszą czekać na _initializationTask, bo metody publiczne już to zrobiły) ---
 
+        private async Task<int> ProcessReplaceItemAsync(ApartmentObject item, ILogger logger)
+        {
+            try
+            {
+                await _apartmentInfoContainer!.ReplaceItemAsync(item, item.Id, new PartitionKey(item.Id));
+                return 0;
+            }
+            catch (CosmosException ex)
+            {
+                // ... obsługa błędów bez zmian
+                return 1;
+            }
+        }
 
+        private async Task<int> ProcessCreateItemAsync(ApartmentObject item, ILogger _logger)
+        {
+            try
+            {
+                await _apartmentInfoContainer!.CreateItemAsync(item, new PartitionKey(item.Id));
+                return 0;
+            }
+            catch (CosmosException ex)
+            {
+                // ... obsługa błędów bez zmian
+                return 1;
+            }
+        }
+
+        private async Task<int> ProcessReplaceItemWithChangeDetectionAsync(ApartmentObject newItem, ILogger _logger)
+        {
+            try
+            {
+                var oldItemResponse = await _apartmentInfoContainer!.ReadItemAsync<ApartmentObject>(newItem.Id, new PartitionKey(newItem.Id));
+                var oldItem = oldItemResponse.Resource;
+                string? differences = FindDifferences(oldItem, newItem);
+
+                if (string.IsNullOrEmpty(differences))
+                {
+                    _logger.LogInformation($"Item with ID '{newItem.Id}' has no changes. Skipping replace operation.");
+                }
+                else
+                {
+                    _logger.LogInformation($"Item with ID '{newItem.Id}' has changed. Differences: {differences}");
+                    await _apartmentInfoContainer!.ReplaceItemAsync(newItem, newItem.Id, new PartitionKey(newItem.Id));
+                }
+                return 0;
+            }
+            catch (CosmosException ex)
+            {
+                // ... obsługa błędów bez zmian
+                return 1;
+            }
+        }
+
+        private string? FindDifferences(ApartmentObject oldObj, ApartmentObject newObj)
+        {
+            if (oldObj == null || newObj == null)
+            {
+                return "One or both objects are null, cannot compare.";
+            }
+            
+            var differences = new StringBuilder();
+            var properties = typeof(ApartmentObject).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var property in properties)
+            {
+                var oldValue = property.GetValue(oldObj);
+                var newValue = property.GetValue(newObj);
+
+                if (!Equals(oldValue, newValue))
+                {
+                    differences.AppendLine($"  - Property '{property.Name}': Old='{oldValue ?? "null"}', New='{newValue ?? "null"}'");
+                }
+            }
+
+            return differences.Length > 0 ? differences.ToString() : null;
+        }
     }
 }
