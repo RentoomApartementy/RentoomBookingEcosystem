@@ -2,7 +2,7 @@
   "profiles": {
     "RentoomBooking.Api": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7238",
+      "commandLineArgs": "--port 7238 --useHttps --cert \"%USERPROFILE%\\certificate.pfx\" --password 123",
       "launchBrowser": false
     }
   }
