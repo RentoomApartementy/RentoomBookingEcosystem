@@ -18,8 +18,8 @@ public class AmenitiesApi
     private readonly ILogger<AmenitiesApi> _logger;
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
   //  private readonly AmenitiesRepository _amenitiesRepository;
-    private readonly AmenitiesService _amenitiesService;
-    public AmenitiesApi(IdoSellService service, ILogger<AmenitiesApi> logger, AmenitiesService amenitiesService)
+    private readonly IAmenitiesService _amenitiesService;
+    public AmenitiesApi(IdoSellService service, ILogger<AmenitiesApi> logger, IAmenitiesService amenitiesService)
     {
         _service = service;
         _logger = logger;
