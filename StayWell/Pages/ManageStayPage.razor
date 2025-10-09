@@ -1,11 +1,13 @@
-﻿@page "/ManageStayPage"
+﻿@page "/reservation/{token}/ManageStayPage"
 @using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
+@inherits Models.PageBase
 
 <PageTitle>Manage Stay</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="Szeroka Premier No 2A" Subtitle="Zarządzaj pobytem"></PageInfo>
+    <PageInfo Title="@Data?.Reservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="Zarządzaj pobytem"></PageInfo>
 </div>
 
 <div class="buttons-wrapper">

@@ -4,35 +4,23 @@
 @inject ReservationState ReservationState
 @inject MediaState MediaState
 
-@if (ReservationState.IsLoading)
-{
-    <div>
-        <p>Ładowanie rezerwacji...</p>
-    </div>
-}else if (ReservationState.CurrentReservation?.Reservation == null)
-{
-    <div>
-        <p>Nie ma takiej rezerwaji.</p>
-    </div>
-}
-else
-{
-    <div class="layout-page">
-        <div class="layout-header">
-            <RentoomBooking.StayWell.Components.Header reservationId="@ReservationState.CurrentReservation.Reservation.id.ToString()">
-            </RentoomBooking.StayWell.Components.Header>
-        </div>
 
-        <div class="layout-body">
-            @Body
-        </div>
-
-        <div class="layout-footer-nav">
-            <RentoomBooking.StayWell.Components.FooterNavigation>
-            </RentoomBooking.StayWell.Components.FooterNavigation>
-        </div>
+<div class="layout-page">
+    <div class="layout-header">
+        <RentoomBooking.StayWell.Components.Header Token="@ReservationState.CurrentToken" reservationId="@ReservationState.CurrentReservation?.Reservation.id.ToString()">
+        </RentoomBooking.StayWell.Components.Header>
     </div>
-}
+
+    <div class="layout-body">
+        @Body
+    </div>
+
+    <div class="layout-footer-nav">
+        <RentoomBooking.StayWell.Components.FooterNavigation Token="@ReservationState.CurrentToken">
+        </RentoomBooking.StayWell.Components.FooterNavigation>
+    </div>
+</div>
+
 
 @code {
 

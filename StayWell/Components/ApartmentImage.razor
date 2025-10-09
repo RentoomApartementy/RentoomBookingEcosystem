@@ -1,13 +1,10 @@
 ﻿@using RentoomBooking.StayWell.States
-@inject MediaState MediaState
 
 <div class="wrapper">
-    <img src="@Source" alt="@Source"/>
+    <img src="@Source" alt="@Source" />
 </div>
 
 @code {
-
     [Parameter] public string Source { get; set; } = "/images/placeholders/apartment_placeholder.png";
-
 
 }

@@ -3,46 +3,46 @@ using RentoomBooking.StayWell.Services;
 
 namespace RentoomBooking.StayWell.States
 {
-    public class MediaState(BackendApi backendApi)
+    public class AmenitiesState(BackendApi backendApi)
     {
-        private List<ObjectMedium>? _media;
+        private List<ObjectAmenity>? _amenities;
         private readonly BackendApi _backendApi = backendApi;
         private int? _currentObjectId;
 
         public bool IsLoading { get; set; }
 
-        public List<ObjectMedium>? CurrentMedia
+        public List<ObjectAmenity>? CurrentAmenities
         {
-            get => _media;
+            get => _amenities;
             private set
             {
-                _media = value;
+                _amenities = value;
                 NotifyStateChanged();
             }
         }
 
-        public async Task<List<ObjectMedium>?> GetMediaAsync(int objectId)
+        public async Task<List<ObjectAmenity>?> GetAmenitiesForObjectsAsync(int objectId)
         {
-            if (_currentObjectId == objectId) return CurrentMedia;
+            if (_currentObjectId == objectId) return CurrentAmenities;
 
             SetLoading(true);
             try
             {
                 if (_backendApi == null)
                 {
-                    ClearMedia();
+                    ClearAmenities();
                     return null;
                 }
-                var media = await _backendApi.GetApartmentMediaAsync(objectId);
-                if (media == null) ClearMedia();
+                var amenities = await _backendApi.GetAmenitiesForObjectsAsync(objectId);
+                if (amenities == null) ClearAmenities();
                 _currentObjectId = objectId;
-                CurrentMedia = media;
-                return CurrentMedia;
+                CurrentAmenities = amenities;
+                return CurrentAmenities;
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 Console.WriteLine(e.Message);
-                ClearMedia();
+                ClearAmenities();
                 return null;
             }
             finally
@@ -51,11 +51,12 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
+
         public event Action? OnChange;
 
-        public void SetMedia(List<ObjectMedium>? media)
+        public void SetAmenities(List<ObjectAmenity>? media)
         {
-            CurrentMedia = media;
+            CurrentAmenities = media;
             IsLoading = false;
         }
 
@@ -66,9 +67,9 @@ namespace RentoomBooking.StayWell.States
         }
 
 
-        public void ClearMedia()
+        public void ClearAmenities()
         {
-            CurrentMedia = null;
+            CurrentAmenities = null;
             _currentObjectId = null;
             IsLoading = false;
         }
