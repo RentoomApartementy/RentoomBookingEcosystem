@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "StayWell",
+    "Projects": [
+      {
+        "Path": "Api\\RentoomBooking.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "StayWell\\RentoomBooking.StayWell.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
