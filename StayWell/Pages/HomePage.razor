@@ -1,74 +1,110 @@
-﻿@page "/HomePage"
+﻿@page "/reservation/{token}/HomePage"
+@using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
-@inject ReservationState ReservationState
+@* @implements IDisposable *@
+@inherits Models.PageBase
 
 <PageTitle>Main</PageTitle>
 
-    <div class="image-wrapper">
-        <ApartmentImage>
+<div class="image-wrapper">
+    @if (_isLoading)
+    {
+        <div class="skeleton">
+
+        </div>
+    }
+    else
+    {
+        <ApartmentImage Source="@ImageUrl">
 
         </ApartmentImage>
-    </div>
+    }
+</div>
 
 
 <div class="reservation-info-wrapper">
-    <ReservationInfo apartmentName="@ApartmentName"
-        apartmentAddress="(apartmentAddress)"
-        apartmentNumber="@ApartmentNumber"
-        reservationCheckInDate="@ReservationDateFrom"
-        reservationCheckOutDate="@ReservationDateTo">
-    </ReservationInfo>
+    @if (_isLoading)
+    {
+        <div class="reservation-info-skeleton">
+            <div class="skeleton-line skeleton-line-title"></div>
+            <div class="skeleton-line skeleton-line-address"></div>
+            <div class="skeleton-line skeleton-line-dates"></div>
+        </div>
+    }
+    else
+    {
+        <ReservationInfo apartmentName="@ApartmentName"
+            apartmentAddress="(apartmentAddress)"
+            apartmentNumber="@ApartmentNumber"
+            reservationCheckInDate="@ReservationDateFrom"
+            reservationCheckOutDate="@ReservationDateTo">
+        </ReservationInfo>
+    }
 </div>
 
 <div class="buttons-wrapper">
 
-    <Button OnClick="@(() => Navigation.NavigateTo("/ClubPage"))" Text="Klub Korzyści Rentoom" ButtonStyle="border-color: #F9B806; color: #F9B806; background-color: #21573e; margin-bottom: 2rem;">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ClubPage"))" Text="Klub Korzyści Rentoom" ButtonStyle="border-color: #F9B806; color: #F9B806; background-color: #21573e; margin-bottom: 2rem;">
         <Icon>
-            <img src="/icons/hand-coins.svg" alt="ClubPaged">
+            <img src="/icons/hand-coins.svg" alt="ClubPage">
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo("/InstructionsPage"))" Text="Instrukcja Zameldowania">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage"))" Text="Instrukcja Zameldowania">
         <Icon>
             <img src="/icons/book.svg" alt="InstructionsPage">
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo("/OpenApartmentPage"))" Text="Otwórz Apartament">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage"))" Text="Otwórz Apartament">
         <Icon>
             <img src="/icons/door-open.svg" alt="OpenApartmentPage">
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo("/AboutReservationPage"))" Text="O rezerwacji">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/AboutReservationPage"))" Text="O rezerwacji">
         <Icon>
             <img src="/icons/info.svg" alt="AboutReservationPage">
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo("/ManageStayPage"))" Text="Zarządzaj pobytem">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ManageStayPage"))" Text="Zarządzaj pobytem">
         <Icon>
             <img src="/icons/lamp.svg" alt="ManageStayPage">
         </Icon>
     </Button>
 
 </div>
-
 @code
 {
+
     public string? ApartmentName;
     public string? ApartmentNumber;
     public string? ReservationDateFrom;
     public string? ReservationDateTo;
+    public string? ImageUrl = string.Empty;
 
-    protected override void OnInitialized()
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
     {
-        RentoomReservation? currentReservation = ReservationState.CurrentReservation;
-        ApartmentName = currentReservation?.Reservation.Items?.FirstOrDefault()?.objectName;
-        ApartmentNumber = currentReservation?.Reservation.Items?.FirstOrDefault()?.itemCode;
-        ReservationDateFrom = currentReservation?.Reservation.ReservationDetails?.dateFrom;
-        ReservationDateTo = currentReservation?.Reservation.ReservationDetails?.dateTo;
+        await base.OnInitializedAsync();
+        LoadData();
+        _isLoading = false;
+    }
+
+    private void LoadData()
+    {
+        var res = Data?.Reservation?.Reservation;
+        ApartmentName = res?.Items?.FirstOrDefault()?.objectName;
+        ApartmentNumber = res?.Items?.FirstOrDefault()?.itemCode;
+        ReservationDateFrom = res?.ReservationDetails?.dateFrom;
+        ReservationDateTo = res?.ReservationDetails?.dateTo;
+
+        var image = Data?.Media?.FirstOrDefault(m => m.Extension is "jpg")?.Url;
+
+        ImageUrl = image;
     }
 }

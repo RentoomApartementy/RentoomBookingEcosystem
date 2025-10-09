@@ -1,11 +1,10 @@
-﻿
+﻿@using RentoomBooking.StayWell.States
+
 <div class="wrapper">
-    <img src="@Source" />
+    <img src="@Source" alt="@Source" />
 </div>
 
 @code {
-
     [Parameter] public string Source { get; set; } = "/images/placeholders/apartment_placeholder.png";
-
 
 }
