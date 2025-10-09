@@ -24,7 +24,7 @@ namespace RentoomBooking.StayWell
 
             builder.Services.AddHttpClient("FunctionsApi", c =>
             {
-                c.BaseAddress = new Uri("http://localhost:7238"+apiBase);
+                c.BaseAddress = new Uri("https://localhost:7238"+apiBase);
             });
 
             builder.Services.AddScoped<BackendApi>();
