@@ -14,7 +14,7 @@ public class ApartmentsApi
 {
     private readonly IdoSellService _service;
     private readonly ILogger<ApartmentsApi> _logger;
-    private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
+   // private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
     public ApartmentsApi(IdoSellService service, ILogger<ApartmentsApi> logger)
     {
