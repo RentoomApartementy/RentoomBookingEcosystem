@@ -105,9 +105,21 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
 
         }
 
+        public DateTime getDateFrom()
+        {
+            return DateTime.ParseExact(dateFrom, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+        }
+
+        public DateTime getDateTo()
+        {
+            return DateTime.ParseExact(dateTo, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+
+        }
     }
 
-    public class Client
+        public class Client
     {
         public string clientType { get; set; }
         public string status { get; set; }
