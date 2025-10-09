@@ -19,12 +19,12 @@ public class AmenitiesApi
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
   //  private readonly AmenitiesRepository _amenitiesRepository;
     private readonly AmenitiesService _amenitiesService;
-    public AmenitiesApi(IdoSellService service, ILogger<AmenitiesApi> logger)
+    public AmenitiesApi(IdoSellService service, ILogger<AmenitiesApi> logger, AmenitiesService amenitiesService)
     {
         _service = service;
         _logger = logger;
-      //  _amenitiesRepository = amenitiesRepository;
-        //_amenitiesService = amenitiesService;
+      //_amenitiesRepository = amenitiesRepository;
+        _amenitiesService = amenitiesService;
     }
 
     [Function("GetAmenitiesForObjectTypes")]
@@ -77,7 +77,7 @@ public class AmenitiesApi
             return response;
         }
     }
-/*
+
     [Function("GetAmenitiesFilter")]
     public async Task<HttpResponseData> GetAmenitiesFilter(
          [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "amenities/getForObjects/filter")] HttpRequestData req)
@@ -128,5 +128,5 @@ public class AmenitiesApi
             return response;
         }
     }
-*/
+
     }
