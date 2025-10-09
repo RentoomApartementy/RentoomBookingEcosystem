@@ -1,10 +1,12 @@
-﻿@page "/OpenApartmentPage"
+﻿@page "/reservation/{token}/OpenApartmentPage"
 @using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.States
+@inherits Models.PageBase
 
 <PageTitle>OpenApartmentPage</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="Szeroka Premier No 2A" Subtitle="Otwórz apartament"></PageInfo>
+    <PageInfo Title="@Data?.Reservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="Otwórz apartament"></PageInfo>
 </div>
 
 <div class="description-wrapper">

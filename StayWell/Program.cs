@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using RentoomBooking.SharedClasses;
 using RentoomBooking.StayWell.Services;
-using System.Text.Json;
 using RentoomBooking.StayWell.States;
+using System.Text.Json;
 
 
 namespace RentoomBooking.StayWell
@@ -18,6 +18,7 @@ namespace RentoomBooking.StayWell
 
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
+            builder.Services.AddScoped<AmenitiesState>();
 
             var apiBase = builder.Configuration["ApiBaseUrl"] ?? "/api/";
 

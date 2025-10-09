@@ -22,6 +22,12 @@ namespace RentoomBooking.StayWell.Services
                    ?? [];
         }
 
+        public async Task<List<ObjectAmenity>> GetAmenitiesForObjectsAsync(int objectId)
+        {
+            return await _http.GetFromJsonAsync<List<ObjectAmenity>>($"apartments/{objectId}/amenities", _json)
+                   ?? [];
+        }
+
 
 
 

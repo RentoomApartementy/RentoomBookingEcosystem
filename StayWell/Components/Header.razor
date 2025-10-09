@@ -8,15 +8,17 @@
         </div>
     </div>
     <div class="contact">
-        <NavLink href="/ContactUsPage">
+        <NavLink href="@($"/reservation/{Token}/ContactUsPage")">
             <img src="/icons/phone.svg" alt="Kontakt" />
         </NavLink>
     </div>
 </div>
 
 @code {
-
-    [Parameter] public string reservationId { get; set; } = "brak";
+    [Parameter]
+    public string? Token { get; set; }
+    [Parameter] 
+    public string reservationId { get; set; } = "brak";
 
 
 }

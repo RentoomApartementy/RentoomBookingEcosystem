@@ -13,4 +13,6 @@
     align-items: stretch;
     justify-content: stretch;
     max-width: 500px;
+    background-color: dimgrey;
+    border-radius: 15px;
 }

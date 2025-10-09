@@ -20,6 +20,8 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
+        public string? CurrentToken => _currentToken;
+
         public async Task<RentoomReservation?> GetReservationAsync(string token)
         {
             if (_currentToken == token) return CurrentReservation;

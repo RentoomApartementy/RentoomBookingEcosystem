@@ -1,11 +1,12 @@
-﻿@page "/ContactUsPage"
+﻿@page "/reservation/{token}/ContactUsPage"
 @using RentoomBooking.StayWell.Components
-
+@using RentoomBooking.StayWell.States
+@inherits Models.PageBase
 
 <PageTitle>Contact Us</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="Szeroka Premier No 2A" Subtitle="Skontaktuj się z nami"></PageInfo>
+    <PageInfo Title="@Data?.Reservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="Skontaktuj się z nami"></PageInfo>
 </div>
 
 <div class="description-wrapper">

@@ -1,15 +1,14 @@
 ﻿@page "/reservation/{Token}"
-@implements IDisposable
+@* @implements IDisposable *@
 @using RentoomBooking.StayWell.States;
 @using RentoomBooking.StayWell.Services;
-@inject BackendApi BackendApi
-@inject ReservationState ReservationState
-@inject MediaState MediaState
-@layout Layouts.ReservationLayout
 @inject NavigationManager Navigation
+@layout Layouts.ReservationLayout
+@inherits Models.PageBase
+
 <h3>ReservationPage</h3>
 
-@if (MediaState.IsLoading || ReservationState.IsLoading)
+@* @if (MediaState.IsLoading || ReservationState.IsLoading)
 {
     <h1>Ladowanie...</h1>
 }
@@ -19,42 +18,34 @@ else if (ReservationState.CurrentReservation == null )
 }
 else
 {
-    Navigation.NavigateTo($"/HomePage");
-}
+    Navigation.NavigateTo($"/AboutReservationPage");
+} *@
 
 
 @code {
-    [Parameter]
-    public string? Token { get; set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync()
-    {
-        ReservationState.OnChange += OnReservationChange;
-        MediaState.OnChange += StateHasChanged;
-        await ReservationState.GetReservationAsync(Token);
-    }
-
-    private async void OnReservationChange()
-    {
-        StateHasChanged();
-        var item = ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault();
-        if (item != null)
-        {
-            int objectId = item.objectId;
-            await MediaState.GetMediaAsync(objectId);
-        }
-    }
-
-    // protected override async Task OnParametersSetAsync()
+    // protected override async Task OnInitializedAsync()
     // {
-    //     await LoadReservationAsync();
-    //     await LoadMediaAsync();
-
+    //     ReservationState.OnChange += OnReservationChange;
+    //     MediaState.OnChange += StateHasChanged;
+    //     await ReservationState.GetReservationAsync(Token);
     // }
 
-    public void Dispose()
-    {
-        ReservationState.OnChange -= OnReservationChange;
-        MediaState.OnChange -= StateHasChanged;
-    }
+    // private async void OnReservationChange()
+    // {
+    //     StateHasChanged();
+    //     var item = ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault();
+    //     if (item != null)
+    //     {
+    //         int objectId = item.objectId;
+    //         await MediaState.GetMediaAsync(objectId);
+    //         await AmenitiesState.GetAmenitiesForObjectsAsync(objectId);
+    //     }
+    // }
+
+    // public void Dispose()
+    // {
+    //     ReservationState.OnChange -= OnReservationChange;
+    //     MediaState.OnChange -= StateHasChanged;
+    // }
 }
