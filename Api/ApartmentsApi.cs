@@ -25,7 +25,7 @@ public class ApartmentsApi
     // GET /api/apartments?city=Gdansk&top=50&continuationToken=...
     [Function("ListApartments")]
     public async Task<HttpResponseData> List(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "apartments")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "db/apartments")] HttpRequestData req)
     {
         var q = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
         var city = q.Get("city");

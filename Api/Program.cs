@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
 
 
 TokenCredential credential = new DefaultAzureCredential();
@@ -26,6 +27,11 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IdoSellService>();
 builder.Services.AddSingleton<BookingDatabase>();
 builder.Services.AddSingleton<IAmenitiesService, AmenitiesService>();
+builder.Services.AddSingleton<IClientService, ClientService>();
+builder.Services.AddSingleton<IApartmentService, ApartmentService>();
+builder.Services.AddSingleton<IIdoBookingConnectService, IdoBookingConnectService>();
+
+builder.Services.AddSingleton<ApartmentRepository>();
 builder.Services.AddSingleton<AmenitiesRepository>();
 
 
