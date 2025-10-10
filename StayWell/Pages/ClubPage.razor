@@ -1,6 +1,6 @@
-﻿@page "/ClubPage"
+﻿@page "/reservation/{token}/ClubPage"
 @using RentoomBooking.StayWell.Components
-
+@inherits Models.PageBase
 
 <PageTitle>Club Page</PageTitle>
 
@@ -11,10 +11,10 @@
 <div class="cards-wrapper">
 
     <PartnerCard
-    Href="/PartnerPage"
+    Href="@($"/reservation/{Token}/PartnerPage")"
     Offer="-10%"
     Category=PartnerCategories.Food
-    Image="https://scontent-waw2-2.xx.fbcdn.net/v/t51.75761-15/485733286_17971326416840429_1605928777056025707_n.jpg?stp=dst-jpegr_tt6&_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=3Xc3Y4kQ0pkQ7kNvwFUjzd9&_nc_oc=Adkf0Q98mIziOvGO8fSq8-AJhkUnK2f3rWhJwWr1UW-2D9_OyoZWdnnTdT2MH16zIZE&_nc_zt=23&se=-1&_nc_ht=scontent-waw2-2.xx&_nc_gid=lDTST2cnO_9fwBAk5jvSZg&oh=00_AfaY3u7VQs4rK8z5HfMGTIH725EnhGwrJQsXw6ab7V3uug&oe=68D76EFD"
+    Image="/images/test_images/picmain.jpg"
     PartnerName="Dom Pizzy i Tapas"
     PartnerDescription="Unikatowe połączenie hiszpańskiej kuchni i pizzy neapolitańskiej.">
     </PartnerCard>
@@ -42,3 +42,7 @@
     </PartnerCard>
 
 </div>
+
+@code{
+
+}

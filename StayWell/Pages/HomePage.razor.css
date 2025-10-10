@@ -38,3 +38,59 @@
         margin-right: auto;
     }
 }
+
+.skeleton {
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    border-radius: 15px;
+    background: linear-gradient(90deg, #cccccc 25%, #e0e0e0 50%, #cccccc 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.2s infinite linear;
+}
+
+.reservation-info-skeleton {
+    width: 100%;
+    max-width: 500px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 12px 16px;
+}
+
+.skeleton-line {
+    border-radius: 6px;
+    background: linear-gradient(90deg, #cccccc 25%, #e0e0e0 50%, #cccccc 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.2s infinite linear;
+}
+
+.skeleton-line-title {
+    width: 60%;
+    height: 18px;
+}
+
+.skeleton-line-address {
+    width: 80%;
+    height: 14px;
+}
+
+.skeleton-line-dates {
+    width: 40%;
+    height: 14px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

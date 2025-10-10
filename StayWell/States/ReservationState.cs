@@ -1,11 +1,14 @@
 ﻿using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.StayWell.Services;
 
 namespace RentoomBooking.StayWell.States
 {
 /* https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-9.0#url */
-    public class ReservationState
+    public class ReservationState(BackendApi backendApi)
     {
         private RentoomReservation? _reservation;
+        private readonly BackendApi _backendApi = backendApi;
+        private string? _currentToken;
 
         public RentoomReservation? CurrentReservation
         {
@@ -15,6 +18,38 @@ namespace RentoomBooking.StayWell.States
                 _reservation = value;
                 NotifyStateChanged();
             }
+        }
+
+        public string? CurrentToken => _currentToken;
+
+        public async Task<RentoomReservation?> GetReservationAsync(string token)
+        {
+            if (_currentToken == token) return CurrentReservation;
+
+            SetLoading(true);
+            try
+            {
+                if (_backendApi == null) 
+                { 
+                    ClearReservation(); 
+                    return null; 
+                }
+
+                var reservation = await _backendApi.GetReservationByTokenAsync(token);
+
+                if (reservation == null) ClearReservation();
+
+                _currentToken = token;
+                CurrentReservation = reservation;
+
+                return CurrentReservation;
+            }
+            finally
+            {
+                SetLoading(false);
+            }
+
+
         }
 
         public event Action? OnChange;
@@ -35,6 +70,7 @@ namespace RentoomBooking.StayWell.States
         public void ClearReservation()
         {
             CurrentReservation = null;
+            _currentToken = null;
             IsLoading = false;
         }
 

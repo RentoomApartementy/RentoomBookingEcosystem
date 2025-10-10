@@ -1,28 +1,28 @@
 ﻿@inject NavigationManager Navigation
-
+@* @inherits Models.PageBase *@
 
 <div class="footer-navigation-row">
-    <NavigationButton href="/InstructionsPage">
+    <NavigationButton href="@($"/reservation/{Token}/InstructionsPage")">
         <Icon>
             <img src="/icons/book.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="/OpenApartmentPage">
+    <NavigationButton href="@($"/reservation/{Token}/OpenApartmentPage")">
         <Icon>
             <img src="/icons/door-open.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="/HomePage">
+    <NavigationButton href="@($"/reservation/{Token}/HomePage")">
         <Icon>
             <img src="/icons/house.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="/ManageStayPage">
+    <NavigationButton href="@($"/reservation/{Token}/ManageStayPage")">
         <Icon>
             <img src="/icons/lamp.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="/AboutReservationPage">
+    <NavigationButton href="@($"/reservation/{Token}/AboutReservationPage")">
         <Icon>
             <img src="/icons/info.svg">
         </Icon>
@@ -30,6 +30,6 @@
 </div>
 
 @code {
-
-
+    [Parameter]
+    public string? Token { get; set; }
 }

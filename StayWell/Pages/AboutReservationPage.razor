@@ -1,6 +1,71 @@
-﻿@page "/AboutReservationPage"
+﻿@page "/reservation/{token}/AboutReservationPage"
+@using RentoomBooking.StayWell.Components
+@using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.StayWell.States
+@inject NavigationManager Navigation
+@inherits Models.PageBase
 
-<PageTitle>Main</PageTitle>
+<PageTitle>About Reservation</PageTitle>
 
-<WebSiteComponent Text="Nazwa: " />
-<SolutionLabel Text="@SolutionNameClass.SolutionName_2" />
+<div class="page-info-wrapper">
+    <PageInfo Title="@apartmentName" Subtitle="O rezerwacji"></PageInfo>
+</div>
+
+<div class="amenities-wrapper"> @* ---- Zmontować z tego komponenty i uporządkować ---- *@
+    <div class="amenity">
+        <span><img src="/icons/users.svg"/>Założyciel rezerwacji:</span>
+        <span class="text">@fullName</span>
+    </div>
+    <div class="amenity">
+        <span><img src="/icons/wifi.svg" />Wifi:</span>
+        <span class="text">login</span>
+        <span class="text">password</span>
+    </div>
+    <div class="amenity">
+        <span><img src="/icons/bed-double.svg"/>Wyposażenie apartamentu:</span>
+        <button @onclick="ShowAmenities">@(showAmenities ? "Ukryj wyposażenie":"Pokaż wyposażenie")</button>
+        @if (showAmenities && Data.Amenities is not null)
+        {
+            <ul>
+                @foreach (var amenity in Data.Amenities)
+                {
+                    <li>@amenity.Name</li>
+                }
+            </ul>
+        }
+    </div>
+    <div class="amenity">
+        <span><img src="/icons/file-user.svg"/>Regulamin:</span>
+        <button>Wyświetl cały regulamin</button>
+    </div>
+</div>
+
+@code{
+
+    private bool showAmenities = false;
+    private string apartmentName = string.Empty;
+    private string fullName = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        LoadData();
+    }
+
+    private void ShowAmenities()
+    {
+        showAmenities = !showAmenities;
+    }
+    private void LoadData()
+    {
+        var currentReservation = Data.Reservation?.Reservation;
+
+        if (currentReservation is not null)
+        {
+            fullName = $"{currentReservation.Client.firstName} {currentReservation.Client.lastName}";
+            apartmentName = currentReservation.Items?.FirstOrDefault()?.objectName ?? string.Empty;
+        }
+    }
+
+
+
+}

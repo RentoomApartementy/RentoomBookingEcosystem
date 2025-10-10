@@ -13,23 +13,28 @@ namespace RentoomBooking.SharedClasses.Services
 {
     public interface IAmenitiesService
     {
-        Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes, CancellationToken ct = default);
+        /// <summary>
+        /// Zwraca zestaw filtrów z Idobooking do wyświetlenia na stronie rentoom.
+        /// Zestaw filtrów jest zawężony do tych zdefiniowany w CosmosDB
+        /// Jesli chcemy zwiększyć ilość wyświetlanych filtrów należy dodać odpowiednie id takiego filtra z Idobooking do tablicy w CosmosDB.
+        /// </summary>
+        /// <param name="objectTypes"></param>
+        /// <returns>List<ObjectTypesAmenities>?</returns>
+        Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes);
     }
-
-
-
-
 
     public class AmenitiesService : IAmenitiesService
     {
         private readonly IHttpClientFactory _factory;
         BookingDatabase _bd;
-        ApartmentRepository _AmenitiesRepository;
-        public AmenitiesService(IHttpClientFactory factory, BookingDatabase bd, ApartmentRepository AmenitiesRepository)
+        AmenitiesRepository _AmenitiesRepository;
+        IdoSellService _IdoSellService;
+        public AmenitiesService(IHttpClientFactory factory, BookingDatabase bd, AmenitiesRepository AmenitiesRepository, IdoSellService IdoSellService)
         {
             _factory = factory;
             _bd = bd;
             _AmenitiesRepository = AmenitiesRepository;
+            _IdoSellService = IdoSellService;
         }
 
 
@@ -51,23 +56,21 @@ namespace RentoomBooking.SharedClasses.Services
             return JsonConvert.DeserializeObject<List<ObjectTypesAmenities>>(jsonString);
         }
 
-        public async Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes, CancellationToken ct = default)
+        public async Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes)
         {
-            var amenities = await GetAmenitiesForObjectTypes(objectTypes, ct);
-            if (amenities == null || amenities.Count == 0)
-            {
-                return amenities;
-            }
+            var AllAmenities = await _IdoSellService.FetchAmenitiesForObjectTypesAsync(objectTypes);
 
-            var filterValues = await GetAmenitiesFilterValuesAsync(ct);
+            if (AllAmenities == null || AllAmenities.Count == 0)
+                return AllAmenities;
+
+            var filterValues = await GetAmenitiesFilterValuesAsync();
+
             if (filterValues.Length == 0)
-            {
-                return amenities;
-            }
+                return AllAmenities;
 
             var filterSet = new HashSet<int>(filterValues);
 
-            foreach (var objectTypeAmenities in amenities)
+            foreach (var objectTypeAmenities in AllAmenities)
             {
                 if (objectTypeAmenities?.ObjectAmenities == null)
                 {
@@ -79,25 +82,14 @@ namespace RentoomBooking.SharedClasses.Services
                     .ToList();
             }
 
-            return amenities;
+            return AllAmenities;
         }
 
-        private async Task<int[]> GetAmenitiesFilterValuesAsync(CancellationToken ct)
+        public async Task<int[]> GetAmenitiesFilterValuesAsync()
         {
-            var http = _factory.CreateClient("FunctionsApi");
-            using var resp = await http.GetAsync("amenities/filter", ct);
+            var filteres = await _AmenitiesRepository.GetAmenitiesFilterAsync();
 
-            if (resp.StatusCode == HttpStatusCode.NotFound)
-            {
-                return Array.Empty<int>();
-            }
-
-            resp.EnsureSuccessStatusCode();
-
-            var jsonString = await resp.Content.ReadAsStringAsync(ct);
-            var document = JsonConvert.DeserializeObject<AmenitiesFilterDocument>(jsonString);
-
-            return document?.amenities ?? Array.Empty<int>();
+            return filteres ?? Array.Empty<int>();
         }
     }
 }

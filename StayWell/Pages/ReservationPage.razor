@@ -1,74 +1,51 @@
 ﻿@page "/reservation/{Token}"
-@implements IDisposable
+@* @implements IDisposable *@
 @using RentoomBooking.StayWell.States;
 @using RentoomBooking.StayWell.Services;
-@inject ReservationService ReservationService
-@inject BackendApi BackendApi
-@inject ReservationState ReservationState
-@layout ReservationLayout
 @inject NavigationManager Navigation
+@layout Layouts.ReservationLayout
+@inherits Models.PageBase
+
 <h3>ReservationPage</h3>
 
-@if (isLoading)
+@* @if (MediaState.IsLoading || ReservationState.IsLoading)
 {
     <h1>Ladowanie...</h1>
 }
-else if (ReservationState.CurrentReservation == null)
+else if (ReservationState.CurrentReservation == null )
 {
-    <h3>Nie ma takiej rezerwacji</h3>
+    <h3>Brak rezerwacji</h3>
 }
 else
 {
-    Navigation.NavigateTo($"/HomePage");
-}
+    Navigation.NavigateTo($"/AboutReservationPage");
+} *@
 
 
 @code {
-    [Parameter]
-    public string? Token { get; set; }
 
-    private bool isLoading = true;
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     ReservationState.OnChange += OnReservationChange;
+    //     MediaState.OnChange += StateHasChanged;
+    //     await ReservationState.GetReservationAsync(Token);
+    // }
 
-    protected override async Task OnInitializedAsync()
-    {
-        ReservationState.OnChange += StateHasChanged;
-        await LoadReservationAsync();
-    }
+    // private async void OnReservationChange()
+    // {
+    //     StateHasChanged();
+    //     var item = ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault();
+    //     if (item != null)
+    //     {
+    //         int objectId = item.objectId;
+    //         await MediaState.GetMediaAsync(objectId);
+    //         await AmenitiesState.GetAmenitiesForObjectsAsync(objectId);
+    //     }
+    // }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        await LoadReservationAsync();
-    }
-
-    private async Task LoadReservationAsync()
-    {
-        isLoading = true;
-        ReservationState.SetLoading(true);
-
-        try
-        {
-            var reservation = await BackendApi
-                .GetReservationByTokenAsync(Token);
-
-            if (reservation is not null)
-            {
-                ReservationState.SetReservation(reservation);
-            }
-            else
-            {
-                ReservationState.ClearReservation();
-            }
-        }
-        finally
-        {
-            isLoading = false;
-            ReservationState.SetLoading(false);
-        }
-    }
-
-
-    public void Dispose()
-    {
-        ReservationState.OnChange -= StateHasChanged;
-    }
+    // public void Dispose()
+    // {
+    //     ReservationState.OnChange -= OnReservationChange;
+    //     MediaState.OnChange -= StateHasChanged;
+    // }
 }

@@ -4,19 +4,16 @@ using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 
 namespace RentoomBooking.SharedClasses.Services
 {
     public interface IApartmentsService
     {
-        Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncWithFunctionApi(
-            string? continuationToken = null,
-            int top = 50,
-            CancellationToken ct = default);
-
-
+       
         Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncDirect(
            string? continuationToken = null,
            int top = 50,
@@ -38,14 +35,21 @@ namespace RentoomBooking.SharedClasses.Services
         private readonly IHttpClientFactory _factory;
         BookingDatabase _bd;
         ApartmentRepository _apartmentsRepository;
-        public ApartmentsService(IHttpClientFactory factory, BookingDatabase bd, ApartmentRepository apartmentsRepository)
+        private readonly IIdoBookingConnectService _idoConnect;
+
+        private const string ObjectMediaGetEndpoint = "objects/getMedia/34/json";
+        private const string HashDocumentId = "all-object-hashes"; // ID for the hash document
+
+
+        public ApartmentsService(IHttpClientFactory factory, IIdoBookingConnectService idoConnect, BookingDatabase bd, ApartmentRepository apartmentsRepository)
         {
             _factory = factory;
             _bd = bd;
+            _idoConnect = idoConnect;
             _apartmentsRepository = apartmentsRepository;
         }
 
-        public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncWithFunctionApi(
+     /*   public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncWithFunctionApi(
             string? continuationToken = null,
             int top = 50,
             CancellationToken ct = default)
@@ -64,7 +68,7 @@ namespace RentoomBooking.SharedClasses.Services
             
             return JsonConvert.DeserializeObject<PagedResult<ApartmentObject>>(jsonString);
         }
-
+     */
 
         public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncDirect(
            string? continuationToken = null,
@@ -84,35 +88,28 @@ namespace RentoomBooking.SharedClasses.Services
 
         public async Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default)
         {
-            var http = _factory.CreateClient("FunctionsApi");
-            using var resp = await http.GetAsync($"apartments/{objectId}/media", ct);
-            resp.EnsureSuccessStatusCode();
-
-            var jsonString = await resp.Content.ReadAsStringAsync(ct);
-            return JsonConvert.DeserializeObject<ObjectMediaResponseType>(jsonString);
+            var request = new ObjectMediaRequestType
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                ObjectId = objectId
+            };
+            return await _idoConnect.PostAsync<ObjectMediaRequestType, ObjectMediaResponseType>(ObjectMediaGetEndpoint, request, ct);
         }
 
         public async Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default)
         {
-            var http = _factory.CreateClient("FunctionsApi");
-            var urlBuilder = new StringBuilder($"apartments/{objectId}/descriptions");
-
-            if (!string.IsNullOrWhiteSpace(language))
+            var request = new ObjectDescriptionsRequestType
             {
-                urlBuilder.Append("?language=").Append(Uri.EscapeDataString(language));
-            }
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                ParamsSearch = new ObjectDescriptionParamsSearch
+                {
+                    ObjectId = objectId,
+                    Language = language,
+                }
+            };
 
-            using var resp = await http.GetAsync(urlBuilder.ToString(), ct);
-
-            if (resp.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return null;
-            }
-
-            resp.EnsureSuccessStatusCode();
-
-            var jsonString = await resp.Content.ReadAsStringAsync(ct);
-            return JsonConvert.DeserializeObject<List<ObjectDescription>>(jsonString);
+            var ret = await _idoConnect.PostAsync<ObjectDescriptionsRequestType, ObjectDescriptionsResponseType>(ObjectMediaGetEndpoint, request, ct);
+            return ret?.Result.ObjectDescriptions;
         }
 
       
