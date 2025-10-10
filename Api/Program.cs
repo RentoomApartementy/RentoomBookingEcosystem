@@ -33,7 +33,7 @@ builder.Services.AddSingleton<IIdoBookingConnectService, IdoBookingConnectServic
 
 builder.Services.AddSingleton<ApartmentRepository>();
 builder.Services.AddSingleton<AmenitiesRepository>();
-
+builder.Services.AddSingleton<IOfferService,OfferService>();
 
 var cosendpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
 //cosendpoint = builder.Configuration["AZURE_COSMOS_ENDPOINT"];
