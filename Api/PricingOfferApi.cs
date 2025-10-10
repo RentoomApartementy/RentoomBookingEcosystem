@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Rentoom;
@@ -40,13 +41,7 @@ namespace RentoomBooking.Api
                 using (var reader = new StreamReader(req.Body, Encoding.UTF8))
                 {
                     var body = await reader.ReadToEndAsync().ConfigureAwait(false);
-                    if (string.IsNullOrWhiteSpace(body))
-                    {
-                        response.StatusCode = HttpStatusCode.BadRequest;
-                        await response.WriteStringAsync("Request body can't be empty.").ConfigureAwait(false);
-                        return response;
-                    }
-
+                    
                     payload = JsonConvert.DeserializeObject<PricingOffersRequest>(body);
                 }
 
@@ -72,6 +67,50 @@ namespace RentoomBooking.Api
                 return response;
             }
         }
+
+
+        [Function("GetAvailabilityAndPricesForDays")]
+        public async Task<HttpResponseData> GetAvailabilityAndPricesForDays(
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "offers/availability-and-prices")] HttpRequestData req,
+           FunctionContext executionContext)
+        {
+            var response = req.CreateResponse();
+
+            try
+            {
+                OfferAvailabilityAndPricesParamsSearchInternal? InternalPayload;
+                using (var reader = new StreamReader(req.Body, Encoding.UTF8))
+                {
+                    var body = await reader.ReadToEndAsync().ConfigureAwait(false);
+
+                    InternalPayload = JsonConvert.DeserializeObject<OfferAvailabilityAndPricesParamsSearchInternal>(body);
+                }
+
+                if (InternalPayload is null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    await response.WriteStringAsync("Invalid payload.").ConfigureAwait(false);
+                    return response;
+                }
+
+                var availability = await _offerService
+                    .GetAvailabilityAndPricesForDaysAsync(InternalPayload, executionContext.CancellationToken)
+                    .ConfigureAwait(false);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(availability ?? new List<OfferAvailabilityObject>())).ConfigureAwait(false);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching availability and prices.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.").ConfigureAwait(false);
+                return response;
+            }
+        }
+
     }
 
 }
