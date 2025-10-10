@@ -1,8 +1,9 @@
-﻿using Microsoft.Azure.Functions.Worker;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocation;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Rentoom;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -28,6 +29,7 @@ namespace RentoomBooking.Api
             _apartmentsService = apartmentsService;
         }
 
+        /* do usunięcia - funkcja nie potrzebna, bo nie zwraca sama sobie nic uzytecznego. a lokacja jest teraz w ApartmentObject
         [Function("GetApartmentLocations")]
         public async Task<HttpResponseData> GetApartmentLocations(
                 [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "apartments/locations")] HttpRequestData req)
@@ -82,6 +84,49 @@ namespace RentoomBooking.Api
                 await response.WriteStringAsync("Internal server error.");
                 return response;
             }
+        }
+        */
+
+      
+        
+        [Function("GetAllApartmentsFromIdoSellWithLocalizationInfoAsync")]
+        public async Task<HttpResponseData> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(
+                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "apartments/getAll")] HttpRequestData req)
+        {
+
+            var cancellationToken = req.FunctionContext.CancellationToken;
+            var response = req.CreateResponse();
+
+            _logger.LogInformation($"GetAllApartmentObjectsFunctionNew function started at: {DateTime.Now}");
+
+            try
+            {
+                var result  = await _apartmentsService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+                _logger.LogInformation($"GetAllApartmentObjectsFunctionNew function finished at: {DateTime.Now}");
+                return response;
+                
+
+            }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                _logger.LogError(invalidOperationException, "ApartmentsService is not configured for IdoBooking access.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Apartment service configuration error.");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve apartments.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.");
+                return response;
+            }
+
+            
         }
     }
     }

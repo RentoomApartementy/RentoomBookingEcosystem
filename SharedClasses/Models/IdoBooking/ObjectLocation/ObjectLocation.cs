@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocation
+namespace RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO
 {
     public class GetObjectLocationRequestType
     {  
@@ -41,5 +42,6 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocation
         public int ObjectId { get; set; }
         public int LocationId { get; set; }
         public string? Address { get; set; }
+        public LocalizationItem? LocalizationItem { get; set; }
     }
 }

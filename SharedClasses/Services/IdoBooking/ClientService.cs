@@ -20,13 +20,13 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         private const string ClientsGetEndpoint = "clients/get/34/json";
         private const string ClientsAddEndpoint = "clients/add/34/json";
 
-        private readonly IHttpClientFactory _httpClientFactory;
+       // private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<ClientService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
-        public ClientService(IHttpClientFactory httpClientFactory, IIdoBookingConnectService idoConnect ,IConfiguration configuration, ILogger<ClientService> logger)
+        public ClientService(IIdoBookingConnectService idoConnect ,ILogger<ClientService> logger)
         {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+           // _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _idoConnect = idoConnect;
             

@@ -2,9 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
-using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocation;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,8 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 {
     public interface IApartmentService
     {
-        Task<GetObjectLocationResponseType?> GetObjectLocationsAsync(
-           ParamsSearchObjectLocationType? parameters = null,
-           CancellationToken ct = default);
+        Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellAsync(CancellationToken ct = default);
+        Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(CancellationToken ct = default);
     }
     public class ApartmentService: IApartmentService
     {
@@ -34,12 +34,14 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         private readonly ILogger<IApartmentService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
+        private readonly ApartmentRepository _apartmentRepository;
 
-        public ApartmentService(IIdoBookingConnectService idoConnect, ILogger<IApartmentService> logger)
+        public ApartmentService(IIdoBookingConnectService idoConnect, ILogger<IApartmentService> logger, ApartmentRepository apartmentRepository)
         {
            // _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _idoConnect = idoConnect;
+            _apartmentRepository = apartmentRepository;
 
         }
 
@@ -71,11 +73,22 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         public async Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(CancellationToken ct = default)
         {
-          
+            
+
             List<LocalizationItem> locs = await GetPublicObjectLocationsAsync(ct);
+
             List<ApartmentObject> apartments = await GetAllApartmentsFromIdoSellAsync(ct);
 
-           apartments?.ForEach(a => a.LocalizationItem = locs?.FirstOrDefault(l => l.Id.ToString() == a.Id?.Trim()));
+            var _params = IdoBookingBaseHelper.BuildObjectLocationParams(apartments);
+
+            GetObjectLocationResponseType Objlocs = await GetObjectLocationsAsync(_params, ct);
+            //Objlocs.ObjectLocations
+
+            Objlocs.ObjectLocations.ForEach(a => a.LocalizationItem = locs?.FirstOrDefault(loc => loc.Id == a.LocationId));
+
+           apartments?.ForEach(a => a.ObjectLocation = Objlocs.ObjectLocations?.FirstOrDefault(l => l.ObjectId.ToString() == a.Id?.Trim()));
+
+            await _apartmentRepository.SaveApartmentsAsync(apartments, _logger, ct);
             
             return apartments; 
         }
@@ -104,12 +117,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
                 currentPage++;
 
-            } while (currentPage < pageAll);
+            } while (currentPage <= pageAll);
                 return retList;
         }
 
 
-        public async Task<ApartmentResponseType> GetApartmentsByPageFromIdoSellAsync(int page)
+        public async Task<ApartmentResponseType> GetApartmentsByPageFromIdoSellAsync(int page, CancellationToken ct = default)
         {
 
             var request = new ApartmentRequestType
@@ -118,7 +131,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 Result = new ResultRequestPaging { Page = page, Number = 100 },
             };
 
-            ApartmentResponseType? resp = await _idoConnect.PostAsync<ApartmentRequestType, ApartmentResponseType>(ApartemntsGetEndpoint, null, ct);
+            ApartmentResponseType? resp = await _idoConnect.PostAsync<ApartmentRequestType, ApartmentResponseType>(ApartemntsGetEndpoint, request, ct);
             return resp;
 
 

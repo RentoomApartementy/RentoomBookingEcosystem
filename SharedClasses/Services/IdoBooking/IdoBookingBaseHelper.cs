@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Utils;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -128,14 +131,26 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             return hashedString;
         }
 
-        /*public static AuthenticateType AuthenticateIdbApi()
+        public static ParamsSearchObjectLocationType BuildObjectLocationParams(IEnumerable<ApartmentObject> apartments)
         {
-            return new AuthenticateType
-            {
-                SystemKey = GenerateKey(_hashedPassword),
-                SystemLogin = _systemUser,
-                Lang = _apiLanguage
-            };
-        }*/
+            var objects = apartments?
+                .Select(a => a?.Id)
+                .Where(id => !string.IsNullOrWhiteSpace(id))
+                .Select(id =>
+                {
+                    // parse as invariant int; ignore non-numeric ids
+                    if (int.TryParse(id!.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var n))
+                        return (int?)n;
+                    return null;
+                })
+                .Where(n => n.HasValue)
+                .Select(n => new ObjectLocationRequestItem { Id = n.Value })
+                // distinct by Id (works on all target frameworks)
+                .GroupBy(x => x.Id)
+                .Select(g => g.First())
+                .ToList();
+
+            return new ParamsSearchObjectLocationType { Objects = objects };
+        }
     }
 }

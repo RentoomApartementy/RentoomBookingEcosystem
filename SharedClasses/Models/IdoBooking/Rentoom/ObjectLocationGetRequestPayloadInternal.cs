@@ -1,4 +1,4 @@
-﻿using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocation;
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

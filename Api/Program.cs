@@ -31,6 +31,7 @@ builder.Services.AddSingleton<IClientService, ClientService>();
 builder.Services.AddSingleton<IApartmentService, ApartmentService>();
 builder.Services.AddSingleton<IIdoBookingConnectService, IdoBookingConnectService>();
 
+builder.Services.AddSingleton<ApartmentRepository>();
 builder.Services.AddSingleton<AmenitiesRepository>();
 
 
