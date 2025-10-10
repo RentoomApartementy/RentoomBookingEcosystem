@@ -19,7 +19,7 @@ namespace RentoomBooking.SharedClasses.Models
     public class  GateErrorType
     {
         public int FaultCode { get; set; }
-        public string FaultString { get; set; }
+        public string? FaultString { get; set; }
     }
 
     public class AuthenticateType
