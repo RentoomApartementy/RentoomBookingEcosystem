@@ -1,0 +1,87 @@
+﻿using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocation;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Rentoom;
+using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RentoomBooking.Api
+{
+    public class ApartmentApi
+    {
+
+        private readonly ILogger<ApartmentApi> _logger;
+        private readonly IApartmentService _apartmentsService;
+
+        public ApartmentApi(IApartmentService apartmentsService, ILogger<ApartmentApi> logger)
+        {
+
+            _logger = logger;
+            _apartmentsService = apartmentsService;
+        }
+
+        [Function("GetApartmentLocations")]
+        public async Task<HttpResponseData> GetApartmentLocations(
+                [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "apartments/locations")] HttpRequestData req)
+        {
+            var cancellationToken = req.FunctionContext.CancellationToken;
+            var response = req.CreateResponse();
+
+            try
+            {
+                ParamsSearchObjectLocationType? parameters = null;
+
+                var requestBody = await new StreamReader(req.Body).ReadToEndAsync().ConfigureAwait(false);
+                if (!string.IsNullOrWhiteSpace(requestBody))
+                {
+                    try
+                    {
+                        var payload = JsonConvert.DeserializeObject<ObjectLocationRequestPayloadInternal>(requestBody);
+                        parameters = payload?.ParamsSearchObjectLocation;
+
+                        if (parameters == null)
+                        {
+                            parameters = JsonConvert.DeserializeObject<ParamsSearchObjectLocationType>(requestBody);
+                        }
+                    }
+                    catch (JsonException jsonEx)
+                    {
+                        _logger.LogError(jsonEx, "Invalid apartment location payload.");
+                        response.StatusCode = HttpStatusCode.BadRequest;
+                        await response.WriteStringAsync("Invalid JSON payload.");
+                        return response;
+                    }
+                }
+
+                var result = await _apartmentsService.GetObjectLocationsAsync(parameters, cancellationToken);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+                return response;
+            }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                _logger.LogError(invalidOperationException, "ApartmentsService is not configured for IdoBooking access.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Apartment service configuration error.");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve apartment locations.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.");
+                return response;
+            }
+        }
+    }
+    }

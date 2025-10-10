@@ -469,34 +469,5 @@ namespace RentoomBooking.SharedClasses.Services
             var ret = JsonConvert.DeserializeObject<AmenitiesForObjectsResponseType>(responseContent);
             return ret?.Result.ObjectTypesAmenities;
         }
-
-    /*    private async Task<TResponse?> PostAsync<TRequest, TResponse>(string relativeUrl, TRequest request, CancellationToken cancellationToken)
-        {
-            var httpClient = _httpClientFactory.CreateClient();
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var url = new Uri(new Uri(_baseApiUrl, UriKind.Absolute), relativeUrl);
-            var payload = JsonHelper.SerializeOnlyNonNullProperties(request);
-            using var content = new StringContent(payload, Encoding.UTF8, "application/json");
-
-            _logger.LogDebug("Sending request to {Url} with payload length {Length} bytes.", url, payload.Length);
-
-            using var response = await httpClient.PostAsync(url, content, cancellationToken).ConfigureAwait(false);
-            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError("IdoBooking API request to {Url} failed with status {StatusCode}. Response: {Response}", url, response.StatusCode, responseContent);
-                response.EnsureSuccessStatusCode();
-            }
-
-            if (string.IsNullOrWhiteSpace(responseContent))
-            {
-                return default;
-            }
-
-            return JsonConvert.DeserializeObject<TResponse>(responseContent);
-        }*/
     }
 }
