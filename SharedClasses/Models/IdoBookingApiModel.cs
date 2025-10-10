@@ -29,7 +29,7 @@ namespace RentoomBooking.SharedClasses.Models
         public string? Lang { get; set; } = "pol";
     }
 
-    public class ContainerRequestType { 
+    public class ApartmentRequestType { 
         public AuthenticateType Authenticate { get; set; } = new AuthenticateType();
         public ResultRequestPaging Result { get; set; } = new ResultRequestPaging();
 

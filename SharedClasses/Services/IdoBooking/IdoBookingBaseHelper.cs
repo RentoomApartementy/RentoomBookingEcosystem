@@ -15,7 +15,8 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
     public interface IIdoBookingConnectService
     {
-        Task<TResponse?> PostAsync<TRequest, TResponse>(string relativeUrl, TRequest request, CancellationToken cancellationToken);
+        Task<TResponse?> PostAsync<TRequest, TResponse>(string relativeUrl, TRequest? request, CancellationToken cancellationToken);
+      
         AuthenticateType AuthObjectIdo();
     }
     public class IdoBookingConnectService: IIdoBookingConnectService
@@ -57,7 +58,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             };
         }
 
-        public async Task<TResponse?> PostAsync<TRequest, TResponse>(string relativeUrl, TRequest request, CancellationToken cancellationToken)
+        public async Task<TResponse?> PostAsync<TRequest, TResponse>(string relativeUrl, TRequest? request, CancellationToken cancellationToken)
         {
             var httpClient = _httpClientFactory.CreateClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -82,9 +83,13 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             {
                 return default;
             }
-
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<TResponse>(responseContent);
+            var ret = Newtonsoft.Json.JsonConvert.DeserializeObject<TResponse>(responseContent);
+            return ret;
         }
+
+       
+
+
 
 
     }
