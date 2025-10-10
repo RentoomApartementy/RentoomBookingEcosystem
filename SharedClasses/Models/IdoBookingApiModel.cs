@@ -46,9 +46,10 @@ namespace RentoomBooking.SharedClasses.Models
 
     public class ResultRequestPaging
     {
-        public int Page { get; set; }
-     
-        public int Number { get; set; }
+        public int Page { get; set; } = 1;
+
+
+        public int Number { get; set; } = 100;
     }
 
 
