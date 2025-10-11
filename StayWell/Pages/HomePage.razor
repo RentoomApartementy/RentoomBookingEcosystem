@@ -1,8 +1,11 @@
 ﻿@page "/reservation/{token}/HomePage"
+@using Microsoft.Extensions.Localization
+@using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
+@inject IStringLocalizer<HomePage> Localizer
 @* @implements IDisposable *@
 @inherits Models.PageBase
 
@@ -24,6 +27,8 @@
 </div>
 
 
+
+
 <div class="reservation-info-wrapper">
     @if (_isLoading)
     {
@@ -36,7 +41,7 @@
     else
     {
         <ReservationInfo apartmentName="@ApartmentName"
-            apartmentAddress="(apartmentAddress)"
+            apartmentAddress="@CultureInfo.CurrentCulture.TwoLetterISOLanguageName"
             apartmentNumber="@ApartmentNumber"
             reservationCheckInDate="@ReservationDateFrom"
             reservationCheckOutDate="@ReservationDateTo">
@@ -46,7 +51,7 @@
 
 <div class="buttons-wrapper">
 
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ClubPage"))" Text="Klub Korzyści Rentoom" ButtonStyle="border-color: #F9B806; color: #F9B806; background-color: #21573e; margin-bottom: 2rem;">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ClubPage"))" Text="@Localizer["ClubBenefits"]" ButtonStyle="border-color: #F9B806; color: #F9B806; background-color: #21573e; margin-bottom: 2rem;">
         <Icon>
             <img src="/icons/hand-coins.svg" alt="ClubPage">
         </Icon>
@@ -82,6 +87,7 @@
 
     public string? ApartmentName;
     public string? ApartmentNumber;
+    public string? ApartmentAddress;
     public string? ReservationDateFrom;
     public string? ReservationDateTo;
     public string? ImageUrl = string.Empty;
@@ -96,10 +102,12 @@
     }
 
     private void LoadData()
-    {
+    {   
+
         var res = Data?.Reservation?.Reservation;
         ApartmentName = res?.Items?.FirstOrDefault()?.objectName;
         ApartmentNumber = res?.Items?.FirstOrDefault()?.itemCode;
+        ApartmentAddress = "empty";
         ReservationDateFrom = res?.ReservationDetails?.dateFrom;
         ReservationDateTo = res?.ReservationDetails?.dateTo;
 

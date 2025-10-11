@@ -1,7 +1,6 @@
 ﻿using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 
-//Pozostałość po alpejskich kombinacjach. Do usunięcia.
 namespace RentoomBooking.StayWell.Models
 {
     public class Data

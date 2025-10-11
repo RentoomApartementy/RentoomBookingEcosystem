@@ -7,18 +7,38 @@
                 <span style="text-decoration: underline">@reservationId</span></span>
         </div>
     </div>
-    <div class="contact">
-        <NavLink href="@($"/reservation/{Token}/ContactUsPage")">
-            <img src="/icons/phone.svg" alt="Kontakt" />
-        </NavLink>
+    <div class="right-wrapper">
+
+        <div class="Languages">
+            <Button OnClick="@OnOpenModal" ButtonStyle="border: none">
+                <Icon><img src="/icons/languages.svg"/></Icon>
+            </Button>
+        </div>
+
+        <div class="Contact">
+            <NavLink href="@($"/reservation/{Token}/ContactUsPage")">
+                <img src="/icons/phone.svg" alt="Kontakt" />
+            </NavLink>
+        </div>
     </div>
 </div>
+
+<Modal Title="Languages" IsVisible="@ModalVisible">
+    <Content>
+
+    </Content>
+</Modal>
 
 @code {
     [Parameter]
     public string? Token { get; set; }
     [Parameter] 
     public string reservationId { get; set; } = "brak";
+    [Parameter]
+    public EventCallback OnOpenModal { get; set; }
 
+    private bool ModalVisible = false;
+
+    private void Open() => ModalVisible = true;
 
 }

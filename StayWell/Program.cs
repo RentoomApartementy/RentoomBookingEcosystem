@@ -16,6 +16,11 @@ namespace RentoomBooking.StayWell
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
+            builder.Services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
+
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
             builder.Services.AddScoped<AmenitiesState>();

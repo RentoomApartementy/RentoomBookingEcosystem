@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @using RentoomBooking.SharedClasses.Models;
+@using RentoomBooking.StayWell.Components;
 @using RentoomBooking.StayWell.States
 @inject ReservationState ReservationState
 @inject MediaState MediaState
@@ -10,7 +11,6 @@
         <RentoomBooking.StayWell.Components.Header Token="@ReservationState.CurrentToken" reservationId="@ReservationState.CurrentReservation?.Reservation.id.ToString()">
         </RentoomBooking.StayWell.Components.Header>
     </div>
-
     <div class="layout-body">
         @Body
     </div>
