@@ -131,7 +131,7 @@ namespace RentoomBooking.Api
 
         [Function("GetApartmentByIdAsync")]
         public async Task<HttpResponseData> GetApartmentByIdAsync(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "apartments/{id}")] HttpRequestData req,
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "db/apartments/{id}")] HttpRequestData req,
     int id)
         {
             var cancellationToken = req.FunctionContext.CancellationToken;
