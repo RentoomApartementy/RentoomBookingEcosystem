@@ -27,6 +27,9 @@ namespace RentoomBooking.SharedClasses.Database
         private const string HashDocumentId = "all-object-hashes";
         private const string ReservationPartitionKey = "/resToken";
 
+        private const string ApartmensPartitionKey = "/partitionKey"; 
+        private const string ApartmentsPartitionKeyValue = "rentoom-apartments-list"; 
+
         // ZMODYFIKOWANY KONSTRUKTOR
         public BookingDatabase(CosmosClient client, IConfiguration configuration)
         {
@@ -49,7 +52,7 @@ namespace RentoomBooking.SharedClasses.Database
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
 
             _apartmentInfoContainer = await database.Database.CreateContainerIfNotExistsAsync(
-                new ContainerProperties(containerName, "/id"));
+                new ContainerProperties(containerName, ApartmensPartitionKey));
 
             _hashesContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties(containerNameForHashes, "/id"));
@@ -193,6 +196,39 @@ namespace RentoomBooking.SharedClasses.Database
             }
         }
 
+        //tymczasowo - to trzeba poczyścic i przenieść gdzie indziej.. bo teraz jest w dwóch serwisach. 
+        public async Task<long> GetApartmentCountAsync(ILogger? log = null)
+        {
+            await _initializationTask;
+            long totalCount = 0;
+            try
+            {
+                var query = new QueryDefinition("SELECT VALUE COUNT(1) FROM c");
+
+                var queryOptions = new QueryRequestOptions
+                {
+                    PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
+                };
+
+
+
+                using var countIt = _apartmentInfoContainer.GetItemQueryIterator<long>(query, requestOptions: queryOptions);
+                if (countIt.HasMoreResults)
+                {
+                    var countPage = await countIt.ReadNextAsync();
+                    totalCount = countPage.FirstOrDefault();
+                }
+
+                return totalCount;
+            }
+            catch (CosmosException ex)
+            {
+                log?.LogError(ex, "Failed to get item count from ApartmentInfo container.");
+                return 0;
+            }
+        }
+
+
         public async Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken, int pageSize)
         {
             await _initializationTask;
@@ -201,14 +237,19 @@ namespace RentoomBooking.SharedClasses.Database
             var sql = "SELECT * FROM c";
             var qd = new QueryDefinition(sql);
 
-            var opts = new QueryRequestOptions { MaxItemCount = pageSize };
+            var opts = new QueryRequestOptions { 
+                MaxItemCount = pageSize,
+                PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
+            };
+
+            long totalCount = await GetApartmentCountAsync();
 
             var it = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(qd, continuationToken, opts);
             if (!it.HasMoreResults)
-                return new PagedResult<ApartmentObject>(Array.Empty<ApartmentObject>(), null);
+                return new PagedResult<ApartmentObject>(Array.Empty<ApartmentObject>(), null,0,totalCount);
 
             var page = await it.ReadNextAsync();
-            return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken);
+            return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken, page.Count, totalCount);
         }
 
         public async Task<RentoomReservation> GetRentoomReservationByResTokenAsync(string resToken, ILogger log)

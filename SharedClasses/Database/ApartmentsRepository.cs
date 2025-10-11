@@ -2,6 +2,7 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using System.Diagnostics.Metrics;
 
 namespace RentoomBooking.SharedClasses.Database
 {
@@ -11,7 +12,8 @@ namespace RentoomBooking.SharedClasses.Database
         private readonly Task _initializationTask;
 
         private const string ContainerName = "ApartmentInfo";
-        private const string PartitionKey = "/id";
+        private const string PartitionKey = "/partitionKey";
+        private const string PartitionKeyValue = "rentoom-apartments-list";
         private ILogger<ApartmentRepository> _logger;
 
         public ApartmentRepository(CosmosClient client, IConfiguration configuration, ILogger<ApartmentRepository> logger)
@@ -38,20 +40,26 @@ namespace RentoomBooking.SharedClasses.Database
         public async Task<long> GetApartmentCountAsync(ILogger? log = null)
         {
             await _initializationTask;
-
+            long totalCount = 0;
             try
             {
                 var query = new QueryDefinition("SELECT VALUE COUNT(1) FROM c");
-                var queryIterator = _apartmentInfoContainer.GetItemQueryIterator<long>(query);
 
-                long count = 0;
-                if (queryIterator.HasMoreResults)
+                var queryOptions = new QueryRequestOptions
                 {
-                    var response = await queryIterator.ReadNextAsync();
-                    count = response.FirstOrDefault();
+                    PartitionKey = new PartitionKey(PartitionKeyValue)
+                };
+
+
+
+                using var countIt = _apartmentInfoContainer.GetItemQueryIterator<long>(query, requestOptions: queryOptions);
+                if (countIt.HasMoreResults)
+                {
+                    var countPage = await countIt.ReadNextAsync();
+                    totalCount = countPage.FirstOrDefault();
                 }
 
-                return count;
+                return totalCount;
             }
             catch (CosmosException ex)
             {
