@@ -128,5 +128,50 @@ namespace RentoomBooking.Api
 
             
         }
+
+        [Function("GetApartmentByIdAsync")]
+        public async Task<HttpResponseData> GetApartmentByIdAsync(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "apartments/{id}")] HttpRequestData req,
+    int id)
+        {
+            var cancellationToken = req.FunctionContext.CancellationToken;
+            var response = req.CreateResponse();
+
+            _logger.LogInformation($"GetApartmentByIdAsync function started at: {DateTime.Now} for Id: {id}");
+
+            try
+            {
+                var result = await _apartmentsService.GetApartmentByIdAsync(id);
+
+                if (result == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    await response.WriteStringAsync($"Apartment with Id {id} not found in local repository.");
+                    return response;
+                }
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+                _logger.LogInformation($"GetApartmentByIdAsync function finished at: {DateTime.Now} for Id: {id}");
+                return response;
+            }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                _logger.LogError(invalidOperationException, "ApartmentsService is not configured for IdoBooking access.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Apartment service configuration error.");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to retrieve apartment with Id: {id}.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.");
+                return response;
+            }
+        }
+
+
     }
     }

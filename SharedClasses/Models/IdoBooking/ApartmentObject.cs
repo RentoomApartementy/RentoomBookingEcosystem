@@ -1,10 +1,12 @@
-﻿using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
+﻿using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Models.IdoBooking
@@ -13,6 +15,10 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
     public class ApartmentObject
     {
         public string Id { get; set; }
+
+        [JsonProperty("partitionKey")]
+        [JsonPropertyName("partitionKey")]
+        public string? PartitionKey { get; set; }
         public string? Name { get; set; }
         public int? Capacity { get; set; }
         public string? Area { get; set; }
@@ -25,6 +31,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public List<ItemType>? Items { get; set; }
         public List<AddonType>? Addons { get; set; }
         public ObjectLocation? ObjectLocation { get; set; }
+       
     }
 
 
