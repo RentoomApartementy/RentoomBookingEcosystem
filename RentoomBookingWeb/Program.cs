@@ -2,6 +2,7 @@ using Microsoft.Azure.Cosmos;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBookingWeb.Components;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
 
 namespace RentoomBookingWeb
 {
@@ -48,6 +49,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
             builder.Services.AddScoped<IdoSellService>();
+            builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();
 
 
             var app = builder.Build();
