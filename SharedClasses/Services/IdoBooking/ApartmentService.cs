@@ -21,6 +21,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
     {
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellAsync(CancellationToken ct = default);
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(CancellationToken ct = default);
+        Task<ApartmentObject?> GetApartmentByIdAsync(int objectId);
     }
     public class ApartmentService: IApartmentService
     {
@@ -138,7 +139,10 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         }
 
-
+public  async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
+        {
+            return await _apartmentRepository.FindApartmentInCosmosDb(objectId);
+        }
 
 
     }
