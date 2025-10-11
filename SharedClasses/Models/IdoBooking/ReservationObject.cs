@@ -105,55 +105,59 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
 
         }
 
+        public DateTime getDateFrom()
+        {
+            return DateTime.ParseExact(dateFrom, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+        }
+
+        public DateTime getDateTo()
+        {
+            return DateTime.ParseExact(dateTo, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+
+        }
     }
 
-    public class Client
+        public class Client
     {
-        public string clientType { get; set; }
-        public string status { get; set; }
-        public int id { get; set; }
-        public string login { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public string street { get; set; }
-        public string zipcode { get; set; }
-        public string city { get; set; }
-        public string phone { get; set; }
-        public string email { get; set; }
-        public string language { get; set; }
-        public string currency { get; set; }
-        public string countryCode { get; set; }
-        public string notification { get; set; }
-        public string sendNewsletter { get; set; }
-        public string clientNote { get; set; }
-        public int discountForItemsInGroup { get; set; }
-        public int discountForItemsNotInGroup { get; set; }
-        public List<Guest> guests { get; set; }
-        public InvoiceData invoiceData { get; set; }
+        public string ClientType { get; set; }
+        public string Status { get; set; }
+        public int Id { get; set; }
+        public string Login { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Street { get; set; }
+        public string Zipcode { get; set; }
+        public string City { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string Language { get; set; }
+        public string Currency { get; set; }
+        public string CountryCode { get; set; }
+        public string Notification { get; set; }
+        public string SendNewsletter { get; set; }
+        public string ClientNote { get; set; }
+        public int DiscountForItemsInGroup { get; set; }
+        public int DiscountForItemsNotInGroup { get; set; }
+        public List<Guest> Guests { get; set; }
+        public InvoiceData InvoiceData { get; set; }
     }
 
     public class InvoiceData
     {
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public string street { get; set; }
-        public string zipcode { get; set; }
-        public string city { get; set; }
-        public string countryCode { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Street { get; set; }
+        public string Zipcode { get; set; }
+        public string City { get; set; }
+        public string CountryCode { get; set; }
     }
 
-    public class Guest
+    public class Guest: ClientGuest
     {
-        public int id { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public string street { get; set; }
-        public string zipcode { get; set; }
-        public string city { get; set; }
-        public string phone { get; set; }
-        public string email { get; set; }
-        public string countryCode { get; set; }
-        public string language { get; set; }
+        public int Id { get; set; }
+     
     }
 
     public class ReservationItem

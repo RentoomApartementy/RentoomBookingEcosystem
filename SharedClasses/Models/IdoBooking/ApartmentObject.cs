@@ -1,12 +1,16 @@
-﻿using System;
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Models.IdoBooking
 {
-  public class ApartmentObject
+    
+    public class ApartmentObject
     {
         public string Id { get; set; }
         public string? Name { get; set; }
@@ -20,6 +24,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public List<CategoryType>? Categories { get; set; }
         public List<ItemType>? Items { get; set; }
         public List<AddonType>? Addons { get; set; }
+        public ObjectLocation? ObjectLocation { get; set; }
     }
 
 

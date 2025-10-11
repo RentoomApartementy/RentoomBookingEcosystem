@@ -1,6 +1,7 @@
-﻿@page "/PartnerPage"
+﻿@page "/reservation/{token}/PartnerPage"
 @using RentoomBooking.StayWell.Components
 @inject NavigationManager Navigation
+@inherits Models.PageBase
 
 <PageTitle>Partner Page</PageTitle>
 
@@ -34,8 +35,8 @@
             
         </div>
 
-        @code{
+@code{
 
-    private string[] urls = ["/test_imgs/pic1.jpg","/test_imgs/pic2.jpg","/test_imgs/pic3.jpg"];
+    private string[] urls = ["/images/test_images/pic1.jpg", "/images/test_images/pic2.jpg", "/images/test_images/pic3.jpg"];
 
 }

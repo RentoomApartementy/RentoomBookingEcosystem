@@ -2,25 +2,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
 
 namespace RentoomBooking.Api;
 
 public class GetAllApartmentObjectsFunction
 {
 
-    private readonly IdoSellService _bookingObjectService;
+    private readonly IApartmentService _bookingObjectService;
 
     private readonly ILogger<GetAllApartmentObjectsFunction> _logger;
 
   
 
-    public GetAllApartmentObjectsFunction(ILogger<GetAllApartmentObjectsFunction> logger, IdoSellService bookingObjectService)
+    public GetAllApartmentObjectsFunction(ILogger<GetAllApartmentObjectsFunction> logger, IApartmentService bookingObjectService)
     {
         _logger = logger;
         _bookingObjectService = bookingObjectService;
     }
 
-    [Function("GetAllApartmentObjectsFunction")]
+  /*  [Function("GetAllApartmentObjectsFunction")]
     public async Task SyncFromIdoSell([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
 
@@ -30,7 +31,7 @@ public class GetAllApartmentObjectsFunction
 
         try
         {
-            await _bookingObjectService.SyncAndStoreObjectsAsync();
+            await _bookingObjectService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
         }
         catch (Exception ex)
         {
@@ -39,4 +40,5 @@ public class GetAllApartmentObjectsFunction
 
         _logger.LogInformation($"SyncObjectsTimer function finished at: {DateTime.Now}");
     }
+  */
 }
