@@ -164,7 +164,7 @@ namespace RentoomBooking.SharedClasses.Services
                 Authenticate = _idoConnect.AuthObjectIdo(),
                 ObjectId = objectId
             };
-            ObjectAmenitiesResponseType ret = await _idoConnect.PostAsync<ObjectAmenitiesRequestType, ObjectAmenitiesResponseType>(ApartmentMediaGetEndpoint, request, cancellationToken);
+            var ret = await _idoConnect.PostAsync<ObjectAmenitiesRequestType, ObjectAmenitiesResponseType>(ApartmentAmenitiesGetEndpoint, request, cancellationToken);
 
             /*
                if (!response.IsSuccessStatusCode)

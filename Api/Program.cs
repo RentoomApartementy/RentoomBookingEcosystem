@@ -43,12 +43,16 @@ if (string.IsNullOrEmpty(cosendpoint))
 }
 
 
-var cosmosClient = new CosmosClient( cosendpoint, new CosmosClientOptions()
+var cosmosClient = new CosmosClient(cosendpoint, new CosmosClientOptions()
 {
     SerializerOptions = new CosmosSerializationOptions
     {
         PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-    }
+    },
+    AllowBulkExecution = false,
+    MaxRetryAttemptsOnRateLimitedRequests = 12,
+    MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromMinutes(1)
+
 });
 
 builder.Services.AddSingleton(cosmosClient);
