@@ -43,4 +43,26 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.Client
         public float? DiscountForItemsInPromotion { get; set; }
         public float? DiscountForItemsNotInPromotion { get; set; }
     }
+
+
+    public class ClientAddResponseType
+    {
+        public ClientAddResponse? Result { get; set; }
+        public string? Id { get; set; }
+    }
+
+    public class ClientAddResponse
+    {
+        public AuthenticateType Authenticate { get; set; } = new();
+        public GateErrorType? Errors { get; set; }
+        public List<ClientAddResult>? Clients { get; set; }
+    }
+
+    public class ClientAddResult
+    {
+        public bool Success { get; set; }
+        public GateErrorType? Error { get; set; }
+        public int? ClientId { get; set; }
+        public string? ClientLogin { get; set; }
+    }
 }
