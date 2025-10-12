@@ -4,6 +4,7 @@ using RentoomBooking.SharedClasses;
 using RentoomBooking.StayWell.Services;
 using RentoomBooking.StayWell.States;
 using System.Text.Json;
+using ApartmentState = RentoomBooking.StayWell.States.ApartmentState;
 
 
 namespace RentoomBooking.StayWell
@@ -21,9 +22,12 @@ namespace RentoomBooking.StayWell
                 options.ResourcesPath = "Resources";
             });
 
+            builder.Services.AddScoped<GlobalizationService>();
+
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
             builder.Services.AddScoped<AmenitiesState>();
+            builder.Services.AddScoped<ApartmentState>();
 
             var apiBase = builder.Configuration["ApiBaseUrl"] ?? "/api/";
 

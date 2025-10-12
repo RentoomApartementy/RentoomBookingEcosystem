@@ -1,18 +1,27 @@
-﻿<div class="header">
+﻿@using RentoomBooking.StayWell.Pages
+@using StayWell.Services
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject GlobalizationService GlobalizationService
+@implements IDisposable
+
+@inject IStringLocalizer<HomePage> Localizer
+
+<div class="header">
     <div class="left">
         <img class="logo" src="/icons/building.svg"/>
         <div class="texts">
             <span class="name">StayWell</span>
-            <span class="reservation-id">numer rezerwacji: 
+            <span class="reservation-id">@Localizer["ReservationID"]: 
                 <span style="text-decoration: underline">@reservationId</span></span>
         </div>
     </div>
     <div class="right-wrapper">
 
         <div class="Languages">
-            <Button OnClick="@OnOpenModal" ButtonStyle="border: none">
-                <Icon><img src="/icons/languages.svg"/></Icon>
-            </Button>
+            <button @onclick="@ChangeLang" style="background: none; border: none">
+                <img src="/icons/languages.svg" />
+            </button>
         </div>
 
         <div class="Contact">
@@ -37,8 +46,24 @@
     [Parameter]
     public EventCallback OnOpenModal { get; set; }
 
+
+    protected override void OnInitialized()
+    {
+        GlobalizationService.OnChange += StateHasChanged;
+    }
+
     private bool ModalVisible = false;
 
     private void Open() => ModalVisible = true;
+
+    private void ChangeLang()
+    {
+        GlobalizationService.SetCulture("en-US");
+    }
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= StateHasChanged;
+    }
 
 }

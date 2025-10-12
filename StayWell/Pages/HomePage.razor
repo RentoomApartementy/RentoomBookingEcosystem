@@ -4,9 +4,10 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
+@inject StayWell.Services.GlobalizationService GlobalizationService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<HomePage> Localizer
-@* @implements IDisposable *@
+@implements IDisposable
 @inherits Models.PageBase
 
 <PageTitle>Main</PageTitle>
@@ -41,7 +42,7 @@
     else
     {
         <ReservationInfo apartmentName="@ApartmentName"
-            apartmentAddress="@CultureInfo.CurrentCulture.TwoLetterISOLanguageName"
+            apartmentAddress="@ApartmentAddress"
             apartmentNumber="@ApartmentNumber"
             reservationCheckInDate="@ReservationDateFrom"
             reservationCheckOutDate="@ReservationDateTo">
@@ -57,25 +58,25 @@
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage"))" Text="Instrukcja Zameldowania">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage"))" Text="@Localizer["Instructions"]">
         <Icon>
             <img src="/icons/book.svg" alt="InstructionsPage">
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage"))" Text="Otwórz Apartament">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage"))" Text="@Localizer["OpenApartment"]">
         <Icon>
             <img src="/icons/door-open.svg" alt="OpenApartmentPage">
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/AboutReservationPage"))" Text="O rezerwacji">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/AboutReservationPage"))" Text="@Localizer["AboutReservation"]">
         <Icon>
             <img src="/icons/info.svg" alt="AboutReservationPage">
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ManageStayPage"))" Text="Zarządzaj pobytem">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ManageStayPage"))" Text="@Localizer["ManageStay"]">
         <Icon>
             <img src="/icons/lamp.svg" alt="ManageStayPage">
         </Icon>
@@ -97,6 +98,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        GlobalizationService.OnChange += StateHasChanged;
         LoadData();
         _isLoading = false;
     }
@@ -107,12 +109,17 @@
         var res = Data?.Reservation?.Reservation;
         ApartmentName = res?.Items?.FirstOrDefault()?.objectName;
         ApartmentNumber = res?.Items?.FirstOrDefault()?.itemCode;
-        ApartmentAddress = "empty";
+        ApartmentAddress = Data?.Apartment?.ObjectLocation?.LocalizationItem?.Street;
         ReservationDateFrom = res?.ReservationDetails?.dateFrom;
         ReservationDateTo = res?.ReservationDetails?.dateTo;
 
         var image = Data?.Media?.FirstOrDefault(m => m.Extension is "jpg")?.Url;
 
         ImageUrl = image;
+    }
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= StateHasChanged;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using RentoomBooking.StayWell.States;
+using ApartmentState = RentoomBooking.StayWell.States.ApartmentState;
 
 namespace RentoomBooking.StayWell.Models
 {
@@ -11,6 +12,8 @@ namespace RentoomBooking.StayWell.Models
         protected MediaState MediaState { get; set; } = default!;
         [Inject]
         protected AmenitiesState AmenitiesState { get; set; } = default!;
+        [Inject]
+        protected ApartmentState ApartmentState { get; set; } = default!;
 
         [Parameter]
         public string? Token { get; set; }
@@ -21,6 +24,7 @@ namespace RentoomBooking.StayWell.Models
             Reservation = ReservationState.CurrentReservation,
             Media = MediaState.CurrentMedia,
             Amenities = AmenitiesState.CurrentAmenities,
+            Apartment = ApartmentState.CurrentApartment,
             Token = ReservationState.CurrentToken,
         };
 
@@ -46,6 +50,7 @@ namespace RentoomBooking.StayWell.Models
                     {
                         await Task.WhenAll(
                             MediaState.GetMediaAsync(item.objectId),
+                            ApartmentState.GetApartmentByIdAsync(item.objectId),
                             AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId)
                         );
                     }

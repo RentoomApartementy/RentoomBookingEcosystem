@@ -117,7 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutReservation" xml:space="preserve">
+    <value>O Rezerwacji</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Zameldowanie</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Wymeldowanie</value>
+  </data>
   <data name="ClubBenefits" xml:space="preserve">
-    <value>Rentoom Benefits Club</value>
+    <value>Klub Korzyści Rentoom</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Instrukcja Zameldowania</value>
+  </data>
+  <data name="ManageStay" xml:space="preserve">
+    <value>Zarządzaj Pobytem</value>
+  </data>
+  <data name="OpenApartment" xml:space="preserve">
+    <value>Otwórz Apartament</value>
+  </data>
+  <data name="ReservationID" xml:space="preserve">
+    <value>numer rezerwacji</value>
   </data>
 </root>

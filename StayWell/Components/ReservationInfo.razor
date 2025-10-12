@@ -1,8 +1,15 @@
-﻿<div class="parent">
+﻿@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using RentoomBooking.StayWell.Pages
+@inject StayWell.Services.GlobalizationService GlobalizationService
+@inject IStringLocalizer<HomePage> Localizer
+@implements IDisposable
+
+<div class="parent">
     <div class="apartment-name">@apartmentName</div>
-    <div class="apartment-full-adress"><span><img style="width: 13; height: 13px;" src="/icons/map-pin.svg"/> @apartmentAddress #@apartmentNumber</span></div>
-    <div class="check-in">Zameldowanie:</div>
-    <div class="check-out">Wymeldowanie:</div>
+    <div class="apartment-full-adress"><span><img style="width: 13px; height: 13px;" src="/icons/map-pin.svg"/> @apartmentAddress @apartmentNumber</span></div>
+    <div class="check-in">@Localizer["CheckIn"]:</div>
+    <div class="check-out">@Localizer["CheckOut"]</div>
     <div class="check-in-date">@formattedCheckInDate</div>
     <div class="check-out-date">@formattedCheckOutDate</div>
 </div>
@@ -26,6 +33,12 @@
         formattedCheckOutDate = FormatDate(reservationCheckOutDate);
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        GlobalizationService.OnChange += StateHasChanged;
+    }
+
     private string? FormatDate(string? date)
     {
         if (string.IsNullOrWhiteSpace(date)) return null;
@@ -42,6 +55,11 @@
         if(string.IsNullOrWhiteSpace(number)) return null;
         var match = System.Text.RegularExpressions.Regex.Match(number, @"\d+");
         return match.Success ? match.Value : number;
+    }
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= StateHasChanged;
     }
 
 

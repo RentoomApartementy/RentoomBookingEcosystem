@@ -28,9 +28,13 @@ namespace RentoomBooking.StayWell.Services
                    ?? [];
         }
 
+        public async Task<ApartmentObject?> GetApartmentByIdAsync(int id)
+        {
+            return await _http.GetFromJsonAsync<ApartmentObject>($"db/apartments/{id}", _json);
+        }
 
 
 
 
-    }
+        }
 }
