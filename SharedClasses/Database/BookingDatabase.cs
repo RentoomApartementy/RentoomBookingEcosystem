@@ -16,22 +16,17 @@ namespace RentoomBooking.SharedClasses.Database
 {
     public class BookingDatabase
     {
-        // Kontenery są teraz nullowalne, bo nie są inicjowane synchronicznie w konstruktorze
         private Container? _apartmentInfoContainer;
         private Container? _hashesContainer;
         private Container? _reservationsContainer;
 
-        // Prywatne pole przechowujące zadanie inicjalizacji
         private readonly Task _initializationTask;
 
         private const string HashDocumentId = "all-object-hashes";
         private const string ReservationPartitionKey = "/resToken";
 
-        // ZMODYFIKOWANY KONSTRUKTOR
         public BookingDatabase(CosmosClient client, IConfiguration configuration)
         {
-            // Uruchamiamy inicjalizację, ale nie czekamy na nią blokująco.
-            // Zapisujemy zadanie (Task) w polu, aby można było na nie poczekać później.
             _initializationTask = InitializeAsync(client, configuration);
         }
 
@@ -39,17 +34,16 @@ namespace RentoomBooking.SharedClasses.Database
         {
             var databaseName = configuration["AZURE_COSMOS_DATABASE_NAME"];
             if (string.IsNullOrEmpty(databaseName))
-            {
                 throw new InvalidOperationException("AZURE_COSMOS_DATABASE_NAME configuration is missing.");
-            }
-            
+
             var containerName = "ApartmentInfo";
             var containerNameForHashes = "ApartmentsHashes";
 
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
 
+            // Poprawiony klucz partycji na /partitionKey
             _apartmentInfoContainer = await database.Database.CreateContainerIfNotExistsAsync(
-                new ContainerProperties(containerName, "/id"));
+                new ContainerProperties(containerName, "/partitionKey"));
 
             _hashesContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties(containerNameForHashes, "/id"));
@@ -57,8 +51,6 @@ namespace RentoomBooking.SharedClasses.Database
             _reservationsContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties("Reservations", ReservationPartitionKey));
         }
-
-        // --- PUBLICZNE METODY ZMIENIONE TAK, ABY CZEKAŁY NA INICJALIZACJĘ ---
 
         public async Task<bool> HasRecordsAsync()
         {
@@ -68,15 +60,14 @@ namespace RentoomBooking.SharedClasses.Database
             try
             {
                 var queryDefinition = new QueryDefinition("SELECT TOP 1 * FROM c");
+                using var feedIterator = _apartmentInfoContainer.GetItemQueryIterator<object>(queryDefinition);
 
-                using (var feedIterator = _apartmentInfoContainer.GetItemQueryIterator<object>(queryDefinition))
+                if (feedIterator.HasMoreResults)
                 {
-                    if (feedIterator.HasMoreResults)
-                    {
-                        var response = await feedIterator.ReadNextAsync();
-                        return response.Any();
-                    }
+                    var response = await feedIterator.ReadNextAsync();
+                    return response.Any();
                 }
+
                 return false;
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -93,7 +84,7 @@ namespace RentoomBooking.SharedClasses.Database
         {
             await _initializationTask;
             if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
-            
+
             int itemsPerBatch = 50;
             int totalItemsCreated = 0;
             log.LogInformation($"Starting bulk create for a total of {items.Count} items.");
@@ -108,7 +99,7 @@ namespace RentoomBooking.SharedClasses.Database
 
                 totalItemsCreated += batchItems.Count - totalErrorsInBatch;
                 log.LogInformation($"Successfully created {batchItems.Count - totalErrorsInBatch} items in this batch. Total items created: {totalItemsCreated}.");
-                
+
                 if (i + itemsPerBatch < items.Count)
                 {
                     log.LogInformation("Pausing for 1 second to manage throughput...");
@@ -119,34 +110,34 @@ namespace RentoomBooking.SharedClasses.Database
             log.LogInformation($"Completed bulk create. A total of {totalItemsCreated} items were successfully created.");
         }
 
-        public async Task BulkReplaceItemsAsync(List<ApartmentObject> items, ILogger _logger)
+        public async Task BulkReplaceItemsAsync(List<ApartmentObject> items, ILogger log)
         {
             await _initializationTask;
             if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
 
             int itemsPerBatch = 50;
             int totalItemsReplaced = 0;
-            _logger.LogInformation($"Starting bulk replace for a total of {items.Count} items.");
+            log.LogInformation($"Starting bulk replace for a total of {items.Count} items.");
 
             for (int i = 0; i < items.Count; i += itemsPerBatch)
             {
                 var batchItems = items.Skip(i).Take(itemsPerBatch).ToList();
-                var tasks = batchItems.Select(item => ProcessReplaceItemAsync(item, _logger)).ToList();
+                var tasks = batchItems.Select(item => ProcessReplaceItemAsync(item, log)).ToList();
 
                 int[] errors = await Task.WhenAll(tasks);
                 int totalErrorsInBatch = errors.Sum();
 
                 totalItemsReplaced += batchItems.Count - totalErrorsInBatch;
-                _logger.LogInformation($"Successfully replaced {batchItems.Count - totalErrorsInBatch} items in this batch. Total items replaced: {totalItemsReplaced}.");
+                log.LogInformation($"Successfully replaced {batchItems.Count - totalErrorsInBatch} items in this batch. Total items replaced: {totalItemsReplaced}.");
 
                 if (i + itemsPerBatch < items.Count)
                 {
-                    _logger.LogInformation("Pausing for 1 second to manage throughput...");
+                    log.LogInformation("Pausing for 1 second to manage throughput...");
                     await Task.Delay(1000);
                 }
             }
 
-            _logger.LogInformation($"Completed bulk replace. A total of {totalItemsReplaced} items were successfully replaced.");
+            log.LogInformation($"Completed bulk replace. A total of {totalItemsReplaced} items were successfully replaced.");
         }
 
         public async Task<List<ItemHash>> GetExistingHashesAsync(ILogger log)
@@ -256,18 +247,15 @@ namespace RentoomBooking.SharedClasses.Database
             }
         }
 
-        // --- METODY PRYWATNE (nie muszą czekać na _initializationTask, bo metody publiczne już to zrobiły) ---
-
         private async Task<int> ProcessReplaceItemAsync(ApartmentObject item, ILogger logger)
         {
             try
             {
-                await _apartmentInfoContainer!.ReplaceItemAsync(item, item.Id, new PartitionKey(item.Id));
+                await _apartmentInfoContainer!.ReplaceItemAsync(item, item.Id, new PartitionKey(item.PartitionKey));
                 return 0;
             }
-            catch (CosmosException ex)
+            catch (CosmosException)
             {
-                // ... obsługa błędów bez zmian
                 return 1;
             }
         }
@@ -276,12 +264,11 @@ namespace RentoomBooking.SharedClasses.Database
         {
             try
             {
-                await _apartmentInfoContainer!.CreateItemAsync(item, new PartitionKey(item.Id));
+                await _apartmentInfoContainer!.CreateItemAsync(item, new PartitionKey(item.PartitionKey));
                 return 0;
             }
-            catch (CosmosException ex)
+            catch (CosmosException)
             {
-                // ... obsługa błędów bez zmian
                 return 1;
             }
         }
@@ -290,7 +277,7 @@ namespace RentoomBooking.SharedClasses.Database
         {
             try
             {
-                var oldItemResponse = await _apartmentInfoContainer!.ReadItemAsync<ApartmentObject>(newItem.Id, new PartitionKey(newItem.Id));
+                var oldItemResponse = await _apartmentInfoContainer!.ReadItemAsync<ApartmentObject>(newItem.Id, new PartitionKey(newItem.PartitionKey));
                 var oldItem = oldItemResponse.Resource;
                 string? differences = FindDifferences(oldItem, newItem);
 
@@ -301,13 +288,12 @@ namespace RentoomBooking.SharedClasses.Database
                 else
                 {
                     _logger.LogInformation($"Item with ID '{newItem.Id}' has changed. Differences: {differences}");
-                    await _apartmentInfoContainer!.ReplaceItemAsync(newItem, newItem.Id, new PartitionKey(newItem.Id));
+                    await _apartmentInfoContainer!.ReplaceItemAsync(newItem, newItem.Id, new PartitionKey(newItem.PartitionKey));
                 }
                 return 0;
             }
-            catch (CosmosException ex)
+            catch (CosmosException)
             {
-                // ... obsługa błędów bez zmian
                 return 1;
             }
         }
@@ -315,10 +301,8 @@ namespace RentoomBooking.SharedClasses.Database
         private string? FindDifferences(ApartmentObject oldObj, ApartmentObject newObj)
         {
             if (oldObj == null || newObj == null)
-            {
                 return "One or both objects are null, cannot compare.";
-            }
-            
+
             var differences = new StringBuilder();
             var properties = typeof(ApartmentObject).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -328,9 +312,7 @@ namespace RentoomBooking.SharedClasses.Database
                 var newValue = property.GetValue(newObj);
 
                 if (!Equals(oldValue, newValue))
-                {
                     differences.AppendLine($"  - Property '{property.Name}': Old='{oldValue ?? "null"}', New='{newValue ?? "null"}'");
-                }
             }
 
             return differences.Length > 0 ? differences.ToString() : null;
