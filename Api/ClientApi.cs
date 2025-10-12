@@ -8,6 +8,7 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Client;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Rentoom;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services;
@@ -18,23 +19,23 @@ namespace RentoomBooking.Api;
 
 public class ClientApi
 {
-   
+
     private readonly ILogger<ClientApi> _logger;
-  //  private readonly ClientRepository _ClientRepository;
+    //  private readonly ClientRepository _ClientRepository;
     private readonly IClientService _ClientService;
     public ClientApi(ILogger<ClientApi> logger, IClientService ClientService)
     {
-       
+
         _logger = logger;
-      //_ClientRepository = ClientRepository;
+        //_ClientRepository = ClientRepository;
         _ClientService = ClientService;
     }
 
     [Function("GetClients")]
     public async Task<HttpResponseData> GetClients(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get","post", Route = "clients/get")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "clients/get")] HttpRequestData req)
     {
-      
+
         var cancellationToken = req.FunctionContext.CancellationToken;
         var response = req.CreateResponse();
 
@@ -101,7 +102,7 @@ public class ClientApi
             return response;
         }
         try
-        {   
+        {
             var result = await _ClientService.GetClientByIdAsync(id.Value);
 
             if (result?.Clients == null || result.Clients.Count == 0)
@@ -125,4 +126,56 @@ public class ClientApi
         }
     }
 
+
+    [Function("AddClient")]
+    public async Task<HttpResponseData> AddClient(
+       [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "clients/add")] HttpRequestData req)
+    {
+        var cancellationToken = req.FunctionContext.CancellationToken;
+        var response = req.CreateResponse();
+
+        try
+        {
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync().ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(requestBody))
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                await response.WriteStringAsync("Request body is empty.");
+                return response;
+            }
+
+            ClientAddRequestClient? client;
+            try
+            {
+                client = JsonConvert.DeserializeObject<ClientAddRequestClient>(requestBody);
+                if (client == null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    await response.WriteStringAsync("Invalid client payload.");
+                    return response;
+                }
+            }
+            catch (JsonException jsonEx)
+            {
+                _logger.LogError(jsonEx, "Invalid client add payload.");
+                response.StatusCode = HttpStatusCode.BadRequest;
+                await response.WriteStringAsync("Invalid JSON payload.");
+                return response;
+            }
+
+            var result = await _ClientService.AddClientAsync(client, cancellationToken);
+
+            response.StatusCode = HttpStatusCode.OK;
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to add client.");
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal server error.");
+            return response;
+        }
+    }
 }
