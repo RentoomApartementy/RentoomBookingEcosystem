@@ -21,24 +21,24 @@ public class GetAllApartmentObjectsFunction
         _bookingObjectService = bookingObjectService;
     }
 
-  [Function("GetAllApartmentObjectsFunction")]
-    public async Task SyncFromIdoSell([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
-    {
-
-       
-
-    _logger.LogInformation($"SyncObjectsTimer function started at: {DateTime.Now}");
-
-        try
-        {
-            await _bookingObjectService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"An unexpected error occurred during sync: {ex.Message}");
-        }
-
-        _logger.LogInformation($"SyncObjectsTimer function finished at: {DateTime.Now}");
-    }
+  // [Function("GetAllApartmentObjectsFunction")]
+  //   public async Task SyncFromIdoSell([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+  //   {
+  //
+  //      
+  //
+  //   _logger.LogInformation($"SyncObjectsTimer function started at: {DateTime.Now}");
+  //
+  //       try
+  //       {
+  //           await _bookingObjectService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
+  //       }
+  //       catch (Exception ex)
+  //       {
+  //           _logger.LogError($"An unexpected error occurred during sync: {ex.Message}");
+  //       }
+  //
+  //       _logger.LogInformation($"SyncObjectsTimer function finished at: {DateTime.Now}");
+  //   }
 
 }
