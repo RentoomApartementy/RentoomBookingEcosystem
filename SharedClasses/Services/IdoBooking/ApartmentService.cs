@@ -139,11 +139,10 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         }
 
-public  async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
+        public  async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
         {
             return await _apartmentRepository.FindApartmentInCosmosDb(objectId);
         }
-
 
     }
 }

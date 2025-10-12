@@ -1,6 +1,5 @@
 @page "/apartamenty"
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
-@using RentoomBooking.SharedClasses.Services;
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @inject IApartmentsService ApartmentsApiService;
 @inject IJSRuntime JS;
@@ -18,22 +17,45 @@
         
         <Filters />
         
-        <div class="apartments-items-wrapper">
-            <h4>@ApartmentsCount apartamenty/ów</h4>
-            <div class="apartments-items-container">
-                @if (!string.IsNullOrEmpty(Error))
-                {
-                    <p class="text-red-600">@Error</p>
-                }
-                
-                @if (Items.Count > 0)
-                {
-                    @foreach (var item in Items) { 
-                        <Apartment Item="@item"/>
+        @if (!IsMapView)
+        {
+            <div class="apartments-items-wrapper">
+                <div class="text-button-wrapper">
+                    <h4>@ApartmentsCount apartamenty/ów</h4>
+                    <div class="view-buttons-wrapper">
+                        <div class="view-button-active">Siatka</div>
+                        <div @onclick="OnMapView" class="view-button">Mapa</div>
+                    </div>
+                </div>
+                <div class="apartments-items-container">
+                    @if (!string.IsNullOrEmpty(Error))
+                    {
+                        <p class="text-red-600">@Error</p>
                     }
-                }
+                
+                    @if (Items.Count > 0)
+                    {
+                        @foreach (var item in Items) { 
+                            <Apartment Item="@item"/>
+                        }
+                    }
+                </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="apartments-items-map">
+                <div class="text-button-wrapper">
+                    <h4>@ApartmentsCount apartamenty/ów</h4>
+                    <div class="view-buttons-wrapper">
+                        <div @onclick="OnListView" class="view-button">Siatka</div>
+                        <div class="view-button-active">Mapa</div>
+                    </div>
+                </div>
+                <ApartmentsMap></ApartmentsMap>
+            </div>
+        }
+        
     </div>
 </div>
 
@@ -49,6 +71,7 @@
     private string? Error;
     private DotNetObjectReference<Apartments>? ObjRef;
     private IJSObjectReference? JsModule;
+    private bool IsMapView = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -137,4 +160,13 @@
         JsModule?.DisposeAsync();
     }
 
+    private void OnListView()
+    {
+        IsMapView = false;
+    }
+    
+    private void OnMapView()
+    {
+        IsMapView = true;
+    }
 }
