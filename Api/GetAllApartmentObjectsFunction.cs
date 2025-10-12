@@ -21,7 +21,7 @@ public class GetAllApartmentObjectsFunction
         _bookingObjectService = bookingObjectService;
     }
 
-  /*  [Function("GetAllApartmentObjectsFunction")]
+  [Function("GetAllApartmentObjectsFunction")]
     public async Task SyncFromIdoSell([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
 
@@ -40,5 +40,5 @@ public class GetAllApartmentObjectsFunction
 
         _logger.LogInformation($"SyncObjectsTimer function finished at: {DateTime.Now}");
     }
-  */
+
 }
