@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -83,5 +84,45 @@ public class ClientApi
             return response;
         }
     }
-   
+
+
+    [Function("GetClientById")]
+    public async Task<HttpResponseData> GetClientById(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "clients/getbyId/{id:int?}")] HttpRequestData req,
+    int? id)
+    {
+        var cancellationToken = req.FunctionContext.CancellationToken;
+        var response = req.CreateResponse();
+
+        if (!id.HasValue)
+        {
+            response.StatusCode = HttpStatusCode.BadRequest;
+            await response.WriteStringAsync("Client Id not provided");
+            return response;
+        }
+        try
+        {   
+            var result = await _ClientService.GetClientByIdAsync(id.Value);
+
+            if (result?.Clients == null || result.Clients.Count == 0)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                await response.WriteStringAsync($"Client with id {id} not found.");
+                return response;
+            }
+
+            response.StatusCode = HttpStatusCode.OK;
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Failed to get client with id {id}.");
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal server error.");
+            return response;
+        }
+    }
+
 }

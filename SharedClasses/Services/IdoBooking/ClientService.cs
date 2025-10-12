@@ -12,7 +12,8 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 {
     public interface IClientService
     {
-        Task<ClientGetResponseType?> GetClientsAsync(ClientGetParams? parameters = null, ResultRequestPaging? settings = null, CancellationToken cancellationToken = default);
+        Task<ClientGetResponse?> GetClientsAsync(ClientGetParams? parameters = null, ResultRequestPaging? settings = null, CancellationToken cancellationToken = default);
+        Task<ClientGetResponse?> GetClientByIdAsync(int clientId, CancellationToken cancellationToken = default);
     }
 
     public class ClientService : IClientService
@@ -32,7 +33,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             
         }
 
-        public Task<ClientGetResponseType?> GetClientsAsync(ClientGetParams? parameters = null, ResultRequestPaging? settings = null, CancellationToken cancellationToken = default)
+        public async Task<ClientGetResponse?> GetClientsAsync(ClientGetParams? parameters = null, ResultRequestPaging? settings = null, CancellationToken cancellationToken = default)
         {
             var request = new ClientGetRequest
             {
@@ -40,7 +41,21 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 Settings = settings,
                 Params = parameters
             };
-            return _idoConnect.PostAsync<ClientGetRequest, ClientGetResponseType>(ClientsGetEndpoint, request, cancellationToken);
+
+            var ret = await _idoConnect.PostAsync<ClientGetRequest, ClientGetResponseType>(ClientsGetEndpoint, request, cancellationToken);
+            return ret?.Result;
+        }
+
+        public async Task<ClientGetResponse?> GetClientByIdAsync(int clientId, CancellationToken cancellationToken = default)
+        {
+            if (clientId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(clientId));
+            }
+
+            var ret  = await GetClientsAsync(new ClientGetParams { Id = clientId }, null, cancellationToken);
+            return ret;
+
         }
 
     }
