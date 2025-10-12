@@ -21,8 +21,8 @@
             <div class="image-wrapper">
                 <img 
                     src="@_objectMediumFirst.Url"
-                    alt="Apartament Ralf w Toruniu - salon z zieloną sofą"
-                    title="Apartament Ralf w centrum Torunia"
+                    alt="@Item?.Name"
+                    title="@Item?.Name"
                     itemprop="photo"
                     class="apartment-image" 
                 />
@@ -33,9 +33,9 @@
     <div class="apartment-info">
         <h2 itemprop="name">@Item?.Name</h2>
         <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-            <span itemprop="streetAddress">Kazimierza Jagiellończyka 8</span>, 
-            <span itemprop="postalCode">87-100</span> 
-            <span itemprop="addressLocality">Toruń</span>
+            <span itemprop="streetAddress">@Item?.ObjectLocation?.LocalizationItem?.Street</span>, 
+            <span itemprop="postalCode">@Item?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
+            <span itemprop="addressLocality">@Item?.ObjectLocation?.LocalizationItem?.City</span>
         </p>
 
         <ul class="apartment-details">
