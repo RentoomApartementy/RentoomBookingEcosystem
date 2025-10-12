@@ -16,17 +16,25 @@ namespace RentoomBooking.SharedClasses.Database
 {
     public class BookingDatabase
     {
+        // Kontenery są teraz nullowalne, bo nie są inicjowane synchronicznie w konstruktorze
         private Container? _apartmentInfoContainer;
         private Container? _hashesContainer;
         private Container? _reservationsContainer;
 
+        // Prywatne pole przechowujące zadanie inicjalizacji
         private readonly Task _initializationTask;
 
         private const string HashDocumentId = "all-object-hashes";
         private const string ReservationPartitionKey = "/resToken";
 
+        private const string ApartmensPartitionKey = "/partitionKey"; 
+        private const string ApartmentsPartitionKeyValue = "rentoom-apartments-list"; 
+
+        // ZMODYFIKOWANY KONSTRUKTOR
         public BookingDatabase(CosmosClient client, IConfiguration configuration)
         {
+            // Uruchamiamy inicjalizację, ale nie czekamy na nią blokująco.
+            // Zapisujemy zadanie (Task) w polu, aby można było na nie poczekać później.
             _initializationTask = InitializeAsync(client, configuration);
         }
 
@@ -34,16 +42,17 @@ namespace RentoomBooking.SharedClasses.Database
         {
             var databaseName = configuration["AZURE_COSMOS_DATABASE_NAME"];
             if (string.IsNullOrEmpty(databaseName))
+            {
                 throw new InvalidOperationException("AZURE_COSMOS_DATABASE_NAME configuration is missing.");
-
+            }
+            
             var containerName = "ApartmentInfo";
             var containerNameForHashes = "ApartmentsHashes";
 
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
 
-            // Poprawiony klucz partycji na /partitionKey
             _apartmentInfoContainer = await database.Database.CreateContainerIfNotExistsAsync(
-                new ContainerProperties(containerName, "/partitionKey"));
+                new ContainerProperties(containerName, ApartmensPartitionKey));
 
             _hashesContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties(containerNameForHashes, "/id"));
@@ -51,6 +60,8 @@ namespace RentoomBooking.SharedClasses.Database
             _reservationsContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties("Reservations", ReservationPartitionKey));
         }
+
+        // --- PUBLICZNE METODY ZMIENIONE TAK, ABY CZEKAŁY NA INICJALIZACJĘ ---
 
         public async Task<bool> HasRecordsAsync()
         {
@@ -60,14 +71,15 @@ namespace RentoomBooking.SharedClasses.Database
             try
             {
                 var queryDefinition = new QueryDefinition("SELECT TOP 1 * FROM c");
-                using var feedIterator = _apartmentInfoContainer.GetItemQueryIterator<object>(queryDefinition);
 
-                if (feedIterator.HasMoreResults)
+                using (var feedIterator = _apartmentInfoContainer.GetItemQueryIterator<object>(queryDefinition))
                 {
-                    var response = await feedIterator.ReadNextAsync();
-                    return response.Any();
+                    if (feedIterator.HasMoreResults)
+                    {
+                        var response = await feedIterator.ReadNextAsync();
+                        return response.Any();
+                    }
                 }
-
                 return false;
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -84,7 +96,7 @@ namespace RentoomBooking.SharedClasses.Database
         {
             await _initializationTask;
             if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
-
+            
             int itemsPerBatch = 50;
             int totalItemsCreated = 0;
             log.LogInformation($"Starting bulk create for a total of {items.Count} items.");
@@ -99,7 +111,7 @@ namespace RentoomBooking.SharedClasses.Database
 
                 totalItemsCreated += batchItems.Count - totalErrorsInBatch;
                 log.LogInformation($"Successfully created {batchItems.Count - totalErrorsInBatch} items in this batch. Total items created: {totalItemsCreated}.");
-
+                
                 if (i + itemsPerBatch < items.Count)
                 {
                     log.LogInformation("Pausing for 1 second to manage throughput...");
@@ -110,34 +122,34 @@ namespace RentoomBooking.SharedClasses.Database
             log.LogInformation($"Completed bulk create. A total of {totalItemsCreated} items were successfully created.");
         }
 
-        public async Task BulkReplaceItemsAsync(List<ApartmentObject> items, ILogger log)
+        public async Task BulkReplaceItemsAsync(List<ApartmentObject> items, ILogger _logger)
         {
             await _initializationTask;
             if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
 
             int itemsPerBatch = 50;
             int totalItemsReplaced = 0;
-            log.LogInformation($"Starting bulk replace for a total of {items.Count} items.");
+            _logger.LogInformation($"Starting bulk replace for a total of {items.Count} items.");
 
             for (int i = 0; i < items.Count; i += itemsPerBatch)
             {
                 var batchItems = items.Skip(i).Take(itemsPerBatch).ToList();
-                var tasks = batchItems.Select(item => ProcessReplaceItemAsync(item, log)).ToList();
+                var tasks = batchItems.Select(item => ProcessReplaceItemAsync(item, _logger)).ToList();
 
                 int[] errors = await Task.WhenAll(tasks);
                 int totalErrorsInBatch = errors.Sum();
 
                 totalItemsReplaced += batchItems.Count - totalErrorsInBatch;
-                log.LogInformation($"Successfully replaced {batchItems.Count - totalErrorsInBatch} items in this batch. Total items replaced: {totalItemsReplaced}.");
+                _logger.LogInformation($"Successfully replaced {batchItems.Count - totalErrorsInBatch} items in this batch. Total items replaced: {totalItemsReplaced}.");
 
                 if (i + itemsPerBatch < items.Count)
                 {
-                    log.LogInformation("Pausing for 1 second to manage throughput...");
+                    _logger.LogInformation("Pausing for 1 second to manage throughput...");
                     await Task.Delay(1000);
                 }
             }
 
-            log.LogInformation($"Completed bulk replace. A total of {totalItemsReplaced} items were successfully replaced.");
+            _logger.LogInformation($"Completed bulk replace. A total of {totalItemsReplaced} items were successfully replaced.");
         }
 
         public async Task<List<ItemHash>> GetExistingHashesAsync(ILogger log)
@@ -184,6 +196,39 @@ namespace RentoomBooking.SharedClasses.Database
             }
         }
 
+        //tymczasowo - to trzeba poczyścic i przenieść gdzie indziej.. bo teraz jest w dwóch serwisach. 
+        public async Task<long> GetApartmentCountAsync(ILogger? log = null)
+        {
+            await _initializationTask;
+            long totalCount = 0;
+            try
+            {
+                var query = new QueryDefinition("SELECT VALUE COUNT(1) FROM c");
+
+                var queryOptions = new QueryRequestOptions
+                {
+                    PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
+                };
+
+
+
+                using var countIt = _apartmentInfoContainer.GetItemQueryIterator<long>(query, requestOptions: queryOptions);
+                if (countIt.HasMoreResults)
+                {
+                    var countPage = await countIt.ReadNextAsync();
+                    totalCount = countPage.FirstOrDefault();
+                }
+
+                return totalCount;
+            }
+            catch (CosmosException ex)
+            {
+                log?.LogError(ex, "Failed to get item count from ApartmentInfo container.");
+                return 0;
+            }
+        }
+
+
         public async Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken, int pageSize)
         {
             await _initializationTask;
@@ -192,14 +237,19 @@ namespace RentoomBooking.SharedClasses.Database
             var sql = "SELECT * FROM c";
             var qd = new QueryDefinition(sql);
 
-            var opts = new QueryRequestOptions { MaxItemCount = pageSize };
+            var opts = new QueryRequestOptions { 
+                MaxItemCount = pageSize,
+                PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
+            };
+
+            long totalCount = await GetApartmentCountAsync();
 
             var it = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(qd, continuationToken, opts);
             if (!it.HasMoreResults)
-                return new PagedResult<ApartmentObject>(Array.Empty<ApartmentObject>(), null);
+                return new PagedResult<ApartmentObject>(Array.Empty<ApartmentObject>(), null,0,totalCount);
 
             var page = await it.ReadNextAsync();
-            return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken);
+            return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken, page.Count, totalCount);
         }
 
         public async Task<RentoomReservation> GetRentoomReservationByResTokenAsync(string resToken, ILogger log)
@@ -247,15 +297,18 @@ namespace RentoomBooking.SharedClasses.Database
             }
         }
 
+        // --- METODY PRYWATNE (nie muszą czekać na _initializationTask, bo metody publiczne już to zrobiły) ---
+
         private async Task<int> ProcessReplaceItemAsync(ApartmentObject item, ILogger logger)
         {
             try
             {
-                await _apartmentInfoContainer!.ReplaceItemAsync(item, item.Id, new PartitionKey(item.PartitionKey));
+                await _apartmentInfoContainer!.ReplaceItemAsync(item, item.Id, new PartitionKey(item.Id));
                 return 0;
             }
-            catch (CosmosException)
+            catch (CosmosException ex)
             {
+                // ... obsługa błędów bez zmian
                 return 1;
             }
         }
@@ -264,11 +317,12 @@ namespace RentoomBooking.SharedClasses.Database
         {
             try
             {
-                await _apartmentInfoContainer!.CreateItemAsync(item, new PartitionKey(item.PartitionKey));
+                await _apartmentInfoContainer!.CreateItemAsync(item, new PartitionKey(item.Id));
                 return 0;
             }
-            catch (CosmosException)
+            catch (CosmosException ex)
             {
+                // ... obsługa błędów bez zmian
                 return 1;
             }
         }
@@ -277,7 +331,7 @@ namespace RentoomBooking.SharedClasses.Database
         {
             try
             {
-                var oldItemResponse = await _apartmentInfoContainer!.ReadItemAsync<ApartmentObject>(newItem.Id, new PartitionKey(newItem.PartitionKey));
+                var oldItemResponse = await _apartmentInfoContainer!.ReadItemAsync<ApartmentObject>(newItem.Id, new PartitionKey(newItem.Id));
                 var oldItem = oldItemResponse.Resource;
                 string? differences = FindDifferences(oldItem, newItem);
 
@@ -288,12 +342,13 @@ namespace RentoomBooking.SharedClasses.Database
                 else
                 {
                     _logger.LogInformation($"Item with ID '{newItem.Id}' has changed. Differences: {differences}");
-                    await _apartmentInfoContainer!.ReplaceItemAsync(newItem, newItem.Id, new PartitionKey(newItem.PartitionKey));
+                    await _apartmentInfoContainer!.ReplaceItemAsync(newItem, newItem.Id, new PartitionKey(newItem.Id));
                 }
                 return 0;
             }
-            catch (CosmosException)
+            catch (CosmosException ex)
             {
+                // ... obsługa błędów bez zmian
                 return 1;
             }
         }
@@ -301,8 +356,10 @@ namespace RentoomBooking.SharedClasses.Database
         private string? FindDifferences(ApartmentObject oldObj, ApartmentObject newObj)
         {
             if (oldObj == null || newObj == null)
+            {
                 return "One or both objects are null, cannot compare.";
-
+            }
+            
             var differences = new StringBuilder();
             var properties = typeof(ApartmentObject).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -312,7 +369,9 @@ namespace RentoomBooking.SharedClasses.Database
                 var newValue = property.GetValue(newObj);
 
                 if (!Equals(oldValue, newValue))
+                {
                     differences.AppendLine($"  - Property '{property.Name}': Old='{oldValue ?? "null"}', New='{newValue ?? "null"}'");
+                }
             }
 
             return differences.Length > 0 ? differences.ToString() : null;

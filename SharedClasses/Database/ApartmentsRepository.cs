@@ -42,20 +42,26 @@ namespace RentoomBooking.SharedClasses.Database
         public async Task<long> GetApartmentCountAsync(ILogger? log = null)
         {
             await _initializationTask;
-
+            long totalCount = 0;
             try
             {
                 var query = new QueryDefinition("SELECT VALUE COUNT(1) FROM c");
-                var queryIterator = _apartmentInfoContainer.GetItemQueryIterator<long>(query);
 
-                long count = 0;
-                if (queryIterator.HasMoreResults)
+                var queryOptions = new QueryRequestOptions
                 {
-                    var response = await queryIterator.ReadNextAsync();
-                    count = response.FirstOrDefault();
+                    PartitionKey = new PartitionKey(PartitionKeyValue)
+                };
+
+
+
+                using var countIt = _apartmentInfoContainer.GetItemQueryIterator<long>(query, requestOptions: queryOptions);
+                if (countIt.HasMoreResults)
+                {
+                    var countPage = await countIt.ReadNextAsync();
+                    totalCount = countPage.FirstOrDefault();
                 }
 
-                return count;
+                return totalCount;
             }
             catch (CosmosException ex)
             {
