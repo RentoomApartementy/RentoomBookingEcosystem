@@ -23,6 +23,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
         Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
+        Task<List<ApartmentObject>> GetAllApartmentsList();
       
     }
 
@@ -112,6 +113,10 @@ namespace RentoomBooking.SharedClasses.Services
             return ret?.Result.ObjectDescriptions;
         }
 
+        public async Task<List<ApartmentObject>> GetAllApartmentsList()
+        {
+            return await _apartmentsRepository.GetAllApartmentsList();
+        }
       
     }
 }

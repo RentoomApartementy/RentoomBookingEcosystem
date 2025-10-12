@@ -276,6 +276,46 @@ namespace RentoomBooking.SharedClasses.Database
                 throw;
             }
         }
+        
+        public async Task<List<ApartmentObject>> GetAllApartmentsList()
+        {
+            await _initializationTask;
+
+            if (_apartmentInfoContainer == null)
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+
+            var results = new List<ApartmentObject>();
+
+            try
+            {
+                var query = new QueryDefinition("SELECT * FROM c");
+
+                var requestOptions = new QueryRequestOptions
+                {
+                    PartitionKey = new PartitionKey(PartitionKeyValue)
+                };
+
+                using var iterator = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(
+                    query,
+                    requestOptions: requestOptions
+                );
+
+                while (iterator.HasMoreResults)
+                {
+                    var response = await iterator.ReadNextAsync();
+                    results.AddRange(response);
+                }
+
+                return results;
+            }
+            catch (CosmosException ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve apartments list from Cosmos DB.");
+                throw;
+            }
+        }
+
     }
+    
 
 }
