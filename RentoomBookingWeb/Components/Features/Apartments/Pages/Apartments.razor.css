@@ -42,3 +42,43 @@
     flex-direction: column;
     gap: 1rem;
 }
+
+.apartments-items-map {
+    width: 100%;
+    min-height: 80vh;
+}
+
+.text-button-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.view-buttons-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .25rem .3rem;
+    border-radius: 1000rem;
+    background-color: #A97949;
+    color: white;
+}
+
+.view-button {
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.view-button-active {
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1000rem;
+    background-color: #945F28;
+    cursor: pointer;
+}

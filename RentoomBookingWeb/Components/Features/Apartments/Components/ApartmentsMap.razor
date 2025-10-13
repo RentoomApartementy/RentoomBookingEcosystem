@@ -1,0 +1,88 @@
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@inject IApartmentsService ApartmentsApiService;
+@inject IdoSellService IdoSellService;
+@inject IJSRuntime JSRuntime
+
+<div id="map" style="width: 100%; height: 90%; margin: 1rem 0;"></div>
+
+@code {
+    private List<ApartmentObject>? Items { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        await GetAllApartments();
+        await SetupMarkers();
+    }
+    
+    public class Marker
+    {
+        public float? Lat { get; set; }
+        public float? Lng { get; set; }
+        public string Popup { get; set; } = "";
+    }
+    
+    private async Task GetAllApartments()
+    {
+        try
+        {
+            Items = await ApartmentsApiService.GetAllApartmentsList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+            Items = null;
+        }
+    }
+
+    private async Task SetupMarkers()
+    {
+        await JSRuntime.InvokeVoidAsync("leafletMap.createMap", "map", 53.012217, 18.607378, 14);
+
+        if (Items != null && Items.Count > 0)
+        {
+            var markers = new List<Marker>();
+
+            foreach (var i in Items.Where(i => i?.ObjectLocation?.LocalizationItem != null))
+            {
+                var media = await GetObjectMedia(int.Parse(i.Id));
+                var imageUrl = media?.Url ?? "https://via.placeholder.com/150"; // fallback, jeśli brak zdjęcia
+
+                markers.Add(new Marker
+                {
+                    Lat = i?.ObjectLocation?.LocalizationItem?.GeoLocationLat,
+                    Lng = i?.ObjectLocation?.LocalizationItem?.GeoLocationLng,
+                    Popup = $@"
+<div style='display: flex; flex-direction: column; gap: .4rem;'>
+    <div style='height: 130px; width: 250px;'>
+        <img src='{imageUrl}' 
+             style='height: 100%; width: 100%; object-fit: cover; border-radius: .5rem;' />
+    </div>
+    <strong>{i?.Name}</strong>
+    <div>
+        <span>{i?.ObjectLocation?.LocalizationItem?.Street}</span>
+        <span>{i?.ObjectLocation?.LocalizationItem?.ZipCode}</span>
+        <span>{i?.ObjectLocation?.LocalizationItem?.City}</span>
+    </div>
+    <div style='display: flex; justify-content: flex-end;'>
+        <a href='/apartamenty/{i?.Id}' style='padding: .4rem 1rem; background-color: #945F28; color: white; border-radius: 999rem; cursor: pointer;'>
+            Rezerwacja
+        </a>
+    </div>
+</div>"
+                });
+            }
+
+            await JSRuntime.InvokeVoidAsync("leafletMap.addMarkers", markers);
+        }
+    }
+
+    
+    private async Task<ObjectMedium?> GetObjectMedia(int id)
+    {
+        List<ObjectMedium> mediums;
+        mediums = await IdoSellService.FetchObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+        return mediums.FirstOrDefault();
+    }
+
+}
