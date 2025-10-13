@@ -6,6 +6,19 @@
     display: block;
 }
 
+.apartment-name {
+    font-weight: 700;
+    position: absolute;
+    width: auto;
+    max-height: 40px;
+    font-size: 1.2rem;
+    background-color: white;
+    border-radius: 0 15px 0 0;
+    padding: 10px 10px 10px 2px;
+    bottom: -1px;
+    left: -1px;
+}
+
 .wrapper {
     width: 100%;
     height: 100%;
@@ -15,4 +28,5 @@
     max-width: 500px;
     background-color: dimgrey;
     border-radius: 15px;
+    position: relative;
 }

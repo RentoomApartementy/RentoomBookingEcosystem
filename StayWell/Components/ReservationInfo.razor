@@ -5,13 +5,43 @@
 @inject IStringLocalizer<HomePage> Localizer
 @implements IDisposable
 
-<div class="parent">
+@* <div class="parent">
     <div class="apartment-name">@apartmentName</div>
-    <div class="apartment-full-adress"><span><img style="width: 13px; height: 13px;" src="/icons/map-pin.svg"/> @apartmentAddress @apartmentNumber</span></div>
-    <div class="check-in">@Localizer["CheckIn"]:</div>
+    <div class="apartment-full-adress">
+        <span>
+            @apartmentAddress @apartmentNumber
+        </span>
+        </div>
+    <div class="check-in">
+        <span>
+            @Localizer["CheckIn"]:
+        </span>
+        </div>
     <div class="check-out">@Localizer["CheckOut"]</div>
     <div class="check-in-date">@formattedCheckInDate</div>
     <div class="check-out-date">@formattedCheckOutDate</div>
+</div> *@
+
+<div class="reservation-info">
+        @* <div class="apartment-name">
+            @apartmentName
+        </div> *@
+    @* <div class="address-wrapper">
+    </div>
+    <div class="dates-wrapper">
+        <img src="/icons/calendar-days.svg"/>
+            <div class="check-in">
+                <span>@Localizer["CheckIn"]</span>
+                <span>@formattedCheckInDate</span>
+            </div>
+            <div class="check-out">
+                <span>@Localizer["CheckOut"]</span>
+                <span>@formattedCheckOutDate</span>
+            </div>
+    </div> *@
+    <div class="">
+        <DateRangeBar CheckInDate="@checkInDate" CheckOutDate="@checkOutDate" CurrentDate="@today"/>
+    </div>
 </div>
 
 
@@ -20,6 +50,9 @@
 @code {
     private string? formattedCheckInDate;
     private string? formattedCheckOutDate;
+    private DateTime checkInDate;
+    private DateTime checkOutDate;
+    private DateTime today;
 
     [Parameter] public string? apartmentName { get; set; } = string.Empty;
     [Parameter] public string? apartmentAddress { get; set; } = string.Empty;
@@ -31,6 +64,13 @@
     {
         formattedCheckInDate = FormatDate(reservationCheckInDate);
         formattedCheckOutDate = FormatDate(reservationCheckOutDate);
+
+        DateTime.TryParseExact(reservationCheckInDate, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var ci);
+        checkInDate = ci;
+        DateTime.TryParseExact(reservationCheckOutDate, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var co);
+        checkOutDate = co;
+
+        today = DateTime.Now;
     }
 
     protected override void OnInitialized()

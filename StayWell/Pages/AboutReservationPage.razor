@@ -17,6 +17,14 @@
         <span class="text">@Data?.Reservation?.Reservation.Client.FirstName @Data?.Reservation?.Reservation.Client.LastName</span>
     </div>
     <div class="amenity">
+        <span><img src="/icons/map-pin.svg" />Adres:</span>
+        <span class="text">@Data?.Apartment?.ObjectLocation?.Address</span>
+    </div>
+    <div class="amenity">
+        <span><img src="/icons/door-open.svg" />Apartament:</span>
+        <span class="text">@Data?.Reservation.Reservation?.Items?.FirstOrDefault()?.itemCode</span>
+    </div>
+    <div class="amenity">
         <span><img src="/icons/wifi.svg" />Wifi:</span>
         <span class="text">login</span>
         <span class="text">password</span>

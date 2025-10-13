@@ -1,0 +1,66 @@
+﻿<div class="date-range-bar">
+    <div class="date-labels">
+        <div class="date-label">
+            <div class="label-title">Zameldowanie</div>
+            <div class="label-date">@CheckInDate.ToString("dd.MM.yyyy")</div>
+        </div>
+        <div class="date-label">
+            <div class="label-title">Wymeldowanie</div>
+            <div class="label-date">@CheckOutDate.ToString("dd.MM.yyyy")</div>
+        </div>
+    </div>
+
+    <div class="bar-container">
+        <div class="bar-track"></div>
+        <div class="bar-fill" style="width: @GetFillWidth()"></div>
+
+        @for (int i = 0; i <= TotalDays; i++)
+        {
+            var position = GetStepPosition(i);
+            var stepDate = CheckInDate.AddDays(i);
+            var isCompleted = CurrentDate.HasValue && stepDate.Date <= CurrentDate.Value.Date;
+
+            <div class="bar-step @(isCompleted ? "completed" : "")"
+                 style="left: @position">
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public DateTime CheckInDate { get; set; }
+
+    [Parameter]
+    public DateTime CheckOutDate { get; set; }
+
+    [Parameter]
+    public DateTime? CurrentDate { get; set; }
+
+    private int TotalDays => (CheckOutDate.Date - CheckInDate.Date).Days;
+
+    private string GetStepPosition(int dayIndex)
+    {
+        if (TotalDays == 0) return "0%";
+        var percentage = (dayIndex / (double)TotalDays) * 100;
+        return $"{percentage.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}%";
+    }
+
+    private string GetFillWidth()
+    {
+        if (CurrentDate == null || TotalDays == 0)
+            return "0%";
+
+        var current = CurrentDate.Value.Date;
+
+        if (current < CheckInDate.Date)
+            return "0%";
+
+        if (current >= CheckOutDate.Date)
+            return "100%";
+
+        var daysPassed = (current - CheckInDate.Date).Days;
+        var percentage = (daysPassed / (double)TotalDays) * 100;
+        return $"{percentage.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}%";
+    }
+}
