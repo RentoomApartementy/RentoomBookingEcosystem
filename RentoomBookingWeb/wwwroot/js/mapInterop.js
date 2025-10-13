@@ -23,19 +23,21 @@ window.leafletMap = {
 
         const mediaCache = new Map();
 
+        const markerCluster = L.markerClusterGroup();
+
         markers.forEach(m => {
             const lat = parseFloat(m.lat);
             const lng = parseFloat(m.lng);
             if (isNaN(lat) || isNaN(lng)) return;
 
-            const marker = L.marker([lat, lng]).addTo(window._currentMap);
+            const marker = L.marker([lat, lng]);
 
             if (m.popup)
                 marker.bindPopup(m.popup);
 
             marker.on('click', async function () {
-                const zoomLevel = window._currentMap.getZoom() < 16 ? 16 : window._currentMap.getZoom();
-                window._currentMap.flyTo([lat, lng], zoomLevel);
+                // const zoomLevel = window._currentMap.getZoom() < 16 ? 16 : window._currentMap.getZoom();
+                // window._currentMap.flyTo([lat, lng], zoomLevel);
 
                 if (m.objRef && m.id) {
                     if (mediaCache.has(m.id)) {
@@ -55,8 +57,12 @@ window.leafletMap = {
                     }
                 }
             });
+
+            markerCluster.addLayer(marker);
         });
 
+        window._currentMap.addLayer(markerCluster);
+        
         function updatePopupImage(id, url) {
             const popupEl = document.getElementById(`popup-${id}`);
             if (!popupEl) return;
