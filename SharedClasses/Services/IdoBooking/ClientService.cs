@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,10 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 {
     public interface IClientService
     {
-        Task<ClientGetResponseType?> GetClientsAsync(ClientGetParams? parameters = null, ResultRequestPaging? settings = null, CancellationToken cancellationToken = default);
+        Task<ClientGetResponse?> GetClientsAsync(ClientGetParams? parameters = null, ResultRequestPaging? settings = null, CancellationToken cancellationToken = default);
+        Task<ClientGetResponse?> GetClientByIdAsync(int clientId, CancellationToken cancellationToken = default);
+        Task<ClientAddResponse?> AddClientsAsync(IEnumerable<ClientAddRequestClient> clients, CancellationToken cancellationToken = default);
+        Task<ClientAddResponse?> AddClientAsync(ClientAddRequestClient client, CancellationToken cancellationToken = default);
     }
 
     public class ClientService : IClientService
@@ -32,7 +36,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             
         }
 
-        public Task<ClientGetResponseType?> GetClientsAsync(ClientGetParams? parameters = null, ResultRequestPaging? settings = null, CancellationToken cancellationToken = default)
+        public async Task<ClientGetResponse?> GetClientsAsync(ClientGetParams? parameters = null, ResultRequestPaging? settings = null, CancellationToken cancellationToken = default)
         {
             var request = new ClientGetRequest
             {
@@ -40,7 +44,57 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 Settings = settings,
                 Params = parameters
             };
-            return _idoConnect.PostAsync<ClientGetRequest, ClientGetResponseType>(ClientsGetEndpoint, request, cancellationToken);
+
+            var ret = await _idoConnect.PostAsync<ClientGetRequest, ClientGetResponseType>(ClientsGetEndpoint, request, cancellationToken);
+            return ret?.Result;
+        }
+
+        public async Task<ClientGetResponse?> GetClientByIdAsync(int clientId, CancellationToken cancellationToken = default)
+        {
+            if (clientId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(clientId));
+            }
+
+            var ret  = await GetClientsAsync(new ClientGetParams { Id = clientId }, null, cancellationToken);
+            return ret;
+
+        }
+
+        public async Task<ClientAddResponse?> AddClientsAsync(IEnumerable<ClientAddRequestClient> clients, CancellationToken cancellationToken = default)
+        {
+            if (clients is null)
+            {
+                throw new ArgumentNullException(nameof(clients));
+            }
+
+            var clientsList = clients.ToList();
+            if (clientsList.Count == 0)
+            {
+                throw new ArgumentException("At least one client must be provided.", nameof(clients));
+            }
+
+            var request = new ClientAddRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Params = new ClientAddParams
+                {
+                    Clients = clientsList
+                }
+            };
+
+            var response = await _idoConnect.PostAsync<ClientAddRequest, ClientAddResponseType>(ClientsAddEndpoint, request, cancellationToken);
+            return response?.Result;
+        }
+
+        public Task<ClientAddResponse?> AddClientAsync(ClientAddRequestClient client, CancellationToken cancellationToken = default)
+        {
+            if (client is null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
+            return AddClientsAsync([client], cancellationToken);
         }
 
     }

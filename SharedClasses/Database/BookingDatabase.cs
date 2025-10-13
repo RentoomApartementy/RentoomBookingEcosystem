@@ -229,29 +229,6 @@ namespace RentoomBooking.SharedClasses.Database
         }
 
 
-        public async Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken, int pageSize)
-        {
-            await _initializationTask;
-            if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
-
-            var sql = "SELECT * FROM c";
-            var qd = new QueryDefinition(sql);
-
-            var opts = new QueryRequestOptions { 
-                MaxItemCount = pageSize,
-                PartitionKey = new PartitionKey(ApartmensPartitionKeyVal)
-            };
-
-            long totalCount = await GetApartmentCountAsync();
-
-            var it = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(qd, continuationToken, opts);
-            if (!it.HasMoreResults)
-                return new PagedResult<ApartmentObject>(Array.Empty<ApartmentObject>(), null,0,totalCount);
-
-            var page = await it.ReadNextAsync();
-            return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken, page.Count, totalCount);
-        }
-
         public async Task<RentoomReservation> GetRentoomReservationByResTokenAsync(string resToken, ILogger log)
         {
             await _initializationTask;

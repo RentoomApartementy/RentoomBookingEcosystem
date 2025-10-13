@@ -72,6 +72,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             using var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
             _logger.LogDebug("Sending request to {Url} with payload length {Length} bytes.", url, payload.Length);
+            _logger.LogDebug(payload);
 
             using var response = await httpClient.PostAsync(url, content, cancellationToken).ConfigureAwait(false);
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);

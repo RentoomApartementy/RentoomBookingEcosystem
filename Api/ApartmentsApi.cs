@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
 using System.Net;
 using System.Text.Json;
 
@@ -13,13 +14,15 @@ namespace RentoomBooking.Api;
 public class ApartmentsApi
 {
     private readonly IdoSellService _service;
+    private readonly IApartmentsService _apartmentsService;
     private readonly ILogger<ApartmentsApi> _logger;
    // private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
-    public ApartmentsApi(IdoSellService service, ILogger<ApartmentsApi> logger)
+    public ApartmentsApi(IdoSellService service, IApartmentsService apartmentsService , ILogger<ApartmentsApi> logger)
     {
         _service = service;
         _logger = logger;
+        _apartmentsService = apartmentsService;
     }
 
     // GET /api/apartments?city=Gdansk&top=50&continuationToken=...
@@ -35,7 +38,7 @@ public class ApartmentsApi
 
         _logger.LogInformation("List apartments city={City} top={Top}", city, top);
 
-        var result = await _service.QueryApartmentsAsync(token, top);
+        var result = await _apartmentsService.GetApartmentsByPageAsync(token, top);
         var resp = req.CreateResponse(HttpStatusCode.OK);
         await resp.WriteAsJsonAsync(result,"application/json; charset=utf-8");
         return resp;
