@@ -23,7 +23,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
         Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
-      
+        Task<PagedResult<ApartmentObject>> GetApartmentsByPageAsync(string? continuationToken = null, int pageSize = 50);
     }
 
       
@@ -75,7 +75,7 @@ namespace RentoomBooking.SharedClasses.Services
            int top = 50,
            CancellationToken ct = default)
         {
-            var result = await _bd.QueryApartmentsAsync(continuationToken, top);
+            var result = await _apartmentsRepository.QueryApartmentsAsync(continuationToken, top);
 
             return result;
         }
@@ -84,6 +84,8 @@ namespace RentoomBooking.SharedClasses.Services
         {
             return await _apartmentsRepository.GetApartmentCountAsync();
         }
+
+            public Task<PagedResult<ApartmentObject>> GetApartmentsByPageAsync(string? continuationToken = null, int pageSize = 50) => _apartmentsRepository.QueryApartmentsAsync(continuationToken, pageSize);
 
 
         public async Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default)
