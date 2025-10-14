@@ -11,12 +11,20 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
 {
     public class RentoomQueryOffer
     {
-        public PricingOffersRequest? IdoOfferParams { get; set; }
-        //todo: public ApartmentFilters ApartmentFilterParams { get; set; };
+        public PricingOffersRequest IdoOfferParams { get; set; }
+        public ApartmentFilters? ApartmentFilterParams { get; set; };
     }
 
-    public class RentoomOffer{
-       public  List<PricingOffer> PricingOffers { get; set; } = new List<PricingOffer>();
-        public List<ApartmentObject> ApartmentObjects { get; set; } = new List<ApartmentObject>();
-        }
+    public class RentoomOffer {
+        public List<PricingOffer> PricingOffers { get; set; } = [];
+        public List<ApartmentObject> ApartmentObjects { get; set; } = [];
+    }
+    public class ApartmentFilters {
+        public List<int>? ApartmentAddonFilter { get; set; }
+        public List<int>? ApartmentAmenitiesFilter {get;set;}
+        public List<int>? ApartmentLocationsFilter { get; set; }
+
+    }
+
+
 }
