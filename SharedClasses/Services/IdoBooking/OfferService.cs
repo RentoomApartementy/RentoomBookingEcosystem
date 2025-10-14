@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace RentoomBooking.SharedClasses.Services.IdoBooking
 {
 
-    public interface IOfferService
+    public interface IIdoOfferService
     {
         Task<PricingOffersResponse?> GetPricingOffersAsync(PricingOffersRequest request,
             CancellationToken cancellationToken = default);
@@ -20,15 +20,15 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             CancellationToken cancellationToken = default);
     }
 
-    public class OfferService :IOfferService
+    public class IdoOfferService :IIdoOfferService
     {
         private readonly IIdoBookingConnectService _idoBookingConnectService;
-        private readonly ILogger<OfferService> _logger;
+        private readonly ILogger<IdoOfferService> _logger;
 
         private const string PricingOffersEndpoint = "public/pricingOffers/34/json";
         private const string AvailabilityAndPricesForDaysEndpoint = "offer/getAvailabilityAndPricesForDays/34/json";
 
-        public OfferService(IIdoBookingConnectService idoBookingConnectService, ILogger<OfferService> logger)
+        public IdoOfferService(IIdoBookingConnectService idoBookingConnectService, ILogger<IdoOfferService> logger)
         {
             _idoBookingConnectService = idoBookingConnectService ?? throw new ArgumentNullException(nameof(idoBookingConnectService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

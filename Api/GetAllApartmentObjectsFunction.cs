@@ -9,13 +9,13 @@ namespace RentoomBooking.Api;
 public class GetAllApartmentObjectsFunction
 {
 
-    private readonly IApartmentService _bookingObjectService;
+    private readonly IIdoApartmentService _bookingObjectService;
 
     private readonly ILogger<GetAllApartmentObjectsFunction> _logger;
 
   
 
-    public GetAllApartmentObjectsFunction(ILogger<GetAllApartmentObjectsFunction> logger, IApartmentService bookingObjectService)
+    public GetAllApartmentObjectsFunction(ILogger<GetAllApartmentObjectsFunction> logger, IIdoApartmentService bookingObjectService)
     {
         _logger = logger;
         _bookingObjectService = bookingObjectService;

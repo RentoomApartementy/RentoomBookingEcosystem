@@ -28,13 +28,13 @@ builder.Services.AddSingleton<IdoSellService>();
 builder.Services.AddSingleton<BookingDatabase>();
 builder.Services.AddSingleton<IAmenitiesService, AmenitiesService>();
 builder.Services.AddSingleton<IClientService, ClientService>();
-builder.Services.AddSingleton<IApartmentService, ApartmentService>();
+builder.Services.AddSingleton<IIdoApartmentService, IdoApartmentService>();
 builder.Services.AddSingleton<IIdoBookingConnectService, IdoBookingConnectService>();
-
+builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
 builder.Services.AddSingleton<ApartmentRepository>();
 builder.Services.AddSingleton<AmenitiesRepository>();
-builder.Services.AddSingleton<IOfferService,OfferService>();
-
+builder.Services.AddSingleton<IIdoOfferService,IdoOfferService>();
+builder.Services.AddSingleton<IRentoomOfferService, RentoomOfferService>();
 var cosendpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
 //cosendpoint = builder.Configuration["AZURE_COSMOS_ENDPOINT"];
 if (string.IsNullOrEmpty(cosendpoint))
@@ -64,3 +64,4 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 
 
 builder.Build().Run();
+

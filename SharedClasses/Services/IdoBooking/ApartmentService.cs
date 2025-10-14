@@ -17,27 +17,29 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Services.IdoBooking
 {
-    public interface IApartmentService
+    public interface IIdoApartmentService
     {
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellAsync(CancellationToken ct = default);
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(CancellationToken ct = default);
-        Task<ApartmentObject?> GetApartmentByIdAsync(int objectId);
+        Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
+        Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
     }
-    public class ApartmentService: IApartmentService
+    public class IdoApartmentService: IIdoApartmentService
     {
 
         //private const string ApartmentsGetEndpoint = "clients/get/34/json";
         private const string ApartmentsLocationGetEndpoint = "objects/getLocation/34/json";
         private const string PublicParametersGetEndpoint = "public/parameters/34/json";
         private const string ApartemntsGetEndpoint = "objects/getAll/34/json";
+        private const string ObjectMediaGetEndpoint = "objects/getMedia/34/json";
 
         // private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger<IApartmentService> _logger;
+        private readonly ILogger<IIdoApartmentService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
         private readonly ApartmentRepository _apartmentRepository;
 
-        public ApartmentService(IIdoBookingConnectService idoConnect, ILogger<IApartmentService> logger, ApartmentRepository apartmentRepository)
+        public IdoApartmentService(IIdoBookingConnectService idoConnect, ILogger<IdoApartmentService> logger, ApartmentRepository apartmentRepository)
         {
            // _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -139,9 +141,31 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         }
 
-public  async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
+
+        public async Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default)
         {
-            return await _apartmentRepository.FindApartmentInCosmosDb(objectId);
+            var request = new ObjectMediaRequestType
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                ObjectId = objectId
+            };
+            return await _idoConnect.PostAsync<ObjectMediaRequestType, ObjectMediaResponseType>(ObjectMediaGetEndpoint, request, ct);
+        }
+
+        public async Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default)
+        {
+            var request = new ObjectDescriptionsRequestType
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                ParamsSearch = new ObjectDescriptionParamsSearch
+                {
+                    ObjectId = objectId,
+                    Language = language,
+                }
+            };
+
+            var ret = await _idoConnect.PostAsync<ObjectDescriptionsRequestType, ObjectDescriptionsResponseType>(ObjectMediaGetEndpoint, request, ct);
+            return ret?.Result.ObjectDescriptions;
         }
 
 
