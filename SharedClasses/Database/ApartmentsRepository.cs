@@ -82,8 +82,8 @@ namespace RentoomBooking.SharedClasses.Database
             }
 
             var apartmentList = apartments.ToList();
-                apartmentList.ForEach(a => a.PartitionKey = PartitionKeyValue);
-                
+            apartmentList.ForEach(a => a.PartitionKey = PartitionKeyValue);
+
 
             log.LogInformation("Purging ApartmentInfo container before inserting new data.");
 
@@ -97,7 +97,7 @@ namespace RentoomBooking.SharedClasses.Database
                 await PurgeAll();
                 count = await GetApartmentCountAsync(log);
                 log.LogInformation("{count} after purge in container", count);
-                
+
                 log.LogInformation("ApartmentInfo container purged successfully. Starting bulk insert of {count} apartments.", apartmentList.Count);
 
                 await BulkCreateItemsAsync(apartmentList, log);
@@ -121,55 +121,55 @@ namespace RentoomBooking.SharedClasses.Database
                 _logger.LogWarning("Partition delete returned {code}: {msg}", deleteResponse.StatusCode, deleteResponse.ErrorMessage);
         }
 
-      /*  private async Task PurgeContainerAsync(ILogger log, CancellationToken cancellationToken)
-        {
-            var query = new QueryDefinition("SELECT c.id FROM c");
-            var iterator = _apartmentInfoContainer!.GetItemQueryIterator<dynamic>(query, requestOptions: new QueryRequestOptions
-            {
-                MaxItemCount = 100
-            });
+        /*  private async Task PurgeContainerAsync(ILogger log, CancellationToken cancellationToken)
+          {
+              var query = new QueryDefinition("SELECT c.id FROM c");
+              var iterator = _apartmentInfoContainer!.GetItemQueryIterator<dynamic>(query, requestOptions: new QueryRequestOptions
+              {
+                  MaxItemCount = 100
+              });
 
-            var deleteTasks = new List<Task>();
+              var deleteTasks = new List<Task>();
 
-            while (iterator.HasMoreResults)
-            {
-                var page = await iterator.ReadNextAsync(cancellationToken);
+              while (iterator.HasMoreResults)
+              {
+                  var page = await iterator.ReadNextAsync(cancellationToken);
 
-                foreach (var item in page)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
+                  foreach (var item in page)
+                  {
+                      cancellationToken.ThrowIfCancellationRequested();
 
-                    string id = item.id;
-                    deleteTasks.Add(_apartmentInfoContainer.DeleteItemAsync<dynamic>(id, new PartitionKey(id), cancellationToken: cancellationToken));
+                      string id = item.id;
+                      deleteTasks.Add(_apartmentInfoContainer.DeleteItemAsync<dynamic>(id, new PartitionKey(id), cancellationToken: cancellationToken));
 
-                    if (deleteTasks.Count >= 50)
-                    {
-                        await Task.WhenAll(deleteTasks);
-                        deleteTasks.Clear();
-                    }
-                }
-            }
+                      if (deleteTasks.Count >= 50)
+                      {
+                          await Task.WhenAll(deleteTasks);
+                          deleteTasks.Clear();
+                      }
+                  }
+              }
 
-            if (deleteTasks.Count > 0)
-            {
-                await Task.WhenAll(deleteTasks);
-                deleteTasks.Clear();
-            }
+              if (deleteTasks.Count > 0)
+              {
+                  await Task.WhenAll(deleteTasks);
+                  deleteTasks.Clear();
+              }
 
-            log.LogInformation("ApartmentInfo container purge complete.");
-        }
-      */
+              log.LogInformation("ApartmentInfo container purge complete.");
+          }
+        */
 
         public async Task BulkCreateItemsAsync(List<ApartmentObject> items, ILogger log)
         {
             await _initializationTask;
-               if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
+            if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
             await PurgeAll();
 
             int itemsPerBatch = 25;
             int totalItemsCreated = 0;
             log.LogInformation($"Starting bulk create for a total of {items.Count} items.");
-            
+
             foreach (var a in items) a.PartitionKey = PartitionKeyValue;
 
             for (int i = 0; i < items.Count; i += itemsPerBatch)
@@ -192,8 +192,8 @@ namespace RentoomBooking.SharedClasses.Database
 
             log.LogInformation($"Completed bulk create. A total of {totalItemsCreated} items were successfully created.");
         }
-        
-        
+
+
         private readonly int MaxCreateRetries = 6;
         private async Task<int> ProcessCreateItemAsync(ApartmentObject item, ILogger _logger, CancellationToken ct = default)
         {
@@ -255,14 +255,14 @@ namespace RentoomBooking.SharedClasses.Database
 
             try
             {
-            
+
                 ItemResponse<ApartmentObject> response = await _apartmentInfoContainer.ReadItemAsync<ApartmentObject>(
-                    id: objectId, 
+                    id: objectId,
                     partitionKey: new PartitionKey(PartitionKeyValue),
                     cancellationToken: cancellationToken);
 
                 var apartment = response.Resource;
-                
+
                 return apartment;
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -300,6 +300,52 @@ namespace RentoomBooking.SharedClasses.Database
             var page = await it.ReadNextAsync();
             return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken, page.Count, totalCount);
         }
-    }
 
-}
+
+        public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
+        {
+            var apartmentIds = apartmentFilter.ApartmentIds;
+            if (apartmentIds == null) throw new ArgumentNullException(nameof(apartmentIds));
+
+            await _initializationTask;
+
+            if (_apartmentInfoContainer == null)
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+
+            var distinctIds = apartmentIds.Distinct().Select(id => id.ToString()).ToList();
+
+            if (distinctIds.Count == 0)
+            {
+                return new List<ApartmentObject>();
+            }
+
+            var parameterNames = distinctIds
+                .Select((_, index) => $"@id{index}")
+                .ToList();
+
+            var queryText = $"SELECT * FROM c WHERE c.id IN ({string.Join(", ", parameterNames)})";
+            var queryDefinition = new QueryDefinition(queryText);
+
+            for (int i = 0; i < distinctIds.Count; i++)
+            {
+                queryDefinition.WithParameter(parameterNames[i], distinctIds[i]);
+            }
+
+            var requestOptions = new QueryRequestOptions
+            {
+                PartitionKey = new PartitionKey(PartitionKeyValue)
+            };
+
+            var apartments = new List<ApartmentObject>();
+            using var iterator = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(queryDefinition, requestOptions: requestOptions);
+
+            while (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync(cancellationToken);
+                apartments.AddRange(response.ToList());
+            }
+
+            return apartments;
+        }
+    }
+    }

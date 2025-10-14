@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="Models\IdoBooking\Client\Get\" />
     <Folder Include="Models\IdoBooking\ObjectLocation\NewFolder\" />
-    <Folder Include="Services\IdoBooking\NewFolder\" />
   </ItemGroup>
 
 </Project>
