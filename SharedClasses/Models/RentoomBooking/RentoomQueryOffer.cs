@@ -12,7 +12,7 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
     public class RentoomQueryOffer
     {
         public PricingOffersRequest IdoOfferParams { get; set; }
-        public ApartmentFilters? ApartmentFilterParams { get; set; };
+        public ApartmentFilters? ApartmentFilterParams { get; set; }
     }
 
     public class RentoomOffer {

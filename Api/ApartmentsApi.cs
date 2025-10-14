@@ -15,14 +15,16 @@ public class ApartmentsApi
 {
     private readonly IdoSellService _service;
     private readonly IApartmentsService _apartmentsService;
+    private readonly IIdoApartmentService _idoApartmentService;
     private readonly ILogger<ApartmentsApi> _logger;
    // private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
-    public ApartmentsApi(IdoSellService service, IApartmentsService apartmentsService , ILogger<ApartmentsApi> logger)
+    public ApartmentsApi(IdoSellService service, IIdoApartmentService idoApartmentService, IApartmentsService apartmentsService , ILogger<ApartmentsApi> logger)
     {
         _service = service;
         _logger = logger;
         _apartmentsService = apartmentsService;
+        _idoApartmentService = idoApartmentService;
     }
 
     // GET /api/apartments?city=Gdansk&top=50&continuationToken=...
@@ -107,7 +109,7 @@ public class ApartmentsApi
                 return response;
             }
 
-            List<ObjectAmenity>? media = await _service.FetchObjectAmenitiesAsync(objectId);
+            List<ObjectAmenity>? media = await _idoApartmentService.GetObjectAmenitiesAsync(objectId);
 
             if (media == null)
             {

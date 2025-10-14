@@ -103,7 +103,8 @@ namespace RentoomBooking.Api
 
             try
             {
-                var result  = await _idoAppartmenrService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
+                //  var result  = await _idoAppartmenrService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
+                var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync();
 
                 response.StatusCode = HttpStatusCode.OK;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");

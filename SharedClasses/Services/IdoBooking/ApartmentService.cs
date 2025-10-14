@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Database;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
@@ -23,6 +24,8 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(CancellationToken ct = default);
         Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
         Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
+        Task<List<ObjectAmenity>?> GetObjectAmenitiesAsync(int objectId, CancellationToken ct = default);
+        Task<List<ApartmentAmenitiesDocument>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default);
     }
     public class IdoApartmentService : IIdoApartmentService
     {
@@ -192,6 +195,49 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             */
             // ObjectAmenitiesResponseType ret = JsonConvert.DeserializeObject<ObjectAmenitiesResponseType>(responseContent);
             return ret?.Result.ObjectAmenities;
+        }
+
+
+        public async Task<List<ApartmentAmenitiesDocument>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default)
+        {
+            var apartments = await GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(ct);
+
+            var amenitiesDocuments = new List<ApartmentAmenitiesDocument>(apartments.Count);
+
+            foreach (var apartment in apartments)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                if (string.IsNullOrWhiteSpace(apartment?.Id))
+                {
+                    _logger.LogWarning("Apartment without id encountered while syncing amenities. Skipping.");
+                    continue;
+                }
+
+                if (!int.TryParse(apartment.Id.Trim(), out var apartmentId))
+                {
+                    _logger.LogWarning("Unable to parse apartment id {ApartmentId} to integer. Skipping amenities sync.", apartment.Id);
+                    continue;
+                }
+
+                var amenities = await GetObjectAmenitiesAsync(apartmentId, ct) ?? new List<ObjectAmenity>();
+
+                var document = new ApartmentAmenitiesDocument
+                {
+                    Id = apartment.Id.Trim(),
+                    ApartmentId = apartment.Id.Trim(),
+                  //  Apartment = apartment,
+                    Amenities = amenities
+                };
+
+                amenitiesDocuments.Add(document);
+            }
+
+            _logger.LogInformation("Retrieved amenities for {Count} apartments.", amenitiesDocuments.Count);
+
+            await _apartmentRepository.SaveApartmentAmenitiesAsync(amenitiesDocuments, _logger, ct);
+
+            return amenitiesDocuments;
         }
 
     }
