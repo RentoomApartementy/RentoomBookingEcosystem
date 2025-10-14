@@ -1,8 +1,10 @@
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Database;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
+using System.Net;
 
 namespace RentoomBooking.SharedClasses.Database
 {
@@ -13,7 +15,8 @@ namespace RentoomBooking.SharedClasses.Database
 
         private const string ContainerName = "ApartmentInfo";
         private const string PartitionKey = "/partitionKey";
-        private const string PartitionKeyValue = "rentoom-apartments-list";
+        private const string ApartmentsPartitionKeyValue = "rentoom-apartments-list";
+        private const string AmenitiesPartitionKeyValue = "rentoom-apartments-amenities-list";
         private ILogger<ApartmentRepository> _logger;
 
         public ApartmentRepository(CosmosClient client, IConfiguration configuration, ILogger<ApartmentRepository> logger)
@@ -49,7 +52,7 @@ namespace RentoomBooking.SharedClasses.Database
 
                 var queryOptions = new QueryRequestOptions
                 {
-                    PartitionKey = new PartitionKey(PartitionKeyValue)
+                    PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
                 };
 
 
@@ -82,7 +85,7 @@ namespace RentoomBooking.SharedClasses.Database
             }
 
             var apartmentList = apartments.ToList();
-            apartmentList.ForEach(a => a.PartitionKey = PartitionKeyValue);
+            apartmentList.ForEach(a => a.PartitionKey = ApartmentsPartitionKeyValue);
 
 
             log.LogInformation("Purging ApartmentInfo container before inserting new data.");
@@ -94,7 +97,7 @@ namespace RentoomBooking.SharedClasses.Database
 
 
                 //await PurgeContainerAsync(log, cancellationToken);
-                await PurgeAll();
+                await PurgePartitionAsync(ApartmentsPartitionKeyValue, log, cancellationToken);
                 count = await GetApartmentCountAsync(log);
                 log.LogInformation("{count} after purge in container", count);
 
@@ -109,68 +112,106 @@ namespace RentoomBooking.SharedClasses.Database
                 throw;
             }
         }
-        private async Task PurgeAll()
+
+        public async Task SaveApartmentAmenitiesAsync(IEnumerable<ApartmentAmenitiesDocument> apartmentAmenities, ILogger log, CancellationToken cancellationToken = default)
         {
-            _logger.LogInformation("Purging logical partition '{pk}' in ApartmentRepository...", PartitionKeyValue);
+            if (apartmentAmenities == null) throw new ArgumentNullException(nameof(apartmentAmenities));
+            if (log == null) throw new ArgumentNullException(nameof(log));
 
-            ResponseMessage deleteResponse = await _apartmentInfoContainer!.DeleteAllItemsByPartitionKeyStreamAsync(new PartitionKey(PartitionKeyValue));
+            await _initializationTask;
 
-            if (deleteResponse.IsSuccessStatusCode)
-                _logger.LogInformation("Partition '{pk}' delete started successfully.", PartitionKeyValue);
-            else
-                _logger.LogWarning("Partition delete returned {code}: {msg}", deleteResponse.StatusCode, deleteResponse.ErrorMessage);
+            if (_apartmentInfoContainer == null)
+            {
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+            }
+
+            var amenitiesList = apartmentAmenities
+                .Where(document => document != null)
+                .Select(document =>
+                {
+                    document.PartitionKey = AmenitiesPartitionKeyValue;
+
+                    if (string.IsNullOrWhiteSpace(document.Id))
+                    {
+                        document.Id = document.ApartmentId ?? Guid.NewGuid().ToString("N");
+                    }
+
+                    if (string.IsNullOrWhiteSpace(document.ApartmentId))
+                    {
+                        document.ApartmentId = document.Id;
+                    }
+
+                    document.Amenities ??= new List<ObjectAmenity>();
+
+                    return document;
+                })
+                .ToList();
+
+            log.LogInformation("Saving {count} apartment amenities documents to partition {Partition}", amenitiesList.Count, AmenitiesPartitionKeyValue);
+
+            await PurgePartitionAsync(AmenitiesPartitionKeyValue, log, cancellationToken);
+
+            foreach (var amenityDocument in amenitiesList)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await _apartmentInfoContainer.UpsertItemAsync(
+                    amenityDocument,
+                    new PartitionKey(AmenitiesPartitionKeyValue),
+                    cancellationToken: cancellationToken);
+            }
+
+            log.LogInformation("Apartment amenities saved successfully to partition {Partition}", AmenitiesPartitionKeyValue);
         }
 
-        /*  private async Task PurgeContainerAsync(ILogger log, CancellationToken cancellationToken)
-          {
-              var query = new QueryDefinition("SELECT c.id FROM c");
-              var iterator = _apartmentInfoContainer!.GetItemQueryIterator<dynamic>(query, requestOptions: new QueryRequestOptions
-              {
-                  MaxItemCount = 100
-              });
+       // private Task PurgeAll(ILogger? log = null, CancellationToken cancellationToken = default) =>
+       //     PurgePartitionAsync(PartitionKeyValue, log, cancellationToken);
 
-              var deleteTasks = new List<Task>();
+        private async Task PurgePartitionAsync(string partitionKeyValue, ILogger? log = null, CancellationToken cancellationToken = default)
+        {
+            var logger = log ?? _logger;
+            logger?.LogInformation("Purging logical partition '{pk}' in ApartmentRepository...", partitionKeyValue);
 
-              while (iterator.HasMoreResults)
-              {
-                  var page = await iterator.ReadNextAsync(cancellationToken);
+            if (_apartmentInfoContainer is null)
+            {
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+            }
 
-                  foreach (var item in page)
-                  {
-                      cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                ResponseMessage deleteResponse = await _apartmentInfoContainer.DeleteAllItemsByPartitionKeyStreamAsync(
+                    new PartitionKey(partitionKeyValue),
+                    cancellationToken: cancellationToken);
 
-                      string id = item.id;
-                      deleteTasks.Add(_apartmentInfoContainer.DeleteItemAsync<dynamic>(id, new PartitionKey(id), cancellationToken: cancellationToken));
-
-                      if (deleteTasks.Count >= 50)
-                      {
-                          await Task.WhenAll(deleteTasks);
-                          deleteTasks.Clear();
-                      }
-                  }
-              }
-
-              if (deleteTasks.Count > 0)
-              {
-                  await Task.WhenAll(deleteTasks);
-                  deleteTasks.Clear();
-              }
-
-              log.LogInformation("ApartmentInfo container purge complete.");
-          }
-        */
+                if (deleteResponse.IsSuccessStatusCode)
+                {
+                    logger?.LogInformation("Partition '{pk}' delete started successfully.", partitionKeyValue);
+                }
+                else if (deleteResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+                    logger?.LogInformation("Partition '{pk}' not found during purge request.", partitionKeyValue);
+                }
+                else
+                {
+                    logger?.LogWarning("Partition delete returned {code}: {msg}", deleteResponse.StatusCode, deleteResponse.ErrorMessage);
+                }
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                logger?.LogInformation("Partition '{pk}' does not exist yet.", partitionKeyValue);
+            }
+        }
 
         public async Task BulkCreateItemsAsync(List<ApartmentObject> items, ILogger log)
         {
             await _initializationTask;
             if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
-            await PurgeAll();
+           // await PurgeAll();
 
             int itemsPerBatch = 25;
             int totalItemsCreated = 0;
             log.LogInformation($"Starting bulk create for a total of {items.Count} items.");
 
-            foreach (var a in items) a.PartitionKey = PartitionKeyValue;
+            foreach (var a in items) a.PartitionKey = ApartmentsPartitionKeyValue;
 
             for (int i = 0; i < items.Count; i += itemsPerBatch)
             {
@@ -202,7 +243,7 @@ namespace RentoomBooking.SharedClasses.Database
                 try
                 {
                     var resp = await _apartmentInfoContainer!
-                        .CreateItemAsync(item, new PartitionKey(PartitionKeyValue), cancellationToken: ct);
+                        .CreateItemAsync(item, new PartitionKey(ApartmentsPartitionKeyValue), cancellationToken: ct);
 
                     _logger.LogDebug("Created {Id}. RU {RU:F2}", item.Id, resp.RequestCharge);
                     return 0;
@@ -258,7 +299,7 @@ namespace RentoomBooking.SharedClasses.Database
 
                 ItemResponse<ApartmentObject> response = await _apartmentInfoContainer.ReadItemAsync<ApartmentObject>(
                     id: objectId,
-                    partitionKey: new PartitionKey(PartitionKeyValue),
+                    partitionKey: new PartitionKey(ApartmentsPartitionKeyValue),
                     cancellationToken: cancellationToken);
 
                 var apartment = response.Resource;
@@ -267,7 +308,7 @@ namespace RentoomBooking.SharedClasses.Database
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                _logger.LogWarning("Apartment with id {ApartmentId} not found in partition {PK}.", apartmentId, PartitionKeyValue);
+                _logger.LogWarning("Apartment with id {ApartmentId} not found in partition {PK}.", apartmentId, ApartmentsPartitionKeyValue);
                 return null;
             }
             catch (Exception ex)
@@ -288,7 +329,7 @@ namespace RentoomBooking.SharedClasses.Database
             var opts = new QueryRequestOptions
             {
                 MaxItemCount = pageSize,
-                PartitionKey = new PartitionKey(PartitionKeyValue)
+                PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
             };
 
             long totalCount = await GetApartmentCountAsync();
@@ -333,7 +374,7 @@ namespace RentoomBooking.SharedClasses.Database
 
             var requestOptions = new QueryRequestOptions
             {
-                PartitionKey = new PartitionKey(PartitionKeyValue)
+                PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
             };
 
             var apartments = new List<ApartmentObject>();
