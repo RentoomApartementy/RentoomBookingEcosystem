@@ -1,9 +1,10 @@
 window.leafletMap = {
     createMap: function (id, lat, lng, zoom) {
-        const map = L.map(id).setView([lat, lng], zoom);
+        const map = L.map(id, { attributionControl: false }).setView([lat, lng], zoom);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19
+            maxZoom: 19,
+            attribution: '',
         }).addTo(map);
 
         window._currentMap = map;
