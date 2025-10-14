@@ -168,6 +168,5 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             return ret?.Result.ObjectDescriptions;
         }
 
-
     }
 }

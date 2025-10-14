@@ -1,9 +1,8 @@
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
-using System.Threading;
+using RentoomBooking.SharedClasses.Models;
 
 namespace RentoomBooking.SharedClasses.Database
 {
