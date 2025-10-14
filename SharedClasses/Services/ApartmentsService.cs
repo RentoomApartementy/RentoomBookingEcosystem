@@ -24,6 +24,7 @@ namespace RentoomBooking.SharedClasses.Services
         Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
         Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
         Task<PagedResult<ApartmentObject>> GetApartmentsByPageAsync(string? continuationToken = null, int pageSize = 50);
+        Task<PagedResult<ApartmentObject>> GetAllApartmentsList();
     }
 
       
@@ -85,7 +86,7 @@ namespace RentoomBooking.SharedClasses.Services
             return await _apartmentsRepository.GetApartmentCountAsync();
         }
 
-            public Task<PagedResult<ApartmentObject>> GetApartmentsByPageAsync(string? continuationToken = null, int pageSize = 50) => _apartmentsRepository.QueryApartmentsAsync(continuationToken, pageSize);
+        public Task<PagedResult<ApartmentObject>> GetApartmentsByPageAsync(string? continuationToken = null, int pageSize = 50) => _apartmentsRepository.QueryApartmentsAsync(continuationToken, pageSize);
 
 
         public async Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default)
@@ -114,6 +115,26 @@ namespace RentoomBooking.SharedClasses.Services
             return ret?.Result.ObjectDescriptions;
         }
 
+        public async Task<PagedResult<ApartmentObject>> GetAllApartmentsList()
+        {
+            var allResults = new List<ApartmentObject>();
+            string? continuationToken = null;
+            long totalCount = await _apartmentsRepository.GetApartmentCountAsync();
+
+            do
+            {
+                var page = await _apartmentsRepository.QueryApartmentsAsync(continuationToken, 100);
+                allResults.AddRange(page.Items);
+                continuationToken = page.ContinuationToken;
+            } while (continuationToken != null);
+
+            return new PagedResult<ApartmentObject>(
+                allResults,
+                null,            
+                allResults.Count,   
+                totalCount
+            );
+        }
       
     }
 }
