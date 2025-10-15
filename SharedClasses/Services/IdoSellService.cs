@@ -43,7 +43,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         private const string ReservationsGetEndpoint = "reservations/get/34/json";
         private const string ApartmentMediaGetEndpoint = "objects/getMedia/34/json";
-        private const string ApartmentAmenitiesGetEndpoint = "objects/getAmenities/34/json";
+       
         private const string AllAmenitiesGetEndpoint = "amenities/getForObjects/34/json";
 
         private const string ApartmentDescriptionsGetEndpoint =  "objects/getDescriptions/34/json";
@@ -90,7 +90,7 @@ namespace RentoomBooking.SharedClasses.Services
             return (ret, stored);
         }
 
-        public Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken = null, int pageSize = 50) => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
+        //public Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken = null, int pageSize = 50) => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
 
         public async Task<List<ObjectMedium>?> FetchObjectMediaFromIdoSellAsync(int objectId, CancellationToken cancellationToken = default)
         {
@@ -154,28 +154,7 @@ namespace RentoomBooking.SharedClasses.Services
             return ret?.Result.ObjectMedia;
         }*/
 
-        public async Task<List<ObjectAmenity>?> FetchObjectAmenitiesAsync(int objectId, CancellationToken cancellationToken = default)
-        {
-          
-            _logger.LogInformation("Fetching amenities for object {ObjectId}", objectId);
-
-            var request = new ObjectAmenitiesRequestType
-            {
-                Authenticate = _idoConnect.AuthObjectIdo(),
-                ObjectId = objectId
-            };
-            ObjectAmenitiesResponseType ret = await _idoConnect.PostAsync<ObjectAmenitiesRequestType, ObjectAmenitiesResponseType>(ApartmentMediaGetEndpoint, request, cancellationToken);
-
-            /*
-               if (!response.IsSuccessStatusCode)
-               {
-                   _logger.LogError("Failed to fetch media for object {ObjectId}. StatusCode: {StatusCode}. Content: {Content}", objectId, response.StatusCode, responseContent);
-                   response.EnsureSuccessStatusCode();
-               }
-            */
-           // ObjectAmenitiesResponseType ret = JsonConvert.DeserializeObject<ObjectAmenitiesResponseType>(responseContent);
-            return ret?.Result.ObjectAmenities;
-        }
+       
 
         public async Task<List<ObjectDescription>?> FetchObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken cancellationToken = default)
         {

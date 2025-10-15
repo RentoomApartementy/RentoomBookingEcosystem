@@ -28,13 +28,13 @@ builder.Services.AddSingleton<IdoSellService>();
 builder.Services.AddSingleton<BookingDatabase>();
 builder.Services.AddSingleton<IAmenitiesService, AmenitiesService>();
 builder.Services.AddSingleton<IClientService, ClientService>();
-builder.Services.AddSingleton<IApartmentService, ApartmentService>();
+builder.Services.AddSingleton<IIdoApartmentService, IdoApartmentService>();
 builder.Services.AddSingleton<IIdoBookingConnectService, IdoBookingConnectService>();
-
+builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
 builder.Services.AddSingleton<ApartmentRepository>();
 builder.Services.AddSingleton<AmenitiesRepository>();
-
-
+builder.Services.AddSingleton<IIdoOfferService,IdoOfferService>();
+builder.Services.AddSingleton<IRentoomOfferService, RentoomOfferService>();
 var cosendpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
 //cosendpoint = builder.Configuration["AZURE_COSMOS_ENDPOINT"];
 if (string.IsNullOrEmpty(cosendpoint))
@@ -43,12 +43,16 @@ if (string.IsNullOrEmpty(cosendpoint))
 }
 
 
-var cosmosClient = new CosmosClient( cosendpoint, new CosmosClientOptions()
+var cosmosClient = new CosmosClient(cosendpoint, new CosmosClientOptions()
 {
     SerializerOptions = new CosmosSerializationOptions
     {
         PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-    }
+    },
+    AllowBulkExecution = false,
+    MaxRetryAttemptsOnRateLimitedRequests = 12,
+    MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromMinutes(1)
+
 });
 
 builder.Services.AddSingleton(cosmosClient);
@@ -60,3 +64,4 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 
 
 builder.Build().Run();
+

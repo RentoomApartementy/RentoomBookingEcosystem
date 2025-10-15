@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Models.IdoBooking
 {
-    public class ClientWithGuest : Client
+    public class ClientWithGuest : ClientModel
     {
       //  public string Login { get; set; } = string.Empty;
      //   public int Id { get; set; }

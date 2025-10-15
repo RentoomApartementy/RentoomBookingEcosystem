@@ -1,7 +1,10 @@
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Database;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using System.Net;
 
 namespace RentoomBooking.SharedClasses.Database
 {
@@ -11,7 +14,9 @@ namespace RentoomBooking.SharedClasses.Database
         private readonly Task _initializationTask;
 
         private const string ContainerName = "ApartmentInfo";
-        private const string PartitionKey = "/id";
+        private const string PartitionKey = "/partitionKey";
+        private const string ApartmentsPartitionKeyValue = "rentoom-apartments-list";
+        private const string AmenitiesPartitionKeyValue = "rentoom-apartments-amenities-list";
         private ILogger<ApartmentRepository> _logger;
 
         public ApartmentRepository(CosmosClient client, IConfiguration configuration, ILogger<ApartmentRepository> logger)
@@ -29,29 +34,37 @@ namespace RentoomBooking.SharedClasses.Database
             }
 
             var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-
+            var db = database.Database;
             // Ta klasa, tak jak BookingDatabase, musi mieć dostęp do kontenera
             _apartmentInfoContainer = await database.Database.CreateContainerIfNotExistsAsync(
                 new ContainerProperties(ContainerName, PartitionKey));
+
+
         }
 
         public async Task<long> GetApartmentCountAsync(ILogger? log = null)
         {
             await _initializationTask;
-
+            long totalCount = 0;
             try
             {
                 var query = new QueryDefinition("SELECT VALUE COUNT(1) FROM c");
-                var queryIterator = _apartmentInfoContainer.GetItemQueryIterator<long>(query);
 
-                long count = 0;
-                if (queryIterator.HasMoreResults)
+                var queryOptions = new QueryRequestOptions
                 {
-                    var response = await queryIterator.ReadNextAsync();
-                    count = response.FirstOrDefault();
+                    PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
+                };
+
+
+
+                using var countIt = _apartmentInfoContainer.GetItemQueryIterator<long>(query, requestOptions: queryOptions);
+                if (countIt.HasMoreResults)
+                {
+                    var countPage = await countIt.ReadNextAsync();
+                    totalCount = countPage.FirstOrDefault();
                 }
 
-                return count;
+                return totalCount;
             }
             catch (CosmosException ex)
             {
@@ -72,13 +85,24 @@ namespace RentoomBooking.SharedClasses.Database
             }
 
             var apartmentList = apartments.ToList();
+            apartmentList.ForEach(a => a.PartitionKey = ApartmentsPartitionKeyValue);
+
 
             log.LogInformation("Purging ApartmentInfo container before inserting new data.");
 
             try
             {
-                await PurgeContainerAsync(log, cancellationToken);
+                long count = await GetApartmentCountAsync(log);
+                log.LogInformation("{count} records to be purged", count);
+
+
+                //await PurgeContainerAsync(log, cancellationToken);
+                await PurgePartitionAsync(ApartmentsPartitionKeyValue, log, cancellationToken);
+                count = await GetApartmentCountAsync(log);
+                log.LogInformation("{count} after purge in container", count);
+
                 log.LogInformation("ApartmentInfo container purged successfully. Starting bulk insert of {count} apartments.", apartmentList.Count);
+
                 await BulkCreateItemsAsync(apartmentList, log);
                 log.LogInformation("Bulk insert of apartments completed successfully.");
             }
@@ -88,66 +112,106 @@ namespace RentoomBooking.SharedClasses.Database
                 throw;
             }
         }
-        private async Task PurgeAll()
-        {
-            _logger.LogInformation("Purge All in ApartmentRepository has started");
-            ResponseMessage deleteResponse = await _apartmentInfoContainer!.DeleteAllItemsByPartitionKeyStreamAsync(new PartitionKey(PartitionKey));
 
-            if (deleteResponse.IsSuccessStatusCode)
+        public async Task SaveApartmentAmenitiesAsync(IEnumerable<ApartmentAmenitiesDocument> apartmentAmenities, ILogger log, CancellationToken cancellationToken = default)
+        {
+            if (apartmentAmenities == null) throw new ArgumentNullException(nameof(apartmentAmenities));
+            if (log == null) throw new ArgumentNullException(nameof(log));
+
+            await _initializationTask;
+
+            if (_apartmentInfoContainer == null)
             {
-                Console.WriteLine($"Delete all documents with partition key operation has successfully started");
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
             }
-            _logger.LogInformation("Purge All in ApartmentRepository has ended");
+
+            var amenitiesList = apartmentAmenities
+                .Where(document => document != null)
+                .Select(document =>
+                {
+                    document.PartitionKey = AmenitiesPartitionKeyValue;
+
+                    if (string.IsNullOrWhiteSpace(document.Id))
+                    {
+                        document.Id = document.ApartmentId ?? Guid.NewGuid().ToString("N");
+                    }
+
+                    if (string.IsNullOrWhiteSpace(document.ApartmentId))
+                    {
+                        document.ApartmentId = document.Id;
+                    }
+
+                    document.Amenities ??= new List<ObjectAmenity>();
+
+                    return document;
+                })
+                .ToList();
+
+            log.LogInformation("Saving {count} apartment amenities documents to partition {Partition}", amenitiesList.Count, AmenitiesPartitionKeyValue);
+
+            await PurgePartitionAsync(AmenitiesPartitionKeyValue, log, cancellationToken);
+
+            foreach (var amenityDocument in amenitiesList)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await _apartmentInfoContainer.UpsertItemAsync(
+                    amenityDocument,
+                    new PartitionKey(AmenitiesPartitionKeyValue),
+                    cancellationToken: cancellationToken);
+            }
+
+            log.LogInformation("Apartment amenities saved successfully to partition {Partition}", AmenitiesPartitionKeyValue);
         }
 
-        private async Task PurgeContainerAsync(ILogger log, CancellationToken cancellationToken)
+       // private Task PurgeAll(ILogger? log = null, CancellationToken cancellationToken = default) =>
+       //     PurgePartitionAsync(PartitionKeyValue, log, cancellationToken);
+
+        private async Task PurgePartitionAsync(string partitionKeyValue, ILogger? log = null, CancellationToken cancellationToken = default)
         {
-            var query = new QueryDefinition("SELECT c.id FROM c");
-            var iterator = _apartmentInfoContainer!.GetItemQueryIterator<dynamic>(query, requestOptions: new QueryRequestOptions
+            var logger = log ?? _logger;
+            logger?.LogInformation("Purging logical partition '{pk}' in ApartmentRepository...", partitionKeyValue);
+
+            if (_apartmentInfoContainer is null)
             {
-                MaxItemCount = 100
-            });
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+            }
 
-            var deleteTasks = new List<Task>();
-
-            while (iterator.HasMoreResults)
+            try
             {
-                var page = await iterator.ReadNextAsync(cancellationToken);
+                ResponseMessage deleteResponse = await _apartmentInfoContainer.DeleteAllItemsByPartitionKeyStreamAsync(
+                    new PartitionKey(partitionKeyValue),
+                    cancellationToken: cancellationToken);
 
-                foreach (var item in page)
+                if (deleteResponse.IsSuccessStatusCode)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    string id = item.id;
-                    deleteTasks.Add(_apartmentInfoContainer.DeleteItemAsync<dynamic>(id, new PartitionKey(id), cancellationToken: cancellationToken));
-
-                    if (deleteTasks.Count >= 50)
-                    {
-                        await Task.WhenAll(deleteTasks);
-                        deleteTasks.Clear();
-                    }
+                    logger?.LogInformation("Partition '{pk}' delete started successfully.", partitionKeyValue);
+                }
+                else if (deleteResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+                    logger?.LogInformation("Partition '{pk}' not found during purge request.", partitionKeyValue);
+                }
+                else
+                {
+                    logger?.LogWarning("Partition delete returned {code}: {msg}", deleteResponse.StatusCode, deleteResponse.ErrorMessage);
                 }
             }
-
-            if (deleteTasks.Count > 0)
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                await Task.WhenAll(deleteTasks);
-                deleteTasks.Clear();
+                logger?.LogInformation("Partition '{pk}' does not exist yet.", partitionKeyValue);
             }
-
-            log.LogInformation("ApartmentInfo container purge complete.");
         }
-
 
         public async Task BulkCreateItemsAsync(List<ApartmentObject> items, ILogger log)
         {
             await _initializationTask;
-               if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
-            await PurgeAll();
+            if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
+           // await PurgeAll();
 
             int itemsPerBatch = 25;
             int totalItemsCreated = 0;
             log.LogInformation($"Starting bulk create for a total of {items.Count} items.");
+
+            foreach (var a in items) a.PartitionKey = ApartmentsPartitionKeyValue;
 
             for (int i = 0; i < items.Count; i += itemsPerBatch)
             {
@@ -170,20 +234,159 @@ namespace RentoomBooking.SharedClasses.Database
             log.LogInformation($"Completed bulk create. A total of {totalItemsCreated} items were successfully created.");
         }
 
-        private async Task<int> ProcessCreateItemAsync(ApartmentObject item, ILogger _logger)
+
+        private readonly int MaxCreateRetries = 6;
+        private async Task<int> ProcessCreateItemAsync(ApartmentObject item, ILogger _logger, CancellationToken ct = default)
         {
-            try
+            for (int attempt = 0; attempt <= MaxCreateRetries; attempt++)
             {
-                await _apartmentInfoContainer!.CreateItemAsync(item, new PartitionKey(item.Id));
+                try
+                {
+                    var resp = await _apartmentInfoContainer!
+                        .CreateItemAsync(item, new PartitionKey(ApartmentsPartitionKeyValue), cancellationToken: ct);
+
+                    _logger.LogDebug("Created {Id}. RU {RU:F2}", item.Id, resp.RequestCharge);
+                    return 0;
+                }
+                catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    var delay = Jitter(ex.RetryAfter ?? TimeSpan.FromMilliseconds(100 * Math.Pow(2, attempt)));
+                    _logger.LogWarning("429 on {Id} (attempt {Attempt}). Backing off {Delay}. ActivityId {ActivityId}",
+                                      item.Id, attempt + 1, delay, ex.ActivityId);
+                    if (attempt == MaxCreateRetries) { _logger.LogError(ex, "Giving up on {Id}", item.Id); return 1; }
+                    await Task.Delay(delay, ct);
+                }
+            }
+            return 1;
+
+
+            /*  try
+            {
+                item.PartitionKey = PartitionKeyValue;
+
+                await _apartmentInfoContainer!.CreateItemAsync(item, new PartitionKey(PartitionKeyValue));
                 return 0;
             }
             catch (CosmosException ex)
             {
-                // ... obsługa błędów bez zmian
+                
+                _logger.LogError(ex,
+                    "Create failed for id {Id}. Status:{Status} Sub:{Sub} ActivityId:{ActivityId} Msg:{Msg}",
+                    item.Id, ex.StatusCode, ex.SubStatusCode, ex.ActivityId, ex.Message);
                 return 1;
+            }*/
+        }
+
+        private static TimeSpan Jitter(TimeSpan baseDelay)
+        {
+            // +/- 20% jitter
+            var ms = baseDelay.TotalMilliseconds;
+            var jitter = (0.8 + Random.Shared.NextDouble() * 0.4) * ms;
+            return TimeSpan.FromMilliseconds(jitter);
+        }
+
+        public async Task<ApartmentObject?> FindApartmentInCosmosDb(int apartmentId, CancellationToken cancellationToken = default)
+        {
+            await _initializationTask;
+            var objectId = apartmentId.ToString();
+
+            if (_apartmentInfoContainer is null)
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+
+
+            try
+            {
+
+                ItemResponse<ApartmentObject> response = await _apartmentInfoContainer.ReadItemAsync<ApartmentObject>(
+                    id: objectId,
+                    partitionKey: new PartitionKey(ApartmentsPartitionKeyValue),
+                    cancellationToken: cancellationToken);
+
+                var apartment = response.Resource;
+
+                return apartment;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                _logger.LogWarning("Apartment with id {ApartmentId} not found in partition {PK}.", apartmentId, ApartmentsPartitionKeyValue);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving apartment JSON for id {ApartmentId}.", apartmentId);
+                throw;
             }
         }
 
-    }
+        public async Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken, int pageSize)
+        {
+            await _initializationTask;
+            if (_apartmentInfoContainer == null) throw new InvalidOperationException("Apartment container not initialized.");
 
-}
+            var sql = "SELECT * FROM c";
+            var qd = new QueryDefinition(sql);
+
+            var opts = new QueryRequestOptions
+            {
+                MaxItemCount = pageSize,
+                PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
+            };
+
+            long totalCount = await GetApartmentCountAsync();
+
+            var it = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(qd, continuationToken, opts);
+            if (!it.HasMoreResults)
+                return new PagedResult<ApartmentObject>(Array.Empty<ApartmentObject>(), null, 0, totalCount);
+
+            var page = await it.ReadNextAsync();
+            return new PagedResult<ApartmentObject>(page.ToList(), page.ContinuationToken, page.Count, totalCount);
+        }
+
+
+        public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
+        {
+            var apartmentIds = apartmentFilter.ApartmentIds;
+            if (apartmentIds == null) throw new ArgumentNullException(nameof(apartmentIds));
+
+            await _initializationTask;
+
+            if (_apartmentInfoContainer == null)
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+
+            var distinctIds = apartmentIds.Distinct().Select(id => id.ToString()).ToList();
+
+            if (distinctIds.Count == 0)
+            {
+                return new List<ApartmentObject>();
+            }
+
+            var parameterNames = distinctIds
+                .Select((_, index) => $"@id{index}")
+                .ToList();
+
+            var queryText = $"SELECT * FROM c WHERE c.id IN ({string.Join(", ", parameterNames)})";
+            var queryDefinition = new QueryDefinition(queryText);
+
+            for (int i = 0; i < distinctIds.Count; i++)
+            {
+                queryDefinition.WithParameter(parameterNames[i], distinctIds[i]);
+            }
+
+            var requestOptions = new QueryRequestOptions
+            {
+                PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
+            };
+
+            var apartments = new List<ApartmentObject>();
+            using var iterator = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(queryDefinition, requestOptions: requestOptions);
+
+            while (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync(cancellationToken);
+                apartments.AddRange(response.ToList());
+            }
+
+            return apartments;
+        }
+    }
+    }

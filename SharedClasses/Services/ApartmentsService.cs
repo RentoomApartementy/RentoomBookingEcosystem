@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Azure.Cosmos;
+using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Enum;
@@ -14,16 +16,24 @@ namespace RentoomBooking.SharedClasses.Services
     public interface IApartmentsService
     {
        
-        Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncDirect(
+        Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
            string? continuationToken = null,
            int top = 50,
            CancellationToken ct = default);
 
         Task<long> GetApartmentsCountAsync();
 
-        Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
-        Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
+
+        Task<ApartmentObject?> GetApartmentByIdAsync(int objectId);
+        Task<List<ApartmentObject>> GetApartmentsByFilterAsync(ApartmentQueryFilter filter, CancellationToken ct = default);
+
+   //     Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
+   //     Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
+   //Task<PagedResult<ApartmentObject>> GetApartmentsByPageAsync(string? continuationToken = null, int pageSize = 50);
+
       
+        Task<PagedResult<ApartmentObject>> GetAllApartmentsList();
+
     }
 
       
@@ -37,7 +47,7 @@ namespace RentoomBooking.SharedClasses.Services
         ApartmentRepository _apartmentsRepository;
         private readonly IIdoBookingConnectService _idoConnect;
 
-        private const string ObjectMediaGetEndpoint = "objects/getMedia/34/json";
+       
         private const string HashDocumentId = "all-object-hashes"; // ID for the hash document
 
 
@@ -70,48 +80,75 @@ namespace RentoomBooking.SharedClasses.Services
         }
      */
 
-        public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncDirect(
+        public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
            string? continuationToken = null,
            int top = 50,
            CancellationToken ct = default)
         {
-            var result = await _bd.QueryApartmentsAsync(continuationToken, top);
+            var result = await _apartmentsRepository.QueryApartmentsAsync(continuationToken, top);
 
             return result;
         }
+
+
+        public async Task<PagedResult<ApartmentObject>?> GetApartmentsPagedByFilterAsync(
+           string? continuationToken = null,
+           int top = 50,
+           CancellationToken ct = default)
+        {
+            var result = await _apartmentsRepository.QueryApartmentsAsync(continuationToken, top);
+
+            return result;
+        }
+
 
         public async Task<long> GetApartmentsCountAsync()
         {
             return await _apartmentsRepository.GetApartmentCountAsync();
         }
 
+//        public Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(string? continuationToken = null, int pageSize = 50) => _apartmentsRepository.QueryApartmentsAsync(continuationToken, pageSize);
 
-        public async Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default)
-        {
-            var request = new ObjectMediaRequestType
-            {
-                Authenticate = _idoConnect.AuthObjectIdo(),
-                ObjectId = objectId
-            };
-            return await _idoConnect.PostAsync<ObjectMediaRequestType, ObjectMediaResponseType>(ObjectMediaGetEndpoint, request, ct);
-        }
-
-        public async Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default)
-        {
-            var request = new ObjectDescriptionsRequestType
-            {
-                Authenticate = _idoConnect.AuthObjectIdo(),
-                ParamsSearch = new ObjectDescriptionParamsSearch
-                {
-                    ObjectId = objectId,
-                    Language = language,
-                }
-            };
-
-            var ret = await _idoConnect.PostAsync<ObjectDescriptionsRequestType, ObjectDescriptionsResponseType>(ObjectMediaGetEndpoint, request, ct);
-            return ret?.Result.ObjectDescriptions;
-        }
 
       
+
+        public async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
+        {
+            return await _apartmentsRepository.FindApartmentInCosmosDb(objectId);
+        }
+
+        public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync(ApartmentQueryFilter filter, CancellationToken ct = default)
+        {
+            //if (filter.EqobjectIds == null) throw new ArgumentNullException(nameof(objectIds));
+
+            return await _apartmentsRepository.GetApartmentsByFilterAsync(filter, ct);
+        }
+
+
+        public async Task<PagedResult<ApartmentObject>> GetAllApartmentsList()
+        {
+            var allResults = new List<ApartmentObject>();
+            string? continuationToken = null;
+            long totalCount = await _apartmentsRepository.GetApartmentCountAsync();
+
+            do
+            {
+                var page = await _apartmentsRepository.QueryApartmentsAsync(continuationToken, 100);
+                allResults.AddRange(page.Items);
+                continuationToken = page.ContinuationToken;
+            } while (continuationToken != null);
+
+            return new PagedResult<ApartmentObject>(
+                allResults,
+                null,            
+                allResults.Count,   
+                totalCount
+            );
+        }
+      
+
     }
+
 }
+
+
