@@ -1,7 +1,7 @@
 @page "/apartamenty"
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
-@inject IApartmentsService ApartmentsApiService;
+@inject IApartmentsService ApartmentsService;
 @inject IJSRuntime JS;
 
 <PageTitle>Apartamenty</PageTitle>
@@ -84,7 +84,7 @@
         IsLoading = true;
         try
         {
-            ApartmentsCount = await ApartmentsApiService.GetApartmentsCountAsync();
+            ApartmentsCount = await ApartmentsService.GetApartmentsCountAsync();
         }
         catch (Exception ex)
         {
@@ -106,7 +106,7 @@
 
         try
         {
-            var page = await ApartmentsApiService.GetApartmentsByPageAsyncDirect(Token, top: PageSize);
+            var page = await ApartmentsService.GetApartmentsByPageAsync(Token, top: PageSize);
             if (page?.Items is { Count: > 0 })
             {
                 Items.AddRange(page.Items);
