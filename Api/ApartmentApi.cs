@@ -20,12 +20,14 @@ namespace RentoomBooking.Api
     {
 
         private readonly ILogger<ApartmentApi> _logger;
-        private readonly IApartmentService _apartmentsService;
+        private readonly IIdoApartmentService _idoAppartmenrService;
+        private readonly IApartmentsService _apartmentsService;
 
-        public ApartmentApi(IApartmentService apartmentsService, ILogger<ApartmentApi> logger)
+        public ApartmentApi(IIdoApartmentService idoAppartmenrService, IApartmentsService apartmentsService, ILogger<ApartmentApi> logger)
         {
 
             _logger = logger;
+            _idoAppartmenrService = idoAppartmenrService;
             _apartmentsService = apartmentsService;
         }
 
@@ -101,7 +103,8 @@ namespace RentoomBooking.Api
 
             try
             {
-                var result  = await _apartmentsService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
+                //  var result  = await _idoAppartmenrService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
+                var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync();
 
                 response.StatusCode = HttpStatusCode.OK;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
