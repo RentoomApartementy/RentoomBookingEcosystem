@@ -47,7 +47,7 @@ namespace RentoomBookingWeb
             // builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
             builder.Services.AddScoped<BookingDatabase>();
             builder.Services.AddScoped<ApartmentRepository>();
-            builder.Services.AddScoped<IApartmentService, ApartmentService>();
+            builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
             builder.Services.AddScoped<IdoSellService>();
             builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();

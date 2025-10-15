@@ -1,4 +1,4 @@
-<div class="custom-input" style="@((IsFull) ? "width: 100%;" : null)">
+<div class="custom-input" style="@GetStyle()">
     @if (!string.IsNullOrEmpty(IconPath))
     {
         <img src="@IconPath" alt="" class="input-icon"/>
@@ -18,10 +18,21 @@
     [Parameter] public string Placeholder { get; set; } = "";
     [Parameter] public string Type { get; set; } = "text";
     [Parameter] public bool IsFull { get; set; } = false;
+    [Parameter] public bool IsMarginTop { get; set; } = false;
 
     private async Task OnValueChanged(ChangeEventArgs e)
     {
         Value = e.Value?.ToString() ?? "";
         await ValueChanged.InvokeAsync(Value);
+    }
+
+    private string? GetStyle()
+    {
+        var style = IsFull ? "width: 100%;" : null;
+        if (IsMarginTop)
+        {
+            style = string.IsNullOrEmpty(style) ? "margin-top: .5rem;" : style + " margin-top: .5rem;";
+        }
+        return style;
     }
 }

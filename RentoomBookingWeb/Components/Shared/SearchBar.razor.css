@@ -19,3 +19,8 @@
         gap: .7rem;
     }
 }
+
+.dropdown-title {
+    font-size: 1.1rem;
+    color: black;
+}

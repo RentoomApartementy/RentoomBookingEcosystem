@@ -5,7 +5,30 @@
         @bind-EndDateValue="_endDate"
     />
     <Input IconPath="/assets/svgs/bed.svg" Placeholder="Ilość pokoi" Type="number" @bind-Value="_rooms"/>
-    <Input IconPath="/assets/svgs/person.svg" Placeholder="Ilość osób" Type="number" @bind-Value="_guests"/>
+    @* <Input IconPath="/assets/svgs/person.svg" Placeholder="Ilość osób" Type="number" @bind-Value="_guests"/> *@
+    <InputWithModal IconPath="/assets/svgs/person.svg">
+        <ChildContent>
+            <div class="" style="font-size: .9rem;">
+                @if (CountPersons != 0)
+                {
+                    <span style="color: black;">@CountPersons os.</span>
+                }
+                @if (string.IsNullOrEmpty(_adults) && string.IsNullOrEmpty(_children))
+                {
+                    <span style="color: gray;">Liczba osób</span>
+                }
+            </div>
+        </ChildContent>
+        <DropdownContent>
+            <div>
+                <h6 class="dropdown-title">Wybierz ilość osób</h6>
+                <div>
+                    <Input IconPath="/assets/svgs/person.svg" Placeholder="Dorośli" Type="number" @bind-Value="_adults" IsFull="true"/>
+                    <Input IconPath="/assets/svgs/person.svg" Placeholder="Dzieci do lat 2" Type="number" @bind-Value="_children" IsFull="true" IsMarginTop="true"/>
+                </div>
+            </div>
+        </DropdownContent>
+    </InputWithModal>
     <Button @onclick="Search">Wyszukaj</Button>
 </div>
 
@@ -13,10 +36,15 @@
     private string _startDate = ""; 
     private string _endDate = "";    
     private string _rooms = "";
-    private string _guests = "";
+    private string _adults = "";
+    private string _children = "";
+    
+    private int CountPersons => 
+        (int.TryParse(_adults, out var a) ? a : 0) + 
+        (int.TryParse(_children, out var c) ? c : 0);
 
     private void Search()
     {
-        Console.WriteLine($"Start: {_startDate}, End: {_endDate}, Pokoje: {_rooms}, Osoby: {_guests}");
+        Console.WriteLine($"Start: {_startDate}, End: {_endDate}, Pokoje: {_rooms}, Osoby: {CountPersons}");
     }
 }

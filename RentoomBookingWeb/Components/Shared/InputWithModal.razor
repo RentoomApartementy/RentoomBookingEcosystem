@@ -1,0 +1,31 @@
+<div class="dropdown-wrapper" style="@((IsFull) ? "width: 100%;" : null)">
+    <div @onclick="ToggleModal" class="custom-input">
+        @if (!string.IsNullOrEmpty(IconPath))
+        {
+            <img src="@IconPath" alt="" class="input-icon"/>
+        }
+        @ChildContent
+    </div>
+
+    @if (IsModalOpen)
+    {
+        <div class="dropdown-modal">
+            @if (DropdownContent != null)
+            {
+                @DropdownContent
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string? IconPath { get; set; }
+    [Parameter] public string Placeholder { get; set; } = "";
+    [Parameter] public bool IsFull { get; set; } = false;
+    [Parameter] public required RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment? DropdownContent { get; set; }
+
+    private bool IsModalOpen { get; set; } = false;
+
+    private void ToggleModal() => IsModalOpen = !IsModalOpen;
+}
