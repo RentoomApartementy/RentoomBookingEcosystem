@@ -4,10 +4,8 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
-@inject StayWell.Services.GlobalizationService GlobalizationService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<HomePage> Localizer
-@implements IDisposable
 @inherits Models.PageBase
 
 <PageTitle>Main</PageTitle>
@@ -41,18 +39,13 @@
     }
     else
     {
-        <ReservationInfo apartmentName="@ApartmentName"
-            apartmentAddress="@ApartmentAddress"
-            apartmentNumber="@ApartmentNumber"
-            reservationCheckInDate="@ReservationDateFrom"
-            reservationCheckOutDate="@ReservationDateTo">
-        </ReservationInfo>
+        <DateRangeBar CheckInDate="@checkIn" CheckOutDate="@checkOut" CurrentDate="@now" CheckInLabel="@Localizer["CheckIn"]" CheckOutLabel="@Localizer["CheckOut"]"/>
     }
 </div>
 
 <div class="buttons-wrapper">
 
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ClubPage"))" Text="@Localizer["ClubBenefits"]" ButtonStyle="border-color: #F9B806; color: #F9B806; background-color: #21573e; margin-bottom: 2rem;">
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ClubPage"))" Text="@Localizer["ClubBenefits"]" BenefitsClub=true>
         <Icon>
             <img src="/icons/hand-coins.svg" alt="ClubPage">
         </Icon>
@@ -93,33 +86,37 @@
     public string? ReservationDateTo;
     public string? ImageUrl = string.Empty;
 
+    private DateTime checkIn;
+    private DateTime checkOut;
+    private DateTime now;
+    
+    private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
+
     private bool _isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        GlobalizationService.OnChange += StateHasChanged;
         LoadData();
+        DateTime.TryParseExact(Reservation?.ReservationDetails?.dateFrom, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var ci);
+        DateTime.TryParseExact(Reservation?.ReservationDetails?.dateTo, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var co);
+        checkIn = ci;
+        checkOut = co;
+        now = DateTime.Now;
         _isLoading = false;
     }
 
     private void LoadData()
     {   
 
-        var res = Data?.Reservation?.Reservation;
-        ApartmentName = res?.Items?.FirstOrDefault()?.objectName;
-        ApartmentNumber = res?.Items?.FirstOrDefault()?.itemCode;
-        ApartmentAddress = Data?.Apartment?.ObjectLocation?.LocalizationItem?.Street;
-        ReservationDateFrom = res?.ReservationDetails?.dateFrom;
-        ReservationDateTo = res?.ReservationDetails?.dateTo;
+        ApartmentName = Reservation?.Items?.FirstOrDefault()?.objectName;
+        ApartmentNumber = Reservation?.Items?.FirstOrDefault()?.itemCode;
+        ApartmentAddress = ApartmentState.CurrentApartment?.ObjectLocation?.LocalizationItem?.Street;
+        ReservationDateFrom = Reservation?.ReservationDetails?.dateFrom;
+        ReservationDateTo = Reservation?.ReservationDetails?.dateTo;
 
-        var image = Data?.Media?.FirstOrDefault(m => m.Extension is "jpg")?.Url;
+        var image = MediaState?.CurrentMedia?.FirstOrDefault(m => m.Extension is "jpg")?.Url;
 
         ImageUrl = image;
-    }
-
-    public void Dispose()
-    {
-        GlobalizationService.OnChange -= StateHasChanged;
     }
 }

@@ -10,14 +10,14 @@ namespace RentoomBooking.StayWell.Services
         public CultureInfo CurrentCulture { get; private set; } = CultureInfo.CurrentCulture;
         public void SetCulture(string cultureName)
         {
-            var culture = CultureInfo.GetCultureInfo(cultureName);
+            var culture = new CultureInfo(cultureName);
 
             if (CurrentCulture.Name == culture.Name)
                 return;
 
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
             CurrentCulture = culture;
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
 
             OnChange?.Invoke();
         }

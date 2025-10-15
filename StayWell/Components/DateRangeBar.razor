@@ -1,11 +1,11 @@
 ﻿<div class="date-range-bar">
     <div class="date-labels">
         <div class="date-label">
-            <div class="label-title">Zameldowanie</div>
+            <div class="label-title">@CheckInLabel</div>
             <div class="label-date">@CheckInDate.ToString("dd.MM.yyyy")</div>
         </div>
         <div class="date-label">
-            <div class="label-title">Wymeldowanie</div>
+            <div class="label-title">@CheckOutLabel</div>
             <div class="label-date">@CheckOutDate.ToString("dd.MM.yyyy")</div>
         </div>
     </div>
@@ -14,7 +14,7 @@
         <div class="bar-track"></div>
         <div class="bar-fill" style="width: @GetFillWidth()"></div>
 
-        @for (int i = 0; i <= TotalDays; i++)
+        @for (int i = 0; i <= TotalDays(); i++)
         {
             var position = GetStepPosition(i);
             var stepDate = CheckInDate.AddDays(i);
@@ -29,6 +29,12 @@
 
 @code {
     [Parameter]
+    public string? CheckInLabel { get; set; }
+
+    [Parameter]
+    public string? CheckOutLabel { get; set; }
+
+    [Parameter]
     public DateTime CheckInDate { get; set; }
 
     [Parameter]
@@ -37,18 +43,23 @@
     [Parameter]
     public DateTime? CurrentDate { get; set; }
 
-    private int TotalDays => (CheckOutDate.Date - CheckInDate.Date).Days;
+    private int TotalDays(){
+
+        int days = (CheckOutDate.Date - CheckInDate.Date).Days;
+
+        return days;
+    }
 
     private string GetStepPosition(int dayIndex)
     {
-        if (TotalDays == 0) return "0%";
-        var percentage = (dayIndex / (double)TotalDays) * 100;
+        if (TotalDays() == 0) return "0%";
+        var percentage = (dayIndex / (double)TotalDays()) * 100;
         return $"{percentage.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}%";
     }
 
     private string GetFillWidth()
     {
-        if (CurrentDate == null || TotalDays == 0)
+        if (CurrentDate == null || TotalDays() == 0)
             return "0%";
 
         var current = CurrentDate.Value.Date;
@@ -60,7 +71,7 @@
             return "100%";
 
         var daysPassed = (current - CheckInDate.Date).Days;
-        var percentage = (daysPassed / (double)TotalDays) * 100;
+        var percentage = (daysPassed / (double)TotalDays()) * 100;
         return $"{percentage.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}%";
     }
 }

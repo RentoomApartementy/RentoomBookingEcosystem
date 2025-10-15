@@ -2,46 +2,51 @@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
+
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<ManageStayPage> Localizer
+
 @inherits Models.PageBase
 
 <PageTitle>Manage Stay</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="@Data?.Reservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="Zarządzaj pobytem"></PageInfo>
+    <PageInfo Title="@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["ManageStay"]"></PageInfo>
 </div>
 
 <div class="buttons-wrapper">
-    <Button Text="Zgłoś usterkę" OnClick="@(() => Navigation.NavigateTo("/ReportPage"))">
+    <Button Text="@Localizer["Report"]" OnClick="@(() => Navigation.NavigateTo("/ReportPage"))">
         <Icon>
             <img src="/icons/frown.svg">
         </Icon>
     </Button>
-    <Button Text="Wczesne zameldowanie">
+    <Button Text="@Localizer["EarlyCheckIn"]">
         <Icon>
             <img src="/icons/alarm-clock-check.svg">
         </Icon>
     </Button>
-        <Button Text="Późne wymeldowanie">
+    <Button Text="@Localizer["LateCheckOut"]">
         <Icon>
             <img src="/icons/alarm-clock-minus.svg">
         </Icon>
     </Button>
-    <Button Disabled=true Text="Przedłuż rezerwację">
+    <Button Disabled=true Text="@Localizer["ExtendStay"]">
         <Icon>
             <img src="/icons/calendar-plus.svg">
         </Icon>
     </Button>
-        <Button Text="Dodatkowe sprzątanie apartamentu">
+    <Button Text="@Localizer["AdditionalCleaning"]">
         <Icon>
             <img src="/icons/brush-cleaning.svg">
         </Icon>
     </Button>
-    <Button Text="Łóżeczko dziecięce">
+    <Button Text="@Localizer["BabyCrib"]">
         <Icon>
             <img src="/icons/baby.svg">
         </Icon>
     </Button>
-    <Button ButtonStyle="color: red; border-color: red; margin-top: 30px;" Text="Wymelduj się">
+    <Button ButtonStyle="color: red; border-color: red; margin-top: 30px;" Text="@Localizer["CheckOut"]">
         <Icon>
             <img src="/icons/door-closed.svg">
         </Icon>

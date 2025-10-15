@@ -1,8 +1,13 @@
 ﻿@page "/reservation/{token}/ReportPage"
 @using RentoomBooking.StayWell.Components
+
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<InstructionsPage> Localizer
+
 @inherits Models.PageBase
 
-<PageTitle>Manage Stay</PageTitle>
+<PageTitle>Report</PageTitle>
 
 <div class="page-info-wrapper">
     <PageInfo Title="Szeroka Premier No 2A" Subtitle="Zgłoś usterkę"></PageInfo>

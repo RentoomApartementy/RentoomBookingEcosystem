@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.StayWell.States;
+using System.Globalization;
 using ApartmentState = RentoomBooking.StayWell.States.ApartmentState;
 
 namespace RentoomBooking.StayWell.Models
 {
-    public abstract class PageBase : ComponentBase
+    public abstract class PageBase : ComponentBase,IDisposable
     {
         [Inject]
         protected ReservationState ReservationState { get; set; } = default!;
@@ -14,27 +16,55 @@ namespace RentoomBooking.StayWell.Models
         protected AmenitiesState AmenitiesState { get; set; } = default!;
         [Inject]
         protected ApartmentState ApartmentState { get; set; } = default!;
+        [Inject]
+        protected StayWell.Services.GlobalizationService GlobalizationService { get; set; } = default!;
 
         [Parameter]
         public string? Token { get; set; }
 
         protected bool IsLoading { get; set; } = true;
-        protected Data? Data => new() //Pozostałość po alpejskich kombinacjach. Do usunięcia.
-        {
-            Reservation = ReservationState.CurrentReservation,
-            Media = MediaState.CurrentMedia,
-            Amenities = AmenitiesState.CurrentAmenities,
-            Apartment = ApartmentState.CurrentApartment,
-            Token = ReservationState.CurrentToken,
-        };
+        //protected Data? Data => new() //Pozostałość po alpejskich kombinacjach. Do usunięcia.
+        //{
+        //    Reservation = ReservationState.CurrentReservation,
+        //    Media = MediaState.CurrentMedia,
+        //    Amenities = AmenitiesState.CurrentAmenities,
+        //    Apartment = ApartmentState.CurrentApartment,
+        //    Token = ReservationState.CurrentToken,
+        //};
 
         protected override async Task OnInitializedAsync()
         {
-            if(ReservationState.CurrentReservation == null || MediaState.CurrentMedia == null || AmenitiesState.CurrentAmenities == null && !string.IsNullOrEmpty(Token))
+            ReservationState.OnChange += StateHasChanged;
+            MediaState.OnChange += StateHasChanged;
+            AmenitiesState.OnChange += StateHasChanged;
+            ApartmentState.OnChange += StateHasChanged;
+            GlobalizationService.OnChange += StateHasChanged;
+
+            if (ReservationState.CurrentReservation == null || MediaState.CurrentMedia == null || AmenitiesState.CurrentAmenities == null && !string.IsNullOrEmpty(Token))
             {
                 await LoadDataAsync();
             }
+
+            GlobalizationService.OnChange += StateHasChanged;
         }
+
+        private void SetLanguage()
+        {
+            var lang = ReservationState.CurrentReservation?.Reservation.Client.Language;
+            if (lang == null) return;
+
+            if(lang == "pol")
+            {
+                GlobalizationService.SetCulture("pl-PL");
+            }
+            else if(lang == "eng") // dodać enum
+            {
+                GlobalizationService.SetCulture("en-US");
+            }
+            Console.WriteLine("Language set to: " + lang.ToString() + CultureInfo.CurrentCulture.Name);
+
+        }
+
         private async Task LoadDataAsync()
         {
             IsLoading = true;
@@ -43,6 +73,7 @@ namespace RentoomBooking.StayWell.Models
                 if (!string.IsNullOrEmpty(Token))
                 {
                     await ReservationState.GetReservationAsync(Token);
+                    SetLanguage();
                     var reservation = ReservationState.CurrentReservation?.Reservation;
                     if (reservation == null) return;
                     var item = reservation.Items?.FirstOrDefault();
@@ -61,7 +92,17 @@ namespace RentoomBooking.StayWell.Models
             finally
             {
                 IsLoading = false;
+                StateHasChanged();
             }
+        }
+
+        public void Dispose()
+        {
+            ReservationState.OnChange -= StateHasChanged;
+            MediaState.OnChange -= StateHasChanged;
+            AmenitiesState.OnChange -= StateHasChanged;
+            ApartmentState.OnChange -= StateHasChanged;
+            GlobalizationService.OnChange -= StateHasChanged;
         }
 
     }

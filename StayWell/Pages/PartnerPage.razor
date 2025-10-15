@@ -1,6 +1,11 @@
 ﻿@page "/reservation/{token}/PartnerPage"
 @using RentoomBooking.StayWell.Components
 @inject NavigationManager Navigation
+
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<PartnerPage> Localizer
+
 @inherits Models.PageBase
 
 <PageTitle>Partner Page</PageTitle>

@@ -59,6 +59,7 @@ namespace RentoomBooking.StayWell.States
         {
             CurrentReservation = reservation;
             IsLoading = false;
+            NotifyStateChanged();
         }
 
         public void SetLoading(bool isLoading)

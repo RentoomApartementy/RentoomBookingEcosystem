@@ -8,28 +8,29 @@
 <PageTitle>About Reservation</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="@Data?.Reservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="O rezerwacji"></PageInfo>
+    <PageInfo Title="@Reservation?.Items.FirstOrDefault()?.objectName" Subtitle="O rezerwacji"></PageInfo>
 </div>
 
 <div class="amenities-wrapper"> @* ---- Zmontować z tego komponenty i uporządkować ---- *@
     <div class="amenity">
         <span><img src="/icons/users.svg"/>Założyciel rezerwacji:</span>
-        <span class="text">@Data?.Reservation?.Reservation.Client.FirstName @Data?.Reservation?.Reservation.Client.LastName</span>
+        <span class="text">@Reservation?.Client.FirstName @Reservation?.Client.LastName</span>
     </div>
     <div class="amenity">
         <span><img src="/icons/map-pin.svg" />Adres:</span>
-        <span class="text">@Data?.Apartment?.ObjectLocation?.Address</span>
+        <span class="text">@Apartment?.ObjectLocation?.Address</span>
     </div>
     <div class="amenity">
         <span><img src="/icons/door-open.svg" />Apartament:</span>
-        <span class="text">@Data?.Reservation.Reservation?.Items?.FirstOrDefault()?.itemCode</span>
+        <span class="text">@Reservation?.Items?.FirstOrDefault()?.itemCode</span>
     </div>
     <div class="amenity">
         <span><img src="/icons/wifi.svg" />Wifi:</span>
         <span class="text">login</span>
         <span class="text">password</span>
     </div>
-    @if (Data?.Amenities?.Count >= 1)
+
+    @if (AmenitiesState.CurrentAmenities?.Count >= 1)
     {
         <div class="amenity">
                 <span><img src="/icons/bed-double.svg"/>Wyposażenie apartamentu:</span>
@@ -37,7 +38,7 @@
                 @if (showAmenities)
                 {
                     <ul>
-                        @foreach (var amenity in Data.Amenities)
+                        @foreach (var amenity in AmenitiesState.CurrentAmenities)
                         {
                             <li>@amenity.Name</li>
                         }
@@ -55,6 +56,9 @@
 @code{
 
     private bool showAmenities = false;
+
+    private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
+    private ApartmentObject? Apartment => ApartmentState?.CurrentApartment;
 
     private void ShowAmenities()
     {

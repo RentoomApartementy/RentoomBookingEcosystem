@@ -1,6 +1,6 @@
 ﻿.date-range-bar {
     width: 100%;
-    padding: 15px 0;
+    padding: 15px 0 0 0;
 }
 
 .date-labels {
@@ -34,6 +34,7 @@
 .bar-container {
     position: relative;
     height: 12px;
+    margin-left: 5px;
 }
 
 .bar-track {

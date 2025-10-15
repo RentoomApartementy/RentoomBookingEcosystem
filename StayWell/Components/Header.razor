@@ -19,7 +19,7 @@
     <div class="right-wrapper">
 
         <div class="Languages">
-            <button @onclick="@ChangeLang" style="background: none; border: none">
+            <button @onclick="@ChangeLangButton" style="background: none; border: none">
                 <img src="/icons/languages.svg" />
             </button>
         </div>
@@ -32,9 +32,12 @@
     </div>
 </div>
 
-<Modal Title="Languages" IsVisible="@ModalVisible">
+<Modal Title="Wybierz język" IsVisible="@ModalVisible" OnClose="CloseModal">
     <Content>
-
+        <Button OnClick="() => ChangeLang(pl)" Text="Polski"></Button>
+        <Button OnClick="() => ChangeLang(en)" Text="English"></Button>
+        @* <button @onclick="() => ChangeLang("pl")>Polski</button> *@
+        @* <button @onclick="() => ChangeLang("en")>English</button> *@
     </Content>
 </Modal>
 
@@ -46,6 +49,18 @@
     [Parameter]
     public EventCallback OnOpenModal { get; set; }
 
+    private string pl = "pl";
+    private string en = "en";
+
+    private void OpenModal() => ModalVisible = true;
+
+    private void CloseModal() => ModalVisible = false;
+
+    private void ChangeLang(string lang)
+    {
+        GlobalizationService.SetCulture(lang == "pl" ? "pl-PL" : "en-US");
+        CloseModal(); // Zamknij po zmianie
+    }
 
     protected override void OnInitialized()
     {
@@ -56,10 +71,7 @@
 
     private void Open() => ModalVisible = true;
 
-    private void ChangeLang()
-    {
-        GlobalizationService.SetCulture("en-US");
-    }
+    private void ChangeLangButton() => OpenModal();
 
     public void Dispose()
     {

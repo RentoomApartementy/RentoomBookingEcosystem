@@ -1,28 +1,29 @@
 ﻿@inject NavigationManager Navigation
+@implements IDisposable
 @* @inherits Models.PageBase *@
 
 <div class="footer-navigation-row">
-    <NavigationButton href="@($"/reservation/{Token}/InstructionsPage")">
+    <NavigationButton href="@($"/reservation/{Token}/InstructionsPage")" active="@IsActive($"/reservation/{Token}/InstructionsPage")">
         <Icon>
             <img src="/icons/book.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/OpenApartmentPage")">
+    <NavigationButton href="@($"/reservation/{Token}/OpenApartmentPage")" active="@IsActive($"/reservation/{Token}/OpenApartmentPage")">
         <Icon>
             <img src="/icons/door-open.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/HomePage")">
+    <NavigationButton href="@($"/reservation/{Token}/HomePage")" active="@IsActive($"/reservation/{Token}/HomePage")">
         <Icon>
             <img src="/icons/house.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/ManageStayPage")">
+    <NavigationButton href="@($"/reservation/{Token}/ManageStayPage")" active="@IsActive($"/reservation/{Token}/ManageStayPage")">
         <Icon>
             <img src="/icons/lamp.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/AboutReservationPage")">
+    <NavigationButton href="@($"/reservation/{Token}/AboutReservationPage")" active="@IsActive($"/reservation/{Token}/AboutReservationPage")">
         <Icon>
             <img src="/icons/info.svg">
         </Icon>
@@ -32,4 +33,29 @@
 @code {
     [Parameter]
     public string? Token { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+    private bool IsActive(string href)
+    {
+        var currentUri = Navigation.Uri;
+        // Porównanie bez hosta, tylko ścieżka i parametry
+        var baseUri = Navigation.BaseUri;
+        var relativeUri = currentUri.StartsWith(baseUri) ? currentUri.Substring(baseUri.Length - 1) : currentUri;
+        return relativeUri.Equals(href, StringComparison.OrdinalIgnoreCase);
+    }
 }

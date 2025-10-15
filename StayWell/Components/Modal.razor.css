@@ -11,15 +11,22 @@
     justify-content: center;
 }
 
+.modal-title{
+    color: black;
+
+}
+
 .modal {
     position: relative;
     z-index: 1060;
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    min-height: 300px;
+    max-height: 80vh;
     min-width: 320px;
-    max-width: 90vw;
-    width: 400px;
+    max-width: 600px;
+    width: 100%;
     padding: 0;
     animation: modalFadeIn 0.3s;
     display: flex;
@@ -71,6 +78,15 @@
 
 @media (max-width: 500px) {
     .modal {
+        width: 95vw;
+        min-width: unset;
+        padding: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .modal {
+        max-width: 90vw;
         width: 95vw;
         min-width: unset;
         padding: 0;
