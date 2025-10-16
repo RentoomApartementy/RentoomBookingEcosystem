@@ -350,14 +350,18 @@ namespace RentoomBooking.SharedClasses.Database
         public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync_old(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
         {
             var apartmentIds = apartmentFilter.ApartmentIds;
-            if (apartmentIds == null) throw new ArgumentNullException(nameof(apartmentIds));
+        //    if (apartmentIds == null) throw new ArgumentNullException(nameof(apartmentIds));
 
             await _initializationTask;
 
             if (_apartmentInfoContainer == null)
                 throw new InvalidOperationException("ApartmentInfo container is not initialized.");
 
-            var distinctIds = apartmentIds.Distinct().Select(id => id.ToString()).ToList();
+            
+                var amenityApartmentIds = await GetApartmentIdsByAmenitiesAsync(apartmentFilter.ApartmentAmenityIds, cancellationToken);
+
+
+            var distinctIds = amenityApartmentIds.Distinct().Select(id => id.ToString()).ToList();
 
             if (distinctIds.Count == 0)
             {
@@ -423,20 +427,17 @@ namespace RentoomBooking.SharedClasses.Database
                 .ToList();
 
             var where = new List<string>();
-            if (ids.Count > 0) where.Add("ARRAY_CONTAINS(@ids, c.id)");
+            if (ids.Count > 0) where.Add("ARRAY_CONTAINS(@idStrings, c.id)");
             if (regions.Count > 0) where.Add("ARRAY_CONTAINS(@regions, c.objectLocation.localizationItem.region)");
 
             if (where.Count == 0)
                 return new List<ApartmentObject>();
 
             var queryText = $"SELECT * FROM c WHERE {string.Join(" AND ", where)}";
-
-            var qd = new QueryDefinition(queryText);
-            if (idStrings.Count > 0) qd.WithParameter("@ids", idStrings);
-            if (regions.Count > 0) qd.WithParameter("@regions", regions);
-
-
+               
             var queryDefinition = new QueryDefinition(queryText);
+            if (idStrings.Count > 0) queryDefinition.WithParameter("@idStrings", idStrings);
+            if (regions.Count > 0) queryDefinition.WithParameter("@regions", regions);
 
 
             var requestOptions = new QueryRequestOptions
