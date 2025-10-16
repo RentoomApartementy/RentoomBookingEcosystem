@@ -95,7 +95,7 @@ namespace RentoomBooking.Api
                     return response;
                 }
 
-                var offers = await _rentoomOfferService.getOfferWithAmenitiesFilter(payload).ConfigureAwait(false);
+                var offers = await _rentoomOfferService.getOfferWitFilter(payload).ConfigureAwait(false);
 
                 if (offers == null)
                 {
