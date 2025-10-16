@@ -26,6 +26,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<IdoSellService>();
 builder.Services.AddSingleton<BookingDatabase>();
+builder.Services.AddSingleton<IdoLocksService, IdoLocksService>();
 builder.Services.AddSingleton<IAmenitiesService, AmenitiesService>();
 builder.Services.AddSingleton<IClientService, ClientService>();
 builder.Services.AddSingleton<IIdoApartmentService, IdoApartmentService>();
