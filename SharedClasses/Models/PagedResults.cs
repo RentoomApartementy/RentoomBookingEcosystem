@@ -17,6 +17,7 @@ namespace RentoomBooking.SharedClasses.Models
     {
         public IEnumerable<int>? ApartmentIds { get; set; }
         public IEnumerable<int>? ApartmentAmenityIds { get; set; }
+        public IEnumerable<string>? ApartmentObjectLocalizationItemRegionNames { get; set; }
     }
 
 }

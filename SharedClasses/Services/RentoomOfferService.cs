@@ -59,15 +59,16 @@ namespace RentoomBooking.SharedClasses.Services
 
             var idoRequest = query.IdoOfferParams;
             var amenityFilter = query.ApartmentFilterParams?.ApartmentAmenitiesFilter;
-
+            var regionFilter = query.ApartmentFilterParams.ApartmentLocationsFilter;
             List<ApartmentObject> apartmentsFromAmenities = new();
 
-            if (amenityFilter != null && amenityFilter.Any())
+            if ((amenityFilter != null && amenityFilter.Any()) || (regionFilter != null && regionFilter.Any()))
             {
                 var apartmentFilter = new ApartmentQueryFilter
                 {
                    // ApartmentIds = idoRequest.ObjectIds,
-                    ApartmentAmenityIds = amenityFilter
+                    ApartmentAmenityIds = amenityFilter,
+                    ApartmentObjectLocalizationItemRegionNames = query.ApartmentFilterParams?.ApartmentLocationsFilter
                 };
 
                 apartmentsFromAmenities = await _apartmentsService.GetApartmentsByFilterAsync(apartmentFilter);
