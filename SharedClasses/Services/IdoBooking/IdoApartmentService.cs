@@ -22,8 +22,8 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
     {
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellAsync(CancellationToken ct = default);
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(CancellationToken ct = default);
-        Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
-        Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
+        Task<List<ObjectMedium>?> GetObjectMediaFromIdoSellAsync(int objectId, CancellationToken ct = default);
+        Task<List<ObjectDescription>?> GetObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken ct = default);
         Task<List<ObjectAmenity>?> GetObjectAmenitiesAsync(int objectId, CancellationToken ct = default);
         Task<List<ApartmentAmenitiesDocument>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default);
     }
@@ -36,6 +36,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         private const string ApartemntsGetEndpoint = "objects/getAll/34/json";
         private const string ObjectMediaGetEndpoint = "objects/getMedia/34/json";
         private const string ApartmentAmenitiesGetEndpoint = "objects/getAmenities/34/json";
+        private const string ObjectDescriptionsGetEndpoint = "objects/getDescriptions/34/json";
 
         // private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<IIdoApartmentService> _logger;
@@ -147,17 +148,18 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         }
 
 
-        public async Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default)
+        public async Task<List<ObjectMedium>?> GetObjectMediaFromIdoSellAsync(int objectId, CancellationToken ct = default)
         {
             var request = new ObjectMediaRequestType
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
                 ObjectId = objectId
             };
-            return await _idoConnect.PostAsync<ObjectMediaRequestType, ObjectMediaResponseType>(ObjectMediaGetEndpoint, request, ct);
+            var ret =  await _idoConnect.PostAsync<ObjectMediaRequestType, ObjectMediaResponseType>(ObjectMediaGetEndpoint, request, ct);
+            return ret?.Result.ObjectMedia;
         }
 
-        public async Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default)
+        public async Task<List<ObjectDescription>?> GetObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken ct = default)
         {
             var request = new ObjectDescriptionsRequestType
             {
@@ -169,7 +171,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 }
             };
 
-            var ret = await _idoConnect.PostAsync<ObjectDescriptionsRequestType, ObjectDescriptionsResponseType>(ObjectMediaGetEndpoint, request, ct);
+            var ret = await _idoConnect.PostAsync<ObjectDescriptionsRequestType, ObjectDescriptionsResponseType>(ObjectDescriptionsGetEndpoint, request, ct);
             return ret?.Result.ObjectDescriptions;
         }
 
