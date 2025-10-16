@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
-using RentoomBooking.SharedClasses.Models.Database;
+
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
