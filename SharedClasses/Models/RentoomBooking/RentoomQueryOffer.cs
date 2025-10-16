@@ -22,7 +22,7 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
     public class ApartmentFilters {
         public List<int>? ApartmentAddonFilter { get; set; }
         public List<int>? ApartmentAmenitiesFilter {get;set;}
-        public List<int>? ApartmentLocationsFilter { get; set; }
+        public List<string>? ApartmentLocationsFilter { get; set; }
 
     }
 

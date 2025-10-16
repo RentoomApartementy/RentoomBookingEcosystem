@@ -1,10 +1,13 @@
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using System.Net;
 using System.Reflection.Metadata;
+using System.Text;
 using System.Xml.Linq;
 
 namespace RentoomBooking.SharedClasses.Database
@@ -400,46 +403,41 @@ namespace RentoomBooking.SharedClasses.Database
             if (_apartmentInfoContainer == null)
                 throw new InvalidOperationException("ApartmentInfo container is not initialized.");
 
-            var filterIds = apartmentIds?.Distinct().ToList() ?? new List<int>();
 
+            var ids = (apartmentFilter.ApartmentIds ?? Enumerable.Empty<int>()).ToList();
 
             if (apartmentFilter.ApartmentAmenityIds != null && apartmentFilter.ApartmentAmenityIds.Any())
             {
                 var amenityApartmentIds = await GetApartmentIdsByAmenitiesAsync(apartmentFilter.ApartmentAmenityIds, cancellationToken);
 
-                if (filterIds.Count > 0)
-                {
-                    filterIds = filterIds.Intersect(amenityApartmentIds).ToList();
-                }
-                else
-                {
-                    filterIds = amenityApartmentIds;
-                }
+                ids.AddRange(amenityApartmentIds);
             }
 
 
+            var idStrings = ids.Distinct().Select(i => i.ToString()).ToList();
+
+            var regions = (apartmentFilter.ApartmentObjectLocalizationItemRegionNames ?? Enumerable.Empty<string>())
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select(s => s.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var where = new List<string>();
+            if (ids.Count > 0) where.Add("ARRAY_CONTAINS(@ids, c.id)");
+            if (regions.Count > 0) where.Add("ARRAY_CONTAINS(@regions, c.objectLocation.localizationItem.region)");
+
+            if (where.Count == 0)
+                return new List<ApartmentObject>();
+
+            var queryText = $"SELECT * FROM c WHERE {string.Join(" AND ", where)}";
+
+            var qd = new QueryDefinition(queryText);
+            if (idStrings.Count > 0) qd.WithParameter("@ids", idStrings);
+            if (regions.Count > 0) qd.WithParameter("@regions", regions);
 
 
-
-
-            var distinctIds = filterIds.Distinct().Select(id => id.ToString()).ToList();
-
-            if (distinctIds.Count == 0) return null;
-
-
-            var parameterNames = distinctIds
-                    .Select((_, index) => $"@id{index}")
-                    .ToList();
-
-            var queryText = $"SELECT * FROM c";
-                queryText += $" WHERE c.id IN ({string.Join(", ", parameterNames)})";
             var queryDefinition = new QueryDefinition(queryText);
 
-
-            for (int i = 0; i < distinctIds.Count; i++)
-            {
-                queryDefinition.WithParameter(parameterNames[i], distinctIds[i]);
-            }
 
             var requestOptions = new QueryRequestOptions
             {
@@ -528,6 +526,7 @@ namespace RentoomBooking.SharedClasses.Database
                        .Where(amenity => amenity != null)
                        .Select(amenity => amenity.Id)
                        .ToHashSet();
+
                 if (!amenityIdSet.All(documentAmenityIds.Contains))
                 {
                     continue;
