@@ -18,6 +18,8 @@ namespace RentoomBooking.StayWell.Models
         protected ApartmentState ApartmentState { get; set; } = default!;
         [Inject]
         protected StayWell.Services.GlobalizationService GlobalizationService { get; set; } = default!;
+        [Inject]
+        protected NavigationManager NavigationManager { get;set;} = default!;
 
         [Parameter]
         public string? Token { get; set; }
@@ -45,7 +47,6 @@ namespace RentoomBooking.StayWell.Models
                 await LoadDataAsync();
             }
 
-            GlobalizationService.OnChange += StateHasChanged;
         }
 
         private void SetLanguage()
@@ -61,7 +62,7 @@ namespace RentoomBooking.StayWell.Models
             {
                 GlobalizationService.SetCulture("en-US");
             }
-            Console.WriteLine("Language set to: " + lang.ToString() + CultureInfo.CurrentCulture.Name);
+            Console.WriteLine("Language set to: " + lang.ToString() + " " + CultureInfo.CurrentCulture.Name);
 
         }
 
@@ -73,9 +74,14 @@ namespace RentoomBooking.StayWell.Models
                 if (!string.IsNullOrEmpty(Token))
                 {
                     await ReservationState.GetReservationAsync(Token);
-                    SetLanguage();
+                    if(ReservationState.CurrentReservation == null)
+                    {
+                        NavigationManager.NavigateTo("/ReservationPage");
+                        return;
+                    }
                     var reservation = ReservationState.CurrentReservation?.Reservation;
                     if (reservation == null) return;
+                    SetLanguage();
                     var item = reservation.Items?.FirstOrDefault();
                     if (item != null)
                     {

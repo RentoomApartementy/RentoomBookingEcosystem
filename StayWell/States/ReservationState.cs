@@ -24,7 +24,7 @@ namespace RentoomBooking.StayWell.States
 
         public async Task<RentoomReservation?> GetReservationAsync(string token)
         {
-            if (_currentToken == token) return CurrentReservation;
+            if (_currentToken == token) return CurrentReservation; 
 
             SetLoading(true);
             try
@@ -37,10 +37,19 @@ namespace RentoomBooking.StayWell.States
 
                 var reservation = await _backendApi.GetReservationByTokenAsync(token);
 
+                if(reservation?.StatusCode == System.Net.HttpStatusCode.Gone)
+                {
+                    Console.WriteLine("rezerwacja wygasła :(");
+                    CurrentReservation = null;
+                    _currentToken = token;
+
+                    return null;
+                }
+
                 if (reservation == null) ClearReservation();
 
                 _currentToken = token;
-                CurrentReservation = reservation;
+                CurrentReservation = reservation?.Reservation;
 
                 return CurrentReservation;
             }
