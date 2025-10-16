@@ -11,9 +11,13 @@ namespace RentoomBooking.SharedClasses.Models
         string? ContinuationToken, 
         int CountOnPage,
         long TotalCount);
+
+
+    public class ApartmentQueryFilter
+    {
+        public IEnumerable<int>? ApartmentIds { get; set; }
+        public IEnumerable<int>? ApartmentAmenityIds { get; set; }
+    }
+
 }
 
-public class ApartmentQueryFilter {
-    public IEnumerable<int>? ApartmentIds { get; set; }
-    //todo: kolejne filtry z frontu do filtrowania
-}

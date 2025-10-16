@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Models.IdoBooking
@@ -27,9 +28,13 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
 
     public class ObjectAmenity
     {
+        [JsonPropertyName("ObjectId")]
         private int objectId;
 
+
+        [JsonPropertyName("Id")]
         public int Id { get; set; }
+
         public int ObjectId { 
             
             get => objectId; 
@@ -39,6 +44,8 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
                 objectId = x; 
                 }  
         }
+
+        [JsonPropertyName("name")]
         public string? Name { get; set; }
 
         

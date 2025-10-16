@@ -2,9 +2,10 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models;
-using RentoomBooking.SharedClasses.Models.Database;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using System.Net;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
 
 namespace RentoomBooking.SharedClasses.Database
 {
@@ -343,7 +344,7 @@ namespace RentoomBooking.SharedClasses.Database
         }
 
 
-        public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
+        public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync_old(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
         {
             var apartmentIds = apartmentFilter.ApartmentIds;
             if (apartmentIds == null) throw new ArgumentNullException(nameof(apartmentIds));
@@ -388,5 +389,156 @@ namespace RentoomBooking.SharedClasses.Database
 
             return apartments;
         }
+
+        public async Task<List<ApartmentObject>?> GetApartmentsByFilterAsync(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
+        {
+            var apartmentIds = apartmentFilter.ApartmentIds;
+          //  if (apartmentIds == null) throw new ArgumentNullException(nameof(apartmentIds));
+
+            await _initializationTask;
+
+            if (_apartmentInfoContainer == null)
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+
+            var filterIds = apartmentIds?.Distinct().ToList() ?? new List<int>();
+
+
+            if (apartmentFilter.ApartmentAmenityIds != null && apartmentFilter.ApartmentAmenityIds.Any())
+            {
+                var amenityApartmentIds = await GetApartmentIdsByAmenitiesAsync(apartmentFilter.ApartmentAmenityIds, cancellationToken);
+
+                if (filterIds.Count > 0)
+                {
+                    filterIds = filterIds.Intersect(amenityApartmentIds).ToList();
+                }
+                else
+                {
+                    filterIds = amenityApartmentIds;
+                }
+            }
+
+            var distinctIds = filterIds.Distinct().Select(id => id.ToString()).ToList();
+
+            if (distinctIds.Count == 0) return null;
+
+
+            var parameterNames = distinctIds
+                    .Select((_, index) => $"@id{index}")
+                    .ToList();
+
+            var queryText = $"SELECT * FROM c";
+                queryText += $" WHERE c.id IN ({string.Join(", ", parameterNames)})";
+            var queryDefinition = new QueryDefinition(queryText);
+
+
+            for (int i = 0; i < distinctIds.Count; i++)
+            {
+                queryDefinition.WithParameter(parameterNames[i], distinctIds[i]);
+            }
+
+            var requestOptions = new QueryRequestOptions
+            {
+                PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
+            };
+
+            var apartments = new List<ApartmentObject>();
+            using var iterator = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(queryDefinition, requestOptions: requestOptions);
+
+            while (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync(cancellationToken);
+                apartments.AddRange(response.ToList());
+            }
+
+            return apartments;
+        }
+
+        public async Task<List<ApartmentAmenitiesDocument>> GetAllApartmentAmenitiesAsync(
+    CancellationToken cancellationToken = default)
+        {
+            await _initializationTask;
+
+            if (_apartmentInfoContainer is null)
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+
+            // Query everything in the amenities partition
+            var qd = new QueryDefinition("SELECT * FROM c");
+            var opts = new QueryRequestOptions
+            {
+                PartitionKey = new PartitionKey(AmenitiesPartitionKeyValue)
+            };
+
+            var results = new List<ApartmentAmenitiesDocument>();
+
+            using var it = _apartmentInfoContainer.GetItemQueryIterator<ApartmentAmenitiesDocument>(
+                qd,
+                requestOptions: opts);
+
+            while (it.HasMoreResults)
+            {
+                var page = await it.ReadNextAsync(cancellationToken);
+                results.AddRange(page);
+            }
+
+            return results;
+        }
+
+
+        private async Task<List<int>> GetApartmentIdsByAmenitiesAsync(IEnumerable<int> amenityIds, CancellationToken cancellationToken)
+        {
+            if (_apartmentInfoContainer == null)
+            {
+                throw new InvalidOperationException("ApartmentInfo container is not initialized.");
+            }
+            var all = await GetAllApartmentAmenitiesAsync();
+
+            var amenityIdSet = amenityIds?
+                .Where(id => id > 0)
+                .Distinct()
+                .ToHashSet() ?? new HashSet<int>();
+
+            if (amenityIdSet.Count == 0)
+            {
+                return new List<int>();
+            }
+
+            var queryDefinition = new QueryDefinition("SELECT * FROM c");
+            var requestOptions = new QueryRequestOptions
+            {
+                PartitionKey = new PartitionKey(AmenitiesPartitionKeyValue)
+            };
+
+            var apartmentIds = new List<int>();
+
+            using var iterator = _apartmentInfoContainer.GetItemQueryIterator<ApartmentAmenitiesDocument>(queryDefinition, requestOptions: requestOptions);
+
+            foreach (var amenityDoc in all)
+            {
+                if (amenityDoc?.Amenities == null || string.IsNullOrWhiteSpace(amenityDoc.ApartmentId))
+                {
+                    continue;
+                }
+
+                var documentAmenityIds = amenityDoc.Amenities
+                       .Where(amenity => amenity != null)
+                       .Select(amenity => amenity.Id)
+                       .ToHashSet();
+                if (!amenityIdSet.All(documentAmenityIds.Contains))
+                {
+                    continue;
+                }
+
+                if (int.TryParse(amenityDoc.ApartmentId, out var parsedId))
+                {
+                    apartmentIds.Add(parsedId);
+                }
+
+            }
+
+            return apartmentIds;
+
+        }
+
+
     }
-    }
+}
