@@ -9,11 +9,24 @@
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="RentoomBookingWeb.styles.css" />
     <link rel="icon" type="image/svg" href="assets/svgs/logo-sygnet.svg" />
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
 <body>
-    <Routes @rendermode="InteractiveServer" />
+<Routes @rendermode="InteractiveServer" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <!-- Nasz interop JS -->
+    <script src="js/mapInterop.js"></script>
+    
     <script src="_framework/blazor.web.js"></script>
 </body>
 

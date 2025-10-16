@@ -1,12 +1,12 @@
 ﻿<div class="parent">
     <div class="partner-name">@partnerName</div>
-    <div class="adress-wrapper">
-        <span class="adress-label">
+    <div class="address-wrapper">
+        <span class="address-label">
             <img src="/icons/map-pin.svg"/>
             Adres:
         </span>
-        <span class="adress">
-            @partnerAdress
+        <span class="address">
+            @partnerAddress
         </span>
     </div>
 </div>
@@ -16,6 +16,6 @@
 
 @code {
     [Parameter] public string? partnerName { get; set; } = string.Empty;
-    [Parameter] public string? partnerAdress { get; set; } = string.Empty;
+    [Parameter] public string? partnerAddress { get; set; } = string.Empty;
     [Parameter] public string? offer { get; set; } = string.Empty;
 }

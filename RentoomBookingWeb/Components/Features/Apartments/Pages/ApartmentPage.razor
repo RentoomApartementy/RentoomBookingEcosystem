@@ -1,0 +1,15 @@
+@page "/apartamenty/{id:int}"
+@page "/apartamenty/{slug}"
+
+<h3>Apartment</h3>
+@Id
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    [Parameter]
+    public string? Slug { get; set; }
+    
+    private ApartmentPage? apartment;
+}

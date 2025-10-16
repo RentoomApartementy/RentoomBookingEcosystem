@@ -2,9 +2,10 @@
 
 <div class="wrapper">
     <img src="@Source" alt="@Source" />
+    <div class="apartment-name">@ApartmentName</div>
 </div>
 
 @code {
     [Parameter] public string Source { get; set; } = "/images/placeholders/apartment_placeholder.png";
-
+    [Parameter] public string? ApartmentName { get; set; }
 }

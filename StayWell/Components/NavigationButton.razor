@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager Navigation
 
 <div class="footer-nav-btn-wrapper">
-    <button class="footer-nav-btn" @onclick="Navigate">
+    <button class="footer-nav-btn @(active ? "active" : "")" @onclick="Navigate">
         <div class="footer-nav-icon">
             @Icon
         </div>

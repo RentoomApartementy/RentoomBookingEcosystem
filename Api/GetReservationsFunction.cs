@@ -98,6 +98,19 @@ public class GetReservationsFunction
                 await res.WriteStringAsync($"Reservation with token {token} not found in database.");
                 return res;
             }
+
+
+            // Check if ToDate is before today
+            var toDate = ret.Reservation?.ReservationDetails?.getDateTo();
+            if (toDate != null && toDate.Value.Date < DateTime.UtcNow.Date)
+            {
+                res.StatusCode = System.Net.HttpStatusCode.Gone;
+                await res.WriteStringAsync($"Reservation with token {token} has expired (ToDate: {toDate:yyyy-MM-dd}).");
+                return res;
+            }
+
+
+
             res.StatusCode = System.Net.HttpStatusCode.OK;
             res.Headers.Add("Content-Type", "application/json; charset=utf-8");
             await res.WriteStringAsync(JsonConvert.SerializeObject(ret));

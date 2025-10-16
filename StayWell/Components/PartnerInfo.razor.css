@@ -28,11 +28,15 @@
     padding-left: 10px;
 }
 
-.adress-label{
+.address-label{
     font-weight: bold;
 }
 
-.adress-wrapper {
+.address{
+    margin-left: 30px;
+}
+
+.address-wrapper {
     grid-column-start: 1;
     grid-row-start: 2;
     display: flex;
