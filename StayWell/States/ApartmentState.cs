@@ -3,46 +3,46 @@ using RentoomBooking.StayWell.Services;
 
 namespace RentoomBooking.StayWell.States
 {
-    public class AmenitiesState(BackendApi backendApi)
+    public class ApartmentState(BackendApi backendApi)
     {
-        private List<ObjectAmenity>? _amenities;
+        private ApartmentObject? _apartment;
         private readonly BackendApi _backendApi = backendApi;
         private int? _currentObjectId;
 
         public bool IsLoading { get; set; }
 
-        public List<ObjectAmenity>? CurrentAmenities
+        public ApartmentObject? CurrentApartment
         {
-            get => _amenities;
+            get => _apartment;
             private set
             {
-                _amenities = value;
+                _apartment = value;
                 NotifyStateChanged();
             }
         }
 
-        public async Task<List<ObjectAmenity>?> GetAmenitiesForObjectsAsync(int objectId)
+        public async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
         {
-            if (_currentObjectId == objectId) return CurrentAmenities;
+            if (_currentObjectId == objectId) return CurrentApartment;
 
             SetLoading(true);
             try
             {
                 if (_backendApi == null)
                 {
-                    ClearAmenities();
+                    ClearApartment();
                     return null;
                 }
-                var amenities = await _backendApi.GetAmenitiesForObjectsAsync(objectId);
-                if (amenities == null) ClearAmenities();
+                var apartment = await _backendApi.GetApartmentByIdAsync(objectId);
+                if (apartment == null) ClearApartment();
                 _currentObjectId = objectId;
-                CurrentAmenities = amenities;
-                return CurrentAmenities;
+                CurrentApartment = apartment;
+                return CurrentApartment;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                ClearAmenities();
+                ClearApartment();
                 return null;
             }
             finally
@@ -51,12 +51,11 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
-
         public event Action? OnChange;
 
-        public void SetAmenities(List<ObjectAmenity>? media)
+        public void SetApartment(ApartmentObject? apartment)
         {
-            CurrentAmenities = media;
+            CurrentApartment = apartment;
             IsLoading = false;
             NotifyStateChanged();
         }
@@ -68,14 +67,13 @@ namespace RentoomBooking.StayWell.States
         }
 
 
-        public void ClearAmenities()
+        public void ClearApartment()
         {
-            CurrentAmenities = null;
+            CurrentApartment = null;
             _currentObjectId = null;
             IsLoading = false;
         }
         private void NotifyStateChanged() => OnChange?.Invoke();
-
 
     }
 }

@@ -1,62 +1,96 @@
-﻿
-.parent {
-/*    padding-left: 25px;*/
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 0px;
+﻿.reservation-info {
+    width: 100%;
+    display: flex;
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 100%;
 }
 
 .apartment-name {
-    grid-column: span 4 / span 4;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.3;
+    color: #000;
+    margin-left: 3px;
 }
 
-.apartment-full-adress{
-    grid-column: span 4 / span 4;
-    grid-row-start: 2;
-    font-size: 0.9rem;
+.address-wrapper {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #666;
+}
+.address {
+    font-weight: 500;
+    color: grey;
+    margin-left: 5px;
+    font-size: 1rem;
 }
 
-.check-in,
-.check-out {
-    font-size: 0.8rem;
+    .address-wrapper img {
+        width: 1.5rem;
+        height: 1.5rem;
+        flex-shrink: 0;
+    }
+
+.dates-wrapper {
+    display: flex;
+    align-items: flex-start;
+    font-size: 0.875rem;
 }
+
+    .dates-wrapper img {
+        width: 1.6rem;
+        height: 1.6rem;
+        flex-shrink: 0;
+    }
 
 .check-in {
-    grid-column: span 2 / span 2;
-    grid-row-start: 3;
+    margin-left: 5px;
+    margin-top: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 3;
+    line-height: 0.8;
 }
-
 .check-out {
-    grid-column: span 2 / span 2;
-    grid-column-start: 3;
-    grid-row-start: 3;
+    margin-left: 10px;
+    margin-top: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+    line-height: 0.8;
 }
 
+    .check-in span:first-child,
+    .check-out span:first-child {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: grey;
+        line-height: 0.8;
+    }
 
-.check-in-date,
-.check-out-date {
-    font-size: 0.8rem;
+    .check-in span:last-child,
+    .check-out span:last-child {
+        font-size: 0.75rem;
+        font-weight: 200;
+        color: grey;
+        line-height: 1.2;
+    }
+
+@media (max-width: 768px) {
+    .reservation-info {
+        width: 100%;
+        padding: 0.75rem;
+        padding-top: 0;
+        padding-left: 0;
+    }
+
+    .dates-wrapper img {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
 }
-
-.check-in-date {
-    grid-column: span 2 / span 2;
-    grid-row-start: 4;
-}
-
-.check-out-date {
-    grid-column: span 2 / span 2;
-    grid-column-start: 3;
-    grid-row-start: 4;
-}
-
-
-.check-out,
-.check-out-date {
-    text-align: right;
-    padding-right: 10px;
-}
-

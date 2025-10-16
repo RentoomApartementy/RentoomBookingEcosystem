@@ -1,4 +1,4 @@
-﻿@page "/reservation/{Token}"
+﻿@page "/ReservationPage"
 @* @implements IDisposable *@
 @using RentoomBooking.StayWell.States;
 @using RentoomBooking.StayWell.Services;
@@ -6,46 +6,6 @@
 @layout Layouts.ReservationLayout
 @inherits Models.PageBase
 
-<h3>ReservationPage</h3>
+<h3>Rezerwacja dobiegła końca :(</h3>
 
-@* @if (MediaState.IsLoading || ReservationState.IsLoading)
-{
-    <h1>Ladowanie...</h1>
-}
-else if (ReservationState.CurrentReservation == null )
-{
-    <h3>Brak rezerwacji</h3>
-}
-else
-{
-    Navigation.NavigateTo($"/AboutReservationPage");
-} *@
-
-
-@code {
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     ReservationState.OnChange += OnReservationChange;
-    //     MediaState.OnChange += StateHasChanged;
-    //     await ReservationState.GetReservationAsync(Token);
-    // }
-
-    // private async void OnReservationChange()
-    // {
-    //     StateHasChanged();
-    //     var item = ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault();
-    //     if (item != null)
-    //     {
-    //         int objectId = item.objectId;
-    //         await MediaState.GetMediaAsync(objectId);
-    //         await AmenitiesState.GetAmenitiesForObjectsAsync(objectId);
-    //     }
-    // }
-
-    // public void Dispose()
-    // {
-    //     ReservationState.OnChange -= OnReservationChange;
-    //     MediaState.OnChange -= StateHasChanged;
-    // }
-}
+<p>Wracaj do Torunia bo cie znajdziemy</p>
