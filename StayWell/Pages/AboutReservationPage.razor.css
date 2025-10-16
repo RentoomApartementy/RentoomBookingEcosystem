@@ -23,10 +23,10 @@
     padding-bottom: 0;
 }
 
-    .amenity .text {
-        padding-left: 30px;
-        font-weight: normal;
-    }
+.amenity .text {
+    margin-left: 30px;
+    font-weight: normal;
+}
 
 button {
     margin-left: 27px;
@@ -34,6 +34,7 @@ button {
     border: none;
     background: none;
     text-decoration: underline;
+    font-family: inherit;
 }
 
 ul {

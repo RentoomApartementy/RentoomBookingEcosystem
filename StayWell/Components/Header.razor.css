@@ -1,5 +1,5 @@
 ﻿.header {
-    background-color: white;
+    background: none;
     width: 100%;
     height: 100%;
     padding: 16px 24px;
@@ -40,10 +40,28 @@
     text-decoration: none;
 }
 
-.contact {
-    width: 32px;
-    height: 32px;
+.right-wrapper {
+    width: 70px;
+    height: 100%;
     display: flex;
     align-items: center;
+    justify-content: right;
+    padding: 0;
+    gap: 10px;
+}
+
+.Contact {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
     justify-content: center;
+}
+
+.Languages {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center
 }

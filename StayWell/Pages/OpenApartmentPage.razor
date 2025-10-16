@@ -1,12 +1,18 @@
 ﻿@page "/reservation/{token}/OpenApartmentPage"
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
+
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<OpenApartmentPage> Localizer
+
+
 @inherits Models.PageBase
 
 <PageTitle>OpenApartmentPage</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="@Data?.Reservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="Otwórz apartament"></PageInfo>
+    <PageInfo Title="@ReservationState?.CurrentReservation?.Reservation?.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["OpenApartment"]"></PageInfo>
 </div>
 
 <div class="description-wrapper">
@@ -24,7 +30,7 @@
 </div>
 
 <div class="buttons-wrapper">
-    <Button Text="Otwórz drzwi zdalnie" ButtonStyle="margin-bottom: 30px;">
+    <Button Text="@Localizer["OpenRemotely"]" ButtonStyle="margin-bottom: 30px;">
         <Icon>
             <img src="/icons/radio.svg">
         </Icon>
@@ -34,15 +40,16 @@
         <DescriptionContent>
             <div style="font-weight: bold;">
                 <img src="/icons/binary.svg"/>
-            Twój indywidualny kod do apartamentu:</div>
+                @Localizer["YourIndividualCode"]:
+            </div>
         </DescriptionContent>
     </Description>
 
     <div style="font-size: calc(0.25vw + 1.25rem);">
         <span style ="font-weight: bold">567850</span> 
-        potwierdź
+        @Localizer["Confirm"]
         <span style="font-weight: bold">#</span>
-        lub
+        @Localizer["Or"]
         <img src="/icons/key-round.svg" />
     </div>
 

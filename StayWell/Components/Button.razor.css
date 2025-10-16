@@ -1,7 +1,16 @@
-﻿button {
+﻿@keyframes benefitsClubShine {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+button {
     max-width: 1000px;
-    background-color: #FFFF;
-    border: 1.75px solid black;
+    background: linear-gradient(180deg, #fff 60%, #f3f3f3 100%);
+    border: 1.75px solid #222;
     border-radius: 15px;
     width: 100%;
     height: 40px;
@@ -17,38 +26,75 @@
     overflow-wrap: break-word;
     padding: 8px 12px;
     line-height: 1.2;
+    box-shadow: 0 4px 16px -2px rgba(0,0,0,0.12), 0 1.5px 0 0 #fff inset;
+    transition:
+        transform 0.25s cubic-bezier(.4,0,.2,1),
+        box-shadow 0.25s cubic-bezier(.4,0,.2,1),
+        background 0.25s cubic-bezier(.4,0,.2,1);
 }
 
-    button .text {
-        text-align: center;
-        flex: 1 1 auto;
-        max-width: calc(100% - 70px);
-    }
+button:active:enabled {
+    filter: invert(1);
+    transform: translateY(2px);
+    box-shadow: 0 2px 8px -2px rgba(0,0,0,0.10);
+}
 
-    button:enabled   .icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 24px;
-        height: 24px;
-    }
+button:disabled {
+    background: linear-gradient(180deg, #eaeaea 60%, #d5d5d5 100%);
+    border-color: #bbb;
+    color: #aaa;
+    cursor: not-allowed;
+    box-shadow: none;
+}
 
-    button:hover:enabled {
-        cursor: pointer;
-    }
+button .text {
+    text-align: center;
+    flex: 1 1 auto;
+    max-width: calc(100% - 70px);
+}
 
-    button:active:enabled {
-        filter: invert(1);
-    }
+button:enabled .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+}
 
-    button:disabled {
-        background-color: lightgray;
-        border-color: gray;
-        color: gray;
-        cursor: not-allowed;
-    }
+button:hover:enabled {
+    cursor: pointer;
+    box-shadow: 0 8px 24px -4px rgba(0,0,0,0.18), 0 2px 0 0 #fff inset;
+    background: linear-gradient(180deg, #f8f8ff 40%, #e0e0f8 100%);
+}
 
-    button:disabled .icon {
-      visibility: hidden;
+button:disabled .icon {
+    visibility: hidden;
+}
+
+.button.benefits-club {
+    border-color: #F9B806;
+    color: #F9B806;
+    background: linear-gradient(90deg, #21573e 0%, #24694a 50%, #21573e 100%);
+    margin-bottom: 2rem;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    transition: 
+        transform 0.25s cubic-bezier(.4,0,.2,1),
+        background 0.25s cubic-bezier(.4,0,.2,1);
+    animation: benefitsClubGlow 6s ease-in-out infinite;
+    box-shadow: 0 0 16px 0 rgba(249,184,6,0.5), 0 4px 16px -2px rgba(33,87,62,0.18);
+}
+
+@keyframes benefitsClubGlow {
+    0% {
+        box-shadow: 0 0 8px 0 rgba(249,184,6,0.3), 0 4px 16px -2px rgba(33,87,62,0.18);
     }
+    50% {
+        box-shadow: 0 0 32px 4px rgba(249,184,6,0.7), 0 4px 16px -2px rgba(33,87,62,0.18);
+    }
+    100% {
+        box-shadow: 0 0 8px 0 rgba(249,184,6,0.3), 0 4px 16px -2px rgba(33,87,62,0.18);
+    }
+}
