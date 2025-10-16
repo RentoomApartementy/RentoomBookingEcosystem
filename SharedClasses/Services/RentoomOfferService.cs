@@ -16,7 +16,7 @@ namespace RentoomBooking.SharedClasses.Services
     public interface IRentoomOfferService
     {
         //Task<RentoomOffer> getOffer(RentoomQueryOffer query);
-        Task<RentoomOffer> getOfferWithAmenitiesFilter(RentoomQueryOffer query);
+        Task<RentoomOffer> getOfferWitFilter(RentoomQueryOffer query);
     }
     public class RentoomOfferService : IRentoomOfferService
     {
@@ -50,7 +50,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         }
 
-        public async Task<RentoomOffer?> getOfferWithAmenitiesFilter(RentoomQueryOffer query)
+        public async Task<RentoomOffer?> getOfferWitFilter(RentoomQueryOffer query)
         {
             if (query?.IdoOfferParams == null)
             {

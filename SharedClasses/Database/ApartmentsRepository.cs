@@ -417,6 +417,11 @@ namespace RentoomBooking.SharedClasses.Database
                 }
             }
 
+
+
+
+
+
             var distinctIds = filterIds.Distinct().Select(id => id.ToString()).ToList();
 
             if (distinctIds.Count == 0) return null;
