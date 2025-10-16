@@ -26,27 +26,18 @@ namespace RentoomBooking.SharedClasses.Services
 {
     public class IdoSellService
     {
-        private string? baseAPIUrl;
-        private string? systemUser;
-        private string? systemPwd;
-
-        private readonly HttpClient _httpClient;
-        private readonly Container _objectsContainer;
-        private readonly Container _hashesContainer;
-
-        private const string HashDocumentId = "all-object-hashes"; // ID for the hash document
-        private const string HashPartitionKey = "id"; // Partition key for the hash container
+       
         private BookingDatabase _bookingDatabase;
         private ILogger<IdoSellService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
 
         private const string ReservationsGetEndpoint = "reservations/get/34/json";
-        private const string ApartmentMediaGetEndpoint = "objects/getMedia/34/json";
+        //private const string ApartmentMediaGetEndpoint = "objects/getMedia/34/json";
        
         private const string AllAmenitiesGetEndpoint = "amenities/getForObjects/34/json";
 
-        private const string ApartmentDescriptionsGetEndpoint =  "objects/getDescriptions/34/json";
+        
 
         public IdoSellService(IIdoBookingConnectService idoConnect, ILogger<IdoSellService> logger,  BookingDatabase bookingDatabase)//, CosmosClient cosmosClient)
         {
@@ -92,7 +83,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         //public Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken = null, int pageSize = 50) => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
 
-        public async Task<List<ObjectMedium>?> FetchObjectMediaFromIdoSellAsync(int objectId, CancellationToken cancellationToken = default)
+       /* public async Task<List<ObjectMedium>?> FetchObjectMediaFromIdoSellAsync(int objectId, CancellationToken cancellationToken = default)
         {
             
             _logger.LogInformation("FetchObjectMediaFromIdoSellAsync objectId={ObjectId}", objectId);
@@ -105,14 +96,10 @@ namespace RentoomBooking.SharedClasses.Services
 
             var ret = await _idoConnect.PostAsync<ObjectMediaRequestType, ObjectMediaResponseType>(ApartmentMediaGetEndpoint, request, cancellationToken);
 
-            /*if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError("Failed to fetch media for object {ObjectId}. StatusCode: {StatusCode}. Content: {Content}", objectId, response.StatusCode, responseContent);
-                response.EnsureSuccessStatusCode();
-            }*/
+           
             return ret?.Result.ObjectMedia;
         }
-
+            */
        /* public async Task<List<ObjectMedium>?> FetchObjectMediaFromIdoSellAsync(int objectId)
         {
             string address = baseAPIUrl + "objects/getMedia/34/json";
@@ -156,7 +143,7 @@ namespace RentoomBooking.SharedClasses.Services
 
        
 
-        public async Task<List<ObjectDescription>?> FetchObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken cancellationToken = default)
+    /*    public async Task<List<ObjectDescription>?> FetchObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken cancellationToken = default)
         {
            
             var request = new ObjectDescriptionsRequestType
@@ -173,19 +160,10 @@ namespace RentoomBooking.SharedClasses.Services
             
             var ret = await _idoConnect.PostAsync<ObjectDescriptionsRequestType, ObjectDescriptionsResponseType>(ApartmentDescriptionsGetEndpoint, request, cancellationToken);
 
-            /*
-
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError("Failed to fetch descriptions for object {ObjectId}. StatusCode: {StatusCode}. Content: {Content}", objectId, response.StatusCode, responseContent);
-                response.EnsureSuccessStatusCode();
-            }
-
-            var ret = JsonConvert.DeserializeObject<ObjectDescriptionsResponseType>(responseContent);
-            */
+           
             return ret?.Result.ObjectDescriptions;
         }
-
+    */
         public async Task<List<ObjectTypesAmenities>?> FetchAmenitiesForObjectTypesAsync(IEnumerable<IdoBookingObjectType> objectTypes,CancellationToken cancellationToken = default)
         {
             

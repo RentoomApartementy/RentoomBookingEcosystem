@@ -1,30 +1,18 @@
-﻿using Newtonsoft.Json;
-using RentoomBooking.SharedClasses.Models.IdoBooking;
-using System;
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace RentoomBooking.SharedClasses.Models.Database
+public class ApartmentAmenitiesDocument
 {
-    
-        public class ApartmentAmenitiesDocument
-        {
-            public string Id { get; set; } = string.Empty;
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
 
-            [JsonProperty("partitionKey")]
-            [JsonPropertyName("partitionKey")]
-            public string PartitionKey { get; set; } = string.Empty;
+    [JsonPropertyName("partitionKey")]
+    public string PartitionKey { get; set; } = string.Empty;
 
-            public string? ApartmentId { get; set; }
+    [JsonPropertyName("apartmentId")]
+    public string? ApartmentId { get; set; }
 
-            //public ApartmentObject? Apartment { get; set; }
-
-            public List<ObjectAmenity>? Amenities { get; set; }
-        }
-
-
-    
+    [JsonPropertyName("amenities")]
+    public List<ObjectAmenity>? Amenities { get; set; }
 }
