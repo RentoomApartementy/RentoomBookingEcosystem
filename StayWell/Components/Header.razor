@@ -59,7 +59,7 @@
     private void ChangeLang(string lang)
     {
         GlobalizationService.SetCulture(lang == "pl" ? "pl-PL" : "en-US");
-        CloseModal(); // Zamknij po zmianie
+        CloseModal();
     }
 
     protected override void OnInitialized()
