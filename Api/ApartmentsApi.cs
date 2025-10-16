@@ -64,7 +64,7 @@ public class ApartmentsApi
                 return response;
             }
 
-            List<ObjectMedium>? media = await _service.FetchObjectMediaFromIdoSellAsync(objectId);
+            List<ObjectMedium>? media = await _idoApartmentService.GetObjectMediaFromIdoSellAsync(objectId);
 
             if (media == null)
             {
@@ -155,7 +155,7 @@ public class ApartmentsApi
                 return response;
             }
 
-            var descriptions = await _service.FetchObjectDescriptionsAsync(objectId, language);
+            var descriptions = await _idoApartmentService.GetObjectDescriptionsAsync(objectId, language);
 
             if (descriptions == null || descriptions.Count == 0)
             {

@@ -28,35 +28,19 @@ namespace RentoomBooking.SharedClasses.Services
         private readonly IHttpClientFactory _factory;
         BookingDatabase _bd;
         AmenitiesRepository _AmenitiesRepository;
+        ApartmentRepository _ApartmentRepository;
         IdoSellService _IdoSellService;
-        public AmenitiesService(IHttpClientFactory factory, BookingDatabase bd, AmenitiesRepository AmenitiesRepository, IdoSellService IdoSellService)
+        public AmenitiesService(IHttpClientFactory factory, BookingDatabase bd, AmenitiesRepository AmenitiesRepository, ApartmentRepository ApartmentRepository, IdoSellService idoSellService)
         {
             _factory = factory;
             _bd = bd;
             _AmenitiesRepository = AmenitiesRepository;
-            _IdoSellService = IdoSellService;
+            _IdoSellService = idoSellService;
+            _ApartmentRepository = ApartmentRepository;
         }
 
 
-        public async Task<List<ObjectTypesAmenities>?> GetAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes, CancellationToken ct = default)
-        {
-            var http = _factory.CreateClient("FunctionsApi");
-
-            var ids = objectTypes?.Select(x => ((int)x).ToString()).ToArray() ?? Array.Empty<string>();
-            var urlBuilder = new StringBuilder("amenities/getForObjects");
-            if (ids.Length > 0)
-            {
-                urlBuilder.Append("?objectTypesIds=").Append(Uri.EscapeDataString(string.Join(",", ids)));
-            }
-
-            using var resp = await http.GetAsync(urlBuilder.ToString(), ct);
-            resp.EnsureSuccessStatusCode();
-
-            var jsonString = await resp.Content.ReadAsStringAsync(ct);
-            return JsonConvert.DeserializeObject<List<ObjectTypesAmenities>>(jsonString);
-        }
-
-        public async Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes)
+       public async Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes)
         {
             var AllAmenities = await _IdoSellService.FetchAmenitiesForObjectTypesAsync(objectTypes);
 
