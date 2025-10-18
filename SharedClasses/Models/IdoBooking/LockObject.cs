@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Models.IdoBooking
 {
-    public class LockDefaultRequestType
+
+    public class LockRequestType 
     {
         public AuthenticateType Authenticate { get; set; } = new AuthenticateType();
-        public int? ReservationId { get; set; }
-        public int? ItemId { get; set; }
-    }
-
-    public class LockRequestType : LockDefaultRequestType
-    {
+        public ResultRequestPaging Result { get; set; } = new ResultRequestPaging();
         public LockParamsSearch ParamsSearch { get; set; } = new LockParamsSearch();
     }
 

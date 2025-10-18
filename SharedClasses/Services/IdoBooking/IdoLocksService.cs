@@ -20,7 +20,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
     public class IdoLocksService : IIdoLocksService
     {
-        private BookingDatabase _bookingDatabase;
+        //private BookingDatabase _bookingDatabase;
         private ILogger<IdoLocksService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
@@ -30,7 +30,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         {
             _idoConnect = idoConnect;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _bookingDatabase = bookingDatabase;
+            //_bookingDatabase = bookingDatabase;
         }
 
         public async Task<List<Lock>?> GetLocksAsync(int reservationId, int itemId, CancellationToken ct = default)
@@ -40,8 +40,11 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             var request = new LockRequestType
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
-                ReservationId = reservationId,
-                ItemId = itemId,
+                Result = new ResultRequestPaging
+                {
+                    Page = 1,
+                    Number = 100
+                },
                 ParamsSearch = new LockParamsSearch
                 {
                     ReservationId = reservationId,
@@ -60,8 +63,11 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             var request = new LockRequestType
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
-                ReservationId = reservationId,
-                ItemId = itemId,
+                Result = new ResultRequestPaging
+                {
+                    Page = 1,
+                    Number = 100
+                },
                 ParamsSearch = new LockParamsSearch
                 {
                     ReservationId = reservationId,
