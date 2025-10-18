@@ -57,6 +57,7 @@ namespace RentoomBooking.StayWell.States
         {
             CurrentMedia = media;
             IsLoading = false;
+            NotifyStateChanged();
         }
 
         public void SetLoading(bool isLoading)

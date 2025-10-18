@@ -1,0 +1,106 @@
+﻿.modal-backdrop {
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1050;
+    width: 100vw;
+    height: 100vh;
+    background-color: #00000070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-title{
+    color: black;
+
+}
+
+.modal {
+    position: relative;
+    z-index: 1060;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    min-height: 300px;
+    max-height: 80vh;
+    min-width: 320px;
+    max-width: 600px;
+    width: 100%;
+    padding: 0;
+    animation: modalFadeIn 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.25rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffff;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.modal-header p {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.modal-content {
+    padding: 20px 24px;
+    font-size: 1rem;
+    color: #333;
+    flex: 1;
+    background: #fff;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #d00;
+}
+
+
+@media (max-width: 500px) {
+    .modal {
+        width: 95vw;
+        min-width: unset;
+        padding: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .modal {
+        max-width: 90vw;
+        width: 95vw;
+        min-width: unset;
+        padding: 0;
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

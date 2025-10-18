@@ -1,7 +1,29 @@
 ﻿@page "/reservation/{token}/InstructionsPage"
+@using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.States
+
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<InstructionsPage> Localizer
+
 @inherits Models.PageBase
 
-<PageTitle>Main</PageTitle>
+<PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
-<WebSiteComponent Text="Nazwa: " />
-<SolutionLabel Text="@SolutionNameClass.SolutionName_2" />
+<div class="page-info-wrapper">
+    <PageInfo Title="@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["Instructions"]"></PageInfo>
+</div>
+
+<div class="description-wrapper">
+    <Description>
+        <Icon><img src="/icons/info.svg" /></Icon>
+        <DescriptionContent>
+            <span>Jeżeli dostępne, <img src="/icons/radio.svg"/> 
+                <span style="font-weight: bold">Otwórz zdalnie</span> drzwi pozwala na otwieranie drzwi bez potrzeby wpisywania kodu.
+                Wystarczy wcisnąć przycisk.</span>
+        </DescriptionContent>
+    </Description>
+    <Description DescriptionText="Indywidualny kod jest zawszę funkcjonalny niezależnie od dostępności zdalnego otwierania drzwi.">
+        <Icon><img src="/icons/binary.svg" /></Icon>
+    </Description>
+</div>

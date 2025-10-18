@@ -1,24 +1,81 @@
-﻿<div class="header">
+﻿@using RentoomBooking.StayWell.Pages
+@using StayWell.Services
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject GlobalizationService GlobalizationService
+@implements IDisposable
+
+@inject IStringLocalizer<HomePage> Localizer
+
+<div class="header">
     <div class="left">
         <img class="logo" src="/icons/building.svg"/>
         <div class="texts">
             <span class="name">StayWell</span>
-            <span class="reservation-id">numer rezerwacji: 
+            <span class="reservation-id">@Localizer["ReservationID"]: 
                 <span style="text-decoration: underline">@reservationId</span></span>
         </div>
     </div>
-    <div class="contact">
-        <NavLink href="@($"/reservation/{Token}/ContactUsPage")">
-            <img src="/icons/phone.svg" alt="Kontakt" />
-        </NavLink>
+    <div class="right-wrapper">
+
+        <div class="Languages">
+            <button @onclick="@ChangeLangButton" style="background: none; border: none">
+                <img src="/icons/languages.svg" />
+            </button>
+        </div>
+
+        <div class="Contact">
+            <NavLink href="@($"/reservation/{Token}/ContactUsPage")">
+                <img src="/icons/phone.svg" alt="Kontakt" />
+            </NavLink>
+        </div>
     </div>
 </div>
+
+<Modal Title="Wybierz język" IsVisible="@ModalVisible" OnClose="CloseModal">
+    <Content>
+        <Button OnClick="() => ChangeLang(pl)" Text="Polski"></Button>
+        <Button OnClick="() => ChangeLang(en)" Text="English"></Button>
+        @* <button @onclick="() => ChangeLang("pl")>Polski</button> *@
+        @* <button @onclick="() => ChangeLang("en")>English</button> *@
+    </Content>
+</Modal>
 
 @code {
     [Parameter]
     public string? Token { get; set; }
     [Parameter] 
     public string reservationId { get; set; } = "brak";
+    [Parameter]
+    public EventCallback OnOpenModal { get; set; }
 
+    private string pl = "pl";
+    private string en = "en";
+
+    private void OpenModal() => ModalVisible = true;
+
+    private void CloseModal() => ModalVisible = false;
+
+    private void ChangeLang(string lang)
+    {
+        GlobalizationService.SetCulture(lang == "pl" ? "pl-PL" : "en-US");
+        CloseModal();
+    }
+
+    protected override void OnInitialized()
+    {
+        GlobalizationService.OnChange += StateHasChanged;
+    }
+
+    private bool ModalVisible = false;
+
+    private void Open() => ModalVisible = true;
+
+    private void ChangeLangButton() => OpenModal();
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= StateHasChanged;
+    }
 
 }

@@ -1,12 +1,18 @@
 ﻿@page "/reservation/{token}/ContactUsPage"
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
+
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<ContactUsPage> Localizer
+
+
 @inherits Models.PageBase
 
 <PageTitle>Contact Us</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="@Data?.Reservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="Skontaktuj się z nami"></PageInfo>
+    <PageInfo Title="@ReservationState.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["ContactUs"]"></PageInfo>
 </div>
 
 <div class="description-wrapper">
@@ -14,7 +20,7 @@
         <DescriptionContent>
             <img src="/icons/info.svg"/>
             <span>
-                Nasze wsparcie dostępna jest od poniedziałku do niedzieli 08:00 - 22:00
+                @Localizer["Description"]
             </span>
         </DescriptionContent>
     </Description>
