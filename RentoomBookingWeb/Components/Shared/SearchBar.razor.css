@@ -24,3 +24,8 @@
     font-size: 1.1rem;
     color: black;
 }
+
+.sticky {
+    position: sticky;
+    top: 200px;
+}

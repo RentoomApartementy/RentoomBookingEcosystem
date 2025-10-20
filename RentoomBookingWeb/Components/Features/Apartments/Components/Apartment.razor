@@ -1,4 +1,5 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 @using RentoomBooking.SharedClasses.Services.IdoBooking;
 @inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
@@ -30,12 +31,25 @@
     </header>
 
     <div class="apartment-info">
-        <h2 itemprop="name">@Item?.Name</h2>
-        <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-            <span itemprop="streetAddress">@Item?.ObjectLocation?.LocalizationItem?.Street</span>, 
-            <span itemprop="postalCode">@Item?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
-            <span itemprop="addressLocality">@Item?.ObjectLocation?.LocalizationItem?.City</span>
-        </p>
+        <div class="">
+            <div class="">
+                <h2 itemprop="name">@Item?.Name</h2>
+                <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                    <span itemprop="streetAddress">@Item?.ObjectLocation?.LocalizationItem?.Street</span>, 
+                    <span itemprop="postalCode">@Item?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
+                    <span itemprop="addressLocality">@Item?.ObjectLocation?.LocalizationItem?.City</span>
+                </p>
+            </div>
+            
+            @if (Offer != null)
+            {
+                <span>@FormatHelper.FormatCurrency(Offer?.MinimalPrice)</span>   
+            }
+            else
+            {
+                <span>Brak oferty w wybranym terminie</span>
+            }
+        </div>
 
         <ul class="apartment-details">
             <li>
@@ -65,6 +79,7 @@
 @code {
     [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
     [Parameter] public ApartmentObject? Item { get; set;} = null;
+    [Parameter] public PricingOffer? Offer { get; set;} = null;
     private int? BedsCount = null;
     private List<ObjectMedium>? _objectMediums = null;
     private ObjectMedium? _objectMediumFirst = null;

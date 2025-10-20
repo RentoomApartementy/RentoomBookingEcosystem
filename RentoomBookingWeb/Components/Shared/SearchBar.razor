@@ -1,11 +1,12 @@
-<div class="search-container">
+@using Microsoft.AspNetCore.WebUtilities
+@inject NavigationManager NavManager;
+
+<div class="@GetClass()">
     <DatePickerRange 
         IconPath="/assets/svgs/calendar.svg"
-        @bind-StartDateValue="_startDate"
-        @bind-EndDateValue="_endDate"
+        @bind-StartDateValue="StartDate"
+        @bind-EndDateValue="EndDate"
     />
-    <Input IconPath="/assets/svgs/bed.svg" Placeholder="Ilość pokoi" Type="number" @bind-Value="_rooms"/>
-    @* <Input IconPath="/assets/svgs/person.svg" Placeholder="Ilość osób" Type="number" @bind-Value="_guests"/> *@
     <InputWithModal IconPath="/assets/svgs/person.svg">
         <ChildContent>
             <div class="" style="font-size: .9rem;">
@@ -13,7 +14,7 @@
                 {
                     <span style="color: black;">@CountPersons os.</span>
                 }
-                @if (string.IsNullOrEmpty(_adults) && string.IsNullOrEmpty(_children))
+                @if (string.IsNullOrEmpty(Adults) && string.IsNullOrEmpty(Children))
                 {
                     <span style="color: gray;">Liczba osób</span>
                 }
@@ -23,28 +24,58 @@
             <div>
                 <h6 class="dropdown-title">Wybierz ilość osób</h6>
                 <div>
-                    <Input IconPath="/assets/svgs/person.svg" Placeholder="Dorośli" Type="number" @bind-Value="_adults" IsFull="true"/>
-                    <Input IconPath="/assets/svgs/person.svg" Placeholder="Dzieci do lat 2" Type="number" @bind-Value="_children" IsFull="true" IsMarginTop="true"/>
+                    <Input IconPath="/assets/svgs/person.svg" Placeholder="Dorośli" Type="number" @bind-Value="Adults" IsFull="true"/>
+                    <Input IconPath="/assets/svgs/person.svg" Placeholder="Dzieci do lat 2" Type="number" @bind-Value="Children" IsFull="true" IsMarginTop="true"/>
                 </div>
             </div>
         </DropdownContent>
     </InputWithModal>
+    <Input IconPath="/assets/svgs/bed.svg" Placeholder="Ilość pokoi" Type="number" @bind-Value="Rooms"/>
     <Button @onclick="Search">Wyszukaj</Button>
 </div>
 
 @code {
-    private string _startDate = ""; 
-    private string _endDate = "";    
-    private string _rooms = "";
-    private string _adults = "";
-    private string _children = "";
+    [Parameter] public bool IsSticky { get; set; } = false;
+    [Parameter] public string StartDate { get; set; } = "";
+    [Parameter] public string EndDate { get; set; } = "";
+    [Parameter] public string Adults { get; set; } = "";
+    [Parameter] public string Children { get; set; } = "";
+    [Parameter] public string Rooms { get; set; } = "";
+    [Parameter] public EventCallback<Dictionary<string, string>> OnSearch { get; set; }
     
     private int CountPersons => 
-        (int.TryParse(_adults, out var a) ? a : 0) + 
-        (int.TryParse(_children, out var c) ? c : 0);
+        (int.TryParse(Adults, out var a) ? a : 0) + 
+        (int.TryParse(Children, out var c) ? c : 0);
 
-    private void Search()
+    private async Task Search()
     {
-        Console.WriteLine($"Start: {_startDate}, End: {_endDate}, Pokoje: {_rooms}, Osoby: {CountPersons}");
+        var query = new Dictionary<string, string>
+        {
+            { "startDate", StartDate },
+            { "endDate", EndDate },
+            { "rooms", Rooms },
+            { "adults", Adults },
+            { "children", Children }
+        };
+        
+        if (OnSearch.HasDelegate)
+        {
+            await OnSearch.InvokeAsync(query);
+        }
+        else
+        {
+            var url = QueryHelpers.AddQueryString("/apartamenty", query);
+            NavManager.NavigateTo(url);
+        }
+    }
+
+    private string GetClass()
+    {
+        if (IsSticky)
+        {
+            return "search-container sticky";
+        }
+
+        return "search-container";
     }
 }
