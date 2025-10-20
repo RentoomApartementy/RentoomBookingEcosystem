@@ -1,21 +1,21 @@
 @page "/apartamenty"
-@using RentoomBookingWeb.Components.Features.Apartments.Components;
-@using RentoomBooking.SharedClasses.Models.IdoBooking;
-@using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
-@using RentoomBooking.SharedClasses.Models.RentoomBooking;
-@inject IApartmentsService ApartmentsService;
-@inject IRentoomOfferService RentoomOfferService;
-@inject IJSRuntime JS;
-@using System.Text.Json;
-@using Microsoft.AspNetCore.WebUtilities;
-@inject IApartmentsService ApartmentsApiService;
-@inject NavigationManager NavManager;
+@using RentoomBookingWeb.Components.Features.Apartments.Components
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Models.IdoBooking.Public
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+@inject IApartmentsService ApartmentsService
+@inject IRentoomOfferService RentoomOfferService
+@inject IJSRuntime JS
+@using System.Text.Json
+@using Microsoft.AspNetCore.WebUtilities
+@inject IApartmentsService ApartmentsApiService
+@inject NavigationManager NavManager
 
 <PageTitle>Apartamenty</PageTitle>
 
 <div class="apartments-container">
     <HeaderSection ImagePath="/assets/images/header-bg-apartments.jpeg" Title="Apartamenty" Height="230px" />
-    
+
     <div class="apartments-search-wrapper">
         <SearchBar
             StartDate="@_startDate"
@@ -23,14 +23,13 @@
             Adults="@_adults"
             Children="@_children"
             Rooms="@_rooms"
-            OnSearch="HandleSearch"
-            />
+            OnSearch="@(async query => await HandleSearch(query))" 
+        />
     </div>
-    
+
     <div class="apartments-items">
-        
         <Filters />
-        
+
         @if (!IsMapView)
         {
             <div class="apartments-items-wrapper">
@@ -41,19 +40,28 @@
                         <div @onclick="OnMapView" class="view-button">Mapa</div>
                     </div>
                 </div>
+
                 <div class="apartments-items-container">
                     @if (!string.IsNullOrEmpty(Error))
                     {
                         <p class="text-red-600">@Error</p>
                     }
-                
+
                     @if (Items.Count > 0)
                     {
-                        @foreach (var item in Items) { 
-                            <Apartment Item="@item" Offer="@GetPricingOfferByObjectId(int.Parse(item.Id))"/>
+                        @foreach (var item in Items)
+                        {
+                            <Apartment Item="@item" Offer="@GetPricingOfferByObjectId(int.Parse(item.Id))" ShowPrice="_isSearch" />
                         }
                     }
                 </div>
+
+                @if (ApartmentsIsloading)
+                {
+                    <div class="loading-text">
+                        Ładowanie apartamentów...
+                    </div>
+                }
             </div>
         }
         else
@@ -69,31 +77,57 @@
                 <ApartmentsMap></ApartmentsMap>
             </div>
         }
-        
     </div>
 </div>
 
 @code {
-
     private long? ApartmentsCount;
     private bool IsLoading = true;
     private const int PageSize = 6;
     private readonly List<ApartmentObject> Items = new();
     private readonly List<PricingOffer> Offers = new();
     private string? Token;
-    private bool ApartmentsIsloading;
+    private bool ApartmentsIsloading = false;
     private bool HasMore = true;
     private string? Error;
     private DotNetObjectReference<Apartments>? ObjRef;
     private IJSObjectReference? JsModule;
     private bool IsMapView = false;
 
+    private string? _startDate = "";
+    private string? _endDate = "";
+    private string? _adults = "";
+    private string? _children = "";
+    private string? _rooms = "";
+    private bool _isSearch = false;
+
     protected override async Task OnInitializedAsync()
     {
         GetFiltersFromUrl();
+
+        _isSearch = !string.IsNullOrEmpty(_startDate) || !string.IsNullOrEmpty(_endDate)
+                    || !string.IsNullOrEmpty(_adults) || !string.IsNullOrEmpty(_children)
+                    || !string.IsNullOrEmpty(_rooms);
+
         await GetApartmentsCount();
-        await LoadMore();
-        await GetFilteredOffers();
+
+        if (_isSearch)
+        {
+            var query = new Dictionary<string, string>
+            {
+                { "startDate", _startDate },
+                { "endDate", _endDate },
+                { "adults", _adults },
+                { "children", _children },
+                { "rooms", _rooms }
+            };
+            await HandleSearch(query, updateUrl: false);
+        }
+        else
+        {
+            await LoadMore();
+            await GetFilteredOffers();
+        }
     }
 
     private async Task GetApartmentsCount()
@@ -113,13 +147,14 @@
             IsLoading = false;
         }
     }
-    
+
     private async Task LoadMore()
     {
-        if (IsLoading || !HasMore) return;
+        if (ApartmentsIsloading || !HasMore) return;
 
-        IsLoading = true;
+        ApartmentsIsloading = true;
         Error = null;
+        StateHasChanged();
 
         try
         {
@@ -138,14 +173,14 @@
         catch (Exception ex)
         {
             Error = ex.Message;
-            HasMore = false; 
+            HasMore = false;
         }
         finally
         {
-            IsLoading = false;
+            ApartmentsIsloading = false;
         }
     }
-    
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -155,7 +190,7 @@
             await JsModule.InvokeVoidAsync("init", ObjRef);
         }
     }
-    
+
     [JSInvokable]
     public async Task LoadMoreOnScroll()
     {
@@ -165,7 +200,7 @@
             StateHasChanged();
         }
     }
-    
+
     public async ValueTask DisposeAsync()
     {
         if (JsModule is not null && ObjRef is not null)
@@ -177,16 +212,9 @@
         JsModule?.DisposeAsync();
     }
 
-    private void OnListView()
-    {
-        IsMapView = false;
-    }
-    
-    private void OnMapView()
-    {
-        IsMapView = true;
-    }
-    
+    private void OnListView() => IsMapView = false;
+    private void OnMapView() => IsMapView = true;
+
     private async Task<List<ApartmentObject>?> GetAllApartments()
     {
         try
@@ -197,7 +225,6 @@
             {
                 items?.AddRange(page.Items);
             }
-
             return items;
         }
         catch (Exception ex)
@@ -206,26 +233,19 @@
             return null;
         }
     }
-    
-    private string? _startDate = "";
-    private string? _endDate = "";
-    private string? _adults = "";
-    private string? _children = "";
-    private string? _rooms = "";
 
     private async Task GetFilteredOffers()
     {
         try
         {
-            var items = new List<ApartmentObject>();
-            items = await GetAllApartments();
-            
+            var items = await GetAllApartments() ?? new List<ApartmentObject>();
+
             List<int> ids = items
-                .Select(apartment => int.TryParse(apartment.Id, out var id) ? id : (int?)null)
+                .Select(a => int.TryParse(a.Id, out var id) ? id : (int?)null)
                 .Where(id => id.HasValue)
                 .Select(id => id!.Value)
                 .ToList();
-            
+
             var idoParams = new PricingOffersRequest
             {
                 ObjectIds = ids,
@@ -234,23 +254,15 @@
                 NumberOfAdults = int.TryParse(_adults, out var adults) ? adults : 0,
                 NumberOfBigChildren = int.TryParse(_children, out var children) ? children : 0,
             };
-            
-            RentoomQueryOffer filters = new RentoomQueryOffer()
+
+            var filters = new RentoomQueryOffer
             {
                 IdoOfferParams = idoParams,
-                ApartmentFilterParams = new ApartmentFilters() 
+                ApartmentFilterParams = new ApartmentFilters()
             };
-            
+
             var filteredOffers = await RentoomOfferService.getOfferWitFilter(filters);
             Offers.AddRange(filteredOffers.PricingOffers);
-            
-            // var json = JsonSerializer.Serialize(filteredOffers, new JsonSerializerOptions
-            // {
-            //     WriteIndented = true // ładne formatowanie
-            // });
-            //
-            // Console.WriteLine("JSON OFERTY: ");
-            // Console.WriteLine(json);
         }
         catch (Exception ex)
         {
@@ -271,11 +283,9 @@
     }
 
     private PricingOffer? GetPricingOfferByObjectId(int objectId)
-    {
-        return Offers.Find(item => item.ObjectId == objectId);
-    }
-    
-    private async Task HandleSearch(Dictionary<string, string> query)
+        => Offers.Find(o => o.ObjectId == objectId);
+
+    private async Task HandleSearch(Dictionary<string, string> query, bool updateUrl = true)
     {
         _startDate = query.GetValueOrDefault("startDate", "");
         _endDate = query.GetValueOrDefault("endDate", "");
@@ -283,16 +293,45 @@
         _children = query.GetValueOrDefault("children", "");
         _rooms = query.GetValueOrDefault("rooms", "");
 
+        if (updateUrl)
+        {
+            var urlQuery = new Dictionary<string, string>
+            {
+                { "startDate", _startDate },
+                { "endDate", _endDate },
+                { "adults", _adults },
+                { "children", _children },
+                { "rooms", _rooms }
+            };
+            var url = QueryHelpers.AddQueryString("/apartamenty", urlQuery);
+            NavManager.NavigateTo(url, forceLoad: false);
+        }
+
         Items.Clear();
         Offers.Clear();
         Token = null;
-        HasMore = true;
+        HasMore = false;
 
         await GetApartmentsCount();
-        await LoadMore();
+        ApartmentsIsloading = true;
+        StateHasChanged();
+
+        Items.AddRange(await GetAllApartments() ?? new List<ApartmentObject>());
+
         await GetFilteredOffers();
+
+        Items.Sort((a, b) =>
+        {
+            var offerA = GetPricingOfferByObjectId(int.Parse(a.Id));
+            var offerB = GetPricingOfferByObjectId(int.Parse(b.Id));
+            if (offerA != null && offerB == null) return -1;
+            if (offerA == null && offerB != null) return 1;
+            return 0;
+        });
+
+        ApartmentsIsloading = false;
+        _isSearch = true;
 
         StateHasChanged();
     }
-
 }

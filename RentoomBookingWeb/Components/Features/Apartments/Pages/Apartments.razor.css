@@ -84,3 +84,7 @@
     background-color: #945F28;
     cursor: pointer;
 }
+
+.loading-text {
+    text-align: center;
+}
