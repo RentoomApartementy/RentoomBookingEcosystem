@@ -11,3 +11,7 @@
     gap: 0.25rem;
     margin: 2rem 0;
 }
+
+img{
+    transform: translateY(-2px);
+}

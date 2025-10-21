@@ -2,8 +2,13 @@
 @using RentoomBooking.SharedClasses.Models;
 @using RentoomBooking.StayWell.Components;
 @using RentoomBooking.StayWell.States
+@using RentoomBooking.StayWell.Services
+@inject ModalService ModalService
 @inject ReservationState ReservationState
 @inject MediaState MediaState
+@inject ApartmentState ApartmentState
+@inject AmenitiesState AmenitiesState
+@inject LocksState LocksState
 
 <div class="layout-page">
     <div class="layout-header">
@@ -11,26 +16,70 @@
         </Header>
     </div>
     <div class="layout-body">
-        @Body
+        @if (ReservationState.IsLoading || MediaState.IsLoading || ApartmentState.IsLoading || AmenitiesState.IsLoading || LocksState.IsLoading)
+        {
+            <div class="loading"></div>
+        }
+        else
+        {
+            @Body
+        }
     </div>
-
     <div class="layout-footer-nav">
         <FooterNavigation Token="@ReservationState.CurrentToken">
         </FooterNavigation>
     </div>
 </div>
 
+<Modal Title="@_modalTitle" OnClose="CloseModal" IsVisible="@_modalVisibility">
+    <Content>
+        @_modalContent
+    </Content>
+</Modal>
+
 
 @code {
+
+    private bool _modalVisibility = false;
+    private string _modalTitle = string.Empty;
+    private RenderFragment _modalContent;
 
     protected override void OnInitialized()
     {
         ReservationState.OnChange += StateHasChanged;
+        MediaState.OnChange += StateHasChanged;
+        ApartmentState.OnChange += StateHasChanged;
+        AmenitiesState.OnChange += StateHasChanged;
+        LocksState.OnChange += StateHasChanged;
+
+        ModalService.OnShow += ShowModal;
+        ModalService.OnClose += CloseModal;
+
         InvokeAsync(StateHasChanged);
+    }
+
+    private void ShowModal(string title, RenderFragment content)
+    {
+        _modalTitle = title;
+        _modalContent = content;
+        _modalVisibility = true;
+        StateHasChanged();
+    }
+
+    private void CloseModal()
+    {
+        _modalVisibility = false;
+        StateHasChanged();
     }
 
     public void Dispose()
     {
         ReservationState.OnChange -= StateHasChanged;
+        MediaState.OnChange -= StateHasChanged;
+        ApartmentState.OnChange -= StateHasChanged;
+        AmenitiesState.OnChange -= StateHasChanged;
+        LocksState.OnChange -= StateHasChanged;
+        ModalService.OnShow -= ShowModal;
+        ModalService.OnClose -= CloseModal;
     }
 }

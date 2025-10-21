@@ -1,4 +1,8 @@
-﻿@if (IsVisible)
+﻿@using RentoomBooking.StayWell.Services
+@using RentoomBooking.StayWell.Components
+@inject GlobalizationService GlobalizationService
+
+@if (IsVisible)
 {
     <div class="modal-backdrop" @onclick="Close" tabindex="-1" @ref="backdropRef">
         <div class="modal" @onclick:stopPropagation role="dialog" aria-labelledby="modal-title" aria-modal="true">
@@ -31,6 +35,12 @@
 
     private ElementReference backdropRef;
 
+    protected override Task OnInitializedAsync()
+    {
+        GlobalizationService.OnChange += StateHasChanged;
+        return base.OnInitializedAsync();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && IsVisible)
@@ -52,4 +62,10 @@
             StateHasChanged();
         }
     }
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= StateHasChanged;
+    }
+
 }

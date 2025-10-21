@@ -26,8 +26,15 @@
     </div>
     <div class="amenity">
         <span><img src="/icons/wifi.svg" />Wifi:</span>
+        @if(DateTime.Now < ReservationState?.CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom())
+        {
+          <span class="text">Dostępne podczas rezerwacji</span>
+        }
+        else
+        {
         <span class="text">login</span>
         <span class="text">password</span>
+        }
     </div>
 
     @if (AmenitiesState.CurrentAmenities?.Count >= 1)
