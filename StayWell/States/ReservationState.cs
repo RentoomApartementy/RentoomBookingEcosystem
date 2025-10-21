@@ -1,5 +1,6 @@
 ﻿using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.StayWell.Services;
+using System.Net;
 
 namespace RentoomBooking.StayWell.States
 {
@@ -9,6 +10,7 @@ namespace RentoomBooking.StayWell.States
         private RentoomReservation? _reservation;
         private readonly BackendApi _backendApi = backendApi;
         private string? _currentToken;
+        private HttpStatusCode? _currentStatus;
 
         public RentoomReservation? CurrentReservation
         {
@@ -21,6 +23,7 @@ namespace RentoomBooking.StayWell.States
         }
 
         public string? CurrentToken => _currentToken;
+        public HttpStatusCode? CurrentStatus => _currentStatus;
 
         public async Task<RentoomReservation?> GetReservationAsync(string token)
         {
@@ -36,6 +39,7 @@ namespace RentoomBooking.StayWell.States
                 }
 
                 var reservation = await _backendApi.GetReservationByTokenAsync(token);
+                _currentStatus = reservation?.StatusCode;
 
                 if(reservation?.StatusCode == System.Net.HttpStatusCode.Gone)
                 {

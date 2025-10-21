@@ -30,7 +30,8 @@
 </div>
 
 <div class="buttons-wrapper">
-    <Button Text="@Localizer["OpenRemotely"]" ButtonStyle="margin-bottom: 30px;">
+    <Button Text="@Localizer["OpenRemotely"]" 
+   Disabled="_buttonState" ButtonStyle="margin-bottom: 30px;">
         <Icon>
             <img src="/icons/radio.svg">
         </Icon>
@@ -46,11 +47,23 @@
     </Description>
 
     <div style="font-size: calc(0.25vw + 1.25rem);">
-        <span style ="font-weight: bold">567850</span> 
-        @Localizer["Confirm"]
-        <span style="font-weight: bold">#</span>
-        @Localizer["Or"]
-        <img src="/icons/key-round.svg" />
+        @if (DateTime.Now < ReservationState?.CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom())
+        {
+            <span>@Localizer["CodeNotAvaliable"]</span>
+        }
+        else
+        {
+            <span style ="font-weight: bold">@LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()</span> 
+            <span>@Localizer["Confirm"]</span>
+            <span style="font-weight: bold">#</span>
+            <span>@Localizer["Or"]</span>
+            <img src="/icons/key-round.svg" />
+        }
     </div>
 
 </div>
+
+
+@code{
+    private bool _buttonState => DateTime.Now < ReservationState?.CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom();
+}
