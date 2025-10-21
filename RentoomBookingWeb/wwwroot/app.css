@@ -133,3 +133,14 @@ code {
     text-decoration: none;
     
 }
+
+.marker-offer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 70px;
+    background: #fff;
+    border-radius: 999rem;
+    border: 0.1rem solid #1F5A41;
+    font-weight: bold;
+}

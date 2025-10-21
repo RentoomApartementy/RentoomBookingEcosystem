@@ -30,53 +30,59 @@
     <div class="apartments-items">
         <Filters />
 
-        @if (!IsMapView)
-        {
+        
             <div class="apartments-items-wrapper">
                 <div class="text-button-wrapper">
                     <h4>@ApartmentsCount apartamenty/ów</h4>
                     <div class="view-buttons-wrapper">
-                        <div class="view-button-active">Siatka</div>
-                        <div @onclick="OnMapView" class="view-button">Mapa</div>
+                        <div @onclick="() => ToggleView(false)" class="view-button @(IsMapView ? "" : "view-button-active")">Siatka</div>
+                        <div @onclick="() => ToggleView(true)" class="view-button @(IsMapView ? "view-button-active" : "")">Mapa</div>
                     </div>
                 </div>
 
-                <div class="apartments-items-container">
-                    @if (!string.IsNullOrEmpty(Error))
-                    {
-                        <p class="text-red-600">@Error</p>
-                    }
-
-                    @if (Items.Count > 0)
-                    {
-                        @foreach (var item in Items)
-                        {
-                            <Apartment Item="@item" Offer="@GetPricingOfferByObjectId(int.Parse(item.Id))" ShowPrice="_isSearch" />
-                        }
-                    }
-                </div>
-
-                @if (ApartmentsIsloading)
+                @if (!IsMapView)
                 {
-                    <div class="loading-text">
-                        Ładowanie apartamentów...
-                    </div>
+                    <div class="apartments-items-container">
+                        @if (!string.IsNullOrEmpty(Error))
+                        {
+                            <p class="text-red-600">@Error</p>
+                        }
+
+                        @if (Items.Count > 0)
+                        {
+                            @foreach (var item in Items)
+                            {
+                                <Apartment Item="@item" Offer="@GetPricingOfferByObjectId(int.Parse(item.Id))" ShowPrice="_isSearch"/>
+                            }
+                        }
+
+                        @if (ApartmentsIsloading)
+                        {
+                            <div class="loading-text">
+                                Ładowanie apartamentów...
+                            </div>
+                        }
+                    </div>   
                 }
+                
+                
+                <div class="apartments-items-map" style="display: @(IsMapView ? "block" : "none")">
+                    <ApartmentsMap Offers="@Offers"></ApartmentsMap>
+                </div>   
+                
             </div>
-        }
-        else
-        {
-            <div class="apartments-items-map">
-                <div class="text-button-wrapper">
-                    <h4>@ApartmentsCount apartamenty/ów</h4>
-                    <div class="view-buttons-wrapper">
-                        <div @onclick="OnListView" class="view-button">Siatka</div>
-                        <div class="view-button-active">Mapa</div>
-                    </div>
-                </div>
-                <ApartmentsMap></ApartmentsMap>
-            </div>
-        }
+        
+        
+        @* <div class="apartments-items-map" style="display:@(IsMapView ? "block" : "none")"> *@
+        @*     <div class="text-button-wrapper"> *@
+        @*         <h4>@ApartmentsCount apartamenty/ów</h4> *@
+        @*         <div class="view-buttons-wrapper"> *@
+        @*             <div @onclick="OnListView" class="view-button">Siatka</div> *@
+        @*             <div class="view-button-active">Mapa</div> *@
+        @*         </div> *@
+        @*     </div> *@
+        @*     <ApartmentsMap Offers="@Offers"></ApartmentsMap> *@
+        @* </div> *@
     </div>
 </div>
 
@@ -214,6 +220,11 @@
 
     private void OnListView() => IsMapView = false;
     private void OnMapView() => IsMapView = true;
+    private void ToggleView(bool map)
+    {
+        IsMapView = map;
+        StateHasChanged(); // wymusza ponowne renderowanie, żeby div #map istniał
+    }
 
     private async Task<List<ApartmentObject>?> GetAllApartments()
     {
