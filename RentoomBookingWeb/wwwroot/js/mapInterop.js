@@ -4,6 +4,11 @@ window.leafletMap = {
     mediaCache: new Map(),
 
     createMap: function (id, lat, lng, zoom) {
+        if (this.map) {
+            this.map.remove();
+            this.map = null;
+        }
+        
         if (!this.map) {
             this.map = L.map(id, { attributionControl: false }).setView([lat, lng], zoom);
 
