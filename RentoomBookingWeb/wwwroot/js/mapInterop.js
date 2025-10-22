@@ -27,39 +27,42 @@ window.leafletMap = {
             this.map.removeLayer(this.markerCluster);
         }
 
-        this.markerCluster = L.markerClusterGroup({ showCoverageOnHover: false });
+        this.markerCluster = L.markerClusterGroup({
+            showCoverageOnHover: false,
+            iconCreateFunction: function(cluster) {
+                const markers = cluster.getAllChildMarkers();
+                const hasOffer = markers.some(m => m.options.hasOffer);
+                // const clusterColor = hasOffer ? 'blue' : 'yellow';
+                return L.divIcon({
+                    html: `<div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                ${cluster.getChildCount()}
+                           </div>`,
+                    className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
+                    iconSize: L.point(40, 40)
+                });
+            }
+        });
 
         markers.forEach(m => {
             const lat = parseFloat(m.lat);
             const lng = parseFloat(m.lng);
             if (isNaN(lat) || isNaN(lng)) return;
 
-            const defaultIcon = `
-                <div class="marker">
-                    <img src="/assets/svgs/marker.svg" alt="marker" style="width: 35px; height: 35px;" />
-                </div>
-            `;
-
-            const priceIcon = `
-                <div class="marker-offer">
-                    <span class="marker-price">${Math.round(m.price)} zł</span>
-                </div>
-            `;
-
+            const defaultIcon = `<div class="marker"><img src="/assets/svgs/marker.svg" alt="marker" style="width: 35px; height: 35px;" /></div>`;
+            const priceIcon = `<div class="marker-offer"><span class="marker-price">${Math.round(m.price)} zł</span></div>`;
             const htmlContent = m.hasOffer ? priceIcon : defaultIcon;
 
             const customIcon = L.divIcon({
                 className: 'custom-marker',
                 html: htmlContent,
-                iconSize: m.hasOffer ? [70, 35] : [35, 35],
-                iconAnchor: m.hasOffer ? [35, 35] : [17, 35],
+                iconSize: [35, 35],
+                iconAnchor: [17, 35],
                 popupAnchor: [0, -40]
             });
 
-            const marker = L.marker([lat, lng], { icon: customIcon });
+            const marker = L.marker([lat, lng], { icon: customIcon, hasOffer: m.hasOffer });
 
-            if (m.popup)
-                marker.bindPopup(m.popup);
+            if (m.popup) marker.bindPopup(m.popup);
 
             marker.on('click', async function () {
                 if (m.objRef && m.id) {
@@ -68,7 +71,6 @@ window.leafletMap = {
                         updatePopupImage(m.id, cachedUrl);
                         return;
                     }
-
                     try {
                         const imageUrl = await m.objRef.invokeMethodAsync('OnMarkerClicked', m.id);
                         if (imageUrl) {
@@ -89,12 +91,9 @@ window.leafletMap = {
         function updatePopupImage(id, url) {
             const popupEl = document.getElementById(`popup-${id}`);
             if (!popupEl) return;
-
             const imgContainer = popupEl.querySelector("div");
             if (imgContainer) {
-                imgContainer.innerHTML = `
-                    <img src="${url}" style="height: 130px; width: 250px; object-fit: cover; border-radius: .5rem;" />
-                `;
+                imgContainer.innerHTML = `<img src="${url}" style="height: 130px; width: 250px; object-fit: cover; border-radius: .5rem;" />`;
             }
         }
     },
