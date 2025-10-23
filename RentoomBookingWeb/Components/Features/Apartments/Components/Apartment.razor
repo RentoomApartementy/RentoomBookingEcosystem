@@ -1,20 +1,23 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
-@using RentoomBooking.SharedClasses.Services;
-@using RentoomBooking.SharedClasses.Models.IdoBooking;
-@inject IdoSellService IdoSellService;
+@using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
+@using RentoomBooking.SharedClasses.Services.IdoBooking;
+@inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
 
-<article @onclick="GoToApartment" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
+<article @ref="ElementRef" @onclick="GoToApartment" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
     <header>
         @if (_objectMediumFirst == null)
         {
-            <img 
-                src="@ImageUrl"
-                alt="Przykladowy apartament"
-                title="Przykladowe zdjecie"
-                itemprop="photo"
-                class="apartment-image" 
-            />
+            @* <img  *@
+            @*     src="@ImageUrl" *@
+            @*     alt="Przykladowy apartament" *@
+            @*     title="Przykladowe zdjecie" *@
+            @*     itemprop="photo" *@
+            @*     class="apartment-image"  *@
+            @* /> *@
+            <div class="loading-image">
+                <div class="skeleton"></div>
+            </div>
         }
         else
         {   
@@ -31,12 +34,16 @@
     </header>
 
     <div class="apartment-info">
-        <h2 itemprop="name">@Item?.Name</h2>
-        <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-            <span itemprop="streetAddress">@Item?.ObjectLocation?.LocalizationItem?.Street</span>, 
-            <span itemprop="postalCode">@Item?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
-            <span itemprop="addressLocality">@Item?.ObjectLocation?.LocalizationItem?.City</span>
-        </p>
+        <div class="">
+            <div class="">
+                <h2 itemprop="name">@Item?.Name</h2>
+                <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                    <span itemprop="streetAddress">@Item?.ObjectLocation?.LocalizationItem?.Street</span>, 
+                    <span itemprop="postalCode">@Item?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
+                    <span itemprop="addressLocality">@Item?.ObjectLocation?.LocalizationItem?.City</span>
+                </p>
+            </div>
+        </div>
 
         <ul class="apartment-details">
             <li>
@@ -56,6 +63,20 @@
                 <span itemprop="floorSize">@Item?.Area m²</span>
             </li>
         </ul>
+        
+        @if (ShowPrice)
+        {
+            <div class="apartment-price-info">
+                @if (Offer != null)
+                {
+                    <span>Dostępny od @FormatHelper.FormatCurrency(Offer?.MinimalPrice)</span>   
+                }
+                else
+                {
+                    <span>Brak oferty w wybranym terminie</span>
+                } 
+            </div>
+        }
 
         <div class="apartment-button-wrapper">
             <Button>Rezerwacja</Button>
@@ -66,23 +87,46 @@
 @code {
     [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
     [Parameter] public ApartmentObject? Item { get; set;} = null;
+    [Parameter] public PricingOffer? Offer { get; set;} = null;
+    [Parameter] public bool ShowPrice { get; set;} = false;
     private int? BedsCount = null;
     private List<ObjectMedium>? _objectMediums = null;
     private ObjectMedium? _objectMediumFirst = null;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+    private IJSObjectReference? _jsModule;
+    private DotNetObjectReference<Apartment>? _objRef;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Item != null)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
+            await _jsModule.InvokeVoidAsync("observeElement", _objRef, ElementRef);
+        }
+    }
+    
+    [JSInvokable]
+    public async Task LoadMedia()
+    {
+        await GetObjectMedia();
+        StateHasChanged();
+    }
+
+    private ElementReference ElementRef;
     
     protected override async Task OnInitializedAsync()
     {
         BedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
-        await GetObjectMedia();
+        //await GetObjectMedia();
     }
-
     
     private async Task GetObjectMedia()
     {
         var idString = Item?.Id;
         if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
         {
-            _objectMediums = await IdoSellService.FetchObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
             _objectMediumFirst = _objectMediums.FirstOrDefault();
         }
     }

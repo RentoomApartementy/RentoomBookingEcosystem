@@ -1,0 +1,78 @@
+.custom-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #9aa59b;
+    border-radius: 12px;
+    padding: 4px 8px;
+    width: 150px;
+    height: 43px;
+    background: white;
+}
+
+.input-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+}
+
+.custom-input input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    background: transparent;
+    width: 100%;
+}
+
+@media (max-width: 910px) {
+    .custom-input {
+        width: 100%;
+    }
+}
+
+.dropdown-modal {
+    position: absolute;
+    margin-top: 4px;
+    width: 100%;
+    background: white;
+    border: 1px solid #9aa59b;
+    border-radius: 12px;
+    padding: 8px;
+    z-index: 10;
+}
+
+.dropdown-modal > * {
+    margin-bottom: 6px;
+}
+
+.dropdown-modal > *:last-child {
+    margin-bottom: 0;
+}
+
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-modal {
+    position: absolute;
+    top: 100%; 
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid #9aa59b;
+    border-radius: 12px;
+    padding: 8px;
+    z-index: 999;
+    display: inline-block;
+    min-width: 100px;
+    width: 150%;
+}
+
+.dropdown-modal > * {
+    margin-bottom: 6px;
+}
+
+.dropdown-modal > *:last-child {
+    margin-bottom: 0;
+}

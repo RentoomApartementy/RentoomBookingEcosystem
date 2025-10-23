@@ -1,23 +1,16 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Models.IdoBooking.Public
+@using RentoomBooking.SharedClasses.Services.IdoBooking
 @inject IApartmentsService ApartmentsApiService
-@inject IdoSellService IdoSellService
+@inject IIdoApartmentService IdoApartmentService
 @inject IJSRuntime JSRuntime
 
 <div id="map" style="width: 100%; height: 90%; margin: 1rem 0;"></div>
 
 @code {
-    private List<ApartmentObject>? Items { get; set; } = new();
+    [Parameter] public List<PricingOffer> Offers { get; set; } = new();
+    private List<ApartmentObject> Items { get; set; } = new();
     private DotNetObjectReference<ApartmentsMap>? _objRef;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender) return;
-
-        _objRef = DotNetObjectReference.Create(this);
-
-        await GetAllApartments();
-        await SetupMarkers();
-    }
 
     public class Marker
     {
@@ -26,6 +19,42 @@
         public string Popup { get; set; } = "";
         public string? Id { get; set; }
         public DotNetObjectReference<ApartmentsMap>? ObjRef { get; set; }
+        public bool HasOffer { get; set; }
+        public decimal? Price { get; set; }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+
+            await JSRuntime.InvokeVoidAsync("leafletMap.createMap", "map", 53.012217, 18.607378, 14);
+
+            await LoadApartmentsAndMarkers();
+        }
+        else
+        { 
+            await JSRuntime.InvokeVoidAsync("leafletMap.refreshMap");
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Items.Count > 0)
+        {
+            await SetupMarkers();
+        }
+    }
+
+    private async Task LoadApartmentsAndMarkers()
+    {
+        await GetAllApartments();
+
+        if (Items.Count > 0)
+        {
+            await SetupMarkers();
+        }
     }
 
     private async Task GetAllApartments()
@@ -33,31 +62,29 @@
         try
         {
             var page = await ApartmentsApiService.GetAllApartmentsList();
-            if (page?.Items is { Count: > 0 })
-            {
-                Items?.AddRange(page.Items);
-            }
+            Items = page?.Items?.ToList() ?? new List<ApartmentObject>();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
-            Items = null;
+            Items.Clear();
         }
     }
 
     private async Task SetupMarkers()
     {
-        await JSRuntime.InvokeVoidAsync("leafletMap.createMap", "map", 53.012217, 18.607378, 14);
-
-        if (Items is not { Count: > 0 }) return;
+        await JSRuntime.InvokeVoidAsync("leafletMap.clearMarkers");
 
         var markers = Items
             .Where(i => i?.ObjectLocation?.LocalizationItem != null)
-            .Select(i => new Marker
+            .Select(i =>
             {
-                Lat = i?.ObjectLocation?.LocalizationItem?.GeoLocationLat,
-                Lng = i?.ObjectLocation?.LocalizationItem?.GeoLocationLng,
-                Popup = $@"
+                var offer = GetPricingOfferByObjectId(int.Parse(i.Id ?? "0"));
+                return new Marker
+                {
+                    Lat = i?.ObjectLocation?.LocalizationItem?.GeoLocationLat,
+                    Lng = i?.ObjectLocation?.LocalizationItem?.GeoLocationLng,
+                    Popup = $@"
 <div id='popup-{i?.Id}' style='display: flex; flex-direction: column; gap: .4rem;'>
     <div style='height: 130px; width: 250px; display: flex; align-items: center; justify-content: center; background: #f3f3f3; border-radius: .5rem;'>
         <span>Ładowanie zdjęcia...</span>
@@ -74,8 +101,11 @@
         </a>
     </div>
 </div>",
-                Id = i?.Id,
-                ObjRef = _objRef
+                    Id = i?.Id,
+                    ObjRef = _objRef,
+                    HasOffer = offer != null,
+                    Price = offer?.MinimalPrice,
+                };
             })
             .ToList();
 
@@ -91,7 +121,7 @@
 
     private async Task<ObjectMedium?> GetObjectMedia(int id)
     {
-        var mediums = await IdoSellService.FetchObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+        var mediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
         return mediums.FirstOrDefault();
     }
 
@@ -99,4 +129,7 @@
     {
         _objRef?.Dispose();
     }
+
+    private PricingOffer? GetPricingOfferByObjectId(int objectId)
+        => Offers.Find(o => o.ObjectId == objectId);
 }

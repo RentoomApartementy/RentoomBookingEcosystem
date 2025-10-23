@@ -8,6 +8,7 @@
     align-self: flex-start;
     position: sticky;
     top: 100px;
+    border-radius: .5rem;
 }
 
 .filters-title {
