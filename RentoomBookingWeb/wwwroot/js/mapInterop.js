@@ -98,7 +98,7 @@ window.leafletMap = {
             if (!popupEl) return;
             const imgContainer = popupEl.querySelector("div");
             if (imgContainer) {
-                imgContainer.innerHTML = `<img src="${url}" style="height: 130px; width: 250px; object-fit: cover; border-radius: .5rem;" />`;
+                imgContainer.innerHTML = `<img src="${url}" style="height: 130px; width: 100%; object-fit: cover; border-radius: .5rem .5rem 0 0;" />`;
             }
         }
     },
