@@ -9,6 +9,7 @@
 
 @code {
     [Parameter] public List<PricingOffer> Offers { get; set; } = new();
+    [Parameter] public Boolean IsSearch { get; set; } = false;
     private List<ApartmentObject> Items { get; set; } = new();
     private DotNetObjectReference<ApartmentsMap>? _objRef;
 
@@ -111,7 +112,7 @@
             })
             .ToList();
 
-        await JSRuntime.InvokeVoidAsync("leafletMap.addMarkers", markers);
+        await JSRuntime.InvokeVoidAsync("leafletMap.addMarkers", markers, IsSearch);
     }
 
     [JSInvokable]

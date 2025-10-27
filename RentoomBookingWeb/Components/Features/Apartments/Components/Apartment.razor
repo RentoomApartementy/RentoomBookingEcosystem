@@ -148,7 +148,7 @@
     protected override async Task OnInitializedAsync()
     {
         _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
-        await GetObjectMedia();
+        //await GetObjectMedia();
     }
     
     private async Task GetObjectMedia()
