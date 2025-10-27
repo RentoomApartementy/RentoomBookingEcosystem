@@ -4,9 +4,9 @@
 @inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
 
-<article @ref="ElementRef" @onclick="GoToApartment" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
+<article @ref="_elementRef" @onclick="GoToApartment" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
     <header>
-        @if (_objectMediumFirst == null)
+        @if (_currentObjectMedium == null)
         {
             @* <img  *@
             @*     src="@ImageUrl" *@
@@ -21,14 +21,43 @@
         }
         else
         {   
-            <div class="image-wrapper">
-                <img 
-                    src="@_objectMediumFirst.Url"
-                    alt="@Item?.Name"
-                    title="@Item?.Name"
-                    itemprop="photo"
-                    class="apartment-image" 
-                />
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img 
+                        src="@_currentObjectMedium.Url"
+                        alt="@Item?.Name"
+                        title="@Item?.Name"
+                        itemprop="photo"
+                        class="apartment-image" 
+                    />
+                </div>
+                
+                <div @onclick="() => ChangeCurrentObjectMedium(1)" @onclick:stopPropagation  class="right-button">
+                    &gt;
+                </div>
+                
+                <div @onclick="() => ChangeCurrentObjectMedium(-1)" @onclick:stopPropagation  class="left-button">
+                    &lt;
+                </div>
+                
+                @if (_objectMediums != null)
+                {
+                    <div class="image-counter">
+                        <small>@(_currentMediumIndex + 1)/@(_objectMediums.Count)</small>
+                    </div>
+                }
+                
+                @* @if (_objectMediums != null) *@
+                @* { *@
+                @*     <div class="nav-dot-wrapper"> *@
+                @*         @for (int i = 0; i < _objectMediums.Count; i++) *@
+                @*         { *@
+                @*             <div class="nav-dot"> *@
+                @*                  *@
+                @*             </div> *@
+                @*         } *@
+                @*     </div> *@
+                @* } *@
             </div>
         }
     </header>
@@ -52,7 +81,7 @@
             </li>
             <li>
                 <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
-                @BedsCount
+                @_bedsCount
             </li>
             <li>
                 <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
@@ -86,12 +115,13 @@
 
 @code {
     [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
-    [Parameter] public ApartmentObject? Item { get; set;} = null;
-    [Parameter] public PricingOffer? Offer { get; set;} = null;
-    [Parameter] public bool ShowPrice { get; set;} = false;
-    private int? BedsCount = null;
+    [Parameter] public ApartmentObject? Item { get; set; } = null;
+    [Parameter] public PricingOffer? Offer { get; set; } = null;
+    [Parameter] public bool ShowPrice { get; set; } = false;
     private List<ObjectMedium>? _objectMediums = null;
-    private ObjectMedium? _objectMediumFirst = null;
+    private int _currentMediumIndex = 0;
+    private ObjectMedium? _currentObjectMedium = null;
+    private int? _bedsCount = null;
     [Inject] private IJSRuntime JS { get; set; } = default!;
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<Apartment>? _objRef;
@@ -102,7 +132,7 @@
         {
             _objRef = DotNetObjectReference.Create(this);
             _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
-            await _jsModule.InvokeVoidAsync("observeElement", _objRef, ElementRef);
+            await _jsModule.InvokeVoidAsync("observeElement", _objRef, _elementRef);
         }
     }
     
@@ -113,12 +143,12 @@
         StateHasChanged();
     }
 
-    private ElementReference ElementRef;
+    private ElementReference _elementRef;
     
     protected override async Task OnInitializedAsync()
     {
-        BedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
-        //await GetObjectMedia();
+        _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
+        await GetObjectMedia();
     }
     
     private async Task GetObjectMedia()
@@ -127,7 +157,8 @@
         if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
         {
             _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
-            _objectMediumFirst = _objectMediums.FirstOrDefault();
+            _currentMediumIndex = 0;
+            _currentObjectMedium = _objectMediums.FirstOrDefault();
         }
     }
     
@@ -138,4 +169,20 @@
             Navigation.NavigateTo($"/apartamenty/{id}");
         }
     }
+
+    private void ChangeCurrentObjectMedium(int step)
+    {
+        if (_objectMediums == null || !_objectMediums.Any())
+            return;
+
+        _currentMediumIndex += step;
+
+        if (_currentMediumIndex < 0)
+            _currentMediumIndex = _objectMediums.Count - 1;
+        else if (_currentMediumIndex >= _objectMediums.Count)
+            _currentMediumIndex = 0;
+
+        _currentObjectMedium = _objectMediums[_currentMediumIndex];
+    }
+
 }
