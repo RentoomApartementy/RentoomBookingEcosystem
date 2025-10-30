@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Models.RentoomBooking
 {
+   
+    //todo: depracate - sprawdzic kod i usunąć klasę. nie powinna być już używana.
     public class AmenitiesFilterDocument
     {
         public string id { get; set; } = string.Empty;
@@ -13,8 +15,10 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
         public List<SearchFilter> filters { get; set; } = new();
     }
 
-    public class SearchFilterDocument : AmenitiesFilterDocument
+    public class SearchFilterDocument
     {
+
+        public string id { get; set; } = string.Empty;
         public Dictionary<string, List<SearchFilter>> filtersDictionary { get; set; } = new();
     }
 

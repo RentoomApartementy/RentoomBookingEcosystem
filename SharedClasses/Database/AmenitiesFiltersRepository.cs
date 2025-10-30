@@ -21,7 +21,7 @@ namespace RentoomBooking.SharedClasses.Database
         private const string PartitionKey = "/id";
         private const string AmenitiesFilterPartitionValue = "amenities-filter";
 
-        private const string CitiesFilterPartitionValue = "cities-filter";
+        private const string CitiesFilterPartitionValue = "city-regions-filter";
 
         public FiltersRepository(CosmosClient client, IConfiguration configuration)
         {
