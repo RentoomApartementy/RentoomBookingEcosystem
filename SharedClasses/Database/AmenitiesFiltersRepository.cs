@@ -48,13 +48,13 @@ namespace RentoomBooking.SharedClasses.Database
         public async Task SeedAmenitiesFilters()
         {
             List<SearchFilter> list = [
-              new() { id = "205", name = "Garaż" },
-                new () { id = "204", name = "Parking" },
-                new () { id = "132", name = "Balkon" },
-                new () { id = "206", name = "Zwierzęta dozwolone" },
-                new () { id = "152", name = "Winda" },
-                new () { id = "96", name = "Dostęp dla wózków inwalidzkich" },
-                new () { id = "86", name = "Pralka" },
+              new() { id = "205", name = "Garaż",icon_materialui_name = "garage_home" },
+                new () { id = "204", name = "Parking", icon_materialui_name="parking_sign"},
+                new () { id = "132", name = "Balkon", icon_materialui_name ="balcony" },
+                new () { id = "206", name = "Zwierzęta dozwolone" , icon_materialui_name="pets"},
+                new () { id = "152", name = "Winda", icon_materialui_name="elevator" },
+                new () { id = "96", name = "Dostęp dla wózków inwalidzkich",icon_materialui_name="accessible" },
+                new () { id = "86", name = "Pralka" ,icon_materialui_name="local_laundry_service"},
 
             ];
 

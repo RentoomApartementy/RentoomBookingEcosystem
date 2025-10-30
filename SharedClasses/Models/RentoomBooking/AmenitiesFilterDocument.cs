@@ -27,6 +27,6 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
     {
         public string id { get; set; }
         public string name { get;set; }
-
+        public string icon_materialui_name { get; set; }
     }
 }
