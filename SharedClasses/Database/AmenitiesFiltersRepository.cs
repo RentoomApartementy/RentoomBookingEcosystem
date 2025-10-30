@@ -135,7 +135,16 @@ namespace RentoomBooking.SharedClasses.Database
         {
             List<SearchFilter> regions = [];
             
-            regions.AddRange(regionNames.Select(r =>  new SearchFilter { id = r, name = r }).ToList());
+            regions.AddRange(regionNames.Select(r => {
+
+                var iconName = "map";
+                if (r.ToLower() == "centrum") iconName = "location_city";
+                if (r.ToLower() == "stare miasto") iconName = "castle";
+
+                return new SearchFilter { id = r, name = r, icon_materialui_name = iconName };
+
+            }
+            ).ToList());
             
             var amFilters = new Dictionary<string, List<SearchFilter>>
             {

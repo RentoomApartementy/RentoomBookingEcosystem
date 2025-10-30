@@ -110,7 +110,7 @@ namespace RentoomBooking.Api
                 //  var result  = await _idoAppartmenrService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
                 var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync();
 
-                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).ToList();
+                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
 
                 await _filtersRepository.SaveRegionsFilters(regionsFilter);
 
