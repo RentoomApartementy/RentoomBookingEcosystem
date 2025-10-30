@@ -11,7 +11,7 @@ using System.Text;
 
 namespace RentoomBooking.SharedClasses.Services
 {
-    public interface IAmenitiesService
+    public interface IApartmentSearchFiltersService
     {
         /// <summary>
         /// Zwraca zestaw filtrów z Idobooking do wyświetlenia na stronie rentoom.
@@ -20,34 +20,36 @@ namespace RentoomBooking.SharedClasses.Services
         /// </summary>
         /// <param name="objectTypes"></param>
         /// <returns>List<ObjectTypesAmenities>?</returns>
-        Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes);
+       // Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes);
+        Task<List<SearchFilterDocument>> GetFiltersAsync();
+        Task<bool> SaveFiltersAsync();
     }
 
-    public class AmenitiesService : IAmenitiesService
+    public class ApartmentSearchFiltersService : IApartmentSearchFiltersService
     {
         private readonly IHttpClientFactory _factory;
         BookingDatabase _bd;
-        AmenitiesRepository _AmenitiesRepository;
+        FiltersRepository _FiltersRepository;
         ApartmentRepository _ApartmentRepository;
         IdoSellService _IdoSellService;
-        public AmenitiesService(IHttpClientFactory factory, BookingDatabase bd, AmenitiesRepository AmenitiesRepository, ApartmentRepository ApartmentRepository, IdoSellService idoSellService)
+        public ApartmentSearchFiltersService(IHttpClientFactory factory, BookingDatabase bd, FiltersRepository FiltersRepository, ApartmentRepository ApartmentRepository, IdoSellService idoSellService)
         {
             _factory = factory;
             _bd = bd;
-            _AmenitiesRepository = AmenitiesRepository;
+            _FiltersRepository = FiltersRepository;
             _IdoSellService = idoSellService;
             _ApartmentRepository = ApartmentRepository;
         }
 
 
-       public async Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes)
+     /*  public async Task<List<ObjectTypesAmenities>?> GetFilteredAmenitiesForObjectTypes(IEnumerable<IdoBookingObjectType> objectTypes)
         {
             var AllAmenities = await _IdoSellService.FetchAmenitiesForObjectTypesAsync(objectTypes);
 
             if (AllAmenities == null || AllAmenities.Count == 0)
                 return AllAmenities;
 
-            var filterValues = await GetAmenitiesFilterValuesAsync();
+            var filterValues = await GetFiltersAsync();
 
             if (filterValues.Length == 0)
                 return AllAmenities;
@@ -67,13 +69,26 @@ namespace RentoomBooking.SharedClasses.Services
             }
 
             return AllAmenities;
+        }*/
+
+        public async Task<List<SearchFilterDocument>> GetFiltersAsync()
+        {
+            var filteres = await _FiltersRepository.GetAllSearchFiltersAsync();
+
+            return filteres ?? [];
         }
 
-        public async Task<int[]> GetAmenitiesFilterValuesAsync()
-        {
-            var filteres = await _AmenitiesRepository.GetAmenitiesFilterAsync();
 
-            return filteres ?? Array.Empty<int>();
+        /// <summary>
+        /// Wstępna populacja bazy - uruchom raz.
+        /// </summary>
+        /// 
+        /// <returns>true</returns>
+        public async Task<bool> SaveFiltersAsync()
+        {
+           await _FiltersRepository.SeedAmenitiesFilters();
+
+            return true;
         }
     }
 }
