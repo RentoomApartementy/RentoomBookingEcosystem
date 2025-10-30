@@ -12,12 +12,19 @@
     margin-top: -3rem;
     /*position: sticky;*/
     /*top: 100px;*/
+    /*z-index: 999;*/
 }
 
 .apartments-items {
     padding: 2.5rem 1rem;
     display: flex;
     gap: 1rem;
+}
+
+@media (max-width: 800px) {
+    .apartments-items {
+        flex-direction: column;
+    }
 }
 
 .apartments-items-container {

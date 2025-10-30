@@ -25,7 +25,7 @@ window.leafletMap = {
         }
     },
 
-    addMarkers: function (markers) {
+    addMarkers: function (markers, isSearch) {
         if (!this.map || !Array.isArray(markers)) return;
 
         if (this.markerCluster) {
@@ -34,17 +34,25 @@ window.leafletMap = {
 
         this.markerCluster = L.markerClusterGroup({
             showCoverageOnHover: false,
-            iconCreateFunction: function(cluster) {
+            iconCreateFunction: (cluster) => {
                 const markers = cluster.getAllChildMarkers();
-                const hasOffer = markers.some(m => m.options.hasOffer);
-                // const clusterColor = hasOffer ? 'blue' : 'yellow';
-                return L.divIcon({
-                    html: `<div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                                ${cluster.getChildCount()}
-                           </div>`,
+                const totalCount = cluster.getChildCount();
+                const offersCount = markers.filter(m => m.options.hasOffer).length;
+                const hasOffer = offersCount > 0;
+
+                const apartments = L.divIcon({
+                    html: `<small style="font-size: 10px;">Apartamenty: ${totalCount}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
-                    iconSize: L.point(40, 40)
+                    iconSize: L.point(90, 21)
                 });
+
+                const offers = L.divIcon({
+                    html: `<small style="font-size: 10px;">${offersCount ? "Oferty: " + offersCount : "brak ofert"}</small>`,
+                    className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
+                    iconSize: L.point(70, 21)
+                });
+
+                return isSearch ? offers : apartments;
             }
         });
 
@@ -98,7 +106,7 @@ window.leafletMap = {
             if (!popupEl) return;
             const imgContainer = popupEl.querySelector("div");
             if (imgContainer) {
-                imgContainer.innerHTML = `<img src="${url}" style="height: 130px; width: 250px; object-fit: cover; border-radius: .5rem;" />`;
+                imgContainer.innerHTML = `<img src="${url}" style="height: 130px; width: 100%; object-fit: cover; border-radius: .5rem .5rem 0 0;" />`;
             }
         }
     },

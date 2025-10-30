@@ -9,6 +9,7 @@
 
 @code {
     [Parameter] public List<PricingOffer> Offers { get; set; } = new();
+    [Parameter] public Boolean IsSearch { get; set; } = false;
     private List<ApartmentObject> Items { get; set; } = new();
     private DotNetObjectReference<ApartmentsMap>? _objRef;
 
@@ -86,20 +87,22 @@
                     Lng = i?.ObjectLocation?.LocalizationItem?.GeoLocationLng,
                     Popup = $@"
 <div id='popup-{i?.Id}' style='display: flex; flex-direction: column; gap: .4rem;'>
-    <div style='height: 130px; width: 250px; display: flex; align-items: center; justify-content: center; background: #f3f3f3; border-radius: .5rem;'>
+    <div style='height: 130px; width: 100%; display: flex; align-items: center; justify-content: center; background: #f3f3f3; border-radius: .5rem .5rem 0 0;'>
         <span>Ładowanie zdjęcia...</span>
     </div>
-    <strong>{i?.Name}</strong>
+    <div style='padding-top: .3rem; padding-bottom: 1rem; padding-right: 1rem; padding-left: 1rem; display: flex; flex-direction: column; gap: .5rem;'>
+<strong>{i?.Name}</strong>
     <div>
         <span>{i?.ObjectLocation?.LocalizationItem?.Street}</span>
         <span>{i?.ObjectLocation?.LocalizationItem?.ZipCode}</span>
         <span>{i?.ObjectLocation?.LocalizationItem?.City}</span>
     </div>
-    <div style='display: flex; justify-content: flex-end;'>
-        <a href='/apartamenty/{i?.Id}' style='padding: .4rem 1rem; background-color: #945F28; color: white; border-radius: 999rem; cursor: pointer;'>
+    <div style='width: 100%; display: flex;'>
+        <a href='/apartamenty/{i?.Id}' style='display: flex; align-items: center; justify-content: center; width: 100%; padding: .4rem 1rem; background-color: rgba(148, 95, 40, 0.7); color: white; border-radius: 5px; cursor: pointer;'>
             Rezerwacja
         </a>
     </div>
+</div>
 </div>",
                     Id = i?.Id,
                     ObjRef = _objRef,
@@ -109,7 +112,7 @@
             })
             .ToList();
 
-        await JSRuntime.InvokeVoidAsync("leafletMap.addMarkers", markers);
+        await JSRuntime.InvokeVoidAsync("leafletMap.addMarkers", markers, IsSearch);
     }
 
     [JSInvokable]

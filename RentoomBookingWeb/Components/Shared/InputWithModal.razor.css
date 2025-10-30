@@ -25,6 +25,10 @@
 }
 
 @media (max-width: 910px) {
+    .dropdown-wrapper {
+        width: 100%;
+    }
+
     .custom-input {
         width: 100%;
     }
