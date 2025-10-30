@@ -93,7 +93,26 @@ namespace RentoomBooking.SharedClasses.Services
 
             var offersResponse = await _idoOfferService.GetPricingOffersAsync(idoRequest);
             var pricingOffers = offersResponse?.Result?.PricingOffers ?? new List<PricingOffer>();
+
+            //lokalny filtr po cenie
+            
+            if (query.PriceFilter != null && (query.PriceFilter.PriceFrom>=0 || query.PriceFilter.PriceTo>=0))
+            {
+                var priceFrom = Convert.ToDecimal(query.PriceFilter.PriceFrom);
+                var priceTo = Convert.ToDecimal(query.PriceFilter.PriceTo);
+
+                pricingOffers = pricingOffers
+                    .Where(po =>
+                        (priceFrom <= 0 || po.MinimalPrice >= priceFrom) &&
+                        (priceTo <= 0 || po.MinimalPrice <= priceTo))
+                    .ToList();
+
+            }
+
+
             var offerIds = pricingOffers.Select(offer => offer.ObjectId).Distinct().ToList();
+                      
+
 
             List<ApartmentObject> apartments;
 
@@ -112,6 +131,8 @@ namespace RentoomBooking.SharedClasses.Services
             {
                 apartments = new List<ApartmentObject>();
             }
+
+            
 
             return new RentoomOffer
             {
