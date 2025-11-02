@@ -29,23 +29,29 @@
 }
 
 .filter-option {
-    width: 100%;
-    padding: .2rem .7rem;
     user-select: none;
     display: flex;
     align-items: center;
     gap: .5rem;
+    padding: .2rem .7rem;
+    border-radius: .5rem;
+    transition: .2s background-color ease;
 }
 
 .filter-option > label
 {
     margin-left: -1rem;
     cursor: pointer;
+    width: 100%;
+    padding: .2rem 0;
 }
 
 .selected {
-    background-color: #F0C69B;
-    border-radius: .5rem;
+    background-color: #e1c3b2;
+}
+
+.selected:hover {
+    background-color: #e1c3b2 !important;
 }
 
 .filter-icon {
@@ -77,4 +83,9 @@
         display: inline-flex;
         white-space: nowrap;
     }
+}
+
+.filter-option:hover
+{
+    background-color: #e8d3c1;
 }
