@@ -62,6 +62,8 @@ namespace RentoomBooking.SharedClasses.Services
             var regionFilter = query.ApartmentFilterParams.ApartmentLocationsFilter;
             List<ApartmentObject> apartmentsFromAmenities = new();
 
+            
+            //KROK 1. filtruje apartementy jesli są wybrane amenities
             if ((amenityFilter != null && amenityFilter.Any()) || (regionFilter != null && regionFilter.Any()))
             {
                 var apartmentFilter = new ApartmentQueryFilter
@@ -91,10 +93,31 @@ namespace RentoomBooking.SharedClasses.Services
                 }
             }
 
+            // KROK 2. dla odfiltrowanych apartamentów pobiera oferty z IDOBOOKING zgodnie z filtrami dat i innymi dostepnymi w IDB API
+
             var offersResponse = await _idoOfferService.GetPricingOffersAsync(idoRequest);
             var pricingOffers = offersResponse?.Result?.PricingOffers ?? new List<PricingOffer>();
-            var offerIds = pricingOffers.Select(offer => offer.ObjectId).Distinct().ToList();
 
+            //KROK 3. filtruje pobrane oferty po cenie.
+            
+            if (query.PriceFilter != null && (query.PriceFilter.PriceFrom>=0 || query.PriceFilter.PriceTo>=0))
+            {
+                var priceFrom = Convert.ToDecimal(query.PriceFilter.PriceFrom);
+                var priceTo = Convert.ToDecimal(query.PriceFilter.PriceTo);
+
+                pricingOffers = pricingOffers
+                    .Where(po =>
+                        (priceFrom <= 0 || po.MinimalPrice >= priceFrom) &&
+                        (priceTo <= 0 || po.MinimalPrice <= priceTo))
+                    .ToList();
+
+            }
+
+
+            var offerIds = pricingOffers.Select(offer => offer.ObjectId).Distinct().ToList();
+                      
+
+            //KROK 4. filtruje tylko te apartamentu które znalazły się w ofertach [po amenities i lokacjach]
             List<ApartmentObject> apartments;
 
             if (amenityFilter != null && amenityFilter.Any())
@@ -113,6 +136,8 @@ namespace RentoomBooking.SharedClasses.Services
                 apartments = new List<ApartmentObject>();
             }
 
+            
+            // KROK 5. zwraca oferty (odfiltrowane lokalnie po cenie) oraz tylko te apartementy  które są w ofercie i jednocześnie spełaniają filtr amenities
             return new RentoomOffer
             {
                 PricingOffers = pricingOffers,

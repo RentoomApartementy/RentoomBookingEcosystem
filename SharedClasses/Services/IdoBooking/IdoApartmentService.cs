@@ -25,7 +25,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         Task<List<ObjectMedium>?> GetObjectMediaFromIdoSellAsync(int objectId, CancellationToken ct = default);
         Task<List<ObjectDescription>?> GetObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken ct = default);
         Task<List<ObjectAmenity>?> GetObjectAmenitiesAsync(int objectId, CancellationToken ct = default);
-        Task<List<ApartmentAmenitiesDocument>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default);
+        Task<List<ApartmentObject>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default);
     }
     public class IdoApartmentService : IIdoApartmentService
     {
@@ -200,7 +200,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         }
 
 
-        public async Task<List<ApartmentAmenitiesDocument>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default)
+        public async Task<List<ApartmentObject>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default)
         {
             var apartments = await GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(ct);
 
@@ -239,7 +239,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
             await _apartmentRepository.SaveApartmentAmenitiesAsync(amenitiesDocuments, _logger, ct);
 
-            return amenitiesDocuments;
+            return apartments;// amenitiesDocuments;
         }
 
     }
