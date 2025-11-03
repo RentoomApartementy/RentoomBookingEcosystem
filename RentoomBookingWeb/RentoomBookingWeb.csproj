@@ -22,8 +22,4 @@
     <ProjectReference Include="..\SharedFrontend\RentoomBooking.SharedFrontend.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\assets\images\filter\" />
-  </ItemGroup>
-
 </Project>
