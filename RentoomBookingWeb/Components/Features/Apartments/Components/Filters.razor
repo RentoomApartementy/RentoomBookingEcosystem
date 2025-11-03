@@ -1,30 +1,49 @@
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+@inject IApartmentSearchFiltersService ApartmentSearchFiltersService;
+
 <div class="filters-container">
     <p class="filters-title">Gdzie chcesz się zameldować?</p>
-
-    <div class="filters">
-        @foreach (var option in Locations)
+    
+    @if (_isLoading)
+    {
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+    }
+    
+    <div class="filters grid-2">
+        @foreach (var option in _locations)
         {
             <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
-                <img class="filter-icon" src="@option.Icon" alt="@option.Name">
+                <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
                 <InputCheckbox @bind-Value="option.IsSelected" id="@option.Name" style="visibility: hidden;"/>
                 <label for="@option.Name">@option.Name</label>
             </div>
         }
     </div>
 
-    <hr />
-
-    @* <p class="filters-title">Liczba osób</p> *@
-    @* <Input IconPath="/assets/svgs/person.svg" Placeholder="Ilość osób" Type="number" @bind-Value="FormData.PeopleCount" IsFull="true"/> *@
-
-    @* <hr /> *@
-
+    <hr/>
+    
     <p class="filters-title">Filtry</p>
+    
+    @if (_isLoading)
+    {
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+        <div class="text-skeleton"></div>
+    }
+    
     <div class="filters">
-        @foreach (var filter in FilterOptions)
+        @foreach (var filter in _filterOptions)
         {
             <div class="@(filter.IsSelected ? "filter-option selected" : "filter-option")">
-                <img class="filter-icon" src="@filter.Icon" alt="@filter.Name">
+                <img class="filter-icon" src="@($"/assets/svgs/filter/{filter.Icon}.svg")" alt="@filter.Name">
                 <InputCheckbox @bind-Value="filter.IsSelected" id="@filter.Name" style="visibility: hidden;"/>
                 <label for="@filter.Name">@filter.Name</label>
             </div>
@@ -33,44 +52,77 @@
 </div>
 
 @code {
-    private ReservationForm FormData = new ReservationForm();
-
-    private List<FilterOption> Locations = new()
-    {
-        new FilterOption("Serce starówki", "assets/images/filter/heart.png"),
-        new FilterOption("Poza starówką", "assets/images/filter/smart-city.png"),
-        new FilterOption("Na obrzeżach starówki", "assets/images/filter/mountain-road.png")
-    };
-
-    private List<FilterOption> FilterOptions = new()
-    {
-        new FilterOption("Balkon", "assets/images/filter/balcony.png"),
-        new FilterOption("Dla rodzin z dziećmi", "assets/images/filter/family.png"),
-        new FilterOption("Parking", "assets/images/filter/parking.png"),
-        new FilterOption("Plac zabaw", "assets/images/filter/playground.png"),
-        new FilterOption("Pobyt biznesowy", "assets/images/filter/briefcase.png"),
-        new FilterOption("Podróż z pupilem", "assets/images/filter/paw.png"),
-        new FilterOption("Winda", "assets/images/filter/elevator.png"),
-        // new FilterOption("Osobne łóżka", "assets/images/filter/heart.png"),
-        new FilterOption("Klimatyzacja", "assets/images/filter/air-conditioner.png"),
-        new FilterOption("Udogodnienia dla niepełnosprawnych", "assets/images/filter/disability.png")
-    };
-
     public class ReservationForm
     {
         public string PeopleCount { get; set; } = string.Empty;
     }
+    
+    private ReservationForm FormData = new ReservationForm();
 
+    private List<FilterOption> _locations = new();
+
+    private List<FilterOption> _filterOptions = new();
+    
     public class FilterOption
     {
         public string Name { get; }
         public bool IsSelected { get; set; }
         public string Icon { get; set; }
-
+    
         public FilterOption(string name, string icon)
         {
             Name = name;
             Icon = icon;
         }
+    }
+    
+    private bool _isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetFilters();
+    }
+
+    private async Task GetFilters()
+    {
+        _isLoading = true;
+
+        try
+        {
+            var filters = await ApartmentSearchFiltersService.GetFiltersAsync();
+
+            var locationFilters = filters
+                .FirstOrDefault(f => f.id == "city-regions-filter")
+                ?.filtersDictionary
+                .GetValueOrDefault("pl");
+            
+            var amenitiesFilters = filters
+                .FirstOrDefault(f => f.id == "amenities-filter")
+                ?.filtersDictionary
+                .GetValueOrDefault("pl");
+            
+            if (locationFilters != null)
+            {
+                _locations = locationFilters
+                    .Where(f => !string.IsNullOrEmpty(f.name))
+                    .Select(f => new FilterOption(f.name, f.icon_materialui_name))
+                    .ToList();
+            }
+            
+            if (amenitiesFilters != null)
+            {
+                _filterOptions = amenitiesFilters
+                    .Where(f => !string.IsNullOrEmpty(f.name))
+                    .Select(f => new FilterOption(f.name, f.icon_materialui_name))
+                    .ToList();
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+        _isLoading = false;
     }
 }
