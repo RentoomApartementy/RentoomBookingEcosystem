@@ -47,7 +47,7 @@
     </Description>
 
     <div style="font-size: calc(0.25vw + 1.25rem);">
-        @if (DateTime.Now < ReservationState?.CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom())
+        @if (!ReservationState.IsActiveReservation)
         {
             <span>@Localizer["CodeNotAvaliable"]</span>
         }
