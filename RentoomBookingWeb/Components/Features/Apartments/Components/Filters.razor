@@ -1,34 +1,11 @@
+@using System.Text
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
-@inject IApartmentSearchFiltersService ApartmentSearchFiltersService;
+@inject IApartmentSearchFiltersService ApartmentSearchFiltersService
+@inject NavigationManager Navigation
 
 <div class="filters-container">
     <p class="filters-title">Gdzie chcesz się zameldować?</p>
-    
-    @if (_isLoading)
-    {
-        <div class="text-skeleton"></div>
-        <div class="text-skeleton"></div>
-        <div class="text-skeleton"></div>
-        <div class="text-skeleton"></div>
-        <div class="text-skeleton"></div>
-        <div class="text-skeleton"></div>
-    }
-    
-    <div class="filters grid-2">
-        @foreach (var option in _locations)
-        {
-            <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
-                <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
-                <InputCheckbox @bind-Value="option.IsSelected" id="@option.Name" style="visibility: hidden;"/>
-                <label for="@option.Name">@option.Name</label>
-            </div>
-        }
-    </div>
 
-    <hr/>
-    
-    <p class="filters-title">Filtry</p>
-    
     @if (_isLoading)
     {
         <div class="text-skeleton"></div>
@@ -38,45 +15,63 @@
         <div class="text-skeleton"></div>
         <div class="text-skeleton"></div>
     }
-    
-    <div class="filters">
-        @foreach (var filter in _filterOptions)
-        {
-            <div class="@(filter.IsSelected ? "filter-option selected" : "filter-option")">
-                <img class="filter-icon" src="@($"/assets/svgs/filter/{filter.Icon}.svg")" alt="@filter.Name">
-                <InputCheckbox @bind-Value="filter.IsSelected" id="@filter.Name" style="visibility: hidden;"/>
-                <label for="@filter.Name">@filter.Name</label>
-            </div>
-        }
-    </div>
+    else
+    {
+        <div class="filters grid-2">
+            @foreach (var option in _locations)
+            {
+                <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
+                    <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
+                    <input type="checkbox"
+                           id="@option.Id"
+                           checked="@option.IsSelected"
+                           @onchange="(e) => OnLocationChanged(option)"
+                           style="position:absolute; opacity:0; width:0; height:0;" />
+                    <label for="@option.Id">@option.Name</label>
+                </div>
+            }
+        </div>
+
+        <hr />
+
+        <p class="filters-title">Filtry</p>
+
+        <div class="filters">
+            @foreach (var filter in _filterOptions)
+            {
+                <div class="@(filter.IsSelected ? "filter-option selected" : "filter-option")">
+                    <img class="filter-icon" src="@($"/assets/svgs/filter/{filter.Icon}.svg")" alt="@filter.Name">
+                    <input type="checkbox"
+                           id="@filter.Id"
+                           checked="@filter.IsSelected"
+                           @onchange="(e) => OnFilterChanged(filter)"
+                           style="position:absolute; opacity:0; width:0; height:0;" />
+                    <label for="@filter.Id">@filter.Name</label>
+                </div>
+            }
+        </div>
+    }
 </div>
 
 @code {
-    public class ReservationForm
-    {
-        public string PeopleCount { get; set; } = string.Empty;
-    }
-    
-    private ReservationForm FormData = new ReservationForm();
-
     private List<FilterOption> _locations = new();
-
     private List<FilterOption> _filterOptions = new();
-    
+    private bool _isLoading = false;
+
     public class FilterOption
     {
+        public string Id { get; }
         public string Name { get; }
-        public bool IsSelected { get; set; }
         public string Icon { get; set; }
-    
-        public FilterOption(string name, string icon)
+        public bool IsSelected { get; set; }
+
+        public FilterOption(string id, string name, string icon)
         {
+            Id = id;
             Name = name;
             Icon = icon;
         }
     }
-    
-    private bool _isLoading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,28 +90,29 @@
                 .FirstOrDefault(f => f.id == "city-regions-filter")
                 ?.filtersDictionary
                 .GetValueOrDefault("pl");
-            
+
             var amenitiesFilters = filters
                 .FirstOrDefault(f => f.id == "amenities-filter")
                 ?.filtersDictionary
                 .GetValueOrDefault("pl");
-            
+
             if (locationFilters != null)
             {
                 _locations = locationFilters
                     .Where(f => !string.IsNullOrEmpty(f.name))
-                    .Select(f => new FilterOption(f.name, f.icon_materialui_name))
+                    .Select(f => new FilterOption(f.id.ToString(), f.name, f.icon_materialui_name))
                     .ToList();
             }
-            
+
             if (amenitiesFilters != null)
             {
                 _filterOptions = amenitiesFilters
                     .Where(f => !string.IsNullOrEmpty(f.name))
-                    .Select(f => new FilterOption(f.name, f.icon_materialui_name))
+                    .Select(f => new FilterOption(f.id.ToString(), f.name, f.icon_materialui_name))
                     .ToList();
             }
-            
+
+            ApplyUrlFilters();
         }
         catch (Exception ex)
         {
@@ -124,5 +120,88 @@
         }
 
         _isLoading = false;
+    }
+
+    private async Task OnLocationChanged(FilterOption option)
+    {
+        option.IsSelected = !option.IsSelected;
+        UpdateUrl();
+        await ApplyFilters();
+    }
+
+    private async Task OnFilterChanged(FilterOption filter)
+    {
+        filter.IsSelected = !filter.IsSelected;
+        UpdateUrl();
+        await ApplyFilters();
+    }
+
+    private void UpdateUrl()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+
+        var selectedLocationIds = _locations.Where(l => l.IsSelected).Select(l => l.Id).ToList();
+        if (selectedLocationIds.Any())
+            query["locations"] = string.Join(",", selectedLocationIds);
+        else
+            query.Remove("locations");
+
+        var selectedFilterIds = _filterOptions.Where(f => f.IsSelected).Select(f => f.Id).ToList();
+        if (selectedFilterIds.Any())
+            query["filters"] = string.Join(",", selectedFilterIds);
+        else
+            query.Remove("filters");
+
+        var newQuery = query.ToString();
+        var newUri = string.IsNullOrEmpty(newQuery)
+            ? uri.AbsolutePath
+            : $"{uri.AbsolutePath}?{newQuery}";
+
+        Navigation.NavigateTo(newUri, forceLoad: false);
+    }
+
+    private void ApplyUrlFilters()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+
+        var selectedLocationIds = (query["locations"] ?? string.Empty)
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(Uri.UnescapeDataString)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var selectedFilterIds = (query["filters"] ?? string.Empty)
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(Uri.UnescapeDataString)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var location in _locations)
+            location.IsSelected = selectedLocationIds.Contains(location.Id);
+
+        foreach (var filter in _filterOptions)
+            filter.IsSelected = selectedFilterIds.Contains(filter.Id);
+
+        StateHasChanged();
+    }
+    
+    [Parameter] public EventCallback<ApartmentFilters> OnFiltersChanged { get; set; }
+
+    private async Task ApplyFilters()
+    {
+        var filters = new ApartmentFilters
+        {
+            ApartmentAmenitiesFilter = _filterOptions
+                .Where(f => f.IsSelected)
+                .Select(f => int.Parse(f.Id))
+                .ToList(),
+
+            ApartmentLocationsFilter = _locations
+                .Where(l => l.IsSelected)
+                .Select(l => l.Name)
+                .ToList()
+        };
+
+        await OnFiltersChanged.InvokeAsync(filters);
     }
 }
