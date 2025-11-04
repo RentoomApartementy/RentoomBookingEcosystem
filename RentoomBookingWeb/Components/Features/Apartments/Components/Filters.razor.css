@@ -53,7 +53,6 @@
 
 .filter-option > label
 {
-    margin-left: -1rem;
     cursor: pointer;
     width: 100%;
     padding: .2rem 0;
