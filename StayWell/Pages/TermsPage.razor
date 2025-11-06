@@ -1,0 +1,58 @@
+﻿@page "/reservation/{token}/TermsPage"
+@using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.States
+
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<ContactUsPage> Localizer
+
+
+@inherits Models.PageBase
+
+<PageTitle>Contact Us</PageTitle>
+
+<div class="page-container">
+    <!-- Pozostała treść strony -->
+    <div class="description-wrapper">
+        <div class="page-info-wrapper">
+            <PageInfo Title="Regulamin" Subtitle="Zanim otrzymasz dostęp do swojej aplikacji, zapoznaj i zaakceptuj regulamin!"></PageInfo>
+        </div>
+        <img class="image" src="/images/terms-page.png" />
+        <Button>
+            <Icon>
+                <img src="/icons/file-user.svg" />
+            </Icon>
+            <RenderFragment>
+                <span>Wyświetl cały regulamin</span>
+            </RenderFragment>
+        </Button>
+    </div>
+
+    <div class="bottom-section">
+        <Button>
+            <Icon>
+                <img src="/icons/handshake.svg"/>
+            </Icon>
+            <RenderFragment>
+                <span>Akceptuje regulamin</span>
+            </RenderFragment>
+        </Button>
+    </div>
+</div>
+
+@code{
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        LayoutState.ShowFooter = false;
+    }
+
+
+    public override void Dispose()
+    {
+        LayoutState.ShowFooter = true;
+
+        base.Dispose();
+    }
+}
