@@ -22,6 +22,8 @@ namespace RentoomBooking.StayWell.Models
         [Inject]
         protected LocksState LocksState { get; set; } = default!;
         [Inject]
+        protected LayoutState LayoutState { get; set; } = default!;
+        [Inject]
         protected ModalService ModalService { get; set; } = default!;
         [Inject]
         protected NavigationManager NavigationManager { get;set;} = default!;
@@ -48,6 +50,7 @@ namespace RentoomBooking.StayWell.Models
             ApartmentState.OnChange += StateHasChanged;
             LocksState.OnChange += StateHasChanged;
             GlobalizationService.OnChange += StateHasChanged;
+            LayoutState.OnChange += StateHasChanged;
 
             if (ReservationState.CurrentReservation == null && !string.IsNullOrEmpty(Token))
             {
@@ -109,7 +112,7 @@ namespace RentoomBooking.StayWell.Models
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             ReservationState.OnChange -= StateHasChanged;
             MediaState.OnChange -= StateHasChanged;
@@ -117,6 +120,7 @@ namespace RentoomBooking.StayWell.Models
             ApartmentState.OnChange -= StateHasChanged;
             GlobalizationService.OnChange -= StateHasChanged;
             LocksState.OnChange -= StateHasChanged;
+            LayoutState.OnChange -= StateHasChanged;
         }
 
     }

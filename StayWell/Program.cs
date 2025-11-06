@@ -22,6 +22,8 @@ namespace RentoomBooking.StayWell
                 options.ResourcesPath = "Resources";
             });
 
+            builder.Services.AddSingleton<LayoutState>();
+
             builder.Services.AddScoped<GlobalizationService>();
             builder.Services.AddScoped<ModalService>();
 

@@ -1,0 +1,109 @@
+﻿@page "/reservation/{token}/RegistrationCardPage"
+@using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.States
+@using RentoomBooking.StayWell.Models
+
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+
+@* @inject StayWell.States.LayoutState LayoutState *@
+@inject IStringLocalizer<InstructionsPage> Localizer
+
+@implements IDisposable
+
+@inherits Models.PageBase
+
+<PageTitle>Karta Meldunkowa</PageTitle>
+
+<div class="page-info-wrapper">
+    <PageInfo Title="Karta Meldunkowa" Subtitle="Wypełnij potrzebne informacje."></PageInfo>
+</div>
+
+<div class="description-wrapper">
+    <Description>
+        <Icon><img src="/icons/info.svg" /></Icon>
+        <DescriptionContent>
+            <span style="font-size: 0.9rem">
+                Witaj, @ReservationState?.CurrentReservation?.Reservation?.Client?.FirstName. Zanim otrzymasz dostęp do swojej aplikacji, prosimy o wypełnienie Karty Meldunkowej!
+            </span>
+        </DescriptionContent>
+    </Description>
+</div>
+
+<div class="mail-wrapper">
+    <div class="mail-input-title">Podaj swój adres mailowy</div>
+    <input id="email" type="email" placeholder="adres mail" @bind="_mail"/>
+</div>
+<div class="guests-wrapper">
+    @for(int i = 0; i < _numberOfAdults; i++)
+    {
+        int iCopy = i;
+        <div class="guest-row">
+            <div class="guest-input-title">Dane @(iCopy + 1) gościa</div>
+                <div class="guest-input-row">
+                    <input id="@($"_guests{iCopy}_first")"
+                        value="@_guests[iCopy].FirstName"
+                        @onchange="@(e => _guests[iCopy].FirstName = e.Value?.ToString())"
+                        placeholder="imię"/>
+                    <input id="@($"_guests{iCopy}_last")"
+                           value="@_guests[iCopy].LastName"
+                           @onchange="@(e => _guests[iCopy].LastName = e.Value?.ToString())"
+                           placeholder="nazwisko" />
+            </div>
+        </div>
+    }
+</div>
+
+<div class="next-wrapper">
+    @if (IsFormSet())
+    {
+        <p style="text-align: center;">Wciskająć poniższy przycisk potwierdzam poprawność podanych przeze mnie danych.</p>
+    }
+    <Button Disabled="!IsFormSet()">
+        <RenderFragment>
+            <span>Przejdź dalej &#10140;</span>
+        </RenderFragment>
+    </Button>
+</div>
+
+@code{
+    private string? _mail;
+    private List<Guest> _guests = new(); // State?
+    private int _numberOfAdults;
+    private bool _l = false;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        LayoutState.ShowFooter = false;
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _numberOfAdults = ReservationState?.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.numberOfAdults ?? 0;
+        _guests = Enumerable.Range(0, _numberOfAdults).Select(_ => new Guest()).ToList();
+        _l = true;
+    }
+
+    private bool IsFormSet()
+    {
+        if (string.IsNullOrWhiteSpace(_mail))
+            return false;
+
+        foreach (var guest in _guests)
+        {
+            if (string.IsNullOrWhiteSpace(guest.FirstName) || string.IsNullOrWhiteSpace(guest.LastName))
+                return false;
+        }
+        return true;
+    }
+
+    public override void Dispose()
+    {
+        LayoutState.ShowFooter = true;
+
+        base.Dispose();
+    }
+
+}

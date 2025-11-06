@@ -9,12 +9,16 @@
 @inject ApartmentState ApartmentState
 @inject AmenitiesState AmenitiesState
 @inject LocksState LocksState
+@inject LayoutState LayoutState
 
 <div class="layout-page">
+    @if (LayoutState.ShowHeader)
+    {   
     <div class="layout-header">
         <Header Token="@ReservationState.CurrentToken" reservationId="@ReservationState.CurrentReservation?.Reservation.id.ToString()">
         </Header>
     </div>
+    }
     <div class="layout-body">
         @if (ReservationState.IsLoading || MediaState.IsLoading || ApartmentState.IsLoading || AmenitiesState.IsLoading || LocksState.IsLoading)
         {
@@ -25,10 +29,13 @@
             @Body
         }
     </div>
+    @if (LayoutState.ShowFooter)
+    {
     <div class="layout-footer-nav">
         <FooterNavigation Token="@ReservationState.CurrentToken">
         </FooterNavigation>
     </div>
+    }
 </div>
 
 <Modal Title="@_modalTitle" OnClose="CloseModal" IsVisible="@_modalVisibility">
@@ -39,7 +46,6 @@
 
 
 @code {
-
     private bool _modalVisibility = false;
     private string _modalTitle = string.Empty;
     private RenderFragment _modalContent;
@@ -51,6 +57,7 @@
         ApartmentState.OnChange += StateHasChanged;
         AmenitiesState.OnChange += StateHasChanged;
         LocksState.OnChange += StateHasChanged;
+        LayoutState.OnChange += StateHasChanged;
 
         ModalService.OnShow += ShowModal;
         ModalService.OnClose += CloseModal;
@@ -79,6 +86,7 @@
         ApartmentState.OnChange -= StateHasChanged;
         AmenitiesState.OnChange -= StateHasChanged;
         LocksState.OnChange -= StateHasChanged;
+        LayoutState.OnChange -= StateHasChanged;
         ModalService.OnShow -= ShowModal;
         ModalService.OnClose -= CloseModal;
     }
