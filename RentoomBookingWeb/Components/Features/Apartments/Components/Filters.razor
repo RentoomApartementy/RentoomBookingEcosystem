@@ -4,6 +4,23 @@
 @inject NavigationManager Navigation
 
 <div class="filters-container">
+    
+    <p class="filters-title">Twój przedział cenowy (@MinPriceOffer zł - @MaxPriceOffer zł)</p>
+    
+    <div class="">
+        <PricesPickerRange 
+            IconPath="assets/svgs/filter/money.svg"
+            MinPrice="@MinPriceOffer"
+            MaxPrice="@MaxPriceOffer"
+            StartPriceValue="@_minPrice"
+            StartPriceValueChanged="OnStartPriceChanged"
+            EndPriceValue="@_maxPrice"
+            EndPriceValueChanged="OnEndPriceChanged"
+            />
+    </div>
+
+    <hr/>
+    
     <p class="filters-title">Gdzie chcesz się zameldować?</p>
 
     @if (_isLoading)
@@ -26,13 +43,13 @@
                            id="@option.Id"
                            checked="@option.IsSelected"
                            @onchange="(e) => OnLocationChanged(option)"
-                           style="position:absolute; opacity:0; width:0; height:0;" />
+                           style="position:absolute; opacity:0; width:0; height:0;"/>
                     <label for="@option.Id">@option.Name</label>
                 </div>
             }
         </div>
 
-        <hr />
+        <hr/>
 
         <p class="filters-title">Filtry</p>
 
@@ -45,7 +62,7 @@
                            id="@filter.Id"
                            checked="@filter.IsSelected"
                            @onchange="(e) => OnFilterChanged(filter)"
-                           style="position:absolute; opacity:0; width:0; height:0;" />
+                           style="position:absolute; opacity:0; width:0; height:0;"/>
                     <label for="@filter.Id">@filter.Name</label>
                 </div>
             }
@@ -57,6 +74,28 @@
     private List<FilterOption> _locations = new();
     private List<FilterOption> _filterOptions = new();
     private bool _isLoading = false;
+    
+    [Parameter] public int MinPriceOffer { get; set; } = 0;
+    [Parameter] public int MaxPriceOffer { get; set; } = 0;
+    
+    private int _minPrice;
+    private int _maxPrice;
+
+    protected override void OnParametersSet()
+    {
+        _minPrice = MinPriceOffer;
+        _maxPrice = MaxPriceOffer;
+    }
+    
+    private void OnStartPriceChanged(int newValue)
+    {
+        _minPrice = newValue;
+    }
+
+    private void OnEndPriceChanged(int newValue)
+    {
+        _maxPrice = newValue;
+    }
 
     public class FilterOption
     {

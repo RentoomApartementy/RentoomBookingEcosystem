@@ -28,7 +28,11 @@
     </div>
 
     <div class="apartments-items">
-        <Filters OnFiltersChanged="HandleFiltersChanged"/>
+        <Filters 
+            OnFiltersChanged="HandleFiltersChanged"
+            MinPriceOffer="@GetMinOfferPrice"
+            MaxPriceOffer="@GetMaxOfferPrice"
+            />
         
             <div class="apartments-items-wrapper">
                 <div class="text-button-wrapper">
@@ -405,4 +409,7 @@
         ApartmentsIsloading = false;
         StateHasChanged();
     }
+    
+    private int GetMinOfferPrice => Offers.Count == 0 ? 0 : (int)Offers.Min(offer => offer.MinimalPrice);
+    private int GetMaxOfferPrice => Offers.Count == 0 ? 0 : (int)Offers.Max(offer => offer.MinimalPrice);
 }
