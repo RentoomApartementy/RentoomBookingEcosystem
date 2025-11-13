@@ -1,0 +1,19 @@
+<article class="@(IsReverse ? "item reverse" : "item")">
+    <img 
+        src="@ImagePath" 
+        alt="Zdjęcie"
+        class="item-img"
+    >
+    
+    <section class="@(IsReverse ? "item-section-reverse" : "item-section")">
+        <h3 class="item-title">@Title</h3>
+        <p class="item-description">@Description</p>
+    </section>
+</article>
+
+@code {
+    [Parameter] public string ImagePath { get; set; } = "";
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Description { get; set; } = "";
+    [Parameter] public bool IsReverse { get; set; } = false;
+}

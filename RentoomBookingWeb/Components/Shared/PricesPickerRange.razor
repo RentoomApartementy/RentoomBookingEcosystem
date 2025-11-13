@@ -1,0 +1,42 @@
+<div class="price-range-container">
+    @if (!string.IsNullOrEmpty(IconPath))
+    {
+        <img src="@IconPath" alt="Price Icon" class="price-range-icon" />
+    }
+    <div class="price-range-input-wrapper">
+        <input type="number" step="10" min="@MinPrice" max="@(MaxPrice-1)" placeholder="Od" value="@StartPriceValue" @onchange="OnStartPriceChanged" class="price-input" />
+        <div class="price-separator"></div>
+        <input type="number" step="10" min="@(EndPriceValue - 1)" max="@MaxPrice" placeholder="Do"  value="@EndPriceValue" @onchange="OnEndPriceChanged" class="price-input" />
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? IconPath { get; set; }
+
+    [Parameter] public int MinPrice { get; set; }
+    [Parameter] public int MaxPrice { get; set; }
+    
+    [Parameter] public int StartPriceValue { get; set; }
+    [Parameter] public EventCallback<int> StartPriceValueChanged { get; set; }
+
+    [Parameter] public int EndPriceValue { get; set; }
+    [Parameter] public EventCallback<int> EndPriceValueChanged { get; set; }
+
+    private async Task OnStartPriceChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var newValue))
+        {
+            StartPriceValue = newValue;
+            await StartPriceValueChanged.InvokeAsync(newValue);
+        }
+    }
+
+    private async Task OnEndPriceChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var newValue))
+        {
+            EndPriceValue = newValue;
+            await EndPriceValueChanged.InvokeAsync(newValue);
+        }
+    }
+}
