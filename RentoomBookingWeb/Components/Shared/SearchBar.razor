@@ -1,5 +1,7 @@
 @using Microsoft.AspNetCore.WebUtilities
 @inject NavigationManager NavManager;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<SharedResources> Localizer;
 
 <div class="@GetClass()">
     <DatePickerRange 
@@ -16,7 +18,7 @@
                 }
                 @if (string.IsNullOrEmpty(Adults) && string.IsNullOrEmpty(Children))
                 {
-                    <span style="color: gray;">Liczba osób</span>
+                    <span style="color: gray;">@Localizer["NumberOfPeople"]</span>
                 }
             </div>
         </ChildContent>
@@ -30,8 +32,8 @@
             </div>
         </DropdownContent>
     </InputWithModal>
-    <Input IconPath="/assets/svgs/bed.svg" Placeholder="Ilość pokoi" Type="number" @bind-Value="Rooms"/>
-    <Button @onclick="Search">Wyszukaj</Button>
+    <Input IconPath="/assets/svgs/bed.svg" Placeholder="@Localizer["NumberOfRooms"]" Type="number" @bind-Value="Rooms"/>
+    <Button @onclick="Search">@Localizer["Search"]</Button>
 </div>
 
 @code {

@@ -2,7 +2,7 @@
 @using RentoomBookingWeb.Components.Enums;
 
 <button @onclick="OnClick" disabled="@Disabled" class="@GetButtonClass()">
-    @ChildContent
+    <span style="white-space: nowrap;">@ChildContent</span>
 </button>
 
 @code {

@@ -1,4 +1,7 @@
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<SharedResources> Localizer;
+
 <section class="hero-container">
-    <h1 class="hero-text">Znajdź swój wymarzony apartament w Toruniu!</h1>
+    <h1 class="hero-text">@Localizer["HomeHeroText"]</h1>
     <SearchBar />
 </section>

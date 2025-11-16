@@ -28,6 +28,11 @@
     <script src="js/mapInterop.js"></script>
     
     <script src="_framework/blazor.web.js"></script>
-</body>
+    
+    <script type="module">
+        import { setCultureCookieAndReload } from './js/cultureManager.js';
+        setCultureCookieAndReload(".AspNetCore.Culture");
+    </script>
+    </body>
 
 </html>

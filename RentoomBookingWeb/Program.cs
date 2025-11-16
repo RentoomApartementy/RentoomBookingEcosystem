@@ -1,3 +1,5 @@
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Azure.Cosmos;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBookingWeb.Components;
@@ -12,27 +14,24 @@ namespace RentoomBookingWeb
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
+            
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
             builder.Services.AddHttpClient("Api", client =>
             {
-                //var baseUrl = builder.Configuration["Api:BaseUrl"]!;
-                var baseUrl = "https://localhost:7241/";
-                client.BaseAddress = new Uri(baseUrl);
+                client.BaseAddress = new Uri("https://localhost:7241/");
             });
 
-
-            var cosendpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
-            //cosendpoint = builder.Configuration["AZURE_COSMOS_ENDPOINT"];
-            if (string.IsNullOrEmpty(cosendpoint))
-            {
+            var cosEndpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
+            if (string.IsNullOrEmpty(cosEndpoint))
                 throw new InvalidOperationException("AZURE_COSMOS_ENDPOINT configuration is missing.");
-            }
 
-
-            var cosmosClient = new CosmosClient(cosendpoint, new CosmosClientOptions()
+            var cosmosClient = new CosmosClient(cosEndpoint, new CosmosClientOptions
             {
                 ConnectionMode = ConnectionMode.Gateway,
                 SerializerOptions = new CosmosSerializationOptions
@@ -43,8 +42,6 @@ namespace RentoomBookingWeb
 
             builder.Services.AddSingleton(cosmosClient);
 
-            //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            // builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
             builder.Services.AddScoped<BookingDatabase>();
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<FiltersRepository>();
@@ -55,22 +52,24 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IIdoOfferService, IdoOfferService>();
             builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
             builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
-
-
+            
             var app = builder.Build();
+            
+            var supportedCultures = new[] { "en-US", "pl-PL" };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
 
-            // Configure the HTTP request pipeline.
+            app.UseRequestLocalization(localizationOptions);
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-
-
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
             app.UseAntiforgery();
 
