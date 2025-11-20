@@ -1,5 +1,6 @@
 ﻿.page-info-wrapper {
     width: 100%;
+    background-color: white;
 }
 
 .buttons-wrapper {
@@ -9,100 +10,5 @@
     justify-content: center;
     gap: 0.25rem;
     margin: 2rem 0;
-    height: 50%;
-}
-
-.copy-button{
-    background: none;
-    border: none;
-}
-
-.codes-wrapper {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    width: 100%;
-    margin-top: 10px;
-    gap: 8px;
-/*    padding: 8px;*/
-    padding-top: 0;
-    box-sizing: border-box;
-/*    padding-bottom:0;*/
-}
-
-.codes-wrapper .code {
-    width: 100%;
-/*    aspect-ratio: 2.5 / 1;*/
-    padding: 0.5rem;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.5rem;
-    max-height: 120px;
-}
-
-.codes-wrapper .code img {
-    height: 25px;
-    width: auto;
-    object-fit: contain;
-    display: block;
-/*    padding-right: 0.25rem;*/
-}
-
-.codes-wrapper .code .text-wrapper {
-    display: flex;
-    flex-direction: column;
-}
-
-.codes-wrapper .code .text-wrapper .title {
-    font-size: 0.9em;
-    font-weight: 600;
-    white-space: normal;
-    overflow-wrap: anywhere;
-}
-
-.codes-wrapper .code .text-wrapper .digits {
-    font-size: 1.5rem;
-    line-height: 1.1;
-    word-break: break-all;
-}
-
-.wifi {
-    background: white;
-    border-radius: 15px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
-}
-
-/*.wifi:last-child{
-    padding-bottom: 0;
-}*/
-
-@media (min-width: 768px) {
-    .codes-wrapper {
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-    }
-
-    .codes-wrapper .code {
-        max-height: 90px;
-    }
-
-/*    .codes-wrapper .code .text-wrapper .title {
-        font-size: clamp(0.9rem, 1vw, 1.1rem);
-    }
-
-    .codes-wrapper .code .text-wrapper .digits {
-        font-size: clamp(1.5rem, 1.9vw, 2rem);
-    }*/
-}
-
-@media (max-width: 404px){
-    .codes-wrapper .code img {
-        height: 20px;
-/*        width: auto;
-        object-fit: contain;
-        display: block;*/
-/*        padding-right: 0.25rem;*/
-    }
+    height 50%;
 }

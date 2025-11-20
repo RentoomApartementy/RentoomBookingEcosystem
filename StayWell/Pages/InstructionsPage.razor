@@ -4,141 +4,26 @@
 
 @using Microsoft.Extensions.Localization
 @using System.Globalization
-@inject StayWell.Services.ClipboardService ClipboardService
 @inject IStringLocalizer<InstructionsPage> Localizer
-@inject StayWell.Services.ToastService ToastService
 
 @inherits Models.PageBase
 
 <PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
-<Carousel ImageUrls="@urls" UseControlButtons="@true" ></Carousel>
-
-<div class="codes-wrapper">
-    <div class="code wifi">
-        <img src="/icons/map-pin.svg"/>
-        <div class="text-wrapper">
-            <div class="title">Adres</div>
-            <div class="digits">@ApartmentState.CurrentApartment?.ObjectLocation?.Address</div>
-            @* <div class="digits">@ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode</div> *@
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/door-open.svg"/>
-        <div class="text-wrapper">
-            <div class="title">Numer</div>
-            @* <div class="digits">@ApartmentState.CurrentApartment?.ObjectLocation?.Address</div> *@
-            <div class="digits">@ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode</div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/fence.svg"/>
-        <div class="text-wrapper">
-            <div class="title">Kod do furtki</div>
-            <div class="digits">0000</div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/building.svg"/>
-        <div class="text-wrapper">
-            <div class="title">Kod do budynku</div>
-            <div class="digits">0000</div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/square-parking.svg"/>
-        <div class="text-wrapper">
-            <div class="title">Parking</div>
-            <div class="digits">0000</div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
-        </div>
-    </div>
+<div class="page-info-wrapper">
+    <PageInfo Title="@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["Instructions"]"></PageInfo>
 </div>
 
-@code{
-    private string wifi_pass = "MV329R8VHJYT98W";
-
-    private string[] urls = ["/images/mock_instruction/1.png",
-    "/images/mock_instruction/2.png",
-    "/images/mock_instruction/3COZY.png",
-    "/images/mock_instruction/4.png",
-    "/images/mock_instruction/5.png",
-    "/images/mock_instruction/6.png",
-    "/images/mock_instruction/7 COZY.png",
-    "/images/mock_instruction/8.png",];
-
-
-    async Task CopyToClipboard()
-    {
-        // Writing to the clipboard may be denied, so you must handle the exception
-        try
-        {
-            await ClipboardService.WriteTextAsync(wifi_pass);
-            ToastService.ShowToast($"Skopiowano {wifi_pass}");
-        }
-        catch
-        {
-            Console.WriteLine("Cannot write text to clipboard");
-        }
-    }
-
-}
+<div class="description-wrapper">
+    <Description>
+        <Icon><img src="/icons/info.svg" /></Icon>
+        <DescriptionContent>
+            <span>Jeżeli dostępne, <img src="/icons/radio.svg"/> 
+                <span style="font-weight: bold">Otwórz zdalnie</span> drzwi pozwala na otwieranie drzwi bez potrzeby wpisywania kodu.
+                Wystarczy wcisnąć przycisk.</span>
+        </DescriptionContent>
+    </Description>
+    <Description DescriptionText="Indywidualny kod jest zawszę funkcjonalny niezależnie od dostępności zdalnego otwierania drzwi.">
+        <Icon><img src="/icons/binary.svg" /></Icon>
+    </Description>
+</div>

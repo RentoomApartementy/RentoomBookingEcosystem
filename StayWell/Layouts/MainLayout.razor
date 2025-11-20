@@ -2,129 +2,35 @@
 @using RentoomBooking.SharedClasses.Models;
 @using RentoomBooking.StayWell.Components;
 @using RentoomBooking.StayWell.States
-@using RentoomBooking.StayWell.Services
-@inject ModalService ModalService
-@inject ToastService ToastService
 @inject ReservationState ReservationState
 @inject MediaState MediaState
-@inject ApartmentState ApartmentState
-@inject AmenitiesState AmenitiesState
-@inject LocksState LocksState
-@inject LayoutState LayoutState
-
-@inject IJSRuntime JSRuntime
 
 <div class="layout-page">
-    @if (LayoutState.ShowHeader)
-    {   
-    <div class="layout-header" id="main-header">
+    <div class="layout-header">
         <Header Token="@ReservationState.CurrentToken" reservationId="@ReservationState.CurrentReservation?.Reservation.id.ToString()">
         </Header>
     </div>
-    }
-    <div class="layout-body" id="main-body">
-        @if (ReservationState.IsLoading || MediaState.IsLoading || ApartmentState.IsLoading || AmenitiesState.IsLoading || LocksState.IsLoading)
-        {
-            <div class="loading"></div>
-        }
-        else
-        {
-            @Body
-        }
+    <div class="layout-body">
+        @Body
     </div>
-    @if (LayoutState.ShowFooter)
-    {
+
     <div class="layout-footer-nav">
         <FooterNavigation Token="@ReservationState.CurrentToken">
         </FooterNavigation>
     </div>
-    }
 </div>
-<Toast Message="@_toastMessage" Content="@_toastContent" IsVisible="@_toastVisible" DurationMs="@_toastDuration" OnHide="HideToast" />
-
-<Modal Title="@_modalTitle" OnClose="CloseModal" IsVisible="@_modalVisibility">
-    <Content>
-        @_modalContent
-    </Content>
-</Modal>
 
 
 @code {
-    private bool _modalVisibility = false;
-    private string _modalTitle = string.Empty;
-    private RenderFragment _modalContent;
-
-    private bool _toastVisible = false;
-    private string _toastMessage = string.Empty;
-    private RenderFragment? _toastContent;
-    private int _toastDuration = 3000;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("initHeaderScroll", "main-body", "main-header"); // chowanie nagłówka przy scrollowaniu
-        }
-    }
 
     protected override void OnInitialized()
     {
         ReservationState.OnChange += StateHasChanged;
-        MediaState.OnChange += StateHasChanged;
-        ApartmentState.OnChange += StateHasChanged;
-        AmenitiesState.OnChange += StateHasChanged;
-        LocksState.OnChange += StateHasChanged;
-        LayoutState.OnChange += StateHasChanged;
-
-        ModalService.OnShow += ShowModal;
-        ModalService.OnClose += CloseModal;
-
-        ToastService.OnShow += ShowToast;
-        ToastService.OnHide += HideToast;
-
         InvokeAsync(StateHasChanged);
-    }
-
-    private void ShowModal(string title, RenderFragment content)
-    {
-        _modalTitle = title;
-        _modalContent = content;
-        _modalVisibility = true;
-        StateHasChanged();
-    }
-
-    private void CloseModal()
-    {
-        _modalVisibility = false;
-        StateHasChanged();
-    }
-
-    private void ShowToast(string message, RenderFragment? content, int durationMs)
-    {
-        _toastMessage = message;
-        _toastContent = content;
-        _toastDuration = durationMs;
-        _toastVisible = true;
-        StateHasChanged();
-    }
-
-    private void HideToast()
-    {
-        _toastVisible = false;
-        StateHasChanged();
     }
 
     public void Dispose()
     {
         ReservationState.OnChange -= StateHasChanged;
-        MediaState.OnChange -= StateHasChanged;
-        ApartmentState.OnChange -= StateHasChanged;
-        AmenitiesState.OnChange -= StateHasChanged;
-        LocksState.OnChange -= StateHasChanged;
-        LayoutState.OnChange -= StateHasChanged;
-        ModalService.OnShow -= ShowModal;
-        ModalService.OnClose -= CloseModal;
-        ToastService.OnShow -= ShowToast;
-        ToastService.OnHide -= HideToast;
     }
 }
