@@ -32,6 +32,30 @@
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
+
+    <!--ukrywanie header'a-->
+    <script>
+        window.initHeaderScroll = (bodyId, headerId) => {
+            const scrollContainer = document.getElementById(bodyId);
+            const header = document.getElementById(headerId);
+            let lastScrollTop = 0;
+
+            if (!scrollContainer || !header) return;
+
+            scrollContainer.addEventListener('scroll', () => {
+                const scrollTop = scrollContainer.scrollTop;
+
+                if (scrollTop < 0) return;
+
+                if (scrollTop > lastScrollTop && scrollTop > 10) {
+                    header.classList.add('hide');
+                } else {
+                    header.classList.remove('hide');
+                }
+                lastScrollTop = scrollTop;
+            });
+        };
+    </script>
 </body>
 
 </html>

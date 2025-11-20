@@ -2,6 +2,7 @@
 @using StayWell.Services
 @using Microsoft.Extensions.Localization
 @using System.Globalization
+@inject ModalService ModalService
 @inject GlobalizationService GlobalizationService
 @implements IDisposable
 
@@ -32,34 +33,19 @@
     </div>
 </div>
 
-<Modal Title="Wybierz język" IsVisible="@ModalVisible" OnClose="CloseModal">
-    <Content>
-        <Button OnClick="() => ChangeLang(pl)" Text="Polski"></Button>
-        <Button OnClick="() => ChangeLang(en)" Text="English"></Button>
-        @* <button @onclick="() => ChangeLang("pl")>Polski</button> *@
-        @* <button @onclick="() => ChangeLang("en")>English</button> *@
-    </Content>
-</Modal>
-
 @code {
     [Parameter]
     public string? Token { get; set; }
     [Parameter] 
     public string reservationId { get; set; } = "brak";
-    [Parameter]
-    public EventCallback OnOpenModal { get; set; }
 
     private string pl = "pl";
     private string en = "en";
 
-    private void OpenModal() => ModalVisible = true;
-
-    private void CloseModal() => ModalVisible = false;
-
     private void ChangeLang(string lang)
     {
         GlobalizationService.SetCulture(lang == "pl" ? "pl-PL" : "en-US");
-        CloseModal();
+        ModalService.HideModal();
     }
 
     protected override void OnInitialized()
@@ -67,11 +53,18 @@
         GlobalizationService.OnChange += StateHasChanged;
     }
 
-    private bool ModalVisible = false;
-
-    private void Open() => ModalVisible = true;
-
-    private void ChangeLangButton() => OpenModal();
+    private void ChangeLangButton()
+    {
+        ModalService.ShowModal("Zmień język",
+        @<div>
+            <p>Aktualny język: @CultureInfo.CurrentCulture</p>
+            <Button OnClick="() => ChangeLang(pl)" Text="Polski"></Button>
+            <Button OnClick="() => ChangeLang(en)" Text="English"></Button>
+            @* <button @onclick="() => ChangeLang("pl")>Polski</button> *@
+            @* <button @onclick="() => ChangeLang("en")>English</button> *@
+        </div>
+        );
+    }
 
     public void Dispose()
     {

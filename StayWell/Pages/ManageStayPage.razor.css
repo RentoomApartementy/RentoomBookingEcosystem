@@ -1,15 +1,23 @@
 ﻿.page-info-wrapper {
-
     width: 100%;
-    background-color: white;
-
 }
 
 .buttons-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 0 20px;
+    margin: 2rem 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.buttons-wrapper ::deep button {
+    width: 100%;
+    height: 50px;  
+    min-height: 80px;  
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    gap: 0.25rem;
-    margin: 2rem 0;
+    align-items: center;
 }

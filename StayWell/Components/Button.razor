@@ -11,11 +11,16 @@
             @Text
         </span>
     }
+    @if (RenderFragment is not null)
+    {
+            @RenderFragment
+    }
 </button>
 
 @code {
     [Parameter] public string Text { get; set; } = string.Empty;
     [Parameter] public RenderFragment? Icon { get; set; }
+    [Parameter] public RenderFragment? RenderFragment { get; set; }
     [Parameter] public string? ButtonStyle { get; set; }
     [Parameter] public EventCallback OnClick { get; set; } = EventCallback.Empty;
     [Parameter] public bool Disabled { get; set; } = false;
