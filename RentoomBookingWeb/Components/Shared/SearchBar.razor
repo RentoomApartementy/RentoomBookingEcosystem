@@ -32,7 +32,10 @@
             </div>
         </DropdownContent>
     </InputWithModal>
-    <Input IconPath="/assets/svgs/bed.svg" Placeholder="@Localizer["NumberOfRooms"]" Type="number" @bind-Value="Rooms"/>
+    @if (IsRoom)
+    {
+        <Input IconPath="/assets/svgs/bed.svg" Placeholder="@Localizer["NumberOfRooms"]" Type="number" @bind-Value="Rooms"/>   
+    }
     <Button @onclick="Search">@Localizer["Search"]</Button>
 </div>
 
@@ -44,7 +47,8 @@
     [Parameter] public string Children { get; set; } = "";
     [Parameter] public string Rooms { get; set; } = "";
     [Parameter] public EventCallback<Dictionary<string, string>> OnSearch { get; set; }
-    
+    [Parameter] public bool IsRoom { get; set; } = true;
+
     private int CountPersons => 
         (int.TryParse(Adults, out var a) ? a : 0) + 
         (int.TryParse(Children, out var c) ? c : 0);
