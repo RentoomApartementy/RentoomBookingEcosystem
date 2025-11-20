@@ -46,9 +46,26 @@
             <img src="/icons/baby.svg">
         </Icon>
     </Button>
-    <Button ButtonStyle="color: red; border-color: red; margin-top: 30px;" Text="@Localizer["CheckOut"]">
+    <Button ButtonStyle="color: red; border-color: red; margin-top: 30px;" Text="@Localizer["CheckOut"]"
+    OnClick="OpenModal">
         <Icon>
             <img src="/icons/door-closed.svg">
         </Icon>
     </Button>
 </div>
+
+@code{
+    private bool _windows;
+    private bool _belongings;
+    private bool _trash;
+    private bool _remote;
+
+    private bool _buttonState => _windows && _belongings && _trash && _remote;
+
+    void OpenModal()
+    {
+        ModalService.ShowModal("Wymelduj się",
+        @<RentoomBooking.StayWell.Components.ModalContent.CheckOutContent></RentoomBooking.StayWell.Components.ModalContent.CheckOutContent>
+        );
+    }
+}
