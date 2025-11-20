@@ -29,6 +29,31 @@
     display: flex;
     flex-direction: column;
     justify-items: center;
+    gap: 1rem;
     align-items: center;
     padding-top: 120px;
+}
+
+.apartment-details {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    display: flex;
+    gap: 1rem;
+}
+
+.apartment-details li {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    margin: 6px 0;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+}
+
+hr {
+    width: 100%;
 }
