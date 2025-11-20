@@ -22,9 +22,7 @@
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-/*    min-height: 150px;*/
-/*    min-height: 300px;*/
-    height: auto;
+    min-height: 300px;
     max-height: 80vh;
     min-width: 320px;
     max-width: 600px;
