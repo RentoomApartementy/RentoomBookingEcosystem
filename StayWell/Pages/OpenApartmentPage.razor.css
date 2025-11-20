@@ -1,16 +1,74 @@
-﻿.page-info-wrapper {
-    width: 100%;
-}
-
-.buttons-wrapper {
+﻿.buttons-wrapper {
+    padding: 40px;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.25rem;
-    margin: 2rem 0;
+    gap: 1.5rem;
+    margin: 0 0;
 }
 
-img{
-    transform: translateY(-2px);
+.open-button {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color:whitesmoke;
+    box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+
+.open-button:active {
+    box-shadow: inset 10px 10px 20px #bebebe, inset -10px -10px 20px #ffffff;
+    transform: scale(0.98);
+}
+
+
+.open-button .lock {
+    height: 60px;
+    width: 60px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.open-button::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.5s ease;
+}
+
+.open-button.locked::after {
+    border-color: #00e676;
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.4), inset 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.open-button.locked .lock {
+    /* https://angel-rs.github.io/css-color-filter-generator */
+    filter: invert(47%) sepia(68%) saturate(466%) hue-rotate(98deg) brightness(92%) contrast(94%);
+}
+
+.open-button.unlocked::after {
+    border-color: #ffeb3b;
+    box-shadow: 0 0 20px rgba(255, 235, 59, 0.6), inset 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.open-button.unlocked .lock {
+    transform: scale(0.9);
+    filter: brightness(0) saturate(100%) invert(85%) sepia(21%) saturate(5923%) hue-rotate(329deg) brightness(102%) contrast(101%);
 }

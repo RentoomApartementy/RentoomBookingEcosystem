@@ -4,6 +4,7 @@
 @using RentoomBooking.StayWell.States
 @using RentoomBooking.StayWell.Services
 @inject ModalService ModalService
+@inject ToastService ToastService
 @inject ReservationState ReservationState
 @inject MediaState MediaState
 @inject ApartmentState ApartmentState
@@ -11,15 +12,17 @@
 @inject LocksState LocksState
 @inject LayoutState LayoutState
 
+@inject IJSRuntime JSRuntime
+
 <div class="layout-page">
     @if (LayoutState.ShowHeader)
     {   
-    <div class="layout-header">
+    <div class="layout-header" id="main-header">
         <Header Token="@ReservationState.CurrentToken" reservationId="@ReservationState.CurrentReservation?.Reservation.id.ToString()">
         </Header>
     </div>
     }
-    <div class="layout-body">
+    <div class="layout-body" id="main-body">
         @if (ReservationState.IsLoading || MediaState.IsLoading || ApartmentState.IsLoading || AmenitiesState.IsLoading || LocksState.IsLoading)
         {
             <div class="loading"></div>
@@ -37,6 +40,7 @@
     </div>
     }
 </div>
+<Toast Message="@_toastMessage" Content="@_toastContent" IsVisible="@_toastVisible" DurationMs="@_toastDuration" OnHide="HideToast" />
 
 <Modal Title="@_modalTitle" OnClose="CloseModal" IsVisible="@_modalVisibility">
     <Content>
@@ -50,6 +54,19 @@
     private string _modalTitle = string.Empty;
     private RenderFragment _modalContent;
 
+    private bool _toastVisible = false;
+    private string _toastMessage = string.Empty;
+    private RenderFragment? _toastContent;
+    private int _toastDuration = 3000;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initHeaderScroll", "main-body", "main-header"); // chowanie nagłówka przy scrollowaniu
+        }
+    }
+
     protected override void OnInitialized()
     {
         ReservationState.OnChange += StateHasChanged;
@@ -61,6 +78,9 @@
 
         ModalService.OnShow += ShowModal;
         ModalService.OnClose += CloseModal;
+
+        ToastService.OnShow += ShowToast;
+        ToastService.OnHide += HideToast;
 
         InvokeAsync(StateHasChanged);
     }
@@ -79,6 +99,21 @@
         StateHasChanged();
     }
 
+    private void ShowToast(string message, RenderFragment? content, int durationMs)
+    {
+        _toastMessage = message;
+        _toastContent = content;
+        _toastDuration = durationMs;
+        _toastVisible = true;
+        StateHasChanged();
+    }
+
+    private void HideToast()
+    {
+        _toastVisible = false;
+        StateHasChanged();
+    }
+
     public void Dispose()
     {
         ReservationState.OnChange -= StateHasChanged;
@@ -89,5 +124,7 @@
         LayoutState.OnChange -= StateHasChanged;
         ModalService.OnShow -= ShowModal;
         ModalService.OnClose -= CloseModal;
+        ToastService.OnShow -= ShowToast;
+        ToastService.OnHide -= HideToast;
     }
 }

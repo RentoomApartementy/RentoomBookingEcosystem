@@ -1,69 +1,103 @@
 ﻿@page "/reservation/{token}/OpenApartmentPage"
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
-
 @using Microsoft.Extensions.Localization
 @using System.Globalization
+
 @inject IStringLocalizer<OpenApartmentPage> Localizer
-
-
 @inherits Models.PageBase
 
 <PageTitle>OpenApartmentPage</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="@ReservationState?.CurrentReservation?.Reservation?.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["OpenApartment"]"></PageInfo>
+    <PageInfo Title="@ReservationState?.CurrentReservation?.Reservation?.Items.FirstOrDefault()?.objectName"
+              Subtitle="@Localizer["OpenApartment"]">
+    </PageInfo>
 </div>
 
 <div class="description-wrapper">
-    <Description>
-        <Icon><img src="/icons/info.svg" /></Icon>
-        <DescriptionContent>
-            <span>Jeżeli dostępne, <img src="/icons/radio.svg"/> 
-                <span style="font-weight: bold">Otwórz zdalnie</span> drzwi pozwala na otwieranie drzwi bez potrzeby wpisywania kodu.
-                Wystarczy wcisnąć przycisk.</span>
-        </DescriptionContent>
-    </Description>
+    <div style="margin-bottom: 10px;">
+        <Description>
+            <Icon><img src="/icons/info.svg" /></Icon>
+            <DescriptionContent>
+                <span>
+                    Jeżeli dostępne, <img src="/icons/radio.svg" style="width:1em; vertical-align:middle;" />
+                    <span style="font-weight: bold">Otwórz zdalnie</span> drzwi pozwala na otwieranie drzwi bez potrzeby wpisywania kodu.
+                    Wystarczy wcisnąć przycisk.
+                </span>
+            </DescriptionContent>
+        </Description>
+    </div>
+
     <Description DescriptionText="Indywidualny kod jest zawszę funkcjonalny niezależnie od dostępności zdalnego otwierania drzwi.">
         <Icon><img src="/icons/binary.svg" /></Icon>
     </Description>
 </div>
 
 <div class="buttons-wrapper">
-    <Button Text="@Localizer["OpenRemotely"]" 
-   Disabled="_buttonState" ButtonStyle="margin-bottom: 30px;">
-        <Icon>
-            <img src="/icons/radio.svg">
-        </Icon>
-    </Button>
+
+    <button class="open-button @(IsOpened ? "unlocked" : "locked")" @onclick="OpenDoor" disabled="@IsButtonDisabled">
+        <img class="lock" src="/icons/lock.svg" />
+    </button>
+
+
+    <div style="text-align: center; font-weight: 600; margin-top: 10px;">
+        @if (IsOpened)
+        {
+            <span style="color: #fbc02d; font-size: 1.1em;">Drzwi Otwarte</span>
+        }
+        else
+        {
+            <span style="color: #4caf50; font-size: 1.1em;">Naciśnij, aby otworzyć</span>
+        }
+    </div>
+
 
     <Description>
         <DescriptionContent>
-            <div style="font-weight: bold;">
-                <img src="/icons/binary.svg"/>
+            <div style="font-weight: bold; margin-top: 20px;">
+                <img src="/icons/binary.svg" style="transform: translateY(2px); margin-right: 5px;" />
                 @Localizer["YourIndividualCode"]:
             </div>
         </DescriptionContent>
     </Description>
 
-    <div style="font-size: calc(0.25vw + 1.25rem);">
+    <div style="font-size: calc(0.25vw + 1.25rem); text-align: center;">
         @if (!ReservationState.IsActiveReservation)
         {
             <span>@Localizer["CodeNotAvaliable"]</span>
         }
         else
         {
-            <span style ="font-weight: bold">@LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()</span> 
+            <span style="font-weight: bold">@LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()</span>
             <span>@Localizer["Confirm"]</span>
             <span style="font-weight: bold">#</span>
             <span>@Localizer["Or"]</span>
-            <img src="/icons/key-round.svg" />
+            <img src="/icons/key-round.svg" style="transform: translateY(4px);" />
         }
     </div>
 
 </div>
 
+@code {
 
-@code{
-    private bool _buttonState => DateTime.Now < ReservationState?.CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom();
+    private bool IsOpened = false;
+
+    private bool IsButtonDisabled => DateTime.Now < ReservationState?.CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom();
+
+    private async Task OpenDoor()
+    {
+        if (IsButtonDisabled) return;
+
+        if (!IsOpened)
+        {
+            await Task.Delay(150);
+            /*Otwieranie ttlock*/
+            IsOpened = true;
+        }
+        else
+        {
+            IsOpened = false;
+        }
+    }
 }
