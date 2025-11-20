@@ -1,0 +1,32 @@
+@page "/rezerwacja/{id:int}"
+@page "/rezerwacja/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@inject IApartmentsService ApartmentsService;
+
+<PageTitle>Rezerwacja @_apartment?.Name</PageTitle>
+
+<div class="reservation-container">
+    <div class="reservation-wrapper">
+        <h1>@_apartment?.Name</h1>
+        <div class="">
+            <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>, 
+            <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
+            <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
+    [Parameter] public string? Adults { get; set; }
+    [Parameter] public string? Children { get; set; }
+    
+    private ApartmentObject? _apartment;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
+    }
+}

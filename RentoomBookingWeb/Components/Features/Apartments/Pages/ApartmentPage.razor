@@ -3,9 +3,10 @@
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @using RentoomBooking.SharedClasses.Services.IdoBooking;
+@using System.Globalization;
 @inject IApartmentsService ApartmentsService;
 @inject IIdoApartmentService IdoApartmentService;
-@using System.Globalization;
+@inject NavigationManager Navigation;
 
 <PageTitle>@_apartment?.Name</PageTitle>
 
@@ -117,7 +118,7 @@
         </div>
         
         <div class="apartment-button-wrapper">
-            <Button>Rezerwacja</Button>
+            <Button @onclick="GoToReservation">Rezerwacja</Button>
         </div>
     </div>
 </div>
@@ -200,5 +201,13 @@
     private async Task<List<ObjectAmenity>?> GetAmenities(int objectId)
     {
         return await IdoApartmentService.GetObjectAmenitiesAsync(objectId);
+    }
+    
+    private void GoToReservation()
+    {
+        if (_apartment != null && int.TryParse(_apartment.Id, out int id))
+        {
+            Navigation.NavigateTo($"/rezerwacja/{id}");
+        }
     }
 }
