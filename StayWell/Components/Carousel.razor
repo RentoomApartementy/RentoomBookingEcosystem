@@ -1,28 +1,48 @@
 @using System.Timers
 @implements IDisposable
+@inject StayWell.Services.ModalService ModalService
 
-<div class="carousel">
+<div class="carousel @(UseControlButtons ? "noradius" : "")">
     <div class="slider" style="transform: translateX(calc(-@(_index*100)%))">
         @for (int i = 0; i < ImageUrls.Length; i++)
         {
-            <div class="slide">
-                <img src="@ImageUrls[i]" loading="lazy" alt="slide-@i"/>
+            <div class="slide" @onclick="EnlargeImage">
+                <img class="slide-img" src="@ImageUrls[i]" loading="lazy" alt="slide-@i"/>
             </div>
         }
     </div>
 </div>
+@if (UseControlButtons == true)
+{
+    <div class="control-buttons-wrapper">
+        <button @onclick="PreviousSlide"> &lt; </button>
+        <span>@(_index+1) / @ImageUrls.Length </span>
+        <button @onclick="NextSlide"> &gt; </button>
+    </div>
+}
 
 @code {
 
-    [Parameter] public string[] ImageUrls { get; set; } = Array.Empty<string>();
-    [Parameter] public int TransitionIntervalMs { get; set; } = 2000;
+    [Parameter] public string[] ImageUrls { get; set; } = Array.Empty<string>(); // tablica URLobrazków
+    [Parameter] public bool UseTimer { get; set; } // automatyczna zmiana slajdów
+    [Parameter] public bool UseControlButtons { get; set; } // wyswietla przyciski do zmiany slajdów
+    [Parameter] public int TransitionIntervalMs { get; set; } = 2000; // interwa³ zmiany slajdów w ms
 
     private int _index = 0;
     private System.Timers.Timer? _timer;
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if(firstRender) StartTimer();
+        if(firstRender && UseTimer) StartTimer();
+    }
+
+    private void EnlargeImage()
+    {
+        ModalService.ShowModal("",
+        @<div>
+            <img class="big-img" src="@(ImageUrls[_index])"/>
+        </div>
+        );
     }
 
     private void NextSlide()
@@ -35,6 +55,19 @@
         else
         {
             _index = 0;
+        }
+    }
+
+    private void PreviousSlide()
+    {
+
+        if (_index > 0)
+        {
+            _index--;
+        }
+        else
+        {
+            _index = ImageUrls.Length - 1;
         }
     }
 

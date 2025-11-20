@@ -2,45 +2,98 @@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 
-@using Microsoft.Extensions.Localization
-@using System.Globalization
-@inject IStringLocalizer<ContactUsPage> Localizer
-
-
 @inherits Models.PageBase
 
 <PageTitle>Contact Us</PageTitle>
 
 <div class="page-container">
-    <!-- Pozostała treść strony -->
     <div class="description-wrapper">
         <div class="page-info-wrapper">
             <PageInfo Title="Regulamin" Subtitle="Zanim otrzymasz dostęp do swojej aplikacji, zapoznaj i zaakceptuj regulamin!"></PageInfo>
         </div>
-        <img class="image" src="/images/terms-page.png" />
-        <Button>
-            <Icon>
-                <img src="/icons/file-user.svg" />
-            </Icon>
-            <RenderFragment>
-                <span>Wyświetl cały regulamin</span>
-            </RenderFragment>
-        </Button>
+
+        <div class="step-content @(_isTransitioning ? "fade-out" : "fade-in")">
+            @if (_currentStep != steps.Length)
+            {  
+                <img class="image" src="@steps[_currentStep].Image" />
+                <p style="text-align: center">@steps[_currentStep].Text</p>
+            }
+            else
+            {
+                <div class="tos-full"> @* Tymczasowo *@
+                    REGULAMIN WYNAJMU
+                    Regulamin i Umowa określają warunki rezerwacji i najmu apartamentów będących przedmiotem najmu przez Rentoom Apartamenty Sp. z o.o. (Wynajmującego), Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS: 0000871532, REGON: 387605281 na rzecz Najemcy.
+
+                    Rezerwacja lub najem noclegu jest równoznaczna z zapoznaniem się i akceptacją postanowień Regulaminu i Umowy.
+                    Wszystkie dane Najemcy, wykorzystywane są jedynie do przeprowadzenia rezerwacji lub najmu nie będą udostępniane osobom trzecim. Najemca wyraża zgodę na przetwarzanie jego danych osobowych przez Wynajmującego jako administratora w celu wykonania Umowy. Najemca ma prawo dostępu do swoich danych i ich poprawienia.
+                    Właściwym do rozstrzygania spraw spornych będzie właściwy rzeczowo Sąd w Toruniu.
+                    Wynajmujący zastrzega sobie prawo do odmowy przyjęcia Gościa, który: nie posiada ważnego dokumentu tożsamości (tj. dowód tożsamości bądź paszport) lub nie chce okazać dokumentu, jest pod wpływem alkoholu bądź innych środków odurzających, podczas poprzedniego pobytu naruszył postanowienia Regulaminu.
+                    Doba hotelowa trwa od godziny 15:00 do godziny 11:00 lub dnia następnego.
+                    W dniu wyjazdu Najemca zobowiązany jest do zdania apartamentu do godziny 11:00, w przeciwnym razie zostanie doliczona opłata w wysokości następnej rozpoczętej doby + 50%.
+                    Palenie w apartamentach jest surowo zabronione. Za złamanie zakazu palenia wewnątrz apartamentu Najemca zobowiązany jest do uiszczenia dodatkowej opłaty w kwocie 500 PLN (pięćset).
+                    Zabronione jest korzystanie ze sprzętów elektrycznych niebędących wyposażeniem apartamentu i stanowiących zagrożenie pożarem.
+                    O wszelkich uszkodzeniach lub niesprawnościach wyposażenia apartamentu Najemca zobowiązany jest natychmiast poinformować Wynajmującego.
+                    Zwierzęta nie są akceptowane.
+                    Na terenie wynajmowanego apartamentu obowiązuje cisza nocna w godzinach 22:00-07:00. Osoby niezameldowane w apartamencie, mogą przebywać w odwiedzinach tylko do godziny 21:00.
+                    Organizowanie imprez towarzyskich w apartamencie jest całkowicie zabronione. Za zorganizowanie imprezy towarzyskiej, Najemca uiści na rzecz Wynajmującego dodatkową opłatę w wysokości 5 000 PLN + dodatkowe straty jakie poniósł Wynajmujący. Za wszystkie zniszczenia wynajmowanego apartamentu jak i budynku odpowiada osoba Najemcy. Najemca odpowiada za wszystkie zniszczenia wynikłe z zachowania osób trzecich przebywających z nią w apartamencie – zaproszonych do mieszkania/budynku przez tę osobę. W przypadku interwencji Policji bądź Straży Miejskiej Wynajmujący obciąży Najemcę dodatkową opłatą   w wysokości 500 PLN (pięćset).
+                    Liczba osób nocujących w apartamencie nie może przekraczać liczby podanej podczas rezerwacji. Stwierdzenie nieprawidłowości w tym względzie skutkuje naliczeniem opłaty dodatkowej w wysokości 200 PLN za każdą z niezgłoszonych osób za każdą dobę pobytu.
+                    Goście zobowiązani są do właściwego zabezpieczenia apartamentu, tj. do dokładnego zamykania wszystkich drzwi wejściowych i okien przed każdorazowym opuszczeniem apartamentu oraz do przechowywania kluczy/kodów/pilotów bez możliwości dostępu do nich osób nieupoważnionych.
+                    Wynajmujący nie odpowiada za zniszczone lub zgubione wartościowe przedmioty pozostawione w apartamencie.
+                    W przypadku zagubienia/zniszczenia klucza do apartamentu lub pilota do garażu naliczona jest opłata w wysokości 100 PLN za każdą sztukę.
+                    Sprzątanie końcowe wliczone jest w cenę pobytu. Jednakże, Gość zobowiązany jest do pozostawienia po sobie umytych naczyń oraz używanych sprzętów. Czynności te nie stanowią istoty sprzątania końcowego.
+                    Każde dodatkowe sprzątanie na specjalne życzenie Wynajmującego to koszt 100 PLN. W cenę wliczona jest wymiana pościeli i ręczników.
+                    Opłaty za media, które udostępnia Wynajmujący, są wliczone w cenę pobytu.
+                    W przypadku pobytów dłuższych niż 7 dni na życzenie Najemcy raz na tydzień, może być dokonana wymiana pościeli i ręczników bez dodatkowych opłat.
+                    Za wszystkie szkody / kradzież powstałe w apartamencie podczas pobytu odpowiada materialnie Najemca.
+                    Prosimy o natychmiastowe poinformowanie nas, jeśli dojdzie do jakiegoś nieporozumienia bądź nie będą Państwo zadowoleni z naszych usług. Najemca ma prawo do reklamacji usługi. Reklamacje należy składać mailowo na adres: info@torun-apartamenty.pl lub listownie, listem poleconym na adres: MCS73 sp. z o.o. 87-100 Toruń, ul. St. Szymańskiego 1B. Odpowiedź na reklamacje zostanie udzielona w ciągu 14 dni od jej doręczenia.
+                    Wynajmujący za rezerwacje weekendowe, jednodniowe oraz dwudniowe piątek-sobota oraz sobota-niedziela może pobrać od gości depozyt w wysokości 1 000 PLN do zwrotu w dniu wyjazdu.
+                    Wynajmujący uprawniony jest każdorazowo do dochodzenia odszkodowania przenoszącego wartość opłat dodatkowych.
+
+
+                    REGULAMIN PŁATNOŚCI
+                    Opłaty takie jak cena noclegu oraz wszystkich dodatków widoczne są podczas dokonywania rezerwacji, po wybraniu zakresu dat pobytu, ilości osób oraz rodzaju apartamentu.
+                    Rozliczenie opłaty za pobyt odbywa się z góry, najpóźniej w dniu zameldowania. Opłaty można dokonać gotówką (za zgodą Wynajmującego, co może wiązać się z uiszczeniem dodatkowej opłaty), kartą płatniczą, kartą kredytową lub przelewem.
+                    Podczas dokonywania rezerwacji Wynajmujący ma prawo do pobrania zaliczki w wysokości 10% wartości pobytu lub całość kwoty w przypadku dokonania rezerwacji w obniżonej cenie w promocji bezzwrotnej
+                    Najemca obowiązany jest do dokonania płatności za cały pobyt 14 dni przed zameldowaniem.
+                    Za każdy pobyt wystawiana jest faktura lub paragon.
+                    Jeśli Najemca odstępuje od Umowy do 14 dni przed zameldowaniem lub do 2 godzin po dokonaniu rezerwacji nie ponosi żadnych kosztów rezerwacji, a ewentualnie pobrane zaliczki zostaną mu zwrócone.
+                    Jeśli Najemca odstępuje od umowy zawartej w obniżonej cenie w promocji bezzwrotnej lub w terminie 14 lub mniej dni przed zameldowaniem ponosi całkowity koszt rezerwacji.
+                    Obsługa płatności bezpośrednich realizowana jest przy współpracy z firmami :
+                    a) Tpay.com Krajowy Integrator Płatności Spółka Akcyjna ul. Św. Marcin 73/6 61-808 Poznań NIP: 7773061579 REGON: 300878437 KRS: 0000412357. Regulaminy płatności: https://tpay.com/regulaminy
+                    b) PayPro SA Sp. z o. o.  60-327 Poznań, ul. Kanclerska 15. NIP 779-236-98-87, REGON 301345068 właściciela serwisu  www.przelewy24.pl
+
+
+                    REKLAMACJE
+                    Najemca ma prawo do reklamacji usługi. Reklamacje należy składać mailowo na adres info@rentoom.pl lub listownie, listem poleconym na adres korespondencyjny.
+                    Odpowiedź na reklamacje zostanie udzielona w ciągu 14 dni od jej doręczenia.
+                </div>
+            }
+        </div>
     </div>
 
     <div class="bottom-section">
-        <Button>
+        <Button OnClick="NextStep">
             <Icon>
                 <img src="/icons/handshake.svg"/>
             </Icon>
             <RenderFragment>
-                <span>Akceptuje regulamin</span>
+                <span>Potwierdzam i akceptuję</span>
             </RenderFragment>
         </Button>
     </div>
 </div>
 
-@code{
+@code {
+    private int _currentStep = 0;
+    private bool _isTransitioning = false;
+
+    private readonly (string Image, string Text)[] steps = new[]
+    {
+        ("/images/clock.png", "Doba hotelowa trwa od godziny 15:00 w dniu przyjazdu do godziny 11:00 w dniu wyjazdu. Inne godziny mogą być dostępne po wcześniejszym uzgodnieniu i uiszczeniu dodatkowej opłaty."),
+        ("/images/broken-window.png", "Akceptuję obowiązek zgłoszenia wszelkich szkód i uwag przy zameldowaniu oraz ponoszę odpowiedzialność za zniszczenia powstałe z winy mojej lub osób objętych rezerwacją."),
+        ("/images/no-smoking.png", "Akceptuję zakaz palenia wyrobów tytoniowych i elektronicznych papierosów wewnątrz obiektu. Palenie dozwolone jest wyłącznie na balkonie."),
+        ("/images/party.png", "Zakaz organizowania imprez oraz przyjmowania osób trzecich nieujętych w rezerwacji bez wcześniejszej zgody właściciela.")
+    };
 
     protected override void OnInitialized()
     {
@@ -48,11 +101,26 @@
         LayoutState.ShowFooter = false;
     }
 
-
     public override void Dispose()
     {
         LayoutState.ShowFooter = true;
-
         base.Dispose();
+    }
+
+    private async void NextStep()
+    {
+        if (_currentStep < steps.Length)
+        {
+            _isTransitioning = true;
+            StateHasChanged();
+            await Task.Delay(300); // czas z przejscia css
+            _currentStep++;
+            _isTransitioning = false;
+            StateHasChanged();
+        }
+        else
+        {
+            NavigationManager.NavigateTo($"reservation/{Token}/HomePage");
+        }
     }
 }

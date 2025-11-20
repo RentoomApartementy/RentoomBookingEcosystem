@@ -16,25 +16,13 @@
         <span><img src="/icons/users.svg"/>Założyciel rezerwacji:</span>
         <span class="text">@Reservation?.Client.FirstName @Reservation?.Client.LastName</span>
     </div>
-    <div class="amenity">
+    @* <div class="amenity">
         <span><img src="/icons/map-pin.svg" />Adres:</span>
         <span class="text">@Apartment?.ObjectLocation?.Address</span>
-    </div>
+    </div> *@
     <div class="amenity">
         <span><img src="/icons/door-open.svg" />Apartament:</span>
         <span class="text">@Reservation?.Items?.FirstOrDefault()?.itemCode</span>
-    </div>
-    <div class="amenity">
-        <span><img src="/icons/wifi.svg" />Wifi:</span>
-        @if(!ReservationState.IsActiveReservation)
-        {
-          <span class="text">Dostępne podczas rezerwacji</span>
-        }
-        else
-        {
-            <span class="text">login</span>
-            <span class="text">password</span>
-        }
     </div>
 
     <div class="amenity">
