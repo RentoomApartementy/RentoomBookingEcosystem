@@ -22,12 +22,18 @@ namespace RentoomBooking.StayWell
                 options.ResourcesPath = "Resources";
             });
 
+            builder.Services.AddSingleton<LayoutState>();
+            builder.Services.AddSingleton<ToastService>();
+
+            builder.Services.AddScoped<ClipboardService>();
             builder.Services.AddScoped<GlobalizationService>();
+            builder.Services.AddScoped<ModalService>();
 
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
             builder.Services.AddScoped<AmenitiesState>();
             builder.Services.AddScoped<ApartmentState>();
+            builder.Services.AddScoped<LocksState>();
 
             var apiBase = builder.Configuration["ApiBaseUrl"] ?? "/api/";
 

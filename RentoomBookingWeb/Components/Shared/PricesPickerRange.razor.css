@@ -1,0 +1,38 @@
+.price-range-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #9aa59b;
+    border-radius: 12px;
+    padding: 4px 8px;
+    height: 43px;
+    background: white;
+}
+
+.price-range-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 3px;
+}
+
+.price-range-input-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.price-separator {
+    width: 1px;
+    height: 16px;
+    background-color: #9aa59b;
+    margin: 0 8px;
+}
+
+.price-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    background: transparent;
+    font-family: inherit;
+    color: #000;
+}

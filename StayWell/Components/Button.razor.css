@@ -9,7 +9,7 @@
 
 button {
     max-width: 1000px;
-    background: linear-gradient(180deg, #fff 60%, #f3f3f3 100%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.85) 80%, rgba(255,255,255,0.65) 100%);
     border: 1.75px solid #222;
     border-radius: 15px;
     width: 100%;
@@ -31,6 +31,8 @@ button {
         transform 0.25s cubic-bezier(.4,0,.2,1),
         box-shadow 0.25s cubic-bezier(.4,0,.2,1),
         background 0.25s cubic-bezier(.4,0,.2,1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 button:active:enabled {

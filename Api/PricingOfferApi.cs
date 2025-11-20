@@ -95,7 +95,16 @@ namespace RentoomBooking.Api
                     return response;
                 }
 
-                var offers = await _rentoomOfferService.getOffer(payload).ConfigureAwait(false);
+                var offers = await _rentoomOfferService.getOfferWitFilter(payload).ConfigureAwait(false);
+
+                if (offers == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                    await response.WriteStringAsync($"Nie znaleziono apartamentów spełniający kryteria filtra:  {JsonConvert.SerializeObject(payload)}").ConfigureAwait(false);
+                    return response;
+                }
+
 
                 response.StatusCode = HttpStatusCode.OK;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");

@@ -13,6 +13,7 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
     {
         public PricingOffersRequest IdoOfferParams { get; set; }
         public ApartmentFilters? ApartmentFilterParams { get; set; }
+        public OfferPriceFilter? PriceFilter { get; set; }
     }
 
     public class RentoomOffer {
@@ -22,9 +23,13 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
     public class ApartmentFilters {
         public List<int>? ApartmentAddonFilter { get; set; }
         public List<int>? ApartmentAmenitiesFilter {get;set;}
-        public List<int>? ApartmentLocationsFilter { get; set; }
+        public List<string>? ApartmentLocationsFilter { get; set; }
 
     }
+    public class OfferPriceFilter
+    {
+        public float PriceFrom { get; set; }
+        public float PriceTo { get; set; }
 
-
+    }
 }

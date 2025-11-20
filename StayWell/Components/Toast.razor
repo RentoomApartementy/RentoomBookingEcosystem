@@ -1,0 +1,66 @@
+﻿@using RentoomBooking.StayWell.Services
+
+@if (IsVisible)
+{
+    <div class="toast-container">
+        <div class="toast">
+            @if (Content != null)
+            {
+                <div class="toast-content">@Content</div>
+            }
+            else if (!string.IsNullOrEmpty(Message))
+            {
+                <div class="toast-message">@Message</div>
+            }
+            <button class="toast-close" @onclick="Hide" aria-label="close_modal">×</button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string? Message { get; set; }
+
+    [Parameter]
+    public RenderFragment? Content { get; set; }
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnHide { get; set; }
+
+    [Parameter]
+    public int DurationMs { get; set; } = 3000;
+
+    private CancellationTokenSource? _cts;
+
+    protected override void OnParametersSet()
+    {
+        if (IsVisible)
+        {
+            _cts?.Cancel();
+            _cts = new CancellationTokenSource();
+            _ = AutoHideAsync(_cts.Token);
+        }
+    }
+
+    private async Task AutoHideAsync(CancellationToken token)
+    {
+        try
+        {
+            await Task.Delay(DurationMs, token);
+            if (!token.IsCancellationRequested)
+            {
+                await Hide();
+            }
+        }
+        catch (TaskCanceledException) { }
+    }
+
+    private async Task Hide()
+    {
+        if (OnHide.HasDelegate)
+            await OnHide.InvokeAsync();
+    }
+}
