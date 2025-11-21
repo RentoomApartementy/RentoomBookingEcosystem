@@ -1,7 +1,9 @@
-@page "/rezerwacja/{id:int}"
-@page "/rezerwacja/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}"
-@using RentoomBooking.SharedClasses.Models.IdoBooking
+@page "/rezerwacja/{id:int}";
+@page "/rezerwacja/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}";
+@using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Services.IdoBooking;
 @inject IApartmentsService ApartmentsService;
+@inject IIdoApartmentService IdoApartmentService;
 
 <PageTitle>Rezerwacja @_apartment?.Name</PageTitle>
 
@@ -37,6 +39,113 @@
         </ul>
         
         <hr/>
+        
+        <h3 class="header-text">Podgląd</h3>
+        <div class="preview">
+            <div class="image-wrapper">
+                @if (_currentObjectMedium == null)
+                {
+                    <div class="loading-image">
+                        <div class="skeleton"></div>
+                    </div>
+                }
+                else
+                {   
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img 
+                                src="@_currentObjectMedium.Url"
+                                alt="@_apartment?.Name"
+                                title="@_apartment?.Name"
+                                itemprop="photo"
+                                class="apartment-image" 
+                            />
+                        </div>
+                
+                        <div @onclick="() => ChangeCurrentObjectMedium(1)" @onclick:stopPropagation  class="right-button">
+                            &gt;
+                        </div>
+                
+                        <div @onclick="() => ChangeCurrentObjectMedium(-1)" @onclick:stopPropagation  class="left-button">
+                            &lt;
+                        </div>
+                
+                        @if (_objectMediums != null)
+                        {
+                            <div class="image-counter">
+                                <small>@(_currentMediumIndex + 1)/@(_objectMediums.Count)</small>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            
+            <div class="map">
+                <ApartmentMap 
+                    Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat" 
+                    Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng" 
+                    ApartmentAddress="@_apartment?.ObjectLocation?.Address"
+                />
+            </div>
+        </div>
+        
+        <div style="margin-top: 1rem;"></div>
+        
+        <h3 class="header-text">Dodatkowe opcje</h3>
+        <div class="addon-list-container">
+            @if (_apartment?.Addons != null)
+            {
+                @foreach (var addon in _apartment.Addons)
+                {
+                    <div class="addon-item">
+                        <label class="addon-label">
+                            <input type="checkbox" class="addon-checkbox" />
+                            <span class="addon-name">@addon.Name</span>
+                        </label>
+                    </div>
+                }
+            }
+        </div>
+        
+        <div style="margin-top: 1rem;"></div>
+        <hr/>
+        
+        <h3 class="header-text">Podsumowanie</h3>
+        <div class="summary">
+            <div class="summary-wrapper">
+                <div class="summary-info">
+                    <b class="info-text">Liczba osób</b>
+                    <p class="info-text">2</p>
+                </div>
+            
+                <div class="summary-info">
+                    <b class="info-text">Od</b>
+                    <p class="info-text">8 czerwiec 2025</p>
+                </div>
+            
+                <div class="summary-info">
+                    <b class="info-text">Do</b>
+                    <p class="info-text">10 czerwiec 2025</p>
+                </div>
+            
+                <div class="summary-info">
+                    <b class="info-text">Koszt</b>
+                    <p class="price-text">659.40 zł</p>
+                </div>
+            </div>
+            <p>Liczba nocy: 2</p>
+        </div>
+        
+        <hr/>
+        
+        <div class="confirm-wrapper">
+            <label class="addon-label">
+                <input type="checkbox" class="addon-checkbox" />
+                <span class="addon-name">Chcę otrzymać fakture VAT</span>
+            </label>
+            
+            <Button>Przejdź dalej</Button>
+        </div>
     </div>
 </div>
 
@@ -49,11 +158,42 @@
     
     private ApartmentObject? _apartment;
     private int? _bedsCount = null;
+    
+    private List<ObjectMedium>? _objectMediums = null;
+    private int _currentMediumIndex = 0;
+    private ObjectMedium? _currentObjectMedium = null;
 
     protected override async Task OnInitializedAsync()
     {
         _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
         _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
+
+        await GetObjectMedia();
+    }
+    
+    private async Task GetObjectMedia()
+    {
+        var idString = _apartment?.Id;
+        if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
+        {
+            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+            _currentMediumIndex = 0;
+            _currentObjectMedium = _objectMediums.FirstOrDefault();
+        }
     }
 
+    private void ChangeCurrentObjectMedium(int step)
+    {
+        if (_objectMediums == null || !_objectMediums.Any())
+            return;
+
+        _currentMediumIndex += step;
+
+        if (_currentMediumIndex < 0)
+            _currentMediumIndex = _objectMediums.Count - 1;
+        else if (_currentMediumIndex >= _objectMediums.Count)
+            _currentMediumIndex = 0;
+
+        _currentObjectMedium = _objectMediums[_currentMediumIndex];
+    }
 }
