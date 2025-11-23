@@ -189,7 +189,23 @@
     {
         if (Item != null && int.TryParse(Item.Id, out int id))
         {
-            Navigation.NavigateTo($"/rezerwacja/{id}");
+            var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+            var queryParams = Microsoft.AspNetCore.WebUtilities
+                .QueryHelpers.ParseQuery(uri.Query);
+
+            string? startDate = queryParams.ContainsKey("startDate") ? queryParams["startDate"].ToString() : null;
+            string? endDate   = queryParams.ContainsKey("endDate")   ? queryParams["endDate"].ToString()   : null;
+            string? adults    = queryParams.ContainsKey("adults")    ? queryParams["adults"].ToString()    : null;
+            string? children  = queryParams.ContainsKey("children")  ? queryParams["children"].ToString()  : null;
+
+            string url = $"/rezerwacja/{id}";
+
+            if (startDate != null || endDate != null || adults != null || children != null)
+            {
+                url = $"/rezerwacja/{id}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
+            }
+
+            Navigation.NavigateTo(url);
         }
     }
 }

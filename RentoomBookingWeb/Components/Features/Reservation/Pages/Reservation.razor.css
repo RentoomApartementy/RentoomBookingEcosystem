@@ -275,3 +275,15 @@ hr {
     justify-content: space-between;
     margin-bottom: 1rem;
 }
+
+.alert {
+    width: 100%;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #1F5A41;
+    border-radius: 5px;
+    color: #1F5A41;
+    font-weight: bold;
+}
