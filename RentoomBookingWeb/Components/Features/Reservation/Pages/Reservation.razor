@@ -4,6 +4,7 @@
 @using RentoomBooking.SharedClasses.Services.IdoBooking;
 @inject IApartmentsService ApartmentsService;
 @inject IIdoApartmentService IdoApartmentService;
+@inject NavigationManager Navigation;
 
 <PageTitle>Rezerwacja @_apartment?.Name</PageTitle>
 
@@ -144,7 +145,7 @@
                 <span class="addon-name">Chcę otrzymać fakture VAT</span>
             </label>
             
-            <Button>Przejdź dalej</Button>
+            <Button @onclick="GoToPayment">Przejdź dalej</Button>
         </div>
     </div>
 </div>
@@ -195,5 +196,13 @@
             _currentMediumIndex = 0;
 
         _currentObjectMedium = _objectMediums[_currentMediumIndex];
+    }
+    
+    private void GoToPayment()
+    {
+        if (_apartment != null && int.TryParse(_apartment.Id, out int id))
+        {
+            Navigation.NavigateTo($"/platnosc/{id}");
+        }
     }
 }
