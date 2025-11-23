@@ -107,8 +107,8 @@
             </div>
         }
         
-        <div class="apartment-button-wrapper">
-            <Button>Rezerwacja</Button>
+        <div @onclick:stopPropagation="true" class="apartment-button-wrapper">
+            <Button @onclick="GoToReservation">Rezerwacja</Button>
         </div>
     </div>
 </article>
@@ -185,4 +185,11 @@
         _currentObjectMedium = _objectMediums[_currentMediumIndex];
     }
 
+    private void GoToReservation()
+    {
+        if (Item != null && int.TryParse(Item.Id, out int id))
+        {
+            Navigation.NavigateTo($"/rezerwacja/{id}");
+        }
+    }
 }
