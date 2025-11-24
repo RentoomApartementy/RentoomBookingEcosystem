@@ -1,10 +1,11 @@
-using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Azure.Cosmos;
+using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
-using RentoomBookingWeb.Components;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBookingWeb.Components;
+using System.Globalization;
 
 namespace RentoomBookingWeb
 {
@@ -22,12 +23,13 @@ namespace RentoomBookingWeb
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.AddHttpClient("Api", client =>
+           /* builder.Services.AddHttpClient("Api", client =>
             {
                 client.BaseAddress = new Uri("https://localhost:7241/");
-            });
+            });*/
 
-            var cosEndpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
+            //var cosEndpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
+            var cosEndpoint = CosmosEndpointProvider.GetCosmosEndpointAsync(builder.Configuration, builder.Environment.IsDevelopment()).Result;
             if (string.IsNullOrEmpty(cosEndpoint))
                 throw new InvalidOperationException("AZURE_COSMOS_ENDPOINT configuration is missing.");
 
