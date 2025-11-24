@@ -1,13 +1,20 @@
-﻿@if (IsVisible)
+﻿@using RentoomBooking.StayWell.Services
+@using RentoomBooking.StayWell.Components
+@inject GlobalizationService GlobalizationService
+
+@if (IsVisible)
 {
     <div class="modal-backdrop" @onclick="Close" tabindex="-1" @ref="backdropRef">
         <div class="modal" @onclick:stopPropagation role="dialog" aria-labelledby="modal-title" aria-modal="true">
-            <div class="modal-header">
-                <button class="modal-close" @onclick="Close" aria-label="Zamknij modal">
-                    ×
-                </button>
-                <p class="modal-title">@Title</p>
-            </div>
+            @if (!String.IsNullOrEmpty(Title))
+            {
+                <div class="modal-header">
+                    <button class="modal-close" @onclick="Close" aria-label="Zamknij modal">
+                        ×
+                    </button>
+                    <p class="modal-title">@Title</p>
+                </div>
+            }
 
             <div class="modal-content">
                 @Content
@@ -31,6 +38,12 @@
 
     private ElementReference backdropRef;
 
+    protected override Task OnInitializedAsync()
+    {
+        GlobalizationService.OnChange += StateHasChanged;
+        return base.OnInitializedAsync();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && IsVisible)
@@ -47,9 +60,14 @@
         }
         else
         {
-            // Domyślne zachowanie: ukryj modal, jeśli rodzic nie obsługuje OnClose
             IsVisible = false;
             StateHasChanged();
         }
     }
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= StateHasChanged;
+    }
+
 }

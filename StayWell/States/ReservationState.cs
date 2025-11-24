@@ -1,5 +1,6 @@
 ﻿using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.StayWell.Services;
+using System.Net;
 
 namespace RentoomBooking.StayWell.States
 {
@@ -9,6 +10,11 @@ namespace RentoomBooking.StayWell.States
         private RentoomReservation? _reservation;
         private readonly BackendApi _backendApi = backendApi;
         private string? _currentToken;
+        private HttpStatusCode? _currentStatus;
+        // Rezerwacja jest poprawna
+        public bool IsValidReservation => CurrentReservation != null && CurrentStatus == System.Net.HttpStatusCode.OK;
+        // Rezerwacja jest aktywna (trwa)
+        public bool IsActiveReservation => CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom() <= DateTime.Now && DateTime.Now <= CurrentReservation?.Reservation?.ReservationDetails?.getDateTo();
 
         public RentoomReservation? CurrentReservation
         {
@@ -21,6 +27,7 @@ namespace RentoomBooking.StayWell.States
         }
 
         public string? CurrentToken => _currentToken;
+        public HttpStatusCode? CurrentStatus => _currentStatus;
 
         public async Task<RentoomReservation?> GetReservationAsync(string token)
         {
@@ -36,11 +43,12 @@ namespace RentoomBooking.StayWell.States
                 }
 
                 var reservation = await _backendApi.GetReservationByTokenAsync(token);
+                _currentStatus = reservation?.StatusCode;
 
                 if(reservation?.StatusCode == System.Net.HttpStatusCode.Gone)
                 {
                     Console.WriteLine("rezerwacja wygasła :(");
-                    CurrentReservation = null;
+                    CurrentReservation = null; // 
                     _currentToken = token;
 
                     return null;
@@ -82,11 +90,6 @@ namespace RentoomBooking.StayWell.States
             CurrentReservation = null;
             _currentToken = null;
             IsLoading = false;
-        }
-
-        public bool HasReservation()
-        {
-            return CurrentReservation != null;
         }
 
         private void NotifyStateChanged() => OnChange?.Invoke();
