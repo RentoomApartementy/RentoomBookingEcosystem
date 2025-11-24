@@ -1,15 +1,212 @@
-@page "/apartamenty/{id:int}"
-@page "/apartamenty/{slug}"
+@page "/apartamenty/{id:int}";
+@page "/apartamenty/{slug}";
+@using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Services.IdoBooking;
+@using System.Globalization;
+@inject IApartmentsService ApartmentsService;
+@inject IIdoApartmentService IdoApartmentService;
+@inject NavigationManager Navigation;
 
-<h3>Apartment</h3>
-@Id
+<PageTitle>@_apartment?.Name</PageTitle>
+
+<div class="apartment-container">
+    <HeaderSection
+        ImagePath="@_objectMediums?.FirstOrDefault()?.Url"
+        Title="@_apartment?.Name"
+        Height="230px"
+        IsShadow="true"
+    />   
+    
+    <div class="apartment-wrapper">
+        <h2>@_apartment?.Name</h2>
+        <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>, 
+        <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
+        <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
+        
+        <div class="apartment-map-wrapper">
+            <div class="image-wrapper">
+                @if (_currentObjectMedium == null)
+                {
+                    <div class="loading-image">
+                        <div class="skeleton"></div>
+                    </div>
+                }
+                else
+                {   
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img 
+                                src="@_currentObjectMedium.Url"
+                                alt="@_apartment?.Name"
+                                title="@_apartment?.Name"
+                                itemprop="photo"
+                                class="apartment-image" 
+                            />
+                        </div>
+                
+                        <div @onclick="() => ChangeCurrentObjectMedium(1)" @onclick:stopPropagation  class="right-button">
+                            &gt;
+                        </div>
+                
+                        <div @onclick="() => ChangeCurrentObjectMedium(-1)" @onclick:stopPropagation  class="left-button">
+                            &lt;
+                        </div>
+                
+                        @if (_objectMediums != null)
+                        {
+                            <div class="image-counter">
+                                <small>@(_currentMediumIndex + 1)/@(_objectMediums.Count)</small>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            
+            <div class="map">
+                <ApartmentMap 
+                    Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat" 
+                    Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng" 
+                    ApartmentAddress="@_apartment?.ObjectLocation?.Address"
+                />
+            </div>
+        </div>
+        
+        <article class="description-wrapper">
+            @if (!string.IsNullOrEmpty(_objectDescription?.ShortDescription))
+            {
+                <h4>@_objectDescription.ShortDescription</h4>
+            }
+
+            @if (!string.IsNullOrEmpty(_objectDescription?.LongDescription))
+            {
+                <div class="long-description" itemprop="description">
+                    @((MarkupString)_objectDescription.LongDescription)
+                </div>
+            }
+        </article>
+        
+        <ul class="apartment-details">
+            <li>
+                <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon" />
+                <span itemprop="occupancy">@_apartment?.MinCapacity - @_apartment?.Capacity</span>
+            </li>
+            <li>
+                <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
+                @_bedsCount
+            </li>
+            <li>
+                <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
+                Min 1
+            </li>
+            <li>
+                <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
+                <span itemprop="floorSize">@_apartment?.Area m²</span>
+            </li>
+        </ul>
+        
+        <div class="amenities-wrapper">
+            @if (_amenities != null)
+            {
+                @foreach (var amenity in _amenities)
+                {
+                    <div class="amenity">
+                        @amenity.Name
+                    </div>
+                }
+            }
+        </div>
+        
+        <div class="apartment-button-wrapper">
+            <Button @onclick="GoToReservation">Rezerwacja</Button>
+        </div>
+    </div>
+</div>
 
 @code {
     [Parameter]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     [Parameter]
     public string? Slug { get; set; }
     
-    private ApartmentPage? apartment;
+    private ApartmentObject? _apartment;
+    private List<ObjectMedium>? _objectMediums = null;
+    private int _currentMediumIndex = 0;
+    private ObjectMedium? _currentObjectMedium = null;
+    
+    private List<ObjectAmenity>? _amenities = null;
+    
+    private int? _bedsCount = null;
+    
+    private static Dictionary<string, string> _languageMap = new Dictionary<string, string>
+    {
+        { "pl-PL", "pol" },
+        { "en-US", "eng" }
+    };
+
+    private string CurrentLanguage => _languageMap?.GetValueOrDefault(
+        CultureInfo.CurrentUICulture.Name, 
+        CultureInfo.CurrentUICulture.Name
+    ) ?? CultureInfo.CurrentUICulture.Name;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
+        await GetObjectMedia();
+        
+        var idString = _apartment?.Id;
+        if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
+        {
+            await GetObjectDescription(id, CurrentLanguage);   
+            _amenities = await GetAmenities(id);
+        }
+        
+        _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
+    }
+    
+    private async Task GetObjectMedia()
+    {
+        var idString = _apartment?.Id;
+        if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
+        {
+            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+            _currentMediumIndex = 0;
+            _currentObjectMedium = _objectMediums.FirstOrDefault();
+        }
+    }
+    
+    private void ChangeCurrentObjectMedium(int step)
+    {
+        if (_objectMediums == null || !_objectMediums.Any())
+            return;
+
+        _currentMediumIndex += step;
+
+        if (_currentMediumIndex < 0)
+            _currentMediumIndex = _objectMediums.Count - 1;
+        else if (_currentMediumIndex >= _objectMediums.Count)
+            _currentMediumIndex = 0;
+
+        _currentObjectMedium = _objectMediums[_currentMediumIndex];
+    }
+
+    private ObjectDescription? _objectDescription = null;
+    private async Task GetObjectDescription(int objectId, string? language)
+    {
+        var descriptions = await IdoApartmentService.GetObjectDescriptionsAsync(objectId, language);
+        _objectDescription = descriptions?.FirstOrDefault();
+    }
+
+    private async Task<List<ObjectAmenity>?> GetAmenities(int objectId)
+    {
+        return await IdoApartmentService.GetObjectAmenitiesAsync(objectId);
+    }
+    
+    private void GoToReservation()
+    {
+        if (_apartment != null && int.TryParse(_apartment.Id, out int id))
+        {
+            Navigation.NavigateTo($"/rezerwacja/{id}");
+        }
+    }
 }

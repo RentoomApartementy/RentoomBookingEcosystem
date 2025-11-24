@@ -1,14 +1,21 @@
-<section class="header-section" style="@BackgroundStyle" aria-label="@Title">
+<section class="header-section @(HasImage ? "" : "skeleton-bg") @(IsShadow ? "header-shadow" : "")"
+         style="@BackgroundStyle"
+         aria-label="@Title">
     <h1>@Title</h1>
 </section>
 
 @code {
     [Parameter] public string ImagePath { get; set; } = string.Empty;
     [Parameter] public string Title { get; set; } = string.Empty;
-    [Parameter] public string Height { get; set; } = "250px"; // domyślna wysokość
+    [Parameter] public string Height { get; set; } = "250px";
+    [Parameter] public bool IsShadow { get; set; } = false;
+
+    private bool HasImage => !string.IsNullOrWhiteSpace(ImagePath);
 
     private string BackgroundStyle =>
-        $"background-image: url('{ImagePath}'); " +
+        (HasImage
+            ? $"background-image: url('{ImagePath}'); "
+            : "") +
         "background-repeat: no-repeat; " +
         "background-position: center center; " +
         "background-size: cover; " +
