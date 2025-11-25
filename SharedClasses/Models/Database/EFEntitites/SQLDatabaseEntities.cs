@@ -12,7 +12,7 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
     {
         [Key]
         [Column("id")]
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; }
 
         [Column("payload", TypeName = "jsonb")]
         public string Payload { get; set; } = string.Empty;
@@ -26,7 +26,7 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
     {
         [Key]
         [Column("id")]
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; }
 
         [Column("payload", TypeName = "jsonb")]
         public string Payload { get; set; } = string.Empty;

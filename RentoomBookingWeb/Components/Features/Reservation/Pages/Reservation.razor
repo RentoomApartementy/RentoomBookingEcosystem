@@ -203,10 +203,10 @@
     
     private async Task GetObjectMedia()
     {
-        var idString = _apartment?.Id;
-        if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
+        
+        if (_apartment !=null)
         {
-            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>();
             _currentMediumIndex = 0;
             _currentObjectMedium = _objectMediums.FirstOrDefault();
         }
@@ -229,9 +229,9 @@
     
     private void GoToPayment()
     {
-        if (_apartment != null && int.TryParse(_apartment.Id, out int id))
+        if (_apartment != null)
         {
-            Navigation.NavigateTo($"/platnosc/{id}");
+            Navigation.NavigateTo($"/platnosc/{_apartment.Id}");
         }
     }
 
@@ -247,9 +247,9 @@
         Adults = adults;
         Children = children;
 
-        if (_apartment != null && int.TryParse(_apartment.Id, out int id))
+        if (_apartment != null)
         {
-            var url = $"/rezerwacja/{id}/{StartDate}/{EndDate}/{Adults}/{Children}";
+            var url = $"/rezerwacja/{_apartment.Id}/{StartDate}/{EndDate}/{Adults}/{Children}";
             Navigation.NavigateTo(url, forceLoad: false);
             await GetOffer();
         }
@@ -257,7 +257,7 @@
     
     private PricingOffersRequest CurrentRequest => new PricingOffersRequest
     {
-        ObjectIds = _apartment != null ? new List<int> { int.Parse(_apartment.Id) } : null,
+        ObjectIds = _apartment != null ? new List<int> { _apartment.Id } : null,
         DateFrom = StartDate,
         DateTo = EndDate,
         NumberOfAdults = int.TryParse(Adults, out var a) ? a : null,

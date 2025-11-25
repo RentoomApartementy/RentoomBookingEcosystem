@@ -14,11 +14,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
     
     public class ApartmentObject
     {
-        public string Id { get; set; }
-
-        [JsonProperty("partitionKey")]
-        [JsonPropertyName("partitionKey")]
-        public string? PartitionKey { get; set; }
+        public int Id { get; set; }
         public string? Name { get; set; }
         public int? Capacity { get; set; }
         public string? Area { get; set; }

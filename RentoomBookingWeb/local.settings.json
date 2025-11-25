@@ -5,11 +5,11 @@
   "IDOBOOKING_API_USER": "apimaster",
   "IDOBOOKING_API_PWD": "Apibnb1234",
   "AZURE_COSMOS_ENDPOINT": "AccountEndpoint=https://localhost:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
-  "POSTGRES_RENTOOM_BOOKING_DB_LOCAL": "Host=localhost;Port=5432;Database=RentoomBookingTest;Username=postgres;Password=YourPasswordHere",
+  "POSTGRES_RENTOOM_BOOKING_DB_LOCAL": "Host=localhost;Port=5432;Database=RentoomBookingTest;Username=postgres;Password=admin",
 
   "ConnectionStrings": {
     "AZURE_COSMOS_ENDPOINT": "AccountEndpoint=https://localhost:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
-    "POSTGRES_RENTOOM_BOOKING_DB_LOCAL": "Host=localhost;Port=5432;Database=RentoomBookingTest;Username=postgres;Password=YourPasswordHere"
+    "POSTGRES_RENTOOM_BOOKING_DB_LOCAL": "Host=localhost;Port=5432;Database=RentoomBookingTest;Username=postgres;Password=admin"
 
   }
 }
