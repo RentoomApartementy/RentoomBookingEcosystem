@@ -25,12 +25,12 @@ namespace RentoomBooking.SharedClasses.Database
         //  private const string AmenitiesPartitionKeyValue = "rentoom-apartments-amenities-list";
         private ILogger<ApartmentRepository> _logger;
         private PostgresBookingDatabase _postgresBookingDatabase;
-        private PostgresBookingDbContext _dbContext;
+        private IDbContextFactory<PostgresBookingDbContext> _dbContextFactory;
 
-        public ApartmentRepository(PostgresBookingDatabase postgresBookingDatabase,PostgresBookingDbContext dbContext,  IConfiguration configuration, ILogger<ApartmentRepository> logger)
+        public ApartmentRepository(PostgresBookingDatabase postgresBookingDatabase, IDbContextFactory<PostgresBookingDbContext> dbContextFactory,  IConfiguration configuration, ILogger<ApartmentRepository> logger)
         {
             _postgresBookingDatabase = postgresBookingDatabase;
-            _dbContext = dbContext;
+            _dbContextFactory = dbContextFactory;
             _logger = logger;
         }
 
@@ -52,8 +52,8 @@ namespace RentoomBooking.SharedClasses.Database
 
         public ApartmentObject? FindApartmentInPostgres(int apartmentId, CancellationToken cancellationToken = default)
         {
-
-            var apentity = _dbContext.ApartmentInfos.FirstOrDefault(a => a.Id == apartmentId) ?? throw new KeyNotFoundException("Apartament Not found");
+            using var context = _dbContextFactory.CreateDbContext();
+            var apentity = context.ApartmentInfos.FirstOrDefault(a => a.Id == apartmentId) ?? throw new KeyNotFoundException("Apartament Not found");
 
             var apobj = JsonConvert.DeserializeObject<ApartmentObject>(apentity.Payload);
             return apobj;
@@ -65,13 +65,13 @@ namespace RentoomBooking.SharedClasses.Database
 
             _logger?.LogInformation("QueryApartmentsAsync called. continuationToken={Token}, pageSize={PageSize}", continuationToken, pageSize);
 
-            
-            long totalCount = await _dbContext.ApartmentInfos.LongCountAsync();
+            await using var context = _dbContextFactory.CreateDbContext();
+            long totalCount = await context.ApartmentInfos.LongCountAsync();
 
             _logger?.LogDebug("Total apartments in DB: {TotalCount}", totalCount);
 
             // sortuj po Id od 1->N
-            var query = _dbContext.ApartmentInfos
+            var query = context.ApartmentInfos
                 .AsNoTracking()
                 .OrderBy(a => a.Id)
                 .AsQueryable();
@@ -199,8 +199,8 @@ namespace RentoomBooking.SharedClasses.Database
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-       
-            var ret = _dbContext.ApartmentInfos.ToList();
+            await using var context = _dbContextFactory.CreateDbContext();
+            var ret = context.ApartmentInfos.AsNoTracking().ToList();
                 List<ApartmentObject> apObjects = new();
                 foreach(var r in ret)
                 apObjects.Add(JsonConvert.DeserializeObject<ApartmentObject>(r.Payload));
@@ -234,8 +234,8 @@ namespace RentoomBooking.SharedClasses.Database
             {
                 return new List<int>();
             }
-
-            var amenities = await _dbContext.ApartmentAmenities
+            await using var context = _dbContextFactory.CreateDbContext();
+            var amenities = await context.ApartmentAmenities
                                             .Where(a => amenityIdSet.Contains(a.Id))
                                             .Select(a => JsonConvert.DeserializeObject<ApartmentAmenitiesDocument>(a.Payload))
                                             .Where(doc => doc != null &&

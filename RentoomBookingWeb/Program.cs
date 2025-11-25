@@ -46,11 +46,11 @@ namespace RentoomBookingWeb
                 throw new InvalidOperationException("RentoomDb connection string is missing.");
             }
 
-            builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
+            builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
                 options.UseNpgsql(postgresConnectionString));
 
             builder.Services.AddScoped<PostgresBookingDatabase>();
-            builder.Services.AddScoped<PostgresBookingDbContext>();
+           
 
 
 
