@@ -28,25 +28,37 @@ builder.Services
     .ConfigureFunctionsApplicationInsights();
 builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton<IdoSellService>();
-builder.Services.AddSingleton<BookingDatabase>();
-builder.Services.AddSingleton<IdoLocksService, IdoLocksService>();
-builder.Services.AddSingleton<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
-builder.Services.AddSingleton<IClientService, ClientService>();
-builder.Services.AddSingleton<IIdoApartmentService, IdoApartmentService>();
-builder.Services.AddSingleton<IIdoBookingConnectService, IdoBookingConnectService>();
-builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
-builder.Services.AddSingleton<ApartmentRepository>();
-builder.Services.AddSingleton<FiltersRepository>();
-builder.Services.AddSingleton<IIdoOfferService,IdoOfferService>();
-builder.Services.AddSingleton<IRentoomOfferService, RentoomOfferService>();
 using var tempLoggerFactory = LoggerFactory.Create(lb =>
 {
     lb.AddConfiguration(builder.Configuration.GetSection("Logging"));
     lb.AddConsole();
     lb.AddDebug();
 });
-var tempLogger = tempLoggerFactory.CreateLogger("CosmosInit");
+var tempLogger = tempLoggerFactory.CreateLogger("DatabaseInit");
+
+var postgresConnectionString = PostgresConnectionStringProvider
+    .GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger)
+    .Result;
+
+builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
+
+
+builder.Services.AddScoped<PostgresBookingDatabase>();
+builder.Services.AddScoped<IdoSellService>();
+builder.Services.AddScoped<BookingDatabase>();
+builder.Services.AddScoped<PostgresBookingDatabase>();
+builder.Services.AddScoped<IdoLocksService, IdoLocksService>();
+builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
+builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();
+builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
+builder.Services.AddScoped<ApartmentRepository>();
+builder.Services.AddScoped<FiltersRepository>();
+builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
+builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
+
 
 var cosendpoint = CosmosEndpointProvider.GetCosmosEndpointAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
 
@@ -75,18 +87,13 @@ builder.Services.AddSingleton(cosmosClient);
 
 
 //POSTGRESS
-var postgresConnectionString = PostgresConnectionStringProvider
-    .GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger)
-    .Result;
 
 if (string.IsNullOrWhiteSpace(postgresConnectionString))
 {
     throw new InvalidOperationException("PostgreSQL connection string configuration is missing.");
 }
 
-builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
-    options.UseNpgsql(postgresConnectionString));
-builder.Services.AddScoped<PostgresBookingDatabase>();
+
 
 
 

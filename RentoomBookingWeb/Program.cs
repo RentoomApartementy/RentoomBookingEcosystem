@@ -38,21 +38,6 @@ namespace RentoomBookingWeb
             });
             var tempLogger = tempLoggerFactory.CreateLogger("CosmosInit");
 
-            var cosEndpoint = CosmosEndpointProvider.GetCosmosEndpointAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
-            if (string.IsNullOrEmpty(cosEndpoint))
-                throw new InvalidOperationException("AZURE_COSMOS_ENDPOINT configuration is missing.");
-
-            var cosmosClient = new CosmosClient(cosEndpoint, new CosmosClientOptions
-            {
-                ConnectionMode = ConnectionMode.Gateway,
-                SerializerOptions = new CosmosSerializationOptions
-                {
-                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-                }
-            });
-
-            builder.Services.AddSingleton(cosmosClient);
-
             //POSTGRESS:
 
             var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
@@ -64,7 +49,7 @@ namespace RentoomBookingWeb
             builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
                 options.UseNpgsql(postgresConnectionString));
             builder.Services.AddScoped<PostgresBookingDatabase>();
-
+            builder.Services.AddScoped<PostgresBookingDbContext>();
 
 
 
