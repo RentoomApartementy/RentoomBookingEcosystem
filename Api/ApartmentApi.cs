@@ -131,9 +131,9 @@ namespace RentoomBooking.Api
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to retrieve apartments.");
+                _logger.LogError(ex, "Failed to retrieve apartments." + ex.Message);
                 response.StatusCode = HttpStatusCode.InternalServerError;
-                await response.WriteStringAsync("Internal server error.");
+                await response.WriteStringAsync("Internal server error." + ex.Message);
                 return response;
             }
 

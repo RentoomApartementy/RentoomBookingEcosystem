@@ -6,8 +6,10 @@ using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -36,7 +38,18 @@ builder.Services.AddSingleton<ApartmentRepository>();
 builder.Services.AddSingleton<FiltersRepository>();
 builder.Services.AddSingleton<IIdoOfferService,IdoOfferService>();
 builder.Services.AddSingleton<IRentoomOfferService, RentoomOfferService>();
-var cosendpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
+using var tempLoggerFactory = LoggerFactory.Create(lb =>
+{
+    lb.AddConfiguration(builder.Configuration.GetSection("Logging"));
+    lb.AddConsole();
+    lb.AddDebug();
+});
+var tempLogger = tempLoggerFactory.CreateLogger("CosmosInit");
+
+var cosendpoint = CosmosEndpointProvider.GetCosmosEndpointAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
+
+//builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
+
 //cosendpoint = builder.Configuration["AZURE_COSMOS_ENDPOINT"];
 if (string.IsNullOrEmpty(cosendpoint))
 {

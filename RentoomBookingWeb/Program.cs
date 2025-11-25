@@ -22,14 +22,21 @@ namespace RentoomBookingWeb
             
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.AddHttpClient();
+            /* builder.Services.AddHttpClient("Api", client =>
+             {
+                 client.BaseAddress = new Uri("https://localhost:7241/");
+             });*/
 
-           /* builder.Services.AddHttpClient("Api", client =>
+            using var tempLoggerFactory = LoggerFactory.Create(lb =>
             {
-                client.BaseAddress = new Uri("https://localhost:7241/");
-            });*/
+                lb.AddConfiguration(builder.Configuration.GetSection("Logging"));
+                lb.AddConsole();
+                lb.AddDebug();
+            });
+            var tempLogger = tempLoggerFactory.CreateLogger("CosmosInit");
 
-            //var cosEndpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
-            var cosEndpoint = CosmosEndpointProvider.GetCosmosEndpointAsync(builder.Configuration, builder.Environment.IsDevelopment()).Result;
+            var cosEndpoint = CosmosEndpointProvider.GetCosmosEndpointAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
             if (string.IsNullOrEmpty(cosEndpoint))
                 throw new InvalidOperationException("AZURE_COSMOS_ENDPOINT configuration is missing.");
 
