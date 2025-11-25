@@ -90,6 +90,7 @@ namespace RentoomBooking.SharedClasses.Database
             try
             {
                 await _filterContainer.UpsertItemAsync(document, new PartitionKey(document.id));
+                await Task.Delay(1000);
             }
             catch (CosmosException ex)
             {
