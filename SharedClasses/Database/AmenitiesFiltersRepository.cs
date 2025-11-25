@@ -2,6 +2,7 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Database.PostgresSeeder;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,10 @@ namespace RentoomBooking.SharedClasses.Database
 
         private const string ContainerName = "SearchFilters";
         private const string PartitionKey = "/id";
-        private const string AmenitiesFilterPartitionValue = "amenities-filter";
+        private const string AmenitiesFilterPartitionValue = SearchFiltersSeedData.AmenitiesFilterGroupName;
 
-        private const string CitiesFilterPartitionValue = "city-regions-filter";
+        private const string CitiesFilterPartitionValue = SearchFiltersSeedData.CitiesFilterGroupName;
+
 
         public FiltersRepository(CosmosClient client, IConfiguration configuration)
         {
@@ -47,22 +49,7 @@ namespace RentoomBooking.SharedClasses.Database
 
         public async Task SeedAmenitiesFilters()
         {
-            List<SearchFilter> list = [
-              new() { id = "205", name = "Garaż",icon_materialui_name = "garage_home" },
-                new () { id = "204", name = "Parking", icon_materialui_name="parking_sign"},
-                new () { id = "132", name = "Balkon", icon_materialui_name ="balcony" },
-                new () { id = "206", name = "Zwierzęta dozwolone" , icon_materialui_name="pets"},
-                new () { id = "152", name = "Winda", icon_materialui_name="elevator" },
-                new () { id = "96", name = "Dostęp dla wózków inwalidzkich",icon_materialui_name="accessible" },
-                new () { id = "86", name = "Pralka" ,icon_materialui_name="local_laundry_service"},
-
-            ];
-
-            var amFilters = new Dictionary<string, List<SearchFilter>>
-            {
-                { "pl", list }
-            };
-
+            var amFilters = SearchFiltersSeedData.BuildAmenitiesFilters();
             await SaveFilters(amFilters, AmenitiesFilterPartitionValue);
         }
 

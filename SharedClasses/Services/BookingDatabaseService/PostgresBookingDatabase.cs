@@ -5,6 +5,7 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,37 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _initializationTask = _dbContext.Database.EnsureCreatedAsync();
+        }
+
+        public async Task<List<SearchFilterDocument>> GetAllSearchFiltersAsync(ILogger log, CancellationToken cancellationToken = default)
+        {
+            if (log is null) throw new ArgumentNullException(nameof(log));
+
+            await _initializationTask;
+
+            var entities = await _dbContext.SearchFilters.ToListAsync(cancellationToken);
+            var results = new List<SearchFilterDocument>(entities.Count);
+
+            foreach (var entity in entities)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                try
+                {
+                    var document = JsonConvert.DeserializeObject<SearchFilterDocument>(entity.Payload);
+
+                    if (document is not null)
+                    {
+                        results.Add(document);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.LogError(ex, "Failed to deserialize search filters payload for group {GroupName}.", entity.FilterGroupName);
+                }
+            }
+
+            return results;
         }
 
         public async Task<bool> HasRecordsAsync(CancellationToken cancellationToken = default)
@@ -117,6 +149,42 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
 
             await _dbContext.SaveChangesAsync(cancellationToken);
             log.LogInformation("Saved {Count} amenities documents to PostgreSQL table {Table}.", docs.Count, "apartment_amenities");
+        }
+
+        public async Task SaveSearchFiltersAsync(Dictionary<string, List<SearchFilter>> filtersDictionary, string filterGroupName, ILogger log, CancellationToken cancellationToken = default)
+        {
+            if (filtersDictionary is null) throw new ArgumentNullException(nameof(filtersDictionary));
+            if (string.IsNullOrWhiteSpace(filterGroupName)) throw new ArgumentNullException(nameof(filterGroupName));
+            if (log is null) throw new ArgumentNullException(nameof(log));
+
+            await _initializationTask;
+
+            var document = new SearchFilterDocument
+            {
+                id = filterGroupName,
+                filtersDictionary = filtersDictionary
+            };
+
+            var payload = JsonConvert.SerializeObject(document);
+
+            var entity = await _dbContext.SearchFilters.FirstOrDefaultAsync(s => s.FilterGroupName == filterGroupName, cancellationToken);
+
+            if (entity is null)
+            {
+                _dbContext.SearchFilters.Add(new SearchFiltersEntity
+                {
+                    FilterGroupName = filterGroupName,
+                    Payload = payload
+                });
+            }
+            else
+            {
+                entity.Payload = payload;
+                _dbContext.SearchFilters.Update(entity);
+            }
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            log.LogInformation("Saved search filters for group {Group} to PostgreSQL table {Table}.", filterGroupName, "search_filters");
         }
 
         public async Task<List<ItemHash>> GetExistingHashesAsync(ILogger log, CancellationToken cancellationToken = default)

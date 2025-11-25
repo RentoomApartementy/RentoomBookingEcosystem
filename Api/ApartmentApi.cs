@@ -140,6 +140,34 @@ namespace RentoomBooking.Api
             
         }
 
+
+
+        [Function("SeedApartmentsToPostgres")]
+        public async Task<HttpResponseData> SeedApartmentsToPostgres(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "postgres/apartments/seed")] HttpRequestData req)
+        {
+            var cancellationToken = req.FunctionContext.CancellationToken;
+            var response = req.CreateResponse();
+
+            try
+            {
+                var result = await _idoAppartmenrService.SaveAllApartmentsToPostgresAsync(cancellationToken);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to seed apartments to PostgreSQL.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.");
+                return response;
+            }
+        }
+
+
         [Function("GetApartmentByIdAsync")]
         public async Task<HttpResponseData> GetApartmentByIdAsync(
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "db/apartments/{id}")] HttpRequestData req,
