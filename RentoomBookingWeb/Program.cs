@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Azure.Cosmos;
+using Microsoft.EntityFrameworkCore;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBookingWeb.Components;
 using System.Globalization;
@@ -50,6 +52,22 @@ namespace RentoomBookingWeb
             });
 
             builder.Services.AddSingleton(cosmosClient);
+
+            //POSTGRESS:
+
+            var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
+            if (string.IsNullOrWhiteSpace(postgresConnectionString))
+            {
+                throw new InvalidOperationException("RentoomDb connection string is missing.");
+            }
+
+            builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
+                options.UseNpgsql(postgresConnectionString));
+            builder.Services.AddScoped<PostgresBookingDatabase>();
+
+
+
+
 
             builder.Services.AddScoped<BookingDatabase>();
             builder.Services.AddScoped<ApartmentRepository>();

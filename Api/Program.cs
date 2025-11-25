@@ -3,6 +3,7 @@ using Azure.Identity;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +13,7 @@ using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 
 
@@ -70,6 +72,24 @@ var cosmosClient = new CosmosClient(cosendpoint, new CosmosClientOptions()
 });
 
 builder.Services.AddSingleton(cosmosClient);
+
+
+//POSTGRESS
+var postgresConnectionString = PostgresConnectionStringProvider
+    .GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger)
+    .Result;
+
+if (string.IsNullOrWhiteSpace(postgresConnectionString))
+{
+    throw new InvalidOperationException("PostgreSQL connection string configuration is missing.");
+}
+
+builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
+builder.Services.AddScoped<PostgresBookingDatabase>();
+
+
+
 
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 {
