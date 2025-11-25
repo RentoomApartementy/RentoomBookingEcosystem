@@ -18,24 +18,28 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
     public class PostgresBookingDatabase
     {
         private readonly ILogger<PostgresBookingDatabase> _logger;
-        private readonly PostgresBookingDbContext _dbContext;
+        private readonly IDbContextFactory<PostgresBookingDbContext> _dbContextFactory;
         private readonly Task _initializationTask;
 
         private const string HashDocumentId = "all-object-hashes";
 
-        public PostgresBookingDatabase(PostgresBookingDbContext dbContext, ILogger<PostgresBookingDatabase> logger)
+        public PostgresBookingDatabase(IDbContextFactory<PostgresBookingDbContext> dbContextFactory, ILogger<PostgresBookingDatabase> logger)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _initializationTask = _dbContext.Database.EnsureCreatedAsync();
+            _initializationTask = EnsureCreatedAsync();
         }
-
+        private async Task EnsureCreatedAsync()
+        {
+            await using var context = _dbContextFactory.CreateDbContext();
+            await context.Database.EnsureCreatedAsync();
+        }
         public async Task<List<SearchFilterDocument>> GetAllSearchFiltersAsync(ILogger log, CancellationToken cancellationToken = default)
         {
             if (log is null) throw new ArgumentNullException(nameof(log));
 
             await _initializationTask;
-
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
             var entities = await _dbContext.SearchFilters.ToListAsync(cancellationToken);
             var results = new List<SearchFilterDocument>(entities.Count);
 
@@ -63,7 +67,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
 
         public async Task<long> GetApartmentCountAsync(CancellationToken cancellationToken = default)
         {
-           // await _initializationTask;
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
             return await _dbContext.ApartmentInfos.LongCountAsync(cancellationToken);
         }
 
@@ -74,6 +78,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
 
             var list = apartments.ToList();
             var ids = list.Select(a => a.Id).ToList();
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+
             var existing = await _dbContext.ApartmentInfos
                 .Where(ai => ids.Contains(ai.Id))
                 .ToDictionaryAsync(ai => ai.Id, cancellationToken);
@@ -107,7 +113,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             if (amenities is null) throw new ArgumentNullException(nameof(amenities));
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-          //  await _initializationTask;
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
             var docs = amenities.ToList();
             var ids = docs.Select(a => a.Id).ToList();
             var existing = await _dbContext.ApartmentAmenities
@@ -158,7 +164,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             };
 
             var payload = JsonConvert.SerializeObject(document);
-
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
             var entity = await _dbContext.SearchFilters.FirstOrDefaultAsync(s => s.FilterGroupName == filterGroupName, cancellationToken);
 
             if (entity is null)
@@ -185,7 +191,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             if (string.IsNullOrWhiteSpace(resToken)) throw new ArgumentNullException(nameof(resToken));
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-            await _initializationTask;
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
             var entity = await _dbContext.Reservations.FirstOrDefaultAsync(r => r.ResToken == resToken, cancellationToken);
             if (entity?.Payload is null)
             {
@@ -217,7 +223,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
                 ResToken = resToken,
                 Reservation = payloadReservation
             };
-
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
             var payload = JsonConvert.SerializeObject(document);
             _dbContext.Reservations.Add(new ReservationEntity
             {
