@@ -1,10 +1,13 @@
-using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Azure.Cosmos;
+using Microsoft.EntityFrameworkCore;
+using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
-using RentoomBookingWeb.Components;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBookingWeb.Components;
+using System.Globalization;
 
 namespace RentoomBookingWeb
 {
@@ -21,28 +24,38 @@ namespace RentoomBookingWeb
             
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.AddHttpClient();
+            /* builder.Services.AddHttpClient("Api", client =>
+             {
+                 client.BaseAddress = new Uri("https://localhost:7241/");
+             });*/
 
-            builder.Services.AddHttpClient("Api", client =>
+            using var tempLoggerFactory = LoggerFactory.Create(lb =>
             {
-                client.BaseAddress = new Uri("https://localhost:7241/");
+                lb.AddConfiguration(builder.Configuration.GetSection("Logging"));
+                lb.AddConsole();
+                lb.AddDebug();
             });
+            var tempLogger = tempLoggerFactory.CreateLogger("PostgresInit");
 
-            var cosEndpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
-            if (string.IsNullOrEmpty(cosEndpoint))
-                throw new InvalidOperationException("AZURE_COSMOS_ENDPOINT configuration is missing.");
+            //POSTGRESS:
 
-            var cosmosClient = new CosmosClient(cosEndpoint, new CosmosClientOptions
+            var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
+            if (string.IsNullOrWhiteSpace(postgresConnectionString))
             {
-                ConnectionMode = ConnectionMode.Gateway,
-                SerializerOptions = new CosmosSerializationOptions
-                {
-                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-                }
-            });
+                throw new InvalidOperationException("RentoomDb connection string is missing.");
+            }
 
-            builder.Services.AddSingleton(cosmosClient);
+            builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
+                options.UseNpgsql(postgresConnectionString));
 
-            builder.Services.AddScoped<BookingDatabase>();
+            builder.Services.AddScoped<PostgresBookingDatabase>();
+           
+
+
+
+
+          
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<FiltersRepository>();
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();

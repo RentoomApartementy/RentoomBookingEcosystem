@@ -136,12 +136,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         {
             var objects = apartments?
                 .Select(a => a?.Id)
-                .Where(id => !string.IsNullOrWhiteSpace(id))
+                .Where(id => id >0 )
                 .Select(id =>
                 {
                     // parse as invariant int; ignore non-numeric ids
-                    if (int.TryParse(id!.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var n))
-                        return (int?)n;
+                    if (id>0)
+                        return id;
                     return null;
                 })
                 .Where(n => n.HasValue)

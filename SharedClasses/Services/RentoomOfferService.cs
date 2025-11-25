@@ -79,9 +79,7 @@ namespace RentoomBooking.SharedClasses.Services
                 if (apartmentsFromAmenities == null) return null;
 
                 var filteredApartmentIds = apartmentsFromAmenities
-                    .Select(apartment => int.TryParse(apartment.Id, out var id) ? id : (int?)null)
-                    .Where(id => id.HasValue)
-                    .Select(id => id!.Value)
+                    .Select(apartment => apartment.Id)
                     .Distinct()
                     .ToList();
 
@@ -123,7 +121,7 @@ namespace RentoomBooking.SharedClasses.Services
             if (amenityFilter != null && amenityFilter.Any())
             {
                 apartments = apartmentsFromAmenities
-                    .Where(apartment => int.TryParse(apartment.Id, out var id) && offerIds.Contains(id))
+                    .Where(apartment => apartment.Id>0 && offerIds.Contains(apartment.Id))
                     .ToList();
             }
             else if (offerIds.Count > 0)

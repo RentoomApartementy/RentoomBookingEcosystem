@@ -8,6 +8,7 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Utils;
 using System;
@@ -27,7 +28,7 @@ namespace RentoomBooking.SharedClasses.Services
     public class IdoSellService
     {
        
-        private BookingDatabase _bookingDatabase;
+        private PostgresBookingDatabase _bookingDatabase;
         private ILogger<IdoSellService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
@@ -39,7 +40,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         
 
-        public IdoSellService(IIdoBookingConnectService idoConnect, ILogger<IdoSellService> logger,  BookingDatabase bookingDatabase)//, CosmosClient cosmosClient)
+        public IdoSellService(IIdoBookingConnectService idoConnect, ILogger<IdoSellService> logger,  PostgresBookingDatabase bookingDatabase)//, CosmosClient cosmosClient)
         {
             _idoConnect = idoConnect;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
