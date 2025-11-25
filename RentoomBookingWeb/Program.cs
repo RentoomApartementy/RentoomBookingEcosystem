@@ -36,7 +36,7 @@ namespace RentoomBookingWeb
                 lb.AddConsole();
                 lb.AddDebug();
             });
-            var tempLogger = tempLoggerFactory.CreateLogger("CosmosInit");
+            var tempLogger = tempLoggerFactory.CreateLogger("PostgresInit");
 
             //POSTGRESS:
 
@@ -48,13 +48,14 @@ namespace RentoomBookingWeb
 
             builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
                 options.UseNpgsql(postgresConnectionString));
+
             builder.Services.AddScoped<PostgresBookingDatabase>();
             builder.Services.AddScoped<PostgresBookingDbContext>();
 
 
 
 
-            builder.Services.AddScoped<BookingDatabase>();
+          
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<FiltersRepository>();
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();

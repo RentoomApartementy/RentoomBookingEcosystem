@@ -155,10 +155,10 @@
         await GetObjectMedia();
         
         var idString = _apartment?.Id;
-        if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
+        if (_apartment !=null)
         {
-            await GetObjectDescription(id, CurrentLanguage);   
-            _amenities = await GetAmenities(id);
+            await GetObjectDescription(_apartment.Id, CurrentLanguage);
+            _amenities = await GetAmenities(_apartment.Id);
         }
         
         _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
@@ -167,9 +167,9 @@
     private async Task GetObjectMedia()
     {
         var idString = _apartment?.Id;
-        if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
+        if (_apartment != null)
         {
-            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>();
             _currentMediumIndex = 0;
             _currentObjectMedium = _objectMediums.FirstOrDefault();
         }
@@ -204,9 +204,9 @@
     
     private void GoToReservation()
     {
-        if (_apartment != null && int.TryParse(_apartment.Id, out int id))
+        if (_apartment != null)
         {
-            Navigation.NavigateTo($"/rezerwacja/{id}");
+            Navigation.NavigateTo($"/rezerwacja/{_apartment.Id}");
         }
     }
 }

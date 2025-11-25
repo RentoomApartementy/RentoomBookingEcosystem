@@ -55,7 +55,7 @@
                         {
                             @foreach (var item in Items)
                             {
-                                <Apartment Item="@item" Offer="@GetPricingOfferByObjectId(int.Parse(item.Id))" ShowPrice="_isSearch"/>
+                                <Apartment Item="@item" Offer="@GetPricingOfferByObjectId(item.Id)" ShowPrice="_isSearch"/>
                             }
                         }
 
@@ -253,9 +253,7 @@
             var items = await GetAllApartments() ?? new List<ApartmentObject>();
 
             List<int> ids = items
-                .Select(a => int.TryParse(a.Id, out var id) ? id : (int?)null)
-                .Where(id => id.HasValue)
-                .Select(id => id!.Value)
+                .Select(a => a.Id)
                 .ToList();
 
             var idoParams = new PricingOffersRequest
@@ -337,8 +335,8 @@
 
         Items.Sort((a, b) =>
         {
-            var offerA = GetPricingOfferByObjectId(int.Parse(a.Id));
-            var offerB = GetPricingOfferByObjectId(int.Parse(b.Id));
+            var offerA = GetPricingOfferByObjectId(a.Id);
+            var offerB = GetPricingOfferByObjectId(b.Id);
             if (offerA != null && offerB == null) return -1;
             if (offerA == null && offerB != null) return 1;
             return 0;
@@ -365,9 +363,7 @@
             Items.AddRange(items);
 
             List<int> ids = items
-                .Select(a => int.TryParse(a.Id, out var id) ? id : (int?)null)
-                .Where(id => id.HasValue)
-                .Select(id => id!.Value)
+                .Select(a => a.Id)
                 .ToList();
 
             var idoParams = new PricingOffersRequest
@@ -394,8 +390,8 @@
 
             Items.Sort((a, b) =>
             {
-                var offerA = GetPricingOfferByObjectId(int.Parse(a.Id));
-                var offerB = GetPricingOfferByObjectId(int.Parse(b.Id));
+                var offerA = GetPricingOfferByObjectId(a.Id);
+                var offerB = GetPricingOfferByObjectId(b.Id);
                 if (offerA != null && offerB == null) return -1;
                 if (offerA == null && offerB != null) return 1;
                 return 0;

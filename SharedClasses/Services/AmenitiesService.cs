@@ -31,16 +31,16 @@ namespace RentoomBooking.SharedClasses.Services
     public class ApartmentSearchFiltersService : IApartmentSearchFiltersService
     {
         private readonly IHttpClientFactory _factory;
-        BookingDatabase _bd;
+      
         FiltersRepository _FiltersRepository;
         ApartmentRepository _ApartmentRepository;
         IdoSellService _IdoSellService;
         private readonly PostgresBookingDatabase _postgresBookingDatabase;
         private readonly ILogger<ApartmentSearchFiltersService> _logger;
-        public ApartmentSearchFiltersService(IHttpClientFactory factory, BookingDatabase bd, FiltersRepository FiltersRepository, ApartmentRepository ApartmentRepository, IdoSellService idoSellService, PostgresBookingDatabase postgresBookingDatabase, ILogger<ApartmentSearchFiltersService> logger)
+        public ApartmentSearchFiltersService(IHttpClientFactory factory,  FiltersRepository FiltersRepository, ApartmentRepository ApartmentRepository, IdoSellService idoSellService, PostgresBookingDatabase postgresBookingDatabase, ILogger<ApartmentSearchFiltersService> logger)
         {
             _factory = factory;
-            _bd = bd;
+           
             _FiltersRepository = FiltersRepository;
             _IdoSellService = idoSellService;
             _ApartmentRepository = ApartmentRepository;
@@ -95,7 +95,7 @@ namespace RentoomBooking.SharedClasses.Services
         {
             var filters = SearchFiltersSeedData.BuildAmenitiesFilters();
 
-            await _FiltersRepository.SaveFilters(filters, SearchFiltersSeedData.AmenitiesFilterGroupName, _logger);
+           // await _FiltersRepository.SaveFilters(filters, SearchFiltersSeedData.AmenitiesFilterGroupName, _logger);
 
             await _postgresBookingDatabase.SaveSearchFiltersAsync(filters, SearchFiltersSeedData.AmenitiesFilterGroupName, _logger);
 

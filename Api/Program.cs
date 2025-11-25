@@ -46,7 +46,6 @@ builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
 
 builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoSellService>();
-builder.Services.AddScoped<BookingDatabase>();
 builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoLocksService, IdoLocksService>();
 builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
@@ -58,33 +57,6 @@ builder.Services.AddScoped<ApartmentRepository>();
 builder.Services.AddScoped<FiltersRepository>();
 builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
-
-
-var cosendpoint = CosmosEndpointProvider.GetCosmosEndpointAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
-
-//builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
-
-//cosendpoint = builder.Configuration["AZURE_COSMOS_ENDPOINT"];
-if (string.IsNullOrEmpty(cosendpoint))
-{
-    throw new InvalidOperationException("AZURE_COSMOS_ENDPOINT configuration is missing.");
-}
-
-
-var cosmosClient = new CosmosClient(cosendpoint, new CosmosClientOptions()
-{
-    SerializerOptions = new CosmosSerializationOptions
-    {
-        PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-    },
-    AllowBulkExecution = false,
-    MaxRetryAttemptsOnRateLimitedRequests = 12,
-    MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromMinutes(1)
-
-});
-
-builder.Services.AddSingleton(cosmosClient);
-
 
 //POSTGRESS
 

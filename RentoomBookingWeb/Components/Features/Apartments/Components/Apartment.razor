@@ -153,10 +153,10 @@
     
     private async Task GetObjectMedia()
     {
-        var idString = Item?.Id;
-        if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
+        var id = Item?.Id;
+        if (id!=null)
         {
-            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>();
             _currentMediumIndex = 0;
             _currentObjectMedium = _objectMediums.FirstOrDefault();
         }
@@ -164,9 +164,9 @@
     
     private void GoToApartment()
     {
-        if (Item != null && int.TryParse(Item.Id, out int id))
+        if (Item != null)
         {
-            Navigation.NavigateTo($"/apartamenty/{id}");
+            Navigation.NavigateTo($"/apartamenty/{Item.Id}");
         }
     }
 
@@ -187,7 +187,7 @@
 
     private void GoToReservation()
     {
-        if (Item != null && int.TryParse(Item.Id, out int id))
+        if (Item != null)
         {
             var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
             var queryParams = Microsoft.AspNetCore.WebUtilities
@@ -198,11 +198,11 @@
             string? adults    = queryParams.ContainsKey("adults")    ? queryParams["adults"].ToString()    : null;
             string? children  = queryParams.ContainsKey("children")  ? queryParams["children"].ToString()  : null;
 
-            string url = $"/rezerwacja/{id}";
+            string url = $"/rezerwacja/{Item.Id}";
 
             if (startDate != null || endDate != null || adults != null || children != null)
             {
-                url = $"/rezerwacja/{id}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
+                url = $"/rezerwacja/{Item.Id}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
             }
 
             Navigation.NavigateTo(url);

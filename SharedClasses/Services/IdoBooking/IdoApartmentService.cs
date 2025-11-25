@@ -98,7 +98,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
             Objlocs.ObjectLocations.ForEach(a => a.LocalizationItem = locs?.FirstOrDefault(loc => loc.Id == a.LocationId));
 
-            apartments?.ForEach(a => a.ObjectLocation = Objlocs.ObjectLocations?.FirstOrDefault(l => l.ObjectId.ToString() == a.Id?.Trim()));
+            apartments?.ForEach(a => a.ObjectLocation = Objlocs.ObjectLocations?.FirstOrDefault(l => l.ObjectId == a.Id));
 
             await _apartmentRepository.SaveApartmentsAsync(apartments, _logger, ct);
 
@@ -117,7 +117,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
             objLocs.ObjectLocations.ForEach(a => a.LocalizationItem = locs?.FirstOrDefault(loc => loc.Id == a.LocationId));
 
-            apartments?.ForEach(a => a.ObjectLocation = objLocs.ObjectLocations?.FirstOrDefault(l => l.ObjectId.ToString() == a.Id?.Trim()));
+            apartments?.ForEach(a => a.ObjectLocation = objLocs.ObjectLocations?.FirstOrDefault(l => l.ObjectId == a.Id));
 
             await _postgresBookingDatabase.SaveApartmentsAsync(apartments, _logger, ct);
 
@@ -228,7 +228,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         public async Task<List<ApartmentObject>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default)
         {
-            var apartments = await GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(ct);
+            var apartments = await SaveAllApartmentsToPostgresAsync(ct);
 
             var amenitiesDocuments = new List<ApartmentAmenitiesDocument>(apartments.Count);
 
@@ -236,24 +236,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             {
                 ct.ThrowIfCancellationRequested();
 
-                if (string.IsNullOrWhiteSpace(apartment?.Id))
-                {
-                    _logger.LogWarning("Apartment without id encountered while syncing amenities. Skipping.");
-                    continue;
-                }
-
-                if (!int.TryParse(apartment.Id.Trim(), out var apartmentId))
-                {
-                    _logger.LogWarning("Unable to parse apartment id {ApartmentId} to integer. Skipping amenities sync.", apartment.Id);
-                    continue;
-                }
-
-                var amenities = await GetObjectAmenitiesAsync(apartmentId, ct) ?? new List<ObjectAmenity>();
+                var amenities = await GetObjectAmenitiesAsync(apartment.Id, ct) ?? new List<ObjectAmenity>();
 
                 var document = new ApartmentAmenitiesDocument
                 {
-                    Id = apartment.Id.Trim(),
-                    ApartmentId = apartment.Id.Trim(),
+                    Id = apartment.Id,
+                    ApartmentId = apartment.Id,
                   //  Apartment = apartment,
                     Amenities = amenities
                 };

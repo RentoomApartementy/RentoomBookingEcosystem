@@ -61,12 +61,6 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             return results;
         }
 
-        public async Task<bool> HasRecordsAsync(CancellationToken cancellationToken = default)
-        {
-          //  await _initializationTask;
-            return await _dbContext.ApartmentInfos.AnyAsync(cancellationToken);
-        }
-
         public async Task<long> GetApartmentCountAsync(CancellationToken cancellationToken = default)
         {
            // await _initializationTask;
@@ -78,7 +72,6 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             if (apartments is null) throw new ArgumentNullException(nameof(apartments));
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-          //  await _initializationTask;
             var list = apartments.ToList();
             var ids = list.Select(a => a.Id).ToList();
             var existing = await _dbContext.ApartmentInfos
@@ -116,19 +109,18 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
 
           //  await _initializationTask;
             var docs = amenities.ToList();
-            var ids = docs.Select(a => string.IsNullOrWhiteSpace(a.Id) ? a.ApartmentId ?? string.Empty : a.Id!).ToList();
+            var ids = docs.Select(a => a.Id).ToList();
             var existing = await _dbContext.ApartmentAmenities
                 .Where(a => ids.Contains(a.Id))
                 .ToDictionaryAsync(a => a.Id, cancellationToken);
 
             foreach (var amenityDoc in docs)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                var docId = string.IsNullOrWhiteSpace(amenityDoc.Id) ? amenityDoc.ApartmentId ?? Guid.NewGuid().ToString("N") : amenityDoc.Id!;
-                var apartmentId = amenityDoc.ApartmentId ?? docId;
+               
+               // var apartmentId = amenityDoc.ApartmentId ?? docId;
                 var payload = JsonConvert.SerializeObject(amenityDoc);
 
-                if (existing.TryGetValue(docId, out var entity))
+                if (existing.TryGetValue(amenityDoc.Id, out var entity))
                 {
                //     entity.ApartmentId = apartmentId;
                     entity.Payload = payload;
@@ -139,7 +131,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
                 {
                     _dbContext.ApartmentAmenities.Add(new ApartmentAmenityEntity
                     {
-                        Id = docId,
+                        Id = amenityDoc.Id,
                  //       ApartmentId = apartmentId,
                         Payload = payload,
                         UpdatedAt = DateTime.UtcNow
@@ -187,66 +179,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             log.LogInformation("Saved search filters for group {Group} to PostgreSQL table {Table}.", filterGroupName, "search_filters");
         }
 
-        public async Task<List<ItemHash>> GetExistingHashesAsync(ILogger log, CancellationToken cancellationToken = default)
-        {
-            if (log is null) throw new ArgumentNullException(nameof(log));
-           // await _initializationTask;
-
-            var entity = await _dbContext.ApartmentHashes.FirstOrDefaultAsync(h => h.Id == HashDocumentId, cancellationToken);
-            if (entity?.Payload is null)
-            {
-                log.LogInformation("Hash document not found in PostgreSQL, returning empty list.");
-                return new List<ItemHash>();
-            }
-
-            try
-            {
-                var hashDoc = JsonConvert.DeserializeObject<ApartmentObjectHash>(entity.Payload);
-                return hashDoc?.Hashes ?? new List<ItemHash>();
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, "Failed to deserialize hash document from PostgreSQL.");
-                return new List<ItemHash>();
-            }
-        }
-
-        public async Task UpdateHashesDocumentAsync(List<ItemHash> hashes, ILogger log, CancellationToken cancellationToken = default)
-        {
-            if (hashes is null) throw new ArgumentNullException(nameof(hashes));
-            if (log is null) throw new ArgumentNullException(nameof(log));
-
-            await _initializationTask;
-
-            var hashDoc = new ApartmentObjectHash
-            {
-                Hashes = hashes,
-                lastUpdated = DateTime.UtcNow
-            };
-
-            var payload = JsonConvert.SerializeObject(hashDoc);
-            var entity = await _dbContext.ApartmentHashes.FirstOrDefaultAsync(h => h.Id == HashDocumentId, cancellationToken);
-
-            if (entity is null)
-            {
-                _dbContext.ApartmentHashes.Add(new ApartmentHashEntity
-                {
-                    Id = HashDocumentId,
-                    Payload = payload,
-                    UpdatedAt = DateTime.UtcNow
-                });
-            }
-            else
-            {
-                entity.Payload = payload;
-                entity.UpdatedAt = DateTime.UtcNow;
-                _dbContext.ApartmentHashes.Update(entity);
-            }
-
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            log.LogInformation("Updated hash document in PostgreSQL table {Table}.", "apartment_hashes");
-        }
-
+        
         public async Task<RentoomReservation?> GetRentoomReservationByResTokenAsync(string resToken, ILogger log, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(resToken)) throw new ArgumentNullException(nameof(resToken));

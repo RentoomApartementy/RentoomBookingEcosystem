@@ -111,8 +111,7 @@ namespace RentoomBooking.Api
                 var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync();
 
                 List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
-
-                await _filtersRepository.SaveRegionsFilters(regionsFilter);
+                await _filtersRepository.SaveRegionsFilters(regionsFilter,_logger);
 
                 response.StatusCode = HttpStatusCode.OK;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
@@ -151,7 +150,11 @@ namespace RentoomBooking.Api
 
             try
             {
-                var result = await _idoAppartmenrService.SaveAllApartmentsToPostgresAsync(cancellationToken);
+                var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync(cancellationToken);
+
+                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
+
+                await _filtersRepository.SaveRegionsFilters(regionsFilter,_logger);
 
                 response.StatusCode = HttpStatusCode.OK;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");

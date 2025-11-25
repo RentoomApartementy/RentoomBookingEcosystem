@@ -80,7 +80,7 @@
             .Where(i => i?.ObjectLocation?.LocalizationItem != null)
             .Select(i =>
             {
-                var offer = GetPricingOfferByObjectId(int.Parse(i.Id ?? "0"));
+                var offer = GetPricingOfferByObjectId(i.Id);
                 return new Marker
                 {
                     Lat = i?.ObjectLocation?.LocalizationItem?.GeoLocationLat,
@@ -104,7 +104,7 @@
     </div>
 </div>
 </div>",
-                    Id = i?.Id,
+                    Id = i.Id.ToString(),
                     ObjRef = _objRef,
                     HasOffer = offer != null,
                     Price = offer?.MinimalPrice,

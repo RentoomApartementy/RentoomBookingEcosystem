@@ -77,5 +77,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.PostgresSeeder
                 { "pl", list }
             };
         }
+
+        
+
+
     }
 }
