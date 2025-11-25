@@ -13,7 +13,7 @@ namespace RentoomBooking.SharedClasses.Configuration
     public static class PostgresConnectionStringProvider
     {
         private const string KeyVaultUrl = "https://kv-rentoombooking.vault.azure.net/";
-        private const string ProductionSecretName = "POSTGRES_RENTOOM_BOOKING_DB_PROD";
+        private const string ProductionSecretName = "PostgressConnectionStringProd";
 
         private static string MaskSecret(string? secret)
         {

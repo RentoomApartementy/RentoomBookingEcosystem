@@ -40,13 +40,12 @@ var postgresConnectionString = PostgresConnectionStringProvider
     .GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger)
     .Result;
 
-builder.Services.AddDbContext<PostgresBookingDbContext>(options =>
+builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 
 builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoSellService>();
-builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoLocksService, IdoLocksService>();
 builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
 builder.Services.AddScoped<IClientService, ClientService>();
