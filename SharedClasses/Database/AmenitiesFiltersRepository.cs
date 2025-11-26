@@ -2,113 +2,73 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Database.PostgresSeeder;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Database
 {
-    public class AmenitiesRepository
+    public class FiltersRepository
     {
-        private Container? _amenitiesFilterContainer;
+        private Container? _filterContainer;
+        // private Container? _citiesFilterContainer;
         private readonly Task _initializationTask;
 
-        private const string ContainerName = "AmenitiesFilter";
-        private const string PartitionKey = "/id";
-        private const string DocumentId = "amenities-filter";
+        //private const string ContainerName = "SearchFilters";
+        //private const string PartitionKey = "/id";
+        private const string AmenitiesFilterPartitionValue = SearchFiltersSeedData.AmenitiesFilterGroupName;
+
+        PostgresBookingDatabase _postgresBookingDatabase;
+
+        private const string CitiesFilterPartitionValue = SearchFiltersSeedData.CitiesFilterGroupName;
 
 
-        public AmenitiesRepository(CosmosClient client, IConfiguration configuration)
+        public FiltersRepository(PostgresBookingDatabase postgresBookingDatabase, IConfiguration configuration)
         {
-            _initializationTask = InitializeAsync(client, configuration);
+            _postgresBookingDatabase = postgresBookingDatabase;
         }
 
-        private async Task InitializeAsync(CosmosClient client, IConfiguration configuration)
+
+        public async Task SeedAmenitiesFilters(ILogger log)
         {
-            var databaseName = configuration["AZURE_COSMOS_DATABASE_NAME"];
-            if (string.IsNullOrEmpty(databaseName))
-            {
-                throw new InvalidOperationException("AZURE_COSMOS_DATABASE_NAME configuration is missing.");
-            }
-
-            var database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-
-            // Ta klasa, tak jak BookingDatabase, musi mieć dostęp do kontenera
-            _amenitiesFilterContainer = await database.Database.CreateContainerIfNotExistsAsync(
-                new ContainerProperties(ContainerName, PartitionKey));
-
-            _amenitiesFilterContainer = await database.Database.CreateContainerIfNotExistsAsync(
-               new ContainerProperties(ContainerName, PartitionKey));
-
-           // int[] list = [205, 204, 132, 205, 204, 132, 206, 152, 96, 86];
-          //  await SaveAmenitiesFilterAsync(list);
+            var amFilters = SearchFiltersSeedData.BuildAmenitiesFilters();
+            await _postgresBookingDatabase.SaveSearchFiltersAsync(amFilters, AmenitiesFilterPartitionValue, log);
 
         }
 
-        public async Task SaveAmenitiesFilterAsync(int[] filterValues, ILogger? log = null)
+        public async Task SaveRegionsFilters(List<string?> regionNames, ILogger? log = null)
         {
-            if (filterValues == null)
+            List<SearchFilter> regions = [];
+
+            regions.AddRange(regionNames.Select(r =>
             {
-                throw new ArgumentNullException(nameof(filterValues));
+
+                var iconName = "map";
+                if (r.ToLower() == "centrum") iconName = "location_city";
+                if (r.ToLower() == "stare miasto") iconName = "castle";
+
+                return new SearchFilter { id = r, name = r, icon_materialui_name = iconName };
+
             }
+            ).ToList());
 
-            await _initializationTask;
-
-            if (_amenitiesFilterContainer == null)
+            var amFilters = new Dictionary<string, List<SearchFilter>>
             {
-                throw new InvalidOperationException("Amenities filter container not initialized.");
-            }
-
-            var document = new AmenitiesFilterDocument
-            {
-                id = DocumentId,
-                amenities = filterValues
+                { "pl", regions }
             };
 
-            try
-            {
-                await _amenitiesFilterContainer.UpsertItemAsync(document, new PartitionKey(document.id));
-            }
-            catch (CosmosException ex)
-            {
-                log?.LogError(ex, "Failed to save amenities filter values to Cosmos DB.");
-                throw;
-            }
+            await _postgresBookingDatabase.SaveSearchFiltersAsync(amFilters, CitiesFilterPartitionValue, log);
         }
 
-
-        public async Task<int[]> GetAmenitiesFilterAsync(ILogger? log = null)
+        public async Task<List<SearchFilterDocument>> GetAllSearchFiltersAsync(ILogger? log = null)
         {
-            await _initializationTask;
-
-            if (_amenitiesFilterContainer == null)
-            {
-                throw new InvalidOperationException("Amenities filter container not initialized.");
-            }
-
-            try
-            {
-                var response = await _amenitiesFilterContainer.ReadItemAsync<AmenitiesFilterDocument>(
-                    DocumentId,
-                    new PartitionKey(DocumentId));
-
-                return response.Resource.amenities ?? Array.Empty<int>();
-            }
-            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
-            {
-                log?.LogInformation("Amenities filter document not found in Cosmos DB.");
-                return Array.Empty<int>();
-            }
-            catch (CosmosException ex)
-            {
-                log?.LogError(ex, "Failed to retrieve amenities filter values from Cosmos DB.");
-                throw;
-            }
+            return await _postgresBookingDatabase.GetAllSearchFiltersAsync(log);
         }
-
-
 
     }
 

@@ -1,0 +1,47 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Apartments" xml:space="preserve">
+        <value>Apartments</value>
+    </data>
+    <data name="About" xml:space="preserve">
+        <value>About us</value>
+    </data>
+    <data name="Cooperation" xml:space="preserve">
+        <value>Cooperation</value>
+    </data>
+    <data name="Contact" xml:space="preserve">
+        <value>Contact</value>
+    </data>
+    <data name="RentoomDesigner" xml:space="preserve">
+        <value>Rentoom Designer</value>
+    </data>
+    <data name="Others" xml:space="preserve">
+        <value>Others</value>
+    </data>
+    <data name="CallUs" xml:space="preserve">
+        <value>Call us</value>
+    </data>
+    <data name="HomeHeroText" xml:space="preserve">
+        <value>Find your dream apartment in Toruń!</value>
+    </data>
+    <data name="NumberOfPeople" xml:space="preserve">
+        <value>Number of people</value>
+    </data>
+    <data name="NumberOfRooms" xml:space="preserve">
+        <value>Number of rooms</value>
+    </data>
+    <data name="Search" xml:space="preserve">
+        <value>Search</value>
+    </data>
+</root>

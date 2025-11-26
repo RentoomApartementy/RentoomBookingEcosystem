@@ -4,10 +4,11 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
-using RentoomBooking.SharedClasses.Models.Database;
+
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
     {
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellAsync(CancellationToken ct = default);
         Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(CancellationToken ct = default);
-        Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default);
-        Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default);
+        Task<List<ObjectMedium>?> GetObjectMediaFromIdoSellAsync(int objectId, CancellationToken ct = default);
+        Task<List<ObjectDescription>?> GetObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken ct = default);
         Task<List<ObjectAmenity>?> GetObjectAmenitiesAsync(int objectId, CancellationToken ct = default);
-        Task<List<ApartmentAmenitiesDocument>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default);
+        Task<List<ApartmentObject>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default);
+        Task<List<ApartmentObject>> SaveAllApartmentsToPostgresAsync(CancellationToken ct = default);
+
     }
     public class IdoApartmentService : IIdoApartmentService
     {
@@ -36,20 +39,22 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         private const string ApartemntsGetEndpoint = "objects/getAll/34/json";
         private const string ObjectMediaGetEndpoint = "objects/getMedia/34/json";
         private const string ApartmentAmenitiesGetEndpoint = "objects/getAmenities/34/json";
+        private const string ObjectDescriptionsGetEndpoint = "objects/getDescriptions/34/json";
 
         // private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<IIdoApartmentService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
         private readonly ApartmentRepository _apartmentRepository;
+        private readonly PostgresBookingDatabase _postgresBookingDatabase;
 
-        public IdoApartmentService(IIdoBookingConnectService idoConnect, ILogger<IdoApartmentService> logger, ApartmentRepository apartmentRepository)
+        public IdoApartmentService(IIdoBookingConnectService idoConnect, ILogger<IdoApartmentService> logger, ApartmentRepository apartmentRepository, PostgresBookingDatabase postgresBookingDatabase)
         {
             // _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _idoConnect = idoConnect;
             _apartmentRepository = apartmentRepository;
-
+            _postgresBookingDatabase = postgresBookingDatabase ?? throw new ArgumentNullException(nameof(postgresBookingDatabase));
         }
 
 
@@ -93,12 +98,34 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
             Objlocs.ObjectLocations.ForEach(a => a.LocalizationItem = locs?.FirstOrDefault(loc => loc.Id == a.LocationId));
 
-            apartments?.ForEach(a => a.ObjectLocation = Objlocs.ObjectLocations?.FirstOrDefault(l => l.ObjectId.ToString() == a.Id?.Trim()));
+            apartments?.ForEach(a => a.ObjectLocation = Objlocs.ObjectLocations?.FirstOrDefault(l => l.ObjectId == a.Id));
 
             await _apartmentRepository.SaveApartmentsAsync(apartments, _logger, ct);
 
             return apartments;
         }
+
+        public async Task<List<ApartmentObject>> SaveAllApartmentsToPostgresAsync(CancellationToken ct = default)
+        {
+            List<LocalizationItem> locs = await GetPublicObjectLocationsAsync(ct);
+
+            List<ApartmentObject> apartments = await GetAllApartmentsFromIdoSellAsync(ct);
+
+            var parameters = IdoBookingBaseHelper.BuildObjectLocationParams(apartments);
+
+            GetObjectLocationResponseType objLocs = await GetObjectLocationsAsync(parameters, ct);
+
+            objLocs.ObjectLocations.ForEach(a => a.LocalizationItem = locs?.FirstOrDefault(loc => loc.Id == a.LocationId));
+
+            apartments?.ForEach(a => a.ObjectLocation = objLocs.ObjectLocations?.FirstOrDefault(l => l.ObjectId == a.Id));
+
+            await _postgresBookingDatabase.SaveApartmentsAsync(apartments, _logger, ct);
+
+            return apartments;
+        }
+
+
+
 
         public async Task<List<ApartmentObject>> GetAllApartmentsFromIdoSellAsync(CancellationToken ct = default)
         {
@@ -147,17 +174,18 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         }
 
 
-        public async Task<ObjectMediaResponseType?> GetMedia(int objectId, CancellationToken ct = default)
+        public async Task<List<ObjectMedium>?> GetObjectMediaFromIdoSellAsync(int objectId, CancellationToken ct = default)
         {
             var request = new ObjectMediaRequestType
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
                 ObjectId = objectId
             };
-            return await _idoConnect.PostAsync<ObjectMediaRequestType, ObjectMediaResponseType>(ObjectMediaGetEndpoint, request, ct);
+            var ret =  await _idoConnect.PostAsync<ObjectMediaRequestType, ObjectMediaResponseType>(ObjectMediaGetEndpoint, request, ct);
+            return ret?.Result.ObjectMedia;
         }
 
-        public async Task<List<ObjectDescription>?> GetDescriptions(int objectId, string? language = null, CancellationToken ct = default)
+        public async Task<List<ObjectDescription>?> GetObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken ct = default)
         {
             var request = new ObjectDescriptionsRequestType
             {
@@ -169,7 +197,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 }
             };
 
-            var ret = await _idoConnect.PostAsync<ObjectDescriptionsRequestType, ObjectDescriptionsResponseType>(ObjectMediaGetEndpoint, request, ct);
+            var ret = await _idoConnect.PostAsync<ObjectDescriptionsRequestType, ObjectDescriptionsResponseType>(ObjectDescriptionsGetEndpoint, request, ct);
             return ret?.Result.ObjectDescriptions;
         }
 
@@ -198,9 +226,9 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         }
 
 
-        public async Task<List<ApartmentAmenitiesDocument>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default)
+        public async Task<List<ApartmentObject>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default)
         {
-            var apartments = await GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(ct);
+            var apartments = await SaveAllApartmentsToPostgresAsync(ct);
 
             var amenitiesDocuments = new List<ApartmentAmenitiesDocument>(apartments.Count);
 
@@ -208,24 +236,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             {
                 ct.ThrowIfCancellationRequested();
 
-                if (string.IsNullOrWhiteSpace(apartment?.Id))
-                {
-                    _logger.LogWarning("Apartment without id encountered while syncing amenities. Skipping.");
-                    continue;
-                }
-
-                if (!int.TryParse(apartment.Id.Trim(), out var apartmentId))
-                {
-                    _logger.LogWarning("Unable to parse apartment id {ApartmentId} to integer. Skipping amenities sync.", apartment.Id);
-                    continue;
-                }
-
-                var amenities = await GetObjectAmenitiesAsync(apartmentId, ct) ?? new List<ObjectAmenity>();
+                var amenities = await GetObjectAmenitiesAsync(apartment.Id, ct) ?? new List<ObjectAmenity>();
 
                 var document = new ApartmentAmenitiesDocument
                 {
-                    Id = apartment.Id.Trim(),
-                    ApartmentId = apartment.Id.Trim(),
+                    Id = apartment.Id,
+                    ApartmentId = apartment.Id,
                   //  Apartment = apartment,
                     Amenities = amenities
                 };
@@ -237,7 +253,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
             await _apartmentRepository.SaveApartmentAmenitiesAsync(amenitiesDocuments, _logger, ct);
 
-            return amenitiesDocuments;
+            return apartments;// amenitiesDocuments;
         }
 
     }

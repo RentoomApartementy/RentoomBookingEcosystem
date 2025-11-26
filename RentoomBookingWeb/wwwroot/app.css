@@ -133,3 +133,70 @@ code {
     text-decoration: none;
     
 }
+
+.marker-offer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 70px;
+    background: #fff;
+    border-radius: 999rem;
+    border: 0.1rem solid #1F5A41;
+    font-weight: bold;
+}
+
+/*.custom-cluster {*/
+/*    background-color: #ffa900;*/
+/*    border-radius: 100%;*/
+/*}*/
+
+/*.with-offers {*/
+/*    background-color: #00b0ff;*/
+/*}*/
+
+.custom-cluster {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-width: 70px !important;
+    max-width: 90px !important;
+    height: 21px !important;
+    background: #fff;
+    border-radius: 999rem;
+    border: 0.1rem solid #1F5A41;
+    font-weight: bold;
+    line-height: normal !important;
+    text-align: center;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.4);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.7;
+    }
+}
+
+.leaflet-popup-content-wrapper {
+    padding: 0 !important;
+    border-radius: .7rem; /* opcjonalnie */
+    background: transparent; /* usuwa białe tło */
+    box-shadow: none; /* usuwa cień */
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.leaflet-popup-tip {
+    background: transparent !important; /* usuwa trójkątną strzałkę */
+    box-shadow: none !important;
+}

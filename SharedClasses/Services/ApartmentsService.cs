@@ -43,42 +43,19 @@ namespace RentoomBooking.SharedClasses.Services
     public class ApartmentsService : IApartmentsService
     {
         private readonly IHttpClientFactory _factory;
-        BookingDatabase _bd;
+        
         ApartmentRepository _apartmentsRepository;
         private readonly IIdoBookingConnectService _idoConnect;
 
-       
-        private const string HashDocumentId = "all-object-hashes"; // ID for the hash document
 
 
-        public ApartmentsService(IHttpClientFactory factory, IIdoBookingConnectService idoConnect, BookingDatabase bd, ApartmentRepository apartmentsRepository)
+        public ApartmentsService(IHttpClientFactory factory, IIdoBookingConnectService idoConnect, ApartmentRepository apartmentsRepository)
         {
             _factory = factory;
-            _bd = bd;
+          
             _idoConnect = idoConnect;
             _apartmentsRepository = apartmentsRepository;
         }
-
-     /*   public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsyncWithFunctionApi(
-            string? continuationToken = null,
-            int top = 50,
-            CancellationToken ct = default)
-        {
-            var http = _factory.CreateClient("FunctionsApi");
-
-            var sb = new StringBuilder("apartments?top=").Append(top);
-            if (!string.IsNullOrWhiteSpace(continuationToken))
-                sb.Append("&continuationToken=").Append(Uri.EscapeDataString(continuationToken));
-
-            using var resp = await http.GetAsync(sb.ToString(), ct);
-            resp.EnsureSuccessStatusCode();
-
-            var jsonString = await resp.Content.ReadAsStringAsync(ct);
-
-            
-            return JsonConvert.DeserializeObject<PagedResult<ApartmentObject>>(jsonString);
-        }
-     */
 
         public async Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(
            string? continuationToken = null,
@@ -101,20 +78,15 @@ namespace RentoomBooking.SharedClasses.Services
             return result;
         }
 
-
         public async Task<long> GetApartmentsCountAsync()
         {
             return await _apartmentsRepository.GetApartmentCountAsync();
         }
 
-//        public Task<PagedResult<ApartmentObject>?> GetApartmentsByPageAsync(string? continuationToken = null, int pageSize = 50) => _apartmentsRepository.QueryApartmentsAsync(continuationToken, pageSize);
-
-
-      
-
+//     
         public async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
         {
-            return await _apartmentsRepository.FindApartmentInCosmosDb(objectId);
+            return _apartmentsRepository.FindApartmentInPostgres(objectId);
         }
 
         public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync(ApartmentQueryFilter filter, CancellationToken ct = default)

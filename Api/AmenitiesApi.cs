@@ -17,13 +17,13 @@ public class AmenitiesApi
     private readonly IdoSellService _service;
     private readonly ILogger<AmenitiesApi> _logger;
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
-  //  private readonly AmenitiesRepository _amenitiesRepository;
-    private readonly IAmenitiesService _amenitiesService;
-    public AmenitiesApi(IdoSellService service, ILogger<AmenitiesApi> logger, IAmenitiesService amenitiesService)
+  //  private readonly FiltersRepository _FiltersRepository;
+    private readonly IApartmentSearchFiltersService _amenitiesService;
+    public AmenitiesApi(IdoSellService service, ILogger<AmenitiesApi> logger, IApartmentSearchFiltersService amenitiesService)
     {
         _service = service;
         _logger = logger;
-      //_amenitiesRepository = amenitiesRepository;
+      //_FiltersRepository = FiltersRepository;
         _amenitiesService = amenitiesService;
     }
 
@@ -78,7 +78,7 @@ public class AmenitiesApi
         }
     }
 
-    [Function("GetAmenitiesFilter")]
+ /*   [Function("GetAmenitiesFilter")]
     public async Task<HttpResponseData> GetAmenitiesFilter(
          [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "amenities/getForObjects/filter")] HttpRequestData req)
     {
@@ -128,5 +128,62 @@ public class AmenitiesApi
             return response;
         }
     }
+ */
 
+    [Function("GetAllFilters")]
+    public async Task<HttpResponseData> GetAllFilters(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "filters/getAll")] HttpRequestData req)
+    {
+        var response = req.CreateResponse();
+
+        try
+        {
+
+
+            var result = await _amenitiesService.GetFiltersAsync();
+
+            response.StatusCode = HttpStatusCode.OK;
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync(JsonConvert.SerializeObject(result ?? new List<SearchFilterDocument>()));
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching amenities for object types");
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal server error.");
+            return response;
+        }
     }
+
+
+
+    [Function("SeedAmenitiesFilters")]
+    public async Task<HttpResponseData> SeedFilter(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "postgres/amenitiesfilters/seed")] HttpRequestData req)
+    {
+        var response = req.CreateResponse();
+
+        try
+        {
+            var result = await _amenitiesService.SaveFiltersAsync();
+            response.StatusCode = HttpStatusCode.OK;
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync("Filters saved.");
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error saving filters.");
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal server error.");
+            return response;
+        }
+    }
+
+
+
+
+}
+
+    

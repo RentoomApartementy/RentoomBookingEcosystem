@@ -3,12 +3,14 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Rentoom;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -22,13 +24,15 @@ namespace RentoomBooking.Api
         private readonly ILogger<ApartmentApi> _logger;
         private readonly IIdoApartmentService _idoAppartmenrService;
         private readonly IApartmentsService _apartmentsService;
+        private readonly FiltersRepository _filtersRepository;
 
-        public ApartmentApi(IIdoApartmentService idoAppartmenrService, IApartmentsService apartmentsService, ILogger<ApartmentApi> logger)
+        public ApartmentApi(IIdoApartmentService idoAppartmenrService, IApartmentsService apartmentsService, FiltersRepository filtersRepository, ILogger<ApartmentApi> logger)
         {
 
             _logger = logger;
             _idoAppartmenrService = idoAppartmenrService;
             _apartmentsService = apartmentsService;
+            _filtersRepository = filtersRepository;
         }
 
         /* do usunięcia - funkcja nie potrzebna, bo nie zwraca sama sobie nic uzytecznego. a lokacja jest teraz w ApartmentObject
@@ -106,6 +110,9 @@ namespace RentoomBooking.Api
                 //  var result  = await _idoAppartmenrService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
                 var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync();
 
+                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
+                await _filtersRepository.SaveRegionsFilters(regionsFilter,_logger);
+
                 response.StatusCode = HttpStatusCode.OK;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
                 await response.WriteStringAsync(JsonConvert.SerializeObject(result));
@@ -123,14 +130,46 @@ namespace RentoomBooking.Api
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to retrieve apartments.");
+                _logger.LogError(ex, "Failed to retrieve apartments." + ex.Message);
                 response.StatusCode = HttpStatusCode.InternalServerError;
-                await response.WriteStringAsync("Internal server error.");
+                await response.WriteStringAsync("Internal server error." + ex.Message);
                 return response;
             }
 
             
         }
+
+
+
+        [Function("SeedApartmentsToPostgres")]
+        public async Task<HttpResponseData> SeedApartmentsToPostgres(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "postgres/apartments/seed")] HttpRequestData req)
+        {
+            var cancellationToken = req.FunctionContext.CancellationToken;
+            var response = req.CreateResponse();
+
+            try
+            {
+                var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync(cancellationToken);
+
+                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
+
+                await _filtersRepository.SaveRegionsFilters(regionsFilter,_logger);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to seed apartments to PostgreSQL.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.");
+                return response;
+            }
+        }
+
 
         [Function("GetApartmentByIdAsync")]
         public async Task<HttpResponseData> GetApartmentByIdAsync(

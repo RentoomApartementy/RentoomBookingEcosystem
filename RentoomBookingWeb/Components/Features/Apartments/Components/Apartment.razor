@@ -1,42 +1,78 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
-@using RentoomBooking.SharedClasses.Services;
-@using RentoomBooking.SharedClasses.Models.IdoBooking;
-@inject IdoSellService IdoSellService;
+@using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
+@using RentoomBooking.SharedClasses.Services.IdoBooking;
+@inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
 
-<article @onclick="GoToApartment" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
+<article @ref="_elementRef" @onclick="GoToApartment" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
     <header>
-        @if (_objectMediumFirst == null)
+        @if (_currentObjectMedium == null)
         {
-            <img 
-                src="@ImageUrl"
-                alt="Przykladowy apartament"
-                title="Przykladowe zdjecie"
-                itemprop="photo"
-                class="apartment-image" 
-            />
+            @* <img  *@
+            @*     src="@ImageUrl" *@
+            @*     alt="Przykladowy apartament" *@
+            @*     title="Przykladowe zdjecie" *@
+            @*     itemprop="photo" *@
+            @*     class="apartment-image"  *@
+            @* /> *@
+            <div class="loading-image">
+                <div class="skeleton"></div>
+            </div>
         }
         else
         {   
-            <div class="image-wrapper">
-                <img 
-                    src="@_objectMediumFirst.Url"
-                    alt="@Item?.Name"
-                    title="@Item?.Name"
-                    itemprop="photo"
-                    class="apartment-image" 
-                />
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img 
+                        src="@_currentObjectMedium.Url"
+                        alt="@Item?.Name"
+                        title="@Item?.Name"
+                        itemprop="photo"
+                        class="apartment-image" 
+                    />
+                </div>
+                
+                <div @onclick="() => ChangeCurrentObjectMedium(1)" @onclick:stopPropagation  class="right-button">
+                    &gt;
+                </div>
+                
+                <div @onclick="() => ChangeCurrentObjectMedium(-1)" @onclick:stopPropagation  class="left-button">
+                    &lt;
+                </div>
+                
+                @if (_objectMediums != null)
+                {
+                    <div class="image-counter">
+                        <small>@(_currentMediumIndex + 1)/@(_objectMediums.Count)</small>
+                    </div>
+                }
+                
+                @* @if (_objectMediums != null) *@
+                @* { *@
+                @*     <div class="nav-dot-wrapper"> *@
+                @*         @for (int i = 0; i < _objectMediums.Count; i++) *@
+                @*         { *@
+                @*             <div class="nav-dot"> *@
+                @*                  *@
+                @*             </div> *@
+                @*         } *@
+                @*     </div> *@
+                @* } *@
             </div>
         }
     </header>
 
     <div class="apartment-info">
-        <h2 itemprop="name">@Item?.Name</h2>
-        <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-            <span itemprop="streetAddress">@Item?.ObjectLocation?.LocalizationItem?.Street</span>, 
-            <span itemprop="postalCode">@Item?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
-            <span itemprop="addressLocality">@Item?.ObjectLocation?.LocalizationItem?.City</span>
-        </p>
+        <div class="">
+            <div class="">
+                <h2 itemprop="name">@Item?.Name</h2>
+                <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                    <span itemprop="streetAddress">@Item?.ObjectLocation?.LocalizationItem?.Street</span>, 
+                    <span itemprop="postalCode">@Item?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
+                    <span itemprop="addressLocality">@Item?.ObjectLocation?.LocalizationItem?.City</span>
+                </p>
+            </div>
+        </div>
 
         <ul class="apartment-details">
             <li>
@@ -45,53 +81,131 @@
             </li>
             <li>
                 <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
-                @BedsCount
+                @_bedsCount
             </li>
             <li>
                 <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
-                1
+                Min 1
             </li>
             <li>
                 <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
                 <span itemprop="floorSize">@Item?.Area m²</span>
             </li>
         </ul>
-
-        <div class="apartment-button-wrapper">
-            <Button>Rezerwacja</Button>
+        
+        @if (ShowPrice)
+        {
+            <div class="apartment-price-info">
+                @if (Offer != null)
+                {
+                    <span>Dostępny od @FormatHelper.FormatCurrency(Offer?.MinimalPrice)</span>   
+                }
+                else
+                {
+                    <span>Brak oferty w wybranym terminie</span>
+                } 
+            </div>
+        }
+        
+        <div @onclick:stopPropagation="true" class="apartment-button-wrapper">
+            <Button @onclick="GoToReservation">Rezerwacja</Button>
         </div>
     </div>
 </article>
 
 @code {
     [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
-    [Parameter] public ApartmentObject? Item { get; set;} = null;
-    private int? BedsCount = null;
+    [Parameter] public ApartmentObject? Item { get; set; } = null;
+    [Parameter] public PricingOffer? Offer { get; set; } = null;
+    [Parameter] public bool ShowPrice { get; set; } = false;
     private List<ObjectMedium>? _objectMediums = null;
-    private ObjectMedium? _objectMediumFirst = null;
+    private int _currentMediumIndex = 0;
+    private ObjectMedium? _currentObjectMedium = null;
+    private int? _bedsCount = null;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+    private IJSObjectReference? _jsModule;
+    private DotNetObjectReference<Apartment>? _objRef;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Item != null)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
+            await _jsModule.InvokeVoidAsync("observeElement", _objRef, _elementRef);
+        }
+    }
+    
+    [JSInvokable]
+    public async Task LoadMedia()
+    {
+        await GetObjectMedia();
+        StateHasChanged();
+    }
+
+    private ElementReference _elementRef;
     
     protected override async Task OnInitializedAsync()
     {
-        BedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
-        await GetObjectMedia();
+        _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
+        //await GetObjectMedia();
     }
-
     
     private async Task GetObjectMedia()
     {
-        var idString = Item?.Id;
-        if (!string.IsNullOrEmpty(idString) && int.TryParse(idString, out int id))
+        var id = Item?.Id;
+        if (id!=null)
         {
-            _objectMediums = await IdoSellService.FetchObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
-            _objectMediumFirst = _objectMediums.FirstOrDefault();
+            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>();
+            _currentMediumIndex = 0;
+            _currentObjectMedium = _objectMediums.FirstOrDefault();
         }
     }
     
     private void GoToApartment()
     {
-        if (Item != null && int.TryParse(Item.Id, out int id))
+        if (Item != null)
         {
-            Navigation.NavigateTo($"/apartamenty/{id}");
+            Navigation.NavigateTo($"/apartamenty/{Item.Id}");
+        }
+    }
+
+    private void ChangeCurrentObjectMedium(int step)
+    {
+        if (_objectMediums == null || !_objectMediums.Any())
+            return;
+
+        _currentMediumIndex += step;
+
+        if (_currentMediumIndex < 0)
+            _currentMediumIndex = _objectMediums.Count - 1;
+        else if (_currentMediumIndex >= _objectMediums.Count)
+            _currentMediumIndex = 0;
+
+        _currentObjectMedium = _objectMediums[_currentMediumIndex];
+    }
+
+    private void GoToReservation()
+    {
+        if (Item != null)
+        {
+            var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+            var queryParams = Microsoft.AspNetCore.WebUtilities
+                .QueryHelpers.ParseQuery(uri.Query);
+
+            string? startDate = queryParams.ContainsKey("startDate") ? queryParams["startDate"].ToString() : null;
+            string? endDate   = queryParams.ContainsKey("endDate")   ? queryParams["endDate"].ToString()   : null;
+            string? adults    = queryParams.ContainsKey("adults")    ? queryParams["adults"].ToString()    : null;
+            string? children  = queryParams.ContainsKey("children")  ? queryParams["children"].ToString()  : null;
+
+            string url = $"/rezerwacja/{Item.Id}";
+
+            if (startDate != null || endDate != null || adults != null || children != null)
+            {
+                url = $"/rezerwacja/{Item.Id}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
+            }
+
+            Navigation.NavigateTo(url);
         }
     }
 }

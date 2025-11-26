@@ -1,0 +1,77 @@
+@using System.Globalization
+@inject NavigationManager Navigation
+
+<div class="language-switcher-container">
+    <div class="language-switcher-button" @onclick="ToggleDropdown">
+        <span class="language-icon">
+            🌐
+        </span>
+        <span class="language-code">@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper()</span>
+        
+        <div class="dropdown-arrow">
+            <span class="down-arrow"></span>
+        </div>
+    </div>
+
+    @if (_isDropdownOpen)
+    {
+        <div class="language-dropdown">
+            @foreach (var culture in _supportedCultures)
+            {
+                <button @onclick="(() => ApplySelectedCultureAsync(culture.Name))"
+                        class="@(CultureInfo.CurrentUICulture.Name == culture.Name ? "active" : "")">
+                    @culture.TwoLetterISOLanguageName.ToUpper()
+                </button>
+            }
+        </div>
+    }
+</div>
+
+@code
+{
+    private bool _isDropdownOpen = false;
+    
+    private readonly CultureInfo[] _supportedCultures = new[]
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("pl-PL"),
+    };
+
+    private void ToggleDropdown()
+    {
+        _isDropdownOpen = !_isDropdownOpen;
+    }
+
+    private void ApplySelectedCultureAsync(string selectedCulture)
+    {
+        if (CultureInfo.CurrentUICulture.Name == selectedCulture)
+        {
+            _isDropdownOpen = false;
+            return;
+        }
+        
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        
+        var queryParameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        
+        var newParameters = new Dictionary<string, string?>();
+        
+        foreach (var param in queryParameters)
+        {
+            if (param.Key != "culture" && param.Key != "ui-culture")
+            {
+                newParameters.Add(param.Key, param.Value.FirstOrDefault());
+            }
+        }
+
+        newParameters.Add("culture", selectedCulture);
+        newParameters.Add("ui-culture", selectedCulture);
+
+        var newUri = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(
+            uri.GetLeftPart(UriPartial.Path),
+            newParameters!); 
+
+        _isDropdownOpen = false; 
+        Navigation.NavigateTo(newUri, forceLoad: true);
+    }
+}

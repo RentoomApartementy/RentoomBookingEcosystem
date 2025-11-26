@@ -1,8 +1,13 @@
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Azure.Cosmos;
+using Microsoft.EntityFrameworkCore;
+using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
-using RentoomBookingWeb.Components;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBookingWeb.Components;
+using System.Globalization;
 
 namespace RentoomBookingWeb
 {
@@ -12,61 +17,72 @@ namespace RentoomBookingWeb
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
+            
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+            builder.Services.AddHttpClient();
+            /* builder.Services.AddHttpClient("Api", client =>
+             {
+                 client.BaseAddress = new Uri("https://localhost:7241/");
+             });*/
 
-            builder.Services.AddHttpClient("Api", client =>
+            using var tempLoggerFactory = LoggerFactory.Create(lb =>
             {
-                //var baseUrl = builder.Configuration["Api:BaseUrl"]!;
-                var baseUrl = "https://localhost:7241/";
-                client.BaseAddress = new Uri(baseUrl);
+                lb.AddConfiguration(builder.Configuration.GetSection("Logging"));
+                lb.AddConsole();
+                lb.AddDebug();
             });
+            var tempLogger = tempLoggerFactory.CreateLogger("PostgresInit");
 
+            //POSTGRESS:
 
-            var cosendpoint = builder.Configuration.GetConnectionString("AZURE_COSMOS_ENDPOINT");
-            //cosendpoint = builder.Configuration["AZURE_COSMOS_ENDPOINT"];
-            if (string.IsNullOrEmpty(cosendpoint))
+            var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
+            if (string.IsNullOrWhiteSpace(postgresConnectionString))
             {
-                throw new InvalidOperationException("AZURE_COSMOS_ENDPOINT configuration is missing.");
+                throw new InvalidOperationException("RentoomDb connection string is missing.");
             }
 
+            builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
+                options.UseNpgsql(postgresConnectionString));
 
-            var cosmosClient = new CosmosClient(cosendpoint, new CosmosClientOptions()
-            {
-                ConnectionMode = ConnectionMode.Gateway,
-                SerializerOptions = new CosmosSerializationOptions
-                {
-                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-                }
-            });
+            builder.Services.AddScoped<PostgresBookingDatabase>();
+           
 
-            builder.Services.AddSingleton(cosmosClient);
 
-            //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            // builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
-            builder.Services.AddScoped<BookingDatabase>();
+
+
+          
             builder.Services.AddScoped<ApartmentRepository>();
-            builder.Services.AddScoped<IApartmentService, ApartmentService>();
+            builder.Services.AddScoped<FiltersRepository>();
+            builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
             builder.Services.AddScoped<IdoSellService>();
             builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();
-
-
+            builder.Services.AddScoped<IIdoOfferService, IdoOfferService>();
+            builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
+            builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
+            
             var app = builder.Build();
+            
+            var supportedCultures = new[] { "en-US", "pl-PL" };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
 
-            // Configure the HTTP request pipeline.
+            app.UseRequestLocalization(localizationOptions);
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-
-
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
             app.UseAntiforgery();
 

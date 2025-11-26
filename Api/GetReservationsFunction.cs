@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 
 namespace RentoomBooking.Api;
 
@@ -12,12 +13,12 @@ public class GetReservationsFunction
 {
 
     private readonly IdoSellService _bookingObjectService;
-    private readonly BookingDatabase _bookingDatabase;
+    private readonly PostgresBookingDatabase _bookingDatabase;
     private readonly ILogger<GetReservationsFunction> _logger;
 
 
 
-    public GetReservationsFunction(ILogger<GetReservationsFunction> logger, IdoSellService bookingObjectService, BookingDatabase bookingDatabase)
+    public GetReservationsFunction(ILogger<GetReservationsFunction> logger, IdoSellService bookingObjectService, PostgresBookingDatabase bookingDatabase)
     {
         _logger = logger;
         _bookingObjectService = bookingObjectService;

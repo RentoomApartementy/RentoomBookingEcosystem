@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Database
 {
+
     public class BookingDatabase
     {
         // Kontenery są teraz nullowalne, bo nie są inicjowane synchronicznie w konstruktorze
