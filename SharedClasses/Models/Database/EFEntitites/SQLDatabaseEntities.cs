@@ -56,6 +56,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("res_token")]
         public string ResToken { get; set; } = string.Empty;
 
+        [Column("reservation_id")]
+        public int ReservationId { get; set; }
+
         [Column("payload", TypeName = "jsonb")]
         public string Payload { get; set; } = string.Empty;
 
