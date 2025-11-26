@@ -219,7 +219,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             var resToken = Guid.NewGuid().ToString("N");
             var document = new RentoomReservation
             {
-                Id = resToken,
+                Id = payloadReservation.id,
                 ResToken = resToken,
                 Reservation = payloadReservation
             };
