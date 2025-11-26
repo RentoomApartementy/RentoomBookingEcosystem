@@ -1,14 +1,31 @@
 [
   {
-    "Name": "StayWell",
+    "Name": "StayWell - Dev",
     "Projects": [
       {
         "Path": "Api\\RentoomBooking.Api.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "RentoomBooking.Api"
       },
       {
         "Path": "StayWell\\RentoomBooking.StayWell.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "https - dev"
+      }
+    ]
+  },
+  {
+    "Name": "StayWell - Prod",
+    "Projects": [
+      {
+        "Path": "Api\\RentoomBooking.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "RentoomBooking.Api PROD"
+      },
+      {
+        "Path": "StayWell\\RentoomBooking.StayWell.csproj",
+        "Action": "Start",
+        "DebugTarget": "https - PROD"
       }
     ]
   }
