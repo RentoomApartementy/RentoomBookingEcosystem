@@ -257,7 +257,7 @@ namespace RentoomBooking.SharedClasses.Database
             string resToken = Guid.NewGuid().ToString("N");
             var doc = new RentoomReservation
             {
-                Id = resToken,
+                Id = payloadReservation.id,
                 ResToken = resToken,
                 Reservation = payloadReservation
             };
