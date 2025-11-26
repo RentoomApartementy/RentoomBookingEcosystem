@@ -37,8 +37,8 @@ namespace RentoomBooking.SharedClasses.Services
         //private const string ApartmentMediaGetEndpoint = "objects/getMedia/34/json";
        
         private const string AllAmenitiesGetEndpoint = "amenities/getForObjects/34/json";
+        private const string RestrictionsExceptionsGetEndpoint = "restrictions/getExceptions/34/json";
 
-        
 
         public IdoSellService(IIdoBookingConnectService idoConnect, ILogger<IdoSellService> logger,  PostgresBookingDatabase bookingDatabase)//, CosmosClient cosmosClient)
         {
@@ -191,5 +191,22 @@ namespace RentoomBooking.SharedClasses.Services
             
             return ret?.Result.ObjectTypesAmenities;
         }
+
+        public async Task<List<RestrictionException>?> FetchRestrictionsExceptionsAsync(GetRestrictionException? parameters = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Fetching restrictions exceptions with filters: {Filters}", parameters);
+
+            var request = new GetRestrictionsExceptionsRequestType
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                GetRestrictionException = parameters ?? new GetRestrictionException()
+            };
+
+            var response = await _idoConnect.PostAsync<GetRestrictionsExceptionsRequestType, GetRestrictionsExceptionsResponseType>(RestrictionsExceptionsGetEndpoint, request, cancellationToken);
+
+            return response?.Result.GetRestrictionExceptions;
+        }
+
+
     }
 }

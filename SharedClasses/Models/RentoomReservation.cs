@@ -10,7 +10,7 @@ namespace RentoomBooking.SharedClasses.Models
     public class RentoomReservation
     {
         [Newtonsoft.Json.JsonProperty("id")]
-        public string Id { get; set; } = default!; //id from IdoSell
+        public int Id { get; set; } = default!; //id from IdoSell
 
         [Newtonsoft.Json.JsonProperty("resToken")]
         public string ResToken { get; set; } = default!; //partition key = token
