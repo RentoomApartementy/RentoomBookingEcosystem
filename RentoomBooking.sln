@@ -5,19 +5,15 @@ VisualStudioVersion = 17.14.36327.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.Api", "Api\RentoomBooking.Api.csproj", "{D911E029-F295-4090-9205-78B66F84E132}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.SharedFrontend", "SharedFrontend\RentoomBooking.SharedFrontend.csproj", "{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.SharedClasses", "SharedClasses\RentoomBooking.SharedClasses.csproj", "{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.StayWell", "StayWell\RentoomBooking.StayWell.csproj", "{34705C9D-DF8F-2680-5A79-BD24397458D8}"
 	ProjectSection(ProjectDependencies) = postProject
-		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE} = {2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}
 		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84} = {9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBookingWeb", "RentoomBookingWeb\RentoomBookingWeb.csproj", "{10DCA528-64FF-40C1-86D3-35CAC586479F}"
 	ProjectSection(ProjectDependencies) = postProject
-		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE} = {2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}
 		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84} = {9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}
 	EndProjectSection
 EndProject
@@ -31,10 +27,6 @@ Global
 		{D911E029-F295-4090-9205-78B66F84E132}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D911E029-F295-4090-9205-78B66F84E132}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D911E029-F295-4090-9205-78B66F84E132}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
