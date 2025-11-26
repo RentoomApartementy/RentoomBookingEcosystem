@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharedClasses\RentoomBooking.SharedClasses.csproj" />
-    <ProjectReference Include="..\SharedFrontend\RentoomBooking.SharedFrontend.csproj" />
   </ItemGroup>
 
   
