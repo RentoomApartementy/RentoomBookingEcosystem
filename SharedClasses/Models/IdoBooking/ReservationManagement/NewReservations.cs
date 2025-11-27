@@ -33,8 +33,8 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement
         public List<NewReservationPackage>? Packages { get; set; }
         public List<NewReservationItem> Items { get; set; } = new();
         public string Currency { get; set; } = string.Empty;
-        public string? Notify { get; set; }
-        public string? NotifyService { get; set; }
+        public string? Notify { get; set; } = ReservationNotifyType.No; // wartości "n", "y"
+        public string? NotifyService { get; set; } = ReservationNotifyType.No; // wartości "n", "y"
     }
 
     public class NewReservationPackage
@@ -94,9 +94,15 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement
     {
         public const string Unconfirmed = "unconfirmed";
         public const string Confirmed = "confirmed";
+        public const string PaymentInProgress = "paymentInProgress";
         public const string WaitingForPayment = "waitingForPayment";
         public const string Completed = "completed";
         public const string Accepted = "accepted";
+        public const string InProgress = "inProgress";
+        public const string Canceled = "canceled";
+        public const string Withdrawn = "withdrawn";
+        public const string InvalidCardNumber = "invalidCardNumber";
+        public const string ToClarify = "toClarify";
     }
 
     public static class ReservationInternalSourceType
