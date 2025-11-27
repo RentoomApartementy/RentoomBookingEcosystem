@@ -36,6 +36,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         private const string ReservationsGetEndpoint = "reservations/get/34/json";
         private const string ReservationsAddEndpoint = "reservations/add/34/json";
+        private const string ReservationsEditStatusEndpoint = "reservations/editStatus/34/json";
         //private const string ApartmentMediaGetEndpoint = "objects/getMedia/34/json";
 
         private const string AllAmenitiesGetEndpoint = "amenities/getForObjects/34/json";
@@ -207,14 +208,14 @@ namespace RentoomBooking.SharedClasses.Services
             return response?.Result.GetRestrictionExceptions;
         }
 
-        public Task<ReservationAddResponse?> AddReservationAsync(NewReservation reservation, CancellationToken cancellationToken = default)
+        public async Task<ReservationAddResponse?> AddReservationAsync(NewReservation reservation, CancellationToken cancellationToken = default)
         {
             if (reservation is null)
             {
                 throw new ArgumentNullException(nameof(reservation));
             }
 
-            return AddReservationsAsync([reservation], cancellationToken);
+            return await AddReservationsAsync([reservation], cancellationToken);
         }
 
         public async Task<ReservationAddResponse?> AddReservationsAsync(IEnumerable<NewReservation> reservations, CancellationToken cancellationToken = default)
@@ -242,6 +243,41 @@ namespace RentoomBooking.SharedClasses.Services
             var response = await _idoConnect.PostAsync<ReservationAddRequest, ReservationAddResponseType>(ReservationsAddEndpoint, request, cancellationToken);
             return response?.Result;
         }
+
+        public async Task<ChangeReservationsStatusResponse?> ChangeReservationStatusAsync(EditReservationsStatusRequest editReservationStatusRequest, CancellationToken cancellationToken = default)
+        {
+            if (editReservationStatusRequest is null)
+            {
+                throw new ArgumentNullException(nameof(editReservationStatusRequest));
+            }
+
+            return await ChangeReservationsStatusAsync([editReservationStatusRequest], cancellationToken);
+        }
+
+        public async Task<ChangeReservationsStatusResponse?> ChangeReservationsStatusAsync(IEnumerable<EditReservationsStatusRequest> reservations, CancellationToken cancellationToken = default)
+        {
+            if (reservations is null)
+            {
+                throw new ArgumentNullException(nameof(reservations));
+            }
+
+            var reservationsList = reservations.ToList();
+            if (reservationsList.Count == 0)
+            {
+                throw new ArgumentException("Dodaj przynajmniej jedną rezerwację do zmiany statusu.", nameof(reservations));
+            }
+
+            var request = new EditReservationsStatusRequestType
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Reservations = reservationsList
+            };
+
+            var response = await _idoConnect.PostAsync<EditReservationsStatusRequestType, ChangeReservationsStatusResponseType>(ReservationsEditStatusEndpoint, request, cancellationToken);
+
+            return response?.Result;
+        }
+
 
     }
 }

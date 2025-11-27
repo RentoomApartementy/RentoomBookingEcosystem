@@ -73,4 +73,55 @@ public class AddReservationFunction
             _logger.LogInformation("AddReservationToIdoSell finished at: {time}", DateTime.UtcNow);
         }
     }
+
+    [Function("ChangeReservationStatusInIdoSell")]
+    public async Task<HttpResponseData> ChangeReservationStatusInIdoSell(
+       [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ido/reservations/statuschange")] HttpRequestData req)
+    {
+        _logger.LogInformation("ChangeReservationStatusInIdoSell started at: {time}", DateTime.UtcNow);
+        var response = req.CreateResponse();
+
+        try
+        {
+            string body;
+            using (var reader = new StreamReader(req.Body))
+            {
+                body = await reader.ReadToEndAsync().ConfigureAwait(false);
+            }
+
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                await response.WriteStringAsync("Request body is empty.");
+                return response;
+            }
+
+            var request = JsonConvert.DeserializeObject<List<EditReservationsStatusRequest>>(body);
+
+            if (request == null || request.Count == 0)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                await response.WriteStringAsync("Provide at least one reservation in the  array.");
+                return response;
+            }
+
+            var result = await _idoSellService.ChangeReservationsStatusAsync(request);
+
+            response.StatusCode = HttpStatusCode.OK;
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected error during ChangeReservationStatusInIdoSell.");
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal server error.");
+            return response;
+        }
+        finally
+        {
+            _logger.LogInformation("ChangeReservationStatusInIdoSell finished at: {time}", DateTime.UtcNow);
+        }
+    }
 }
