@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Rentoom;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Services;
 using System;
@@ -16,6 +17,7 @@ public class AddReservationFunction
 {
     private readonly IdoSellService _idoSellService;
     private readonly ILogger<AddReservationFunction> _logger;
+    
 
     public AddReservationFunction(IdoSellService idoSellService, ILogger<AddReservationFunction> logger)
     {
@@ -56,9 +58,20 @@ public class AddReservationFunction
 
             var result = await _idoSellService.AddReservationsAsync(request.Reservations);
 
+            RentoomReservationHashRecord functionResult = new();
+            
+            foreach (var r in result.Reservations)
+            {
+                if (r.Success)
+                {
+                    functionResult = await _idoSellService.FetchReservationByIDFromIdoSellAsync(r.ReservationId.Value, true);
+
+                }
+            }
+
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+            await response.WriteStringAsync(JsonConvert.SerializeObject(functionResult));
             return response;
         }
         catch (Exception ex)

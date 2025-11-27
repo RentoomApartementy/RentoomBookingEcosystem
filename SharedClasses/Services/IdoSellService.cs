@@ -8,6 +8,7 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Rentoom;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -53,7 +54,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         }
 
-        public async Task<(ReservationResponseFromIdoSellAPI? ReservationResponse, string? resToken)> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, CancellationToken cancellationToken = default)
+        public async Task<RentoomReservationHashRecord> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, CancellationToken cancellationToken = default)
         {
             ReservationRequestIDOSellAPI request = new ReservationRequestIDOSellAPI
             {
@@ -65,6 +66,9 @@ namespace RentoomBooking.SharedClasses.Services
             string? stored = null;
 
             var ret = await _idoConnect.PostAsync<ReservationRequestIDOSellAPI, ReservationResponseFromIdoSellAPI>(ReservationsGetEndpoint, request, cancellationToken);
+
+            if(ret.result.errors !=null)
+                throw new ApplicationException(ret.result.errors.FaultString);
 
             if (saveToDb && ret?.result?.Reservations != null && ret.result.Reservations.Count > 0)
             {
@@ -82,7 +86,7 @@ namespace RentoomBooking.SharedClasses.Services
                 }
             }
 
-            return (ret, stored);
+            return new RentoomReservationHashRecord() { ReservationResponse= ret,resToken= stored };
         }
 
         //public Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken = null, int pageSize = 50) => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
