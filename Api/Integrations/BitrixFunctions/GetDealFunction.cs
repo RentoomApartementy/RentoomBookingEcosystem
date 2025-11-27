@@ -5,6 +5,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using System.Text.Json;
 
 namespace RentoomBooking.Api.Integrations.BitrixFunctions;
 
@@ -20,7 +21,7 @@ public class GetDealFunction
     }
 
     [Function("GetDealFunction")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "bitrix/deals/{id}")] HttpRequest req, int id)
+    public async Task<IActionResult> GetDeal([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "bitrix/deals/{id}")] HttpRequest req, int id)
     {
 
         try
@@ -33,7 +34,7 @@ public class GetDealFunction
 
             var customerId = Convert.ToInt16(dealdata.DealData.FirstOrDefault(m => m.FieldID == "CONTACT_ID")?.Value);
 
-            var customerdata = new BitrixDealData();
+            var customerdata = new BitrixResponseObject();
             if (customerId > 0) 
 
             customerdata = await _bitrixService.DownloadContactDetailsJsonAsync(customerId, customerFieldsDef);
@@ -52,4 +53,6 @@ public class GetDealFunction
         }
 
     }
+
+   
 }
