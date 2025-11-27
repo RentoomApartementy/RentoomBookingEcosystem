@@ -113,20 +113,20 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Models
 
     public class BitrixDealForm
     {
-        public BitrixDealData DealForm { get; set; }
-        public BitrixDealData CustomerInfo { get; set; }
+        public BitrixResponseObject DealForm { get; set; }
+        public BitrixResponseObject CustomerInfo { get; set; }
     }
 
-    public class BitrixDealData
+    public class BitrixResponseObject
     {
         public List<BitrixDealField> DealData { get; set; } = new();
 
-        public BitrixDealData()
+        public BitrixResponseObject()
         {
             DealData = new();
         }
 
-        public BitrixDealData(string jsonReponse, BitrixFieldsDefinition fieldsDef)
+        public BitrixResponseObject(string jsonReponse, BitrixFieldsDefinition fieldsDef)
         {
             DeserializeBitrixDeal(jsonReponse, fieldsDef);
         }
