@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Localization;
-using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
@@ -7,7 +5,7 @@ using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBookingWeb.Components;
-using System.Globalization;
+using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 
 namespace RentoomBookingWeb
 {
@@ -50,11 +48,6 @@ namespace RentoomBookingWeb
                 options.UseNpgsql(postgresConnectionString));
 
             builder.Services.AddScoped<PostgresBookingDatabase>();
-           
-
-
-
-
           
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<FiltersRepository>();
@@ -65,6 +58,9 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IIdoOfferService, IdoOfferService>();
             builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
             builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
+            
+            //view scoped
+            builder.Services.AddScoped<IApartmentsViewModel, ApartmentsViewModel>();
             
             var app = builder.Build();
             
