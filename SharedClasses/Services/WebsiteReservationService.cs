@@ -106,7 +106,11 @@ namespace RentoomBooking.SharedClasses.Services
 
         private string? BuildStayWellLink(string? resToken)
         {
-            var baseUrl = _configuration["StayWell:ReservationUrlBase"] ?? _configuration["StayWellReservationUrlBase"];
+            var baseUrl =
+                Environment.GetEnvironmentVariable("StayWell__ReservationUrlBase") ??
+                Environment.GetEnvironmentVariable("StayWellReservationUrlBase") ??
+                _configuration["StayWell:ReservationUrlBase"] ??
+                _configuration["StayWellReservationUrlBase"];
 
             if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(resToken))
             {
