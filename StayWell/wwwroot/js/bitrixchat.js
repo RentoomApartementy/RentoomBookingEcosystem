@@ -1,4 +1,6 @@
-﻿window.bitrixChat = {
+﻿
+//stary kod z app.rentoom.pl - nie jest wywoływany obecnie
+window.bitrixChat = {
     open: function () {
         console.log("bitrixChat.open called");
 
@@ -71,6 +73,47 @@
     }
 };
 
+
+
+//na podstawie https://helpdesk.bitrix24.pl/open/10887560/
+// działa poprawnie w czacie na birix24.pl widac ustawione dane
+// TODO: przekazywac dane goscia dynamicznie z aplikacji poprzez zmienne JS (poprzez JS interop)
+    window.addEventListener('onBitrixLiveChat', function(event)
+    {
+        var widget = event.detail.widget;
+
+    // Setting custom data (get published at the beginning of a new conversation, extended format)
+    widget.setCustomData([
+    {"USER": {
+        "NAME" : "John Smith",
+    "AVATAR" : "http://files.smith.com/images/avatar-john.jpg",
+            }},
+    {"GRID": [
+    {
+        "NAME" : "E-mail",
+    "VALUE" : "john@smith.com",
+    "DISPLAY" : "LINE",
+                },
+    {
+        "NAME" : "Customer ID",
+    "VALUE" : "12234",
+    "COLOR" : "#ff0000",
+    "DISPLAY" : "LINE"
+                },
+    {
+        "NAME": "Website",
+    "VALUE": location.hostname,
+    "DISPLAY": "LINE"
+                },
+    {
+        "NAME": "Page",
+    "VALUE": "[url="+location.href+"]"+(document.title || location.href)+"[/url]",
+    "DISPLAY": "LINE"
+                },
+            ]}
+    ]);
+        
+    });
 
 function destroyBitrixChat() {
     document.querySelectorAll('script[src*="bitrix24.pl"]').forEach(s => s.remove());
