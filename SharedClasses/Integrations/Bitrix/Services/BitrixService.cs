@@ -1,4 +1,5 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,11 +69,67 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
         }
 
 
-        public async Task<int> AddContactAsync(CreateContactRequest NewContactData)
+        public async Task<int> AddContactAsync(ClientAddRequestClient NewContactData, int resId,int assignedByBitrixUserId)
         {
             var endpointMethod = "crm.contact.add.json";
 
             var payload = new 
+            {
+                fields = new
+                {
+                    UF_CRM_1764281071779 = resId, //id rezerwacji IDB
+                    NAME = NewContactData.FirstName,
+                    LAST_NAME = NewContactData.LastName,
+                    OPENED = "Y",
+                    TYPE_ID = "UC_YIVWK8",
+                    SOURCE_ID = "WEB",
+                    ASSIGNED_BY_ID = assignedByBitrixUserId,
+                    PHONE = new[]
+                    {
+                new { VALUE = NewContactData.Phone, VALUE_TYPE = "WORK" }
+            },
+                    EMAIL = new[]
+                    {
+                new { VALUE = NewContactData.Email, VALUE_TYPE = "WORK" }
+            }
+                },
+                @params = new
+                {
+                    REGISTER_SONET_EVENT = "Y"
+                }
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var url = $"{baseURL}/{endpointMethod}";
+            var response = await client.PostAsync(url, content);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            using var doc = JsonDocument.Parse(responseContent);
+
+           
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.ValueKind == JsonValueKind.Number)
+            {
+                return resultElement.GetInt32();
+            }
+
+            if (doc.RootElement.TryGetProperty("error_description", out var errorElement))
+            {
+                throw new Exception($"Bitrix24 error: {errorElement.GetString()}");
+            }
+
+            throw new Exception($"Unexpected Bitrix24 response: {responseContent}");
+        }
+
+        public async Task<int> AddContactAsync(CreateContactRequest NewContactData)
+        {
+            var endpointMethod = "crm.contact.add.json";
+
+            var payload = new
             {
                 fields = new
                 {
@@ -109,7 +166,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
             using var doc = JsonDocument.Parse(responseContent);
 
-           
+
             if (doc.RootElement.TryGetProperty("result", out var resultElement)
                 && resultElement.ValueKind == JsonValueKind.Number)
             {
