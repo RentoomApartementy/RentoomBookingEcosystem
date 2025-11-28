@@ -49,6 +49,7 @@
     padding: .2rem .7rem;
     border-radius: .5rem;
     transition: .2s background-color ease;
+    position: relative;
 }
 
 .filter-option > label
@@ -60,6 +61,13 @@
 
 .selected {
     background-color: #e1c3b2;
+}
+
+.selected::before {
+    content: 'x';
+    position: absolute;
+    right: 10px;
+    pointer-events: none;
 }
 
 .selected:hover {
