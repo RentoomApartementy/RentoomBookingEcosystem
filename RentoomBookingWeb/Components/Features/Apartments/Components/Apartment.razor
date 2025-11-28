@@ -8,13 +8,6 @@
     <header>
         @if (_currentObjectMedium == null)
         {
-            @* <img  *@
-            @*     src="@ImageUrl" *@
-            @*     alt="Przykladowy apartament" *@
-            @*     title="Przykladowe zdjecie" *@
-            @*     itemprop="photo" *@
-            @*     class="apartment-image"  *@
-            @* /> *@
             <div class="loading-image">
                 <div class="skeleton"></div>
             </div>
@@ -47,17 +40,6 @@
                     </div>
                 }
                 
-                @* @if (_objectMediums != null) *@
-                @* { *@
-                @*     <div class="nav-dot-wrapper"> *@
-                @*         @for (int i = 0; i < _objectMediums.Count; i++) *@
-                @*         { *@
-                @*             <div class="nav-dot"> *@
-                @*                  *@
-                @*             </div> *@
-                @*         } *@
-                @*     </div> *@
-                @* } *@
             </div>
         }
     </header>
@@ -93,22 +75,24 @@
             </li>
         </ul>
         
-        @if (ShowPrice)
-        {
-            <div class="apartment-price-info">
-                @if (Offer != null)
-                {
-                    <span>Dostępny od @FormatHelper.FormatCurrency(Offer?.MinimalPrice)</span>   
-                }
-                else
-                {
-                    <span>Brak oferty w wybranym terminie</span>
-                } 
-            </div>
-        }
-        
         <div @onclick:stopPropagation="true" class="apartment-button-wrapper">
-            <Button @onclick="GoToReservation">Rezerwacja</Button>
+            @if (ShowPrice)
+            {
+                <div class="apartment-price-info">
+                    @if (Offer != null)
+                    {
+                        <div class="price-wrapper">
+                            <span class="price">@FormatHelper.FormatCurrency(Offer?.MinimalPrice)</span>
+                            <small>Cena za pobyt</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <small class="non-offer">Brak oferty w wybranym terminie</small>
+                    } 
+                </div>
+            }
+            <Button @onclick="GoToReservation" Disabled="@(ShowPrice && Offer == null)">Rezerwacja</Button>
         </div>
     </div>
 </article>

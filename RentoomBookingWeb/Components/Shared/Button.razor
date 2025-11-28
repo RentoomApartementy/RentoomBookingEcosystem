@@ -1,7 +1,7 @@
 @inherits ComponentBase;
 @using RentoomBookingWeb.Components.Enums;
 
-<button @onclick="OnClick" disabled="@Disabled" class="@GetButtonClass()">
+<button @onclick="OnClick" disabled="@Disabled" class="@(Disabled ? "custom-button disabled" : GetButtonClass())">
     <span style="white-space: nowrap;">@ChildContent</span>
 </button>
 
