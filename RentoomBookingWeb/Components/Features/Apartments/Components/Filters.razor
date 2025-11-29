@@ -5,23 +5,21 @@
 
 <div class="filters-container">
     
-    <p class="filters-title">Twój przedział cenowy (@MinPriceOffer zł - @MaxPriceOffer zł)</p>
+    @* <p class="filters-title">Twój przedział cenowy (@MinPriceOffer zł - @MaxPriceOffer zł)</p> *@
     
-    <div class="">
-        <PricesPickerRange 
-            IconPath="assets/svgs/filter/money.svg"
-            MinPrice="@MinPriceOffer"
-            MaxPrice="@MaxPriceOffer"
-            StartPriceValue="@_minPrice"
-            StartPriceValueChanged="OnStartPriceChanged"
-            EndPriceValue="@_maxPrice"
-            EndPriceValueChanged="OnEndPriceChanged"
-            />
-    </div>
+    @* <div class=""> *@
+    @*     <PricesPickerRange  *@
+    @*         IconPath="assets/svgs/filter/money.svg" *@
+    @*         MinPrice="@MinPriceOffer" *@
+    @*         MaxPrice="@MaxPriceOffer" *@
+    @*         StartPriceValue="@_minPrice" *@
+    @*         StartPriceValueChanged="OnStartPriceChanged" *@
+    @*         EndPriceValue="@_maxPrice" *@
+    @*         EndPriceValueChanged="OnEndPriceChanged" *@
+    @*         /> *@
+    @* </div> *@
 
-    <hr/>
-    
-    <p class="filters-title">Gdzie chcesz się zameldować?</p>
+    @* <hr/> *@
 
     @if (_isLoading)
     {
@@ -34,22 +32,31 @@
     }
     else
     {
-        <div class="filters grid-2">
-            @foreach (var option in _locations)
-            {
-                <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
-                    <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
-                    <input type="checkbox"
-                           id="@option.Id"
-                           checked="@option.IsSelected"
-                           @onchange="(e) => OnLocationChanged(option)"
-                           style="position:absolute; opacity:0; width:0; height:0;"/>
-                    <label for="@option.Id">@option.Name</label>
-                </div>
-            }
-        </div>
+        @if (!IsMapActive)
+        {
+            <div @onclick="HandleClickOnMapFilter" class="map-filter">
+                <span class="map-filter-title">WIDOK MAPY</span>
+            </div>
+    
+            <p class="filters-title">Gdzie chcesz się zameldować?</p>
+        
+            <div class="filters grid-2">
+                @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
+                {
+                    <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
+                        <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
+                        <input type="checkbox"
+                               id="@option.Id"
+                               checked="@option.IsSelected"
+                               @onchange="(e) => OnLocationChanged(option)"
+                               style="position:absolute; opacity:0; width:0; height:0;"/>
+                        <label for="@option.Id">@option.Name</label>
+                    </div>
+                }
+            </div>
 
-        <hr/>
+            <hr/>
+        }
 
         <p class="filters-title">Filtry</p>
 
@@ -71,6 +78,8 @@
 </div>
 
 @code {
+    [Parameter] public bool IsMapActive { get; set; } = false;
+
     private List<FilterOption> _locations = new();
     private List<FilterOption> _filterOptions = new();
     private bool _isLoading = false;
@@ -242,5 +251,12 @@
         };
 
         await OnFiltersChanged.InvokeAsync(filters);
+    }
+
+    [Parameter] public EventCallback<ApartmentFilters> OnClickOnMap { get; set; }
+
+    private async Task HandleClickOnMapFilter()
+    {
+        await OnClickOnMap.InvokeAsync();
     }
 }
