@@ -175,3 +175,15 @@
     padding: .1rem .5rem;
     border-radius: 100rem;
 }
+
+.reset-button-wrapper {
+    width: 100%;
+    display: flex;
+    margin-top: 1rem;
+}
+
+@media (max-width: 800px) {
+    .reset-button-wrapper {
+        display: none;
+    }
+}

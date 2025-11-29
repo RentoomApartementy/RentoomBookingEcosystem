@@ -74,6 +74,13 @@
                 </div>
             }
         </div>
+        
+        @if (HasSelectedFilters)
+        {
+            <div class="reset-button-wrapper">
+                <Button @onclick="async () => await ResetFilters()" style="width: 100%">Zresetuj filtry</Button>  
+            </div> 
+        }
     }
 </div>
 
@@ -258,5 +265,23 @@
     private async Task HandleClickOnMapFilter()
     {
         await OnClickOnMap.InvokeAsync();
+    }
+    
+    private bool HasSelectedFilters => _locations.Any(l => l.IsSelected) || _filterOptions.Any(f => f.IsSelected);
+
+    private async Task ResetFilters()
+    {
+        foreach (var location in _locations)
+        {
+            location.IsSelected = false;
+        }
+
+        foreach (var filter in _filterOptions)
+        {
+            filter.IsSelected = false;
+        }
+
+        UpdateUrl();
+        await ApplyFilters();
     }
 }
