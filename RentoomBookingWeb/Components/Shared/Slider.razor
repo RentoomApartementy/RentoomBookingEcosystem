@@ -54,7 +54,14 @@
             .Select(g => g.Select(v => v.x).ToList())
             .ToList();
 
-        CurrentIndex = Math.Clamp(CurrentIndex, 0, ChunkedItems.Count - 1);
+        if (ChunkedItems.Count > 0)
+        {
+            CurrentIndex = Math.Clamp(CurrentIndex, 0, ChunkedItems.Count - 1);
+        }
+        else
+        {
+            CurrentIndex = 0;
+        }
     }
 
     private void GoToSlide(int index)

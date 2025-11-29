@@ -3,5 +3,11 @@
 
 <section class="hero-container">
     <h1 class="hero-text">@Localizer["HomeHeroText"]</h1>
-    <SearchBar />
+    <SearchBar StartDate="@_startDate" EndDate="@_endDate" Adults="2"/>
 </section>
+
+@code 
+{
+    private readonly string _startDate = DateTime.Now.ToString("yyyy-MM-dd");
+    private readonly string _endDate = DateTime.Now.AddDays(6).ToString("yyyy-MM-dd"); //one week later
+}
