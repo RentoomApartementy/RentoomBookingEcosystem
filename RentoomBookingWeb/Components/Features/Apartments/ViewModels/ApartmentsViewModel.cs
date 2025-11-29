@@ -311,9 +311,17 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             {
                 var offerA = GetPricingOfferByObjectId(a.Id);
                 var offerB = GetPricingOfferByObjectId(b.Id);
+        
                 if (offerA != null && offerB == null) return -1;
+        
                 if (offerA == null && offerB != null) return 1;
-                return 0;
+
+                if (offerA != null && offerB != null)
+                {
+                    return offerB.MinimalPrice.CompareTo(offerA.MinimalPrice);
+                }
+
+                return 0; 
             });
         }
 
