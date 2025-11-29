@@ -31,7 +31,28 @@
         
             <div class="apartments-items-wrapper">
                 <div class="text-button-wrapper">
-                    <h4>@ViewModel.ApartmentsCount apartamenty/ów</h4>
+                    @if (!ViewModel.ApartmentsIsLoading)
+                    {
+                        @if (ViewModel.IsSearch)
+                        {
+                            @if (ViewModel.Offers.Count > 0)
+                            {
+                                <h4>@ViewModel.Offers.Count dostępnych ofert</h4>
+                            }
+                            else
+                            {
+                                <h4>Brak ofert w wybranym terminie</h4>
+                            }
+                        }
+                        else
+                        {
+                            <h4>@ViewModel.ApartmentsCount apartamenty/ów</h4>
+                        }   
+                    }
+                    else
+                    {
+                        <h4>Ładowanie...</h4>
+                    }
                     <div class="view-buttons-wrapper">
                         <div @onclick="() => ViewModel.ToggleView(false)" class="view-button @(ViewModel.IsMapView ? "" : "view-button-active")">Siatka</div>
                         <div @onclick="() => ViewModel.ToggleView(true)" class="view-button @(ViewModel.IsMapView ? "view-button-active" : "")">Mapa</div>
