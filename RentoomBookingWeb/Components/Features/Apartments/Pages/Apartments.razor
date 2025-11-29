@@ -1,10 +1,5 @@
 @page "/apartamenty"
 @using RentoomBookingWeb.Components.Features.Apartments.Components
-@using RentoomBookingWeb.Components.Features.Apartments.ViewModels
-
-@inject IApartmentsViewModel ViewModel
-@inject IJSRuntime JS
-@implements IAsyncDisposable
 
 <PageTitle>Apartamenty</PageTitle>
 
@@ -93,50 +88,3 @@
             </div>
     </div>
 </div>
-
-@code {
-    private DotNetObjectReference<Apartments>? ObjRef;
-    private IJSObjectReference? JsModule;
-    
-    protected override async Task OnInitializedAsync()
-    {
-        ViewModel.OnChange += StateHasChanged;
-        
-        await ViewModel.InitializeAsync();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            ObjRef = DotNetObjectReference.Create(this);
-            JsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/infiniteScroll.js");
-            await JsModule.InvokeVoidAsync("init", ObjRef);
-        }
-    }
-
-    [JSInvokable]
-    public async Task LoadMoreOnScroll()
-    {
-        if (!ViewModel.ApartmentsIsLoading && ViewModel.HasMore)
-        {
-            await ViewModel.LoadMoreAsync();
-        }
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        ViewModel.OnChange -= StateHasChanged;
-
-        if (JsModule is not null && ObjRef is not null)
-        {
-            await JsModule.InvokeVoidAsync("unregister", ObjRef);
-        }
-
-        ObjRef?.Dispose();
-        if (JsModule != null)
-        {
-            await JsModule.DisposeAsync();
-        }
-    }
-}
