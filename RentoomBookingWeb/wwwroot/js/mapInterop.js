@@ -8,7 +8,7 @@ window.leafletMap = {
             this.map.remove();
             this.map = null;
         }
-        
+
         if (!this.map) {
             this.map = L.map(id, { attributionControl: false }).setView([lat, lng], zoom);
 
@@ -104,7 +104,9 @@ window.leafletMap = {
         function updatePopupImage(id, url) {
             const popupEl = document.getElementById(`popup-${id}`);
             if (!popupEl) return;
-            const imgContainer = popupEl.querySelector("div");
+
+            const imgContainer = popupEl.querySelector(".popup-img-target");
+
             if (imgContainer) {
                 imgContainer.innerHTML = `<img src="${url}" style="height: 130px; width: 100%; object-fit: cover; border-radius: .5rem .5rem 0 0;" />`;
             }
