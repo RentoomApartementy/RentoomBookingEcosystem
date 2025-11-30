@@ -85,8 +85,6 @@ public class ClientApi
             return response;
         }
     }
-
-
     [Function("GetClientById")]
     public async Task<HttpResponseData> GetClientById(
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "clients/getbyId/{id:int?}")] HttpRequestData req,
@@ -120,6 +118,45 @@ public class ClientApi
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Failed to get client with id {id}.");
+            response.StatusCode = HttpStatusCode.InternalServerError;
+            await response.WriteStringAsync("Internal server error.");
+            return response;
+        }
+    }
+
+    [Function("GetClientByEmail")]
+    public async Task<HttpResponseData> GetClientByEmail(
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "clients/getbyEmail/{email}")] HttpRequestData req,
+string email)
+    {
+        var cancellationToken = req.FunctionContext.CancellationToken;
+        var response = req.CreateResponse();
+
+        if (string.IsNullOrEmpty(email))
+        {
+            response.StatusCode = HttpStatusCode.BadRequest;
+            await response.WriteStringAsync("Client email not provided");
+            return response;
+        }
+        try
+        {
+            var result = await _ClientService.GetClientByEmailAsync(email);
+
+            if (result?.Clients == null || result.Clients.Count == 0)
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                await response.WriteStringAsync($"Client with email {email} not found.");
+                return response;
+            }
+
+            response.StatusCode = HttpStatusCode.OK;
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Failed to get client with email {email}.");
             response.StatusCode = HttpStatusCode.InternalServerError;
             await response.WriteStringAsync("Internal server error.");
             return response;
