@@ -11,7 +11,7 @@ public partial class ApartmentsSection : ComponentBase
     
     public List<ApartmentObject> Apartments { get; private set; } = new();
     public List<PricingOffer> Offers { get; private set; } = new();
-    public bool ApartmentsIsLoading = false;
+    public bool ApartmentsIsLoading = true;
 
     public string? Error { get; private set; }
 

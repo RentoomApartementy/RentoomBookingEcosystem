@@ -39,7 +39,6 @@
                         <small>@(_currentMediumIndex + 1)/@(_objectMediums.Count)</small>
                     </div>
                 }
-                
             </div>
         }
     </header>
@@ -47,11 +46,26 @@
     <div class="apartment-info">
         <div class="">
             <div class="">
-                <h2 itemprop="name">@Item?.Name</h2>
+                @if (Item == null)
+                {
+                    <div class="skeleton skeleton-text title"></div>
+                }
+                else
+                {
+                    <h2 itemprop="name">@Item.Name</h2>
+                }
+
                 <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-                    <span itemprop="streetAddress">@Item?.ObjectLocation?.LocalizationItem?.Street</span>, 
-                    <span itemprop="postalCode">@Item?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
-                    <span itemprop="addressLocality">@Item?.ObjectLocation?.LocalizationItem?.City</span>
+                    @if (Item == null)
+                    {
+                        <span class="skeleton skeleton-text address"></span>
+                    }
+                    else
+                    {
+                        <span itemprop="streetAddress">@Item.ObjectLocation?.LocalizationItem?.Street</span><span>, </span> 
+                        <span itemprop="postalCode">@Item.ObjectLocation?.LocalizationItem?.ZipCode</span> 
+                        <span itemprop="addressLocality">@Item.ObjectLocation?.LocalizationItem?.City</span>
+                    }
                 </p>
             </div>
         </div>
@@ -59,19 +73,50 @@
         <ul class="apartment-details">
             <li>
                 <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon" />
-                <span itemprop="occupancy">@Item?.MinCapacity - @Item?.Capacity</span>
+                @if (Item == null)
+                {
+                    <span class="skeleton skeleton-text mini"></span>
+                }
+                else
+                {
+                    <span itemprop="occupancy">@Item.MinCapacity - @Item.Capacity</span>
+                }
             </li>
+            
             <li>
                 <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
-                @_bedsCount
+                @if (Item == null)
+                {
+                    <span class="skeleton skeleton-text mini"></span>
+                }
+                else
+                {
+                    <span>@_bedsCount</span>
+                }
             </li>
+            
             <li>
                 <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
-                1
+                @if (Item == null)
+                {
+                    <span class="skeleton skeleton-text mini" style="width: 20px;"></span>
+                }
+                else
+                {
+                    <span>1</span>
+                }
             </li>
+            
             <li>
                 <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
-                <span itemprop="floorSize">@Item?.Area m²</span>
+                @if (Item == null)
+                {
+                    <span class="skeleton skeleton-text mini"></span>
+                }
+                else
+                {
+                    <span itemprop="floorSize">@Item.Area m²</span>
+                }
             </li>
         </ul>
         
@@ -86,13 +131,23 @@
                             <small>Cena za pobyt</small>
                         </div>
                     }
+                    else if (Item == null) 
+                    {
+                        /* Skeleton dla ceny, jeśli element się ładuje */
+                        <div class="price-wrapper">
+                            <span class="skeleton skeleton-text mini" style="width: 80px; height: 24px;"></span>
+                            <small class="skeleton skeleton-text mini" style="width: 60px; height: 12px; margin-top: 4px;"></small>
+                        </div>
+                    }
                     else
                     {
                         <small class="non-offer">Brak oferty w wybranym terminie</small>
                     } 
                 </div>
             }
-            <Button @onclick="GoToReservation" Disabled="@(ShowPrice && Offer == null)">Rezerwacja</Button>
+            <Button @onclick="GoToReservation" Disabled="@(Item == null || (ShowPrice && Offer == null))">
+                Rezerwacja
+            </Button>
         </div>
     </div>
 </article>

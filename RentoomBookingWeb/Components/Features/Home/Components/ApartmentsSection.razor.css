@@ -42,3 +42,9 @@
         padding: 0;
     }
 }
+
+.loading-state {
+    width: 100%;
+    height: 20vh;
+    background: #1F5A41;
+}

@@ -222,3 +222,26 @@
     transform: translateX(-50%);
     color: rgba(255, 255, 255, 0.51);
 }
+
+.skeleton-text {
+    display: inline-block;
+    background-color: #eee;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+    
+.skeleton-text.title {
+    height: 24px;
+    width: 80%;
+    margin-bottom: 8px;
+}
+
+.skeleton-text.address {
+    height: 16px;
+    width: 60%;
+}
+
+.skeleton-text.mini {
+    height: 16px;
+    width: 50px;
+}
