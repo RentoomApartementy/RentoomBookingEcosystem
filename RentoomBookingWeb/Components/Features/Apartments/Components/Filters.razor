@@ -37,26 +37,26 @@
             <div @onclick="HandleClickOnMapFilter" class="map-filter">
                 <span class="map-filter-title">WIDOK MAPY</span>
             </div>
-    
-            <p class="filters-title">Gdzie chcesz się zameldować?</p>
-        
-            <div class="filters grid-2">
-                @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
-                {
-                    <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
-                        <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
-                        <input type="checkbox"
-                               id="@option.Id"
-                               checked="@option.IsSelected"
-                               @onchange="(e) => OnLocationChanged(option)"
-                               style="position:absolute; opacity:0; width:0; height:0;"/>
-                        <label for="@option.Id">@option.Name</label>
-                    </div>
-                }
-            </div>
-
-            <hr/>
         }
+        
+        <p class="filters-title">Gdzie chcesz się zameldować?</p>
+        
+        <div class="filters grid-2">
+            @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
+            {
+                <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
+                    <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
+                    <input type="checkbox"
+                           id="@option.Id"
+                           checked="@option.IsSelected"
+                           @onchange="(e) => OnLocationChanged(option)"
+                           style="position:absolute; opacity:0; width:0; height:0;"/>
+                    <label for="@option.Id">@option.Name</label>
+                </div>
+            }
+        </div>
+
+        <hr/>
 
         <p class="filters-title">Filtry</p>
 
