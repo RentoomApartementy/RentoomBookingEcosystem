@@ -4,17 +4,11 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services;
 
-
 namespace RentoomBookingWeb.Components.Features.Home.Components;
-
 public partial class ApartmentsSection : ComponentBase
 {
-    [Inject] private IApartmentsService ApartmentService { get; set; } = default!;
     [Inject] private IRentoomOfferService RentoomOfferService { get; set; } = default!;
     
-    private string? _token;
-    private const int _pageSize = 12;
-
     public List<ApartmentObject> Apartments { get; private set; } = new();
     public List<PricingOffer> Offers { get; private set; } = new();
     public bool ApartmentsIsLoading = false;
@@ -30,9 +24,6 @@ public partial class ApartmentsSection : ComponentBase
     {
         Apartments.Clear();
         Offers.Clear();
-        _token = null;
-        
-        await LoadMoreAsync();
         
         await GetFilteredOffers();
 
@@ -45,11 +36,9 @@ public partial class ApartmentsSection : ComponentBase
     {
         try
         {
-            List<int> ids = Apartments.Select(a => a.Id).ToList();
-
             var idoParams = new PricingOffersRequest
             {
-                ObjectIds = ids,
+                ObjectIds = [],
                 DateFrom = DateTime.Now.ToString("yyyy-MM-dd"),
                 DateTo = DateTime.Now.AddDays(6).ToString("yyyy-MM-dd"),
                 NumberOfAdults = 2,
@@ -65,6 +54,7 @@ public partial class ApartmentsSection : ComponentBase
             var filteredOffers = await RentoomOfferService.getOfferWitFilter(filters);
             if (filteredOffers?.PricingOffers != null)
             {
+                Apartments.AddRange(filteredOffers.ApartmentObjects);
                 Offers.AddRange(filteredOffers.PricingOffers);
             }
         }
@@ -96,31 +86,5 @@ public partial class ApartmentsSection : ComponentBase
     
     public PricingOffer? GetPricingOfferByObjectId(int objectId)
         => Offers.Find(o => o.ObjectId == objectId);
-    
-    public async Task LoadMoreAsync()
-    {
-        if (ApartmentsIsLoading) return;
-
-        ApartmentsIsLoading = true;
-        Error = null;
-
-        try
-        {
-            var page = await ApartmentService.GetApartmentsByPageAsync(_token, top: _pageSize);
-            if (page?.Items is { Count: > 0 })
-            {
-                Apartments.AddRange(page.Items);
-                _token = page.ContinuationToken;
-            }
-        }
-        catch (Exception ex)
-        {
-            Error = ex.Message;
-        }
-        finally
-        {
-            ApartmentsIsLoading = false;
-        }
-    }
     
 }
