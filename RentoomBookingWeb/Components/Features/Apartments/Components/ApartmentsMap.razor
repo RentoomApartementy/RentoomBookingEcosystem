@@ -77,6 +77,7 @@
         await JSRuntime.InvokeVoidAsync("leafletMap.clearMarkers");
 
         var markers = Items
+            .Where(i => !IsSearch || GetPricingOfferByObjectId(i.Id) != null)
             .Where(i => i?.ObjectLocation?.LocalizationItem != null)
             .Select(i =>
             {

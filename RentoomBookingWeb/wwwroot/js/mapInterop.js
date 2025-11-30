@@ -65,12 +65,28 @@ window.leafletMap = {
             const priceIcon = `<div class="marker-offer"><span class="marker-price">${Math.round(m.price)} zł</span></div>`;
             const htmlContent = m.hasOffer ? priceIcon : defaultIcon;
 
+            let iconSettings;
+
+            if (m.hasOffer) {
+                iconSettings = {
+                    size: [70, 30],
+                    anchor: [35, 38],
+                    popupAnchor: [0, -38]
+                };
+            } else {
+                iconSettings = {
+                    size: [35, 35],
+                    anchor: [17, 35],
+                    popupAnchor: [0, -40]
+                };
+            }
+
             const customIcon = L.divIcon({
                 className: 'custom-marker',
                 html: htmlContent,
-                iconSize: [35, 35],
-                iconAnchor: [17, 35],
-                popupAnchor: [0, -40]
+                iconSize: iconSettings.size,
+                iconAnchor: iconSettings.anchor,
+                popupAnchor: iconSettings.popupAnchor
             });
 
             const marker = L.marker([lat, lng], { icon: customIcon, hasOffer: m.hasOffer });
