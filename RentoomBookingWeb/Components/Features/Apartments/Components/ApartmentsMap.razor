@@ -99,6 +99,27 @@
                 <span>{i?.ObjectLocation?.LocalizationItem?.ZipCode}</span>
                 <span>{i?.ObjectLocation?.LocalizationItem?.City}</span>
             </div>
+            <div style=""display: flex; gap: .5rem;"">
+                 <div>
+                    <img src=""assets/svgs/users.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span>{i.MinCapacity} - {i.Capacity}</span>
+                </div>
+                <div>
+                    <img src=""assets/svgs/bed.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span>{SumBedByItem(i)}</span>
+                </div>
+                <div>
+                    <img src=""assets/svgs/bath.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span>1</span>
+                </div>
+                <div>
+                    <img src=""assets/svgs/m2.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span>{i.Area}</span>
+                </div>
+            </div>
+
+            <span>{getMinimalPrice(i.Id)}</span>            
+
             <div style='width: 100%; display: flex;'>
                 <a href='/apartamenty/{i?.Id}' style='display: flex; align-items: center; justify-content: center; width: 100%; padding: .4rem 1rem; background-color: rgba(148, 95, 40, 0.7); color: white; border-radius: 5px; cursor: pointer; text-decoration: none;'>
                     Rezerwacja
@@ -139,4 +160,14 @@
 
     private PricingOffer? GetPricingOfferByObjectId(int objectId)
         => Offers.Find(o => o.ObjectId == objectId);
+
+    private int SumBedByItem(ApartmentObject apartment)
+    {
+        return (int)apartment?.BedsConfiguration?.Sum(item => item.Count)!;
+    }
+
+    private string getMinimalPrice(int id)
+    {
+        return GetPricingOfferByObjectId(id) != null ? $"Cena za pobyt: {GetPricingOfferByObjectId(id)?.MinimalPrice} zł" : "";
+    }
 }
