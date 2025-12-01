@@ -1,4 +1,4 @@
-﻿@page "/reservation/{token}/ContactUsPage"
+﻿@* @page "/reservation/{token}/ContactUsPage" *@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 
@@ -7,14 +7,14 @@
 @inject IStringLocalizer<ContactUsPage> Localizer
 
 
-@inherits Models.PageBase
+@* @inherits Models.PageBase *@
 
-<PageTitle>Contact Us</PageTitle>
+@* <PageTitle>Contact Us</PageTitle> *@
 
 @* TODO WAŻNE *@
 @* Wyłączyć Footer jeżeli niewypełniona jest karta meldunkowa *@
 
-<div class="page-info-wrapper">
+@* <div class="page-info-wrapper">
     <PageInfo Title="@ReservationState.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["ContactUs"]"></PageInfo>
 </div>
 
@@ -27,7 +27,7 @@
             </span>
         </DescriptionContent>
     </Description>
-</div>
+</div> *@
 
 <div class="buttons-wrapper">
     <Button Text="WhatsApp">

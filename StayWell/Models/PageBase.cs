@@ -33,6 +33,8 @@ namespace RentoomBooking.StayWell.Models
 
         protected bool IsLoading { get; set; } = true;
 
+        private readonly string _instanceId = Guid.NewGuid().ToString("N");
+
         //protected Data? Data => new() //Pozostałość po alpejskich kombinacjach. Do usunięcia.
         //{
         //    Reservation = ReservationState.CurrentReservation,
@@ -78,6 +80,7 @@ namespace RentoomBooking.StayWell.Models
 
         private async Task LoadDataAsync()
         {
+            Console.WriteLine($"LoadDataAsync {_instanceId}, Token={Token}");
             IsLoading = true;
             try
             {
@@ -85,8 +88,13 @@ namespace RentoomBooking.StayWell.Models
                 {
                     await ReservationState.GetReservationAsync(Token);
                     var reservation = ReservationState.CurrentReservation?.Reservation;
-                    
-                    if(!ReservationState.IsValidReservation || reservation == null)
+
+                    if (ReservationState.CurrentStatus == System.Net.HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine("There is no reservation with such token");
+                    }
+
+                    if (!ReservationState.IsValidReservation || reservation == null)
                     {
                         NavigationManager.NavigateTo("/ReservationPage");
                         return;
@@ -104,11 +112,14 @@ namespace RentoomBooking.StayWell.Models
                         );
                     }
                 }
+            }catch
+            {
+                throw;
             }
             finally
             {
-            IsLoading = false;
-            StateHasChanged();
+                IsLoading = false;
+                StateHasChanged();
             }
         }
 

@@ -18,16 +18,24 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<ReservationResponse?> GetReservationByTokenAsync(string token)
         {
-            var response = await _http.GetAsync($"db/reservations/{token}");
-            if (response.IsSuccessStatusCode)
-            {
-                var reservation = await response.Content.ReadFromJsonAsync<RentoomReservation>(_json);
-                Console.WriteLine(response.StatusCode);
-                return new(reservation!, response.StatusCode);
+            try
+            { 
+                var response = await _http.GetAsync($"db/reservations/{token}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var reservation = await response.Content.ReadFromJsonAsync<RentoomReservation>(_json);
+                    Console.WriteLine(response.StatusCode);
+                    return new(reservation!, response.StatusCode);
+                }
+                else
+                {
+                    return new(null, response.StatusCode);
+                }
             }
-            else
+            catch(Exception e)
             {
-                return new(null, response.StatusCode);
+                Console.WriteLine(e.Message);
+                return new(null, System.Net.HttpStatusCode.InternalServerError);
             }
 
             //throw new Exception($"{response.Content} {response.StatusCode}");

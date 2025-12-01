@@ -1,4 +1,5 @@
-﻿using RentoomBooking.SharedClasses.Models;
+﻿using Microsoft.AspNetCore.Components;
+using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.StayWell.Services;
 using System.Net;
 
@@ -47,8 +48,7 @@ namespace RentoomBooking.StayWell.States
 
                 if(reservation?.StatusCode == System.Net.HttpStatusCode.Gone)
                 {
-                    Console.WriteLine("rezerwacja wygasła :(");
-                    CurrentReservation = null; // 
+                    CurrentReservation = null;
                     _currentToken = token;
 
                     return null;
