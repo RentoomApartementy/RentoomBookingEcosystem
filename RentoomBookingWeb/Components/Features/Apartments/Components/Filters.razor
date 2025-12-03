@@ -41,7 +41,7 @@
         
         <p class="filters-title">Gdzie chcesz się zameldować?</p>
         
-        <div class="filters grid-2">
+        <div class="filters">
             @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
             {
                 <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
