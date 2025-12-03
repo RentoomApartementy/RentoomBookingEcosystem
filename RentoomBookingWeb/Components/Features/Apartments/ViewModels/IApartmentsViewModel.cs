@@ -24,13 +24,16 @@ public interface IApartmentsViewModel
 
     int MinOfferPrice { get; }
     int MaxOfferPrice { get; }
+    int ScaleMinPrice { get; }
+    int ScaleMaxPrice { get; }
+    public Guid SliderResetKey { get; }
     PricingOffer? GetPricingOfferByObjectId(int objectId);
 
     Task InitializeAsync();
     Task LoadMoreAsync();
     void ToggleView(bool isMap);
     Task HandleSearchAsync(Dictionary<string, string> query);
-    Task HandleFiltersChangedAsync(ApartmentFilters filters);
+    Task HandleFiltersChangedAsync((ApartmentFilters Filters, int MinPrice, int MaxPrice) data);
 
     event Action? OnChange;
 }

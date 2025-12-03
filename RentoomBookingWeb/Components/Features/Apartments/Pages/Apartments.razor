@@ -19,10 +19,11 @@
 
     <div class="apartments-items">
         <Filters 
-            OnFiltersChanged="@ViewModel.HandleFiltersChangedAsync"
+            @key="ViewModel.SliderResetKey"
+            OnFiltersChanged="@(data => ViewModel.HandleFiltersChangedAsync(data))"
             OnClickOnMap="() => ViewModel.ToggleView(true)"
-            MinPriceOffer="@ViewModel.MinOfferPrice"
-            MaxPriceOffer="@ViewModel.MaxOfferPrice"
+            MinPriceOffer="@ViewModel.ScaleMinPrice"
+            MaxPriceOffer="@ViewModel.ScaleMaxPrice"
             IsMapActive="@ViewModel.IsMapView"
             />
         

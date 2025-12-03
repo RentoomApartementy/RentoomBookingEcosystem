@@ -18,6 +18,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         public List<ApartmentObject> Items { get; private set; } = new();
         public List<PricingOffer> Offers { get; private set; } = new();
+        
         public long? ApartmentsCount { get; private set; }
         public bool IsLoading { get; private set; } = true;
         public bool ApartmentsIsLoading { get; private set; } = false;
@@ -31,6 +32,13 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public string Adults { get; set; } = "";
         public string Children { get; set; } = "";
         public string Rooms { get; set; } = "";
+
+        public int? FilterMinPrice { get; private set; }
+        public int? FilterMaxPrice { get; private set; }
+
+        public int ScaleMinPrice { get; private set; }
+        public int ScaleMaxPrice { get; private set; }
+        public Guid SliderResetKey { get; private set; } = Guid.NewGuid();
 
         public event Action? OnChange;
 
@@ -75,7 +83,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             else
             {
                 await LoadMoreAsync();
-                await GetFilteredOffers();
+                var allItems = await GetAllApartments() ?? new List<ApartmentObject>();
+                await GetFilteredOffers(allItems);
             }
         }
 
@@ -124,8 +133,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             await HandleSearchAsync(query, updateUrl: true);
         }
 
-        public async Task HandleFiltersChangedAsync(ApartmentFilters filters)
+        public async Task HandleFiltersChangedAsync((ApartmentFilters Filters, int MinPrice, int MaxPrice) data)
         {
+            var filters = data.Filters;
+            FilterMinPrice = data.MinPrice;
+            FilterMaxPrice = data.MaxPrice;
+
             Items.Clear();
             Offers.Clear();
             _token = null;
@@ -138,51 +151,29 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 var items = await GetAllApartments() ?? new List<ApartmentObject>();
                 Items.AddRange(items);
 
-                List<int> ids = items.Select(a => a.Id).ToList();
-
-                var idoParams = new PricingOffersRequest
-                {
-                    ObjectIds = ids,
-                    DateFrom = StartDate,
-                    DateTo = EndDate,
-                    NumberOfAdults = int.TryParse(Adults, out var adults) ? adults : 0,
-                    NumberOfBigChildren = int.TryParse(Children, out var children) ? children : 0,
-                };
-
-                var rentoomFilters = new RentoomQueryOffer
-                {
-                    IdoOfferParams = idoParams,
-                    ApartmentFilterParams = filters
-                };
-
-                var filteredOffers = await _rentoomOfferService.getOfferWitFilter(rentoomFilters);
-
-                if (filteredOffers?.PricingOffers != null)
-                {
-                    Offers.AddRange(filteredOffers.PricingOffers);
-                }
+                await GetFilteredOffers(items, filters, forceReset: false);
 
                 SortItemsByOffers();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Błąd przy filtrowaniu: {ex.Message}");
+                Console.WriteLine(ex.Message);
             }
-            finally 
+            finally
             {
                 ApartmentsIsLoading = false;
                 NotifyStateChanged();
             }
         }
 
-
         private async Task HandleSearchAsync(Dictionary<string, string> query, bool updateUrl)
         {
-            StartDate = query.GetValueOrDefault("startDate", "");
-            EndDate = query.GetValueOrDefault("endDate", "");
-            Adults = query.GetValueOrDefault("adults", "");
-            Children = query.GetValueOrDefault("children", "");
-            Rooms = query.GetValueOrDefault("rooms", "");
+            if (query.ContainsKey("startDate")) StartDate = query["startDate"];
+            if (query.ContainsKey("endDate")) EndDate = query["endDate"];
+            if (query.ContainsKey("adults")) Adults = query["adults"];
+            if (query.ContainsKey("children")) Children = query["children"];
+            if (query.ContainsKey("rooms")) Rooms = query["rooms"];
+
 
             if (updateUrl)
             {
@@ -194,6 +185,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 queryParams["adults"] = Adults;
                 queryParams["children"] = Children;
                 queryParams["rooms"] = Rooms;
+        
+                queryParams.Remove("minPrice");
+                queryParams.Remove("maxPrice");
 
                 var newUri = $"{uri.AbsolutePath}?{queryParams}";
                 _navManager.NavigateTo(newUri, forceLoad: false);
@@ -205,17 +199,22 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             HasMore = false;
 
             await GetApartmentsCount();
+    
             ApartmentsIsLoading = true;
             NotifyStateChanged();
 
-            Items.AddRange(await GetAllApartments() ?? new List<ApartmentObject>());
+            var fetchedItems = await GetAllApartments() ?? new List<ApartmentObject>();
+            Items.AddRange(fetchedItems);
 
-            await GetFilteredOffers();
-
+            await GetFilteredOffers(fetchedItems, explicitFilters: null, forceReset: true);
+    
             SortItemsByOffers();
 
             ApartmentsIsLoading = false;
             IsSearch = true;
+            
+            SliderResetKey = Guid.NewGuid();
+    
             NotifyStateChanged();
         }
 
@@ -229,7 +228,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+                Console.WriteLine($"Error: {ex.Message}");
                 ApartmentsCount = null;
             }
             finally
@@ -258,11 +257,18 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             }
         }
 
-        private async Task GetFilteredOffers()
+        private async Task GetFilteredOffers(List<ApartmentObject> items, ApartmentFilters? explicitFilters = null, bool forceReset = false)
         {
             try
             {
-                var items = await GetAllApartments() ?? new List<ApartmentObject>();
+                if (items == null || !items.Any())
+                {
+                    ScaleMinPrice = 0;
+                    ScaleMaxPrice = 0;
+                    FilterMinPrice = 0;
+                    FilterMaxPrice = 0;
+                    return;
+                }
 
                 List<int> ids = items.Select(a => a.Id).ToList();
 
@@ -278,18 +284,72 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 var filters = new RentoomQueryOffer
                 {
                     IdoOfferParams = idoParams,
-                    ApartmentFilterParams = new ApartmentFilters()
+                    ApartmentFilterParams = explicitFilters ?? new ApartmentFilters(),
+                    PriceFilter = null
                 };
 
                 var filteredOffers = await _rentoomOfferService.getOfferWitFilter(filters);
+
                 if (filteredOffers?.PricingOffers != null)
                 {
-                    Offers.AddRange(filteredOffers.PricingOffers);
+                    var allOffers = filteredOffers.PricingOffers;
+
+                    if (allOffers.Any())
+                    {
+                        var newScaleMin = (int)allOffers.Min(o => o.MinimalPrice) - 1;
+                        var newScaleMax = (int)allOffers.Max(o => o.MinimalPrice) + 1;
+                        
+                        ScaleMinPrice = newScaleMin;
+                        ScaleMaxPrice = newScaleMax;
+
+                        if (forceReset)
+                        {
+                            FilterMinPrice = newScaleMin;
+                            FilterMaxPrice = newScaleMax;
+                        }
+                        else
+                        {
+                            if (FilterMinPrice == null) FilterMinPrice = newScaleMin;
+                            if (FilterMaxPrice == null) FilterMaxPrice = newScaleMax;
+
+                            if (FilterMinPrice < newScaleMin) FilterMinPrice = newScaleMin;
+                            if (FilterMaxPrice > newScaleMax) FilterMaxPrice = newScaleMax;
+                            
+                            if (FilterMinPrice > FilterMaxPrice)
+                            {
+                                FilterMinPrice = newScaleMin;
+                                FilterMaxPrice = newScaleMax;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ScaleMinPrice = 0;
+                        ScaleMaxPrice = 0;
+                        FilterMinPrice = 0;
+                        FilterMaxPrice = 0;
+                    }
+
+                    var minLimit = FilterMinPrice ?? 0;
+                    var maxLimit = (FilterMaxPrice.HasValue && FilterMaxPrice > 0) ? FilterMaxPrice.Value : int.MaxValue;
+
+                    var displayedOffers = allOffers
+                        .Where(o => o.MinimalPrice >= minLimit && o.MinimalPrice <= maxLimit)
+                        .ToList();
+
+                    Offers.AddRange(displayedOffers);
+                }
+                else
+                {
+                    ScaleMinPrice = 0;
+                    ScaleMaxPrice = 0;
+                    FilterMinPrice = 0;
+                    FilterMaxPrice = 0;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+                Console.WriteLine($"Error in GetFilteredOffers: {ex.Message}");
             }
         }
 
@@ -303,6 +363,16 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             Adults = query.TryGetValue("adults", out var a) ? a.ToString() : "";
             Children = query.TryGetValue("children", out var c) ? c.ToString() : "";
             Rooms = query.TryGetValue("rooms", out var r) ? r.ToString() : "";
+            
+            if (int.TryParse(query.TryGetValue("minPrice", out var min) ? min.ToString() : null, out int minVal))
+            {
+                FilterMinPrice = minVal;
+            }
+
+            if (int.TryParse(query.TryGetValue("maxPrice", out var max) ? max.ToString() : null, out int maxVal))
+            {
+                FilterMaxPrice = maxVal;
+            }
         }
 
         private void SortItemsByOffers()
