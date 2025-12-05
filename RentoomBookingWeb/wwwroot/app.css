@@ -143,6 +143,21 @@ code {
     border-radius: 999rem;
     border: 0.1rem solid #1F5A41;
     font-weight: bold;
+    position: relative;
+    overflow: visible;
+}
+
+.marker-offer::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-bottom: 0.1rem solid #1F5A41;
+    border-right: 0.1rem solid #1F5A41;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
 }
 
 /*.custom-cluster {*/
@@ -167,6 +182,19 @@ code {
     font-weight: bold;
     line-height: normal !important;
     text-align: center;
+}
+
+.custom-cluster::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-bottom: 0.1rem solid #1F5A41;
+    border-right: 0.1rem solid #1F5A41;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
 }
 
 @keyframes pulse {

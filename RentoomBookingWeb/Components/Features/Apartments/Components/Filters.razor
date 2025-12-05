@@ -4,25 +4,6 @@
 @inject NavigationManager Navigation
 
 <div class="filters-container">
-    
-    <p class="filters-title">Twój przedział cenowy (@MinPriceOffer zł - @MaxPriceOffer zł)</p>
-    
-    <div class="">
-        <PricesPickerRange 
-            IconPath="assets/svgs/filter/money.svg"
-            MinPrice="@MinPriceOffer"
-            MaxPrice="@MaxPriceOffer"
-            StartPriceValue="@_minPrice"
-            StartPriceValueChanged="OnStartPriceChanged"
-            EndPriceValue="@_maxPrice"
-            EndPriceValueChanged="OnEndPriceChanged"
-            />
-    </div>
-
-    <hr/>
-    
-    <p class="filters-title">Gdzie chcesz się zameldować?</p>
-
     @if (_isLoading)
     {
         <div class="text-skeleton"></div>
@@ -34,8 +15,17 @@
     }
     else
     {
-        <div class="filters grid-2">
-            @foreach (var option in _locations)
+        @if (!IsMapActive)
+        {
+            <div @onclick="HandleClickOnMapFilter" class="map-filter">
+                <span class="map-filter-title">WIDOK MAPY</span>
+            </div>
+        }
+        
+        <p class="filters-title">Gdzie chcesz się zameldować?</p>
+        
+        <div class="filters">
+            @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
             {
                 <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
                     <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
@@ -48,6 +38,20 @@
                 </div>
             }
         </div>
+        
+        @if (MinPriceOffer != 0 && MaxPriceOffer != 0)
+        {
+            <hr/>
+        
+            <div class="price-filter" style="padding: 0 10px;">
+                <PricesPickerRange
+                    Min="@MinPriceOffer" 
+                    Max="@MaxPriceOffer"
+                    @bind-MinSelected="_minPrice"
+                    @bind-MaxSelected="_maxPrice"
+                    OnRangeChanged="HandlePriceCommit"/>
+            </div>
+        }
 
         <hr/>
 
@@ -67,34 +71,40 @@
                 </div>
             }
         </div>
+        
+        @if (HasSelectedFilters)
+        {
+            <div class="reset-button-wrapper">
+                <Button @onclick="async () => await ResetFilters()" style="width: 100%">Zresetuj filtry</Button>  
+            </div> 
+        }
     }
 </div>
 
 @code {
+    [Parameter] public bool IsMapActive { get; set; } = false;
+    [Parameter] public int MinPriceOffer { get; set; } = 0;
+    [Parameter] public int MaxPriceOffer { get; set; } = 0;
+    [Parameter] public int? InitialMinPrice { get; set; }
+    [Parameter] public int? InitialMaxPrice { get; set; }
+    [Parameter] public Guid SliderResetKey { get; set; }
+
+    [Parameter] public EventCallback<(ApartmentFilters Filters, int MinPrice, int MaxPrice)> OnFiltersChanged { get; set; }
+    [Parameter] public EventCallback OnClickOnMap { get; set; }
+
     private List<FilterOption> _locations = new();
     private List<FilterOption> _filterOptions = new();
     private bool _isLoading = false;
-    
-    [Parameter] public int MinPriceOffer { get; set; } = 0;
-    [Parameter] public int MaxPriceOffer { get; set; } = 0;
-    
     private int _minPrice;
     private int _maxPrice;
 
     protected override void OnParametersSet()
     {
-        _minPrice = MinPriceOffer;
-        _maxPrice = MaxPriceOffer;
-    }
-    
-    private void OnStartPriceChanged(int newValue)
-    {
-        _minPrice = newValue;
-    }
-
-    private void OnEndPriceChanged(int newValue)
-    {
-        _maxPrice = newValue;
+        if (_minPrice == 0)
+            _minPrice = InitialMinPrice.HasValue && InitialMinPrice > 0 ? InitialMinPrice.Value : MinPriceOffer;
+        
+        if (_maxPrice == 0)
+            _maxPrice = InitialMaxPrice.HasValue && InitialMaxPrice > 0 ? InitialMaxPrice.Value : MaxPriceOffer;
     }
 
     public class FilterOption
@@ -106,9 +116,7 @@
 
         public FilterOption(string id, string name, string icon)
         {
-            Id = id;
-            Name = name;
-            Icon = icon;
+            Id = id; Name = name; Icon = icon;
         }
     }
 
@@ -120,44 +128,14 @@
     private async Task GetFilters()
     {
         _isLoading = true;
-
-        try
-        {
+        try {
             var filters = await ApartmentSearchFiltersService.GetFiltersAsync();
-
-            var locationFilters = filters
-                .FirstOrDefault(f => f.id == "city-regions-filter")
-                ?.filtersDictionary
-                .GetValueOrDefault("pl");
-
-            var amenitiesFilters = filters
-                .FirstOrDefault(f => f.id == "amenities-filter")
-                ?.filtersDictionary
-                .GetValueOrDefault("pl");
-
-            if (locationFilters != null)
-            {
-                _locations = locationFilters
-                    .Where(f => !string.IsNullOrEmpty(f.name))
-                    .Select(f => new FilterOption(f.id.ToString(), f.name, f.icon_materialui_name))
-                    .ToList();
-            }
-
-            if (amenitiesFilters != null)
-            {
-                _filterOptions = amenitiesFilters
-                    .Where(f => !string.IsNullOrEmpty(f.name))
-                    .Select(f => new FilterOption(f.id.ToString(), f.name, f.icon_materialui_name))
-                    .ToList();
-            }
-
+            var locationFilters = filters.FirstOrDefault(f => f.id == "city-regions-filter")?.filtersDictionary.GetValueOrDefault("pl");
+            var amenitiesFilters = filters.FirstOrDefault(f => f.id == "amenities-filter")?.filtersDictionary.GetValueOrDefault("pl");
+            if (locationFilters != null) _locations = locationFilters.Select(f => new FilterOption(f.id.ToString(), f.name, f.icon_materialui_name)).ToList();
+            if (amenitiesFilters != null) _filterOptions = amenitiesFilters.Select(f => new FilterOption(f.id.ToString(), f.name, f.icon_materialui_name)).ToList();
             ApplyUrlFilters();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
-
+        } catch (Exception ex) { Console.WriteLine(ex); }
         _isLoading = false;
     }
 
@@ -175,28 +153,33 @@
         await ApplyFilters();
     }
 
+    private async Task HandlePriceCommit()
+    {
+        UpdateUrl();
+        await ApplyFilters();
+    }
+
     private void UpdateUrl()
     {
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
 
         var selectedLocationIds = _locations.Where(l => l.IsSelected).Select(l => l.Id).ToList();
-        if (selectedLocationIds.Any())
-            query["locations"] = string.Join(",", selectedLocationIds);
-        else
-            query.Remove("locations");
+        if (selectedLocationIds.Any()) query["locations"] = string.Join(",", selectedLocationIds);
+        else query.Remove("locations");
 
         var selectedFilterIds = _filterOptions.Where(f => f.IsSelected).Select(f => f.Id).ToList();
-        if (selectedFilterIds.Any())
-            query["filters"] = string.Join(",", selectedFilterIds);
-        else
-            query.Remove("filters");
+        if (selectedFilterIds.Any()) query["filters"] = string.Join(",", selectedFilterIds);
+        else query.Remove("filters");
+
+        if (_minPrice > MinPriceOffer) query["minPrice"] = _minPrice.ToString();
+        else query.Remove("minPrice");
+
+        if (_maxPrice < MaxPriceOffer && MaxPriceOffer > 0) query["maxPrice"] = _maxPrice.ToString();
+        else query.Remove("maxPrice");
 
         var newQuery = query.ToString();
-        var newUri = string.IsNullOrEmpty(newQuery)
-            ? uri.AbsolutePath
-            : $"{uri.AbsolutePath}?{newQuery}";
-
+        var newUri = string.IsNullOrEmpty(newQuery) ? uri.AbsolutePath : $"{uri.AbsolutePath}?{newQuery}";
         Navigation.NavigateTo(newUri, forceLoad: false);
     }
 
@@ -205,42 +188,39 @@
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
 
-        var selectedLocationIds = (query["locations"] ?? string.Empty)
-            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(Uri.UnescapeDataString)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var selectedLocationIds = (query["locations"] ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
+        var selectedFilterIds = (query["filters"] ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
 
-        var selectedFilterIds = (query["filters"] ?? string.Empty)
-            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(Uri.UnescapeDataString)
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        foreach (var location in _locations)
-            location.IsSelected = selectedLocationIds.Contains(location.Id);
-
-        foreach (var filter in _filterOptions)
-            filter.IsSelected = selectedFilterIds.Contains(filter.Id);
-
+        foreach (var location in _locations) location.IsSelected = selectedLocationIds.Contains(location.Id);
+        foreach (var filter in _filterOptions) filter.IsSelected = selectedFilterIds.Contains(filter.Id);
+        
         StateHasChanged();
     }
-    
-    [Parameter] public EventCallback<ApartmentFilters> OnFiltersChanged { get; set; }
 
     private async Task ApplyFilters()
     {
         var filters = new ApartmentFilters
         {
-            ApartmentAmenitiesFilter = _filterOptions
-                .Where(f => f.IsSelected)
-                .Select(f => int.Parse(f.Id))
-                .ToList(),
-
-            ApartmentLocationsFilter = _locations
-                .Where(l => l.IsSelected)
-                .Select(l => l.Name)
-                .ToList()
+            ApartmentAmenitiesFilter = _filterOptions.Where(f => f.IsSelected).Select(f => int.Parse(f.Id)).ToList(),
+            ApartmentLocationsFilter = _locations.Where(l => l.IsSelected).Select(l => l.Name).ToList()
         };
 
-        await OnFiltersChanged.InvokeAsync(filters);
+        await OnFiltersChanged.InvokeAsync((filters, _minPrice, _maxPrice));
+    }
+
+    private async Task HandleClickOnMapFilter() => await OnClickOnMap.InvokeAsync();
+    
+    private bool HasSelectedFilters => _locations.Any(l => l.IsSelected) || _filterOptions.Any(f => f.IsSelected) || _minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer;
+
+    private async Task ResetFilters()
+    {
+        foreach (var location in _locations) location.IsSelected = false;
+        foreach (var filter in _filterOptions) filter.IsSelected = false;
+        
+        _minPrice = MinPriceOffer;
+        _maxPrice = MaxPriceOffer;
+        
+        UpdateUrl();
+        await ApplyFilters();
     }
 }

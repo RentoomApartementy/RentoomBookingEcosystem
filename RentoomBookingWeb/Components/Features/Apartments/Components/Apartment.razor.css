@@ -134,12 +134,22 @@
 }
 
 .apartment-price-info {
-    display: flex;
     width: 100%;
-    background: rgba(237, 237, 237, 0.56);
-    border-radius: 8px;
-    margin-bottom: .5rem;
-    padding: .3rem 1rem;
+    display: flex;
+}
+
+.price-wrapper {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1rem;
+}
+
+.price {
+    font-size: 1.2rem;
+}
+
+.non-offer {
+    
 }
 
 /*.nav-dot-wrapper {*/
@@ -211,4 +221,27 @@
     left: 50%;
     transform: translateX(-50%);
     color: rgba(255, 255, 255, 0.51);
+}
+
+.skeleton-text {
+    display: inline-block;
+    background-color: #eee;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+    
+.skeleton-text.title {
+    height: 24px;
+    width: 80%;
+    margin-bottom: 8px;
+}
+
+.skeleton-text.address {
+    height: 16px;
+    width: 60%;
+}
+
+.skeleton-text.mini {
+    height: 16px;
+    width: 50px;
 }

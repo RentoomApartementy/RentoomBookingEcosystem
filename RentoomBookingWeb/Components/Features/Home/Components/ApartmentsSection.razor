@@ -6,33 +6,51 @@
         <h2 class="city-subtitle">Szukasz komfortowego apartamentu w Toruniu?</h2>
     </div>
     
-    <Slider ItemsPerPage="3">
-        <Item>
-            <Apartment/>
-        </Item>
-        <Item>
-            <Apartment/>
-        </Item>
-        <Item>
-            <Apartment/>
-        </Item>
-        <Item>
-            <Apartment/>
-        </Item>
-        <Item>
-            <Apartment/>
-        </Item>
-        <Item>
-            <Apartment/>
-        </Item>
-        <Item>
-            <Apartment/>
-        </Item>
-        <Item>
-            <Apartment/>
-        </Item>
-        <Item>
-            <Apartment/>
-        </Item>
-    </Slider>
+    @if (!string.IsNullOrEmpty(Error))
+    {
+        <p class="text-red-600">@Error</p>
+    }
+    else
+    {
+        @if (!ApartmentsIsLoading)
+        {
+            <Slider ItemsPerPage="4">
+                @foreach (var apartment in Apartments)
+                {
+                    <Item>
+                        <div class="apartment-slide-col">
+                            <Apartment Item="@apartment" 
+                                       Offer="@GetPricingOfferByObjectId(apartment.Id)" 
+                                       ShowPrice="true"/>
+                        </div>
+                    </Item>
+                }  
+            </Slider>   
+        }
+        else
+        {
+            <Slider ItemsPerPage="4">
+                <Item>
+                    <div class="apartment-slide-col">
+                        <Apartment />
+                    </div>
+                </Item>
+                <Item>
+                    <div class="apartment-slide-col">
+                        <Apartment />
+                    </div>
+                </Item>
+                <Item>
+                    <div class="apartment-slide-col">
+                        <Apartment />
+                    </div>
+                </Item>
+                <Item>
+                    <div class="apartment-slide-col">
+                        <Apartment />
+                    </div>
+                </Item>
+            </Slider>   
+        } 
+    }
 </div>
