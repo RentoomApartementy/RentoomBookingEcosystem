@@ -4,7 +4,7 @@
 @inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
 
-<article @ref="_elementRef" @onclick="GoToApartment" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
+<article @ref="_elementRef" @onclick="GoToReservation" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
     <header>
         @if (_currentObjectMedium == null)
         {
@@ -146,7 +146,7 @@
                 </div>
             }
             <Button @onclick="GoToReservation" Disabled="@(Item == null || (ShowPrice && Offer == null))">
-                Rezerwacja
+                Zarezerwuj
             </Button>
         </div>
     </div>
@@ -237,11 +237,11 @@
             string? adults    = queryParams.ContainsKey("adults")    ? queryParams["adults"].ToString()    : null;
             string? children  = queryParams.ContainsKey("children")  ? queryParams["children"].ToString()  : null;
 
-            string url = $"/rezerwacja/{Item.Id}";
+            string url = $"/apartamenty/{Item.Id}";
 
             if (startDate != null || endDate != null || adults != null || children != null)
             {
-                url = $"/rezerwacja/{Item.Id}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
+                url = $"/apartamenty/{Item.Id}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
             }
 
             Navigation.NavigateTo(url);
