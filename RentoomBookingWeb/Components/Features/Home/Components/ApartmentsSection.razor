@@ -1,4 +1,4 @@
-@using RentoomBookingWeb.Components.Features.Apartments.Components
+@using RentoomBookingWeb.Components.Features.Apartments.Components;
 
 <div class="apartments-section-container">
     <div class="apartments-section-container-text">
@@ -18,10 +18,12 @@
                 @foreach (var apartment in Apartments)
                 {
                     <Item>
-                        <div class="apartment-slide-col">
+                        <div @onclick="() => GoToApartmentWithOffer(apartment.Id)" class="apartment-slide-col">
                             <Apartment Item="@apartment" 
                                        Offer="@GetPricingOfferByObjectId(apartment.Id)" 
-                                       ShowPrice="true"/>
+                                       ShowPrice="true"
+                                       DisableForGoToReservation="true"
+                                       />
                         </div>
                     </Item>
                 }  

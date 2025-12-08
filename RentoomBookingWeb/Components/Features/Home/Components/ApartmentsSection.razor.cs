@@ -8,6 +8,7 @@ namespace RentoomBookingWeb.Components.Features.Home.Components;
 public partial class ApartmentsSection : ComponentBase
 {
     [Inject] private IRentoomOfferService RentoomOfferService { get; set; } = default!;
+    [Inject] private NavigationManager Navigation { get; set; } = default!;
     
     public List<ApartmentObject> Apartments { get; private set; } = new();
     public List<PricingOffer> Offers { get; private set; } = new();
@@ -86,5 +87,9 @@ public partial class ApartmentsSection : ComponentBase
     
     public PricingOffer? GetPricingOfferByObjectId(int objectId)
         => Offers.Find(o => o.ObjectId == objectId);
-    
+
+    public void GoToApartmentWithOffer(int apartmentId)
+    {
+        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(6).ToString("yyyy-MM-dd")}/2/0");
+    }
 }

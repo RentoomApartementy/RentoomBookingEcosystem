@@ -4,7 +4,11 @@
 @inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
 
-<article @ref="_elementRef" @onclick="GoToReservation" class="apartment-card" itemscope itemtype="https://schema.org/Apartment">
+<article @ref="_elementRef" 
+         @onclick="GoToReservation" 
+         class="apartment-card" 
+         style="@(DisableForGoToReservation ? "cursor: default;" : "")"
+         itemscope itemtype="https://schema.org/Apartment">
     <header>
         @if (_currentObjectMedium == null)
         {
@@ -120,7 +124,7 @@
             </li>
         </ul>
         
-        <div @onclick:stopPropagation="true" class="apartment-button-wrapper">
+        <div class="apartment-button-wrapper">
             @if (ShowPrice)
             {
                 <div class="apartment-price-info">
@@ -145,7 +149,9 @@
                     } 
                 </div>
             }
-            <Button @onclick="GoToReservation" Disabled="@(Item == null || (ShowPrice && Offer == null))">
+            
+            <Button @onclick="GoToReservation" 
+                    Disabled="@(Item == null || (ShowPrice && Offer == null))">
                 Zarezerwuj
             </Button>
         </div>
@@ -157,6 +163,9 @@
     [Parameter] public ApartmentObject? Item { get; set; } = null;
     [Parameter] public PricingOffer? Offer { get; set; } = null;
     [Parameter] public bool ShowPrice { get; set; } = false;
+    
+    [Parameter] public bool DisableForGoToReservation { get; set; } = false;
+
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
     private ObjectMedium? _currentObjectMedium = null;
@@ -187,7 +196,6 @@
     protected override async Task OnInitializedAsync()
     {
         _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
-        //await GetObjectMedia();
     }
     
     private async Task GetObjectMedia()
@@ -198,14 +206,6 @@
             _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>();
             _currentMediumIndex = 0;
             _currentObjectMedium = _objectMediums.FirstOrDefault();
-        }
-    }
-    
-    private void GoToApartment()
-    {
-        if (Item != null)
-        {
-            Navigation.NavigateTo($"/apartamenty/{Item.Id}");
         }
     }
 
@@ -226,6 +226,8 @@
 
     private void GoToReservation()
     {
+        if (DisableForGoToReservation) return;
+
         if (Item != null)
         {
             var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
