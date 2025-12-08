@@ -1,14 +1,14 @@
-@page "/apartamenty/{id:int}";
-@page "/apartamenty/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}";
-@using RentoomBooking.SharedClasses.Models.IdoBooking;
-@using RentoomBooking.SharedClasses.Services.IdoBooking;
-@using System.Globalization;
+@page "/apartamenty/{id:int}"
+@page "/apartamenty/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Services.IdoBooking
+@using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBookingWeb.Components.Features.Apartments.Components
-@inject IApartmentsService ApartmentsService;
-@inject IIdoApartmentService IdoApartmentService;
-@inject NavigationManager Navigation;
-@inject IIdoOfferService OfferService;
+@inject IApartmentsService ApartmentsService
+@inject IIdoApartmentService IdoApartmentService
+@inject NavigationManager Navigation
+@inject IIdoOfferService OfferService
 
 <PageTitle>@_apartment?.Name</PageTitle>
 
@@ -22,79 +22,122 @@
     
     <div class="main-wrapper">
         
-        <div class="apartment-wrapper">
-            <div class="apartment-text-wrapper">
-                <div class="">
-                    <h2>@_apartment?.Name</h2>
-                    <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>,
-                    <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>
-                    <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
-                </div>
-            
-                <ul class="apartment-details">
-                    <li>
-                        <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon"/>
-                        <span itemprop="occupancy">@_apartment?.MinCapacity - @_apartment?.Capacity</span>
-                    </li>
-                    <li>
-                        <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon"/>
-                        @_bedsCount
-                    </li>
-                    <li>
-                        <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon"/>
-                        1
-                    </li>
-                    <li>
-                        <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon"/>
-                        <span itemprop="floorSize">@_apartment?.Area m²</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div style="margin-top: 1rem;"></div>
-            
-            <Images ImagesList="_objectMediums"></Images>
-
-            @* <div class="apartment-map-wrapper"> *@
-            @*     $1$ <Images ImagesList="_objectMediums"></Images> #1# *@
-            @*      *@
-            
-            @* </div> *@
-
-            <article class="description-wrapper">
-                @if (!string.IsNullOrEmpty(_objectDescription?.ShortDescription))
-                {
-                    <h4>@_objectDescription.ShortDescription</h4>
-                }
-
-                @if (!string.IsNullOrEmpty(_objectDescription?.LongDescription))
-                {
-                    <div class="long-description" itemprop="description">
-                        @((MarkupString)_objectDescription.LongDescription)
+        <div class="left-container">
+            <div class="apartment-wrapper @(_isExpanded ? "expanded" : "collapsed")">
+                <div class="apartment-text-wrapper">
+                    <div class="">
+                        <h2>@_apartment?.Name</h2>
+                        <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>,
+                        <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>
+                        <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
                     </div>
-                }
-            </article>
+                
+                    <ul class="apartment-details">
+                        <li>
+                            <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon"/>
+                            <span itemprop="occupancy">@_apartment?.MinCapacity - @_apartment?.Capacity</span>
+                        </li>
+                        <li>
+                            <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon"/>
+                            @_bedsCount
+                        </li>
+                        <li>
+                            <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon"/>
+                            1
+                        </li>
+                        <li>
+                            <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon"/>
+                            <span itemprop="floorSize">@_apartment?.Area m²</span>
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="amenities-wrapper">
-                @if (_amenities != null)
-                {
-                    @foreach (var amenity in _amenities)
+                <div style="margin-top: 1rem;"></div>
+                
+                <Images ImagesList="_objectMediums"></Images>
+
+                <article class="description-wrapper">
+                    @if (!string.IsNullOrEmpty(_objectDescription?.ShortDescription))
                     {
-                        <div class="amenity">
-                            @amenity.Name
+                        <h4>@_objectDescription.ShortDescription</h4>
+                    }
+
+                    @if (!string.IsNullOrEmpty(_objectDescription?.LongDescription))
+                    {
+                        <div class="long-description" itemprop="description">
+                            @((MarkupString)_objectDescription.LongDescription)
                         </div>
                     }
+                </article>
+
+                <div class="amenities-wrapper">
+                    @if (_amenities != null)
+                    {
+                        @foreach (var amenity in _amenities)
+                        {
+                            <div class="amenity">
+                                @amenity.Name
+                            </div>
+                        }
+                    }
+                </div>
+
+                @if (!_isExpanded)
+                {
+                    <div class="wrapper-shadow"></div>
                 }
             </div>
 
-            @* <div class="apartment-button-wrapper"> *@
-            @*     <Button @onclick="GoToReservation">Rezerwacja</Button> *@
-            @* </div> *@
+            <span class="read-more-btn" @onclick="ToggleExpand">
+                @(_isExpanded ? "Zwiń szczegóły" : "Pokaż całość")
+            </span>
         </div>
 
         <div class="info-box">
             <div class="reservation-info">
-                ss
+                    <div>
+                        <h5>Wybrany termin</h5>
+                        @if (StartDate != null && EndDate != null)
+                        {
+                            <p>Od @StartDate do @EndDate</p>
+                        }
+                        else
+                        {
+                            <p>brak wybranego terminu</p>
+                        }
+                        
+                        <h5>Liczba osób</h5>
+                        @if (StartDate != null && EndDate != null)
+                        {
+                            <p>Dorośli: @Adults, Dzieci: @(Children != null ? Children :  0)</p>
+                        }
+                        else
+                        {
+                            <p>brak wybranej liczby osób</p>
+                        }
+                        
+                        @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
+                        {
+                            <div class="offer-price-wrapper">
+                                <div class="offer-price">
+                                    <span>Oferta zwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
+                                </div>   
+                            
+                                <div class="offer-price">
+                                    <span>Oferta bezzwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
+                                </div> 
+                                
+                                <div style="margin-top: .2rem"></div>
+                                <Button>Zarezerwuj</Button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div >
+                                brak oferty 
+                            </div>
+                        }
+                    </div>
             </div>
             
             <div class="map">
@@ -123,10 +166,9 @@
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
     private ObjectMedium? _currentObjectMedium = null;
-    
     private List<ObjectAmenity>? _amenities = null;
-    
     private int? _bedsCount = null;
+    private bool _isExpanded = false;
     
     private static Dictionary<string, string> _languageMap = new Dictionary<string, string>
     {
@@ -144,21 +186,23 @@
         _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
         await GetObjectMedia();
         
-        var idString = _apartment?.Id;
         if (_apartment !=null)
         {
             await GetObjectDescription(_apartment.Id, CurrentLanguage);
             _amenities = await GetAmenities(_apartment.Id);
+            _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
         }
         
-        _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
-
         await GetOffer();
     }
     
+    private void ToggleExpand()
+    {
+        _isExpanded = !_isExpanded;
+    }
+
     private async Task GetObjectMedia()
     {
-        var idString = _apartment?.Id;
         if (_apartment != null)
         {
             _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>();
@@ -211,7 +255,7 @@
         NumberOfBigChildren = int.TryParse(Children, out var c) ? c : null
     };
     
-    private PricingOffersResponse? _offersResponse = null;
+    private PricingOffersResponse? _offersResponse;
     private async Task GetOffer()
     {
         _offersResponse = await OfferService.GetPricingOffersAsync(CurrentRequest);

@@ -6,6 +6,77 @@
     flex-direction: column;
     gap: 2rem;
     align-items: center;
+    padding-bottom: 2rem;
+}
+
+.main-wrapper {
+    width: 90%;
+    display: flex;
+    gap: 2rem;
+}
+
+.left-container {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.apartment-wrapper {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+}
+
+.apartment-wrapper.collapsed {
+    max-height: 900px;
+}
+
+.apartment-wrapper.expanded {
+    max-height: none;
+    overflow: visible;
+}
+
+.wrapper-shadow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(to bottom, rgba(247,247,247,0), rgba(247,247,247,1));
+    pointer-events: none;
+    z-index: 10;
+}
+
+.read-more-btn {
+    align-self: center;
+    margin-top: 1rem;
+    background: none;
+    color: #1F5A41;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.read-more-btn:hover {
+    background-color: #e6f0eb;
+}
+
+.apartment-text-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 910px) {
+    .apartment-text-wrapper {
+        flex-direction: column;
+    }
 }
 
 .image-wrapper {
@@ -25,13 +96,11 @@
 
 .image-container {
     position: relative;
-
 }
 
-.left-button {
+.left-button, .right-button {
     position: absolute;
     top: 0;
-    left: 0;
     height: 100%;
     width: 40px;
     background-color: #0c4128;
@@ -46,27 +115,9 @@
     user-select: none;
 }
 
-.right-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100%;
-    width: 40px;
-    background-color: #0c4128;
-    z-index: 99;
-    color: white;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
-    user-select: none;
-}
-
-.left-button:hover, .right-button:hover {
-    opacity: .85;
-}
+.left-button { left: 0; }
+.right-button { right: 0; }
+.left-button:hover, .right-button:hover { opacity: .85; }
 
 .image-counter {
     position: absolute;
@@ -90,23 +141,14 @@
 .loading-image .skeleton {
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-            90deg,
-            #f0f0f0 0%,
-            #e0e0e0 50%,
-            #f0f0f0 100%
-    );
+    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
 }
 
 @keyframes skeleton-loading {
-    0% {
-        background-position: 200% 0;
-    }
-    100% {
-        background-position: -200% 0;
-    }
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 .apartment-map-wrapper {
@@ -165,28 +207,6 @@
     justify-content: end;
 }
 
-.main-wrapper {
-    width: 90%;
-    display: flex;
-    gap: 2rem;
-    
-}
-
-.apartment-wrapper {
-    width: 80%;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 20px;
-    color: #333;
-    position: relative;
-}
-
-.apartment-text-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-
 .info-box {
     width: 20%;
     height: 56vh;
@@ -201,7 +221,7 @@
 .reservation-info {
     width: 100%;
     flex: 0 0 auto;
-    padding: 1rem 2rem;
+    padding: 1rem;
     border: 1px solid #C9C9C9;
     background-color: #EBEBEB;
     border-radius: 10px;
@@ -216,14 +236,48 @@
     border: 1px solid #1F5A41;
 }
 
-@media (max-width: 910px) {
+.offer-price {
+    width: 100%;
+    padding: .5rem .8rem;
+    border-radius: .7rem;
+    background-color: #dadada;
+}
+
+.offer-price-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+@media (max-width: 810px) {
+    .main-wrapper {
+        flex-direction: column;
+        width: 95%;
+    }
+
+    .left-container {
+        width: 100%;
+    }
+
+    .info-box {
+        width: 100%;
+        height: auto;
+        position: static;
+        margin-top: 2rem;
+    }
+
+    .apartment-wrapper {
+        padding: 0;
+    }
+
     .image-wrapper {
         height: 270px;
         flex: none;
     }
 
     .map {
-        height: 135px;
+        height: 200px;
         flex: none;
     }
 
