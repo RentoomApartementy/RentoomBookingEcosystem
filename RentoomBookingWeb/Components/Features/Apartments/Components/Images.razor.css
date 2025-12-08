@@ -255,3 +255,32 @@
     .next-btn { right: 10px; }
     .thumbnails-container { justify-content: flex-start; }
 }
+
+
+.skeleton {
+    background-color: #e0e0e0;
+    background-image: linear-gradient(
+            90deg,
+            #e0e0e0 0px,
+            #f5f5f5 50%,
+            #e0e0e0 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: .5rem;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-right-item {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+}
