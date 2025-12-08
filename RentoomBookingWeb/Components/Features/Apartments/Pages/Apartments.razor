@@ -89,7 +89,13 @@
                 }
                 
                 <div class="apartments-items-map" style="display: @(ViewModel.IsMapView ? "block" : "none")">
-                    <ApartmentsMap Offers="@ViewModel.Offers" IsSearch="@ViewModel.IsSearch"></ApartmentsMap>
+                    <ApartmentsMap 
+                        Offers="@ViewModel.Offers" 
+                        IsSearch="@ViewModel.IsSearch" 
+                        StartDate="@ViewModel.StartDate" 
+                        EndDate="@ViewModel.EndDate" 
+                        Adults="@ViewModel.Adults" 
+                        Children="@ViewModel.Children"></ApartmentsMap>
                 </div>      
                 
             </div>
