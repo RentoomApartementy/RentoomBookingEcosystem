@@ -33,6 +33,15 @@
         import { setCultureCookieAndReload } from './js/cultureManager.js';
         setCultureCookieAndReload(".AspNetCore.Culture");
     </script>
+    
+    <script>
+    window.scrollToElement = (elementId) => {
+        var element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+    </script>
     </body>
 
 </html>

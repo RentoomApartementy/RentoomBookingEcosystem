@@ -9,6 +9,7 @@
 @inject IIdoApartmentService IdoApartmentService
 @inject NavigationManager Navigation
 @inject IIdoOfferService OfferService
+@inject IJSRuntime JSRuntime
 
 <PageTitle>@_apartment?.Name</PageTitle>
 
@@ -95,49 +96,51 @@
 
         <div class="info-box">
             <div class="reservation-info">
-                    <div>
-                        <h5>Wybrany termin</h5>
-                        @if (StartDate != null && EndDate != null)
-                        {
-                            <p>Od @StartDate do @EndDate</p>
-                        }
-                        else
-                        {
-                            <p>brak wybranego terminu</p>
-                        }
+                <div>
+                    <h5>Wybrany termin</h5>
+                    @if (StartDate != null && EndDate != null)
+                    {
+                        <p>Od @StartDate do @EndDate</p>
+                    }
+                    else
+                    {
+                        <p>brak wybranego terminu</p>
+                    }
                         
-                        <h5>Liczba osób</h5>
-                        @if (StartDate != null && EndDate != null)
-                        {
-                            <p>Dorośli: @Adults, Dzieci: @(Children != null ? Children :  0)</p>
-                        }
-                        else
-                        {
-                            <p>brak wybranej liczby osób</p>
-                        }
+                    <h5>Liczba osób</h5>
+                    @if (StartDate != null && EndDate != null)
+                    {
+                        <p>Dorośli: @Adults, Dzieci: @(Children != null ? Children :  0)</p>
+                    }
+                    else
+                    {
+                        <p>brak wybranej liczby osób</p>
+                    }
                         
-                        @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
-                        {
-                            <div class="offer-price-wrapper">
-                                <div class="offer-price">
-                                    <span>Oferta zwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
-                                </div>   
+                    @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
+                    {
+                        <div class="offer-price-wrapper">
+                            <div class="offer-price">
+                                <span>Oferta zwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
+                            </div>   
                             
-                                <div class="offer-price">
-                                    <span>Oferta bezzwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
-                                </div> 
+                            <div class="offer-price">
+                                <span>Oferta bezzwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
+                            </div> 
                                 
-                                <div style="margin-top: .2rem"></div>
-                                <Button>Zarezerwuj</Button>
+                            <div style="margin-top: .2rem"></div>
+                            <div style="width: 100%;" @onclick="ScrollToReservation">
+                                <Button style="width: 100%;">Zarezerwuj</Button>
                             </div>
-                        }
-                        else
-                        {
-                            <div >
-                                brak oferty 
-                            </div>
-                        }
-                    </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div >
+                            brak oferty 
+                        </div>
+                    }
+                </div>
             </div>
             
             <div class="map">
@@ -150,6 +153,57 @@
         </div>
 
     </div>
+    
+    <div style="margin-top: 2rem;"></div>
+    
+    <h3 class="header-text">Podsumowanie</h3>
+    
+    <SearchBar
+        StartDate="@StartDate"
+        EndDate="@EndDate"
+        Adults="@Adults"
+        Children="@Children"
+        IsRoom="false"
+        OnSearch="@(async query => await HandleSearch(query))"
+    ></SearchBar>
+    
+    <h3 id="confirm-reservation" class="header-text">Dodatkowe opcje</h3>
+    <div class="addon-list-container">
+        @if (_apartment?.Addons != null)
+        {
+            @foreach (var addon in _apartment.Addons)
+            {
+                <div class="addon-item">
+                    <label class="addon-label">
+                        <input type="checkbox" class="addon-checkbox" />
+                        <span class="addon-name">@addon.Name</span>
+                    </label>
+                </div>
+            }
+        }
+    </div>
+    
+    @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
+    {
+        <div class="summary-offer-price-wrapper">
+            <div class="summary-offer-price">
+                <span>Oferta zwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
+                <Button @onclick="GoToPayment">Zarezerwuj</Button>
+            </div>   
+                            
+            <div class="summary-offer-price">
+                <span>Oferta bezzwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
+                <Button @onclick="GoToPayment">Zarezerwuj</Button>
+            </div> 
+        </div>
+    }
+    else
+    {
+        <div >
+            brak oferty 
+        </div>
+    }
+    
 </div>
 
 @code {
@@ -259,5 +313,39 @@
     private async Task GetOffer()
     {
         _offersResponse = await OfferService.GetPricingOffersAsync(CurrentRequest);
+    }
+    
+    private async Task HandleSearch(Dictionary<string, string> query, bool updateUrl = true)
+    {
+        query.TryGetValue("startDate", out var startDate);
+        query.TryGetValue("endDate", out var endDate);
+        query.TryGetValue("adults", out var adults);
+        query.TryGetValue("children", out var children);
+
+        StartDate = startDate;
+        EndDate = endDate;
+        Adults = adults;
+        Children = children;
+
+        if (_apartment != null)
+        {
+            var url = $"/apartamenty/{_apartment.Id}/{StartDate}/{EndDate}/{Adults}/{Children}";
+            Navigation.NavigateTo(url, forceLoad: false);
+            await GetOffer();
+        }
+    }
+    
+    private void GoToPayment()
+    {
+        if (_apartment != null)
+        {
+            Navigation.NavigateTo($"/platnosc/{_apartment.Id}");
+        }
+    }
+    
+    private async Task ScrollToReservation()
+    {
+        await Task.Yield(); 
+        await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation");
     }
 }
