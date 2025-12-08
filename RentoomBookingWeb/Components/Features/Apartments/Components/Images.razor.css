@@ -28,6 +28,16 @@
     height: 100%;
 }
 
+@media (max-width: 910px) {
+    .images-right {
+        display: none !important;
+    }
+
+    .images-left {
+        width: 100% !important;
+    }
+}
+
 .images-right > img {
     border-radius: .5rem;
     width: 100%;
