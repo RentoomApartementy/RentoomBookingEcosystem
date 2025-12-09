@@ -26,8 +26,14 @@
 .apartment-info h2 {
     font-size: 1.4rem;
     margin-bottom: 8px;
-}
 
+    white-space: nowrap;
+    overflow: hidden;         
+    text-overflow: ellipsis;  
+
+    display: block;
+    width: 100%;
+}
 .apartment-details {
     list-style: none;
     padding: 0;
