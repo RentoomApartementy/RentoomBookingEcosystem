@@ -218,8 +218,6 @@
     
     private ApartmentObject? _apartment;
     private List<ObjectMedium>? _objectMediums = null;
-    private int _currentMediumIndex = 0;
-    private ObjectMedium? _currentObjectMedium = null;
     private List<ObjectAmenity>? _amenities = null;
     private int? _bedsCount = null;
     private bool _isExpanded = false;
@@ -260,24 +258,7 @@
         if (_apartment != null)
         {
             _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>();
-            _currentMediumIndex = 0;
-            _currentObjectMedium = _objectMediums.FirstOrDefault();
         }
-    }
-    
-    private void ChangeCurrentObjectMedium(int step)
-    {
-        if (_objectMediums == null || !_objectMediums.Any())
-            return;
-
-        _currentMediumIndex += step;
-
-        if (_currentMediumIndex < 0)
-            _currentMediumIndex = _objectMediums.Count - 1;
-        else if (_currentMediumIndex >= _objectMediums.Count)
-            _currentMediumIndex = 0;
-
-        _currentObjectMedium = _objectMediums[_currentMediumIndex];
     }
 
     private ObjectDescription? _objectDescription = null;
@@ -290,14 +271,6 @@
     private async Task<List<ObjectAmenity>?> GetAmenities(int objectId)
     {
         return await IdoApartmentService.GetObjectAmenitiesAsync(objectId);
-    }
-    
-    private void GoToReservation()
-    {
-        if (_apartment != null)
-        {
-            Navigation.NavigateTo($"/rezerwacja/{_apartment.Id}");
-        }
     }
     
     private PricingOffersRequest CurrentRequest => new PricingOffersRequest
