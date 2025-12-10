@@ -10,6 +10,9 @@
 @inject NavigationManager Navigation
 @inject IIdoOfferService OfferService
 @inject IJSRuntime JSRuntime
+@using RentoomBookingWeb.Models
+@using RentoomBookingWeb.Services
+@inject IAvailabilityFinderService AvailabilityFinder
 
 <PageTitle>@_apartment?.Name</PageTitle>
 
@@ -137,7 +140,21 @@
                     else
                     {
                         <div >
-                            brak oferty 
+                            brak oferty w wybranym terminie
+                            @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
+                            {
+                                <div @onclick="GoToSuggestionDates" class="suggest-offer">
+                                    <span>Sugerowany termin</span>
+                                    <b>Od @_suggestionDates?.StartDate do @_suggestionDates?.EndDate</b>
+                                </div>  
+                            }
+                            @if (_suggestionLoading)
+                            {
+                                <div class="suggest-offer">
+                                    <span>Sugerowany termin</span>
+                                    <b>Sprawdzanie dostępności...</b>
+                                </div>  
+                            }
                         </div>
                     }
                 </div>
@@ -155,6 +172,8 @@
     </div>
     
     <div style="margin-top: 2rem;"></div>
+    
+    <hr style="width: 90%;"/>
     
     <h3 class="header-text">Podsumowanie</h3>
     
@@ -199,8 +218,22 @@
     }
     else
     {
-        <div >
-            brak oferty 
+        <div class="summary-offer-price-wrapper">
+            Brak oferty w wybranym terminie
+            @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
+            {
+                <div class="summary-offer-price">
+                    <span>Sugerowany termin: <b>@_suggestionDates?.StartDate - @_suggestionDates?.EndDate</b></span>
+                    <Button @onclick="GoToSuggestionDates">Wybierz</Button>
+                </div>  
+            }
+            @if (_suggestionLoading)
+            {
+                <div class="summary-offer-price">
+                    <span>Sugerowany termin: <b>Sprawdzanie dostępności...</b></span>
+                    <Button Disabled="true">Wybierz</Button>
+                </div>  
+            }
         </div>
     }
     
@@ -221,6 +254,10 @@
     private List<ObjectAmenity>? _amenities = null;
     private int? _bedsCount = null;
     private bool _isExpanded = false;
+    private PricingOffersResponse? _offersResponse;
+
+    private AvailableTerm? _suggestionDates = null;
+    private bool _suggestionLoading = true;
     
     private static Dictionary<string, string> _languageMap = new Dictionary<string, string>
     {
@@ -238,7 +275,7 @@
         _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
         await GetObjectMedia();
         
-        if (_apartment !=null)
+        if (_apartment != null)
         {
             await GetObjectDescription(_apartment.Id, CurrentLanguage);
             _amenities = await GetAmenities(_apartment.Id);
@@ -247,6 +284,62 @@
         
         await GetOffer();
     }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    if (firstRender && _offersResponse?.Result?.PricingOffers?.Count == null)
+    {
+        bool shouldSearch = _offersResponse?.Result?.PricingOffers == null 
+                            || !_offersResponse.Result.PricingOffers.Any();
+
+        if (shouldSearch && _apartment != null)
+        {
+            _ = Task.Run(async () => 
+            {
+                await Task.Delay(140);
+
+                await LoadSuggestionInBackground();
+                
+                await InvokeAsync(StateHasChanged);
+            });
+        }
+    }
+}
+
+private async Task LoadSuggestionInBackground()
+{
+    try 
+    {
+        var aptId = _apartment?.Id ?? 0;
+        var sDate = StartDate;
+        var eDate = EndDate;
+        var aCount = int.TryParse(Adults, out var a) ? a : 2;
+        var cCount = int.TryParse(Children, out var c) ? c : 1;
+
+        if (aptId == 0) return;
+
+        var result = await AvailabilityFinder.FindNextAvailableTermAsync(
+            aptId, 
+            sDate, 
+            eDate, 
+            aCount, 
+            cCount
+        );
+
+        _suggestionDates = result;
+        _suggestionLoading = false;
+
+        if (_suggestionDates != null)
+        {
+            _suggestionLoading = false;
+            Console.WriteLine($"Znaleziono w tle: {_suggestionDates.StartDate}");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Błąd w tle: {ex.Message}");
+    }
+}
     
     private void ToggleExpand()
     {
@@ -282,7 +375,6 @@
         NumberOfBigChildren = int.TryParse(Children, out var c) ? c : null
     };
     
-    private PricingOffersResponse? _offersResponse;
     private async Task GetOffer()
     {
         _offersResponse = await OfferService.GetPricingOffersAsync(CurrentRequest);
@@ -308,6 +400,17 @@
         }
     }
     
+    private async Task GoToSuggestionDates()
+    {
+        if (_apartment != null && _suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
+        {
+            var url = $"/apartamenty/{_apartment.Id}/{_suggestionDates.StartDate}/{_suggestionDates.EndDate}/{Adults}/{Children}";
+            Navigation.NavigateTo(url, forceLoad: true);
+            await GetOffer();
+            StateHasChanged();
+        }
+    }
+    
     private void GoToPayment()
     {
         if (_apartment != null)
@@ -321,4 +424,5 @@
         await Task.Yield(); 
         await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation");
     }
+    
 }
