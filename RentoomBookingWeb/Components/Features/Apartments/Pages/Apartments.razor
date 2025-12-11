@@ -69,7 +69,16 @@
                         {
                             @foreach (var item in ViewModel.Items)
                             {
-                                <Apartment Item="@item" Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)" ShowPrice="@ViewModel.IsSearch"/>
+                                <Apartment 
+                                    Item="@item" 
+                                    Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)" 
+                                    ShowPrice="@ViewModel.IsSearch"
+                                    StartDate="@ViewModel.StartDate"
+                                    EndDate="@ViewModel.EndDate"
+                                    Adults="@ViewModel.Adults"
+                                    Children="@ViewModel.Children"
+                                    SuggestionDates="@ViewModel.GetSuggestionByObjectId(item.Id)"
+                                    />
                             }
                         }
 

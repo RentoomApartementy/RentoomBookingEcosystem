@@ -3,6 +3,10 @@
 @using RentoomBooking.SharedClasses.Services.IdoBooking;
 @inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
+@using RentoomBookingWeb.Models
+@using RentoomBookingWeb.Services
+@inject IAvailabilityFinderService AvailabilityFinder
+@inject IJSRuntime JS
 
 <article @ref="_elementRef" 
          @onclick="GoToReservation" 
@@ -137,7 +141,6 @@
                     }
                     else if (Item == null) 
                     {
-                        /* Skeleton dla ceny, jeśli element się ładuje */
                         <div class="price-wrapper">
                             <span class="skeleton skeleton-text mini" style="width: 80px; height: 24px;"></span>
                             <small class="skeleton skeleton-text mini" style="width: 60px; height: 12px; margin-top: 4px;"></small>
@@ -145,7 +148,17 @@
                     }
                     else
                     {
-                        <small class="non-offer">Brak oferty w wybranym terminie</small>
+                        <div class="non-offer-wrapper">
+                            @if (SuggestionDates?.StartDate != null && SuggestionDates?.EndDate != null)
+                            {
+                                <small>Sugerowany termin:</small>
+                                <b>Od @SuggestionDates?.StartDate do @SuggestionDates?.EndDate</b>
+                            }
+                            else
+                            {
+                                <small class="non-offer">Brak oferty w wybranym terminie</small>
+                            }
+                        </div>
                     } 
                 </div>
             }
@@ -164,15 +177,29 @@
     [Parameter] public PricingOffer? Offer { get; set; } = null;
     [Parameter] public bool ShowPrice { get; set; } = false;
     
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
+    [Parameter] public string? Adults { get; set; }
+    [Parameter] public string? Children { get; set; }
+    
     [Parameter] public bool DisableForGoToReservation { get; set; } = false;
+    
+    [Parameter] public AvailableTerm? SuggestionDates { get; set; } = null;
 
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
     private ObjectMedium? _currentObjectMedium = null;
     private int? _bedsCount = null;
-    [Inject] private IJSRuntime JS { get; set; } = default!;
+    
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<Apartment>? _objRef;
+
+    private ElementReference _elementRef;
+
+    protected override void OnInitialized()
+    {
+        _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
+    }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -188,20 +215,14 @@
     public async Task LoadMedia()
     {
         await GetObjectMedia();
-        StateHasChanged();
+     
+        await InvokeAsync(StateHasChanged);
     }
 
-    private ElementReference _elementRef;
-    
-    protected override async Task OnInitializedAsync()
-    {
-        _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
-    }
-    
     private async Task GetObjectMedia()
     {
         var id = Item?.Id;
-        if (id!=null)
+        if (id != null)
         {
             _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>();
             _currentMediumIndex = 0;
@@ -235,9 +256,9 @@
                 .QueryHelpers.ParseQuery(uri.Query);
 
             string? startDate = queryParams.ContainsKey("startDate") ? queryParams["startDate"].ToString() : null;
-            string? endDate   = queryParams.ContainsKey("endDate")   ? queryParams["endDate"].ToString()   : null;
-            string? adults    = queryParams.ContainsKey("adults")    ? queryParams["adults"].ToString()    : null;
-            string? children  = queryParams.ContainsKey("children")  ? queryParams["children"].ToString()  : null;
+            string? endDate = queryParams.ContainsKey("endDate") ? queryParams["endDate"].ToString() : null;
+            string? adults = queryParams.ContainsKey("adults") ? queryParams["adults"].ToString() : null;
+            string? children = queryParams.ContainsKey("children") ? queryParams["children"].ToString() : null;
 
             string url = $"/apartamenty/{Item.Id}";
 
@@ -249,4 +270,6 @@
             Navigation.NavigateTo(url);
         }
     }
+
+   
 }

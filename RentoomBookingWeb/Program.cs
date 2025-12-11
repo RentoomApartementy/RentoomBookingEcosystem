@@ -59,6 +59,8 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IIdoOfferService, IdoOfferService>();
             builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
             builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
+            
+            builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
             
             //view scoped

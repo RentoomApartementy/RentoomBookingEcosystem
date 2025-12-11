@@ -251,3 +251,8 @@
     height: 16px;
     width: 50px;
 }
+
+.non-offer-wrapper {
+    display: flex;
+    flex-direction: column;
+}
