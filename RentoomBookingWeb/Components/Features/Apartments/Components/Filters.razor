@@ -2,8 +2,15 @@
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @inject IApartmentSearchFiltersService ApartmentSearchFiltersService
 @inject NavigationManager Navigation
+@using RentoomBookingWeb.Components.Enums
 
-<div class="filters-container">
+<button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
+    <img src="assets/svgs/mobile-filters.svg" alt="" style="color: black;">
+    <span>Filtry</span>
+</button>
+
+<div class="filters-container @(_isMobileFiltersOpen ? "active" : "")">
+    
     @if (_isLoading)
     {
         <div class="text-skeleton"></div>
@@ -72,6 +79,13 @@
             }
         </div>
         
+        @if (_isMobileFiltersOpen)
+        {
+            <div >
+                <Button @onclick="ToggleMobileFilters" style="width: 100%; margin-top: 1rem;" Type="ButtonType.Secondary">Zastosuj filtry</Button>  
+            </div> 
+        }
+        
         @if (HasSelectedFilters)
         {
             <div class="reset-button-wrapper">
@@ -97,6 +111,13 @@
     private bool _isLoading = false;
     private int _minPrice;
     private int _maxPrice;
+    
+    private bool _isMobileFiltersOpen = false;
+
+    private void ToggleMobileFilters()
+    {
+        _isMobileFiltersOpen = !_isMobileFiltersOpen;
+    }
 
     protected override void OnParametersSet()
     {
