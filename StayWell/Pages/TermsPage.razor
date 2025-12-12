@@ -120,7 +120,31 @@
         }
         else
         {
-            NavigationManager.NavigateTo($"reservation/{Token}/HomePage");
+            await AcceptTermsAsync();
         }
+    }
+
+    private async Task AcceptTermsAsync()
+    {
+        var terms = new RentoomBooking.SharedClasses.Models.Database.EFEntitites.TermsEntity
+        {
+            ResToken = Token,
+            VersionAccepted = "0", 
+            TypeAccepted = "regulamin",   
+            AcceptedAt = DateTime.UtcNow,
+            // UpdatedAt = DateTime.UtcNow
+        };
+
+        var res = await TermsState.AddTermsAsync(terms);
+        NavigationManager.NavigateTo($"reservation/{Token}/RegistrationCardPage");
+        // if(res)
+        // {
+        //     NavigationManager.NavigateTo($"reservation/{Token}/HomePage");
+        // }
+        // else
+        // {
+        //     Console.WriteLine("err");
+        // }
+
     }
 }

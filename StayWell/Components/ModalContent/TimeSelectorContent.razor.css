@@ -1,30 +1,37 @@
-﻿.content-modal{
+﻿.content-modal {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
-.List{
-    display: flex;
-    flex-direction: column;
-    list-style: none;
-/*    max-height: 200px;*/
-/*    overflow-y: scroll;*/
+.List {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+    list-style: none;
     padding-left: 0;
+    width: 100%;
 }
 
-.Element{
+.Element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     border-radius: 15px;
     border: 2px solid grey;
-    padding: 5px;
-    font-size: larger;
+    padding: 10px 5px;
+    font-size: 1.1rem;
+    font-weight: 500;
     width: auto;
-    max-width: 150px;
-    background-color: none;
+    max-width: none;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
 
-.Element:hover{
-    cursor: pointer;
+.Element:hover {
+    background-color: #f0f0f0;
+    border-color: #333;
 }

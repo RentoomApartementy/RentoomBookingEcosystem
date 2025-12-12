@@ -1,0 +1,87 @@
+﻿@using RentoomBooking.StayWell.Models
+@using RentoomBooking.SharedClasses.Models.StayWell
+@using RentoomBooking.SharedClasses.Models.Database.EFEntitites
+@inject Services.ModalService ModalService
+@inject Services.ToastService ToastService
+
+<div class="content-modal-guests">
+    <p class="instruction-text">
+        Prosimy o podanie danych wszystkich osób, które będą przebywać w obiekcie.
+    </p>
+
+    @if (Guests != null)
+    {
+        <div class="guests-scroll-container">
+            @for (int i = 0; i < Guests.Count; i++)
+            {
+                int index = i;
+                <div class="guest-block">
+                    <div class="guest-separator">
+                        <span>Gość @(index + 1)</span>
+                    </div>
+
+                    <div class="guest-inputs-row">
+                        <input class="editform-input modal-input"
+                               placeholder="Imię"
+                               value="@Guests[index].FirstName"
+                               @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), true))" />
+
+                        <input class="editform-input modal-input"
+                               placeholder="Nazwisko"
+                               value="@Guests[index].LastName"
+                               @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), false))" />
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="modal-actions">
+        <Button Disabled="@(!IsValid)" OnClick="@Confirm">
+            <RenderFragment>
+                <span>Zatwierdź</span>
+            </RenderFragment>
+        </Button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<RegistrationCardGuestModel> InitialGuests { get; set; } = new();
+
+    [Parameter] public EventCallback<List<RegistrationCardGuestModel>> OnConfirm { get; set; }
+
+    private List<RegistrationCardGuestModel> Guests { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        if (InitialGuests != null)
+        {
+            Guests = InitialGuests.Select(g => new RegistrationCardGuestModel
+            {
+                FirstName = g.FirstName,
+                LastName = g.LastName
+            }).ToList();
+        }
+    }
+
+    private bool IsValid => Guests != null && Guests.All(g =>
+        !string.IsNullOrWhiteSpace(g.FirstName) &&
+        !string.IsNullOrWhiteSpace(g.LastName));
+
+    private void UpdateGuest(int index, string? value, bool isFirstName)
+    {
+        if (index < 0 || index >= Guests.Count) return;
+        if (isFirstName) Guests[index].FirstName = value ?? string.Empty;
+        else Guests[index].LastName = value ?? string.Empty;
+    }
+
+    private async Task Confirm()
+    {
+        if (IsValid)
+        {
+            await OnConfirm.InvokeAsync(Guests);
+            ModalService.HideModal();
+            ToastService.ShowToast("Pomyślnie zapisano dane!");
+        }
+    }
+}

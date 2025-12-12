@@ -5,6 +5,8 @@
 @inject ModalService ModalService
 @inject GlobalizationService GlobalizationService
 @implements IDisposable
+@inject Services.BitrixService BitrixService
+@inject States.ReservationState ReservationState
 
 @inject IStringLocalizer<HomePage> Localizer
 
@@ -26,8 +28,8 @@
         </div>
 
         <div class="Contact">
-            <button @onclick="@ContactMenu" style="background: none; border: none">
-                <img src="/icons/phone.svg" />
+            <button @onclick="@OpenChat" style="background: none; border: none">
+                <img src="/icons/message-circle.svg" />
             </button>
             @* <NavLink href="@($"/reservation/{Token}/ContactUsPage")">
                 <img src="/icons/phone.svg" alt="Kontakt" />
@@ -51,6 +53,10 @@
         ModalService.HideModal();
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await BitrixService.InitializeAsync();
+    }
     protected override void OnInitialized()
     {
         GlobalizationService.OnChange += StateHasChanged;
@@ -59,7 +65,7 @@
     private void ChangeLangButton()
     {
         ModalService.ShowModal("Zmień język",
-        @<div>
+@<div>
             <p>Aktualny język: @CultureInfo.CurrentCulture</p>
             <Button OnClick="() => ChangeLang(pl)" Text="Polski"></Button>
             <Button OnClick="() => ChangeLang(en)" Text="English"></Button>
@@ -69,12 +75,34 @@
     );
     }
 
-    private void ContactMenu()
+    private async Task OpenChat()
     {
-        ModalService.ShowModal("Skontaktuj się z nami",
-        @<ContactUsPage/>
-        );
+        var guestData = new Services.BitrixGuestData
+        {
+            Name = "",
+            Phone = "",
+            ExternalId = ""
+        };
+
+        guestData.Name = string.Concat(ReservationState.CurrentReservation.Reservation.Client.FirstName," ",ReservationState.CurrentReservation.Reservation.Client.LastName);
+        guestData.Phone = ReservationState.CurrentReservation.Reservation.Client.Phone;
+        guestData.ExternalId = ReservationState.CurrentReservation.Reservation.Client.Id.ToString();
+
+        guestData.ExtraInfo.Add("Numer Rezerwacji", ReservationState.CurrentReservation.Reservation.id.ToString());
+        guestData.ExtraInfo.Add("Apartament", ReservationState.CurrentReservation.Reservation.Items.FirstOrDefault().objectName);
+        guestData.ExtraInfo.Add("Cena", ReservationState.CurrentReservation.Reservation.Items.FirstOrDefault().price.ToString());
+        string staywellLink = $"[url=https://staywell.rentoom.pl/reservation/{Token}/HomePage]Otwórz StayWell rezerwacji[/url]";
+        guestData.ExtraInfo.Add("Link do StayWell", staywellLink);
+
+        await BitrixService.OpenChatAsync(guestData);
     }
+
+    // private void ContactMenu()
+    // {
+    //     ModalService.ShowModal("Skontaktuj się z nami",
+    //     @<ContactUsPage/>
+    //     );
+    // }
 
     public void Dispose()
     {

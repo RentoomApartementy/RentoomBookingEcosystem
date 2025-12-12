@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.StayWell.Services;
 using RentoomBooking.StayWell.States;
 using System.Globalization;
@@ -20,9 +21,15 @@ namespace RentoomBooking.StayWell.Models
         [Inject]
         protected StayWell.Services.GlobalizationService GlobalizationService { get; set; } = default!;
         [Inject]
+        protected StayWell.Services.BitrixService BitrixService{ get; set; } = default!;
+        [Inject]
         protected LocksState LocksState { get; set; } = default!;
         [Inject]
         protected LayoutState LayoutState { get; set; } = default!;
+        [Inject]
+        protected TermsState TermsState { get; set; } = default!;
+        [Inject]
+        protected RegistrationCardState RegistrationCardState { get; set; } = default!;
         [Inject]
         protected ModalService ModalService { get; set; } = default!;
         [Inject]
@@ -35,15 +42,6 @@ namespace RentoomBooking.StayWell.Models
 
         private readonly string _instanceId = Guid.NewGuid().ToString("N");
 
-        //protected Data? Data => new() //Pozostałość po alpejskich kombinacjach. Do usunięcia.
-        //{
-        //    Reservation = ReservationState.CurrentReservation,
-        //    Media = MediaState.CurrentMedia,
-        //    Amenities = AmenitiesState.CurrentAmenities,
-        //    Apartment = ApartmentState.CurrentApartment,
-        //    Token = ReservationState.CurrentToken,
-        //};
-
         protected override async Task OnInitializedAsync()
         {
             ReservationState.OnChange += StateHasChanged;
@@ -53,11 +51,23 @@ namespace RentoomBooking.StayWell.Models
             LocksState.OnChange += StateHasChanged;
             GlobalizationService.OnChange += StateHasChanged;
             LayoutState.OnChange += StateHasChanged;
+            TermsState.OnChange += StateHasChanged;
+            RegistrationCardState.OnChange += StateHasChanged;
 
             if (ReservationState.CurrentReservation == null && !string.IsNullOrEmpty(Token))
             {
                 await LoadDataAsync();
+                if (TermsState.CurrentTerms == null)
+                {
+                    NavigationManager.NavigateTo($"/reservation/{Token}/TermsPage");
+                }
+                //else
+                //{
+                //    // temporary
+                //    NavigationManager.NavigateTo($"/reservation/{Token}/HomePage");
+                //}
             }
+
 
         }
 
@@ -96,8 +106,9 @@ namespace RentoomBooking.StayWell.Models
 
                     if (!ReservationState.IsValidReservation || reservation == null)
                     {
-                        NavigationManager.NavigateTo("/ReservationPage");
-                        return;
+                        Console.WriteLine("Rezerwacja wygasła");
+                        //NavigationManager.NavigateTo("/ReservationPage");
+                        //return;
                     }
 
                     SetLanguage();
@@ -105,6 +116,8 @@ namespace RentoomBooking.StayWell.Models
                     if (item != null)
                     {
                         await Task.WhenAll(
+                            TermsState.GetTermsAsync(ReservationState.CurrentToken),
+                            RegistrationCardState.GetCardAsync(ReservationState.CurrentToken),
                             MediaState.GetMediaAsync(item.objectId),
                             ApartmentState.GetApartmentByIdAsync(item.objectId),
                             AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
@@ -132,6 +145,8 @@ namespace RentoomBooking.StayWell.Models
             GlobalizationService.OnChange -= StateHasChanged;
             LocksState.OnChange -= StateHasChanged;
             LayoutState.OnChange -= StateHasChanged;
+            TermsState.OnChange -= StateHasChanged;
+            RegistrationCardState.OnChange -= StateHasChanged;
         }
 
     }

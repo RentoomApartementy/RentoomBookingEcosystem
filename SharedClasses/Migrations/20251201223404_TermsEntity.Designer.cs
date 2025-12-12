@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
@@ -11,9 +12,11 @@ using RentoomBooking.SharedClasses.Database;
 namespace RentoomBooking.SharedClasses.Migrations
 {
     [DbContext(typeof(PostgresBookingDbContext))]
-    partial class PostgresBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251201223404_TermsEntity")]
+    partial class TermsEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,31 +95,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApartmentInfos");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.RegistrationCardEntity", b =>
-                {
-                    b.Property<string>("ResToken")
-                        .HasColumnType("text")
-                        .HasColumnName("res_token");
-
-                    b.Property<DateTime>("CheckInTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("check_in_time");
-
-                    b.Property<string>("ContactEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("contact_mail");
-
-                    b.Property<string>("GuestsData")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("guests_data");
-
-                    b.HasKey("ResToken");
-
-                    b.ToTable("RegistrationCard");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationEntity", b =>

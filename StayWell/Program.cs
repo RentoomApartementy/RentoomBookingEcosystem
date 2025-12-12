@@ -28,12 +28,15 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<ClipboardService>();
             builder.Services.AddScoped<GlobalizationService>();
             builder.Services.AddScoped<ModalService>();
+            builder.Services.AddScoped<BitrixService>();
 
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
             builder.Services.AddScoped<AmenitiesState>();
             builder.Services.AddScoped<ApartmentState>();
             builder.Services.AddScoped<LocksState>();
+            builder.Services.AddScoped<TermsState>();
+            builder.Services.AddScoped<RegistrationCardState>();
 
             builder.Services.AddHttpClient("FunctionsApi", c =>
             {

@@ -1,4 +1,5 @@
 ﻿using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using System.Net;
 using System.Net.Http.Json;
@@ -70,7 +71,44 @@ namespace RentoomBooking.StayWell.Services
         }
 
 
+        public async Task<TermsEntity?> GetTermsByResTokenAsync(string resToken)
+        {
+            var response = await _http.GetAsync($"db/terms/GetTermsByResToken/{resToken}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<TermsEntity>(_json);
+            }
+            return null;
+        }
 
+        public async Task<bool> AddTermsAsync(TermsEntity entity)
+        {
+            var response = await _http.PostAsJsonAsync("db/terms/AddTerms", entity, _json);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdateTermsAsync(string resToken, TermsEntity entity)
+        {
+            var response = await _http.PutAsJsonAsync($"db/terms/UpdateTerms/{resToken}", entity, _json);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<RegistrationCardEntity?> GetRegistrationCardByResTokenAsync(string resToken)
+        {
+            var response = await _http.GetAsync($"db/registrationcard/GetRegistrationCardByResToken/{resToken}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<RegistrationCardEntity>(_json);
+            }
+            return null;
+        }
+
+        public async Task<bool> SaveRegistrationCardAsync(RegistrationCardEntity entity)
+        {
+            var response = await _http.PostAsJsonAsync("db/registrationcard/SaveRegistrationCard", entity, _json);
+            return response.IsSuccessStatusCode;
+        }
 
     }
+
 }

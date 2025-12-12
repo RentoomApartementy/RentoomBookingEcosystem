@@ -2,12 +2,14 @@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @using RentoomBooking.StayWell.Models
+@using RentoomBooking.SharedClasses.Models.StayWell
+@using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
-@using Microsoft.Extensions.Localization
-@using System.Globalization
-
-@* @inject StayWell.States.LayoutState LayoutState *@
-@inject IStringLocalizer<InstructionsPage> Localizer
+@* @inject IStringLocalizer<InstructionsPage> Localizer *@
+@inject Services.ModalService ModalService
+@inject Services.ToastService ToastService
+@inject States.ReservationState ReservationState
+@inject States.RegistrationCardState RegistrationCardState
 
 @implements IDisposable
 
@@ -28,36 +30,17 @@
             </span>
         </DescriptionContent>
     </Description>
-
 </div>
-
-
-@* <EditForm Model="@_reservation_owner">
-    <label for="mail">Adres mail</label>
-    <InputText id="mail" @bind-Value="_reservation_owner.Email"></InputText>
-    <label for="phone-number">Numer telefonu</label>
-    <InputText id="phone-number" @bind-Value="_reservation_owner.Phone"></InputText>
-</EditForm> *@
 
 <div class="mail-wrapper">
-    @* <div class="mail-input-title">Podaj swój adres mailowy</div> *@
     <label class="mail-input-title" for="email">Podaj swój adres mailowy</label>
     <input class="editform-input" id="email" type="email" placeholder="adres mail" @bind="_mail" />
-
-    @* <div class="mail-input-title">Podaj swój numer lub WhatsApp</div> *@
-    <label class="mail-input-title" for="number">Podaj swój numer lub WhatsApp</label>
-    <input class="editform-input" id="number" type="tel" placeholder="numer" @bind="_number" />
-
-    @* <input class="time-input" type="time"/>  *@
-    @* <TimeSelector /> *@
-
 </div>
 
-<div>
-
-<Button OnClick="SelectTime">
-    <RenderFragment>
-            @if(_checkInTime is null)
+<div class="form-buttons">
+    <Button OnClick="SelectTime" ButtonStyle="padding: 25px 12px !important;">
+        <RenderFragment>
+            @if (_checkInTime is null)
             {
                 <span>Wybierz godzinę zameldowania</span>
             }
@@ -66,96 +49,133 @@
                 <span>Zmień godzinę z @_checkInTime.Value.ToString(@"hh\:mm")</span>
             }
         </RenderFragment>
-</Button>
-</div>
+    </Button>
 
-<div class="guests-wrapper">
-    @for(int i = 0; i < _numberOfAdults; i++)
-    {
-        int iCopy = i;
-        <div class="guest-row">
-            <div class="guest-input-title">Dane @(iCopy + 1) gościa</div>
-                <div class="guest-input-row">
-                    <input id="@($"_guests{iCopy}_first")"
-                        value="@_guests[iCopy].FirstName"
-                        @onchange="@(e => _guests[iCopy].FirstName = e.Value?.ToString())"
-                        placeholder="imię"/>
-                    <input id="@($"_guests{iCopy}_last")"
-                           value="@_guests[iCopy].LastName"
-                           @onchange="@(e => _guests[iCopy].LastName = e.Value?.ToString())"
-                           placeholder="nazwisko" />
-            </div>
-        </div>
-    }
+    <Button OnClick="FillGuestInfo" ButtonStyle="padding: 25px 12px !important;">
+        <RenderFragment>
+            @if (AreGuestsFilled())
+            {
+                <span>Zmień dane gości</span>
+            }
+            else
+            {
+                <span>Uzupełnij dane gości</span>
+            }
+        </RenderFragment>
+    </Button>
 </div>
 
 <div class="next-wrapper">
     @if (IsFormSet())
     {
         <span class="info">
-            <img src="/icons/info.svg"/> Wciskająć poniższy przycisk potwierdzam poprawność podanych przeze mnie danych.
+            <img src="/icons/info.svg" /> Wciskając poniższy przycisk potwierdzam poprawność danych.
         </span>
-
     }
-    <Button Disabled="!IsFormSet()" OnClick="navigate">
+
+    <Button Disabled="!IsFormSet()" OnClick="SaveAndNavigate">
         <RenderFragment>
-            <span>Przejdź dalej &#10140;</span>
+            <span>Zapisz i przejdź dalej &#10140;</span>
         </RenderFragment>
     </Button>
 </div>
 
-@code{
+@code {
     private string? _mail;
-    private string? _number;
-    private List<Guest> _guests = new(); // State?
-    private int _numberOfAdults;
-    private bool _l = false;
-    private Guest _reservation_owner = new();
-    private List<int> _hours = Enumerable.Range(0, 24).ToList();
     private TimeSpan? _checkInTime;
 
-    private void navigate() => NavigationManager.NavigateTo($"/reservation/{base.Token}/TermsPage");
+    private List<RegistrationCardGuestModel> _guests = new();
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         LayoutState.ShowFooter = false;
-    }
 
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        _numberOfAdults = ReservationState?.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.numberOfAdults ?? 0;
-        _guests = Enumerable.Range(0, _numberOfAdults).Select(_ => new Guest()).ToList();
-        _l = true;
+        int adults = ReservationState?.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.numberOfAdults ?? 1;
+
+        if (RegistrationCardState.CurrentCard?.GuestsData?.Any() == true)
+        {
+            _guests = RegistrationCardState.CurrentCard.GuestsData;
+            _mail = RegistrationCardState.CurrentCard.ContactEmail;
+        }
+        else
+        {
+            _guests = Enumerable.Range(0, adults).Select(_ => new RegistrationCardGuestModel()).ToList();
+        }
     }
 
     private void SelectTime()
     {
         ModalService.ShowModal(
             "Wybierz szacowaną godzinę zameldowania",
-            @<RentoomBooking.StayWell.Components.ModalContent.TimeSelectorContent @bind-value="_checkInTime"/>
+            @<RentoomBooking.StayWell.Components.ModalContent.TimeSelectorContent @bind-value="_checkInTime" />
         );
+    }
+
+    private void FillGuestInfo()
+    {
+        ModalService.ShowModal("Uzupełnij dane gości",
+            @<RentoomBooking.StayWell.Components.ModalContent.FillGuestDataContent InitialGuests="@_guests"
+                                                                      OnConfirm="@HandleGuestsConfirmed" />
+        );
+    }
+
+    private void HandleGuestsConfirmed(List<RegistrationCardGuestModel> updatedGuests)
+    {
+        _guests = updatedGuests;
+        StateHasChanged();
+    }
+
+    private bool AreGuestsFilled()
+    {
+        return _guests.Any(g => !string.IsNullOrWhiteSpace(g.FirstName) && !string.IsNullOrWhiteSpace(g.LastName));
     }
 
     private bool IsFormSet()
     {
-        if (string.IsNullOrWhiteSpace(_mail))
-            return false;
-
-        foreach (var guest in _guests)
-        {
-            if (string.IsNullOrWhiteSpace(guest.FirstName) || string.IsNullOrWhiteSpace(guest.LastName))
-                return false;
-        }
+        if (string.IsNullOrWhiteSpace(_mail)) return false;
+        if (_checkInTime == null) return false;
+        if (!AreGuestsFilled()) return false;
         return true;
+    }
+
+    private async Task SaveAndNavigate()
+    {
+        if (!IsFormSet()) return;
+        if (ReservationState.CurrentToken == null) return;
+
+        try
+        {
+            var checkInDateTime = DateTime.UtcNow.Date.Add(_checkInTime.Value);
+
+            var regcard = new RegistrationCardEntity
+            {
+                ResToken = ReservationState.CurrentToken,
+                ContactEmail = _mail,
+                // Pola telefonu usunięte. Upewnij się, że w bazie mogą być nullami lub pustymi stringami.
+                // Jeśli baza wymaga wartości, odkomentuj poniższe i ustaw puste stringi:
+                // PhoneCountryCode = "",
+                // ContactPhone = "",
+
+                CheckInTime = checkInDateTime,
+
+                GuestsData = _guests
+            };
+
+            await RegistrationCardState.SaveCardAsync(regcard);
+
+            NavigationManager.NavigateTo($"/reservation/{Token}/HomePage");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            ToastService.ShowToast("Wystąpił błąd podczas zapisywania danych. Spróbuj ponownie.");
+        }
     }
 
     public override void Dispose()
     {
         // LayoutState.ShowFooter = true;
-
         base.Dispose();
     }
-
 }
