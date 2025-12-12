@@ -10,6 +10,10 @@
 @code {
     [Parameter] public List<PricingOffer> Offers { get; set; } = new();
     [Parameter] public Boolean IsSearch { get; set; } = false;
+    [Parameter] public String? StartDate { get; set; } = null;
+    [Parameter] public String? EndDate { get; set; } = null;
+    [Parameter] public String? Adults { get; set; } = null;
+    [Parameter] public String? Children { get; set; } = null;
     private List<ApartmentObject> Items { get; set; } = new();
     private DotNetObjectReference<ApartmentsMap>? _objRef;
 
@@ -81,6 +85,23 @@
             .Where(i => i?.ObjectLocation?.LocalizationItem != null)
             .Select(i =>
             {
+                var detailsUrl = $"/apartamenty/{i.Id}";
+
+                if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
+                {
+                    detailsUrl += $"/{StartDate}/{EndDate}";
+
+                    if (!string.IsNullOrEmpty(Adults))
+                    {
+                        detailsUrl += $"/{Adults}";
+
+                        if (!string.IsNullOrEmpty(Children))
+                        {
+                            detailsUrl += $"/{Children}";
+                        }
+                    }
+                }
+
                 var offer = GetPricingOfferByObjectId(i.Id);
                 return new Marker
                 {
@@ -121,8 +142,8 @@
             <span>{getMinimalPrice(i.Id)}</span>            
 
             <div style='width: 100%; display: flex;'>
-                <a href='/apartamenty/{i?.Id}' style='display: flex; align-items: center; justify-content: center; width: 100%; padding: .4rem 1rem; background-color: rgba(148, 95, 40, 0.7); color: white; border-radius: 5px; cursor: pointer; text-decoration: none;'>
-                    Rezerwacja
+                <a href='{detailsUrl}' style='display: flex; align-items: center; justify-content: center; width: 100%; padding: .4rem 1rem; background-color: rgba(148, 95, 40, 0.7); color: white; border-radius: 5px; cursor: pointer; text-decoration: none;'>
+                    Zarezerwuj
                 </a>
             </div>
         </div>

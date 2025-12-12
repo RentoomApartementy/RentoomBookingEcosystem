@@ -6,6 +6,7 @@ using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
+using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb
 {
@@ -58,6 +59,9 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IIdoOfferService, IdoOfferService>();
             builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
             builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
+            
+            builder.Services.AddMemoryCache();
+            builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
             
             //view scoped
             builder.Services.AddScoped<IApartmentsViewModel, ApartmentsViewModel>();

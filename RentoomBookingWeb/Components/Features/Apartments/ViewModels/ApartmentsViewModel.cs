@@ -4,6 +4,8 @@ using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBookingWeb.Models;
+using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 {
@@ -12,6 +14,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly IApartmentsService _apartmentsService;
         private readonly IRentoomOfferService _rentoomOfferService;
         private readonly NavigationManager _navManager;
+        private readonly IAvailabilityFinderService _availabilityFinder;
 
         private string? _token;
         private const int PageSize = 6;
@@ -19,6 +22,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public List<ApartmentObject> Items { get; private set; } = new();
         public List<PricingOffer> Offers { get; private set; } = new();
         
+        public Dictionary<int, AvailableTerm> AvailableTerms { get; private set; } = new();
+
         public long? ApartmentsCount { get; private set; }
         public bool IsLoading { get; private set; } = true;
         public bool ApartmentsIsLoading { get; private set; } = false;
@@ -45,11 +50,13 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public ApartmentsViewModel(
             IApartmentsService apartmentsService,
             IRentoomOfferService rentoomOfferService,
-            NavigationManager navManager)
+            NavigationManager navManager,
+            IAvailabilityFinderService availabilityFinder)
         {
             _apartmentsService = apartmentsService;
             _rentoomOfferService = rentoomOfferService;
             _navManager = navManager;
+            _availabilityFinder = availabilityFinder;
         }
 
         public int MinOfferPrice => Offers.Count == 0 ? 0 : (int)Offers.Min(o => o.MinimalPrice);
@@ -57,6 +64,11 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         public PricingOffer? GetPricingOfferByObjectId(int objectId)
             => Offers.Find(o => o.ObjectId == objectId);
+
+        public AvailableTerm? GetSuggestionByObjectId(int objectId)
+        {
+            return AvailableTerms.TryGetValue(objectId, out var term) ? term : null;
+        }
 
         public async Task InitializeAsync()
         {
@@ -85,6 +97,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 await LoadMoreAsync();
                 var allItems = await GetAllApartments() ?? new List<ApartmentObject>();
                 await GetFilteredOffers(allItems);
+                await FetchSuggestionsForItemsWithoutOffers(allItems);
             }
         }
 
@@ -104,6 +117,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     Items.AddRange(page.Items);
                     _token = page.ContinuationToken;
                     HasMore = !string.IsNullOrEmpty(_token);
+                    
+                    if (IsSearch) 
+                    {
+                        await GetFilteredOffers(page.Items);
+                        await FetchSuggestionsForItemsWithoutOffers(page.Items);
+                    }
                 }
                 else
                 {
@@ -141,6 +160,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             Items.Clear();
             Offers.Clear();
+            AvailableTerms.Clear();
             _token = null;
             HasMore = false;
             ApartmentsIsLoading = true;
@@ -152,6 +172,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 Items.AddRange(items);
 
                 await GetFilteredOffers(items, filters, forceReset: false);
+                await FetchSuggestionsForItemsWithoutOffers(items);
 
                 SortItemsByOffers();
             }
@@ -174,7 +195,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             if (query.ContainsKey("children")) Children = query["children"];
             if (query.ContainsKey("rooms")) Rooms = query["rooms"];
 
-
             if (updateUrl)
             {
                 var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
@@ -195,6 +215,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             Items.Clear();
             Offers.Clear();
+            AvailableTerms.Clear();
             _token = null;
             HasMore = false;
 
@@ -207,6 +228,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             Items.AddRange(fetchedItems);
 
             await GetFilteredOffers(fetchedItems, explicitFilters: null, forceReset: true);
+            await FetchSuggestionsForItemsWithoutOffers(fetchedItems);
     
             SortItemsByOffers();
 
@@ -216,6 +238,34 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             SliderResetKey = Guid.NewGuid();
     
             NotifyStateChanged();
+        }
+
+        private async Task FetchSuggestionsForItemsWithoutOffers(IEnumerable<ApartmentObject> itemsToCheck)
+        {
+            if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate)) return;
+
+            var idsWithoutOffers = itemsToCheck
+                .Where(item => !Offers.Any(o => o.ObjectId == item.Id))
+                .Select(item => item.Id)
+                .ToList();
+
+            if (idsWithoutOffers.Any())
+            {
+                var newSuggestions = await _availabilityFinder.FindNextAvailableTermsAsync(
+                    idsWithoutOffers, 
+                    StartDate, 
+                    EndDate, 
+                    int.TryParse(Adults, out var a) ? a : 2, 
+                    int.TryParse(Children, out var c) ? c : 1
+                );
+
+                foreach (var kvp in newSuggestions)
+                {
+                    AvailableTerms[kvp.Key] = kvp.Value;
+                }
+                
+                NotifyStateChanged();
+            }
         }
 
         private async Task GetApartmentsCount()
@@ -257,7 +307,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             }
         }
 
-        private async Task GetFilteredOffers(List<ApartmentObject> items, ApartmentFilters? explicitFilters = null, bool forceReset = false)
+        private async Task GetFilteredOffers(IEnumerable<ApartmentObject> items, ApartmentFilters? explicitFilters = null, bool forceReset = false)
         {
             try
             {
