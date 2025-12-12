@@ -20,17 +20,17 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
     public class IdoLocksService : IIdoLocksService
     {
-        //private BookingDatabase _bookingDatabase;
+       
         private ILogger<IdoLocksService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
         private const string LocksGetEndpoint = "locks/get/34/json";
 
-        public IdoLocksService(IIdoBookingConnectService idoConnect, ILogger<IdoLocksService> logger, BookingDatabase bookingDatabase)
+        public IdoLocksService(IIdoBookingConnectService idoConnect, ILogger<IdoLocksService> logger)
         {
             _idoConnect = idoConnect;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            //_bookingDatabase = bookingDatabase;
+           
         }
 
         public async Task<List<Lock>?> GetLocksAsync(int reservationId, int itemId, CancellationToken ct = default)

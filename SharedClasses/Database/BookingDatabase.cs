@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Database
 {
+
     public class BookingDatabase
     {
         // Kontenery są teraz nullowalne, bo nie są inicjowane synchronicznie w konstruktorze
@@ -256,7 +257,7 @@ namespace RentoomBooking.SharedClasses.Database
             string resToken = Guid.NewGuid().ToString("N");
             var doc = new RentoomReservation
             {
-                Id = resToken,
+                Id = payloadReservation.id,
                 ResToken = resToken,
                 Reservation = payloadReservation
             };

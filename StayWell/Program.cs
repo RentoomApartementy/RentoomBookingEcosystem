@@ -28,18 +28,29 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<ClipboardService>();
             builder.Services.AddScoped<GlobalizationService>();
             builder.Services.AddScoped<ModalService>();
+            builder.Services.AddScoped<BitrixService>();
 
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
             builder.Services.AddScoped<AmenitiesState>();
             builder.Services.AddScoped<ApartmentState>();
             builder.Services.AddScoped<LocksState>();
-
-            var apiBase = builder.Configuration["ApiBaseUrl"] ?? "/api/";
+            builder.Services.AddScoped<TermsState>();
+            builder.Services.AddScoped<RegistrationCardState>();
 
             builder.Services.AddHttpClient("FunctionsApi", c =>
             {
-                c.BaseAddress = new Uri("https://localhost:7238"+apiBase);
+                if (builder.HostEnvironment.IsDevelopment())
+                {
+                    // Local dev:
+                    c.BaseAddress = new Uri("https://localhost:7238/api/");
+                }
+                else
+                {
+                    // Azure Static Web App: functions api sa deployowane oddzielne, ale sa "podpiete" w Static Website (Settings->Api) na Azure - wiec powinny byc dostepny pod adresem /api
+                    var appBase = new Uri(builder.HostEnvironment.BaseAddress);
+                    c.BaseAddress = new Uri(appBase, "api/");
+                }
             });
 
             builder.Services.AddScoped<BackendApi>();

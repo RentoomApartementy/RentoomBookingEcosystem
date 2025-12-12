@@ -1,0 +1,368 @@
+.apartment-container {
+    width: 100%;
+    min-height: 80vh;
+    background-color: #F7F7F7;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    padding-bottom: 2rem;
+}
+
+.main-wrapper {
+    width: 90%;
+    display: flex;
+    gap: 2rem;
+}
+
+.left-container {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.apartment-wrapper {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+}
+
+.apartment-wrapper.collapsed {
+    max-height: 900px;
+}
+
+.apartment-wrapper.expanded {
+    max-height: none;
+    overflow: visible;
+}
+
+.wrapper-shadow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(to bottom, rgba(247,247,247,0), rgba(247,247,247,1));
+    pointer-events: none;
+    z-index: 10;
+}
+
+.read-more-btn {
+    align-self: center;
+    background: none;
+    color: #1F5A41;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.read-more-btn:hover {
+    background-color: #e6f0eb;
+}
+
+.apartment-text-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 910px) {
+    .apartment-text-wrapper {
+        flex-direction: column;
+    }
+}
+
+.image-wrapper {
+    flex: 2;
+    width: 100%;
+    height: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #1F5A41;
+}
+
+.apartment-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-container {
+    position: relative;
+}
+
+.left-button, .right-button {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    background-color: #0c4128;
+    z-index: 99;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+    user-select: none;
+}
+
+.left-button { left: 0; }
+.right-button { right: 0; }
+.left-button:hover, .right-button:hover { opacity: .85; }
+
+.image-counter {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.51);
+}
+
+.loading-image {
+    width: 100%;
+    height: 240px;
+    position: relative;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-image .skeleton {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.apartment-map-wrapper {
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.amenities-wrapper {
+    width: 100%;
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+}
+
+.amenity {
+    padding: .5rem 1rem;
+    border: 1px solid #1F5A41;
+    border-radius: 10px;
+}
+
+.description-wrapper {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.apartment-details {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    display: flex;
+    gap: 1rem;
+}
+
+.apartment-details li {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    margin: 6px 0;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+}
+
+.apartment-button-wrapper {
+    position: sticky;
+    right: 0;
+    bottom: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+}
+
+.info-box {
+    width: 20%;
+    height: 56vh;
+    position: sticky;
+    top: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.reservation-info {
+    width: 100%;
+    flex: 0 0 auto;
+    padding: 1rem;
+    border: 1px solid #C9C9C9;
+    background-color: #EBEBEB;
+    border-radius: 10px;
+}
+
+.map {
+    width: 100%;
+    height: auto;
+    flex: 1 1 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #1F5A41;
+}
+
+.offer-price {
+    width: 100%;
+    padding: .5rem .8rem;
+    border-radius: .7rem;
+    background-color: #dadada;
+}
+
+.offer-price-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+@media (max-width: 810px) {
+    .main-wrapper {
+        flex-direction: column;
+        width: 95%;
+    }
+
+    .left-container {
+        width: 100%;
+    }
+
+    .info-box {
+        width: 100%;
+        height: auto;
+        position: static;
+        margin-top: 2rem;
+    }
+
+    .apartment-wrapper {
+        padding: 0;
+    }
+
+    .image-wrapper {
+        height: 270px;
+        flex: none;
+    }
+
+    .map {
+        height: 200px;
+        flex: none;
+    }
+
+    .apartment-map-wrapper {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+.header-text {
+    color: #1F5A41;
+}
+
+.addon-list-container {
+    border: 1px solid #e0e0e0;
+    background-color: white;
+    width: 50%;
+    border-radius: 5px;
+}
+
+@media (max-width: 810px) {
+    .addon-list-container {
+        width: 80%;
+    }
+}
+
+.addon-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addon-item:last-child {
+    border-bottom: none;
+}
+
+.addon-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+    width: 100%;
+}
+
+.addon-checkbox {
+    margin-right: 15px;
+}
+
+.addon-name {
+
+}
+
+.summary-offer-price-wrapper {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.summary-offer-price {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .7rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    gap: .5rem;
+}
+
+@media (max-width: 810px) {
+    .summary-offer-price-wrapper {
+        width: 80%;
+        flex-direction: column;
+    }
+}
+.suggest-offer {
+    width: 100%;
+    padding: .5rem .8rem;
+    border-radius: .7rem;
+    background-color: #dadada;
+    display: flex;
+    flex-direction: column;
+    margin-top: .4rem;
+    cursor: pointer;
+}

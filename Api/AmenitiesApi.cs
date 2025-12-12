@@ -158,9 +158,9 @@ public class AmenitiesApi
 
 
 
-    [Function("SeedFilters")]
+    [Function("SeedAmenitiesFilters")]
     public async Task<HttpResponseData> SeedFilter(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "filters/seed")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "postgres/amenitiesfilters/seed")] HttpRequestData req)
     {
         var response = req.CreateResponse();
 

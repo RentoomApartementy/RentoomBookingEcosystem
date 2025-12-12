@@ -1,0 +1,282 @@
+@page "/rezerwacja/{id:int}";
+@page "/rezerwacja/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}";
+@using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Models.IdoBooking.Public
+@using RentoomBooking.SharedClasses.Services.IdoBooking;
+@inject IApartmentsService ApartmentsService;
+@inject IIdoApartmentService IdoApartmentService;
+@inject NavigationManager Navigation;
+@inject IIdoOfferService OfferService;
+
+<PageTitle>Rezerwacja @_apartment?.Name</PageTitle>
+
+<div class="reservation-container">
+    <div class="reservation-wrapper">
+        <h1>@_apartment?.Name</h1>
+        
+        <div class="">
+            <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>, 
+            <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
+            <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
+        </div>
+        
+        <SearchBar 
+            StartDate="@StartDate"
+            EndDate="@EndDate"
+            Adults="@Adults"
+            Children="@Children"
+            IsRoom="false"
+            OnSearch="@(async query => await HandleSearch(query))" 
+        />
+        
+        <ul class="apartment-details">
+            <li>
+                <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon" />
+                <span itemprop="occupancy">@_apartment?.MinCapacity - @_apartment?.Capacity</span>
+            </li>
+            <li>
+                <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
+                @_bedsCount
+            </li>
+            <li>
+                <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
+                1
+            </li>
+            <li>
+                <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
+                <span itemprop="floorSize">@_apartment?.Area m²</span>
+            </li>
+        </ul>
+        
+        <hr/>
+        
+        <h3 class="header-text">Podgląd</h3>
+        <div class="preview">
+            <div class="image-wrapper">
+                @if (_currentObjectMedium == null)
+                {
+                    <div class="loading-image">
+                        <div class="skeleton"></div>
+                    </div>
+                }
+                else
+                {   
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img 
+                                src="@_currentObjectMedium.Url"
+                                alt="@_apartment?.Name"
+                                title="@_apartment?.Name"
+                                itemprop="photo"
+                                class="apartment-image" 
+                            />
+                        </div>
+                
+                        <div @onclick="() => ChangeCurrentObjectMedium(1)" @onclick:stopPropagation  class="right-button">
+                            &gt;
+                        </div>
+                
+                        <div @onclick="() => ChangeCurrentObjectMedium(-1)" @onclick:stopPropagation  class="left-button">
+                            &lt;
+                        </div>
+                
+                        @if (_objectMediums != null)
+                        {
+                            <div class="image-counter">
+                                <small>@(_currentMediumIndex + 1)/@(_objectMediums.Count)</small>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            
+            <div class="map">
+                <ApartmentMap 
+                    Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat" 
+                    Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng" 
+                    ApartmentAddress="@_apartment?.ObjectLocation?.Address"
+                />
+            </div>
+        </div>
+        
+        <div style="margin-top: 1rem;"></div>
+        
+        <h3 class="header-text">Dodatkowe opcje</h3>
+        <div class="addon-list-container">
+            @if (_apartment?.Addons != null)
+            {
+                @foreach (var addon in _apartment.Addons)
+                {
+                    <div class="addon-item">
+                        <label class="addon-label">
+                            <input type="checkbox" class="addon-checkbox" />
+                            <span class="addon-name">@addon.Name</span>
+                        </label>
+                    </div>
+                }
+            }
+        </div>
+        
+        <div style="margin-top: 1rem;"></div>
+        <hr/>
+        
+        <h3 class="header-text">Podsumowanie</h3>
+        @if (StartDate == null || EndDate == null || Adults == null)
+        {
+            <div class="alert">
+                <span>Aby zarezerwować apartament wybierz termin i ilość osób</span>
+            </div>
+        }
+        else if (_offersResponse?.Result?.PricingOffers == null || _offersResponse.Result.PricingOffers.Count == 0)
+        {
+            <div class="alert">
+                <span>Niestety w tym terminie nie ma ofert dla tego apartamentu</span>
+            </div>
+        }
+        else
+        {
+            <div class="summary">
+                <div class="summary-wrapper">
+                    <div class="summary-info">
+                        <b class="info-text">Liczba osób</b>
+                        <p class="info-text">@Adults</p>
+                    </div>
+
+                    <div class="summary-info">
+                        <b class="info-text">Od</b>
+                        <p class="info-text">@StartDate</p>
+                    </div>
+
+                    <div class="summary-info">
+                        <b class="info-text">Do</b>
+                        <p class="info-text">@EndDate</p>
+                    </div>
+
+                    <div class="summary-info">
+                        <b class="info-text">Koszt</b>
+                        <p class="price-text">@_offersResponse.Result.PricingOffers[0].MinimalPrice zł</p>
+                    </div>
+                </div>
+                <p>Liczba nocy: @GetNumberOfNights()</p>
+            </div>
+        }
+        
+        @if (StartDate != null && EndDate != null && Adults != null)
+        {
+            <hr/>
+        
+            <div class="confirm-wrapper">
+                <label class="addon-label">
+                    <input type="checkbox" class="addon-checkbox" />
+                    <span class="addon-name">Chcę otrzymać fakture VAT</span>
+                </label>
+            
+                <Button @onclick="GoToPayment">Przejdź dalej</Button>
+            </div>   
+        }
+        
+    </div>
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
+    [Parameter] public string? Adults { get; set; }
+    [Parameter] public string? Children { get; set; }
+    
+    private ApartmentObject? _apartment;
+    private int? _bedsCount = null;
+    
+    private List<ObjectMedium>? _objectMediums = null;
+    private int _currentMediumIndex = 0;
+    private ObjectMedium? _currentObjectMedium = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
+        _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
+
+        await GetObjectMedia();
+        await GetOffer();
+    }
+    
+    private async Task GetObjectMedia()
+    {
+        
+        if (_apartment !=null)
+        {
+            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>();
+            _currentMediumIndex = 0;
+            _currentObjectMedium = _objectMediums.FirstOrDefault();
+        }
+    }
+
+    private void ChangeCurrentObjectMedium(int step)
+    {
+        if (_objectMediums == null || !_objectMediums.Any())
+            return;
+
+        _currentMediumIndex += step;
+
+        if (_currentMediumIndex < 0)
+            _currentMediumIndex = _objectMediums.Count - 1;
+        else if (_currentMediumIndex >= _objectMediums.Count)
+            _currentMediumIndex = 0;
+
+        _currentObjectMedium = _objectMediums[_currentMediumIndex];
+    }
+    
+    private void GoToPayment()
+    {
+        if (_apartment != null)
+        {
+            Navigation.NavigateTo($"/platnosc/{_apartment.Id}");
+        }
+    }
+
+    private async Task HandleSearch(Dictionary<string, string> query, bool updateUrl = true)
+    {
+        query.TryGetValue("startDate", out var startDate);
+        query.TryGetValue("endDate", out var endDate);
+        query.TryGetValue("adults", out var adults);
+        query.TryGetValue("children", out var children);
+
+        StartDate = startDate;
+        EndDate = endDate;
+        Adults = adults;
+        Children = children;
+
+        if (_apartment != null)
+        {
+            var url = $"/rezerwacja/{_apartment.Id}/{StartDate}/{EndDate}/{Adults}/{Children}";
+            Navigation.NavigateTo(url, forceLoad: false);
+            await GetOffer();
+        }
+    }
+    
+    private PricingOffersRequest CurrentRequest => new PricingOffersRequest
+    {
+        ObjectIds = _apartment != null ? new List<int> { _apartment.Id } : null,
+        DateFrom = StartDate,
+        DateTo = EndDate,
+        NumberOfAdults = int.TryParse(Adults, out var a) ? a : null,
+        NumberOfBigChildren = int.TryParse(Children, out var c) ? c : null
+    };
+    
+    private PricingOffersResponse? _offersResponse = null;
+    private async Task GetOffer()
+    {
+        _offersResponse = await OfferService.GetPricingOffersAsync(CurrentRequest);
+    }
+
+    private int GetNumberOfNights()
+    {
+        if (DateTime.TryParse(StartDate, out var start) && DateTime.TryParse(EndDate, out var end))
+        {
+            return (end - start).Days;
+        }
+
+        return 0;
+    }
+}

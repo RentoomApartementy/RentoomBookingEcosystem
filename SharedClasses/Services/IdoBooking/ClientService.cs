@@ -17,6 +17,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         Task<ClientGetResponse?> GetClientByIdAsync(int clientId, CancellationToken cancellationToken = default);
         Task<ClientAddResponse?> AddClientsAsync(IEnumerable<ClientAddRequestClient> clients, CancellationToken cancellationToken = default);
         Task<ClientAddResponse?> AddClientAsync(ClientAddRequestClient client, CancellationToken cancellationToken = default);
+        Task<ClientGetResponse?> GetClientByEmailAsync(string clientEmail, CancellationToken cancellationToken = default);
     }
 
     public class ClientService : IClientService
@@ -56,7 +57,19 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 throw new ArgumentOutOfRangeException(nameof(clientId));
             }
 
-            var ret  = await GetClientsAsync(new ClientGetParams { Id = clientId }, null, cancellationToken);
+            var ret = await GetClientsAsync(new ClientGetParams { Id = clientId }, null, cancellationToken);
+            return ret;
+
+        }
+
+        public async Task<ClientGetResponse?> GetClientByEmailAsync(string clientEmail, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(clientEmail) || string.IsNullOrWhiteSpace(clientEmail) || !clientEmail.Contains('@'))
+            {
+                throw new ArgumentOutOfRangeException(nameof(clientEmail));
+            }
+
+            var ret = await GetClientsAsync(new ClientGetParams { Email = clientEmail }, null, cancellationToken);
             return ret;
 
         }

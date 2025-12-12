@@ -1,5 +1,6 @@
 ﻿@using System
 @inject Services.ModalService ModalService
+@inject Services.ToastService ToastService
 
 <div class="content-modal">
     <ul class="List">
@@ -12,7 +13,7 @@
             </li>
         }
         @* <li class="Element">Ciężko oszacować</li> *@
-        <li class="Element">@(new TimeSpan(22, 0, 0).ToString(@"hh\:mm"))+</li>
+        <li class="Element">Nie wiem</li>
     </ul>
 </div>
 
@@ -29,6 +30,7 @@
     {
         await ValueChanged.InvokeAsync(time);
         ModalService.HideModal();
+        ToastService.ShowToast($"Wybrałeś/aś godzinę {time}");
     }
 
 }

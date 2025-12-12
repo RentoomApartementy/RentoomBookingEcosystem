@@ -1,0 +1,91 @@
+@if (ImagesList?.Count > 0 && ImagesList != null)
+{
+    <div class="images-container">
+        <div class="images-wrapper">
+            <img class="images-left" 
+                 src="@ImagesList.First().Url" 
+                 alt="" 
+                 @onclick="() => OpenGallery(0)">
+        
+            <div class="images-right">
+                @if (ImagesList.Count > 1)
+                {
+                    <img src="@ImagesList[1].Url" 
+                         alt="" 
+                         @onclick="() => OpenGallery(1)">   
+                }
+                @if (ImagesList.Count > 2)
+                {
+                    <img src="@ImagesList[2].Url" 
+                         alt="" 
+                         @onclick="() => OpenGallery(2)">   
+                }
+            </div>
+        </div>
+        
+        @if (ImagesList.Count > 3)
+        {
+            <div class="other-images">
+                @{
+                    int sliderIndex = 3; 
+                }
+                @foreach (var image in ImagesList.Skip(3))
+                {
+                    var currentIndex = sliderIndex;
+                    <div class="other-image">
+                        <img src="@image.Url" 
+                             alt="" 
+                             @onclick="() => OpenGallery(currentIndex)">   
+                    </div>
+                    sliderIndex++;
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="images-container">
+        <div class="images-wrapper">
+            <div class="images-left skeleton"></div>
+        
+            <div class="images-right">
+                <div class="skeleton skeleton-right-item"></div>
+                <div class="skeleton skeleton-right-item"></div>
+            </div>
+        </div>
+        
+        <div class="other-images">
+            @for (int i = 0; i < 5; i++) 
+            {
+                <div class="other-image skeleton"></div>
+            }
+        </div>
+    </div>
+}
+
+@if (_isModalOpen && ImagesList != null)
+{
+    <div class="modal-overlay" @onclick="CloseGallery">
+        <div class="modal-content" @onclick:stopPropagation>
+            <button class="close-btn" @onclick="CloseGallery">&times;</button>
+            
+            <div class="modal-main-view">
+                <button class="nav-btn prev-btn" @onclick="PrevImage">&#10094;</button>
+                <img class="modal-image" src="@ImagesList[_currentImageIndex].Url" alt="">
+                <button class="nav-btn next-btn" @onclick="NextImage">&#10095;</button>
+            </div>
+
+            <div class="thumbnails-container">
+                @for (int i = 0; i < ImagesList.Count; i++)
+                {
+                    var index = i;
+                    <img src="@ImagesList[i].Url" 
+                         class="@(index == _currentImageIndex ? "thumbnail-image active" : "thumbnail-image")"
+                         @onclick="() => SelectImage(index)"
+                         alt="" />
+                }
+            </div>
+        </div>
+    </div>
+}

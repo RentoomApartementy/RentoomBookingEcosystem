@@ -94,7 +94,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             {
                 var idsHash = payload.ObjectIds.ToHashSet();
 
-                ret = ret.Where(o => idsHash.Contains(o.ObjectId)).ToList();
+                ret = ret?.Where(o => idsHash.Contains(o.ObjectId)).ToList();
             }
 
             return ret;

@@ -1,7 +1,6 @@
 ﻿@inject NavigationManager Navigation
 @implements IDisposable
 @* @inherits Models.PageBase *@
-
 <div class="footer-navigation-row">
     <NavigationButton href="@($"/reservation/{Token}/InstructionsPage")" active="@IsActive($"/reservation/{Token}/InstructionsPage")">
         <Icon>
@@ -29,7 +28,6 @@
         </Icon>
     </NavigationButton>
 </div>
-
 @code {
     [Parameter]
     public string? Token { get; set; }

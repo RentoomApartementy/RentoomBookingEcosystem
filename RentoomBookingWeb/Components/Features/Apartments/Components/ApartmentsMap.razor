@@ -5,11 +5,15 @@
 @inject IIdoApartmentService IdoApartmentService
 @inject IJSRuntime JSRuntime
 
-<div id="map" style="width: 100%; height: 90%; margin: 1rem 0;"></div>
+<div id="map" class="map-container"></div>
 
 @code {
     [Parameter] public List<PricingOffer> Offers { get; set; } = new();
     [Parameter] public Boolean IsSearch { get; set; } = false;
+    [Parameter] public String? StartDate { get; set; } = null;
+    [Parameter] public String? EndDate { get; set; } = null;
+    [Parameter] public String? Adults { get; set; } = null;
+    [Parameter] public String? Children { get; set; } = null;
     private List<ApartmentObject> Items { get; set; } = new();
     private DotNetObjectReference<ApartmentsMap>? _objRef;
 
@@ -77,34 +81,76 @@
         await JSRuntime.InvokeVoidAsync("leafletMap.clearMarkers");
 
         var markers = Items
+            .Where(i => !IsSearch || GetPricingOfferByObjectId(i.Id) != null)
             .Where(i => i?.ObjectLocation?.LocalizationItem != null)
             .Select(i =>
             {
-                var offer = GetPricingOfferByObjectId(int.Parse(i.Id ?? "0"));
+                var detailsUrl = $"/apartamenty/{i.Id}";
+
+                if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
+                {
+                    detailsUrl += $"/{StartDate}/{EndDate}";
+
+                    if (!string.IsNullOrEmpty(Adults))
+                    {
+                        detailsUrl += $"/{Adults}";
+
+                        if (!string.IsNullOrEmpty(Children))
+                        {
+                            detailsUrl += $"/{Children}";
+                        }
+                    }
+                }
+
+                var offer = GetPricingOfferByObjectId(i.Id);
                 return new Marker
                 {
                     Lat = i?.ObjectLocation?.LocalizationItem?.GeoLocationLat,
                     Lng = i?.ObjectLocation?.LocalizationItem?.GeoLocationLng,
                     Popup = $@"
-<div id='popup-{i?.Id}' style='display: flex; flex-direction: column; gap: .4rem;'>
-    <div style='height: 130px; width: 100%; display: flex; align-items: center; justify-content: center; background: #f3f3f3; border-radius: .5rem .5rem 0 0;'>
-        <span>Ładowanie zdjęcia...</span>
+<div id='popup-{i?.Id}' style='position: relative; background-color: white; border-radius: .5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.3);'>
+    <div style='display: flex; flex-direction: column; gap: .4rem;'>
+        <div class='popup-img-target' style='height: 130px; width: 100%; display: flex; align-items: center; justify-content: center; background: #f3f3f3; border-radius: .5rem .5rem 0 0;'>
+            <span>Ładowanie zdjęcia...</span>
+        </div>
+        <div style='padding: .3rem 1rem 1rem 1rem; display: flex; flex-direction: column; gap: .5rem;'>
+            <strong>{i?.Name}</strong>
+            <div>
+                <span>{i?.ObjectLocation?.LocalizationItem?.Street}</span>
+                <span>{i?.ObjectLocation?.LocalizationItem?.ZipCode}</span>
+                <span>{i?.ObjectLocation?.LocalizationItem?.City}</span>
+            </div>
+            <div style=""display: flex; gap: .5rem;"">
+                 <div>
+                    <img src=""assets/svgs/users.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span>{i.MinCapacity} - {i.Capacity}</span>
+                </div>
+                <div>
+                    <img src=""assets/svgs/bed.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span>{SumBedByItem(i)}</span>
+                </div>
+                <div>
+                    <img src=""assets/svgs/bath.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span>1</span>
+                </div>
+                <div>
+                    <img src=""assets/svgs/m2.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span>{i.Area}</span>
+                </div>
+            </div>
+
+            <span>{getMinimalPrice(i.Id)}</span>            
+
+            <div style='width: 100%; display: flex;'>
+                <a href='{detailsUrl}' style='display: flex; align-items: center; justify-content: center; width: 100%; padding: .4rem 1rem; background-color: rgba(148, 95, 40, 0.7); color: white; border-radius: 5px; cursor: pointer; text-decoration: none;'>
+                    Zarezerwuj
+                </a>
+            </div>
+        </div>
     </div>
-    <div style='padding-top: .3rem; padding-bottom: 1rem; padding-right: 1rem; padding-left: 1rem; display: flex; flex-direction: column; gap: .5rem;'>
-<strong>{i?.Name}</strong>
-    <div>
-        <span>{i?.ObjectLocation?.LocalizationItem?.Street}</span>
-        <span>{i?.ObjectLocation?.LocalizationItem?.ZipCode}</span>
-        <span>{i?.ObjectLocation?.LocalizationItem?.City}</span>
-    </div>
-    <div style='width: 100%; display: flex;'>
-        <a href='/apartamenty/{i?.Id}' style='display: flex; align-items: center; justify-content: center; width: 100%; padding: .4rem 1rem; background-color: rgba(148, 95, 40, 0.7); color: white; border-radius: 5px; cursor: pointer;'>
-            Rezerwacja
-        </a>
-    </div>
-</div>
+    <div style='position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid white;'></div>
 </div>",
-                    Id = i?.Id,
+                    Id = i.Id.ToString(),
                     ObjRef = _objRef,
                     HasOffer = offer != null,
                     Price = offer?.MinimalPrice,
@@ -135,4 +181,14 @@
 
     private PricingOffer? GetPricingOfferByObjectId(int objectId)
         => Offers.Find(o => o.ObjectId == objectId);
+
+    private int SumBedByItem(ApartmentObject apartment)
+    {
+        return (int)apartment?.BedsConfiguration?.Sum(item => item.Count)!;
+    }
+
+    private string getMinimalPrice(int id)
+    {
+        return GetPricingOfferByObjectId(id) != null ? $"Cena za pobyt: {GetPricingOfferByObjectId(id)?.MinimalPrice} zł" : "";
+    }
 }

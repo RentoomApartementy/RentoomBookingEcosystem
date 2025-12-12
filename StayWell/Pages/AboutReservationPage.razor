@@ -50,7 +50,19 @@
     }
     <div class="amenity">
         <span><img src="/icons/file-user.svg"/>Regulamin:</span>
+        <span class="text">Data akceptacji: <span>@TermsState.CurrentTerms.AcceptedAt.ToShortDateString()</span></span>
         <button>Wyświetl cały regulamin</button>
+    </div>
+    <div class="amenity">
+        <span><img src="/icons/users.svg"/>Zarejestrowani goście:</span>
+        <ul>
+            @foreach(var guest in RegistrationCardState.CurrentCard.GuestsData)
+            {
+                <li>
+                    @guest.FirstName @guest.LastName
+                </li>
+            }
+        </ul>
     </div>
 </div>
 

@@ -111,8 +111,7 @@ namespace RentoomBooking.Api
                 var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync();
 
                 List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
-
-                await _filtersRepository.SaveRegionsFilters(regionsFilter);
+                await _filtersRepository.SaveRegionsFilters(regionsFilter,_logger);
 
                 response.StatusCode = HttpStatusCode.OK;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
@@ -131,14 +130,46 @@ namespace RentoomBooking.Api
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to retrieve apartments.");
+                _logger.LogError(ex, "Failed to retrieve apartments." + ex.Message);
                 response.StatusCode = HttpStatusCode.InternalServerError;
-                await response.WriteStringAsync("Internal server error.");
+                await response.WriteStringAsync("Internal server error." + ex.Message);
                 return response;
             }
 
             
         }
+
+
+
+        [Function("SeedApartmentsToPostgres")]
+        public async Task<HttpResponseData> SeedApartmentsToPostgres(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "postgres/apartments/seed")] HttpRequestData req)
+        {
+            var cancellationToken = req.FunctionContext.CancellationToken;
+            var response = req.CreateResponse();
+
+            try
+            {
+                var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync(cancellationToken);
+
+                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
+
+                await _filtersRepository.SaveRegionsFilters(regionsFilter,_logger);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to seed apartments to PostgreSQL.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.");
+                return response;
+            }
+        }
+
 
         [Function("GetApartmentByIdAsync")]
         public async Task<HttpResponseData> GetApartmentByIdAsync(

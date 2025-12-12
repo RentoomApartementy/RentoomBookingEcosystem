@@ -1,0 +1,14 @@
+.form-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.form-title {
+    text-align: center;
+    color: #1F5A41;
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}

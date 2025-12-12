@@ -80,3 +80,20 @@
 .dropdown-modal > *:last-child {
     margin-bottom: 0;
 }
+
+@media (max-width: 910px) {
+    .dropdown-wrapper {
+        width: 100%;
+    }
+
+    .custom-input {
+        width: 100%;
+    }
+
+    .dropdown-modal {
+        width: 100%;      
+        left: 0;          
+        transform: none;  
+        min-width: unset; 
+    }
+}

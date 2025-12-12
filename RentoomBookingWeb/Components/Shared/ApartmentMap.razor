@@ -1,0 +1,57 @@
+<div id="apartmentMap" style="width: 100%; height: 100%;"></div>
+
+@code {
+    [Parameter] public float? Latitude { get; set; }
+    [Parameter] public float? Longitude { get; set; }
+    [Parameter] public string? ApartmentAddress { get; set; }
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private DotNetObjectReference<ApartmentMap>? _objRef;
+    private bool _mapRendered = false;
+
+    public class Marker
+    {
+        public float? Lat { get; set; }
+        public float? Lng { get; set; }
+        public string Popup { get; set; } = "";
+        public string? Id { get; set; }
+        public DotNetObjectReference<ApartmentMap>? ObjRef { get; set; }
+        public bool HasOffer { get; set; } = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_mapRendered && Latitude.HasValue && Longitude.HasValue)
+        {
+            _mapRendered = true;
+
+            _objRef = DotNetObjectReference.Create(this);
+
+            double lat = (double)Latitude.Value;
+            double lng = (double)Longitude.Value;
+
+            await JS.InvokeVoidAsync("leafletMap.createMap", "apartmentMap", lat, lng, 15);
+
+            var marker = new Marker
+            {
+                Lat = Latitude,
+                Lng = Longitude,
+                Popup = $@"<div class='marker-offer' style='padding: 0.2rem 0.5rem;'>{ApartmentAddress ?? "Adres"}</div>",
+                Id = "1",
+                ObjRef = _objRef,
+                HasOffer = false
+            };
+
+            await JS.InvokeVoidAsync("leafletMap.addMarkers", new[] { marker }, false);
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("leafletMap.refreshMap");
+        }
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+}

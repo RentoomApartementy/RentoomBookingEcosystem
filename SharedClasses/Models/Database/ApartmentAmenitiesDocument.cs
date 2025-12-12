@@ -5,13 +5,10 @@ using System.Text.Json.Serialization;
 public class ApartmentAmenitiesDocument
 {
     [JsonPropertyName("id")]
-    public string Id { get; set; } = string.Empty;
-
-    [JsonPropertyName("partitionKey")]
-    public string PartitionKey { get; set; } = string.Empty;
+    public int Id { get; set; }
 
     [JsonPropertyName("apartmentId")]
-    public string? ApartmentId { get; set; }
+    public int ApartmentId { get; set; }
 
     [JsonPropertyName("amenities")]
     public List<ObjectAmenity>? Amenities { get; set; }
