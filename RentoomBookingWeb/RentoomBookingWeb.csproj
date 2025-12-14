@@ -77,4 +77,8 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Features\Payment\" />
+  </ItemGroup>
+
 </Project>

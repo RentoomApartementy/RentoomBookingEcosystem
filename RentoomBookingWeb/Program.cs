@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
+using RentoomBooking.SharedClasses.Integrations.Tpay;
+using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -65,7 +69,35 @@ namespace RentoomBookingWeb
             
             //view scoped
             builder.Services.AddScoped<IApartmentsViewModel, ApartmentsViewModel>();
-            
+
+            //TPAY
+            builder.Services.Configure<TpaySettings>(builder.Configuration.GetSection("Tpay"));
+
+            builder.Services.AddHttpClient("Tpay", (sp, http) =>
+            {
+                var settings = sp.GetRequiredService<IOptions<TpaySettings>>().Value;
+
+                if (string.IsNullOrWhiteSpace(settings.ApiBaseUrl))
+                    throw new InvalidOperationException("Tpay:ApiBaseUrl is missing.");
+
+                http.BaseAddress = new Uri(settings.ApiBaseUrl, UriKind.Absolute);
+                http.DefaultRequestHeaders.Accept.Clear();
+                http.DefaultRequestHeaders.Accept.Add(
+                    new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            });
+
+            builder.Services.AddScoped<ITpayClient>(sp =>
+            {
+                var http = sp.GetRequiredService<IHttpClientFactory>().CreateClient("Tpay");
+                var opt = sp.GetRequiredService<IOptions<TpaySettings>>();
+                var logger = sp.GetRequiredService<ILogger<TpayClient>>();
+                return new TpayClient(http, opt, logger);
+            });
+            //TPAY END
+
+
+
+
             var app = builder.Build();
             
             var supportedCultures = new[] { "en-US", "pl-PL" };
