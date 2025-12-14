@@ -411,11 +411,15 @@ private async Task LoadSuggestionInBackground()
         }
     }
     
+    // GotReservationSummary() -> "Tworz rezerwacje w idobokooking jako unconfirmed"> przekaz ID do ReservationSummary.razor->"Oplac rezerwacje -> zmien status rezerwacji na waitingForPayment-> przekierujuj->Payment.razor/{idrezerwacji}-> automatycznie Przekierowanie do TPAy->{klient opplaca}->payment.razor(wyswietl blad, lub success i info o linku staywell)
     private void GoToPayment()
     {
         if (_apartment != null)
         {
-            Navigation.NavigateTo($"/platnosc/{_apartment.Id}");
+            //create reservation in idoBooking as unconfirmed
+            //fallback if fails
+            //else navigate to ReservationSummary.razor with reservation id
+            Navigation.NavigateTo($"/NowaRezerwacja/{_apartment.Id}");
         }
     }
     
