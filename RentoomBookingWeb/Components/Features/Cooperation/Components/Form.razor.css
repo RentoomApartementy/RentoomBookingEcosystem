@@ -12,3 +12,50 @@
     font-size: 1.4rem;
     margin-bottom: 5px;
 }
+
+.form-wrapper {
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.form-image-wrapper {
+    flex: 1;
+    border-radius: 2rem;
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.form-inputs-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #F7F7F7;
+    width: 100%;
+    border: solid grey 1px;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    gap: 1rem;
+}
+
+.form-names {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .form-wrapper {
+        flex-direction: column;
+    }   
+    
+}

@@ -1,8 +1,34 @@
 <div class="form-container">
     <h3 class="form-title">Jesli chcesz nawiązać współpracę, wypełnij formularz</h3>
     
+    <div class="form-wrapper">
+        <div class="form-image-wrapper">
+            <img src="assets/images/contact.jpeg" alt="Kontakt" class="image">
+        </div>
+        
+        <div class="form-inputs-container">
+            <div class="form-names">
+                <Input Placeholder="Imię" Type="text" @bind-Value="_name" IsFull="true"/>  
+                <Input Placeholder="Nazwisko" Type="text" @bind-Value="_surname" IsFull="true"/>  
+            </div>
+            <Input Placeholder="Numer telefonu" Type="text" @bind-Value="_phone" IsFull="true"/>  
+            <Input Placeholder="Email" Type="text" @bind-Value="_email" IsFull="true"/> 
+            <div class="form-names">
+                <Input Placeholder="Ilość mieszkań" Type="number" @bind-Value="_apartmentsCount" IsFull="true"/>  
+                <Input Placeholder="Dzielnica Torunia" Type="text" @bind-Value="_district" IsFull="true"/>  
+            </div>
+            
+            <Button>Wyślij</Button>
+        </div>
+    </div>
+    
 </div>
 
 @code {
-    
+    private string _name = "";
+    private string _surname = "";
+    private string _phone = "";
+    private string _email = "";
+    private string _apartmentsCount = "";
+    private string _district = "";
 }
