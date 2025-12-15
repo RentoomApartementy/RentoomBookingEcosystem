@@ -1,0 +1,23 @@
+@page "/rezerwuj/{currentGuid:guid}/oplac"
+
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
+@inject IReservationWorkflowService ReservationWorkflowService;
+@inject NavigationManager Navigation
+
+<PageTitle>Opłać</PageTitle>
+
+<div class="summary-container">
+    <div class="">
+        <h2>Opłać</h2>
+        <Button @onclick="GoToSummary">Przejdź dalej</Button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid CurrentGuid { get; set; }
+    
+    private void GoToSummary()
+    {
+        Navigation.NavigateTo($"/rezerwuj/{ReservationWorkflowService.CurrentGuid}/podsumowanie-transakcji");
+    }
+}

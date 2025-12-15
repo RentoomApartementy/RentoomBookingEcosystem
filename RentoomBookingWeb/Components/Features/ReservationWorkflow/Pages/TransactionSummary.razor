@@ -1,0 +1,17 @@
+@page "/rezerwuj/{currentGuid:guid}/podsumowanie-transakcji"
+
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
+@inject IReservationWorkflowService ReservationWorkflowService;
+@inject NavigationManager Navigation
+
+<PageTitle>Opłać</PageTitle>
+
+<div class="summary-container">
+    <div class="">
+        <h2>Podsumowanie transakcji</h2>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid CurrentGuid { get; set; }
+}
