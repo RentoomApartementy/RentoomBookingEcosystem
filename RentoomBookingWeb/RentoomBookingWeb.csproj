@@ -79,6 +79,7 @@
 
   <ItemGroup>
     <Folder Include="Components\Features\Payment\" />
+    <Folder Include="Components\Features\ReservationWorkflow\Components\" />
   </ItemGroup>
 
 </Project>

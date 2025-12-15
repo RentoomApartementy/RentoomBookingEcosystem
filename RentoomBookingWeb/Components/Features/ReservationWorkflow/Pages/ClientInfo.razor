@@ -1,25 +1,28 @@
-@page "/platnosc/{idoReservationId:int}";
+@page "/rezerwuj/{currentGuid:guid}/dane-klienta/";
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
 @inject IApartmentsService ApartmentsService;
+@inject IReservationWorkflowService ReservationWorkflowService;
+@inject NavigationManager Navigation
 
 <PageTitle>Płatność</PageTitle>
 
 <div class="payment-container">
     <div class="payment-wrapper">
-        <h1>@_apartment?.Name</h1>
-        
-        <div class="">
-            <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>, 
-            <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span> 
-            <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
-        </div>
+        @* <h1>@_apartment?.Name</h1> *@
+        @* *@
+        @* <div class=""> *@
+        @*     <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>,  *@
+        @*     <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>  *@
+        @*     <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span> *@
+        @* </div> *@
         
         <hr style="width: 100%"/>
         
         <div class="form-wrapper">
             <div class="form-item">
                 <h4>Dane osobiste</h4>
-                
+
                 <Input Placeholder="Imię" IsFull="true"/>
                 <Input Placeholder="Nazwisko" IsFull="true"/>
                 <Input Placeholder="Miasto" IsFull="true"/>
@@ -28,10 +31,10 @@
                 <Input Placeholder="Adres E-mail" IsFull="true"/>
                 <Input Placeholder="Numer telefonu" IsFull="true"/>
             </div>
-            
+
             <div class="form-item">
                 <h4>Dane firmowe</h4>
-                
+
                 <Input Placeholder="Imię" IsFull="true"/>
                 <Input Placeholder="Nazwisko" IsFull="true"/>
                 <Input Placeholder="Nazwa firmy" IsFull="true"/>
@@ -51,17 +54,24 @@
         
         <!-- TODO payments types -->
         
+        <Button @onclick="GoToSummary">Przejdź do podsumowania</Button>
+        
     </div>
     
 </div>
 
 @code {
-    [Parameter] public int Id { get; set; }
+    [Parameter] public Guid CurrentGuid { get; set; }
     
-    private ApartmentObject? _apartment;
+    // private ApartmentObject? _apartment;
+    //
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
+    // }
     
-    protected override async Task OnInitializedAsync()
+    private void GoToSummary()
     {
-        _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
+        Navigation.NavigateTo($"/rezerwuj/{ReservationWorkflowService.CurrentGuid}/podsumowanie");
     }
 }

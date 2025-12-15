@@ -5,6 +5,7 @@
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBookingWeb.Components.Features.Apartments.Components
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
 @inject IApartmentsService ApartmentsService
 @inject IIdoApartmentService IdoApartmentService
 @inject NavigationManager Navigation
@@ -13,6 +14,7 @@
 @using RentoomBookingWeb.Models
 @using RentoomBookingWeb.Services
 @inject IAvailabilityFinderService AvailabilityFinder
+@inject IReservationWorkflowService ReservationWorkflowService
 
 <PageTitle>@_apartment?.Name</PageTitle>
 
@@ -25,7 +27,6 @@
     />   
     
     <div class="main-wrapper">
-        
         <div class="left-container">
             <div class="apartment-wrapper @(_isExpanded ? "expanded" : "collapsed")">
                 <div class="apartment-text-wrapper">
@@ -419,7 +420,7 @@ private async Task LoadSuggestionInBackground()
             //create reservation in idoBooking as unconfirmed
             //fallback if fails
             //else navigate to ReservationSummary.razor with reservation id
-            Navigation.NavigateTo($"/NowaRezerwacja/{_apartment.Id}");
+            Navigation.NavigateTo($"/rezerwuj/{ReservationWorkflowService.CurrentGuid}/dane-klienta");
         }
     }
     
