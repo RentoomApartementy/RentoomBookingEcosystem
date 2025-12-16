@@ -46,6 +46,19 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
         public string Email { get; set; } = string.Empty;
     }
 
+    public class ReservationSummaryDto
+    {
+        public Guid ReservationGuid { get; set; }
+        public StartReservationRequest? StartRequest { get; set; }
+        public ClientInfoDto? Client { get; set; }
+        public InvoiceInfoDto? Invoice { get; set; }
+        public int? IdoReservationId { get; set; }
+        public string? IdoStatus { get; set; }
+        public decimal? OfferPrice { get; set; }
+        public string Currency { get; set; } = "PLN";
+    }
+
+
     public class ReservationState
     {
         public StartReservationRequest? StartRequest { get; set; }

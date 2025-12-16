@@ -73,18 +73,26 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             if (record is null) throw new ArgumentNullException(nameof(record));
 
-         
             await using var context = _dbContextFactory.CreateDbContext();
-            var entity = MapToEntity(record);
-            //entity.RowVersion = Guid.NewGuid().ToByteArray();        
-           // context.Entry(entity).Property(e => e.RowVersion).OriginalValue = record.RowVersion;
-            //context.Entry(entity).Property(e => e.RowVersion).IsModified = true;
-            //context.Entry(entity).State = EntityState.Modified;
-            entity.UpdatedAt = DateTime.UtcNow;
-            context.ReservationRecords.Update(entity);
+            var existing = await context.ReservationRecords
+                .FirstOrDefaultAsync(r => r.ReservationGuid == record.ReservationGuid, cancellationToken);
+
+            if (existing is null)
+            {
+                return;
+            }
+
+            existing.ReservationJson = JsonConvert.SerializeObject(record.State);
+            existing.IdoReservationId = record.IdoReservationId;
+            existing.IdoStatus = record.IdoStatus;
+            existing.PaymentSessionGuid = record.PaymentSessionGuid;
+            existing.PaymentStatus = record.PaymentStatus;
+            existing.Provider = record.Provider;
+            existing.ProviderTransactionId = record.ProviderTransactionId;
+            existing.UpdatedAt = DateTime.UtcNow;
 
             await context.SaveChangesAsync(cancellationToken);
-            record.RowVersion = entity.RowVersion ?? Array.Empty<byte>();
+
         }
 
 

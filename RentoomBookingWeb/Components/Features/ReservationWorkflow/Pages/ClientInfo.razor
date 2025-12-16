@@ -83,13 +83,7 @@
 
     // private ApartmentObject? _apartment;
     //
-    protected override async Task OnInitializedAsync()
-    {
-        //_apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
-
-        _editContext = new EditContext(_form);
-
-    }
+   
 
     private PaymentFormModel _form = new();
     private EditContext _editContext = default!;
@@ -97,7 +91,14 @@
     private string? _error;
 
 
+    protected override async Task OnInitializedAsync()
+    {
+        //_apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
 
+        _editContext = new EditContext(_form);
+        // _form.Client = ReservationWorkflowService
+
+    }
 
 
    /* private void GoToSummary()

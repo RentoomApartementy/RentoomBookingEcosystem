@@ -1,5 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
@@ -14,7 +18,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
     {
         Task<Guid> StartAsync(StartReservationRequest request);
         Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice);
-     //   Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid);
+        Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid);
        // Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
        // Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
        // Task HandleTpayWebhookAsync(TpayWebhookDto dto);
@@ -54,10 +58,159 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             await _store.UpdateAsync(record);
         }
 
+        public async Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid)
+        {
+            var record = await RequireReservationAsync(reservationGuid);
+            record = await EnsureIdoReservationAsync(record);
+
+            return new ReservationSummaryDto
+            {
+                ReservationGuid = reservationGuid,
+                StartRequest = record.State.StartRequest,
+                Client = record.State.Client,
+                Invoice = record.State.Invoice,
+                IdoReservationId = record.IdoReservationId,
+                IdoStatus = record.IdoStatus,
+                OfferPrice = record.State.StartRequest?.OfferPrice,
+                Currency = record.State.StartRequest?.Currency ?? "PLN"
+            };
+        }
+
+
         private async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid)
         {
             var record = await _store.GetAsync(reservationGuid);
             return record ?? throw new InvalidOperationException($"Reservation {reservationGuid} not found.");
         }
+
+        private async Task<ReservationRecord> EnsureIdoReservationAsync(ReservationRecord record)
+        {
+            while (true)
+            {
+                if (record.IdoReservationId is not null)
+                {
+                    return record;
+                }
+
+                var request = BuildReservationAddRequest(record);
+                try
+                {
+                    var idoresponse = await _idoApi.AddReservationAsync(request);
+                    
+                    if (idoresponse?.Errors is not null )
+                        throw new InvalidOperationException($"Reservation {record.ReservationGuid} couldn't be saved in Idobooking with error: {JsonConvert.SerializeObject(idoresponse.Errors)}.");
+
+                   // var errorMessages = string.Join("; ", idoresponse.Errors.ErrorList.Select(e => e.Message));
+                   //     throw new InvalidOperationException($"Failed to create IdoBooking reservation: {errorMessages}");
+                    
+                    record.IdoReservationId = idoresponse.Reservations[0].ReservationId;
+                    record.IdoStatus = ReservationStatusType.Unconfirmed;
+
+                    await _store.UpdateAsync(record);
+                    return record;
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    _logger.LogWarning("Concurrency conflict while creating IdoBooking reservation for {ReservationGuid}. Retrying.", record.ReservationGuid);
+                    record = await RequireReservationAsync(record.ReservationGuid);
+                }
+            }
+        }
+
+        private static NewReservation BuildReservationAddRequest(ReservationRecord record)
+        {
+            if (record.State.StartRequest is null)
+            {
+                throw new InvalidOperationException("Reservation start request is missing.");
+            }
+
+            var start = record.State.StartRequest;
+            var reservation = new NewReservation
+            {
+                DateFrom = start.StartDate.ToString("yyyy-MM-dd"),
+                DateTo = start.EndDate.ToString("yyyy-MM-dd"),
+                Price = start.OfferPrice.HasValue ? (float)start.OfferPrice.Value : null,
+                Status = ReservationStatusType.Unconfirmed,
+                InternalSource = ReservationInternalSourceType.Other,
+                Items =
+                [
+                    new NewReservationItem
+                {
+                    ObjectItemId = start.ObjectItemId,
+                    NumberOfAdults = start.Adults,
+                    NumberOfBigChildren = start.Children,
+                    Addons = start.SelectedAddons?.Select(a => new NewReservationAddon
+                    {
+                        AddonId = a.AddonId,
+                        Persons = a.Persons,
+                        Nights = a.Nights,
+                        Quantity = a.Quantity,
+                        Price = a.Price,
+                        Vat = a.Vat
+                    }).ToList()
+                }
+                ],
+                Currency = start.Currency ?? "PLN",
+                ClientData = MapClient(record.State.Client, record.State.Invoice)
+            };
+
+            /* return new ReservationAddRequest
+             {
+                 Params = new ReservationAddParams
+                 {
+                     Reservations = new List<NewReservation> { reservation }
+                 }
+             };*/
+            return reservation;
+        }
+
+        private static ClientWithGuest? MapClient(ClientInfoDto? client, InvoiceInfoDto? invoice)
+        {
+            if (client is null) return null;
+
+            var guests = new List<ClientGuest>
+        {
+            new()
+            {
+                FirstName = client.FirstName,
+                LastName = client.LastName,
+                City = client.City,
+                CountryCode = client.CountryCode,
+                Email = client.Email,
+                Language = "pl",
+                Phone = client.Phone,
+                Street = client.Street,
+                Zipcode = client.ZipCode
+            }
+        };
+
+            return new ClientWithGuest
+            {
+                FirstName = client.FirstName,
+                LastName = client.LastName,
+                Email = client.Email,
+                Phone = client.Phone,
+                Street = client.Street,
+                Zipcode = client.ZipCode,
+                City = client.City,
+                CountryCode = client.CountryCode,
+                Guests = guests,
+                InvoiceData = invoice is null
+                    ? null
+                    : new ClientInvoiceData
+                    {
+                        FirstName = client.FirstName,
+                        LastName = client.LastName,
+                        CompanyName = invoice.CompanyName,
+                        TaxNumber = invoice.TaxNumber,
+                        Street = invoice.Street,
+                        Zipcode = invoice.ZipCode,
+                        City = invoice.City,
+                        CountryCode = client.CountryCode
+                    }
+            };
+        }
+
+
     }
 }
