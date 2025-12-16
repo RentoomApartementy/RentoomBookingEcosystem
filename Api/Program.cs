@@ -55,6 +55,8 @@ builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>(
 builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
 builder.Services.AddScoped<ApartmentRepository>();
 builder.Services.AddScoped<FiltersRepository>();
+builder.Services.AddScoped<TermsRepository>();
+builder.Services.AddScoped<RegistrationCardRepository>();
 builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<BitrixService>();

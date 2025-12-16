@@ -1,8 +1,86 @@
-html, body {
+﻿html, body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
 }
+
+
+
+/* UKRYWANIE STYLU BITRIX */
+.b24-widget-button-visible {
+    visibility: hidden !important;
+    display: none !important;
+}
+
+.bx-livechat-wrapper {
+    width: 100% !important;
+}
+
+.bx-livechat-body {
+    background-image: none !important;
+/*    background-color: #e5e5e5 !important;*/
+    /**/
+    backdrop-filter: blur(10px) !important;
+    background-color: rgba(229, 229, 229, 0.6) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.bx-livechat-box {
+    border-radius: 15px !important;
+    /**/
+    background: rgba(255, 255, 255, 0.18) !important;
+    backdrop-filter: blur(12px) saturate(130%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(130%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.bx-livechat-title {
+    font-size: larger !important;
+}
+
+.bx-livechat-control-btn-close::before{
+    display: none !important;
+}
+
+.bx-im-message,
+.bx-imopenlines-message,
+.bx-im-message-type-self,
+.bx-im-message-type-system {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.bx-im-message-content-text {
+  color: #111 !important;
+}
+
+.bx-livechat-textarea{
+    background-color: white !important;
+}
+
+@media (min-width: 601px) {
+    .bx-livechat-wrapper {
+        width: 100% !important;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .bx-livechat-box {
+        background: #ffffff !important;
+        border: 1px solid #e6e6e6 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    .bx-livechat-body {
+        background-image: none !important;
+        background-color: #f2f2f2 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+}
+
 
 h1:focus {
     outline: none;

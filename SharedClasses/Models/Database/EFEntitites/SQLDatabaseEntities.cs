@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RentoomBooking.SharedClasses.Models.StayWell;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -76,4 +77,41 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         public string Payload { get; set; } = string.Empty;
 
     }
+
+    public class TermsEntity
+    {
+        [Key]
+        [Column("res_token")]
+        public string ResToken { get; set; } = string.Empty;
+        [Column("version_accepted")]
+        public string VersionAccepted { get; set; } = string.Empty;
+        [Column("type_accepted")]
+        public string TypeAccepted { get; set; } = string.Empty;
+        [Column("accepted_at")]
+        public DateTime AcceptedAt { get; set; }
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
+            = DateTime.UtcNow;
+    }
+
+    public class RegistrationCardEntity
+    {
+        [Key]
+        [Column("res_token")]
+        public string ResToken { get; set; } = string.Empty;
+
+        [Column("contact_email")]
+        public string ContactEmail { get; set; } = string.Empty;
+
+        //[Column("contact_phone")]
+        //public string ContactPhone { get; set; } = string.Empty;
+        //[Column("phone_country_code")]
+        //public string PhoneCountryCode { get; set; } = string.Empty;
+        [Column("check_in_time")]
+        public DateTime CheckInTime { get; set; }
+        [Column("guests_data")]
+        public List<RegistrationCardGuestModel> GuestsData { get; set; } = new();
+
+    }
+
 }

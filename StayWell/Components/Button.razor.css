@@ -2,12 +2,14 @@
     0% {
         background-position: 0% 50%;
     }
+
     100% {
         background-position: 100% 50%;
     }
 }
 
 button {
+    color: black;
     max-width: 1000px;
     background: linear-gradient(180deg, rgba(255,255,255,0.85) 80%, rgba(255,255,255,0.65) 100%);
     border: 1.75px solid #222;
@@ -27,52 +29,55 @@ button {
     padding: 8px 12px;
     line-height: 1.2;
     box-shadow: 0 4px 16px -2px rgba(0,0,0,0.12), 0 1.5px 0 0 #fff inset;
-    transition:
-        transform 0.25s cubic-bezier(.4,0,.2,1),
-        box-shadow 0.25s cubic-bezier(.4,0,.2,1),
-        background 0.25s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s cubic-bezier(.4,0,.2,1), background 0.25s cubic-bezier(.4,0,.2,1);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-button:active:enabled {
-    filter: invert(1);
-    transform: translateY(2px);
-    box-shadow: 0 2px 8px -2px rgba(0,0,0,0.10);
-}
+    button:active:enabled {
+        filter: invert(1);
+        transform: translateY(2px);
+        box-shadow: 0 2px 8px -2px rgba(0,0,0,0.10);
+        transition: none;
+    }
 
-button:disabled {
-    background: linear-gradient(180deg, #eaeaea 60%, #d5d5d5 100%);
-    border-color: #bbb;
-    color: #aaa;
-    cursor: not-allowed;
-    box-shadow: none;
-}
+    button:disabled {
+        background: linear-gradient(180deg, #eaeaea 60%, #d5d5d5 100%);
+        border-color: #bbb;
+        color: #aaa;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
 
-button .text {
-    text-align: center;
-    flex: 1 1 auto;
-    max-width: calc(100% - 70px);
-}
+    button .text {
+        text-align: center;
+        flex: 1 1 auto;
+        max-width: calc(100% - 70px);
+    }
 
-button:enabled .icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
-}
+    button:enabled .icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        pointer-events: none;
+    }
 
-button:hover:enabled {
-    cursor: pointer;
-    box-shadow: 0 8px 24px -4px rgba(0,0,0,0.18), 0 2px 0 0 #fff inset;
-    background: linear-gradient(180deg, #f8f8ff 40%, #e0e0f8 100%);
-}
+    button:hover:enabled {
+        cursor: pointer;
+        box-shadow: 0 8px 24px -4px rgba(0,0,0,0.18), 0 2px 0 0 #fff inset;
+        background: linear-gradient(180deg, #f8f8ff 40%, #e0e0f8 100%);
+    }
 
-button:disabled .icon {
-    visibility: hidden;
-}
+    button:disabled .icon {
+        visibility: hidden;
+    }
 
 .button.benefits-club {
     border-color: #F9B806;
@@ -82,9 +87,7 @@ button:disabled .icon {
     font-weight: 600;
     position: relative;
     overflow: hidden;
-    transition: 
-        transform 0.25s cubic-bezier(.4,0,.2,1),
-        background 0.25s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1), background 0.25s cubic-bezier(.4,0,.2,1);
     animation: benefitsClubGlow 6s ease-in-out infinite;
     box-shadow: 0 0 16px 0 rgba(249,184,6,0.5), 0 4px 16px -2px rgba(33,87,62,0.18);
 }
@@ -93,10 +96,41 @@ button:disabled .icon {
     0% {
         box-shadow: 0 0 8px 0 rgba(249,184,6,0.3), 0 4px 16px -2px rgba(33,87,62,0.18);
     }
+
     50% {
         box-shadow: 0 0 32px 4px rgba(249,184,6,0.7), 0 4px 16px -2px rgba(33,87,62,0.18);
     }
+
     100% {
         box-shadow: 0 0 8px 0 rgba(249,184,6,0.3), 0 4px 16px -2px rgba(33,87,62,0.18);
     }
+}
+
+.button.benefits-club:active:enabled {
+    filter: none;
+    transform: translateY(2px) scale(0.995);
+    background: linear-gradient(90deg, #1c4a35 0%, #1f5a42 50%, #1c4a35 100%);
+    box-shadow: 0 2px 8px -2px rgba(0,0,0,0.20);
+    animation: none;
+    transition: none;
+}
+
+button.is-active {
+    filter: invert(1);
+    transform: translateY(2px);
+    box-shadow: 0 2px 8px -2px rgba(0,0,0,0.10);
+    transition: none;
+}
+
+.button.benefits-club.is-active {
+    filter: none;
+    transform: translateY(2px) scale(0.995);
+    background: linear-gradient(90deg, #1c4a35 0%, #1f5a42 50%, #1c4a35 100%);
+    animation: none;
+    transition: none;
+}
+
+button::before,
+button::after {
+    pointer-events: none;
 }

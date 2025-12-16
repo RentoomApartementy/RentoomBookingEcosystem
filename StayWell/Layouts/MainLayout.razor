@@ -40,6 +40,7 @@
     </div>
     }
 </div>
+
 <Toast Message="@_toastMessage" Content="@_toastContent" IsVisible="@_toastVisible" DurationMs="@_toastDuration" OnHide="HideToast" />
 
 <Modal Title="@_modalTitle" OnClose="CloseModal" IsVisible="@_modalVisibility">
@@ -47,6 +48,17 @@
         @_modalContent
     </Content>
 </Modal>
+
+<!--CHAT BITRIX //-->
+@if(ReservationState.CurrentReservation != null)
+{
+    <script>
+        (function (w, d, u) {
+            var s = d.createElement('script'); s.async = true; s.src = u + '?' + (Date.now() / 60000 | 0);
+            var h = d.getElementsByTagName('script')[0]; h.parentNode.insertBefore(s, h);
+        })(window, document, 'https://cdn.bitrix24.pl/b27983133/crm/site_button/loader_8_cr6n1r.js');
+    </script>
+}
 
 
 @code {
@@ -65,6 +77,11 @@
         {
             await JSRuntime.InvokeVoidAsync("initHeaderScroll", "main-body", "main-header"); // chowanie nagłówka przy scrollowaniu
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("bitrixInterop.init");
     }
 
     protected override void OnInitialized()

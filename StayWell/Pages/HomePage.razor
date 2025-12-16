@@ -89,7 +89,7 @@
     private DateTime checkIn;
     private DateTime checkOut;
     private DateTime now;
-    
+
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
 
     private bool _isLoading = true;
@@ -115,8 +115,19 @@
         ReservationDateFrom = Reservation?.ReservationDetails?.dateFrom;
         ReservationDateTo = Reservation?.ReservationDetails?.dateTo;
 
-        var image = MediaState?.CurrentMedia?.FirstOrDefault(m => m.Extension is "jpg")?.Url;
+        LoadImage();
 
-        ImageUrl = image;
     }
+
+    private void LoadImage()
+    {
+        const string placeholder = "/images/placeholders/apartment_placeholder.png";
+
+        ImageUrl = MediaState?.CurrentMedia?
+            .FirstOrDefault(m => string.Equals(m.Extension, "jpg", StringComparison.OrdinalIgnoreCase))
+            ?.Url
+            ?? placeholder;
+    }
+
+
 }

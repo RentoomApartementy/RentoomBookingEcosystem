@@ -55,61 +55,19 @@
     <div class="code wifi">
         <img src="/icons/wifi.svg"/>
         <div class="text-wrapper">
+        @if(ReservationState.IsActiveReservation){
             <div class="title">wifi_multimedia</div>
             <div class="digits">
                 @wifi_pass
                 <button @onclick="CopyToClipboard" class="copy-button">
                     <img src="/icons/copy.svg"/>
                 </button>
-            </div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="code wifi">
-        <img src="/icons/wifi.svg"/>
-        <div class="text-wrapper">
-            <div class="title">wifi_multimedia</div>
-            <div class="digits">
-                @wifi_pass
-                <button @onclick="CopyToClipboard" class="copy-button">
-                    <img src="/icons/copy.svg"/>
-                </button>
-            </div>
+                </div>
+            }
+            else
+            {
+                <span>Dostęp do wifi w dniu zameldowania</span>
+            }
         </div>
     </div>
 </div>
