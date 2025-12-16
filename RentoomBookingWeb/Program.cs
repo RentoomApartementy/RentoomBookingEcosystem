@@ -8,6 +8,7 @@ using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services;
@@ -64,8 +65,12 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IIdoOfferService, IdoOfferService>();
             builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
             builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
-            builder.Services.AddScoped<IReservationWorkflowService, ReservationWorkflowService>();
             
+            builder.Services.AddScoped<IReservationWorkflowService, ReservationWorkflowService>();
+            builder.Services.AddScoped<IReservationStore, ReservationStore>();
+            builder.Services.AddScoped<ITpayGateway, MockTpayGateway>();
+
+
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
             

@@ -1,4 +1,4 @@
-@page "/rezerwuj/{currentGuid:guid}/oplac/{tpayGuid:guid}/fail"
+@page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/{tpayGuid:guid}/fail"
 
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
 
@@ -12,7 +12,7 @@
 </div>
 
 @code {
-    [Parameter] public Guid CurrentGuid { get; set; }
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
     [Parameter] public Guid TpayGuid { get; set; }
     
 }

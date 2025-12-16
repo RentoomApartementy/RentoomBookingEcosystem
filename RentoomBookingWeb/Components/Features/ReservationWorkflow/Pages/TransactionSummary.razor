@@ -1,6 +1,6 @@
-@page "/rezerwuj/{currentGuid:guid}/podsumowanie-transakcji"
+@page "/rezerwuj/{ReservationTokenGuid:guid}/podsumowanie-transakcji"
 
-@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject IReservationWorkflowService ReservationWorkflowService;
 @inject NavigationManager Navigation
 
@@ -13,5 +13,5 @@
 </div>
 
 @code {
-    [Parameter] public Guid CurrentGuid { get; set; }
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
 }

@@ -1,6 +1,6 @@
-@page "/rezerwuj/{currentGuid:guid}/dane-klienta/";
+@page "/rezerwuj/{ReservationTokenGuid:guid}/dane-klienta/";
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
-@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject IApartmentsService ApartmentsService;
 @inject IReservationWorkflowService ReservationWorkflowService;
 @inject NavigationManager Navigation
@@ -61,7 +61,7 @@
 </div>
 
 @code {
-    [Parameter] public Guid CurrentGuid { get; set; }
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
     
     // private ApartmentObject? _apartment;
     //
@@ -72,6 +72,6 @@
     
     private void GoToSummary()
     {
-        Navigation.NavigateTo($"/rezerwuj/{ReservationWorkflowService.CurrentGuid}/podsumowanie");
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
     }
 }

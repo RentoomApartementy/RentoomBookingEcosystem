@@ -13,7 +13,13 @@ namespace RentoomBooking.SharedClasses.Database
         public DbSet<ApartmentInfoEntity> ApartmentInfos => Set<ApartmentInfoEntity>();
         public DbSet<ApartmentAmenityEntity> ApartmentAmenities => Set<ApartmentAmenityEntity>();
         public DbSet<ApartmentHashEntity> ApartmentHashes => Set<ApartmentHashEntity>();
+        
+        //MS: będziemy uzywac jednego z tych dwóch poniższych.... muszę pomyslec jak to zrefaktorowac odpowiednio.. 
+        //MS: bo rezerwacje w ido NEW reservation vs Reservation to troche inne obiekty... 
         public DbSet<ReservationEntity> Reservations => Set<ReservationEntity>();
+        public DbSet<ReservationRecordEntity> ReservationRecords => Set<ReservationRecordEntity>();
+        
+        
         public DbSet<SearchFiltersEntity> SearchFilters => Set<SearchFiltersEntity>();
         public DbSet<TermsEntity> Terms => Set<TermsEntity>();
         public DbSet<RegistrationCardEntity> RegistrationCard => Set<RegistrationCardEntity>();

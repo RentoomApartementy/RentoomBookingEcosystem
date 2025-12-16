@@ -1,13 +1,13 @@
 namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Services;
 
-interface IReservationWorkflowService
+interface IUIReservationWorkflowService
 {
-    public Guid CurrentGuid { get; }
+    public Guid ReservationTokenGuid { get; }
     public Guid TpayGuid { get; }
 }
 
-public class ReservationWorkflowService:  IReservationWorkflowService
+public class UIReservationWorkflowService:  IUIReservationWorkflowService
 {
-    public Guid CurrentGuid { get; private set; } = Guid.NewGuid();
+    public Guid ReservationTokenGuid { get; private set; } = Guid.NewGuid();
     public Guid TpayGuid { get; } = Guid.NewGuid();
 }

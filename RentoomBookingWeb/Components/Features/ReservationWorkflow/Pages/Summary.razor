@@ -1,6 +1,6 @@
-@page "/rezerwuj/{currentGuid:guid}/podsumowanie"
+@page "/rezerwuj/{ReservationTokenGuid:guid}/podsumowanie"
 
-@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject IReservationWorkflowService ReservationWorkflowService;
 @inject NavigationManager Navigation
 
@@ -14,10 +14,10 @@
 </div>
 
 @code {
-    [Parameter] public Guid CurrentGuid { get; set; }
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
     
     private void GoToPayment()
     {
-        Navigation.NavigateTo($"/rezerwuj/{ReservationWorkflowService.CurrentGuid}/oplac");
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
     }
 }
