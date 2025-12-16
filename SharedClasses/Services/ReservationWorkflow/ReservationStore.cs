@@ -15,8 +15,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
     public interface IReservationStore
     {
         Task<ReservationRecord> CreateAsync(StartReservationRequest request, CancellationToken cancellationToken = default);
-      //  Task<ReservationRecord?> GetAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
-      //  Task UpdateAsync(ReservationRecord record, CancellationToken cancellationToken = default);
+        Task<ReservationRecord?> GetAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
+        Task UpdateAsync(ReservationRecord record, CancellationToken cancellationToken = default);
     }
 
     public class ReservationStore : IReservationStore
@@ -57,6 +57,36 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
             return MapToRecord(entity);
         }
+
+        public async Task<ReservationRecord?> GetAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        {
+            await _initializationTask;
+
+            await using var context = _dbContextFactory.CreateDbContext();
+            var entity = await context.ReservationRecords.AsNoTracking()
+                .FirstOrDefaultAsync(r => r.ReservationGuid == reservationGuid, cancellationToken);
+
+            return entity is null ? null : MapToRecord(entity);
+        }
+
+        public async Task UpdateAsync(ReservationRecord record, CancellationToken cancellationToken = default)
+        {
+            if (record is null) throw new ArgumentNullException(nameof(record));
+
+         
+            await using var context = _dbContextFactory.CreateDbContext();
+            var entity = MapToEntity(record);
+            //entity.RowVersion = Guid.NewGuid().ToByteArray();        
+           // context.Entry(entity).Property(e => e.RowVersion).OriginalValue = record.RowVersion;
+            //context.Entry(entity).Property(e => e.RowVersion).IsModified = true;
+            //context.Entry(entity).State = EntityState.Modified;
+            entity.UpdatedAt = DateTime.UtcNow;
+            context.ReservationRecords.Update(entity);
+
+            await context.SaveChangesAsync(cancellationToken);
+            record.RowVersion = entity.RowVersion ?? Array.Empty<byte>();
+        }
+
 
         private static ReservationRecord MapToRecord(ReservationRecordEntity entity)
         {

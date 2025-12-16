@@ -13,7 +13,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
     public interface IReservationWorkflowService
     {
         Task<Guid> StartAsync(StartReservationRequest request);
-       // Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice);
+        Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice);
      //   Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid);
        // Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
        // Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
@@ -46,6 +46,18 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             return record.ReservationGuid;
         }
 
+        public async Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice)
+        {
+            var record = await RequireReservationAsync(reservationGuid); //sprawdz czy rezerwacja istnieje
+            record.State.Client = client ?? throw new ArgumentNullException(nameof(client));
+            record.State.Invoice = invoice;
+            await _store.UpdateAsync(record);
+        }
 
+        private async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid)
+        {
+            var record = await _store.GetAsync(reservationGuid);
+            return record ?? throw new InvalidOperationException($"Reservation {reservationGuid} not found.");
+        }
     }
 }
