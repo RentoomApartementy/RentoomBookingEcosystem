@@ -1,13 +1,23 @@
 @page "/o-nas"
-@using RentoomBookingWeb.Components.Features.Errors.Components
 
-<PageTitle>O nas</PageTitle>
+<PageTitle>O nas - Rentoom | Profesjonalne Zarządzanie Najmem</PageTitle>
 
-<div class="about-container">
+<HeadContent>
+    <meta name="description" content="Poznaj zespół Rentoom. Od 6 lat zajmujemy się profesjonalnym zarządzaniem najmem krótkoterminowym, obsługą apartamentów i turystyką. Sprawdź naszą misję." />
+    <meta name="keywords" content="zarządzanie najmem, obsługa apartamentów, Rentoom, wynajem krótkoterminowy, zespół Rentoom, inwestycje w nieruchomości" />
+    <meta property="og:title" content="O nas - Rentoom | Profesjonalne Zarządzanie Najmem" />
+    <meta property="og:description" content="Jesteśmy grupą pasjonatów podróży i ekspertów od nieruchomości. Zobacz, jak możemy pomóc w zarządzaniu Twoim apartamentem." />
+    <meta property="og:image" content="assets/images/header-bg-about-us.jpeg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://twojadomena.pl/o-nas" />
+    <link rel="canonical" href="https://twojadomena.pl/o-nas" />
+</HeadContent>
+
+<main class="about-container">
     <HeaderSection ImagePath="/assets/images/header-bg-about-us.jpeg" Title="O nas" Height="230px" />
     
     <div class="main-wrapper">
-        <div class="stats">
+        <section class="stats" aria-label="Statystyki firmy">
             <div class="stat-item">
                 <h3>9.7</h3>
                 <small>średnia ocena apartamentów</small>
@@ -27,7 +37,7 @@
                 <h3>300k</h3>
                 <small>obsłużonych gości</small>
             </div>
-        </div>
+        </section>
         
         <div class="history-mission">
             <section class="history-mission-section">
@@ -50,15 +60,15 @@
         <h2 class="team-title">Nasz zespół</h2>
         
         <div class="team">
-            <div class="team-item">
+            <article class="team-item">
                 <div class="team-item-img-container">
-                    <img src="assets/images/test-user-opinion.jpeg" alt="" class="team-item-img">
+                    <img src="assets/images/test-user-opinion.jpeg" alt="Tomasz - CEO Rentoom" class="team-item-img">
                 </div>
                 
                 <div class="team-item-section">
                     <div class="mobile-icon-wrapper">
                         <div class="team-item-img-container-mobile">
-                            <img src="assets/images/test-user-opinion.jpeg" alt="" class="team-item-img">
+                            <img src="assets/images/test-user-opinion.jpeg" alt="Tomasz - CEO Rentoom" class="team-item-img">
                         </div>
                         <h2>Tomasz – CEO & Founder</h2>
                     </div>
@@ -68,17 +78,17 @@
                         <Button>Zadzwoń</Button>
                     </div>
                 </div>
-            </div>
+            </article>
             
-            <div class="team-item reverse">
+            <article class="team-item reverse">
                 <div class="team-item-img-container">
-                    <img src="assets/images/test-user-opinion.jpeg" alt="" class="team-item-img">
+                    <img src="assets/images/test-user-opinion.jpeg" alt="Kamil - Tech Lead Rentoom" class="team-item-img">
                 </div>
                 
                 <div class="team-item-section">
                     <div class="mobile-icon-wrapper">
                         <div class="team-item-img-container-mobile">
-                            <img src="assets/images/test-user-opinion.jpeg" alt="" class="team-item-img">
+                            <img src="assets/images/test-user-opinion.jpeg" alt="Kamil - Tech Lead Rentoom" class="team-item-img">
                         </div>
                         <h2>Kamil – Tech Lead</h2>
                     </div>
@@ -88,17 +98,17 @@
                         <Button>Zadzwoń</Button>
                     </div>
                 </div>
-            </div>
+            </article>
             
-            <div class="team-item">
+            <article class="team-item">
                 <div class="team-item-img-container">
-                    <img src="assets/images/test-user-opinion.jpeg" alt="" class="team-item-img">
+                    <img src="assets/images/test-user-opinion.jpeg" alt="Marta - Head of Operations Rentoom" class="team-item-img">
                 </div>
                 
                 <div class="team-item-section">
                     <div class="mobile-icon-wrapper">
                         <div class="team-item-img-container-mobile">
-                            <img src="assets/images/test-user-opinion.jpeg" alt="" class="team-item-img">
+                            <img src="assets/images/test-user-opinion.jpeg" alt="Marta - Head of Operations Rentoom" class="team-item-img">
                         </div>
                         <h2>Marta – Head of Operations</h2>
                     </div>
@@ -108,11 +118,10 @@
                         <Button>Zadzwoń</Button>
                     </div>
                 </div>
-            </div>
+            </article>
         </div>
     </div>
-
-</div>
+</main>
 
 @code {
     
