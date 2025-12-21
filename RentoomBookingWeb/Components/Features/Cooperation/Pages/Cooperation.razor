@@ -1,7 +1,21 @@
 @page "/wspolpraca";
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
+@inject NavigationManager NavManager
 
-<PageTitle>Współpraca</PageTitle>
+<PageTitle>Współpraca - Rentoom | Zarządzanie Najmem Toruń</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Zmień swój apartament w bezobsługową inwestycję z Rentoom. Oferujemy kompleksowe zarządzanie najmem w Toruniu, optymalizację dochodu i obsługę gości 24/7. Postaw na jakość i doświadczenie." />
+    <meta name="keywords" content="zarządzanie najmem toruń, obsługa apartamentów, bezobsługowa inwestycja, rentoom współpraca, optymalizacja zysku z najmu, wynajem krótkoterminowy toruń" />
+    <link rel="canonical" href="@NavManager.Uri" />
+
+    <meta property="og:title" content="Współpraca - Rentoom | Profesjonalne Zarządzanie Najmem" />
+    <meta property="og:description" content="Jesteśmy liderem rynku w Toruniu. Oferujemy pełną obsługę, innowacyjne technologie i maksymalizację Twoich zysków. Śpij spokojnie, my pracujemy na Ciebie." />
+    <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-coop.jpeg")" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@NavManager.Uri" />
+    <meta property="og:locale" content="pl_PL" />
+</HeadContent>
 
 <div class="cooperation-container">
     <HeaderSection 

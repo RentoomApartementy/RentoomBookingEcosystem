@@ -1,6 +1,20 @@
 @page "/regulaminy"
+@inject NavigationManager NavManager;
 
 <PageTitle>Regulaminy - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Zapoznaj się z regulaminem wynajmu apartamentów Rentoom w Toruniu. Sprawdź zasady rezerwacji, płatności, ciszy nocnej oraz procedurę reklamacyjną." />
+    <meta name="keywords" content="regulamin wynajmu, zasady pobytu toruń, rentoom regulamin, reklamacje apartamenty, płatności za nocleg toruń, polityka prywatności" />
+    <link rel="canonical" href="@NavManager.Uri" />
+
+    <meta property="og:title" content="Regulaminy - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń" />
+    <meta property="og:description" content="Jasne zasady wynajmu i rezerwacji. Przeczytaj regulamin pobytu i płatności w apartamentach Rentoom." />
+    <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-statute.jpg")" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@NavManager.Uri" />
+    <meta property="og:locale" content="pl_PL" />
+</HeadContent>
 
 <main class="statute-container">
     <HeaderSection ImagePath="/assets/images/header-bg-statute.jpg" Title="Regulamin" Height="230px" />
