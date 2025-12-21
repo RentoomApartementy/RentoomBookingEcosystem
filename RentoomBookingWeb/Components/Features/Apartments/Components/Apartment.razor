@@ -7,6 +7,7 @@
 @using RentoomBookingWeb.Services
 @inject IAvailabilityFinderService AvailabilityFinder
 @inject IJSRuntime JS
+@using RentoomBookingWeb.Helpers
 
 <article @ref="_elementRef" 
          @onclick="GoToReservation" 
@@ -260,11 +261,11 @@
             string? adults = queryParams.ContainsKey("adults") ? queryParams["adults"].ToString() : null;
             string? children = queryParams.ContainsKey("children") ? queryParams["children"].ToString() : null;
 
-            string url = $"/apartamenty/{Item.Id}";
+            string url = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
 
             if (startDate != null || endDate != null || adults != null || children != null)
             {
-                url = $"/apartamenty/{Item.Id}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
+                url = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
             }
 
             Navigation.NavigateTo(url);

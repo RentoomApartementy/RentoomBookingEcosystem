@@ -3,6 +3,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBookingWeb.Helpers;
 
 namespace RentoomBookingWeb.Components.Features.Home.Components;
 public partial class ApartmentsSection : ComponentBase
@@ -88,8 +89,8 @@ public partial class ApartmentsSection : ComponentBase
     public PricingOffer? GetPricingOfferByObjectId(int objectId)
         => Offers.Find(o => o.ObjectId == objectId);
 
-    public void GoToApartmentWithOffer(int apartmentId)
+    public void GoToApartmentWithOffer(int apartmentId, string apartmentName)
     {
-        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(6).ToString("yyyy-MM-dd")}/2/0");
+        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(6).ToString("yyyy-MM-dd")}/2/0");
     }
 }

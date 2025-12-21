@@ -18,7 +18,7 @@
                 @foreach (var apartment in Apartments)
                 {
                     <Item>
-                        <div @onclick="() => GoToApartmentWithOffer(apartment.Id)" class="apartment-slide-col">
+                        <div @onclick="() => GoToApartmentWithOffer(apartment.Id, apartment.Name)" class="apartment-slide-col">
                             <Apartment Item="@apartment" 
                                        Offer="@GetPricingOfferByObjectId(apartment.Id)" 
                                        ShowPrice="true"
