@@ -8,6 +8,7 @@ namespace RentoomBooking.StayWell.States
         private ApartmentObject? _apartment;
         private readonly BackendApi _backendApi = backendApi;
         private int? _currentObjectId;
+        private string? _qrMaintFormUrl;
 
         public bool IsLoading { get; set; }
 
@@ -49,6 +50,29 @@ namespace RentoomBooking.StayWell.States
             {
                 SetLoading(false);
             }
+        }
+
+        public string? QrMaintFormUrl
+        {
+            get => _qrMaintFormUrl;
+            set
+            {
+                _qrMaintFormUrl = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId)
+        {
+            if (!string.IsNullOrEmpty(QrMaintFormUrl)) return QrMaintFormUrl;
+            if (_backendApi == null)
+            {
+                QrMaintFormUrl = null;
+                return QrMaintFormUrl;
+            }
+            var url = await _backendApi.GetQrMaintFormUrlAsync(apartmentId);
+            QrMaintFormUrl = url;
+            return QrMaintFormUrl;
         }
 
         public event Action? OnChange;
