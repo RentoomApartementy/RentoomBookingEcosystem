@@ -16,6 +16,11 @@ namespace RentoomBooking.StayWell.Services
         private readonly HttpClient _http = factory.CreateClient("FunctionsApi");
         private readonly JsonSerializerOptions _json = json;
 
+        private class QrMaintResponse
+        {
+            public string? url { get; set; }
+        }
+
 
         public async Task<ReservationResponse?> GetReservationByTokenAsync(string token)
         {
@@ -107,6 +112,21 @@ namespace RentoomBooking.StayWell.Services
         {
             var response = await _http.PostAsJsonAsync("db/registrationcard/SaveRegistrationCard", entity, _json);
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId)
+        {
+            using var response = await _http.GetAsync($"qrmaint/form-url/{apartmentId}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadFromJsonAsync<QrMaintResponse>(_json);
+            return result?.url;
         }
 
     }
