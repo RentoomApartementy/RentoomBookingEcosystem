@@ -1,7 +1,22 @@
 ﻿@page "/"
 @using RentoomBookingWeb.Components.Features.Home.Components
+@inject NavigationManager Navigation
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Apartamenty Toruń - Wynajem Krótkoterminowy | Rentoom</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Szukasz noclegu w Toruniu? Oferujemy komfortowe apartamenty w centrum i na Starówce. Rezerwuj bezpośrednio online - najniższe ceny, bez prowizji pośredników." />
+
+    <meta name="keywords" content="apartamenty toruń, noclegi toruń, wynajem krótkoterminowy, apartamenty starówka, rentoom" />
+
+    <link rel="canonical" href="@Navigation.BaseUri" />
+
+    <meta property="og:title" content="Apartamenty Toruń - Twój komfortowy nocleg" />
+    <meta property="og:description" content="Sprawdź nasze apartamenty w sercu Torunia. Idealne na weekend i dłuższy pobyt." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@Navigation.BaseUri" />
+    <meta property="og:image" content="@($"{Navigation.BaseUri}assets/images/hero-bg.jpeg")" />
+</HeadContent>
 
 <div class="home-container">
     <HeroSection/>
