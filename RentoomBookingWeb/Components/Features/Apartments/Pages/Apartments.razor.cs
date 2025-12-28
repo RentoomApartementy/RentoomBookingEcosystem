@@ -11,6 +11,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
 
         [Inject]
         public IJSRuntime JS { get; set; } = default!;
+        
+        [Inject]
+        public NavigationManager NavManager { get; set; } = default!;
 
         private DotNetObjectReference<Apartments>? _objRef;
         private IJSObjectReference? _jsModule;
@@ -55,5 +58,33 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
                 await _jsModule.DisposeAsync();
             }
         }
+        
+        private string GetSeoTitle()
+        {
+            if (ViewModel.IsSearch)
+            {
+                if (ViewModel.Offers.Count > 0)
+                    return $"Wyniki wyszukiwania: {ViewModel.Offers.Count} ofert - Rentoom";
+                
+                return "Brak dostępnych apartamentów w tym terminie - Rentoom";
+            }
+            return "Luksusowe Apartamenty na Wynajem - Rentoom";
+        }
+
+        private string GetSeoDescription()
+        {
+            if (ViewModel.IsSearch && !string.IsNullOrEmpty(ViewModel.StartDate))
+            {
+                return $"Sprawdź dostępne apartamenty w terminie {ViewModel.StartDate} - {ViewModel.EndDate}. " +
+                       $"Znaleziono {ViewModel.Offers.Count} ofert idealnych dla Ciebie. Rezerwuj bezpiecznie online.";
+            }
+            return "Odkryj szeroką ofertę apartamentów Rentoom. Komfort, świetne lokalizacje i wysoki standard. Idealne na wakacje i podróże służbowe.";
+        }
+
+        private string GetSeoImage()
+        {
+            return $"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg";
+        }
     }
+    
 }
