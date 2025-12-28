@@ -12,6 +12,8 @@ namespace RentoomBookingWeb.Helpers
                 return string.Empty;
 
             string str = phrase.ToLowerInvariant();
+            
+            str = str.Replace("ł", "l");
 
             str = RemoveDiacritics(str);
 
