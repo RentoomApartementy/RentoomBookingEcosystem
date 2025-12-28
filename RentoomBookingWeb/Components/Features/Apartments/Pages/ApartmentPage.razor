@@ -1,5 +1,5 @@
-@page "/apartamenty/{id:int}"
-@page "/apartamenty/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@page "/apartamenty/{id:int}/{slug}"
+@page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using System.Globalization
@@ -13,6 +13,7 @@
 @using RentoomBookingWeb.Models
 @using RentoomBookingWeb.Services
 @inject IAvailabilityFinderService AvailabilityFinder
+@using RentoomBookingWeb.Helpers
 
 <PageTitle>@_apartment?.Name</PageTitle>
 
@@ -241,13 +242,11 @@
 
 @code {
     [Parameter] public int Id { get; set; }
+    [Parameter] public string? Slug { get; set; }
     [Parameter] public string? StartDate { get; set; }
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
     [Parameter] public string? Children { get; set; }
-
-    [Parameter]
-    public string? Slug { get; set; }
     
     private ApartmentObject? _apartment;
     private List<ObjectMedium>? _objectMediums = null;
@@ -394,7 +393,7 @@ private async Task LoadSuggestionInBackground()
 
         if (_apartment != null)
         {
-            var url = $"/apartamenty/{_apartment.Id}/{StartDate}/{EndDate}/{Adults}/{Children}";
+            var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{StartDate}/{EndDate}/{Adults}/{Children}";
             Navigation.NavigateTo(url, forceLoad: false);
             await GetOffer();
         }
@@ -404,7 +403,7 @@ private async Task LoadSuggestionInBackground()
     {
         if (_apartment != null && _suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
         {
-            var url = $"/apartamenty/{_apartment.Id}/{_suggestionDates.StartDate}/{_suggestionDates.EndDate}/{Adults}/{Children}";
+            var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{_suggestionDates.StartDate}/{_suggestionDates.EndDate}/{Adults}/{Children}";
             Navigation.NavigateTo(url, forceLoad: true);
             await GetOffer();
             StateHasChanged();
