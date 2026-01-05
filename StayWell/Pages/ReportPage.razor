@@ -14,7 +14,7 @@
 </div>
 
 <div class="buttons-wrapper">
-    <div class="description-wrapper" style="padding-bottom: 30px;">
+    <div class="description-wrapper" style="padding-bottom: 0px;">
         <Description>
             <Icon><img src="/icons/info.svg"/></Icon>
             <DescriptionContent>
@@ -23,9 +23,26 @@
         </Description>
     </div>
 
-    <Button Text="Przejdź na stronę zgłoszeń">
+    @* <Button Text="Przejdź na stronę zgłoszeń">
         <Icon>
             <img src="/icons/external-link.svg">
         </Icon>
-    </Button>
+    </Button> *@
+    @if (!string.IsNullOrEmpty(ApartmentState.QrMaintFormUrl))
+    {
+        <div class="qr-maint-wrap">
+            <iframe 
+                class="qr-maint-frame"
+                src='@ApartmentState.QrMaintFormUrl' 
+                style='position:relative;width:1px;min-width:100%;*width:100%;' 
+                frameborder='0' scrolling='no' seamless='seamless' height='1000' width='100'>
+            </iframe>
+        </div>
+    }
+    else
+    {
+        <div>
+            <p>Napisz mail!</p>
+        </div>
+    }
 </div>
