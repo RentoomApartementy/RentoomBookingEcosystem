@@ -241,13 +241,18 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                     if (idoresponse?.Errors is not null )
                         throw new InvalidOperationException($"Reservation {record.ReservationGuid} couldn't be saved in Idobooking with error: {JsonConvert.SerializeObject(idoresponse.Errors)}.");
 
-                   // var errorMessages = string.Join("; ", idoresponse.Errors.ErrorList.Select(e => e.Message));
-                   //     throw new InvalidOperationException($"Failed to create IdoBooking reservation: {errorMessages}");
-                    
-                    record.IdoReservationId = idoresponse.Reservations[0].ReservationId;
-                    record.IdoStatus = ReservationStatusType.Unconfirmed;
+                    if (idoresponse.Reservations is not null && idoresponse.Reservations.Count > 0)
+                    {
+                        var resAddResult = idoresponse.Reservations[0];
+                        
+                        if (resAddResult.Error is not null)
+                            throw new InvalidOperationException($"Failed to create IdoBooking reservation: {resAddResult.Error.FaultString}");
 
-                    await _store.UpdateAsync(record);
+                        record.IdoReservationId = idoresponse.Reservations[0].ReservationId;
+                        record.IdoStatus = ReservationStatusType.Unconfirmed;
+
+                        await _store.UpdateAsync(record);
+                    }
                     return record;
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -337,10 +342,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 City = client.City,
                 CountryCode = client.CountryCode,
                 Email = client.Email,
-                Language = "pl",
+                Language = "pol",
                 Phone = client.Phone,
                 Street = client.Street,
-                Zipcode = client.ZipCode
+                Zipcode = client.ZipCode,
+                
             }
         };
 
@@ -354,6 +360,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 Zipcode = client.ZipCode,
                 City = client.City,
                 CountryCode = client.CountryCode,
+                Currency = "PLN",
+                Language = "pol",
                 Guests = guests,
                 InvoiceData = invoice is null
                     ? null

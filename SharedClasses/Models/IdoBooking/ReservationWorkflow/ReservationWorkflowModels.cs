@@ -11,6 +11,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
 {
     public class StartReservationRequest
     {
+        public int ObjectId { get; set; }
         public int ObjectItemId { get; set; }
         [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateOnly StartDate { get; set; }
@@ -33,7 +34,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
         public string Street { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
-        public string CountryCode { get; set; } = "PL";
+        public string CountryCode { get; set; } = "pl";
     }
 
     public class InvoiceInfoDto

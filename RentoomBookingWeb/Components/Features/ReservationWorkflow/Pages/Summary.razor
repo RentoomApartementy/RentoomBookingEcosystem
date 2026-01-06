@@ -40,9 +40,9 @@
         {
             _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            _error = "Nie udało się zbudować podsumowania.";
+            _error = $"Nie udało się zbudować podsumowania. {ex.Source} {ex.Message} ";
         }
         finally
         {

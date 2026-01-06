@@ -79,11 +79,11 @@
 </div>
 
 @code {
-    [Parameter] public Guid ReservationTokenGuid { get; set; }
+        [Parameter] public Guid ReservationTokenGuid { get; set; }
 
     // private ApartmentObject? _apartment;
-    //
-   
+        //
+
 
     private PaymentFormModel _form = new();
     private EditContext _editContext = default!;
@@ -95,8 +95,9 @@
     {
         //_apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
 
+        _form.Client = MockupClient();
         _editContext = new EditContext(_form);
-        // _form.Client = ReservationWorkflowService
+       
 
     }
 
@@ -125,12 +126,24 @@
     {
         _error = "Nie udało się zapisać danych klienta." + ex.Message ;
     }
-        finally
-        {
-            _isSaving = false;
-        }
+    finally
+    {
+        _isSaving = false;
+    }
     }
 
+        private ClientInfoDto MockupClient()
+        {
+            return new ClientInfoDto
+            {
+                FirstName = "Maciej",
+                LastName = "Stanisławski",
+                City = "Kopanino",
+                Street = "Sczęśliwa 2",
+                ZipCode = "87-162",
+                Email = "posith@gmail.com"
+            };
+        }
 
     private sealed class PaymentFormModel
     {

@@ -436,7 +436,8 @@ private async Task LoadSuggestionInBackground()
 
         var request = new StartReservationRequest
         {
-            ObjectItemId = _apartment.Id,
+            ObjectId = _apartment.Id, //ID całego apartamentu
+            ObjectItemId = _apartment.Items[0].Id.Value, // ID itemu apartamentu - na jego podstawie jest robiona rezerwacja, a nie na podstawie ObjectId
             StartDate = start,
             EndDate = end,
             Adults = adults,
