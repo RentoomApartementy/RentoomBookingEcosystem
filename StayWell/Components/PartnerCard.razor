@@ -11,12 +11,12 @@
     }
 
 
-    @if (Category != PartnerCategories.Empty)
+    @* @if (Category != PartnerCategories.Empty)
     {
         <div class="category">
             <img src="@PartnerCategory.ToSVGPath(@Category)" />
         </div>
-    }
+    } *@
 
     <div class="image-wrapper">
         <img src="@Image" class="image"/>
@@ -25,6 +25,10 @@
     <div class="footer">
         <h1>@PartnerName</h1>
         <span>@PartnerDescription</span>
+        <div class="info">
+            <span><img src="/icons/circle-arrow-right.svg"/> Zobacz</span>
+            <span>&#9679; Otwarte</span>
+        </div>
     </div>
 </div>
 
@@ -32,7 +36,6 @@
 @code {
     [Parameter] public string? PartnerName { get; set; } = string.Empty;
     [Parameter] public string? PartnerDescription { get; set; } = string.Empty;
-    [Parameter] public PartnerCategories Category { get; set; } = PartnerCategories.Empty;
     [Parameter] public string? Offer { get; set; } = string.Empty;
     [Parameter] public string? Image { get; set; } = "/images/placeholders/partner_placeholder.png";
     [Parameter] public string Href { get; set; } = "/404";

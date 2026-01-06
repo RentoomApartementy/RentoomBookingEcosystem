@@ -1,30 +1,63 @@
-.carousel {
+.carousel-component-root {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+}
+
+.glow-layer {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    z-index: -1;
+    filter: blur(25px) saturate(200%);
+    opacity: 0.7;
+    transform: scale(0.95);
+    overflow: hidden;
+    border-radius: 30px;
+}
+
+.carousel-mask {
+    position: relative;
     width: 100%;
     height: 200px;
     overflow: hidden;
     border-radius: 15px;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 2;
 }
 
 .noradius {
     border-radius: 15px 15px 0 0;
 }
 
-.carousel .slider {
+.slider {
     display: flex;
     width: 100%;
     height: 100%;
     will-change: transform;
-    transition: transform 450ms ease;
+    transition: transform 450ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.slider .slide {
+.slide {
     min-width: 100%;
     width: 100%;
     height: 100%;
     flex-shrink: 0;
 }
 
+.slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .control-buttons-wrapper {
+    position: relative;
+    z-index: 3;
     display: flex;
     justify-content: center;
     gap: 30px;
@@ -33,6 +66,7 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+    background: rgba(255, 255, 255, 0.8);
 }
 
 .control-buttons-wrapper button {
@@ -44,46 +78,20 @@
     color: #222;
     background: linear-gradient(180deg, #fff 60%, #f3f3f3 100%);
     box-shadow: 0 4px 16px -2px rgba(0,0,0,0.12), 0 1.5px 0 0 #fff inset;
-    filter: none;
-    transform: translateY(0px);
     cursor: pointer;
-    transition: transform 0.1s cubic-bezier(.4,0,.2,1), box-shadow 0.25s cubic-bezier(.4,0,.2,1), background 0.25s cubic-bezier(.4,0,.2,1), filter 0.1s cubic-bezier(.4,0,.2,1);
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    -webkit-user-select: none;
-    user-select: none;
+    transition: all 0.2s ease;
 }
 
-.control-buttons-wrapper button:hover {
-    box-shadow: 0 8px 16px -4px rgba(0,0,0,0.18), 0 1px 0 0 #fff inset;
-    background: #fff;
-}
-
-.control-buttons-wrapper button:active {
-    filter: invert(1);
-    transform: translateY(2px);
-    box-shadow: 0 2px 8px -2px rgba(0,0,0,0.10);
-    transition: none;
-}
-
-.control-buttons-wrapper button.is-active {
-    filter: invert(1);
-    transform: translateY(2px);
-    box-shadow: 0 2px 8px -2px rgba(0,0,0,0.10);
-    transition: none;
-}
+    .control-buttons-wrapper button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
 
 .control-buttons-wrapper span {
     align-content: center;
     font-size: large;
     width: 50px;
     text-align: center;
-}
-
-.slide-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
 .big-img {

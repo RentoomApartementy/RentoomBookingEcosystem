@@ -10,35 +10,63 @@
 
 <PageTitle>Partner Page</PageTitle>
 
-        <!---<ApartmentImage Source="https://scontent-waw2-2.cdninstagram.com/v/t39.30808-6/466859529_17956503284840429_801782726175962602_n.jpg?stp=dst-jpg_e35_s480x480_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0uaW1hZ2VfdXJsZ2VuLjE0NDB4MTE1Mi5zZHIuZjMwODA4LmRlZmF1bHRfaW1hZ2UuYzIifQ&_nc_ht=scontent-waw2-2.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2QF009K5GiShtaduA8TouoHBiGwmmKDawWo3rpyid3688G0YI3GHIKXaxWeGbEYeoLg&_nc_ohc=inOVtjkCimwQ7kNvwGU7hfC&_nc_gid=BRFbH4oiAsgeniSz4WG-pA&edm=APoiHPcAAAAA&ccb=7-5&ig_cache_key=MzI5OTY0OTU3NTQ4NzcwMzgwOQ%3D%3D.3-ccb7-5&oh=00_AfYhRt0kqos7tVpSP4IGyS9M7IBOalLtsDekuqygdm4ECA&oe=68E0F118&_nc_sid=22de04">
-        </ApartmentImage> --->
-        <Carousel ImageUrls="@urls" TransitionIntervalMs="3500" UseTimer="@true"/>
-
-        @*<div class="offer-wrapper">
-            <span class="offer">
-                -1000%
-            </span>
-        </div>*@
-        <div class="partner-info-wrapper">
-    <PartnerInfo
-    partnerName="Dom Pizzy i Tapas"
-    partnerAddress="Leona Szumana 1"
-    offer=""
-    >
-    </PartnerInfo>
+<div class="title">
+    Dom Pizzy i Tapas
 </div>
 
-        <div class="description"> 
-            <span>
-                Dom Pizzy i Tapas to miejsce, w którym celebrujemy każdą okazję – od rodzinnych uroczystości, przez spotkania ze znajomymi, aż po wydarzenia biznesowe.
-                Hiszpańska kuchnia, aromatyczne wina i wyjątkowa atmosfera sprawiają, że każdy moment tutaj nabiera szczególnego smaku.
-                -10% tylko dla gości Rentoom!
-            </span>
-        </div>
-        
-        <div>
-            
-        </div>
+<Carousel ImageUrls="@urls" TransitionIntervalMs="3500" UseTimer="@true" UseSmartGlow="@false"/>
+
+
+<div class="labels">
+    <div class="label">
+        🍕 pizza
+    </div>
+    <div class="label">
+        🍝 pasta
+    </div>
+    <div class="label">
+        🥘 tapas
+    </div>
+    <div class="label">
+        🍲 zupy
+    </div>
+    <div class="label">
+        🍰 desery
+    </div>
+</div>
+
+<div class="offer-wrap">
+    <div class="offer">
+        -10% na całe menu
+    </div>
+    <div class="img-wrap">
+        <img src="images/qr-code.png"/>
+    </div>
+    <div class="staff">
+        Pokaż ten ekran obsłudze
+    </div>
+</div>
+
+<div class="description">
+    Nasz ogródek to więcej niż tylko miejsce przy stole! ✨
+    To przestrzeń, gdzie można delektować się pysznym jedzeniem na świeżym powietrzu, a później rozsiąść się wygodnie na kanapie z koktajlem w dłoni.
+    Zapraszamy – czekamy właśnie na Was! 🍕🍹☀️
+</div>
+
+<div class="labels">
+    <div class="action">
+        <span><img src="/icons/map-pin.svg"/>Leona Szumana 1</span>
+    </div>
+    <div class="action" style="background-color: #3b5998">
+        <img src="/icons/facebook.svg"/>
+    </div>
+    <div class="action instagram-gradient">
+        <img src="/icons/instagram.svg" />
+    </div>
+    <div class="action">
+        <img src="/icons/globe.svg" />
+    </div>
+</div>
 
 @code{
 
