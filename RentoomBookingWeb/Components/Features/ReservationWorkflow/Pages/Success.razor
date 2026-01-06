@@ -16,4 +16,13 @@
     [Parameter] public Guid ReservationTokenGuid { get; set; }
     [Parameter] public Guid TpayGuid { get; set; }
     
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji", true);
+        }
+    }
+
 }

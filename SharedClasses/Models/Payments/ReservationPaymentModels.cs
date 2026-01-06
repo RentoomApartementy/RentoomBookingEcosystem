@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Models.Payments
 {
-    public class ReservationPaymentRequest
+   /* public class ReservationPaymentRequest
     {
         public int ReservationId { get; set; }
         public string? PayerName { get; set; }
@@ -40,5 +40,5 @@ namespace RentoomBooking.SharedClasses.Models.Payments
         public string? ClientPhone { get; set; }
         public Reservation? Reservation { get; set; }
         public string? Status => Reservation?.ReservationDetails?.status;
-    }
+    }*/
 }
