@@ -5,7 +5,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
 {
     public class TpaySettings
     {
-        public string ApiBaseUrl { get; set; } = "https://api.tpay.com";
+        public string ApiBaseUrl { get; set; } = string.Empty;
 
         // OAuth 2.0 credentials (Open API keys)
         public string ClientId { get; set; } = string.Empty;
@@ -17,6 +17,16 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
         public string? NotificationUrl { get; set; }
 
         public string DefaultCurrency { get; set; } = "PLN";
+
+        // <summary>
+        /// Expected prefix for the x5u certificate URL used in webhook JWS signatures (e.g. https://secure.tpay.com).
+        /// </summary>
+        public string? JwsCertPrefix { get; set; }
+
+        /// <summary>
+        /// Root CA PEM URL for validating Tpay signing certificate chain.
+        /// </summary>
+        public string? RootCaPemUrl { get; set; }
 
         /// <summary>
         /// Merchant "security code" used to verify transaction settlement notifications md5sum
@@ -272,5 +282,24 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
         public string? token_expiry_date { get; set; }
         public string? card_tail { get; set; }
         public string? card_brand { get; set; }
+    }
+
+
+    public class TpayCreatePaymentRequest
+    {
+        public Guid OrderId { get; set; }
+        public decimal Amount { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string? SuccessUrl { get; set; }
+        public string? ErrorUrl { get; set; }
+    }
+
+    public class TpayCreatePaymentResponse
+    {
+        public string TransactionId { get; set; } = string.Empty;
+        public string TransactionPaymentUrl { get; set; } = string.Empty;
+        public Guid PaymentSessionGuid { get; set; }
     }
 }

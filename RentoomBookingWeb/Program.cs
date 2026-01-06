@@ -129,7 +129,7 @@ namespace RentoomBookingWeb
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
 
-            app.MapPost("/api/tpay/webhook", async (TpayWebhookDto dto, IReservationWorkflowService workflow, ILogger<Program> logger) =>
+          /*  app.MapPost("/api/tpay/webhook", async (TpayWebhookDto dto, IReservationWorkflowService workflow, ILogger<Program> logger) =>
             {
                 if (!string.Equals(dto.Signature, "mock", StringComparison.OrdinalIgnoreCase))
                 {
@@ -154,7 +154,7 @@ namespace RentoomBookingWeb
                 }
             });
 
-
+            */
 
 
             app.Run();

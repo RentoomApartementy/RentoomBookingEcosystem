@@ -17,6 +17,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<ReservationRecord> CreateAsync(StartReservationRequest request, CancellationToken cancellationToken = default);
         Task<ReservationRecord?> GetAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
         Task UpdateAsync(ReservationRecord record, CancellationToken cancellationToken = default);
+        Task<ReservationRecord?> GetByProviderTransactionIdAsync(string providerTransactionId, CancellationToken cancellationToken = default);
     }
 
     public class ReservationStore : IReservationStore
@@ -139,6 +140,19 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             await using var context = _dbContextFactory.CreateDbContext();
             await context.Database.EnsureCreatedAsync();
+        }
+
+        public async Task<ReservationRecord?> GetByProviderTransactionIdAsync(string providerTransactionId, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(providerTransactionId)) throw new ArgumentNullException(nameof(providerTransactionId));
+
+            await _initializationTask;
+
+            await using var context = _dbContextFactory.CreateDbContext();
+            var entity = await context.ReservationRecords.AsNoTracking()
+                .FirstOrDefaultAsync(r => r.ProviderTransactionId == providerTransactionId, cancellationToken);
+
+            return entity is null ? null : MapToRecord(entity);
         }
     }
 }
