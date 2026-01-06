@@ -1,0 +1,86 @@
+﻿.filter-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    list-style: none;
+    width: 100%;
+    padding: 10px 10px 25px 10px;
+    margin: 6px 0 7px 0;
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar
+
+{
+    display: none;
+}
+
+scrollbar-width: none;
+}
+
+.filter-list li {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 22px;
+    /* font-family: system-ui, -apple-system, sans-serif; */
+    font-size: 15px;
+    cursor: pointer;
+    user-select: none;
+    transition: box-shadow 0.25s cubic-bezier(.4,0,.2,1), background-color 0.25s cubic-bezier(.4,0,.2,1), color 0.25s ease, transform 0.1s ease;
+}
+
+    .filter-list li.inactive {
+        background-color: #f0f2f0;
+        color: #666;
+        border: 1px solid transparent;
+        box-shadow: 0 2px 8px 0 rgba(33,87,62,0.05);
+    }
+
+        .filter-list li.inactive:hover {
+            background-color: #e0e2e0;
+            color: #222;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px 0 rgba(33,87,62,0.10);
+        }
+
+    .filter-list li.active {
+        background-color: #1a1a1a;
+        color: #ffffff;
+        padding-right: 14px;
+        box-shadow: 0 6px 16px 0 rgba(33,87,62,0.20);
+        border: 1px solid #1a1a1a;
+    }
+
+        .filter-list li.active:hover {
+            background-color: #333333;
+            transform: translateY(-1px);
+        }
+
+    .filter-list li .filter-text {
+        position: relative;
+        top: 0;
+        font-weight: 500;
+    }
+
+    .filter-list li.active .filter-text {
+        font-weight: 600;
+    }
+
+    .filter-list li .close-icon {
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 0.8;
+        margin-left: 2px;
+        transition: color 0.2s ease;
+    }
+
+    .filter-list li.active .close-icon {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .filter-list li.active:hover .close-icon {
+        color: #fff;
+    }
