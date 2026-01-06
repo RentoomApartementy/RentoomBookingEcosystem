@@ -62,11 +62,13 @@
         var endpoint = Navigation.ToAbsoluteUri("/api/tpay/webhook");
         try
         {
+            Console.WriteLine("Wysyłanie webhooka do TPAY...");
             await Http.PostAsJsonAsync(endpoint, payload);
+            Console.WriteLine("Webhook wysłany pomyślnie.");
         }
-        catch
+        catch (Exception ex)
         {
-            // intentionally swallow for mock scenario
+            Console.WriteLine($"Błąd podczas wysyłania webhooka: {ex.Message}");
         }
 
         var redirect = status.Equals("PAID", StringComparison.OrdinalIgnoreCase)

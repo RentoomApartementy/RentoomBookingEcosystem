@@ -5,6 +5,7 @@ using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -127,6 +128,34 @@ namespace RentoomBookingWeb
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
+
+            app.MapPost("/api/tpay/webhook", async (TpayWebhookDto dto, IReservationWorkflowService workflow, ILogger<Program> logger) =>
+            {
+                if (!string.Equals(dto.Signature, "mock", StringComparison.OrdinalIgnoreCase))
+                {
+                    logger.LogWarning("Invalid webhook signature for reservation {ReservationGuid}.", dto.ReservationGuid);
+                    return Results.Unauthorized();
+                }
+
+                try
+                {
+                    await workflow.HandleTpayWebhookAsync(dto);
+                    return Results.Ok();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    logger.LogWarning(ex, "Webhook validation failed for reservation {ReservationGuid}.", dto.ReservationGuid);
+                    return Results.BadRequest();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Unexpected error while handling webhook for reservation {ReservationGuid}.", dto.ReservationGuid);
+                    return Results.StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            });
+
+
+
 
             app.Run();
         }

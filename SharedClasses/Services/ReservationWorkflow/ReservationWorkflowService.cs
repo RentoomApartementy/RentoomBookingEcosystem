@@ -21,7 +21,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid);
         Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
         Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
-       // Task HandleTpayWebhookAsync(TpayWebhookDto dto);
+        Task HandleTpayWebhookAsync(TpayWebhookDto dto);
     }
 
     public class ReservationWorkflowService : IReservationWorkflowService
