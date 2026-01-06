@@ -28,7 +28,7 @@
 </div>
 
 @code {
-    [Parameter] public Guid CurrentGuid { get; set; }
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
     
     private ReservationSummaryDto? _summary;
     private bool _loading = true;
@@ -38,7 +38,7 @@
     {
         try
         {
-            _summary = await ReservationWorkflowService.BuildSummaryAsync(CurrentGuid);
+            _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
         }
         catch (Exception)
         {
@@ -52,6 +52,6 @@
     
     private void GoToPayment()
     {
-        Navigation.NavigateTo($"/rezerwuj/{CurrentGuid}/oplac");
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
     }
 }

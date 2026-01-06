@@ -19,8 +19,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<Guid> StartAsync(StartReservationRequest request);
         Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice);
         Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid);
-       // Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
-       // Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
+        Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
+        Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
        // Task HandleTpayWebhookAsync(TpayWebhookDto dto);
     }
 
@@ -77,6 +77,147 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         }
 
 
+        public async Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid)
+        {
+            while (true)
+            {
+                var record = await RequireReservationAsync(reservationGuid);
+                record = await EnsureIdoReservationAsync(record);
+
+                if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
+                {
+                    var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie-transakcji";
+
+                    return new PaymentInitResult
+                    {
+                        ReservationGuid = reservationGuid,
+                        PaymentSessionGuid = record.PaymentSessionGuid.Value,
+                        ProviderTransactionId = record.ProviderTransactionId ?? string.Empty,
+                        RedirectUrl = redirectUrl,
+                        Provider = record.Provider ?? "TPAY"
+                    };
+                }
+
+                if (record.PaymentStatus == PaymentStatuses.Initiated && record.PaymentSessionGuid.HasValue)
+                {
+                    var redirectUrl = record.State.PaymentRedirectUrl ?? $"/tpay-mock/{record.PaymentSessionGuid}?reservationGuid={reservationGuid}";
+
+                    return new PaymentInitResult
+                    {
+                        ReservationGuid = reservationGuid,
+                        PaymentSessionGuid = record.PaymentSessionGuid.Value,
+                        ProviderTransactionId = record.ProviderTransactionId ?? string.Empty,
+                        RedirectUrl = redirectUrl,
+                        Provider = record.Provider ?? "TPAY"
+                    };
+                }
+
+                var paymentSessionGuid = Guid.NewGuid();
+                var amount = record.State.StartRequest?.OfferPrice ?? 0m;
+                var currency = record.State.StartRequest?.Currency ?? "PLN";
+
+                var paymentResult = await _tpayGateway.CreatePaymentAsync(reservationGuid, paymentSessionGuid, amount, currency);
+                if (!paymentResult.Success)
+                {
+                    throw new InvalidOperationException("Failed to initiate payment session.");
+                }
+
+                record.PaymentSessionGuid = paymentSessionGuid;
+                record.PaymentStatus = PaymentStatuses.Initiated;
+                record.Provider = record.Provider ?? "TPAY";
+                record.ProviderTransactionId = paymentResult.TransactionId;
+                record.State.PaymentRedirectUrl = paymentResult.RedirectUrl;
+                record.IdoStatus = ReservationStatusType.WaitingForPayment;
+
+                try
+                {
+                    await _store.UpdateAsync(record);
+                    await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
+
+                    return new PaymentInitResult
+                    {
+                        ReservationGuid = reservationGuid,
+                        PaymentSessionGuid = paymentSessionGuid,
+                        ProviderTransactionId = paymentResult.TransactionId,
+                        RedirectUrl = paymentResult.RedirectUrl,
+                        Provider = record.Provider ?? "TPAY"
+                    };
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    _logger.LogWarning("Concurrency conflict while initiating payment for {ReservationGuid}. Retrying.", reservationGuid);
+                    await Task.Delay(TimeSpan.FromMilliseconds(50));
+                }
+            }
+        }
+
+        public async Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid)
+        {
+            var record = await RequireReservationAsync(reservationGuid);
+            return new PaymentStateDto
+            {
+                ReservationGuid = reservationGuid,
+                PaymentStatus = record.PaymentStatus,
+                PaymentSessionGuid = record.PaymentSessionGuid,
+                ProviderTransactionId = record.ProviderTransactionId,
+                Provider = record.Provider,
+                RedirectUrl = record.State.PaymentRedirectUrl,
+                IdoStatus = record.IdoStatus
+            };
+        }
+        public async Task HandleTpayWebhookAsync(TpayWebhookDto dto)
+        {
+            if (dto is null) throw new ArgumentNullException(nameof(dto));
+
+            while (true)
+            {
+                var record = await RequireReservationAsync(dto.ReservationGuid);
+                if (record.PaymentSessionGuid != dto.PaymentSessionGuid)
+                {
+                    _logger.LogWarning("Payment session guid mismatch for reservation {ReservationGuid}.", dto.ReservationGuid);
+                    throw new InvalidOperationException("Payment session mismatch.");
+                }
+
+                if (!string.Equals(record.ProviderTransactionId, dto.ProviderTransactionId, StringComparison.OrdinalIgnoreCase))
+                {
+                    _logger.LogWarning("Provider transaction id mismatch for reservation {ReservationGuid}.", dto.ReservationGuid);
+                    throw new InvalidOperationException("Transaction mismatch.");
+                }
+
+                if (string.IsNullOrWhiteSpace(record.PaymentStatus) || record.PaymentStatus == PaymentStatuses.None)
+                {
+                    _logger.LogWarning("Received webhook for reservation {ReservationGuid} without initiated payment.", dto.ReservationGuid);
+                    throw new InvalidOperationException("Payment not initiated.");
+                }
+
+                if (record.PaymentStatus == PaymentStatuses.Paid)
+                {
+                    return;
+                }
+
+                var isPaid = string.Equals(dto.Status, "PAID", StringComparison.OrdinalIgnoreCase);
+                record.PaymentStatus = isPaid ? PaymentStatuses.Paid : PaymentStatuses.Failed;
+                record.IdoStatus = isPaid ? ReservationStatusType.Confirmed : record.IdoStatus;
+
+                try
+                {
+                    await _store.UpdateAsync(record);
+                    if (isPaid)
+                    {
+                        await UpdateIdoStatusAsync(record, ReservationStatusType.Confirmed);
+                    }
+                    return;
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    _logger.LogWarning("Concurrency conflict while handling webhook for {ReservationGuid}. Retrying.", dto.ReservationGuid);
+                    await Task.Delay(TimeSpan.FromMilliseconds(50));
+                }
+            }
+        }
+
+
+
         private async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid)
         {
             var record = await _store.GetAsync(reservationGuid);
@@ -116,6 +257,25 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 }
             }
         }
+
+        private async Task UpdateIdoStatusAsync(ReservationRecord record, string targetStatus)
+        {
+            if (record.IdoReservationId is null)
+            {
+                return;
+            }
+
+            var request = new EditReservationsStatusRequest
+                                                            {
+                                                                ReservationId = record.IdoReservationId.Value,
+                                                                Status = targetStatus,
+                                                                Notify = ReservationNotifyType.No,
+                                                                NotifyService = ReservationNotifyType.No
+                                                            };
+
+            await _idoApi.ChangeReservationStatusAsync(request);
+        }
+
 
         private static NewReservation BuildReservationAddRequest(ReservationRecord record)
         {

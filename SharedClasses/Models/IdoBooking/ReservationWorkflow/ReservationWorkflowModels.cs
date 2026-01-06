@@ -58,6 +58,34 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
         public string Currency { get; set; } = "PLN";
     }
 
+    public class PaymentInitResult
+    {
+        public Guid ReservationGuid { get; set; }
+        public Guid PaymentSessionGuid { get; set; }
+        public string ProviderTransactionId { get; set; } = string.Empty;
+        public string RedirectUrl { get; set; } = string.Empty;
+        public string Provider { get; set; } = string.Empty;
+    }
+
+    public class PaymentStateDto
+    {
+        public Guid ReservationGuid { get; set; }
+        public string PaymentStatus { get; set; } = PaymentStatuses.None;
+        public Guid? PaymentSessionGuid { get; set; }
+        public string? ProviderTransactionId { get; set; }
+        public string? Provider { get; set; }
+        public string? RedirectUrl { get; set; }
+        public string? IdoStatus { get; set; }
+    }
+
+    public class TpayWebhookDto
+    {
+        public Guid ReservationGuid { get; set; }
+        public Guid PaymentSessionGuid { get; set; }
+        public string ProviderTransactionId { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string Signature { get; set; } = string.Empty;
+    }
 
     public class ReservationState
     {
@@ -100,6 +128,8 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
         public const string Paid = "Paid";
         public const string Failed = "Failed";
     }
+
+
 
 
     public class DateOnlyJsonConverter : JsonConverter<DateOnly>

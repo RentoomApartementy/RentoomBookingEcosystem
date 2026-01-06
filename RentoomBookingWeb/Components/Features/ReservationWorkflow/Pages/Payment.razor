@@ -7,15 +7,45 @@
 <PageTitle>Opłać</PageTitle>
 
 <div class="summary-container">
-    <div class="">
-        <h2>Opłać</h2>
-        <Button @onclick="GoToSummary">Przejdź dalej</Button>
-    </div>
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <p class="text-danger">@_error</p>
+    }
+    else
+    {
+        <div class="">
+            <h2>Przekierowanie do płatności...</h2>
+        </div>
+    }
 </div>
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
     
+    private string? _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var payment = await ReservationWorkflowService.InitiatePaymentAsync(ReservationTokenGuid);
+            if (!string.IsNullOrWhiteSpace(payment.RedirectUrl))
+            {
+                Navigation.NavigateTo(payment.RedirectUrl, true);
+            }
+            else
+            {
+                Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji", true);
+            }
+        }
+        catch (Exception)
+        {
+            _error = "Nie udało się zainicjować płatności.";
+        }
+    }
+
+
+
     private void GoToSummary()
     {
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji");

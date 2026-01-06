@@ -1,17 +1,93 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/podsumowanie-transakcji"
 
+@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject IReservationWorkflowService ReservationWorkflowService;
 @inject NavigationManager Navigation
+@implements IDisposable
 
 <PageTitle>Opłać</PageTitle>
 
 <div class="summary-container">
-    <div class="">
-        <h2>Podsumowanie transakcji</h2>
-    </div>
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <p class="text-danger">@_error</p>
+    }
+    else if (_state?.PaymentStatus == PaymentStatuses.Paid)
+    {
+        <div class="">
+            <h2>Płatność zakończona sukcesem</h2>
+            <Button @onclick="NavigateToSummary">Powrót do podsumowania</Button>
+        </div>
+    }
+    else if (_state?.PaymentStatus == PaymentStatuses.Failed)
+    {
+        <div class="">
+            <h2>Płatność nie powiodła się</h2>
+            <Button @onclick="RetryPayment">Spróbuj ponownie</Button>
+        </div>
+    }
+    else
+    {
+        <div class="">
+            <h2>Oczekiwanie na potwierdzenie płatności...</h2>
+        </div>
+    }
 </div>
+
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
+
+    private PaymentStateDto? _state;
+    private string? _error;
+    private CancellationTokenSource? _cts;
+
+    protected override Task OnInitializedAsync()
+    {
+        _cts = new CancellationTokenSource();
+        _ = PollAsync(_cts.Token);
+        return Task.CompletedTask;
+    }
+
+    private async Task PollAsync(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            try
+            {
+                _state = await ReservationWorkflowService.GetPaymentStateAsync(ReservationTokenGuid);
+                await InvokeAsync(StateHasChanged);
+                if (_state?.PaymentStatus == PaymentStatuses.Paid || _state?.PaymentStatus == PaymentStatuses.Failed)
+                {
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                _error = "Nie udało się pobrać statusu płatności.";
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            await Task.Delay(TimeSpan.FromSeconds(2), token);
+        }
+    }
+
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+    }
+
+    private void NavigateToSummary()
+    {
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
+    }
+
+    private void RetryPayment()
+    {
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
+    }
+
 }
