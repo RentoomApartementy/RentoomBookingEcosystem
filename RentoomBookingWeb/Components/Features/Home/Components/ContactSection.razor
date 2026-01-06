@@ -1,6 +1,9 @@
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<HomePage> Localizer;
+
 <div class="contact-container">
-    <h1 class="contact-title">Zostaw swoje informacje kontaktowe, a my się z tobą skontaktujemy!</h1>
-    <h2 class="contact-subtitle">Formularz kontaktowy</h2>
+    <h1 class="contact-title">@Localizer["formtext"]</h1>
+    <h2 class="contact-subtitle">@Localizer["formContactText"]</h2>
     
     <div class="contact-content">
         <div 
@@ -9,20 +12,20 @@
         ></div>
         
         <div class="contact-form">
-            <input type="text" placeholder="Imię" @bind="Name" />
-            <input type="text" placeholder="Nazwisko" @bind="Surname" />
-            <input type="text" placeholder="Telefon" @bind="Phone" />
+            <input type="text" placeholder="@Localizer["name"]" @bind="Name" />
+            <input type="text" placeholder="@Localizer["lastName"]" @bind="Surname" />
+            <input type="text" placeholder="@Localizer["phone"]" @bind="Phone" />
             <input type="email" placeholder="Email" @bind="Email" />
             
             <div class="contact-form-buttons">
                 <label class="contact-checkbox-wrapper">
                     <input type="checkbox" @bind="IsAccepted" />
                     <small class="contact-check-text">
-                        Wyrażam zgodę na przetwarzanie moich danych osobowych podanych w powyższym formularzu
+                        @Localizer["formConfirm"]
                     </small>
                 </label>
                 
-                <Button>Wyślij</Button>
+                <Button>@Localizer["send"]</Button>
             </div>
         </div>
     </div>

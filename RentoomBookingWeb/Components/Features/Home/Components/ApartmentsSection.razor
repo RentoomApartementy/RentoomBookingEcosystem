@@ -1,9 +1,11 @@
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<HomePage> Localizer;
 
 <div class="apartments-section-container">
     <div class="apartments-section-container-text">
-        <h1 class="city-title">Apartamenty w Toruniu – komfortowe noclegi</h1>
-        <h2 class="city-subtitle">Szukasz komfortowego apartamentu w Toruniu?</h2>
+        <h1 class="city-title">@Localizer["title2"]</h1>
+        <h2 class="city-subtitle">@Localizer["title2subtitle"]</h2>
     </div>
     
     @if (!string.IsNullOrEmpty(Error))
