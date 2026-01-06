@@ -1,0 +1,48 @@
+﻿<div class="filter-container">
+    <ul class="filter-list">
+        @foreach (var item in items)
+        {
+            <li @onclick="() => ToggleFilter(item)"
+                class="@(item.IsActive ? "active" : "inactive")">
+
+                <span class="filter-text">@item.Name</span>
+
+                @if (item.IsActive)
+                {
+                    <span class="close-icon">&times;</span>
+                }
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<List<string>> OnFiltersChanged { get; set; }
+
+    private class FilterItem
+    {
+        public string Name { get; set; } = "";
+        public bool IsActive { get; set; }
+    }
+    // tymczasowa lista filtrów
+    private List<FilterItem> items = new List<FilterItem>
+    {
+        new() { Name = "🍕 Jedzenie", IsActive = false },
+        new() { Name = "🧁 Słodkie", IsActive = false },
+        new() { Name = "🧖‍ Wypoczynek", IsActive = false },
+        new() { Name = "🎨 Rozrywka", IsActive = false }
+    };
+
+    private async Task ToggleFilter(FilterItem item)
+    {
+        item.IsActive = !item.IsActive;
+
+        var activeFilters = items
+            .Where(x => x.IsActive)
+            .Select(x => x.Name)
+            .ToList();
+
+        await OnFiltersChanged.InvokeAsync(activeFilters);
+    }
+}

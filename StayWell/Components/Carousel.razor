@@ -2,31 +2,49 @@
 @implements IDisposable
 @inject StayWell.Services.ModalService ModalService
 
-<div class="carousel @(UseControlButtons ? "noradius" : "")">
-    <div class="slider" style="transform: translateX(calc(-@(_index*100)%))">
-        @for (int i = 0; i < ImageUrls.Length; i++)
-        {
-            <div class="slide" @onclick="EnlargeImage">
-                <img class="slide-img" src="@ImageUrls[i]" loading="lazy" alt="slide-@i"/>
+<div class="carousel-component-root" style="@(UseSmartGlow ? "" : "")">
+
+    @if (UseSmartGlow)
+    {
+        <div class="glow-layer">
+            <div class="slider" style="transform: translateX(calc(-@(_index*100)%))">
+                @for (int i = 0; i < ImageUrls.Length; i++)
+                {
+                    <div class="slide">
+                        <img class="slide-img" src="@ImageUrls[i]" aria-hidden="true" alt="" />
+                    </div>
+                }
             </div>
-        }
+        </div>
+    }
+
+    <div class="carousel-mask @(UseControlButtons ? "noradius" : "")">
+        <div class="slider" style="transform: translateX(calc(-@(_index * 100)%))">
+            @for (int i = 0; i < ImageUrls.Length; i++)
+            {
+                <div class="slide" @onclick="EnlargeImage">
+                    <img class="slide-img" src="@ImageUrls[i]" loading="lazy" alt="slide-@i"/>
+                </div>
+            }
+        </div>
     </div>
+    @if (UseControlButtons == true)
+    {
+        <div class="control-buttons-wrapper">
+            <button @onclick="PreviousSlide"> &lt; </button>
+            <span>@(_index+1) / @ImageUrls.Length </span>
+            <button @onclick="NextSlide"> &gt; </button>
+        </div>
+    }
 </div>
-@if (UseControlButtons == true)
-{
-    <div class="control-buttons-wrapper">
-        <button @onclick="PreviousSlide"> &lt; </button>
-        <span>@(_index+1) / @ImageUrls.Length </span>
-        <button @onclick="NextSlide"> &gt; </button>
-    </div>
-}
 
 @code {
-
-    [Parameter] public string[] ImageUrls { get; set; } = Array.Empty<string>(); // tablica URLobrazków
-    [Parameter] public bool UseTimer { get; set; } // automatyczna zmiana slajdów
-    [Parameter] public bool UseControlButtons { get; set; } // wyswietla przyciski do zmiany slajdów
-    [Parameter] public int TransitionIntervalMs { get; set; } = 2000; // interwa³ zmiany slajdów w ms
+    [Parameter] public string[] ImageUrls { get; set; } = Array.Empty<string>();
+    [Parameter] public bool UseTimer { get; set; }
+    [Parameter] public bool UseControlButtons { get; set; }
+    [Parameter] public int TransitionIntervalMs { get; set; } = 2000;
+    [Parameter] public bool UseSmartGlow { get; set; } = false;
+    [Parameter] public string AdditionalStyle { get; set; } = string.Empty;
 
     private int _index = 0;
     private System.Timers.Timer? _timer;
@@ -41,13 +59,13 @@
         ModalService.ShowModal("",
         @<div>
             <img class="big-img" src="@(ImageUrls[_index])"/>
-        </div>
+</div>
         );
     }
 
     private void NextSlide()
     {
-        
+
         if (_index < ImageUrls.Length - 1)
         {
             _index++;
