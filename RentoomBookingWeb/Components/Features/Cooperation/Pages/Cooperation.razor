@@ -1,6 +1,8 @@
 @page "/wspolpraca";
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
 @inject NavigationManager NavManager
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<Cooperation> Localizer;
 
 <PageTitle>Współpraca - Rentoom | Zarządzanie Najmem Toruń</PageTitle>
 
@@ -20,7 +22,7 @@
 <div class="cooperation-container">
     <HeaderSection 
         ImagePath="/assets/images/header-bg-coop.jpeg" 
-        Title="Współpraca" 
+        Title="@Localizer["CooperationText"]" 
         Height="230px"
     />
     <AboutUs />
