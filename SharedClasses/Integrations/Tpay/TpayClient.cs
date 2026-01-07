@@ -119,7 +119,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
             }
 
             var redirectUrl = parsed?.TransactionPaymentUrl;
-            var transactionId = parsed?.TransactionId;
+            var transactionId = parsed?.Title;//parsed?.TransactionId;
 
             if (string.IsNullOrWhiteSpace(redirectUrl))
             {

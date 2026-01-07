@@ -155,11 +155,14 @@ namespace RentoomBooking.Api.Integrations.TpayFunctions;
                 }
             }
 
-            var payload = new TpayCreatePaymentResponse
+        var parsed = JsonConvert.DeserializeObject<TpayTransactionCreatedResponse>(tpayResult.RawResponse);
+
+        var payload = new TpayCreatePaymentResponse
             {
                 TransactionId = tpayResult.TransactionId!,
                 TransactionPaymentUrl = tpayResult.RedirectUrl!,
-                PaymentSessionGuid = sessionGuid
+                PaymentSessionGuid = sessionGuid,
+                TpayFullResponse = parsed
             };
 
             response.StatusCode = HttpStatusCode.OK;

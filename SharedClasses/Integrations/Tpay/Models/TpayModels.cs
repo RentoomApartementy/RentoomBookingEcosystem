@@ -301,5 +301,6 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
         public string TransactionId { get; set; } = string.Empty;
         public string TransactionPaymentUrl { get; set; } = string.Empty;
         public Guid PaymentSessionGuid { get; set; }
+        public TpayTransactionCreatedResponse? TpayFullResponse { get; set; }
     }
 }
