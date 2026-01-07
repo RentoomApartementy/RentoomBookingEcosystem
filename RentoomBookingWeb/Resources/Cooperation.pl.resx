@@ -97,4 +97,7 @@
     <data name="Send" xml:space="preserve">
         <value>Wyślij</value>
     </data>
+    <data name="CooperationText1" xml:space="preserve">
+        <value>Współpraca</value>
+    </data>
 </root>

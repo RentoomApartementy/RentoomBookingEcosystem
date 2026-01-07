@@ -206,5 +206,11 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("Send", resourceCulture);
             }
         }
+        
+        internal static string CooperationText1 {
+            get {
+                return ResourceManager.GetString("CooperationText1", resourceCulture);
+            }
+        }
     }
 }

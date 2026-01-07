@@ -1,6 +1,8 @@
 @page "/kontakt"
 @inject IJSRuntime JSRuntime;
 @inject NavigationManager NavManager;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<RentoomBookingWeb.Contact> Localizer;
 
 <PageTitle>Kontakt - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</PageTitle>
 
@@ -18,13 +20,13 @@
 </HeadContent>
 
 <main class="contact-container">
-    <HeaderSection ImagePath="/assets/images/header-bg-contact.jpeg" Title="Kontakt" Height="230px" />
+    <HeaderSection ImagePath="/assets/images/header-bg-contact.jpeg" Title="@Localizer["ContactText"]" Height="230px" />
     
     <div class="main-wrapper">
         <div class="contact-grid">
             
             <section class="contact-card info-card" aria-labelledby="contact-details-heading">
-                <h2 id="contact-details-heading" class="card-title">Dane kontaktowe</h2>
+                <h2 id="contact-details-heading" class="card-title">@Localizer["ContactDetails"]</h2>
                 
                 <div class="company-details" itemscope itemtype="https://schema.org/Organization">
                     <h3 itemprop="name">Rentoom Apartamenty sp. z o.o.</h3>
@@ -42,7 +44,7 @@
                     <div class="tax-row"><span>REGON:</span> <strong>387605281</strong></div>
                 </div>
 
-                <h3 class="bank-title">Numery kont bankowych (ING)</h3>
+                <h3 class="bank-title">@Localizer["BankAccountNumber"]</h3>
                 
                 <div class="bank-account">
                     <div class="currency-badge pln">PLN</div>
@@ -64,28 +66,28 @@
             </section>
 
             <section class="contact-card form-card" aria-labelledby="contact-form-heading">
-                <h2 id="contact-form-heading" class="card-title">Formularz kontaktowy</h2>
-                <p class="form-subtitle">Wypełnij formularz, odpowiemy najszybciej jak to możliwe.</p>
+                <h2 id="contact-form-heading" class="card-title">@Localizer["ContactForm"]</h2>
+                <p class="form-subtitle">@Localizer["FillOutText"]</p>
                 
                 <form class="custom-form-layout" onsubmit="return false;">
                     
-                    <Input Placeholder="Imię i nazwisko" Type="text" @bind-Value="_name" IsFull="true" />
+                    <Input Placeholder="@Localizer["FirstAndLastName"]" Type="text" @bind-Value="_name" IsFull="true" />
                     
-                    <Input Placeholder="Adres e-mail" Type="email" @bind-Value="_email" IsFull="true" />
+                    <Input Placeholder="@Localizer["EmailAddress"]" Type="email" @bind-Value="_email" IsFull="true" />
                     
-                    <Input Placeholder="Numer telefonu" Type="tel" @bind-Value="_phone" IsFull="true" />
+                    <Input Placeholder="@Localizer["PhoneNumber"]" Type="tel" @bind-Value="_phone" IsFull="true" />
 
-                    <textarea class="custom-textarea" placeholder="Treść wiadomości" @bind="_message"></textarea>
+                    <textarea class="custom-textarea" placeholder="@Localizer["MessageContent"]" @bind="_message"></textarea>
 
                     <div class="checkbox-wrapper">
                         <input type="checkbox" id="rodo" @bind="_consent" />
                         <label for="rodo">
-                            Wyrażam zgodę na przetwarzanie moich danych w celu realizacji zapytania (<a href="/polityka-prywatnosci" target="_blank">Polityka Prywatności</a>).
+                            @Localizer["ConsentText"] (<a href="/polityka-prywatnosci" target="_blank">@Localizer["Privacypolicy"]</a>).
                         </label>
                     </div>
 
                     <div class="btn-wrapper">
-                        <Button IsFull="true">Wyślij wiadomość</Button>
+                        <Button IsFull="true">@Localizer["Send"]</Button>
                     </div>
                 </form>
             </section>

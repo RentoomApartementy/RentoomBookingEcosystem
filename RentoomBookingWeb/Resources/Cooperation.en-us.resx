@@ -83,4 +83,7 @@
     <data name="Send" xml:space="preserve">
         <value>Send</value>
     </data>
+    <data name="CooperationText1" xml:space="preserve">
+        <value>Cooperation</value>
+    </data>
 </root>
