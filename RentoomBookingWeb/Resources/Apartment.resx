@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ApartmentName" xml:space="preserve">
+        <value />
+    </data>
+    <data name="SelectedDates" xml:space="preserve">
+        <value />
+    </data>
+    <data name="NoDatesSelected" xml:space="preserve">
+        <value />
+    </data>
+    <data name="NumberOfGuests" xml:space="preserve">
+        <value />
+    </data>
+    <data name="NoGuestsSelected" xml:space="preserve">
+        <value />
+    </data>
+    <data name="NoOffersAvailable" xml:space="preserve">
+        <value />
+    </data>
+    <data name="ShowAll" xml:space="preserve">
+        <value />
+    </data>
+    <data name="HideDetails" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Summary" xml:space="preserve">
+        <value />
+    </data>
+    <data name="AdditionalOptions" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Opłata serwisowa 139 x" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Zwierzę" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Łóżeczko dla niemowlaka" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Łóżeczko turystyczne" xml:space="preserve">
+        <value />
+    </data>
+    <data name="PÓŹNE WYMELDOWANIE" xml:space="preserve">
+        <value />
+    </data>
+    <data name="WCZESNE ZAMELDOWANIE" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Kwiaty" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Upgrade" xml:space="preserve">
+        <value />
+    </data>
+    <data name="From" xml:space="preserve">
+        <value />
+    </data>
+    <data name="To" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Adults" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Children" xml:space="preserve">
+        <value />
+    </data>
+    <data name="RefundableOffer" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Non-refundableOffer" xml:space="preserve">
+        <value />
+    </data>
+    <data name="BookNow" xml:space="preserve">
+        <value />
+    </data>
+</root>

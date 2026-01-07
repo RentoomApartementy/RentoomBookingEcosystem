@@ -1,4 +1,7 @@
-@page "/o-nas"
+@page "/o-nas";
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<AboutUs> Localizer;
+@inject NavigationManager Navigation
 
 <PageTitle>O nas - Rentoom | Profesjonalne Zarządzanie Najmem</PageTitle>
 
@@ -9,8 +12,8 @@
     <meta property="og:description" content="Jesteśmy grupą pasjonatów podróży i ekspertów od nieruchomości. Zobacz, jak możemy pomóc w zarządzaniu Twoim apartamentem." />
     <meta property="og:image" content="assets/images/header-bg-about-us.jpeg" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://twojadomena.pl/o-nas" />
-    <link rel="canonical" href="https://twojadomena.pl/o-nas" />
+    <meta property="og:url" content="@Navigation.BaseUri/o-nas" />
+    <link rel="canonical" href="@Navigation.BaseUri/o-nas" />
 </HeadContent>
 
 <main class="about-container">
@@ -20,44 +23,44 @@
         <section class="stats" aria-label="Statystyki firmy">
             <div class="stat-item">
                 <h3>9.7</h3>
-                <small>średnia ocena apartamentów</small>
+                <small>@Localizer["AverageRating"]</small>
             </div>
 
             <div class="stat-item">
                 <h3>50+</h3>
-                <small>apartamentów do zarządzania</small>
+                <small>@Localizer["ApartmentsManagement"]</small>
             </div>
 
             <div class="stat-item">
                 <h3>35</h3>
-                <small>obsłużonych rezerwacji</small>
+                <small>@Localizer["CompletedBookings"]</small>
             </div>
 
             <div class="stat-item">
                 <h3>300k</h3>
-                <small>obsłużonych gości</small>
+                <small>@Localizer["QuestsServed"]</small>
             </div>
         </section>
         
         <div class="history-mission">
             <section class="history-mission-section">
-                <h2>Historia</h2>
+                <h2>@Localizer["HistoryText1"]</h2>
                 <p>
-                    Jesteśmy grupą ludzi, która uwielbia podróże i zdobyła doświadczenie w turystyce na międzynarodowych rynkach. Dodatkowo zajmujemy się zarządzaniem, najmem, remontami oraz obrotem na rynku nieruchomości od ponad 6 lat. Uzyskane doświadczenie chcemy zaoferować naszym klientom oraz gościom, którzy są zawsze zadowoleni z naszych usług.
+                    @Localizer["HistoryText2"]
                 </p>
             </section>
             
             <section class="history-mission-section">
-                <h2>Misja</h2>
+                <h2>@Localizer["MissionText1"]</h2>
                 <p>
-                    Zapewnienie jak najlepszej obsługi naszych klientów, zarówno gości jak i właścieli apartamentów. Szczególnie ważne jest dla nas utrzymanie wysokiego standardu obsługi klienta oraz zapewnienie naszych gości, że w naszych apartamentach będą czuli się jak w domu i mogą w każdej chwili liczyć na naszą pomoc.
+                    @Localizer["MissionText2"]
                 </p>
             </section>
         </div>
 
         <hr>
         
-        <h2 class="team-title">Nasz zespół</h2>
+        <h2 class="team-title">@Localizer["OurTeamText"]</h2>
         
         <div class="team">
             <article class="team-item">
@@ -73,9 +76,9 @@
                         <h2>Tomasz – CEO & Founder</h2>
                     </div>
                     <hr>
-                    <p>Wizjoner i strateg z doświadczeniem w branży nieruchomości. Zbudował Rentoom, by uprościć wynajem krótkoterminowy i zautomatyzować wszystko, co można – od rezerwacji po zarządzanie gośćmi.</p>
+                    <p>@Localizer["TomaszText1"]</p>
                     <div class="team-button-wrapper">
-                        <Button>Zadzwoń</Button>
+                        <Button>@Localizer["CallText"]</Button>
                     </div>
                 </div>
             </article>
@@ -93,9 +96,9 @@
                         <h2>Kamil – Tech Lead</h2>
                     </div>
                     <hr>
-                    <p>Czuwa nad tym, by technologia Rentoom była szybka, niezawodna i bezpieczna. Pasjonat automatyzacji i nowoczesnych rozwiązań dla rynku najmu.</p>
+                    <p>@Localizer["KamilText"]</p>
                     <div class="team-button-wrapper">
-                        <Button>Zadzwoń</Button>
+                        <Button>@Localizer["CallText"]</Button>
                     </div>
                 </div>
             </article>
@@ -113,9 +116,9 @@
                         <h2>Marta – Head of Operations</h2>
                     </div>
                     <hr>
-                    <p>Z dbałością o każdy szczegół koordynuje codzienne działania. Dzięki niej nasi klienci mogą spać spokojnie – wszystko działa na czas i bez zgrzytów.</p>
+                    <p>@Localizer["MartaText1"]</p>
                     <div class="team-button-wrapper">
-                        <Button>Zadzwoń</Button>
+                        <Button>@Localizer["CallText"]</Button>
                     </div>
                 </div>
             </article>

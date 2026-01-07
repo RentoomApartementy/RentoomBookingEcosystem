@@ -1,0 +1,89 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ApartmentName" xml:space="preserve">
+        <value>Apartament</value>
+    </data>
+    <data name="NumberOfGuests" xml:space="preserve">
+        <value>Liczba osób</value>
+    </data>
+    <data name="NoDatesSelected" xml:space="preserve">
+        <value>brak wybranego terminu</value>
+    </data>
+    <data name="SelectedDates" xml:space="preserve">
+        <value>Wybrany termin</value>
+    </data>
+    <data name="NoGuestsSelected" xml:space="preserve">
+        <value>brak wybranej liczby osób</value>
+    </data>
+    <data name="NoOffersAvailable" xml:space="preserve">
+        <value>brak oferty w wybranym terminie</value>
+    </data>
+    <data name="ShowAll" xml:space="preserve">
+        <value>Pokaż całość</value>
+    </data>
+    <data name="HideDetails" xml:space="preserve">
+        <value>Zwiń szczegóły</value>
+    </data>
+    <data name="Summary" xml:space="preserve">
+        <value>Podsumowanie</value>
+    </data>
+    <data name="Opłata serwisowa 139 x" xml:space="preserve">
+        <value>Opłata serwisowa 139 x</value>
+    </data>
+    <data name="AdditionalOptions" xml:space="preserve">
+        <value>Dodatkowe opcje</value>
+    </data>
+    <data name="Zwierzę" xml:space="preserve">
+        <value>Zwierzę</value>
+    </data>
+    <data name="Łóżeczko turystyczne" xml:space="preserve">
+        <value>Łóżeczko turystyczne</value>
+    </data>
+    <data name="Łóżeczko dla niemowlaka" xml:space="preserve">
+        <value>Łóżeczko dla niemowlaka</value>
+    </data>
+    <data name="PÓŹNE WYMELDOWANIE" xml:space="preserve">
+        <value>PÓŹNE WYMELDOWANIE</value>
+    </data>
+    <data name="WCZESNE ZAMELDOWANIE" xml:space="preserve">
+        <value>WCZESNE ZAMELDOWANIE</value>
+    </data>
+    <data name="Kwiaty" xml:space="preserve">
+        <value>Kwiaty</value>
+    </data>
+    <data name="Upgrade" xml:space="preserve">
+        <value>Upgrade</value>
+    </data>
+    <data name="To" xml:space="preserve">
+        <value>Do</value>
+    </data>
+    <data name="From" xml:space="preserve">
+        <value>Od</value>
+    </data>
+    <data name="Adults" xml:space="preserve">
+        <value>Dorośli</value>
+    </data>
+    <data name="Children" xml:space="preserve">
+        <value>Dzieci</value>
+    </data>
+    <data name="RefundableOffer" xml:space="preserve">
+        <value>Oferta zwrotna</value>
+    </data>
+    <data name="Non-refundableOffer" xml:space="preserve">
+        <value>Oferta bezzwrotna</value>
+    </data>
+    <data name="BookNow" xml:space="preserve">
+        <value>Zarezerwuj</value>
+    </data>
+</root>

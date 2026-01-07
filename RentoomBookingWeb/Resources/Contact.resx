@@ -18,49 +18,40 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Apartments" xml:space="preserve">
+    <data name="ContactText" xml:space="preserve">
         <value />
     </data>
-    <data name="About" xml:space="preserve">
+    <data name="ContactDetails" xml:space="preserve">
         <value />
     </data>
-    <data name="Cooperation" xml:space="preserve">
+    <data name="BankAccountNumber" xml:space="preserve">
         <value />
     </data>
-    <data name="Contact" xml:space="preserve">
+    <data name="ContactForm" xml:space="preserve">
         <value />
     </data>
-    <data name="RentoomDesigner" xml:space="preserve">
+    <data name="FillOutText" xml:space="preserve">
         <value />
     </data>
-    <data name="Others" xml:space="preserve">
+    <data name="FirstAndLastName" xml:space="preserve">
         <value />
     </data>
-    <data name="CallUs" xml:space="preserve">
+    <data name="EmailAddress" xml:space="preserve">
         <value />
     </data>
-    <data name="HomeHeroText" xml:space="preserve">
+    <data name="PhoneNumber" xml:space="preserve">
         <value />
     </data>
-    <data name="NumberOfPeople" xml:space="preserve">
+    <data name="MessageContent" xml:space="preserve">
         <value />
     </data>
-    <data name="NumberOfRooms" xml:space="preserve">
+    <data name="ConsentText" xml:space="preserve">
         <value />
     </data>
-    <data name="Search" xml:space="preserve">
+    <data name="Privacypolicy" xml:space="preserve">
         <value />
     </data>
-    <data name="SelectNumberOfGuests" xml:space="preserve">
-        <value />
-    </data>
-    <data name="NumberOfGuests" xml:space="preserve">
-        <value />
-    </data>
-    <data name="ChildrenUnder2" xml:space="preserve">
-        <value />
-    </data>
-    <data name="Adults" xml:space="preserve">
+    <data name="Send" xml:space="preserve">
         <value />
     </data>
 </root>

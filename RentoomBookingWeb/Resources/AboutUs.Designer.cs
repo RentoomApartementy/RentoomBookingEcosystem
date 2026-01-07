@@ -14,21 +14,21 @@ namespace RentoomBookingWeb {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SharedResources {
+    internal class AboutUs {
         
         private static System.Resources.ResourceManager resourceMan;
         
         private static System.Globalization.CultureInfo resourceCulture;
         
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SharedResources() {
+        internal AboutUs() {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("RentoomBookingWeb.Resources.SharedResources", typeof(SharedResources).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("RentoomBookingWeb.Resources.AboutUs", typeof(AboutUs).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -45,93 +45,87 @@ namespace RentoomBookingWeb {
             }
         }
         
-        internal static string Apartments {
+        internal static string AboutUsText {
             get {
-                return ResourceManager.GetString("Apartments", resourceCulture);
+                return ResourceManager.GetString("AboutUsText", resourceCulture);
             }
         }
         
-        internal static string About {
+        internal static string AverageRating {
             get {
-                return ResourceManager.GetString("About", resourceCulture);
+                return ResourceManager.GetString("AverageRating", resourceCulture);
             }
         }
         
-        internal static string Cooperation {
+        internal static string ApartmentsManagement {
             get {
-                return ResourceManager.GetString("Cooperation", resourceCulture);
+                return ResourceManager.GetString("ApartmentsManagement", resourceCulture);
             }
         }
         
-        internal static string Contact {
+        internal static string CompletedBookings {
             get {
-                return ResourceManager.GetString("Contact", resourceCulture);
+                return ResourceManager.GetString("CompletedBookings", resourceCulture);
             }
         }
         
-        internal static string RentoomDesigner {
+        internal static string QuestsServed {
             get {
-                return ResourceManager.GetString("RentoomDesigner", resourceCulture);
+                return ResourceManager.GetString("QuestsServed", resourceCulture);
             }
         }
         
-        internal static string Others {
+        internal static string HistoryText1 {
             get {
-                return ResourceManager.GetString("Others", resourceCulture);
+                return ResourceManager.GetString("HistoryText1", resourceCulture);
             }
         }
         
-        internal static string CallUs {
+        internal static string HistoryText2 {
             get {
-                return ResourceManager.GetString("CallUs", resourceCulture);
+                return ResourceManager.GetString("HistoryText2", resourceCulture);
             }
         }
         
-        internal static string HomeHeroText {
+        internal static string MissionText1 {
             get {
-                return ResourceManager.GetString("HomeHeroText", resourceCulture);
+                return ResourceManager.GetString("MissionText1", resourceCulture);
             }
         }
         
-        internal static string NumberOfPeople {
+        internal static string MissionText2 {
             get {
-                return ResourceManager.GetString("NumberOfPeople", resourceCulture);
+                return ResourceManager.GetString("MissionText2", resourceCulture);
             }
         }
         
-        internal static string NumberOfRooms {
+        internal static string OurTeamText {
             get {
-                return ResourceManager.GetString("NumberOfRooms", resourceCulture);
+                return ResourceManager.GetString("OurTeamText", resourceCulture);
             }
         }
         
-        internal static string Search {
+        internal static string TomaszText1 {
             get {
-                return ResourceManager.GetString("Search", resourceCulture);
+                return ResourceManager.GetString("TomaszText1", resourceCulture);
             }
         }
         
-        internal static string SelectNumberOfGuests {
+        internal static string KamilText {
             get {
-                return ResourceManager.GetString("SelectNumberOfGuests", resourceCulture);
+                return ResourceManager.GetString("KamilText", resourceCulture);
             }
         }
         
-        internal static string NumberOfGuests {
+        internal static string MartaText1 {
             get {
-                return ResourceManager.GetString("NumberOfGuests", resourceCulture);
+                return ResourceManager.GetString("MartaText1", resourceCulture);
             }
         }
         
-        internal static string ChildrenUnder2 {
+        internal static string CallText {
             get {
-                return ResourceManager.GetString("ChildrenUnder2", resourceCulture);
-            }
-        }
-        
-        internal static string Adults {
-            get {
-                return ResourceManager.GetString("Adults", resourceCulture);
+                return ResourceManager.GetString("CallText", resourceCulture);
             }
         }
     }

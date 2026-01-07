@@ -18,49 +18,46 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Apartments" xml:space="preserve">
+    <data name="AboutUsText" xml:space="preserve">
         <value />
     </data>
-    <data name="About" xml:space="preserve">
+    <data name="AverageRating" xml:space="preserve">
         <value />
     </data>
-    <data name="Cooperation" xml:space="preserve">
+    <data name="ApartmentsManagement" xml:space="preserve">
         <value />
     </data>
-    <data name="Contact" xml:space="preserve">
+    <data name="CompletedBookings" xml:space="preserve">
         <value />
     </data>
-    <data name="RentoomDesigner" xml:space="preserve">
+    <data name="QuestsServed" xml:space="preserve">
         <value />
     </data>
-    <data name="Others" xml:space="preserve">
+    <data name="HistoryText1" xml:space="preserve">
         <value />
     </data>
-    <data name="CallUs" xml:space="preserve">
+    <data name="HistoryText2" xml:space="preserve">
         <value />
     </data>
-    <data name="HomeHeroText" xml:space="preserve">
+    <data name="MissionText1" xml:space="preserve">
         <value />
     </data>
-    <data name="NumberOfPeople" xml:space="preserve">
+    <data name="MissionText2" xml:space="preserve">
         <value />
     </data>
-    <data name="NumberOfRooms" xml:space="preserve">
+    <data name="OurTeamText" xml:space="preserve">
         <value />
     </data>
-    <data name="Search" xml:space="preserve">
+    <data name="TomaszText1" xml:space="preserve">
         <value />
     </data>
-    <data name="SelectNumberOfGuests" xml:space="preserve">
+    <data name="KamilText" xml:space="preserve">
         <value />
     </data>
-    <data name="NumberOfGuests" xml:space="preserve">
+    <data name="MartaText1" xml:space="preserve">
         <value />
     </data>
-    <data name="ChildrenUnder2" xml:space="preserve">
-        <value />
-    </data>
-    <data name="Adults" xml:space="preserve">
+    <data name="CallText" xml:space="preserve">
         <value />
     </data>
 </root>

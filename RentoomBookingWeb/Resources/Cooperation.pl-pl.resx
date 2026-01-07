@@ -1,0 +1,102 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CooperationText" xml:space="preserve">
+        <value>Współpraca</value>
+    </data>
+    <data name="WhyUsText" xml:space="preserve">
+        <value>O nas i dlaczego my?</value>
+    </data>
+    <data name="ExperienceText1" xml:space="preserve">
+        <value>Doświadczenie
+</value>
+    </data>
+    <data name="Experience2Text" xml:space="preserve">
+        <value>Jesteśmy liderem na rynku wynajmu apartamentów w Toruniu. Dużo podróżujemy, więc wiemy doskonale, co oferuje konkurencja i jak być od niej lepszymi.
+
+</value>
+    </data>
+    <data name="QualityText1" xml:space="preserve">
+        <value>Jakość</value>
+    </data>
+    <data name="QualityText2" xml:space="preserve">
+        <value>Znamy tajemnicę udanego wypoczynku! Dbamy więc o każdy szczegół, by nasi goście wracali do nas z przyjemnością. Dlaczego? Bo zadowolenie goście przekłada się na zyski właścicieli apartamentów.
+
+</value>
+    </data>
+    <data name="ProfessionalismText1" xml:space="preserve">
+        <value>Profesjonalizm</value>
+    </data>
+    <data name="Professionalism2" xml:space="preserve">
+        <value>Nasz zespół to specjaliści z długoletnim doświadczeniem, którzy zdobywali wiedzę oraz umiejętności w hotelach na terenie całej Europy.
+
+</value>
+    </data>
+    <data name="InnovationText1" xml:space="preserve">
+        <value>Innowacyjność</value>
+    </data>
+    <data name="InnovationText2" xml:space="preserve">
+        <value>Stale inwestujemy w nowe technologie, które usprawniają procesy zarządzania apartamentami i zwiększają zyski
+
+</value>
+    </data>
+    <data name="AdvantagesOfCooperation" xml:space="preserve">
+        <value>Zalety współpracy
+</value>
+    </data>
+    <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+        <value>Bezobsługowa inwestycja</value>
+    </data>
+    <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+        <value>Oferowana przez nas obsługa jest kompletna. Możesz spać spokojnie, my pracujemy za Ciebie.</value>
+    </data>
+    <data name="IncomeOptimizationText1" xml:space="preserve">
+        <value>Optymalizacja dochodu</value>
+    </data>
+    <data name="ReadyToHelpText1" xml:space="preserve">
+        <value>Gotowi do pomocy 24/7
+</value>
+    </data>
+    <data name="IncomeOptimizationText2" xml:space="preserve">
+        <value>Na bieżąco monitorujemy rynek i dostosowujemy ceny za wynajem apartamentu pod Twój zysk.
+
+</value>
+    </data>
+    <data name="ReadyToHelpText2" xml:space="preserve">
+        <value>Gwarantujemy naszym wspólnym klientom obsługę przez całą dobę, siedem dni w tygodniu.
+
+</value>
+    </data>
+    <data name="FillOutForm" xml:space="preserve">
+        <value>Jesli chcesz nawiązać współpracę, wypełnij formularz
+</value>
+    </data>
+    <data name="LastName" xml:space="preserve">
+        <value>Nazwisko</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>Imię</value>
+    </data>
+    <data name="PhoneNumber" xml:space="preserve">
+        <value>Numer telefonu</value>
+    </data>
+    <data name="NumberOfApartments" xml:space="preserve">
+        <value>Ilość mieszkań</value>
+    </data>
+    <data name="District" xml:space="preserve">
+        <value>Dzielnica Torunia</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Wyślij</value>
+    </data>
+</root>
