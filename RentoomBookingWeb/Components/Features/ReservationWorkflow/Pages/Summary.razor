@@ -22,6 +22,8 @@
             <p>Termin: @_summary.StartRequest?.StartDate.ToString("yyyy-MM-dd") - @_summary.StartRequest?.EndDate.ToString("yyyy-MM-dd")</p>
             <p>Goście: @_summary.StartRequest?.Adults dorosłych, @_summary.StartRequest?.Children dzieci</p>
             <p>Cena: @_summary.OfferPrice @_summary.Currency</p>
+            <p>Status IdoBooking: @_summary.IdoStatus</p>
+            <p>Status Płatności: @_summary.PaymentStatus</p>
             <Button @onclick="GoToPayment">Przejdź dalej</Button>
         </div>
     }

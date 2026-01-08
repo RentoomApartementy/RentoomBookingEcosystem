@@ -1,4 +1,4 @@
-@page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/{tpayGuid:guid}/success"
+@page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/success"
 
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject IReservationWorkflowService ReservationWorkflowService;
@@ -14,14 +14,14 @@
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
-    [Parameter] public Guid TpayGuid { get; set; }
+    [Parameter] public Guid tpayTransactionId { get; set; }
     
 
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
-            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji", true);
+            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji/", true);
         }
     }
 

@@ -69,17 +69,26 @@ namespace RentoomBookingWeb
             
             builder.Services.AddScoped<IReservationWorkflowService, ReservationWorkflowService>();
             builder.Services.AddScoped<IReservationStore, ReservationStore>();
-            builder.Services.AddScoped<ITpayGateway, MockTpayGateway>();
+            builder.Services.AddScoped<IMockTpayGateway, MockTpayGateway>();
+            builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
 
 
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
-            
+
+            //http context provider for absoulte urls - for tpay.
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<ISiteBaseProvider, SiteBaseProvider>();
+
+
             //view scoped
             builder.Services.AddScoped<IApartmentsViewModel, ApartmentsViewModel>();
 
             //TPAY
-            builder.Services.Configure<TpaySettings>(builder.Configuration.GetSection("Tpay"));
+            bool UseDevelopmentSettingsOnProd = true;
+            var TpaySection = UseDevelopmentSettingsOnProd ? builder.Configuration.GetSection("TpayDev") : builder.Configuration.GetSection("Tpay");
+            
+            builder.Services.Configure<TpaySettings>(TpaySection);
 
             builder.Services.AddHttpClient("Tpay", (sp, http) =>
             {
@@ -129,32 +138,7 @@ namespace RentoomBookingWeb
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
 
-          /*  app.MapPost("/api/tpay/webhook", async (TpayWebhookDto dto, IReservationWorkflowService workflow, ILogger<Program> logger) =>
-            {
-                if (!string.Equals(dto.Signature, "mock", StringComparison.OrdinalIgnoreCase))
-                {
-                    logger.LogWarning("Invalid webhook signature for reservation {ReservationGuid}.", dto.ReservationGuid);
-                    return Results.Unauthorized();
-                }
-
-                try
-                {
-                    await workflow.HandleTpayWebhookAsync(dto);
-                    return Results.Ok();
-                }
-                catch (InvalidOperationException ex)
-                {
-                    logger.LogWarning(ex, "Webhook validation failed for reservation {ReservationGuid}.", dto.ReservationGuid);
-                    return Results.BadRequest();
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Unexpected error while handling webhook for reservation {ReservationGuid}.", dto.ReservationGuid);
-                    return Results.StatusCode(StatusCodes.Status500InternalServerError);
-                }
-            });
-
-            */
+         
 
 
             app.Run();

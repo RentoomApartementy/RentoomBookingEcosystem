@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace RentoomBooking.SharedClasses.Integrations.Tpay
 {
 
-    public interface ITpayGateway
+    public interface IMockTpayGateway
     {
         Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency);
     }
 
-    public class MockTpayGateway : ITpayGateway
+    public class MockTpayGateway : IMockTpayGateway
     {
         public Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency)
         {

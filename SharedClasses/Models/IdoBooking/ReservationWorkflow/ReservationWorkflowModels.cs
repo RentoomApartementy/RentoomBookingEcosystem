@@ -57,6 +57,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
         public string? IdoStatus { get; set; }
         public decimal? OfferPrice { get; set; }
         public string Currency { get; set; } = "PLN";
+        public string PaymentStatus { get; set; } = PaymentStatuses.None;
     }
 
     public class PaymentInitResult

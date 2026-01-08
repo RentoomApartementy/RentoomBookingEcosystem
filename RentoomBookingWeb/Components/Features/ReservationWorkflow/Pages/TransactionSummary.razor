@@ -15,22 +15,23 @@
     }
     else if (_state?.PaymentStatus == PaymentStatuses.Paid)
     {
-        <div class="">
+        <div class="success">
             <h2>Płatność zakończona sukcesem</h2>
             <Button @onclick="NavigateToSummary">Powrót do podsumowania</Button>
         </div>
     }
     else if (_state?.PaymentStatus == PaymentStatuses.Failed)
     {
-        <div class="">
+        <div class="error">
             <h2>Płatność nie powiodła się</h2>
             <Button @onclick="RetryPayment">Spróbuj ponownie</Button>
         </div>
     }
     else
     {
-        <div class="">
+        <div class="waiting">
             <h2>Oczekiwanie na potwierdzenie płatności...</h2>
+            <div class="spinner" role="status" aria-label="Ładowanie"></div>
         </div>
     }
 </div>
@@ -52,6 +53,8 @@
 
     private async Task PollAsync(CancellationToken token)
     {
+         await Task.Delay(TimeSpan.FromSeconds(5), token);// tylko na testy - zeby wymusic spinner- potem usunac.
+
         while (!token.IsCancellationRequested)
         {
             try

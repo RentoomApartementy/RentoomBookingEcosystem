@@ -10,18 +10,26 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.Tpay
 {
+
+    public interface ITpayGateway
+    {
+        Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency);
+    }
+
     public class TpayOpenApiGateway : ITpayGateway
     {
         private readonly ITpayClient _client;
         private readonly IReservationStore _store;
         private readonly TpaySettings _settings;
         private readonly ILogger<TpayOpenApiGateway> _logger;
-
+      //  private readonly ISiteBaseProvider _siteBase;
         public TpayOpenApiGateway(
             ITpayClient client,
             IReservationStore store,
             IOptions<TpaySettings> options,
-            ILogger<TpayOpenApiGateway> logger)
+            ILogger<TpayOpenApiGateway> logger
+            //ISiteBaseProvider siteBase
+            )
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _store = store ?? throw new ArgumentNullException(nameof(store));
@@ -38,13 +46,15 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
             var payerName = string.Join(" ", new[] { record.State.Client?.FirstName, record.State.Client?.LastName }
                 .Where(x => !string.IsNullOrWhiteSpace(x)));
 
-            var request = new TpayTransactionRequest
+            var successURL = _settings.RentoomSiteBaseUrl + "/" + _settings.SuccessUrl?.Replace("{ReservationTokenGuid}", reservationGuid.ToString()).Replace("{tpayGuid}", reservationGuid.ToString());
+            
+                var request = new TpayTransactionRequest
             {
                 Amount = amount,
                 Currency = string.IsNullOrWhiteSpace(currency) ? _settings.DefaultCurrency : currency,
                 Description = $"Reservation {reservationGuid}",
 
-
+                
                 Payer = new TpayPayer
                 {
                     Email = payerEmail ?? string.Empty,
@@ -52,7 +62,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
                     // Phone = record.State.Client?.Phone ?? string.Empty
 
                 },
-                SuccessUrl = _settings.SuccessUrl,
+                SuccessUrl = successURL,
                 ErrorUrl = _settings.ErrorUrl,
                 NotificationUrl = _settings.NotificationUrl,
                 HiddenDescription = reservationGuid.ToString(),

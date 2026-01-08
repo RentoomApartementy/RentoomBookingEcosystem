@@ -72,7 +72,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 IdoReservationId = record.IdoReservationId,
                 IdoStatus = record.IdoStatus,
                 OfferPrice = record.State.StartRequest?.OfferPrice,
-                Currency = record.State.StartRequest?.Currency ?? "PLN"
+                Currency = record.State.StartRequest?.Currency ?? "PLN",
+                PaymentStatus = record.PaymentStatus,
+                
             };
         }
 
@@ -100,7 +102,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 if (record.PaymentStatus == PaymentStatuses.Initiated && record.PaymentSessionGuid.HasValue)
                 {
-                    var redirectUrl = record.State.PaymentRedirectUrl ?? $"/tpay-mock/{record.PaymentSessionGuid}?reservationGuid={reservationGuid}";
+                    var redirectUrl = record.State.PaymentRedirectUrl;
 
                     return new PaymentInitResult
                     {

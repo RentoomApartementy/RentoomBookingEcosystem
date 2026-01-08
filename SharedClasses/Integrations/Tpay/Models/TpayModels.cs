@@ -35,10 +35,13 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
         /// </summary>
         public string? MerchantSecurityCode { get; set; }
 
+        public string? RentoomSiteBaseUrl { get; set; }
+
         public bool IsConfigured()
             => !string.IsNullOrWhiteSpace(ApiBaseUrl)
             && !string.IsNullOrWhiteSpace(ClientId)
-            && !string.IsNullOrWhiteSpace(ClientSecret);
+            && !string.IsNullOrWhiteSpace(ClientSecret)
+            && !string.IsNullOrWhiteSpace(RentoomSiteBaseUrl);
     }
 
     public class TpayPayer
