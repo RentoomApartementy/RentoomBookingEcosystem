@@ -1,9 +1,11 @@
-@page "/apartamenty/{id:int}"
-@page "/apartamenty/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@page "/apartamenty/{id:int}/{slug}"
+@page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @inject IApartmentsService ApartmentsService
 @inject IIdoApartmentService IdoApartmentService
@@ -15,8 +17,6 @@
 @inject IAvailabilityFinderService AvailabilityFinder
 @using RentoomBookingWeb.Helpers
 @using System.Text.RegularExpressions
-@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
-@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject NavigationManager NavManager
 
 <PageTitle>@GetSeoTitle()</PageTitle>
@@ -226,12 +226,12 @@
         <div class="summary-offer-price-wrapper">
             <div class="summary-offer-price">
                 <span>Oferta zwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
-                <Button @onclick="GoToPayment">Zarezerwuj</Button>
+                <Button @onclick="@(() => GoToPayment(OfferTypeRefundable))">Zarezerwuj</Button>
             </div>   
                             
             <div class="summary-offer-price">
                 <span>Oferta bezzwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
-                <Button @onclick="GoToPayment">Zarezerwuj</Button>
+                <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">Zarezerwuj</Button>
             </div> 
         </div>
     }
@@ -260,6 +260,7 @@
 
 @code {
     [Parameter] public int Id { get; set; }
+    [Parameter] public string? Slug { get; set; }
     [Parameter] public string? StartDate { get; set; }
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
