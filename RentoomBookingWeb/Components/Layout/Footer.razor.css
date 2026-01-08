@@ -145,6 +145,10 @@
     font-size: 0.75rem;
     padding: 8px 0;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .border-b-r {
@@ -158,7 +162,19 @@
         border-right: 2px solid #ffffff;
         padding-bottom: 0;
     }
-    
-    
-    
+}
+
+.all-apartments-link,
+.all-apartments-link:hover,
+.all-apartments-link:visited,
+.all-apartments-link:active,
+.all-apartments-link:focus {
+    color: rgba(255, 255, 255, 0.5);   
+    font-size: .6rem;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.all-apartments-link:hover {
+    text-decoration: underline;
 }

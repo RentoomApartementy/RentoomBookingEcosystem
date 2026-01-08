@@ -1,3 +1,7 @@
+@inject NavigationManager Navigation;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<RentoomBookingWeb.Footer> Localizer;
+
 <div class="footer">
     <div class="footer-section-logo">
         <div class="footer-logo">
@@ -8,23 +12,20 @@
     <div class="footer-content">
         <div class="footer-section footer-section-description border-b-r">
             <p class="footer-description">
-                <b>Naszą misją jest zapewnienie</b> jak najlepszej obsługi naszych klientów, zarówno gości jak i właścicieli apartamentów. 
-                Szczególnie ważne jest dla nas utrzymanie wysokiego standardu obsługi klienta oraz zapewnienie naszych gości, 
-                że w naszych apartamentach będą czuli się jak w domu i mogą w każdej chwili liczyć na naszą pomoc.
+                @Localizer["footerText1"]
             </p>
         </div>
 
         <div class="footer-section border-b-r">
-            <h3 class="footer-title">Kontakt</h3>
-            <p class="footer-text">Zadzwoń do nas: <br /><a href="tel:+48881388001" style="color: white">+48 881 388 001</a></p>
-            <p class="footer-text">Napisz do nas: <br /><a href="mailto:info@rentoom.pl" style="color: white">info@rentoom.pl</a></p>
+            <h3 class="footer-title">@Localizer["contactText"]</h3>
+            <p class="footer-text">@Localizer["CallUsText"] <br /><a href="tel:+48881388001" style="color: white">+48 881 388 001</a></p>
+            <p class="footer-text">@Localizer["WriteUs"] <br /><a href="mailto:info@rentoom.pl" style="color: white">info@rentoom.pl</a></p>
         </div>
 
         <div class="footer-section">
-            <h3 class="footer-title">Regulaminy</h3>
+            <h3 class="footer-title">@Localizer["Regulations1"]</h3>
             <ul class="footer-list">
-                <li><a href="/regulamin" class="footer-link" >Regulamin korzystania ze strony</a></li>
-                <li><a href="/polityka-prywatnosci" class="footer-link">Polityka Prywatności</a></li>
+                <li><a href="/regulaminy" class="footer-link" >@Localizer["Regulations2"]</a></li>
             </ul>
         </div>
     </div>
@@ -38,5 +39,6 @@
 </div>
 
 <div class="footer-bottom">
-    Zaprojektowane przez Bartosza Frankowskiego i Szymona Balickiego
+    <a href="/apartamenty-torun" class="all-apartments-link">@Localizer["AllApartmentsText"]</a>
+    @Localizer["DesignedText"]
 </div>

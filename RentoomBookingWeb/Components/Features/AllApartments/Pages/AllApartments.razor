@@ -1,0 +1,80 @@
+@page "/apartamenty-torun"
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using RentoomBooking.SharedClasses.Services
+
+@inject IApartmentsService ApartmentsService
+@inject NavigationManager Navigation
+
+<PageTitle>Apartamenty Toruń - Pełna Lista Noclegów</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Zobacz listę wszystkich naszych apartamentów w Toruniu. Komfortowe noclegi, świetna lokalizacja blisko Starówki. Sprawdź szczegóły każdego apartamentu." />
+</HeadContent>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1>Apartamenty Toruń - Wszystkie nasze obiekty</h1>
+            <p class="mb-4">Poniżej znajduje się lista wszystkich dostępnych apartamentów w naszej ofercie w Toruniu.</p>
+
+            @if (_isLoading)
+            {
+                <p>Ładowanie listy apartamentów...</p>
+            }
+            else if (_apartments == null || !_apartments.Any())
+            {
+                <p>Brak dostępnych apartamentów.</p>
+            }
+            else
+            {
+                <ul class="list-unstyled">
+                    @foreach (var apartment in _apartments)
+                    {
+                        <li class="mb-2">
+                            <a href="@GetApartmentUrl(apartment)" title="Zobacz szczegóły: @apartment.Name">
+                                <strong>@apartment.Name</strong>
+                            </a>
+                             - Toruń
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<ApartmentObject> _apartments = new();
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var result = await ApartmentsService.GetAllApartmentsList();
+            
+            if (result?.Items != null)
+            {
+                _apartments = (List<ApartmentObject>)result.Items;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Błąd pobierania sitemapy: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private string GetApartmentUrl(ApartmentObject item)
+    {
+        if (item == null) return "#";
+
+        string slug = item.Name?.ToSlug() ?? "szczegoly";
+        
+        return $"/apartamenty/{item.Id}/{slug}";
+    }
+}

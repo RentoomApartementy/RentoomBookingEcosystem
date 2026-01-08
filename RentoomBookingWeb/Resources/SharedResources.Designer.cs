@@ -110,5 +110,29 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("Search", resourceCulture);
             }
         }
+        
+        internal static string SelectNumberOfGuests {
+            get {
+                return ResourceManager.GetString("SelectNumberOfGuests", resourceCulture);
+            }
+        }
+        
+        internal static string NumberOfGuests {
+            get {
+                return ResourceManager.GetString("NumberOfGuests", resourceCulture);
+            }
+        }
+        
+        internal static string ChildrenUnder2 {
+            get {
+                return ResourceManager.GetString("ChildrenUnder2", resourceCulture);
+            }
+        }
+        
+        internal static string Adults {
+            get {
+                return ResourceManager.GetString("Adults", resourceCulture);
+            }
+        }
     }
 }

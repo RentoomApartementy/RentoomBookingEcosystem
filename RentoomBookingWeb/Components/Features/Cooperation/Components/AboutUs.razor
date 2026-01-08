@@ -1,30 +1,33 @@
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<Cooperation> Localizer;
+
 <div class="about-container">
-    <h1 class="about-title">O nas i dlaczego my?</h1>
+    <h1 class="about-title">@Localizer["WhyUsText"]</h1>
     
     <AboutUsInfoItem 
         ImagePath="assets/images/package-test.jpeg"
-        Title="Doświadczenie"
-        Description="Jesteśmy liderem na rynku wynajmu apartamentów w Toruniu. Dużo podróżujemy, więc wiemy doskonale, co oferuje konkurencja i jak być od niej lepszymi."
+        Title="@Localizer["ExperienceText1"]"
+        Description="@Localizer["Experience2Text"]"
     />
     
     <AboutUsInfoItem 
         IsReverse="true"
         ImagePath="assets/images/package-test.jpeg"
-        Title="Jakość"
-        Description="Znamy tajemnicę udanego wypoczynku! Dbamy więc o każdy szczegół, by nasi goście wracali do nas z przyjemnością. Dlaczego? Bo zadowolenie goście przekłada się na zyski właścicieli apartamentów."
+        Title="@Localizer["QualityText1"]"
+        Description="@Localizer["QualityText2"]"
     />
     
     <AboutUsInfoItem 
         ImagePath="assets/images/package-test.jpeg"
-        Title="Profesjonalizm"
-        Description="Nasz zespół to specjaliści z długoletnim doświadczeniem, którzy zdobywali wiedzę oraz umiejętności w hotelach na terenie całej Europy."
+        Title="@Localizer["ProfessionalismText1"]"
+        Description="@Localizer["Professionalism2"]"
     />
     
     <AboutUsInfoItem 
         IsReverse="true"
         ImagePath="assets/images/package-test.jpeg"
-        Title="Innowacyjność"
-        Description="Stale inwestujemy w nowe technologie, które usprawniają procesy zarządzania apartamentami i zwiększają zyski"
+        Title="@Localizer["InnovationText1"]"
+        Description="@Localizer["InnovationText2"]"
     />
 </div>
 

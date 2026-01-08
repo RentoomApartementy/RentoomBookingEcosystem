@@ -7,9 +7,9 @@
 @using RentoomBookingWeb.Services
 @inject IAvailabilityFinderService AvailabilityFinder
 @inject IJSRuntime JS
+@using RentoomBookingWeb.Helpers
 
 <article @ref="_elementRef" 
-         @onclick="GoToReservation" 
          class="apartment-card" 
          style="@(DisableForGoToReservation ? "cursor: default;" : "")"
          itemscope itemtype="https://schema.org/Apartment">
@@ -23,21 +23,35 @@
         else
         {   
             <div class="image-container">
-                <div class="image-wrapper">
-                    <img 
-                        src="@_currentObjectMedium.Url"
-                        alt="@Item?.Name"
-                        title="@Item?.Name"
-                        itemprop="photo"
-                        class="apartment-image" 
-                    />
-                </div>
+                @if (!string.IsNullOrEmpty(_detailsUrl))
+                {
+                    <div class="image-wrapper" title="@Item?.Name">
+                        <img 
+                            src="@_currentObjectMedium.Url"
+                            alt="@Item?.Name"
+                            itemprop="photo"
+                            class="apartment-image" 
+                        />
+                    </div>
+                }
+                else
+                {
+                    <div class="image-wrapper">
+                        <img 
+                            src="@_currentObjectMedium.Url"
+                            alt="@Item?.Name"
+                            title="@Item?.Name"
+                            itemprop="photo"
+                            class="apartment-image" 
+                        />
+                    </div>
+                }
                 
-                <div @onclick="() => ChangeCurrentObjectMedium(1)" @onclick:stopPropagation  class="right-button">
+                <div @onclick="() => ChangeCurrentObjectMedium(1)" @onclick:stopPropagation @onclick:preventDefault class="right-button">
                     &gt;
                 </div>
                 
-                <div @onclick="() => ChangeCurrentObjectMedium(-1)" @onclick:stopPropagation  class="left-button">
+                <div @onclick="() => ChangeCurrentObjectMedium(-1)" @onclick:stopPropagation @onclick:preventDefault class="left-button">
                     &lt;
                 </div>
                 
@@ -60,7 +74,16 @@
                 }
                 else
                 {
-                    <h2 itemprop="name" title="@Item.Name">@Item.Name</h2>
+                    <h2 itemprop="name">
+                        @if (!string.IsNullOrEmpty(_detailsUrl))
+                        {
+                            <a href="@_detailsUrl" style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
+                        }
+                        else
+                        {
+                            @Item.Name
+                        }
+                    </h2>
                 }
 
                 <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
@@ -163,10 +186,19 @@
                 </div>
             }
             
-            <Button @onclick="GoToReservation" 
-                    Disabled="@(Item == null || (ShowPrice && Offer == null))">
-                Zarezerwuj
-            </Button>
+            @if (Item == null || (ShowPrice && Offer == null))
+            {
+                <Button Href="@_detailsUrl"
+                        Disabled="@(Item == null || (ShowPrice && Offer == null))">
+                    Szczegóły
+                </Button>
+            }
+            else
+            {
+                <Button Href="@_detailsUrl">
+                    Zarezerwuj
+                </Button>
+            }
         </div>
     </div>
 </article>
@@ -190,6 +222,7 @@
     private int _currentMediumIndex = 0;
     private ObjectMedium? _currentObjectMedium = null;
     private int? _bedsCount = null;
+    private string? _detailsUrl;
     
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<Apartment>? _objRef;
@@ -199,6 +232,12 @@
     protected override void OnInitialized()
     {
         _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
+        CalculateDetailsUrl();
+    }
+
+    protected override void OnParametersSet()
+    {
+        CalculateDetailsUrl();
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -245,31 +284,37 @@
         _currentObjectMedium = _objectMediums[_currentMediumIndex];
     }
 
-    private void GoToReservation()
+    private void CalculateDetailsUrl()
     {
-        if (DisableForGoToReservation) return;
-
-        if (Item != null)
+        if (DisableForGoToReservation || Item == null)
         {
-            var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-            var queryParams = Microsoft.AspNetCore.WebUtilities
-                .QueryHelpers.ParseQuery(uri.Query);
+            _detailsUrl = null;
+            return;
+        }
 
-            string? startDate = queryParams.ContainsKey("startDate") ? queryParams["startDate"].ToString() : null;
-            string? endDate = queryParams.ContainsKey("endDate") ? queryParams["endDate"].ToString() : null;
-            string? adults = queryParams.ContainsKey("adults") ? queryParams["adults"].ToString() : null;
-            string? children = queryParams.ContainsKey("children") ? queryParams["children"].ToString() : null;
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
-            string url = $"/apartamenty/{Item.Id}";
+        string? s = queryParams.TryGetValue("startDate", out var sVal) ? sVal.ToString() : null;
+        string? e = queryParams.TryGetValue("endDate", out var eVal) ? eVal.ToString() : null;
+        string? a = queryParams.TryGetValue("adults", out var aVal) ? aVal.ToString() : null;
+        string? c = queryParams.TryGetValue("children", out var cVal) ? cVal.ToString() : null;
 
-            if (startDate != null || endDate != null || adults != null || children != null)
-            {
-                url = $"/apartamenty/{Item.Id}/{startDate ?? ""}/{endDate ?? ""}/{adults ?? ""}/{children ?? ""}";
-            }
+        string finalStart = !string.IsNullOrEmpty(StartDate) ? StartDate : s;
+        string finalEnd = !string.IsNullOrEmpty(EndDate) ? EndDate : e;
+        string finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : a;
+        string finalChildren = !string.IsNullOrEmpty(Children) ? Children : c;
 
-            Navigation.NavigateTo(url);
+        string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
+
+        if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd) || 
+            !string.IsNullOrEmpty(finalAdults) || !string.IsNullOrEmpty(finalChildren))
+        {
+            _detailsUrl = $"{baseUrl}/{finalStart ?? ""}/{finalEnd ?? ""}/{finalAdults ?? ""}/{finalChildren ?? ""}";
+        }
+        else
+        {
+            _detailsUrl = baseUrl;
         }
     }
-
-   
 }

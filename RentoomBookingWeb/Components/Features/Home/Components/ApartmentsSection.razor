@@ -1,9 +1,11 @@
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<HomePage> Localizer;
 
 <div class="apartments-section-container">
     <div class="apartments-section-container-text">
-        <h1 class="city-title">Apartamenty w Toruniu – komfortowe noclegi</h1>
-        <h2 class="city-subtitle">Szukasz komfortowego apartamentu w Toruniu?</h2>
+        <h1 class="city-title">@Localizer["title2"]</h1>
+        <h2 class="city-subtitle">@Localizer["title2subtitle"]</h2>
     </div>
     
     @if (!string.IsNullOrEmpty(Error))
@@ -18,7 +20,7 @@
                 @foreach (var apartment in Apartments)
                 {
                     <Item>
-                        <div @onclick="() => GoToApartmentWithOffer(apartment.Id)" class="apartment-slide-col">
+                        <div @onclick="() => GoToApartmentWithOffer(apartment.Id, apartment.Name)" class="apartment-slide-col">
                             <Apartment Item="@apartment" 
                                        Offer="@GetPricingOfferByObjectId(apartment.Id)" 
                                        ShowPrice="true"

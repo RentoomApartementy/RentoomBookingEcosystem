@@ -1,16 +1,19 @@
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<HomePage> Localizer;
+
 <div class="city-container">
-    <h1 class="city-title">Dlaczego Rentoom?</h1>
-    <h2 class="city-subtitle">Co wyróżnia nasze apartamenty od innych?</h2>
+    <h1 class="city-title">@Localizer["whyRentoom"]</h1>
+    <h2 class="city-subtitle">@Localizer["whyRentoomSubtitle"]</h2>
 
     <div class="city-content">
         <div class="city-text">
-            <h4><strong>Zalety naszych apartamentów w Toruniu.</strong></h4>
+            <h4><strong>@Localizer["whyRentoomTitle"]</strong></h4>
             <p>
-                Żeby maksymalnie ułatwić Ci pobyt, w naszych apartamentach zastosowaliśmy <strong>nowoczesny system zamków</strong>. Dzięki niemu samodzielnie zameldujesz się i wymeldujesz o dowolnej porze. Nie musisz odbierać i zwracać kluczy. Każdy apartament, który proponujemy, charakteryzuje się unikalnym stylem i dbałością o szczegóły wykończenia.
+                @Localizer["whyRentoomText1"]
             </p>
 
             <p>
-                We wszystkich naszych apartamentach znajdziesz <strong>bezpłatne WiFi, telewizor z kontem Netflix oraz w pełni wyposażoną kuchnię</strong>. W naszej ofercie znajdziesz także apartamenty idealne na <strong>romantyczny weekend we dwoje</strong> oraz na dłuższy pobyt w Toruniu <strong>dla naprawdę licznej rodziny</strong>. Nasze apartamenty ulokowane są tak, jak lubisz. Wybierz odpowiedni dla siebie. Posiadamy apartamenty na toruńskiej starówce oraz na obrzeżach miasta. Z widokiem na rynek lub na Wisłę. Na pewno znajdziesz ten apartament w Toruniu, którego szukasz.
+                @Localizer["whyRentoomText2"]
             </p>
         </div>
         

@@ -1,0 +1,107 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="title2" xml:space="preserve">
+        <value>Apartamenty w Toruniu – komfortowe noclegi
+</value>
+    </data>
+    <data name="title2subtitle" xml:space="preserve">
+        <value>
+Szukasz komfortowego apartamentu w Toruniu?</value>
+    </data>
+    <data name="title3" xml:space="preserve">
+        <value>Apartamenty w Toruniu – komfortowe noclegi</value>
+    </data>
+    <data name="title3subtitle" xml:space="preserve">
+        <value>Szukasz komfortowego apartamentu w Toruniu?
+
+</value>
+    </data>
+    <data name="text1title" xml:space="preserve">
+        <value>Cieszymy się, że do nas trafiłeś!
+</value>
+    </data>
+    <data name="text1description" xml:space="preserve">
+        <value>Kochamy Toruń i chcemy Ci pokazać dlaczego. Pomożemy Ci poznać nasze miasto i zadbamy o to, żebyś zabrał na pamiątkę same dobre wrażenia. Wiemy, że zwiedzanie, nawet najprzyjemniejsze, bywa męczące. Dlatego jest dla nas ważne, żeby na koniec dnia wypoczął w dokładnie takich warunkach, jakich oczekujesz. Naszą ofertę apartamentów w Toruniu przygotowaliśmy specjalnie dla Ciebie. Pośród kilkudziesięciu noclegów i apartamentów z pewnością znajdziesz taki, który będzie odpowiadał Twoim potrzebom.</value>
+    </data>
+    <data name="text1title2" xml:space="preserve">
+        <value>Dlaczego nasze apartamenty w Toruniu są wyjątkowe?
+</value>
+    </data>
+    <data name="text1description2" xml:space="preserve">
+        <value>Ponieważ mieszkamy w Toruniu i kochamy to miasto. Ponieważ naszą ekipę tworzą ludzie, którzy podróżują sami i z dziećmi, w interesach i turystycznie, dla odpoczynku i dla zwiedzania. Ponieważ naprawdę wiemy, czego potrzebujesz i chcemy, żebyś czuł się u nas dobrze. Zależy nam, żebyś nie tylko zwiedził Toruń, ale również odpoczął, zrelaksował się i zabrał ze sobą najlepsze wspomnienia.
+
+</value>
+    </data>
+    <data name="clientsstat" xml:space="preserve">
+        <value>Zadowolonych klientów</value>
+    </data>
+    <data name="apartmentsstats" xml:space="preserve">
+        <value>Apartamentów w Toruniu
+
+</value>
+    </data>
+    <data name="locationsstats" xml:space="preserve">
+        <value>Lokalizacji w Toruniu</value>
+    </data>
+    <data name="whyRentoom" xml:space="preserve">
+        <value>Dlaczego Rentoom?
+</value>
+    </data>
+    <data name="whyRentoomTitle" xml:space="preserve">
+        <value>Zalety naszych apartamentów w Toruniu.
+</value>
+    </data>
+    <data name="whyRentoomText1" xml:space="preserve">
+        <value>Żeby maksymalnie ułatwić Ci pobyt, w naszych apartamentach zastosowaliśmy nowoczesny system zamków. Dzięki niemu samodzielnie zameldujesz się i wymeldujesz o dowolnej porze. Nie musisz odbierać i zwracać kluczy. Każdy apartament, który proponujemy, charakteryzuje się unikalnym stylem i dbałością o szczegóły wykończenia.
+
+</value>
+    </data>
+    <data name="whyRentoomText2" xml:space="preserve">
+        <value>We wszystkich naszych apartamentach znajdziesz bezpłatne WiFi, telewizor z kontem Netflix oraz w pełni wyposażoną kuchnię. W naszej ofercie znajdziesz także apartamenty idealne na romantyczny weekend we dwoje oraz na dłuższy pobyt w Toruniu dla naprawdę licznej rodziny. Nasze apartamenty ulokowane są tak, jak lubisz. Wybierz odpowiedni dla siebie. Posiadamy apartamenty na toruńskiej starówce oraz na obrzeżach miasta. Z widokiem na rynek lub na Wisłę. Na pewno znajdziesz ten apartament w Toruniu, którego szukasz.
+
+</value>
+    </data>
+    <data name="opinionText" xml:space="preserve">
+        <value>Poznaj opinie osób, które spały w naszych apartamentach w Toruniu.
+
+</value>
+    </data>
+    <data name="formtext" xml:space="preserve">
+        <value>Zostaw swoje informacje kontaktowe, a my się z tobą skontaktujemy!
+</value>
+    </data>
+    <data name="formContactText" xml:space="preserve">
+        <value>Formularz kontaktowy</value>
+    </data>
+    <data name="formConfirm" xml:space="preserve">
+        <value>Wyrażam zgodę na przetwarzanie moich danych osobowych podanych w powyższym formularzu</value>
+    </data>
+    <data name="name" xml:space="preserve">
+        <value>Imię</value>
+    </data>
+    <data name="lastName" xml:space="preserve">
+        <value>Nazwisko</value>
+    </data>
+    <data name="phone" xml:space="preserve">
+        <value>Telefon</value>
+    </data>
+    <data name="send" xml:space="preserve">
+        <value>Wyślij</value>
+    </data>
+    <data name="whyRentoomSubtitle" xml:space="preserve">
+        <value>Co wyróżnia nasze apartamenty od innych?
+
+</value>
+    </data>
+</root>

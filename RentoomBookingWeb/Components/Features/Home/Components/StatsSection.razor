@@ -1,9 +1,12 @@
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<HomePage> Localizer;
+
 <section class="stats">
     <article class="stat">
         <h2>60,000</h2>
         <div class="stat-content">
             <img src="assets/svgs/user-stat.svg" alt="Zadowoleni klienci" class="icon" />
-            <p>Zadowolonych klientów</p>
+            <p>@Localizer["clientsstat"]</p>
         </div>
     </article>
 
@@ -11,7 +14,7 @@
         <h2>120</h2>
         <div class="stat-content">
             <img src="assets/svgs/home.svg" alt="Apartamenty w Toruniu" class="icon" />
-            <p>Apartamentów w Toruniu</p>
+            <p>@Localizer["apartmentsstats"]</p>
         </div>
     </article>
 
@@ -19,7 +22,7 @@
         <h2>35</h2>
         <div class="stat-content">
             <img src="assets/svgs/pin.svg" alt="Lokalizacje w Toruniu" class="icon" />
-            <p>Lokalizacji w Toruniu</p>
+            <p>@Localizer["locationsstats"]</p>
         </div>
     </article>
 </section>

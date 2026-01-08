@@ -51,4 +51,16 @@
     <data name="Search" xml:space="preserve">
         <value />
     </data>
+    <data name="SelectNumberOfGuests" xml:space="preserve">
+        <value />
+    </data>
+    <data name="NumberOfGuests" xml:space="preserve">
+        <value />
+    </data>
+    <data name="ChildrenUnder2" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Adults" xml:space="preserve">
+        <value />
+    </data>
 </root>
