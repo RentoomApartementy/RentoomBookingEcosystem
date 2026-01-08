@@ -1,9 +1,130 @@
-@page "/o-nas"
-@using RentoomBookingWeb.Components.Features.Errors.Components
+@page "/o-nas";
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<RentoomBookingWeb.AboutUs> Localizer;
+@inject NavigationManager Navigation
 
-<PageTitle>O nas</PageTitle>
+<PageTitle>O nas - Rentoom | Profesjonalne Zarządzanie Najmem</PageTitle>
 
-<UnderConstruction></UnderConstruction>
+<HeadContent>
+    <meta name="description" content="Poznaj zespół Rentoom. Od 6 lat zajmujemy się profesjonalnym zarządzaniem najmem krótkoterminowym, obsługą apartamentów i turystyką. Sprawdź naszą misję." />
+    <meta name="keywords" content="zarządzanie najmem, obsługa apartamentów, Rentoom, wynajem krótkoterminowy, zespół Rentoom, inwestycje w nieruchomości" />
+    <meta property="og:title" content="O nas - Rentoom | Profesjonalne Zarządzanie Najmem" />
+    <meta property="og:description" content="Jesteśmy grupą pasjonatów podróży i ekspertów od nieruchomości. Zobacz, jak możemy pomóc w zarządzaniu Twoim apartamentem." />
+    <meta property="og:image" content="assets/images/header-bg-about-us.jpeg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@Navigation.BaseUri/o-nas" />
+    <link rel="canonical" href="@Navigation.BaseUri/o-nas" />
+</HeadContent>
+
+<main class="about-container">
+    <HeaderSection ImagePath="/assets/images/header-bg-about-us.jpeg" Title="@Localizer["AboutUsText"]" Height="230px" />
+    
+    <div class="main-wrapper">
+        <section class="stats" aria-label="Statystyki firmy">
+            <div class="stat-item">
+                <h3>9.7</h3>
+                <small>@Localizer["AverageRating"]</small>
+            </div>
+
+            <div class="stat-item">
+                <h3>50+</h3>
+                <small>@Localizer["ApartmentsManagement"]</small>
+            </div>
+
+            <div class="stat-item">
+                <h3>35</h3>
+                <small>@Localizer["CompletedBookings"]</small>
+            </div>
+
+            <div class="stat-item">
+                <h3>300k</h3>
+                <small>@Localizer["QuestsServed"]</small>
+            </div>
+        </section>
+        
+        <div class="history-mission">
+            <section class="history-mission-section">
+                <h2>@Localizer["HistoryText1"]</h2>
+                <p>
+                    @Localizer["HistoryText2"]
+                </p>
+            </section>
+            
+            <section class="history-mission-section">
+                <h2>@Localizer["MissionText1"]</h2>
+                <p>
+                    @Localizer["MissionText2"]
+                </p>
+            </section>
+        </div>
+
+        <hr>
+        
+        <h2 class="team-title">@Localizer["OurTeamText"]</h2>
+        
+        <div class="team">
+            <article class="team-item">
+                <div class="team-item-img-container">
+                    <img src="assets/images/test-user-opinion.jpeg" alt="Tomasz - CEO Rentoom" class="team-item-img">
+                </div>
+                
+                <div class="team-item-section">
+                    <div class="mobile-icon-wrapper">
+                        <div class="team-item-img-container-mobile">
+                            <img src="assets/images/test-user-opinion.jpeg" alt="Tomasz - CEO Rentoom" class="team-item-img">
+                        </div>
+                        <h2>Tomasz – CEO & Founder</h2>
+                    </div>
+                    <hr>
+                    <p>@Localizer["TomaszText1"]</p>
+                    <div class="team-button-wrapper">
+                        <Button>@Localizer["CallText"]</Button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="team-item reverse">
+                <div class="team-item-img-container">
+                    <img src="assets/images/test-user-opinion.jpeg" alt="Kamil - Tech Lead Rentoom" class="team-item-img">
+                </div>
+                
+                <div class="team-item-section">
+                    <div class="mobile-icon-wrapper">
+                        <div class="team-item-img-container-mobile">
+                            <img src="assets/images/test-user-opinion.jpeg" alt="Kamil - Tech Lead Rentoom" class="team-item-img">
+                        </div>
+                        <h2>Kamil – Tech Lead</h2>
+                    </div>
+                    <hr>
+                    <p>@Localizer["KamilText"]</p>
+                    <div class="team-button-wrapper">
+                        <Button>@Localizer["CallText"]</Button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="team-item">
+                <div class="team-item-img-container">
+                    <img src="assets/images/test-user-opinion.jpeg" alt="Marta - Head of Operations Rentoom" class="team-item-img">
+                </div>
+                
+                <div class="team-item-section">
+                    <div class="mobile-icon-wrapper">
+                        <div class="team-item-img-container-mobile">
+                            <img src="assets/images/test-user-opinion.jpeg" alt="Marta - Head of Operations Rentoom" class="team-item-img">
+                        </div>
+                        <h2>Marta – Head of Operations</h2>
+                    </div>
+                    <hr>
+                    <p>@Localizer["MartaText1"]</p>
+                    <div class="team-button-wrapper">
+                        <Button>@Localizer["CallText"]</Button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</main>
 
 @code {
     

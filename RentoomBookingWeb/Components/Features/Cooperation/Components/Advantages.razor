@@ -1,20 +1,23 @@
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<Cooperation> Localizer;
+
 <div class="advantages-container">
-    <h1 class="advantages-title">Zalety Współpracy</h1>
+    <h1 class="advantages-title">@Localizer["AdvantagesOfCooperation"]</h1>
     
     <div class="advantages-wrapper">
         <section class="advantage-section">
-            <h3>Bezobsługowa inwestycja</h3>
-            <p>Oferowana przez nas obsługa jest kompletna. Możesz spać spokojnie, my pracujemy za Ciebie.</p>
+            <h3>@Localizer["Maintenance-freeInvestmentText1"]</h3>
+            <p>@Localizer["Maintenance-freeInvestmentText2"]</p>
         </section>
         
         <section class="advantage-section">
-            <h3>Optymalizacja dochodu</h3>
-            <p>Na bieżąco monitorujemy rynek i dostosowujemy ceny za wynajem apartamentu pod Twój zysk.</p>
+            <h3>@Localizer["IncomeOptimizationText1"]</h3>
+            <p>@Localizer["IncomeOptimizationText2"]</p>
         </section>
         
         <section class="advantage-section">
-            <h3>Gotowi do pomocy 24/7</h3>
-            <p>Gwarantujemy naszym wspólnym klientom obsługę przez całą dobę, siedem dni w tygodniu.</p>
+            <h3>@Localizer["ReadyToHelpText1"]</h3>
+            <p>@Localizer["ReadyToHelpText2"]</p>
         </section>
     </div>
 </div>

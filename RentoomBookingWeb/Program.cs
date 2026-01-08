@@ -21,6 +21,8 @@ namespace RentoomBookingWeb
                 options.ResourcesPath = "Resources";
             });
             
+            builder.Services.AddControllers();
+            
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddHttpClient();
@@ -85,6 +87,8 @@ namespace RentoomBookingWeb
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAntiforgery();
+            
+            app.MapControllers();
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();

@@ -1,5 +1,5 @@
-@page "/apartamenty/{id:int}"
-@page "/apartamenty/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@page "/apartamenty/{id:int}/{slug}"
+@page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using System.Globalization
@@ -13,8 +13,24 @@
 @using RentoomBookingWeb.Models
 @using RentoomBookingWeb.Services
 @inject IAvailabilityFinderService AvailabilityFinder
+@using RentoomBookingWeb.Helpers
+@using System.Text.RegularExpressions
+@inject NavigationManager NavManager
 
-<PageTitle>@_apartment?.Name</PageTitle>
+<PageTitle>@GetSeoTitle()</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="@GetSeoDescription()" />
+    <meta name="keywords" content="apartament toruń, nocleg toruń, rentoom, wynajem krótkoterminowy, @_apartment?.Name" />
+    <link rel="canonical" href="@GetCanonicalUrl()" />
+
+    <meta property="og:title" content="@GetSeoTitle()" />
+    <meta property="og:description" content="@GetSeoDescription()" />
+    <meta property="og:image" content="@GetSeoImage()" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@GetCanonicalUrl()" />
+    <meta property="og:locale" content="pl_PL" />
+</HeadContent>
 
 <div class="apartment-container">
     <HeaderSection
@@ -241,13 +257,11 @@
 
 @code {
     [Parameter] public int Id { get; set; }
+    [Parameter] public string? Slug { get; set; }
     [Parameter] public string? StartDate { get; set; }
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
     [Parameter] public string? Children { get; set; }
-
-    [Parameter]
-    public string? Slug { get; set; }
     
     private ApartmentObject? _apartment;
     private List<ObjectMedium>? _objectMediums = null;
@@ -270,6 +284,42 @@
         CultureInfo.CurrentUICulture.Name
     ) ?? CultureInfo.CurrentUICulture.Name;
 
+    private string GetSeoTitle()
+    {
+        if (_apartment == null) return "Szczegóły apartamentu - Rentoom";
+        return $"{_apartment.Name} - Rentoom";
+    }
+
+    private string GetSeoDescription()
+    {
+        if (_objectDescription != null && !string.IsNullOrEmpty(_objectDescription.ShortDescription))
+        {
+            return Regex.Replace(_objectDescription.ShortDescription, "<.*?>", String.Empty).Trim();
+        }
+        
+        if (_apartment != null)
+        {
+            return $"Zarezerwuj {_apartment.Name} w Rentoom. Świetna lokalizacja, {_bedsCount} pokoje, wysoki standard.";
+        }
+        
+        return "Sprawdź szczegóły apartamentu i zarezerwuj pobyt w Rentoom.";
+    }
+
+    private string GetSeoImage()
+    {
+        var img = _objectMediums?.FirstOrDefault()?.Url;
+        if (!string.IsNullOrEmpty(img))
+        {
+            return img;
+        }
+        return $"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg";
+    }
+
+    private string GetCanonicalUrl()
+    {
+        return $"{NavManager.BaseUri}apartamenty/{Id}/{Slug}";
+    }
+
     protected override async Task OnInitializedAsync()
     {
         _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
@@ -286,60 +336,59 @@
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
-{
-    if (firstRender && _offersResponse?.Result?.PricingOffers?.Count == null)
     {
-        bool shouldSearch = _offersResponse?.Result?.PricingOffers == null 
-                            || !_offersResponse.Result.PricingOffers.Any();
-
-        if (shouldSearch && _apartment != null)
+        if (firstRender && _offersResponse?.Result?.PricingOffers?.Count == null)
         {
-            _ = Task.Run(async () => 
+            bool shouldSearch = _offersResponse?.Result?.PricingOffers == null 
+                                || !_offersResponse.Result.PricingOffers.Any();
+
+            if (shouldSearch && _apartment != null)
             {
-                await Task.Delay(160);
+                _ = Task.Run(async () => 
+                {
+                    await Task.Delay(160);
 
-                await LoadSuggestionInBackground();
-                
-                await InvokeAsync(StateHasChanged);
-            });
+                    await LoadSuggestionInBackground();
+                    
+                    await InvokeAsync(StateHasChanged);
+                });
+            }
         }
     }
-}
 
-private async Task LoadSuggestionInBackground()
-{
-    try 
+    private async Task LoadSuggestionInBackground()
     {
-        var aptId = _apartment?.Id ?? 0;
-        var sDate = StartDate;
-        var eDate = EndDate;
-        var aCount = int.TryParse(Adults, out var a) ? a : 2;
-        var cCount = int.TryParse(Children, out var c) ? c : 1;
-
-        if (aptId == 0) return;
-
-        var result = await AvailabilityFinder.FindNextAvailableTermAsync(
-            aptId, 
-            sDate, 
-            eDate, 
-            aCount, 
-            cCount
-        );
-
-        _suggestionDates = result;
-        _suggestionLoading = false;
-
-        if (_suggestionDates != null)
+        try 
         {
+            var aptId = _apartment?.Id ?? 0;
+            var sDate = StartDate;
+            var eDate = EndDate;
+            var aCount = int.TryParse(Adults, out var a) ? a : 2;
+            var cCount = int.TryParse(Children, out var c) ? c : 1;
+
+            if (aptId == 0) return;
+
+            var result = await AvailabilityFinder.FindNextAvailableTermAsync(
+                aptId, 
+                sDate, 
+                eDate, 
+                aCount, 
+                cCount
+            );
+
+            _suggestionDates = result;
             _suggestionLoading = false;
-            Console.WriteLine($"Znaleziono w tle: {_suggestionDates.StartDate}");
+
+            if (_suggestionDates != null)
+            {
+                _suggestionLoading = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Błąd w tle: {ex.Message}");
         }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Błąd w tle: {ex.Message}");
-    }
-}
     
     private void ToggleExpand()
     {
@@ -394,7 +443,7 @@ private async Task LoadSuggestionInBackground()
 
         if (_apartment != null)
         {
-            var url = $"/apartamenty/{_apartment.Id}/{StartDate}/{EndDate}/{Adults}/{Children}";
+            var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{StartDate}/{EndDate}/{Adults}/{Children}";
             Navigation.NavigateTo(url, forceLoad: false);
             await GetOffer();
         }
@@ -404,7 +453,7 @@ private async Task LoadSuggestionInBackground()
     {
         if (_apartment != null && _suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
         {
-            var url = $"/apartamenty/{_apartment.Id}/{_suggestionDates.StartDate}/{_suggestionDates.EndDate}/{Adults}/{Children}";
+            var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{_suggestionDates.StartDate}/{_suggestionDates.EndDate}/{Adults}/{Children}";
             Navigation.NavigateTo(url, forceLoad: true);
             await GetOffer();
             StateHasChanged();
@@ -424,5 +473,4 @@ private async Task LoadSuggestionInBackground()
         await Task.Yield(); 
         await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation");
     }
-    
 }

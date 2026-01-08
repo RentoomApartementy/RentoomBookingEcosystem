@@ -1,10 +1,110 @@
 @page "/kontakt"
-@using RentoomBookingWeb.Components.Features.Errors.Components
+@inject IJSRuntime JSRuntime;
+@inject NavigationManager NavManager;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<RentoomBookingWeb.Contact> Localizer;
 
-<PageTitle>Kontakt</PageTitle>
+<PageTitle>Kontakt - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</PageTitle>
 
-<UnderConstruction></UnderConstruction>
+<HeadContent>
+    <meta name="description" content="Skontaktuj się z zespołem Rentoom w Toruniu. Dane adresowe, numery kont bankowych (PLN/EUR) oraz formularz kontaktowy. Profesjonalna obsługa najmu." />
+    <meta name="keywords" content="kontakt rentoom, biuro rentoom toruń, zarządzanie najmem kontakt, dane do faktury rentoom" />
+    <link rel="canonical" href="@NavManager.Uri" />
+
+    <meta property="og:title" content="Kontakt - Rentoom | Profesjonalne Zarządzanie Najmem" />
+    <meta property="og:description" content="Masz pytania dotyczące zarządzania najmem? Skontaktuj się z nami! Sprawdź nasze dane adresowe i bankowe." />
+    <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg")" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@NavManager.Uri" />
+    <meta property="og:locale" content="pl_PL" />
+</HeadContent>
+
+<main class="contact-container">
+    <HeaderSection ImagePath="/assets/images/header-bg-contact.jpeg" Title="@Localizer["ContactText"]" Height="230px" />
+    
+    <div class="main-wrapper">
+        <div class="contact-grid">
+            
+            <section class="contact-card info-card" aria-labelledby="contact-details-heading">
+                <h2 id="contact-details-heading" class="card-title">@Localizer["ContactDetails"]</h2>
+                
+                <div class="company-details" itemscope itemtype="https://schema.org/Organization">
+                    <h3 itemprop="name">Rentoom Apartamenty sp. z o.o.</h3>
+                    
+                    <address itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                        <i class="icon-location" aria-hidden="true"></i>
+                        <span itemprop="streetAddress">ul. Stanisława Szymańskiego 1B</span><br />
+                        <span itemprop="postalCode">87-100</span> <span itemprop="addressLocality">Toruń</span>
+                    </address>
+                </div>
+
+                <div class="tax-info">
+                    <div class="tax-row"><span>NIP:</span> <strong>8792727407</strong></div>
+                    <div class="tax-row"><span>KRS:</span> <strong>0000871532</strong></div>
+                    <div class="tax-row"><span>REGON:</span> <strong>387605281</strong></div>
+                </div>
+
+                <h3 class="bank-title">@Localizer["BankAccountNumber"]</h3>
+                
+                <div class="bank-account">
+                    <div class="currency-badge pln">PLN</div>
+                    <span class="iban">25 1050 1979 1000 0090 8110 5711</span>
+                    <button class="copy-btn" @onclick='() => CopyToClipboard("25105019791000009081105711")' aria-label="Skopiuj numer konta PLN do schowka" title="Kopiuj numer PLN">
+                        📋
+                    </button>
+                </div>
+                
+                <div class="bank-account">
+                    <div class="currency-badge eur">EUR</div>
+                    <span class="iban">24 1050 1979 1000 0090 8110 5729</span>
+                    <button class="copy-btn" @onclick='() => CopyToClipboard("24105019791000009081105729")' aria-label="Skopiuj numer konta EUR do schowka" title="Kopiuj numer EUR">
+                        📋
+                    </button>
+                </div>
+                
+                <p class="swift">SWIFT: <strong>INGBPLPW</strong></p>
+            </section>
+
+            <section class="contact-card form-card" aria-labelledby="contact-form-heading">
+                <h2 id="contact-form-heading" class="card-title">@Localizer["ContactForm"]</h2>
+                <p class="form-subtitle">@Localizer["FillOutText"]</p>
+                
+                <form class="custom-form-layout" onsubmit="return false;">
+                    
+                    <Input Placeholder="@Localizer["FirstAndLastName"]" Type="text" @bind-Value="_name" IsFull="true" />
+                    
+                    <Input Placeholder="@Localizer["EmailAddress"]" Type="email" @bind-Value="_email" IsFull="true" />
+                    
+                    <Input Placeholder="@Localizer["PhoneNumber"]" Type="tel" @bind-Value="_phone" IsFull="true" />
+
+                    <textarea class="custom-textarea" placeholder="@Localizer["MessageContent"]" @bind="_message"></textarea>
+
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="rodo" @bind="_consent" />
+                        <label for="rodo">
+                            @Localizer["ConsentText"] (<a href="/polityka-prywatnosci" target="_blank">@Localizer["Privacypolicy"]</a>).
+                        </label>
+                    </div>
+
+                    <div class="btn-wrapper">
+                        <Button IsFull="true">@Localizer["Send"]</Button>
+                    </div>
+                </form>
+            </section>
+
+        </div>
+    </div>
+</main>
 
 @code {
-    
+    private string _name = "";
+    private string _email = "";
+    private string _phone = "";
+    private string _message = "";
+    private bool _consent = false;
+
+    private async Task CopyToClipboard(string text)
+    {
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", text);
+    }
 }

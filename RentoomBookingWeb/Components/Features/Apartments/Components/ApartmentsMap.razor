@@ -4,6 +4,7 @@
 @inject IApartmentsService ApartmentsApiService
 @inject IIdoApartmentService IdoApartmentService
 @inject IJSRuntime JSRuntime
+@using RentoomBookingWeb.Helpers
 
 <div id="map" class="map-container"></div>
 
@@ -85,7 +86,7 @@
             .Where(i => i?.ObjectLocation?.LocalizationItem != null)
             .Select(i =>
             {
-                var detailsUrl = $"/apartamenty/{i.Id}";
+                var detailsUrl = $"/apartamenty/{i.Id}/{i.Name?.ToSlug()}";
 
                 if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
                 {

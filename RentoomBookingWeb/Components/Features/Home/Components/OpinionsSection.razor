@@ -1,7 +1,9 @@
 @using RentoomBookingWeb.Components.Features.Home.Components
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<HomePage> Localizer;
 
 <div class="opinions-title">
-    Poznaj opinie osób, które spały w naszych apartamentach w Toruniu.
+    @Localizer["opinionText"]
 </div>
 
 <div class="options-slider-wrapper">
