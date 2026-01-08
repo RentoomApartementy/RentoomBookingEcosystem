@@ -28,5 +28,20 @@
         "DebugTarget": "https - PROD"
       }
     ]
+  },
+  {
+    "Name": "Rentoom.pl - dev (with API)",
+    "Projects": [
+      {
+        "Path": "RentoomBookingWeb\\RentoomBookingWeb.csproj",
+        "Action": "Start",
+        "DebugTarget": "https- dev"
+      },
+      {
+        "Path": "Api\\RentoomBooking.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "RentoomBooking.Api"
+      }
+    ]
   }
 ]

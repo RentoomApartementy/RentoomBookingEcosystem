@@ -1,4 +1,6 @@
-﻿using RentoomBooking.SharedClasses.Models.StayWell;
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Models.StayWell;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -67,6 +69,47 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         public DateTime CreatedAt { get; set; }
             = DateTime.UtcNow;
     }
+
+    [Table("reservation_records")]
+    public class ReservationRecordEntity
+    {
+        [Key]
+        [Column("reservation_guid")]
+        public Guid ReservationGuid { get; set; }
+
+        [Column("reservation_json", TypeName = "jsonb")]
+        public string ReservationJson { get; set; } = string.Empty;
+
+        [Column("ido_reservation_id")]
+        public int? IdoReservationId { get; set; }
+
+        [Column("ido_status")]
+        public string? IdoStatus { get; set; }
+
+        [Column("payment_session_guid")]
+        public Guid? PaymentSessionGuid { get; set; }
+
+        [Column("payment_status")]
+        public string PaymentStatus { get; set; } = PaymentStatuses.None;
+
+        [Column("provider")]
+        public string? Provider { get; set; }
+
+        [Column("provider_transaction_id")]
+        public string? ProviderTransactionId { get; set; }
+
+        [Timestamp]
+        [Column("row_version")]
+        public byte[]? RowVersion { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
+
+
     public class SearchFiltersEntity
     {
         [Key]

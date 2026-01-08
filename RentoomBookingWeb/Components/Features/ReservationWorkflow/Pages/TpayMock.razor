@@ -1,0 +1,80 @@
+﻿@page "/tpay-mock/{paymentGuid:guid}"
+@using Microsoft.AspNetCore.WebUtilities
+@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<PageTitle>Mock TPAY</PageTitle>
+
+<div class="summary-container">
+    <h3>Symulacja płatności</h3>
+    @if (_reservationGuid == Guid.Empty)
+    {
+        <p>Brak identyfikatora rezerwacji w adresie URL.</p>
+    }
+    else
+    {
+        <p>Rezerwacja: @_reservationGuid</p>
+        <p>Sesja płatności: @PaymentGuid</p>
+        <div class="summary-offer-price-wrapper">
+            <Button @onclick='() => SendWebhookAsync("PAID")'>Opłać</Button>
+            <Button @onclick='() => SendWebhookAsync("FAILED")'>Anuluj</Button>
+        </div>
+
+    }
+</div>
+
+@code {
+    [Parameter] public Guid PaymentGuid { get; set; }
+
+    private Guid _reservationGuid;
+    private bool _isSending;
+
+    protected override void OnInitialized()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+        if (query.TryGetValue("reservationGuid", out var value) && Guid.TryParse(value, out var parsed))
+        {
+            _reservationGuid = parsed;
+        }
+    }
+
+    private async Task SendWebhookAsync(string status)
+    {
+        if (_reservationGuid == Guid.Empty || _isSending)
+        {
+            return;
+        }
+
+        _isSending = true;
+
+        var payload = new TpayWebhookDto
+        {
+            ReservationGuid = _reservationGuid,
+            PaymentSessionGuid = PaymentGuid,
+            ProviderTransactionId = $"TPAY-{PaymentGuid:N}",
+            Status = status,
+            Signature = "mock"
+        };
+
+        var endpoint = Navigation.ToAbsoluteUri("/api/tpay/webhook");
+        try
+        {
+            Console.WriteLine("Wysyłanie webhooka do TPAY...");
+            await Http.PostAsJsonAsync(endpoint, payload);
+            Console.WriteLine("Webhook wysłany pomyślnie.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Błąd podczas wysyłania webhooka: {ex.Message}");
+        }
+
+        var redirect = status.Equals("PAID", StringComparison.OrdinalIgnoreCase)
+            ? $"/rezerwuj/{_reservationGuid}/oplac/{PaymentGuid}/success"
+            : $"/rezerwuj/{_reservationGuid}/oplac/{PaymentGuid}/fail";
+
+        Navigation.NavigateTo(redirect, true);
+    }
+}

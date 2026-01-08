@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace RentoomBooking.SharedClasses.Database
 {
-    public class PostgresBookingDbContextFactory : IDesignTimeDbContextFactory<PostgresBookingDbContext>
+   /* public class PostgresBookingDbContextFactory : IDesignTimeDbContextFactory<PostgresBookingDbContext>
     {
         public PostgresBookingDbContext CreateDbContext(string[] args)
         {
@@ -14,5 +14,5 @@ namespace RentoomBooking.SharedClasses.Database
 
             return new PostgresBookingDbContext(optionsBuilder.Options);
         }
-    }
+    }*/
 }
