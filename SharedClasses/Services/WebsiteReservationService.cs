@@ -28,7 +28,7 @@ namespace RentoomBooking.SharedClasses.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<WebsiteCreateReservationResult> CreateReservationAsync(WebsiteCreateReservationRequest request, CancellationToken cancellationToken = default)
+      /*  public async Task<WebsiteCreateReservationResult> CreateReservationAsync(WebsiteCreateReservationRequest request, CancellationToken cancellationToken = default)
         {
             if (request is null)
             {
@@ -88,7 +88,7 @@ namespace RentoomBooking.SharedClasses.Services
 
             _logger.LogInformation("Created Bitrix CRM Client Entry {clientBitrixResult} for client {ClientId}.", clientBitrixResult, createdClient.ClientId);
 
-            var reservationWithToken = await _idoSellService.FetchReservationByIDFromIdoSellAsync(createdReservation.ReservationId.Value, true, cancellationToken);
+            var reservationWithToken =  await _idoSellService.FetchReservationByIDFromIdoSellAsync(createdReservation.ReservationId.Value, true, cancellationToken);
 
             var stayWellLink = BuildStayWellLink(reservationWithToken.resToken);
 
@@ -103,7 +103,7 @@ namespace RentoomBooking.SharedClasses.Services
                 StayWellLink = stayWellLink
             };
         }
-
+      */
         private string? BuildStayWellLink(string? resToken)
         {
             var baseUrl =

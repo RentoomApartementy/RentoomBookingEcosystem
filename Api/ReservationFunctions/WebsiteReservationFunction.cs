@@ -22,7 +22,7 @@ public class WebsiteReservationFunction
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    [Function("CreateWebsiteReservation")]
+  /*  [Function("CreateWebsiteReservation")]
     public async Task<HttpResponseData> RunAsync(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "website/reservations")] HttpRequestData req)
     {
@@ -82,5 +82,5 @@ public class WebsiteReservationFunction
         {
             _logger.LogInformation("CreateWebsiteReservation finished at: {Time}", DateTime.UtcNow);
         }
-    }
+    }*/
 }

@@ -23,8 +23,24 @@
             <p>Goście: @_summary.StartRequest?.Adults dorosłych, @_summary.StartRequest?.Children dzieci</p>
             <p>Cena: @_summary.OfferPrice @_summary.Currency</p>
             <p>Status IdoBooking: @_summary.IdoStatus</p>
+            <p>ID IdoBooking: @_summary.IdoReservationId</p>
             <p>Status Płatności: @_summary.PaymentStatus</p>
+            
+            @if (@_summary.IdoStatus == "accepted" && @_summary.PaymentStatus == "Paid")
+            {
+                <p class="text-success">Twoja rezerwacja została potwierdzona i opłacona.</p>
+                <h4> StayWell Link: <a href="@staywellLink">@staywellLink</a></h4>
+            }
+            else if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
+            {
+                <p class="text-warning">Twoja rezerwacja została potwierdzona, ale nie została jeszcze opłacona.</p>
             <Button @onclick="GoToPayment">Przejdź dalej</Button>
+            }
+            else if (@_summary.IdoStatus != "accepted")
+            {
+                <p class="text-danger">Twoja rezerwacja nie została jeszcze potwierdzona.</p>
+            }
+            
         </div>
     }
 </div>
@@ -36,6 +52,9 @@
     private bool _loading = true;
     private string? _error;
     
+    //mockup linka 
+    private string? staywellLink => $"https://staywell.rentoom.pl/{ReservationTokenGuid}/HomePage";
+
     protected override async Task OnInitializedAsync()
     {
         try

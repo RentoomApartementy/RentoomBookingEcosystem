@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
 using System;
@@ -61,7 +62,18 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         public async Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid)
         {
             var record = await RequireReservationAsync(reservationGuid);
-            record = await EnsureIdoReservationAsync(record);
+            
+            if (record.IdoStatus != ReservationStatusType.Accepted && record.PaymentStatus != PaymentStatuses.Paid)
+            {
+                record = await EnsureIdoReservationAsync(record, ReservationStatusType.Accepted);
+
+                record.IdoStatus = ReservationStatusType.WaitingForPayment;
+
+                await _store.UpdateAsync(record);
+                await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
+
+                record = await RequireReservationAsync(reservationGuid);
+            }
 
             return new ReservationSummaryDto
             {
@@ -84,7 +96,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             while (true)
             {
                 var record = await RequireReservationAsync(reservationGuid);
-                record = await EnsureIdoReservationAsync(record);
+                record = await EnsureIdoReservationAsync(record, ReservationStatusType.WaitingForPayment);
 
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
                 {
@@ -129,13 +141,14 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 record.Provider = record.Provider ?? "TPAY";
                 record.ProviderTransactionId = paymentResult.TransactionId;
                 record.State.PaymentRedirectUrl = paymentResult.RedirectUrl;
+                
                 record.IdoStatus = ReservationStatusType.WaitingForPayment;
 
                 try
                 {
                     await _store.UpdateAsync(record);
                     await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
-
+                   //await AddIdoPaymentAsync(record, amount, currency, paymentResult.TransactionId);
                     return new PaymentInitResult
                     {
                         ReservationGuid = reservationGuid,
@@ -152,6 +165,39 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 }
             }
         }
+
+         private async Task<int?> AddIdoPaymentAsync(ReservationRecord record, decimal amount, string currency, string? transactionId)
+        {
+            if (record.IdoReservationId is null || string.IsNullOrWhiteSpace(transactionId))
+            {
+                return null;
+            }
+
+            var payment = new PaymentAdd
+            {
+                ReservationId = record.IdoReservationId.Value,
+                Value = Convert.ToSingle(amount),
+                Currency = currency,
+                ExternalPaymentId = transactionId,
+            };
+
+            var paymentresult = await _idoApi.AddPaymentAsync(payment);
+            return paymentresult?.Results[0].Id;
+        }
+
+        private static string MapIdoPaymentStatus(string paymentStatus)
+        {
+            return paymentStatus switch
+            {
+                PaymentStatuses.Paid => PaymentStatus.Processed,
+                PaymentStatuses.Failed => PaymentStatus.Cancelled,
+                PaymentStatuses.Initiated => PaymentStatus.Pending,
+                _ => PaymentStatus.Pending
+            };
+        }
+
+       
+
 
         public async Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid)
         {
@@ -199,14 +245,19 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 var isPaid = string.Equals(dto.Status, "PAID", StringComparison.OrdinalIgnoreCase);
                 record.PaymentStatus = isPaid ? PaymentStatuses.Paid : PaymentStatuses.Failed;
-                record.IdoStatus = isPaid ? ReservationStatusType.Confirmed : record.IdoStatus;
+                record.IdoStatus = isPaid ? ReservationStatusType.Accepted : record.IdoStatus;
 
                 try
                 {
                     await _store.UpdateAsync(record);
+
+                    await _idoApi.FetchReservationByIDFromIdoSellAsync(record.IdoReservationId.Value, true,record.ReservationGuid.ToString("D"));
+
                     if (isPaid)
                     {
-                        await UpdateIdoStatusAsync(record, ReservationStatusType.Confirmed);
+                        var paymentId = await AddIdoPaymentAsync(record, record.State.StartRequest?.OfferPrice ?? 0m, record.State.StartRequest?.Currency ?? "PLN", dto.ProviderTransactionId);
+                        await ConfirmIdoPaymentAsync(paymentId.Value); 
+                        await UpdateIdoStatusAsync(record, ReservationStatusType.Accepted);
                     }
                     return;
                 }
@@ -218,7 +269,10 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             }
         }
 
-
+        private async Task ConfirmIdoPaymentAsync(int paymentId)
+        {
+            await _idoApi.ConfirmPaymentsAsync([paymentId]);
+        }
 
         private async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid)
         {
@@ -226,7 +280,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             return record ?? throw new InvalidOperationException($"Reservation {reservationGuid} not found.");
         }
 
-        private async Task<ReservationRecord> EnsureIdoReservationAsync(ReservationRecord record)
+        private async Task<ReservationRecord> EnsureIdoReservationAsync(ReservationRecord record, string initialStatus)
         {
             while (true)
             {
@@ -234,8 +288,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 {
                     return record;
                 }
-
-                var request = BuildReservationAddRequest(record);
+               
+                var request = BuildReservationAddRequest(record, initialStatus);
                 try
                 {
                     var idoresponse = await _idoApi.AddReservationAsync(request);
@@ -251,7 +305,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                             throw new InvalidOperationException($"Failed to create IdoBooking reservation: {resAddResult.Error.FaultString}");
 
                         record.IdoReservationId = idoresponse.Reservations[0].ReservationId;
-                        record.IdoStatus = ReservationStatusType.Unconfirmed;
+                        record.IdoStatus = initialStatus;
 
                         await _store.UpdateAsync(record);
                     }
@@ -264,6 +318,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 }
             }
         }
+
+
 
         private async Task UpdateIdoStatusAsync(ReservationRecord record, string targetStatus)
         {
@@ -280,11 +336,12 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                                                                 NotifyService = ReservationNotifyType.No
                                                             };
 
+            
             await _idoApi.ChangeReservationStatusAsync(request);
         }
 
 
-        private static NewReservation BuildReservationAddRequest(ReservationRecord record)
+        private static NewReservation BuildReservationAddRequest(ReservationRecord record, string initialStatus)
         {
             if (record.State.StartRequest is null)
             {
@@ -297,7 +354,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 DateFrom = start.StartDate.ToString("yyyy-MM-dd"),
                 DateTo = start.EndDate.ToString("yyyy-MM-dd"),
                 Price = start.OfferPrice.HasValue ? (float)start.OfferPrice.Value : null,
-                Status = ReservationStatusType.Unconfirmed,
+                Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,
                 Items =
                 [

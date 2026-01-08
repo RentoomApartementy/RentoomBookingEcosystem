@@ -35,8 +35,8 @@
 
     public class PaymentAddResult
     {
-        public string? Id { get; set; }
-        public string? ExternalPaymentId { get; set; }
+        public int? Id { get; set; }
+       // public string? ExternalPaymentId { get; set; }
         public int ReservationId { get; set; }
         public GateErrorType? Error { get; set; }
     }

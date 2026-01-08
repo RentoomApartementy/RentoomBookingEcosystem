@@ -210,13 +210,18 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             }
         }
 
-        public async Task<string?> SaveReservationJsonAsync(Reservation payloadReservation, ILogger log, CancellationToken cancellationToken = default)
+        public async Task<string?> SaveReservationJsonAsync(Reservation payloadReservation, ILogger log, string? existingResToken = null, CancellationToken cancellationToken = default)
         {
             if (payloadReservation is null) throw new ArgumentNullException(nameof(payloadReservation));
             if (log is null) throw new ArgumentNullException(nameof(log));
-
+            
+            var resToken = existingResToken;
+            
+            if (existingResToken is null)
+                resToken = Guid.NewGuid().ToString("N");
+            
             await _initializationTask;
-            var resToken = Guid.NewGuid().ToString("N");
+            
             var document = new RentoomReservation
             {
                 Id = payloadReservation.id,

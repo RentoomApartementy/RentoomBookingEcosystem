@@ -178,12 +178,7 @@ namespace RentoomBooking.Api.Integrations.TpayFunctions;
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
         
-        var AlwaysTrue = true;
-        if (AlwaysTrue)
-        {
-            await response.WriteStringAsync("TRUE");
-            return response;
-        }
+        
         var payload = await ReadBodyAsync(req);
 
 
@@ -192,8 +187,7 @@ namespace RentoomBooking.Api.Integrations.TpayFunctions;
 
         _logger.LogWarning("TPay webhook with settings ={settigs}", JsonConvert.SerializeObject(_settings));
 
-
-
+        
 
         var hasSignatureHeader = req.Headers.TryGetValues("X-JWS-Signature", out var sigValues);
             var signature = hasSignatureHeader ? sigValues.FirstOrDefault() : null;

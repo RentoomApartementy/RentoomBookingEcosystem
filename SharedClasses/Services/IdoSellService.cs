@@ -63,7 +63,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         }
 
-        public async Task<RentoomReservationHashRecord> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, CancellationToken cancellationToken = default)
+        public async Task<RentoomReservationHashRecord> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, string? existingResToken = null, CancellationToken cancellationToken = default)
         {
             ReservationRequestIDOSellAPI request = new ReservationRequestIDOSellAPI
             {
@@ -83,7 +83,7 @@ namespace RentoomBooking.SharedClasses.Services
             {
                 var reservation = ret.result.Reservations[0];
 
-                stored = await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger);
+                stored = await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger, existingResToken);
 
                 if (stored != null)
                 {
