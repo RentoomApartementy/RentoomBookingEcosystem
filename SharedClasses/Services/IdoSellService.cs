@@ -8,6 +8,7 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Rentoom;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
@@ -38,6 +39,14 @@ namespace RentoomBooking.SharedClasses.Services
         private const string ReservationsGetEndpoint = "reservations/get/34/json";
         private const string ReservationsAddEndpoint = "reservations/add/34/json";
         private const string ReservationsEditStatusEndpoint = "reservations/editStatus/34/json";
+
+        private const string PaymentsAddEndpoint = "payments/add/34/json";
+        private const string PaymentsCancelEndpoint = "payments/cancel/34/json";
+        private const string PaymentsConfirmEndpoint = "payments/confirm/34/json";
+        private const string PaymentsEditEndpoint = "payments/edit/34/json";
+        private const string PaymentsFormsEndpoint = "payments/getPaymentForms/34/json";
+        private const string PaymentsGetEndpoint = "payments/get/34/json";
+
         //private const string ApartmentMediaGetEndpoint = "objects/getMedia/34/json";
 
         private const string AllAmenitiesGetEndpoint = "amenities/getForObjects/34/json";
@@ -54,7 +63,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         }
 
-        public async Task<RentoomReservationHashRecord> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, CancellationToken cancellationToken = default)
+        public async Task<RentoomReservationHashRecord> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, string? existingResToken = null, CancellationToken cancellationToken = default)
         {
             ReservationRequestIDOSellAPI request = new ReservationRequestIDOSellAPI
             {
@@ -74,7 +83,7 @@ namespace RentoomBooking.SharedClasses.Services
             {
                 var reservation = ret.result.Reservations[0];
 
-                stored = await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger);
+                stored = await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger, existingResToken);
 
                 if (stored != null)
                 {
@@ -282,6 +291,134 @@ namespace RentoomBooking.SharedClasses.Services
             return response?.Result;
         }
 
+        public async Task<PaymentAddResponse?> AddPaymentAsync(PaymentAdd payment, CancellationToken cancellationToken = default)
+        {
+            if (payment is null)
+            {
+                throw new ArgumentNullException(nameof(payment));
+            }
 
+            return await AddPaymentsAsync(new[] { payment }, cancellationToken);
+        }
+
+        public async Task<PaymentAddResponse?> AddPaymentsAsync(IEnumerable<PaymentAdd> payments, CancellationToken cancellationToken = default)
+        {
+            if (payments is null)
+            {
+                throw new ArgumentNullException(nameof(payments));
+            }
+
+            var paymentList = payments.ToList();
+
+            if (paymentList.Count == 0)
+            {
+                throw new ArgumentException("Dodaj przynajmniej jedną płatność.", nameof(payments));
+            }
+
+            var request = new PaymentAddRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Params = new PaymentAddParams
+                {
+                    Payments = paymentList
+                }
+            };
+
+            var response = await _idoConnect.PostAsync<PaymentAddRequest, PaymentAddResponseType>(PaymentsAddEndpoint, request, cancellationToken);
+
+            return response?.Result;
+        }
+
+        public async Task<PaymentActionResponse?> CancelPaymentsAsync(IEnumerable<int> paymentIds, CancellationToken cancellationToken = default)
+        {
+            return await ExecutePaymentActionAsync(paymentIds, PaymentsCancelEndpoint, cancellationToken);
+        }
+
+        public async Task<PaymentActionResponse?> ConfirmPaymentsAsync(IEnumerable<int> paymentIds, CancellationToken cancellationToken = default)
+        {
+            return await ExecutePaymentActionAsync(paymentIds, PaymentsConfirmEndpoint, cancellationToken);
+        }
+
+        public async Task<PaymentActionResponse?> EditPaymentsAsync(IEnumerable<PaymentEdit> payments, CancellationToken cancellationToken = default)
+        {
+            if (payments is null)
+            {
+                throw new ArgumentNullException(nameof(payments));
+            }
+
+            var paymentList = payments.ToList();
+
+            if (paymentList.Count == 0)
+            {
+                throw new ArgumentException("Podaj przynajmniej jedną płatność do edycji.", nameof(payments));
+            }
+
+            var request = new PaymentEditRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Params = new PaymentEditParams
+                {
+                    Payments = paymentList
+                }
+            };
+
+            var response = await _idoConnect.PostAsync<PaymentEditRequest, PaymentEditResponseType>(PaymentsEditEndpoint, request, cancellationToken);
+
+            return response?.Result;
+        }
+
+        public async Task<PaymentFormsResponse?> GetPaymentFormsAsync(CancellationToken cancellationToken = default)
+        {
+            var request = new PaymentFormsRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo()
+            };
+
+            var response = await _idoConnect.PostAsync<PaymentFormsRequest, PaymentFormsResponseType>(PaymentsFormsEndpoint, request, cancellationToken);
+
+            return response?.Result;
+        }
+
+        public async Task<PaymentGetResponse?> GetPaymentsAsync(PaymentGetParams? parameters = null, PaymentGetSettings? settings = null, CancellationToken cancellationToken = default)
+        {
+            var request = new PaymentGetRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Settings = settings ?? new PaymentGetSettings(),
+                Params = parameters
+            };
+
+            var response = await _idoConnect.PostAsync<PaymentGetRequest, PaymentGetResponseType>(PaymentsGetEndpoint, request, cancellationToken);
+
+            return response?.Result;
+        }
+
+        private async Task<PaymentActionResponse?> ExecutePaymentActionAsync(IEnumerable<int> paymentIds, string endpoint, CancellationToken cancellationToken)
+        {
+            if (paymentIds is null)
+            {
+                throw new ArgumentNullException(nameof(paymentIds));
+            }
+
+            var paymentList = paymentIds.Select(id => new PaymentIdentifier { Id = id }).ToList();
+
+            if (paymentList.Count == 0)
+            {
+                throw new ArgumentException("Podaj przynajmniej jeden identyfikator płatności.", nameof(paymentIds));
+            }
+
+            var request = new PaymentActionRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Params = new PaymentActionParams
+                {
+                    Payments = paymentList
+                }
+            };
+
+            var response = await _idoConnect.PostAsync<PaymentActionRequest, PaymentActionResponseType>(endpoint, request, cancellationToken);
+
+            return response?.Result;
+        }
     }
 }

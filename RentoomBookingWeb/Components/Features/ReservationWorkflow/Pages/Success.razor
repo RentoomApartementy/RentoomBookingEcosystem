@@ -1,0 +1,28 @@
+@page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/success"
+
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@inject IReservationWorkflowService ReservationWorkflowService;
+@inject NavigationManager Navigation
+
+<PageTitle>Sukces</PageTitle>
+
+<div class="summary-container">
+    <div class="">
+        <h2>Sukces</h2>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
+    [Parameter] public Guid tpayTransactionId { get; set; }
+    
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji/", true);
+        }
+    }
+
+}

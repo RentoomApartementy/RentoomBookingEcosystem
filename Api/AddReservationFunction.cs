@@ -59,20 +59,27 @@ public class AddReservationFunction
             var result = await _idoSellService.AddReservationsAsync(request.Reservations);
 
             RentoomReservationHashRecord functionResult = new();
-            
-            foreach (var r in result.Reservations)
+
+            var r = result.Reservations[0];
             {
                 if (r.Success)
                 {
                     functionResult = await _idoSellService.FetchReservationByIDFromIdoSellAsync(r.ReservationId.Value, true);
-
+                    response.StatusCode = HttpStatusCode.OK;
+                    response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                    await response.WriteStringAsync(JsonConvert.SerializeObject(functionResult));
+                    return response;
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.InternalServerError;
+                    await response.WriteStringAsync(JsonConvert.SerializeObject(r.Error));
+                    return response;
+                    
                 }
             }
 
-            response.StatusCode = HttpStatusCode.OK;
-            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            await response.WriteStringAsync(JsonConvert.SerializeObject(functionResult));
-            return response;
+            
         }
         catch (Exception ex)
         {

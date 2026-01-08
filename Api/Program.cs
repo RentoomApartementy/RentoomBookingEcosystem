@@ -8,16 +8,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.Tpay;
+using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Services;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 
 
 TokenCredential credential = new DefaultAzureCredential();
@@ -46,10 +50,7 @@ var postgresConnectionString = PostgresConnectionStringProvider
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
-builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("RentoomDbConnectionString")));
 
-builder.Services.AddScoped<RappQrMaintService>();
 builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoSellService>();
 builder.Services.AddScoped<IdoLocksService, IdoLocksService>();
@@ -65,6 +66,44 @@ builder.Services.AddScoped<RegistrationCardRepository>();
 builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<BitrixService>();
+
+//TPAY
+
+bool UseDevelopmentSettingsOnProd = true;
+var TpaySection = UseDevelopmentSettingsOnProd ?builder.Configuration.GetSection("TpayDev"): builder.Configuration.GetSection("Tpay");
+
+builder.Services.Configure<TpaySettings>(TpaySection);
+
+builder.Services.AddScoped<IReservationStore, ReservationStore>();
+builder.Services.AddScoped<IReservationWorkflowService, ReservationWorkflowService>();
+builder.Services.AddScoped<ITpayNotificationValidator, TpayNotificationValidator>();
+builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
+builder.Services.AddSingleton<TpayClient>();
+
+builder.Services.AddHttpClient("Tpay", (sp, http) =>
+{
+    var settings = sp.GetRequiredService<IOptions<TpaySettings>>().Value;
+
+    if (string.IsNullOrWhiteSpace(settings.ApiBaseUrl))
+        throw new InvalidOperationException("Tpay:ApiBaseUrl is missing.");
+
+    http.BaseAddress = new Uri(settings.ApiBaseUrl, UriKind.Absolute);
+    http.DefaultRequestHeaders.Accept.Clear();
+    http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+});
+
+
+
+builder.Services.AddScoped<ITpayClient>(sp =>
+{
+    var http = sp.GetRequiredService<IHttpClientFactory>().CreateClient("Tpay");
+    var opt = sp.GetRequiredService<IOptions<TpaySettings>>();
+    var logger = sp.GetRequiredService<ILogger<TpayClient>>();
+
+    logger.LogInformation("Creating TpayClient with ApiBaseUrl: {ApiBaseUrl}", opt.Value.ApiBaseUrl);
+    return new TpayClient(http, opt, logger);
+});
+
 
 //POSTGRESS
 

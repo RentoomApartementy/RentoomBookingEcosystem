@@ -1,0 +1,78 @@
+@page "/rezerwuj/{ReservationTokenGuid:guid}/podsumowanie"
+
+@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@inject IReservationWorkflowService ReservationWorkflowService;
+@inject NavigationManager Navigation
+
+<PageTitle>Podsumowanie</PageTitle>
+<div class="summary-container">
+    @if (_loading)
+    {
+        <p>Ładowanie podsumowania...</p>
+    }
+    else if (!string.IsNullOrEmpty(_error))
+    {
+        <p class="text-danger">@_error</p>
+    }
+    else if (_summary is not null)
+    {
+        <div class="">
+            <h2>Podsumowanie</h2>
+            <p>Termin: @_summary.StartRequest?.StartDate.ToString("yyyy-MM-dd") - @_summary.StartRequest?.EndDate.ToString("yyyy-MM-dd")</p>
+            <p>Goście: @_summary.StartRequest?.Adults dorosłych, @_summary.StartRequest?.Children dzieci</p>
+            <p>Cena: @_summary.OfferPrice @_summary.Currency</p>
+            <p>Status IdoBooking: @_summary.IdoStatus</p>
+            <p>ID IdoBooking: @_summary.IdoReservationId</p>
+            <p>Status Płatności: @_summary.PaymentStatus</p>
+            
+            @if (@_summary.IdoStatus == "accepted" && @_summary.PaymentStatus == "Paid")
+            {
+                <p class="text-success">Twoja rezerwacja została potwierdzona i opłacona.</p>
+                <h4> StayWell Link: <a href="@staywellLink">@staywellLink</a></h4>
+            }
+            else if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
+            {
+                <p class="text-warning">Twoja rezerwacja została potwierdzona, ale nie została jeszcze opłacona.</p>
+            <Button @onclick="GoToPayment">Przejdź dalej</Button>
+            }
+            else if (@_summary.IdoStatus != "accepted")
+            {
+                <p class="text-danger">Twoja rezerwacja nie została jeszcze potwierdzona.</p>
+            }
+            
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
+    
+    private ReservationSummaryDto? _summary;
+    private bool _loading = true;
+    private string? _error;
+    
+    //mockup linka 
+    private string? staywellLink => $"https://staywell.rentoom.pl/{ReservationTokenGuid}/HomePage";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+        }
+        catch (Exception ex)
+        {
+            _error = $"Nie udało się zbudować podsumowania. {ex.Source} {ex.Message} ";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+    
+    private void GoToPayment()
+    {
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
+    }
+}

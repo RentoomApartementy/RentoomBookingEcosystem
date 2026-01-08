@@ -77,8 +77,9 @@ window.bitrixChat = {
 
 //na podstawie https://helpdesk.bitrix24.pl/open/10887560/
 // działa poprawnie w czacie na birix24.pl widac ustawione dane
-// TODO: przekazywac dane goscia dynamicznie z aplikacji poprzez zmienne JS (poprzez JS interop)
-    window.addEventListener('onBitrixLiveChat', function(event)
+// TODO: przekazywac dane goscia dynamicznie z aplikacji poprzez zmienne JS (poprzez JS interop) przedz załadowaniem CZATU.
+// TODO: jak podpinac ten czat pod istniejacego klienta w CRM bitrix24?
+window.addEventListener('onBitrixLiveChat', function (event) //<-- dodac parametr ClientData aby przekazywac dane dynamicznie
     {
         var widget = event.detail.widget;
 
