@@ -1,5 +1,5 @@
-@page "/apartamenty/{id:int}/{slug}"
-@page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@page "/apartamenty/{id:int}"
+@page "/apartamenty/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using System.Globalization
@@ -15,9 +15,12 @@
 @inject IAvailabilityFinderService AvailabilityFinder
 @using RentoomBookingWeb.Helpers
 @using System.Text.RegularExpressions
+@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject NavigationManager NavManager
 
 <PageTitle>@GetSeoTitle()</PageTitle>
+@inject IReservationWorkflowService ReservationWorkflowService
 
 <HeadContent>
     <meta name="description" content="@GetSeoDescription()" />
@@ -257,7 +260,6 @@
 
 @code {
     [Parameter] public int Id { get; set; }
-    [Parameter] public string? Slug { get; set; }
     [Parameter] public string? StartDate { get; set; }
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
@@ -273,6 +275,9 @@
     private AvailableTerm? _suggestionDates = null;
     private bool _suggestionLoading = true;
     
+    private const string OfferTypeRefundable = "refundable";
+    private const string OfferTypeNonrefundable = "nonrefundable";
+
     private static Dictionary<string, string> _languageMap = new Dictionary<string, string>
     {
         { "pl-PL", "pol" },
@@ -460,12 +465,40 @@
         }
     }
     
-    private void GoToPayment()
+    // GotReservationSummary() -> "Tworz rezerwacje w idobokooking jako unconfirmed"> przekaz ID do ReservationSummary.razor->"Oplac rezerwacje -> zmien status rezerwacji na waitingForPayment-> przekierujuj->Payment.razor/{idrezerwacji}-> automatycznie Przekierowanie do TPAy->{klient opplaca}->payment.razor(wyswietl blad, lub success i info o linku staywell)
+    private async Task GoToPayment(string? offerType)
     {
-        if (_apartment != null)
+        if (_apartment is null || string.IsNullOrWhiteSpace(StartDate) || string.IsNullOrWhiteSpace(EndDate))
         {
-            Navigation.NavigateTo($"/platnosc/{_apartment.Id}");
+            return;
         }
+        
+        
+        if(!TryParseDate(StartDate, out var start) || !TryParseDate(EndDate, out var end))
+        {
+            return;
+        }
+
+        var selectedOffer = GetOfferByType(offerType);
+        var adults = int.TryParse(Adults, out var a) ? a : 1;
+        var children = int.TryParse(Children, out var c) ? c : 0;
+
+        var request = new StartReservationRequest
+        {
+            ObjectId = _apartment.Id, //ID całego apartamentu
+            ObjectItemId = _apartment.Items[0].Id.Value, // ID itemu apartamentu - na jego podstawie jest robiona rezerwacja, a nie na podstawie ObjectId
+            StartDate = start,
+            EndDate = end,
+            Adults = adults,
+            Children = children,
+            SelectedOfferType = selectedOffer?.OfferType ?? offerType,
+            OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
+            Currency = "PLN",
+            SelectedAddons = new List<SelectedAddonDto>()
+        };
+
+        var reservationGuid = await ReservationWorkflowService.StartAsync(request);
+        Navigation.NavigateTo($"/rezerwuj/{reservationGuid}/dane-klienta", true);
     }
     
     private async Task ScrollToReservation()
@@ -473,4 +506,40 @@
         await Task.Yield(); 
         await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation");
     }
+
+    private static bool TryParseDate(string? value, out DateOnly date)
+    {
+        if (!string.IsNullOrWhiteSpace(value) && DateOnly.TryParse(value, out date))
+        {
+            return true;
+        }
+
+        if (!string.IsNullOrWhiteSpace(value) && DateTime.TryParse(value, out var parsed))
+        {
+            date = DateOnly.FromDateTime(parsed);
+            return true;
+        }
+
+        date = default;
+        return false;
+    }
+
+    private OfferItem? GetOfferByType(string? offerType)
+    {
+        var offers = _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers;
+        if (offers is null) return null;
+
+        if (!string.IsNullOrWhiteSpace(offerType))
+        {
+            var match = offers.FirstOrDefault(o => string.Equals(o.OfferType, offerType, StringComparison.OrdinalIgnoreCase));
+            if (match is not null)
+            {
+                return match;
+            }
+        }
+
+        return offers.FirstOrDefault();
+    }
+
+    
 }

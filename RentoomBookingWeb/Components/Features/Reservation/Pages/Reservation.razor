@@ -184,10 +184,10 @@
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
     [Parameter] public string? Children { get; set; }
-    
+
     private ApartmentObject? _apartment;
     private int? _bedsCount = null;
-    
+    private int reservationId;
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
     private ObjectMedium? _currentObjectMedium = null;
@@ -196,7 +196,7 @@
     {
         _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
         _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
-
+        reservationId = Id;
         await GetObjectMedia();
         await GetOffer();
     }
@@ -231,7 +231,7 @@
     {
         if (_apartment != null)
         {
-            Navigation.NavigateTo($"/platnosc/{_apartment.Id}");
+            Navigation.NavigateTo($"/platnosc/{reservationId}");
         }
     }
 

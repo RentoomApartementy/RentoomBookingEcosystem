@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
@@ -11,9 +12,11 @@ using RentoomBooking.SharedClasses.Database;
 namespace RentoomBooking.SharedClasses.Migrations
 {
     [DbContext(typeof(PostgresBookingDbContext))]
-    partial class PostgresBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251216200149_ReservationWorkflow_ReservationRecordEntity_MS")]
+    partial class ReservationWorkflow_ReservationRecordEntity_MS
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,7 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApartmentAmenities", (string)null);
+                    b.ToTable("ApartmentAmenities");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ApartmentHashEntity", b =>
@@ -66,7 +69,7 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApartmentHashes", (string)null);
+                    b.ToTable("ApartmentHashes");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ApartmentInfoEntity", b =>
@@ -91,7 +94,7 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApartmentInfos", (string)null);
+                    b.ToTable("ApartmentInfos");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.RegistrationCardEntity", b =>
@@ -116,7 +119,7 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("ResToken");
 
-                    b.ToTable("RegistrationCard", (string)null);
+                    b.ToTable("RegistrationCard");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationEntity", b =>
@@ -142,7 +145,7 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("ResToken");
 
-                    b.ToTable("Reservations", (string)null);
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationRecordEntity", b =>
@@ -198,7 +201,7 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("ReservationGuid");
 
-                    b.ToTable("reservation_records", (string)null);
+                    b.ToTable("reservation_records");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.SearchFiltersEntity", b =>
@@ -214,7 +217,7 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("FilterGroupName");
 
-                    b.ToTable("SearchFilters", (string)null);
+                    b.ToTable("SearchFilters");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.TermsEntity", b =>
@@ -245,7 +248,7 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("ResToken");
 
-                    b.ToTable("Terms", (string)null);
+                    b.ToTable("Terms");
                 });
 #pragma warning restore 612, 618
         }

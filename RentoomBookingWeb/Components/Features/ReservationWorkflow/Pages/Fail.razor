@@ -1,0 +1,18 @@
+@page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/{tpayGuid:guid}/fail"
+
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
+
+
+<PageTitle>Fail</PageTitle>
+
+<div class="summary-container">
+    <div class="">
+        <h2>Fail</h2>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
+    [Parameter] public Guid TpayGuid { get; set; }
+    
+}

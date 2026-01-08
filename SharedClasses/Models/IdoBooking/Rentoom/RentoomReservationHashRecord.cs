@@ -4,5 +4,6 @@
     {
         public ReservationResponseFromIdoSellAPI ReservationResponse { get; set; }
         public string resToken { get; set; } = string.Empty;
+        
     }
 }
