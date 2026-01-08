@@ -16,7 +16,7 @@
 </div>
 
 <div class="buttons-wrapper">
-    <Button Text="@Localizer["Report"]" OnClick="@(() => Navigation.NavigateTo("/ReportPage"))">
+    <Button Text="@Localizer["Report"]" OnClick="@(() => Navigation.NavigateTo($"reservation/{Token}/ReportPage"))">
         <Icon>
             <img src="/icons/frown.svg">
         </Icon>

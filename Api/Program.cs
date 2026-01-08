@@ -13,6 +13,8 @@ using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Services;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -44,7 +46,10 @@ var postgresConnectionString = PostgresConnectionStringProvider
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
+builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("RentoomDbConnectionString")));
 
+builder.Services.AddScoped<RappQrMaintService>();
 builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoSellService>();
 builder.Services.AddScoped<IdoLocksService, IdoLocksService>();
