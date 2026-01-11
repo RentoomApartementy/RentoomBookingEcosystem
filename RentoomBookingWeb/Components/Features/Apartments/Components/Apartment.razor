@@ -8,6 +8,8 @@
 @inject IAvailabilityFinderService AvailabilityFinder
 @inject IJSRuntime JS
 @using RentoomBookingWeb.Helpers
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
 
 <article @ref="_elementRef" 
          class="apartment-card" 
@@ -159,7 +161,7 @@
                     {
                         <div class="price-wrapper">
                             <span class="price">@FormatHelper.FormatCurrency(Offer?.MinimalPrice)</span>
-                            <small>Cena za pobyt</small>
+                            <small>@Localizer["TotalPrice"]</small>
                         </div>
                     }
                     else if (Item == null) 
@@ -174,12 +176,12 @@
                         <div class="non-offer-wrapper">
                             @if (SuggestionDates?.StartDate != null && SuggestionDates?.EndDate != null)
                             {
-                                <small>Sugerowany termin:</small>
-                                <b>Od @SuggestionDates?.StartDate do @SuggestionDates?.EndDate</b>
+                                <small>@Localizer["SuggestedDate"]:</small>
+                                <b>@Localizer["FromText"] @SuggestionDates?.StartDate @Localizer["To"] @SuggestionDates?.EndDate</b>
                             }
                             else
                             {
-                                <small class="non-offer">Brak oferty w wybranym terminie</small>
+                                <small class="non-offer">@Localizer["NoOfferText2"]</small>
                             }
                         </div>
                     } 
@@ -190,13 +192,13 @@
             {
                 <Button Href="@_detailsUrl"
                         Disabled="@(Item == null || (ShowPrice && Offer == null))">
-                    Szczegóły
+                    @Localizer["Details"]
                 </Button>
             }
             else
             {
                 <Button Href="@_detailsUrl">
-                    Zarezerwuj
+                    @Localizer["BookNow"]
                 </Button>
             }
         </div>
