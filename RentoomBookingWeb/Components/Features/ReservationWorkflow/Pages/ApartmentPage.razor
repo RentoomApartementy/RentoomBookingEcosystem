@@ -166,7 +166,7 @@
                             {
                                 <div @onclick="GoToSuggestionDates" class="suggest-offer">
                                     <span>@Localizer["NoOffersAvailable"]</span>
-                                    <b>Od @_suggestionDates?.StartDate do @_suggestionDates?.EndDate</b>
+                                    <b>@Localizer["From"] @_suggestionDates?.StartDate @Localizer["To"] @_suggestionDates?.EndDate</b>
                                 </div>  
                             }
                             @if (_suggestionLoading)
