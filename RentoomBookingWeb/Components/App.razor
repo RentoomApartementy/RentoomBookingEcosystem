@@ -41,6 +41,16 @@
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
+
+    window.registerClickOutside = (elementId, dotnetHelper) => {
+        window.addEventListener("click", (e) => {
+            const el = document.getElementById(elementId);
+            if (el && !el.contains(e.target)) {
+                dotnetHelper.invokeMethodAsync("CloseModal");
+            }
+        });
+    };
+    
     </script>
     </body>
 

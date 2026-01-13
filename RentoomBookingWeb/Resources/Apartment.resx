@@ -93,4 +93,10 @@
     <data name="BookNow" xml:space="preserve">
         <value />
     </data>
+    <data name="SuggestedDate" xml:space="preserve">
+        <value />
+    </data>
+    <data name="SuggestedDateLoading" xml:space="preserve">
+        <value />
+    </data>
 </root>

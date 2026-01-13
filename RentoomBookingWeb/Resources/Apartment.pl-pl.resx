@@ -86,4 +86,10 @@
     <data name="BookNow" xml:space="preserve">
         <value>Zarezerwuj</value>
     </data>
+    <data name="SuggestedDate" xml:space="preserve">
+        <value>Sugerowany termin</value>
+    </data>
+    <data name="SuggestedDateLoading" xml:space="preserve">
+        <value>Sprawdanie dostępności...</value>
+    </data>
 </root>
