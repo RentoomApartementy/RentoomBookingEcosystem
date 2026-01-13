@@ -144,14 +144,27 @@
                     @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
                     {
                         <div class="offer-price-wrapper">
-                            <div class="offer-price">
-                                <span>@Localizer["RefundableOffer"]: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
-                            </div>   
-                            
-                            <div class="offer-price">
-                                <span>@Localizer["Non-refundableOffer"]: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
-                            </div> 
-                                
+                            @{
+                                var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
+
+                                var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+                                var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+                            }
+
+                            @if (refundableOffer != null)
+                            {
+                                <div class="offer-price">
+                                    <span>@Localizer["RefundableOffer"]: <b>@refundableOffer.Price zł</b></span>
+                                </div>   
+                            }
+
+                            @if (nonRefundableOffer != null)
+                            {
+                                <div class="offer-price">
+                                    <span>@Localizer["Non-refundableOffer"]: <b>@nonRefundableOffer.Price zł</b></span>
+                                </div>
+                            }
+
                             <div style="margin-top: .2rem"></div>
                             <div style="width: 100%;" @onclick="ScrollToReservation">
                                 <Button style="width: 100%;">@Localizer["BookNow"]</Button>
@@ -226,15 +239,28 @@
     @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
     {
         <div class="summary-offer-price-wrapper">
-            <div class="summary-offer-price">
-                <span>@Localizer["RefundableOffer"]: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
-                <Button @onclick="@(() => GoToPayment(OfferTypeRefundable))">@Localizer["BookNow"]</Button>
-            </div>   
-                            
-            <div class="summary-offer-price">
-                <span>@Localizer["Non-refundableOffer"]: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
-                <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">@Localizer["BookNow"]</Button>
-            </div> 
+            @{
+                var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
+
+                var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+                var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+            }
+
+            @if (refundableOffer != null)
+            {
+                <div class="summary-offer-price">
+                    <span>@Localizer["RefundableOffer"]: <b>@refundableOffer.Price zł</b></span>
+                    <Button @onclick="@(() => GoToPayment(OfferTypeRefundable))">@Localizer["BookNow"]</Button>
+                </div>   
+            }
+
+            @if (nonRefundableOffer != null)
+            {
+                <div class="summary-offer-price">
+                    <span>@Localizer["Non-refundableOffer"]: <b>@nonRefundableOffer.Price zł</b></span>
+                    <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">@Localizer["BookNow"]</Button>
+                </div>  
+            }
         </div>
     }
     else
