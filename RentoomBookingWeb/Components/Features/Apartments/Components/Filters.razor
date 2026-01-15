@@ -3,10 +3,12 @@
 @inject IApartmentSearchFiltersService ApartmentSearchFiltersService
 @inject NavigationManager Navigation
 @using RentoomBookingWeb.Components.Enums
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
 
 <button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
     <img src="assets/svgs/mobile-filters.svg" alt="" style="color: black;">
-    <span>Filtry</span>
+    <span>@Localizer["Filters"]</span>
 </button>
 
 <div class="filters-container @(_isMobileFiltersOpen ? "active" : "")">
@@ -25,11 +27,11 @@
         @if (!IsMapActive)
         {
             <div @onclick="HandleClickOnMapFilter" class="map-filter">
-                <span class="map-filter-title">WIDOK MAPY</span>
+                <span class="map-filter-title">@Localizer["MapView"]</span>
             </div>
         }
         
-        <p class="filters-title">Gdzie chcesz się zameldować?</p>
+        <p class="filters-title">@Localizer["WhereCheckIn"]</p>
         
         <div class="filters">
             @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
@@ -41,7 +43,7 @@
                            checked="@option.IsSelected"
                            @onchange="(e) => OnLocationChanged(option)"
                            style="position:absolute; opacity:0; width:0; height:0;"/>
-                    <label for="@option.Id">@option.Name</label>
+                    <label for="@option.Id">@Localizer[option.Name]</label>
                 </div>
             }
         </div>
@@ -62,7 +64,7 @@
 
         <hr/>
 
-        <p class="filters-title">Filtry</p>
+        <p class="filters-title">@Localizer["Filters"]</p>
 
         <div class="filters">
             @foreach (var filter in _filterOptions)
@@ -74,7 +76,7 @@
                            checked="@filter.IsSelected"
                            @onchange="(e) => OnFilterChanged(filter)"
                            style="position:absolute; opacity:0; width:0; height:0;"/>
-                    <label for="@filter.Id">@filter.Name</label>
+                    <label for="@filter.Id">@Localizer[filter.Name]</label>
                 </div>
             }
         </div>
@@ -82,14 +84,14 @@
         @if (_isMobileFiltersOpen)
         {
             <div >
-                <Button @onclick="ToggleMobileFilters" style="width: 100%; margin-top: 1rem;" Type="ButtonType.Secondary">Zastosuj filtry</Button>  
+                <Button @onclick="ToggleMobileFilters" style="width: 100%; margin-top: 1rem;" Type="ButtonType.Secondary">@Localizer["ApplyFilters"]</Button>  
             </div> 
         }
         
         @if (HasSelectedFilters)
         {
             <div class="reset-button-wrapper">
-                <Button @onclick="async () => await ResetFilters()" style="width: 100%">Zresetuj filtry</Button>  
+                <Button @onclick="async () => await ResetFilters()" style="width: 100%">@Localizer["Reset"]</Button>  
             </div> 
         }
     }

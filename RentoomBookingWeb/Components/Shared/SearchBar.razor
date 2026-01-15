@@ -14,7 +14,7 @@
             <div class="" style="font-size: .9rem;">
                 @if (CountPersons != 0)
                 {
-                    <span style="color: black;">@CountPersons os.</span>
+                    <span style="color: black;">@CountPersons @Localizer["NumberOfGuests"]</span>
                 }
                 @if (string.IsNullOrEmpty(Adults) && string.IsNullOrEmpty(Children))
                 {
@@ -24,10 +24,10 @@
         </ChildContent>
         <DropdownContent>
             <div>
-                <h6 class="dropdown-title">Wybierz ilość osób</h6>
+                <h6 class="dropdown-title">@Localizer["SelectNumberOfGuests"]</h6>
                 <div>
-                    <Input IconPath="/assets/svgs/person.svg" Placeholder="Dorośli" Type="number" @bind-Value="Adults" IsFull="true"/>
-                    <Input IconPath="/assets/svgs/person.svg" Placeholder="Dzieci do lat 2" Type="number" @bind-Value="Children" IsFull="true" IsMarginTop="true"/>
+                    <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["Adults"]" Type="number" @bind-Value="Adults" IsFull="true"/>
+                    <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["ChildrenUnder2"]" Type="number" @bind-Value="Children" IsFull="true" IsMarginTop="true"/>
                 </div>
             </div>
         </DropdownContent>
