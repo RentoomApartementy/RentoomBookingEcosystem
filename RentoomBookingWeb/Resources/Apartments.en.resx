@@ -86,4 +86,10 @@
     <data name="TotalPrice" xml:space="preserve">
         <value>Total price</value>
     </data>
+    <data name="AvailableOffers" xml:space="preserve">
+        <value>available offers</value>
+    </data>
+    <data name="Reset" xml:space="preserve">
+        <value>Reset filters</value>
+    </data>
 </root>

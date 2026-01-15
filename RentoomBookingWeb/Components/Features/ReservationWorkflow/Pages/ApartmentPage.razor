@@ -19,6 +19,8 @@
 @using RentoomBookingWeb.Helpers
 @using System.Text.RegularExpressions
 @inject NavigationManager NavManager
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 @inject IReservationWorkflowService ReservationWorkflowService
@@ -113,66 +115,79 @@
             </div>
 
             <span class="read-more-btn" @onclick="ToggleExpand">
-                @(_isExpanded ? "Zwiń szczegóły" : "Pokaż całość")
+                @(_isExpanded ? @Localizer["HideDetails"] : @Localizer["ShowAll"])
             </span>
         </div>
 
         <div class="info-box">
             <div class="reservation-info">
                 <div>
-                    <h5>Wybrany termin</h5>
+                    <h5>@Localizer["SelectedDates"]</h5>
                     @if (StartDate != null && EndDate != null)
                     {
-                        <p>Od @StartDate do @EndDate</p>
+                        <p>@Localizer["From"] @StartDate @Localizer["To"] @EndDate</p>
                     }
                     else
                     {
-                        <p>brak wybranego terminu</p>
+                        <p>@Localizer["NoDatesSelected"]</p>
                     }
                         
-                    <h5>Liczba osób</h5>
+                    <h5>@Localizer["NumberOfGuests"]</h5>
                     @if (StartDate != null && EndDate != null)
                     {
-                        <p>Dorośli: @Adults, Dzieci: @(Children != null ? Children :  0)</p>
+                        <p>@Localizer["Adults"]: @Adults, @Localizer["Children"]: @(Children != null ? Children :  0)</p>
                     }
                     else
                     {
-                        <p>brak wybranej liczby osób</p>
+                        <p>@Localizer["NoGuestsSelected"]</p>
                     }
                         
                     @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
                     {
                         <div class="offer-price-wrapper">
-                            <div class="offer-price">
-                                <span>Oferta zwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
-                            </div>   
-                            
-                            <div class="offer-price">
-                                <span>Oferta bezzwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
-                            </div> 
-                                
+                            @{
+                                var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
+
+                                var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+                                var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+                            }
+
+                            @if (refundableOffer != null)
+                            {
+                                <div class="offer-price">
+                                    <span>@Localizer["RefundableOffer"]: <b>@refundableOffer.Price zł</b></span>
+                                </div>   
+                            }
+
+                            @if (nonRefundableOffer != null)
+                            {
+                                <div class="offer-price">
+                                    <span>@Localizer["Non-refundableOffer"]: <b>@nonRefundableOffer.Price zł</b></span>
+                                </div>
+                            }
+
                             <div style="margin-top: .2rem"></div>
                             <div style="width: 100%;" @onclick="ScrollToReservation">
-                                <Button style="width: 100%;">Zarezerwuj</Button>
+                                <Button style="width: 100%;">@Localizer["BookNow"]</Button>
                             </div>
                         </div>
                     }
                     else
                     {
                         <div >
-                            brak oferty w wybranym terminie
+                            @Localizer["NoOffersAvailable"]
                             @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
                             {
                                 <div @onclick="GoToSuggestionDates" class="suggest-offer">
-                                    <span>Sugerowany termin</span>
-                                    <b>Od @_suggestionDates?.StartDate do @_suggestionDates?.EndDate</b>
+                                    <span>@Localizer["NoOffersAvailable"]</span>
+                                    <b>@Localizer["From"] @_suggestionDates?.StartDate @Localizer["To"] @_suggestionDates?.EndDate</b>
                                 </div>  
                             }
                             @if (_suggestionLoading)
                             {
                                 <div class="suggest-offer">
-                                    <span>Sugerowany termin</span>
-                                    <b>Sprawdzanie dostępności...</b>
+                                    <span>@Localizer["SuggestedDate"]</span>
+                                    <b>@Localizer["SuggestedDateLoading"]</b>
                                 </div>  
                             }
                         </div>
@@ -195,7 +210,7 @@
     
     <hr style="width: 90%;"/>
     
-    <h3 class="header-text">Podsumowanie</h3>
+    <h3 class="header-text">@Localizer["Summary"]</h3>
     
     <SearchBar
         StartDate="@StartDate"
@@ -206,7 +221,7 @@
         OnSearch="@(async query => await HandleSearch(query))"
     ></SearchBar>
     
-    <h3 id="confirm-reservation" class="header-text">Dodatkowe opcje</h3>
+    <h3 id="confirm-reservation" class="header-text">@Localizer["AdditionalOptions"]</h3>
     <div class="addon-list-container">
         @if (_apartment?.Addons != null)
         {
@@ -247,33 +262,46 @@
     @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
     {
         <div class="summary-offer-price-wrapper">
-            <div class="summary-offer-price">
-                <span>Oferta zwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "refundable")?.FirstOrDefault()?.Price zł</b></span>
-                <Button @onclick="@(() => GoToPayment(OfferTypeRefundable))">Zarezerwuj</Button>
-            </div>   
-                            
-            <div class="summary-offer-price">
-                <span>Oferta bezzwrotna: <b>@_offersResponse?.Result?.PricingOffers?[0].Offers?.Where(offer => offer.OfferType == "nonrefundable")?.FirstOrDefault()?.Price zł</b></span>
-                <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">Zarezerwuj</Button>
-            </div> 
+            @{
+                var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
+
+                var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+                var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+            }
+
+            @if (refundableOffer != null)
+            {
+                <div class="summary-offer-price">
+                    <span>@Localizer["RefundableOffer"]: <b>@refundableOffer.Price zł</b></span>
+                    <Button @onclick="@(() => GoToPayment(OfferTypeRefundable))">@Localizer["BookNow"]</Button>
+                </div>   
+            }
+
+            @if (nonRefundableOffer != null)
+            {
+                <div class="summary-offer-price">
+                    <span>@Localizer["Non-refundableOffer"]: <b>@nonRefundableOffer.Price zł</b></span>
+                    <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">@Localizer["BookNow"]</Button>
+                </div>  
+            }
         </div>
     }
     else
     {
         <div class="summary-offer-price-wrapper">
-            Brak oferty w wybranym terminie
+            @Localizer["NoOffersAvailable"]
             @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
             {
                 <div class="summary-offer-price">
-                    <span>Sugerowany termin: <b>@_suggestionDates?.StartDate - @_suggestionDates?.EndDate</b></span>
-                    <Button @onclick="GoToSuggestionDates">Wybierz</Button>
+                    <span>@Localizer["SuggestedDate"]: <b>@_suggestionDates?.StartDate - @_suggestionDates?.EndDate</b></span>
+                    <Button @onclick="GoToSuggestionDates">@Localizer["BookNow"]</Button>
                 </div>  
             }
             @if (_suggestionLoading)
             {
                 <div class="summary-offer-price">
-                    <span>Sugerowany termin: <b>Sprawdzanie dostępności...</b></span>
-                    <Button Disabled="true">Wybierz</Button>
+                    <span>@Localizer["SuggestedDate"]: <b>@Localizer["SuggestedDateLoading"]</b></span>
+                    <Button Disabled="true">@Localizer["BookNow"]</Button>
                 </div>  
             }
         </div>

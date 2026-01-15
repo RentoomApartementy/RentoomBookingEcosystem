@@ -3,7 +3,8 @@
     flex-direction: column;
     border: 1px solid #C1C1C1;
     padding: 1rem;
-    max-width: 400px;
+    width: 250px;
+    flex-shrink: 0;
     align-self: flex-start;
     position: sticky;
     top: 100px;

@@ -1,5 +1,7 @@
 @page "/apartamenty"
 @using RentoomBookingWeb.Components.Features.Apartments.Components
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -17,7 +19,7 @@
 </HeadContent>
 
 <div class="apartments-container">
-    <HeaderSection ImagePath="/assets/images/header-bg-apartments.jpeg" Title="Apartamenty" Height="230px" />
+    <HeaderSection ImagePath="/assets/images/header-bg-apartments.jpeg" Title="@Localizer["ApartmentsText"]" Height="230px" />
 
     <div class="apartments-search-wrapper">
         <SearchBar
@@ -48,25 +50,25 @@
                         {
                             @if (ViewModel.Offers.Count > 0)
                             {
-                                <h4>@ViewModel.Offers.Count dostępnych ofert</h4>
+                                <h4>@ViewModel.Offers.Count @Localizer["AvailableOffers"]</h4>
                             }
                             else
                             {
-                                <h4>Brak ofert w wybranym terminie</h4>
+                                <h4>@Localizer["NoOffersText1"]</h4>
                             }
                         }
                         else
                         {
-                            <h4>@ViewModel.ApartmentsCount apartamenty/ów</h4>
+                            <h4>@ViewModel.ApartmentsCount @Localizer["ApartmentsNumber"]</h4>
                         }   
                     }
                     else
                     {
-                        <h4>Ładowanie...</h4>
+                        <h4>@Localizer["Loading"]...</h4>
                     }
                     <div class="view-buttons-wrapper">
-                        <div @onclick="() => ViewModel.ToggleView(false)" class="view-button @(ViewModel.IsMapView ? "" : "view-button-active")">Siatka</div>
-                        <div @onclick="() => ViewModel.ToggleView(true)" class="view-button @(ViewModel.IsMapView ? "view-button-active" : "")">Mapa</div>
+                        <div @onclick="() => ViewModel.ToggleView(false)" class="view-button @(ViewModel.IsMapView ? "" : "view-button-active")">@Localizer["Grid"]</div>
+                        <div @onclick="() => ViewModel.ToggleView(true)" class="view-button @(ViewModel.IsMapView ? "view-button-active" : "")">@Localizer["Map"]</div>
                     </div>
                 </div>
 

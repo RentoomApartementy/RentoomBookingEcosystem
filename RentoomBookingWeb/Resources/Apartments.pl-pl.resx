@@ -86,4 +86,10 @@
     <data name="TotalPrice" xml:space="preserve">
         <value>Cena za pobyt</value>
     </data>
+    <data name="AvailableOffers" xml:space="preserve">
+        <value>dostępnych ofert</value>
+    </data>
+    <data name="Reset" xml:space="preserve">
+        <value>Zresetuj filtry</value>
+    </data>
 </root>

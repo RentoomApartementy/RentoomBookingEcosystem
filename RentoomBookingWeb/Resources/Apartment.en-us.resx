@@ -86,4 +86,10 @@
     <data name="BookNow" xml:space="preserve">
         <value>Book now</value>
     </data>
+    <data name="SuggestedDate" xml:space="preserve">
+        <value>Recommended dates</value>
+    </data>
+    <data name="SuggestedDateLoading" xml:space="preserve">
+        <value>Check availability...</value>
+    </data>
 </root>
