@@ -10,6 +10,7 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
     {
         PayPerPersonPerNight,
         PayPerStay,
+        PayPerAmountPerNight,
         PayPerAmount,
         PayPerNight
     }
