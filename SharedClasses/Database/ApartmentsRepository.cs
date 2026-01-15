@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
@@ -129,56 +130,7 @@ namespace RentoomBooking.SharedClasses.Database
         }
 
 
-        /*  public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync_old(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
-          {
-              var apartmentIds = apartmentFilter.ApartmentIds;
-          //    if (apartmentIds == null) throw new ArgumentNullException(nameof(apartmentIds));
-
-              await _initializationTask;
-
-              if (_apartmentInfoContainer == null)
-                  throw new InvalidOperationException("ApartmentInfo container is not initialized.");
-
-
-                  var amenityApartmentIds = await GetApartmentIdsByAmenitiesAsync(apartmentFilter.ApartmentAmenityIds, cancellationToken);
-
-
-              var distinctIds = amenityApartmentIds.Distinct().Select(id => id.ToString()).ToList();
-
-              if (distinctIds.Count == 0)
-              {
-                  return new List<ApartmentObject>();
-              }
-
-              var parameterNames = distinctIds
-                  .Select((_, index) => $"@id{index}")
-                  .ToList();
-
-              var queryText = $"SELECT * FROM c WHERE c.id IN ({string.Join(", ", parameterNames)})";
-              var queryDefinition = new QueryDefinition(queryText);
-
-              for (int i = 0; i < distinctIds.Count; i++)
-              {
-                  queryDefinition.WithParameter(parameterNames[i], distinctIds[i]);
-              }
-
-              var requestOptions = new QueryRequestOptions
-              {
-                  PartitionKey = new PartitionKey(ApartmentsPartitionKeyValue)
-              };
-
-              var apartments = new List<ApartmentObject>();
-              using var iterator = _apartmentInfoContainer.GetItemQueryIterator<ApartmentObject>(queryDefinition, requestOptions: requestOptions);
-
-              while (iterator.HasMoreResults)
-              {
-                  var response = await iterator.ReadNextAsync(cancellationToken);
-                  apartments.AddRange(response.ToList());
-              }
-
-              return apartments;
-          }
-        */
+      
         public async Task<List<ApartmentObject>?> GetApartmentsByFilterAsync(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
         {
             var apartmentIds = apartmentFilter.ApartmentIds;
@@ -251,5 +203,13 @@ namespace RentoomBooking.SharedClasses.Database
         }
 
 
+        public async Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync(CancellationToken cancellationToken = default)
+        {
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+            return await _dbContext.DefinedAddons.AsNoTracking().ToListAsync(cancellationToken);
+        }
     }
+
+
+
 }

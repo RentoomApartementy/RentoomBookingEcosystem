@@ -1,5 +1,6 @@
 @page "/rezerwacja/{id:int}";
 @page "/rezerwacja/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}";
+@using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -107,12 +108,27 @@
             {
                 @foreach (var addon in _apartment.Addons)
                 {
+                    var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
+                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a=>a.Lang == "PL");
+                    @if(fa !=null ){
                     <div class="addon-item">
                         <label class="addon-label">
                             <input type="checkbox" class="addon-checkbox" />
-                            <span class="addon-name">@addon.Name</span>
+                            <span class="addon-name">@fadesc.Name</span>
+                            <span class="addon-name">@fadesc.Description</span>
+                            <span class="addon-price">@String.Format("#, ## PLN",fa.PriceGross)</span>
                         </label>
-                    </div>
+                        </div>
+                    }
+                    else
+                    {
+                       <div class="addon-item">
+                        <label class="addon-label">
+                                <span class="addon-name-empty">Brak dodatków</span> @*<<<// zrób to klasę add-name-empty*@
+                            </label>
+                        </div>
+                    }
+
                 }
             }
         </div>
@@ -191,10 +207,11 @@
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
     private ObjectMedium? _currentObjectMedium = null;
-
+    private List<DefinedAddonEntity>? _definedAddons = null;
     protected override async Task OnInitializedAsync()
     {
         _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
+        _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
         _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
         reservationId = Id;
         await GetObjectMedia();

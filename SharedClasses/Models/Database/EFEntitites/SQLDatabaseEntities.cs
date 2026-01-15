@@ -1,5 +1,6 @@
 ﻿using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Models.StayWell;
 using System;
 using System.Collections.Generic;
@@ -108,6 +109,35 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
+
+    [Table("defined_addons")]
+    public class DefinedAddonEntity
+    {
+        [Key]
+        [Column("idobooking_id")]
+        public int IdoBookingId { get; set; }
+
+        [Column("name")]
+        public string Name { get; set; } = string.Empty;
+
+        [Column("payment_type")]
+        public AddonPaymentType PaymentType { get; set; }
+
+        [Column("addon_type")]
+        public string AddonType { get; set; } = string.Empty;
+
+
+        [Column("price_gross")]
+        public decimal PriceGross { get; set; }
+
+        [Column("vat")]
+        public decimal Vat { get; set; }
+
+        [Column("addon_definition", TypeName = "jsonb")]
+        public DefinedAddonDefinition AddonDefinition { get; set; } = new();
+        
+    }
+
 
 
     public class SearchFiltersEntity

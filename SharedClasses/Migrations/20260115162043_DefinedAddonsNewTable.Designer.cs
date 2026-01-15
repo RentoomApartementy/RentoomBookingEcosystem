@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
@@ -11,9 +12,11 @@ using RentoomBooking.SharedClasses.Database;
 namespace RentoomBooking.SharedClasses.Migrations
 {
     [DbContext(typeof(PostgresBookingDbContext))]
-    partial class PostgresBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260115162043_DefinedAddonsNewTable")]
+    partial class DefinedAddonsNewTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,11 +110,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("addon_definition");
-
-                    b.Property<string>("AddonType")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("addon_type");
 
                     b.Property<string>("Name")
                         .IsRequired()
