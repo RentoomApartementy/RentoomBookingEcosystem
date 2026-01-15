@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services;
@@ -34,16 +35,18 @@ namespace RentoomBooking.SharedClasses.Services
       
         Task<PagedResult<ApartmentObject>> GetAllApartmentsList();
 
+        Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync(CancellationToken cancellationToken = default);
+
     }
 
-      
+
 
 
 
     public class ApartmentsService : IApartmentsService
     {
         private readonly IHttpClientFactory _factory;
-        
+
         ApartmentRepository _apartmentsRepository;
         private readonly IIdoBookingConnectService _idoConnect;
 
@@ -52,7 +55,7 @@ namespace RentoomBooking.SharedClasses.Services
         public ApartmentsService(IHttpClientFactory factory, IIdoBookingConnectService idoConnect, ApartmentRepository apartmentsRepository)
         {
             _factory = factory;
-          
+
             _idoConnect = idoConnect;
             _apartmentsRepository = apartmentsRepository;
         }
@@ -83,10 +86,11 @@ namespace RentoomBooking.SharedClasses.Services
             return await _apartmentsRepository.GetApartmentCountAsync();
         }
 
-//     
+        //     
         public async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
         {
             return _apartmentsRepository.FindApartmentInPostgres(objectId);
+
         }
 
         public async Task<List<ApartmentObject>> GetApartmentsByFilterAsync(ApartmentQueryFilter filter, CancellationToken ct = default)
@@ -112,12 +116,18 @@ namespace RentoomBooking.SharedClasses.Services
 
             return new PagedResult<ApartmentObject>(
                 allResults,
-                null,            
-                allResults.Count,   
+                null,
+                allResults.Count,
                 totalCount
             );
         }
-      
+
+
+        public async Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync(CancellationToken cancellationToken = default)
+        {
+
+            return await _apartmentsRepository.GetDefinedAddonsAsync(cancellationToken);
+        }
 
     }
 

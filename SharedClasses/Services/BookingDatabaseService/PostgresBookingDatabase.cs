@@ -249,6 +249,14 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
                 return null;
             }
         }
+
+        public async Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync(CancellationToken cancellationToken = default)
+        {
+            await _initializationTask;
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+            return await _dbContext.DefinedAddons.AsNoTracking().ToListAsync(cancellationToken);
+        }
+
     }
 
 }

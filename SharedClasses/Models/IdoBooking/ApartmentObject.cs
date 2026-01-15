@@ -63,10 +63,13 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public bool? Optional { get; set; }
         public string? Type { get; set; }
         public string? PersonType { get; set; }
+
+        //wewnetrzny typ addonu z bazy rentoom z ceną.
+
     }
 
 
-   
 
-   
+
+
 }

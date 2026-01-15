@@ -24,19 +24,21 @@ namespace RentoomBooking.SharedClasses.Database
         public DbSet<TermsEntity> Terms => Set<TermsEntity>();
         public DbSet<RegistrationCardEntity> RegistrationCard => Set<RegistrationCardEntity>();
 
+        public DbSet<DefinedAddonEntity> DefinedAddons => Set<DefinedAddonEntity>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApartmentInfoEntity>(entity =>
             {
-              
+
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Payload). HasColumnType("jsonb").IsRequired();
+                entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
             });
 
             modelBuilder.Entity<ApartmentAmenityEntity>(entity =>
             {
-              
+
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
@@ -44,7 +46,7 @@ namespace RentoomBooking.SharedClasses.Database
 
             modelBuilder.Entity<ApartmentHashEntity>(entity =>
             {
-               
+
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
@@ -52,7 +54,7 @@ namespace RentoomBooking.SharedClasses.Database
 
             modelBuilder.Entity<ReservationEntity>(entity =>
             {
-              
+
                 entity.HasKey(e => e.ResToken);
                 entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
@@ -91,8 +93,23 @@ namespace RentoomBooking.SharedClasses.Database
                     );
             });
 
-            
-           }
+            modelBuilder.Entity<DefinedAddonEntity>(entity =>
+            {
+                entity.HasKey(e => e.IdoBookingId);
+                entity.Property(e => e.Name).HasColumnName("name").IsRequired();
+                entity.Property(e => e.PaymentType).HasColumnName("payment_type").HasConversion<string>().IsRequired();
+                entity.Property(e => e.PriceGross).HasColumnName("price_gross");
+                entity.Property(e => e.Vat).HasColumnName("vat");
+                entity.Property(e => e.AddonDefinition).HasColumnName("addon_definition").HasColumnType("jsonb")
+                    .HasConversion(
+                        v => Newtonsoft.Json.JsonConvert.SerializeObject(v),
+                        v => Newtonsoft.Json.JsonConvert.DeserializeObject<RentoomBooking.SharedClasses.Models.RentoomBooking.DefinedAddonDefinition>(v)
+                            ?? new RentoomBooking.SharedClasses.Models.RentoomBooking.DefinedAddonDefinition()
+                    );
+            });
+
+
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 @page "/apartamenty/{id:int}/{slug}"
 @page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.IdoBooking
@@ -226,12 +227,34 @@
         {
             @foreach (var addon in _apartment.Addons)
             {
-                <div class="addon-item">
-                    <label class="addon-label">
-                        <input type="checkbox" class="addon-checkbox" />
-                        <span class="addon-name">@Localizer[addon.Name]</span>
-                    </label>
-                </div>
+              if (_definedAddons !=null){
+                var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
+                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL");@*<<<// dostosuj jezyk*@
+                @if (fa != null)
+                {
+                    <div class="addon-item">
+                        <label class="addon-label">
+                            <input type="checkbox" class="addon-checkbox" />
+                            <span class="addon-name">@fadesc.Name</span>
+                            <span class="addon-name">@fadesc.Description</span>
+                            <span class="addon-price">@String.Format("{0:#.00}", fa.PriceGross)</span>
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    <div class="addon-item">
+                        <label class="addon-label">
+                            <span class="addon-name-empty">Brak dodatków</span> @*<<<// zrób to klasę add-name-empty*@
+                        </label>
+                    </div>
+                    }
+                }
+                else
+                {
+                    <div><span> laduje.... dodatki... </span></div>
+                }
+
             }
         }
     </div>
@@ -304,6 +327,8 @@
     private AvailableTerm? _suggestionDates = null;
     private bool _suggestionLoading = true;
     
+    private List<DefinedAddonEntity>? _definedAddons = null;
+
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
 
@@ -364,6 +389,7 @@
             await GetObjectDescription(_apartment.Id, CurrentLanguage);
             _amenities = await GetAmenities(_apartment.Id);
             _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
+            _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
         }
         
         await GetOffer();

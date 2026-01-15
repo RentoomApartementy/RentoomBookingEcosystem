@@ -31,8 +31,9 @@ namespace RentoomBooking.SharedClasses.Configuration
 
             if (isDevelopmentEnv)
             {
-                var local = configuration.GetConnectionString("POSTGRES_RENTOOM_BOOKING_DB_LOCAL");
-                        
+                var local = configuration.GetConnectionString("POSTGRES_RENTOOM_BOOKING_DB_LOCAL") ?? configuration["ConnectionStrings:POSTGRES_RENTOOM_BOOKING_DB_LOCAL"]?? configuration["Values:POSTGRES_RENTOOM_BOOKING_DB_LOCAL"]?? configuration["POSTGRES_RENTOOM_BOOKING_DB_LOCAL"];
+
+
 
                 if (!string.IsNullOrWhiteSpace(local))
                 {
