@@ -9,6 +9,20 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 {
+    public sealed record BitrixDealPipeline(int Id, string Name);
+    public sealed record BitrixDealStage(string StageId, string Name);
+    public sealed record CreateDealRequest(
+        string Title,
+        int CategoryId,
+        string StageId,
+        int? AssignedById = null,
+        decimal? Opportunity = null,
+        string? CurrencyId = null,
+        int? ContactId = null,
+        int? CompanyId = null
+    );
+
+
     public class BitrixService
     {
         //private readonly  _rentoomDbContext;
@@ -187,6 +201,118 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
             var customerData = await DownloadContactDetailsJsonAsync(id, customerFields);
             return customerData;
+        }
+
+
+        public async Task<int> AddDealAsync(CreateDealRequest req)
+        {
+            var endpointMethod = "crm.deal.add.json";
+
+            var fields = new Dictionary<string, object?>
+            {
+                ["TITLE"] = req.Title,
+                ["CATEGORY_ID"] = req.CategoryId,
+                ["STAGE_ID"] = req.StageId,
+                ["OPENED"] = "Y"
+            };
+
+            if (req.AssignedById.HasValue) fields["ASSIGNED_BY_ID"] = req.AssignedById.Value;
+            if (req.Opportunity.HasValue) fields["OPPORTUNITY"] = req.Opportunity.Value;
+            if (!string.IsNullOrWhiteSpace(req.CurrencyId)) fields["CURRENCY_ID"] = req.CurrencyId!;
+            if (req.ContactId.HasValue) fields["CONTACT_ID"] = req.ContactId.Value;
+            if (req.CompanyId.HasValue) fields["COMPANY_ID"] = req.CompanyId.Value;
+
+            using var doc = await PostAsync(endpointMethod, new
+            {
+                fields,
+                @params = new { REGISTER_SONET_EVENT = "Y" }
+            });
+
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.ValueKind == JsonValueKind.Number)
+            {
+                return resultElement.GetInt32();
+            }
+
+            throw BitrixError(doc.RootElement.GetRawText(), doc);
+        }
+
+
+
+        public async Task<List<BitrixDealPipeline>> GetDealPipelinesAsync()
+        {
+            var endpointMethod = "crm.category.list.json";
+
+            // entityTypeId=2 => Deals
+            using var doc = await PostAsync(endpointMethod, new { entityTypeId = 2 });
+
+            if (!doc.RootElement.TryGetProperty("result", out var result)
+                || !result.TryGetProperty("categories", out var categories)
+                || categories.ValueKind != JsonValueKind.Array)
+            {
+                throw BitrixError(doc.RootElement.GetRawText(), doc);
+            }
+
+            var list = new List<BitrixDealPipeline>();
+            foreach (var c in categories.EnumerateArray())
+            {
+                var id = c.GetProperty("id").GetInt32();
+                var name = c.GetProperty("name").GetString() ?? $"Category {id}";
+                list.Add(new BitrixDealPipeline(id, name));
+            }
+
+            return list;
+        }
+
+        public async Task<List<BitrixDealStage>> GetDealStagesAsync(int categoryId)
+        {
+            var endpointMethod = "crm.status.list.json";
+            var entityId = categoryId == 0 ? "DEAL_STAGE" : $"DEAL_STAGE_{categoryId}";
+
+            using var doc = await PostAsync(endpointMethod, new
+            {
+                filter = new { ENTITY_ID = entityId }
+            });
+
+            if (!doc.RootElement.TryGetProperty("result", out var result)
+                || result.ValueKind != JsonValueKind.Array)
+            {
+                throw BitrixError(doc.RootElement.GetRawText(), doc);
+            }
+
+            var list = new List<BitrixDealStage>();
+            foreach (var s in result.EnumerateArray())
+            {
+                var stageId = s.GetProperty("STATUS_ID").GetString() ?? "";
+                var name = s.GetProperty("NAME").GetString() ?? stageId;
+                list.Add(new BitrixDealStage(stageId, name));
+            }
+
+            return list;
+        }
+
+        private async Task<JsonDocument> PostAsync(string endpointMethod, object payload)
+        {
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var url = $"{baseURL}/{endpointMethod}";
+            var response = await client.PostAsync(url, content);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return JsonDocument.Parse(responseContent);
+        }
+
+        private static Exception BitrixError(string responseContent, JsonDocument doc)
+        {
+            if (doc.RootElement.TryGetProperty("error_description", out var errDesc))
+                return new Exception($"Bitrix24 error: {errDesc.GetString()}");
+
+            if (doc.RootElement.TryGetProperty("error", out var err))
+                return new Exception($"Bitrix24 error: {err.GetString()}");
+
+            return new Exception($"Unexpected Bitrix24 response: {responseContent}");
         }
 
     }
