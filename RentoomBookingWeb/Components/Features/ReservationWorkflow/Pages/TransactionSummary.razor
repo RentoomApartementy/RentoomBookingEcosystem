@@ -1,43 +1,159 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/podsumowanie-transakcji"
 
-@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
-@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 @inject IReservationWorkflowService ReservationWorkflowService;
-@inject NavigationManager Navigation
-@implements IDisposable
+@inject NavigationManager Navigation;
+@inject IApartmentsService ApartmentsService;
+@implements IDisposable;
 
 <PageTitle>Opłać</PageTitle>
 
 <div class="summary-container">
-    @if (!string.IsNullOrEmpty(_error))
-    {
-        <p class="text-danger">@_error</p>
-    }
-    else if (_state?.PaymentStatus == PaymentStatuses.Paid)
-    {
-        <div class="success">
-            <h2>Płatność zakończona sukcesem</h2>
+    <div class="summary-wrapper">
+        @if (!string.IsNullOrEmpty(_error))
+        {
+            <p class="text-danger">@_error</p>
+        }
+        else if (_state?.PaymentStatus == PaymentStatuses.Paid)
+        {
+            @* <div class="success"> *@
+            @*     <h2>Płatność zakończona sukcesem</h2> *@
+            @*     <button class="button" @onclick="NavigateToSummary">Powrót do podsumowania</button> *@
+            @* </div> *@
             
-           
-            <Button @onclick="NavigateToSummary">Powrót do podsumowania</Button>
-        </div>
-    }
-    else if (_state?.PaymentStatus == PaymentStatuses.Failed)
-    {
-        <div class="error">
-            <h2>Płatność nie powiodła się</h2>
-            <Button @onclick="RetryPayment">Spróbuj ponownie</Button>
-        </div>
-    }
-    else
-    {
-        <div class="waiting">
-            <h2>Oczekiwanie na potwierdzenie płatności...</h2>
-            <div class="spinner" role="status" aria-label="Ładowanie"></div>
-        </div>
-    }
-</div>
+            <div class="payment-success-card">
+                <div class="success-icon-wrapper">
+                    <img src="assets/svgs/success.svg" alt="Sukces" class="success-icon">
+                </div>
+    
+                <h2 class="success-title">Płatność zakończona sukcesem!</h2>
+                <p class="success-subtitle">Twój apartament został pomyślnie zarezerwowany</p>
 
+                <button class="button" @onclick="NavigateToSummary">Powrót do podsumowania</button>
+            </div>
+            
+            <div class="guest-info">
+                <div class="box-text">
+                    <img src="assets/svgs/calendar-2.svg" alt="ikona kalendarza" class="box-text-icon">
+                    <b class="box-text-title">Szczegóły rezerwacji</b>
+                </div>
+
+                <div class="guest-details-grid">
+                    <div class="guest-detail-item">
+                        <div class="guest-detail-item-img-wrapper">
+                            <img src="assets/svgs/calendar-2.svg" alt="">
+                        </div>
+                        <div class="guest-detail-item-text-wrapper">
+                            <span class="detail-label">Zameldowanie</span>
+                            <span class="detail-value">@_summary?.StartRequest?.StartDate.ToString("yyyy-MM-dd")</span>
+                        </div>
+                    </div>
+                    <div class="guest-detail-item">
+                        <div class="guest-detail-item-img-wrapper">
+                            <img src="assets/svgs/calendar-2.svg" alt="">
+                        </div>
+                        <div class="guest-detail-item-text-wrapper">
+                            <span class="detail-label">Wymeldowanie</span>
+                            <span class="detail-value">@_summary?.StartRequest?.EndDate.ToString("yyyy-MM-dd")</span>
+                        </div>
+                    </div>
+                    <div class="guest-detail-item">
+                        <div class="guest-detail-item-img-wrapper">
+                            <img src="assets/svgs/mail.svg" alt="">
+                        </div>
+                        <div class="guest-detail-item-text-wrapper">
+                            <span class="detail-label">Potwierdzenie wysłane na mail</span>
+                            <span class="detail-value">@(_summary?.Client?.Email)</span>
+                        </div>
+                    </div>
+                    <div class="guest-detail-item">
+                        <div class="guest-detail-item-img-wrapper">
+                            <img src="assets/svgs/dolar.svg" alt="">
+                        </div>
+                        <div class="guest-detail-item-text-wrapper">
+                            <span class="detail-label">Kwota</span>
+                            <span class="detail-value">@_summary?.StartRequest?.OfferPrice?.ToString("N2") @_summary?.StartRequest?.Currency</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr />
+                
+                <div class="apartment-card-summary">
+                    <div class="apt-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=300&auto=format&fit=crop" 
+                             alt="Zdjęcie apartamentu" 
+                             class="apt-image">
+                    </div>
+    
+                    <div class="apt-details">
+                        <h4 class="apt-title">@_apartment?.Name</h4>
+                        <div class="apt-location">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 13.43C13.7231 13.43 15.12 12.0331 15.12 10.31C15.12 8.58687 13.7231 7.19 12 7.19C10.2769 7.19 8.88 8.58687 8.88 10.31C8.88 12.0331 10.2769 13.43 12 13.43Z" stroke="#6B7280" stroke-width="1.5"/>
+                                <path d="M3.62 10.44C3.62 7.13 7.02 3.69 12 3.69C16.98 3.69 20.38 7.13 20.38 10.44C20.38 14.59 16.9 18.06 13.53 20.12C12.63 20.67 11.37 20.67 10.47 20.12C7.1 18.06 3.62 14.59 3.62 10.44Z" stroke="#6B7280" stroke-width="1.5"/>
+                            </svg>
+                            <span class="apt-location-text">@_apartment?.ObjectLocation?.LocalizationItem?.Street, @_apartment?.ObjectLocation?.LocalizationItem?.ZipCode @_apartment?.ObjectLocation?.LocalizationItem?.City</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="download-card">
+                <div class="icon-container">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </div>
+                <div class="content">
+                    <h3 class="title">Download Confirmation</h3>
+                    <p class="description">PDF receipt and booking details</p>
+                </div>
+            </div>
+        }
+        else if (_state?.PaymentStatus == PaymentStatuses.Failed)
+        {
+            @* <div class="error"> *@
+            @*     <h2>Płatność nie powiodła się</h2> *@
+            @*     <button class="button" @onclick="RetryPayment">Spróbuj ponownie</button> *@
+            @* </div> *@
+            
+            <div class="payment-success-card">
+                <div class="error-icon-wrapper">
+                    <img src="assets/svgs/danger.svg" alt="Sukces" class="success-icon">
+                </div>
+    
+                <h2 class="success-title">Płatność nie powiodła się</h2>
+                <p class="success-subtitle">Twój apartament nie został zarezerwowany</p>
+
+                <button class="button-info" @onclick="RetryPayment">Spróbuj ponownie</button>
+            </div>
+        }
+        else
+        {
+            @* <div class="waiting"> *@
+            @*     <h2>Oczekiwanie na potwierdzenie płatności...</h2> *@
+            @*     <div class="spinner" role="status" aria-label="Ładowanie"></div> *@
+            @* </div> *@
+            
+            <div class="payment-success-card">
+                <div class="info-icon-wrapper">
+                    <div class="spinner" role="status" aria-label="Ładowanie"></div>
+                </div>
+    
+                <h2 class="success-title">Oczekiwanie na potwierdzenie płatności...</h2>
+
+                <button class="button-info" @onclick="RetryPayment">Spróbuj ponownie</button>
+            </div>
+            
+        }
+    </div>
+</div>
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
@@ -45,6 +161,8 @@
     private PaymentStateDto? _state;
     private string? _error;
     private CancellationTokenSource? _cts;
+    private ReservationSummaryDto? _summary;
+    private ApartmentObject? _apartment;
    
     protected override Task OnInitializedAsync()
     {
@@ -55,21 +173,32 @@
 
     private async Task PollAsync(CancellationToken token)
     {
-        await Task.Delay(TimeSpan.FromSeconds(5), token);// tylko na testy - zeby wymusic spinner- potem usunac.
-
         while (!token.IsCancellationRequested)
         {
             try
             {
                 _state = await ReservationWorkflowService.GetPaymentStateAsync(ReservationTokenGuid);
                
-                await InvokeAsync(StateHasChanged);
-                if (_state?.PaymentStatus == PaymentStatuses.Paid || _state?.PaymentStatus == PaymentStatuses.Failed)
+                if (_state?.PaymentStatus == PaymentStatuses.Paid)
                 {
-                   
+                    _summary = await ReservationWorkflowService.BuildSummaryAsync(_state.ReservationGuid);
+                    
+                    if (_summary?.StartRequest?.ObjectId != null)
+                    {
+                        _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
+                    }
+                    
+                    await InvokeAsync(StateHasChanged);
                     return;
                 }
-                
+
+                if (_state?.PaymentStatus == PaymentStatuses.Failed)
+                {
+                    await InvokeAsync(StateHasChanged);
+                    return;
+                }
+
+                await InvokeAsync(StateHasChanged);
             }
             catch (Exception)
             {
@@ -97,5 +226,4 @@
     {
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
     }
-
 }

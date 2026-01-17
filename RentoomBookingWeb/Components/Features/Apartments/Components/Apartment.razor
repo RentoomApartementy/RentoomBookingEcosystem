@@ -153,7 +153,9 @@
             </li>
         </ul>
         
-        <div class="apartment-button-wrapper">
+        @if (!Readonly)
+        {
+            <div class="apartment-button-wrapper">
             @if (ShowPrice)
             {
                 <div class="apartment-price-info">
@@ -202,6 +204,7 @@
                 </Button>
             }
         </div>
+        }
     </div>
 </article>
 
@@ -215,6 +218,7 @@
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
     [Parameter] public string? Children { get; set; }
+    [Parameter] public bool Readonly { get; set; } = false;
     
     [Parameter] public bool DisableForGoToReservation { get; set; } = false;
     

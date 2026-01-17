@@ -4,147 +4,189 @@
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject IApartmentsService ApartmentsService;
 @inject IReservationWorkflowService ReservationWorkflowService;
-@inject NavigationManager Navigation
+@inject NavigationManager Navigation;
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components;
 
 <PageTitle>Płatność</PageTitle>
 
 <div class="payment-container">
     <div class="payment-wrapper">
-        @* <h1>@_apartment?.Name</h1> *@
-        @* *@
-        @* <div class=""> *@
-        @*     <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>,  *@
-        @*     <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>  *@
-        @*     <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span> *@
-        @* </div> *@
-        
-        <hr style="width: 100%"/>
-
-        <EditForm EditContext="_editContext" OnValidSubmit="SaveAsync">
+        <EditForm EditContext="_editContext" OnValidSubmit="SaveAsync" class="editform-width">
             <DataAnnotationsValidator />
-            @* Optional *@
-            @* <ValidationSummary /> *@
 
             <div class="form-wrapper">
-                <div class="form-item">
-                    <h4>Dane osobiste</h4>
-
-                    <Input Placeholder="Imię" IsFull="true" @bind-Value="_form.Client.FirstName" />
-                    <Input Placeholder="Nazwisko" IsFull="true" @bind-Value="_form.Client.LastName" />
-                    <Input Placeholder="Miasto" IsFull="true" @bind-Value="_form.Client.City" />
-                    <Input Placeholder="Adres" IsFull="true" @bind-Value="_form.Client.Street" />
-                    <Input Placeholder="Kod pocztowy" IsFull="true" @bind-Value="_form.Client.ZipCode" />
-                    <Input Placeholder="Adres E-mail" IsFull="true" @bind-Value="_form.Client.Email" />
-                    <Input Placeholder="Numer telefonu" IsFull="true" @bind-Value="_form.Client.Phone" />
+                <div class="form-wrapper-title">
+                    <div class="form-wrapper-title-icon-wrapper">
+                        <img src="assets/svgs/user.svg" alt="ikona uzytkownika">
+                    </div> 
+                    <div class="form-wrapper-title-text">
+                        <h3>Informacje podstawowe</h3>
+                        <p>Uzupełnij dane</p>
+                    </div>
                 </div>
+                
+                <div class="form">
+                    <div class="form-item">
+                        <div class="form-two-items">
+                            <div class="input-wrapper">
+                                <small>Imię</small>
+                                <Input Placeholder="Imię" IsFull="true" @bind-Value="_form.Client.FirstName"/>
+                            </div>
+                            <div class="input-wrapper">
+                                <small>Nazwisko</small>
+                                <Input Placeholder="Nazwisko" IsFull="true" @bind-Value="_form.Client.LastName"/>
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <small>Miasto</small>
+                            <Input Placeholder="Miasto" IsFull="true" @bind-Value="_form.Client.City"/>
+                        </div>
+                        <div class="input-wrapper">
+                            <small>Adres</small>
+                            <Input Placeholder="Adres" IsFull="true" @bind-Value="_form.Client.Street"/>
+                        </div>
+                        <div class="input-wrapper">
+                            <small>Kod pocztowy</small>
+                            <Input Placeholder="Kod pocztowy" IsFull="true" @bind-Value="_form.Client.ZipCode"/>
+                        </div>
+                        <div class="form-two-items">
+                            <div class="input-wrapper">
+                                <small>Adres E-mail</small>
+                                <Input Placeholder="Adres E-mail" IsFull="true" @bind-Value="_form.Client.Email"/>
+                            </div>
+                            <div class="input-wrapper">
+                                <small>Numer telefonu</small>
+                                <Input Placeholder="Numer telefonu" IsFull="true" @bind-Value="_form.Client.Phone"/>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="form-item">
-                    <h4>Dane firmowe</h4>
+                    <hr>
 
                     <label class="addon-label">
-                        <input type="checkbox" class="addon-checkbox" @bind="_form.UseInvoice" />
+                        <input type="checkbox" class="addon-checkbox" @bind="_form.UseInvoice"/>
                         <span class="addon-name">Chcę otrzymać fakturę</span>
                     </label>
+                    
+                    <div class="form-item mt-1 mb-2">
+                        @if (_form.UseInvoice)
+                        {
+                            <div class="input-wrapper">
+                                <small>NIP</small>
+                                <div class="">
+                                    <Input Placeholder="NIP" IsFull="true" @bind-Value="_form.Invoice.TaxNumber"/>
+                                    <small class="download-nip-button">Kliknij, aby pobrać informacje po NIP</small>
+                                </div>
+                            </div>
+                            <div class="input-wrapper">
+                                <small>Nazwa firmy</small>
+                                <Input Placeholder="Nazwa firmy" IsFull="true" @bind-Value="_form.Invoice.CompanyName"/>
+                            </div>
+                            <div class="form-two-items">
+                                <div class="input-wrapper">
+                                    <small>Miasto</small>
+                                    <Input Placeholder="Miasto" IsFull="true" @bind-Value="_form.Invoice.City"/>
+                                </div>
+                                <div class="input-wrapper">
+                                    <small>Adres</small>
+                                    <Input Placeholder="Adres" IsFull="true" @bind-Value="_form.Invoice.Street"/>
+                                </div>
+                                <div class="input-wrapper">
+                                    <small>Kod pocztowy</small>
+                                    <Input Placeholder="Kod pocztowy" IsFull="true" @bind-Value="_form.Invoice.ZipCode"/>
+                                </div>
+                            </div>
+                            <div class="input-wrapper">
+                                <small>Adres E-mail</small>
+                                <Input Placeholder="Adres E-mail" IsFull="true" @bind-Value="_form.Invoice.Email"/>
+                            </div>
+                        }
+                    </div>
 
-                    @if (_form.UseInvoice)
-                    {
-                        <Input Placeholder="Nazwa firmy" IsFull="true" @bind-Value="_form.Invoice.CompanyName" />
-                        <Input Placeholder="NIP" IsFull="true" @bind-Value="_form.Invoice.TaxNumber" />
-                        <Input Placeholder="Miasto" IsFull="true" @bind-Value="_form.Invoice.City" />
-                        <Input Placeholder="Adres" IsFull="true" @bind-Value="_form.Invoice.Street" />
-                        <Input Placeholder="Kod pocztowy" IsFull="true" @bind-Value="_form.Invoice.ZipCode" />
-                        <Input Placeholder="Adres E-mail" IsFull="true" @bind-Value="_form.Invoice.Email" />
-                    }
+                    <label class="addon-label">
+                        <input type="checkbox" class="addon-checkbox"/>
+                        <span class="addon-name">Zapisz moje informacje na wypadek przyszłych transakcji</span>
+                    </label>
                 </div>
+
+                @if (!string.IsNullOrEmpty(_error))
+                {
+                    <p class="text-danger">@_error</p>
+                }
+
+                <button type="submit" disabled="@_isSaving" class="button">
+                    @(_isSaving ? "Zapisywanie..." : "Przejdź do podsumowania")
+                </button>
             </div>
-
-            <label class="addon-label">
-                <input type="checkbox" class="addon-checkbox" />
-                <span class="addon-name">Zapisz moje informacje na wypadek przyszłych transakcji</span>
-            </label>
-
-            <!-- TODO payments types -->
-            @if (!string.IsNullOrEmpty(_error))
-            {
-                <p class="text-danger">@_error</p>
-            }
-
-            <button type="submit" disabled="@_isSaving">
-                @(_isSaving ? "Zapisywanie..." : "Przejdź do podsumowania")
-            </button>
         </EditForm>
         
+        <SummaryBox 
+            Summary="_summary"
+            Apartment="_apartment"
+            />
     </div>
-    
 </div>
 
 @code {
-        [Parameter] public Guid ReservationTokenGuid { get; set; }
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
 
-    // private ApartmentObject? _apartment;
-        //
-
-
+    private ApartmentObject? _apartment;
     private PaymentFormModel _form = new();
     private EditContext _editContext = default!;
     private bool _isSaving;
     private string? _error;
-
-
+    private ReservationSummaryDto? _summary;
+    
     protected override async Task OnInitializedAsync()
     {
-        //_apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
-
         _form.Client = MockupClient();
         _editContext = new EditContext(_form);
-       
-
+        
+        _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+        
+        if (_summary != null)
+        {
+            if (_summary.StartRequest?.ObjectId != null)
+            {
+                _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
+            }
+        }
     }
-
-
-   /* private void GoToSummary()
-    {        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
-    }*/
-
 
     private async Task SaveAsync()
     {
-    if (_isSaving)
-    {
-        return;
-    }
+        if (_isSaving) return;
+        _isSaving = true;
+        _error = null;
 
-    _isSaving = true;
-    _error = null;
-
-    try
-    {
-        await ReservationWorkflowService.SaveClientInfoAsync(ReservationTokenGuid, _form.Client, _form.UseInvoice ? _form.Invoice : null);
-        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
-    }
-    catch (Exception ex)
-    {
-        _error = "Nie udało się zapisać danych klienta." + ex.Message ;
-    }
-    finally
-    {
-        _isSaving = false;
-    }
-    }
-
-        private ClientInfoDto MockupClient()
+        try
         {
-            return new ClientInfoDto
-            {
-                FirstName = "Maciej",
-                LastName = "Stanisławski",
-                City = "Kopanino",
-                Street = "Sczęśliwa 2",
-                ZipCode = "87-162",
-                Email = "posith@gmail.com",
-                Phone = "+48.602394436"
-            };
+            await ReservationWorkflowService.SaveClientInfoAsync(ReservationTokenGuid, _form.Client, _form.UseInvoice ? _form.Invoice : null);
+            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
         }
+        catch (Exception ex)
+        {
+            _error = "Nie udało się zapisać danych klienta." + ex.Message ;
+        }
+        finally
+        {
+            _isSaving = false;
+        }
+    }
+
+    private ClientInfoDto MockupClient()
+    {
+        return new ClientInfoDto
+        {
+            FirstName = "Maciej",
+            LastName = "Stanisławski",
+            City = "Kopanino",
+            Street = "Sczęśliwa 2",
+            ZipCode = "87-162",
+            Email = "posith@gmail.com",
+            Phone = "+48.602394436"
+        };
+    }
 
     private sealed class PaymentFormModel
     {
@@ -152,5 +194,4 @@
         public InvoiceInfoDto Invoice { get; set; } = new();
         public bool UseInvoice { get; set; }
     }
-
 }
