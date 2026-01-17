@@ -2,8 +2,268 @@
 {
     display: flex;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+.summary-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(0,0,0,.55), transparent);
+}
+
+.summary-wrapper {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+    position: relative;
+    display: flex;
+    gap: 2rem;
+    padding-top: 120px;
+}
+
+.main-section {
+    width: 65%;
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
+.status-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.form-wrapper-title {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-wrapper-title-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(39, 198, 119, 0.43);
+    border-radius: 1rem;
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.form-wrapper-title-icon-wrapper > img
+{
+    width: 70%;
+}
+
+.form-wrapper-title-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-wrapper-title-text > p {
+    margin: 0;
+    margin-top: -.5rem;
+}
+
+.rounded-full {
+    border-radius: 9999rem;
+}
+
+.pending-bg
+{
+    background-color: #FDF6EC;
+    border: 1px solid #E9A23B;
+}
+
+.pending-icon-color
+{
+    background-color: #FBEEDA !important;
+}
+
+.pending-text-color
+{
+    color: #E9A23B;
+}
+
+.danger-bg
+{
+    background-color: #FEF2F2;
+    border: 1px solid #FCA5A5;
+}
+
+.danger-icon-color
+{
+    background-color: #FEE2E2 !important;
+}
+
+.danger-text-color
+{
+    color: #991B1B;
+}
+
+.success-bg
+{
+    background-color: #F0FDF4;
+    border: 1px solid #BBF7D0;
+}
+
+.success-icon-color
+{
+    background-color: #DCFCE7 !important;
+}
+
+.success-text-color
+{
+    color: #166534;
+}
+
+.status-box {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.button-pending {
+    width: 100%;
+    background-color: #166534;
+    color: #fff;
+    padding: 1rem;
+    border: #002b67 solid 1px;
+    border-radius: .6rem;
+}
+
+.button {
+    width: 100%;
+    background-color: #1F5A41;
+    color: white;
+    padding: .5rem;
+    border: none;
+    border-radius: .6rem;
+    text-align: center;
+}
+
+.guest-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.box-text {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-shrink: 0;
+}
+
+.box-text-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.box-text-title {
+    font-size: 1.4rem;
+}
+
+.guest-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.guest-detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    color: #6B7280;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.detail-value {
+    color: #111827;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+@media (max-width: 800px) {
+    .guest-details-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .summary-wrapper {
+        flex-direction: column;
+    }
+    
+    .main-section {
+        width: 100%;
+    }
+}
+
+.spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid rgba(0, 0, 0, 0.15);
+    border-top-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.payment-success-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.info-icon-wrapper {
+    background-color: rgba(59, 130, 246, 0.25);
+    border-radius: 999rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+}
+
+.success-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827; 
+    margin: 0 0 8px 0;
 }

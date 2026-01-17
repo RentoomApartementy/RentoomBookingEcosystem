@@ -1,7 +1,7 @@
 .payment-container {
     position: relative;
     width: 100%;
-    min-height: 80vh;
+    /*min-height: 80vh;*/
     background-color: #F7F7F7;
     display: flex;
     flex-direction: column;
@@ -27,17 +27,49 @@
     color: #333;
     position: relative;
     display: flex;
-    flex-direction: column;
-    justify-items: center;
-    gap: 1rem;
-    align-items: center;
+    gap: 2rem;
     padding-top: 120px;
 }
 
 .form-wrapper {
-    width: 100%;
     display: flex;
+    flex-direction: column;
     gap: 2.5rem;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.form-wrapper-title {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-wrapper-title-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(39, 198, 119, 0.43);
+    border-radius: 1rem;
+    width: 60px;
+    height: 60px;
+}
+
+.form-wrapper-title-icon-wrapper > img
+{
+    width: 70%;
+}
+
+.form-wrapper-title-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-wrapper-title-text > p {
+    margin: 0;
+    margin-top: -.5rem;
 }
 
 .form-item {
@@ -45,6 +77,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
+}
+
+.form-two-items {
+    width: 100%;
+    display: flex;
     gap: 1rem;
 }
 
@@ -72,4 +110,96 @@
 
 .addon-name {
 
+}
+
+.order-wrapper {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 110px;
+    justify-content: center;
+    align-self: flex-start;
+    height: fit-content;
+    gap: 1rem;
+}
+
+.button {
+    width: 100%;
+    background-color: #1F5A41;
+    color: white;
+    padding: .5rem;
+    border: none;
+    border-radius: .6rem;
+}
+
+.summary-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    width: 500px;
+    margin: auto;
+}
+
+.summary-box-title {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.63);
+}
+
+.summary-box-dates {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.summary-box-prices {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.summary-box-prices-text {
+    display: flex;
+    justify-content: space-between;
+}
+
+::deep .editform-width {
+    width: 65% !important;
+}
+
+@media (max-width: 800px) {
+    .payment-wrapper {
+        flex-direction: column;
+    }
+    
+    .order-wrapper {
+        width: 100%;
+    }
+    
+    .form-wrapper {
+        width: 100%;
+    }
+
+    ::deep .editform-width {
+        width: 100% !important;
+    }
+
+    .summary-box {
+        width: 100%;
+    }
+}
+
+.input-wrapper
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.download-nip-button {
+    cursor: pointer;
+    border-bottom: 1px solid #000000;
 }
