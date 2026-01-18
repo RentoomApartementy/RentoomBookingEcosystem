@@ -20,10 +20,11 @@
 @using System.Text.RegularExpressions
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Components.Enums
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
+@inject IReservationWorkflowService ReservationWorkflowService
 
 <PageTitle>@GetSeoTitle()</PageTitle>
-@inject IReservationWorkflowService ReservationWorkflowService
 
 <HeadContent>
     <meta name="description" content="@GetSeoDescription()" />
@@ -179,7 +180,7 @@
                             @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
                             {
                                 <div @onclick="GoToSuggestionDates" class="suggest-offer">
-                                    <span>@Localizer["NoOffersAvailable"]</span>
+                                    <span>@Localizer["SuggestedDate"]</span>
                                     <b>@Localizer["From"] @_suggestionDates?.StartDate @Localizer["To"] @_suggestionDates?.EndDate</b>
                                 </div>  
                             }
@@ -210,7 +211,7 @@
     
     <hr style="width: 90%;"/>
     
-    <h3 class="header-text">@Localizer["Summary"]</h3>
+    <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
     
     <SearchBar
         StartDate="@StartDate"
@@ -221,43 +222,55 @@
         OnSearch="@(async query => await HandleSearch(query))"
     ></SearchBar>
     
-    <h3 id="confirm-reservation" class="header-text">@Localizer["AdditionalOptions"]</h3>
+    <h3 id="confirm-reservation" class="header-text" style="margin-bottom: -1rem;">@Localizer["AdditionalOptions"]</h3>
     <div class="addon-list-container">
         @if (_apartment?.Addons != null)
         {
             @foreach (var addon in _apartment.Addons)
             {
-              if (_definedAddons !=null){
-                var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
-                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL");@*<<<// dostosuj jezyk*@
-                @if (fa != null)
-                {
-                    <div class="addon-item">
-                        <label class="addon-label">
-                            <input type="checkbox" class="addon-checkbox" />
-                            <span class="addon-name">@fadesc.Name</span>
-                            <span class="addon-name">@fadesc.Description</span>
-                            <span class="addon-price">@String.Format("{0:#.00}", fa.PriceGross)</span>
-                        </label>
-                    </div>
-                }
-                else
-                {
-                    <div class="addon-item">
-                        <label class="addon-label">
-                            <span class="addon-name-empty">Brak dodatków</span> @*<<<// zrób to klasę add-name-empty*@
-                        </label>
-                    </div>
+                if (_definedAddons !=null){
+                    var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
+                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL"); 
+                    @if (fa != null)
+                    {
+                        <div class="addon-item">
+                            <label class="addon-label">
+                                <span class="addon-name">@Localizer[fadesc?.Name ?? "Dodatek"]</span>
+                                <span class="price-box">
+                                    <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
+                                
+                                    <input type="checkbox" 
+                                           class="addon-checkbox" 
+                                           checked="@(IsAddonSelected(addon.Id))"
+                                           disabled="@(IsAddonMandatory(addon.Optional))"
+                                           @onchange="@(e => ToggleAddon(addon.Id, e.Value))" />
+                                </span>
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="addon-item">
+                            <label class="addon-label">
+                                <span class="addon-name-empty">Brak opisu dodatku</span>
+                            </label>
+                        </div>
                     }
                 }
                 else
                 {
-                    <div><span> laduje.... dodatki... </span></div>
+                    <div><span>@Localizer["Loading"]</span></div>
                 }
-
             }
         }
     </div>
+    
+    @if (TotalAddonsPrice > 0)
+    {
+        <div class="additional-price">
+            +@TotalAddonsPrice zł
+        </div>
+    }
     
     @if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
     {
@@ -268,31 +281,41 @@
                 var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
                 var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
             }
-
-            @if (refundableOffer != null)
-            {
-                <div class="summary-offer-price">
-                    <span>@Localizer["RefundableOffer"]: <b>@refundableOffer.Price zł</b></span>
-                    <Button @onclick="@(() => GoToPayment(OfferTypeRefundable))">@Localizer["BookNow"]</Button>
-                </div>   
-            }
-
+            
             @if (nonRefundableOffer != null)
             {
                 <div class="summary-offer-price">
-                    <span>@Localizer["Non-refundableOffer"]: <b>@nonRefundableOffer.Price zł</b></span>
-                    <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">@Localizer["BookNow"]</Button>
+                    <b>@Localizer["Non-refundableOffer"]</b>
+                    <small>@Localizer["NonRefundableText"]
+                    </small>
+                    <div class="summary-offer-price-button">
+                        <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice) zł</b></span>
+                        <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">@Localizer["BookNow"]</Button>
+                    </div>
                 </div>  
+            }
+            
+            @if (refundableOffer != null)
+            {
+                <div class="summary-offer-price refundable">
+                    <b>@Localizer["RefundableOffer"]</b>
+                    <small>@Localizer["RefundableOfferText"]
+                    </small>
+                    <div class="summary-offer-price-button">
+                        <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice) zł</b></span>
+                        <Button Type="ButtonType.Tertiary" @onclick="@(() => GoToPayment(OfferTypeRefundable))">@Localizer["BookNow"]</Button>
+                    </div>
+                </div>   
             }
         </div>
     }
     else
     {
         <div class="summary-offer-price-wrapper">
-            @Localizer["NoOffersAvailable"]
             @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
             {
                 <div class="summary-offer-price">
+                    <b>@Localizer["NoOffersAvailable"]</b>
                     <span>@Localizer["SuggestedDate"]: <b>@_suggestionDates?.StartDate - @_suggestionDates?.EndDate</b></span>
                     <Button @onclick="GoToSuggestionDates">@Localizer["BookNow"]</Button>
                 </div>  
@@ -328,6 +351,9 @@
     private bool _suggestionLoading = true;
     
     private List<DefinedAddonEntity>? _definedAddons = null;
+
+    private List<SelectedAddonDto> _selectedAddons = new();
+    private float TotalAddonsPrice => _selectedAddons.Sum(a => a.Price * a.Quantity);
 
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
@@ -389,12 +415,88 @@
             await GetObjectDescription(_apartment.Id, CurrentLanguage);
             _amenities = await GetAmenities(_apartment.Id);
             _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
+            
             _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
+
+            InitializeMandatoryAddons();
         }
         
         await GetOffer();
     }
     
+    private void InitializeMandatoryAddons()
+    {
+        if (_apartment?.Addons == null || _definedAddons == null) return;
+
+        foreach (var addon in _apartment.Addons)
+        {
+            if (addon.Id.HasValue && (addon.Optional == false))
+            {
+                if (!_selectedAddons.Any(x => x.AddonId == addon.Id.Value))
+                {
+                    AddAddonToList(addon.Id.Value);
+                }
+            }
+        }
+    }
+
+    private void AddAddonToList(int addonId)
+    {
+        var definition = _definedAddons?.FirstOrDefault(d => d.IdoBookingId == addonId);
+        
+        int nights = 1;
+        if (TryParseDate(StartDate, out var s) && TryParseDate(EndDate, out var e))
+        {
+            var diff = (e.ToDateTime(TimeOnly.MinValue) - s.ToDateTime(TimeOnly.MinValue)).Days;
+            if (diff > 0) nights = diff;
+        }
+
+        var newDto = new SelectedAddonDto
+        {
+            AddonId = addonId,
+            Quantity = 1, 
+            Price = definition != null ? (float)definition.PriceGross : 0f, 
+            Vat = 8f,
+            Persons = int.TryParse(Adults, out var a) ? a : 1, 
+            Nights = nights 
+        };
+
+        _selectedAddons.Add(newDto);
+    }
+
+    private bool IsAddonSelected(int? addonId)
+    {
+        if (!addonId.HasValue) return false;
+        return _selectedAddons.Any(a => a.AddonId == addonId.Value);
+    }
+
+    private bool IsAddonMandatory(bool? isOptional)
+    {
+        return isOptional == false;
+    }
+
+    private void ToggleAddon(int? addonId, object? checkedValue)
+    {
+        if (!addonId.HasValue) return;
+        var isChecked = (bool)(checkedValue ?? false);
+
+        if (isChecked)
+        {
+            if (!_selectedAddons.Any(x => x.AddonId == addonId.Value))
+            {
+                AddAddonToList(addonId.Value);
+            }
+        }
+        else
+        {
+            var item = _selectedAddons.FirstOrDefault(x => x.AddonId == addonId.Value);
+            if (item != null)
+            {
+                _selectedAddons.Remove(item);
+            }
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && _offersResponse?.Result?.PricingOffers?.Count == null)
@@ -520,14 +622,12 @@
         }
     }
     
-    // GotReservationSummary() -> "Tworz rezerwacje w idobokooking jako unconfirmed"> przekaz ID do ReservationSummary.razor->"Oplac rezerwacje -> zmien status rezerwacji na waitingForPayment-> przekierujuj->Payment.razor/{idrezerwacji}-> automatycznie Przekierowanie do TPAy->{klient opplaca}->payment.razor(wyswietl blad, lub success i info o linku staywell)
     private async Task GoToPayment(string? offerType)
     {
         if (_apartment is null || string.IsNullOrWhiteSpace(StartDate) || string.IsNullOrWhiteSpace(EndDate))
         {
             return;
         }
-        
         
         if(!TryParseDate(StartDate, out var start) || !TryParseDate(EndDate, out var end))
         {
@@ -540,16 +640,16 @@
 
         var request = new StartReservationRequest
         {
-            ObjectId = _apartment.Id, //ID całego apartamentu
-            ObjectItemId = _apartment.Items[0].Id.Value, // ID itemu apartamentu - na jego podstawie jest robiona rezerwacja, a nie na podstawie ObjectId
+            ObjectId = _apartment.Id, 
+            ObjectItemId = _apartment.Items[0].Id.Value, 
             StartDate = start,
             EndDate = end,
             Adults = adults,
             Children = children,
             SelectedOfferType = selectedOffer?.OfferType ?? offerType,
-            OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
+            OfferPrice = selectedOffer?.Price + (decimal) TotalAddonsPrice ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice + (decimal) TotalAddonsPrice,
             Currency = "PLN",
-            SelectedAddons = new List<SelectedAddonDto>()
+            SelectedAddons = _selectedAddons
         };
 
         var reservationGuid = await ReservationWorkflowService.StartAsync(request);
@@ -595,6 +695,4 @@
 
         return offers.FirstOrDefault();
     }
-
-    
 }

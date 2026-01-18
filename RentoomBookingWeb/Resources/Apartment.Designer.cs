@@ -206,5 +206,23 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("SuggestedDateLoading", resourceCulture);
             }
         }
+        
+        internal static string NonRefundableText {
+            get {
+                return ResourceManager.GetString("NonRefundableText", resourceCulture);
+            }
+        }
+        
+        internal static string RefundableOfferText {
+            get {
+                return ResourceManager.GetString("RefundableOfferText", resourceCulture);
+            }
+        }
+        
+        internal static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
     }
 }

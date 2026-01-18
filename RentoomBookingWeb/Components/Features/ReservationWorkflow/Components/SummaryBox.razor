@@ -42,15 +42,25 @@
                 
         <div class="summary-box-prices">
             <div class="summary-box-prices-text">
-                <span>@_pricePerNight@Summary?.StartRequest?.Currency x @_totalDays nocy</span>
-                <b>@Summary?.StartRequest?.OfferPrice@Summary?.StartRequest?.Currency</b>
+                <span>@_pricePerNight @Summary?.StartRequest?.Currency x @_totalDays nocy</span>
+                <b>@_basePrice @Summary?.StartRequest?.Currency</b>
             </div>
+            @if (Summary?.StartRequest?.SelectedAddons?.Count > 0)
+            {
+                @foreach (SelectedAddonDto addon in Summary.StartRequest.SelectedAddons)
+                {
+                    <div class="summary-box-prices-text">
+                        <span>@GetAddonName(@addon.AddonId)</span>
+                        <b>@addon.Price zł</b>
+                    </div>
+                }
+            }
         </div>
         <hr style="margin: 0;">
                 
         <div class="summary-box-prices-text">
             <b style="font-size: 1.2rem;">Podsumowanie</b>
-            <b style="font-size: 1.2rem;">@Summary?.StartRequest?.OfferPrice@Summary?.StartRequest?.Currency</b>
+            <b style="font-size: 1.2rem;">@Summary?.StartRequest?.OfferPrice @Summary?.StartRequest?.Currency</b>
         </div>
     </div>
 </div>
@@ -62,8 +72,9 @@
     
     private int _totalDays;
     private decimal _pricePerNight;
+    private decimal _basePrice;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnParametersSet()
     {
         var start = Summary?.StartRequest?.StartDate;
         var end = Summary?.StartRequest?.EndDate;
@@ -71,13 +82,23 @@
         if (start != null && end != null)
         {
             _totalDays = end.Value.DayNumber - start.Value.DayNumber;
-                
             if (_totalDays <= 0) _totalDays = 1;
 
-            if (Summary?.OfferPrice != null)
+            if (Summary?.StartRequest?.OfferPrice != null)
             {
-                _pricePerNight = Math.Round(Summary.OfferPrice.Value / _totalDays, 2);
+                var addonsTotal = (decimal)(Summary.StartRequest.SelectedAddons?.Sum(a => a.Price * a.Quantity) ?? 0);
+                _basePrice = (Summary.StartRequest.OfferPrice ?? 0) - addonsTotal;
+                _pricePerNight = Math.Round(_basePrice / _totalDays, 2);
             }
         }
+    }
+
+    private string GetAddonName(int idoId)
+    {
+        if (Apartment?.Addons != null)
+        {
+            return Apartment.Addons.FirstOrDefault(item => item.Id == idoId)?.Name ?? "Dodatek";
+        }
+        return "Dodatek";
     }
 }
