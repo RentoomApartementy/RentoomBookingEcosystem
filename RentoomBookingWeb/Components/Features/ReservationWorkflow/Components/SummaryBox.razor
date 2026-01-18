@@ -1,6 +1,8 @@
-@using RentoomBooking.SharedClasses.Models.IdoBooking
-@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 
 <div class="order-wrapper">
     @if (Apartment != null)
@@ -32,9 +34,9 @@
                 <img src="assets/svgs/calendar-2.svg" alt="ikona uzytkownika">
             </div> 
             <div class="form-wrapper-title-text">
-                <h3 class="summary-box-title">Twój pobyt</h3>
+                <h3 class="summary-box-title">@Localizer["YourStay"]</h3>
                 <p class="summary-box-dates">
-                    Od @(Summary?.StartRequest?.StartDate.ToString("dd.MM.yyyy") ?? "---") do @(Summary?.StartRequest?.EndDate.ToString("dd.MM.yyyy") ?? "---")
+                    @Localizer["From"] @(Summary?.StartRequest?.StartDate.ToString("dd.MM.yyyy") ?? "---") @Localizer["To"] @(Summary?.StartRequest?.EndDate.ToString("dd.MM.yyyy") ?? "---")
                 </p>
             </div>
         </div>
@@ -42,7 +44,7 @@
                 
         <div class="summary-box-prices">
             <div class="summary-box-prices-text">
-                <span>@_pricePerNight @Summary?.StartRequest?.Currency x @_totalDays nocy</span>
+                <span>@_pricePerNight @Summary?.StartRequest?.Currency x @_totalDays @Localizer["NightsText"]</span>
                 <b>@_basePrice @Summary?.StartRequest?.Currency</b>
             </div>
             @if (Summary?.StartRequest?.SelectedAddons?.Count > 0)
@@ -59,7 +61,7 @@
         <hr style="margin: 0;">
                 
         <div class="summary-box-prices-text">
-            <b style="font-size: 1.2rem;">Podsumowanie</b>
+            <b style="font-size: 1.2rem;">@Localizer["SummaryText"]</b>
             <b style="font-size: 1.2rem;">@Summary?.StartRequest?.OfferPrice @Summary?.StartRequest?.Currency</b>
         </div>
     </div>

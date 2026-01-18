@@ -6,6 +6,8 @@
 @inject IReservationWorkflowService ReservationWorkflowService;
 @inject NavigationManager Navigation;
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 
 <PageTitle>Płatność</PageTitle>
 
@@ -20,8 +22,8 @@
                         <img src="assets/svgs/user.svg" alt="ikona uzytkownika">
                     </div> 
                     <div class="form-wrapper-title-text">
-                        <h3>Informacje podstawowe</h3>
-                        <p>Uzupełnij dane</p>
+                        <h3>@Localizer["ClientInfoTitle"]</h3>
+                        <p>@Localizer["ClientInfoSubtitle"]</p>
                     </div>
                 </div>
                 
@@ -29,34 +31,34 @@
                     <div class="form-item">
                         <div class="form-two-items">
                             <div class="input-wrapper">
-                                <small>Imię</small>
-                                <Input Placeholder="Imię" IsFull="true" @bind-Value="_form.Client.FirstName"/>
+                                <small>@Localizer["Name"]</small>
+                                <Input Placeholder="@Localizer["Name"]" IsFull="true" @bind-Value="_form.Client.FirstName"/>
                             </div>
                             <div class="input-wrapper">
-                                <small>Nazwisko</small>
-                                <Input Placeholder="Nazwisko" IsFull="true" @bind-Value="_form.Client.LastName"/>
+                                <small>@Localizer["LastName"]</small>
+                                <Input Placeholder="@Localizer["LastName"]" IsFull="true" @bind-Value="_form.Client.LastName"/>
                             </div>
                         </div>
                         <div class="input-wrapper">
-                            <small>Miasto</small>
-                            <Input Placeholder="Miasto" IsFull="true" @bind-Value="_form.Client.City"/>
+                            <small>@Localizer["City"]</small>
+                            <Input Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Client.City"/>
                         </div>
                         <div class="input-wrapper">
-                            <small>Adres</small>
-                            <Input Placeholder="Adres" IsFull="true" @bind-Value="_form.Client.Street"/>
+                            <small>@Localizer["Address"]</small>
+                            <Input Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Client.Street"/>
                         </div>
                         <div class="input-wrapper">
-                            <small>Kod pocztowy</small>
-                            <Input Placeholder="Kod pocztowy" IsFull="true" @bind-Value="_form.Client.ZipCode"/>
+                            <small>@Localizer["PostalCode"]</small>
+                            <Input Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Client.ZipCode"/>
                         </div>
                         <div class="form-two-items">
                             <div class="input-wrapper">
-                                <small>Adres E-mail</small>
-                                <Input Placeholder="Adres E-mail" IsFull="true" @bind-Value="_form.Client.Email"/>
+                                <small>@Localizer["Email"]</small>
+                                <Input Placeholder="@Localizer["Email"]" IsFull="true" @bind-Value="_form.Client.Email"/>
                             </div>
                             <div class="input-wrapper">
-                                <small>Numer telefonu</small>
-                                <Input Placeholder="Numer telefonu" IsFull="true" @bind-Value="_form.Client.Phone"/>
+                                <small>@Localizer["Phone"]</small>
+                                <Input Placeholder="@Localizer["Phone"]" IsFull="true" @bind-Value="_form.Client.Phone"/>
                             </div>
                         </div>
                     </div>
@@ -65,7 +67,7 @@
 
                     <label class="addon-label">
                         <input type="checkbox" class="addon-checkbox" @bind="_form.UseInvoice"/>
-                        <span class="addon-name">Chcę otrzymać fakturę</span>
+                        <span class="addon-name">@Localizer["IsInvoiceText"]</span>
                     </label>
                     
                     <div class="form-item mt-1 mb-2">
@@ -75,37 +77,37 @@
                                 <small>NIP</small>
                                 <div class="">
                                     <Input Placeholder="NIP" IsFull="true" @bind-Value="_form.Invoice.TaxNumber"/>
-                                    <small class="download-nip-button">Kliknij, aby pobrać informacje po NIP</small>
+                                    <small class="download-nip-button">@Localizer["ClickToDownloadInfo"]</small>
                                 </div>
                             </div>
                             <div class="input-wrapper">
-                                <small>Nazwa firmy</small>
-                                <Input Placeholder="Nazwa firmy" IsFull="true" @bind-Value="_form.Invoice.CompanyName"/>
+                                <small>@Localizer["CompanyName"]</small>
+                                <Input Placeholder="@Localizer["CompanyName"]" IsFull="true" @bind-Value="_form.Invoice.CompanyName"/>
                             </div>
                             <div class="form-two-items">
                                 <div class="input-wrapper">
-                                    <small>Miasto</small>
-                                    <Input Placeholder="Miasto" IsFull="true" @bind-Value="_form.Invoice.City"/>
+                                    <small>@Localizer["City"]</small>
+                                    <Input Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Invoice.City"/>
                                 </div>
                                 <div class="input-wrapper">
-                                    <small>Adres</small>
-                                    <Input Placeholder="Adres" IsFull="true" @bind-Value="_form.Invoice.Street"/>
+                                    <small>@Localizer["Address"]</small>
+                                    <Input Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Invoice.Street"/>
                                 </div>
                                 <div class="input-wrapper">
-                                    <small>Kod pocztowy</small>
-                                    <Input Placeholder="Kod pocztowy" IsFull="true" @bind-Value="_form.Invoice.ZipCode"/>
+                                    <small>@Localizer["PostalCode"]</small>
+                                    <Input Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Invoice.ZipCode"/>
                                 </div>
                             </div>
                             <div class="input-wrapper">
-                                <small>Adres E-mail</small>
-                                <Input Placeholder="Adres E-mail" IsFull="true" @bind-Value="_form.Invoice.Email"/>
+                                <small>@Localizer["Email"]</small>
+                                <Input Placeholder="@Localizer["Email"]" IsFull="true" @bind-Value="_form.Invoice.Email"/>
                             </div>
                         }
                     </div>
 
                     <label class="addon-label">
                         <input type="checkbox" class="addon-checkbox"/>
-                        <span class="addon-name">Zapisz moje informacje na wypadek przyszłych transakcji</span>
+                        <span class="addon-name">@Localizer["IsSaveInfoText"]</span>
                     </label>
                 </div>
 
@@ -115,7 +117,7 @@
                 }
 
                 <button type="submit" disabled="@_isSaving" class="button">
-                    @(_isSaving ? "Zapisywanie..." : "Przejdź do podsumowania")
+                    @(_isSaving ? Localizer["ClientInfoButtonLoading"] : Localizer["ClientInfoButton"])
                 </button>
             </div>
         </EditForm>

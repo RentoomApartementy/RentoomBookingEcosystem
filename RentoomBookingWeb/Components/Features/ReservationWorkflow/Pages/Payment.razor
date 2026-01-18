@@ -2,6 +2,8 @@
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @inject IReservationWorkflowService ReservationWorkflowService;
 @inject NavigationManager Navigation
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 
 <PageTitle>Opłać</PageTitle>
 
@@ -13,9 +15,9 @@
                 <div class="icon-circle error">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </div>
-                <h2>Ups! Coś poszło nie tak</h2>
+                <h2>@Localizer["SomethingWrong"]</h2>
                 <p class="message">@_error</p>
-                <button class="btn-primary" @onclick="GoToSummary">Wróć do podsumowania</button>
+                <button class="btn-primary" @onclick="GoToSummary">@Localizer["BackToSummary"]</button>
             </div>
         }
         else
@@ -24,9 +26,9 @@
                 <div class="spinner-container">
                     <div class="loading-spinner"></div>
                 </div>
-                <h2>Przekierowanie do płatności...</h2>
-                <p class="message">Zaraz zostaniesz przeniesiony do bezpiecznego systemu płatności.</p>
-                <p class="sub-message">Prosimy nie odświeżać strony.</p>
+                <h2>@Localizer["RedirectingToPayment"]</h2>
+                <p class="message">@Localizer["RedirectToPaymentText"]</p>
+                <p class="sub-message">@Localizer["NotRefreshPage"]</p>
             </div>
         }
     </div>
