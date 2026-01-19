@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
-using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using System.IO;

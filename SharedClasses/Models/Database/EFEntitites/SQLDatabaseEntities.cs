@@ -1,6 +1,6 @@
 ﻿using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
-using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.StayWell;
 using System;
 using System.Collections.Generic;
@@ -92,6 +92,11 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
         [Column("deal_bitrix_id")]
         public int? DealBitrixId { get; set; }
+
+        [Column("confirmation_email_bitrix_id")]
+        public string? ConfirmationEmailBitrixId { get; set; }
+
+
 
         [Column("payment_session_guid")]
         public Guid? PaymentSessionGuid { get; set; }

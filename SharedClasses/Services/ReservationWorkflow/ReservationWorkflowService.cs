@@ -9,7 +9,7 @@ using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
-using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +28,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
         Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
         Task HandleTpayWebhookAsync(TpayWebhookDto dto);
+
+        Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
     }
 
     public class ReservationWorkflowService : IReservationWorkflowService
@@ -279,6 +281,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                         await ConfirmIdoPaymentAsync(paymentId.Value); 
                         await UpdateIdoStatusAsync(record, ReservationStatusType.Accepted);
                         //record = await EnsureBitrixContactAndDealAsync(record);
+                        GetDealEmailStatusAsync(record.ReservationGuid);
                     }
                     await UpdateBitrixDealAsync(record, "Payment status updated");
                     return;
@@ -628,5 +631,54 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             return baseUrl.Replace("{resToken}", resToken).TrimEnd('/');
         }
 
+        public async Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid)
+        {
+            var record = await RequireReservationAsync(reservationGuid);
+
+            if (!record.DealBitrixId.HasValue)
+            {
+                record = await EnsureBitrixContactAndDealAsync(record);
+            }
+
+            if (!record.DealBitrixId.HasValue)
+            {
+            
+                
+                
+                return new DealEmailStatusDto
+                {
+                    EmailSent = false,
+                    HasActivities = false
+                };
+            }
+
+            //najpierw sprawdz czy w bazie jest.
+            if (!String.IsNullOrEmpty(record.DealBitrixSentConfirmationEmailId))
+            {
+                return new DealEmailStatusDto
+                {
+                    EmailSent = true,
+                    HasActivities = true
+                };
+            }
+
+            var activities = await _bitrixService.ListDealEmailActivitiesAsync(record.DealBitrixId.Value);
+            
+            var latest = activities.FirstOrDefault();
+            var emailSent = latest is not null
+                && string.Equals(latest.Completed, "Y", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(latest.Status, "2", StringComparison.OrdinalIgnoreCase);
+            record.DealBitrixSentConfirmationEmailId = emailSent ? latest.Id : null;
+            
+           await _store.UpdateAsync(record); 
+
+            return new DealEmailStatusDto
+            {
+                EmailSent = emailSent, // czy byl wyslany mail z bitrixa
+                HasActivities = activities.Count > 0, // czy w ogole sa maile w pipeline
+                LatestActivity = latest,
+                Activities = activities
+            };
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
+namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
 {
     public class StartReservationRequest
     {
@@ -105,6 +105,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
         public string? IdoStatus { get; set; }
         public int? ClientBitrixId { get; set; }
         public int? DealBitrixId { get; set; }
+        public string? DealBitrixSentConfirmationEmailId { get; set; } // ma wartosc gdy email poszedl.. 
         public Guid? PaymentSessionGuid { get; set; }
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
         public string? Provider { get; set; }
@@ -133,7 +134,28 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
         public const string Failed = "Failed";
     }
 
+    public class DealEmailActivityDto  //Bitrix xEmailActivity class
+    {
+        public string? Id { get; set; }
+        public string? Subject { get; set; }
+        public string? ProviderId { get; set; }
+        public string? ProviderTypeId { get; set; }
+        public string? Status { get; set; }
+        public string? Completed { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
+        public DateTimeOffset? Created { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
+        public string? Direction { get; set; }
+    }
 
+    public class DealEmailStatusDto
+    {
+        public bool EmailSent { get; set; }
+        public bool HasActivities { get; set; }
+        public DealEmailActivityDto? LatestActivity { get; set; }
+        public List<DealEmailActivityDto> Activities { get; set; } = new();
+    }
 
 
     public class DateOnlyJsonConverter : JsonConverter<DateOnly>

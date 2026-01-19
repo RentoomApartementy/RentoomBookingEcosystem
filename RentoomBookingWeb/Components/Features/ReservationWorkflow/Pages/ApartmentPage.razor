@@ -1,11 +1,11 @@
 @page "/apartamenty/{id:int}/{slug}"
 @page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@using System.Globalization
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking
-@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
-@using RentoomBooking.SharedClasses.Services.IdoBooking
-@using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Services.IdoBooking
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @inject IApartmentsService ApartmentsService

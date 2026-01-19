@@ -1,5 +1,6 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Client;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -395,6 +396,58 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             return list;
         }
 
+
+        public async Task<List<DealEmailActivityDto>> ListDealEmailActivitiesAsync(int dealId)
+        {
+            var endpointMethod = "crm.activity.list.json";
+
+            using var doc = await PostAsync(endpointMethod, new
+            {
+                filter = new
+                {
+                    OWNER_TYPE_ID = 2, // Deals
+                    OWNER_ID = dealId,
+                    TYPE_ID = 4 // Email
+                },
+                select = new[]
+                {
+                    "ID",
+                    "SUBJECT",
+                    "PROVIDER_ID",
+                    "PROVIDER_TYPE_ID",
+                    "STATUS",
+                    "COMPLETED",
+                    "START_TIME",
+                    "END_TIME",
+                    "CREATED",
+                    "LAST_UPDATED",
+                    "DIRECTION"
+                },
+                order = new { CREATED = "DESC" }
+            });
+
+            if (!doc.RootElement.TryGetProperty("result", out var resultElement)
+                || resultElement.ValueKind != JsonValueKind.Array)
+            {
+                throw BitrixError(doc.RootElement.GetRawText(), doc);
+            }
+
+
+            var activities = new List<DealEmailActivityDto>();
+
+            foreach (var activity in resultElement.EnumerateArray())
+            {
+                activities.Add(MapEmailActivity(activity));
+            }
+
+
+
+            return activities;
+        }
+
+
+
+
         private async Task<JsonDocument> PostAsync(string endpointMethod, object payload)
         {
             var json = JsonSerializer.Serialize(payload);
@@ -418,6 +471,46 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
             return new Exception($"Unexpected Bitrix24 response: {responseContent}");
         }
+
+
+        private static DealEmailActivityDto MapEmailActivity(System.Text.Json.JsonElement activity)
+        {
+            return new DealEmailActivityDto
+            {
+                Id = GetString(activity, "ID"),
+                Subject = GetString(activity, "SUBJECT"),
+                ProviderId = GetString(activity, "PROVIDER_ID"),
+                ProviderTypeId = GetString(activity, "PROVIDER_TYPE_ID"),
+                Status = GetString(activity, "STATUS"),
+                Completed = GetString(activity, "COMPLETED"),
+                StartTime = GetDateTimeOffset(activity, "START_TIME"),
+                EndTime = GetDateTimeOffset(activity, "END_TIME"),
+                Created = GetDateTimeOffset(activity, "CREATED"),
+                LastUpdated = GetDateTimeOffset(activity, "LAST_UPDATED"),
+                Direction = GetString(activity, "DIRECTION")
+            };
+        }
+
+        private static string? GetString(System.Text.Json.JsonElement element, string propertyName)
+        {
+            return element.TryGetProperty(propertyName, out var value) && value.ValueKind == System.Text.Json.JsonValueKind.String
+                ? value.GetString()
+                : null;
+        }
+
+        private static DateTimeOffset? GetDateTimeOffset(System.Text.Json.JsonElement element, string propertyName)
+        {
+            if (element.TryGetProperty(propertyName, out var value)
+                && value.ValueKind == System.Text.Json.JsonValueKind.String
+                && DateTimeOffset.TryParse(value.GetString(), out var parsed))
+            {
+                return parsed;
+            }
+
+            return null;
+        }
+
+
 
     }
 }

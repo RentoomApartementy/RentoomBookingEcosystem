@@ -89,6 +89,18 @@ public class GetDealFunction
 
     }
 
-
+    [Function("GetDealEmailActivities")]
+    public async Task<IActionResult> BX_GetDealEmailActivities([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "bitrix/deals/{id}/email-activities")] HttpRequest req, int id)
+    {
+        try
+        {
+            var activities = await _bitrixService.ListDealEmailActivitiesAsync(id);
+            return new OkObjectResult(activities);
+        }
+        catch (Exception ex)
+        {
+            return new NotFoundObjectResult(ex.Message);
+        }
+    }
 
 }
