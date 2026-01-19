@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
+using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
-using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -73,6 +73,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IReservationStore, ReservationStore>();
             builder.Services.AddScoped<IMockTpayGateway, MockTpayGateway>();
             builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
+            builder.Services.AddScoped<BitrixService>();
 
 
             builder.Services.AddMemoryCache();
@@ -88,7 +89,7 @@ namespace RentoomBookingWeb
 
             //TPAY
             bool UseDevelopmentSettingsOnProd = true;
-            var TpaySection = UseDevelopmentSettingsOnProd ? builder.Configuration.GetSection("TpayDev") : builder.Configuration.GetSection("Tpay");
+            var TpaySection = UseDevelopmentSettingsOnProd ? builder.Configuration.GetSection("TpayDev") : builder.Configuration.GetSection("TpayStage");
             
             builder.Services.Configure<TpaySettings>(TpaySection);
 

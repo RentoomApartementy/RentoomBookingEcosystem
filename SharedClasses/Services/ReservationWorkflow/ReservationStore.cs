@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
-using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,12 +86,14 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             existing.ReservationJson = JsonConvert.SerializeObject(record.State);
             existing.IdoReservationId = record.IdoReservationId;
             existing.IdoStatus = record.IdoStatus;
+            existing.ClientBitrixId = record.ClientBitrixId;
+            existing.DealBitrixId = record.DealBitrixId;
             existing.PaymentSessionGuid = record.PaymentSessionGuid;
             existing.PaymentStatus = record.PaymentStatus;
             existing.Provider = record.Provider;
             existing.ProviderTransactionId = record.ProviderTransactionId;
             existing.UpdatedAt = DateTime.UtcNow;
-
+            existing.ConfirmationEmailBitrixId = record.DealBitrixSentConfirmationEmailId;
             await context.SaveChangesAsync(cancellationToken);
 
         }
@@ -109,13 +111,16 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 State = state,
                 IdoReservationId = entity.IdoReservationId,
                 IdoStatus = entity.IdoStatus,
+                ClientBitrixId = entity.ClientBitrixId,
+                DealBitrixId = entity.DealBitrixId,
                 PaymentSessionGuid = entity.PaymentSessionGuid,
                 PaymentStatus = entity.PaymentStatus ?? PaymentStatuses.None,
                 Provider = entity.Provider,
                 ProviderTransactionId = entity.ProviderTransactionId,
                 RowVersion = entity.RowVersion ?? Array.Empty<byte>(),
                 CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt
+                UpdatedAt = entity.UpdatedAt,
+                DealBitrixSentConfirmationEmailId = entity.ConfirmationEmailBitrixId
             };
         }
 
@@ -127,13 +132,16 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 ReservationJson = JsonConvert.SerializeObject(record.State),
                 IdoReservationId = record.IdoReservationId,
                 IdoStatus = record.IdoStatus,
+                ClientBitrixId = record.ClientBitrixId,
+                DealBitrixId = record.DealBitrixId,
                 PaymentSessionGuid = record.PaymentSessionGuid,
                 PaymentStatus = record.PaymentStatus,
                 Provider = record.Provider,
                 ProviderTransactionId = record.ProviderTransactionId,
                 RowVersion = record.RowVersion,
                 CreatedAt = record.CreatedAt,
-                UpdatedAt = record.UpdatedAt
+                UpdatedAt = record.UpdatedAt,
+                ConfirmationEmailBitrixId = record.DealBitrixSentConfirmationEmailId
             };
         }
         private async Task EnsureCreatedAsync()
