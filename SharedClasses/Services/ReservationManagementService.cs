@@ -8,5 +8,6 @@ namespace RentoomBooking.SharedClasses.Services
 {
     internal class ReservationManagementService
     {
+        //service chyba nie bedzie potrzebny
     }
 }

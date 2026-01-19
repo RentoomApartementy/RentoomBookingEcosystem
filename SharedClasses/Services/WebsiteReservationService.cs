@@ -6,6 +6,8 @@ using RentoomBooking.SharedClasses.Services.IdoBooking;
 
 namespace RentoomBooking.SharedClasses.Services
 {
+
+    //service do usuniecia zastapiony przez ReservationManagemnetService.cs
     public class WebsiteReservationService
     {
         private readonly IClientService _clientService;

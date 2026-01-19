@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
@@ -11,6 +13,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,9 +33,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
     public class ReservationWorkflowService : IReservationWorkflowService
     {
         private readonly IReservationStore _store;
+        private readonly ApartmentRepository _apartmentStore;
         private readonly IdoSellService _idoApi;
         private readonly ITpayGateway _tpayGateway;
         private readonly BitrixService _bitrixService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<ReservationWorkflowService> _logger;
         private const int BitrixAssignedByUserId = 208;
         public ReservationWorkflowService(
@@ -40,13 +45,17 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             IdoSellService idoApi,
             ITpayGateway tpayGateway,
             BitrixService bitrixService,
-            ILogger<ReservationWorkflowService> logger)
+            IConfiguration configuration,
+            ApartmentRepository apartmentStore,
+        ILogger<ReservationWorkflowService> logger)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _idoApi = idoApi ?? throw new ArgumentNullException(nameof(idoApi));
             _tpayGateway = tpayGateway ?? throw new ArgumentNullException(nameof(tpayGateway));
             _bitrixService = bitrixService ?? throw new ArgumentNullException(nameof(bitrixService));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _apartmentStore = apartmentStore ?? throw new ArgumentNullException(nameof(apartmentStore));
         }
 
         public async Task<Guid> StartAsync(StartReservationRequest request)
@@ -526,9 +535,22 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 return;
             }
 
+
+            Reservation? idoReservation = null;
+            ApartmentObject? apartmentInf = null;
+            if (record.IdoReservationId.HasValue)
+            {
+                var idoResponse = await _idoApi.FetchReservationByIDFromIdoSellAsync(record.IdoReservationId.Value, false);
+                idoReservation = idoResponse?.ReservationResponse?.result?.Reservations?.FirstOrDefault();
+
+                apartmentInf = _apartmentStore.FindApartmentInPostgres(record.State.StartRequest.ObjectId);
+            }
+
+            //pola UF_CRM* to pola customowe - tu sa wpisane na sztywno ale mozna je pobrac z bitrixa dynamicznie jesli trzeba.. ewentualne TODO.
+
             var fields = new Dictionary<string, object?>
             {
-                ["COMMENTS"] = $"Reservation status: {record.IdoStatus ?? "Unknown"}, Payment status: {record.PaymentStatus} ({updateReason}).",
+                ["COMMENTS"] = $"{DateTime.Now.ToString()}: Status Rezerwacji (z IDB): {record.IdoStatus ?? "Unknown"}, Status Platnosci TPAY: {record.PaymentStatus} ({updateReason}).",
 
                 //RB_Status_Platnosci
                 ["UF_CRM_1768566732609"] = record.PaymentStatus
@@ -551,34 +573,59 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             }
             
             //RB_Nazwa_Apartamentu
-            fields["UF_CRM_1768566682522"] = "";
+            fields["UF_CRM_1768566682522"] = idoReservation.Items[0].objectName;
+
+            //RB_Adres_Apartamentu
+            fields["UF_CRM_1768840472108"] = apartmentInf.ObjectLocation.LocalizationItem.ZipCode + " " +
+                apartmentInf.ObjectLocation.LocalizationItem.City +", ul. " + apartmentInf.ObjectLocation.LocalizationItem.Street;
+
             
+
             //RB_Status_Rezerwacji
-            fields["UF_CRM_1768566710921"] = "";
+            fields["UF_CRM_1768566710921"] = record.IdoStatus;
 
             //RB_KodTpay_Platnosci
-            fields["UF_CRM_1768566766553"] = "";
+            fields["UF_CRM_1768566766553"] = string.Empty;
 
             //RB_Poczatek_Rezerwacji
-            fields["UF_CRM_1768566963962"] = "";
-            
+            fields["UF_CRM_1768566963962"] = idoReservation.ReservationDetails.dateFrom;
+            fields["BEGINDATE"] = idoReservation.ReservationDetails.dateFrom; //deal field
+
+
             //RB_Koniec_Rezerwacji
-            fields["UF_CRM_1768566980297"] = "";
+            fields["UF_CRM_1768566980297"] = idoReservation.ReservationDetails.dateTo;
+            fields["CLOSEDATE"] = idoReservation.ReservationDetails.dateTo; //deal field
 
             //RB_ID_Rezrerwacji
-            fields["UF_CRM_1768835556855"] = "";
+            fields["UF_CRM_1768835556855"] = record.IdoReservationId;
 
             //RB_Link_StayWell
-            fields["UF_CRM_1768835603310"] = "";
+            fields["UF_CRM_1768835603310"] = BuildStayWellLink(record.ReservationGuid.ToString());
 
             //RB_Ilosc_Gosci
-            fields["UF_CRM_1768836801823"] = "";
+            fields["UF_CRM_1768836801823"] = idoReservation.Client.Guests.Count;
 
             //RB_Ilosc_Nocy
-            fields["UF_CRM_1768836818927"] = "";
+            fields["UF_CRM_1768836818927"] = idoReservation.ReservationDetails.getDuration();
 
 
             await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
+        }
+
+        private string? BuildStayWellLink(string? resToken)
+        {
+            var baseUrl =
+                Environment.GetEnvironmentVariable("StayWell__ReservationUrlBase") ??
+                Environment.GetEnvironmentVariable("StayWellReservationUrlBase") ??
+                _configuration["StayWell:ReservationUrlBase"] ??
+                _configuration["StayWellReservationUrlBase"];
+
+            if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(resToken))
+            {
+                return null;
+            }
+
+            return baseUrl.Replace("{resToken}", resToken).TrimEnd('/');
         }
 
     }
