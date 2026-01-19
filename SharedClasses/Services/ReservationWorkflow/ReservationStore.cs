@@ -86,6 +86,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             existing.ReservationJson = JsonConvert.SerializeObject(record.State);
             existing.IdoReservationId = record.IdoReservationId;
             existing.IdoStatus = record.IdoStatus;
+            existing.ClientBitrixId = record.ClientBitrixId;
+            existing.DealBitrixId = record.DealBitrixId;
             existing.PaymentSessionGuid = record.PaymentSessionGuid;
             existing.PaymentStatus = record.PaymentStatus;
             existing.Provider = record.Provider;
@@ -109,6 +111,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 State = state,
                 IdoReservationId = entity.IdoReservationId,
                 IdoStatus = entity.IdoStatus,
+                ClientBitrixId = entity.ClientBitrixId,
+                DealBitrixId = entity.DealBitrixId,
                 PaymentSessionGuid = entity.PaymentSessionGuid,
                 PaymentStatus = entity.PaymentStatus ?? PaymentStatuses.None,
                 Provider = entity.Provider,
@@ -127,6 +131,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 ReservationJson = JsonConvert.SerializeObject(record.State),
                 IdoReservationId = record.IdoReservationId,
                 IdoStatus = record.IdoStatus,
+                ClientBitrixId = record.ClientBitrixId,
+                DealBitrixId = record.DealBitrixId,
                 PaymentSessionGuid = record.PaymentSessionGuid,
                 PaymentStatus = record.PaymentStatus,
                 Provider = record.Provider,

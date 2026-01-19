@@ -86,6 +86,12 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
         [Column("ido_status")]
         public string? IdoStatus { get; set; }
+        
+        [Column("client_bitrix_id")]
+        public int? ClientBitrixId { get; set; }
+
+        [Column("deal_bitrix_id")]
+        public int? DealBitrixId { get; set; }
 
         [Column("payment_session_guid")]
         public Guid? PaymentSessionGuid { get; set; }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
+using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
@@ -30,17 +32,20 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private readonly IReservationStore _store;
         private readonly IdoSellService _idoApi;
         private readonly ITpayGateway _tpayGateway;
+        private readonly BitrixService _bitrixService;
         private readonly ILogger<ReservationWorkflowService> _logger;
-
+        private const int BitrixAssignedByUserId = 208;
         public ReservationWorkflowService(
             IReservationStore store,
             IdoSellService idoApi,
             ITpayGateway tpayGateway,
+            BitrixService bitrixService,
             ILogger<ReservationWorkflowService> logger)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _idoApi = idoApi ?? throw new ArgumentNullException(nameof(idoApi));
             _tpayGateway = tpayGateway ?? throw new ArgumentNullException(nameof(tpayGateway));
+            _bitrixService = bitrixService ?? throw new ArgumentNullException(nameof(bitrixService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -48,7 +53,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             if (request is null) throw new ArgumentNullException(nameof(request));
             var record = await _store.CreateAsync(request);
-            return record.ReservationGuid;
+            return record.ReservationGuid; //<== to jest tez reservation token dla staywell
         }
 
         public async Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice)
@@ -258,6 +263,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                         var paymentId = await AddIdoPaymentAsync(record, record.State.StartRequest?.OfferPrice ?? 0m, record.State.StartRequest?.Currency ?? "PLN", dto.ProviderTransactionId);
                         await ConfirmIdoPaymentAsync(paymentId.Value); 
                         await UpdateIdoStatusAsync(record, ReservationStatusType.Accepted);
+                        record = await EnsureBitrixContactAndDealAsync(record);
                     }
                     return;
                 }
@@ -438,6 +444,102 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             };
         }
 
+
+        private async Task<ReservationRecord> EnsureBitrixContactAndDealAsync(ReservationRecord record)
+        {
+            if (record.IdoReservationId is null || record.State.Client is null)
+            {
+                return record;
+            }
+
+            var contactRequest = new CreateContactRequest
+            {
+                FirstName = record.State.Client.FirstName,
+                LastName = record.State.Client.LastName,
+                Email = record.State.Client.Email,
+                Phone = record.State.Client.Phone,
+                ReservationId = record.IdoReservationId,
+                AssignedById = BitrixAssignedByUserId
+            };
+
+            var updated = false;
+
+            if (!record.ClientBitrixId.HasValue)
+            {
+                record.ClientBitrixId = await _bitrixService.UpsertContactByEmailAsync(contactRequest);
+                updated = true;
+                _logger.LogInformation("Upserted Bitrix contact {ContactId} for reservation {ReservationGuid}.", record.ClientBitrixId, record.ReservationGuid);
+            }
+            else
+            {
+                await _bitrixService.UpdateContactAsync(record.ClientBitrixId.Value, contactRequest);
+                updated = true;
+                _logger.LogInformation("Updated Bitrix contact {ContactId} for reservation {ReservationGuid}.", record.ClientBitrixId, record.ReservationGuid);
+            }
+
+            if (!record.DealBitrixId.HasValue)
+            {
+                var pipelines = await _bitrixService.GetDealPipelinesAsync();
+                var rentalPipeline = pipelines.FirstOrDefault(p => string.Equals(p.Name, "Rezerwacje", StringComparison.OrdinalIgnoreCase));
+                var pipelineId = rentalPipeline?.Id ?? 0;
+                var stages = await _bitrixService.GetDealStagesAsync(pipelineId);
+                var newStage = stages.FirstOrDefault(s => string.Equals(s.Name, "W toku", StringComparison.OrdinalIgnoreCase));
+
+                var dealTitle = record.IdoReservationId.HasValue
+                    ? $"Reservation #{record.IdoReservationId}"
+                    : $"Reservation {record.ReservationGuid:D}";
+
+                record.DealBitrixId = await _bitrixService.AddDealAsync(new CreateDealRequest(
+                    Title: dealTitle,
+                    CategoryId: pipelineId,
+                    StageId: newStage?.StageId ?? "NEW",
+                    AssignedById: BitrixAssignedByUserId,
+                    Opportunity: record.State.StartRequest?.OfferPrice,
+                    CurrencyId: record.State.StartRequest?.Currency ?? "PLN",
+                    ContactId: record.ClientBitrixId
+                ));
+
+                updated = true;
+                _logger.LogInformation("Created Bitrix deal {DealId} for reservation {ReservationGuid}.", record.DealBitrixId, record.ReservationGuid);
+            }
+
+            if (updated)
+            {
+                await _store.UpdateAsync(record);
+            }
+
+            return record;
+        }
+
+        private async Task UpdateBitrixDealAsync(ReservationRecord record, string updateReason)
+        {
+            if (!record.DealBitrixId.HasValue)
+            {
+                return;
+            }
+
+            var fields = new Dictionary<string, object?>
+            {
+                ["COMMENTS"] = $"Reservation status: {record.IdoStatus ?? "Unknown"}, Payment status: {record.PaymentStatus} ({updateReason})."
+            };
+
+            if (record.State.StartRequest?.OfferPrice is not null)
+            {
+                fields["OPPORTUNITY"] = record.State.StartRequest.OfferPrice.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(record.State.StartRequest?.Currency))
+            {
+                fields["CURRENCY_ID"] = record.State.StartRequest.Currency;
+            }
+
+            if (record.ClientBitrixId.HasValue)
+            {
+                fields["CONTACT_ID"] = record.ClientBitrixId.Value;
+            }
+
+            await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
+        }
 
     }
 }

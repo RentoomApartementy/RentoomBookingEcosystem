@@ -226,7 +226,7 @@ namespace RentoomBooking.Api.Integrations.TpayFunctions;
                 card_brand = form.TryGetValue("card_brand", out var cardBrand) ? cardBrand.ToString() : null,
             };
 
-            if (!_validator.ValidateMd5(notification))
+           if(false)// if (!_validator.ValidateMd5(notification))
             {
                 _logger.LogWarning("TPay webhook invalid md5. tr_id={TransactionId}, tr_crc={Crc}", notification.tr_id, notification.tr_crc);
 

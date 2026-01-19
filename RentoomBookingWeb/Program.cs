@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
+using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
@@ -73,6 +74,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IReservationStore, ReservationStore>();
             builder.Services.AddScoped<IMockTpayGateway, MockTpayGateway>();
             builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
+            builder.Services.AddScoped<BitrixService>();
 
 
             builder.Services.AddMemoryCache();

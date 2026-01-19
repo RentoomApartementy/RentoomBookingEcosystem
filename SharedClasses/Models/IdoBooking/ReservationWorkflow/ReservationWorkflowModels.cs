@@ -103,6 +103,8 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
         public ReservationState State { get; set; } = new();
         public int? IdoReservationId { get; set; }
         public string? IdoStatus { get; set; }
+        public int? ClientBitrixId { get; set; }
+        public int? DealBitrixId { get; set; }
         public Guid? PaymentSessionGuid { get; set; }
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
         public string? Provider { get; set; }
