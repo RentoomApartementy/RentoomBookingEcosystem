@@ -67,15 +67,17 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         public async Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid)
         {
             var record = await RequireReservationAsync(reservationGuid);
-            
+                record = await EnsureBitrixContactAndDealAsync(record);
+
             if (record.IdoStatus != ReservationStatusType.Accepted && record.PaymentStatus != PaymentStatuses.Paid)
             {
                 record = await EnsureIdoReservationAsync(record, ReservationStatusType.Accepted);
-
+                record = await EnsureBitrixContactAndDealAsync(record);
                 record.IdoStatus = ReservationStatusType.WaitingForPayment;
 
                 await _store.UpdateAsync(record);
                 await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
+                await UpdateBitrixDealAsync(record, "Reservation status updated");
 
                 record = await RequireReservationAsync(reservationGuid);
             }
@@ -102,6 +104,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             {
                 var record = await RequireReservationAsync(reservationGuid);
                 record = await EnsureIdoReservationAsync(record, ReservationStatusType.WaitingForPayment);
+                record = await EnsureBitrixContactAndDealAsync(record);
 
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
                 {
@@ -153,7 +156,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 {
                     await _store.UpdateAsync(record);
                     await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
-                   //await AddIdoPaymentAsync(record, amount, currency, paymentResult.TransactionId);
+                    //await AddIdoPaymentAsync(record, amount, currency, paymentResult.TransactionId);
+                    await UpdateBitrixDealAsync(record, "Payment initiated");
+
                     return new PaymentInitResult
                     {
                         ReservationGuid = reservationGuid,
@@ -225,6 +230,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             while (true)
             {
                 var record = await RequireReservationAsync(dto.ReservationGuid);
+                record = await EnsureBitrixContactAndDealAsync(record);
                 if (record.PaymentSessionGuid != dto.PaymentSessionGuid)
                 {
                     _logger.LogWarning("Payment session guid mismatch for reservation {ReservationGuid}.", dto.ReservationGuid);
@@ -263,8 +269,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                         var paymentId = await AddIdoPaymentAsync(record, record.State.StartRequest?.OfferPrice ?? 0m, record.State.StartRequest?.Currency ?? "PLN", dto.ProviderTransactionId);
                         await ConfirmIdoPaymentAsync(paymentId.Value); 
                         await UpdateIdoStatusAsync(record, ReservationStatusType.Accepted);
-                        record = await EnsureBitrixContactAndDealAsync(record);
+                        //record = await EnsureBitrixContactAndDealAsync(record);
                     }
+                    await UpdateBitrixDealAsync(record, "Payment status updated");
                     return;
                 }
                 catch (DbUpdateConcurrencyException)
@@ -315,6 +322,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                         await _store.UpdateAsync(record);
                     }
+                    record = await EnsureBitrixContactAndDealAsync(record);
                     return record;
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -520,7 +528,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
             var fields = new Dictionary<string, object?>
             {
-                ["COMMENTS"] = $"Reservation status: {record.IdoStatus ?? "Unknown"}, Payment status: {record.PaymentStatus} ({updateReason})."
+                ["COMMENTS"] = $"Reservation status: {record.IdoStatus ?? "Unknown"}, Payment status: {record.PaymentStatus} ({updateReason}).",
+
+                //RB_Status_Platnosci
+                ["UF_CRM_1768566732609"] = record.PaymentStatus
+
             };
 
             if (record.State.StartRequest?.OfferPrice is not null)
@@ -537,6 +549,34 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             {
                 fields["CONTACT_ID"] = record.ClientBitrixId.Value;
             }
+            
+            //RB_Nazwa_Apartamentu
+            fields["UF_CRM_1768566682522"] = "";
+            
+            //RB_Status_Rezerwacji
+            fields["UF_CRM_1768566710921"] = "";
+
+            //RB_KodTpay_Platnosci
+            fields["UF_CRM_1768566766553"] = "";
+
+            //RB_Poczatek_Rezerwacji
+            fields["UF_CRM_1768566963962"] = "";
+            
+            //RB_Koniec_Rezerwacji
+            fields["UF_CRM_1768566980297"] = "";
+
+            //RB_ID_Rezrerwacji
+            fields["UF_CRM_1768835556855"] = "";
+
+            //RB_Link_StayWell
+            fields["UF_CRM_1768835603310"] = "";
+
+            //RB_Ilosc_Gosci
+            fields["UF_CRM_1768836801823"] = "";
+
+            //RB_Ilosc_Nocy
+            fields["UF_CRM_1768836818927"] = "";
+
 
             await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
         }
