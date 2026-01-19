@@ -203,6 +203,92 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             return customerData;
         }
 
+        public async Task<int?> FindContactIdByEmailAsync(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return null;
+            }
+
+            using var doc = await PostAsync("crm.contact.list.json", new
+            {
+                filter = new { EMAIL = email },
+                select = new[] { "ID" },
+                order = new { ID = "ASC" }
+            });
+
+            if (!doc.RootElement.TryGetProperty("result", out var resultElement)
+                || resultElement.ValueKind != JsonValueKind.Array)
+            {
+                return null;
+            }
+
+            foreach (var item in resultElement.EnumerateArray())
+            {
+                if (item.TryGetProperty("ID", out var idElement)
+                    && int.TryParse(idElement.GetString(), out var id))
+                {
+                    return id;
+                }
+            }
+
+            return null;
+        }
+        public async Task UpdateContactAsync(int contactId, CreateContactRequest updatedContact)
+        {
+            var endpointMethod = "crm.contact.update.json";
+
+            var fields = new Dictionary<string, object?>
+            {
+                ["UF_CRM_1764281071779"] = updatedContact.ReservationId,
+                ["NAME"] = updatedContact.FirstName,
+                ["LAST_NAME"] = updatedContact.LastName,
+                ["OPENED"] = "Y",
+                ["TYPE_ID"] = "UC_YIVWK8",
+                ["SOURCE_ID"] = "WEB",
+                ["PHONE"] = new[]
+                {
+                    new { VALUE = updatedContact.Phone, VALUE_TYPE = "WORK" }
+                },
+                ["EMAIL"] = new[]
+                {
+                    new { VALUE = updatedContact.Email, VALUE_TYPE = "WORK" }
+                }
+            };
+
+            if (updatedContact.AssignedById.HasValue)
+            {
+                fields["ASSIGNED_BY_ID"] = updatedContact.AssignedById.Value;
+            }
+
+            using var doc = await PostAsync(endpointMethod, new
+            {
+                id = contactId,
+                fields,
+                @params = new { REGISTER_SONET_EVENT = "Y" }
+            });
+
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.ValueKind == JsonValueKind.True)
+            {
+                return;
+            }
+
+            throw BitrixError(doc.RootElement.GetRawText(), doc);
+        }
+
+        public async Task<int> UpsertContactByEmailAsync(CreateContactRequest contact)
+        {
+            var existingId = await FindContactIdByEmailAsync(contact.Email);
+            if (existingId.HasValue)
+            {
+                await UpdateContactAsync(existingId.Value, contact);
+                return existingId.Value;
+            }
+
+            return await AddContactAsync(contact);
+        }
+
 
         public async Task<int> AddDealAsync(CreateDealRequest req)
         {
@@ -237,7 +323,25 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             throw BitrixError(doc.RootElement.GetRawText(), doc);
         }
 
+        public async Task UpdateDealAsync(int dealId, IDictionary<string, object?> fields)
+        {
+            var endpointMethod = "crm.deal.update.json";
 
+            using var doc = await PostAsync(endpointMethod, new
+            {
+                id = dealId,
+                fields,
+                @params = new { REGISTER_SONET_EVENT = "Y" }
+            });
+
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.ValueKind == JsonValueKind.True)
+            {
+                return;
+            }
+
+            throw BitrixError(doc.RootElement.GetRawText(), doc);
+        }
 
         public async Task<List<BitrixDealPipeline>> GetDealPipelinesAsync()
         {
