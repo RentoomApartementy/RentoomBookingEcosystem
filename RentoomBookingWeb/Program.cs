@@ -89,7 +89,7 @@ namespace RentoomBookingWeb
 
             //TPAY
             bool UseDevelopmentSettingsOnProd = true;
-            var TpaySection = UseDevelopmentSettingsOnProd ? builder.Configuration.GetSection("TpayDev") : builder.Configuration.GetSection("Tpay");
+            var TpaySection = UseDevelopmentSettingsOnProd ? builder.Configuration.GetSection("TpayDev") : builder.Configuration.GetSection("TpayStage");
             
             builder.Services.Configure<TpaySettings>(TpaySection);
 
