@@ -5,8 +5,14 @@
 @if (IsVisible)
 {
     <div class="modal-backdrop" @onclick="Close" tabindex="-1" @ref="backdropRef">
-        <div class="modal" @onclick:stopPropagation role="dialog" aria-labelledby="modal-title" aria-modal="true">
-            @if (!String.IsNullOrEmpty(Title))
+
+        <div class="modal @(HasImage ? "modal-image-mode" : "")"
+             @onclick:stopPropagation
+             role="dialog"
+             aria-labelledby="modal-title"
+             aria-modal="true">
+
+            @if (!HasImage && !String.IsNullOrEmpty(Title))
             {
                 <div class="modal-header">
                     <button class="modal-close" @onclick="Close" aria-label="Zamknij modal">
@@ -16,27 +22,54 @@
                 </div>
             }
 
-            <div class="modal-content">
-                @Content
+            @if (HasImage)
+            {
+                <div class="modal-content image-content">
+                    <div class="image-wrapper">
+                        <img src="@ImageUrl"
+                             alt="@Title"
+                             style="transform: rotate(@(_rotation)deg);
+                                            @(IsRotatedPerpendicular
+                                                                   ? "max-width: 98vh; max-height: 98vw;"
+                                                                   : "max-width: 100vw; max-height: 98vh;")" />
             </div>
+
+                    <div class="image-controls">
+                        @* <button type="button" class="control-btn" @onclick="RotateImage" title="Rotate">
+                            <img style="filter: invert(1)" src="/icons/rotate-ccw.svg"/>
+                            <span>Obróc zdjęcie</span>
+                        </button> *@
+
+                        <button type="button" class="control-btn close-btn" @onclick="Close" title="Close">
+                            <img style="filter: invert(1)" src="/icons/x.svg" />
+                            <span>Zamknij</span>
+                        </button>
+                    </div>
+                </div>
+                }
+            else
+            {
+                <div class="modal-content">
+                    @Content
+                </div>
+            }
         </div>
     </div>
 }
 
 @code {
-    [Parameter]
-    public string? Title { get; set; }
-
-    [Parameter]
-    public bool IsVisible { get; set; }
-
-    [Parameter]
-    public EventCallback OnClose { get; set; }
-
-    [Parameter]
-    public RenderFragment? Content { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public RenderFragment? Content { get; set; }
+    [Parameter] public string? ImageUrl { get; set; }
 
     private ElementReference backdropRef;
+    private int _rotation = 0;
+
+    private bool HasImage => !string.IsNullOrEmpty(ImageUrl);
+
+    private bool IsRotatedPerpendicular => _rotation == 90 || _rotation == 270;
 
     protected override Task OnInitializedAsync()
     {
@@ -52,8 +85,15 @@
         }
     }
 
+    private void RotateImage()
+    {
+        _rotation += 90;
+        if (_rotation >= 360) _rotation = 0;
+    }
+
     private async Task Close()
     {
+        _rotation = 0;
         if (OnClose.HasDelegate)
         {
             await OnClose.InvokeAsync();
@@ -69,5 +109,4 @@
     {
         GlobalizationService.OnChange -= StateHasChanged;
     }
-
 }
