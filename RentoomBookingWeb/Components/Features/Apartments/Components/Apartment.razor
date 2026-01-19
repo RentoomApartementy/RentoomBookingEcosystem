@@ -153,7 +153,9 @@
             </li>
         </ul>
         
-        <div class="apartment-button-wrapper">
+        @if (!Readonly)
+        {
+            <div class="apartment-button-wrapper">
             @if (ShowPrice)
             {
                 <div class="apartment-price-info">
@@ -202,6 +204,7 @@
                 </Button>
             }
         </div>
+        }
     </div>
 </article>
 
@@ -215,6 +218,7 @@
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
     [Parameter] public string? Children { get; set; }
+    [Parameter] public bool Readonly { get; set; } = false;
     
     [Parameter] public bool DisableForGoToReservation { get; set; } = false;
     
@@ -287,36 +291,44 @@
     }
 
     private void CalculateDetailsUrl()
+{
+    if (DisableForGoToReservation || Item == null)
     {
-        if (DisableForGoToReservation || Item == null)
-        {
-            _detailsUrl = null;
-            return;
-        }
-
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-
-        string? s = queryParams.TryGetValue("startDate", out var sVal) ? sVal.ToString() : null;
-        string? e = queryParams.TryGetValue("endDate", out var eVal) ? eVal.ToString() : null;
-        string? a = queryParams.TryGetValue("adults", out var aVal) ? aVal.ToString() : null;
-        string? c = queryParams.TryGetValue("children", out var cVal) ? cVal.ToString() : null;
-
-        string finalStart = !string.IsNullOrEmpty(StartDate) ? StartDate : s;
-        string finalEnd = !string.IsNullOrEmpty(EndDate) ? EndDate : e;
-        string finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : a;
-        string finalChildren = !string.IsNullOrEmpty(Children) ? Children : c;
-
-        string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
-
-        if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd) || 
-            !string.IsNullOrEmpty(finalAdults) || !string.IsNullOrEmpty(finalChildren))
-        {
-            _detailsUrl = $"{baseUrl}/{finalStart ?? ""}/{finalEnd ?? ""}/{finalAdults ?? ""}/{finalChildren ?? ""}";
-        }
-        else
-        {
-            _detailsUrl = baseUrl;
-        }
+        _detailsUrl = null;
+        return;
     }
+
+    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+    var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+    string? s = queryParams.TryGetValue("startDate", out var sVal) ? sVal.ToString() : null;
+    string? e = queryParams.TryGetValue("endDate", out var eVal) ? eVal.ToString() : null;
+    string? a = queryParams.TryGetValue("adults", out var aVal) ? aVal.ToString() : null;
+    string? c = queryParams.TryGetValue("children", out var cVal) ? cVal.ToString() : null;
+
+    string? finalStart = !string.IsNullOrEmpty(StartDate) ? StartDate : s;
+    string? finalEnd = !string.IsNullOrEmpty(EndDate) ? EndDate : e;
+    string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : a;
+    string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : c;
+
+    string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
+
+    if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd) || 
+        !string.IsNullOrEmpty(finalAdults) || !string.IsNullOrEmpty(finalChildren))
+    {
+        var segments = new List<string>();
+        segments.Add(finalStart ?? "null");
+        segments.Add(finalEnd ?? "null");
+        segments.Add(finalAdults ?? "1");
+        segments.Add(finalChildren ?? "0");
+
+        _detailsUrl = $"{baseUrl}/{string.Join("/", segments)}";
+    }
+    else
+    {
+        _detailsUrl = baseUrl;
+    }
+
+    _detailsUrl = _detailsUrl.Replace("//", "/");
+}
 }

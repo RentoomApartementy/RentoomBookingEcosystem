@@ -59,6 +59,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Apartment.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Payment.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Payment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -127,11 +131,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Apartment.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Payment.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Payment.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Components\Features\Payment\" />
-    <Folder Include="Components\Features\ReservationWorkflow\Components\" />
   </ItemGroup>
 
 </Project>

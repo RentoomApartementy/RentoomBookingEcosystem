@@ -1,15 +1,26 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/podsumowanie"
 
-@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow
-@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationWorkflow;
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components;
 @inject IReservationWorkflowService ReservationWorkflowService;
-@inject NavigationManager Navigation
+@inject NavigationManager Navigation;
+@inject IApartmentsService ApartmentsService;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 
 <PageTitle>Podsumowanie</PageTitle>
 <div class="summary-container">
     @if (_loading)
     {
-        <p>Ładowanie podsumowania...</p>
+        <div class="payment-success-card">
+            <div class="info-icon-wrapper">
+                <div class="spinner" role="status" aria-label="Ładowanie"></div>
+            </div>
+    
+            <h2 class="success-title">@Localizer["SummaryLoadingText"]</h2>
+        </div>
     }
     else if (!string.IsNullOrEmpty(_error))
     {
@@ -17,31 +28,149 @@
     }
     else if (_summary is not null)
     {
-        <div class="">
-            <h2>Podsumowanie</h2>
-            <p>Termin: @_summary.StartRequest?.StartDate.ToString("yyyy-MM-dd") - @_summary.StartRequest?.EndDate.ToString("yyyy-MM-dd")</p>
-            <p>Goście: @_summary.StartRequest?.Adults dorosłych, @_summary.StartRequest?.Children dzieci</p>
-            <p>Cena: @_summary.OfferPrice @_summary.Currency</p>
-            <p>Status IdoBooking: @_summary.IdoStatus</p>
-            <p>ID IdoBooking: @_summary.IdoReservationId</p>
-            <p>Status Płatności: @_summary.PaymentStatus</p>
+        
+        <div class="summary-wrapper">
+            <div class="main-section">
+                
+                <div class="status-section">
+                    <div class="form-wrapper-title">
+                        <div class="form-wrapper-title-icon-wrapper">
+                            <img src="assets/svgs/file.svg" alt="ikona uzytkownika">
+                        </div> 
+                        <div class="form-wrapper-title-text">
+                            <h3 class="summary-box-title">@Localizer["ReservationSummary"]</h3>
+                            <p class="summary-box-dates">
+                                @Localizer["SummaryDetailsText"]
+                            </p>
+                        </div>
+                    </div>
+                    
+                    @if (@_summary.IdoStatus == "accepted" && @_summary.PaymentStatus == "Paid")
+                    {
+                        <div 
+                            class="status-box success-bg"
+                        >
+                            <div class="form-wrapper-title-icon-wrapper success-icon-color rounded-full">
+                                <img src="assets/svgs/success.svg" alt="ikona uzytkownika">
+                            </div> 
+                        
+                            <div class="status-box-text">
+                                <h4 class="success-text-color">@Localizer["ReservationPaid"]</h4>
+                                <span>@Localizer["ReservationPaidInfo"]</span>
+                            </div>
+                        </div>
+                        <a href="@staywellLink" class="button">@Localizer["GoToStayWell"]</a>
+                    }
+                    else if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
+                    {
+                        <div 
+                            class="status-box pending-bg"
+                        >
+                            <div class="form-wrapper-title-icon-wrapper pending-icon-color rounded-full">
+                                <img src="assets/svgs/time.svg" alt="ikona uzytkownika">
+                            </div> 
+                        
+                            <div class="status-box-text">
+                                <h4 class="pending-text-color">@Localizer["ReservationPending"]</h4>
+                                <span>@Localizer["ReservationPendingInfo"]</span>
+                            </div>
+                        </div>
+                        <button @onclick="GoToPayment" class="button-pending">
+                            <img src="assets/svgs/tpay.svg" alt="Tpay icon"/>
+                            @Localizer["ClickToPay"]
+                        </button>
+                    }
+                    else if (@_summary.IdoStatus != "accepted")
+                    {
+                        <div 
+                            class="status-box danger-bg"
+                        >
+                            <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
+                                <img src="assets/svgs/danger.svg" alt="ikona uzytkownika">
+                            </div> 
+                        
+                            <div class="status-box-text">
+                                <h4 class="danger-text-color">@Localizer["ReservationDanger"]</h4>
+                                <span>@Localizer["ReservationDangerInfo"]</span>
+                            </div>
+                        </div>
+                    }
+                    
+                </div>
+                
+                <div class="guest-info">
+                    <div class="box-text">
+                        <img src="assets/svgs/user.svg" alt="ikona uzytkownika" class="box-text-icon">
+                        <b class="box-text-title">@Localizer["ClientInfoTitle"]</b>
+                    </div>
+
+                    <div class="guest-details-grid">
+                        <div class="guest-detail-item">
+                            <span class="detail-label">@Localizer["NameLastName"]</span>
+                            <span class="detail-value">@_summary?.Client?.FirstName @_summary?.Client?.LastName</span>
+                        </div>
+                        <div class="guest-detail-item">
+                            <span class="detail-label">@Localizer["Email"]</span>
+                            <span class="detail-value">@_summary?.Client?.Email</span>
+                        </div>
+                        <div class="guest-detail-item">
+                            <span class="detail-label">@Localizer["Phone"]</span>
+                            <span class="detail-value">@_summary?.Client?.Phone</span>
+                        </div>
+                        <div class="guest-detail-item">
+                            <span class="detail-label">@Localizer["Address"]</span>
+                            <span class="detail-value">@_summary?.Client?.Street @_summary?.Client?.City @_summary?.Client?.ZipCode</span>
+                        </div>
+                    </div>
+                    
+                    @if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
+                    {
+                        <button class="button" @onclick="GoToClientInfo">@Localizer["Edit"]</button>   
+                    }
+                </div>
+                
+                <div class="guest-info">
+                    <div class="box-text">
+                        <img src="assets/svgs/calendar-2.svg" alt="ikona uzytkownika" class="box-text-icon">
+                        <b class="box-text-title">@Localizer["ReservationDetails"]</b>
+                    </div>
+
+                    <div class="guest-details-grid">
+                        <div class="guest-detail-item">
+                            <span class="detail-label">@Localizer["CheckIn"]</span>
+                            <span class="detail-value">@_summary?.StartRequest?.StartDate.ToString("yyyy-MM-dd")</span>
+                        </div>
+                        <div class="guest-detail-item">
+                            <span class="detail-label">@Localizer["CheckOut"]</span>
+                            <span class="detail-value">@_summary?.StartRequest?.EndDate.ToString("yyyy-MM-dd")</span>
+                        </div>
+                        <div class="guest-detail-item">
+                            <span class="detail-label">@Localizer["Guests"]</span>
+                            <span class="detail-value">@(_summary?.StartRequest?.Adults + _summary?.StartRequest?.Children)</span>
+                        </div>
+                        <div class="guest-detail-item">
+                            <span class="detail-label">@Localizer["ConfirmationNumber"]</span>
+                            <span class="detail-value">@_summary?.IdoReservationId</span>
+                        </div>
+                    </div>
+                </div>
+                
+                @* @if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid") *@
+                @* { *@
+                @* <button @onclick="GoToPayment" class="button-pending"> *@
+                @*     <img src="assets/svgs/tpay.svg" alt="Tpay icon"/> *@
+                @*     Kliknij, aby opłacić rezerwacje *@
+                @* </button> *@
+                @* } *@
+                
+            </div>
             
-            @if (@_summary.IdoStatus == "accepted" && @_summary.PaymentStatus == "Paid")
-            {
-                <p class="text-success">Twoja rezerwacja została potwierdzona i opłacona.</p>
-                <h4> StayWell Link: <a href="@staywellLink">@staywellLink</a></h4>
-            }
-            else if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
-            {
-                <p class="text-warning">Twoja rezerwacja została potwierdzona, ale nie została jeszcze opłacona.</p>
-            <Button @onclick="GoToPayment">Przejdź dalej</Button>
-            }
-            else if (@_summary.IdoStatus != "accepted")
-            {
-                <p class="text-danger">Twoja rezerwacja nie została jeszcze potwierdzona.</p>
-            }
-            
+            <SummaryBox
+                Summary="_summary"
+                Apartment="_apartment"
+                />
         </div>
+        
     }
 </div>
 
@@ -51,6 +180,7 @@
     private ReservationSummaryDto? _summary;
     private bool _loading = true;
     private string? _error;
+    private ApartmentObject? _apartment;
     
     //mockup linka 
     private string? staywellLink => $"https://staywell.rentoom.pl/{ReservationTokenGuid}/HomePage";
@@ -60,6 +190,13 @@
         try
         {
             _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+            if (_summary != null)
+            {
+                if (_summary.StartRequest?.ObjectId != null)
+                {
+                    _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -74,5 +211,10 @@
     private void GoToPayment()
     {
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
+    }
+    
+    private void GoToClientInfo()
+    {
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/dane-klienta");
     }
 }

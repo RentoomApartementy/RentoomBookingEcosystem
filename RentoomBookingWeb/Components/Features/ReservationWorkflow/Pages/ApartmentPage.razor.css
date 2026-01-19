@@ -290,11 +290,33 @@
     color: #1F5A41;
 }
 
+.text-lg {
+    font-size: 2.5rem;    
+}
+
 .addon-list-container {
-    border: 1px solid #e0e0e0;
     background-color: white;
     width: 50%;
     border-radius: 5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: .5rem;
+    position: relative;
+}
+
+.additional-price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d7f1e5;
+    color: #0c4128;
+    font-weight: bold;
+    padding: .1rem 1rem;
+    border-radius: 1rem;
+    border: #0c4128 solid 1px;
+    margin: -1rem 0;
 }
 
 @media (max-width: 810px) {
@@ -304,8 +326,6 @@
 }
 
 .addon-item {
-    padding: 12px 15px;
-    border-bottom: 1px solid #e0e0e0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -321,6 +341,16 @@
     cursor: pointer;
     margin: 0;
     width: 100%;
+    justify-content: space-between;
+    transition: background-color 0.2s ease-in;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid transparent;
+}
+
+.addon-label:hover {
+    background-color: #d7f1e5;
+    border: 1px solid #abefd0;
 }
 
 .addon-checkbox {
@@ -328,7 +358,7 @@
 }
 
 .addon-name {
-
+    user-select: none;
 }
 
 .summary-offer-price-wrapper {
@@ -341,16 +371,32 @@
 .summary-offer-price {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
     padding: .7rem 1rem;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
-    background-color: #f0f0f0;
+    background-color: #fff;
     gap: .5rem;
+    box-shadow: 0 0 8px rgba(139, 115, 68, 0.3);
 }
 
-@media (max-width: 810px) {
+.summary-offer-price-button-price {
+    font-size: 1.4rem;
+}
+
+.summary-offer-price-button {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.refundable {
+    border: #0c4128 2px solid;
+}
+
+@media (max-width: 1010px) {
     .summary-offer-price-wrapper {
         width: 80%;
         flex-direction: column;
@@ -365,4 +411,49 @@
     flex-direction: column;
     margin-top: .4rem;
     cursor: pointer;
+}
+
+.addon-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #8b7344; 
+    border-radius: 50%;       
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    outline: none;
+    vertical-align: middle;
+}
+
+.addon-checkbox:checked {
+    background-color: #4a6755; 
+    border-color: #8b7344;    
+}
+
+.addon-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 11px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px; 
+}
+
+.addon-checkbox:hover {
+    box-shadow: 0 0 5px rgba(139, 115, 68, 0.3);
+    border-width: 3px;
+}
+
+.price-box {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
 }

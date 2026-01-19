@@ -92,4 +92,13 @@
     <data name="SuggestedDateLoading" xml:space="preserve">
         <value>Check availability...</value>
     </data>
+    <data name="RefundableOfferText" xml:space="preserve">
+        <value>Cancellation up to 14 days before arrival is free of charge (100% refund). Cancellations made less than 14 days before arrival are non-refundable</value>
+    </data>
+    <data name="NonRefundableText" xml:space="preserve">
+        <value>The prepayment is non-refundable</value>
+    </data>
+    <data name="Loading" xml:space="preserve">
+        <value>Loading</value>
+    </data>
 </root>
