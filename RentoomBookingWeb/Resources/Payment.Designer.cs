@@ -350,5 +350,29 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("NotRefreshPage", resourceCulture);
             }
         }
+        
+        internal static string CheckEmailText {
+            get {
+                return ResourceManager.GetString("CheckEmailText", resourceCulture);
+            }
+        }
+        
+        internal static string SendMailText {
+            get {
+                return ResourceManager.GetString("SendMailText", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmationWill {
+            get {
+                return ResourceManager.GetString("ConfirmationWill", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmationHasBeenSent {
+            get {
+                return ResourceManager.GetString("ConfirmationHasBeenSent", resourceCulture);
+            }
+        }
     }
 }

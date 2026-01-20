@@ -171,4 +171,16 @@
     <data name="NotRefreshPage" xml:space="preserve">
         <value />
     </data>
+    <data name="CheckEmailText" xml:space="preserve">
+        <value />
+    </data>
+    <data name="SendMailText" xml:space="preserve">
+        <value />
+    </data>
+    <data name="ConfirmationWill" xml:space="preserve">
+        <value />
+    </data>
+    <data name="ConfirmationHasBeenSent" xml:space="preserve">
+        <value />
+    </data>
 </root>

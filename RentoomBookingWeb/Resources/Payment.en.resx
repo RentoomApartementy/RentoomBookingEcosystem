@@ -123,7 +123,7 @@
         <value>Guests</value>
     </data>
     <data name="ConfirmationNumber" xml:space="preserve">
-        <value>Confirmation number</value>
+        <value>Reservation number</value>
     </data>
     <data name="PaymentSuccessful" xml:space="preserve">
         <value>Payment successful!</value>
@@ -163,5 +163,17 @@
     </data>
     <data name="NotRefreshPage" xml:space="preserve">
         <value>Please do not refresh the page</value>
+    </data>
+    <data name="CheckEmailText" xml:space="preserve">
+        <value>Checking email...</value>
+    </data>
+    <data name="SendMailText" xml:space="preserve">
+        <value>Mail send</value>
+    </data>
+    <data name="ConfirmationWill" xml:space="preserve">
+        <value>Confirmation will be sent to:</value>
+    </data>
+    <data name="ConfirmationHasBeenSent" xml:space="preserve">
+        <value>Confirmation has been sent to:</value>
     </data>
 </root>
