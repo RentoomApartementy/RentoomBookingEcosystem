@@ -231,14 +231,34 @@
                 if (_definedAddons !=null){
                     var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
                     var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL"); 
+                    var paymentType = fadesc?.PaymentTypeShortDescription; // --- ZMIANA: Pobranie typu płatności do zmiennej dla czytelności
+
                     @if (fa != null)
                     {
                         <div class="addon-item">
                             <label class="addon-label">
-                                <span class="addon-name">@Localizer[fadesc?.Name ?? "Dodatek"]</span>
+                                <span class="addon-name">
+                                    @* @Localizer[fadesc?.Name ?? "Dodatek"] *@
+                                    @fadesc?.Name
+                                    
+                                    @* --- ZMIANA: Wyświetlanie inputa dla typu "Za ilość" tylko gdy dodatek jest zaznaczony *@
+                                    @if (IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <div class="addon-quantity-wrapper" style="margin-top: 5px;" @onclick:stopPropagation="true" @onclick:preventDefault="true">
+                                            <small style="margin-right: 5px;">Ilość:</small>
+                                            <input type="number" 
+                                                   class="form-control form-control-sm" 
+                                                   style="width: 70px; display: inline-block;"
+                                                   min="1" 
+                                                   value="@GetSelectedAddonQuantity(addon.Id)" 
+                                                   @onchange="@(e => UpdateAddonQuantity(addon.Id, e.Value))" />
+                                        </div>
+                                    }
+                                </span>
                                 <span class="price-box">
+                                    <span style="opacity: 0.5;">(@fadesc.PaymentTypeShortDescription)</span>
                                     <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
-                                
+
                                     <input type="checkbox" 
                                            class="addon-checkbox" 
                                            checked="@(IsAddonSelected(addon.Id))"
@@ -268,7 +288,8 @@
     @if (TotalAddonsPrice > 0)
     {
         <div class="additional-price">
-            +@TotalAddonsPrice zł
+            @* --- ZMIANA: Wyświetlanie całkowitej ceny dodatków *@
+            +@TotalAddonsPrice.ToString("N2") zł
         </div>
     }
     
@@ -353,7 +374,53 @@
     private List<DefinedAddonEntity>? _definedAddons = null;
 
     private List<SelectedAddonDto> _selectedAddons = new();
-    private float TotalAddonsPrice => _selectedAddons.Sum(a => a.Price * a.Quantity);
+    
+    // --- ZMIANA: Całkowicie przebudowana logika obliczania ceny dodatków
+    private float TotalAddonsPrice 
+    {
+        get
+        {
+            float total = 0;
+            if (_selectedAddons == null || _definedAddons == null) return 0;
+
+            foreach (var selected in _selectedAddons)
+            {
+                var def = _definedAddons.FirstOrDefault(d => d.IdoBookingId == selected.AddonId);
+                var details = def?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == "PL");
+                
+                if (details == null) continue;
+
+                var type = details.PaymentTypeShortDescription?.ToLower().Trim() ?? "";
+                
+                // Logika wyliczania ceny na podstawie typu płatności
+                if (type.Contains("za cały pobyt"))
+                {
+                    total += selected.Price; // Jednorazowo (Quantity powinno być 1)
+                }
+                else if (type.Contains("za osobę za każdą dobę") || type.Contains("za osobę za dobę"))
+                {
+                    // Cena * Osoby * Noce
+                    total += selected.Price * selected.Persons * selected.Nights;
+                }
+                else if (type.Contains("za dobę"))
+                {
+                    // Cena * Noce
+                    total += selected.Price * selected.Nights;
+                }
+                else if (type.Contains("za ilość"))
+                {
+                    // Cena * Ilość wpisana przez usera
+                    total += selected.Price * selected.Quantity;
+                }
+                else 
+                {
+                    // Fallback (domyślne zachowanie jak 'za cały pobyt' lub wg quantity)
+                    total += selected.Price * selected.Quantity;
+                }
+            }
+            return total;
+        }
+    }
 
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
@@ -369,6 +436,7 @@
         CultureInfo.CurrentUICulture.Name
     ) ?? CultureInfo.CurrentUICulture.Name;
 
+    // --- Metody SEO i Initializacja (bez zmian) ---
     private string GetSeoTitle()
     {
         if (_apartment == null) return "Szczegóły apartamentu - Rentoom";
@@ -450,14 +518,17 @@
             var diff = (e.ToDateTime(TimeOnly.MinValue) - s.ToDateTime(TimeOnly.MinValue)).Days;
             if (diff > 0) nights = diff;
         }
+        
+        // Parsowanie liczby osób (zakładam sumę dorosłych i dzieci jako podstawę lub tylko dorośli zależnie od logiki biznesowej)
+        int persons = (int.TryParse(Adults, out var a) ? a : 1) + (int.TryParse(Children, out var c) ? c : 0);
 
         var newDto = new SelectedAddonDto
         {
             AddonId = addonId,
-            Quantity = 1, 
+            Quantity = 1, // Domyślnie 1 sztuka
             Price = definition != null ? (float)definition.PriceGross : 0f, 
             Vat = 8f,
-            Persons = int.TryParse(Adults, out var a) ? a : 1, 
+            Persons = persons, 
             Nights = nights 
         };
 
@@ -468,6 +539,31 @@
     {
         if (!addonId.HasValue) return false;
         return _selectedAddons.Any(a => a.AddonId == addonId.Value);
+    }
+    
+    // --- ZMIANA: Helper do pobierania aktualnej ilości wybranego dodatku do inputa
+    private int GetSelectedAddonQuantity(int? addonId)
+    {
+        if (!addonId.HasValue) return 1;
+        var item = _selectedAddons.FirstOrDefault(x => x.AddonId == addonId.Value);
+        return item?.Quantity ?? 1;
+    }
+
+    // --- ZMIANA: Obsługa zmiany wartości w inpucie "Za ilość"
+    private void UpdateAddonQuantity(int? addonId, object? value)
+    {
+        if (!addonId.HasValue || value == null) return;
+        
+        if (int.TryParse(value.ToString(), out int quantity) && quantity > 0)
+        {
+            var item = _selectedAddons.FirstOrDefault(x => x.AddonId == addonId.Value);
+            if (item != null)
+            {
+                item.Quantity = quantity;
+                // Wymuszenie odświeżenia UI po zmianie ilości, aby przeliczyć cenę
+                StateHasChanged();
+            }
+        }
     }
 
     private bool IsAddonMandatory(bool? isOptional)
@@ -602,6 +698,8 @@
         EndDate = endDate;
         Adults = adults;
         Children = children;
+        
+        RefreshAddonsParams();
 
         if (_apartment != null)
         {
@@ -647,7 +745,7 @@
             Adults = adults,
             Children = children,
             SelectedOfferType = selectedOffer?.OfferType ?? offerType,
-            OfferPrice = selectedOffer?.Price + (decimal) TotalAddonsPrice ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice + (decimal) TotalAddonsPrice,
+            OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
             Currency = "PLN",
             SelectedAddons = _selectedAddons
         };
@@ -694,5 +792,30 @@
         }
 
         return offers.FirstOrDefault();
+    }
+    
+    private void RefreshAddonsParams()
+    {
+        // 1. Oblicz aktualną liczbę nocy
+        int currentNights = 1;
+        if (TryParseDate(StartDate, out var s) && TryParseDate(EndDate, out var e))
+        {
+            var diff = (e.ToDateTime(TimeOnly.MinValue) - s.ToDateTime(TimeOnly.MinValue)).Days;
+            if (diff > 0) currentNights = diff;
+        }
+
+        // 2. Oblicz aktualną liczbę osób
+        int currentPersons = (int.TryParse(Adults, out var a) ? a : 1) + 
+                             (int.TryParse(Children, out var c) ? c : 0);
+
+        // 3. Zaktualizuj wszystkie wybrane już dodatki
+        foreach (var addon in _selectedAddons)
+        {
+            addon.Nights = currentNights;
+            addon.Persons = currentPersons;
+        }
+    
+        // 4. Wymuś odświeżenie widoku (ceny się zmienią)
+        StateHasChanged(); 
     }
 }

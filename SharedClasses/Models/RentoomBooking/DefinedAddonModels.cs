@@ -26,6 +26,7 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string PaymentTypeDescription { get; set; } = string.Empty;
+        public string PaymentTypeShortDescription { get; set; } = string.Empty;
     }
 
 }
