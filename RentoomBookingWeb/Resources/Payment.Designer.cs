@@ -374,5 +374,11 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("ConfirmationHasBeenSent", resourceCulture);
             }
         }
+        
+        internal static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
     }
 }
