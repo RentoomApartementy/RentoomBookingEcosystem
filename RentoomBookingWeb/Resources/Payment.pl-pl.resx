@@ -183,4 +183,13 @@
     <data name="Loading" xml:space="preserve">
         <value>Ładowanie...</value>
     </data>
+    <data name="NoGusInfo" xml:space="preserve">
+        <value>Nie znaleziono danych dla podanego numeru NIP.</value>
+    </data>
+    <data name="GusError" xml:space="preserve">
+        <value>Błąd przy pobieraniu danych z GUS</value>
+    </data>
+    <data name="NoNipError" xml:space="preserve">
+        <value>Proszę wpisać numer NIP</value>
+    </data>
 </root>

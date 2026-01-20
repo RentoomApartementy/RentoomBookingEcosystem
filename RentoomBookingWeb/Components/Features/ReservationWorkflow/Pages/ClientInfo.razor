@@ -167,7 +167,7 @@
         var nip = _form.Invoice.TaxNumber;
         if (string.IsNullOrWhiteSpace(nip))
         {
-            _error = "Proszę wpisać numer NIP.";
+            _error = Localizer["NoNipError"];
             return;
         }
 
@@ -195,13 +195,14 @@
             }
             else
             {
-                _error = "Nie znaleziono danych dla podanego numeru NIP.";
+                _error = Localizer["NoGusInfo"];
             }
         }
         catch (Exception ex)
         {
-            _error = $"Błąd: {ex.Message}"; 
-            Console.WriteLine(ex.ToString());
+            // _error = $"Błąd: {ex.Message}"; 
+            // Console.WriteLine(ex.ToString());
+            _error = Localizer["GusError"];
         }
         finally
         {

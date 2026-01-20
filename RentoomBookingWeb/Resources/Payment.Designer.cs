@@ -380,5 +380,23 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
+        
+        internal static string NoGusInfo {
+            get {
+                return ResourceManager.GetString("NoGusInfo", resourceCulture);
+            }
+        }
+        
+        internal static string GusError {
+            get {
+                return ResourceManager.GetString("GusError", resourceCulture);
+            }
+        }
+        
+        internal static string NoNipError {
+            get {
+                return ResourceManager.GetString("NoNipError", resourceCulture);
+            }
+        }
     }
 }
