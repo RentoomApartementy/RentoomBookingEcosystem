@@ -231,30 +231,34 @@
                 if (_definedAddons !=null){
                     var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
                     var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL"); 
-                    var paymentType = fadesc?.PaymentTypeShortDescription; // --- ZMIANA: Pobranie typu płatności do zmiennej dla czytelności
+                    var paymentType = fadesc?.PaymentTypeShortDescription;
 
                     @if (fa != null)
                     {
                         <div class="addon-item">
-                            <label class="addon-label">
+                            <div class="addon-label" @onclick="@(() => { if (!IsAddonMandatory(addon.Optional)) ToggleAddon(addon.Id, !IsAddonSelected(addon.Id)); })">
+        
                                 <span class="addon-name">
-                                    @* @Localizer[fadesc?.Name ?? "Dodatek"] *@
                                     @fadesc?.Name
-                                    
-                                    @* --- ZMIANA: Wyświetlanie inputa dla typu "Za ilość" tylko gdy dodatek jest zaznaczony *@
+            
                                     @if (IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        <div class="addon-quantity-wrapper" style="margin-top: 5px;" @onclick:stopPropagation="true" @onclick:preventDefault="true">
-                                            <small style="margin-right: 5px;">Ilość:</small>
-                                            <input type="number" 
-                                                   class="form-control form-control-sm" 
-                                                   style="width: 70px; display: inline-block;"
-                                                   min="1" 
-                                                   value="@GetSelectedAddonQuantity(addon.Id)" 
-                                                   @onchange="@(e => UpdateAddonQuantity(addon.Id, e.Value))" />
+                                        var currentQty = GetSelectedAddonQuantity(addon.Id);
+                
+                                        <div class="quantity-selector" @onclick:stopPropagation="true" @onclick:preventDefault="true">
+                                            <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty - 1))">
+                                                <span>−</span>
+                                            </button>
+                    
+                                            <span class="quantity-value">@currentQty</span>
+                    
+                                            <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty + 1))">
+                                                <span>+</span>
+                                            </button>
                                         </div>
                                     }
                                 </span>
+        
                                 <span class="price-box">
                                     <span style="opacity: 0.5;">(@fadesc.PaymentTypeShortDescription)</span>
                                     <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
@@ -262,10 +266,10 @@
                                     <input type="checkbox" 
                                            class="addon-checkbox" 
                                            checked="@(IsAddonSelected(addon.Id))"
-                                           disabled="@(IsAddonMandatory(addon.Optional))"
-                                           @onchange="@(e => ToggleAddon(addon.Id, e.Value))" />
+                                           disabled="@(IsAddonMandatory(addon.Optional))" 
+                                           style="pointer-events: none; flex-shrink: 0;" />
                                 </span>
-                            </label>
+                            </div>
                         </div>
                     }
                     else
@@ -288,7 +292,6 @@
     @if (TotalAddonsPrice > 0)
     {
         <div class="additional-price">
-            @* --- ZMIANA: Wyświetlanie całkowitej ceny dodatków *@
             +@TotalAddonsPrice.ToString("N2") zł
         </div>
     }
@@ -375,7 +378,6 @@
 
     private List<SelectedAddonDto> _selectedAddons = new();
     
-    // --- ZMIANA: Całkowicie przebudowana logika obliczania ceny dodatków
     private float TotalAddonsPrice 
     {
         get
@@ -392,29 +394,24 @@
 
                 var type = details.PaymentTypeShortDescription?.ToLower().Trim() ?? "";
                 
-                // Logika wyliczania ceny na podstawie typu płatności
                 if (type.Contains("za cały pobyt"))
                 {
-                    total += selected.Price; // Jednorazowo (Quantity powinno być 1)
+                    total += selected.Price; 
                 }
                 else if (type.Contains("za osobę za każdą dobę") || type.Contains("za osobę za dobę"))
                 {
-                    // Cena * Osoby * Noce
                     total += selected.Price * selected.Persons * selected.Nights;
                 }
                 else if (type.Contains("za dobę"))
                 {
-                    // Cena * Noce
                     total += selected.Price * selected.Nights;
                 }
                 else if (type.Contains("za ilość"))
                 {
-                    // Cena * Ilość wpisana przez usera
                     total += selected.Price * selected.Quantity;
                 }
                 else 
                 {
-                    // Fallback (domyślne zachowanie jak 'za cały pobyt' lub wg quantity)
                     total += selected.Price * selected.Quantity;
                 }
             }
@@ -436,7 +433,6 @@
         CultureInfo.CurrentUICulture.Name
     ) ?? CultureInfo.CurrentUICulture.Name;
 
-    // --- Metody SEO i Initializacja (bez zmian) ---
     private string GetSeoTitle()
     {
         if (_apartment == null) return "Szczegóły apartamentu - Rentoom";
@@ -519,13 +515,12 @@
             if (diff > 0) nights = diff;
         }
         
-        // Parsowanie liczby osób (zakładam sumę dorosłych i dzieci jako podstawę lub tylko dorośli zależnie od logiki biznesowej)
         int persons = (int.TryParse(Adults, out var a) ? a : 1) + (int.TryParse(Children, out var c) ? c : 0);
 
         var newDto = new SelectedAddonDto
         {
             AddonId = addonId,
-            Quantity = 1, // Domyślnie 1 sztuka
+            Quantity = 1, 
             Price = definition != null ? (float)definition.PriceGross : 0f, 
             Vat = 8f,
             Persons = persons, 
@@ -541,7 +536,6 @@
         return _selectedAddons.Any(a => a.AddonId == addonId.Value);
     }
     
-    // --- ZMIANA: Helper do pobierania aktualnej ilości wybranego dodatku do inputa
     private int GetSelectedAddonQuantity(int? addonId)
     {
         if (!addonId.HasValue) return 1;
@@ -549,7 +543,6 @@
         return item?.Quantity ?? 1;
     }
 
-    // --- ZMIANA: Obsługa zmiany wartości w inpucie "Za ilość"
     private void UpdateAddonQuantity(int? addonId, object? value)
     {
         if (!addonId.HasValue || value == null) return;
@@ -560,7 +553,6 @@
             if (item != null)
             {
                 item.Quantity = quantity;
-                // Wymuszenie odświeżenia UI po zmianie ilości, aby przeliczyć cenę
                 StateHasChanged();
             }
         }
@@ -796,7 +788,6 @@
     
     private void RefreshAddonsParams()
     {
-        // 1. Oblicz aktualną liczbę nocy
         int currentNights = 1;
         if (TryParseDate(StartDate, out var s) && TryParseDate(EndDate, out var e))
         {
@@ -804,18 +795,15 @@
             if (diff > 0) currentNights = diff;
         }
 
-        // 2. Oblicz aktualną liczbę osób
         int currentPersons = (int.TryParse(Adults, out var a) ? a : 1) + 
                              (int.TryParse(Children, out var c) ? c : 0);
 
-        // 3. Zaktualizuj wszystkie wybrane już dodatki
         foreach (var addon in _selectedAddons)
         {
             addon.Nights = currentNights;
             addon.Persons = currentPersons;
         }
     
-        // 4. Wymuś odświeżenie widoku (ceny się zmienią)
         StateHasChanged(); 
     }
 }
