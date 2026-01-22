@@ -6,10 +6,27 @@
     width: 250px;
     flex-shrink: 0;
     align-self: flex-start;
-    position: sticky;
-    top: 100px;
     border-radius: .5rem;
     background-color: white;
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.filters-container::-webkit-scrollbar {
+    width: 6px;
+}
+.filters-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+.filters-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+.filters-container::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
 }
 
 .filters-title {
