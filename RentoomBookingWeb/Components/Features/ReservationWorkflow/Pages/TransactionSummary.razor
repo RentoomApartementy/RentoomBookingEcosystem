@@ -27,26 +27,26 @@
     
                 <h2 class="success-title">@Localizer["PaymentSuccessful"]</h2>
                 <p class="success-subtitle">@Localizer["PaymentSuccessfulText"]</p>
+                <p class="success-subtitle">@Localizer["ConfirmationNumber"]: @_summary?.IdoReservationId</p>
 
                 <button class="button" @onclick="NavigateToSummary">@Localizer["BackToSummary"]</button>
             </div>
 
-            // TODO - Michal - zrob to ladniej :)
-            <div class="email-status">
+            <div class="payment-success-card email-status">
                 @if (!string.IsNullOrEmpty(_emailError))
                 {
                     <p class="text-danger">@_emailError</p>
                 }
                 else if (_isCheckingEmail || _emailSent != true)
                 {
-                            <p class="success-title">Sprawdzamy e-mail…</p>
-                            <p class="success-subtitle">Potwierdzenie zostanie wysłane na: @(_summary?.Client?.Email)</p>
+                    <p class="success-title">@Localizer["CheckEmailText"]</p> 
+                    <p class="success-subtitle">@Localizer["ConfirmationWill"] @(_summary?.Client?.Email)</p>
                     
                 }
                 else
                 {
-                    <h2 class="success-title">Wysłano e-mail</h2>
-                    <p class="success-subtitle">Potwierdzenie wysłano na: @(_summary?.Client?.Email)</p>
+                    <h2 class="success-title">@Localizer["SendMailText"]</h2>
+                    <p class="success-subtitle">@Localizer["ConfirmationHasBeenSent"] @(_summary?.Client?.Email)</p>
                 }
             </div>
 
@@ -143,6 +143,7 @@
     
                 <h2 class="success-title">@Localizer["PaymentFailed"]</h2>
                 <p class="success-subtitle">@Localizer["PaymentFailedText"]</p>
+                <p class="success-subtitle">@Localizer["ConfirmationNumber"]: @_summary?.IdoReservationId</p>
 
                 <button class="button-info" @onclick="RetryPayment">@Localizer["TryAgain"]</button>
             </div>

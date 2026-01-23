@@ -223,43 +223,92 @@
     ></SearchBar>
     
     <h3 id="confirm-reservation" class="header-text" style="margin-bottom: -1rem;">@Localizer["AdditionalOptions"]</h3>
+    
     <div class="addon-list-container">
         @if (_apartment?.Addons != null)
         {
             @foreach (var addon in _apartment.Addons)
             {
-                if (_definedAddons !=null){
+                if (_definedAddons != null)
+                {
                     var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
-                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL"); 
+                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL");
+                    var paymentType = fadesc?.PaymentTypeShortDescription;
+
                     @if (fa != null)
                     {
                         <div class="addon-item">
-                            <label class="addon-label">
-                                <span class="addon-name">@Localizer[fadesc?.Name ?? "Dodatek"]</span>
-                                <span class="price-box">
-                                    <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
+                            @* --- CLICK WRAPPER: Kliknięcie gdziekolwiek w div zaznacza/odznacza --- *@
+                            @* Naprawa błędu: Przekazujemy ID i Optional (int?, bool?) zamiast całego obiektu *@
+                            <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))">
                                 
+                                @* 1. KOLUMNA: NAZWA *@
+                                <div class="addon-info-col">
+                                    <span class="addon-name">@fadesc?.Name</span>
+                                    <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
+                                </div>
+
+                                @* 2. KOLUMNA: STEPPER (Ilość) *@
+                                <div class="addon-quantity-col @((IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase)) ? "" : "empty")" 
+                                     @onclick:stopPropagation="true" 
+                                     @onclick:preventDefault="true">
+                                    
+                                    @if (IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        var currentQty = GetSelectedAddonQuantity(addon.Id);
+                                        
+                                        <div class="quantity-selector">
+                                            <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty - 1))">
+                                                <span>−</span>
+                                            </button>
+                                            
+                                            <span class="quantity-value">@currentQty</span>
+                                            
+                                            <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty + 1))">
+                                                <span>+</span>
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+
+                                @* 3. KOLUMNA: CENA I CHECKBOX *@
+                                <div class="price-box">
+                                    <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
+                                    
+                                    @* Checkbox jest tylko wizualny (pointer-events: none), steruje nim div rodzic *@
                                     <input type="checkbox" 
                                            class="addon-checkbox" 
                                            checked="@(IsAddonSelected(addon.Id))"
                                            disabled="@(IsAddonMandatory(addon.Optional))"
-                                           @onchange="@(e => ToggleAddon(addon.Id, e.Value))" />
-                                </span>
-                            </label>
+                                           readonly />
+                                </div>
+                            </div>
                         </div>
                     }
                     else
                     {
                         <div class="addon-item">
-                            <label class="addon-label">
+                            <div class="addon-label">
                                 <span class="addon-name-empty">Brak opisu dodatku</span>
-                            </label>
+                            </div>
                         </div>
                     }
                 }
                 else
                 {
-                    <div><span>@Localizer["Loading"]</span></div>
+                            <div class="skeleton-row">
+                                @* Lewa strona: imitacja nazwy (szerokość 50%) *@
+                                <div style="flex: 1;">
+                                    <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span>
+                                    <span class="skeleton-box" style="width: 30%; height: 12px;"></span>
+                                </div>
+                            
+                                @* Prawa strona: imitacja ceny i checkboxa *@
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <span class="skeleton-box" style="width: 60px; height: 16px;"></span>
+                                    <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span>
+                                </div>
+                            </div>
                 }
             }
         }
@@ -268,7 +317,7 @@
     @if (TotalAddonsPrice > 0)
     {
         <div class="additional-price">
-            +@TotalAddonsPrice zł
+            +@TotalAddonsPrice.ToString("N2") zł
         </div>
     }
     
@@ -353,7 +402,47 @@
     private List<DefinedAddonEntity>? _definedAddons = null;
 
     private List<SelectedAddonDto> _selectedAddons = new();
-    private float TotalAddonsPrice => _selectedAddons.Sum(a => a.Price * a.Quantity);
+    
+    private float TotalAddonsPrice 
+    {
+        get
+        {
+            float total = 0;
+            if (_selectedAddons == null || _definedAddons == null) return 0;
+
+            foreach (var selected in _selectedAddons)
+            {
+                var def = _definedAddons.FirstOrDefault(d => d.IdoBookingId == selected.AddonId);
+                var details = def?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == "PL");
+                
+                if (details == null) continue;
+
+                var type = details.PaymentTypeShortDescription?.ToLower().Trim() ?? "";
+                
+                if (type.Contains("za cały pobyt"))
+                {
+                    total += selected.Price; 
+                }
+                else if (type.Contains("za osobę za każdą dobę") || type.Contains("za osobę za dobę"))
+                {
+                    total += selected.Price * selected.Persons * selected.Nights;
+                }
+                else if (type.Contains("za dobę"))
+                {
+                    total += selected.Price * selected.Nights;
+                }
+                else if (type.Contains("za ilość"))
+                {
+                    total += selected.Price * selected.Quantity;
+                }
+                else 
+                {
+                    total += selected.Price * selected.Quantity;
+                }
+            }
+            return total;
+        }
+    }
 
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
@@ -450,6 +539,8 @@
             var diff = (e.ToDateTime(TimeOnly.MinValue) - s.ToDateTime(TimeOnly.MinValue)).Days;
             if (diff > 0) nights = diff;
         }
+        
+        int persons = (int.TryParse(Adults, out var a) ? a : 1) + (int.TryParse(Children, out var c) ? c : 0);
 
         var newDto = new SelectedAddonDto
         {
@@ -457,7 +548,7 @@
             Quantity = 1, 
             Price = definition != null ? (float)definition.PriceGross : 0f, 
             Vat = 8f,
-            Persons = int.TryParse(Adults, out var a) ? a : 1, 
+            Persons = persons, 
             Nights = nights 
         };
 
@@ -469,16 +560,59 @@
         if (!addonId.HasValue) return false;
         return _selectedAddons.Any(a => a.AddonId == addonId.Value);
     }
+    
+    private int GetSelectedAddonQuantity(int? addonId)
+    {
+        if (!addonId.HasValue) return 1;
+        var item = _selectedAddons.FirstOrDefault(x => x.AddonId == addonId.Value);
+        return item?.Quantity ?? 1;
+    }
+
+    private void UpdateAddonQuantity(int? addonId, object? value)
+    {
+        if (!addonId.HasValue || value == null) return;
+        
+        if (int.TryParse(value.ToString(), out int quantity))
+        {
+            var item = _selectedAddons.FirstOrDefault(x => x.AddonId == addonId.Value);
+
+            if (quantity > 0)
+            {
+                if (item != null)
+                {
+                    item.Quantity = quantity;
+                }
+            }
+            else
+            {
+                // Jeśli ilość spadnie do 0, usuwamy dodatek (odznaczamy go)
+                if (item != null)
+                {
+                    _selectedAddons.Remove(item);
+                }
+            }
+            StateHasChanged();
+        }
+    }
 
     private bool IsAddonMandatory(bool? isOptional)
     {
         return isOptional == false;
     }
 
-    private void ToggleAddon(int? addonId, object? checkedValue)
+    // --- ZMIANA: Wrapper używa teraz typów prostych (int?, bool?), 
+    // aby uniknąć problemu z typem 'Addon' ---
+    private void ToggleAddonWrapper(int? addonId, bool? optional)
+    {
+        if (IsAddonMandatory(optional)) return;
+        
+        // Wywołujemy ToggleAddon z odwróconą wartością zaznaczenia
+        ToggleAddon(addonId, !IsAddonSelected(addonId));
+    }
+
+    private void ToggleAddon(int? addonId, bool isChecked)
     {
         if (!addonId.HasValue) return;
-        var isChecked = (bool)(checkedValue ?? false);
 
         if (isChecked)
         {
@@ -602,6 +736,8 @@
         EndDate = endDate;
         Adults = adults;
         Children = children;
+        
+        RefreshAddonsParams();
 
         if (_apartment != null)
         {
@@ -647,7 +783,7 @@
             Adults = adults,
             Children = children,
             SelectedOfferType = selectedOffer?.OfferType ?? offerType,
-            OfferPrice = selectedOffer?.Price + (decimal) TotalAddonsPrice ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice + (decimal) TotalAddonsPrice,
+            OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
             Currency = "PLN",
             SelectedAddons = _selectedAddons
         };
@@ -694,5 +830,26 @@
         }
 
         return offers.FirstOrDefault();
+    }
+    
+    private void RefreshAddonsParams()
+    {
+        int currentNights = 1;
+        if (TryParseDate(StartDate, out var s) && TryParseDate(EndDate, out var e))
+        {
+            var diff = (e.ToDateTime(TimeOnly.MinValue) - s.ToDateTime(TimeOnly.MinValue)).Days;
+            if (diff > 0) currentNights = diff;
+        }
+
+        int currentPersons = (int.TryParse(Adults, out var a) ? a : 1) + 
+                             (int.TryParse(Children, out var c) ? c : 0);
+
+        foreach (var addon in _selectedAddons)
+        {
+            addon.Nights = currentNights;
+            addon.Persons = currentPersons;
+        }
+    
+        StateHasChanged(); 
     }
 }

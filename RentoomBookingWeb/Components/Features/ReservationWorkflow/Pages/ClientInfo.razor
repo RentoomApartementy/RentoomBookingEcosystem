@@ -1,14 +1,15 @@
-@page "/rezerwuj/{ReservationTokenGuid:guid}/dane-klienta/";
-@using RentoomBooking.SharedClasses.Models.IdoBooking;
-@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@page "/rezerwuj/{ReservationTokenGuid:guid}/dane-klienta/"
+@using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
-@inject IApartmentsService ApartmentsService;
-@inject IReservationWorkflowService ReservationWorkflowService;
-@inject NavigationManager Navigation;
-@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components;
-@using Microsoft.Extensions.Localization;
-@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
+@using RentoomBookingWeb.Services
+@inject IApartmentsService ApartmentsService
+@inject IReservationWorkflowService ReservationWorkflowService
+@inject IGusService GusService
+@inject NavigationManager Navigation
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
 
 <PageTitle>Płatność</PageTitle>
 
@@ -78,7 +79,9 @@
                                 <small>NIP</small>
                                 <div class="">
                                     <Input Placeholder="NIP" IsFull="true" @bind-Value="_form.Invoice.TaxNumber"/>
-                                    <small class="download-nip-button">@Localizer["ClickToDownloadInfo"]</small>
+                                    <small class="download-nip-button" @onclick="DownloadGusDataAsync" style="cursor: pointer; color: var(--primary);">
+                                        @(_isFetchingGus ? Localizer["Loading"] : Localizer["ClickToDownloadInfo"])
+                                    </small>
                                 </div>
                             </div>
                             <div class="input-wrapper">
@@ -137,6 +140,7 @@
     private PaymentFormModel _form = new();
     private EditContext _editContext = default!;
     private bool _isSaving;
+    private bool _isFetchingGus;
     private string? _error;
     private ReservationSummaryDto? _summary;
     
@@ -153,6 +157,56 @@
             {
                 _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
             }
+        }
+    }
+
+    private async Task DownloadGusDataAsync()
+    {
+        if (_isFetchingGus) return;
+        
+        var nip = _form.Invoice.TaxNumber;
+        if (string.IsNullOrWhiteSpace(nip))
+        {
+            _error = Localizer["NoNipError"];
+            return;
+        }
+
+        _isFetchingGus = true;
+        _error = null;
+
+        try
+        {
+            var data = await GusService.GetCompanyInfoByNipAsync(nip);
+
+            if (data != null)
+            {
+                _form.Invoice.CompanyName = data.Nazwa;
+                _form.Invoice.City = data.Miejscowosc;
+                _form.Invoice.ZipCode = data.KodPocztowy;
+                _form.Invoice.Street = $"{data.Ulica} {data.NrNieruchomosci}".Trim();
+                
+                if (!string.IsNullOrEmpty(data.NrLokalu))
+                {
+                    _form.Invoice.Street += $"/{data.NrLokalu}";
+                }
+                
+                _form.Invoice.Street = _form.Invoice.Street.Trim();
+                _error = null;
+            }
+            else
+            {
+                _error = Localizer["NoGusInfo"];
+            }
+        }
+        catch (Exception ex)
+        {
+            // _error = $"Błąd: {ex.Message}"; 
+            // Console.WriteLine(ex.ToString());
+            _error = Localizer["GusError"];
+        }
+        finally
+        {
+            _isFetchingGus = false;
         }
     }
 
