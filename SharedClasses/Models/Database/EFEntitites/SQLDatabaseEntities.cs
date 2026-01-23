@@ -21,7 +21,7 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("payload", TypeName = "jsonb")]
         public string Payload { get; set; } = string.Empty;
 
-        [Column("updated_at")]
+        [Column("updated_at")] 
         public DateTime UpdatedAt { get; set; }
             = DateTime.UtcNow;
     }
