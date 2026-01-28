@@ -11,8 +11,7 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
 
-<article @ref="_elementRef" 
-         class="apartment-card" 
+<article class="apartment-card" 
          style="@(DisableForGoToReservation ? "cursor: default;" : "")"
          itemscope itemtype="https://schema.org/Apartment">
     <header>
@@ -33,6 +32,8 @@
                             alt="@Item?.Name"
                             itemprop="photo"
                             class="apartment-image" 
+                            loading="lazy"
+                            decoding="async"
                         />
                     </div>
                 }
@@ -44,7 +45,9 @@
                             alt="@Item?.Name"
                             title="@Item?.Name"
                             itemprop="photo"
-                            class="apartment-image" 
+                            class="apartment-image"
+                            loading="lazy"
+                            decoding="async"
                         />
                     </div>
                 }
@@ -230,10 +233,7 @@
     private int? _bedsCount = null;
     private string? _detailsUrl;
     
-    private IJSObjectReference? _jsModule;
-    private DotNetObjectReference<Apartment>? _objRef;
-
-    private ElementReference _elementRef;
+    // Usunąłem zmienne JS Interop (_jsModule, _objRef, _elementRef)
 
     protected override void OnInitialized()
     {
@@ -248,20 +248,24 @@
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && Item != null)
+        if (firstRender && Item != null && _objectMediums == null)
         {
-            _objRef = DotNetObjectReference.Create(this);
-            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
-            await _jsModule.InvokeVoidAsync("observeElement", _objRef, _elementRef);
+            // Fire-and-forget: nie blokujemy renderowania UI, po prostu startujemy zadanie
+            _ = LoadMediaAsync();
         }
     }
     
-    [JSInvokable]
-    public async Task LoadMedia()
+    private async Task LoadMediaAsync()
     {
-        await GetObjectMedia();
-     
-        await InvokeAsync(StateHasChanged);
+        try
+        {
+            await GetObjectMedia();
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading media: {ex.Message}");
+        }
     }
 
     private async Task GetObjectMedia()
@@ -291,44 +295,44 @@
     }
 
     private void CalculateDetailsUrl()
-{
-    if (DisableForGoToReservation || Item == null)
     {
-        _detailsUrl = null;
-        return;
+        if (DisableForGoToReservation || Item == null)
+        {
+            _detailsUrl = null;
+            return;
+        }
+
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+        string? s = queryParams.TryGetValue("startDate", out var sVal) ? sVal.ToString() : null;
+        string? e = queryParams.TryGetValue("endDate", out var eVal) ? eVal.ToString() : null;
+        string? a = queryParams.TryGetValue("adults", out var aVal) ? aVal.ToString() : null;
+        string? c = queryParams.TryGetValue("children", out var cVal) ? cVal.ToString() : null;
+
+        string? finalStart = !string.IsNullOrEmpty(StartDate) ? StartDate : s;
+        string? finalEnd = !string.IsNullOrEmpty(EndDate) ? EndDate : e;
+        string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : a;
+        string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : c;
+
+        string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
+
+        if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd) || 
+            !string.IsNullOrEmpty(finalAdults) || !string.IsNullOrEmpty(finalChildren))
+        {
+            var segments = new List<string>();
+            segments.Add(finalStart ?? "null");
+            segments.Add(finalEnd ?? "null");
+            segments.Add(finalAdults ?? "1");
+            segments.Add(finalChildren ?? "0");
+
+            _detailsUrl = $"{baseUrl}/{string.Join("/", segments)}";
+        }
+        else
+        {
+            _detailsUrl = baseUrl;
+        }
+
+        _detailsUrl = _detailsUrl.Replace("//", "/");
     }
-
-    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-    var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-
-    string? s = queryParams.TryGetValue("startDate", out var sVal) ? sVal.ToString() : null;
-    string? e = queryParams.TryGetValue("endDate", out var eVal) ? eVal.ToString() : null;
-    string? a = queryParams.TryGetValue("adults", out var aVal) ? aVal.ToString() : null;
-    string? c = queryParams.TryGetValue("children", out var cVal) ? cVal.ToString() : null;
-
-    string? finalStart = !string.IsNullOrEmpty(StartDate) ? StartDate : s;
-    string? finalEnd = !string.IsNullOrEmpty(EndDate) ? EndDate : e;
-    string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : a;
-    string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : c;
-
-    string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
-
-    if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd) || 
-        !string.IsNullOrEmpty(finalAdults) || !string.IsNullOrEmpty(finalChildren))
-    {
-        var segments = new List<string>();
-        segments.Add(finalStart ?? "null");
-        segments.Add(finalEnd ?? "null");
-        segments.Add(finalAdults ?? "1");
-        segments.Add(finalChildren ?? "0");
-
-        _detailsUrl = $"{baseUrl}/{string.Join("/", segments)}";
-    }
-    else
-    {
-        _detailsUrl = baseUrl;
-    }
-
-    _detailsUrl = _detailsUrl.Replace("//", "/");
-}
 }

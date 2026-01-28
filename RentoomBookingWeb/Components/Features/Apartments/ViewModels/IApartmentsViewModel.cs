@@ -22,6 +22,8 @@ public interface IApartmentsViewModel
     string Adults { get; set; }
     string Children { get; set; }
     string Rooms { get; set; }
+    int? FilterMinPrice { get; }
+    int? FilterMaxPrice { get; }
 
     int MinOfferPrice { get; }
     int MaxOfferPrice { get; }
