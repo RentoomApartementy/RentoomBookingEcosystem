@@ -101,4 +101,7 @@
     <data name="Loading" xml:space="preserve">
         <value>Ładowanie</value>
     </data>
+    <data name="MandatoryOptions" xml:space="preserve">
+        <value>Obowiązkowe opcje</value>
+    </data>
 </root>

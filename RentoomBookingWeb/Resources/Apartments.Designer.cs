@@ -206,5 +206,11 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("Reset", resourceCulture);
             }
         }
+        
+        internal static string MandatoryOptions {
+            get {
+                return ResourceManager.GetString("MandatoryOptions", resourceCulture);
+            }
+        }
     }
 }

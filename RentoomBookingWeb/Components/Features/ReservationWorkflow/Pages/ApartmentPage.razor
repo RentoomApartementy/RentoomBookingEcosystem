@@ -231,12 +231,12 @@
         OnSearch="@(async query => await HandleSearch(query))"
     ></SearchBar>
     
-    <h3 id="confirm-reservation" class="header-text" style="margin-bottom: -1rem;">@Localizer["AdditionalOptions"]</h3>
-    
-    <div class="addon-list-container">
-        @if (_apartment?.Addons != null)
-        {
-            @foreach (var addon in _apartment.Addons)
+    @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional == false))
+    {
+        <h3 id="confirm-reservation" class="header-text" style="margin-bottom: -1rem;">@Localizer["MandatoryOptions"]</h3>
+        
+        <div class="addon-list-container">
+            @foreach (var addon in _apartment.Addons.Where(x => x.Optional == false))
             {
                 if (_definedAddons != null)
                 {
@@ -253,24 +253,86 @@
                                     <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
                                 </div>
 
-                                <div class="addon-quantity-col @((IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase)) ? "" : "empty")" 
-                                     @onclick:stopPropagation="true" 
-                                     @onclick:preventDefault="true">
-                                    
-                                    @if (IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        var currentQty = GetSelectedAddonQuantity(addon.Id);
-                                        <div class="quantity-selector">
-                                            <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty - 1))">
-                                                <span>−</span>
-                                            </button>
-                                            <span class="quantity-value">@currentQty</span>
-                                            <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty + 1))">
-                                                <span>+</span>
-                                            </button>
-                                        </div>
-                                    }
+                                <div class="addon-quantity-col empty" @onclick:stopPropagation="true" @onclick:preventDefault="true">
                                 </div>
+
+                                <div class="price-box">
+                                    <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
+                                    @* <input type="checkbox"  *@
+                                    @*        class="addon-checkbox"  *@
+                                    @*        checked="@(IsAddonSelected(addon.Id))" *@
+                                    @*        disabled="true" *@
+                                    @*        readonly /> *@
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="addon-item">
+                            <div class="addon-label">
+                                <span class="addon-name-empty">Brak opisu dodatku</span>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="skeleton-row">
+                        <div style="flex: 1;">
+                            <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span>
+                            <span class="skeleton-box" style="width: 30%; height: 12px;"></span>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span class="skeleton-box" style="width: 60px; height: 16px;"></span>
+                            <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+
+    @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional != false))
+    {
+        <h3 class="header-text" style="margin-bottom: -1rem;">@Localizer["AdditionalOptions"]</h3>
+        
+        <div class="addon-list-container">
+            @foreach (var addon in _apartment.Addons.Where(x => x.Optional != false))
+            {
+                if (_definedAddons != null)
+                {
+                    var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
+                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL");
+                    var paymentType = fadesc?.PaymentTypeShortDescription;
+
+                    @if (fa != null)
+                    {
+                        <div class="addon-item">
+                            <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))">
+                                <div class="addon-info-col">
+                                    <span class="addon-name">@fadesc?.Name</span>
+                                    <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
+                                </div>
+
+                                @* <div class="addon-quantity-col @((IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase)) ? "" : "empty")"  *@
+                                @*      @onclick:stopPropagation="true"  *@
+                                @*      @onclick:preventDefault="true"> *@
+                                @*      *@
+                                @*     @if (IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase)) *@
+                                @*     { *@
+                                @*         var currentQty = GetSelectedAddonQuantity(addon.Id); *@
+                                @*         <div class="quantity-selector"> *@
+                                @*             <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty - 1))"> *@
+                                @*                 <span>−</span> *@
+                                @*             </button> *@
+                                @*             <span class="quantity-value">@currentQty</span> *@
+                                @*             <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty + 1))"> *@
+                                @*                 <span>+</span> *@
+                                @*             </button> *@
+                                @*         </div> *@
+                                @*     } *@
+                                @* </div> *@
 
                                 <div class="price-box">
                                     <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
@@ -306,8 +368,8 @@
                     </div>
                 }
             }
-        }
-    </div>
+        </div>
+    }
     
     @if (TotalAddonsPrice > 0)
     {
@@ -393,7 +455,6 @@
     private bool _isExpanded = false;
     private PricingOffersResponse? _offersResponse;
 
-    // --- ZMIENIONO DOMYŚLNĄ WARTOŚĆ NA TRUE ---
     private bool _isOfferLoading = true;
 
     private AvailableTerm? _suggestionDates = null;
