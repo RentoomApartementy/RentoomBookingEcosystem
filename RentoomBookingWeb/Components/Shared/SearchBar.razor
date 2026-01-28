@@ -4,10 +4,13 @@
 @inject IStringLocalizer<SharedResources> Localizer;
 
 <div class="@GetClass()">
+    @* Zmieniono bindowanie na wewnętrzne zmienne _startDate, _endDate *@
     <DatePickerRange 
         IconPath="/assets/svgs/calendar.svg"
-        @bind-StartDateValue="StartDate"
-        @bind-EndDateValue="EndDate"
+        StartDateValue="@_startDate"
+        EndDateValue="@_endDate"
+        StartDateValueChanged="@(v => _startDate = v)"
+        EndDateValueChanged="@(v => _endDate = v)"
     />
     <InputWithModal IconPath="/assets/svgs/person.svg">
         <ChildContent>
@@ -16,7 +19,7 @@
                 {
                     <span style="color: black;">@CountPersons @Localizer["NumberOfGuests"]</span>
                 }
-                @if (string.IsNullOrEmpty(Adults) && string.IsNullOrEmpty(Children))
+                @if (string.IsNullOrEmpty(_adults) && string.IsNullOrEmpty(_children))
                 {
                     <span style="color: gray;">@Localizer["NumberOfPeople"]</span>
                 }
@@ -26,42 +29,91 @@
             <div>
                 <h6 class="dropdown-title">@Localizer["SelectNumberOfGuests"]</h6>
                 <div>
-                    <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["Adults"]" Type="number" @bind-Value="Adults" IsFull="true"/>
-                    <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["ChildrenUnder2"]" Type="number" @bind-Value="Children" IsFull="true" IsMarginTop="true"/>
+                    @* Bindowanie do prywatnych pól _adults i _children *@
+                    <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["Adults"]" Type="number" @bind-Value="_adults" IsFull="true"/>
+                    <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["ChildrenUnder2"]" Type="number" @bind-Value="_children" IsFull="true" IsMarginTop="true"/>
                 </div>
             </div>
         </DropdownContent>
     </InputWithModal>
     @if (IsRoom)
     {
-        <Input IconPath="/assets/svgs/bed.svg" Placeholder="@Localizer["NumberOfRooms"]" Type="number" @bind-Value="Rooms"/>   
+        <Input IconPath="/assets/svgs/bed.svg" Placeholder="@Localizer["NumberOfRooms"]" Type="number" @bind-Value="_rooms"/>   
     }
     <Button @onclick="Search">@Localizer["Search"]</Button>
 </div>
 
 @code {
     [Parameter] public bool IsSticky { get; set; } = false;
+    
+    // Parametry wejściowe (tylko do odczytu z góry)
     [Parameter] public string StartDate { get; set; } = "";
     [Parameter] public string EndDate { get; set; } = "";
     [Parameter] public string Adults { get; set; } = "";
     [Parameter] public string Children { get; set; } = "";
     [Parameter] public string Rooms { get; set; } = "";
+    
     [Parameter] public EventCallback<Dictionary<string, string>> OnSearch { get; set; }
     [Parameter] public bool IsRoom { get; set; } = true;
 
+    // Prywatne pola do edycji (stan formularza)
+    private string _startDate = "";
+    private string _endDate = "";
+    private string _adults = "";
+    private string _children = "";
+    private string _rooms = "";
+
+    // Pola do śledzenia zmian (aby nie nadpisywać formularza, gdy rodzic się tylko odświeża)
+    private string _lastStartDateParam = "";
+    private string _lastEndDateParam = "";
+    private string _lastAdultsParam = "";
+    private string _lastChildrenParam = "";
+    private string _lastRoomsParam = "";
+
+    protected override void OnInitialized()
+    {
+        // Inicjalizacja przy pierwszym załadowaniu
+        SyncParamsToFields();
+    }
+
+    protected override void OnParametersSet()
+    {
+        // Ta metoda wykonuje się ZAWSZE, gdy rodzic się przerysowuje.
+        // Sprawdzamy, czy parametry FAKTYCZNIE się zmieniły (np. zmiana URL), 
+        // czy to tylko odświeżenie tła (wtedy wartości będą takie same jak ostatnio).
+        
+        bool changed = false;
+
+        if (StartDate != _lastStartDateParam) { _startDate = StartDate; _lastStartDateParam = StartDate; changed = true; }
+        if (EndDate != _lastEndDateParam)     { _endDate = EndDate;     _lastEndDateParam = EndDate;     changed = true; }
+        if (Adults != _lastAdultsParam)       { _adults = Adults;       _lastAdultsParam = Adults;       changed = true; }
+        if (Children != _lastChildrenParam)   { _children = Children;   _lastChildrenParam = Children;   changed = true; }
+        if (Rooms != _lastRoomsParam)         { _rooms = Rooms;         _lastRoomsParam = Rooms;         changed = true; }
+    }
+
+    private void SyncParamsToFields()
+    {
+        _startDate = StartDate; _lastStartDateParam = StartDate;
+        _endDate = EndDate;     _lastEndDateParam = EndDate;
+        _adults = Adults;       _lastAdultsParam = Adults;
+        _children = Children;   _lastChildrenParam = Children;
+        _rooms = Rooms;         _lastRoomsParam = Rooms;
+    }
+
     private int CountPersons => 
-        (int.TryParse(Adults, out var a) ? a : 0) + 
-        (int.TryParse(Children, out var c) ? c : 0);
+        (int.TryParse(_adults, out var a) ? a : 0) + 
+        (int.TryParse(_children, out var c) ? c : 0);
 
     private async Task Search()
     {
+        // Budujemy zapytanie z naszych WEWNĘTRZNYCH pól (_adults itd.)
         var query = new Dictionary<string, string>
         {
-            { "startDate", StartDate },
-            { "endDate", EndDate },
-            { "rooms", Rooms },
-            { "adults", Adults },
-            { "children", Children }
+            { "startDate", _startDate },
+            { "endDate", _endDate },
+            { "rooms", _rooms },
+            { "adults", _adults },
+            { "children", _children }
         };
         
         if (OnSearch.HasDelegate)
