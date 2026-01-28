@@ -23,6 +23,7 @@
 @using RentoomBookingWeb.Components.Enums
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
 @inject IReservationWorkflowService ReservationWorkflowService
+@inject MediaCacheService MediaCache
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -695,7 +696,10 @@
     {
         if (_apartment != null)
         {
-            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>();
+            _objectMediums = await MediaCache.GetOrFetchMediaAsync(
+                _apartment.Id, 
+                async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>()
+            );
         }
     }
 
