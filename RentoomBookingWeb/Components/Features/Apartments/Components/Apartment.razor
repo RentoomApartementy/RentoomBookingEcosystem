@@ -246,19 +246,16 @@
         _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
         CalculateDetailsUrl();
         
-        // --- POPRAWKA: Próba natychmiastowego pobrania z cache ---
         if (Item?.Id != null)
         {
             if (MediaCache.TryGetCachedMedia(Item.Id, out var cachedMedia))
             {
-                // Mamy w cache -> Ustawiamy natychmiast
                 _objectMediums = cachedMedia;
                 _currentMediumIndex = 0;
                 _currentObjectMedium = _objectMediums?.FirstOrDefault();
-                _isMediaLoaded = true; // Oznaczamy jako załadowane, żeby LazyLoad nie uruchamiał się bez sensu
+                _isMediaLoaded = true; 
             }
         }
-        // ---------------------------------------------------------
     }
 
     protected override void OnParametersSet()
@@ -268,10 +265,6 @@
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Uruchamiamy Lazy Load TYLKO jeśli:
-        // 1. To pierwszy render
-        // 2. Item istnieje
-        // 3. I najważniejsze: NIE ZAŁADOWALIŚMY JESZCZE MEDIÓW (czyli nie było ich w cache)
         if (firstRender && Item != null && !_isMediaLoaded)
         {
             try 
@@ -283,7 +276,6 @@
             catch (Exception ex)
             {
                 Console.WriteLine($"Lazy load init failed: {ex.Message}");
-                // Fallback
                 _ = LoadMedia();
             }
         }
@@ -311,7 +303,6 @@
         var id = Item?.Id;
         if (id != null)
         {
-            // Pobieramy przez cache (jeśli nie było, to teraz pobierze z API i zapisze)
             _objectMediums = await MediaCache.GetOrFetchMediaAsync(
                 id.Value, 
                 async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>()
