@@ -1,23 +1,27 @@
-@using Microsoft.Extensions.Localization;
-@inject IStringLocalizer<HomePage> Localizer;
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<HomePage> Localizer
 
-<div class="city-container">
-    <h1 class="city-title">@Localizer["title3"]</h1>
-    <h2 class="city-subtitle">@Localizer["title3subtitle"]</h2>
+<section class="city-container">
+    <header class="city-header">
+        <h1 class="city-title">@Localizer["title3"]</h1>
+        <p class="city-subtitle">@Localizer["title3subtitle"]</p>
+    </header>
 
     <div class="city-content">
-        <img src="assets/images/torun.jpeg" alt="Apartamenty w Toruniu – panorama miasta" class="city-image" />
-
-        <div class="city-text">
-            <h4><strong>@Localizer["text1title"]</strong></h4>
-            <p>
-                @Localizer["text1description"]
-            </p>
-
-            <h4><strong>@Localizer["text1title2"]</strong></h4>
-            <p>
-                @Localizer["text1description2"]
-            </p>
+        <div class="city-image-wrapper">
+            <img src="assets/images/torun.jpeg" alt="Apartamenty w Toruniu – panorama miasta" class="city-image" loading="lazy" />
         </div>
+
+        <article class="city-text-column">
+            <div class="city-text-block">
+                <h3>@Localizer["text1title"]</h3>
+                <p>@Localizer["text1description"]</p>
+            </div>
+
+            <div class="city-text-block">
+                <h3>@Localizer["text1title2"]</h3>
+                <p>@Localizer["text1description2"]</p>
+            </div>
+        </article>
     </div>
-</div>
+</section>

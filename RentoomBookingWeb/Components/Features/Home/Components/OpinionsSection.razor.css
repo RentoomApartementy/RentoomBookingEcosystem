@@ -3,6 +3,13 @@
     color: #1F5A41;
     font-size: 2.2rem;
     margin-bottom: 5px;
+    font-weight: 500;
+}
+
+@media (max-width: 900px) {
+    .opinions-title {
+        font-size: 1.8rem;
+    }
 }
 
 .options-slider-wrapper {

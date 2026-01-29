@@ -6,7 +6,8 @@
     align-items: center;
     padding: 0 1rem;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
+    margin-top: 2rem;
 }
 
 .contact-title {
@@ -16,12 +17,18 @@
     margin-bottom: 5px;
 }
 
+@media (max-width: 900px) {
+    .contact-title {
+        font-size: 1.8rem;
+    }
+}
+
 .contact-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    font-weight: 400;
     text-align: center;
-    color: #1F5A41;
-    font-size: 1.2rem;
-    margin-bottom: 25px;
-    font-weight: normal;
+    margin-bottom: 2rem;
 }
 
 .contact-content {
