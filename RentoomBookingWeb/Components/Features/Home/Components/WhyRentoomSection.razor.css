@@ -1,55 +1,95 @@
-.city-container {
-    max-width: 1600px;
+.rentoom-container {
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
-    line-height: 1.6;
+    padding: 60px 20px;
     color: #333;
 }
 
-.city-title {
+.rentoom-header {
     text-align: center;
+    margin-bottom: 60px;
+}
+
+.rentoom-title {
     color: #1F5A41;
-    font-size: 2.2rem;
-    margin-bottom: 5px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
 }
 
-.city-subtitle {
-    text-align: center;
-    color: #1F5A41;
-    font-size: 1.2rem;
-    margin-bottom: 25px;
-    font-weight: normal;
+.rentoom-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 400;
 }
 
-.city-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    align-items: flex-start;
-}
-
-.city-image {
-    flex: 1 1 45%;
-    max-width: 500px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    margin-top: 1rem;
-}
-
-@media (max-width: 910px) {
-    .city-image {
-        max-width: 100%;
+@media (max-width: 900px) {
+    .rentoom-title {
+        font-size: 1.8rem;
     }
 }
 
-.city-text {
-    flex: 1 1 50%;
-    font-size: 1rem;
+.rentoom-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 60px;
+    justify-content: space-between;
 }
 
-.city-text h4 {
-    margin-top: 15px;
-    margin-bottom: 10px;
-    color: #000;
-    font-size: 1.1rem;
+.rentoom-text-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rentoom-text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.rentoom-text-block h3 {
+    color: #1F5A41;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.rentoom-text-block p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #444;
+    margin: 0;
+}
+
+.rentoom-image-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+.rentoom-image {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    display: block;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 900px) {
+    .rentoom-content {
+        flex-direction: column-reverse;
+        gap: 40px;
+    }
+
+    .rentoom-title {
+        font-size: 2rem;
+    }
+
+    .rentoom-image-wrapper,
+    .rentoom-text-column {
+        width: 100%;
+    }
 }

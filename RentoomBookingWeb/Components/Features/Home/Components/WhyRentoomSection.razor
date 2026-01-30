@@ -1,22 +1,23 @@
-@using Microsoft.Extensions.Localization;
-@inject IStringLocalizer<HomePage> Localizer;
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<HomePage> Localizer
 
-<div class="city-container">
-    <h1 class="city-title">@Localizer["whyRentoom"]</h1>
-    <h2 class="city-subtitle">@Localizer["whyRentoomSubtitle"]</h2>
+<section class="rentoom-container">
+    <header class="rentoom-header">
+        <h1 class="rentoom-title">@Localizer["whyRentoom"]</h1>
+        <p class="rentoom-subtitle">@Localizer["whyRentoomSubtitle"]</p>
+    </header>
 
-    <div class="city-content">
-        <div class="city-text">
-            <h4><strong>@Localizer["whyRentoomTitle"]</strong></h4>
-            <p>
-                @Localizer["whyRentoomText1"]
-            </p>
+    <div class="rentoom-content">
+        <article class="rentoom-text-column">
+            <div class="rentoom-text-block">
+                <h3>@Localizer["whyRentoomTitle"]</h3>
+                <p>@Localizer["whyRentoomText1"]</p>
+                <p>@Localizer["whyRentoomText2"]</p>
+            </div>
+        </article>
 
-            <p>
-                @Localizer["whyRentoomText2"]
-            </p>
+        <div class="rentoom-image-wrapper">
+            <img src="assets/images/apartment.jpeg" alt="Apartamenty w Toruniu – wnętrze" class="rentoom-image" loading="lazy" />
         </div>
-        
-        <img src="assets/images/apartment.jpeg" alt="Apartamenty w Toruniu – panorama miasta" class="city-image" />
     </div>
-</div>
+</section>

@@ -1,10 +1,8 @@
 <div class="option-container">
     <div class="option-top">
-        <div 
-            class="option-image-wrapper"
-            style="background-image: url('@UserImage'); background-size: cover; background-position: center;"
-        ></div>
-        
+        <div class="option-image-wrapper"
+             style="background-image: url('@UserImage'); background-size: cover; background-position: center;"></div>
+
         <div class="option-top-content">
             <p>@Title</p>
             <div class="stars">
@@ -19,7 +17,7 @@
             </div>
         </div>
     </div>
-    
+
     <p class="option-content">
         @Description
     </p>
@@ -32,6 +30,5 @@
     [Parameter] public int Stars { get; set; } = 5;
 
     private int MaxStars = 5;
-
-    private int StarsNotFilled => MaxStars - Stars;
+    private int StarsNotFilled => MaxStars - Stars; 
 }

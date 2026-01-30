@@ -10,18 +10,16 @@
         <div class="slider-track-bg"></div>
         <div class="slider-track-fill" style="@TrackStyle"></div>
 
-        @* Input MIN: Bierzemy Min/Max bezpośrednio z parametrów *@
-        <input type="range" 
-               min="@Min" max="@Max" step="1" 
-               value="@MinSelected" 
+        <input type="range"
+               min="@Min" max="@Max" step="1"
+               value="@MinSelected"
                @oninput="OnMinInput"
                @onchange="OnRangeCommitted"
                class="@GetMinThumbClass()"/>
-               
-        @* Input MAX: Bierzemy Min/Max bezpośrednio z parametrów *@
-        <input type="range" 
-               min="@Min" max="@Max" step="1" 
-               value="@MaxSelected" 
+
+        <input type="range"
+               min="@Min" max="@Max" step="1"
+               value="@MaxSelected"
                @oninput="OnMaxInput"
                @onchange="OnRangeCommitted"
                class="@GetMaxThumbClass()"/>
@@ -29,219 +27,103 @@
 </div>
 
 @code {
-    [Parameter] public int Min { get; set; }
-    [Parameter] public int Max { get; set; }
-    
-    [Parameter] public int MinSelected { get; set; }
-    [Parameter] public int MaxSelected { get; set; }
-    
-    [Parameter] public EventCallback<int> MinSelectedChanged { get; set; }
-    [Parameter] public EventCallback<int> MaxSelectedChanged { get; set; }
-    
-    [Parameter] public EventCallback OnRangeChanged { get; set; }
+[Parameter] public int Min { get; set; }
+[Parameter] public int Max { get; set; }
 
-    private const int Gap = 10;
+[Parameter] public int MinSelected { get; set; }
+[Parameter] public int MaxSelected { get; set; }
 
-    // To uruchamia się, gdy Rodzic (ViewModel) zmieni Min/Max lub wybrane wartości
-    protected override void OnParametersSet()
-    {
-        // 1. Zabezpieczenie na start lub błędne dane
-        if (Max <= Min)
-        {
-             return; // Nie robimy nic, jeśli skala jest bez sensu
-        }
+[Parameter] public EventCallback<int> MinSelectedChanged { get; set; }
+[Parameter] public EventCallback<int> MaxSelectedChanged { get; set; }
 
-        // 2. LOGIKA PRZYCINANIA (CLAMPING)
-        // Jeśli nowa skala to 0-500, a wybrane jest 1000 -> zmieniamy wybrane na 500.
-        
-        bool changed = false;
+[Parameter] public EventCallback OnRangeChanged { get; set; }
 
-        // Sprawdzamy MinSelected
-        if (MinSelected < Min) 
-        {
-            MinSelected = Min;
-            changed = true;
-        }
-        else if (MinSelected > Max)
-        {
-            MinSelected = Max - Gap; // Bezpiecznik
-            changed = true;
-        }
+[Parameter] public Guid ResetKey { get; set; }
 
-        // Sprawdzamy MaxSelected
-        if (MaxSelected > Max) 
-        {
-            MaxSelected = Max;
-            changed = true;
-        }
-        else if (MaxSelected < Min)
-        {
-            MaxSelected = Min + Gap; // Bezpiecznik
-            changed = true;
-        }
+private Guid _prevResetKey;
+private const int Gap = 10;
 
-        // Zabezpieczenie przed skrzyżowaniem suwaków
-        if (MinSelected > MaxSelected)
-        {
-            MinSelected = Min;
-            MaxSelected = Max;
-            changed = true;
-        }
+protected override void OnParametersSet()
+{
+if (_prevResetKey != ResetKey)
+{
+_prevResetKey = ResetKey;
+MinSelected = Min;
+MaxSelected = Max;
+}
 
-        // Ważne: W OnParametersSet NIE wywołujemy EventCallbacków do rodzica,
-        // bo to spowodowałoby pętlę nieskończoną. Po prostu aktualizujemy widok lokalnie.
-    }
+if (Max <= Min) return;
 
-    // Styl paska (niebieskiego) - teraz oparty o Min i Max
-    private string TrackStyle
-    {
-        get
-        {
-            double range = Max - Min;
-            if (range <= 0) return "left: 0%; width: 0%";
+if (MinSelected < Min) MinSelected = Min;
+if (MaxSelected > Max) MaxSelected = Max;
 
-            double percent1 = (double)(MinSelected - Min) / range * 100;
-            double percent2 = (double)(MaxSelected - Min) / range * 100;
-            
-            percent1 = Math.Clamp(percent1, 0, 100);
-            percent2 = Math.Clamp(percent2, 0, 100);
-            
-            double width = percent2 - percent1;
-            
-            return $"left: {percent1.ToString(CultureInfo.InvariantCulture)}%; width: {width.ToString(CultureInfo.InvariantCulture)}%;";
-        }
-    }
+if (MinSelected > MaxSelected - Gap)
+{
+if (MinSelected > Min + Gap) MaxSelected = Math.Min(Max, MinSelected + Gap);
+else MinSelected = Math.Max(Min, MaxSelected - Gap);
+}
+}
 
-    private string GetMinThumbClass() => 
-        MinSelected > (Max - Min) * 0.9 ? "range-input z-high" : "range-input";
+private string TrackStyle
+{
+get
+{
+double range = Max - Min;
+if (range <= 0) return "left: 0%; width: 0%";
 
-    private string GetMaxThumbClass() => 
-        MaxSelected <= (Max - Min) * 0.9 ? "range-input z-high" : "range-input";
+double percent1 = (double)(MinSelected - Min) / range * 100;
+double percent2 = (double)(MaxSelected - Min) / range * 100;
 
-    private async Task OnMinInput(ChangeEventArgs e)
-    {
-        if (int.TryParse(e.Value?.ToString(), out int val))
-        {
-            val = Math.Clamp(val, Min, Max);
-            if (val > MaxSelected - Gap) val = MaxSelected - Gap;
-            
-            MinSelected = val;
-            await MinSelectedChanged.InvokeAsync(val);
-        }
-    }
+percent1 = Math.Clamp(percent1, 0, 100);
+percent2 = Math.Clamp(percent2, 0, 100);
 
-    private async Task OnMaxInput(ChangeEventArgs e)
-    {
-        if (int.TryParse(e.Value?.ToString(), out int val))
-        {
-            val = Math.Clamp(val, Min, Max);
-            if (val < MinSelected + Gap) val = MinSelected + Gap;
-            
-            MaxSelected = val;
-            await MaxSelectedChanged.InvokeAsync(val);
-        }
-    }
-    
-    private async Task OnRangeCommitted(ChangeEventArgs e)
-    {
-        await OnRangeChanged.InvokeAsync();
-    }
+double width = percent2 - percent1;
+
+return $"left: {percent1.ToString(CultureInfo.InvariantCulture)}%; width: {width.ToString(CultureInfo.InvariantCulture)}%;";
+}
+}
+
+private string GetMinThumbClass() => MinSelected > (Max - Min) * 0.9 + Min ? "range-input z-high" : "range-input";
+private string GetMaxThumbClass() => MaxSelected <= (Max - Min) * 0.1 + Min ? "range-input z-high" : "range-input";
+
+private async Task OnMinInput(ChangeEventArgs e)
+{
+if (int.TryParse(e.Value?.ToString(), out int val))
+{
+val = Math.Clamp(val, Min, MaxSelected - Gap);
+MinSelected = val;
+await MinSelectedChanged.InvokeAsync(val);
+}
+}
+
+private async Task OnMaxInput(ChangeEventArgs e)
+{
+if (int.TryParse(e.Value?.ToString(), out int val))
+{
+val = Math.Clamp(val, MinSelected + Gap, Max);
+MaxSelected = val;
+await MaxSelectedChanged.InvokeAsync(val);
+}
+}
+
+private async Task OnRangeCommitted(ChangeEventArgs e)
+{
+await OnRangeChanged.InvokeAsync();
+}
 }
 
 <style>
-    /* CSS BEZ ZMIAN - zostawiamy tak jak miałeś */
-    .price-slider-container {
-        width: 100%;
-        padding: 5px 0 15px 0;
-        font-family: inherit;
-        position: relative;
-    }
+    .price-slider-container { width: 100%; padding: 5px 0 15px 0; font-family: inherit; position: relative; }
+    .price-labels { display: flex; justify-content: space-between; font-weight: 500; color: #1a1a1a; margin-bottom: 10px; font-size: 14px; }
+    .slider-wrapper { position: relative; width: 100%; height: 20px; }
+    .slider-track-bg { position: absolute; width: 100%; height: 4px; background-color: #e0e0e0; border-radius: 2px; top: 50%; transform: translateY(-50%); z-index: 1; }
+    .slider-track-fill { position: absolute; height: 4px; background-color: #003b95; border-radius: 2px; top: 50%; transform: translateY(-50%); z-index: 2; }
+    .range-input { -webkit-appearance: none; appearance: none; width: 100%; position: absolute; background: transparent; pointer-events: none; top: 50%; transform: translateY(-50%); margin: 0; padding: 0; z-index: 3; border: none; height: 0; }
 
-    .price-labels {
-        display: flex;
-        justify-content: space-between;
-        font-weight: 500;
-        color: #1a1a1a;
-        margin-bottom: 10px;
-        font-size: 14px;
-    }
+    .range-input::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; height: 20px; width: 20px; border-radius: 50%; background: #fff; border: 1px solid #003b95; box-shadow: 0 1px 3px rgba(0,0,0,0.3); cursor: pointer; }
+    .range-input::-moz-range-thumb { pointer-events: auto; height: 20px; width: 20px; border-radius: 50%; background: #fff; border: 1px solid #003b95; box-shadow: 0 1px 3px rgba(0,0,0,0.3); cursor: pointer; border: none; }
 
-    .slider-wrapper {
-        position: relative;
-        width: 100%;
-        height: 20px;
-    }
-
-    .slider-track-bg {
-        position: absolute;
-        width: 100%;
-        height: 4px;
-        background-color: #e0e0e0;
-        border-radius: 2px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 1;
-    }
-
-    .slider-track-fill {
-        position: absolute;
-        height: 4px;
-        background-color: #003b95;
-        border-radius: 2px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 2;
-    }
-
-    .range-input {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 100%;
-        position: absolute;
-        background: transparent;
-        pointer-events: none;
-        top: 50%;
-        transform: translateY(-50%);
-        margin: 0;
-        padding: 0;
-        z-index: 3;
-        border: none;
-        height: 0;
-    }
-
-    .range-input::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        pointer-events: auto;
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: #ffffff;
-        border: 1px solid #003b95;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        cursor: pointer;
-        margin-top: 0;
-    }
-
-    .range-input::-moz-range-thumb {
-        pointer-events: auto;
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: #ffffff;
-        border: 1px solid #003b95;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        cursor: pointer;
-        border: none;
-    }
-
-    .z-high {
-        z-index: 100 !important;
-    }
-
-    .range-input::-webkit-slider-thumb:hover {
-        transform: scale(1.1);
-    }
-    .range-input::-moz-range-thumb:hover {
-        transform: scale(1.1);
-    }
+    .z-high { z-index: 100 !important; }
+    .range-input::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    .range-input::-moz-range-thumb:hover { transform: scale(1.1); }
 </style>

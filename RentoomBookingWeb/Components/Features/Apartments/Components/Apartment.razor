@@ -10,9 +10,11 @@
 @using RentoomBookingWeb.Helpers
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
+@inject MediaCacheService MediaCache 
+@implements IAsyncDisposable
 
-<article @ref="_elementRef" 
-         class="apartment-card" 
+<article class="apartment-card" 
+         @ref="_elementRef"
          style="@(DisableForGoToReservation ? "cursor: default;" : "")"
          itemscope itemtype="https://schema.org/Apartment">
     <header>
@@ -33,6 +35,8 @@
                             alt="@Item?.Name"
                             itemprop="photo"
                             class="apartment-image" 
+                            loading="lazy"
+                            decoding="async"
                         />
                     </div>
                 }
@@ -44,7 +48,9 @@
                             alt="@Item?.Name"
                             title="@Item?.Name"
                             itemprop="photo"
-                            class="apartment-image" 
+                            class="apartment-image"
+                            loading="lazy"
+                            decoding="async"
                         />
                     </div>
                 }
@@ -232,13 +238,24 @@
     
     private IJSObjectReference? _jsModule;
     private DotNetObjectReference<Apartment>? _objRef;
-
     private ElementReference _elementRef;
+    private bool _isMediaLoaded = false;
 
     protected override void OnInitialized()
     {
         _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
         CalculateDetailsUrl();
+        
+        if (Item?.Id != null)
+        {
+            if (MediaCache.TryGetCachedMedia(Item.Id, out var cachedMedia))
+            {
+                _objectMediums = cachedMedia;
+                _currentMediumIndex = 0;
+                _currentObjectMedium = _objectMediums?.FirstOrDefault();
+                _isMediaLoaded = true; 
+            }
+        }
     }
 
     protected override void OnParametersSet()
@@ -248,20 +265,37 @@
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && Item != null)
+        if (firstRender && Item != null && !_isMediaLoaded)
         {
-            _objRef = DotNetObjectReference.Create(this);
-            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
-            await _jsModule.InvokeVoidAsync("observeElement", _objRef, _elementRef);
+            try 
+            {
+                _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
+                _objRef = DotNetObjectReference.Create(this);
+                await _jsModule.InvokeVoidAsync("observeElement", _objRef, _elementRef);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lazy load init failed: {ex.Message}");
+                _ = LoadMedia();
+            }
         }
     }
     
-    [JSInvokable]
+    [JSInvokable("LoadMedia")]
     public async Task LoadMedia()
     {
-        await GetObjectMedia();
-     
-        await InvokeAsync(StateHasChanged);
+        if (_isMediaLoaded) return;
+        _isMediaLoaded = true;
+
+        try
+        {
+            await GetObjectMedia();
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading media: {ex.Message}");
+        }
     }
 
     private async Task GetObjectMedia()
@@ -269,7 +303,11 @@
         var id = Item?.Id;
         if (id != null)
         {
-            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>();
+            _objectMediums = await MediaCache.GetOrFetchMediaAsync(
+                id.Value, 
+                async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>()
+            );
+
             _currentMediumIndex = 0;
             _currentObjectMedium = _objectMediums.FirstOrDefault();
         }
@@ -277,58 +315,50 @@
 
     private void ChangeCurrentObjectMedium(int step)
     {
-        if (_objectMediums == null || !_objectMediums.Any())
-            return;
+        if (_objectMediums == null || !_objectMediums.Any()) return;
 
         _currentMediumIndex += step;
-
-        if (_currentMediumIndex < 0)
-            _currentMediumIndex = _objectMediums.Count - 1;
-        else if (_currentMediumIndex >= _objectMediums.Count)
-            _currentMediumIndex = 0;
+        if (_currentMediumIndex < 0) _currentMediumIndex = _objectMediums.Count - 1;
+        else if (_currentMediumIndex >= _objectMediums.Count) _currentMediumIndex = 0;
 
         _currentObjectMedium = _objectMediums[_currentMediumIndex];
     }
 
     private void CalculateDetailsUrl()
-{
-    if (DisableForGoToReservation || Item == null)
     {
-        _detailsUrl = null;
-        return;
+        if (DisableForGoToReservation || Item == null) { _detailsUrl = null; return; }
+
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+        string? GetQ(string k) => queryParams.TryGetValue(k, out var v) ? v.ToString() : null;
+
+        string? finalStart = !string.IsNullOrEmpty(StartDate) ? StartDate : GetQ("startDate");
+        string? finalEnd = !string.IsNullOrEmpty(EndDate) ? EndDate : GetQ("endDate");
+        string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : GetQ("adults");
+        string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : GetQ("children");
+
+        string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
+
+        if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd))
+        {
+            var segments = new List<string> {
+                finalStart ?? "null", finalEnd ?? "null", finalAdults ?? "1", finalChildren ?? "0"
+            };
+            _detailsUrl = $"{baseUrl}/{string.Join("/", segments)}";
+        }
+        else
+        {
+            _detailsUrl = baseUrl;
+        }
+        _detailsUrl = _detailsUrl.Replace("//", "/");
     }
 
-    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-    var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-
-    string? s = queryParams.TryGetValue("startDate", out var sVal) ? sVal.ToString() : null;
-    string? e = queryParams.TryGetValue("endDate", out var eVal) ? eVal.ToString() : null;
-    string? a = queryParams.TryGetValue("adults", out var aVal) ? aVal.ToString() : null;
-    string? c = queryParams.TryGetValue("children", out var cVal) ? cVal.ToString() : null;
-
-    string? finalStart = !string.IsNullOrEmpty(StartDate) ? StartDate : s;
-    string? finalEnd = !string.IsNullOrEmpty(EndDate) ? EndDate : e;
-    string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : a;
-    string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : c;
-
-    string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
-
-    if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd) || 
-        !string.IsNullOrEmpty(finalAdults) || !string.IsNullOrEmpty(finalChildren))
+    public async ValueTask DisposeAsync()
     {
-        var segments = new List<string>();
-        segments.Add(finalStart ?? "null");
-        segments.Add(finalEnd ?? "null");
-        segments.Add(finalAdults ?? "1");
-        segments.Add(finalChildren ?? "0");
-
-        _detailsUrl = $"{baseUrl}/{string.Join("/", segments)}";
+        try {
+            _objRef?.Dispose();
+            if (_jsModule != null) await _jsModule.DisposeAsync();
+        } catch {}
     }
-    else
-    {
-        _detailsUrl = baseUrl;
-    }
-
-    _detailsUrl = _detailsUrl.Replace("//", "/");
-}
 }

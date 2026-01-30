@@ -1,11 +1,12 @@
 @namespace RentoomBookingWeb.Components.Shared
 @inject IJSRuntime JS
+@implements IDisposable
 
 <CascadingValue Value="this">
     @ChildContent
 </CascadingValue>
 
-<div class="slider-container">
+<div class="slider-container" @ref="_sliderContainer">
     <div class="slider-wrapper @TransitionClass" style="transform: translateX(-@(CurrentIndex * 100)%)">
         @foreach (var chunk in ChunkedItems)
         {
@@ -37,7 +38,10 @@
     internal List<RenderFragment> _items { get; set; } = new();
     private List<List<RenderFragment>> ChunkedItems { get; set; } = new();
     private int CurrentIndex { get; set; } = 0;
+    
+    private ElementReference _sliderContainer;
     private DotNetObjectReference<Slider>? objRef;
+    private IJSObjectReference? _jsModule;
 
     internal void RegisterItem(RenderFragment fragment)
     {
@@ -48,9 +52,11 @@
 
     private void SplitIntoChunks()
     {
+        int safeItemsPerPage = ItemsPerPage > 0 ? ItemsPerPage : 1;
+
         ChunkedItems = _items
             .Select((x, i) => new { x, i })
-            .GroupBy(x => x.i / ItemsPerPage)
+            .GroupBy(x => x.i / safeItemsPerPage)
             .Select(g => g.Select(v => v.x).ToList())
             .ToList();
 
@@ -68,6 +74,28 @@
     {
         if (ChunkedItems.Count == 0) return;
         CurrentIndex = Math.Clamp(index, 0, ChunkedItems.Count - 1);
+        StateHasChanged();
+    }
+
+
+    [JSInvokable]
+    public void NextSlide()
+    {
+        if (CurrentIndex < ChunkedItems.Count - 1)
+        {
+            CurrentIndex++;
+            StateHasChanged();
+        }
+    }
+
+    [JSInvokable]
+    public void PrevSlide()
+    {
+        if (CurrentIndex > 0)
+        {
+            CurrentIndex--;
+            StateHasChanged();
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -75,8 +103,9 @@
         if (firstRender)
         {
             objRef = DotNetObjectReference.Create(this);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/resizePage.js");
-            await module.InvokeVoidAsync("init", objRef);
+            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/sliderGestures.js");
+            
+            await _jsModule.InvokeVoidAsync("initSlider", objRef, _sliderContainer);
         }
     }
 
