@@ -580,7 +580,7 @@
         bool hasOffers = _offersResponse?.Result?.PricingOffers != null && 
                          _offersResponse.Result.PricingOffers.Any();
 
-        if (!hasOffers)
+        if (!hasOffers && _isOfferLoading)
         {
             _ = Task.Run(async () => await LoadSuggestionInBackground());
         }
