@@ -36,7 +36,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 .Include(service => service.Banners)
                     .ThenInclude(banner => banner.MediaAsset)
                 .Include(service => service.Targets)
-                .Where(service => service.Status == PartnerServiceStatus.Active)
+                .Where(service => service.Status == PartnerServiceStatus.Active && service.Partner.Status == PartnerStatus.Active) 
                 .OrderBy(service => service.Sequence)
                 .ToListAsync(cancellationToken);
 
