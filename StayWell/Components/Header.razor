@@ -27,14 +27,14 @@
             </button>
         </div>
 
+        @if (ReservationState.IsValidReservation)
+        {   
         <div class="Contact">
             <button @onclick="@OpenChat" style="background: none; border: none">
                 <img src="/icons/message-circle.svg" />
             </button>
-            @* <NavLink href="@($"/reservation/{Token}/ContactUsPage")">
-                <img src="/icons/phone.svg" alt="Kontakt" />
-            </NavLink> *@
         </div>
+        }
     </div>
 </div>
 

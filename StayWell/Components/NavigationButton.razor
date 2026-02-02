@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager Navigation
 
 <div class="footer-nav-btn-wrapper">
-    <button class="footer-nav-btn @(active ? "active" : "")" @onclick="Navigate">
+    <button class="footer-nav-btn @(active ? "active" : "")" @onclick="Navigate" disabled="@(Disabled)">
         <div class="footer-nav-icon">
             @Icon
         </div>
@@ -12,9 +12,13 @@
     [Parameter] public string href { get; set; } = "/404";
     [Parameter] public RenderFragment? Icon { get; set; }
     [Parameter] public bool active { get; set; }
+    [Parameter] public bool Disabled { get; set; }
 
     private void Navigate()
     {
-        Navigation.NavigateTo(href);
+        @if(!Disabled)
+        {
+            Navigation.NavigateTo(href);
+        }
     }
 }

@@ -14,12 +14,14 @@
     flex-shrink: 0;
     justify-content: center;
     align-self: center;
+    padding-bottom: 30px;
 }
 
 .description {
     font-size: 0.9rem;
     line-height: 1.4;
     text-align: justify;
+/*    padding-top: 10px;*/
 /*    padding-bottom: 10px;*/
     flex: 1;
 }
