@@ -1,0 +1,295 @@
+﻿@page "/reservation/{token}/Prearrival"
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using RentoomBooking.StayWell.Components
+@inject NavigationManager Navigation
+@inject IStringLocalizer<HomePage> Localizer
+@inherits Models.PageBase
+
+<div class="wrap">
+    <div class="hero">
+        @if (!ReservationState.IsActiveReservation)
+        {
+        <div class="t">Do pobytu pozostało</div>
+            <div class="grid">
+                <div>
+                    <div class="n">@_days</div>
+                    <div class="l">Dni</div>
+                </div>
+                <div>
+                    <div class="n">@_hours</div>
+                    <div class="l">Godzin</div>
+                </div>
+                <div>
+                    <div class="n">@_minutes</div>
+                    <div class="l">Minut</div>
+                </div>
+            </div>
+            <div class="sg">Nie możemy się już doczekać!</div>
+        }
+        else
+        {
+            <div class="t">
+                Twój Panel rezerwacji jest już dostępny!
+            </div>
+        }
+        @* <div class="sg oooh-baby-regular" style="margin-top: 0;">Zespół Rentoom Apartamenty</div> *@
+    </div>
+
+    <div class="card">
+
+        @* <div class="h">Opłata za rezerwację</div>
+        @if (!_paid)
+        {
+            <div class="row">
+                <span class="m">Do zapłaty:</span>
+                <span class="a">--,-- zł</span>
+            </div>
+            <button class="btn" type="button">Zapłać Teraz</button>
+        }
+        else
+        {
+            <div class="s">Opłacono!
+                <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg"/>
+            </div>
+            <br />
+            <button class="btn" type="button" style="background-color: black;" @onclick="Navigate">Przejdź dalej 
+                <img class="white-filter pb-1" src="/icons/chevron-right.svg"/>
+            </button>
+        } *@
+
+        @if (ReservationState.IsActiveReservation)
+        {
+            <div class="s">
+                Skorzystaj z panelu
+                @* <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg" /> *@
+            </div>
+            <br />
+            <button class="btn" type="button" style="background-color: black;" @onclick="NavigateToTerms">
+                Przejdź dalej
+                <img class="white-filter pb-1" src="/icons/chevron-right.svg" />
+            </button>
+        }
+        else
+        {
+            <div class="s">
+                Dostęp do panelu otrzymasz po wypełnieniu potrzebnych informacji!
+            </div>
+        }
+
+        <hr class="b-l"/>
+        @* <img src="@_apartment_image" /> *@
+        <div class="pb-3">
+            <Carousel ImageUrls="@urls" TransitionIntervalMs="3500" UseTimer="@true" UseSmartGlow="@false" />
+        </div>
+        <div class="an">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName</div>
+        <div class="row">
+            <div class="ct">Zameldowanie</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom().ToString("yyyy.MM.dd")</div>
+        </div>
+        <div class="row">
+            <div class="ct">Wymeldowanie</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateTo().ToString("yyyy.MM.dd")</div>
+        </div>
+        <hr class="b-l" />
+        <div class="row">
+            <div class="ct">Karta rezerwacji</div>
+            <div class="cd">
+                @if(RegistrationCardState.CurrentCard == null)
+                {
+                    <button class="btn-small" @onclick="NavigateToRegistration">
+                        <img class="white-filter pb-1" src="/icons/chevron-right.svg" />
+                        Wypełnij
+                    </button>
+                }
+                else
+                {
+                    <div>
+                        Wypełniona <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg" />
+                    </div>
+                }
+                </div>
+        </div>
+        <div class="row">
+            <div class="ct">Warunki pobytu</div>
+            <div class="cd">
+                @if (TermsState.CurrentTerms == null)
+                {
+                    <button class="btn-small" @onclick="NavigateToTerms">
+                        <img class="white-filter pb-1" src="/icons/chevron-right.svg" />
+                        Zaakceptuj
+                    </button>
+                }
+                else
+                {
+                    <div>
+                        Zaakceptowane <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg" />
+                    </div>
+                }
+            </div>
+        </div>
+
+        <hr class="b-l" />
+
+        <div class="row">
+            <div class="ct">Imie</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Client.FirstName</div>
+        </div>
+        <div class="row">
+            <div class="ct">Nazwisko</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Client.LastName</div>
+        </div>
+        @if(!IsBookingMail())
+        {
+        <div class="row">
+            <div class="ct">E-mail</div>
+            <div class="cd">
+                @ReservationState?.CurrentReservation?.Reservation.Client.Email
+            </div>
+            </div>
+        }
+        <div class="row">
+            <div class="ct">Numer telefonu</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Client.Phone</div>
+        </div>
+        <div class="row">
+            <div class="ct">Ilość dorosłych</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfAdults</div>
+        </div>
+        @if (ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren != "0")
+        {
+        <div class="row">
+            <div class="ct">Ilość dzieci</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren</div>
+        </div>
+        }
+    </div>
+
+    <div class="card" style="border-radius: 22px; margin-top: 10px;">
+        @if (RegistrationCardState.CurrentCard == null && TermsState.CurrentTerms == null)
+        {
+            <div>
+                Wypełnij Kartę zameldowania oraz zaakceptuj regulamin aby otrzymać dostęp do swojego panelu.
+            </div>
+        }else if(RegistrationCardState.CurrentCard == null && TermsState.CurrentTerms != null)
+        {
+            <div>
+                Wypełnij Kartę zameldowania aby otrzymać dostęp do swojego panelu.
+            </div>
+        }
+        else if (RegistrationCardState.CurrentCard != null && TermsState.CurrentTerms == null)
+        {
+            <div>
+               Zaakceptuj regulamin aby otrzymać dostęp do swojego panelu.
+            </div>
+        }
+        else
+        {
+            <div style="text-align: center;">
+                Wszystko wypełnione, pozostało tylko czekać!
+            </div>
+        }
+    </div>
+        
+</div>
+
+@code{
+    private bool _paid = true;
+    private string[] urls = Array.Empty<string>();
+
+    private int _days;
+    private int _hours;
+    private int _minutes;
+    private System.Threading.Timer? _timer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (RegistrationCardState.CurrentCard != null && TermsState.CurrentTerms != null)
+        {
+            NavigationManager.NavigateTo($"/reservation/{Token}/");
+            LayoutState.ShowFooter = true;
+        }
+        else
+        {
+            
+            LayoutState.ShowFooter = false;
+            LoadImages();
+            if (!ReservationState.IsActiveReservation)
+            {
+                StartTimer();
+            }
+        }
+        await base.OnInitializedAsync();
+    }
+
+    private void NavigateToTerms()
+    {
+        NavigationManager.NavigateTo($"/reservation/{Token}/TermsPage");
+    }
+
+    private void NavigateToRegistration()
+    {
+        NavigationManager.NavigateTo($"/reservation/{Token}/RegistrationCardPage");
+    }
+
+    private bool IsBookingMail()
+    {
+        string? mail = ReservationState?.CurrentReservation?.Reservation.Client.Email;
+        if (string.IsNullOrEmpty(mail)) return false;
+
+        return mail.EndsWith("@guest.booking.com", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void StartTimer()
+    {
+        UpdateCountdown();
+        _timer = new System.Threading.Timer(_ =>
+        {
+            InvokeAsync(() =>
+            {
+                UpdateCountdown();
+                StateHasChanged();
+            });
+        }, null, 0, 1000 * 60);
+    }
+
+    private void UpdateCountdown()
+    {
+        var checkIn = ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom();
+        if (checkIn == null)
+        {
+            _days = _hours = _minutes = 0;
+            return;
+        }
+
+        var now = DateTime.Now;
+        var diff = checkIn.Value - now;
+        if (diff.TotalSeconds < 0)
+        {
+            _days = _hours = _minutes = 0;
+        }
+        else
+        {
+            _days = diff.Days;
+            _hours = diff.Hours;
+            _minutes = diff.Minutes;
+        }
+    }
+
+    private void LoadImages()
+    {
+        const string placeholder = "/images/placeholders/apartment_placeholder.png";
+        urls = MediaState?.CurrentMedia?
+            .Where(m => !string.IsNullOrEmpty(m.Url) && (m.Extension?.ToLower() == "jpg" || m.Extension?.ToLower() == "png"))
+            .OrderBy(m => m.Position)
+            .Select(m => m.Url!)
+            .ToArray()
+            ?? new[] { placeholder };
+    }
+
+    public void Dispose()
+    {
+        LayoutState.ShowFooter = true;
+        _timer?.Dispose();
+    }
+}
