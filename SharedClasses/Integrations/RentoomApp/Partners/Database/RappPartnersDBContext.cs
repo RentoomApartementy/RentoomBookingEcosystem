@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices
+namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database
 {
     public class RappPartnersDBContext :DbContext
     {
