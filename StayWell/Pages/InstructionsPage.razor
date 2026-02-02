@@ -12,7 +12,7 @@
 
 <PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
-<Carousel ImageUrls="@urls" UseControlButtons="@true" ></Carousel>
+<Carousel ImageUrls="@urls" UseControlButtons="@true" IsInstructionCarousel=true></Carousel>
 
 <div class="codes-wrapper">
     <div class="code wifi">
@@ -34,22 +34,56 @@
     <div class="code wifi">
         <img src="/icons/fence.svg"/>
         <div class="text-wrapper">
-            <div class="title">Kod do furtki</div>
-            <div class="digits">0000</div>
+            @if (ReservationState.IsActiveReservation)
+            {
+                <div class="title">Kod do furtki</div>
+                <div class="digits">0000</div>
+            }
+            else
+            {
+                <span>
+                    Otrzymasz dostęp za:
+                    <span class="fw-bold">
+                        @_days dni @_hours h @_minutes min
+                    </span>
+                </span>
+            }
         </div>
     </div>
     <div class="code wifi">
         <img src="/icons/building.svg"/>
         <div class="text-wrapper">
+        @if(ReservationState.IsActiveReservation){
             <div class="title">Kod do budynku</div>
-            <div class="digits">0000</div>
+                <div class="digits">0000</div>
+            }
+            else
+            {
+                <span>
+                    Otrzymasz dostęp za:
+                    <span class="fw-bold">
+                        @_days dni @_hours h @_minutes min
+                    </span>
+                </span>
+            }
         </div>
     </div>
     <div class="code wifi">
         <img src="/icons/square-parking.svg"/>
         <div class="text-wrapper">
+        @if(ReservationState.IsActiveReservation){
             <div class="title">Parking</div>
             <div class="digits">0000</div>
+            }
+            else
+            {
+                <span>
+                    Otrzymasz dostęp za:
+                    <span class="fw-bold">
+                        @_days dni @_hours h @_minutes min
+                    </span>
+                </span>
+            }
         </div>
     </div>
     <div class="code wifi">
@@ -66,7 +100,11 @@
             }
             else
             {
-                <span>Dostęp do wifi w dniu zameldowania</span>
+                <span>Otrzymasz dostęp za:
+                    <span class="fw-bold">
+                        @_days dni @_hours h @_minutes min
+                    </span>
+                </span>
             }
         </div>
     </div>
@@ -84,6 +122,55 @@
     "/images/mock_instruction/7 COZY.png",
     "/images/mock_instruction/8.png",];
 
+    private int _days;
+    private int _hours;
+    private int _minutes;
+    private System.Threading.Timer? _timer;
+
+    protected override Task OnInitializedAsync()
+    {
+        if (!ReservationState.IsActiveReservation)
+        {
+            StartTimer();
+        }
+        return base.OnInitializedAsync();
+    }  
+
+    private void StartTimer()
+    {
+        UpdateCountdown();
+        _timer = new System.Threading.Timer(_ =>
+        {
+            InvokeAsync(() =>
+            {
+                UpdateCountdown();
+                StateHasChanged();
+            });
+        }, null, 0, 1000 * 60);
+    }
+
+    private void UpdateCountdown()
+    {
+        var checkIn = ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom();
+        if (checkIn == null)
+        {
+            _days = _hours = _minutes = 0;
+            return;
+        }
+
+        var now = DateTime.Now;
+        var diff = checkIn.Value - now;
+        if (diff.TotalSeconds < 0)
+        {
+            _days = _hours = _minutes = 0;
+        }
+        else
+        {
+            _days = diff.Days;
+            _hours = diff.Hours;
+            _minutes = diff.Minutes;
+        }
+    }
 
     async Task CopyToClipboard()
     {
@@ -97,6 +184,12 @@
         {
             Console.WriteLine("Cannot write text to clipboard");
         }
+    }
+
+    public void Dispose()
+    {
+        // LayoutState.ShowFooter = true;
+        _timer?.Dispose();
     }
 
 }
