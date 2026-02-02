@@ -18,14 +18,18 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         Task<ClientAddResponse?> AddClientsAsync(IEnumerable<ClientAddRequestClient> clients, CancellationToken cancellationToken = default);
         Task<ClientAddResponse?> AddClientAsync(ClientAddRequestClient client, CancellationToken cancellationToken = default);
         Task<ClientGetResponse?> GetClientByEmailAsync(string clientEmail, CancellationToken cancellationToken = default);
+
+        Task<ClientEditResponse?> EditClientsAsync(IEnumerable<ClientEditRequestClient> clients, CancellationToken cancellationToken = default);
+        Task<ClientEditResponse?> EditClientAsync(ClientEditRequestClient client, CancellationToken cancellationToken = default);
     }
 
     public class ClientService : IClientService
     {
         private const string ClientsGetEndpoint = "clients/get/34/json";
         private const string ClientsAddEndpoint = "clients/add/34/json";
+        private const string ClientsEditEndpoint = "clients/edit/34/json";
 
-       // private readonly IHttpClientFactory _httpClientFactory;
+        // private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<ClientService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
 
@@ -109,6 +113,43 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
             return AddClientsAsync([client], cancellationToken);
         }
+
+        public async Task<ClientEditResponse?> EditClientsAsync(IEnumerable<ClientEditRequestClient> clients, CancellationToken cancellationToken = default)
+        {
+            if (clients is null)
+            {
+                throw new ArgumentNullException(nameof(clients));
+            }
+
+            var clientsList = clients.ToList();
+            if (clientsList.Count == 0)
+            {
+                throw new ArgumentException("At least one client must be provided.", nameof(clients));
+            }
+
+            var request = new ClientEditRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Params = new ClientEditParams
+                {
+                    Clients = clientsList
+                }
+            };
+
+            var response = await _idoConnect.PostAsync<ClientEditRequest, ClientEditResponseType>(ClientsEditEndpoint, request, cancellationToken);
+            return response?.Result;
+        }
+
+        public Task<ClientEditResponse?> EditClientAsync(ClientEditRequestClient client, CancellationToken cancellationToken = default)
+        {
+            if (client is null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
+            return EditClientsAsync([client], cancellationToken);
+        }
+
 
     }
 }

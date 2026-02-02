@@ -37,7 +37,7 @@
             <div class="form-wrapper-title-text">
                 <h3 class="summary-box-title">@Localizer["YourStay"]</h3>
                 <p class="summary-box-dates">
-                    @Localizer["From"] @(Summary?.StartRequest?.StartDate.ToString("dd.MM.yyyy") ?? "---") @Localizer["To"] @(Summary?.StartRequest?.EndDate.ToString("dd.MM.yyyy") ?? "---")
+                    @Localizer["From"] @(Summary?.StartRequest?.StartDate.ToString("dd.MM.yyyy") + " " + Summary?.StartRequest?.CheckInTime.ToString("HH:mm") ?? "---") @Localizer["To"] @(Summary?.StartRequest?.EndDate.ToString("dd.MM.yyyy") + " " + Summary?.StartRequest?.CheckOutTime.ToString("HH:mm") ?? "---")
                 </p>
             </div>
         </div>

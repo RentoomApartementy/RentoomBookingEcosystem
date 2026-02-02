@@ -25,6 +25,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<Guid> StartAsync(StartReservationRequest request);
         Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice);
         Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid);
+        Task<ReservationSummaryDto> BuildDraftSummaryAsync(Guid reservationGuid);
         Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
         Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
         Task HandleTpayWebhookAsync(TpayWebhookDto dto);
@@ -92,7 +93,17 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 record = await RequireReservationAsync(reservationGuid);
             }
+            return BuildSummaryFromRecord(reservationGuid, record);
+        }
 
+        public async Task<ReservationSummaryDto> BuildDraftSummaryAsync(Guid reservationGuid)
+        {
+            var record = await RequireReservationAsync(reservationGuid);
+            return BuildSummaryFromRecord(reservationGuid, record);
+        }
+
+        private static ReservationSummaryDto BuildSummaryFromRecord(Guid reservationGuid, ReservationRecord record)
+        {
             return new ReservationSummaryDto
             {
                 ReservationGuid = reservationGuid,
@@ -377,8 +388,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             var start = record.State.StartRequest;
             var reservation = new NewReservation
             {
-                DateFrom = start.StartDate.ToString("yyyy-MM-dd"),
-                DateTo = start.EndDate.ToString("yyyy-MM-dd"),
+                DateFrom = start.StartDate.ToString("yyyy-MM-dd") +" " +start.CheckInTime.ToString("HH:mm"),
+                DateTo = start.EndDate.ToString("yyyy-MM-dd") + " " + start.CheckOutTime.ToString("HH:mm"),
                 Price = start.OfferPrice.HasValue ? (float)start.OfferPrice.Value : null,
                 Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,

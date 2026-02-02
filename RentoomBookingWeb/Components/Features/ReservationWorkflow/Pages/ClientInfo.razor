@@ -149,7 +149,8 @@
         _form.Client = MockupClient();
         _editContext = new EditContext(_form);
         
-        _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+        //_summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+        _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
         
         if (_summary != null)
         {
