@@ -15,6 +15,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public Dictionary<string, string> BannerUrls { get; set; } = new();
         public bool StayBoundOnly { get; set; }
         public string PricingModel { get; set; } = string.Empty;
+        public string PricingDiscountType { get; set; } = string.Empty;
         public bool IsPersonalizable { get; set; }
     }
 

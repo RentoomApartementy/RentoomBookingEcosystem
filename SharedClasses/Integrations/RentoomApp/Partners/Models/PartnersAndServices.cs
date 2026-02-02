@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models
 {
-    [Table("Partner", Schema = "rentoom")]
+    [Table("Partners", Schema = "rentoom")]
     public class Partner
     {
         public int Id { get; set; }
@@ -45,7 +45,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public Partner Partner { get; set; } = null!;
     }
 
-    [Table("PartnerService", Schema = "rentoom")]
+    [Table("PartnerServices", Schema = "rentoom")]
     public class PartnerService
     {
         public int Id { get; set; }
@@ -75,7 +75,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public ICollection<PartnerServiceTarget> Targets { get; set; } = new List<PartnerServiceTarget>();
     }
 
-    [Table("PartnerServiceTranslation", Schema = "rentoom")]
+    [Table("PartnerServiceTranslations", Schema = "rentoom")]
     public class PartnerServiceTranslation
     {
         public int Id { get; set; }
@@ -88,7 +88,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public string? Terms { get; set; }
     }
 
-    [Table("MediaAsset", Schema = "rentoom")]
+    [Table("MediaAssets", Schema = "rentoom")]
     public class MediaAsset
     {
         public int Id { get; set; }
@@ -103,7 +103,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public string? CreatedBy { get; set; }
     }
 
-    [Table("PartnerServiceBanner", Schema = "rentoom")]
+    [Table("PartnerServiceBanners", Schema = "rentoom")]
     public class PartnerServiceBanner
     {
         public int Id { get; set; }
@@ -115,7 +115,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public MediaAsset MediaAsset { get; set; } = null!;
     }
 
-    [Table("PartnerServiceTarget", Schema = "rentoom")]
+    [Table("PartnerServiceTargets", Schema = "rentoom")]
     public class PartnerServiceTarget
     {
         public int Id { get; set; }
