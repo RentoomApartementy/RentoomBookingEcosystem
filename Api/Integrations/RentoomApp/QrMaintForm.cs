@@ -2,7 +2,7 @@
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using System;
 using System.Collections.Generic;
 using System.Linq;

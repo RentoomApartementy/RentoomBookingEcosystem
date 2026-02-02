@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentoomBooking.SharedClasses.Integrations.RentoomApp
+namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 {
     public class QrMaintRappDbContext : DbContext
     {
