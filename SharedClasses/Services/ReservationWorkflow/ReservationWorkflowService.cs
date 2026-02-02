@@ -388,8 +388,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             var start = record.State.StartRequest;
             var reservation = new NewReservation
             {
-                DateFrom = start.StartDate.ToString("yyyy-MM-dd"),
-                DateTo = start.EndDate.ToString("yyyy-MM-dd"),
+                DateFrom = start.StartDate.ToString("yyyy-MM-dd") +" " +start.CheckInTime.ToString("HH:mm"),
+                DateTo = start.EndDate.ToString("yyyy-MM-dd") + " " + start.CheckOutTime.ToString("HH:mm"),
                 Price = start.OfferPrice.HasValue ? (float)start.OfferPrice.Value : null,
                 Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,

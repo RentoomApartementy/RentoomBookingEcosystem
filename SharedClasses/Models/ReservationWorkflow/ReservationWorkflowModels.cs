@@ -17,6 +17,8 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public DateOnly StartDate { get; set; }
         [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateOnly EndDate { get; set; }
+        public TimeOnly CheckInTime { get; set; } = new TimeOnly(15, 0); //15:00
+        public TimeOnly CheckOutTime { get; set; } = new TimeOnly(11, 0); //11:00
         public int Adults { get; set; }
         public int Children { get; set; }
         public string? SelectedOfferType { get; set; }
