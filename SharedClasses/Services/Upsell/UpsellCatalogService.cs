@@ -25,7 +25,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             _dbContextFactory = dbContextFactory;
         }
 
-        public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentId, string culture, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentItemId, string culture, CancellationToken cancellationToken = default)
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
@@ -40,7 +40,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 .OrderBy(service => service.Sequence)
                 .ToListAsync(cancellationToken);
 
-            var applicableServices = services.Where(service => AppliesToApartment(service, apartmentId)).ToList();
+            var applicableServices = services.Where(service => AppliesToApartment(service, apartmentItemId)).ToList();
 
             var tiles = new List<UpsellTileDto>(applicableServices.Count);
             foreach (var service in applicableServices)
@@ -57,10 +57,13 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     Price = service.BasePrice,
                     Currency = service.Currency,
                     Discount = service.DiscountType == PartnerServiceDiscountType.None ? null : service.DiscountValue,
+                    PricingDiscountType = service.DiscountType.ToString(),
                     BannerUrls = banners,
                     StayBoundOnly = service.StayBoundOnly,
                     PricingModel = service.PricingModel.ToString(),
-                    IsPersonalizable = service.IsPersonalizable
+                    IsPersonalizable = service.IsPersonalizable,
+
+                   
                 });
             }
 

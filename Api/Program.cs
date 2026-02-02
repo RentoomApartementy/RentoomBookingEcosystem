@@ -16,7 +16,6 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.Services;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Services;
