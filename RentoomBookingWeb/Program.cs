@@ -48,10 +48,10 @@ namespace RentoomBookingWeb
 
             //POSTGRESS:
 
-            var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger).Result;
+            var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionStringAsync(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger).Result;
             if (string.IsNullOrWhiteSpace(postgresConnectionString))
             {
-                throw new InvalidOperationException("RentoomDb connection string is missing.");
+                throw new InvalidOperationException("RentoomBookingDb connection string is missing.");
             }
 
             builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>

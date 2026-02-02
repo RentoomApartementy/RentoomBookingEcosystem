@@ -54,6 +54,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public Guid ReservationGuid { get; set; }
         public StartReservationRequest? StartRequest { get; set; }
         public ClientInfoDto? Client { get; set; }
+       
         public InvoiceInfoDto? Invoice { get; set; }
         public int? IdoReservationId { get; set; }
         public string? IdoStatus { get; set; }
@@ -96,6 +97,8 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public StartReservationRequest? StartRequest { get; set; }
         public ClientInfoDto? Client { get; set; }
         public InvoiceInfoDto? Invoice { get; set; }
+
+      //  public List<TermsAndConditionsAcceptanceInfo> {get;set;}
         public string? PaymentRedirectUrl { get; set; }
     }
 
