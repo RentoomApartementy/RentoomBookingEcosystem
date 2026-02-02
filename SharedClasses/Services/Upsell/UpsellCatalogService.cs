@@ -51,16 +51,17 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 tiles.Add(new UpsellTileDto
                 {
                     PartnerPublicId = service.Partner?.PublicId.ToString() ?? string.Empty,
-                    PartnerServiceId = service.Id.ToString(),
+                    PartnerServiceId = service.Id,
+                    PartnerServicePublicId = service.PublicServiceId.ToString() ?? string.Empty,
                     Title = translation?.Title ?? service.ServiceTitle,
                     ShortDescription = translation?.ShortDescription ?? string.Empty,
                     Price = service.BasePrice,
                     Currency = service.Currency,
                     Discount = service.DiscountType == PartnerServiceDiscountType.None ? null : service.DiscountValue,
-                    PricingDiscountType = service.DiscountType.ToString(),
+                    PricingDiscountType = service.DiscountType,
                     BannerUrls = banners,
                     StayBoundOnly = service.StayBoundOnly,
-                    PricingModel = service.PricingModel.ToString(),
+                    PricingModel = service.PricingModel,
                     IsPersonalizable = service.IsPersonalizable,
 
                    

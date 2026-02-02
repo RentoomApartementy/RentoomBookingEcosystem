@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace RentoomBooking.SharedClasses.Models.Upsell
@@ -6,7 +7,8 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
     public class UpsellTileDto
     {
         public string PartnerPublicId { get; set; } = string.Empty;
-        public string PartnerServiceId { get; set; } = string.Empty;
+        public int PartnerServiceId { get; set; }
+        public string PartnerServicePublicId { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string ShortDescription { get; set; } = string.Empty;
         public decimal Price { get; set; }
@@ -14,8 +16,8 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public decimal? Discount { get; set; }
         public Dictionary<string, string> BannerUrls { get; set; } = new();
         public bool StayBoundOnly { get; set; }
-        public string PricingModel { get; set; } = string.Empty;
-        public string PricingDiscountType { get; set; } = string.Empty;
+        public PartnerServicePricingModel PricingModel { get; set; }
+        public PartnerServiceDiscountType PricingDiscountType { get; set; }
         public bool IsPersonalizable { get; set; }
     }
 

@@ -50,6 +50,8 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
     {
         public int Id { get; set; }
         public int PartnerId { get; set; }
+        
+        public Guid PublicServiceId { get; set; }
         public Partner Partner { get; set; } = null!;
         public int Sequence { get; set; }
         public string ServiceTitle { get; set; } = string.Empty;
