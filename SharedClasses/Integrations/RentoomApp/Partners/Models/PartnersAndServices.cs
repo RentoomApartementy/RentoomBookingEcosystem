@@ -1,12 +1,14 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models
 {
+    [Table("Partner", Schema = "rentoom")]
     public class Partner
     {
         public int Id { get; set; }
@@ -33,7 +35,8 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public ICollection<PartnerSupportedLanguage> SupportedLanguages { get; set; } = new List<PartnerSupportedLanguage>();
         public ICollection<PartnerService> Services { get; set; } = new List<PartnerService>();
     }
-
+    
+    [Table("PartnerSupportedLanguage", Schema = "rentoom")]
     public class PartnerSupportedLanguage
     {
         public int Id { get; set; }
@@ -42,6 +45,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public Partner Partner { get; set; } = null!;
     }
 
+    [Table("PartnerService", Schema = "rentoom")]
     public class PartnerService
     {
         public int Id { get; set; }
@@ -71,6 +75,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public ICollection<PartnerServiceTarget> Targets { get; set; } = new List<PartnerServiceTarget>();
     }
 
+    [Table("PartnerServiceTranslation", Schema = "rentoom")]
     public class PartnerServiceTranslation
     {
         public int Id { get; set; }
@@ -83,6 +88,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public string? Terms { get; set; }
     }
 
+    [Table("MediaAsset", Schema = "rentoom")]
     public class MediaAsset
     {
         public int Id { get; set; }
@@ -97,6 +103,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public string? CreatedBy { get; set; }
     }
 
+    [Table("PartnerServiceBanner", Schema = "rentoom")]
     public class PartnerServiceBanner
     {
         public int Id { get; set; }
@@ -108,6 +115,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public MediaAsset MediaAsset { get; set; } = null!;
     }
 
+    [Table("PartnerServiceTarget", Schema = "rentoom")]
     public class PartnerServiceTarget
     {
         public int Id { get; set; }
