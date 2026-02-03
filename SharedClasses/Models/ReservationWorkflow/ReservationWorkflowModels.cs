@@ -25,6 +25,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public decimal? OfferPrice { get; set; }
         public string Currency { get; set; } = "PLN";
         public List<SelectedAddonDto> SelectedAddons { get; set; } = new();
+        public List<SelectedUpsellDto> SelectedUpsells { get; set; } = new();
     }
 
     public class ClientInfoDto
@@ -131,6 +132,11 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public float Vat { get; set; }
     }
 
+    public class SelectedUpsellDto
+    {
+        public int PartnerServiceId { get; set; }
+        public int Quantity { get; set; }
+    }
     public static class PaymentStatuses
     {
         public const string None = "None";
