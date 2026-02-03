@@ -13,7 +13,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 {
     public interface IUpsellCatalogService
     {
-        Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentId, string culture, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentItemId, string culture, string CurrentApp, CancellationToken cancellationToken = default);
     }
 
     public class UpsellCatalogService : IUpsellCatalogService
@@ -25,22 +25,53 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             _dbContextFactory = dbContextFactory;
         }
 
-        public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentItemId, string culture, CancellationToken cancellationToken = default)
+      /*  public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync_RentoomBooking(int apartmentItemId, string culture, CancellationToken cancellationToken = default)
+        {
+            return await GetUpsellTilesForApartmentAsync(apartmentItemId, culture,true,false, cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync_StayWell(int apartmentItemId, string culture, CancellationToken cancellationToken = default)
+        {
+            return await GetUpsellTilesForApartmentAsync(apartmentItemId, culture, false, true, cancellationToken);
+        }
+      */
+        public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentItemId, string culture, string CurrentApp, CancellationToken cancellationToken = default)
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-            var services = await dbContext.PartnerServices
+            var query = dbContext.PartnerServices
                 .AsNoTracking()
                 .Include(service => service.Partner)
                 .Include(service => service.Translations)
                 .Include(service => service.Banners)
                     .ThenInclude(banner => banner.MediaAsset)
                 .Include(service => service.Targets)
-                .Where(service => service.Status == PartnerServiceStatus.Active && service.Partner.Status == PartnerStatus.Active) 
+                .Where(service => service.Status == PartnerServiceStatus.Active && service.Partner.Status == PartnerStatus.Active);
+
+            if (CurrentApp == "rentoombooking")
+            {
+                query = query.Where(s => s.VisibleInRentoomBooking);
+            }
+
+            if (CurrentApp == "staywell")
+            {
+                query = query.Where(s => s.VisibleInStayWell);
+            }
+
+            if (CurrentApp == "all"  || String.IsNullOrEmpty(CurrentApp))
+            {
+                query = query.Where(s => s.VisibleInStayWell || s.VisibleInRentoomBooking);
+            }
+
+
+
+            query = query.Where(s => !s.Targets.Any() || s.Targets.Any(t => t.TargetType == PartnerServiceTargetType.Apartment && t.TargetId == apartmentItemId));
+
+            var applicableServices = await query
                 .OrderBy(service => service.Sequence)
                 .ToListAsync(cancellationToken);
 
-            var applicableServices = services.Where(service => AppliesToApartment(service, apartmentItemId)).ToList();
+          //  var applicableServices = services.Where(service => AppliesToApartment(service, apartmentItemId)).ToList();
 
             var tiles = new List<UpsellTileDto>(applicableServices.Count);
             foreach (var service in applicableServices)
@@ -114,9 +145,9 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return translations.FirstOrDefault();
         }
 
-        internal static Dictionary<string, string> SelectBanners(PartnerService service, string culture)
+        internal static Dictionary<PartnerServiceBannerPlacementType, string> SelectBanners(PartnerService service, string culture)
         {
-            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var result = new Dictionary<PartnerServiceBannerPlacementType, string>();
             if (service.Banners == null || service.Banners.Count == 0)
             {
                 return result;
@@ -130,7 +161,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     continue;
                 }
 
-                result[placement.ToString()] = banner.MediaAsset.StorageKey;
+                result[placement] = banner.MediaAsset.StorageKey;
             }
 
             return result;
