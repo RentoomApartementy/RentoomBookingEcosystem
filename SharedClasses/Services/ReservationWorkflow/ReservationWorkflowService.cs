@@ -163,6 +163,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                     }
 
                     var quantity = Math.Max(1, selected.Quantity);
+                    
+                    
                     var lineTotal = UpsellPricingCalculator.CalculateTotal(
                         tile.PricingModel,
                         tile.Price,

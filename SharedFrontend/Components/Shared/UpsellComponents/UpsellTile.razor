@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums
 @using RentoomBooking.SharedClasses.Models.Upsell
 
 <div>
@@ -7,7 +8,7 @@
     <div>@Tile.ShortDescription</div>
     @if (Tile.Discount.HasValue)
     {
-        <div>Oszczędzasz: @Tile.Discount.Value%</div>
+        <div>Oszczędzasz: @(Tile.Discount.Value) @(Tile.PricingDiscountType == PartnerServiceDiscountType.Percent?"%": Tile.Currency) </div>
     }
     <div>@Tile.PricingModel</div>
     <div>@DisplayText</div>
