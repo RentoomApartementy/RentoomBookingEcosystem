@@ -203,6 +203,28 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             };
         }
 
+        private async Task EnsurePaymentTotalsAsync(Guid reservationGuid, ReservationRecord record)
+        {
+            var summary = await BuildSummaryFromRecordAsync(reservationGuid, record);
+            var updated = false;
+
+            if (record.State.PaymentUpsellsTotal != summary.UpsellsTotal)
+            {
+                record.State.PaymentUpsellsTotal = summary.UpsellsTotal;
+                updated = true;
+            }
+
+            if (record.State.PaymentGrandTotal != summary.GrandTotal)
+            {
+                record.State.PaymentGrandTotal = summary.GrandTotal;
+                updated = true;
+            }
+
+            if (updated)
+            {
+                await _store.UpdateAsync(record);
+            }
+        }
 
 
 
@@ -217,7 +239,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
                 {
+                    await EnsurePaymentTotalsAsync(reservationGuid, record);
                     var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie-transakcji";
+
 
                     return new PaymentInitResult
                     {
@@ -231,6 +255,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 if (record.PaymentStatus == PaymentStatuses.Initiated && record.PaymentSessionGuid.HasValue)
                 {
+                    await EnsurePaymentTotalsAsync(reservationGuid, record);
                     var redirectUrl = record.State.PaymentRedirectUrl;
 
                     return new PaymentInitResult
