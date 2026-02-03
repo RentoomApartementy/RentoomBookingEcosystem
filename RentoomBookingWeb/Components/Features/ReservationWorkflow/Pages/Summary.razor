@@ -9,7 +9,9 @@
 @inject NavigationManager Navigation;
 @inject IApartmentsService ApartmentsService;
 @using Microsoft.Extensions.Localization;
+@using RentoomBooking.SharedClasses.Models
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
+@inject CustomerTermsService TermsService
 
 <PageTitle>Podsumowanie</PageTitle>
 <div class="summary-container">
@@ -29,10 +31,8 @@
     }
     else if (_summary is not null)
     {
-        
         <div class="summary-wrapper">
             <div class="main-section">
-                
                 <div class="status-section">
                     <div class="form-wrapper-title">
                         <div class="form-wrapper-title-icon-wrapper">
@@ -48,9 +48,7 @@
                     
                     @if (@_summary.IdoStatus == "accepted" && @_summary.PaymentStatus == "Paid")
                     {
-                        <div 
-                            class="status-box success-bg"
-                        >
+                        <div class="status-box success-bg">
                             <div class="form-wrapper-title-icon-wrapper success-icon-color rounded-full">
                                 <img src="assets/svgs/success.svg" alt="ikona uzytkownika">
                             </div> 
@@ -64,9 +62,7 @@
                     }
                     else if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
                     {
-                        <div 
-                            class="status-box pending-bg"
-                        >
+                        <div class="status-box pending-bg">
                             <div class="form-wrapper-title-icon-wrapper pending-icon-color rounded-full">
                                 <img src="assets/svgs/time.svg" alt="ikona uzytkownika">
                             </div> 
@@ -76,16 +72,55 @@
                                 <span>@Localizer["ReservationPendingInfo"]</span>
                             </div>
                         </div>
-                        <button @onclick="GoToPayment" class="button-pending">
+                        
+                        <div class="customer-terms-section">
+                            @if (_isTermsLoading)
+                            {
+                                <span>@Localizer["Loading"]</span>
+                            }
+                            else if (_termsSources != null)
+                            {
+                                @foreach (var term in _termsSources)
+                                {
+                                    <div class="customer-term-row mb-3">
+                                        <div class="term-checkbox-wrapper">
+                                            <input type="checkbox" 
+                                                   class="custom-checkbox" 
+                                                   id="term-@term.Id" 
+                                                   checked="@_userSelections[term.Id]" 
+                                                   @onchange="@(e => OnTermChanged(term.Id, e))" />
+            
+                                            <label class="term-label" for="term-@term.Id">
+                                                @term.Description
+                                                @if (term.IsRequired)
+                                                {
+                                                    <span class="required-star" title="@Localizer["FieldRequired"]">*</span>
+                                                }
+                                            </label>
+                                        </div>
+
+                                        @if (!string.IsNullOrEmpty(term.Link))
+                                        {
+                                            <a href="@term.Link" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
+                                                <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                        
+                        <button @onclick="GoToPayment" 
+                                class="button-pending" 
+                                disabled="@(!CanProceedToPayment())"
+                                style="@(!CanProceedToPayment() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
                             <img src="assets/svgs/tpay.svg" alt="Tpay icon"/>
                             @Localizer["ClickToPay"]
                         </button>
                     }
                     else if (@_summary.IdoStatus != "accepted")
                     {
-                        <div 
-                            class="status-box danger-bg"
-                        >
+                        <div class="status-box danger-bg">
                             <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
                                 <img src="assets/svgs/danger.svg" alt="ikona uzytkownika">
                             </div> 
@@ -96,7 +131,6 @@
                             </div>
                         </div>
                     }
-                    
                 </div>
                 
                 <div class="guest-info">
@@ -155,23 +189,10 @@
                         </div>
                     </div>
                 </div>
-                
-                @* @if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid") *@
-                @* { *@
-                @* <button @onclick="GoToPayment" class="button-pending"> *@
-                @*     <img src="assets/svgs/tpay.svg" alt="Tpay icon"/> *@
-                @*     Kliknij, aby opłacić rezerwacje *@
-                @* </button> *@
-                @* } *@
-                
             </div>
             
-            <SummaryBox
-                Summary="_summary"
-                Apartment="_apartment"
-                />
+            <SummaryBox Summary="_summary" Apartment="_apartment" />
         </div>
-        
     }
 </div>
 
@@ -183,7 +204,6 @@
     private string? _error;
     private ApartmentObject? _apartment;
     
-    //mockup linka 
     private string? staywellLink => $"https://staywell.rentoom.pl/{ReservationTokenGuid}/HomePage";
 
     protected override async Task OnInitializedAsync()
@@ -191,13 +211,12 @@
         try
         {
             _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
-            if (_summary != null)
+            if (_summary != null && _summary.StartRequest?.ObjectId != null)
             {
-                if (_summary.StartRequest?.ObjectId != null)
-                {
-                    _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
-                }
+                _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
             }
+
+            await LoadTermsAsync();
         }
         catch (Exception ex)
         {
@@ -209,13 +228,56 @@
         }
     }
     
-    private void GoToPayment()
+    private async Task GoToPayment()
     {
-        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
+        try
+        {
+            await ReservationWorkflowService.SaveCustomerTermsAsync(ReservationTokenGuid, _userSelections);
+            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
+        }
+        catch (Exception ex)
+        {
+            _error = "Wystąpił błąd podczas zapisywania zgód. Spróbuj ponownie.";
+        }
     }
     
     private void GoToClientInfo()
     {
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/dane-klienta");
+    }
+    
+    private List<CustomerTermsAndConditionsSource>? _termsSources;
+    private Dictionary<int, bool> _userSelections = new();
+    private bool _isTermsLoading = true;
+    
+    private async Task LoadTermsAsync()
+    {
+        try 
+        {
+            _isTermsLoading = true;
+            _termsSources = await TermsService.GetTermsForDisplayAsync();
+            _userSelections = _termsSources.ToDictionary(t => t.Id, _ => false);
+        }
+        finally 
+        {
+            _isTermsLoading = false;
+        }
+    }
+
+    private void OnTermChanged(int termId, ChangeEventArgs e)
+    {
+        if (e.Value is bool val)
+        {
+            _userSelections[termId] = val;
+        }
+    }
+
+    private bool CanProceedToPayment()
+    {
+        if (_termsSources == null) return false;
+
+        return _termsSources
+            .Where(t => t.IsRequired)
+            .All(t => _userSelections.TryGetValue(t.Id, out var selected) && selected);
     }
 }
