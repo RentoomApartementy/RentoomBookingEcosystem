@@ -59,6 +59,9 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
         public PartnerServiceCategory Category { get; set; }
         public bool StayBoundOnly { get; set; }
         public bool IsPersonalizable { get; set; }
+        public bool VisibleInStayWell { get; set; }
+        public bool VisibleInRentoomBooking { get; set; }
+
         public PartnerServicePricingModel PricingModel { get; set; }
         public string Currency { get; set; } = "PLN";
         public decimal BasePrice { get; set; }

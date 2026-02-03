@@ -14,7 +14,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public decimal Price { get; set; }
         public string Currency { get; set; } = string.Empty;
         public decimal? Discount { get; set; }
-        public Dictionary<string, string> BannerUrls { get; set; } = new();
+        public Dictionary<PartnerServiceBannerPlacementType, string> BannerUrls { get; set; } = new();
         public bool StayBoundOnly { get; set; }
         public PartnerServicePricingModel PricingModel { get; set; }
         public PartnerServiceDiscountType PricingDiscountType { get; set; }

@@ -4,6 +4,7 @@
 
 <div>
     <input type="checkbox" checked="@IsSelected" @onchange="HandleToggle" />
+    <img src="@Tile.BannerUrls[PartnerServiceBannerPlacementType.StayWell]" alt="@Tile.Title" style="height:10%" />
     <div>@Tile.Title</div>
     <div>@Tile.ShortDescription</div>
     @if (Tile.Discount.HasValue)
@@ -12,6 +13,7 @@
     }
     <div>@Tile.PricingModel</div>
     <div>@DisplayText</div>
+    <div>Całość: @Total @Tile.Currency</div>
 </div>
 
 @code {
@@ -40,7 +42,7 @@
     private string Currency => string.IsNullOrWhiteSpace(Context.Currency) ? Tile.Currency : Context.Currency;
 
     private string DisplayText =>
-        $"Cena: {Total} {Currency} / {Context.TotalGuests} gości / {Context.Nights} noce ({Tile.PricingModel})"; //<<TODO: multi jezyk!
+        $"Cena: {Tile.Price} {Currency} / {Context.TotalGuests} gości / {Context.Nights} noce ({Tile.PricingModel})"; //<<TODO: multi jezyk!
 
     private async Task HandleToggle(ChangeEventArgs args)
     {

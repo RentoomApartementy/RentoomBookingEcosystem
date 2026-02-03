@@ -137,7 +137,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             if (startRequest?.SelectedUpsells?.Count > 0)
             {
                 var culture = CultureInfo.CurrentUICulture.Name;
-                var tiles = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(startRequest.ObjectId, culture);
+                var tiles = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(startRequest.ObjectId, culture,"all");
                 
                 var tileLookup = tiles.ToDictionary(tile => tile.PartnerServiceId);
                 
@@ -184,9 +184,16 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 }
             }
 
-            var addonsTotal = startRequest?.SelectedAddons?.Sum(addon => (decimal)addon.Price * addon.Quantity) ?? 0m;
+            decimal addonsTotal = 0m;//startRequest?.SelectedAddons?.Sum(addon => (decimal)addon.Price * addon.Quantity) ?? 0m; //wyliczenie do sprawdzenia bo nie bierze pod uwage typu addonu
+
+            foreach (var addon in startRequest?.SelectedAddons ?? [])
+            {
+                addonsTotal +=AddonPricingCalculator.CalculateTotal(addon.PaymentType, (decimal)addon.Price, addon.Nights, startRequest.Adults + startRequest.Children, addon.Quantity);
+            }
+
             var offerPrice = startRequest?.OfferPrice ?? 0m;
-            var grandTotal = offerPrice + addonsTotal + upsellsTotal;
+            
+            decimal grandTotal = offerPrice + addonsTotal + upsellsTotal;
 
             return new ReservationSummaryDto
             {

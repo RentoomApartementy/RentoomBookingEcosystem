@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
+using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
@@ -137,6 +138,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public int Quantity { get; set; }
         public float Price { get; set; }
         public float Vat { get; set; }
+        public AddonPaymentType? PaymentType { get; set; }
     }
 
     public class SelectedUpsellDto
@@ -206,4 +208,35 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
             return DateOnly.TryParse(stringValue, out var parsed) ? parsed : default;
         }
     }
+
+
+    public static class AddonPricingCalculator
+    {
+        public static decimal CalculateTotal(
+            AddonPaymentType? pricingModel,
+            decimal unitPriceGross,
+            int nights,
+            int totalGuests,
+            int quantity = 1) //quantity  najczescie to 1 ale dla niektorych dodatkow moze byc wiecej (np. wynajem rowerow per osoba per dzien - 2 rowery x 2 osoby x 2 noce)
+        {
+            return pricingModel switch
+            {
+
+
+           //       if (type.Contains("za cały pobyt")) total += selected.Price;
+           // else if (type.Contains("za osobę za każdą dobę") || type.Contains("za osobę za dobę")) total += selected.Price * selected.Persons * selected.Nights;
+           // else if (type.Contains("za dobę")) total += selected.Price * selected.Nights;
+           // else total += selected.Price * selected.Quantity;
+
+                AddonPaymentType.PayPerPersonPerNight => unitPriceGross * nights * totalGuests*quantity,
+                AddonPaymentType.PayPerStay => unitPriceGross*quantity,
+                AddonPaymentType.PayPerAmountPerNight => unitPriceGross * nights * quantity,
+                AddonPaymentType.PayPerAmount => unitPriceGross * quantity,
+                AddonPaymentType.PayPerNight => unitPriceGross * nights * quantity,
+                _ => throw new ArgumentOutOfRangeException(nameof(pricingModel), pricingModel, "Unsupported pricing model.")
+            };
+        }
+    }
+
+
 }
