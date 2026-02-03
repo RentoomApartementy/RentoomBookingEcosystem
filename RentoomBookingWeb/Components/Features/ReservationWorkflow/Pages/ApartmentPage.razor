@@ -413,7 +413,7 @@
                     <b>@Localizer["Non-refundableOffer"]</b>
                     <small>@Localizer["NonRefundableText"]</small>
                     <div class="summary-offer-price-button">
-                        <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice) zł</b></span>
+                        <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
                         <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">@Localizer["BookNow"]</Button>
                     </div>
                 </div>  
@@ -425,7 +425,7 @@
                     <b>@Localizer["RefundableOffer"]</b>
                     <small>@Localizer["RefundableOfferText"]</small>
                     <div class="summary-offer-price-button">
-                        <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice) zł</b></span>
+                        <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
                         <Button Type="ButtonType.Tertiary" @onclick="@(() => GoToPayment(OfferTypeRefundable))">@Localizer["BookNow"]</Button>
                     </div>
                 </div>   
@@ -478,7 +478,7 @@
     private List<SelectedAddonDto> _selectedAddons = new();
     
     private IReadOnlyList<UpsellTileDto> _availableUpsells = Array.Empty<UpsellTileDto>();
-    private ReservationPricingContext? _reservationPricingContext;
+    private ReservationPricingContext? _reservationPricingContext; // uztywany do prawidlowego liczenia upselli w UpsellList 
     private List<SelectedUpsellDto> _selectedUpsells = new();
     private StartReservationRequest? _draftStartReservationRequest;
 
@@ -504,6 +504,37 @@
                 else if (type.Contains("za dobę")) total += selected.Price * selected.Nights;
                 else total += selected.Price * selected.Quantity;
             }
+            return total;
+        }
+    }
+
+    private decimal TotalUpsellsPrice
+    {
+        get
+        {
+            if (_reservationPricingContext is null || _selectedUpsells.Count == 0 || _availableUpsells.Count == 0)
+            {
+                return 0m;
+            }
+
+            decimal total = 0m;
+            foreach (var selected in _selectedUpsells)
+            {
+                var tile = _availableUpsells.FirstOrDefault(item => item.PartnerServiceId == selected.PartnerServiceId);
+                if (tile is null)
+                {
+                    continue;
+                }
+
+                var quantity = Math.Max(1, selected.Quantity);
+                total += UpsellPricingCalculator.CalculateTotal( // Michal to bys mógł tez użyć w TotalAddonsPrice - zrobilem to serwer side zeby moc w razie co wyliczac niezaleznie od UI (np w jakichs serwisach dodatkowych)
+                    tile.PricingModel,
+                    tile.Price,
+                    _reservationPricingContext.Nights,
+                    _reservationPricingContext.TotalGuests,
+                    quantity);
+            }
+
             return total;
         }
     }
@@ -861,7 +892,8 @@
             SelectedOfferType = selectedOffer?.OfferType ?? offerType,
             OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
             Currency = "PLN",
-            SelectedAddons = _selectedAddons
+            SelectedAddons = _selectedAddons,
+            SelectedUpsells = _selectedUpsells
         };
 
         var reservationGuid = await ReservationWorkflowService.StartAsync(request);

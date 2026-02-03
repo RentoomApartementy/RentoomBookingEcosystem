@@ -1,6 +1,5 @@
 @using Microsoft.Extensions.Localization;
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
-@using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
@@ -58,12 +57,25 @@
                     </div>
                 }
             }
+
+            @if (Summary?.StartRequest?.SelectedUpsells?.Count > 0)
+            {
+                @foreach (var upsell in Summary.Upsells)
+                {
+                    <div class="summary-box-prices-text">
+                        <span>@upsell.Title</span>
+                        <b>@upsell.LineTotalGross.ToString("N2") @Summary.Currency</b>
+                    </div>
+                }
+            }
+
+
         </div>
         <hr style="margin: 0;">
                 
         <div class="summary-box-prices-text">
             <b style="font-size: 1.2rem;">@Localizer["SummaryText"]</b>
-            <b style="font-size: 1.2rem;">@Summary?.StartRequest?.OfferPrice @Summary?.StartRequest?.Currency</b>
+            <b style="font-size: 1.2rem;">@Summary?.GrandTotal.ToString("N2") @Summary?.Currency</b>
         </div>
     </div>
 </div>
