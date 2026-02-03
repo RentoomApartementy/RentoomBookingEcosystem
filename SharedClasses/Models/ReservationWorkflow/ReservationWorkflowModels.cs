@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using System;
@@ -62,6 +63,9 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public decimal? OfferPrice { get; set; }
         public string Currency { get; set; } = "PLN";
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
+        public List<UpsellSummaryLineDto> Upsells { get; set; } = new();
+        public decimal UpsellsTotal { get; set; }
+        public decimal GrandTotal { get; set; }
     }
 
     public class PaymentInitResult
@@ -137,6 +141,21 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public int PartnerServiceId { get; set; }
         public int Quantity { get; set; }
     }
+
+    public class UpsellSummaryLineDto
+    {
+        public int PartnerServiceId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public PartnerServicePricingModel PricingModel { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPriceGross { get; set; }
+        public int Nights { get; set; }
+        public int TotalGuests { get; set; }
+        public decimal LineTotalGross { get; set; }
+        public string DisplayText { get; set; } = string.Empty;
+    }
+
+
     public static class PaymentStatuses
     {
         public const string None = "None";
