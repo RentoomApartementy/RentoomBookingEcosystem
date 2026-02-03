@@ -1,5 +1,53 @@
-﻿<h3>UpsellTile</h3>
+﻿@using Microsoft.AspNetCore.Components
+@using RentoomBooking.SharedClasses.Models.Upsell
+
+<div>
+    <input type="checkbox" checked="@IsSelected" @onchange="HandleToggle" />
+    <div>@Tile.Title</div>
+    <div>@Tile.ShortDescription</div>
+    @if (Tile.Discount.HasValue)
+    {
+        <div>Discount: @Tile.Discount.Value% off</div>
+    }
+    <div>@Tile.PricingModel</div>
+    <div>@DisplayText</div>
+</div>
 
 @code {
+    [Parameter]
+    public UpsellTileDto Tile { get; set; } = new();
 
+    [Parameter]
+    public ReservationPricingContext Context { get; set; } = new();
+
+    [Parameter]
+    public int Quantity { get; set; } = 1;
+
+    [Parameter]
+    public bool IsSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnToggled { get; set; }
+
+    private decimal Total => UpsellPricingCalculator.CalculateTotal(
+        Tile.PricingModel,
+        Tile.Price,
+        Context.Nights,
+        Context.TotalGuests,
+        Quantity);
+
+    private string Currency => string.IsNullOrWhiteSpace(Context.Currency) ? Tile.Currency : Context.Currency;
+
+    private string DisplayText =>
+        $"Cena: {Total} {Currency} / {Context.TotalGuests} gości / {Context.Nights} noce ({Tile.PricingModel})";
+
+    private async Task HandleToggle(ChangeEventArgs args)
+    {
+        var isChecked = args.Value is bool boolValue && boolValue;
+        IsSelected = isChecked;
+        if (OnToggled.HasDelegate)
+        {
+            await OnToggled.InvokeAsync(isChecked);
+        }
+    }
 }
