@@ -184,7 +184,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
             var addonsTotal = startRequest?.SelectedAddons?.Sum(addon => (decimal)addon.Price * addon.Quantity) ?? 0m;
             var offerPrice = startRequest?.OfferPrice ?? 0m;
-            var grandTotal = (offerPrice - addonsTotal) + addonsTotal + upsellsTotal;
+            var grandTotal = offerPrice + addonsTotal + upsellsTotal;
 
             return new ReservationSummaryDto
             {
@@ -244,7 +244,10 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 }
 
                 var paymentSessionGuid = Guid.NewGuid();
-                var amount = record.State.StartRequest?.OfferPrice ?? 0m;
+
+                var summary = await BuildSummaryFromRecordAsync(reservationGuid, record);
+                var amount = summary.GrandTotal;
+
                 var currency = record.State.StartRequest?.Currency ?? "PLN";
 
                 var paymentResult = await _tpayGateway.CreatePaymentAsync(reservationGuid, paymentSessionGuid, amount, currency);
@@ -258,7 +261,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 record.Provider = record.Provider ?? "TPAY";
                 record.ProviderTransactionId = paymentResult.TransactionId;
                 record.State.PaymentRedirectUrl = paymentResult.RedirectUrl;
-                
+                record.State.PaymentUpsellsTotal = summary.UpsellsTotal;
+                record.State.PaymentGrandTotal = summary.GrandTotal;
+
                 record.IdoStatus = ReservationStatusType.WaitingForPayment;
 
                 try
