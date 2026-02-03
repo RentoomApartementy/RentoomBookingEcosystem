@@ -1,0 +1,74 @@
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+@if (IsModalOpen)
+{
+    <div id="@Id" class="container">
+        <div class="top-wrapper">
+            <div class="title">
+                <span>Mapa apartamentów</span>
+            </div>
+            
+            <div class="close-button" @onclick="CloseModal">
+                x
+            </div>
+        </div>
+        
+        @if (Apartment != null)
+        {
+            <div class="map">
+                <ApartmentMap
+                    Latitude="@Apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
+                    Longitude="@Apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
+                    ApartmentAddress="@Apartment?.ObjectLocation?.Address"
+                    Id="map-popup"
+                    ClassName="leafletPopupMap"
+                />
+            </div>   
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsModalOpen { get; set; }
+    [Parameter] public EventCallback<bool> IsModalOpenChanged { get; set; }
+    [Parameter] public ApartmentObject? Apartment { get; set; }
+
+    private DotNetObjectReference<MapPopup>? objRef;
+    private string Id { get; } = $"mappopup-{Guid.NewGuid()}";
+    
+    [JSInvokable]
+    public void CloseModal()
+    {
+        if (IsModalOpen)
+        {
+            IsModalOpen = false;
+            StateHasChanged();
+        }
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("registerClickOutside", Id, objRef);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("unregisterClickOutside", Id);
+        }
+        catch (Exception)
+        {
+        }
+        finally
+        {
+            objRef?.Dispose();
+        }
+    }
+}

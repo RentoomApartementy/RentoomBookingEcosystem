@@ -21,6 +21,7 @@
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization
 @using RentoomBookingWeb.Components.Enums
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
 @inject IReservationWorkflowService ReservationWorkflowService
 @inject MediaCacheService MediaCache
@@ -205,12 +206,14 @@
                 </div>
             </div>
             
-            <div class="map">
-                <ApartmentMap
-                    Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
-                    Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
-                    ApartmentAddress="@_apartment?.ObjectLocation?.Address"
-                />
+            <div class="map" @onclick="OpenModal">
+                @if (_isModalOpen)
+                {
+                    <ApartmentMap
+                        Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
+                        Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
+                        ApartmentAddress="@_apartment?.ObjectLocation?.Address"/>   
+                }
             </div>
         </div>
 
@@ -438,6 +441,11 @@
             }
         </div>
     }
+    
+    <MapPopup
+        @bind-IsModalOpen="_isModalOpen"
+        Apartment="_apartment"
+        />
 </div>
 
 @code {
@@ -462,6 +470,8 @@
     
     private List<DefinedAddonEntity>? _definedAddons = null;
     private List<SelectedAddonDto> _selectedAddons = new();
+
+    private bool _isModalOpen = true;
     
     private float TotalAddonsPrice 
     {
@@ -901,5 +911,10 @@
         }
     
         StateHasChanged(); 
+    }
+
+    private void OpenModal()
+    {
+        _isModalOpen = true;
     }
 }
