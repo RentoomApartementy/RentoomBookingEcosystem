@@ -4,12 +4,14 @@ using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services;
@@ -58,7 +60,16 @@ namespace RentoomBookingWeb
                 options.UseNpgsql(postgresConnectionString));
 
             builder.Services.AddScoped<PostgresBookingDatabase>();
-          
+
+            var rentoomAppConnectionString = PostgresConnectionStringProvider
+               .GetPostgresConnectionStringAsync(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger)
+               .Result;
+
+            builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
+
+
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<FiltersRepository>();
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
@@ -80,6 +91,7 @@ namespace RentoomBookingWeb
             //Customer Terms
             builder.Services.AddScoped<CustomerTermsRepository>();
             builder.Services.AddScoped<CustomerTermsService>();
+            builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
