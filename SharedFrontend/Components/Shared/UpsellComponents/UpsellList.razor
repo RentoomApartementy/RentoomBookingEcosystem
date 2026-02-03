@@ -9,7 +9,7 @@
         {
             var isSelected = IsSelected(tile);
             <UpsellTile Tile="tile"
-                        Context="Context"
+                        Context="ReservationContext"
                         Quantity="1"
                         IsSelected="isSelected"
                         OnToggled="@((bool selected) => HandleToggle(tile, selected))" />

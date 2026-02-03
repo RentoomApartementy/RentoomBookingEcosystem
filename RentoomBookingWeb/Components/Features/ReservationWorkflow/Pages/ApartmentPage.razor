@@ -5,8 +5,10 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Services.Upsell
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @inject IApartmentsService ApartmentsService
 @inject IIdoApartmentService IdoApartmentService
@@ -23,6 +25,7 @@
 @using RentoomBookingWeb.Components.Enums
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
 @inject IReservationWorkflowService ReservationWorkflowService
+@inject IUpsellCatalogService UpsellCatalogService
 @inject MediaCacheService MediaCache
 
 <PageTitle>@GetSeoTitle()</PageTitle>
@@ -372,6 +375,16 @@
         </div>
     }
     
+    
+     @if (_reservationPricingContext is not null)
+    {
+        <h3 class="header-text" style="margin-bottom: -1rem;">Upselle</h3>
+        <UpsellList AvailableUpsellsList="_availableUpsells"
+                    ReservationContext="_reservationPricingContext"
+                    OnSelectionChanged="HandleUpsellSelectionChanged" />
+    }
+
+    
     @if (TotalAddonsPrice > 0)
     {
         <div class="additional-price">
@@ -464,6 +477,12 @@
     private List<DefinedAddonEntity>? _definedAddons = null;
     private List<SelectedAddonDto> _selectedAddons = new();
     
+    private IReadOnlyList<UpsellTileDto> _availableUpsells = Array.Empty<UpsellTileDto>();
+    private ReservationPricingContext? _reservationPricingContext;
+    private List<SelectedUpsellDto> _selectedUpsells = new();
+    private StartReservationRequest? _draftStartReservationRequest;
+
+
     private float TotalAddonsPrice 
     {
         get
@@ -552,6 +571,10 @@
             
             _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
             InitializeMandatoryAddons();
+
+            UpdateReservationPricingContext();
+            await LoadUpsellsAsync();
+
         }
         
         await GetOffer();
@@ -905,4 +928,52 @@
     
         StateHasChanged(); 
     }
+
+    private async Task LoadUpsellsAsync()
+    {
+        if (_apartment is null)
+        {
+            _availableUpsells = Array.Empty<UpsellTileDto>();
+            return;
+        }
+
+        try
+        {
+            _availableUpsells = await UpsellCatalogService.GetUpsellTilesForApartmentAsync(
+                _apartment.Id,
+                CultureInfo.CurrentUICulture.Name);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading upsells: {ex.Message}");
+            _availableUpsells = Array.Empty<UpsellTileDto>();
+        }
+    }
+
+    private void UpdateReservationPricingContext()
+    {
+        if (!TryParseDate(StartDate, out var start) || !TryParseDate(EndDate, out var end))
+        {
+            _reservationPricingContext = null;
+            return;
+        }
+
+        var adults = int.TryParse(Adults, out var parsedAdults) ? parsedAdults : 0;
+        var children = int.TryParse(Children, out var parsedChildren) ? parsedChildren : 0;
+
+        _reservationPricingContext = new ReservationPricingContext
+        {
+            StartDate = start,
+            EndDate = end,
+            Adults = adults,
+            Children = children,
+            Currency = "PLN"
+        };
+    }
+
+    private void HandleUpsellSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
+    {
+        _selectedUpsells = selectedUpsells ?? new List<SelectedUpsellDto>();
+    }
+
 }
