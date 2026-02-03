@@ -7,7 +7,7 @@
     <div>@Tile.ShortDescription</div>
     @if (Tile.Discount.HasValue)
     {
-        <div>Discount: @Tile.Discount.Value% off</div>
+        <div>Oszczędzasz: @Tile.Discount.Value%</div>
     }
     <div>@Tile.PricingModel</div>
     <div>@DisplayText</div>
@@ -39,7 +39,7 @@
     private string Currency => string.IsNullOrWhiteSpace(Context.Currency) ? Tile.Currency : Context.Currency;
 
     private string DisplayText =>
-        $"Cena: {Total} {Currency} / {Context.TotalGuests} gości / {Context.Nights} noce ({Tile.PricingModel})";
+        $"Cena: {Total} {Currency} / {Context.TotalGuests} gości / {Context.Nights} noce ({Tile.PricingModel})"; //<<TODO: multi jezyk!
 
     private async Task HandleToggle(ChangeEventArgs args)
     {
