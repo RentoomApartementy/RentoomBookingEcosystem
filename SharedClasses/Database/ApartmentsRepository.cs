@@ -60,6 +60,37 @@ namespace RentoomBooking.SharedClasses.Database
             return apobj;
         }
 
+        public ApartmentObject? FindApartmentByItemId(int objectItemId, CancellationToken cancellationToken = default)
+        {
+            using var context = _dbContextFactory.CreateDbContext();
+            var entities = context.ApartmentInfos.AsNoTracking().ToList();
+
+            foreach (var entity in entities)
+            {
+                ApartmentObject? apartment = null;
+                try
+                {
+                    apartment = JsonConvert.DeserializeObject<ApartmentObject>(entity.Payload);
+                }
+                catch (Exception ex)
+                {
+                    _logger?.LogError(ex, "Failed to deserialize ApartmentInfo payload for id {Id}", entity.Id);
+                }
+
+                if (apartment?.Items is null)
+                {
+                    continue;
+                }
+
+                if (apartment.Items.Any(item => item.Id == objectItemId))
+                {
+                    return apartment;
+                }
+            }
+
+            return null;
+        }
+
         public async Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken, int pageSize)
         {
             if (pageSize <= 0) pageSize = 50;
