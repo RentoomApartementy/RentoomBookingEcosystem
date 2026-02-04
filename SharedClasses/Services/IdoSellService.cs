@@ -63,7 +63,7 @@ namespace RentoomBooking.SharedClasses.Services
             ILogger<IdoSellService> logger,
             PostgresBookingDatabase bookingDatabase,
             ApartmentRepository apartmentRepository,
-            IConfiguration configuration)//, CosmosClient cosmosClient)
+            IConfiguration configuration)
         {
             _idoConnect = idoConnect;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -77,6 +77,10 @@ builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 builder.Services.AddScoped<BitrixService>();
 
+//Customer Terms
+builder.Services.AddScoped<CustomerTermsRepository>();
+builder.Services.AddScoped<CustomerTermsService>();
+
 //TPAY
 
 bool UseDevelopmentSettingsOnProd = true;
