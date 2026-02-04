@@ -234,6 +234,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             _dbContext.Reservations.Add(new ReservationEntity
             {
                 ResToken = resToken,
+                ReservationId = payloadReservation.id,
                 Payload = payload,
                 CreatedAt = DateTime.UtcNow,
                 ReservationId = payloadReservation.id
@@ -248,6 +249,58 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             catch (Exception ex)
             {
                 log.LogError(ex, "Failed to save reservation {Token} to PostgreSQL.", resToken);
+                return null;
+            }
+        }
+
+        public async Task<Reservation?> GetReservationByIdAsync(int reservationId, ILogger log, CancellationToken cancellationToken = default)
+        {
+            if (log is null) throw new ArgumentNullException(nameof(log));
+
+            await _initializationTask;
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+            var entity = await _dbContext.Reservations.AsNoTracking()
+                .FirstOrDefaultAsync(r => r.ReservationId == reservationId, cancellationToken);
+            if (entity?.Payload is null)
+            {
+                log.LogWarning("Reservation with id {Id} not found in PostgreSQL.", reservationId);
+                return null;
+            }
+
+            try
+            {
+                var reservation = JsonConvert.DeserializeObject<RentoomReservation>(entity.Payload);
+                return reservation?.Reservation;
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "Failed to deserialize reservation {Id} from PostgreSQL.", reservationId);
+                return null;
+            }
+        }
+
+        public async Task<Reservation?> GetReservationTemplateAsync(string templateKey, ILogger log, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(templateKey)) throw new ArgumentNullException(nameof(templateKey));
+            if (log is null) throw new ArgumentNullException(nameof(log));
+
+            await _initializationTask;
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+            var entity = await _dbContext.ReservationTemplates.AsNoTracking()
+                .FirstOrDefaultAsync(t => t.TemplateKey == templateKey, cancellationToken);
+            if (entity?.Payload is null)
+            {
+                log.LogWarning("Reservation template {TemplateKey} not found in PostgreSQL.", templateKey);
+                return null;
+            }
+
+            try
+            {
+                return JsonConvert.DeserializeObject<Reservation>(entity.Payload);
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "Failed to deserialize reservation template {TemplateKey} from PostgreSQL.", templateKey);
                 return null;
             }
         }

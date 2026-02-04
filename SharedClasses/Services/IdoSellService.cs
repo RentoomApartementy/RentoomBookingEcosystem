@@ -18,9 +18,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +36,9 @@ namespace RentoomBooking.SharedClasses.Services
         private PostgresBookingDatabase _bookingDatabase;
         private ILogger<IdoSellService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
+        private readonly ApartmentRepository _apartmentRepository;
+        private readonly bool _useDummyIdoBooking;
+        private readonly string _dummyReservationTemplateKey;
 
 
         private const string ReservationsGetEndpoint = "reservations/get/34/json";
@@ -53,18 +58,46 @@ namespace RentoomBooking.SharedClasses.Services
         private const string RestrictionsExceptionsGetEndpoint = "restrictions/getExceptions/34/json";
 
 
-        public IdoSellService(IIdoBookingConnectService idoConnect, ILogger<IdoSellService> logger, PostgresBookingDatabase bookingDatabase)//, CosmosClient cosmosClient)
+        public IdoSellService(
+            IIdoBookingConnectService idoConnect,
+            ILogger<IdoSellService> logger,
+            PostgresBookingDatabase bookingDatabase,
+            ApartmentRepository apartmentRepository,
+            IConfiguration configuration)//, CosmosClient cosmosClient)
         {
             _idoConnect = idoConnect;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _bookingDatabase = bookingDatabase;
-
-
+            _apartmentRepository = apartmentRepository ?? throw new ArgumentNullException(nameof(apartmentRepository));
+            _useDummyIdoBooking = configuration.GetValue("IdoBooking:UseDummy", false);
+            _dummyReservationTemplateKey = configuration.GetValue<string>("IdoBooking:DummyReservationTemplateKey") ?? "default";
 
         }
 
         public async Task<RentoomReservationHashRecord> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, string? existingResToken = null, CancellationToken cancellationToken = default)
         {
+            if (_useDummyIdoBooking)
+            {
+                var reservation = await _bookingDatabase.GetReservationByIdAsync(ReservationId, _logger, cancellationToken);
+                var response = new ReservationResponseFromIdoSellAPI
+                {
+                    result = new ReservationsResult
+                    {
+                        Authenticate = _idoConnect.AuthObjectIdo(),
+                        Reservations = reservation is null ? new List<Reservation>() : new List<Reservation> { reservation },
+                        errors = reservation is null
+                            ? new GateErrorType { FaultString = $"Reservation {ReservationId} not found in dummy storage." }
+                            : null
+                    }
+                };
+
+                return new RentoomReservationHashRecord
+                {
+                    ReservationResponse = response,
+                    resToken = existingResToken
+                };
+            }
+
             ReservationRequestIDOSellAPI request = new ReservationRequestIDOSellAPI
             {
                 authenticate = _idoConnect.AuthObjectIdo(),
@@ -244,6 +277,11 @@ namespace RentoomBooking.SharedClasses.Services
                 throw new ArgumentException("Dodaj przynajmniej jedną rezerwację.", nameof(reservations));
             }
 
+            if (_useDummyIdoBooking)
+            {
+                return await AddReservationsDummyAsync(reservationsList, cancellationToken);
+            }
+
             var request = new ReservationAddRequest
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
@@ -278,6 +316,18 @@ namespace RentoomBooking.SharedClasses.Services
             if (reservationsList.Count == 0)
             {
                 throw new ArgumentException("Dodaj przynajmniej jedną rezerwację do zmiany statusu.", nameof(reservations));
+            }
+
+            if (_useDummyIdoBooking)
+            {
+                return new ChangeReservationsStatusResponse
+                {
+                    Reservations = reservationsList.Select(r => new ReservationStatusChangeResult
+                    {
+                        ReservationId = r.ReservationId,
+                        Success = true
+                    }).ToList()
+                };
             }
 
             var request = new EditReservationsStatusRequestType
@@ -315,6 +365,18 @@ namespace RentoomBooking.SharedClasses.Services
                 throw new ArgumentException("Dodaj przynajmniej jedną płatność.", nameof(payments));
             }
 
+            if (_useDummyIdoBooking)
+            {
+                return new PaymentAddResponse
+                {
+                    Results = paymentList.Select(payment => new PaymentAddResult
+                    {
+                        Id = GenerateReservationId(),
+                        ReservationId = payment.ReservationId
+                    }).ToList()
+                };
+            }
+
             var request = new PaymentAddRequest
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
@@ -331,11 +393,21 @@ namespace RentoomBooking.SharedClasses.Services
 
         public async Task<PaymentActionResponse?> CancelPaymentsAsync(IEnumerable<int> paymentIds, CancellationToken cancellationToken = default)
         {
+            if (_useDummyIdoBooking)
+            {
+                return BuildDummyPaymentActionResponse(paymentIds);
+            }
+
             return await ExecutePaymentActionAsync(paymentIds, PaymentsCancelEndpoint, cancellationToken);
         }
 
         public async Task<PaymentActionResponse?> ConfirmPaymentsAsync(IEnumerable<int> paymentIds, CancellationToken cancellationToken = default)
         {
+            if (_useDummyIdoBooking)
+            {
+                return BuildDummyPaymentActionResponse(paymentIds);
+            }
+
             return await ExecutePaymentActionAsync(paymentIds, PaymentsConfirmEndpoint, cancellationToken);
         }
 
@@ -351,6 +423,17 @@ namespace RentoomBooking.SharedClasses.Services
             if (paymentList.Count == 0)
             {
                 throw new ArgumentException("Podaj przynajmniej jedną płatność do edycji.", nameof(payments));
+            }
+
+            if (_useDummyIdoBooking)
+            {
+                return new PaymentActionResponse
+                {
+                    Results = paymentList.Select(payment => new PaymentActionResult
+                    {
+                        Id = payment.Id.ToString()
+                    }).ToList()
+                };
             }
 
             var request = new PaymentEditRequest
@@ -369,6 +452,11 @@ namespace RentoomBooking.SharedClasses.Services
 
         public async Task<PaymentFormsResponse?> GetPaymentFormsAsync(CancellationToken cancellationToken = default)
         {
+            if (_useDummyIdoBooking)
+            {
+                return new PaymentFormsResponse { Results = new List<PaymentForm>() };
+            }
+
             var request = new PaymentFormsRequest
             {
                 Authenticate = _idoConnect.AuthObjectIdo()
@@ -381,6 +469,18 @@ namespace RentoomBooking.SharedClasses.Services
 
         public async Task<PaymentGetResponse?> GetPaymentsAsync(PaymentGetParams? parameters = null, PaymentGetSettings? settings = null, CancellationToken cancellationToken = default)
         {
+            if (_useDummyIdoBooking)
+            {
+                return new PaymentGetResponse
+                {
+                    Results = new List<PaymentDetails>(),
+                    Page = settings?.Page ?? 1,
+                    CountOnPage = 0,
+                    PageAll = 1,
+                    CountAll = 0
+                };
+            }
+
             var request = new PaymentGetRequest
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
@@ -419,6 +519,217 @@ namespace RentoomBooking.SharedClasses.Services
             var response = await _idoConnect.PostAsync<PaymentActionRequest, PaymentActionResponseType>(endpoint, request, cancellationToken);
 
             return response?.Result;
+        }
+
+        private async Task<ReservationAddResponse> AddReservationsDummyAsync(List<NewReservation> reservationsList, CancellationToken cancellationToken)
+        {
+            var template = await _bookingDatabase.GetReservationTemplateAsync(_dummyReservationTemplateKey, _logger, cancellationToken);
+            var results = new List<ReservationChangeResult>();
+
+            foreach (var reservationRequest in reservationsList)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var reservationId = GenerateReservationId();
+                var reservation = BuildDummyReservation(reservationRequest, template, reservationId);
+
+                await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger, cancellationToken: cancellationToken);
+
+                results.Add(new ReservationChangeResult
+                {
+                    Success = true,
+                    ReservationId = reservationId
+                });
+            }
+
+            return new ReservationAddResponse
+            {
+                Reservations = results
+            };
+        }
+
+        private Reservation BuildDummyReservation(NewReservation reservationRequest, Reservation? template, int reservationId)
+        {
+            var reservation = CloneReservation(template) ?? new Reservation
+            {
+                ReservationDetails = new ReservationDetails(),
+                Items = new List<ReservationItem>(),
+                Client = new ClientModel { Guests = new List<Guest>(), InvoiceData = new InvoiceData() }
+            };
+
+            reservation.id = reservationId;
+            reservation.ReservationDetails ??= new ReservationDetails();
+            reservation.Items ??= new List<ReservationItem>();
+            reservation.Client ??= new ClientModel { Guests = new List<Guest>(), InvoiceData = new InvoiceData() };
+
+            ApplyReservationDetails(reservation.ReservationDetails, reservationRequest);
+            reservation.Items = BuildReservationItems(reservationRequest.Items, reservation.Items);
+            ApplyClientData(reservation.Client, reservationRequest.ClientData, reservationRequest.Currency);
+
+            return reservation;
+        }
+
+        private void ApplyReservationDetails(ReservationDetails details, NewReservation reservationRequest)
+        {
+            details.dateFrom = reservationRequest.DateFrom;
+            details.dateTo = reservationRequest.DateTo;
+            if (reservationRequest.Price.HasValue)
+            {
+                details.price = reservationRequest.Price.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(reservationRequest.Currency))
+            {
+                details.currency = reservationRequest.Currency;
+            }
+
+            if (!string.IsNullOrWhiteSpace(reservationRequest.Status))
+            {
+                details.status = reservationRequest.Status;
+            }
+
+            if (!string.IsNullOrWhiteSpace(reservationRequest.InternalSource))
+            {
+                details.internalSourceId = reservationRequest.InternalSource;
+            }
+
+            details.clientNote = reservationRequest.ClientNote ?? details.clientNote;
+            details.externalNote = reservationRequest.ExternalNote ?? details.externalNote;
+            details.internalNote = reservationRequest.InternalNote ?? details.internalNote;
+            details.apiNote = reservationRequest.ApiNote ?? details.apiNote;
+            details.modificationDate = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm");
+        }
+
+        private List<ReservationItem> BuildReservationItems(List<NewReservationItem> items, List<ReservationItem> templateItems)
+        {
+            var result = new List<ReservationItem>();
+            for (var index = 0; index < items.Count; index++)
+            {
+                var requestItem = items[index];
+                var templateItem = templateItems.Count > index ? templateItems[index] : new ReservationItem();
+                var reservationItem = new ReservationItem
+                {
+                    objectItemId = requestItem.ObjectItemId,
+                    price = requestItem.Price ?? templateItem.price,
+                    vat = requestItem.Vat ?? templateItem.vat,
+                    numberOfAdults = requestItem.NumberOfAdults ?? templateItem.numberOfAdults,
+                    numberOfSmallChildren = requestItem.NumberOfBigChildren?.ToString() ?? templateItem.numberOfSmallChildren,
+                    priceCorrection = templateItem.priceCorrection
+                };
+
+                var apartment = _apartmentRepository.FindApartmentByItemId(requestItem.ObjectItemId);
+                var apartmentItem = apartment?.Items?.FirstOrDefault(item => item.Id == requestItem.ObjectItemId);
+                if (apartment is not null)
+                {
+                    reservationItem.objectId = apartment.Id;
+                    reservationItem.objectName = apartment.Name ?? templateItem.objectName;
+                }
+                else
+                {
+                    reservationItem.objectId = templateItem.objectId;
+                    reservationItem.objectName = templateItem.objectName;
+                }
+
+                if (apartmentItem is not null)
+                {
+                    reservationItem.itemId = apartmentItem.Id ?? templateItem.itemId;
+                    reservationItem.itemCode = apartmentItem.Code ?? templateItem.itemCode;
+                }
+                else
+                {
+                    reservationItem.itemId = templateItem.itemId;
+                    reservationItem.itemCode = templateItem.itemCode;
+                }
+
+                reservationItem.addons = requestItem.Addons?.Select(addon => new ReservationAddon
+                {
+                    addonId = addon.AddonId.ToString(),
+                    price = addon.Price.ToString(CultureInfo.InvariantCulture),
+                    vat = addon.Vat,
+                    nights = addon.Nights,
+                    quantity = addon.Quantity
+                }).ToList() ?? templateItem.addons;
+
+                result.Add(reservationItem);
+            }
+
+            return result;
+        }
+
+        private static void ApplyClientData(ClientModel client, ClientWithGuest? clientData, string? currency)
+        {
+            if (clientData is null)
+            {
+                return;
+            }
+
+            client.FirstName = clientData.FirstName;
+            client.LastName = clientData.LastName;
+            client.Email = clientData.Email;
+            client.Phone = clientData.Phone;
+            client.Street = clientData.Street;
+            client.Zipcode = clientData.Zipcode;
+            client.City = clientData.City;
+            client.CountryCode = clientData.CountryCode;
+            client.Language = string.IsNullOrWhiteSpace(clientData.Language) ? client.Language : clientData.Language;
+            client.Currency = string.IsNullOrWhiteSpace(clientData.Currency) ? (currency ?? client.Currency) : clientData.Currency;
+
+            if (clientData.Guests is not null && clientData.Guests.Count > 0)
+            {
+                client.Guests = clientData.Guests.Select(guest => new Guest
+                {
+                    FirstName = guest.FirstName,
+                    LastName = guest.LastName,
+                    City = guest.City,
+                    CountryCode = guest.CountryCode,
+                    Email = guest.Email,
+                    Language = guest.Language,
+                    Phone = guest.Phone,
+                    Street = guest.Street,
+                    Zipcode = guest.Zipcode
+                }).ToList();
+            }
+
+            if (clientData.InvoiceData is not null)
+            {
+                client.InvoiceData = new InvoiceData
+                {
+                    FirstName = clientData.InvoiceData.FirstName,
+                    LastName = clientData.InvoiceData.LastName,
+                    Street = clientData.InvoiceData.Street,
+                    Zipcode = clientData.InvoiceData.Zipcode,
+                    City = clientData.InvoiceData.City,
+                    CountryCode = clientData.InvoiceData.CountryCode
+                };
+            }
+        }
+
+        private static Reservation? CloneReservation(Reservation? template)
+        {
+            if (template is null)
+            {
+                return null;
+            }
+
+            var serialized = JsonConvert.SerializeObject(template);
+            return JsonConvert.DeserializeObject<Reservation>(serialized);
+        }
+
+        private static int GenerateReservationId()
+        {
+            return RandomNumberGenerator.GetInt32(100000, 99999999);
+        }
+
+        private static PaymentActionResponse BuildDummyPaymentActionResponse(IEnumerable<int> paymentIds)
+        {
+            var paymentList = paymentIds?.ToList() ?? new List<int>();
+            return new PaymentActionResponse
+            {
+                Results = paymentList.Select(id => new PaymentActionResult
+                {
+                    Id = id.ToString()
+                }).ToList()
+            };
         }
     }
 }
