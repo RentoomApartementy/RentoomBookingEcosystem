@@ -69,7 +69,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public ReservationDetails? ReservationDetails { get; set; }
         public List<ReservationItem> Items { get; set; }
         public ClientModel Client { get; set; }
-        public decimal? TotalPaymentsAsInAPI { get; set; }
+       // public decimal? TotalPaymentsAsInAPI { get; set; }
 
     }
 

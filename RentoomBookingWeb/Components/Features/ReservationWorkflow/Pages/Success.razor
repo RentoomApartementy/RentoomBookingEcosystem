@@ -17,10 +17,12 @@
     [Parameter] public Guid tpayTransactionId { get; set; }
     
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+
+            await ReservationWorkflowService.MarkPaymentAsPaidAsync(ReservationTokenGuid);//<< for  testing : flag _idoApi.UseDummyIdoBooking
             Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji/", true);
         }
     }
