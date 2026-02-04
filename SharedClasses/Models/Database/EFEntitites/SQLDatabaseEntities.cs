@@ -71,6 +71,20 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
             = DateTime.UtcNow;
     }
 
+    [Table("reservation_templates")]
+    public class ReservationTemplateEntity
+    {
+        [Key]
+        [Column("template_key")]
+        public string TemplateKey { get; set; } = string.Empty;
+
+        [Column("payload", TypeName = "jsonb")]
+        public string Payload { get; set; } = string.Empty;
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
+
     [Table("reservation_records")]
     public class ReservationRecordEntity
     {
