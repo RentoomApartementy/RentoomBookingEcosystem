@@ -16,6 +16,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using RentoomBooking.SharedClasses.Models;
 
 namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 {
@@ -31,6 +32,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task HandleTpayWebhookAsync(TpayWebhookDto dto);
 
         Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
+        Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections);
     }
 
     public class ReservationWorkflowService : IReservationWorkflowService
@@ -41,6 +43,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private readonly ITpayGateway _tpayGateway;
         private readonly BitrixService _bitrixService;
         private readonly IConfiguration _configuration;
+        private readonly CustomerTermsRepository _termsRepository;
         private readonly ILogger<ReservationWorkflowService> _logger;
         private const int BitrixAssignedByUserId = 208;
         public ReservationWorkflowService(
@@ -50,6 +53,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             BitrixService bitrixService,
             IConfiguration configuration,
             ApartmentRepository apartmentStore,
+            CustomerTermsRepository termsRepository,
         ILogger<ReservationWorkflowService> logger)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
@@ -59,6 +63,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _apartmentStore = apartmentStore ?? throw new ArgumentNullException(nameof(apartmentStore));
+            _termsRepository = termsRepository;
         }
 
         public async Task<Guid> StartAsync(StartReservationRequest request)
@@ -690,6 +695,24 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 LatestActivity = latest,
                 Activities = activities
             };
+        }
+
+        public async Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections)
+        {
+            var record = await RequireReservationAsync(reservationGuid);
+
+            var agreedEntities = termSelections.Select(kvp => new CustomerAgreedTerms
+            {
+                ReservationGuid = reservationGuid,
+                TermsSourceId = kvp.Key,
+                IsAccepted = kvp.Value, 
+                AgreedAt = DateTime.UtcNow,
+                ClientBitrixId = record.ClientBitrixId,
+            }).ToList();
+
+            await _termsRepository.AddAgreedTermsAsync(agreedEntities);
+
+            _logger.LogInformation("Saved {Count} term states for reservation {Guid}", agreedEntities.Count, reservationGuid);
         }
     }
 }

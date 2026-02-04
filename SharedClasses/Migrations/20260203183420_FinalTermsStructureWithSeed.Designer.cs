@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
@@ -11,9 +12,11 @@ using RentoomBooking.SharedClasses.Database;
 namespace RentoomBooking.SharedClasses.Migrations
 {
     [DbContext(typeof(PostgresBookingDbContext))]
-    partial class PostgresBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260203183420_FinalTermsStructureWithSeed")]
+    partial class FinalTermsStructureWithSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,36 +24,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.CustomerAgreedTerms", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("AgreedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("ClientBitrixId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsAccepted")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("ReservationGuid")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("TermsSourceId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TermsSourceId");
-
-                    b.ToTable("customer_agreed_terms");
-                });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.CustomerTermsAndConditionsSource", b =>
                 {
@@ -398,17 +371,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.HasKey("ResToken");
 
                     b.ToTable("Terms");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.CustomerAgreedTerms", b =>
-                {
-                    b.HasOne("RentoomBooking.SharedClasses.Models.CustomerTermsAndConditionsSource", "TermsSource")
-                        .WithMany()
-                        .HasForeignKey("TermsSourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TermsSource");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.StayWell;
 
@@ -25,6 +26,9 @@ namespace RentoomBooking.SharedClasses.Database
         public DbSet<RegistrationCardEntity> RegistrationCard => Set<RegistrationCardEntity>();
 
         public DbSet<DefinedAddonEntity> DefinedAddons => Set<DefinedAddonEntity>();
+        
+        public DbSet<CustomerTermsAndConditionsSource> CustomerTermsSources { get; set; }
+        public DbSet<CustomerAgreedTerms> CustomerAgreedTerms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -107,8 +111,52 @@ namespace RentoomBooking.SharedClasses.Database
                             ?? new RentoomBooking.SharedClasses.Models.RentoomBooking.DefinedAddonDefinition()
                     );
             });
+            
+            var staticDate = new DateTime(2025, 2, 3, 0, 0, 0, DateTimeKind.Utc);
 
-
+            //CustomerTermsAndConditionsSource
+            modelBuilder.Entity<CustomerTermsAndConditionsSource>().HasData(
+                new CustomerTermsAndConditionsSource
+                {
+                    Id = 1,
+                    ValidFrom = staticDate,
+                    Description = "Zgoda na przetwarzanie danych osobowych przez serwis Rentoom (Administratora danych) w celu realizacji usług",
+                    Link = "",
+                    IsRequired = true,
+                },
+                new CustomerTermsAndConditionsSource
+                {
+                    Id = 2,
+                    ValidFrom = staticDate,
+                    Description = "Regulamin główny serwisu i akceptacja IdoBooking",
+                    Link = "",
+                    IsRequired = false,
+                },
+                new CustomerTermsAndConditionsSource
+                {
+                    Id = 3,
+                    ValidFrom = staticDate,
+                    Description = "Zgoda na komunikację i przesyłanie ofert przez WhatsApp",
+                    Link = "",
+                    IsRequired = false,
+                },
+                new CustomerTermsAndConditionsSource
+                {
+                    Id = 4,
+                    ValidFrom = staticDate,
+                    Description = "Zgoda na przetwarzanie danych w systemie CRM Bitrix24",
+                    Link = "",
+                    IsRequired = false,
+                },
+                new CustomerTermsAndConditionsSource
+                {
+                    Id = 5,
+                    ValidFrom = staticDate,
+                    Description = "Zgoda marketingowa na przesyłanie ofert handlowych",
+                    Link = "",
+                    IsRequired = false,
+                }
+            );
         }
     }
 

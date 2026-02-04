@@ -76,7 +76,10 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixService>();
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<MediaCacheService>();
-
+            
+            //Customer Terms
+            builder.Services.AddScoped<CustomerTermsRepository>();
+            builder.Services.AddScoped<CustomerTermsService>();
 
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
