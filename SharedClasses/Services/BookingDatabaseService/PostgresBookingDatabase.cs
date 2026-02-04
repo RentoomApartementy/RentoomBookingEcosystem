@@ -226,7 +226,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             {
                 Id = payloadReservation.id,
                 ResToken = resToken,
-                Reservation = payloadReservation
+                Reservation = payloadReservation,
+
             };
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             var payload = JsonConvert.SerializeObject(document);
@@ -234,7 +235,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             {
                 ResToken = resToken,
                 Payload = payload,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                ReservationId = payloadReservation.id
             });
 
             try
