@@ -45,16 +45,16 @@ using var tempLoggerFactory = LoggerFactory.Create(lb =>
 var tempLogger = tempLoggerFactory.CreateLogger("DatabaseInit");
 
 var postgresConnectionString = PostgresConnectionStringProvider
-    .GetPostgresConnectionString(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger)
-    .Result;
+    .GetPostgresConnectionString(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger);
+  
 
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 
 var rentoomAppConnectionString = PostgresConnectionStringProvider
-    .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger)
-    .Result;
+    .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
+  
 
 builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
