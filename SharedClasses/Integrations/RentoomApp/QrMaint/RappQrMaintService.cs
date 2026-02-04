@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Services
+namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 {
     public class RappQrMaintService
     {

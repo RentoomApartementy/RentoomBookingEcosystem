@@ -1,0 +1,87 @@
+﻿﻿@using Microsoft.AspNetCore.Components
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
+
+<div>
+    @if (AvailableUpsellsList is not null)
+    {
+        foreach (var tile in AvailableUpsellsList)
+        {
+            var isSelected = IsSelected(tile);
+            <UpsellTile Tile="tile"
+                        Context="ReservationContext"
+                        Quantity="1"
+                        IsSelected="isSelected"
+                        OnToggled="@((bool selected) => HandleToggle(tile, selected))" />
+        }
+    }
+    <div class="additional-price"><b>Suma upselli: @_totalTotal @Currency</b></div>
+</div>
+
+@code {
+    [Parameter]
+    public IReadOnlyList<UpsellTileDto> AvailableUpsellsList { get; set; } = Array.Empty<UpsellTileDto>();
+
+    [Parameter]
+    public ReservationPricingContext ReservationContext { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
+
+    private readonly List<SelectedUpsellDto> _selectedUpsells = new();
+    private decimal _totalTotal;
+
+    private string Currency => string.IsNullOrWhiteSpace(ReservationContext.Currency)
+        ? AvailableUpsellsList.FirstOrDefault()?.Currency ?? string.Empty
+        : ReservationContext.Currency;
+
+    private bool IsSelected(UpsellTileDto tile)
+        => _selectedUpsells.Any(item => item.PartnerServiceId == tile.PartnerServiceId);
+
+    private async Task HandleToggle(UpsellTileDto tile, bool isSelected)
+    {
+        var existing = _selectedUpsells.FirstOrDefault(item => item.PartnerServiceId == tile.PartnerServiceId);
+        if (isSelected)
+        {
+            if (existing is null)
+            {
+                _selectedUpsells.Add(new SelectedUpsellDto
+                {
+                    PartnerServiceId = tile.PartnerServiceId,
+                    Quantity = 1
+                });
+            }
+        }
+        else if (existing is not null)
+        {
+            _selectedUpsells.Remove(existing);
+        }
+
+        RecalculateTotal();
+
+        if (OnSelectionChanged.HasDelegate)
+        {
+            await OnSelectionChanged.InvokeAsync(_selectedUpsells.ToList());
+        }
+    }
+
+    private void RecalculateTotal()
+    {
+        _totalTotal = 0m;
+        foreach (var selected in _selectedUpsells)
+        {
+            var tile = AvailableUpsellsList.FirstOrDefault(item => item.PartnerServiceId == selected.PartnerServiceId);
+            if (tile is null)
+            {
+                continue;
+            }
+
+            _totalTotal += UpsellPricingCalculator.CalculateTotal(
+                tile.PricingModel,
+                tile.Price,
+                ReservationContext.Nights,
+                ReservationContext.TotalGuests,  //TODO: <<total guest to Adults + Children !!! trzeba obgadac z Bartkiem.
+                selected.Quantity);
+        }
+    }
+}

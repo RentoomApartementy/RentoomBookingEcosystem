@@ -14,8 +14,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.StayWell", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBookingWeb", "RentoomBookingWeb\RentoomBookingWeb.csproj", "{10DCA528-64FF-40C1-86D3-35CAC586479F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE} = {2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}
 		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84} = {9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.SharedFrontend", "SharedFrontend\RentoomBooking.SharedFrontend.csproj", "{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +42,10 @@ Global
 		{10DCA528-64FF-40C1-86D3-35CAC586479F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10DCA528-64FF-40C1-86D3-35CAC586479F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10DCA528-64FF-40C1-86D3-35CAC586479F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

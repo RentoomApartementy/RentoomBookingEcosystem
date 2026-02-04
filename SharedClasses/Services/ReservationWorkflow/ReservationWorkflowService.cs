@@ -10,8 +10,11 @@ using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Models.Upsell;
+using RentoomBooking.SharedClasses.Services.Upsell;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -43,6 +46,10 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private readonly ITpayGateway _tpayGateway;
         private readonly BitrixService _bitrixService;
         private readonly IConfiguration _configuration;
+
+        private readonly IUpsellCatalogService _upsellCatalogService;
+
+
         private readonly CustomerTermsRepository _termsRepository;
         private readonly ILogger<ReservationWorkflowService> _logger;
         private const int BitrixAssignedByUserId = 208;
@@ -53,6 +60,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             BitrixService bitrixService,
             IConfiguration configuration,
             ApartmentRepository apartmentStore,
+             IUpsellCatalogService upsellCatalogService,
             CustomerTermsRepository termsRepository,
         ILogger<ReservationWorkflowService> logger)
         {
@@ -63,6 +71,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _apartmentStore = apartmentStore ?? throw new ArgumentNullException(nameof(apartmentStore));
+            _upsellCatalogService = upsellCatalogService ?? throw new ArgumentNullException(nameof(upsellCatalogService));
             _termsRepository = termsRepository;
         }
 
@@ -98,13 +107,13 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 record = await RequireReservationAsync(reservationGuid);
             }
-            return BuildSummaryFromRecord(reservationGuid, record);
+            return await BuildSummaryFromRecordAsync(reservationGuid, record);
         }
 
         public async Task<ReservationSummaryDto> BuildDraftSummaryAsync(Guid reservationGuid)
         {
             var record = await RequireReservationAsync(reservationGuid);
-            return BuildSummaryFromRecord(reservationGuid, record);
+            return await BuildSummaryFromRecordAsync(reservationGuid, record);
         }
 
         private static ReservationSummaryDto BuildSummaryFromRecord(Guid reservationGuid, ReservationRecord record)
@@ -124,6 +133,115 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             };
         }
 
+        private async Task<ReservationSummaryDto> BuildSummaryFromRecordAsync(Guid reservationGuid, ReservationRecord record)
+        {
+            var startRequest = record.State.StartRequest;
+            var upsellLines = new List<UpsellSummaryLineDto>();
+            var upsellsTotal = 0m;
+
+            if (startRequest?.SelectedUpsells?.Count > 0)
+            {
+                var culture = CultureInfo.CurrentUICulture.Name;
+                var tiles = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(startRequest.ObjectId, culture,"all");
+                
+                var tileLookup = tiles.ToDictionary(tile => tile.PartnerServiceId);
+                
+                var pricingContext = new ReservationPricingContext
+                {
+                    StartDate = startRequest.StartDate,
+                    EndDate = startRequest.EndDate,
+                    Adults = startRequest.Adults,
+                    Children = startRequest.Children,
+                    Currency = startRequest.Currency ?? "PLN"
+                };
+
+                foreach (var selected in startRequest.SelectedUpsells)
+                {
+                    if (!tileLookup.TryGetValue(selected.PartnerServiceId, out var tile))
+                    {
+                        continue;
+                    }
+
+                    var quantity = Math.Max(1, selected.Quantity);
+                    
+                    
+                    var lineTotal = UpsellPricingCalculator.CalculateTotal(
+                        tile.PricingModel,
+                        tile.Price,
+                        pricingContext.Nights,
+                        pricingContext.TotalGuests,
+                        quantity);
+
+                    upsellLines.Add(new UpsellSummaryLineDto
+                    {
+                        PartnerServiceId = tile.PartnerServiceId,
+                        Title = tile.Title,
+                        PricingModel = tile.PricingModel,
+                        Quantity = quantity,
+                        UnitPriceGross = tile.Price,
+                        Nights = pricingContext.Nights,
+                        TotalGuests = pricingContext.TotalGuests,
+                        LineTotalGross = lineTotal,
+                        DisplayText = $"Cena: {tile.Price} {tile.Currency}"
+                    });
+
+                    upsellsTotal += lineTotal;
+                }
+            }
+
+            decimal addonsTotal = 0m;//startRequest?.SelectedAddons?.Sum(addon => (decimal)addon.Price * addon.Quantity) ?? 0m; //wyliczenie do sprawdzenia bo nie bierze pod uwage typu addonu
+
+            foreach (var addon in startRequest?.SelectedAddons ?? [])
+            {
+                addonsTotal +=AddonPricingCalculator.CalculateTotal(addon.PaymentType, (decimal)addon.Price, addon.Nights, startRequest.Adults + startRequest.Children, addon.Quantity);
+            }
+
+            var offerPrice = startRequest?.OfferPrice ?? 0m;
+            
+            decimal grandTotal = offerPrice + addonsTotal + upsellsTotal;
+
+            return new ReservationSummaryDto
+            {
+                ReservationGuid = reservationGuid,
+                StartRequest = startRequest,
+                Client = record.State.Client,
+                Invoice = record.State.Invoice,
+                IdoReservationId = record.IdoReservationId,
+                IdoStatus = record.IdoStatus,
+                OfferPrice = startRequest?.OfferPrice,
+                Currency = startRequest?.Currency ?? "PLN",
+                PaymentStatus = record.PaymentStatus,
+                Upsells = upsellLines,
+                UpsellsTotal = upsellsTotal,
+                GrandTotal = grandTotal
+            };
+        }
+
+        private async Task EnsurePaymentTotalsAsync(Guid reservationGuid, ReservationRecord record)
+        {
+            var summary = await BuildSummaryFromRecordAsync(reservationGuid, record);
+            var updated = false;
+
+            if (record.State.PaymentUpsellsTotal != summary.UpsellsTotal)
+            {
+                record.State.PaymentUpsellsTotal = summary.UpsellsTotal;
+                updated = true;
+            }
+
+            if (record.State.PaymentGrandTotal != summary.GrandTotal)
+            {
+                record.State.PaymentGrandTotal = summary.GrandTotal;
+                updated = true;
+            }
+
+            if (updated)
+            {
+                await _store.UpdateAsync(record);
+            }
+        }
+
+
+
 
         public async Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid)
         {
@@ -135,7 +253,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
                 {
+                    await EnsurePaymentTotalsAsync(reservationGuid, record);
                     var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie-transakcji";
+
 
                     return new PaymentInitResult
                     {
@@ -149,6 +269,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 if (record.PaymentStatus == PaymentStatuses.Initiated && record.PaymentSessionGuid.HasValue)
                 {
+                    await EnsurePaymentTotalsAsync(reservationGuid, record);
                     var redirectUrl = record.State.PaymentRedirectUrl;
 
                     return new PaymentInitResult
@@ -162,7 +283,10 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 }
 
                 var paymentSessionGuid = Guid.NewGuid();
-                var amount = record.State.StartRequest?.OfferPrice ?? 0m;
+
+                var summary = await BuildSummaryFromRecordAsync(reservationGuid, record);
+                var amount = summary.GrandTotal;
+
                 var currency = record.State.StartRequest?.Currency ?? "PLN";
 
                 var paymentResult = await _tpayGateway.CreatePaymentAsync(reservationGuid, paymentSessionGuid, amount, currency);
@@ -176,7 +300,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 record.Provider = record.Provider ?? "TPAY";
                 record.ProviderTransactionId = paymentResult.TransactionId;
                 record.State.PaymentRedirectUrl = paymentResult.RedirectUrl;
-                
+                record.State.PaymentUpsellsTotal = summary.UpsellsTotal;
+                record.State.PaymentGrandTotal = summary.GrandTotal;
+
                 record.IdoStatus = ReservationStatusType.WaitingForPayment;
 
                 try

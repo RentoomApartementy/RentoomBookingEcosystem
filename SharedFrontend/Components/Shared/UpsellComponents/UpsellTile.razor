@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNetCore.Components
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums
+@using RentoomBooking.SharedClasses.Models.Upsell
+
+<div>
+    <input type="checkbox" checked="@IsSelected" @onchange="HandleToggle" />
+    <img src="@Tile.BannerUrls[PartnerServiceBannerPlacementType.StayWell]" alt="@Tile.Title" style="height:10%" />
+    <div>@Tile.Title</div>
+    <div>@Tile.ShortDescription</div>
+    @if (Tile.Discount.HasValue)
+    {
+        <div>Oszczędzasz: @(Tile.Discount.Value) @(Tile.PricingDiscountType == PartnerServiceDiscountType.Percent?"%": Tile.Currency) </div>
+    }
+    <div>@Tile.PricingModel</div>
+    <div>@DisplayText</div>
+    <div>Całość: @Total @Tile.Currency</div>
+</div>
+
+@code {
+    [Parameter]
+    public UpsellTileDto Tile { get; set; } = new();
+
+    [Parameter]
+    public ReservationPricingContext Context { get; set; } = new();
+
+    [Parameter]
+    public int Quantity { get; set; } = 1;
+
+    [Parameter]
+    public bool IsSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnToggled { get; set; }
+
+    private decimal Total => UpsellPricingCalculator.CalculateTotal(
+        Tile.PricingModel,
+        Tile.Price,
+        Context.Nights,
+        Context.TotalGuests,
+        Quantity);
+
+    private string Currency => string.IsNullOrWhiteSpace(Context.Currency) ? Tile.Currency : Context.Currency;
+
+    private string DisplayText =>
+        $"Cena: {Tile.Price} {Currency} / {Context.TotalGuests} gości / {Context.Nights} noce ({Tile.PricingModel})"; //<<TODO: multi jezyk!
+
+    private async Task HandleToggle(ChangeEventArgs args)
+    {
+        var isChecked = args.Value is bool boolValue && boolValue;
+        IsSelected = isChecked;
+        if (OnToggled.HasDelegate)
+        {
+            await OnToggled.InvokeAsync(isChecked);
+        }
+    }
+}

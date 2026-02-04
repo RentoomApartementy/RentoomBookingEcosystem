@@ -1,5 +1,6 @@
 ﻿using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,7 +23,7 @@ namespace RentoomBooking.SharedClasses.Configuration
             return $"{secret[..6]}...{secret[^4..]}";
         }
 
-        public static async Task<string?> GetPostgresConnectionStringAsync(IConfiguration configuration, bool isDevelopmentEnv, ILogger log)
+        public static async Task<string?> GetPostgresConnectionStringAsync(IConfiguration configuration, string propertyName, bool isDevelopmentEnv, ILogger log)
         {
             if (configuration is null) throw new ArgumentNullException(nameof(configuration));
             if (log is null) throw new ArgumentNullException(nameof(log));
@@ -31,7 +32,7 @@ namespace RentoomBooking.SharedClasses.Configuration
 
             if (isDevelopmentEnv)
             {
-                var local = configuration.GetConnectionString("POSTGRES_RENTOOM_BOOKING_DB_LOCAL") ?? configuration["ConnectionStrings:POSTGRES_RENTOOM_BOOKING_DB_LOCAL"]?? configuration["Values:POSTGRES_RENTOOM_BOOKING_DB_LOCAL"]?? configuration["POSTGRES_RENTOOM_BOOKING_DB_LOCAL"];
+                var local = configuration.GetConnectionString(propertyName) ?? configuration[$"ConnectionStrings:{propertyName}"] ?? configuration[$"Values:{propertyName}"] ?? configuration[propertyName];
 
 
 

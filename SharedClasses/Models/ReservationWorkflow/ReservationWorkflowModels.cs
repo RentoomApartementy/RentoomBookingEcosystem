@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
+using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public decimal? OfferPrice { get; set; }
         public string Currency { get; set; } = "PLN";
         public List<SelectedAddonDto> SelectedAddons { get; set; } = new();
+        public List<SelectedUpsellDto> SelectedUpsells { get; set; } = new(); //tylko ID upsellu.
     }
 
     public class ClientInfoDto
@@ -54,12 +57,16 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public Guid ReservationGuid { get; set; }
         public StartReservationRequest? StartRequest { get; set; }
         public ClientInfoDto? Client { get; set; }
+       
         public InvoiceInfoDto? Invoice { get; set; }
         public int? IdoReservationId { get; set; }
         public string? IdoStatus { get; set; }
         public decimal? OfferPrice { get; set; }
         public string Currency { get; set; } = "PLN";
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
+        public List<UpsellSummaryLineDto> Upsells { get; set; } = new();
+        public decimal UpsellsTotal { get; set; }
+        public decimal GrandTotal { get; set; }
     }
 
     public class PaymentInitResult
@@ -96,7 +103,12 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public StartReservationRequest? StartRequest { get; set; }
         public ClientInfoDto? Client { get; set; }
         public InvoiceInfoDto? Invoice { get; set; }
+
+      //  public List<TermsAndConditionsAcceptanceInfo> {get;set;}
         public string? PaymentRedirectUrl { get; set; }
+
+        public decimal PaymentUpsellsTotal { get; set; }
+        public decimal PaymentGrandTotal { get; set; }
     }
 
     public class ReservationRecord
@@ -126,7 +138,28 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public int Quantity { get; set; }
         public float Price { get; set; }
         public float Vat { get; set; }
+        public AddonPaymentType? PaymentType { get; set; }
     }
+
+    public class SelectedUpsellDto
+    {
+        public int PartnerServiceId { get; set; }
+        public int Quantity { get; set; }
+    }
+
+    public class UpsellSummaryLineDto
+    {
+        public int PartnerServiceId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public PartnerServicePricingModel PricingModel { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPriceGross { get; set; }
+        public int Nights { get; set; }
+        public int TotalGuests { get; set; }
+        public decimal LineTotalGross { get; set; }
+        public string DisplayText { get; set; } = string.Empty;
+    }
+
 
     public static class PaymentStatuses
     {
@@ -175,4 +208,35 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
             return DateOnly.TryParse(stringValue, out var parsed) ? parsed : default;
         }
     }
+
+
+    public static class AddonPricingCalculator
+    {
+        public static decimal CalculateTotal(
+            AddonPaymentType? pricingModel,
+            decimal unitPriceGross,
+            int nights,
+            int totalGuests,
+            int quantity = 1) //quantity  najczescie to 1 ale dla niektorych dodatkow moze byc wiecej (np. wynajem rowerow per osoba per dzien - 2 rowery x 2 osoby x 2 noce)
+        {
+            return pricingModel switch
+            {
+
+
+           //       if (type.Contains("za cały pobyt")) total += selected.Price;
+           // else if (type.Contains("za osobę za każdą dobę") || type.Contains("za osobę za dobę")) total += selected.Price * selected.Persons * selected.Nights;
+           // else if (type.Contains("za dobę")) total += selected.Price * selected.Nights;
+           // else total += selected.Price * selected.Quantity;
+
+                AddonPaymentType.PayPerPersonPerNight => unitPriceGross * nights * totalGuests*quantity,
+                AddonPaymentType.PayPerStay => unitPriceGross*quantity,
+                AddonPaymentType.PayPerAmountPerNight => unitPriceGross * nights * quantity,
+                AddonPaymentType.PayPerAmount => unitPriceGross * quantity,
+                AddonPaymentType.PayPerNight => unitPriceGross * nights * quantity,
+                _ => throw new ArgumentOutOfRangeException(nameof(pricingModel), pricingModel, "Unsupported pricing model.")
+            };
+        }
+    }
+
+
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RentoomBooking.SharedClasses.Integrations.RentoomApp
+namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 {
     [Table("QRMaintIdosellMapping", Schema = "rentoom")]
     public class QRMaintIdosellMappingEntity

@@ -14,14 +14,15 @@ using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.Services;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Services.Upsell;
 
 
 TokenCredential credential = new DefaultAzureCredential();
@@ -44,11 +45,19 @@ using var tempLoggerFactory = LoggerFactory.Create(lb =>
 var tempLogger = tempLoggerFactory.CreateLogger("DatabaseInit");
 
 var postgresConnectionString = PostgresConnectionStringProvider
-    .GetPostgresConnectionStringAsync(builder.Configuration, builder.Environment.IsDevelopment(), tempLogger)
+    .GetPostgresConnectionStringAsync(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger)
     .Result;
 
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
+
+
+var rentoomAppConnectionString = PostgresConnectionStringProvider
+    .GetPostgresConnectionStringAsync(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger)
+    .Result;
+
+builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
+    options.UseNpgsql(rentoomAppConnectionString));
 
 
 builder.Services.AddScoped<PostgresBookingDatabase>();
@@ -65,6 +74,7 @@ builder.Services.AddScoped<TermsRepository>();
 builder.Services.AddScoped<RegistrationCardRepository>();
 builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
+builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 builder.Services.AddScoped<BitrixService>();
 
 //TPAY

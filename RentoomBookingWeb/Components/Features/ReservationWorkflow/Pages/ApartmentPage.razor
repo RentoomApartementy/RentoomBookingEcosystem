@@ -5,8 +5,10 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Services.Upsell
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @inject IApartmentsService ApartmentsService
 @inject IIdoApartmentService IdoApartmentService
@@ -23,6 +25,7 @@
 @using RentoomBookingWeb.Components.Enums
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
 @inject IReservationWorkflowService ReservationWorkflowService
+@inject IUpsellCatalogService UpsellCatalogService
 @inject MediaCacheService MediaCache
 
 <PageTitle>@GetSeoTitle()</PageTitle>
@@ -372,6 +375,16 @@
         </div>
     }
     
+    
+     @if (_reservationPricingContext is not null)
+    {
+        <h3 class="header-text" style="margin-bottom: -1rem;">Upselle</h3>
+        <UpsellList AvailableUpsellsList="_availableUpsells"
+                    ReservationContext="_reservationPricingContext"
+                    OnSelectionChanged="HandleUpsellSelectionChanged" />
+    }
+
+    
     @if (TotalAddonsPrice > 0)
     {
         <div class="additional-price">
@@ -400,7 +413,7 @@
                     <b>@Localizer["Non-refundableOffer"]</b>
                     <small>@Localizer["NonRefundableText"]</small>
                     <div class="summary-offer-price-button">
-                        <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice) zł</b></span>
+                        <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
                         <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">@Localizer["BookNow"]</Button>
                     </div>
                 </div>  
@@ -412,7 +425,7 @@
                     <b>@Localizer["RefundableOffer"]</b>
                     <small>@Localizer["RefundableOfferText"]</small>
                     <div class="summary-offer-price-button">
-                        <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice) zł</b></span>
+                        <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
                         <Button Type="ButtonType.Tertiary" @onclick="@(() => GoToPayment(OfferTypeRefundable))">@Localizer["BookNow"]</Button>
                     </div>
                 </div>   
@@ -448,7 +461,7 @@
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
     [Parameter] public string? Children { get; set; }
-    
+
     private ApartmentObject? _apartment;
     private List<ObjectMedium>? _objectMediums = null;
     private List<ObjectAmenity>? _amenities = null;
@@ -460,13 +473,42 @@
 
     private AvailableTerm? _suggestionDates = null;
     private bool _suggestionLoading = false;
-    
+
     private List<DefinedAddonEntity>? _definedAddons = null;
     private List<SelectedAddonDto> _selectedAddons = new();
-    
-    private float TotalAddonsPrice 
+
+    private IReadOnlyList<UpsellTileDto> _availableUpsells = Array.Empty<UpsellTileDto>();
+    private ReservationPricingContext? _reservationPricingContext; // uztywany do prawidlowego liczenia upselli w UpsellList 
+    private List<SelectedUpsellDto> _selectedUpsells = new();
+    private StartReservationRequest? _draftStartReservationRequest;
+
+
+    private decimal TotalAddonsPrice 
     {
         get
+        {
+            decimal total = 0;
+            if (_reservationPricingContext is null || _selectedAddons == null || _definedAddons == null) return 0m;
+
+
+            foreach (var selected in _selectedAddons)
+            {
+                var def = _definedAddons.FirstOrDefault(d => d.IdoBookingId == selected.AddonId);
+                var details = def?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == "PL");
+
+                if (details == null) continue;
+
+                total += AddonPricingCalculator.CalculateTotal(
+                                                                def?.PaymentType, 
+                                                                (decimal)selected.Price, 
+                                                                _reservationPricingContext.Nights,
+                                                                _reservationPricingContext.TotalGuests,
+                                                                quantity: 1);
+            }
+            return total;
+        }
+
+        /*get
         {
             float total = 0;
             if (_selectedAddons == null || _definedAddons == null) return 0;
@@ -475,16 +517,47 @@
             {
                 var def = _definedAddons.FirstOrDefault(d => d.IdoBookingId == selected.AddonId);
                 var details = def?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == "PL");
-                
+
                 if (details == null) continue;
 
                 var type = details.PaymentTypeShortDescription?.ToLower().Trim() ?? "";
-                
-                if (type.Contains("za cały pobyt")) total += selected.Price; 
+
+                if (type.Contains("za cały pobyt")) total += selected.Price;
                 else if (type.Contains("za osobę za każdą dobę") || type.Contains("za osobę za dobę")) total += selected.Price * selected.Persons * selected.Nights;
                 else if (type.Contains("za dobę")) total += selected.Price * selected.Nights;
                 else total += selected.Price * selected.Quantity;
             }
+            return total;
+        }*/
+    }
+
+    private decimal TotalUpsellsPrice
+    {
+        get
+        {
+            if (_reservationPricingContext is null || _selectedUpsells.Count == 0 || _availableUpsells.Count == 0)
+            {
+                return 0m;
+            }
+
+            decimal total = 0m;
+            foreach (var selected in _selectedUpsells)
+            {
+                var tile = _availableUpsells.FirstOrDefault(item => item.PartnerServiceId == selected.PartnerServiceId);
+                if (tile is null)
+                {
+                    continue;
+                }
+
+                var quantity = Math.Max(1, selected.Quantity);
+                total += UpsellPricingCalculator.CalculateTotal( 
+                                                                tile.PricingModel,
+                                                                tile.Price,
+                                                                _reservationPricingContext.Nights,
+                                                                _reservationPricingContext.TotalGuests,
+                                                                quantity);
+            }
+
             return total;
         }
     }
@@ -552,6 +625,10 @@
             
             _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
             InitializeMandatoryAddons();
+
+            UpdateReservationPricingContext();
+            await LoadUpsellsAsync();
+
         }
         
         await GetOffer();
@@ -659,7 +736,8 @@
             Price = definition != null ? (float)definition.PriceGross : 0f, 
             Vat = 8f,
             Persons = persons, 
-            Nights = nights 
+            Nights = nights,
+            PaymentType = definition?.PaymentType
         };
 
         _selectedAddons.Add(newDto);
@@ -838,7 +916,8 @@
             SelectedOfferType = selectedOffer?.OfferType ?? offerType,
             OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
             Currency = "PLN",
-            SelectedAddons = _selectedAddons
+            SelectedAddons = _selectedAddons,
+            SelectedUpsells = _selectedUpsells
         };
 
         var reservationGuid = await ReservationWorkflowService.StartAsync(request);
@@ -905,4 +984,52 @@
     
         StateHasChanged(); 
     }
+
+    private async Task LoadUpsellsAsync()
+    {
+        if (_apartment is null)
+        {
+            _availableUpsells = Array.Empty<UpsellTileDto>();
+            return;
+        }
+
+        try
+        {
+            _availableUpsells = await UpsellCatalogService.GetUpsellTilesForApartmentAsync(
+                _apartment.Id,
+                CultureInfo.CurrentUICulture.Name,"rentoombooking");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading upsells: {ex.Message}");
+            _availableUpsells = Array.Empty<UpsellTileDto>();
+        }
+    }
+
+    private void UpdateReservationPricingContext()
+    {
+        if (!TryParseDate(StartDate, out var start) || !TryParseDate(EndDate, out var end))
+        {
+            _reservationPricingContext = null;
+            return;
+        }
+
+        var adults = int.TryParse(Adults, out var parsedAdults) ? parsedAdults : 0;
+        var children = int.TryParse(Children, out var parsedChildren) ? parsedChildren : 0;
+
+        _reservationPricingContext = new ReservationPricingContext
+        {
+            StartDate = start,
+            EndDate = end,
+            Adults = adults,
+            Children = children,
+            Currency = "PLN"
+        };
+    }
+
+    private void HandleUpsellSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
+    {
+        _selectedUpsells = selectedUpsells ?? new List<SelectedUpsellDto>();
+    }
+
 }
