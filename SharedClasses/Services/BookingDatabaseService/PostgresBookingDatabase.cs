@@ -237,7 +237,6 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
                 ReservationId = payloadReservation.id,
                 Payload = payload,
                 CreatedAt = DateTime.UtcNow,
-                ReservationId = payloadReservation.id
             });
 
             try
@@ -312,6 +311,14 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             return await _dbContext.DefinedAddons.AsNoTracking().ToListAsync(cancellationToken);
         }
 
+        internal async void UpdateReservationStatusInWorkflow(int reservationId, string status)
+        {
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+            var res = await _dbContext.ReservationRecords.FirstOrDefaultAsync(r => r.IdoReservationId == reservationId);
+            res.IdoStatus = status;
+            _dbContext.SaveChanges();
+
+        }
     }
 
 }

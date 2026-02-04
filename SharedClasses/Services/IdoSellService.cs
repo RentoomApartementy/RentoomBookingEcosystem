@@ -320,6 +320,9 @@ namespace RentoomBooking.SharedClasses.Services
 
             if (_useDummyIdoBooking)
             {
+                var res = reservations.ToList()[0];
+                _bookingDatabase.UpdateReservationStatusInWorkflow(res.ReservationId,res.Status);
+
                 return new ChangeReservationsStatusResponse
                 {
                     Reservations = reservationsList.Select(r => new ReservationStatusChangeResult
