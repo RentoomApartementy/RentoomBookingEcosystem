@@ -33,7 +33,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
         Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
         Task HandleTpayWebhookAsync(TpayWebhookDto dto);
-
+        Task MarkPaymentAsPaidAsync(Guid reservationGuid); //for dummy scenario
         Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
         Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections);
     }
@@ -74,6 +74,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _upsellCatalogService = upsellCatalogService ?? throw new ArgumentNullException(nameof(upsellCatalogService));
             _termsRepository = termsRepository;
         }
+
+     
 
         public async Task<Guid> StartAsync(StartReservationRequest request)
         {
@@ -839,6 +841,37 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             await _termsRepository.AddAgreedTermsAsync(agreedEntities);
 
             _logger.LogInformation("Saved {Count} term states for reservation {Guid}", agreedEntities.Count, reservationGuid);
+        }
+
+        //<summary>
+        /// Metoda do ręcznego oznaczania płatności jako opłaconej. Używana tylko przy lokalnym ustawieniu _idoApi.UseDummyIdoBooking = true, czyli przy testach bez integracji z Idobooking. Oznacza rezerwację jako opłaconą zarówno w naszej bazie, jak i w Bitrixie, ale nie dodaje płatności do Idobooking ani nie zmienia statusu rezerwacji w Idobooking (bo w trybie dummy nie tworzymy rezerwacji w Idobooking).
+        /// W trybie dummy też nie dostajemy webhooków z TPAY (gdy na lokalnej maszynie), więc ta metoda pozwala zasymulować sytuację po opłaceniu rezerwacji, żeby móc przetestować dalsze kroki workflow, takie jak wysyłka maili z Bitrixa czy zmiana statusu rezerwacji.
+        //</summary>
+        public async Task MarkPaymentAsPaidAsync(Guid reservationGuid)
+        {
+            if (!_idoApi.UseDummyIdoBooking)
+            {
+                return;
+            }
+
+            var record = await RequireReservationAsync(reservationGuid);
+            if (record.PaymentStatus == PaymentStatuses.Paid)
+            {
+                return;
+            }
+
+            record.PaymentStatus = PaymentStatuses.Paid;
+            await _store.UpdateAsync(record);
+
+            var fields = new Dictionary<string, object?>()
+            {
+                //RB_Status_Rezerwacji
+                ["UF_CRM_1768566710921"] = "accepted",
+                //RB_Status_Platnosci
+                ["UF_CRM_1768566732609"] = record.PaymentStatus
+
+            };
+            await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
         }
     }
 }

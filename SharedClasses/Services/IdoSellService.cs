@@ -74,6 +74,8 @@ namespace RentoomBooking.SharedClasses.Services
 
         }
 
+        public bool UseDummyIdoBooking => _useDummyIdoBooking;
+
         public async Task<RentoomReservationHashRecord> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, string? existingResToken = null, CancellationToken cancellationToken = default)
         {
             if (_useDummyIdoBooking)
