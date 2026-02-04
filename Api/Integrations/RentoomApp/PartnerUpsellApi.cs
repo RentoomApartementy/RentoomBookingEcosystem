@@ -36,7 +36,7 @@ public class PartnerUpsellApi
                 return response;
             }
 
-            var UpselList = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(apartmentItemId, locale, cancellationToken);
+            var UpselList = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(apartmentItemId, locale, "all", cancellationToken);
             if (UpselList.Count == 0)
             {
                 response.StatusCode = HttpStatusCode.NotFound;
