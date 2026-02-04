@@ -23,7 +23,7 @@ namespace RentoomBooking.SharedClasses.Configuration
             return $"{secret[..6]}...{secret[^4..]}";
         }
 
-        public static async Task<string?> GetPostgresConnectionStringAsync(IConfiguration configuration, string propertyName, bool isDevelopmentEnv, ILogger log)
+        public static string? GetPostgresConnectionString(IConfiguration configuration, string propertyName, bool isDevelopmentEnv, ILogger log)
         {
             if (configuration is null) throw new ArgumentNullException(nameof(configuration));
             if (log is null) throw new ArgumentNullException(nameof(log));
@@ -47,26 +47,41 @@ namespace RentoomBooking.SharedClasses.Configuration
 
             try
             {
-                log.LogInformation("Retrieving PostgreSQL connection string from Key Vault '{KeyVaultUrl}' using secret '{SecretName}'", KeyVaultUrl, ProductionSecretName);
-                var credential = new DefaultAzureCredential();
-                var client = new SecretClient(new Uri(KeyVaultUrl), credential);
-                var secretResponse = await client.GetSecretAsync(ProductionSecretName);
-                var secretValue = secretResponse.Value?.Value;
+                /*  log.LogInformation("Retrieving PostgreSQL connection string from Key Vault '{KeyVaultUrl}' using secret '{SecretName}'", KeyVaultUrl, ProductionSecretName);
+                  var credential = new DefaultAzureCredential();
+                  var client = new SecretClient(new Uri(KeyVaultUrl), credential);
+                  var secretResponse = await client.GetSecretAsync(ProductionSecretName);
+                  var secretValue = secretResponse.Value?.Value;
 
-                if (string.IsNullOrWhiteSpace(secretValue))
+                  if (string.IsNullOrWhiteSpace(secretValue))
+                  {
+                      log.LogWarning("Secret '{SecretName}' retrieved from Key Vault but is empty.", ProductionSecretName);
+                      return secretValue;
+                  }
+
+                  log.LogInformation("Successfully retrieved PostgreSQL connection string from Key Vault (masked): {Masked}", MaskSecret(secretValue));
+                  return secretValue;
+                */
+                log.LogInformation("PROD: Retrieving PostgreSQL connection string from env variables using env_name '{SecretName}'", ProductionSecretName);
+                var local = configuration.GetConnectionString(ProductionSecretName) ?? configuration[$"ConnectionStrings:{ProductionSecretName}"] ?? configuration[$"Values:{ProductionSecretName}"] ?? configuration[ProductionSecretName];
+
+
+
+                if (!string.IsNullOrWhiteSpace(local))
                 {
-                    log.LogWarning("Secret '{SecretName}' retrieved from Key Vault but is empty.", ProductionSecretName);
-                    return secretValue;
+                    log.LogInformation("Using PROD PostgreSQL connection string from configuration (masked): {Masked}", MaskSecret(local));
+                    return local;
                 }
 
-                log.LogInformation("Successfully retrieved PostgreSQL connection string from Key Vault (masked): {Masked}", MaskSecret(secretValue));
-                return secretValue;
+                log.LogWarning("PROD PostgreSQL connection string not found in configuration.");
+
+                return local;
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "Failed to retrieve PostgreSQL connection string from Key Vault '{KeyVaultUrl}' with secret '{SecretName}'", KeyVaultUrl, ProductionSecretName);
+                log.LogError(ex, "PROD Failed to retrieve PostgreSQL connection string from env_variables  '{SecretName}'", ProductionSecretName);
                 throw new InvalidOperationException(
-                    "Failed to retrieve PostgreSQL connection string from Azure Key Vault. Ensure the application identity has Get permission for the secret and DefaultAzureCredential is configured.",
+                    "PROD - postgress env variables: Failed to retrieve PostgreSQL connection string from Azure Key Vault. Ensure the application identity has Get permission for the secret and DefaultAzureCredential is configured.",
                     ex);
             }
         }

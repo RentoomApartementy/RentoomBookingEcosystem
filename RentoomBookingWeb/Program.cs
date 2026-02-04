@@ -50,7 +50,7 @@ namespace RentoomBookingWeb
 
             //POSTGRESS:
 
-            var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionStringAsync(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger).Result;
+            var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionString(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger);
             if (string.IsNullOrWhiteSpace(postgresConnectionString))
             {
                 throw new InvalidOperationException("RentoomBookingDb connection string is missing.");
@@ -62,8 +62,8 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<PostgresBookingDatabase>();
 
             var rentoomAppConnectionString = PostgresConnectionStringProvider
-               .GetPostgresConnectionStringAsync(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger)
-               .Result;
+               .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
+               
 
             builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));

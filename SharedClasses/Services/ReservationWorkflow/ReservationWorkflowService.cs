@@ -861,12 +861,13 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             }
 
             record.PaymentStatus = PaymentStatuses.Paid;
+            record.IdoStatus = ReservationStatusType.Accepted;
             await _store.UpdateAsync(record);
 
             var fields = new Dictionary<string, object?>()
             {
                 //RB_Status_Rezerwacji
-                ["UF_CRM_1768566710921"] = "accepted",
+                ["UF_CRM_1768566710921"] = ReservationStatusType.Accepted,
                 //RB_Status_Platnosci
                 ["UF_CRM_1768566732609"] = record.PaymentStatus
 
