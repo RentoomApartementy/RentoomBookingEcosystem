@@ -1,7 +1,7 @@
 @inject NavigationManager Navigation;
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Footer> Localizer;
-
+@inject RentoomBookingWeb.Services.FooterEnvironmentInfo FooterEnvironmentInfo;
 <div class="footer">
     <div class="footer-section-logo">
         <div class="footer-logo">
@@ -41,4 +41,8 @@
 <div class="footer-bottom">
     <a href="/apartamenty-torun" class="all-apartments-link">@Localizer["AllApartmentsText"]</a>
     @* @Localizer["DesignedText"] *@
+    <div class="footer-env">
+        <span class="footer-env-label">Env</span>
+        <span class="footer-env-details">@FooterEnvironmentInfo.Summary</span>
+    </div>
 </div>

@@ -143,13 +143,47 @@
     color: rgba(255, 255, 255, 0.5);
     text-align: center;
     font-size: 0.75rem;
-    padding: 8px 0;
+    /*MS Change: was-> padding: 8px 0;*/
+    padding: 8px 16px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    /*MS: addded: gap:4px*/
+    gap: 4px;
 }
+
+
+/*below section added by MS :)*/
+
+.footer-env {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-env-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    padding: 2px 6px;
+}
+
+.footer-env-details {
+    font-size: 0.65rem;
+    text-align: center;
+    word-break: break-word;
+}
+
+/*end of section added by MS :)*/
+
 
 .border-b-r {
     border-bottom: 2px solid #ffffff;
@@ -162,6 +196,24 @@
         border-right: 2px solid #ffffff;
         padding-bottom: 0;
     }
+
+    /* added by ms: */
+    .footer-bottom {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 24px;
+        text-align: left;
+    }
+
+    .footer-env {
+        justify-content: flex-start;
+    }
+
+    .footer-env-details {
+        text-align: left;
+    }
+    /*end of added by ms*/
 }
 
 .all-apartments-link,
@@ -178,3 +230,5 @@
 .all-apartments-link:hover {
     text-decoration: underline;
 }
+
+

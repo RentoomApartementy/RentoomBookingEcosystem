@@ -68,7 +68,11 @@ namespace RentoomBookingWeb
             builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
 
-
+            var footerEnvironmentInfo = FooterEnvironmentInfo.Create(
+               builder.Environment,
+               ("BookingDb", postgresConnectionString),
+               ("RentoomAppDb", rentoomAppConnectionString ?? string.Empty));
+            builder.Services.AddSingleton(footerEnvironmentInfo);
 
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<FiltersRepository>();
@@ -107,7 +111,10 @@ namespace RentoomBookingWeb
             //TPAY
             bool UseDevelopmentSettingsOnProd = true;
             var TpaySection = UseDevelopmentSettingsOnProd ? builder.Configuration.GetSection("TpayDev") : builder.Configuration.GetSection("TpayStage");
-            
+
+            var DummyIdoBookingApiKey = builder.Configuration.GetValue<string>("IdoBooking:UseDummy");
+            tempLogger.LogInformation("Using Dummy IdoBooking Service (No Idobooking writes via API): {DummyIdoBookingApiKey}", DummyIdoBookingApiKey);
+
             builder.Services.Configure<TpaySettings>(TpaySection);
 
             builder.Services.AddHttpClient("Tpay", (sp, http) =>

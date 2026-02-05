@@ -63,7 +63,7 @@ namespace RentoomBooking.SharedClasses.Configuration
                   return secretValue;
                 */
                 log.LogInformation("PROD: Retrieving PostgreSQL connection string from env variables using env_name '{SecretName}'", ProductionSecretName);
-                var local = configuration.GetConnectionString(ProductionSecretName) ?? configuration[$"ConnectionStrings:{ProductionSecretName}"] ?? configuration[$"Values:{ProductionSecretName}"] ?? configuration[ProductionSecretName];
+                var local = configuration.GetConnectionString(propertyName) ?? configuration[$"ConnectionStrings:{propertyName}"] ?? configuration[$"Values:{propertyName}"] ?? configuration[propertyName];
 
 
 
@@ -79,7 +79,7 @@ namespace RentoomBooking.SharedClasses.Configuration
             }
             catch (Exception ex)
             {
-                log.LogError(ex, "PROD Failed to retrieve PostgreSQL connection string from env_variables  '{SecretName}'", ProductionSecretName);
+                log.LogError(ex, "PROD Failed to retrieve PostgreSQL connection string from env_variables  '{SecretName}'", propertyName);
                 throw new InvalidOperationException(
                     "PROD - postgress env variables: Failed to retrieve PostgreSQL connection string from Azure Key Vault. Ensure the application identity has Get permission for the secret and DefaultAzureCredential is configured.",
                     ex);
