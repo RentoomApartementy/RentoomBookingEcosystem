@@ -33,39 +33,44 @@ namespace RentoomBooking.StayWell.Models
         [Inject]
         protected ModalService ModalService { get; set; } = default!;
         [Inject]
+        protected ToastService ToastService { get; set; } = default!;
+        [Inject]
         protected NavigationManager NavigationManager { get;set;} = default!;
 
         [Parameter]
         public string? Token { get; set; }
 
+        [Parameter]
+        public bool IsDisabled { get; set; } = false;
         protected bool IsLoading { get; set; } = true;
+
+        protected bool IsInitializedSuccessfully { get; private set; } = false;
 
         private readonly string _instanceId = Guid.NewGuid().ToString("N");
 
         protected override async Task OnInitializedAsync()
         {
-            ReservationState.OnChange += StateHasChanged;
-            MediaState.OnChange += StateHasChanged;
-            AmenitiesState.OnChange += StateHasChanged;
-            ApartmentState.OnChange += StateHasChanged;
-            LocksState.OnChange += StateHasChanged;
-            GlobalizationService.OnChange += StateHasChanged;
-            LayoutState.OnChange += StateHasChanged;
-            TermsState.OnChange += StateHasChanged;
-            RegistrationCardState.OnChange += StateHasChanged;
+            if (IsDisabled)
+            {
+                NavigationManager.NavigateTo($"/reservation/{Token}/");
+                ToastService.ShowToast("Nie masz dostepu do tej strony.");
+                return;
+            }
+
+            Subscribe();
 
             if (ReservationState.CurrentReservation == null && !string.IsNullOrEmpty(Token))
             {
                 await LoadDataAsync();
-                if (TermsState.CurrentTerms == null)
+                if (!IsInitializedSuccessfully)
                 {
-                    NavigationManager.NavigateTo($"/reservation/{Token}/TermsPage");
+                    NavigationManager.NavigateTo("/Error");
+                    return;
                 }
-                //else
-                //{
-                //    // temporary
-                //    NavigationManager.NavigateTo($"/reservation/{Token}/HomePage");
-                //}
+                if (!ReservationState.IsActiveReservation && DateTime.Now < ReservationState?.CurrentReservation?.Reservation?.ReservationDetails?.getDateTo())
+                {
+                    NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");
+                }
             }
 
 
@@ -73,7 +78,7 @@ namespace RentoomBooking.StayWell.Models
 
         private void SetLanguage()
         {
-            var lang = ReservationState.CurrentReservation?.Reservation.Client.Language;
+            var lang = ReservationState.CurrentReservation?.Reservation?.Client?.Language;
 
             if(lang == "eng" || lang == null)
             {
@@ -94,41 +99,47 @@ namespace RentoomBooking.StayWell.Models
             IsLoading = true;
             try
             {
-                if (!string.IsNullOrEmpty(Token))
+                if (string.IsNullOrEmpty(Token))
                 {
-                    await ReservationState.GetReservationAsync(Token);
-                    var reservation = ReservationState.CurrentReservation?.Reservation;
-
-                    if (ReservationState.CurrentStatus == System.Net.HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine("There is no reservation with such token");
-                    }
-
-                    if (!ReservationState.IsValidReservation || reservation == null)
-                    {
-                        Console.WriteLine("Rezerwacja wygasła");
-                        //NavigationManager.NavigateTo("/ReservationPage");
-                        //return;
-                    }
-
-                    SetLanguage();
-                    var item = reservation.Items?.FirstOrDefault();
-                    if (item != null)
-                    {
-                        await Task.WhenAll(
-                            TermsState.GetTermsAsync(ReservationState.CurrentToken),
-                            RegistrationCardState.GetCardAsync(ReservationState.CurrentToken),
-                            MediaState.GetMediaAsync(item.objectId),
-                            ApartmentState.GetApartmentByIdAsync(item.objectId),
-                            ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
-                            AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
-                            LocksState.GetLocksAsync(reservation.id, item.itemId)
-                        );
-                    }
+                    NavigationManager.NavigateTo("/Error");
+                    return;
                 }
-            }catch
+
+                await ReservationState.GetReservationAsync(Token);
+                var reservation = ReservationState.CurrentReservation?.Reservation;
+
+                if (ReservationState.CurrentStatus == System.Net.HttpStatusCode.NotFound)
+                {
+                    Console.WriteLine("There is no reservation with such token");
+                    return;
+                }
+
+                if (!ReservationState.IsValidReservation || reservation == null)
+                {
+                    Console.WriteLine("Rezerwacja wygasła");
+                    return;
+                }
+
+                SetLanguage();
+                var item = reservation.Items?.FirstOrDefault();
+                if (item is null)
+                {
+                    return;
+                }
+                    await Task.WhenAll(
+                        TermsState.GetTermsAsync(Token),
+                        RegistrationCardState.GetCardAsync(Token),
+                        MediaState.GetMediaAsync(item.objectId),
+                        ApartmentState.GetApartmentByIdAsync(item.objectId),
+                        //ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
+                        AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
+                        LocksState.GetLocksAsync(reservation.id, item.itemId)
+                    );
+                IsInitializedSuccessfully = true;
+            }
+            catch(Exception ex)
             {
-                throw;
+                Console.WriteLine($"LoadDataAsync failed: {ex}");
             }
             finally
             {
@@ -137,6 +148,18 @@ namespace RentoomBooking.StayWell.Models
             }
         }
 
+        private void Subscribe()
+        {
+            ReservationState.OnChange += StateHasChanged;
+            MediaState.OnChange += StateHasChanged;
+            AmenitiesState.OnChange += StateHasChanged;
+            ApartmentState.OnChange += StateHasChanged;
+            LocksState.OnChange += StateHasChanged;
+            GlobalizationService.OnChange += StateHasChanged;
+            LayoutState.OnChange += StateHasChanged;
+            TermsState.OnChange += StateHasChanged;
+            RegistrationCardState.OnChange += StateHasChanged;
+        }
         public virtual void Dispose()
         {
             ReservationState.OnChange -= StateHasChanged;

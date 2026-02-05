@@ -152,10 +152,6 @@
             {
                 ResToken = ReservationState.CurrentToken,
                 ContactEmail = _mail,
-                // Pola telefonu usunięte. Upewnij się, że w bazie mogą być nullami lub pustymi stringami.
-                // Jeśli baza wymaga wartości, odkomentuj poniższe i ustaw puste stringi:
-                // PhoneCountryCode = "",
-                // ContactPhone = "",
 
                 CheckInTime = checkInDateTime,
 
@@ -164,7 +160,7 @@
 
             await RegistrationCardState.SaveCardAsync(regcard);
 
-            NavigationManager.NavigateTo($"/reservation/{Token}/HomePage");
+            NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");
         }
         catch (Exception ex)
         {

@@ -12,7 +12,7 @@
             <img src="/icons/door-open.svg">
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/HomePage")" active="@IsActive($"/reservation/{Token}/HomePage")">
+    <NavigationButton href="@($"/reservation/{Token}/HomePage")" active="@IsActive([$"/reservation/{Token}/HomePage", $"/reservation/{Token}/"])">
         <Icon>
             <img src="/icons/house.svg">
         </Icon>
@@ -55,5 +55,15 @@
         var baseUri = Navigation.BaseUri;
         var relativeUri = currentUri.StartsWith(baseUri) ? currentUri.Substring(baseUri.Length - 1) : currentUri;
         return relativeUri.Equals(href, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool IsActive(List<string> hrefs)
+    {
+        var currentUri = Navigation.Uri;
+        // Porównanie bez hosta, tylko ścieżka i parametry
+        var baseUri = Navigation.BaseUri;
+        var relativeUri = currentUri.StartsWith(baseUri) ? currentUri.Substring(baseUri.Length - 1) : currentUri;
+
+        return hrefs.Any(href => relativeUri.Equals(href, StringComparison.OrdinalIgnoreCase));
     }
 }

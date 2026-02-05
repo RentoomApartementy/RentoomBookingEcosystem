@@ -1,0 +1,151 @@
+﻿.wrap {
+    width: 100%
+}
+
+.hero {
+    background: #21573e;
+    border-radius: 22px 22px 0 0;
+    padding: 18px 16px 20px;
+    color: #fff;
+}
+
+.t {
+    font-weight: 900;
+    font-size: 22px;
+    margin: 6px 0 10px;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    text-align: center
+}
+
+.sg{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.n {
+    font-size: 68px;
+    font-weight: 950;
+    line-height: 1
+}
+
+.l {
+    margin-top: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    opacity: .95
+}
+
+.s {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 950;
+    width: auto;
+    color: #21573e;
+}
+
+.card {
+    background: #fff;
+    border-radius: 0 0 22px 22px;
+    padding: 16px;
+    box-shadow: 0 14px 30px rgba(15,23,42,.1)
+}
+
+.h {
+    font-size: 22px;
+    font-weight: 950;
+    color: #0f172a;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px
+}
+
+.m {
+    color: black;
+    font-size: 19px;
+    font-weight: 500;
+    width: auto;
+}
+
+.a {
+    color: #0f172a;
+    font-size: 22px;
+    font-weight: 950;
+    width: auto;
+}
+
+.an {
+    font-weight: 950;
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.ct {
+    width: auto;
+}
+
+.cd {
+    width: auto;
+    font-weight: 950;
+}
+
+.b-l {
+    height: 2px;
+    color: lightgray;
+}
+
+.btn {
+    width: 100%;
+    height: 48px;
+    border: 0;
+    border-radius: 14px;
+    background: #21573e;
+    color: white;
+    font-size: 18px;
+    font-weight: 950
+}
+
+.btn-small {
+    min-width: 130px;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    border: 0;
+    border-radius: 12px;
+    background: #21573e;
+    color: white;
+    font-size: 14px;
+    font-weight: 700
+}
+
+.partner-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.partner-wrap{
+    margin-top: 24px;
+}
+
+.rentoom-green-filter {
+    filter: brightness(0) saturate(100%) invert(25%) sepia(33%) saturate(800%) hue-rotate(100deg) brightness(96%) contrast(86%);
+}
+
+.white-filter {
+    filter: brightness(0) saturate(100%) invert(99%) sepia(98%) saturate(2%) hue-rotate(177deg) brightness(105%) contrast(100%);
+}

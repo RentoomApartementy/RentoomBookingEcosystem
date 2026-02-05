@@ -13,7 +13,7 @@
             </li>
         }
         @* <li class="Element">Ciężko oszacować</li> *@
-        <li class="Element">Nie wiem</li>
+        @* <li class="Element">Nie wiem</li> *@
     </ul>
 </div>
 
@@ -24,7 +24,7 @@
     [Parameter]
     public EventCallback<TimeSpan?> ValueChanged { get; set; }
 
-    private List<int> _hours = Enumerable.Range(15, 7).ToList();
+    private List<int> _hours = Enumerable.Range(15, 8).ToList();
 
     private async Task Select(TimeSpan? time)
     {

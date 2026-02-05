@@ -16,6 +16,10 @@
         <span><img src="/icons/users.svg"/>Założyciel rezerwacji:</span>
         <span class="text">@Reservation?.Client.FirstName @Reservation?.Client.LastName</span>
     </div>
+    <div class="amenity">
+        <span><img src="/icons/mail.svg" />Podany adres mail:</span>
+        <span class="text">@RegistrationCardState.CurrentCard.ContactEmail</span>
+    </div>
     @* <div class="amenity">
         <span><img src="/icons/map-pin.svg" />Adres:</span>
         <span class="text">@Apartment?.ObjectLocation?.Address</span>

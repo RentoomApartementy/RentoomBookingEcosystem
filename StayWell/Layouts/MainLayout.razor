@@ -16,11 +16,11 @@
 
 <div class="layout-page">
     @if (LayoutState.ShowHeader)
-    {   
-    <div class="layout-header" id="main-header">
-        <Header Token="@ReservationState.CurrentToken" reservationId="@ReservationState.CurrentReservation?.Reservation.id.ToString()">
-        </Header>
-    </div>
+    {
+        <div class="layout-header" id="main-header">
+            <Header Token="@ReservationState.CurrentToken" reservationId="@ReservationState.CurrentReservation?.Reservation.id.ToString()">
+            </Header>
+        </div>
     }
     <div class="layout-body" id="main-body">
         @if (ReservationState.IsLoading || MediaState.IsLoading || ApartmentState.IsLoading || AmenitiesState.IsLoading || LocksState.IsLoading)
@@ -34,23 +34,24 @@
     </div>
     @if (LayoutState.ShowFooter)
     {
-    <div class="layout-footer-nav">
-        <FooterNavigation Token="@ReservationState.CurrentToken">
-        </FooterNavigation>
-    </div>
+        <div class="layout-footer-nav">
+            <FooterNavigation Token="@ReservationState.CurrentToken">
+            </FooterNavigation>
+        </div>
     }
 </div>
 
 <Toast Message="@_toastMessage" Content="@_toastContent" IsVisible="@_toastVisible" DurationMs="@_toastDuration" OnHide="HideToast" />
 
-<Modal Title="@_modalTitle" OnClose="CloseModal" IsVisible="@_modalVisibility">
-    <Content>
-        @_modalContent
-    </Content>
+<Modal Title="@_modalTitle"
+       OnClose="CloseModal"
+       IsVisible="@_modalVisibility"
+       ImageUrl="@_modalImageUrl"
+       Content="@_modalContent">
 </Modal>
 
 <!--CHAT BITRIX //-->
-@if(ReservationState.CurrentReservation != null)
+@if (ReservationState.CurrentReservation != null)
 {
     <script>
         (function (w, d, u) {
@@ -64,7 +65,10 @@
 @code {
     private bool _modalVisibility = false;
     private string _modalTitle = string.Empty;
-    private RenderFragment _modalContent;
+
+    private RenderFragment? _modalContent;
+
+    private string? _modalImageUrl;
 
     private bool _toastVisible = false;
     private string _toastMessage = string.Empty;
@@ -102,10 +106,11 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void ShowModal(string title, RenderFragment content)
+    private void ShowModal(string title, RenderFragment? content, string? imageUrl)
     {
         _modalTitle = title;
         _modalContent = content;
+        _modalImageUrl = imageUrl;
         _modalVisibility = true;
         StateHasChanged();
     }
@@ -113,6 +118,9 @@
     private void CloseModal()
     {
         _modalVisibility = false;
+        _modalImageUrl = null;
+        _modalContent = null;
+
         StateHasChanged();
     }
 

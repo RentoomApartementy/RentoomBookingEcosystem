@@ -7,7 +7,7 @@
     @if (UseSmartGlow)
     {
         <div class="glow-layer">
-            <div class="slider" style="transform: translateX(calc(-@(_index*100)%))">
+            <div class="slider" style="transform: translateX(calc(-@(_index * 100)%))">
                 @for (int i = 0; i < ImageUrls.Length; i++)
                 {
                     <div class="slide">
@@ -18,12 +18,15 @@
         </div>
     }
 
-    <div class="carousel-mask @(UseControlButtons ? "noradius" : "")">
+    <div class="carousel-mask @(UseControlButtons ? "noradius" : "")"
+         style="height: @(IsInstructionCarousel ? "500px;" : "200px;")">
         <div class="slider" style="transform: translateX(calc(-@(_index * 100)%))">
             @for (int i = 0; i < ImageUrls.Length; i++)
             {
-                <div class="slide" @onclick="EnlargeImage">
-                    <img class="slide-img" src="@ImageUrls[i]" loading="lazy" alt="slide-@i"/>
+                <div class="slide" @onclick="EnlargeImage" style="cursor: pointer;" title="Click to enlarge">
+                    <div class="slide-bg" style="background-image: url('@ImageUrls[i]')"></div>
+                    <img class="slide-img" src="@ImageUrls[i]" loading="lazy" alt="slide-@i"
+                        style="object-fit: @(IsInstructionCarousel ? "contain;" : "cover;")" />
                 </div>
             }
         </div>
@@ -32,7 +35,7 @@
     {
         <div class="control-buttons-wrapper">
             <button @onclick="PreviousSlide"> &lt; </button>
-            <span>@(_index+1) / @ImageUrls.Length </span>
+            <span>@(_index + 1) / @ImageUrls.Length </span>
             <button @onclick="NextSlide"> &gt; </button>
         </div>
     }
@@ -45,27 +48,30 @@
     [Parameter] public int TransitionIntervalMs { get; set; } = 2000;
     [Parameter] public bool UseSmartGlow { get; set; } = false;
     [Parameter] public string AdditionalStyle { get; set; } = string.Empty;
+    [Parameter] public bool IsInstructionCarousel { get; set; } = false;
 
     private int _index = 0;
     private System.Timers.Timer? _timer;
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if(firstRender && UseTimer) StartTimer();
+        if (firstRender && UseTimer) StartTimer();
     }
 
     private void EnlargeImage()
     {
-        ModalService.ShowModal("",
-        @<div>
-            <img class="big-img" src="@(ImageUrls[_index])"/>
-</div>
+        if (ImageUrls == null || ImageUrls.Length == 0) return;
+
+        var currentImageUrl = ImageUrls[_index];
+
+        ModalService.ShowModal(
+            title: "Image Preview",
+            imageUrl: currentImageUrl
         );
     }
 
     private void NextSlide()
     {
-
         if (_index < ImageUrls.Length - 1)
         {
             _index++;
@@ -78,7 +84,6 @@
 
     private void PreviousSlide()
     {
-
         if (_index > 0)
         {
             _index--;
@@ -101,7 +106,6 @@
         };
         _timer.AutoReset = true;
         _timer.Start();
-
     }
 
     public void Dispose()
@@ -109,5 +113,4 @@
         _timer?.Stop();
         _timer?.Dispose();
     }
-
 }
