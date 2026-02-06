@@ -233,7 +233,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
                 AddonPaymentType.PayPerAmountPerNight => unitPriceGross * nights * quantity,
                 AddonPaymentType.PayPerAmount => unitPriceGross * quantity,
                 AddonPaymentType.PayPerNight => unitPriceGross * nights * quantity,
-                _ => throw new ArgumentOutOfRangeException(nameof(pricingModel), pricingModel, "Unsupported pricing model.")
+                _ => throw new ArgumentOutOfRangeException(nameof(pricingModel), pricingModel, "Unsupported Addon pricing model.")
             };
         }
     }

@@ -13,7 +13,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
         Task<UpsellOrderRecord> CreateAsync(UpsellOrderRequest request, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord> CreateWithLinesAsync(UpsellOrderRequest request, IReadOnlyList<UpsellOrderLineRecord> lines, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord?> GetAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
-        Task<IReadOnlyList<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
+        Task<List<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
         Task UpdateAsync(UpsellOrderRecord record, CancellationToken cancellationToken = default);
         Task ReplaceLinesAsync(Guid upsellOrderGuid, IReadOnlyList<UpsellOrderLineRecord> lines, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord?> GetByProviderTransactionIdAsync(string providerTransactionId, CancellationToken cancellationToken = default);
@@ -45,7 +45,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 UpsellOrderGuid = orderGuid,
                 ReservationGuid = request.ReservationGuid,
                 UpsellOrderJson = JsonConvert.SerializeObject(state),
-                PaymentStatus = ReservationWorkflow.PaymentStatuses.None,
+                PaymentStatus = Models.ReservationWorkflow.PaymentStatuses.None,
                 Provider = "TPAY",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -87,7 +87,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return record;
         }
 
-        public async Task<IReadOnlyList<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default)
+        public async Task<List<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default)
         {
             await _initializationTask;
 
@@ -168,7 +168,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 State = state,
                 Lines = new List<UpsellOrderLineRecord>(),
                 PaymentSessionGuid = entity.PaymentSessionGuid,
-                PaymentStatus = entity.PaymentStatus ?? ReservationWorkflow.PaymentStatuses.None,
+                PaymentStatus = entity.PaymentStatus ?? Models.ReservationWorkflow.PaymentStatuses.None,
                 Provider = entity.Provider,
                 ProviderTransactionId = entity.ProviderTransactionId,
                 PaidAtUtc = entity.PaidAtUtc,

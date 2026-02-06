@@ -7,6 +7,7 @@ using System;
 
 namespace RentoomBooking.SharedClasses.Services.Payments
 {
+    
     public interface IPaymentFlowHandler
     {
         PaymentFlowType FlowType { get; }
@@ -14,6 +15,8 @@ namespace RentoomBooking.SharedClasses.Services.Payments
         Task<bool> TryHandleWebhookAsync(string providerTransactionId, string status, CancellationToken cancellationToken = default);
     }
 
+    //Handler Service dla rezerwacji - flow Tpay dla zakladania rezerwacji w rentoombooking, gdzie p?atno?? jest inicjowana przed finalizacj? rezerwacji w rentoombooking!
+    //TODO: do przemyslenia jak ogarnac ze staywell czy bedzie korzystac z tego flow przy przedluzaniu rezerwacji, czy bedzie potrzebny osobny flow, czy moze wystarczy przekazanie innego parametru do tego flowa przy przedluzaniu rezerwacji
     public class ReservationPaymentFlowHandler : IPaymentFlowHandler
     {
         private readonly IReservationWorkflowService _workflowService;
@@ -68,6 +71,7 @@ namespace RentoomBooking.SharedClasses.Services.Payments
         }
     }
 
+    //Handler Service dla upsell - flow Tpay upsellowy, gdzie p?atno?? jest inicjowana przez Staywell
     public class UpsellPaymentFlowHandler : IPaymentFlowHandler
     {
         private readonly IUpsellOrderWorkflowService _workflowService;

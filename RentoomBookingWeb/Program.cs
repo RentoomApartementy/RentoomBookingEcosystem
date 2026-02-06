@@ -10,13 +10,14 @@ using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
-using RentoomBooking.SharedClasses.Services.Payments;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services;
 using RentoomBookingWeb.Services;
+using RentoomBooking.SharedClasses.Services.Payments;
 
 namespace RentoomBookingWeb
 {

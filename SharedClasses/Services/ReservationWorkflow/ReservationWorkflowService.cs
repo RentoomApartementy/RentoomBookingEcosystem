@@ -409,7 +409,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                 if (record.PaymentStatus == PaymentStatuses.Paid)
                 {
-                    return;
+                 //   return;
                 }
 
                 var isPaid = string.Equals(dto.Status, "PAID", StringComparison.OrdinalIgnoreCase);
@@ -447,6 +447,12 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             await _idoApi.ConfirmPaymentsAsync([paymentId]);
         }
 
+
+
+        //metoda tylko dla RentoomBooking (Nie Staywell, ):
+        //po potwierdzeniu płatności za rezerwację wywołuję CreatePaidOrderAsync
+        //z danymi  wierszy uzyskanymi z wybranych ofert dodatkowych rezerwacji (z rekordu rezerwacji) ,
+        //aby upselle zakupione w ramach rezerwacji zalogować w tej samej tabeli wierszy co zakupy w StayWell!
         private async Task CreatePaidUpsellOrderAsync(ReservationRecord record, string providerTransactionId)
         {
             var request = record.State.StartRequest;
@@ -456,7 +462,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             }
 
             var culture = CultureInfo.CurrentUICulture.Name;
-            var tiles = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(request.ObjectId, culture, "rentoombooking");
+            var tiles = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(request.ObjectId, culture, "rentoombooking"); //<<--tylko dla rentoombooking!
             var tileLookup = tiles.ToDictionary(tile => tile.PartnerServiceId);
 
             var pricingContext = new ReservationPricingContext
@@ -504,7 +510,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             {
                 return;
             }
-
+            //pełny order
             var orderRequest = new UpsellOrderRequest
             {
                 ReservationGuid = record.ReservationGuid,
@@ -519,7 +525,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                     Email = record.State.Client?.Email ?? string.Empty,
                     Name = string.Join(" ", new[] { record.State.Client?.FirstName, record.State.Client?.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)))
                 },
-                SelectedUpsells = request.SelectedUpsells
+                SelectedUpsells = request.SelectedUpsells //<<-- one też trafiają do osobnej tabeli gdzie mozna dowolnie je skanselowac, odwołać . Tu  jako JSON snapshot początkowy - taki audit log pierwotnego zakupu
                     .Select(u => new UpsellOrderLineRequest { PartnerServiceId = u.PartnerServiceId, Quantity = u.Quantity })
                     .ToList()
             };
@@ -629,7 +635,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                         Nights = a.Nights,
                         Quantity = a.Quantity,
                         Price = a.Price,
-                        Vat = a.Vat
+                        Vat = a.Vat,
                     }).ToList()
                 }
                 ],
@@ -953,6 +959,18 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             record.IdoStatus = ReservationStatusType.Accepted;
             await _store.UpdateAsync(record);
 
+            var dto = new TpayWebhookDto
+            {
+                ReservationGuid = record.ReservationGuid,
+                PaymentSessionGuid = record.PaymentSessionGuid.Value,
+                ProviderTransactionId = record.ProviderTransactionId,
+                Status = PaymentStatuses.Paid,
+                Signature = "validated"
+            };
+
+            await HandleTpayWebhookAsync(dto);
+
+            
             var fields = new Dictionary<string, object?>()
             {
                 //RB_Status_Rezerwacji
@@ -962,6 +980,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
             };
             await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
+            
         }
     }
 }
