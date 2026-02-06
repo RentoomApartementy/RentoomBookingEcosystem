@@ -48,6 +48,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private readonly IConfiguration _configuration;
 
         private readonly IUpsellCatalogService _upsellCatalogService;
+        private readonly IUpsellOrderWorkflowService _upsellOrderWorkflowService;
 
 
         private readonly CustomerTermsRepository _termsRepository;
@@ -61,6 +62,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             IConfiguration configuration,
             ApartmentRepository apartmentStore,
              IUpsellCatalogService upsellCatalogService,
+             IUpsellOrderWorkflowService upsellOrderWorkflowService,
             CustomerTermsRepository termsRepository,
         ILogger<ReservationWorkflowService> logger)
         {
@@ -72,6 +74,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _apartmentStore = apartmentStore ?? throw new ArgumentNullException(nameof(apartmentStore));
             _upsellCatalogService = upsellCatalogService ?? throw new ArgumentNullException(nameof(upsellCatalogService));
+            _upsellOrderWorkflowService = upsellOrderWorkflowService ?? throw new ArgumentNullException(nameof(upsellOrderWorkflowService));
             _termsRepository = termsRepository;
         }
 
@@ -426,6 +429,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                         await UpdateIdoStatusAsync(record, ReservationStatusType.Accepted);
                         //record = await EnsureBitrixContactAndDealAsync(record);
                         GetDealEmailStatusAsync(record.ReservationGuid);
+                        await CreatePaidUpsellOrderAsync(record, dto.ProviderTransactionId);
                     }
                     await UpdateBitrixDealAsync(record, "Payment status updated");
                     return;
@@ -441,6 +445,91 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private async Task ConfirmIdoPaymentAsync(int paymentId)
         {
             await _idoApi.ConfirmPaymentsAsync([paymentId]);
+        }
+
+        private async Task CreatePaidUpsellOrderAsync(ReservationRecord record, string providerTransactionId)
+        {
+            var request = record.State.StartRequest;
+            if (request is null || request.SelectedUpsells.Count == 0)
+            {
+                return;
+            }
+
+            var culture = CultureInfo.CurrentUICulture.Name;
+            var tiles = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(request.ObjectId, culture, "rentoombooking");
+            var tileLookup = tiles.ToDictionary(tile => tile.PartnerServiceId);
+
+            var pricingContext = new ReservationPricingContext
+            {
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Adults = request.Adults,
+                Children = request.Children,
+                Currency = request.Currency ?? "PLN"
+            };
+
+            var lines = new List<UpsellOrderLineRecord>();
+            foreach (var selected in request.SelectedUpsells)
+            {
+                if (!tileLookup.TryGetValue(selected.PartnerServiceId, out var tile))
+                {
+                    continue;
+                }
+
+                var quantity = Math.Max(1, selected.Quantity);
+                var lineTotal = UpsellPricingCalculator.CalculateTotal(
+                    tile.PricingModel,
+                    tile.Price,
+                    pricingContext.Nights,
+                    pricingContext.TotalGuests,
+                    quantity);
+
+                lines.Add(new UpsellOrderLineRecord
+                {
+                    UpsellOrderGuid = Guid.Empty,
+                    PartnerServiceId = tile.PartnerServiceId,
+                    TitleSnapshot = tile.Title,
+                    PricingModel = tile.PricingModel,
+                    Quantity = quantity,
+                    UnitPriceGross = tile.Price,
+                    Nights = pricingContext.Nights,
+                    TotalGuests = pricingContext.TotalGuests,
+                    LineTotalGross = lineTotal,
+                    Currency = request.Currency ?? "PLN",
+                    LineStatus = UpsellLineStatuses.Paid
+                });
+            }
+
+            if (lines.Count == 0)
+            {
+                return;
+            }
+
+            var orderRequest = new UpsellOrderRequest
+            {
+                ReservationGuid = record.ReservationGuid,
+                ApartmentId = request.ObjectId,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Adults = request.Adults,
+                Children = request.Children,
+                Currency = request.Currency ?? "PLN",
+                Buyer = new UpsellBuyerDto
+                {
+                    Email = record.State.Client?.Email ?? string.Empty,
+                    Name = string.Join(" ", new[] { record.State.Client?.FirstName, record.State.Client?.LastName }.Where(x => !string.IsNullOrWhiteSpace(x)))
+                },
+                SelectedUpsells = request.SelectedUpsells
+                    .Select(u => new UpsellOrderLineRequest { PartnerServiceId = u.PartnerServiceId, Quantity = u.Quantity })
+                    .ToList()
+            };
+
+            await _upsellOrderWorkflowService.CreatePaidOrderAsync(
+                orderRequest,
+                lines,
+                providerTransactionId,
+                record.Provider,
+                DateTime.UtcNow);
         }
 
         private async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid)

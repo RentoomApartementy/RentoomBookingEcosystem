@@ -21,6 +21,7 @@ using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
 
@@ -75,6 +76,8 @@ builder.Services.AddScoped<RegistrationCardRepository>();
 builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
+builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
+builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
 builder.Services.AddScoped<BitrixService>();
 
 //Customer Terms
@@ -90,6 +93,9 @@ builder.Services.Configure<TpaySettings>(TpaySection);
 
 builder.Services.AddScoped<IReservationStore, ReservationStore>();
 builder.Services.AddScoped<IReservationWorkflowService, ReservationWorkflowService>();
+builder.Services.AddScoped<IPaymentFlowHandler, ReservationPaymentFlowHandler>();
+builder.Services.AddScoped<IPaymentFlowHandler, UpsellPaymentFlowHandler>();
+builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
 builder.Services.AddScoped<ITpayNotificationValidator, TpayNotificationValidator>();
 builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
 builder.Services.AddSingleton<TpayClient>();
@@ -138,4 +144,3 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 
 
 builder.Build().Run();
-

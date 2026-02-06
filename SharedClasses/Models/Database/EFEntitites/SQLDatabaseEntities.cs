@@ -2,6 +2,8 @@
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.StayWell;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
+using RentoomBooking.SharedClasses.Models.Upsell;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -127,6 +129,98 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Timestamp]
         [Column("row_version")]
         public byte[]? RowVersion { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
+
+    [Table("upsell_order_records")]
+    public class UpsellOrderRecordEntity
+    {
+        [Key]
+        [Column("upsell_order_guid")]
+        public Guid UpsellOrderGuid { get; set; }
+
+        [Column("upsell_order_json", TypeName = "jsonb")]
+        public string UpsellOrderJson { get; set; } = string.Empty;
+
+        [Column("reservation_guid")]
+        public Guid? ReservationGuid { get; set; }
+
+        [Column("payment_session_guid")]
+        public Guid? PaymentSessionGuid { get; set; }
+
+        [Column("payment_status")]
+        public string PaymentStatus { get; set; } = PaymentStatuses.None;
+
+        [Column("provider")]
+        public string? Provider { get; set; }
+
+        [Column("provider_transaction_id")]
+        public string? ProviderTransactionId { get; set; }
+
+        [Column("paid_at_utc")]
+        public DateTime? PaidAtUtc { get; set; }
+
+        [Timestamp]
+        [Column("row_version")]
+        public byte[]? RowVersion { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
+
+    [Table("upsell_order_lines")]
+    public class UpsellOrderLineEntity
+    {
+        [Key]
+        [Column("upsell_order_line_guid")]
+        public Guid UpsellOrderLineGuid { get; set; }
+
+        [Column("upsell_order_guid")]
+        public Guid UpsellOrderGuid { get; set; }
+
+        [Column("partner_service_id")]
+        public int PartnerServiceId { get; set; }
+
+        [Column("title_snapshot")]
+        public string TitleSnapshot { get; set; } = string.Empty;
+
+        [Column("pricing_model")]
+        public PartnerServicePricingModel PricingModel { get; set; }
+
+        [Column("quantity")]
+        public int Quantity { get; set; }
+
+        [Column("unit_price_gross")]
+        public decimal UnitPriceGross { get; set; }
+
+        [Column("nights")]
+        public int Nights { get; set; }
+
+        [Column("total_guests")]
+        public int TotalGuests { get; set; }
+
+        [Column("line_total_gross")]
+        public decimal LineTotalGross { get; set; }
+
+        [Column("currency")]
+        public string Currency { get; set; } = "PLN";
+
+        [Column("line_status")]
+        public string LineStatus { get; set; } = UpsellLineStatuses.Pending;
+
+        [Column("bitrix_product_id")]
+        public int? BitrixProductId { get; set; }
+
+        [Column("bitrix_line_id")]
+        public string? BitrixLineId { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
