@@ -1,6 +1,7 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/oplac"
-@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
-@inject IReservationWorkflowService ReservationWorkflowService;
+@using RentoomBooking.SharedClasses.Models.Payments
+@using RentoomBooking.SharedClasses.Services.Payments
+@inject IPaymentOrchestrator PaymentOrchestrator;
 @inject NavigationManager Navigation
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
@@ -43,7 +44,11 @@
     {
         try
         {
-            var payment = await ReservationWorkflowService.InitiatePaymentAsync(ReservationTokenGuid);
+            var payment = await PaymentOrchestrator.CreatePaymentAsync(new PaymentIntentRequest
+            {
+                FlowType = PaymentFlowType.Reservation,
+                OrderId = ReservationTokenGuid
+            });
             if (!string.IsNullOrWhiteSpace(payment.RedirectUrl))
             {
                 Navigation.NavigateTo(payment.RedirectUrl, true);

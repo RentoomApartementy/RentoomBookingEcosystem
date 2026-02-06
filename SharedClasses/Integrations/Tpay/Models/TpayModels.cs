@@ -290,6 +290,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
 
     public class TpayCreatePaymentRequest
     {
+        public RentoomBooking.SharedClasses.Models.Payments.PaymentFlowType FlowType { get; set; } = RentoomBooking.SharedClasses.Models.Payments.PaymentFlowType.Reservation;
         public Guid OrderId { get; set; }
         public decimal Amount { get; set; }
         public string Description { get; set; } = string.Empty;
@@ -297,6 +298,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
         public string Name { get; set; } = string.Empty;
         public string? SuccessUrl { get; set; }
         public string? ErrorUrl { get; set; }
+        public RentoomBooking.SharedClasses.Models.Upsell.UpsellOrderRequest? UpsellOrder { get; set; }
     }
 
     public class TpayCreatePaymentResponse

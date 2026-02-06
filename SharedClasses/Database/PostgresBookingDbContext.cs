@@ -20,6 +20,8 @@ namespace RentoomBooking.SharedClasses.Database
         public DbSet<ReservationEntity> Reservations => Set<ReservationEntity>();
         public DbSet<ReservationRecordEntity> ReservationRecords => Set<ReservationRecordEntity>();
         public DbSet<ReservationTemplateEntity> ReservationTemplates => Set<ReservationTemplateEntity>();
+        public DbSet<UpsellOrderRecordEntity> UpsellOrderRecords => Set<UpsellOrderRecordEntity>();
+        public DbSet<UpsellOrderLineEntity> UpsellOrderLines => Set<UpsellOrderLineEntity>();
         
         
         public DbSet<SearchFiltersEntity> SearchFilters => Set<SearchFiltersEntity>();
@@ -69,6 +71,23 @@ namespace RentoomBooking.SharedClasses.Database
             {
                 entity.HasKey(e => e.TemplateKey);
                 entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+            });
+
+            modelBuilder.Entity<UpsellOrderRecordEntity>(entity =>
+            {
+                entity.HasKey(e => e.UpsellOrderGuid);
+                entity.Property(e => e.UpsellOrderJson).HasColumnType("jsonb").IsRequired();
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+            });
+
+            modelBuilder.Entity<UpsellOrderLineEntity>(entity =>
+            {
+                entity.HasKey(e => e.UpsellOrderLineGuid);
+                entity.Property(e => e.TitleSnapshot).HasMaxLength(512);
+                entity.Property(e => e.LineStatus).HasMaxLength(32);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
             });
 
