@@ -193,6 +193,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 LineTotalGross = entity.LineTotalGross,
                 Currency = entity.Currency,
                 LineStatus = entity.LineStatus,
+                BitrixProductId = entity.BitrixProductId,
+                BitrixLineId = entity.BitrixLineId,
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt
             };
@@ -214,6 +216,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 LineTotalGross = line.LineTotalGross,
                 Currency = line.Currency,
                 LineStatus = line.LineStatus,
+                BitrixProductId = line.BitrixProductId,
+                BitrixLineId = line.BitrixLineId,
                 CreatedAt = line.CreatedAt == default ? DateTime.UtcNow : line.CreatedAt,
                 UpdatedAt = DateTime.UtcNow
             };

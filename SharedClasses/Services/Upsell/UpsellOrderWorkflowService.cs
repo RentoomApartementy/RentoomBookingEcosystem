@@ -66,8 +66,13 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             record.PaidAtUtc = paidAtUtc;
             record.State.GrandTotal = lines.Sum(line => line.LineTotalGross);
             record.State.UpsellsTotal = record.State.GrandTotal;
+            foreach (var line in lines)
+            {
+                line.LineStatus = UpsellLineStatuses.Paid;
+            }
 
             await _store.UpdateAsync(record, cancellationToken);
+            await _store.ReplaceLinesAsync(record.UpsellOrderGuid, lines, cancellationToken);
             return record;
         }
 
@@ -190,6 +195,15 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 try
                 {
                     await _store.UpdateAsync(record, cancellationToken);
+                    if (isPaid)
+                    {
+                        var lines = await _store.GetLinesAsync(record.UpsellOrderGuid, cancellationToken);
+                        foreach (var line in lines)
+                        {
+                            line.LineStatus = UpsellLineStatuses.Paid;
+                        }
+                        await _store.ReplaceLinesAsync(record.UpsellOrderGuid, lines, cancellationToken);
+                    }
                     return;
                 }
                 catch (DbUpdateConcurrencyException)

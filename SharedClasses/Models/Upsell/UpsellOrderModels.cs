@@ -80,6 +80,8 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public decimal LineTotalGross { get; set; }
         public string Currency { get; set; } = "PLN";
         public string LineStatus { get; set; } = UpsellLineStatuses.Pending;
+        public int? BitrixProductId { get; set; }
+        public string? BitrixLineId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

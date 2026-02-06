@@ -216,6 +216,12 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("line_status")]
         public string LineStatus { get; set; } = UpsellLineStatuses.Pending;
 
+        [Column("bitrix_product_id")]
+        public int? BitrixProductId { get; set; }
+
+        [Column("bitrix_line_id")]
+        public string? BitrixLineId { get; set; }
+
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

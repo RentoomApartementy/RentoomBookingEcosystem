@@ -87,6 +87,7 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.HasKey(e => e.UpsellOrderLineGuid);
                 entity.Property(e => e.TitleSnapshot).HasMaxLength(512);
                 entity.Property(e => e.LineStatus).HasMaxLength(32);
+                entity.Property(e => e.BitrixLineId).HasMaxLength(128);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
             });
