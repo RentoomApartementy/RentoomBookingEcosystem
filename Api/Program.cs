@@ -78,6 +78,7 @@ builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
 builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
+builder.Services.AddScoped<IUpsellPurchasedSummaryService, UpsellPurchasedSummaryService>();
 builder.Services.AddScoped<BitrixService>();
 
 //Customer Terms

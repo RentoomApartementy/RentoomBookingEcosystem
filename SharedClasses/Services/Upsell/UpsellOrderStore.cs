@@ -13,7 +13,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
         Task<UpsellOrderRecord> CreateAsync(UpsellOrderRequest request, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord> CreateWithLinesAsync(UpsellOrderRequest request, IReadOnlyList<UpsellOrderLineRecord> lines, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord?> GetAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
-        Task<List<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<UpsellOrderRecord>> GetByReservationGuidAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
         Task UpdateAsync(UpsellOrderRecord record, CancellationToken cancellationToken = default);
         Task ReplaceLinesAsync(Guid upsellOrderGuid, IReadOnlyList<UpsellOrderLineRecord> lines, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord?> GetByProviderTransactionIdAsync(string providerTransactionId, CancellationToken cancellationToken = default);
@@ -87,7 +88,26 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return record;
         }
 
-        public async Task<List<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<UpsellOrderRecord>> GetByReservationGuidAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        {
+            await _initializationTask;
+
+            await using var context = _dbContextFactory.CreateDbContext();
+            var entities = await context.UpsellOrderRecords.AsNoTracking()
+                .Where(r => r.ReservationGuid == reservationGuid)
+                .OrderBy(r => r.CreatedAt)
+                .ToListAsync(cancellationToken);
+
+            var records = entities.Select(MapToRecord).ToList();
+            foreach (var record in records)
+            {
+                record.Lines = await GetLinesAsync(record.UpsellOrderGuid, cancellationToken);
+            }
+
+            return records;
+        }
+
+        public async Task<IReadOnlyList<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default)
         {
             await _initializationTask;
 
