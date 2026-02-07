@@ -13,6 +13,7 @@ using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services;
+using RentoomBookingWeb.Models;
 using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb
@@ -74,11 +75,13 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IMockTpayGateway, MockTpayGateway>();
             builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
             builder.Services.AddScoped<BitrixService>();
-            builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<MediaCacheService>();
-
-
+            
             builder.Services.AddMemoryCache();
+            //GUS
+            builder.Services.Configure<GusApiSettings>(builder.Configuration.GetSection("GusApi"));
+            builder.Services.AddScoped<IGusService, GusService>();
+
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
 
             //http context provider for absoulte urls - for tpay.
