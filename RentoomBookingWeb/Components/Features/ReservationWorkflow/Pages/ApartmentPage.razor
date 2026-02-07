@@ -207,13 +207,11 @@
             </div>
             
             <div class="map" @onclick="OpenModal">
-                @if (_isModalOpen)
-                {
-                    <ApartmentMap
-                        Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
-                        Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
-                        ApartmentAddress="@_apartment?.ObjectLocation?.Address"/>   
-                }
+                <ApartmentMap
+                    Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
+                    Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
+                    ApartmentAddress="@_apartment?.ObjectLocation?.Address"
+                    />   
             </div>
         </div>
 
@@ -445,6 +443,10 @@
     <MapPopup
         @bind-IsModalOpen="_isModalOpen"
         Apartment="_apartment"
+        StartDate="@StartDate"
+        EndDate="@EndDate"
+        Adults="@Adults"
+        Children="@Children"
         />
 </div>
 
@@ -471,7 +473,7 @@
     private List<DefinedAddonEntity>? _definedAddons = null;
     private List<SelectedAddonDto> _selectedAddons = new();
 
-    private bool _isModalOpen = true;
+    private bool _isModalOpen = false;
     
     private float TotalAddonsPrice 
     {

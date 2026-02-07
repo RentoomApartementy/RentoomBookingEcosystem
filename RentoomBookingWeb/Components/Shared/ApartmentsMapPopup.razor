@@ -1,0 +1,245 @@
+@using RentoomBooking.SharedClasses.Models
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Models.IdoBooking.Public
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using RentoomBooking.SharedClasses.Services
+@using RentoomBooking.SharedClasses.Services.IdoBooking
+@using RentoomBookingWeb.Services 
+@using RentoomBookingWeb.Helpers
+@using Microsoft.Extensions.Localization
+@inject IApartmentsService ApartmentsApiService
+@inject IIdoApartmentService IdoApartmentService
+@inject IRentoomOfferService RentoomOfferService
+@inject IJSRuntime JS
+@inject MediaCacheService MediaCache
+@inject NavigationManager NavManager
+@inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
+
+<div id="@Id" style="width: 100%; height: 100%;"></div>
+
+@code {
+    [Parameter] public float? Latitude { get; set; }
+    [Parameter] public float? Longitude { get; set; }
+    [Parameter] public string? ApartmentAddress { get; set; }
+    [Parameter] public string Id { get; set; } = "apartmentsMapPopup";
+    [Parameter] public string ClassName { get; set; } = "leafletMap";
+    
+    [Parameter] public ApartmentObject? Apartment { get; set; }
+    [Parameter] public String? StartDate { get; set; }
+    [Parameter] public String? EndDate { get; set; }
+    [Parameter] public String? Adults { get; set; }
+    [Parameter] public String? Children { get; set; }
+
+    private DotNetObjectReference<ApartmentsMapPopup>? _objRef;
+    private bool _mapRendered = false;
+
+    public class Marker
+    {
+        public float? Lat { get; set; }
+        public float? Lng { get; set; }
+        public string Popup { get; set; } = "";
+        public string? Id { get; set; }
+        public DotNetObjectReference<ApartmentsMapPopup>? ObjRef { get; set; }
+        public bool IsSelected { get; set; } = false;
+        public bool HasOffer { get; set; }
+        public decimal? Price { get; set; }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_mapRendered && Latitude.HasValue && Longitude.HasValue)
+        {
+            _mapRendered = true;
+            _objRef = DotNetObjectReference.Create(this);
+
+            double lat = (double)Latitude.Value;
+            double lng = (double)Longitude.Value;
+
+            await JS.InvokeVoidAsync($"{ClassName}.createMap", Id, lat, lng, 17);
+
+            await LoadAndDisplayAllMarkers();
+        }
+    }
+
+    private async Task LoadAndDisplayAllMarkers()
+    {
+        try
+        {
+            var page = await ApartmentsApiService.GetAllApartmentsList();
+            var allApartments = page?.Items?.ToList() ?? new List<ApartmentObject>();
+            var markersList = new List<Marker>();
+            List<PricingOffer> offers = new();
+
+            if (Apartment != null && !allApartments.Any(x => x.Id == Apartment.Id))
+            {
+                allApartments.Add(Apartment);
+            }
+
+            bool isSearch = !string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate);
+            
+            if (isSearch)
+            {
+                int.TryParse(Adults, out int a);
+                int.TryParse(Children, out int c);
+
+                var ids = allApartments.Select(x => x.Id).ToList();
+
+                var idoParams = new PricingOffersRequest 
+                {
+                    ObjectIds = ids, 
+                    DateFrom = StartDate, 
+                    DateTo = EndDate,
+                    NumberOfAdults = a, 
+                    NumberOfBigChildren = c
+                };
+
+                var queryObj = new RentoomQueryOffer 
+                { 
+                    IdoOfferParams = idoParams, 
+                    ApartmentFilterParams = new ApartmentFilters(), 
+                    PriceFilter = null 
+                };
+
+                var rentoomOfferResult = await RentoomOfferService.getOfferWitFilter(queryObj);
+                if (rentoomOfferResult?.PricingOffers != null)
+                {
+                    offers = rentoomOfferResult.PricingOffers;
+                }
+            }
+
+            foreach (var apt in allApartments)
+            {
+                if (apt.ObjectLocation?.LocalizationItem?.GeoLocationLat == null ||
+                    apt.ObjectLocation?.LocalizationItem?.GeoLocationLng == null)
+                {
+                    continue;
+                }
+
+                bool isTarget = Apartment != null && apt.Id == Apartment.Id;
+                
+                var offer = offers.FirstOrDefault(o => o.ObjectId == apt.Id);
+
+                markersList.Add(new Marker
+                {
+                    Lat = apt.ObjectLocation.LocalizationItem.GeoLocationLat,
+                    Lng = apt.ObjectLocation.LocalizationItem.GeoLocationLng,
+                    Id = apt.Id.ToString(),
+                    ObjRef = _objRef,
+                    IsSelected = isTarget,
+                    HasOffer = offer != null,
+                    Price = offer?.MinimalPrice,
+                    Popup = GeneratePopupHtml(apt, offer) 
+                });
+            }
+
+            await JS.InvokeVoidAsync($"{ClassName}.addMarkers", markersList, false);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Błąd ładowania mapy: {ex.Message}");
+        }
+    }
+
+    private string GeneratePopupHtml(ApartmentObject apt, PricingOffer? offer)
+    {
+        string imageContent;
+        var loadingText = Localizer["Loading"];
+        var bookNowText = Localizer["BookNow"];
+        
+        if (MediaCache.TryGetCachedMedia(apt.Id, out var cachedMedia) && cachedMedia != null && cachedMedia.Any())
+        {
+            var imgUrl = cachedMedia.First().Url;
+            imageContent = $"<img src='{imgUrl}' style='width: 100%; height: 100%; object-fit: cover; border-radius: .5rem .5rem 0 0;' alt='Apartment' />";
+        }
+        else
+        {
+            imageContent = $"<span>{loadingText}...</span>";
+        }
+
+        var detailsUrl = $"/apartamenty/{apt.Id}/{apt.Name?.ToSlug()}";
+
+        if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
+        {
+            detailsUrl += $"/{StartDate}/{EndDate}";
+            if (!string.IsNullOrEmpty(Adults))
+            {
+                detailsUrl += $"/{Adults}";
+                if (!string.IsNullOrEmpty(Children))
+                {
+                    detailsUrl += $"/{Children}";
+                }
+            }
+        }
+
+        string priceHtml = offer != null ? $"Cena za pobyt: {offer.MinimalPrice} zł" : "";
+
+        return $@"
+        <div id='popup-{apt.Id}' style='position: relative; background-color: white; border-radius: .5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.3);'>
+            <div style='display: flex; flex-direction: column; gap: .4rem;'>
+                <div class='popup-img-target' data-id='{apt.Id}' style='height: 130px; width: 100%; display: flex; align-items: center; justify-content: center; background: #f3f3f3; border-radius: .5rem .5rem 0 0;'>
+                    {imageContent}
+                </div>
+                <div style='padding: .3rem 1rem 1rem 1rem; display: flex; flex-direction: column; gap: .5rem;'>
+                    <strong>{apt.Name}</strong>
+                    <div>
+                        <span>{apt.ObjectLocation?.LocalizationItem?.Street}</span>
+                        <span>{apt.ObjectLocation?.LocalizationItem?.ZipCode}</span>
+                        <span>{apt.ObjectLocation?.LocalizationItem?.City}</span>
+                    </div>
+                    <div style=""display: flex; gap: .5rem;"">
+                         <div>
+                            <img src=""assets/svgs/users.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <span>{apt.MinCapacity} - {apt.Capacity}</span>
+                        </div>
+                        <div>
+                            <img src=""assets/svgs/bed.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <span>{SumBedByItem(apt)}</span>
+                        </div>
+                        <div>
+                            <img src=""assets/svgs/bath.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <span>1</span>
+                        </div>
+                        <div>
+                            <img src=""assets/svgs/m2.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <span>{apt.Area}</span>
+                        </div>
+                    </div>
+
+                    <span>{priceHtml}</span>            
+
+                    <div style='width: 100%; display: flex;'>
+                        <a href='{detailsUrl}' onclick=""window.location.href='{detailsUrl}'; return false;"" style='display: flex; align-items: center; justify-content: center; width: 100%; padding: .4rem 1rem; background-color: rgba(148, 95, 40, 0.7); color: white; border-radius: 5px; cursor: pointer; text-decoration: none;'>
+                            {bookNowText}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div style='position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid white;'></div>
+        </div>";
+    }
+
+    private int SumBedByItem(ApartmentObject apartment)
+    {
+        return (int)(apartment?.BedsConfiguration?.Sum(item => item.Count) ?? 0);
+    }
+
+    [JSInvokable]
+    public async Task<string> OnMarkerClicked(string idStr)
+    {
+        if (int.TryParse(idStr, out int id))
+        {
+            var media = await MediaCache.GetOrFetchMediaAsync(
+                id, 
+                async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>()
+            );
+            
+            return media?.FirstOrDefault()?.Url ?? "";
+        }
+        return "";
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+}

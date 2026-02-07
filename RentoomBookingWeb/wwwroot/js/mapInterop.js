@@ -152,12 +152,14 @@ window.leafletMap = {
 window.leafletPopupMap = {
     map: null,
     markerCluster: null,
+    selectedLayer: null, 
     mediaCache: new Map(),
 
     createMap: function (id, lat, lng, zoom) {
         if (this.map) {
             this.map.remove();
             this.map = null;
+            this.selectedLayer = null;
         }
 
         var container = document.getElementById(id);
@@ -186,6 +188,11 @@ window.leafletPopupMap = {
 
         if (this.markerCluster) {
             this.map.removeLayer(this.markerCluster);
+        }
+
+        if (this.selectedLayer) {
+            this.map.removeLayer(this.selectedLayer);
+            this.selectedLayer = null;
         }
 
         this.markerCluster = L.markerClusterGroup({
@@ -217,12 +224,17 @@ window.leafletPopupMap = {
             const lng = parseFloat(m.lng);
             if (isNaN(lat) || isNaN(lng)) return;
 
-            const defaultIcon = `<div class="marker selected-marker"><img src="/assets/svgs/marker.svg" alt="marker" style="width: 35px; height: 35px;" /></div>`;
-            const priceIcon = `<div class="marker-offer"><span class="marker-price">${Math.round(m.price)} zł</span></div>`;
+            const extraClass = m.isSelected ? " selected-marker" : "";
+
+            const zIndexVal = m.isSelected ? 10000 : 0;
+
+            const defaultIcon = `<div class="marker${extraClass}"><img src="/assets/svgs/marker.svg" alt="marker" style="width: 35px; height: 35px;" /></div>`;
+
+            const priceIcon = `<div class="marker-offer${extraClass}"><span class="marker-price">${Math.round(m.price)} zł</span></div>`;
+
             const htmlContent = m.hasOffer ? priceIcon : defaultIcon;
 
             let iconSettings;
-
             if (m.hasOffer) {
                 iconSettings = {
                     size: [70, 30],
@@ -245,21 +257,25 @@ window.leafletPopupMap = {
                 popupAnchor: iconSettings.popupAnchor
             });
 
-            const marker = L.marker([lat, lng], { icon: customIcon, hasOffer: m.hasOffer });
+            const marker = L.marker([lat, lng], {
+                icon: customIcon,
+                hasOffer: m.hasOffer,
+                zIndexOffset: zIndexVal
+            });
 
             if (m.popup) marker.bindPopup(m.popup);
 
             marker.on('click', async function () {
                 if (m.objRef && m.id) {
-                    if (window.leafletMap.mediaCache.has(m.id)) {
-                        const cachedUrl = window.leafletMap.mediaCache.get(m.id);
+                    if (window.leafletPopupMap.mediaCache.has(m.id)) {
+                        const cachedUrl = window.leafletPopupMap.mediaCache.get(m.id);
                         updatePopupImage(m.id, cachedUrl);
                         return;
                     }
                     try {
                         const imageUrl = await m.objRef.invokeMethodAsync('OnMarkerClicked', m.id);
                         if (imageUrl) {
-                            window.leafletMap.mediaCache.set(m.id, imageUrl);
+                            window.leafletPopupMap.mediaCache.set(m.id, imageUrl);
                             updatePopupImage(m.id, imageUrl);
                         }
                     } catch (err) {
@@ -268,7 +284,12 @@ window.leafletPopupMap = {
                 }
             });
 
-            this.markerCluster.addLayer(marker);
+            if (m.isSelected) {
+                marker.addTo(this.map);
+                this.selectedLayer = marker;
+            } else {
+                this.markerCluster.addLayer(marker);
+            }
         });
 
         this.map.addLayer(this.markerCluster);
@@ -276,9 +297,7 @@ window.leafletPopupMap = {
         function updatePopupImage(id, url) {
             const popupEl = document.getElementById(`popup-${id}`);
             if (!popupEl) return;
-
             const imgContainer = popupEl.querySelector(".popup-img-target");
-
             if (imgContainer) {
                 imgContainer.innerHTML = `<img src="${url}" style="height: 130px; width: 100%; object-fit: cover; border-radius: .5rem .5rem 0 0;" />`;
             }
@@ -289,6 +308,10 @@ window.leafletPopupMap = {
         if (this.map && this.markerCluster) {
             this.map.removeLayer(this.markerCluster);
             this.markerCluster = null;
+        }
+        if (this.selectedLayer) {
+            this.map.removeLayer(this.selectedLayer);
+            this.selectedLayer = null;
         }
     },
 

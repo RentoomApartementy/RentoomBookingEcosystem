@@ -53,6 +53,12 @@
             await JS.InvokeVoidAsync($"{@ClassName}.refreshMap");
         }
     }
+    
+    [JSInvokable]
+    public async Task<string> OnMarkerClicked(string idStr)
+    {
+        return null;
+    }
 
     public void Dispose()
     {
