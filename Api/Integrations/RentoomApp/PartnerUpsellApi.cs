@@ -19,7 +19,7 @@ public class PartnerUpsellApi
         _upsellCatalogService = upsellCatalogService;
     }
 
-    [Function("GetListOfUpsellServicesx")]
+    [Function("GetAvailableUpsellServicesForApartmentItemId")]
     public async Task<HttpResponseData> GetListOfUpsellServices(
              [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "upsell/{apartmentItemId:int}/{locale}")] HttpRequestData req, int apartmentItemId,string locale)
     {

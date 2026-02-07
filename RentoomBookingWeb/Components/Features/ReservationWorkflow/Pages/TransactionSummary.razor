@@ -224,14 +224,14 @@
 
                 await InvokeAsync(StateHasChanged);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _error = "Nie udało się pobrać statusu płatności.";
+                _error = "Nie udało się pobrać statusu płatności. " + ex.Message;
                 await InvokeAsync(StateHasChanged);
                 return;
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(2), token);
+            await Task.Delay(TimeSpan.FromSeconds(20), token);
         }
     }
 

@@ -74,6 +74,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             if (record is null) throw new ArgumentNullException(nameof(record));
 
+            if (record.State.StartRequest.SelectedAddons[0].PaymentType == null)
+            {
+                               Console.WriteLine($"[ReservationStore] Warning: Attempting to update ReservationRecord with ReservationGuid {record.ReservationGuid} where the first selected addon's PaymentType is null. This may indicate an issue with the data being saved.");
+            }
+
             await using var context = _dbContextFactory.CreateDbContext();
             var existing = await context.ReservationRecords
                 .FirstOrDefaultAsync(r => r.ReservationGuid == record.ReservationGuid, cancellationToken);
@@ -101,6 +106,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
         private static ReservationRecord MapToRecord(ReservationRecordEntity entity)
         {
+            if (!entity.ReservationJson.Contains("paymentType"))
+            {
+                Console.WriteLine($"[ReservationStore] Warning: ReservationJson for ReservationGuid {entity.ReservationGuid} does not contain PaymentType. This may indicate an older record that needs to be updated.");
+            }
+
             var state = string.IsNullOrWhiteSpace(entity.ReservationJson)
                 ? new ReservationState()
                 : JsonConvert.DeserializeObject<ReservationState>(entity.ReservationJson) ?? new ReservationState();
