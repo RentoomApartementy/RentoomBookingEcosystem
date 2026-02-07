@@ -1,7 +1,7 @@
-using RentoomBookingWeb.Models;
+using RentoomBooking.SharedClasses.Models.Gus;
 using System.Threading.Tasks;
 
-namespace RentoomBookingWeb.Services
+namespace RentoomBooking.SharedClasses.Services.Gus
 {
     public interface IGusService
     {

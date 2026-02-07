@@ -13,7 +13,8 @@ using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services;
-using RentoomBookingWeb.Models;
+using RentoomBooking.SharedClasses.Services.Gus;
+using RentoomBooking.SharedClasses.Models.Gus;
 using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb

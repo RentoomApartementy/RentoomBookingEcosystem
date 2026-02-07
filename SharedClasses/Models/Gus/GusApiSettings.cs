@@ -1,4 +1,4 @@
-namespace RentoomBookingWeb.Models;
+namespace RentoomBooking.SharedClasses.Models.Gus;
 
 public class GusApiSettings
 {

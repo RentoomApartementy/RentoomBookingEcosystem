@@ -1,4 +1,4 @@
-using RentoomBookingWeb.Models;
+using RentoomBooking.SharedClasses.Models.Gus;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -6,7 +6,7 @@ using System.Xml.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace RentoomBookingWeb.Services
+namespace RentoomBooking.SharedClasses.Services.Gus
 {
     public class GusService : IGusService
     {
