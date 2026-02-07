@@ -13,8 +13,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
         Task<UpsellOrderRecord> CreateAsync(UpsellOrderRequest request, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord> CreateWithLinesAsync(UpsellOrderRequest request, IReadOnlyList<UpsellOrderLineRecord> lines, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord?> GetAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
-        Task<IReadOnlyList<UpsellOrderRecord>> GetByReservationGuidAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
-        Task<IReadOnlyList<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
+        Task<List<UpsellOrderRecord>> GetByReservationGuidAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
+        Task<List<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default);
         Task UpdateAsync(UpsellOrderRecord record, CancellationToken cancellationToken = default);
         Task ReplaceLinesAsync(Guid upsellOrderGuid, IReadOnlyList<UpsellOrderLineRecord> lines, CancellationToken cancellationToken = default);
         Task<UpsellOrderRecord?> GetByProviderTransactionIdAsync(string providerTransactionId, CancellationToken cancellationToken = default);
@@ -88,7 +88,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return record;
         }
 
-        public async Task<IReadOnlyList<UpsellOrderRecord>> GetByReservationGuidAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        public async Task<List<UpsellOrderRecord>> GetByReservationGuidAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
         {
             await _initializationTask;
 
@@ -107,7 +107,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return records;
         }
 
-        public async Task<IReadOnlyList<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default)
+        public async Task<List<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default)
         {
             await _initializationTask;
 

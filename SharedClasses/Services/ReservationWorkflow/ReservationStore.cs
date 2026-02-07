@@ -106,7 +106,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
         private static ReservationRecord MapToRecord(ReservationRecordEntity entity)
         {
-            if (!entity.ReservationJson.Contains("paymentType"))
+            if (!entity.ReservationJson.ToLower().Contains("paymenttype"))
             {
                 Console.WriteLine($"[ReservationStore] Warning: ReservationJson for ReservationGuid {entity.ReservationGuid} does not contain PaymentType. This may indicate an older record that needs to be updated.");
             }
