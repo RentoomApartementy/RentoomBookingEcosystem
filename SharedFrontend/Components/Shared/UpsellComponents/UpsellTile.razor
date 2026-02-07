@@ -2,35 +2,93 @@
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums
 @using RentoomBooking.SharedClasses.Models.Upsell
 
-<div>
-    <input type="checkbox" checked="@IsSelected" @onchange="HandleToggle" />
-    <img src="@Tile.BannerUrls[PartnerServiceBannerPlacementType.StayWell]" alt="@Tile.Title" style="height:10%" />
-    <div>@Tile.Title</div>
-    <div>@Tile.ShortDescription</div>
-    @if (Tile.Discount.HasValue)
-    {
-        <div>Oszczędzasz: @(Tile.Discount.Value) @(Tile.PricingDiscountType == PartnerServiceDiscountType.Percent?"%": Tile.Currency) </div>
-    }
-    <div>@Tile.PricingModel</div>
-    <div>@DisplayText</div>
-    <div>Całość: @Total @Tile.Currency</div>
+<div class="upsell-tile-container @Theme @(IsSelected ? "is-selected" : "")">
+    <div class="upsell-card-inner @(_isFlipped ? "is-flipped" : "")">
+        
+        <div class="upsell-card-front">
+            <div class="upsell-header" @onclick="ToggleFlip">
+                <img src="@Tile.BannerUrls[PartnerServiceBannerPlacementType.StayWell]" alt="@Tile.Title" class="upsell-image" />
+                
+                @if (Tile.Discount.HasValue && Tile.PricingDiscountType != PartnerServiceDiscountType.None)
+                {
+                    <div class="upsell-badge">
+                        @if (Tile.PricingDiscountType == PartnerServiceDiscountType.Percent)
+                        {
+                            <span>-@((Tile.Discount.Value * 100).ToString("F0"))%</span>
+                        }
+                        else
+                        {
+                            <span>-@Tile.Discount.Value.ToString("F2") @Tile.Currency</span>
+                        }
+                    </div>
+                }
+
+                 <div class="upsell-details-overlay">
+                    <span>@Texts.BadgeInfo</span>
+                </div>
+            </div>
+
+            <div class="upsell-content">
+                <div class="click-area" @onclick="ToggleFlip">
+                    <h3 class="upsell-title">@Tile.Title</h3>
+                    <p class="upsell-description">@Tile.ShortDescription</p>
+
+                    <div class="upsell-context">
+                        <span>@Context.Nights @Texts.NightsText</span>
+                        <span class="separator">•</span>
+                        <span>@Context.TotalGuests @Texts.GuestsText</span>
+                    </div>
+                </div>
+
+                <div class="upsell-pricing">
+                    <div class="upsell-total">
+                        <span class="current-price">@Total.ToString("F2") @Currency</span>
+                        @if (Tile.Discount.HasValue && OldPrice > Total)
+                        {
+                            <span class="old-price">@OldPrice.ToString("F2") @Currency</span>
+                        }
+                    </div>
+                    <div class="upsell-unit-info">@DisplayText</div>
+                </div>
+
+                <label class="upsell-button">
+                    <input type="checkbox" checked="@IsSelected" @onchange="HandleToggle" />
+                    <span class="button-text">@(IsSelected ? Texts.DeleteText : Texts.AddText)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="upsell-card-back" @onclick="ToggleFlip">
+            <div class="upsell-back-content">
+                <span class="upsell-back-title">@Tile.Title</span>
+                <div class="upsell-back-description">
+                    <span class="upsell-back-description-title">@Texts.DescriptionText</span>
+                    <span class="upsell-back-description-sub-title">@Tile.ShortDescription</span>
+                </div>
+                
+                <div class="upsell-back-description">
+                    <span class="upsell-back-description-title">@Texts.TermsTitleText</span>
+                    <span class="upsell-back-description-sub-title">@Texts.TermsDescriptionText</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 @code {
-    [Parameter]
-    public UpsellTileDto Tile { get; set; } = new();
+    [Parameter] public UpsellTileDto Tile { get; set; } = new();
+    [Parameter] public ReservationPricingContext Context { get; set; } = new();
+    [Parameter] public int Quantity { get; set; } = 1;
+    [Parameter] public bool IsSelected { get; set; }
+    [Parameter] public EventCallback<bool> OnToggled { get; set; }
+    
+    [Parameter] 
+    public UpsellTextConfig Texts { get; set; } = new();
+    
+    [CascadingParameter] public string Theme { get; set; } = "rentoom-theme";
 
-    [Parameter]
-    public ReservationPricingContext Context { get; set; } = new();
-
-    [Parameter]
-    public int Quantity { get; set; } = 1;
-
-    [Parameter]
-    public bool IsSelected { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> OnToggled { get; set; }
+    private bool _isFlipped = false;
 
     private decimal Total => UpsellPricingCalculator.CalculateTotal(
         Tile.PricingModel,
@@ -39,15 +97,34 @@
         Context.TotalGuests,
         Quantity);
 
+    private decimal OldPrice => Tile.PricingDiscountType switch
+    {
+        PartnerServiceDiscountType.Percent => (Tile.Discount.HasValue && Tile.Discount.Value < 1) 
+            ? Total / (1 - Tile.Discount.Value) 
+            : Total,
+        PartnerServiceDiscountType.FixedAmount => Total + (Tile.Discount ?? 0),
+        _ => Total
+    };
+
     private string Currency => string.IsNullOrWhiteSpace(Context.Currency) ? Tile.Currency : Context.Currency;
 
-    private string DisplayText =>
-        $"Cena: {Tile.Price} {Currency} / {Context.TotalGuests} gości / {Context.Nights} noce ({Tile.PricingModel})"; //<<TODO: multi jezyk!
+    private string DisplayText => 
+        $"Cena: {Tile.Price:F2} {Currency} / {GetPricingModelText(Tile.PricingModel)}";
+
+    private string GetPricingModelText(PartnerServicePricingModel model) => model switch
+    {
+        PartnerServicePricingModel.PerPersonPerDay => "os./dzień",
+        PartnerServicePricingModel.PerApartmentPerDay => "apt./dzień",
+        PartnerServicePricingModel.PerStay => "pobyt",
+        PartnerServicePricingModel.OneTime => "jednorazowo",
+        _ => model.ToString()
+    };
+
+    private void ToggleFlip() => _isFlipped = !_isFlipped;
 
     private async Task HandleToggle(ChangeEventArgs args)
     {
         var isChecked = args.Value is bool boolValue && boolValue;
-        IsSelected = isChecked;
         if (OnToggled.HasDelegate)
         {
             await OnToggled.InvokeAsync(isChecked);

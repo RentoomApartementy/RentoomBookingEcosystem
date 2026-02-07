@@ -24,6 +24,7 @@
 @using Microsoft.Extensions.Localization
 @using RentoomBookingWeb.Components.Enums
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
+@inject IStringLocalizer<RentoomBookingWeb.Upsell> UpsellLocalizer;
 @inject IReservationWorkflowService ReservationWorkflowService
 @inject IUpsellCatalogService UpsellCatalogService
 @inject MediaCacheService MediaCache
@@ -378,17 +379,17 @@
     
      @if (_reservationPricingContext is not null)
     {
-        <h3 class="header-text" style="margin-bottom: -1rem;">Upselle</h3>
         <UpsellList AvailableUpsellsList="_availableUpsells"
                     ReservationContext="_reservationPricingContext"
-                    OnSelectionChanged="HandleUpsellSelectionChanged" />
+                    OnSelectionChanged="HandleUpsellSelectionChanged"
+                    Texts="UpsellTexts"/>
     }
 
     
     @if (TotalAddonsPrice > 0)
     {
         <div class="additional-price">
-            +@TotalAddonsPrice.ToString("N2") zł
+            +@((TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) zł
         </div>
     }
     
@@ -482,6 +483,7 @@
     private List<SelectedUpsellDto> _selectedUpsells = new();
     private StartReservationRequest? _draftStartReservationRequest;
 
+    public UpsellTextConfig UpsellTexts { get; set; } = new();
 
     private decimal TotalAddonsPrice 
     {
@@ -632,6 +634,20 @@
         }
         
         await GetOffer();
+        
+        UpsellTexts = new UpsellTextConfig()
+        {
+            Title = UpsellLocalizer["ListTitle"],
+            SubTitle = UpsellLocalizer["ListSubtitle"],
+            BadgeInfo = UpsellLocalizer["BadgeInfo"],
+            NightsText = UpsellLocalizer["Nights"],
+            GuestsText = UpsellLocalizer["Guests"],
+            DeleteText = UpsellLocalizer["Delete"],
+            AddText = UpsellLocalizer["Add"],
+            DescriptionText = UpsellLocalizer["Description"],
+            TermsTitleText = UpsellLocalizer["TermsTitle"],
+            TermsDescriptionText = UpsellLocalizer["TermsDescription"]
+        };
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -867,6 +883,7 @@
         Children = children;
         
         RefreshAddonsParams();
+        UpdateReservationPricingContext();
 
         if (_apartment != null)
         {
@@ -997,7 +1014,8 @@
         {
             _availableUpsells = await UpsellCatalogService.GetUpsellTilesForApartmentAsync(
                 _apartment.Id,
-                CultureInfo.CurrentUICulture.Name,"rentoombooking");
+                CultureInfo.CurrentUICulture.Name,
+                "rentoombooking");
         }
         catch (Exception ex)
         {
