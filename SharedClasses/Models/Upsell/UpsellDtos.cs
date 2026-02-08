@@ -71,4 +71,34 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public DateTime ValidFromUtc { get; set; }
         public DateTime ValidToUtc { get; set; }
     }
+
+    public class UpsellPurchasedSummaryDto
+    {
+        public Guid ReservationGuid { get; set; }
+        public List<UpsellPurchasedOrderDto> Orders { get; set; } = new();
+    }
+
+    public class UpsellPurchasedOrderDto
+    {
+        public Guid UpsellOrderGuid { get; set; }
+        public string PaymentStatus { get; set; } = string.Empty;
+        public DateTime? PaidAtUtc { get; set; }
+        public decimal TotalGross { get; set; }
+        public string Currency { get; set; } = "PLN";
+        public List<UpsellPurchasedLineDto> Lines { get; set; } = new();
+    }
+
+    public class UpsellPurchasedLineDto
+    {
+        public int PartnerServiceId { get; set; }
+        public string TitleSnapshot { get; set; } = string.Empty;
+        public PartnerServicePricingModel PricingModel { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPriceGross { get; set; }
+        public int Nights { get; set; }
+        public int TotalGuests { get; set; }
+        public decimal LineTotalGross { get; set; }
+        public string Currency { get; set; } = "PLN";
+        public string LineStatus { get; set; } = string.Empty;
+    }
 }

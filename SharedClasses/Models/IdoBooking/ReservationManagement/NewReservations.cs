@@ -19,6 +19,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement
 
     public class NewReservation
     {
+        public Guid? RentoomResrvationID { get; set; } = null; // dodatkowe pole do mapowania rezerwacji w RentoomBooking, nie jest wymagane przez IdoSell, dodawanie on demand zawsze.
         public string DateFrom { get; set; } = string.Empty;
         public string DateTo { get; set; } = string.Empty;
         public float? Price { get; set; }

@@ -66,6 +66,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
     public class Reservation
     {
         public int id { get; set; }
+        public Guid? RentoomReservationId { get; set; } = null; //lokalne id rezerwacji w Rentoom, które będzie przypisywane do rezerwacji z IdoSell, jeśli uda się znaleźć rezerwację w Rentoom na podstawie tokena z IdoSell (ResToken) - wtedy będzie można łatwo powiązać rezerwację z IdoSell z rezerwacją w Rentoom
         public ReservationDetails? ReservationDetails { get; set; }
         public List<ReservationItem> Items { get; set; }
         public ClientModel Client { get; set; }

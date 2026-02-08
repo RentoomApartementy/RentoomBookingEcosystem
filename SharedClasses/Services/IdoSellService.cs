@@ -256,7 +256,7 @@ namespace RentoomBooking.SharedClasses.Services
             return response?.Result.GetRestrictionExceptions;
         }
 
-        public async Task<ReservationAddResponse?> AddReservationAsync(NewReservation reservation, CancellationToken cancellationToken = default)
+        public async Task<ReservationAddResponse?> AddReservationAsync(NewReservation reservation , CancellationToken cancellationToken = default)
         {
             if (reservation is null)
             {
@@ -538,7 +538,7 @@ namespace RentoomBooking.SharedClasses.Services
                 var reservationId = GenerateReservationId();
                 var reservation = BuildDummyReservation(reservationRequest, template, reservationId);
 
-                await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger, cancellationToken: cancellationToken);
+                await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger,existingResToken: reservationRequest.RentoomResrvationID.ToString(), cancellationToken: cancellationToken);
 
                 results.Add(new ReservationChangeResult
                 {
@@ -563,6 +563,7 @@ namespace RentoomBooking.SharedClasses.Services
             };
 
             reservation.id = reservationId;
+            reservation.RentoomReservationId = reservationRequest.RentoomResrvationID;
             reservation.ReservationDetails ??= new ReservationDetails();
             reservation.Items ??= new List<ReservationItem>();
             reservation.Client ??= new ClientModel { Guests = new List<Guest>(), InvoiceData = new InvoiceData() };
