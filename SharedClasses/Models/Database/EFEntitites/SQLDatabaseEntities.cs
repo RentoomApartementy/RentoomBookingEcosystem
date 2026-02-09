@@ -1,8 +1,9 @@
-﻿using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
+﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.StayWell;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using System;
 using System.Collections.Generic;
@@ -135,6 +136,8 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<UpsellOrderRecordEntity> UpsellOrderRecords { get; set; } = new List<UpsellOrderRecordEntity>();
     }
 
     [Table("upsell_order_records")]
@@ -174,6 +177,12 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<UpsellOrderLineEntity> UpsellOrderLineEntities { get; set; } = new List<UpsellOrderLineEntity>();
+
+        //public virtual UpsellVoucherEntity UpsellVoucher { get; set; } = null!;
+        public virtual ReservationRecordEntity ReservationRecord { get; set; } = null!;
+
     }
 
     [Table("upsell_order_lines")]
@@ -230,6 +239,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public virtual UpsellOrderRecordEntity UpsellOrderRecord { get; set; } = null!;
+        public virtual UpsellVoucherEntity UpsellVoucher { get; set; } = null!;
     }
 
     [Table("upsell_vouchers")]
@@ -238,7 +250,7 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Key]
         [Column("upsell_voucher_guid")]
         public Guid UpsellVoucherGuid { get; set; }
-
+        
         [Column("upsell_order_line_guid")]
         public Guid UpsellOrderLineGuid { get; set; }
 
@@ -278,6 +290,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public virtual UpsellOrderLineEntity UpsellOrderLine { get; set; } = null!;
+        //public virtual UpsellOrderLineEntity UpsellOrderLine { get; set; } = null!;
     }
 
 

@@ -69,6 +69,16 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
             });
 
+            modelBuilder.Entity<ReservationRecordEntity>(entity =>
+            {
+
+                entity.HasKey(e => e.ReservationGuid);
+                //entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
+                //entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+            });
+
+
+
             modelBuilder.Entity<ReservationTemplateEntity>(entity =>
             {
                 entity.HasKey(e => e.TemplateKey);
@@ -82,6 +92,10 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.Property(e => e.UpsellOrderJson).HasColumnType("jsonb").IsRequired();
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+                entity.HasOne(ps => ps.ReservationRecord)
+                    .WithMany(p => p.UpsellOrderRecords)
+                    .HasForeignKey(ps => ps.ReservationGuid)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<UpsellOrderLineEntity>(entity =>
@@ -93,6 +107,10 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.Property(e => e.IsFreeUnlimitedUses).HasDefaultValue(false);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+                entity.HasOne(ps => ps.UpsellOrderRecord)
+                    .WithMany(p => p.UpsellOrderLineEntities)
+                    .HasForeignKey(ps => ps.UpsellOrderGuid)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<UpsellVoucherEntity>(entity =>
@@ -103,8 +121,8 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.HasIndex(e => new { e.Status, e.ValidFrom, e.ValidTo }).HasDatabaseName("idx_upsell_vouchers_status_validity");
                 entity.HasIndex(e => e.QrToken).IsUnique();
                 entity.HasIndex(e => e.CodeShort).IsUnique();
-                entity.HasOne<UpsellOrderLineEntity>()
-                    .WithOne()
+                entity.HasOne(ps=>ps.UpsellOrderLine)
+                    .WithOne(p=>p.UpsellVoucher)
                     .HasForeignKey<UpsellVoucherEntity>(e => e.UpsellOrderLineGuid)
                     .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(e => e.QrToken).HasColumnType("varchar");

@@ -41,7 +41,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 .ToListAsync();
 
             return results
-                .Select(result => MapToDto(result.voucher, result.line, includeQrToken: false))
+                .Select(result => MapToDto(result.voucher, result.line, includeQrToken: true))
                 .ToList();
         }
 
