@@ -18,6 +18,14 @@
     gap: 2rem;
 }
 
+
+@media (max-width: 800px) {  
+    .container {
+        padding: 1rem;
+        gap: 1rem;
+    }
+}
+
 .top-wrapper {
     width: 100%;
     display: flex;
