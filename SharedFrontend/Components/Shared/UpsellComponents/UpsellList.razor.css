@@ -1,0 +1,111 @@
+.upsell-outer-wrapper.rentoom-theme {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+    background-color: transparent;
+}
+
+.rentoom-theme .upsell-section-container {
+    width: 95%;
+    max-width: 1200px;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.rentoom-theme .upsell-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.rentoom-theme .upsell-title-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rentoom-theme .upsell-icon {
+    background: #c8ffc8;
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.rentoom-theme .upsell-main-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a1a;
+}
+
+.rentoom-theme .upsell-subtitle {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 2px 0 0 0;
+}
+
+.rentoom-theme .nav-btn {
+    border: 1px solid #eee;
+    background: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #333;
+}
+
+.rentoom-theme .nav-btn:hover {
+    background: #f5f5f5;
+}
+
+.rentoom-theme .upsell-list-scroll-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    overflow-x: auto; 
+    padding: 10px 5px 20px 5px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.rentoom-theme .upsell-list-scroll-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+.rentoom-theme .upsell-list-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 10px;
+}
+
+.rentoom-theme .additional-price {
+    margin-top: 20px;
+    padding: 20px;
+    text-align: right;
+    font-size: 1.1rem;
+    color: #1F5A41;
+    border-top: 1px solid #f0f0f0;
+}
+
+.rentoom-theme .additional-price b {
+    font-weight: 800;
+}
+
+@media (max-width: 768px) {
+    .rentoom-theme .upsell-section-container {
+        padding: 20px;
+    }
+
+    .rentoom-theme .upsell-main-title {
+        font-size: 1.2rem;
+    }
+
+    .rentoom-theme .upsell-nav-buttons {
+        display: none; 
+    }
+}
