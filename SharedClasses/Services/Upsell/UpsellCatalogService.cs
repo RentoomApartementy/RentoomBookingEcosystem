@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
+using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using System;
 using System.Collections.Generic;
@@ -13,16 +15,18 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 {
     public interface IUpsellCatalogService
     {
-        Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentItemId, string culture, string CurrentApp, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentItemId, string culture, string CurrentApp,  CancellationToken cancellationToken = default);
     }
 
     public class UpsellCatalogService : IUpsellCatalogService
     {
         private readonly IDbContextFactory<RappPartnersDBContext> _dbContextFactory;
+        private IOptions<StorageOptions> storageOptions;
 
-        public UpsellCatalogService(IDbContextFactory<RappPartnersDBContext> dbContextFactory)
+        public UpsellCatalogService(IDbContextFactory<RappPartnersDBContext> dbContextFactory, IOptions<StorageOptions> storageOptions)
         {
             _dbContextFactory = dbContextFactory;
+            this.storageOptions = storageOptions;
         }
 
       /*  public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync_RentoomBooking(int apartmentItemId, string culture, CancellationToken cancellationToken = default)
@@ -145,7 +149,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return translations.FirstOrDefault();
         }
 
-        internal static Dictionary<PartnerServiceBannerPlacementType, string> SelectBanners(PartnerService service, string culture)
+        internal Dictionary<PartnerServiceBannerPlacementType, string> SelectBanners(PartnerService service, string culture)
         {
             var result = new Dictionary<PartnerServiceBannerPlacementType, string>();
             if (service.Banners == null || service.Banners.Count == 0)
@@ -161,7 +165,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     continue;
                 }
 
-                result[placement] = banner.MediaAsset.StorageKey;
+                result[placement] = $"https://{storageOptions.Value.AccountName}.blob.core.windows.net/{storageOptions.Value.Container}/{banner.MediaAsset.StorageKey}";
             }
 
             return result;
