@@ -47,7 +47,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
         public async Task EnsureForOrderAsync(Guid upsellOrderGuid)
         {
-            await _initializationTask;
+            //await _initializationTask;
 
             var record = await _orderStore.GetAsync(upsellOrderGuid);
             if (record is null)
@@ -82,7 +82,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
         public async Task EnsureForReservationAsync(Guid reservationGuid)
         {
-            await _initializationTask;
+            //await _initializationTask;
 
             var orders = await _orderStore.GetByReservationGuidAsync(reservationGuid);
             var paidOrders = orders.Where(order => string.Equals(order.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase));

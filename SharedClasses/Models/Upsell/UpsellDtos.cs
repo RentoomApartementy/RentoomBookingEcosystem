@@ -23,7 +23,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
 
  
 
-    public class UpsellSelectionDto
+   /* public class UpsellSelectionDto
     {
         public string PartnerServiceId { get; set; } = string.Empty;
         public int Quantity { get; set; }
@@ -37,7 +37,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public decimal TotalAmount { get; set; }
         public List<UpsellQuoteLineItemDto> LineItems { get; set; } = new();
     }
-   
+   */
     public class UpsellQuoteLineItemDto
     {
         public string PartnerServiceId { get; set; } = string.Empty;
@@ -48,7 +48,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public string? ServiceDateMode { get; set; }
     }
 
-    public class UpsellPurchaseDto
+  /*  public class UpsellPurchaseDto
     {
         public string PurchaseId { get; set; } = string.Empty;
         public string ReservationId { get; set; } = string.Empty;
@@ -61,12 +61,13 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public int TotalVouchers { get; set; }
         public int RedeemedVouchers { get; set; }
     }
-
+*/
     public class UpsellVoucherDto
     {
         public Guid VoucherGuid { get; set; }
         public Guid OrderLineGuid { get; set; }
         public Guid ReservationGuid { get; set; }
+        public int PartnerServiceId { get; set; }
         public string CodeShort { get; set; } = string.Empty;
         public string? QrToken { get; set; }
         public int UsedCount { get; set; }
