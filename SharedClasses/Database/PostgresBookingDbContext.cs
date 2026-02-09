@@ -30,8 +30,10 @@ namespace RentoomBooking.SharedClasses.Database
 
         public DbSet<DefinedAddonEntity> DefinedAddons => Set<DefinedAddonEntity>();
         
-        public DbSet<CustomerTermsAndConditionsSource> CustomerTermsSources { get; set; }
-        public DbSet<CustomerAgreedTerms> CustomerAgreedTerms { get; set; }
+        public DbSet<CustomerTermsAndConditionsSource> CustomerTermsSources => Set<CustomerTermsAndConditionsSource>();
+        public DbSet<CustomerAgreedTerms> CustomerAgreedTerms => Set<CustomerAgreedTerms>();
+
+        public DbSet<UpsellVoucherEntity> UpsellVouchers => Set<UpsellVoucherEntity>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -88,6 +90,29 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.Property(e => e.TitleSnapshot).HasMaxLength(512);
                 entity.Property(e => e.LineStatus).HasMaxLength(32);
                 entity.Property(e => e.BitrixLineId).HasMaxLength(128);
+                entity.Property(e => e.IsFreeUnlimitedUses).HasDefaultValue(false);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+            });
+
+            modelBuilder.Entity<UpsellVoucherEntity>(entity =>
+            {
+                entity.HasKey(e => e.UpsellVoucherGuid);
+                entity.HasIndex(e => e.UpsellOrderLineGuid).IsUnique();
+                entity.HasIndex(e => e.ReservationGuid).HasDatabaseName("idx_upsell_vouchers_reservation_guid");
+                entity.HasIndex(e => new { e.Status, e.ValidFrom, e.ValidTo }).HasDatabaseName("idx_upsell_vouchers_status_validity");
+                entity.HasIndex(e => e.QrToken).IsUnique();
+                entity.HasIndex(e => e.CodeShort).IsUnique();
+                entity.HasOne<UpsellOrderLineEntity>()
+                    .WithOne()
+                    .HasForeignKey<UpsellVoucherEntity>(e => e.UpsellOrderLineGuid)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(e => e.QrToken).HasColumnType("varchar");
+                entity.Property(e => e.CodeShort).HasColumnType("varchar");
+                entity.Property(e => e.Status).HasColumnType("varchar");
+                entity.Property(e => e.ValidFrom).HasColumnType("date");
+                entity.Property(e => e.ValidTo).HasColumnType("date");
+                entity.Property(e => e.UsedCount).HasDefaultValue(0);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
             });
