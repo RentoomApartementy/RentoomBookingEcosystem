@@ -52,12 +52,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
              // await _initializationTask;
 
-            var normalized = NormalizeCodeShort(codeShort);
-            if (string.IsNullOrWhiteSpace(normalized))
-            {
-                return null;
-            }
-
+          
             await using var context = _dbContextFactory.CreateDbContext();
               var result = context.UpsellVouchers
                   .Include(v => v.UpsellOrderLine)
@@ -72,7 +67,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                                     on voucher.UpsellOrderLineGuid equals line.UpsellOrderLineGuid
                                   where voucher.CodeShort == codeShort
                                 select new { voucher, line })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync();*/
 
             return result is null ? null : MapToDto(result.voucher, result.line, includeQrToken: false);
         }
@@ -104,11 +99,11 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return result is null ? null : MapToDto(result.voucher, result.line, includeQrToken: false);
         }
 
-        private static string NormalizeCodeShort(string codeShort)
+      /*  private static string NormalizeCodeShort(string codeShort)
         {
             return codeShort.Trim().ToUpperInvariant().Replace("-", string.Empty);
         }
-
+      */
         private static UpsellVoucherDto MapToDto(
             Models.Database.EFEntitites.UpsellVoucherEntity voucher,
             Models.Database.EFEntitites.UpsellOrderLineEntity line,
