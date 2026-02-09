@@ -32,13 +32,18 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             await _initializationTask;
 
             await using var context = _dbContextFactory.CreateDbContext();
-            var results = await (from voucher in context.UpsellVouchers.AsNoTracking()
+            var results = await context.UpsellVouchers.Include(v=> v.UpsellOrderLine).
+                Where(v => v.ReservationGuid == reservationGuid).AsNoTracking().Select(v => new { voucher = v, line = v.UpsellOrderLine }).ToListAsync();
+
+
+           /* await (from voucher in context.UpsellVouchers.AsNoTracking()
+
                                  join line in context.UpsellOrderLines.AsNoTracking()
                                      on voucher.UpsellOrderLineGuid equals line.UpsellOrderLineGuid
                                  where voucher.ReservationGuid == reservationGuid
                                  orderby voucher.CreatedAt
                                  select new { voucher, line })
-                .ToListAsync();
+                .ToListAsync();*/
 
             return results
                 .Select(result => MapToDto(result.voucher, result.line, includeQrToken: true))
@@ -52,21 +57,24 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 return null;
             }
 
-            await _initializationTask;
+           // await _initializationTask;
 
-            var normalized = NormalizeCodeShort(codeShort);
-            if (string.IsNullOrWhiteSpace(normalized))
-            {
-                return null;
-            }
-
+          
             await using var context = _dbContextFactory.CreateDbContext();
-            var result = await (from voucher in context.UpsellVouchers.AsNoTracking()
+            var result = context.UpsellVouchers
+                .Include(v => v.UpsellOrderLine)
+                .AsNoTracking()
+                .Where(v => v.CodeShort == codeShort)
+                .Select(v => new { voucher = v, line = v.UpsellOrderLine }).
+                FirstOrDefault();
+
+
+            /*await (from voucher in context.UpsellVouchers.AsNoTracking()
                                 join line in context.UpsellOrderLines.AsNoTracking()
                                     on voucher.UpsellOrderLineGuid equals line.UpsellOrderLineGuid
-                                where voucher.CodeShort.Replace("-", "") == normalized
+                                where voucher.CodeShort == codeShort
                                 select new { voucher, line })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync();*/
 
             return result is null ? null : MapToDto(result.voucher, result.line, includeQrToken: false);
         }
@@ -82,21 +90,27 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
             var trimmedToken = qrToken.Trim();
             await using var context = _dbContextFactory.CreateDbContext();
-            var result = await (from voucher in context.UpsellVouchers.AsNoTracking()
+            var result = context.UpsellVouchers
+                .Include(v => v.UpsellOrderLine)
+                .AsNoTracking()
+                .Where(v => v.QrToken == trimmedToken)
+                .Select(v => new { voucher = v, line = v.UpsellOrderLine })
+                .FirstOrDefault();
+            /*await (from voucher in context.UpsellVouchers.AsNoTracking()
                                 join line in context.UpsellOrderLines.AsNoTracking()
                                     on voucher.UpsellOrderLineGuid equals line.UpsellOrderLineGuid
                                 where voucher.QrToken == trimmedToken
                                 select new { voucher, line })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync()*/
 
             return result is null ? null : MapToDto(result.voucher, result.line, includeQrToken: false);
         }
 
-        private static string NormalizeCodeShort(string codeShort)
+      /*  private static string NormalizeCodeShort(string codeShort)
         {
             return codeShort.Trim().ToUpperInvariant().Replace("-", string.Empty);
         }
-
+      */
         private static UpsellVoucherDto MapToDto(
             Models.Database.EFEntitites.UpsellVoucherEntity voucher,
             Models.Database.EFEntitites.UpsellOrderLineEntity line,
