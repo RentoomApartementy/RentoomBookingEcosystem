@@ -1,13 +1,15 @@
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @implements IAsyncDisposable
 @inject IJSRuntime JS
+@inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
 
 @if (IsModalOpen)
 {
     <div id="@Id" class="container">
         <div class="top-wrapper">
             <div class="title">
-                <span>Mapa apartamentów</span>
+                <span>@Localizer["ApartmentsMap"]</span>
             </div>
             
             <div class="close-button" @onclick="CloseModal">
