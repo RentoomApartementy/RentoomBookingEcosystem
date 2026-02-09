@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using System;
 
-namespace RentoomBooking.Api;
+namespace RentoomBooking.Api.Upsell;
 
 public class GetReservationUpsellsFunction
 {
