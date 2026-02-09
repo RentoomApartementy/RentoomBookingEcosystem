@@ -252,7 +252,7 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         public string CodeShort { get; set; } = string.Empty;
 
         [Column("status")]
-        public string Status { get; set; } = string.Empty;
+        public string Status { get; set; } = UpsellVoucherStatuses.Active;
 
         [Column("max_uses")]
         public int? MaxUses { get; set; }

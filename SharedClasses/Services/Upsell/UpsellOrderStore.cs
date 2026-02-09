@@ -215,6 +215,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 LineStatus = entity.LineStatus,
                 BitrixProductId = entity.BitrixProductId,
                 BitrixLineId = entity.BitrixLineId,
+                IsFreeUnlimitedUses = entity.IsFreeUnlimitedUses,
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt
             };
@@ -238,6 +239,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 LineStatus = line.LineStatus,
                 BitrixProductId = line.BitrixProductId,
                 BitrixLineId = line.BitrixLineId,
+                IsFreeUnlimitedUses = line.IsFreeUnlimitedUses,
                 CreatedAt = line.CreatedAt == default ? DateTime.UtcNow : line.CreatedAt,
                 UpdatedAt = DateTime.UtcNow
             };

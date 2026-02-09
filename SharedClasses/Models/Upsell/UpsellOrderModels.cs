@@ -52,6 +52,14 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public const string Refunded = "Refunded";
     }
 
+    public static class UpsellVoucherStatuses
+    {
+        public const string Active = "Active";
+        public const string Expired = "Expired";
+        public const string Cancelled = "Cancelled";
+        public const string Completed = "Completed";
+    }
+
     public class UpsellOrderRecord
     {
         public Guid UpsellOrderGuid { get; set; }
@@ -82,6 +90,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public string LineStatus { get; set; } = UpsellLineStatuses.Pending;
         public int? BitrixProductId { get; set; }
         public string? BitrixLineId { get; set; }
+        public bool IsFreeUnlimitedUses { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
