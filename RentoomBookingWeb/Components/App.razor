@@ -42,13 +42,28 @@
         }
     }
 
+    window.clickListeners = {};
+
     window.registerClickOutside = (elementId, dotnetHelper) => {
-        window.addEventListener("click", (e) => {
+        const listener = (e) => {
             const el = document.getElementById(elementId);
             if (el && !el.contains(e.target)) {
-                dotnetHelper.invokeMethodAsync("CloseModal");
+                try {
+                    dotnetHelper.invokeMethodAsync("CloseModal")
+                        .catch(() => {});
+                } catch (e) {}
             }
-        });
+        };
+        window.clickListeners[elementId] = listener;
+        window.addEventListener("click", listener);
+    };
+
+    window.unregisterClickOutside = (elementId) => {
+        const listener = window.clickListeners[elementId];
+        if (listener) {
+            window.removeEventListener("click", listener);
+            delete window.clickListeners[elementId];
+        }
     };
     
     </script>

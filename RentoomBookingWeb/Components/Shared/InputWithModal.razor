@@ -1,4 +1,4 @@
-@implements IDisposable
+@implements IAsyncDisposable
 @inject IJSRuntime JS
 
 <div id="@Id" class="dropdown-wrapper" style="@((IsFull) ? "width: 100%;" : null)">
@@ -49,8 +49,18 @@
         }
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        objRef?.Dispose();
+        try
+        {
+            await JS.InvokeVoidAsync("unregisterClickOutside", Id);
+        }
+        catch (Exception)
+        {
+        }
+        finally
+        {
+            objRef?.Dispose();
+        }
     }
 }

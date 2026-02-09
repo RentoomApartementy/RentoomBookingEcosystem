@@ -214,9 +214,9 @@ code {
 
 .leaflet-popup-content-wrapper {
     padding: 0 !important;
-    border-radius: .7rem; /* opcjonalnie */
-    background: transparent; /* usuwa białe tło */
-    box-shadow: none; /* usuwa cień */
+    border-radius: .7rem; 
+    background: transparent; 
+    box-shadow: none;
 }
 
 .leaflet-popup-content {
@@ -225,6 +225,21 @@ code {
 }
 
 .leaflet-popup-tip {
-    background: transparent !important; /* usuwa trójkątną strzałkę */
+    background: transparent !important; 
     box-shadow: none !important;
+}
+
+.selected-marker {
+    z-index: 9999;
+    transform-origin: center bottom;
+    animation: smooth-jump 1s ease-in-out infinite;
+}
+
+@keyframes smooth-jump {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-7px);
+    }
 }

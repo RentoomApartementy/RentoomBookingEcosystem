@@ -1,32 +1,72 @@
-export function initSlider(dotNetHelper, element) {
-    function checkWidth() {
-        dotNetHelper.invokeMethodAsync('UpdateItemPerPageAsync', window.innerWidth);
+class SliderManager {
+    constructor(dotNetHelper, element) {
+        this.dotNetHelper = dotNetHelper;
+        this.element = element;
+        this.resizeTimer = null;
+
+        this.resizeHandler = this.onResize.bind(this);
+        this.touchStartHandler = this.onTouchStart.bind(this);
+        this.touchEndHandler = this.onTouchEnd.bind(this);
+
+        this.touchStartX = 0;
+
+        window.addEventListener('resize', this.resizeHandler);
+
+        if (this.element) {
+            this.element.addEventListener('touchstart', this.touchStartHandler, { passive: true });
+            this.element.addEventListener('touchend', this.touchEndHandler, { passive: true });
+        }
+
+        this.onResize();
     }
 
-    window.addEventListener('resize', checkWidth);
-    checkWidth(); 
+    onResize() {
+        if (this.resizeTimer) clearTimeout(this.resizeTimer);
 
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const minSwipeDistance = 50; 
+        this.resizeTimer = setTimeout(() => {
+            if (this.dotNetHelper) {
+                this.dotNetHelper.invokeMethodAsync('UpdateItemPerPageAsync', window.innerWidth)
+                    .catch(e => console.debug("Ignored Blazor call", e));
+            }
+        }, 100);
+    }
 
-    element.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
+    onTouchStart(e) {
+        this.touchStartX = e.changedTouches[0].screenX;
+    }
 
-    element.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleGesture();
-    }, { passive: true });
+    onTouchEnd(e) {
+        if (!this.dotNetHelper) return;
 
-    function handleGesture() {
-        const distance = touchStartX - touchEndX;
+        const touchEndX = e.changedTouches[0].screenX;
+        const distance = this.touchStartX - touchEndX;
+        const minSwipeDistance = 50;
 
         if (distance > minSwipeDistance) {
-            dotNetHelper.invokeMethodAsync('NextSlide');
-        }
-        else if (distance < -minSwipeDistance) {
-            dotNetHelper.invokeMethodAsync('PrevSlide');
+            this.dotNetHelper.invokeMethodAsync('NextSlide').catch(() => {});
+        } else if (distance < -minSwipeDistance) {
+            this.dotNetHelper.invokeMethodAsync('PrevSlide').catch(() => {});
         }
     }
+
+    dispose() {
+        if (this.resizeTimer) {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = null;
+        }
+
+        window.removeEventListener('resize', this.resizeHandler);
+
+        if (this.element) {
+            this.element.removeEventListener('touchstart', this.touchStartHandler);
+            this.element.removeEventListener('touchend', this.touchEndHandler);
+        }
+
+        this.dotNetHelper = null;
+        this.element = null;
+    }
+}
+
+export function initSlider(dotNetHelper, element) {
+    return new SliderManager(dotNetHelper, element);
 }
