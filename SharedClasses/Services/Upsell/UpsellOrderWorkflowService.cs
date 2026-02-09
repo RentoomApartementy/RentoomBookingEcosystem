@@ -76,7 +76,16 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
             await _store.UpdateAsync(record, cancellationToken);
             await _store.ReplaceLinesAsync(record.UpsellOrderGuid, lines, cancellationToken);
-            await _voucherProvisioningService.EnsureForOrderAsync(record.UpsellOrderGuid);
+            try
+            {
+                await _voucherProvisioningService.EnsureForOrderAsync(record.UpsellOrderGuid);
+                _logger.LogInformation("Ensured upsell vouchers for paid order {OrderGuid}.", record.UpsellOrderGuid);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to ensure upsell vouchers for paid order {OrderGuid}.", record.UpsellOrderGuid);
+                throw;
+            }
             return record;
         }
 
@@ -207,7 +216,16 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                             line.LineStatus = UpsellLineStatuses.Paid;
                         }
                         await _store.ReplaceLinesAsync(record.UpsellOrderGuid, lines, cancellationToken);
-                        await _voucherProvisioningService.EnsureForOrderAsync(record.UpsellOrderGuid);
+                        try
+                        {
+                            await _voucherProvisioningService.EnsureForOrderAsync(record.UpsellOrderGuid);
+                            _logger.LogInformation("Ensured upsell vouchers for paid order {OrderGuid}.", record.UpsellOrderGuid);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, "Failed to ensure upsell vouchers for paid order {OrderGuid}.", record.UpsellOrderGuid);
+                            throw;
+                        }
                     }
                     return;
                 }
