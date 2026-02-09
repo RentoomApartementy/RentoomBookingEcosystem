@@ -104,8 +104,14 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<CustomerTermsRepository>();
             builder.Services.AddScoped<CustomerTermsService>();
             builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
+
+            //upselle
             builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
             builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
+
+            //upselle vouchery
+            builder.Services.AddScoped<IUpsellVoucherProvisioningService, UpsellVoucherProvisioningService>();
+            builder.Services.AddScoped<IUpsellVoucherCodeGenerator, UpsellVoucherCodeGenerator>();
 
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();

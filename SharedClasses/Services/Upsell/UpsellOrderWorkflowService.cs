@@ -24,6 +24,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
     {
         private readonly IUpsellOrderStore _store;
         private readonly IUpsellCatalogService _catalogService;
+        private readonly IUpsellVoucherProvisioningService _voucherProvisioningService;
         private readonly ITpayClient _tpayClient;
         private readonly TpaySettings _tpaySettings;
         private readonly ILogger<UpsellOrderWorkflowService> _logger;
@@ -31,12 +32,14 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
         public UpsellOrderWorkflowService(
             IUpsellOrderStore store,
             IUpsellCatalogService catalogService,
+            IUpsellVoucherProvisioningService voucherProvisioningService,
             ITpayClient tpayClient,
             IOptions<TpaySettings> tpayOptions,
             ILogger<UpsellOrderWorkflowService> logger)
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _catalogService = catalogService ?? throw new ArgumentNullException(nameof(catalogService));
+            _voucherProvisioningService = voucherProvisioningService ?? throw new ArgumentNullException(nameof(voucherProvisioningService));
             _tpayClient = tpayClient ?? throw new ArgumentNullException(nameof(tpayClient));
             _tpaySettings = tpayOptions?.Value ?? throw new ArgumentNullException(nameof(tpayOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -73,6 +76,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
             await _store.UpdateAsync(record, cancellationToken);
             await _store.ReplaceLinesAsync(record.UpsellOrderGuid, lines, cancellationToken);
+            await _voucherProvisioningService.EnsureForOrderAsync(record.UpsellOrderGuid);
             return record;
         }
 
@@ -203,6 +207,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                             line.LineStatus = UpsellLineStatuses.Paid;
                         }
                         await _store.ReplaceLinesAsync(record.UpsellOrderGuid, lines, cancellationToken);
+                        await _voucherProvisioningService.EnsureForOrderAsync(record.UpsellOrderGuid);
                     }
                     return;
                 }

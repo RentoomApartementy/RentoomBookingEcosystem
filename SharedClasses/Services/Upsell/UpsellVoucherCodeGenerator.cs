@@ -39,7 +39,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             var payload = EncodeCrockfordBase32(hash.AsSpan(0, 5), ShortCodePayloadLength);
             var checksum = ComputeChecksum(payload);
 
-            return $"RW-{payload[..4]}-{payload[4..]}-{checksum}";
+            return $"{payload[..4]}-{payload[4..]}-{checksum}";
         }
 
         private static string EncodeCrockfordBase32(ReadOnlySpan<byte> data, int outputLength)
