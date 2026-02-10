@@ -5,6 +5,7 @@ using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using System.Net;
 using System.Net.Http.Json;
+using System.Security.Policy;
 using System.Text.Json;
 
 namespace RentoomBooking.StayWell.Services
@@ -87,12 +88,23 @@ namespace RentoomBooking.StayWell.Services
             return null;
         }
 
-        public async Task<AvailableUpsellsResponseDto?> GetAvailableUpsellsByReservationTokenAsync(string token)
+        public async Task<AvailableUpsellsResponseDto?> GetAvailableUpsellsByReservationTokenAsync(string token, string? locale = null)
         {
-            var response = await _http.GetAsync($"db/reservations/{token}/upsells/available");
-            response.EnsureSuccessStatusCode();
-            
-            return await response.Content.ReadFromJsonAsync<AvailableUpsellsResponseDto>(_json);
+
+            var url = $"db/reservations/{token}/upsells/available";
+            if (!string.IsNullOrEmpty(locale))
+            {
+                url += $"?locale={Uri.EscapeDataString(locale)}";
+            }
+
+            var response = await _http.GetAsync(url);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            return await response.Content.ReadFromJsonAsync<AvailableUpsellsResponseDto>(_json)
+                   ?? null;
+
             
             
         }
