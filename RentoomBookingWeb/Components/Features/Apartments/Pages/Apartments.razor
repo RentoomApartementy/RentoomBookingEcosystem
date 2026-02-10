@@ -87,6 +87,7 @@
                             @foreach (var item in ViewModel.Items)
                             {
                                 <Apartment 
+                                    @key="item.Id"
                                     Item="@item" 
                                     Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)" 
                                     ShowPrice="@ViewModel.IsSearch"

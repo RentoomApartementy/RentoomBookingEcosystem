@@ -3,6 +3,7 @@ const observers = new WeakMap();
 export function observeElement(dotNetHelper, element) {
     if (!element) return;
 
+    // Zabezpieczenie: jeśli element już jest obserwowany, odepnij stary observer
     if (observers.has(element)) {
         observers.get(element).disconnect();
         observers.delete(element);
@@ -11,7 +12,12 @@ export function observeElement(dotNetHelper, element) {
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                dotNetHelper.invokeMethodAsync('LoadMedia').catch(err => console.error(err));
+                dotNetHelper.invokeMethodAsync('LoadMedia')
+                    .catch(err => {
+                        if (err && err.message && !err.message.includes("disposed")) {
+                            console.error(err);
+                        }
+                    });
 
                 observer.unobserve(entry.target);
                 observer.disconnect();
@@ -22,4 +28,11 @@ export function observeElement(dotNetHelper, element) {
 
     observer.observe(element);
     observers.set(element, observer);
+}
+
+export function unobserveElement(element) {
+    if (element && observers.has(element)) {
+        observers.get(element).disconnect();
+        observers.delete(element);
+    }
 }

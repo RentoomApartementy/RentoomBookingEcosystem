@@ -356,9 +356,22 @@
 
     public async ValueTask DisposeAsync()
     {
-        try {
+        try 
+        {
+            if (_jsModule != null) 
+            {
+                try {
+                    await _jsModule.InvokeVoidAsync("unobserveElement", _elementRef);
+                } catch {  }
+                
+                await _jsModule.DisposeAsync();
+            }
+            
             _objRef?.Dispose();
-            if (_jsModule != null) await _jsModule.DisposeAsync();
-        } catch {}
+        } 
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Dispose error: {ex.Message}");
+        }
     }
 }

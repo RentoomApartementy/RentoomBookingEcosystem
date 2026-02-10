@@ -1,6 +1,6 @@
 @namespace RentoomBookingWeb.Components.Shared
 @inject IJSRuntime JS
-@implements IDisposable
+@implements IAsyncDisposable
 
 <CascadingValue Value="this">
     @ChildContent
@@ -38,10 +38,18 @@
     internal List<RenderFragment> _items { get; set; } = new();
     private List<List<RenderFragment>> ChunkedItems { get; set; } = new();
     private int CurrentIndex { get; set; } = 0;
+    private int _defaultItemsPerPage;
+    private bool _isDisposed = false; 
     
     private ElementReference _sliderContainer;
     private DotNetObjectReference<Slider>? objRef;
+    private IJSObjectReference? _jsManager;
     private IJSObjectReference? _jsModule;
+
+    protected override void OnInitialized()
+    {
+        _defaultItemsPerPage = ItemsPerPage;
+    }
 
     internal void RegisterItem(RenderFragment fragment)
     {
@@ -53,7 +61,6 @@
     private void SplitIntoChunks()
     {
         int safeItemsPerPage = ItemsPerPage > 0 ? ItemsPerPage : 1;
-
         ChunkedItems = _items
             .Select((x, i) => new { x, i })
             .GroupBy(x => x.i / safeItemsPerPage)
@@ -64,7 +71,7 @@
         {
             CurrentIndex = Math.Clamp(CurrentIndex, 0, ChunkedItems.Count - 1);
         }
-        else
+        else 
         {
             CurrentIndex = 0;
         }
@@ -77,10 +84,11 @@
         StateHasChanged();
     }
 
-
     [JSInvokable]
     public void NextSlide()
     {
+        if (_isDisposed) return;
+
         if (CurrentIndex < ChunkedItems.Count - 1)
         {
             CurrentIndex++;
@@ -91,6 +99,8 @@
     [JSInvokable]
     public void PrevSlide()
     {
+        if (_isDisposed) return;
+
         if (CurrentIndex > 0)
         {
             CurrentIndex--;
@@ -100,25 +110,68 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && !_isDisposed)
         {
-            objRef = DotNetObjectReference.Create(this);
-            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/sliderGestures.js");
-            
-            await _jsModule.InvokeVoidAsync("initSlider", objRef, _sliderContainer);
+            try 
+            {
+                objRef = DotNetObjectReference.Create(this);
+                _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/sliderGestures.js?v=" + DateTime.Now.Ticks);
+                
+                if (_isDisposed) return;
+                
+                _jsManager = await _jsModule.InvokeAsync<IJSObjectReference>("initSlider", objRef, _sliderContainer);
+            }
+            catch (Exception) when (_isDisposed)
+            {
+            }
         }
     }
 
     [JSInvokable]
     public void UpdateItemPerPageAsync(int width)
     {
-        ItemsPerPage = width < 850 ? 1 : ItemsPerPage;
+        if (_isDisposed || objRef == null) return;
+        
+        ItemsPerPage = width < 850 ? 1 : _defaultItemsPerPage;
         SplitIntoChunks();
         StateHasChanged();
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        objRef?.Dispose();
+        _isDisposed = true; 
+
+        try 
+        {
+            if (_jsManager != null)
+            {
+                _ = _jsManager.InvokeVoidAsync("dispose");
+                await _jsManager.DisposeAsync();
+            }
+
+            if (_jsModule != null)
+            {
+                await _jsModule.DisposeAsync();
+            }
+        }
+        catch (Exception)
+        {
+        }
+        
+        if (objRef != null)
+        {
+            var zombieRef = objRef; 
+            objRef = null;
+
+            _ = Task.Run(async () => 
+            {
+                try 
+                {
+                    await Task.Delay(5000); 
+                    zombieRef.Dispose();
+                }
+                catch { }
+            });
+        }
     }
 }

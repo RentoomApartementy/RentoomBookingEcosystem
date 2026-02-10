@@ -104,4 +104,7 @@
     <data name="MandatoryOptions" xml:space="preserve">
         <value>Obowiązkowe opcje</value>
     </data>
+    <data name="ApartmentsMap" xml:space="preserve">
+        <value>Mapa apartamentów</value>
+    </data>
 </root>

@@ -230,5 +230,11 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("MandatoryOptions", resourceCulture);
             }
         }
+        
+        internal static string ApartmentsMap {
+            get {
+                return ResourceManager.GetString("ApartmentsMap", resourceCulture);
+            }
+        }
     }
 }

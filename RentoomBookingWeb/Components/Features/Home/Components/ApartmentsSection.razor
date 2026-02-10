@@ -21,10 +21,12 @@
                 {
                     <Item>
                         <div @onclick="() => GoToApartmentWithOffer(apartment.Id, apartment.Name)" class="apartment-slide-col">
-                            <Apartment Item="@apartment" 
-                                       Offer="@GetPricingOfferByObjectId(apartment.Id)" 
-                                       ShowPrice="true"
-                                       DisableForGoToReservation="true"
+                            <Apartment 
+                                @key="apartment.Id"
+                                Item="@apartment" 
+                                Offer="@GetPricingOfferByObjectId(apartment.Id)" 
+                                ShowPrice="true"
+                                DisableForGoToReservation="true"
                                        />
                         </div>
                     </Item>

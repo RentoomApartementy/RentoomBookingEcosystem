@@ -1,8 +1,8 @@
 .upsell-tile-container {
     flex-shrink: 0;
-    width: 320px;
-    max-width: 400px;
-    height: 450px;
+    width: 260px;
+    max-width: 300px;
+    height: 380px;
     perspective: 1200px;
     background-color: transparent;
     margin: 0;
@@ -31,9 +31,9 @@
     height: 100%;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
     background-color: #fff;
     border: 2px solid transparent;
     display: flex;
@@ -48,21 +48,21 @@
 .upsell-back-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
     height: 100%;
-    padding: 16px;
+    padding: 12px;
 }
 
 .upsell-back-title {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     font-weight: 700;
 }
 
 .upsell-back-description {
     display: flex;
-    gap: .3rem;
+    gap: .2rem;
     flex-direction: column;
-    
+    font-size: 0.85rem;
 }
 
 .upsell-back-description-title {
@@ -71,7 +71,7 @@
 
 .upsell-header {
     position: relative;
-    height: 200px;
+    height: 140px;
     width: 100%;
     overflow: hidden;
     cursor: pointer;
@@ -85,31 +85,31 @@
 
 .upsell-badge {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 8px;
+    right: 8px;
     background: #1F5A41;
     color: #fff;
-    padding: 6px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
     font-weight: bold;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     z-index: 2;
 }
 
 .upsell-details-overlay {
     position: absolute;
-    bottom: 12px;
-    right: 12px;
+    bottom: 8px;
+    right: 8px;
     background: rgba(0,0,0,0.6);
     color: #fff;
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     backdrop-filter: blur(4px);
 }
 
 .upsell-content {
-    padding: 16px;
+    padding: 12px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -121,34 +121,34 @@
 }
 
 .upsell-title {
-    font-size: 1.25rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    margin: 0 0 8px 0;
+    margin: 0 0 4px 0;
     color: #222;
 }
 
 .upsell-description {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #666;
-    line-height: 1.4;
-    margin-bottom: 8px;
+    line-height: 1.3;
+    margin-bottom: 4px;
 }
 
 .upsell-context {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     color: #777;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     margin-top: auto;
-    padding-top: 12px;
+    padding-top: 8px;
 }
 
 .upsell-pricing {
-    margin-top: 16px;
+    margin-top: 8px;
 }
 
 .current-price {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 800;
     color: #222;
 }
@@ -156,23 +156,25 @@
 .old-price {
     text-decoration: line-through;
     color: #aaa;
-    margin-left: 8px;
+    margin-left: 6px;
+    font-size: 0.9rem;
 }
 
 .upsell-unit-info {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #999;
 }
 
 .upsell-button {
     display: block;
-    margin-top: 16px;
+    margin-top: 12px;
     width: 100%;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 10px;
+    border-radius: 10px;
     text-align: center;
     cursor: pointer;
     font-weight: 700;
+    font-size: 0.9rem;
     user-select: none;
     transition: all 0.2s ease;
 }
@@ -189,12 +191,26 @@
 }
 
 .rentoom-theme .upsell-button {
-    background: #1F5A41;
+    background: #945F28;
     color: #fff;
 }
 
 .rentoom-theme.is-selected .upsell-button {
     background: #dc3545;
+}
+
+.rentoom-theme .upsell-button {
+    display: block;
+    margin-top: 12px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 9999px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    user-select: none;
+    transition: all 0.2s ease;
 }
 
 .staywell-theme.is-selected .upsell-card-front,
@@ -214,8 +230,8 @@
 
 @media (max-width: 600px) {
     .upsell-tile-container {
-        width: 290px;
+        width: 240px;
         margin: 0 auto;
-        height: 480px;
+        height: 360px;
     }
 }

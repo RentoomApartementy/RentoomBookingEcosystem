@@ -4,7 +4,6 @@
 @inject IStringLocalizer<SharedResources> Localizer;
 
 <div class="@GetClass()">
-    @* Zmieniono bindowanie na wewnętrzne zmienne _startDate, _endDate *@
     <DatePickerRange 
         IconPath="/assets/svgs/calendar.svg"
         StartDateValue="@_startDate"
@@ -29,7 +28,6 @@
             <div>
                 <h6 class="dropdown-title">@Localizer["SelectNumberOfGuests"]</h6>
                 <div>
-                    @* Bindowanie do prywatnych pól _adults i _children *@
                     <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["Adults"]" Type="number" @bind-Value="_adults" IsFull="true"/>
                     <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["ChildrenUnder2"]" Type="number" @bind-Value="_children" IsFull="true" IsMarginTop="true"/>
                 </div>
@@ -46,7 +44,6 @@
 @code {
     [Parameter] public bool IsSticky { get; set; } = false;
     
-    // Parametry wejściowe (tylko do odczytu z góry)
     [Parameter] public string StartDate { get; set; } = "";
     [Parameter] public string EndDate { get; set; } = "";
     [Parameter] public string Adults { get; set; } = "";
@@ -56,14 +53,12 @@
     [Parameter] public EventCallback<Dictionary<string, string>> OnSearch { get; set; }
     [Parameter] public bool IsRoom { get; set; } = true;
 
-    // Prywatne pola do edycji (stan formularza)
     private string _startDate = "";
     private string _endDate = "";
     private string _adults = "";
     private string _children = "";
     private string _rooms = "";
 
-    // Pola do śledzenia zmian (aby nie nadpisywać formularza, gdy rodzic się tylko odświeża)
     private string _lastStartDateParam = "";
     private string _lastEndDateParam = "";
     private string _lastAdultsParam = "";
@@ -72,16 +67,11 @@
 
     protected override void OnInitialized()
     {
-        // Inicjalizacja przy pierwszym załadowaniu
         SyncParamsToFields();
     }
 
     protected override void OnParametersSet()
     {
-        // Ta metoda wykonuje się ZAWSZE, gdy rodzic się przerysowuje.
-        // Sprawdzamy, czy parametry FAKTYCZNIE się zmieniły (np. zmiana URL), 
-        // czy to tylko odświeżenie tła (wtedy wartości będą takie same jak ostatnio).
-        
         bool changed = false;
 
         if (StartDate != _lastStartDateParam) { _startDate = StartDate; _lastStartDateParam = StartDate; changed = true; }
@@ -106,7 +96,6 @@
 
     private async Task Search()
     {
-        // Budujemy zapytanie z naszych WEWNĘTRZNYCH pól (_adults itd.)
         var query = new Dictionary<string, string>
         {
             { "startDate", _startDate },

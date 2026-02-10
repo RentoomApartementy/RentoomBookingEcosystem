@@ -23,6 +23,7 @@
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization
 @using RentoomBookingWeb.Components.Enums
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
 @inject IStringLocalizer<RentoomBookingWeb.Upsell> UpsellLocalizer;
 @inject IReservationWorkflowService ReservationWorkflowService
@@ -210,12 +211,12 @@
                 </div>
             </div>
             
-            <div class="map">
+            <div class="map" @onclick="OpenModal">
                 <ApartmentMap
                     Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
                     Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
                     ApartmentAddress="@_apartment?.ObjectLocation?.Address"
-                />
+                    />   
             </div>
         </div>
 
@@ -453,6 +454,15 @@
             }
         </div>
     }
+    
+    <MapPopup
+        @bind-IsModalOpen="_isModalOpen"
+        Apartment="_apartment"
+        StartDate="@StartDate"
+        EndDate="@EndDate"
+        Adults="@Adults"
+        Children="@Children"
+        />
 </div>
 
 @code {
@@ -485,6 +495,8 @@
 
     public UpsellTextConfig UpsellTexts { get; set; } = new();
 
+    private bool _isModalOpen = false;
+    
     private decimal TotalAddonsPrice 
     {
         get
@@ -674,7 +686,7 @@
         bool hasOffers = _offersResponse?.Result?.PricingOffers != null && 
                          _offersResponse.Result.PricingOffers.Any();
 
-        if (!hasOffers)
+        if (!hasOffers && _isOfferLoading)
         {
             _ = Task.Run(async () => await LoadSuggestionInBackground());
         }
@@ -1050,4 +1062,9 @@
         _selectedUpsells = selectedUpsells ?? new List<SelectedUpsellDto>();
     }
 
+
+    private void OpenModal()
+    {
+        _isModalOpen = true;
+    }
 }

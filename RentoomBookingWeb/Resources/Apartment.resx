@@ -111,4 +111,7 @@
     <data name="MandatoryOptions" xml:space="preserve">
         <value />
     </data>
+    <data name="ApartmentsMap" xml:space="preserve">
+        <value />
+    </data>
 </root>

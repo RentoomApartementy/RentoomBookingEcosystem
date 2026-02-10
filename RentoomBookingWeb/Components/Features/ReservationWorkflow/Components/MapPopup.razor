@@ -1,0 +1,86 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+@inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
+
+@if (IsModalOpen)
+{
+    <div id="@Id" class="container">
+        <div class="top-wrapper">
+            <div class="title">
+                <span>@Localizer["ApartmentsMap"]</span>
+            </div>
+            
+            <div class="close-button" @onclick="CloseModal">
+                x
+            </div>
+        </div>
+        
+        @if (Apartment != null)
+        {
+            <div class="map">
+                <ApartmentsMapPopup
+                    Latitude="@Apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
+                    Longitude="@Apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
+                    ApartmentAddress="@Apartment?.ObjectLocation?.Address"
+                    Id="map-popup"
+                    ClassName="leafletPopupMap"
+                    Apartment="Apartment"
+                    StartDate="@StartDate"
+                    EndDate="@EndDate"
+                    Adults="@Adults"
+                    Children="@Children"
+                />
+            </div>   
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsModalOpen { get; set; }
+    [Parameter] public EventCallback<bool> IsModalOpenChanged { get; set; }
+    
+    [Parameter] public ApartmentObject? Apartment { get; set; }
+    [Parameter] public String? StartDate { get; set; } = null;
+    [Parameter] public String? EndDate { get; set; } = null;
+    [Parameter] public String? Adults { get; set; } = null;
+    [Parameter] public String? Children { get; set; } = null;
+
+    private DotNetObjectReference<MapPopup>? objRef;
+    private string Id { get; } = $"mappopup-{Guid.NewGuid()}";
+    
+    [JSInvokable]
+    public void CloseModal()
+    {
+        if (IsModalOpen)
+        {
+            IsModalOpen = false;
+            StateHasChanged();
+        }
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("registerClickOutside", Id, objRef);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("unregisterClickOutside", Id);
+        }
+        catch (Exception)
+        {
+        }
+        finally
+        {
+            objRef?.Dispose();
+        }
+    }
+}
