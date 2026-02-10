@@ -125,10 +125,6 @@
 
     private async Task HandleToggle(ChangeEventArgs args)
     {
-        var isChecked = args.Value is bool boolValue && boolValue;
-        if (OnToggled.HasDelegate)
-        {
-            await OnToggled.InvokeAsync(isChecked);
-        }
+       /*TODO: Flip and show QR CODE and Human Readable CODE*/
     }
 }

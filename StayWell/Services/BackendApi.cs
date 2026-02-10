@@ -2,6 +2,7 @@
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.Upsell;
+using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -78,13 +79,25 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<UpsellPurchasedSummaryDto?> GetPurchasedUpsellsByReservationTokenAsync(string token)
         {
-            var response = await _http.GetAsync($"db/reservations/{token}/upsells");
+            var response = await _http.GetAsync($"db/reservations/{token}/upsells/purchased");
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<UpsellPurchasedSummaryDto>(_json);
             }
             return null;
         }
+
+        public async Task<AvailableUpsellsResponseDto?> GetAvailableUpsellsByReservationTokenAsync(string token)
+        {
+            var response = await _http.GetAsync($"db/reservations/{token}/upsells/available");
+            response.EnsureSuccessStatusCode();
+            
+            return await response.Content.ReadFromJsonAsync<AvailableUpsellsResponseDto>(_json);
+            
+            
+        }
+
+        
 
 
         public async Task<TermsEntity?> GetTermsByResTokenAsync(string resToken)

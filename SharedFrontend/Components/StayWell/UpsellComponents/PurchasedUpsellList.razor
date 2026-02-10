@@ -29,10 +29,10 @@
         </div>
 
         <div class="upsell-list-scroll-wrapper" @ref="_scrollContainer">
-            @if (AvailableUpsellsList is not null)
+            @if (PurchasedUpsellList is not null)
             {
                 <CascadingValue Value="Theme">
-                    @foreach (var tile in AvailableUpsellsList)
+                    @foreach (var tile in PurchasedUpsellList)
                     {
                         var isSelected = IsSelected(tile);
                         <UpsellTile Tile="tile"
@@ -57,7 +57,7 @@
 </script>
 
 @code {
-    [Parameter] public IReadOnlyList<UpsellTileDto> AvailableUpsellsList { get; set; } = Array.Empty<UpsellTileDto>();
+    [Parameter] public IReadOnlyList<UpsellTileDto> PurchasedUpsellList { get; set; } = Array.Empty<UpsellTileDto>();
     [Parameter] public ReservationPricingContext ReservationContext { get; set; } = new();
     [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
     [Parameter] public string Theme { get; set; } = "rentoom-theme";
@@ -80,7 +80,7 @@
     }
 
     private string Currency => string.IsNullOrWhiteSpace(ReservationContext.Currency)
-        ? AvailableUpsellsList.FirstOrDefault()?.Currency ?? string.Empty
+        ? PurchasedUpsellList.FirstOrDefault()?.Currency ?? string.Empty
         : ReservationContext.Currency;
 
     private bool IsSelected(UpsellTileDto tile)
@@ -88,33 +88,8 @@
 
     private async Task HandleToggle(UpsellTileDto tile, bool isSelected)
     {
-        var existing = _selectedUpsells.FirstOrDefault(item => item.PartnerServiceId == tile.PartnerServiceId);
-        if (isSelected)
-        {
-            if (existing is null)
-            {
-                _selectedUpsells.Add(new SelectedUpsellDto { PartnerServiceId = tile.PartnerServiceId, Quantity = 1 });
-            }
-        }
-        else if (existing is not null)
-        {
-            _selectedUpsells.Remove(existing);
-        }
-        // RecalculateTotal(); <<-- do wewnetrznego uzytku w przypadku gdybyśmy chcieli pokazywać total na UI w ramach tego komponentu (np w headerze?)
-        if (OnSelectionChanged.HasDelegate)
-        {
-            await OnSelectionChanged.InvokeAsync(_selectedUpsells.ToList());
-        }
+       //TODO as option: show popup with QR CODE AND HUMAN READABLE CODE ??
     }
 
-    private void RecalculateTotal()
-    {
-        _totalTotal = 0m;
-        foreach (var selected in _selectedUpsells)
-        {
-            var tile = AvailableUpsellsList.FirstOrDefault(item => item.PartnerServiceId == selected.PartnerServiceId);
-            if (tile is null) continue;
-            _totalTotal += UpsellPricingCalculator.CalculateTotal(tile.PricingModel, tile.Price, ReservationContext.Nights, ReservationContext.TotalGuests, selected.Quantity);
-        }
-    }
+ 
 }

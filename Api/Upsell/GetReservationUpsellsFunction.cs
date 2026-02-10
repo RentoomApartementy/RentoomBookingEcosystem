@@ -126,9 +126,28 @@ public class GetReservationUpsellsFunction
                 .Where(tile => !alreadyPurchasedServiceIds.Contains(tile.PartnerServiceId) || tile.PricingModel == PartnerServicePricingModel.OneTime) 
                 .ToList();
 
+
+            var df = reservation.Reservation.ReservationDetails.getDateFrom();
+            var dt = reservation.Reservation.ReservationDetails.getDateTo();
+            var adults = reservation.Reservation.Items[0].numberOfAdults ?? 0;
+            AvailableUpsellsResponseDto responseDto = new AvailableUpsellsResponseDto
+            {
+                Available = onlyAvailable,
+                ReservationGuid = reservationGuid,
+                Context =  new ReservationPricingContext
+                {
+                    StartDate = new DateOnly(df.Year, df.Month, df.Day),
+                    EndDate = new DateOnly(dt.Year, dt.Month, dt.Day),
+                    Adults = reservation.Reservation.Items[0].numberOfAdults ?? 0,
+                    Children = int.TryParse(reservation.Reservation.Items[0].numberOfSmallChildren, out var children) ? children : 0,
+                    Currency =  "PLN"
+                }
+
+            };
+
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            await response.WriteStringAsync(JsonConvert.SerializeObject(onlyAvailable), cancellationToken);
+            await response.WriteStringAsync(JsonConvert.SerializeObject(responseDto), cancellationToken);
             return response;
 
         }
