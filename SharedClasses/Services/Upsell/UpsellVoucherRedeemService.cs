@@ -12,8 +12,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 {
     public interface IUpsellVoucherRedeemService
     {
-        Task<RedeemResultDto> ValidateByCodeShortAsync(string codeShort);
-        Task<RedeemResultDto> ValidateByQrTokenAsync(string qrToken);
+        Task<RedeemResultDto> ValidateByCodeShortAsync(string codeShort, CancellationToken ct = default);
+        Task<RedeemResultDto> ValidateByQrTokenAsync(string qrToken, CancellationToken ct = default);
         Task<RedeemResultDto> TryRedeemByCodeShortAsync(string codeShort);
         Task<RedeemResultDto> TryRedeemByQrTokenAsync(string qrToken);
     }
@@ -47,7 +47,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return await TryRedeemInternalAsync(context, result.voucher, result.line);
         }
 
-        public async Task<RedeemResultDto> ValidateByCodeShortAsync(string codeShort)
+        public async Task<RedeemResultDto> ValidateByCodeShortAsync(string codeShort, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(codeShort))
             {
@@ -55,8 +55,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             }
 
             await using var context = _dbContextFactory.CreateDbContext();
-            var result = await FindByCodeShortAsync(context, codeShort);
-            return BuildValidationResult(result.voucher, result.line);
+            var result = await FindByCodeShortAsync(context, codeShort, ct);
+            return ValidateInternal(result.voucher, result.line, DateOnly.FromDateTime(DateTime.UtcNow));
         }
 
         public async Task<RedeemResultDto> TryRedeemByQrTokenAsync(string qrToken)
@@ -77,7 +77,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             return await TryRedeemInternalAsync(context, result.voucher, result.line);
         }
 
-        public async Task<RedeemResultDto> ValidateByQrTokenAsync(string qrToken)
+        public async Task<RedeemResultDto> ValidateByQrTokenAsync(string qrToken, CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(qrToken))
             {
@@ -91,20 +91,21 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             }
 
             await using var context = _dbContextFactory.CreateDbContext();
-            var result = await FindByQrTokenAsync(context, trimmed);
-            return BuildValidationResult(result.voucher, result.line);
+            var result = await FindByQrTokenAsync(context, trimmed, ct);
+            return ValidateInternal(result.voucher, result.line, DateOnly.FromDateTime(DateTime.UtcNow));
         }
 
-        private static RedeemResultDto BuildValidationResult(
+        private static RedeemResultDto ValidateInternal(
             UpsellVoucherEntity? voucher,
-            UpsellOrderLineEntity? line)
+            UpsellOrderLineEntity? line,
+            DateOnly nowDate)
         {
             if (voucher is null || line is null)
             {
                 return BuildFailure(FailureNotFound);
             }
 
-            var failureReason = EvaluateFailureReason(voucher);
+            var failureReason = EvaluateFailureReason(voucher, nowDate);
             if (!string.IsNullOrWhiteSpace(failureReason))
             {
                 return BuildFailure(failureReason, voucher, line);
@@ -123,10 +124,10 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 return BuildFailure(FailureNotFound);
             }
 
-            var failureReason = EvaluateFailureReason(voucher);
-            if (!string.IsNullOrWhiteSpace(failureReason))
+            var validationResult = ValidateInternal(voucher, line, DateOnly.FromDateTime(DateTime.UtcNow));
+            if (!validationResult.Success)
             {
-                return BuildFailure(failureReason, voucher, line);
+                return validationResult;
             }
 
             var now = DateTime.UtcNow;
@@ -156,11 +157,11 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 return BuildFailure(FailureNotFound);
             }
 
-            var latestReason = EvaluateFailureReason(latest.voucher) ?? FailureLimitReached;
+            var latestReason = EvaluateFailureReason(latest.voucher, DateOnly.FromDateTime(DateTime.UtcNow)) ?? FailureLimitReached;
             return BuildFailure(latestReason, latest.voucher, latest.line);
         }
 
-        private static string? EvaluateFailureReason(UpsellVoucherEntity voucher)
+        private static string? EvaluateFailureReason(UpsellVoucherEntity voucher, DateOnly nowDate)
         {
             if (!string.Equals(voucher.Status, UpsellVoucherStatuses.Active, StringComparison.OrdinalIgnoreCase))
             {
@@ -182,8 +183,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 return FailureExpired;
             }
 
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            if (today < voucher.ValidFrom || today > voucher.ValidTo)
+            if (nowDate < voucher.ValidFrom || nowDate > voucher.ValidTo)
             {
                 return FailureOutsideReservationWindow;
             }
@@ -229,42 +229,45 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
         private static async Task<(UpsellVoucherEntity? voucher, UpsellOrderLineEntity? line)> FindByGuidAsync(
             PostgresBookingDbContext context,
-            Guid voucherGuid)
+            Guid voucherGuid,
+            CancellationToken ct = default)
         {
             var result = await (from voucher in context.UpsellVouchers.AsNoTracking()
                                 join line in context.UpsellOrderLines.AsNoTracking()
                                     on voucher.UpsellOrderLineGuid equals line.UpsellOrderLineGuid
                                 where voucher.UpsellVoucherGuid == voucherGuid
                                 select new { voucher, line })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(ct);
 
             return (result?.voucher, result?.line);
         }
 
         private static async Task<(UpsellVoucherEntity? voucher, UpsellOrderLineEntity? line)> FindByCodeShortAsync(
             PostgresBookingDbContext context,
-            string codeShort)
+            string codeShort,
+            CancellationToken ct = default)
         {
             var result = await (from voucher in context.UpsellVouchers.AsNoTracking()
                                 join line in context.UpsellOrderLines.AsNoTracking()
                                     on voucher.UpsellOrderLineGuid equals line.UpsellOrderLineGuid
                                 where voucher.CodeShort == codeShort
                                 select new { voucher, line })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(ct);
 
             return (result?.voucher, result?.line);
         }
 
         private static async Task<(UpsellVoucherEntity? voucher, UpsellOrderLineEntity? line)> FindByQrTokenAsync(
             PostgresBookingDbContext context,
-            string qrToken)
+            string qrToken,
+            CancellationToken ct = default)
         {
             var result = await (from voucher in context.UpsellVouchers.AsNoTracking()
                                 join line in context.UpsellOrderLines.AsNoTracking()
                                     on voucher.UpsellOrderLineGuid equals line.UpsellOrderLineGuid
                                 where voucher.QrToken == qrToken
                                 select new { voucher, line })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(ct);
 
             return (result?.voucher, result?.line);
         }
