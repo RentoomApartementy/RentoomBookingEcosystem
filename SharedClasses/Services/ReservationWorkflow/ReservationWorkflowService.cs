@@ -504,7 +504,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                     LineTotalGross = lineTotal,
                     Currency = request.Currency ?? "PLN",
                     LineStatus = UpsellLineStatuses.Paid,
-                    UpsellDefinitionSnapshot = tile.PartnerServiceInfo
+                    UpsellDefinitionSnapshot = tile
                 });
             }
 

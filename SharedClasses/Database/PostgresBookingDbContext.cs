@@ -3,6 +3,7 @@ using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.StayWell;
+using RentoomBooking.SharedClasses.Models.Upsell;
 
 namespace RentoomBooking.SharedClasses.Database
 {
@@ -107,7 +108,7 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.Property(e => e.BitrixLineId).HasMaxLength(128);
                 entity.Property(e=> e.UpsellDefinitionSnapshot).HasColumnType("jsonb").IsRequired().HasConversion(
                         v => Newtonsoft.Json.JsonConvert.SerializeObject(v),
-                        v => Newtonsoft.Json.JsonConvert.DeserializeObject<PartnerServiceSnapshot>(v) ?? new PartnerServiceSnapshot()
+                        v => Newtonsoft.Json.JsonConvert.DeserializeObject<UpsellTileDto>(v) ?? new UpsellTileDto()
                     );
                 entity.Property(e => e.IsFreeUnlimitedUses).HasDefaultValue(false);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");

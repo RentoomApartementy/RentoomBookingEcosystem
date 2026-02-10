@@ -33,12 +33,13 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             var orders = await _upsellOrderStore.GetByReservationGuidAsync(reservationGuid, cancellationToken);
             var paidOrders = orders
                 .Where(order => string.Equals(order.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
+                .Where(order => order.Lines.Any(line => string.Equals(line.LineStatus, UpsellLineStatuses.Paid, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
             return new UpsellPurchasedSummaryDto
             {
                 ReservationGuid = reservationGuid,
-                Orders = paidOrders.Select(order => new UpsellPurchasedOrderDto
+                PurchasedUpsellsWithVouchers = paidOrders.SelectMany(po => po.Lines).ToList() /* paidOrders.Select(order => new UpsellPurchasedOrderDto
                 {
                     UpsellOrderGuid = order.UpsellOrderGuid,
                     PaymentStatus = order.PaymentStatus,
@@ -47,32 +48,28 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     Currency = order.Lines.FirstOrDefault()?.Currency ?? order.State.Request?.Currency ?? "PLN",
                     Lines = order.Lines
                         .Where(line => string.Equals(line.LineStatus, UpsellLineStatuses.Paid, StringComparison.OrdinalIgnoreCase))
-                        .Select(line => new UpsellPurchasedLineDto
-                        {
-                            PartnerServiceId = line.PartnerServiceId,
-                            TitleSnapshot = line.TitleSnapshot,
-                            PricingModel = line.PricingModel,
-                            Quantity = line.Quantity,
-                            UnitPriceGross = line.UnitPriceGross,
-                            Nights = line.Nights,
-                            TotalGuests = line.TotalGuests,
-                            LineTotalGross = line.LineTotalGross,
-                            Currency = line.Currency,
-                            LineStatus = line.LineStatus,
-                            IsFreeUnlimitedUses = line.IsFreeUnlimitedUses,
-                            Voucher = line.Voucher == null ? null : new PurchasedVoucherDto
+                        .Select(line => {
+                            
+                            var upsell = new UpsellPurchasedLineDto
                             {
-                                CodeShort = line.Voucher.CodeShort,
-                                MaxUses = line.Voucher.MaxUses,
-                                UsedCount = line.Voucher.UsedCount,
-                                ValidFrom = line.Voucher.ValidFrom,
-                                ValidTo = line.Voucher.ValidTo,
-                                VoucherStatus = line.Voucher.Status
+                                PartnerServiceId = line.PartnerServiceId,
+                                TitleSnapshot = line.TitleSnapshot,
+                                PricingModel = line.PricingModel,
+                                Quantity = line.Quantity,
+                                UnitPriceGross = line.UnitPriceGross,
+                                Nights = line.Nights,
+                                TotalGuests = line.TotalGuests,
+                                LineTotalGross = line.LineTotalGross,
+                                Currency = line.Currency,
+                                LineStatus = line.LineStatus,
+                                IsFreeUnlimitedUses = line.IsFreeUnlimitedUses,
+                            };
 
-                            }
+                            upsell.Voucher = line.Voucher;
+                            return upsell;
                         })
                         .ToList()
-                }).ToList()
+                }).ToList()*/
             };
         }
 

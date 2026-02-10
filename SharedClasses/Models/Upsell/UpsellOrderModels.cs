@@ -96,7 +96,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public UpsellVoucherDto? Voucher { get; set; }
-        public PartnerServiceSnapshot UpsellDefinitionSnapshot { get; set; } = new();
+        public UpsellTileDto UpsellDefinitionSnapshot { get; set; } = new();
     }
 
     public class UpsellPaymentInitResult
