@@ -20,7 +20,7 @@ public class GetReservationUpsellsFunction
 
     [Function("GetReservationUpsellsByToken")]
     public async Task<HttpResponseData> GetReservationUpsellsByToken(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "db/reservations/{reservationToken}/upsells")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "db/reservations/{reservationToken}/upsells/purchased")] HttpRequestData req,
         string reservationToken,
         CancellationToken cancellationToken)
     {
@@ -32,7 +32,7 @@ public class GetReservationUpsellsFunction
             if (string.IsNullOrWhiteSpace(reservationToken))
             {
                 res.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                await res.WriteStringAsync("Provide reservationToken in path (/reservations/{reservationToken}/upsells).", cancellationToken);
+                await res.WriteStringAsync("Provide reservationToken in path (/reservations/{reservationToken}/upsells/purchased).", cancellationToken);
                 return res;
             }
 
