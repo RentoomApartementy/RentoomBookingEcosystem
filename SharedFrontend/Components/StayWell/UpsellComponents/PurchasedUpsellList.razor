@@ -1,0 +1,120 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Microsoft.JSInterop
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
+@inject IJSRuntime JSRuntime
+
+<div class="upsell-outer-wrapper @Theme">
+    <div class="upsell-section-container">
+        <div class="upsell-header-row">
+            <div class="upsell-title-group">
+                <div class="upsell-icon">
+                    <img src="assets/svgs/kid_star.svg" alt="icon" style="width: 20px; height: 20px;" />
+                </div>
+                <div class="upsell-text">
+                    <h2 class="upsell-main-title">@Texts.Title</h2>
+                    <p class="upsell-subtitle">@Texts.SubTitle</p>
+                </div>
+            </div>
+            
+            <div class="upsell-nav-buttons">
+                <button class="nav-btn" @onclick="() => ScrollList(-240)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="nav-btn" @onclick="() => ScrollList(240)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="upsell-list-scroll-wrapper" @ref="_scrollContainer">
+            @if (AvailableUpsellsList is not null)
+            {
+                <CascadingValue Value="Theme">
+                    @foreach (var tile in AvailableUpsellsList)
+                    {
+                        var isSelected = IsSelected(tile);
+                        <UpsellTile Tile="tile"
+                                    Context="ReservationContext"
+                                    Quantity="1"
+                                    IsSelected="isSelected"
+                                    OnToggled="@((bool selected) => HandleToggle(tile, selected))"
+                                    Texts="Texts"/>
+                    }
+                </CascadingValue>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    window.scrollUpsellContainer = (element, amount) => {
+        if (element) {
+            element.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+    }
+</script>
+
+@code {
+    [Parameter] public IReadOnlyList<UpsellTileDto> AvailableUpsellsList { get; set; } = Array.Empty<UpsellTileDto>();
+    [Parameter] public ReservationPricingContext ReservationContext { get; set; } = new();
+    [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
+    [Parameter] public string Theme { get; set; } = "rentoom-theme";
+    [Parameter] public UpsellTextConfig Texts { get; set; } = new();
+
+    private readonly List<SelectedUpsellDto> _selectedUpsells = new();
+    private decimal _totalTotal;
+    private ElementReference _scrollContainer;
+
+    private async Task ScrollList(int offset)
+    {
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("scrollUpsellContainer", _scrollContainer, offset);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Scroll error: {ex.Message}");
+        }
+    }
+
+    private string Currency => string.IsNullOrWhiteSpace(ReservationContext.Currency)
+        ? AvailableUpsellsList.FirstOrDefault()?.Currency ?? string.Empty
+        : ReservationContext.Currency;
+
+    private bool IsSelected(UpsellTileDto tile)
+        => _selectedUpsells.Any(item => item.PartnerServiceId == tile.PartnerServiceId);
+
+    private async Task HandleToggle(UpsellTileDto tile, bool isSelected)
+    {
+        var existing = _selectedUpsells.FirstOrDefault(item => item.PartnerServiceId == tile.PartnerServiceId);
+        if (isSelected)
+        {
+            if (existing is null)
+            {
+                _selectedUpsells.Add(new SelectedUpsellDto { PartnerServiceId = tile.PartnerServiceId, Quantity = 1 });
+            }
+        }
+        else if (existing is not null)
+        {
+            _selectedUpsells.Remove(existing);
+        }
+        // RecalculateTotal(); <<-- do wewnetrznego uzytku w przypadku gdybyśmy chcieli pokazywać total na UI w ramach tego komponentu (np w headerze?)
+        if (OnSelectionChanged.HasDelegate)
+        {
+            await OnSelectionChanged.InvokeAsync(_selectedUpsells.ToList());
+        }
+    }
+
+    private void RecalculateTotal()
+    {
+        _totalTotal = 0m;
+        foreach (var selected in _selectedUpsells)
+        {
+            var tile = AvailableUpsellsList.FirstOrDefault(item => item.PartnerServiceId == selected.PartnerServiceId);
+            if (tile is null) continue;
+            _totalTotal += UpsellPricingCalculator.CalculateTotal(tile.PricingModel, tile.Price, ReservationContext.Nights, ReservationContext.TotalGuests, selected.Quantity);
+        }
+    }
+}

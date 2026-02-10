@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums
 @using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
 
 <div class="upsell-tile-container @Theme @(IsSelected ? "is-selected" : "")">
     <div class="upsell-card-inner @(_isFlipped ? "is-flipped" : "")">
@@ -63,12 +64,12 @@
                 <span class="upsell-back-title">@Tile.Title</span>
                 <div class="upsell-back-description">
                     <span class="upsell-back-description-title">@Texts.DescriptionText</span>
-                    <span class="upsell-back-description-sub-title">@Tile.LongDescription</span>
+                    <span class="upsell-back-description-sub-title">@Tile.ShortDescription</span>
                 </div>
                 
                 <div class="upsell-back-description">
                     <span class="upsell-back-description-title">@Texts.TermsTitleText</span>
-                    <span class="upsell-back-description-sub-title">@Tile.Terms</span>
+                    <span class="upsell-back-description-sub-title">@Texts.TermsDescriptionText</span>
                 </div>
             </div>
         </div>
