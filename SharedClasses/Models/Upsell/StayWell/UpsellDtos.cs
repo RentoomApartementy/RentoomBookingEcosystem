@@ -21,26 +21,26 @@ namespace RentoomBooking.SharedClasses.Models.Upsell.StayWell
         public int AlreadyPurchasedCount { get; set; }
     }
 
-    public class PurchasedUpsellsWithVouchersResponseDto
+    public class PurchasedUpsellsWithVouchersResponseDto : UpsellPurchasedSummaryDto
     {
-        public Guid ReservationGuid { get; set; }
-        public List<PurchasedUpsellDto> Items { get; set; } = new();
+
     }
 
-    public class PurchasedUpsellDto
+    /*public class PurchasedUpsellDto
     {
         public int PartnerServiceId { get; set; }
         public string TitleSnapshot { get; set; } = string.Empty;
         public PartnerServicePricingModel PricingModel { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPriceGross { get; set; }
+
         public decimal LineTotalGross { get; set; }
         public string Currency { get; set; } = string.Empty;
         public DateTime? PaidAtUtc { get; set; }
         public PurchasedVoucherDto Voucher { get; set; } = new();
-    }
+    }*/
 
-    public class PurchasedVoucherDto
+   /* public class PurchasedVoucherDto
     {
         public string CodeShort { get; set; } = string.Empty;
         public string? QrPayloadUrl { get; set; }
@@ -49,5 +49,5 @@ namespace RentoomBooking.SharedClasses.Models.Upsell.StayWell
         public DateOnly ValidFrom { get; set; }
         public DateOnly ValidTo { get; set; }
         public string VoucherStatus { get; set; } = string.Empty;
-    }
+    }*/
 }

@@ -85,7 +85,7 @@ builder.Services.AddScoped<IUpsellPurchasedSummaryService, UpsellPurchasedSummar
 //Vouchery do upselli
 builder.Services.AddScoped<IUpsellVoucherProvisioningService, UpsellVoucherProvisioningService>();
 builder.Services.AddScoped<IUpsellVoucherCodeGenerator, UpsellVoucherCodeGenerator>();
-builder.Services.AddScoped<IUpsellVoucherQueryService, UpsellVoucherQueryService>();
+//builder.Services.AddScoped<IUpsellVoucherQueryService, UpsellVoucherQueryService>();
 builder.Services.AddScoped<IUpsellVoucherRedeemService, UpsellVoucherRedeemService>();
 
 

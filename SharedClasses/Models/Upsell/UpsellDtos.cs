@@ -1,4 +1,5 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
+using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using System;
 using System.Collections.Generic;
 
@@ -21,53 +22,12 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public bool IsPersonalizable { get; set; }
     }
 
- 
-
-   /* public class UpsellSelectionDto
-    {
-        public string PartnerServiceId { get; set; } = string.Empty;
-        public int Quantity { get; set; }
-    }
-
-    public class UpsellQuoteDto
-    {
-        public string Currency { get; set; } = string.Empty;
-        public decimal BaseAmount { get; set; }
-        public decimal UpsellAmount { get; set; }
-        public decimal TotalAmount { get; set; }
-        public List<UpsellQuoteLineItemDto> LineItems { get; set; } = new();
-    }
-   */
-    public class UpsellQuoteLineItemDto
-    {
-        public string PartnerServiceId { get; set; } = string.Empty;
-        public string TitleSnapshot { get; set; } = string.Empty;
-        public decimal UnitPrice { get; set; }
-        public int Quantity { get; set; }
-        public decimal LineTotal { get; set; }
-        public string? ServiceDateMode { get; set; }
-    }
-
-  /*  public class UpsellPurchaseDto
-    {
-        public string PurchaseId { get; set; } = string.Empty;
-        public string ReservationId { get; set; } = string.Empty;
-        public string PartnerServiceId { get; set; } = string.Empty;
-        public string PartnerPublicId { get; set; } = string.Empty;
-        public string TitleSnapshot { get; set; } = string.Empty;
-        public string PartnerNameSnapshot { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public DateTime CreatedAtUtc { get; set; }
-        public int TotalVouchers { get; set; }
-        public int RedeemedVouchers { get; set; }
-    }
-*/
     public class UpsellVoucherDto
     {
         public Guid VoucherGuid { get; set; }
         public Guid OrderLineGuid { get; set; }
         public Guid ReservationGuid { get; set; }
-        public int PartnerServiceId { get; set; }
+        //public int PartnerServiceId { get; set; }
         public string CodeShort { get; set; } = string.Empty;
         public string? QrToken { get; set; }
         public int UsedCount { get; set; }
@@ -75,8 +35,8 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public DateOnly ValidFrom { get; set; }
         public DateOnly ValidTo { get; set; }
         public string Status { get; set; } = string.Empty;
-        public string TitleSnapshot { get; set; } = string.Empty;
-        public string Currency { get; set; } = string.Empty;
+        //public string TitleSnapshot { get; set; } = string.Empty;
+        //public string Currency { get; set; } = string.Empty;
     }
 
     public class RedeemResultDto
@@ -119,5 +79,17 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public string Currency { get; set; } = "PLN";
         public string LineStatus { get; set; } = string.Empty;
         public bool IsFreeUnlimitedUses { get; set; }
+        public PurchasedVoucherDto? Voucher { get; set; } = new();
+    }
+
+    public class PurchasedVoucherDto
+    {
+        public string CodeShort { get; set; } = string.Empty;
+        public string? QrPayloadUrl { get; set; }
+        public int UsedCount { get; set; }
+        public int? MaxUses { get; set; }
+        public DateOnly ValidFrom { get; set; }
+        public DateOnly ValidTo { get; set; }
+        public string VoucherStatus { get; set; } = string.Empty;
     }
 }

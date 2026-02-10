@@ -93,6 +93,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public bool IsFreeUnlimitedUses { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public UpsellVoucherDto? Voucher { get; set; }
     }
 
     public class UpsellPaymentInitResult
