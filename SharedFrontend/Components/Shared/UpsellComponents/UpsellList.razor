@@ -68,7 +68,7 @@
         {
             _selectedUpsells.Remove(existing);
         }
-        RecalculateTotal();
+        // RecalculateTotal(); <<-- do wewnetrznego uzytku w przypadku gdybyśmy chcieli pokazywać total na UI w ramach tego komponentu (np w headerze?)
         if (OnSelectionChanged.HasDelegate)
         {
             await OnSelectionChanged.InvokeAsync(_selectedUpsells.ToList());

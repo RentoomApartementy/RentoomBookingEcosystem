@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
@@ -11,9 +12,11 @@ using RentoomBooking.SharedClasses.Database;
 namespace RentoomBooking.SharedClasses.Migrations
 {
     [DbContext(typeof(PostgresBookingDbContext))]
-    partial class PostgresBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260209200549_upsell_vouchers_table_add")]
+    partial class upsell_vouchers_table_add
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -507,8 +510,6 @@ namespace RentoomBooking.SharedClasses.Migrations
 
                     b.HasKey("UpsellOrderLineGuid");
 
-                    b.HasIndex("UpsellOrderGuid");
-
                     b.ToTable("upsell_order_lines");
                 });
 
@@ -568,8 +569,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .HasColumnName("upsell_order_json");
 
                     b.HasKey("UpsellOrderGuid");
-
-                    b.HasIndex("ReservationGuid");
 
                     b.ToTable("upsell_order_records");
                 });
@@ -675,52 +674,13 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.Navigation("TermsSource");
                 });
 
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", b =>
-                {
-                    b.HasOne("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderRecordEntity", "UpsellOrderRecord")
-                        .WithMany("UpsellOrderLineEntities")
-                        .HasForeignKey("UpsellOrderGuid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UpsellOrderRecord");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderRecordEntity", b =>
-                {
-                    b.HasOne("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationRecordEntity", "ReservationRecord")
-                        .WithMany("UpsellOrderRecords")
-                        .HasForeignKey("ReservationGuid")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("ReservationRecord");
-                });
-
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellVoucherEntity", b =>
                 {
-                    b.HasOne("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", "UpsellOrderLine")
-                        .WithOne("UpsellVoucher")
+                    b.HasOne("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", null)
+                        .WithOne()
                         .HasForeignKey("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellVoucherEntity", "UpsellOrderLineGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("UpsellOrderLine");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationRecordEntity", b =>
-                {
-                    b.Navigation("UpsellOrderRecords");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", b =>
-                {
-                    b.Navigation("UpsellVoucher")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderRecordEntity", b =>
-                {
-                    b.Navigation("UpsellOrderLineEntities");
                 });
 #pragma warning restore 612, 618
         }

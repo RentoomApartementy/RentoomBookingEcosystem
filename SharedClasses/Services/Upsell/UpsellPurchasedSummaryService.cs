@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using System;
@@ -5,6 +7,8 @@ using System.Linq;
 
 namespace RentoomBooking.SharedClasses.Services.Upsell
 {
+
+
     public interface IUpsellPurchasedSummaryService
     {
         Task<UpsellPurchasedSummaryDto> GetPurchasedSummaryAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
@@ -13,10 +17,15 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
     public class UpsellPurchasedSummaryService : IUpsellPurchasedSummaryService
     {
         private readonly IUpsellOrderStore _upsellOrderStore;
+        private const string DefaultQrPayloadTemplate = "https://booking.rentoom.pl/redeem?t={qr_token}";
 
-        public UpsellPurchasedSummaryService(IUpsellOrderStore upsellOrderStore)
+        private readonly IConfiguration _configuration;
+        ILogger<UpsellPurchasedSummaryService> _logger;
+        public UpsellPurchasedSummaryService(IUpsellOrderStore upsellOrderStore, IConfiguration configuration, ILogger<UpsellPurchasedSummaryService> logger)
         {
             _upsellOrderStore = upsellOrderStore ?? throw new ArgumentNullException(nameof(upsellOrderStore));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<UpsellPurchasedSummaryDto> GetPurchasedSummaryAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
@@ -49,11 +58,64 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                             TotalGuests = line.TotalGuests,
                             LineTotalGross = line.LineTotalGross,
                             Currency = line.Currency,
-                            LineStatus = line.LineStatus
+                            LineStatus = line.LineStatus,
+                            IsFreeUnlimitedUses = line.IsFreeUnlimitedUses,
+                            Voucher = line.Voucher == null ? null : new PurchasedVoucherDto
+                            {
+                                CodeShort = line.Voucher.CodeShort,
+                                MaxUses = line.Voucher.MaxUses,
+                                UsedCount = line.Voucher.UsedCount,
+                                ValidFrom = line.Voucher.ValidFrom,
+                                ValidTo = line.Voucher.ValidTo,
+                                VoucherStatus = line.Voucher.Status
+
+                            }
                         })
                         .ToList()
                 }).ToList()
             };
         }
+
+
+
+        private string? BuildQrPayloadUrl(string? qrToken, string? partnerPublicId)
+        {
+            if (string.IsNullOrWhiteSpace(qrToken))
+            {
+                return null;
+            }
+
+            var template = ResolveQrPayloadTemplate(partnerPublicId);
+            if (string.IsNullOrWhiteSpace(template))
+            {
+                template = DefaultQrPayloadTemplate;
+            }
+
+            var encodedToken = Uri.EscapeDataString(qrToken.Trim());
+            var url = template.Replace("{qr_token}", encodedToken, StringComparison.OrdinalIgnoreCase);
+
+            if (!string.IsNullOrWhiteSpace(partnerPublicId))
+            {
+                url = url.Replace("{partnerPublicId}", Uri.EscapeDataString(partnerPublicId.Trim()), StringComparison.OrdinalIgnoreCase);
+            }
+
+            return url;
+        }
+
+        private string ResolveQrPayloadTemplate(string? partnerPublicId)
+        {
+            var templateWithPartner = _configuration["Upsell:QrPayloadUrlTemplateWithPartner"]
+                ?? _configuration["UpsellQrPayloadUrlTemplateWithPartner"];
+            var templateDefault = _configuration["Upsell:QrPayloadUrlTemplate"]
+                ?? _configuration["UpsellQrPayloadUrlTemplate"];
+
+            if (!string.IsNullOrWhiteSpace(partnerPublicId) && !string.IsNullOrWhiteSpace(templateWithPartner))
+            {
+                return templateWithPartner;
+            }
+
+            return !string.IsNullOrWhiteSpace(templateDefault) ? templateDefault : DefaultQrPayloadTemplate;
+        }
+
     }
 }

@@ -90,26 +90,54 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
         public async Task<List<UpsellOrderRecord>> GetByReservationGuidAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
         {
-            await _initializationTask;
+
+
+            /* await using var context = _dbContextFactory.CreateDbContext();
+             var entities = await context.UpsellOrderRecords.AsNoTracking()
+                 .Where(r => r.ReservationGuid == reservationGuid)
+                 .OrderBy(r => r.CreatedAt)
+                 .ToListAsync(cancellationToken);
+
+             var records = entities.Select(MapToRecord).ToList();
+             foreach (var record in records)
+             {
+                 record.Lines = await GetLinesAsync(record.UpsellOrderGuid, cancellationToken);
+             }
+
+             return records;*/
+           
 
             await using var context = _dbContextFactory.CreateDbContext();
-            var entities = await context.UpsellOrderRecords.AsNoTracking()
-                .Where(r => r.ReservationGuid == reservationGuid)
-                .OrderBy(r => r.CreatedAt)
-                .ToListAsync(cancellationToken);
 
-            var records = entities.Select(MapToRecord).ToList();
-            foreach (var record in records)
-            {
-                record.Lines = await GetLinesAsync(record.UpsellOrderGuid, cancellationToken);
-            }
+            var orderEntities = await context.UpsellOrderRecords.AsNoTracking()
+                .Where(o => o.ReservationGuid == reservationGuid)
+                .OrderBy(o => o.CreatedAt)
+                .ToListAsync();
+
+            var orderGuids = orderEntities.Select(o => o.UpsellOrderGuid).ToList();
+
+            var lineEntities = await context.UpsellOrderLines.AsNoTracking()
+                .Include(l => l.UpsellVoucher)
+                .Where(l => orderGuids.Contains(l.UpsellOrderGuid))
+                .OrderBy(l => l.CreatedAt)
+                .ToListAsync();
+            
+            var linesByOrder = lineEntities
+                .GroupBy(l => l.UpsellOrderGuid)
+                .ToDictionary(g => g.Key, g => g.Select(MapLineToRecord).ToList()); // includes voucher mapping
+
+            var records = orderEntities.Select(MapToRecord).ToList();
+            foreach (var r in records)
+                r.Lines = linesByOrder.GetValueOrDefault(r.UpsellOrderGuid, new List<UpsellOrderLineRecord>());
 
             return records;
+
+
         }
 
         public async Task<List<UpsellOrderLineRecord>> GetLinesAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default)
         {
-            await _initializationTask;
+         
 
             await using var context = _dbContextFactory.CreateDbContext();
             var entities = await context.UpsellOrderLines.AsNoTracking()
@@ -215,8 +243,10 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 LineStatus = entity.LineStatus,
                 BitrixProductId = entity.BitrixProductId,
                 BitrixLineId = entity.BitrixLineId,
+                IsFreeUnlimitedUses = entity.IsFreeUnlimitedUses,
                 CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt
+                UpdatedAt = entity.UpdatedAt,
+                Voucher = entity.UpsellVoucher is null ? null : MapVoucherToDto(entity.UpsellVoucher)
             };
         }
 
@@ -238,10 +268,33 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 LineStatus = line.LineStatus,
                 BitrixProductId = line.BitrixProductId,
                 BitrixLineId = line.BitrixLineId,
+                IsFreeUnlimitedUses = line.IsFreeUnlimitedUses,
                 CreatedAt = line.CreatedAt == default ? DateTime.UtcNow : line.CreatedAt,
                 UpdatedAt = DateTime.UtcNow
             };
         }
+
+        private static UpsellVoucherDto MapVoucherToDto(UpsellVoucherEntity voucher)
+        {
+            return new UpsellVoucherDto
+            {
+                VoucherGuid = voucher.UpsellVoucherGuid,
+                OrderLineGuid = voucher.UpsellOrderLineGuid,
+                ReservationGuid = voucher.ReservationGuid,
+                //PartnerServiceId = line.PartnerServiceId,
+                CodeShort = voucher.CodeShort,
+                QrToken =voucher.QrToken,
+                UsedCount = voucher.UsedCount,
+                MaxUses = voucher.MaxUses,
+                ValidFrom = voucher.ValidFrom,
+                ValidTo = voucher.ValidTo,
+                Status = voucher.Status,
+                //TitleSnapshot = line.TitleSnapshot,
+               // Currency = line.Currency
+            };
+        }
+
+
 
         private async Task EnsureCreatedAsync()
         {

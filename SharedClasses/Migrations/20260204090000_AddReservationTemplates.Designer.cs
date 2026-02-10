@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
@@ -11,9 +12,10 @@ using RentoomBooking.SharedClasses.Database;
 namespace RentoomBooking.SharedClasses.Migrations
 {
     [DbContext(typeof(PostgresBookingDbContext))]
-    partial class PostgresBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260204090000_AddReservationTemplates")]
+    partial class AddReservationTemplates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,6 +287,28 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.ToTable("Reservations");
                 });
 
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationTemplateEntity", b =>
+                {
+                    b.Property<string>("TemplateKey")
+                        .HasColumnType("text")
+                        .HasColumnName("template_key");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("payload");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.HasKey("TemplateKey");
+
+                    b.ToTable("reservation_templates");
+                });
+
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationRecordEntity", b =>
                 {
                     b.Property<Guid>("ReservationGuid")
@@ -353,28 +377,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.ToTable("reservation_records");
                 });
 
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationTemplateEntity", b =>
-                {
-                    b.Property<string>("TemplateKey")
-                        .HasColumnType("text")
-                        .HasColumnName("template_key");
-
-                    b.Property<string>("Payload")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("payload");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.HasKey("TemplateKey");
-
-                    b.ToTable("reservation_templates");
-                });
-
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.SearchFiltersEntity", b =>
                 {
                     b.Property<string>("FilterGroupName")
@@ -422,248 +424,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.ToTable("Terms");
                 });
 
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", b =>
-                {
-                    b.Property<Guid>("UpsellOrderLineGuid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("upsell_order_line_guid");
-
-                    b.Property<string>("BitrixLineId")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasColumnName("bitrix_line_id");
-
-                    b.Property<int?>("BitrixProductId")
-                        .HasColumnType("integer")
-                        .HasColumnName("bitrix_product_id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("currency");
-
-                    b.Property<bool>("IsFreeUnlimitedUses")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_free_unlimited_uses");
-
-                    b.Property<string>("LineStatus")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)")
-                        .HasColumnName("line_status");
-
-                    b.Property<decimal>("LineTotalGross")
-                        .HasColumnType("numeric")
-                        .HasColumnName("line_total_gross");
-
-                    b.Property<int>("Nights")
-                        .HasColumnType("integer")
-                        .HasColumnName("nights");
-
-                    b.Property<int>("PartnerServiceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("partner_service_id");
-
-                    b.Property<int>("PricingModel")
-                        .HasColumnType("integer")
-                        .HasColumnName("pricing_model");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
-
-                    b.Property<string>("TitleSnapshot")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("title_snapshot");
-
-                    b.Property<int>("TotalGuests")
-                        .HasColumnType("integer")
-                        .HasColumnName("total_guests");
-
-                    b.Property<decimal>("UnitPriceGross")
-                        .HasColumnType("numeric")
-                        .HasColumnName("unit_price_gross");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<Guid>("UpsellOrderGuid")
-                        .HasColumnType("uuid")
-                        .HasColumnName("upsell_order_guid");
-
-                    b.HasKey("UpsellOrderLineGuid");
-
-                    b.HasIndex("UpsellOrderGuid");
-
-                    b.ToTable("upsell_order_lines");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderRecordEntity", b =>
-                {
-                    b.Property<Guid>("UpsellOrderGuid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("upsell_order_guid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<DateTime?>("PaidAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("paid_at_utc");
-
-                    b.Property<Guid?>("PaymentSessionGuid")
-                        .HasColumnType("uuid")
-                        .HasColumnName("payment_session_guid");
-
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("payment_status");
-
-                    b.Property<string>("Provider")
-                        .HasColumnType("text")
-                        .HasColumnName("provider");
-
-                    b.Property<string>("ProviderTransactionId")
-                        .HasColumnType("text")
-                        .HasColumnName("provider_transaction_id");
-
-                    b.Property<Guid?>("ReservationGuid")
-                        .HasColumnType("uuid")
-                        .HasColumnName("reservation_guid");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea")
-                        .HasColumnName("row_version");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<string>("UpsellOrderJson")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("upsell_order_json");
-
-                    b.HasKey("UpsellOrderGuid");
-
-                    b.HasIndex("ReservationGuid");
-
-                    b.ToTable("upsell_order_records");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellVoucherEntity", b =>
-                {
-                    b.Property<Guid>("UpsellVoucherGuid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("upsell_voucher_guid");
-
-                    b.Property<string>("CodeShort")
-                        .IsRequired()
-                        .HasColumnType("varchar")
-                        .HasColumnName("code_short");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<DateTime?>("LastUsedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_used_at_utc");
-
-                    b.Property<int?>("MaxUses")
-                        .HasColumnType("integer")
-                        .HasColumnName("max_uses");
-
-                    b.Property<string>("QrToken")
-                        .IsRequired()
-                        .HasColumnType("varchar")
-                        .HasColumnName("qr_token");
-
-                    b.Property<Guid>("ReservationGuid")
-                        .HasColumnType("uuid")
-                        .HasColumnName("reservation_guid");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea")
-                        .HasColumnName("row_version");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar")
-                        .HasColumnName("status");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<Guid>("UpsellOrderLineGuid")
-                        .HasColumnType("uuid")
-                        .HasColumnName("upsell_order_line_guid");
-
-                    b.Property<int>("UsedCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0)
-                        .HasColumnName("used_count");
-
-                    b.Property<DateOnly>("ValidFrom")
-                        .HasColumnType("date")
-                        .HasColumnName("valid_from");
-
-                    b.Property<DateOnly>("ValidTo")
-                        .HasColumnType("date")
-                        .HasColumnName("valid_to");
-
-                    b.HasKey("UpsellVoucherGuid");
-
-                    b.HasIndex("CodeShort")
-                        .IsUnique();
-
-                    b.HasIndex("QrToken")
-                        .IsUnique();
-
-                    b.HasIndex("ReservationGuid")
-                        .HasDatabaseName("idx_upsell_vouchers_reservation_guid");
-
-                    b.HasIndex("UpsellOrderLineGuid")
-                        .IsUnique();
-
-                    b.HasIndex("Status", "ValidFrom", "ValidTo")
-                        .HasDatabaseName("idx_upsell_vouchers_status_validity");
-
-                    b.ToTable("upsell_vouchers");
-                });
-
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.CustomerAgreedTerms", b =>
                 {
                     b.HasOne("RentoomBooking.SharedClasses.Models.CustomerTermsAndConditionsSource", "TermsSource")
@@ -673,54 +433,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .IsRequired();
 
                     b.Navigation("TermsSource");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", b =>
-                {
-                    b.HasOne("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderRecordEntity", "UpsellOrderRecord")
-                        .WithMany("UpsellOrderLineEntities")
-                        .HasForeignKey("UpsellOrderGuid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UpsellOrderRecord");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderRecordEntity", b =>
-                {
-                    b.HasOne("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationRecordEntity", "ReservationRecord")
-                        .WithMany("UpsellOrderRecords")
-                        .HasForeignKey("ReservationGuid")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("ReservationRecord");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellVoucherEntity", b =>
-                {
-                    b.HasOne("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", "UpsellOrderLine")
-                        .WithOne("UpsellVoucher")
-                        .HasForeignKey("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellVoucherEntity", "UpsellOrderLineGuid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UpsellOrderLine");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ReservationRecordEntity", b =>
-                {
-                    b.Navigation("UpsellOrderRecords");
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", b =>
-                {
-                    b.Navigation("UpsellVoucher")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderRecordEntity", b =>
-                {
-                    b.Navigation("UpsellOrderLineEntities");
                 });
 #pragma warning restore 612, 618
         }

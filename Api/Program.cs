@@ -77,8 +77,18 @@ builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
+
+//Upselle
 builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
 builder.Services.AddScoped<IUpsellPurchasedSummaryService, UpsellPurchasedSummaryService>();
+
+//Vouchery do upselli
+builder.Services.AddScoped<IUpsellVoucherProvisioningService, UpsellVoucherProvisioningService>();
+builder.Services.AddScoped<IUpsellVoucherCodeGenerator, UpsellVoucherCodeGenerator>();
+//builder.Services.AddScoped<IUpsellVoucherQueryService, UpsellVoucherQueryService>();
+builder.Services.AddScoped<IUpsellVoucherRedeemService, UpsellVoucherRedeemService>();
+
+
 builder.Services.AddScoped<BitrixService>();
 
 //Customer Terms
