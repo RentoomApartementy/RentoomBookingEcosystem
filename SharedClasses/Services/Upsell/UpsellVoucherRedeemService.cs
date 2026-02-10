@@ -12,6 +12,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 {
     public interface IUpsellVoucherRedeemService
     {
+        Task<RedeemResultDto> ValidateByCodeShortAsync(string codeShort);
+        Task<RedeemResultDto> ValidateByQrTokenAsync(string qrToken);
         Task<RedeemResultDto> TryRedeemByCodeShortAsync(string codeShort);
         Task<RedeemResultDto> TryRedeemByQrTokenAsync(string qrToken);
     }
@@ -40,9 +42,13 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 return BuildFailure(FailureNotFound);
             }
 
-          
+            await using var context = _dbContextFactory.CreateDbContext();
+            var result = await FindByCodeShortAsync(context, codeShort);
+            return await TryRedeemInternalAsync(context, result.voucher, result.line);
+        }
 
-         
+        public async Task<RedeemResultDto> ValidateByCodeShortAsync(string codeShort)
+        {
             if (string.IsNullOrWhiteSpace(codeShort))
             {
                 return BuildFailure(FailureNotFound);
@@ -50,7 +56,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
             await using var context = _dbContextFactory.CreateDbContext();
             var result = await FindByCodeShortAsync(context, codeShort);
-            return await TryRedeemInternalAsync(context, result.voucher, result.line);
+            return BuildValidationResult(result.voucher, result.line);
         }
 
         public async Task<RedeemResultDto> TryRedeemByQrTokenAsync(string qrToken)
@@ -59,8 +65,6 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             {
                 return BuildFailure(FailureNotFound);
             }
-
-           
 
             var trimmed = qrToken.Trim();
             if (string.IsNullOrWhiteSpace(trimmed))
@@ -71,6 +75,42 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             await using var context = _dbContextFactory.CreateDbContext();
             var result = await FindByQrTokenAsync(context, trimmed);
             return await TryRedeemInternalAsync(context, result.voucher, result.line);
+        }
+
+        public async Task<RedeemResultDto> ValidateByQrTokenAsync(string qrToken)
+        {
+            if (string.IsNullOrWhiteSpace(qrToken))
+            {
+                return BuildFailure(FailureNotFound);
+            }
+
+            var trimmed = qrToken.Trim();
+            if (string.IsNullOrWhiteSpace(trimmed))
+            {
+                return BuildFailure(FailureNotFound);
+            }
+
+            await using var context = _dbContextFactory.CreateDbContext();
+            var result = await FindByQrTokenAsync(context, trimmed);
+            return BuildValidationResult(result.voucher, result.line);
+        }
+
+        private static RedeemResultDto BuildValidationResult(
+            UpsellVoucherEntity? voucher,
+            UpsellOrderLineEntity? line)
+        {
+            if (voucher is null || line is null)
+            {
+                return BuildFailure(FailureNotFound);
+            }
+
+            var failureReason = EvaluateFailureReason(voucher);
+            if (!string.IsNullOrWhiteSpace(failureReason))
+            {
+                return BuildFailure(failureReason, voucher, line);
+            }
+
+            return BuildSuccess(voucher, line);
         }
 
         private async Task<RedeemResultDto> TryRedeemInternalAsync(
