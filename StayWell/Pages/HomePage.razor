@@ -51,7 +51,13 @@
         </Icon>
     </Button>
 
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ClubPage"))" Text="Twoje Vouchery" BenefitsClub=true>
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage"))" Text="Twoje Vouchery" BenefitsClub=true>
+        <Icon>
+            <img src="/icons/hand-coins.svg" alt="ClubPage">
+        </Icon>
+    </Button>
+
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/VouchersPage"))" Text="Vouchery" BenefitsClub=true>
         <Icon>
             <img src="/icons/hand-coins.svg" alt="ClubPage">
         </Icon>
