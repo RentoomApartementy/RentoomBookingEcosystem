@@ -110,6 +110,16 @@
 }
 
 @media (max-width: 768px) {
+
+    .staywell-theme .upsell-list-scroll-wrapper {
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: visible;
+        padding: 10px 0;
+        gap: 12px;
+    }
+
+
     .staywell-theme .upsell-section-container {
         padding: 15px;
         width: 95%; 

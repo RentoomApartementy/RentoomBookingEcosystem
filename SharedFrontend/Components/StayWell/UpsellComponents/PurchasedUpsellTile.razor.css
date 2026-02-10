@@ -228,10 +228,11 @@
     color: #fff;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .upsell-tile-container {
-        width: 240px;
+        width: 100%;
+        max-width: 420px;
         margin: 0 auto;
-        height: 360px;
+        height: 420px;
     }
 }
