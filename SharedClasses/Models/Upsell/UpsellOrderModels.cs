@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
@@ -90,10 +91,11 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public string LineStatus { get; set; } = UpsellLineStatuses.Pending;
         public int? BitrixProductId { get; set; }
         public string? BitrixLineId { get; set; }
-        public bool IsFreeUnlimitedUses { get; set; }
+        public bool IsFreeUnlimitedUses { get; set; }        
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public UpsellVoucherDto? Voucher { get; set; }
+        public PartnerService UpsellDefinitionSnapshot { get; set; } = new();
     }
 
     public class UpsellPaymentInitResult

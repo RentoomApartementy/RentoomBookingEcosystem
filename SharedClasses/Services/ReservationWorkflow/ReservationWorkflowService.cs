@@ -187,7 +187,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                         Nights = pricingContext.Nights,
                         TotalGuests = pricingContext.TotalGuests,
                         LineTotalGross = lineTotal,
-                        DisplayText = $"Cena: {tile.Price} {tile.Currency}"
+                        DisplayText = $"{tile.Price} {tile.Currency}"
                     });
 
                     upsellsTotal += lineTotal;
@@ -502,7 +502,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                     TotalGuests = pricingContext.TotalGuests,
                     LineTotalGross = lineTotal,
                     Currency = request.Currency ?? "PLN",
-                    LineStatus = UpsellLineStatuses.Paid
+                    LineStatus = UpsellLineStatuses.Paid,
+                    UpsellDefinitionSnapshot = tile.PartnerServiceInfo
                 });
             }
 

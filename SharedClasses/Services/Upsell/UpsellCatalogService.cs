@@ -98,8 +98,10 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     StayBoundOnly = service.StayBoundOnly,
                     PricingModel = service.PricingModel,
                     IsPersonalizable = service.IsPersonalizable,
-
-                   
+                    LongDescription = translation?.LongDescription,
+                    Terms = translation?.Terms,
+                    PartnerServiceInfo = service
+                    //TODO: add Partner Information to the tile (like logo, name, etc) if needed, currently we only have PartnerPublicId which is not enough to get that information without another call to the database
                 });
             }
 

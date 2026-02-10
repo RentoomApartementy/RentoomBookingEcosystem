@@ -1,4 +1,5 @@
-﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
@@ -233,6 +234,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
         [Column("is_free_unlimited_uses")]
         public bool IsFreeUnlimitedUses { get; set; }
+
+        [Column("partner_service_definition_snapshot", TypeName = "jsonb")]// to jest snapshot definicji usługi w momencie zakupu, żeby mieć dane do rozliczeń nawet jak potem usuniemy usługę w RentoomApp z katalogu albo zmieni się  cena itp.
+        public PartnerService UpsellDefinitionSnapshot { get; set; } = new();
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

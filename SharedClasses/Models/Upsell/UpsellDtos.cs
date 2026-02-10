@@ -1,7 +1,9 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RentoomBooking.SharedClasses.Models.Upsell
 {
@@ -12,6 +14,8 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public string PartnerServicePublicId { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string ShortDescription { get; set; } = string.Empty;
+        public string? LongDescription { get; set; }
+        public string? Terms { get; set; }
         public decimal Price { get; set; }
         public string Currency { get; set; } = string.Empty;
         public decimal? Discount { get; set; }
@@ -20,6 +24,12 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public PartnerServicePricingModel PricingModel { get; set; }
         public PartnerServiceDiscountType PricingDiscountType { get; set; }
         public bool IsPersonalizable { get; set; }
+        
+        [Required]
+        public PartnerService PartnerServiceInfo { get; set; } 
+
+        //TODO add Partner object dto the tile if needed, currently we only have PartnerPublicId which is not enough to get that information without another call to the database
+
     }
 
     public class UpsellVoucherDto

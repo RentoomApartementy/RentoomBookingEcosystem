@@ -246,6 +246,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 IsFreeUnlimitedUses = entity.IsFreeUnlimitedUses,
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt,
+                UpsellDefinitionSnapshot = entity.UpsellDefinitionSnapshot,
                 Voucher = entity.UpsellVoucher is null ? null : MapVoucherToDto(entity.UpsellVoucher)
             };
         }
@@ -269,6 +270,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 BitrixProductId = line.BitrixProductId,
                 BitrixLineId = line.BitrixLineId,
                 IsFreeUnlimitedUses = line.IsFreeUnlimitedUses,
+                UpsellDefinitionSnapshot = line.UpsellDefinitionSnapshot,
                 CreatedAt = line.CreatedAt == default ? DateTime.UtcNow : line.CreatedAt,
                 UpdatedAt = DateTime.UtcNow
             };
