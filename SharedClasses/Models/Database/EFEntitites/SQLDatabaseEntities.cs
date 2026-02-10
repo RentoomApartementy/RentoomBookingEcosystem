@@ -225,6 +225,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("line_status")]
         public string LineStatus { get; set; } = UpsellLineStatuses.Pending;
 
+        [Column("is_free_unlimited_uses")]
+        public bool IsFreeUnlimitedUses { get; set; }
+
         [Column("bitrix_product_id")]
         public int? BitrixProductId { get; set; }
 
