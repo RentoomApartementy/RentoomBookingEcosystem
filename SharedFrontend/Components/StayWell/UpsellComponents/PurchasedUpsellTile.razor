@@ -51,10 +51,10 @@
                     </div>
                     <div class="upsell-unit-info">@DisplayText</div>
                 </div>
-
+                
                 <label class="upsell-button">
                     <input type="checkbox" checked="@IsSelected" @onchange="HandleToggle" />
-                    <span class="button-text">@(IsSelected ? Texts.DeleteText : Texts.AddText)</span>
+                    <span class="button-text">Pokaż kod voucher</span>
                 </label>
             </div>
         </div>
@@ -71,6 +71,19 @@
                     <span class="upsell-back-description-title">@Texts.TermsTitleText</span>
                     <span class="upsell-back-description-sub-title">@Tile.Terms</span>
                 </div>
+                <div class="upsell-back-voucher-code">
+                    <div class="upsell-purchase-success">
+
+                            <div class="upsell-purchase-success__codebox">
+                                <p class="upsell-purchase-success__label">Twój kupon:</p>
+                                <p class="upsell-purchase-success__code">@Voucher.CodeShort</p>
+                            </div>
+
+                            <p class="upsell-purchase-success__footer">
+                                Pokaż go obsłudze
+                            </p>
+                        </div>
+                </div>
             </div>
         </div>
 
@@ -79,6 +92,7 @@
 
 @code {
     [Parameter] public UpsellTileDto Tile { get; set; } = new();
+    [Parameter] public UpsellVoucherDto Voucher { get; set; } = new();
     [Parameter] public ReservationPricingContext Context { get; set; } = new();
     [Parameter] public int Quantity { get; set; } = 1;
     [Parameter] public bool IsSelected { get; set; }

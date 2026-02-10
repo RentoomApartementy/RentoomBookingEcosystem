@@ -32,14 +32,14 @@
             @if (PurchasedUpsells is not null)
             {
                 <CascadingValue Value="Theme">
-                    @foreach (var tile in PurchasedUpsells)
+                    @foreach (var upsell in PurchasedUpsells)
                     {
-                        var isSelected = IsSelected(tile);
-                        <PurchasedUpsellTile Tile="tile"
+                        var isSelected = IsSelected(upsell.UpsellDefinitionSnapshot);
+                        <PurchasedUpsellTile Tile="upsell.UpsellDefinitionSnapshot" Voucher="upsell.Voucher"
                                     Context="ReservationContext"
                                     Quantity="1"
-                                    IsSelected="isSelected"
-                                    OnToggled="@((bool selected) => HandleToggle(tile, selected))"
+                                    IsSelected="true"
+                                             OnToggled="@((bool selected) => HandleToggle(upsell.UpsellDefinitionSnapshot, selected))"
                                     Texts="Texts"/>
                     }
                 </CascadingValue>
@@ -57,7 +57,7 @@
 </script>
 
 @code {
-    [Parameter] public IReadOnlyList<UpsellTileDto> PurchasedUpsells { get; set; } = Array.Empty<UpsellTileDto>();
+    [Parameter] public IReadOnlyList<UpsellOrderLineRecord> PurchasedUpsells { get; set; } = Array.Empty<UpsellOrderLineRecord>();
     [Parameter] public ReservationPricingContext ReservationContext { get; set; } = new();
     [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
     [Parameter] public string Theme { get; set; } = "rentoom-theme";

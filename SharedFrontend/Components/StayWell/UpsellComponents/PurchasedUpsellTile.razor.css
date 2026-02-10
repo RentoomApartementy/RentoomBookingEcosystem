@@ -183,6 +183,69 @@
     display: none;
 }
 
+/*-- Voucher Code styles --*/
+
+                    /* OUTER: bg-success/10 border border-success/20 rounded-lg p-3 */
+                    .upsell-purchase-success {
+                        background: rgb(var(--success-rgb) / 0.10);
+                        border: 1px solid rgb(var(--success-rgb) / 0.20);
+                        border-radius: 0.5rem; /* rounded-lg */
+                        padding: 0.75rem; /* p-3 */
+                    }
+
+                    /* HEADER: flex items-center gap-2 text-success font-medium mb-2 */
+                    .upsell-purchase-success__header {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem; /* gap-2 */
+                        color: rgb(var(--success-rgb));
+                        font-weight: 500; /* font-medium */
+                        margin-bottom: 0.5rem; /* mb-2 */
+                    }
+
+                    /* ICON: w-4 h-4 */
+                    .upsell-purchase-success__icon {
+                        width: 16px;
+                        height: 16px;
+                    }
+
+                    /* CODE BOX: bg-white rounded-md p-2 border border-border */
+                    .upsell-purchase-success__codebox {
+                        background: #fff;
+                        border: 1px solid var(--border);
+                        border-radius: 0.375rem; /* rounded-md */
+                        padding: 0.5rem; /* p-2 */
+                    }
+
+                    /* LABEL: text-xs text-muted-foreground mb-1 */
+                    .upsell-purchase-success__label {
+                        font-size: 0.75rem; /* text-xs */
+                        line-height: 1rem;
+                        color: var(--muted-foreground);
+                        margin-bottom: 0.25rem; /* mb-1 */
+                    }
+
+                    /* CODE: font-mono font-bold text-foreground tracking-wider text-center text-lg */
+                    .upsell-purchase-success__code {
+                        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                        font-weight: 700; /* font-bold */
+                        color: var(--foreground);
+                        letter-spacing: 0.05em; /* tracking-wider */
+                        text-align: center;
+                        font-size: 1.125rem; /* text-lg */
+                        line-height: 1.75rem;
+                    }
+
+                    /* FOOTER: text-xs text-muted-foreground mt-2 text-center */
+                    .upsell-purchase-success__footer {
+                        margin-top: 0.5rem; /* mt-2 */
+                        font-size: 0.75rem;
+                        line-height: 1rem;
+                        color: var(--muted-foreground);
+                        text-align: center;
+                    }
+
+
 /* --- Theme Styles --- */
 
 .staywell-theme.is-selected .upsell-card-front,

@@ -1,3 +1,10 @@
+.staywell-theme {
+    --border: #e5e7eb;
+    --foreground: #111827;
+    --muted-foreground: #6b7280;
+    --success-rgb: 31 90 65; /* #1F5A41 */
+}
+
 .upsell-outer-wrapper.staywell-theme {
     width: 100%;
     display: flex;
@@ -110,7 +117,9 @@
 }
 
 @media (max-width: 768px) {
-
+    .upsell-nav-buttons {
+        display: none !important;
+    }
     .staywell-theme .upsell-list-scroll-wrapper {
         flex-direction: column;
         overflow-x: hidden;
