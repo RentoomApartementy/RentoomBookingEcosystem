@@ -1,4 +1,4 @@
-.upsell-outer-wrapper.rentoom-theme {
+.upsell-outer-wrapper.staywell-theme {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -6,7 +6,7 @@
     background-color: transparent;
 }
 
-.rentoom-theme .upsell-section-container {
+.staywell-theme .upsell-section-container {
     width: 95%;
     max-width: 980px;
     background: #ffffff;
@@ -15,21 +15,21 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-.rentoom-theme .upsell-header-row {
+.staywell-theme .upsell-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
 }
 
-.rentoom-theme .upsell-title-group {
+.staywell-theme .upsell-title-group {
     display: flex;
     align-items: center;
     gap: 10px;
     max-width: calc(100% - 90px);
 }
 
-.rentoom-theme .upsell-icon {
+.staywell-theme .upsell-icon {
     background: #c8ffc8;
     padding: 8px;
     border-radius: 8px;
@@ -38,7 +38,7 @@
     flex-shrink: 0;
 }
 
-.rentoom-theme .upsell-main-title {
+.staywell-theme .upsell-main-title {
     font-size: 1rem;
     font-weight: 700;
     margin: 0;
@@ -48,19 +48,19 @@
     text-overflow: ellipsis;
 }
 
-.rentoom-theme .upsell-subtitle {
+.staywell-theme .upsell-subtitle {
     font-size: 0.65rem;
     color: #666;
     margin: 0;
 }
 
-.rentoom-theme .upsell-nav-buttons {
+.staywell-theme .upsell-nav-buttons {
     display: flex;
     align-items: center;
     flex-shrink: 0;
 }
 
-.rentoom-theme .nav-btn {
+.staywell-theme .nav-btn {
     border: 1px solid #e0e0e0;
     background: white;
     width: 36px;
@@ -75,13 +75,13 @@
     justify-content: center;
 }
 
-.rentoom-theme .nav-btn:hover {
+.staywell-theme .nav-btn:hover {
     background: #f8f9fa;
     border-color: #ccc;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.rentoom-theme .upsell-list-scroll-wrapper {
+.staywell-theme .upsell-list-scroll-wrapper {
     display: flex;
     flex-direction: row;
     gap: 22px;
@@ -92,11 +92,11 @@
     scrollbar-width: none;
 }
 
-.rentoom-theme .upsell-list-scroll-wrapper::-webkit-scrollbar {
+.staywell-theme .upsell-list-scroll-wrapper::-webkit-scrollbar {
     display: none;
 }
 
-.rentoom-theme .additional-price {
+.staywell-theme .additional-price {
     margin-top: 10px;
     padding: 10px 10px 0 10px;
     text-align: right;
@@ -105,26 +105,26 @@
     border-top: 1px solid #f0f0f0;
 }
 
-.rentoom-theme .additional-price b {
+.staywell-theme .additional-price b {
     font-weight: 700;
 }
 
 @media (max-width: 768px) {
-    .rentoom-theme .upsell-section-container {
+    .staywell-theme .upsell-section-container {
         padding: 15px;
         width: 95%; 
         box-shadow: none;
     }
 
-    .rentoom-theme .upsell-main-title {
+    .staywell-theme .upsell-main-title {
         font-size: 0.95rem; 
     }
 
-    .rentoom-theme .upsell-subtitle {
+    .staywell-theme .upsell-subtitle {
         font-size: 0.6rem;
     }
 
-    .rentoom-theme .nav-btn {
+    .staywell-theme .nav-btn {
         width: 32px; 
         height: 32px;
         margin-left: 6px;

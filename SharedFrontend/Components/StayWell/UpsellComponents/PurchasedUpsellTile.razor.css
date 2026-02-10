@@ -185,21 +185,21 @@
 
 /* --- Theme Styles --- */
 
-.rentoom-theme.is-selected .upsell-card-front,
-.rentoom-theme.is-selected .upsell-card-back {
+.staywell-theme.is-selected .upsell-card-front,
+.staywell-theme.is-selected .upsell-card-back {
     border: 2px solid #1F5A41;
 }
 
-.rentoom-theme .upsell-button {
+.staywell-theme .upsell-button {
     background: #945F28;
     color: #fff;
 }
 
-.rentoom-theme.is-selected .upsell-button {
+.staywell-theme.is-selected .upsell-button {
     background: #dc3545;
 }
 
-.rentoom-theme .upsell-button {
+.staywell-theme .upsell-button {
     display: block;
     margin-top: 12px;
     width: 100%;
