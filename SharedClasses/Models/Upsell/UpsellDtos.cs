@@ -1,4 +1,5 @@
-﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
+﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using System;
@@ -24,9 +25,8 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public PartnerServicePricingModel PricingModel { get; set; }
         public PartnerServiceDiscountType PricingDiscountType { get; set; }
         public bool IsPersonalizable { get; set; }
-        
-        [Required]
-        public PartnerService PartnerServiceInfo { get; set; } 
+     
+        public PartnerServiceSnapshot PartnerServiceInfo { get; set; } 
 
         //TODO add Partner object dto the tile if needed, currently we only have PartnerPublicId which is not enough to get that information without another call to the database
 

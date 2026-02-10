@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.StayWell;
@@ -104,6 +105,10 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.Property(e => e.TitleSnapshot).HasMaxLength(512);
                 entity.Property(e => e.LineStatus).HasMaxLength(32);
                 entity.Property(e => e.BitrixLineId).HasMaxLength(128);
+                entity.Property(e=> e.UpsellDefinitionSnapshot).HasColumnType("jsonb").IsRequired().HasConversion(
+                        v => Newtonsoft.Json.JsonConvert.SerializeObject(v),
+                        v => Newtonsoft.Json.JsonConvert.DeserializeObject<PartnerServiceSnapshot>(v) ?? new PartnerServiceSnapshot()
+                    );
                 entity.Property(e => e.IsFreeUnlimitedUses).HasDefaultValue(false);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");

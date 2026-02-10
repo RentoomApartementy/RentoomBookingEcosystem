@@ -98,10 +98,11 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixService>();
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<MediaCacheService>();
-            
 
 
-             builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
+            builder.Services.AddScoped<IPaymentFlowHandler, ReservationPaymentFlowHandler>();
+            builder.Services.AddScoped<IPaymentFlowHandler, UpsellPaymentFlowHandler>();
+            builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
             //Customer Terms
             builder.Services.AddScoped<CustomerTermsRepository>();
             builder.Services.AddScoped<CustomerTermsService>();

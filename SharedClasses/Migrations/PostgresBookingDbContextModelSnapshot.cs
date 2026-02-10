@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 
 #nullable disable
 
@@ -502,7 +502,7 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<PartnerService>("UpsellDefinitionSnapshot")
+                    b.Property<PartnerServiceSnapshot>("UpsellDefinitionSnapshot")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("partner_service_definition_snapshot");

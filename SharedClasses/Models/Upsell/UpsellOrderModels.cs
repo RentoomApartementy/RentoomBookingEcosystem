@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
@@ -95,7 +96,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public UpsellVoucherDto? Voucher { get; set; }
-        public PartnerService UpsellDefinitionSnapshot { get; set; } = new();
+        public PartnerServiceSnapshot UpsellDefinitionSnapshot { get; set; } = new();
     }
 
     public class UpsellPaymentInitResult

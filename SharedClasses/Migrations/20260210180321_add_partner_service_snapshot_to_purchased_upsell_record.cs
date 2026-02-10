@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 
 #nullable disable
 
@@ -11,11 +11,11 @@ namespace RentoomBooking.SharedClasses.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<PartnerService>(
+            migrationBuilder.AddColumn<PartnerServiceSnapshot>(
                 name: "partner_service_definition_snapshot",
                 table: "upsell_order_lines",
                 type: "jsonb",
-                nullable: true);
+                nullable: false);
         }
 
         /// <inheritdoc />

@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 
 #nullable disable
 
 namespace RentoomBooking.SharedClasses.Migrations
 {
     [DbContext(typeof(PostgresBookingDbContext))]
-    [Migration("20260210172048_add_partner_service_snapshot_to_purchased_upsell_record")]
+    [Migration("20260210180321_add_partner_service_snapshot_to_purchased_upsell_record")]
     partial class add_partner_service_snapshot_to_purchased_upsell_record
     {
         /// <inheritdoc />
@@ -505,7 +505,7 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .HasColumnName("updated_at")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<PartnerService>("UpsellDefinitionSnapshot")
+                    b.Property<PartnerServiceSnapshot>("UpsellDefinitionSnapshot")
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("partner_service_definition_snapshot");
