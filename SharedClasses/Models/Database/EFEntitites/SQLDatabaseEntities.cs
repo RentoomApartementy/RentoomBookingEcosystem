@@ -234,6 +234,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("bitrix_line_id")]
         public string? BitrixLineId { get; set; }
 
+        [Column("is_free_unlimited_uses")]
+        public bool IsFreeUnlimitedUses { get; set; }
+
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
