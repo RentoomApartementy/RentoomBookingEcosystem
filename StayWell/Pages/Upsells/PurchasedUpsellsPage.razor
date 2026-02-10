@@ -1,9 +1,75 @@
-﻿ @page "/reservation/{Token}/MyVouchersPage"
+﻿@page "/reservation/{Token}/MyVouchersPage"
+@using RentoomBooking.SharedClasses.Models.Upsell
+@inject RentoomBooking.StayWell.Services.BackendApi BackendApi
+@using RentooomBooking.SharedFrontend.Components.StayWell.UpsellComponenets
 
 @inherits Models.PageBase
 
-<h3>MyVouchersPage</h3>
+@if (!string.IsNullOrWhiteSpace(_errorMessage))
+{
+    <p>@_errorMessage</p>
+}
+else if (_isLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <PurchasedUpsellList PurchasedUpsellList="_purchasedTiles"
+                         ReservationContext="_context"
+                         Theme="staywell-theme" />
+}
 
 @code {
+    private List<UpsellTileDto> _purchasedTiles = new();
+    private ReservationPricingContext _context = new();
+    private bool _isLoading = true;
+    private string? _errorMessage;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (string.IsNullOrWhiteSpace(Token))
+        {
+            _errorMessage = "Token is missing.";
+            _isLoading = false;
+            return;
+        }
+
+        var purchasedSummary = await BackendApi.GetPurchasedUpsellsByReservationTokenAsync(Token);
+        var purchasedLines = purchasedSummary?.PurchasedUpsellsWithVouchers ?? new();
+
+        _purchasedTiles = purchasedLines
+            .Select(line => line.UpsellDefinitionSnapshot)
+            .Where(tile => tile is not null)
+            .ToList();
+
+        var firstLine = purchasedLines.FirstOrDefault();
+
+        var reservationFrom = ReservationState.CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom();
+        var reservationTo = ReservationState.CurrentReservation?.Reservation?.ReservationDetails?.getDateTo();
+
+        var startDate = reservationFrom.HasValue
+            ? DateOnly.FromDateTime(reservationFrom.Value)
+            : DateOnly.FromDateTime(DateTime.Today);
+
+        var endDate = reservationTo.HasValue
+            ? DateOnly.FromDateTime(reservationTo.Value)
+            : startDate.AddDays(Math.Max(1, firstLine?.Nights ?? 1));
+
+        var adults = firstLine?.TotalGuests ?? 0;
+        var children = 0;
+
+        _context = new ReservationPricingContext
+        {
+            StartDate = startDate,
+            EndDate = endDate,
+            Adults = adults,
+            Children = children,
+            Currency = firstLine?.Currency ?? _purchasedTiles.FirstOrDefault()?.Currency ?? "PLN"
+        };
+
+        _isLoading = false;
+    }
 }

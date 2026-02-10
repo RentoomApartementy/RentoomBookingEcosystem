@@ -29,13 +29,13 @@
         </div>
 
         <div class="upsell-list-scroll-wrapper" @ref="_scrollContainer">
-            @if (PurchasedUpsellList is not null)
+            @if (PurchasedUpsells is not null)
             {
                 <CascadingValue Value="Theme">
-                    @foreach (var tile in PurchasedUpsellList)
+                    @foreach (var tile in PurchasedUpsells)
                     {
                         var isSelected = IsSelected(tile);
-                        <UpsellTile Tile="tile"
+                        <PurchasedUpsellTile Tile="tile"
                                     Context="ReservationContext"
                                     Quantity="1"
                                     IsSelected="isSelected"
@@ -57,14 +57,13 @@
 </script>
 
 @code {
-    [Parameter] public IReadOnlyList<UpsellTileDto> PurchasedUpsellList { get; set; } = Array.Empty<UpsellTileDto>();
+    [Parameter] public IReadOnlyList<UpsellTileDto> PurchasedUpsells { get; set; } = Array.Empty<UpsellTileDto>();
     [Parameter] public ReservationPricingContext ReservationContext { get; set; } = new();
     [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
     [Parameter] public string Theme { get; set; } = "rentoom-theme";
     [Parameter] public UpsellTextConfig Texts { get; set; } = new();
 
     private readonly List<SelectedUpsellDto> _selectedUpsells = new();
-    private decimal _totalTotal;
     private ElementReference _scrollContainer;
 
     private async Task ScrollList(int offset)
@@ -80,7 +79,7 @@
     }
 
     private string Currency => string.IsNullOrWhiteSpace(ReservationContext.Currency)
-        ? PurchasedUpsellList.FirstOrDefault()?.Currency ?? string.Empty
+        ? PurchasedUpsells.FirstOrDefault()?.Currency ?? string.Empty
         : ReservationContext.Currency;
 
     private bool IsSelected(UpsellTileDto tile)
