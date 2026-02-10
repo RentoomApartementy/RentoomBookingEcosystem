@@ -1,50 +1,230 @@
-# StayWell Upsell API review (Azure Functions)
+# Staywell Upsell API review (current state)
 
-## 1) Function app structure + DI/startup pattern
+## Scope
+This review documents the current Azure Functions API structure and how it relates to Staywell reservation and upsell use cases, based on the `Api`, `SharedClasses`, and `StayWell` projects.
 
-- **Project/host layout:** The Azure Functions app lives in `Api/` as an isolated worker (.NET v4) project. Functions are defined as classes with `[Function]` attributes and `[HttpTrigger]` bindings (example in the Upsell and Reservation functions).【F:Api/Upsell/GetReservationUpsellsFunction.cs†L1-L63】【F:Api/GetReservationsFunction.cs†L1-L116】
-- **Startup/DI registration:** There is no `FunctionsStartup`; instead the app uses the isolated-worker `Program.cs` pattern with `FunctionsApplication.CreateBuilder(args)` and `builder.ConfigureFunctionsWebApplication()` to configure the host and register services into DI. Key services for reservation workflow and upsell are registered here (e.g., `IReservationWorkflowService`, `IUpsellCatalogService`, `IUpsellOrderWorkflowService`, `IUpsellPurchasedSummaryService`, and upsell voucher services).【F:Api/Program.cs†L1-L155】
+---
 
-## 2) Reservation token mapping (reservationTokenGuid → reservationGuid + reservation context)
+## 1) Function app structure and startup/DI pattern
 
-- **Token storage and lookup:** Reservation tokens are stored as `ResToken` in the PostgreSQL-backed reservation record. `PostgresBookingDatabase.GetRentoomReservationByResTokenAsync` looks up a reservation by `ResToken` and deserializes the `RentoomReservation` payload, which includes the IdoSell reservation details and the token itself.【F:SharedClasses/Services/BookingDatabaseService/PostgresBookingDatabase.cs†L184-L213】【F:SharedClasses/Models/RentoomReservation.cs†L1-L18】
-- **How tokens are created:** When saving a reservation, `PostgresBookingDatabase.SaveReservationJsonAsync` assigns `ResToken` to the provided `existingResToken` or generates a new GUID (`Guid.NewGuid().ToString("N")`). This is the token returned to the client for later lookups.【F:SharedClasses/Services/BookingDatabaseService/PostgresBookingDatabase.cs†L213-L266】
-- **Reservation workflow token = reservationGuid (StayWell):** In the reservation workflow, `ReservationWorkflowService.StartAsync` returns `record.ReservationGuid` and explicitly notes it as the StayWell reservation token. Later, when a payment is confirmed, the same `ReservationGuid` is passed as `existingResToken` when pulling the IdoSell reservation into the DB, ensuring a 1:1 link between `reservationGuid` and `ResToken` in storage.【F:SharedClasses/Services/ReservationWorkflow/ReservationWorkflowService.cs†L72-L88】【F:SharedClasses/Services/ReservationWorkflow/ReservationWorkflowService.cs†L420-L432】
-- **Reservation context (dates, guests, apartment/objectId):** The reservation context returned to StayWell is the serialized IdoSell `Reservation` object inside `RentoomReservation.Reservation`. Key fields include:
-  - `ReservationDetails.dateFrom/dateTo` (arrival/departure) via helper methods `getDateFrom/getDateTo`.【F:SharedClasses/Models/IdoBooking/ReservationObject.cs†L77-L132】
-  - `ReservationItem.objectId/objectItemId`, and adult/child counts (`numberOfAdults`, `numberOfSmallChildren`).【F:SharedClasses/Models/IdoBooking/ReservationObject.cs†L164-L192】
-  - Guest list in `ClientModel.Guests` (for per-guest data).【F:SharedClasses/Models/IdoBooking/ReservationObject.cs†L134-L161】
+### Function app project and folders
+The Azure Functions project is `Api/` (`RentoomBooking.Api.csproj`) and currently uses a .NET isolated worker startup (`Program.cs`), not `FunctionsStartup`.
 
-## 3) Existing upsell-related functions/services used by StayWell
+Current high-level layout:
 
-- **StayWell client usage:** StayWell calls `GET db/reservations/{token}/upsells` to fetch purchased upsells for a reservation token (GUID).【F:StayWell/Services/BackendApi.cs†L63-L76】
-- **Upsell summary endpoint:** `GetReservationUpsellsFunction` handles that route and validates the token as a GUID before delegating to `IUpsellPurchasedSummaryService`.【F:Api/Upsell/GetReservationUpsellsFunction.cs†L21-L62】
-- **Upsell catalog endpoint:** `PartnerUpsellApi.GetAvailableUpsellServicesForApartmentItemId` exposes `GET upsell/{apartmentItemId}/{locale}` to return available upsell tiles from `IUpsellCatalogService`.【F:Api/Integrations/RentoomApp/PartnerUpsellApi.cs†L12-L58】
-- **Upsell services registered in DI:** Upsell-related services wired in DI include catalog retrieval, order workflow, purchased summary, and voucher provisioning/query/redeem services. These are the building blocks for new endpoints around orders and post-purchase workflows.【F:Api/Program.cs†L78-L109】
+- `Api/Program.cs` – isolated worker host + DI registrations.
+- `Api/Upsell/` – upsell-specific function endpoints.
+- `Api/ReservationFunctions/` – reservation-related function area (currently one function file is commented out).
+- `Api/Integrations/TpayFunctions/` – payment creation + webhook endpoint.
+- `Api/Integrations/RentoomApp/` – partner upsell catalog + QR maintenance URL endpoint.
+- other domain/API files at `Api/` root (`GetReservationsFunction`, `AddReservationFunction`, etc.).
+
+### Startup pattern
+The app uses:
+
+- `FunctionsApplication.CreateBuilder(args)`
+- `builder.ConfigureFunctionsWebApplication()`
+- service registrations via `builder.Services.AddScoped(...)` / `AddDbContextFactory(...)`
+- `builder.Build().Run()`
+
+No `FunctionsStartup` class is present.
+
+### DI registrations relevant to reservation/upsell
+`Program.cs` registers:
+
+- Data/DB:
+  - `AddDbContextFactory<PostgresBookingDbContext>`
+  - `AddDbContextFactory<RappPartnersDBContext>`
+  - `PostgresBookingDatabase`
+- Reservation workflow:
+  - `IReservationStore` → `ReservationStore`
+  - `IReservationWorkflowService` → `ReservationWorkflowService`
+- Upsell workflow:
+  - `IUpsellCatalogService` → `UpsellCatalogService`
+  - `IUpsellOrderStore` → `UpsellOrderStore`
+  - `IUpsellOrderWorkflowService` → `UpsellOrderWorkflowService`
+  - `IUpsellPurchasedSummaryService` → `UpsellPurchasedSummaryService`
+  - voucher services (`IUpsellVoucherProvisioningService`, `IUpsellVoucherCodeGenerator`, `IUpsellVoucherRedeemService`)
+- Payments:
+  - both payment flow handlers are registered (`ReservationPaymentFlowHandler` and `UpsellPaymentFlowHandler`) behind `IPaymentFlowHandler`
+  - `IPaymentOrchestrator`, `ITpayGateway`, `ITpayClient`, `ITpayNotificationValidator`
+
+### Auth + routing conventions observed
+
+- Functions are mostly `AuthorizationLevel.Anonymous`.
+- Routes are explicitly set per function method with `[HttpTrigger(..., Route = "...")]`.
+- Existing route families are mixed by domain:
+  - `db/...` for PostgreSQL-backed reads/writes
+  - `ido/...` for IdoSell integration
+  - `upsell/...` for partner upsell catalog
+  - `tpay/...` for payment/webhook
+- `host.json` does not override route prefix; Azure Functions default `/api` prefix applies.
+
+---
+
+## 2) Existing reservation token mapping and reservation context
+
+## What exists now
+
+### Reservation token storage/lookup
+- Reservation token (`resToken`) is persisted in PostgreSQL (`Reservations` table) and used as lookup key.
+- `PostgresBookingDatabase.GetRentoomReservationByResTokenAsync(string resToken, ...)` loads the DB row by `ResToken`, then deserializes `Payload` to `RentoomReservation`.
+- `GetReservationsFunction` exposes this as `GET db/reservations/{reservationToken}`.
+
+### Reservation payload/context fields returned
+`RentoomReservation` contains:
+
+- `Id` (IdoSell reservation ID)
+- `ResToken`
+- `Reservation` object (IdoSell model)
+
+Within `Reservation` / `ReservationDetails` / `ReservationItem`, the context used by Staywell is present:
+
+- stay dates: `Reservation.ReservationDetails.dateFrom/dateTo` (+ helpers `getDateFrom()`, `getDateTo()`)
+- apartment/object context per item: `Reservation.Items[*].objectId`, `itemId`, `objectItemId`
+- guest counts per item: `numberOfAdults`, `numberOfSmallChildren`
+- client guests list via `Reservation.Client.Guests`
+
+`GetReservationsFunction` also applies an expiration rule: if `toDate < UtcToday`, endpoint returns HTTP `410 Gone`.
+
+### reservationTokenGuid -> reservationGuid mapping for upsell
+Important current behavior:
+
+- `GetReservationUpsellsByToken` route is `db/reservations/{reservationToken}/upsells/purchased`.
+- In implementation, `reservationToken` is parsed directly as a `Guid` and treated as `reservationGuid`.
+- There is **no lookup** from DB `resToken` string to a separate `reservationGuid` in this function.
+
+So for upsell purchased summary, the API currently expects `{reservationToken}` to already be a GUID that equals `reservationGuid` used in `UpsellOrderRecords.ReservationGuid`.
+
+---
+
+## 3) Existing upsell functions/services used by Staywell
+
+### Function endpoints currently relevant
+
+1. Purchased upsell summary by token-like GUID:
+   - `GET /api/db/reservations/{reservationToken}/upsells/purchased`
+   - function: `Api/Upsell/GetReservationUpsellsFunction.cs`
+   - service: `IUpsellPurchasedSummaryService`
+
+2. Upsell catalog by apartment item + locale:
+   - `GET /api/upsell/{apartmentItemId}/{locale}`
+   - function: `Api/Integrations/RentoomApp/PartnerUpsellApi.cs`
+   - service: `IUpsellCatalogService`
+
+3. Payment creation / webhook (shared for reservation + upsell flows):
+   - `POST /api/tpay/create`
+   - `POST /api/tpay/notification`
+   - function: `Api/Integrations/TpayFunctions/TpayFunctions.cs`
+   - service: `IPaymentOrchestrator` with `Reservation` and `Upsell` flow handlers
+
+### Staywell client-side calls currently in code
+In `StayWell/Services/BackendApi.cs`:
+
+- Reservation fetch by token: `GET db/reservations/{token}`
+- Purchased upsells fetch: currently calls `GET db/reservations/{token}/upsells` (**without** `/purchased` suffix)
+
+This suggests a route mismatch between Staywell client call and the function route currently implemented.
+
+---
 
 ## 4) Existing DTO namespaces and mapping patterns (SharedClasses)
 
-- **DTO namespaces:**
-  - Reservation workflow DTOs live in `RentoomBooking.SharedClasses.Models.ReservationWorkflow` (e.g., `StartReservationRequest`, `ReservationSummaryDto`, `PaymentStateDto`).【F:SharedClasses/Models/ReservationWorkflow/ReservationWorkflowModels.cs†L1-L140】
-  - Upsell DTOs live in `RentoomBooking.SharedClasses.Models.Upsell` (e.g., `UpsellTileDto`, `UpsellPurchasedSummaryDto`, `UpsellPurchasedOrderDto`, `UpsellPurchasedLineDto`).【F:SharedClasses/Models/Upsell/UpsellDtos.cs†L1-L120】
-  - IdoSell reservation payloads are in `RentoomBooking.SharedClasses.Models.IdoBooking` (e.g., `Reservation`, `ReservationDetails`, `ReservationItem`).【F:SharedClasses/Models/IdoBooking/ReservationObject.cs†L66-L192】
-- **Mapping pattern:** DTOs are built by explicit projection in services (no auto-mapper). Example: `UpsellPurchasedSummaryService` pulls records from `IUpsellOrderStore`, filters paid orders, and manually projects each order/line into `UpsellPurchasedSummaryDto` → `UpsellPurchasedOrderDto` → `UpsellPurchasedLineDto`.【F:SharedClasses/Services/Upsell/UpsellPurchasedSummaryService.cs†L10-L60】
+## DTO/model namespaces
+Representative namespaces used for reservation/upsell payloads:
 
-## 5) Recommendation for where to add new functions
+- `RentoomBooking.SharedClasses.Models`
+  - `RentoomReservation`
+- `RentoomBooking.SharedClasses.Models.IdoBooking`
+  - reservation structures (`Reservation`, `ReservationDetails`, `ReservationItem`, etc.)
+- `RentoomBooking.SharedClasses.Models.Upsell`
+  - `UpsellTileDto`, `UpsellOrderRequest`, `UpsellPurchasedSummaryDto`, voucher DTOs
+- `RentoomBooking.SharedClasses.Models.Upsell.StayWell`
+  - `AvailableUpsellsResponseDto`, `UpsellOfferDto`, `PurchasedUpsellsWithVouchersResponseDto`
+- `RentoomBooking.SharedClasses.Models.ReservationWorkflow`
+  - reservation workflow/payment status models
 
-**Recommended placement:** add new HTTP-trigger Azure Functions under `Api/Upsell/` alongside `GetReservationUpsellsFunction`, or under a new `Api/Upsell/Orders/` folder if you want a clearer grouping for order/payment endpoints. This keeps upsell APIs together and leverages the existing DI services registered in `Api/Program.cs`.【F:Api/Upsell/GetReservationUpsellsFunction.cs†L1-L63】【F:Api/Program.cs†L78-L109】
+### Mapping style/patterns observed
 
-**Suggested routes (aligned with the requested REST paths):**
+- Mostly manual mapping methods in services/stores (no AutoMapper usage found in reviewed paths).
+  - examples: `MapToRecord`, `MapLineToRecord`, `MapVoucherToDto` in `UpsellOrderStore`
+- JSON persistence pattern for workflow states:
+  - reservation and upsell order state serialized as JSON blobs in DB entities (`ReservationJson`, `UpsellOrderJson`) and deserialized back into state models.
+- Function responses are commonly serialized with `JsonConvert.SerializeObject(...)` and returned via `HttpResponseData`.
+
+---
+
+## 5) Recommendation: where to add the new Staywell upsell endpoints
+
+Requested endpoints:
 
 - `GET /api/reservations/{token}/upsells/available`
-  - Backing service: `IUpsellCatalogService` (likely requires apartment item/context from reservation). Use `RentoomReservation.Reservation` to derive apartment item/object and date range from `ReservationDetails`/`ReservationItem` if needed.【F:SharedClasses/Models/RentoomReservation.cs†L1-L18】【F:SharedClasses/Models/IdoBooking/ReservationObject.cs†L77-L192】
 - `GET /api/reservations/{token}/upsells/purchased`
-  - Backing service: `IUpsellPurchasedSummaryService` (similar to existing `GET db/reservations/{token}/upsells`).【F:Api/Upsell/GetReservationUpsellsFunction.cs†L21-L62】【F:SharedClasses/Services/Upsell/UpsellPurchasedSummaryService.cs†L10-L60】
 - `POST /api/reservations/{token}/upsells/orders`
-  - Backing service: `IUpsellOrderWorkflowService` (create order from reservation context + selected upsells).【F:Api/Program.cs†L78-L109】
 - `POST /api/upsells/orders/{orderGuid}/pay`
-  - Backing services: `IUpsellOrderWorkflowService` (prepare payment), `IPaymentOrchestrator` or `ITpayGateway` depending on how the order is initiated in the existing payment flow wiring.【F:Api/Program.cs†L101-L109】
 - `GET /api/upsells/orders/{orderGuid}/status`
-  - Backing service: `IUpsellOrderStore` or `IUpsellOrderWorkflowService` to fetch the current state and payment status for the order.【F:Api/Program.cs†L78-L109】
 
-**Notes for token handling:** Use GUID parsing (as in `GetReservationUpsellsFunction`) and map it to the reservation GUID / token stored in `ResToken`. That keeps alignment with how StayWell currently treats `reservationGuid` as the token.【F:Api/Upsell/GetReservationUpsellsFunction.cs†L33-L46】【F:SharedClasses/Services/ReservationWorkflow/ReservationWorkflowService.cs†L72-L88】
+### Recommended placement
+
+Create a dedicated function class under `Api/Upsell/`, e.g.:
+
+- `Api/Upsell/StaywellUpsellApi.cs`
+
+Rationale:
+
+- Keeps Staywell upsell endpoints together with current upsell endpoint (`GetReservationUpsellsFunction`) and upsell integration logic.
+- Keeps payment-specific adapter logic in `Api/Integrations/TpayFunctions` while exposing a Staywell-friendly façade in `Api/Upsell`.
+
+### Recommended service wiring (reuse existing services)
+
+Use existing DI services in handlers:
+
+- token resolution + reservation context:
+  - `PostgresBookingDatabase` (for token -> `RentoomReservation` lookup)
+- upsell availability:
+  - `IUpsellCatalogService`
+- purchased summary:
+  - `IUpsellPurchasedSummaryService`
+- order create/pay:
+  - `IUpsellOrderWorkflowService`
+  - optionally `IPaymentOrchestrator` if pay endpoint wraps/create payment session directly
+- order status:
+  - `IUpsellOrderStore` (read payment/order status)
+
+### Token resolution recommendation (important)
+
+Before implementing new routes, define one canonical mapping strategy for `{token}`:
+
+1. **If `{token}` is the existing DB `resToken` string** (current Staywell pattern):
+   - resolve with `GetRentoomReservationByResTokenAsync`
+   - derive a consistent `reservationGuid` for upsell domain (e.g., use `Reservation.RentoomReservationId` when available, otherwise explicitly map and persist)
+
+2. **If `{token}` is intended to be a GUID reservation id**:
+   - enforce GUID route constraint and align all Staywell calls + endpoint names/docs accordingly
+
+Current code mixes these concepts (DB `resToken` lookup endpoint vs upsell purchased endpoint requiring GUID parse), so this should be normalized first.
+
+### Suggested route convention
+
+For new Staywell-oriented endpoints, prefer a single bounded context prefix:
+
+- reservation-scoped: `/api/reservations/{token}/upsells/...`
+- order-scoped: `/api/upsells/orders/{orderGuid}/...`
+
+This is cleaner than current mixed `db/...` + `upsell/...` style and aligns with the requested contract.
+
+---
+
+## Existing endpoints inventory (Staywell reservation/upsell relevant)
+
+- Reservation by token:
+  - `GET /api/db/reservations/{reservationToken}`
+- Purchased upsells (current function route):
+  - `GET /api/db/reservations/{reservationToken}/upsells/purchased`
+- Upsell catalog for apartment item:
+  - `GET /api/upsell/{apartmentItemId}/{locale}`
+- Tpay create transaction:
+  - `POST /api/tpay/create`
+- Tpay webhook:
+  - `POST /api/tpay/notification`
+
