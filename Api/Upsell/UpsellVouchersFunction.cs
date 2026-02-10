@@ -74,20 +74,41 @@ public class UpsellVouchersFunction
                 return response;
             }
 
-            RedeemResultDto result;
-            if (hasCodeShort)
+            if (!Guid.TryParse(payload?.ReservationToken, out var reservationTokenGuid))
             {
-                var codeShort = payload!.CodeShort!.Trim();
-                result = action == VoucherAction.Validate
-                    ? await _upsellVoucherRedeemService.ValidateByCodeShortAsync(codeShort, cancellationToken)
-                    : await _upsellVoucherRedeemService.TryRedeemByCodeShortAsync(codeShort);
+                response.StatusCode = HttpStatusCode.BadRequest;
+                await response.WriteStringAsync("'reservationToken' must be a valid GUID.", cancellationToken);
+                return response;
+            }
+
+            RedeemResultDto result;
+            if (action == VoucherAction.Validate)
+            {
+                result = hasCodeShort
+                    ? await _upsellVoucherRedeemService.ValidateByCodeShortAsync(payload!.CodeShort!.Trim(), cancellationToken)
+                    : await _upsellVoucherRedeemService.ValidateByQrTokenAsync(payload!.QrToken!.Trim(), cancellationToken);
+
+                result = EnsureReservationTokenMatch(result, reservationTokenGuid);
             }
             else
             {
-                var qrToken = payload!.QrToken!.Trim();
-                result = action == VoucherAction.Validate
-                    ? await _upsellVoucherRedeemService.ValidateByQrTokenAsync(qrToken, cancellationToken)
-                    : await _upsellVoucherRedeemService.TryRedeemByQrTokenAsync(qrToken);
+                var preValidation = hasCodeShort
+                    ? await _upsellVoucherRedeemService.ValidateByCodeShortAsync(payload!.CodeShort!.Trim(), cancellationToken)
+                    : await _upsellVoucherRedeemService.ValidateByQrTokenAsync(payload!.QrToken!.Trim(), cancellationToken);
+
+                preValidation = EnsureReservationTokenMatch(preValidation, reservationTokenGuid);
+                if (!preValidation.Success)
+                {
+                    result = preValidation;
+                }
+                else
+                {
+                    result = hasCodeShort
+                        ? await _upsellVoucherRedeemService.TryRedeemByCodeShortAsync(payload!.CodeShort!.Trim())
+                        : await _upsellVoucherRedeemService.TryRedeemByQrTokenAsync(payload!.QrToken!.Trim());
+
+                    result = EnsureReservationTokenMatch(result, reservationTokenGuid);
+                }
             }
 
             response.StatusCode = HttpStatusCode.OK;
@@ -115,6 +136,28 @@ public class UpsellVouchersFunction
 
         [JsonProperty("qrToken")]
         public string? QrToken { get; set; }
+
+        [JsonProperty("reservationToken")]
+        public string? ReservationToken { get; set; }
+    }
+
+    private static RedeemResultDto EnsureReservationTokenMatch(RedeemResultDto result, Guid expectedReservationGuid)
+    {
+        if (result.ReservationGuid == Guid.Empty || result.ReservationGuid == expectedReservationGuid)
+        {
+            return result;
+        }
+
+        return new RedeemResultDto
+        {
+            Success = false,
+            FailureReason = "ReservationTokenMismatch",
+            UpdatedUsedCount = result.UpdatedUsedCount,
+            MaxUses = result.MaxUses,
+            ReservationGuid = result.ReservationGuid,
+            PartnerServiceId = result.PartnerServiceId,
+            TitleSnapshot = result.TitleSnapshot
+        };
     }
 
     private enum VoucherAction
