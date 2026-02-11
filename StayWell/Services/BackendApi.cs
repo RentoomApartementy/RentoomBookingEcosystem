@@ -3,6 +3,7 @@ using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
+using RentoomBooking.StayWell.Models;
 using System.Net;
 using System.Net.Http.Json;
 using System.Security.Policy;
@@ -150,6 +151,8 @@ namespace RentoomBooking.StayWell.Services
             return response.IsSuccessStatusCode;
         }
 
+
+
         public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId)
         {
             using var response = await _http.GetAsync($"qrmaint/form-url/{apartmentId}");
@@ -163,6 +166,42 @@ namespace RentoomBooking.StayWell.Services
 
             var result = await response.Content.ReadFromJsonAsync<QrMaintResponse>(_json);
             return result?.url;
+        }
+
+        public async Task<RedeemResultDto?> ValidateUpsellVoucherAsync(string reservationToken,string? codeShort, string? qrToken)
+        {
+            var request = new UpsellVoucherLookupRequestDto
+            {
+                CodeShort = codeShort,
+                QrToken = qrToken,
+                ReservationToken = reservationToken 
+            };
+
+            var response = await _http.PostAsJsonAsync("db/upsells/vouchers/validate", request, _json);
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<RedeemResultDto>(_json);
+        }
+
+        public async Task<RedeemResultDto?> RedeemUpsellVoucherAsync(string reservationToken,string? codeShort, string? qrToken)
+        {
+            var request = new UpsellVoucherLookupRequestDto
+            {
+                CodeShort = codeShort,
+                QrToken = qrToken,
+                ReservationToken = reservationToken
+            };
+
+            var response = await _http.PostAsJsonAsync("db/upsells/vouchers/redeem", request, _json);
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<RedeemResultDto>(_json);
         }
 
     }
