@@ -23,7 +23,8 @@
     transform: rotateY(180deg);
 }
 
-.upsell-card-front, .upsell-card-back {
+.upsell-card-front,
+.upsell-card-back {
     position: absolute;
     top: 0;
     left: 0;
@@ -33,7 +34,7 @@
     -webkit-backface-visibility: hidden;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
     background-color: #fff;
     border: 2px solid transparent;
     display: flex;
@@ -100,7 +101,7 @@
     position: absolute;
     bottom: 8px;
     right: 8px;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     color: #fff;
     padding: 3px 8px;
     border-radius: 20px;
@@ -183,68 +184,152 @@
     display: none;
 }
 
-/*-- Voucher Code styles --*/
+/* Voucher UI */
+.voucher-back {
+    justify-content: flex-start;
+    gap: 0.75rem;
+}
 
-                    /* OUTER: bg-success/10 border border-success/20 rounded-lg p-3 */
-                    .upsell-purchase-success {
-                        background: rgb(var(--success-rgb) / 0.10);
-                        border: 1px solid rgb(var(--success-rgb) / 0.20);
-                        border-radius: 0.5rem; /* rounded-lg */
-                        padding: 0.75rem; /* p-3 */
-                    }
+.voucher-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
 
-                    /* HEADER: flex items-center gap-2 text-success font-medium mb-2 */
-                    .upsell-purchase-success__header {
-                        display: flex;
-                        align-items: center;
-                        gap: 0.5rem; /* gap-2 */
-                        color: rgb(var(--success-rgb));
-                        font-weight: 500; /* font-medium */
-                        margin-bottom: 0.5rem; /* mb-2 */
-                    }
+.voucher-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+}
 
-                    /* ICON: w-4 h-4 */
-                    .upsell-purchase-success__icon {
-                        width: 16px;
-                        height: 16px;
-                    }
+.voucher-close,
+.voucher-overlay-close {
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #444;
+    padding: 0.15rem 0.35rem;
+}
 
-                    /* CODE BOX: bg-white rounded-md p-2 border border-border */
-                    .upsell-purchase-success__codebox {
-                        background: #fff;
-                        border: 1px solid var(--border);
-                        border-radius: 0.375rem; /* rounded-md */
-                        padding: 0.5rem; /* p-2 */
-                    }
+.voucher-code {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+}
 
-                    /* LABEL: text-xs text-muted-foreground mb-1 */
-                    .upsell-purchase-success__label {
-                        font-size: 0.75rem; /* text-xs */
-                        line-height: 1rem;
-                        color: var(--muted-foreground);
-                        margin-bottom: 0.25rem; /* mb-1 */
-                    }
+.voucher-code-label {
+    font-size: 0.75rem;
+    color: #666;
+}
 
-                    /* CODE: font-mono font-bold text-foreground tracking-wider text-center text-lg */
-                    .upsell-purchase-success__code {
-                        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-                        font-weight: 700; /* font-bold */
-                        color: var(--foreground);
-                        letter-spacing: 0.05em; /* tracking-wider */
-                        text-align: center;
-                        font-size: 1.125rem; /* text-lg */
-                        line-height: 1.75rem;
-                    }
+.voucher-code-value {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #222;
+    word-break: break-word;
+}
 
-                    /* FOOTER: text-xs text-muted-foreground mt-2 text-center */
-                    .upsell-purchase-success__footer {
-                        margin-top: 0.5rem; /* mt-2 */
-                        font-size: 0.75rem;
-                        line-height: 1rem;
-                        color: var(--muted-foreground);
-                        text-align: center;
-                    }
+.voucher-qr-wrap,
+.voucher-overlay-qr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.voucher-qr {
+    display: block;
+    width: min(80%, 190px);
+    max-width: 190px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.voucher-qr.big {
+    width: min(85%, 320px);
+    max-width: 320px;
+}
+
+.voucher-qr-placeholder {
+    width: min(80%, 190px);
+    max-width: 190px;
+    aspect-ratio: 1 / 1;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.voucher-expand {
+    border: none;
+    border-radius: 999px;
+    background: #1f5a41;
+    color: #fff;
+    padding: 0.55rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: center;
+}
+
+.voucher-overlay {
+    --staywell-header-h: 64px;
+    --staywell-footer-h: 76px;
+    position: fixed;
+    z-index: 1100;
+    left: 0;
+    right: 0;
+    top: var(--staywell-header-h);
+    bottom: var(--staywell-footer-h);
+    background: rgba(0, 0, 0, 0.58);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.voucher-overlay-panel {
+    width: min(92vw, 420px);
+    max-height: 100%;
+    overflow: auto;
+    background: #fff;
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+.voucher-overlay-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.voucher-overlay-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.voucher-overlay-hint {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #666;
+    text-align: center;
+}
 
 /* --- Theme Styles --- */
 

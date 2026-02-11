@@ -9,7 +9,7 @@
         
         <div class="upsell-card-front">
             <div class="upsell-header" @onclick="ToggleFlip">
-                <img src="@Tile.BannerUrls[PartnerServiceBannerPlacementType.StayWell]" alt="@Tile.Title" class="upsell-image" />
+                <img src="@StayWellBannerUrl" alt="@Tile.Title" class="upsell-image" />
                 
                 @if (Tile.Discount.HasValue && Tile.PricingDiscountType != PartnerServiceDiscountType.None)
                 {
@@ -61,42 +61,67 @@
         </div>
 
         <div class="upsell-card-back" @onclick="ToggleFlip">
-            <div class="upsell-back-content">
-                <span class="upsell-back-title">@Tile.Title</span>
-                <div class="upsell-back-description">
-                    <span class="upsell-back-description-title">@Texts.DescriptionText</span>
-                    <span class="upsell-back-description-sub-title">@Tile.LongDescription</span>
+            <div class="upsell-back-content voucher-back">
+                <div class="voucher-header">
+                    <span class="voucher-title">Twój kod</span>
+                    <button type="button" class="voucher-close" @onclick="CloseFlip" @onclick:stopPropagation>
+                        ×
+                    </button>
                 </div>
-                
-                <div class="upsell-back-description">
-                    <span class="upsell-back-description-title">@Texts.TermsTitleText</span>
-                    <span class="upsell-back-description-sub-title">@Tile.Terms</span>
-                </div>
-                <div class="upsell-back-voucher-code">
-                    <div class="upsell-purchase-success">
 
-                            <div class="upsell-purchase-success__codebox">
-                                <p class="upsell-purchase-success__label">Twój kupon:</p>
-                                <p class="upsell-purchase-success__code">@Voucher.CodeShort</p>
-                            @if (!string.IsNullOrWhiteSpace(VoucherQrDataUri))
-                            {
-                                <img src="@VoucherQrDataUri" alt="Kod QR vouchera" class="upsell-purchase-success__qr" />
-                            }
-                            </div>
-                        <div class="upsell-purchase-success__codebox">
-                            <p class="upsell-purchase-success__label">Użycia: @Voucher.UsedCount/@(Voucher.MaxUses?.ToString() ?? "∞")</p>
-                            <p class="upsell-purchase-success__label">Ważny: @Voucher.ValidFrom - @Voucher.ValidTo</p>
-                            <p class="upsell-purchase-success__label">Status: @Voucher.Status</p>
-                        </div>
-                            <p class="upsell-purchase-success__footer">
-                                Pokaż go obsłudze
-                            </p>
-                        </div>
+                <div class="voucher-code">
+                    <span class="voucher-code-label">Kod do podania ręcznie</span>
+                    <span class="voucher-code-value">@Voucher.CodeShort</span>
                 </div>
+
+                <div class="voucher-qr-wrap">
+                    @if (!string.IsNullOrWhiteSpace(_qrDataUri))
+                    {
+                        <img src="@_qrDataUri" alt="Kod QR vouchera" class="voucher-qr" />
+                    }
+                    else
+                    {
+                        <div class="voucher-qr-placeholder">QR niedostępny</div>
+                    }
+                </div>
+
+                <button type="button" class="voucher-expand" @onclick="OpenFullscreen" @onclick:stopPropagation>
+                    Powiększ
+                </button>
             </div>
         </div>
 
     </div>
+
+    @if (_isFullscreen)
+    {
+        <div class="voucher-overlay" @onclick="CloseFullscreen">
+            <div class="voucher-overlay-panel" @onclick:stopPropagation>
+                <div class="voucher-overlay-header">
+                    <span class="voucher-overlay-title">Pokaż w restauracji</span>
+                    <button type="button" class="voucher-overlay-close" @onclick="CloseFullscreen">×</button>
+                </div>
+
+                <div class="voucher-code">
+                    <span class="voucher-code-label">Kod</span>
+                    <span class="voucher-code-value">@Voucher.CodeShort</span>
+                </div>
+
+                <div class="voucher-overlay-qr">
+                    @if (!string.IsNullOrWhiteSpace(_qrDataUri))
+                    {
+                        <img src="@_qrDataUri" alt="Kod QR vouchera" class="voucher-qr big" />
+                    }
+                    else
+                    {
+                        <div class="voucher-qr-placeholder">QR niedostępny</div>
+                    }
+                </div>
+
+                <p class="voucher-overlay-hint">Pokaż ten kod obsłudze, aby zrealizować voucher.</p>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
@@ -113,11 +138,31 @@
     [CascadingParameter] public string Theme { get; set; } = "rentoom-theme";
 
     private bool _isFlipped = false;
-    private string? VoucherQrDataUri { get; set; }
+    private bool _isFullscreen;
+    private string? _qrDataUri;
+    private string _lastQrCacheKey = string.Empty;
+    private string StayWellBannerUrl { get; set; } = string.Empty;
 
     protected override void OnParametersSet()
     {
-        VoucherQrDataUri = GenerateVoucherQrDataUri();
+        StayWellBannerUrl = ResolveStayWellBannerUrl();
+
+        var currentQrCacheKey = $"{Voucher?.QrToken}|{Voucher?.CodeShort}|{Tile?.PartnerServicePublicId}";
+        if (_lastQrCacheKey != currentQrCacheKey)
+        {
+            _lastQrCacheKey = currentQrCacheKey;
+            _qrDataUri = GenerateVoucherQrDataUri();
+        }
+    }
+
+    private string ResolveStayWellBannerUrl()
+    {
+        if (Tile.BannerUrls is not null && Tile.BannerUrls.TryGetValue(PartnerServiceBannerPlacementType.StayWell, out var bannerUrl))
+        {
+            return bannerUrl;
+        }
+
+        return string.Empty;
     }
 
     private string? GenerateVoucherQrDataUri()
@@ -169,8 +214,29 @@
 
     private void ToggleFlip() => _isFlipped = !_isFlipped;
 
+    private void CloseFlip()
+    {
+        _isFlipped = false;
+    }
+
+    private void OpenFullscreen()
+    {
+        _isFullscreen = true;
+    }
+
+    private void CloseFullscreen()
+    {
+        _isFullscreen = false;
+    }
+
     private async Task HandleToggle(ChangeEventArgs args)
     {
-       /*TODO: Flip and show QR CODE and Human Readable CODE*/
+        ToggleFlip();
+
+        var selected = args.Value is bool boolValue && boolValue;
+        if (OnToggled.HasDelegate)
+        {
+            await OnToggled.InvokeAsync(selected);
+        }
     }
 }
