@@ -1,0 +1,83 @@
+﻿.toggle-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-row__switch {
+    flex: 0 0 auto;
+}
+
+.toggle__input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.toggle__track {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    transition: background 150ms ease, border-color 150ms ease;
+    cursor: pointer;
+}
+
+    .toggle__track::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 3px;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: left 150ms ease;
+    }
+
+.toggle__input:checked + .toggle__track {
+    background: var( --rentoom-green-dark);
+    border-color: var( --rentoom-green-sage);
+}
+
+    .toggle__input:checked + .toggle__track::after {
+        left: 22px;
+    }
+
+.toggle__input:focus-visible + .toggle__track {
+    outline: 3px solid rgba(59, 130, 246, 0.35);
+    outline-offset: 2px;
+}
+
+.toggle-row__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.toggle-row__text {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.85);
+    cursor: default;
+}
+
+.toggle-row__description {
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.6);
+    cursor: default;
+}
+
+.toggle__input:disabled + .toggle__track {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.toggle__input:disabled ~ .toggle-row__content {
+    opacity: 0.65;
+}

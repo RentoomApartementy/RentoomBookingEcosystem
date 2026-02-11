@@ -131,9 +131,10 @@ namespace RentoomBooking.StayWell.Models
                         RegistrationCardState.GetCardAsync(Token),
                         MediaState.GetMediaAsync(item.objectId),
                         ApartmentState.GetApartmentByIdAsync(item.objectId),
-                        //ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
+                        ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
                         AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
                         LocksState.GetLocksAsync(reservation.id, item.itemId)
+                        //LocksState.GetTTLockIdAsync(item.objectItemId)
                     );
                 IsInitializedSuccessfully = true;
             }
