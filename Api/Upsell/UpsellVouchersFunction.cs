@@ -156,7 +156,8 @@ public class UpsellVouchersFunction
             MaxUses = result.MaxUses,
             ReservationGuid = result.ReservationGuid,
             PartnerServiceId = result.PartnerServiceId,
-            TitleSnapshot = result.TitleSnapshot
+            TitleSnapshot = result.TitleSnapshot,
+            Voucher = result.Voucher
         };
     }
 

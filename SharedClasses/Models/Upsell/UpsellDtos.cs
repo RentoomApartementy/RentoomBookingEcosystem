@@ -60,6 +60,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public Guid ReservationGuid { get; set; }
         public int PartnerServiceId { get; set; }
         public string TitleSnapshot { get; set; } = string.Empty;
+        public UpsellVoucherDto? Voucher { get; set; }
     }
 
     public class UpsellPurchasedSummaryDto

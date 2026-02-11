@@ -139,7 +139,12 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                                          .ExecuteUpdateAsync(setters => setters
                                              .SetProperty(v => v.UsedCount, v => v.UsedCount + 1)
                                              .SetProperty(v => v.LastUsedAtUtc, v => now)
-                                             .SetProperty(v => v.UpdatedAt, v => now));
+                                              .SetProperty(v => v.UpdatedAt, v => now)
+                                             .SetProperty(
+                                                 v => v.Status,
+                                                 v => v.MaxUses.HasValue && v.UsedCount + 1 >= v.MaxUses.Value
+                                                     ? UpsellVoucherStatuses.Completed
+                                                     : v.Status));
             if (affected == 1)
             {
                 var refreshed = await FindByGuidAsync(context, voucher.UpsellVoucherGuid);
@@ -206,7 +211,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 MaxUses = voucher.MaxUses,
                 ReservationGuid = voucher.ReservationGuid,
                 PartnerServiceId = line.PartnerServiceId,
-                TitleSnapshot = line.TitleSnapshot
+                TitleSnapshot = line.TitleSnapshot,
+                Voucher = UpsellOrderMapper.MapVoucherToDto(voucher)
             };
         }
 
@@ -223,7 +229,9 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 MaxUses = voucher?.MaxUses,
                 ReservationGuid = voucher?.ReservationGuid ?? Guid.Empty,
                 PartnerServiceId = line?.PartnerServiceId ?? 0,
-                TitleSnapshot = line?.TitleSnapshot ?? string.Empty
+                TitleSnapshot = line?.TitleSnapshot ?? string.Empty,
+                Voucher = voucher is null ? null : UpsellOrderMapper.MapVoucherToDto(voucher)
+
             };
         }
 

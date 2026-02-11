@@ -58,7 +58,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             context.UpsellOrderRecords.Add(entity);
             await context.SaveChangesAsync(cancellationToken);
 
-            return MapToRecord(entity);
+            return UpsellOrderMapper.MapToRecord(entity);
         }
 
         public async Task<UpsellOrderRecord> CreateWithLinesAsync(UpsellOrderRequest request, IReadOnlyList<UpsellOrderLineRecord> lines, CancellationToken cancellationToken = default)
@@ -84,7 +84,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 return null;
             }
 
-            var record = MapToRecord(entity);
+            var record = UpsellOrderMapper.MapToRecord(entity);
             record.Lines = await GetLinesAsync(record.UpsellOrderGuid, cancellationToken);
             return record;
         }
@@ -125,9 +125,9 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             
             var linesByOrder = lineEntities
                 .GroupBy(l => l.UpsellOrderGuid)
-                .ToDictionary(g => g.Key, g => g.Select(MapLineToRecord).ToList()); // includes voucher mapping
+                .ToDictionary(g => g.Key, g => g.Select(UpsellOrderMapper.MapLineToRecord).ToList()); // includes voucher mapping
 
-            var records = orderEntities.Select(MapToRecord).ToList();
+            var records = orderEntities.Select(UpsellOrderMapper.MapToRecord).ToList();
             foreach (var r in records)
                 r.Lines = linesByOrder.GetValueOrDefault(r.UpsellOrderGuid, new List<UpsellOrderLineRecord>());
 
@@ -146,7 +146,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 .OrderBy(line => line.CreatedAt)
                 .ToListAsync(cancellationToken);
 
-            return entities.Select(MapLineToRecord).ToList();
+            return entities.Select(UpsellOrderMapper.MapLineToRecord).ToList();
         }
 
         public async Task UpdateAsync(UpsellOrderRecord record, CancellationToken cancellationToken = default)
@@ -187,7 +187,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 context.UpsellOrderLines.RemoveRange(existing);
             }
 
-            var entities = lines.Select(line => MapLineToEntity(upsellOrderGuid, line)).ToList();
+            var entities = lines.Select(line => UpsellOrderMapper.MapLineToEntity(upsellOrderGuid, line)).ToList();
             context.UpsellOrderLines.AddRange(entities);
             await context.SaveChangesAsync(cancellationToken);
         }
@@ -202,104 +202,10 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             var entity = await context.UpsellOrderRecords.AsNoTracking()
                 .FirstOrDefaultAsync(r => r.ProviderTransactionId == providerTransactionId, cancellationToken);
 
-            return entity is null ? null : MapToRecord(entity);
+            return entity is null ? null : UpsellOrderMapper.MapToRecord(entity);
         }
 
-        private static UpsellOrderRecord MapToRecord(UpsellOrderRecordEntity entity)
-        {
-            var state = string.IsNullOrWhiteSpace(entity.UpsellOrderJson)
-                ? new UpsellOrderState()
-                : JsonConvert.DeserializeObject<UpsellOrderState>(entity.UpsellOrderJson) ?? new UpsellOrderState();
-
-            return new UpsellOrderRecord
-            {
-                UpsellOrderGuid = entity.UpsellOrderGuid,
-                State = state,
-                Lines = new List<UpsellOrderLineRecord>(),
-                PaymentSessionGuid = entity.PaymentSessionGuid,
-                PaymentStatus = entity.PaymentStatus ?? Models.ReservationWorkflow.PaymentStatuses.None,
-                Provider = entity.Provider,
-                ProviderTransactionId = entity.ProviderTransactionId,
-                PaidAtUtc = entity.PaidAtUtc,
-                CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt
-            };
-        }
-
-        private static UpsellOrderLineRecord MapLineToRecord(UpsellOrderLineEntity entity)
-        {
-            return new UpsellOrderLineRecord
-            {
-                UpsellOrderLineGuid = entity.UpsellOrderLineGuid,
-                UpsellOrderGuid = entity.UpsellOrderGuid,
-                PartnerServiceId = entity.PartnerServiceId,
-                TitleSnapshot = entity.TitleSnapshot,
-                PricingModel = entity.PricingModel,
-                Quantity = entity.Quantity,
-                UnitPriceGross = entity.UnitPriceGross,
-                Nights = entity.Nights,
-                TotalGuests = entity.TotalGuests,
-                LineTotalGross = entity.LineTotalGross,
-                Currency = entity.Currency,
-                LineStatus = entity.LineStatus,
-                BitrixProductId = entity.BitrixProductId,
-                BitrixLineId = entity.BitrixLineId,
-                IsFreeUnlimitedUses = entity.IsFreeUnlimitedUses,
-                CreatedAt = entity.CreatedAt,
-                UpdatedAt = entity.UpdatedAt,
-                UpsellDefinitionSnapshot = entity.UpsellDefinitionSnapshot,
-                Voucher = entity.UpsellVoucher is null ? null : MapVoucherToDto(entity.UpsellVoucher)
-            };
-        }
-
-        private static UpsellOrderLineEntity MapLineToEntity(Guid upsellOrderGuid, UpsellOrderLineRecord line)
-        {
-            return new UpsellOrderLineEntity
-            {
-                UpsellOrderLineGuid = line.UpsellOrderLineGuid == Guid.Empty ? Guid.NewGuid() : line.UpsellOrderLineGuid,
-                UpsellOrderGuid = upsellOrderGuid,
-                PartnerServiceId = line.PartnerServiceId,
-                TitleSnapshot = line.TitleSnapshot,
-                PricingModel = line.PricingModel,
-                Quantity = line.Quantity,
-                UnitPriceGross = line.UnitPriceGross,
-                Nights = line.Nights,
-                TotalGuests = line.TotalGuests,
-                LineTotalGross = line.LineTotalGross,
-                Currency = line.Currency,
-                LineStatus = line.LineStatus,
-                BitrixProductId = line.BitrixProductId,
-                BitrixLineId = line.BitrixLineId,
-                IsFreeUnlimitedUses = line.IsFreeUnlimitedUses,
-                UpsellDefinitionSnapshot = line.UpsellDefinitionSnapshot,
-                CreatedAt = line.CreatedAt == default ? DateTime.UtcNow : line.CreatedAt,
-                UpdatedAt = DateTime.UtcNow
-            };
-        }
-
-        private static UpsellVoucherDto MapVoucherToDto(UpsellVoucherEntity voucher)
-        {
-            return new UpsellVoucherDto
-            {
-                VoucherGuid = voucher.UpsellVoucherGuid,
-                OrderLineGuid = voucher.UpsellOrderLineGuid,
-                ReservationGuid = voucher.ReservationGuid,
-                //PartnerServiceId = line.PartnerServiceId,
-                CodeShort = voucher.CodeShort,
-                QrToken =voucher.QrToken,
-                UsedCount = voucher.UsedCount,
-                MaxUses = voucher.MaxUses,
-                ValidFrom = voucher.ValidFrom,
-                ValidTo = voucher.ValidTo,
-                Status = voucher.Status,
-                //TitleSnapshot = line.TitleSnapshot,
-               // Currency = line.Currency
-            };
-        }
-
-
-
-        private async Task EnsureCreatedAsync()
+       private async Task EnsureCreatedAsync()
         {
             await using var context = _dbContextFactory.CreateDbContext();
             await context.Database.EnsureCreatedAsync();
