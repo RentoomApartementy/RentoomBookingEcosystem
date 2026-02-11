@@ -20,10 +20,10 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
+        public string? TTLockId { get; private set; }
+
         public async Task<List<Lock?>?> GetLocksAsync(int reservationId, int itemId)
         {
-            //if (_currentObjectId == objectId) return CurrentLocks;
-
             SetLoading(true);
             try
             {
@@ -32,13 +32,12 @@ namespace RentoomBooking.StayWell.States
                     ClearLocks();
                     return null;
                 }
-                var locks = await _backendApi.GetLocksAsync(reservationId,itemId);
+                var locks = await _backendApi.GetLocksAsync(reservationId, itemId);
                 if (locks == null) ClearLocks();
-                //_currentObjectId = objectId;
                 CurrentLocks = locks;
                 return CurrentLocks;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 ClearLocks();
@@ -50,6 +49,12 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
+        public async Task GetTTLockIdAsync(int apartmentItemId)
+        {
+            TTLockId = await _backendApi.GetLockCodeAsync(apartmentItemId);
+            Console.WriteLine(TTLockId);
+            NotifyStateChanged();
+        }
 
         public event Action? OnChange;
 
@@ -66,14 +71,12 @@ namespace RentoomBooking.StayWell.States
             NotifyStateChanged();
         }
 
-
         public void ClearLocks()
         {
             CurrentLocks = null;
             IsLoading = false;
+            TTLockId = null;
         }
         private void NotifyStateChanged() => OnChange?.Invoke();
-
-
     }
 }

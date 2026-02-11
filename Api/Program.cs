@@ -54,6 +54,8 @@ var postgresConnectionString = PostgresConnectionStringProvider
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
+builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("RentoomDbConnectionString")));
 
 var rentoomAppConnectionString = PostgresConnectionStringProvider
     .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
@@ -77,6 +79,7 @@ builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
 builder.Services.AddScoped<ApartmentRepository>();
 builder.Services.AddScoped<FiltersRepository>();
 builder.Services.AddScoped<TermsRepository>();
+builder.Services.AddScoped<RappQrMaintService>();
 builder.Services.AddScoped<RegistrationCardRepository>();
 builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();

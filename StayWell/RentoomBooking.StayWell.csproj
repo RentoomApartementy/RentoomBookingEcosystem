@@ -25,4 +25,11 @@
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Pages\AboutReservationPage.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
