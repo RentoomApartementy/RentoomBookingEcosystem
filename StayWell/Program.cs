@@ -38,6 +38,9 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<TermsState>();
             builder.Services.AddScoped<RegistrationCardState>();
 
+            //available upsells
+            builder.Services.AddScoped<AvailableUpsellsState>();
+
             builder.Services.AddHttpClient("FunctionsApi", c =>
             {
                 if (builder.HostEnvironment.IsDevelopment())
