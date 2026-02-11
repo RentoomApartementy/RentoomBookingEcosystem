@@ -87,6 +87,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 tiles.Add(new UpsellTileDto
                 {
                     PartnerPublicId = service.Partner?.PublicId.ToString() ?? string.Empty,
+                    PartnerPublicSlug = service.Partner?.Slug ?? string.Empty,
                     PartnerServiceId = service.Id,
                     PartnerServicePublicId = service.PublicServiceId.ToString() ?? string.Empty,
                     Title = translation?.Title ?? service.ServiceTitle,
@@ -108,6 +109,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
             return tiles;
         }
+
+
 
         internal static bool AppliesToApartment(PartnerService service, int apartmentId)
         {
