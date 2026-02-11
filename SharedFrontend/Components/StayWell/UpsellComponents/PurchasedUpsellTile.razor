@@ -231,8 +231,9 @@
 
     private string? GenerateVoucherQrDataUri()
     {
+        //TODO: podać url ze zmiennych środowiskowych lub z konfiguracji, zamiast hardcodować
         var code = Voucher?.QrToken ?? Voucher?.CodeShort;
-        var payload = !string.IsNullOrWhiteSpace(code) ? $"https://staywell.rentoom.com/partnerportal/{Tile.PartnerPublicId}/{Tile.PartnerPublicSlug}/{Tile.PartnerServicePublicId}" : null;
+        var payload = !string.IsNullOrWhiteSpace(code) ? $"https://staywell.rentoom.pl/partnerportal/{Tile.PartnerPublicId}/{Tile.PartnerPublicSlug}/{Tile.PartnerServicePublicId}?voucherToken={code}" : null;
         if (string.IsNullOrWhiteSpace(payload))
         {
             return null;
