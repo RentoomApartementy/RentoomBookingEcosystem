@@ -61,6 +61,8 @@
                     </div>
                     <div class="upsell-unit-info">@DisplayText</div>
                 </div>
+
+                <button type="button" class="tile-details-link" @onclick="ToggleDetails" @onclick:stopPropagation="true">Szczegóły</button>
                 
                 <label class="upsell-button">
                     <input type="checkbox" checked="@IsSelected" @onchange="HandleToggle" />
@@ -97,9 +99,61 @@
                 <button type="button" class="voucher-expand" @onclick="OpenFullscreen" @onclick:stopPropagation>
                     Powiększ
                 </button>
+
+                <button type="button" class="tile-details-link voucher-details-link" @onclick="ToggleDetails" @onclick:stopPropagation="true">
+                    Szczegóły
+                </button>
             </div>
         </div>
 
+    </div>
+
+    <div class="tile-details-overlay @(_showDetails ? "open" : string.Empty)" @onclick="CloseDetails">
+        <div class="tile-details-panel" @onclick:stopPropagation="true">
+            <div class="tile-details-header">
+                <span class="tile-details-title">Szczegóły</span>
+                <button type="button" class="tile-details-close" @onclick="CloseDetails" @onclick:stopPropagation="true">×</button>
+            </div>
+
+            <div class="tile-details-body">
+                @if (!string.IsNullOrWhiteSpace(Tile.LongDescription))
+                {
+                    <section class="tile-details-section">
+                        <h4>Opis</h4>
+                        <p>@Tile.LongDescription</p>
+                    </section>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Tile.Terms))
+                {
+                    <section class="tile-details-section">
+                        <h4>Warunki</h4>
+                        <p>@Tile.Terms</p>
+                    </section>
+                }
+
+                @if (HasPartnerAddress)
+                {
+                    <section class="tile-details-section">
+                        <h4>Adres</h4>
+                        @if (!string.IsNullOrWhiteSpace(Tile.PartnerInfo?.Name))
+                        {
+                            <p>@Tile.PartnerInfo.Name</p>
+                        }
+                        <p>@PartnerAddressLine</p>
+                    </section>
+                }
+
+                <section class="tile-details-section">
+                    <h4>Wykorzystanie vouchera</h4>
+                    <p>Status: @Voucher.Status</p>
+                    <p>Wykorzystano: @Voucher.UsedCount / @VoucherMaxUsesText</p>
+                    <p>@VoucherRemainingText</p>
+                    <p>Ważny od: @Voucher.ValidFrom.ToString("yyyy-MM-dd")</p>
+                    <p>Ważny do: @Voucher.ValidTo.ToString("yyyy-MM-dd")</p>
+                </section>
+            </div>
+        </div>
     </div>
 
     @if (_isFullscreen)
@@ -148,6 +202,7 @@
 
     private bool _isFlipped = false;
     private bool _isFullscreen;
+    private bool _showDetails;
     private string? _qrDataUri;
     private string _lastQrCacheKey = string.Empty;
     private string StayWellBannerUrl { get; set; } = string.Empty;
@@ -230,6 +285,7 @@
 
     private void OpenFullscreen()
     {
+        _showDetails = false;
         _isFullscreen = true;
     }
 
@@ -237,6 +293,48 @@
     {
         _isFullscreen = false;
     }
+
+    private void ToggleDetails()
+    {
+        if (!_showDetails && _isFullscreen)
+        {
+            CloseFullscreen();
+        }
+
+        _showDetails = !_showDetails;
+    }
+
+    private void CloseDetails()
+    {
+        _showDetails = false;
+    }
+
+    private bool HasPartnerAddress => !string.IsNullOrWhiteSpace(PartnerAddressLine);
+
+    private string PartnerAddressLine
+    {
+        get
+        {
+            if (Tile.PartnerInfo is null)
+            {
+                return string.Empty;
+            }
+
+            var parts = new[]
+            {
+                Tile.PartnerInfo.AddressLine,
+                $"{Tile.PartnerInfo.PostalCode} {Tile.PartnerInfo.City}".Trim()
+            };
+
+            return string.Join(", ", parts.Where(static part => !string.IsNullOrWhiteSpace(part)));
+        }
+    }
+
+    private string VoucherMaxUsesText => Voucher.MaxUses.HasValue ? Voucher.MaxUses.Value.ToString() : "Bez limitu";
+
+    private string VoucherRemainingText => Voucher.MaxUses.HasValue
+        ? $"Pozostało: {Math.Max(0, Voucher.MaxUses.Value - Voucher.UsedCount)} z {Voucher.MaxUses.Value}"
+        : "Pozostało: Bez limitu";
 
     private async Task HandleToggle(ChangeEventArgs args)
     {
