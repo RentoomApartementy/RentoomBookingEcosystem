@@ -1,4 +1,5 @@
 .upsell-tile-container {
+    position: relative;
     flex-shrink: 0;
     width: 260px;
     max-width: 300px;
@@ -148,6 +149,18 @@
     margin-top: 8px;
 }
 
+.tile-details-link {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-top: 6px;
+    align-self: flex-end;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #1f5a41;
+}
+
 .current-price {
     font-size: 1.2rem;
     font-weight: 800;
@@ -281,6 +294,91 @@
     font-weight: 600;
     cursor: pointer;
     align-self: center;
+}
+
+.voucher-details-link {
+    align-self: center;
+    margin-top: 0;
+}
+
+.tile-details-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+    z-index: 50;
+    border-radius: 12px;
+}
+
+.tile-details-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.tile-details-panel {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 12px;
+    transform: translateY(100%);
+    transition: transform 220ms ease;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.tile-details-overlay.open .tile-details-panel {
+    transform: translateY(0);
+}
+
+.tile-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.tile-details-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #222;
+}
+
+.tile-details-close {
+    border: none;
+    background: transparent;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #444;
+    padding: 0.15rem 0.35rem;
+}
+
+.tile-details-body {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0;
+}
+
+.tile-details-section h4 {
+    margin: 0 0 4px;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.tile-details-section p {
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: #444;
 }
 
 .voucher-overlay {
