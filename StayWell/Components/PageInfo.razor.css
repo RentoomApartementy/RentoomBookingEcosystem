@@ -2,18 +2,21 @@
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 0px;
+    gap: 2px;
+    margin-bottom: 12px;
 }
 
 .title {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: clamp(1.55rem, 4vw, 1.9rem);
+    font-weight: 700;
     text-align: center;
+    color: var(--sw-primary-strong);
+    letter-spacing: 0.01em;
 }
 
 .subtitle {
     font-size: 1rem;
-/*    line-height: 1.5rem;*/
-    color: gray;
+    color: var(--sw-text-muted);
     text-align: center;
+    line-height: 1.55;
 }

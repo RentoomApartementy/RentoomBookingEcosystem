@@ -1,17 +1,20 @@
 ﻿.reservation-info {
     width: 100%;
     display: flex;
-    padding: 0.75rem;
+    padding: 0.9rem;
     flex-direction: column;
-    gap: 0.2rem;
-    width: 100%;
+    gap: 0.45rem;
+    border-radius: var(--sw-radius-md);
+    border: 1px solid rgba(47, 95, 61, 0.14);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.92) 0%, rgba(243, 248, 237, 0.9) 100%);
+    box-shadow: 0 10px 24px rgba(36, 74, 48, 0.1);
 }
 
 .apartment-name {
-    font-size: 1.2rem;
+    font-size: 1.18rem;
     font-weight: 700;
     line-height: 1.3;
-    color: #000;
+    color: var(--sw-text);
     margin-left: 3px;
 }
 
@@ -19,20 +22,22 @@
     display: flex;
     align-items: center;
     font-size: 0.875rem;
-    color: #666;
-}
-.address {
-    font-weight: 500;
-    color: grey;
-    margin-left: 5px;
-    font-size: 1rem;
+    color: var(--sw-text-muted);
 }
 
-    .address-wrapper img {
-        width: 1.5rem;
-        height: 1.5rem;
-        flex-shrink: 0;
-    }
+.address {
+    font-weight: 500;
+    color: var(--sw-text-muted);
+    margin-left: 6px;
+    font-size: 0.95rem;
+}
+
+.address-wrapper img {
+    width: 1.35rem;
+    height: 1.35rem;
+    flex-shrink: 0;
+    filter: brightness(0) saturate(100%) invert(27%) sepia(16%) saturate(727%) hue-rotate(84deg) brightness(90%) contrast(88%);
+}
 
 .dates-wrapper {
     display: flex;
@@ -40,57 +45,54 @@
     font-size: 0.875rem;
 }
 
-    .dates-wrapper img {
-        width: 1.6rem;
-        height: 1.6rem;
-        flex-shrink: 0;
-    }
+.dates-wrapper img {
+    width: 1.4rem;
+    height: 1.4rem;
+    flex-shrink: 0;
+    filter: brightness(0) saturate(100%) invert(45%) sepia(23%) saturate(614%) hue-rotate(356deg) brightness(88%) contrast(88%);
+}
+
+.check-in,
+.check-out {
+    margin-top: 2px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
 
 .check-in {
-    margin-left: 5px;
-    margin-top: 2px;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+    margin-left: 8px;
     flex: 3;
-    line-height: 0.8;
 }
+
 .check-out {
-    margin-left: 10px;
-    margin-top: 2px;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+    margin-left: 12px;
     flex: 1;
-    line-height: 0.8;
 }
 
-    .check-in span:first-child,
-    .check-out span:first-child {
-        font-size: 0.875rem;
-        font-weight: 400;
-        color: grey;
-        line-height: 0.8;
-    }
+.check-in span:first-child,
+.check-out span:first-child {
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: #607061;
+}
 
-    .check-in span:last-child,
-    .check-out span:last-child {
-        font-size: 0.75rem;
-        font-weight: 200;
-        color: grey;
-        line-height: 1.2;
-    }
+.check-in span:last-child,
+.check-out span:last-child {
+    font-size: 0.76rem;
+    font-weight: 400;
+    color: #7b8a7b;
+    line-height: 1.2;
+}
 
 @media (max-width: 768px) {
     .reservation-info {
         width: 100%;
         padding: 0.75rem;
-        padding-top: 0;
-        padding-left: 0;
     }
 
     .dates-wrapper img {
-        width: 1.75rem;
-        height: 1.75rem;
+        width: 1.55rem;
+        height: 1.55rem;
     }
 }
