@@ -5,7 +5,7 @@ namespace RentoomBooking.StayWell.States
 {
     public class AvailableUpsellsState(BackendApi backendApi)
     {
-        private static readonly TimeSpan CacheTtl = TimeSpan.FromMinutes(10); //<<-- zeby nie sciagal za kazdym razem wejsca na page.
+        private static readonly TimeSpan CacheTtl = TimeSpan.FromSeconds(1); //<<-- zeby nie sciagal za kazdym razem wejsca na page.
 
         private readonly BackendApi _backendApi = backendApi;
         private readonly SemaphoreSlim _loadLock = new(1, 1);

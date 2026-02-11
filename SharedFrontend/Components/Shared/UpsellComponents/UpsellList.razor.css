@@ -110,6 +110,17 @@
 }
 
 @media (max-width: 768px) {
+    .upsell-nav-buttons {
+        display: none !important;
+    }
+    .rentoom-theme .upsell-list-scroll-wrapper {
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: visible;
+        padding: 10px 0;
+        gap: 12px;
+    }
+
     .rentoom-theme .upsell-section-container {
         padding: 15px;
         width: 95%; 
@@ -126,6 +137,160 @@
 
     .rentoom-theme .nav-btn {
         width: 32px; 
+        height: 32px;
+        margin-left: 6px;
+    }
+}
+
+/*staywell Theme*/
+.staywell-theme {
+    --border: #e5e7eb;
+    --foreground: #111827;
+    --muted-foreground: #6b7280;
+    --success-rgb: 31 90 65; /* #1F5A41 */
+}
+
+.upsell-outer-wrapper.staywell-theme {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    background-color: transparent;
+}
+
+.staywell-theme .upsell-section-container {
+    width: 95%;
+    max-width: 980px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.staywell-theme .upsell-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.staywell-theme .upsell-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: calc(100% - 90px);
+}
+
+.staywell-theme .upsell-icon {
+    background: #c8ffc8;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.staywell-theme .upsell-main-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.staywell-theme .upsell-subtitle {
+    font-size: 0.65rem;
+    color: #666;
+    margin: 0;
+}
+
+.staywell-theme .upsell-nav-buttons {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.staywell-theme .nav-btn {
+    border: 1px solid #e0e0e0;
+    background: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .staywell-theme .nav-btn:hover {
+        background: #f8f9fa;
+        border-color: #ccc;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+.staywell-theme .upsell-list-scroll-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 22px;
+    overflow-x: auto;
+    padding: 5px 2px 10px 2px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+    .staywell-theme .upsell-list-scroll-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+.staywell-theme .additional-price {
+    margin-top: 10px;
+    padding: 10px 10px 0 10px;
+    text-align: right;
+    font-size: 0.95rem;
+    color: #1F5A41;
+    border-top: 1px solid #f0f0f0;
+}
+
+    .staywell-theme .additional-price b {
+        font-weight: 700;
+    }
+
+@media (max-width: 768px) {
+    .upsell-nav-buttons {
+        display: none !important;
+    }
+
+    .staywell-theme .upsell-list-scroll-wrapper {
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: visible;
+        padding: 10px 0;
+        gap: 12px;
+    }
+
+
+    .staywell-theme .upsell-section-container {
+        padding: 15px;
+        width: 95%;
+        box-shadow: none;
+    }
+
+    .staywell-theme .upsell-main-title {
+        font-size: 0.95rem;
+    }
+
+    .staywell-theme .upsell-subtitle {
+        font-size: 0.6rem;
+    }
+
+    .staywell-theme .nav-btn {
+        width: 32px;
         height: 32px;
         margin-left: 6px;
     }

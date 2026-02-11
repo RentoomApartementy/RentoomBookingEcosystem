@@ -433,21 +433,21 @@
 
 /* --- Theme Styles --- */
 
-.staywell-theme.is-selected .upsell-card-front,
-.staywell-theme.is-selected .upsell-card-back {
+.rentoom-theme.is-selected .upsell-card-front,
+.rentoom-theme.is-selected .upsell-card-back {
     border: 2px solid #1F5A41;
 }
 
-.staywell-theme .upsell-button {
+.rentoom-theme .upsell-button {
     background: #945F28;
     color: #fff;
 }
 
-.staywell-theme.is-selected .upsell-button {
+.rentoom-theme.is-selected .upsell-button {
     background: #dc3545;
 }
 
-.staywell-theme .upsell-button {
+.rentoom-theme .upsell-button {
     display: block;
     margin-top: 12px;
     width: 100%;

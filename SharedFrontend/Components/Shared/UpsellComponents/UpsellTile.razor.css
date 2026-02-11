@@ -1,4 +1,5 @@
 .upsell-tile-container {
+    position: relative; /*MS*/
     flex-shrink: 0;
     width: 260px;
     max-width: 300px;
@@ -218,6 +219,12 @@
     border: 2px solid #FF8C00;
 }
 
+.staywell-theme.is-not-selected .upsell-card-front,
+.staywell-theme.is-not-selected .upsell-card-back {
+    border: 2px solid #b0b0b0;
+}
+
+
 .staywell-theme .upsell-button {
     background: linear-gradient(90deg, #FFB347 0%, #FF8C00 100%);
     color: #000;
@@ -228,8 +235,15 @@
     color: #fff;
 }
 
-@media (max-width: 600px) {
-    .upsell-tile-container {
+@media (max-width: 768px) {
+  .staywell-theme.upsell-tile-container {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        height: 420px;
+    }
+
+    .rentoom-theme.upsell-tile-container {
         width: 240px;
         margin: 0 auto;
         height: 360px;
