@@ -303,7 +303,7 @@
 
 .tile-details-overlay {
     position: absolute;
-    inset: 0;
+    inset: 2px;
     display: flex;
     align-items: flex-end;
     background: rgba(0, 0, 0, 0.35);
@@ -311,7 +311,8 @@
     pointer-events: none;
     transition: opacity 180ms ease;
     z-index: 50;
-    border-radius: 12px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .tile-details-overlay.open {
@@ -323,7 +324,7 @@
     width: 100%;
     height: 100%;
     background: #fff;
-    border-radius: 12px;
+    border-radius: 10px;
     transform: translateY(100%);
     transition: transform 220ms ease;
     padding: 12px;
@@ -361,6 +362,7 @@
 }
 
 .tile-details-body {
+    flex:1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
