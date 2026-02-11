@@ -12,7 +12,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServic
     public class Partner
     {
         public int Id { get; set; }
-        public Guid PublicId { get; private set; } = Guid.NewGuid();
+        public Guid PublicId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Slug { get; set; } = string.Empty;
         public PartnerStatus Status { get; set; }

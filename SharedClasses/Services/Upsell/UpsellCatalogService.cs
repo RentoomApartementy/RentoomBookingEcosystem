@@ -102,8 +102,20 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     IsPersonalizable = service.IsPersonalizable,
                     LongDescription = translation?.LongDescription,
                     Terms = translation?.Terms,
-                   // PartnerServiceInfo = PartnerServiceMappings.ToDto(service)
-                    //TODO: add Partner Information to the tile (like logo, name, etc) if needed, currently we only have PartnerPublicId which is not enough to get that information without another call to the database
+                    PartnerInfo = new PartnerInfoDto
+                    {
+                        Name = service.Partner.Name,
+                        AddressLine = service.Partner.AddressLine,
+                        City = service.Partner.City,
+                        ContactEmail = service.Partner.ContactEmail,
+                        ContactPhone = service.Partner.ContactPhone,
+                        Country = service.Partner.Country,
+                        Id = service.Partner.Id,
+                        LogoBannerUrl = service.Partner.LogoBannerMediaAsset?.StorageKey,
+                        PostalCode = service.Partner.PostalCode,
+                        PublicId = service.Partner.PublicId,
+                        Slug = service.Partner.Slug,
+                    }
                 });
             }
 

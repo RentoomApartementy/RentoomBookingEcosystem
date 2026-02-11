@@ -32,16 +32,25 @@
 
             <div class="upsell-content">
                 <div class="click-area" @onclick="ToggleFlip">
+                   
                     <h3 class="upsell-title">@Tile.Title</h3>
                     <p class="upsell-description">@Tile.ShortDescription</p>
-
+                    <div class="upsell-partner-info upsell-unit-info">
+                        @if (Tile.PartnerInfo != null)
+                        {
+                            <span>@Tile.PartnerInfo.Name</span>
+                            <span>@Tile.PartnerInfo.PostalCode @Tile.PartnerInfo.City, @Tile.PartnerInfo.AddressLine</span>
+                            <span>@Tile.PartnerInfo.ContactPhone</span>
+                        }
+                    </div>
                     <div class="upsell-context">
                         <span>@Context.Nights @Texts.NightsText</span>
                         <span class="separator">•</span>
                         <span>@Context.TotalGuests @Texts.GuestsText</span>
                     </div>
                 </div>
-
+                
+                
                 <div class="upsell-pricing">
                     <div class="upsell-total">
                         <span class="current-price">@Total.ToString("F2") @Currency</span>

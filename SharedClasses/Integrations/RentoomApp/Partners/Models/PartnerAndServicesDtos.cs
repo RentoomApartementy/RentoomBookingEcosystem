@@ -8,6 +8,22 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models
 {
+
+    public class PartnerInfoDto
+    {
+        public int Id { get; set; }
+        public Guid PublicId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Slug { get; set; } = string.Empty;
+        public string? ContactEmail { get; set; }
+        public string? ContactPhone { get; set; }
+        public string? AddressLine { get; set; }
+        public string? City { get; set; }
+        public string? Region { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Country { get; set; }
+        public string? LogoBannerUrl { get; set; }
+    }
     public class PartnerServiceSnapshot
     {
         public int Id { get; set; }
