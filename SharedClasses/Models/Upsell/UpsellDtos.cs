@@ -28,6 +28,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public PartnerServiceDiscountType PricingDiscountType { get; set; }
         public bool IsPersonalizable { get; set; }
         public string PartnerPublicSlug { get; set; } = string.Empty;
+        public PartnerInfoDto? PartnerInfo {get;set;}
 
         // public PartnerServiceSnapshot PartnerServiceInfo { get; set; } 
 
