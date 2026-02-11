@@ -5,7 +5,7 @@ namespace RentoomBooking.StayWell.States
 {
     public class AvailableUpsellsState(BackendApi backendApi)
     {
-        private static readonly TimeSpan CacheTtl = TimeSpan.FromMinutes(10);
+        private static readonly TimeSpan CacheTtl = TimeSpan.FromMinutes(10); //<<-- zeby nie sciagal za kazdym razem wejsca na page.
 
         private readonly BackendApi _backendApi = backendApi;
         private readonly SemaphoreSlim _loadLock = new(1, 1);
@@ -16,7 +16,7 @@ namespace RentoomBooking.StayWell.States
         public string? Error { get; private set; }
         public string? CurrentToken { get; private set; }
         public DateTime? LastLoadedAtUtc { get; private set; }
-        public IReadOnlyList<UpsellTileDto> AvailableUpsells { get; private set; } = Array.Empty<UpsellTileDto>();
+        public IReadOnlyList<UpsellTileDto> AvailableUpsells { get; set; } = Array.Empty<UpsellTileDto>();
 
         public event Action? OnChange;
 
@@ -61,7 +61,7 @@ namespace RentoomBooking.StayWell.States
                 // BackendApi method currently does not expose CancellationToken.
                 var response = await _backendApi.GetAvailableUpsellsByReservationTokenAsync(token, normalizedLocale);
 
-                AvailableUpsells = response?.Available ?? Array.Empty<UpsellTileDto>();
+                AvailableUpsells = response?.Available.ToArray() ?? Array.Empty<UpsellTileDto>();
                 CurrentToken = token;
                 _currentLocale = normalizedLocale;
                 LastLoadedAtUtc = DateTime.UtcNow;
