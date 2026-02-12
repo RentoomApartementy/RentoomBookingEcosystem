@@ -11,8 +11,8 @@ namespace RentoomBooking.SharedClasses.Models.Upsell.StayWell
     {
         public Guid ReservationGuid { get; set; }
         public ReservationPricingContext Context { get; set; } = new();
-        public List<UpsellOfferDto> Available { get; set; } = new();
-        public Dictionary<int, int>? AlreadyPurchased { get; set; }
+        public List<UpsellTileDto> Available { get; set; } = new();
+        //public Dictionary<int, int>? AlreadyPurchased { get; set; }
     }
 
     public class UpsellOfferDto : UpsellTileDto

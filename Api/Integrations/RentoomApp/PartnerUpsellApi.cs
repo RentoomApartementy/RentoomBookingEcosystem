@@ -18,10 +18,11 @@ public class PartnerUpsellApi
         _logger = logger;
         _upsellCatalogService = upsellCatalogService;
     }
-
+    //* to be depracated - GetReservationAvailableUpsells should be used instead as it goes via reservationGuid
+  
     [Function("GetAvailableUpsellServicesForApartmentItemId")]
     public async Task<HttpResponseData> GetListOfUpsellServices(
-             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "upsell/{apartmentItemId:int}/{locale}")] HttpRequestData req, int apartmentItemId,string locale)
+             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "apartment/availableupsells/{apartmentItemId:int}/{locale}")] HttpRequestData req, int apartmentItemId,string locale)
     {
         var cancellationToken = req.FunctionContext.CancellationToken;
         var response = req.CreateResponse();

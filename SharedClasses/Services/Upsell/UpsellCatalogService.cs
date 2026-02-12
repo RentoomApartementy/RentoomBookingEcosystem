@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
@@ -86,6 +87,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 tiles.Add(new UpsellTileDto
                 {
                     PartnerPublicId = service.Partner?.PublicId.ToString() ?? string.Empty,
+                    PartnerPublicSlug = service.Partner?.Slug ?? string.Empty,
                     PartnerServiceId = service.Id,
                     PartnerServicePublicId = service.PublicServiceId.ToString() ?? string.Empty,
                     Title = translation?.Title ?? service.ServiceTitle,
@@ -98,13 +100,29 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     StayBoundOnly = service.StayBoundOnly,
                     PricingModel = service.PricingModel,
                     IsPersonalizable = service.IsPersonalizable,
-
-                   
+                    LongDescription = translation?.LongDescription,
+                    Terms = translation?.Terms,
+                    PartnerInfo = new PartnerInfoDto
+                    {
+                        Name = service.Partner.Name,
+                        AddressLine = service.Partner.AddressLine,
+                        City = service.Partner.City,
+                        ContactEmail = service.Partner.ContactEmail,
+                        ContactPhone = service.Partner.ContactPhone,
+                        Country = service.Partner.Country,
+                        Id = service.Partner.Id,
+                        LogoBannerUrl = service.Partner.LogoBannerMediaAsset?.StorageKey,
+                        PostalCode = service.Partner.PostalCode,
+                        PublicId = service.Partner.PublicId,
+                        Slug = service.Partner.Slug,
+                    }
                 });
             }
 
             return tiles;
         }
+
+
 
         internal static bool AppliesToApartment(PartnerService service, int apartmentId)
         {

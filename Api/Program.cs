@@ -18,6 +18,7 @@ using RentoomBooking.SharedClasses.Integrations.RentoomApp;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
+using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -99,6 +100,8 @@ builder.Services.AddScoped<CustomerTermsService>();
 
 bool UseDevelopmentSettingsOnProd = true;
 var TpaySection = UseDevelopmentSettingsOnProd ?builder.Configuration.GetSection("TpayDev"): builder.Configuration.GetSection("Tpay");
+
+builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
 
 builder.Services.Configure<TpaySettings>(TpaySection);
 

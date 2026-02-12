@@ -8,18 +8,15 @@ using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
-using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
-using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
-using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services;
 using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
 using RentoomBookingWeb.Services;
@@ -98,8 +95,11 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixService>();
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<MediaCacheService>();
-            
-            
+
+
+            builder.Services.AddScoped<IPaymentFlowHandler, ReservationPaymentFlowHandler>();
+            builder.Services.AddScoped<IPaymentFlowHandler, UpsellPaymentFlowHandler>();
+            builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
             //Customer Terms
             builder.Services.AddScoped<CustomerTermsRepository>();
             builder.Services.AddScoped<CustomerTermsService>();

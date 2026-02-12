@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.SharedClasse
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentoomBooking.StayWell", "StayWell\RentoomBooking.StayWell.csproj", "{34705C9D-DF8F-2680-5A79-BD24397458D8}"
 	ProjectSection(ProjectDependencies) = postProject
+		{2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE} = {2A5E4D4B-27AC-A1E1-32D5-4D850933D1CE}
 		{9B0C2631-46E6-09C7-09A6-9CD2AEB71D84} = {9B0C2631-46E6-09C7-09A6-9CD2AEB71D84}
 	EndProjectSection
 EndProject

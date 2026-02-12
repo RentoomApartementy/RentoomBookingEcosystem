@@ -5,7 +5,9 @@ using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
+using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
@@ -19,7 +21,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using RentoomBooking.SharedClasses.Models;
 
 namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 {
@@ -187,7 +188,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                         Nights = pricingContext.Nights,
                         TotalGuests = pricingContext.TotalGuests,
                         LineTotalGross = lineTotal,
-                        DisplayText = $"Cena: {tile.Price} {tile.Currency}"
+                        DisplayText = $"{tile.Price} {tile.Currency}"
                     });
 
                     upsellsTotal += lineTotal;
@@ -502,7 +503,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                     TotalGuests = pricingContext.TotalGuests,
                     LineTotalGross = lineTotal,
                     Currency = request.Currency ?? "PLN",
-                    LineStatus = UpsellLineStatuses.Paid
+                    LineStatus = UpsellLineStatuses.Paid,
+                    UpsellDefinitionSnapshot = tile
                 });
             }
 

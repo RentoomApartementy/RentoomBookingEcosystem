@@ -1,0 +1,99 @@
+﻿@page "/reservation/{Token}/Vouchers"
+@page "/reservation/{Token}/VouchersPage"
+@using System.Globalization
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
+@using RentoomBooking.StayWell.States
+@inject AvailableUpsellsState AvailableUpsellsState
+@inject NavigationManager Navigation
+
+@inherits Models.PageBase
+
+@if (AvailableUpsellsState.IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrWhiteSpace(AvailableUpsellsState.Error))
+{
+    <p>@AvailableUpsellsState.Error</p>
+}
+else if (AvailableUpsellsState.AvailableUpsells.Count == 0)
+{
+    <p>Brak dostępnych dodatków</p>
+}
+else
+{
+    <UpsellList AvailableUpsellsList="AvailableUpsellsState.AvailableUpsells"
+                ReservationContext="_reservationContext"
+                Theme="staywell-theme"
+                Texts="_texts"
+                OnSelectionChanged="HandleSelectionChanged" />
+}
+
+@code {
+    private List<SelectedUpsellDto> _selectedUpsells = new();
+    private ReservationPricingContext _reservationContext = new();
+
+    private readonly UpsellTextConfig _texts = new()
+    {
+        Title = "Vouchery",
+        SubTitle = "Dostępne dodatki do kupienia"
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (string.IsNullOrWhiteSpace(Token))
+        {
+            return;
+        }
+
+        var locale = string.IsNullOrWhiteSpace(CultureInfo.CurrentUICulture.Name)
+            ? "pl"
+            : CultureInfo.CurrentUICulture.Name;
+
+        _reservationContext = BuildReservationPricingContext();
+        await AvailableUpsellsState.EnsureLoadedAsync(Token, locale);
+    }
+
+    private ReservationPricingContext BuildReservationPricingContext()
+    {
+        var reservation = ReservationState.CurrentReservation?.Reservation;
+        var reservationDetails = reservation?.ReservationDetails;
+        var firstItem = reservation?.Items?.FirstOrDefault();
+
+        var fromDateTime = reservationDetails?.getDateFrom() ?? DateTime.Today;
+        var toDateTime = reservationDetails?.getDateTo() ?? fromDateTime;
+
+        var adults = firstItem?.numberOfAdults ?? 0;
+        var childrenRaw = firstItem?.numberOfSmallChildren;
+        var children = int.TryParse(childrenRaw, out var parsedChildren) ? parsedChildren : 0;
+
+        var currency = reservationDetails?.currency;
+        if (string.IsNullOrWhiteSpace(currency))
+        {
+            currency = reservation?.Client?.Currency;
+        }
+
+        if (string.IsNullOrWhiteSpace(currency))
+        {
+            currency = "PLN";
+        }
+
+        return new ReservationPricingContext
+        {
+            StartDate = DateOnly.FromDateTime(fromDateTime),
+            EndDate = DateOnly.FromDateTime(toDateTime),
+            Adults = adults,
+            Children = children,
+            Currency = currency
+        };
+    }
+
+    private void HandleSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
+    {
+        _selectedUpsells = selectedUpsells;
+    }
+}

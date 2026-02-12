@@ -1,0 +1,486 @@
+.upsell-tile-container {
+    position: relative;
+    flex-shrink: 0;
+    width: 260px;
+    max-width: 300px;
+    height: 380px;
+    perspective: 1200px;
+    background-color: transparent;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.upsell-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.upsell-card-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.upsell-card-front,
+.upsell-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    background-color: #fff;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    transform: translateZ(0);
+}
+
+.upsell-card-back {
+    transform: rotateY(180deg) translateZ(0);
+}
+
+.upsell-back-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    padding: 12px;
+}
+
+.upsell-back-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.upsell-back-description {
+    display: flex;
+    gap: .2rem;
+    flex-direction: column;
+    font-size: 0.85rem;
+}
+
+.upsell-back-description-title {
+    font-weight: 500;
+}
+
+.upsell-header {
+    position: relative;
+    height: 140px;
+    width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.upsell-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upsell-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #1F5A41;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.75rem;
+    z-index: 2;
+}
+
+.upsell-details-overlay {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    backdrop-filter: blur(4px);
+}
+
+.upsell-content {
+    padding: 12px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.click-area {
+    cursor: pointer;
+    flex-grow: 1;
+}
+
+.upsell-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: #222;
+}
+
+.upsell-description {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.3;
+    margin-bottom: 4px;
+}
+
+.upsell-context {
+    display: flex;
+    gap: 6px;
+    color: #777;
+    font-size: 0.75rem;
+    margin-top: auto;
+    padding-top: 8px;
+}
+
+.upsell-pricing {
+    margin-top: 8px;
+}
+
+.tile-details-link {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-top: 6px;
+    align-self: flex-end;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #1f5a41;
+}
+
+.current-price {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #222;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #aaa;
+    margin-left: 6px;
+    font-size: 0.9rem;
+}
+
+.upsell-unit-info {
+    font-size: 0.7rem;
+    color: #999;
+}
+
+.upsell-button {
+    display: block;
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.upsell-button input {
+    display: none;
+}
+
+/* Voucher UI */
+.voucher-back {
+    justify-content: flex-start;
+    gap: 0.75rem;
+}
+
+.voucher-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.voucher-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.voucher-close,
+.voucher-overlay-close {
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #444;
+    padding: 0.15rem 0.35rem;
+}
+
+.voucher-code {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+}
+
+.voucher-code-label {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.voucher-code-value {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #222;
+    word-break: break-word;
+}
+
+.voucher-qr-wrap,
+.voucher-overlay-qr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.voucher-qr {
+    display: block;
+    width: min(80%, 190px);
+    max-width: 190px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.voucher-qr.big {
+    width: min(85%, 320px);
+    max-width: 320px;
+}
+
+.voucher-qr-placeholder {
+    width: min(80%, 190px);
+    max-width: 190px;
+    aspect-ratio: 1 / 1;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.voucher-expand {
+    border: none;
+    border-radius: 999px;
+    background: #1f5a41;
+    color: #fff;
+    padding: 0.55rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: center;
+}
+
+.voucher-details-link {
+    align-self: center;
+    margin-top: 0;
+}
+
+.tile-details-overlay {
+    position: absolute;
+    inset: 2px;
+    display: flex;
+    align-items: flex-end;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+    z-index: 50;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tile-details-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.tile-details-panel {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    transform: translateY(100%);
+    transition: transform 220ms ease;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.tile-details-overlay.open .tile-details-panel {
+    transform: translateY(0);
+}
+
+.tile-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.tile-details-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #222;
+}
+
+.tile-details-close {
+    border: none;
+    background: transparent;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #444;
+    padding: 0.15rem 0.35rem;
+}
+
+.tile-details-body {
+    flex:1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0;
+}
+
+.tile-details-section h4 {
+    margin: 0 0 4px;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.tile-details-section p {
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: #444;
+}
+
+.voucher-overlay {
+    --staywell-header-h: 64px;
+    --staywell-footer-h: 76px;
+    position: fixed;
+    z-index: 1100;
+    left: 0;
+    right: 0;
+    top: var(--staywell-header-h);
+    bottom: var(--staywell-footer-h);
+    background: rgba(0, 0, 0, 0.58);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.voucher-overlay-panel {
+    width: min(92vw, 420px);
+    max-height: 100%;
+    overflow: auto;
+    background: #fff;
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+.voucher-overlay-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.voucher-overlay-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.voucher-overlay-hint {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #666;
+    text-align: center;
+}
+
+/* --- Theme Styles --- */
+
+.rentoom-theme.is-selected .upsell-card-front,
+.rentoom-theme.is-selected .upsell-card-back {
+    border: 2px solid #1F5A41;
+}
+
+.rentoom-theme .upsell-button {
+    background: #945F28;
+    color: #fff;
+}
+
+.rentoom-theme.is-selected .upsell-button {
+    background: #dc3545;
+}
+
+.rentoom-theme .upsell-button {
+    display: block;
+    margin-top: 12px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 9999px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.staywell-theme.is-selected .upsell-card-front,
+.staywell-theme.is-selected .upsell-card-back {
+    border: 2px solid #FF8C00;
+}
+
+.staywell-theme .upsell-button {
+    background: linear-gradient(90deg, #FFB347 0%, #FF8C00 100%);
+    color: #000;
+}
+
+.staywell-theme.is-selected .upsell-button {
+    background: #333;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .upsell-tile-container {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        height: 420px;
+    }
+}

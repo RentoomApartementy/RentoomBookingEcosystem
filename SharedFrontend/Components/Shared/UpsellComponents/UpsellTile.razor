@@ -2,7 +2,7 @@
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums
 @using RentoomBooking.SharedClasses.Models.Upsell
 
-<div class="upsell-tile-container @Theme @(IsSelected ? "is-selected" : "")">
+<div class="upsell-tile-container @Theme @(IsSelected ? "is-selected" : "is-not-selected")">
     <div class="upsell-card-inner @(_isFlipped ? "is-flipped" : "")">
         
         <div class="upsell-card-front">
@@ -63,13 +63,19 @@
                 <span class="upsell-back-title">@Tile.Title</span>
                 <div class="upsell-back-description">
                     <span class="upsell-back-description-title">@Texts.DescriptionText</span>
-                    <span class="upsell-back-description-sub-title">@Tile.ShortDescription</span>
+                    <span class="upsell-back-description-sub-title">@Tile.LongDescription</span>
                 </div>
                 
                 <div class="upsell-back-description">
                     <span class="upsell-back-description-title">@Texts.TermsTitleText</span>
-                    <span class="upsell-back-description-sub-title">@Texts.TermsDescriptionText</span>
+                    <span class="upsell-back-description-sub-title">@Tile.Terms</span>
                 </div>
+
+                <div class="upsell-back-description">
+                    <span class="upsell-back-description-title">Link</span>
+                    <span class="upsell-back-description-sub-title">@Tile.PartnerPublicId/@Tile.PartnerPublicSlug</span>
+                </div>
+
             </div>
         </div>
 

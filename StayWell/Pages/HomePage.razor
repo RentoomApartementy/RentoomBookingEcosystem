@@ -3,7 +3,6 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking
-@using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
 @inject IStringLocalizer<HomePage> Localizer
@@ -51,6 +50,19 @@
             <img src="/icons/hand-coins.svg" alt="ClubPage">
         </Icon>
     </Button>
+
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage"))" Text="Twoje Vouchery" BenefitsClub=true>
+        <Icon>
+            <img src="/icons/hand-coins.svg" alt="ClubPage">
+        </Icon>
+    </Button>
+
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/Vouchers"))" Text="Vouchery" BenefitsClub=true>
+        <Icon>
+            <img src="/icons/hand-coins.svg" alt="ClubPage">
+        </Icon>
+    </Button>
+
 
     <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage"))" Text="@Localizer["Instructions"]">
         <Icon>
