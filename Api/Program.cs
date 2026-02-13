@@ -15,6 +15,7 @@ using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
@@ -61,6 +62,9 @@ var rentoomAppConnectionString = PostgresConnectionStringProvider
 builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
 
+builder.Services.AddDbContextFactory<RappInstructionsDbContext>(options =>
+    options.UseNpgsql(rentoomAppConnectionString));
+
 
 builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoSellService>();
@@ -95,6 +99,9 @@ builder.Services.AddScoped<BitrixService>();
 //Customer Terms
 builder.Services.AddScoped<CustomerTermsRepository>();
 builder.Services.AddScoped<CustomerTermsService>();
+
+//arrival instructions
+builder.Services.AddScoped<ArrivalInstructionsService>();
 
 //TPAY
 

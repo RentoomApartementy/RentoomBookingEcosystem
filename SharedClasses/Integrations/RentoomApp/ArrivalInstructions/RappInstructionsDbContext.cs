@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions
 {
-    internal class RappInstructionsDbContext: DbContext
+    public class RappInstructionsDbContext: DbContext
     {
         public RappInstructionsDbContext(DbContextOptions<RappInstructionsDbContext> options) : base(options) { }
-        public DbSet<ApartmentArrivalInstructionStep> ArivalInstructions { get; set; }
+        public DbSet<ApartmentArrivalInstructionStep> ArrivalInstructions { get; set; }
     }
 }
