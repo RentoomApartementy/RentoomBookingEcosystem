@@ -37,14 +37,14 @@ else
     private List<SelectedUpsellDto> _selectedUpsells = new();
     private ReservationPricingContext _reservationContext = new();
 
-   /* private UpsellTextConfig _texts = new()
+    private UpsellTextConfig _texts = new()
     {
         Title = "Vouchery",
         SubTitle = "Dostępne dodatki do kupienia"
-    };*/
+    };
 
 
-    private readonly UpsellTextConfig _texts = new ()
+ /*   private readonly UpsellTextConfig _texts = new ()
     {
         Title = UpsellLocalizer["ListTitle"],
             SubTitle = UpsellLocalizer["ListSubtitle"],
@@ -61,7 +61,7 @@ else
             PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
             PriceLabel = UpsellLocalizer["Price"],
         };
-
+        */
 
     protected override async Task OnInitializedAsync()
     {

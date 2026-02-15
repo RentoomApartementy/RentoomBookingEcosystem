@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RentoomBookingWeb {
+namespace RentoomBooking.StayWell {
     using System;
     
     
