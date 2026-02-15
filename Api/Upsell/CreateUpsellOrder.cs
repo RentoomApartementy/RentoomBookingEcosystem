@@ -239,6 +239,50 @@ namespace RentoomBooking.Api.Upsell
             }
         }
 
+
+        [Function("GetUpsellOrderStatus")]
+        public async Task<HttpResponseData> GetUpsellOrderStatus(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "upsells/orders/{upsellOrderGuid}/status")] HttpRequestData req,
+        string upsellOrderGuid,
+        CancellationToken cancellationToken)
+        {
+            var response = req.CreateResponse();
+
+            try
+            {
+                if (!Guid.TryParse(upsellOrderGuid, out var orderGuid))
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    await response.WriteStringAsync("Upsell order guid must be a valid GUID.", cancellationToken);
+                    return response;
+                }
+
+                var order = await _upsellOrderStore.GetAsync(orderGuid, cancellationToken);
+                if (order is null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    await response.WriteStringAsync("Upsell order not found.", cancellationToken);
+                    return response;
+                }
+
+                
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(order), cancellationToken);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error while getting upsell order status for {UpsellOrderGuid}.", upsellOrderGuid);
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.", cancellationToken);
+                return response;
+            }
+        }
+
+
+
         private async Task<RentoomReservation?> ResolveReservationAsync(string providedToken, Guid reservationGuid, CancellationToken cancellationToken)
         {
             var candidates = new[]

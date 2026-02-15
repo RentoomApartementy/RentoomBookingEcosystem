@@ -284,7 +284,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     TotalGuests = pricingContext.TotalGuests,
                     LineTotalGross = lineTotal,
                     Currency = request.Currency,
-                    LineStatus = UpsellLineStatuses.Pending
+                    LineStatus = UpsellLineStatuses.Pending,
+                    UpsellDefinitionSnapshot = tile
                 });
 
                 total += lineTotal;

@@ -44,9 +44,10 @@ to do so: 1. split the api calls into two (1. create order in db , return order 
         while (true)
         {
             var r = await backendApi.GetUpsellOrderStatusAsync(new Guid(UpsellOrderGuid));
+            Console.WriteLine($"Upsell order status: {r.PaymentStatus}");
             if (r.PaymentStatus == PaymentStatuses.Paid)
             {
-                NavigationManager.NavigateTo($"/reservation/{Token}/MyVouchersPage", forceLoad: true);
+                NavigationManager.NavigateTo($"/reservation/{resToken}/MyVouchersPage", forceLoad: true);
             }
         }
 
