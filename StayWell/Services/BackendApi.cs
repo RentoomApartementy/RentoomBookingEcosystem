@@ -1,4 +1,5 @@
-﻿using RentoomBooking.SharedClasses.Models;
+﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.Upsell;
@@ -239,6 +240,18 @@ namespace RentoomBooking.StayWell.Services
                 return await response.Content.ReadFromJsonAsync<TTLockActionResult>(_json);
             }
             catch { return null; }
+        }
+
+        public async Task<List<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId)
+        {
+            var response = await _http.GetAsync($"apartment/arrivalinstructions/{apartmentId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return [];
+            }
+
+            return await response.Content.ReadFromJsonAsync<List<ApartmentArrivalInstructionStepDTO>>(_json)
+                   ?? [];
         }
 
         private sealed class LockCodeResponse

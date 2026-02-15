@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,15 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
         public string? ImageUrl { get; set; }
     }
 
+    [Table("ApartmentArrivalInstructionSteps", Schema = "rentoom")]
     public class ApartmentArrivalInstructionStep
     {
         [Key]
         public int Id { get; set; }
 
         public int ApartmentId { get; set; }
-        public ApartmentObject Apartment { get; set; } = null!;
+
+        //public ApartmentObject Apartment { get; set; } = null!;
 
         [Required]
         public int Sequence { get; set; }
