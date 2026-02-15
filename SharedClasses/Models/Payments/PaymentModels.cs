@@ -15,6 +15,7 @@ namespace RentoomBooking.SharedClasses.Models.Payments
         public string? SuccessUrl { get; set; }
         public string? ErrorUrl { get; set; }
         public Upsell.UpsellOrderRequest? UpsellOrder { get; set; }
+        public string? NotificationUrl { get;  set; }
     }
 
     public class PaymentSessionResponse

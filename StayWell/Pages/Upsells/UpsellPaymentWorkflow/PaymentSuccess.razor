@@ -1,0 +1,56 @@
+﻿@page "/reservation/{resToken}/Vouchers/payment/{UpsellOrderGuid}/Success"
+
+@*//<-- todo: add {paymenttoken or upsell order token from backend
+to do so: 1. split the api calls into two (1. create order in db , return order guid, 2). start payment with order guid as payload}needed*@
+
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
+@using RentoomBooking.StayWell.Services
+@using RentoomBooking.StayWell.States
+@inject AvailableUpsellsState AvailableUpsellsState
+@inject NavigationManager Navigation
+@inject IStringLocalizer<PurchasedUpsellsPage> UpsellLocalizer;
+@inject BackendApi backendApi
+@inherits Models.PageBase
+
+
+    <h3>Czekam na potwierdzenie opłacenia ...</h3>
+
+
+@code {
+
+    [Parameter] public string? resToken { get; set; }
+    [Parameter] public string? UpsellOrderGuid { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+
+            // await backendApi.MarkPaymentAsPaidAsync(ReservationTokenGuid);//<< for  testing : flag _idoApi.UseDummyIdoBooking
+            //Navigation.NavigateTo($"/rezerwuj/token/podsumowanie-transakcji/", true);
+           await RefreshPurchasedUpsellsAsync();
+        }
+    }
+
+    private async Task RefreshPurchasedUpsellsAsync()
+    {        if (string.IsNullOrWhiteSpace(resToken))
+        {
+            return;
+        }
+
+        while (true)
+        {
+            var r = await backendApi.GetUpsellOrderStatusAsync(new Guid(UpsellOrderGuid));
+            if (r.PaymentStatus == PaymentStatuses.Paid)
+            {
+                NavigationManager.NavigateTo($"/reservation/{Token}/MyVouchersPage", forceLoad: true);
+            }
+        }
+
+    }
+   
+   
+}

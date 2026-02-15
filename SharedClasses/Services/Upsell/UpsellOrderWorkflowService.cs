@@ -111,6 +111,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
                 var successUrl = string.IsNullOrWhiteSpace(request.SuccessUrl) ? _tpaySettings.SuccessUrl : request.SuccessUrl;
                 var errorUrl = string.IsNullOrWhiteSpace(request.ErrorUrl) ? _tpaySettings.ErrorUrl : request.ErrorUrl;
+                var notificationUrl = string.IsNullOrWhiteSpace(request.NotificationUrl) ? _tpaySettings.NotificationUrl : request.NotificationUrl;
 
                 var tpayRequest = new TpayTransactionRequest
                 {
@@ -127,7 +128,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     },
                     SuccessUrl = successUrl,
                     ErrorUrl = errorUrl,
-                    NotificationUrl = _tpaySettings.NotificationUrl,
+                    NotificationUrl = notificationUrl,
                     HiddenDescription = record.UpsellOrderGuid.ToString()
                 };
 

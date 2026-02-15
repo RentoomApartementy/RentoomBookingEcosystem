@@ -12,6 +12,8 @@ namespace RentoomBooking.StayWell.States
 
         private string? _currentLocale;
 
+        public UpsellPaymentInitResult? _lastInitResult { get; set; }
+
         public bool IsLoading { get; private set; }
         public string? Error { get; private set; }
         public string? CurrentToken { get; private set; }

@@ -5,11 +5,12 @@
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
+@using RentoomBooking.StayWell.Services
 @using RentoomBooking.StayWell.States
 @inject AvailableUpsellsState AvailableUpsellsState
 @inject NavigationManager Navigation
 @inject IStringLocalizer<PurchasedUpsellsPage> UpsellLocalizer;
-
+@inject BackendApi backendApi
 @inherits Models.PageBase
 
 @if (AvailableUpsellsState.IsLoading)
@@ -26,9 +27,9 @@ else if (AvailableUpsellsState.AvailableUpsells.Count == 0)
 }
 else
 {
-    if (_selectedUpsells != null && _selectedUpsells.Any()){
+    if (_cartSelected != null && _cartSelected.Any()){
     <div>
-        <p>Wybrane dodatki: @_selectedUpsells.Count</p>
+    <p>Wybrane dodatki: @_cartSelected.Count</p>
         <p>Razem: @TotalUpsellsPrice.ToString("F2") PLN</p>
     </div>
     }
@@ -42,11 +43,11 @@ else
 
 
 
-    if (_selectedUpsells != null && _selectedUpsells.Any())
+    if (_cartSelected != null && _cartSelected.Any())
     {
         <div style="position: sticky; bottom: 0; z-index: 20; background: white; border-top: 1px solid #ddd; padding: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
             <span>Razem: @TotalUpsellsPrice.ToString("F2") PLN</span>
-            <button disabled="@(_selectedUpsells.Count == 0)">Opłać</button>
+            <button disabled="@(_cartSelected.Count == 0)" @onclick="BuySelectedUpsellsAsync">Opłać</button>
         </div>
     }
 }
@@ -54,8 +55,14 @@ else
 
 
 @code {
-    private List<SelectedUpsellDto> _selectedUpsells = new();
+    private List<SelectedUpsellDto> _cartSelected = new();
     private ReservationPricingContext _reservationContext = new();
+
+    private bool _isCartBusy;
+    private string? _cartError;
+    private string? _cartMessage;
+    private Guid? _lastCreatedOrderGuid;
+
 
     private UpsellTextConfig _texts = new()
     {
@@ -69,13 +76,13 @@ else
     {
         get
         {
-            if (_reservationContext is null || _selectedUpsells.Count == 0 || AvailableUpsellsState.AvailableUpsells.Count == 0)
+            if (_reservationContext is null || _cartSelected.Count == 0 || AvailableUpsellsState.AvailableUpsells.Count == 0)
             {
                 return 0m;
             }
 
             decimal total = 0m;
-            foreach (var selected in _selectedUpsells)
+            foreach (var selected in _cartSelected)
             {
                 var tile = AvailableUpsellsState.AvailableUpsells.FirstOrDefault(item => item.PartnerServiceId == selected.PartnerServiceId);
                 if (tile is null)
@@ -169,10 +176,95 @@ else
 
     private void HandleSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
     {
-        _selectedUpsells = selectedUpsells;
+        _cartSelected = selectedUpsells;
 
     }
 
-    
+    private async Task BuySelectedUpsellsAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Token) || _cartSelected.Count == 0)
+        {
+            return;
+        }
+
+        _isCartBusy = true;
+        _cartError = null;
+        _cartMessage = null;
+
+        try
+        {
+            var request = BuildCreateUpsellOrderRequest();
+           
+         //   var upsellPaymentInitResult = await backendApi.CreateUpsellOrderAsync(Token, request);
+         
+            
+            
+            var upsellPaymentInitResult = await backendApi.CreateUpsellOrderAsync(Token, request);
+            
+            AvailableUpsellsState._lastInitResult = upsellPaymentInitResult;
+            
+            if (upsellPaymentInitResult is null)
+            {
+                _cartError = "Nie udało się utworzyć zamówienia dodatków.";
+                return;
+            }
+
+            _lastCreatedOrderGuid = upsellPaymentInitResult.UpsellOrderGuid;
+
+           
+
+            if (!string.IsNullOrWhiteSpace(upsellPaymentInitResult.RedirectUrl))
+            {
+                NavigationManager.NavigateTo(upsellPaymentInitResult.RedirectUrl, forceLoad: true);
+                return;
+            }
+
+            _cartMessage = "Płatność nie wymagana / już opłacone";
+         //   await RefreshPurchasedUpsellsAsync();
+        }
+        catch (Exception ex)
+        {
+            _cartError = ex.Message;
+        }
+        finally
+        {
+            _isCartBusy = false;
+        }
+    }
+
+    private UpsellOrderRequest BuildCreateUpsellOrderRequest()
+    {
+        var reservation = ReservationState.CurrentReservation?.Reservation;
+        var client = reservation?.Client;
+
+        return new UpsellOrderRequest
+        {
+            ReservationGuid = Guid.TryParse(Token, out var reservationGuid) ? reservationGuid : null,
+            ApartmentId = reservation?.Items?.FirstOrDefault()?.objectId ?? 0,
+            StartDate = _reservationContext.StartDate,
+            EndDate = _reservationContext.EndDate,
+            Adults = _reservationContext.Adults,
+            Children = _reservationContext.Children,
+            Currency = _reservationContext.Currency,
+            Buyer = new UpsellBuyerDto
+            {
+                Email = client?.Email ?? string.Empty,
+                Name = $"{client?.FirstName} {client?.LastName}".Trim(),
+                Phone = client?.Phone
+            },
+            SelectedUpsells = _cartSelected
+                .Select(s => new UpsellOrderLineRequest
+                {
+                    PartnerServiceId = s.PartnerServiceId,
+                    Quantity = Math.Max(1, s.Quantity)
+                })
+                .ToList(),
+            SuccessUrl = NavigationManager.BaseUri + $"reservation/{Token}/Vouchers/payment/UpsellOrderGuid/Success",
+            ErrorUrl = NavigationManager.BaseUri + $"reservation/{Token}/Vouchers/payment/UpsellOrderGuid/Error",
+            NotificationUrl = NavigationManager.BaseUri + $"api/upsell/UpsellOrderGuid/payment-notification"
+        };
+    }
+
+   
 
 }

@@ -110,6 +110,12 @@ namespace RentoomBooking.SharedClasses.Services.Payments
                     intent.UpsellOrder.ErrorUrl = intent.ErrorUrl;
                 }
 
+                if (string.IsNullOrWhiteSpace(intent.UpsellOrder.NotificationUrl) && !string.IsNullOrWhiteSpace(intent.NotificationUrl))
+                {
+                    intent.UpsellOrder.NotificationUrl = intent.NotificationUrl;
+                }
+
+
                 result = await _workflowService.CreateOrderAndInitiatePaymentAsync(intent.UpsellOrder, cancellationToken);
             }
 
