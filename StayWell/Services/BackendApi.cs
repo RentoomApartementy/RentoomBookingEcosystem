@@ -111,15 +111,9 @@ namespace RentoomBooking.StayWell.Services
             return null;
         }
 
-        public async Task<bool> AddTermsAsync(TermsEntity entity)
+        public async Task<bool> SaveTermsAsync(TermsEntity entity)
         {
-            var response = await _http.PostAsJsonAsync("db/terms/AddTerms", entity, _json);
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> UpdateTermsAsync(string resToken, TermsEntity entity)
-        {
-            var response = await _http.PutAsJsonAsync($"db/terms/UpdateTerms/{resToken}", entity, _json);
+            var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
             return response.IsSuccessStatusCode;
         }
 
@@ -210,6 +204,47 @@ namespace RentoomBooking.StayWell.Services
             return await response.Content.ReadFromJsonAsync<RedeemResultDto>(_json);
         }
 
+        public record TTLockActionResult(bool Success, string? LockCode, string? Status, int? BatteryLevel);
+        public async Task<TTLockActionResult?> PingLockAsync(string reservationToken)
+        {
+            try
+            {
+                var response = await _http.GetAsync($"PingLockByReservationId/{reservationToken}");
+                if (!response.IsSuccessStatusCode) return null;
+
+                return await response.Content.ReadFromJsonAsync<TTLockActionResult>(_json);
+            }
+            catch { return null; }
+        }
+
+        public async Task<TTLockActionResult?> OpenLockAsync(string reservationToken)
+        {
+            try
+            {
+                var response = await _http.GetAsync($"OpenLockByReservationId/{reservationToken}");
+                if (!response.IsSuccessStatusCode) return null;
+
+                return await response.Content.ReadFromJsonAsync<TTLockActionResult>(_json);
+            }
+            catch { return null; }
+        }
+
+        public async Task<TTLockActionResult?> CloseLockAsync(string reservationToken)
+        {
+            try
+            {
+                var response = await _http.GetAsync($"CloseLockByReservationId/{reservationToken}");
+                if (!response.IsSuccessStatusCode) return null;
+
+                return await response.Content.ReadFromJsonAsync<TTLockActionResult>(_json);
+            }
+            catch { return null; }
+        }
+
+        private sealed class LockCodeResponse
+        {
+            [JsonPropertyName("lockCode")]
+            public string? LockCode { get; init; }
         public async Task<UpsellPaymentInitResult?> CreateUpsellOrderAsync(string token, UpsellOrderRequest request)
         {
             var response = await _http.PostAsJsonAsync($"reservations/{token}/upsells/orders", request, _json);

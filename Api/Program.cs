@@ -16,6 +16,7 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
@@ -26,6 +27,8 @@ using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
+using RentoomBooking.SharedClasses.Integrations.TTLock;
+using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
 
 
 TokenCredential credential = new DefaultAzureCredential();
@@ -86,6 +89,24 @@ builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
 
+builder.Services.Configure<TTLockSettings>(options =>
+{
+    options.ClientId = Environment.GetEnvironmentVariable("TTLOCK_CLIENT_ID") ?? "";
+    options.ClientSecret = Environment.GetEnvironmentVariable("TTLOCK_APP_SECRET") ?? "";
+    options.Username = Environment.GetEnvironmentVariable("TTLOCK_USERNAME") ?? "";
+    options.Password = Environment.GetEnvironmentVariable("TTLOCK_PASSWORD") ?? "";
+    options.ApiBaseUrl = "https://euapi.ttlock.com";
+});
+
+builder.Services.AddScoped<TTLockService>(sp => {
+    var httpFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var client = httpFactory.CreateClient();
+    var options = sp.GetRequiredService<IOptions<TTLockSettings>>();
+    var logger = sp.GetRequiredService<ILogger<TTLockService>>();
+
+    return new TTLockService(client, options, logger);
+});
+
 //Upselle
 builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
 builder.Services.AddScoped<IUpsellPurchasedSummaryService, UpsellPurchasedSummaryService>();
@@ -123,6 +144,8 @@ builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
 builder.Services.AddScoped<ITpayNotificationValidator, TpayNotificationValidator>();
 builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
 builder.Services.AddSingleton<TpayClient>();
+
+builder.Services.AddHttpClient(); 
 
 builder.Services.AddHttpClient("Tpay", (sp, http) =>
 {
