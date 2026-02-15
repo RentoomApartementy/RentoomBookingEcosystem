@@ -120,6 +120,9 @@
   <data name="AboutReservation" xml:space="preserve">
     <value>O Rezerwacji</value>
   </data>
+  <data name="ChangeLanguage" xml:space="preserve">
+    <value>Zmień język</value>
+  </data>
   <data name="CheckIn" xml:space="preserve">
     <value>Zameldowanie</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="ClubBenefits" xml:space="preserve">
     <value>Klub Korzyści Rentoom</value>
+  </data>
+  <data name="CurrentLanguage" xml:space="preserve">
+    <value>Aktualny Język</value>
   </data>
   <data name="Instructions" xml:space="preserve">
     <value>Instrukcja Zameldowania</value>
