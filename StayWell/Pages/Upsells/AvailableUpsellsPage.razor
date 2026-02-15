@@ -1,12 +1,14 @@
 ﻿@page "/reservation/{Token}/Vouchers"
 @page "/reservation/{Token}/VouchersPage"
 @using System.Globalization
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
 @using RentoomBooking.StayWell.States
 @inject AvailableUpsellsState AvailableUpsellsState
 @inject NavigationManager Navigation
+@inject IStringLocalizer<PurchasedUpsellsPage> UpsellLocalizer;
 
 @inherits Models.PageBase
 
@@ -35,11 +37,31 @@ else
     private List<SelectedUpsellDto> _selectedUpsells = new();
     private ReservationPricingContext _reservationContext = new();
 
-    private readonly UpsellTextConfig _texts = new()
+   /* private UpsellTextConfig _texts = new()
     {
         Title = "Vouchery",
         SubTitle = "Dostępne dodatki do kupienia"
-    };
+    };*/
+
+
+    private readonly UpsellTextConfig _texts = new ()
+    {
+        Title = UpsellLocalizer["ListTitle"],
+            SubTitle = UpsellLocalizer["ListSubtitle"],
+            BadgeInfo = UpsellLocalizer["BadgeInfo"],
+            NightsText = UpsellLocalizer["Nights"],
+            GuestsText = UpsellLocalizer["Guests"],
+            DeleteText = UpsellLocalizer["Delete"],
+            AddText = UpsellLocalizer["Add"],
+            DescriptionText = UpsellLocalizer["Description"],
+            TermsTitleText = UpsellLocalizer["TermsTitle"],
+            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
+            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
+            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
+            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
+            PriceLabel = UpsellLocalizer["Price"],
+        };
+
 
     protected override async Task OnInitializedAsync()
     {

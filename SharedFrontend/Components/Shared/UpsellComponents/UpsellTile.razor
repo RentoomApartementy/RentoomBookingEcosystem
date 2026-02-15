@@ -115,14 +115,14 @@
     private string Currency => string.IsNullOrWhiteSpace(Context.Currency) ? Tile.Currency : Context.Currency;
 
     private string DisplayText => 
-        $"Cena: {Tile.Price:F2} {Currency} / {GetPricingModelText(Tile.PricingModel)}";
+        $"{Texts.PriceLabel}: {Tile.Price:F2} {Currency} / {GetPricingModelText(Tile.PricingModel)}";
 
     private string GetPricingModelText(PartnerServicePricingModel model) => model switch
     {
-        PartnerServicePricingModel.PerPersonPerDay => "os./dzień",
-        PartnerServicePricingModel.PerApartmentPerDay => "apt./dzień",
-        PartnerServicePricingModel.PerStay => "pobyt",
-        PartnerServicePricingModel.OneTime => "jednorazowo",
+        PartnerServicePricingModel.PerPersonPerDay => Texts.PricingPerPersonPerDayText,
+        PartnerServicePricingModel.PerApartmentPerDay => Texts.PricingPerApartmentPerDayText,
+        PartnerServicePricingModel.PerStay => Texts.PricingPerStayText,
+        PartnerServicePricingModel.OneTime => Texts.PricingOneTimeText,
         _ => model.ToString()
     };
 

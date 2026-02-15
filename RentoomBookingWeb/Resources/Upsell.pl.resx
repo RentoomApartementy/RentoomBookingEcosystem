@@ -41,4 +41,28 @@
     <data name="Add" xml:space="preserve">
         <value>Dodaj</value>
     </data>
+	 <data name="Price" xml:space="preserve"><value>Cena</value></data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve"><value>os./dzień</value></data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve"><value>apt./dzień</value></data>
+  <data name="PricingPerStay" xml:space="preserve"><value>pobyt</value></data>
+  <data name="PricingOneTime" xml:space="preserve"><value>jednorazowo</value></data>
+  <data name="LinkLabel" xml:space="preserve"><value>Link</value></data>
+  <data name="Details" xml:space="preserve"><value>Szczegóły</value></data>
+  <data name="ShowVoucherCode" xml:space="preserve"><value>Pokaż kod voucher</value></data>
+  <data name="YourCode" xml:space="preserve"><value>Twój kod</value></data>
+  <data name="ManualCodeLabel" xml:space="preserve"><value>Kod do podania ręcznie</value></data>
+  <data name="VoucherQrAlt" xml:space="preserve"><value>Kod QR vouchera</value></data>
+  <data name="QrUnavailable" xml:space="preserve"><value>QR niedostępny</value></data>
+  <data name="Enlarge" xml:space="preserve"><value>Powiększ</value></data>
+  <data name="Address" xml:space="preserve"><value>Adres</value></data>
+  <data name="VoucherUsageTitle" xml:space="preserve"><value>Wykorzystanie vouchera</value></data>
+  <data name="VoucherStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="VoucherUsedCount" xml:space="preserve"><value>Wykorzystano</value></data>
+  <data name="VoucherRemaining" xml:space="preserve"><value>Pozostało</value></data>
+  <data name="VoucherValidFrom" xml:space="preserve"><value>Ważny od</value></data>
+  <data name="VoucherValidTo" xml:space="preserve"><value>Ważny do</value></data>
+  <data name="VoucherNoLimit" xml:space="preserve"><value>Bez limitu</value></data>
+  <data name="ShowInRestaurant" xml:space="preserve"><value>Pokaż w restauracji</value></data>
+  <data name="VoucherCode" xml:space="preserve"><value>Kod</value></data>
+  <data name="VoucherOverlayHint" xml:space="preserve"><value>Pokaż ten kod obsłudze, aby zrealizować voucher.</value></data>
 </root>
