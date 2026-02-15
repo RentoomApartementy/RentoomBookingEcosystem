@@ -26,12 +26,22 @@ else if (AvailableUpsellsState.AvailableUpsells.Count == 0)
 }
 else
 {
+    if (_selectedUpsells != null && _selectedUpsells.Any()){
+    <div>
+        <p>Wybrane dodatki: @_selectedUpsells.Count</p>
+        <p>Razem: @TotalUpsellsPrice.ToString("F2") PLN</p>
+    </div>
+    }
+
+
     <UpsellList AvailableUpsellsList="AvailableUpsellsState.AvailableUpsells"
                 ReservationContext="_reservationContext"
                 Theme="staywell-theme"
                 Texts="_texts"
                 OnSelectionChanged="HandleSelectionChanged" />
 }
+
+
 
 @code {
     private List<SelectedUpsellDto> _selectedUpsells = new();
@@ -42,6 +52,39 @@ else
         Title = "Vouchery",
         SubTitle = "Dostępne dodatki do kupienia"
     };
+
+
+
+    private decimal TotalUpsellsPrice
+    {
+        get
+        {
+            if (_reservationContext is null || _selectedUpsells.Count == 0 || AvailableUpsellsState.AvailableUpsells.Count == 0)
+            {
+                return 0m;
+            }
+
+            decimal total = 0m;
+            foreach (var selected in _selectedUpsells)
+            {
+                var tile = AvailableUpsellsState.AvailableUpsells.FirstOrDefault(item => item.PartnerServiceId == selected.PartnerServiceId);
+                if (tile is null)
+                {
+                    continue;
+                }
+
+                var quantity = Math.Max(1, selected.Quantity);
+                total += UpsellPricingCalculator.CalculateTotal(
+                                                                tile.PricingModel,
+                                                                tile.Price,
+                                                                _reservationContext.Nights,
+                                                                _reservationContext.TotalGuests,
+                                                                quantity);
+            }
+
+            return total;
+        }
+    }
 
 
  /*   private readonly UpsellTextConfig _texts = new ()
@@ -117,5 +160,9 @@ else
     private void HandleSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
     {
         _selectedUpsells = selectedUpsells;
+
     }
+
+    
+
 }
