@@ -64,10 +64,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Payment.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Upsell.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Upsell.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -140,11 +136,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Payment.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Upsell.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Upsell.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 

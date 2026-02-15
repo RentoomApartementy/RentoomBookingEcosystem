@@ -25,7 +25,7 @@
 @using RentoomBookingWeb.Components.Enums
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
-@inject IStringLocalizer<RentoomBookingWeb.Upsell> UpsellLocalizer;
+@inject IStringLocalizer<RentoomBooking.SharedFrontend.Resources.UpsellResources> UpsellLocalizer;
 @inject IReservationWorkflowService ReservationWorkflowService
 @inject IUpsellCatalogService UpsellCatalogService
 @inject MediaCacheService MediaCache
@@ -647,19 +647,7 @@
         
         await GetOffer();
         
-        UpsellTexts = new UpsellTextConfig()
-        {
-            Title = UpsellLocalizer["ListTitle"],
-            SubTitle = UpsellLocalizer["ListSubtitle"],
-            BadgeInfo = UpsellLocalizer["BadgeInfo"],
-            NightsText = UpsellLocalizer["Nights"],
-            GuestsText = UpsellLocalizer["Guests"],
-            DeleteText = UpsellLocalizer["Delete"],
-            AddText = UpsellLocalizer["Add"],
-            DescriptionText = UpsellLocalizer["Description"],
-            TermsTitleText = UpsellLocalizer["TermsTitle"],
-            TermsDescriptionText = UpsellLocalizer["TermsDescription"]
-        };
+        UpsellTexts = UpsellTextConfigFactory.Create(key => UpsellLocalizer[key]);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

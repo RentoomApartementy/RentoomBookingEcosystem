@@ -62,11 +62,11 @@
                     <div class="upsell-unit-info">@DisplayText</div>
                 </div>
 
-                <button type="button" class="tile-details-link" @onclick="ToggleDetails" @onclick:stopPropagation="true">Szczegóły</button>
+                <button type="button" class="tile-details-link" @onclick="ToggleDetails" @onclick:stopPropagation="true">@Texts.DetailsText</button>
                 
                 <label class="upsell-button">
                     <input type="checkbox" checked="@IsSelected" @onchange="HandleToggle" />
-                    <span class="button-text">Pokaż kod voucher</span>
+                    <span class="button-text">@Texts.ShowVoucherCodeText</span>
                 </label>
             </div>
         </div>
@@ -74,34 +74,34 @@
         <div class="upsell-card-back" @onclick="ToggleFlip">
             <div class="upsell-back-content voucher-back">
                 <div class="voucher-header">
-                    <span class="voucher-title">Twój kod</span>
+                    <span class="voucher-title">@Texts.YourCodeText</span>
                     <button type="button" class="voucher-close" @onclick="CloseFlip" @onclick:stopPropagation>
                         ×
                     </button>
                 </div>
 
                 <div class="voucher-code">
-                    <span class="voucher-code-label">Kod do podania ręcznie</span>
+                    <span class="voucher-code-label">@Texts.ManualCodeLabelText</span>
                     <span class="voucher-code-value">@Voucher.CodeShort</span>
                 </div>
 
                 <div class="voucher-qr-wrap">
                     @if (!string.IsNullOrWhiteSpace(_qrDataUri))
                     {
-                        <img src="@_qrDataUri" alt="Kod QR vouchera" class="voucher-qr" />
+                        <img src="@_qrDataUri" alt="@Texts.VoucherQrAltText" class="voucher-qr" />
                     }
                     else
                     {
-                        <div class="voucher-qr-placeholder">QR niedostępny</div>
+                        <div class="voucher-qr-placeholder">@Texts.QrUnavailableText</div>
                     }
                 </div>
 
                 <button type="button" class="voucher-expand" @onclick="OpenFullscreen" @onclick:stopPropagation>
-                    Powiększ
+                    @Texts.EnlargeText
                 </button>
 
                 <button type="button" class="tile-details-link voucher-details-link" @onclick="ToggleDetails" @onclick:stopPropagation="true">
-                    Szczegóły
+                    @Texts.DetailsText
                 </button>
             </div>
         </div>
@@ -111,7 +111,7 @@
     <div class="tile-details-overlay @(_showDetails ? "open" : string.Empty)" @onclick="CloseDetails">
         <div class="tile-details-panel" @onclick:stopPropagation="true">
             <div class="tile-details-header">
-                <span class="tile-details-title">Szczegóły</span>
+                <span class="tile-details-title">@Texts.DetailsText</span>
                 <button type="button" class="tile-details-close" @onclick="CloseDetails" @onclick:stopPropagation="true">×</button>
             </div>
 
@@ -127,7 +127,7 @@
                 @if (!string.IsNullOrWhiteSpace(Tile.Terms))
                 {
                     <section class="tile-details-section">
-                        <h4>Warunki</h4>
+                        <h4>@Texts.TermsTitleText</h4>
                         <p>@Tile.Terms</p>
                     </section>
                 }
@@ -135,7 +135,7 @@
                 @if (HasPartnerAddress)
                 {
                     <section class="tile-details-section">
-                        <h4>Adres</h4>
+                        <h4>@Texts.AddressText</h4>
                         @if (!string.IsNullOrWhiteSpace(Tile.PartnerInfo?.Name))
                         {
                             <p>@Tile.PartnerInfo.Name</p>
@@ -145,12 +145,12 @@
                 }
 
                 <section class="tile-details-section">
-                    <h4>Wykorzystanie vouchera</h4>
-                    <p>Status: @Voucher.Status</p>
-                    <p>Wykorzystano: @Voucher.UsedCount / @VoucherMaxUsesText</p>
+                    <h4>@Texts.VoucherUsageTitleText</h4>
+                    <p>@Texts.VoucherStatusText: @Voucher.Status</p>
+                    <p>@Texts.VoucherUsedCountText: @Voucher.UsedCount / @VoucherMaxUsesText</p>
                     <p>@VoucherRemainingText</p>
-                    <p>Ważny od: @Voucher.ValidFrom.ToString("yyyy-MM-dd")</p>
-                    <p>Ważny do: @Voucher.ValidTo.ToString("yyyy-MM-dd")</p>
+                    <p>@Texts.VoucherValidFromText: @Voucher.ValidFrom.ToString("yyyy-MM-dd")</p>
+                    <p>@Texts.VoucherValidToText: @Voucher.ValidTo.ToString("yyyy-MM-dd")</p>
                 </section>
             </div>
         </div>
@@ -161,27 +161,27 @@
         <div class="voucher-overlay" @onclick="CloseFullscreen">
             <div class="voucher-overlay-panel" @onclick:stopPropagation>
                 <div class="voucher-overlay-header">
-                    <span class="voucher-overlay-title">Pokaż w restauracji</span>
+                    <span class="voucher-overlay-title">@Texts.ShowInRestaurantText</span>
                     <button type="button" class="voucher-overlay-close" @onclick="CloseFullscreen">×</button>
                 </div>
 
                 <div class="voucher-code">
-                    <span class="voucher-code-label">Kod</span>
+                    <span class="voucher-code-label">@Texts.VoucherCodeText</span>
                     <span class="voucher-code-value">@Voucher.CodeShort</span>
                 </div>
 
                 <div class="voucher-overlay-qr">
                     @if (!string.IsNullOrWhiteSpace(_qrDataUri))
                     {
-                        <img src="@_qrDataUri" alt="Kod QR vouchera" class="voucher-qr big" />
+                        <img src="@_qrDataUri" alt="@Texts.VoucherQrAltText" class="voucher-qr big" />
                     }
                     else
                     {
-                        <div class="voucher-qr-placeholder">QR niedostępny</div>
+                        <div class="voucher-qr-placeholder">@Texts.QrUnavailableText</div>
                     }
                 </div>
 
-                <p class="voucher-overlay-hint">Pokaż ten kod obsłudze, aby zrealizować voucher.</p>
+                <p class="voucher-overlay-hint">@Texts.VoucherOverlayHintText</p>
             </div>
         </div>
     }
@@ -266,14 +266,14 @@
     private string Currency => string.IsNullOrWhiteSpace(Context.Currency) ? Tile.Currency : Context.Currency;
 
     private string DisplayText => 
-        $"Cena: {Tile.Price:F2} {Currency} / {GetPricingModelText(Tile.PricingModel)}";
+        $"{Texts.PriceLabel}: {Tile.Price:F2} {Currency} / {GetPricingModelText(Tile.PricingModel)}";
 
     private string GetPricingModelText(PartnerServicePricingModel model) => model switch
     {
-        PartnerServicePricingModel.PerPersonPerDay => "os./dzień",
-        PartnerServicePricingModel.PerApartmentPerDay => "apt./dzień",
-        PartnerServicePricingModel.PerStay => "pobyt",
-        PartnerServicePricingModel.OneTime => "jednorazowo",
+        PartnerServicePricingModel.PerPersonPerDay => Texts.PricingPerPersonPerDayText,
+        PartnerServicePricingModel.PerApartmentPerDay => Texts.PricingPerApartmentPerDayText,
+        PartnerServicePricingModel.PerStay => Texts.PricingPerStayText,
+        PartnerServicePricingModel.OneTime => Texts.PricingOneTimeText,
         _ => model.ToString()
     };
 
@@ -331,11 +331,11 @@
         }
     }
 
-    private string VoucherMaxUsesText => Voucher.MaxUses.HasValue ? Voucher.MaxUses.Value.ToString() : "Bez limitu";
+    private string VoucherMaxUsesText => Voucher.MaxUses.HasValue ? Voucher.MaxUses.Value.ToString() : Texts.VoucherNoLimitText;
 
     private string VoucherRemainingText => Voucher.MaxUses.HasValue
-        ? $"Pozostało: {Math.Max(0, Voucher.MaxUses.Value - Voucher.UsedCount)} z {Voucher.MaxUses.Value}"
-        : "Pozostało: Bez limitu";
+        ? $"{Texts.VoucherRemainingText}: {Math.Max(0, Voucher.MaxUses.Value - Voucher.UsedCount)} / {Voucher.MaxUses.Value}"
+        : $"{Texts.VoucherRemainingText}: {Texts.VoucherNoLimitText}";
 
     private async Task HandleToggle(ChangeEventArgs args)
     {

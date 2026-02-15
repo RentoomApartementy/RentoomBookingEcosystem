@@ -1,12 +1,14 @@
 ﻿@page "/reservation/{Token}/Vouchers"
 @page "/reservation/{Token}/VouchersPage"
 @using System.Globalization
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
 @using RentoomBooking.StayWell.States
 @inject AvailableUpsellsState AvailableUpsellsState
 @inject NavigationManager Navigation
+@inject IStringLocalizer<RentoomBooking.SharedFrontend.Resources.UpsellResources> UpsellLocalizer
 
 @inherits Models.PageBase
 
@@ -35,11 +37,7 @@ else
     private List<SelectedUpsellDto> _selectedUpsells = new();
     private ReservationPricingContext _reservationContext = new();
 
-    private readonly UpsellTextConfig _texts = new()
-    {
-        Title = "Vouchery",
-        SubTitle = "Dostępne dodatki do kupienia"
-    };
+    private UpsellTextConfig _texts = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,6 +52,7 @@ else
             ? "pl"
             : CultureInfo.CurrentUICulture.Name;
 
+        _texts = UpsellTextConfigFactory.Create(key => UpsellLocalizer[key]);
         _reservationContext = BuildReservationPricingContext();
         await AvailableUpsellsState.EnsureLoadedAsync(Token, locale);
     }
