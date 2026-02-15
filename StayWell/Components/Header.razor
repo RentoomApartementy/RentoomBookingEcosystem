@@ -64,9 +64,9 @@
 
     private void ChangeLangButton()
     {
-        ModalService.ShowModal("Zmień język",
+        ModalService.ShowModal(Localizer["ChangeLanguage"],
 @<div>
-            <p>Aktualny język: @CultureInfo.CurrentCulture</p>
+    <p>@Localizer["CurrentLanguage"]: @CultureInfo.CurrentCulture</p>
             <Button OnClick="() => ChangeLang(pl)" Text="Polski"></Button>
             <Button OnClick="() => ChangeLang(en)" Text="English"></Button>
             @* <button @onclick="() => ChangeLang("pl")>Polski</button> *@

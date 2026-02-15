@@ -120,6 +120,9 @@
   <data name="AboutReservation" xml:space="preserve">
     <value>Your Reservation</value>
   </data>
+  <data name="ChangeLanguage" xml:space="preserve">
+    <value>Change language</value>
+  </data>
   <data name="CheckIn" xml:space="preserve">
     <value>Check-in</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="ClubBenefits" xml:space="preserve">
     <value>Rentoom Benefits Club</value>
+  </data>
+  <data name="CurrentLanguage" xml:space="preserve">
+    <value>Current Language</value>
   </data>
   <data name="Instructions" xml:space="preserve">
     <value>Check-in Instructions</value>

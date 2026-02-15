@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
         public int Id { get; set; }
 
         public int ApartmentId { get; set; }
-        public Apartment Apartment { get; set; } = null!;
+        public ApartmentObject Apartment { get; set; } = null!;
 
         [Required]
         public int Sequence { get; set; }

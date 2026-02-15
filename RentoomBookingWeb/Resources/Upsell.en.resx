@@ -41,4 +41,28 @@
     <data name="TermsDescription" xml:space="preserve">
         <value>Valid for the duration of your stay. Must present coupon code at time of service.</value>
     </data>
+	  <data name="Price" xml:space="preserve"><value>Price</value></data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve"><value>person/day</value></data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve"><value>apartment/day</value></data>
+  <data name="PricingPerStay" xml:space="preserve"><value>stay</value></data>
+  <data name="PricingOneTime" xml:space="preserve"><value>one-time</value></data>
+  <data name="LinkLabel" xml:space="preserve"><value>Link</value></data>
+  <data name="Details" xml:space="preserve"><value>Details</value></data>
+  <data name="ShowVoucherCode" xml:space="preserve"><value>Show voucher code</value></data>
+  <data name="YourCode" xml:space="preserve"><value>Your code</value></data>
+  <data name="ManualCodeLabel" xml:space="preserve"><value>Code to enter manually</value></data>
+  <data name="VoucherQrAlt" xml:space="preserve"><value>Voucher QR code</value></data>
+  <data name="QrUnavailable" xml:space="preserve"><value>QR unavailable</value></data>
+  <data name="Enlarge" xml:space="preserve"><value>Enlarge</value></data>
+  <data name="Address" xml:space="preserve"><value>Address</value></data>
+  <data name="VoucherUsageTitle" xml:space="preserve"><value>Voucher usage</value></data>
+  <data name="VoucherStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="VoucherUsedCount" xml:space="preserve"><value>Used</value></data>
+  <data name="VoucherRemaining" xml:space="preserve"><value>Remaining</value></data>
+  <data name="VoucherValidFrom" xml:space="preserve"><value>Valid from</value></data>
+  <data name="VoucherValidTo" xml:space="preserve"><value>Valid to</value></data>
+  <data name="VoucherNoLimit" xml:space="preserve"><value>No limit</value></data>
+  <data name="ShowInRestaurant" xml:space="preserve"><value>Show at restaurant</value></data>
+  <data name="VoucherCode" xml:space="preserve"><value>Code</value></data>
+  <data name="VoucherOverlayHint" xml:space="preserve"><value>Show this code to staff to redeem the voucher.</value></data>
 </root>

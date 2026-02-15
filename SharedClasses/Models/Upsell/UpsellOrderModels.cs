@@ -22,6 +22,7 @@ namespace RentoomBooking.SharedClasses.Models.Upsell
         public string Currency { get; set; } = "PLN";
         public string? SuccessUrl { get; set; }
         public string? ErrorUrl { get; set; }
+        public string? NotificationUrl { get; set; }
         public UpsellBuyerDto Buyer { get; set; } = new();
         public List<UpsellOrderLineRequest> SelectedUpsells { get; set; } = new();
     }
