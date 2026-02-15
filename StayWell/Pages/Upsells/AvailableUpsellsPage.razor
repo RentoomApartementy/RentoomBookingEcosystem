@@ -39,6 +39,16 @@ else
                 Theme="staywell-theme"
                 Texts="_texts"
                 OnSelectionChanged="HandleSelectionChanged" />
+
+
+
+    if (_selectedUpsells != null && _selectedUpsells.Any())
+    {
+        <div style="position: sticky; bottom: 0; z-index: 20; background: white; border-top: 1px solid #ddd; padding: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <span>Razem: @TotalUpsellsPrice.ToString("F2") PLN</span>
+            <button disabled="@(_selectedUpsells.Count == 0)">Opłać</button>
+        </div>
+    }
 }
 
 
