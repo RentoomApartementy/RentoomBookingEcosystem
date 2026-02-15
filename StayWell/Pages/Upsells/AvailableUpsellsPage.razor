@@ -14,7 +14,7 @@
 
 @if (AvailableUpsellsState.IsLoading)
 {
-    <p>Loading...</p>
+    <p>@UpsellLocalizer["Loading"]</p>
 }
 else if (!string.IsNullOrWhiteSpace(AvailableUpsellsState.Error))
 {
@@ -22,7 +22,7 @@ else if (!string.IsNullOrWhiteSpace(AvailableUpsellsState.Error))
 }
 else if (AvailableUpsellsState.AvailableUpsells.Count == 0)
 {
-    <p>Brak dostępnych dodatków</p>
+    <p>@UpsellLocalizer["NoAvailableUpsells"]</p>
 }
 else
 {
@@ -44,23 +44,7 @@ else
     };*/
 
 
-    private readonly UpsellTextConfig _texts = new ()
-    {
-        Title = UpsellLocalizer["ListTitle"],
-            SubTitle = UpsellLocalizer["ListSubtitle"],
-            BadgeInfo = UpsellLocalizer["BadgeInfo"],
-            NightsText = UpsellLocalizer["Nights"],
-            GuestsText = UpsellLocalizer["Guests"],
-            DeleteText = UpsellLocalizer["Delete"],
-            AddText = UpsellLocalizer["Add"],
-            DescriptionText = UpsellLocalizer["Description"],
-            TermsTitleText = UpsellLocalizer["TermsTitle"],
-            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
-            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
-            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
-            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
-            PriceLabel = UpsellLocalizer["Price"],
-        };
+    private UpsellTextConfig _texts = new();
 
 
     protected override async Task OnInitializedAsync()
@@ -76,8 +60,30 @@ else
             ? "pl"
             : CultureInfo.CurrentUICulture.Name;
 
+        _texts = BuildTexts();
         _reservationContext = BuildReservationPricingContext();
         await AvailableUpsellsState.EnsureLoadedAsync(Token, locale);
+    }
+
+    private UpsellTextConfig BuildTexts()
+    {
+        return new UpsellTextConfig
+        {
+            Title = UpsellLocalizer["ListTitle"],
+            SubTitle = UpsellLocalizer["ListSubtitle"],
+            BadgeInfo = UpsellLocalizer["BadgeInfo"],
+            NightsText = UpsellLocalizer["Nights"],
+            GuestsText = UpsellLocalizer["Guests"],
+            DeleteText = UpsellLocalizer["Delete"],
+            AddText = UpsellLocalizer["Add"],
+            DescriptionText = UpsellLocalizer["Description"],
+            TermsTitleText = UpsellLocalizer["TermsTitle"],
+            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
+            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
+            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
+            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
+            PriceLabel = UpsellLocalizer["Price"]
+        };
     }
 
     private ReservationPricingContext BuildReservationPricingContext()

@@ -52,4 +52,6 @@
   <data name="ShowInRestaurant" xml:space="preserve"><value>Show at restaurant</value></data>
   <data name="VoucherCode" xml:space="preserve"><value>Code</value></data>
   <data name="VoucherOverlayHint" xml:space="preserve"><value>Show this code to staff to redeem the voucher.</value></data>
+  <data name="Loading" xml:space="preserve"><value>Loading...</value></data>
+  <data name="NoAvailableUpsells" xml:space="preserve"><value>No available add-ons</value></data>
 </root>
