@@ -1,5 +1,7 @@
-﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
+﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.StayWell.Services;
+using System.Linq;
 
 namespace RentoomBooking.StayWell.States
 {
@@ -9,6 +11,8 @@ namespace RentoomBooking.StayWell.States
         private readonly BackendApi _backendApi = backendApi;
         private int? _currentObjectId;
         private string? _qrMaintFormUrl;
+        private IReadOnlyList<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
+        private int? _currentArrivalInstructionApartmentId;
 
         public bool IsLoading { get; set; }
 
@@ -21,6 +25,18 @@ namespace RentoomBooking.StayWell.States
                 NotifyStateChanged();
             }
         }
+
+        public IReadOnlyList<ApartmentArrivalInstructionStepDTO> ArrivalInstructionSteps
+        {
+            get => _arrivalInstructionSteps;
+            private set
+            {
+                _arrivalInstructionSteps = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public bool IsArrivalInstructionAvailable => ArrivalInstructionSteps.Count > 0;
 
         public async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
         {
@@ -50,6 +66,34 @@ namespace RentoomBooking.StayWell.States
             {
                 SetLoading(false);
             }
+        }
+
+        public async Task<IReadOnlyList<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId)
+        {
+            if (apartmentId <= 0)
+            {
+                SetArrivalInstructionSteps([], null);
+                return ArrivalInstructionSteps;
+            }
+
+            if (_currentArrivalInstructionApartmentId == apartmentId)
+            {
+                return ArrivalInstructionSteps;
+            }
+
+            if (_backendApi == null)
+            {
+                SetArrivalInstructionSteps([], apartmentId);
+                return ArrivalInstructionSteps;
+            }
+
+            var steps = await _backendApi.GetArrivalInstructionStepsAsync(apartmentId);
+            var orderedSteps = steps
+                .OrderBy(s => s.Sequence)
+                .ToList();
+
+            SetArrivalInstructionSteps(orderedSteps, apartmentId);
+            return ArrivalInstructionSteps;
         }
 
         public string? QrMaintFormUrl
@@ -90,14 +134,20 @@ namespace RentoomBooking.StayWell.States
             NotifyStateChanged();
         }
 
-
         public void ClearApartment()
         {
             CurrentApartment = null;
             _currentObjectId = null;
             IsLoading = false;
+            SetArrivalInstructionSteps([], null);
         }
-        private void NotifyStateChanged() => OnChange?.Invoke();
 
+        private void SetArrivalInstructionSteps(IReadOnlyList<ApartmentArrivalInstructionStepDTO> steps, int? apartmentId)
+        {
+            _currentArrivalInstructionApartmentId = apartmentId;
+            ArrivalInstructionSteps = steps;
+        }
+
+        private void NotifyStateChanged() => OnChange?.Invoke();
     }
 }

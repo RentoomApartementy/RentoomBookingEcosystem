@@ -133,6 +133,7 @@ namespace RentoomBooking.StayWell.Models
                     MediaState.GetMediaAsync(item.objectId),
                     ApartmentState.GetApartmentByIdAsync(item.objectId),
                     ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
+                    ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId),
                     AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
                     LocksState.GetLocksAsync(reservation.id, item.itemId),
                     LocksState.CheckTTLockStatusAsync(Token)

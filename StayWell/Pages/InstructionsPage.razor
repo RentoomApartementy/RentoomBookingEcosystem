@@ -7,7 +7,6 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject StayWell.Services.ClipboardService ClipboardService
-@inject StayWell.Services.BackendApi BackendApi
 @inject IStringLocalizer<InstructionsPage> Localizer
 @inject StayWell.Services.ToastService ToastService
 
@@ -16,17 +15,17 @@
 <PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
 <div class="instructions-page">
-    @if(_instructionAvailable == true)
+    @if (InstructionAvailable)
     {   
         <section class="instructions-section">
             <header class="instructions-section__header">
                 <h3 class="instructions-section__title">Instrukcja zameldowania</h3>
             </header>
             <div class="carousel-wrapper">
-                <Carousel Description="@_fallbackInstructionDescription"
-                          Descriptions="@_instructionDescriptions"
-                          StepTitles="@_instructionTitles"
-                          ImageUrls="@urls"
+                <Carousel Description="@FallbackInstructionDescription"
+                          Descriptions="@InstructionDescriptions"
+                          StepTitles="@InstructionTitles"
+                          ImageUrls="@InstructionImageUrls"
                           UseControlButtons="@true"
                           IsInstructionCarousel=true>
                 </Carousel>
@@ -123,10 +122,14 @@
                     <img src="/icons/wifi.svg" class="code-card__icon" />
                 </div>
                 <div class="code-card__content">
-                    <div class="code-card__label">Hasło Wi-Fi</div>
+                    <div class="code-card__label">Login i Hasło Wi-Fi</div>
                     @if (ReservationState.IsActiveReservation)
                     {
                         <div class="code-card__row">
+                            <div class="code-card__value">@wifi_login</div>
+                        </div>
+                        <hr />
+                        <div class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 10px;">
                             <div class="code-card__value">@wifi_pass</div>
                             <button @onclick="CopyToClipboard" class="copy-button" title="Skopiuj">
                                 <img src="/icons/copy.svg" />
@@ -148,23 +151,26 @@
 
 @code {
     private string wifi_pass = "MV329R8VHJYT98W";
+    private string wifi_login = "5G-HAJSPID-NETŁERK";
     private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
     private const string InstructionImageBaseUrl = "https://app.rentoom.pl/";
-    private string _fallbackInstructionDescription = "Instrukcje zameldowania są w trakcie przygotowania.";
+    private const string DefaultFallbackInstructionDescription = "Instrukcje zameldowania są w trakcie przygotowania.";
 
-    private List<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
-    private string[] _instructionDescriptions = Array.Empty<string>();
-    private string[] _instructionTitles = Array.Empty<string>();
-    private bool _instructionAvailable = false;
+    private IReadOnlyList<ApartmentArrivalInstructionStepDTO> ArrivalInstructionSteps => ApartmentState.ArrivalInstructionSteps;
+    private bool InstructionAvailable => ArrivalInstructionSteps.Count > 0;
+    private string FallbackInstructionDescription => InstructionAvailable ? string.Empty : DefaultFallbackInstructionDescription;
 
-    private string[] urls = ["/images/mock_instruction/1.png",
-    "/images/mock_instruction/2.png",
-    "/images/mock_instruction/3COZY.png",
-    "/images/mock_instruction/4.png",
-    "/images/mock_instruction/5.png",
-    "/images/mock_instruction/6.png",
-    "/images/mock_instruction/7 COZY.png",
-    "/images/mock_instruction/8.png",];
+    private string[] InstructionDescriptions => ArrivalInstructionSteps
+        .Select(s => s.Description)
+        .ToArray();
+
+    private string[] InstructionTitles => ArrivalInstructionSteps
+        .Select(s => s.Name)
+        .ToArray();
+
+    private string[] InstructionImageUrls => ArrivalInstructionSteps
+        .Select(s => NormalizeInstructionImageUrl(s.ImageUrl))
+        .ToArray();
 
     private int _days;
     private int _hours;
@@ -179,36 +185,6 @@
         }
 
         await base.OnInitializedAsync();
-        await LoadArrivalInstructionsAsync();
-    }
-
-    private async Task LoadArrivalInstructionsAsync()
-    {
-        var apartmentId = ReservationState.CurrentReservation?.Reservation?.Items.FirstOrDefault()?.objectItemId;
-        if (apartmentId is null || apartmentId <= 0) return;
-
-        var steps = await BackendApi.GetArrivalInstructionStepsAsync(apartmentId.Value);
-        if (steps.Count == 0) return;
-
-        _instructionAvailable = true;
-        _arrivalInstructionSteps = steps
-            .OrderBy(s => s.Sequence)
-            .ToList();
-
-        urls = _arrivalInstructionSteps
-            .Select(s => NormalizeInstructionImageUrl(s.ImageUrl))
-            .ToArray();
-
-        _instructionDescriptions = _arrivalInstructionSteps
-            .Select(s => s.Description)
-            .ToArray();
-
-        _instructionTitles = _arrivalInstructionSteps
-            .Select(s => s.Name)
-            .ToArray();
-
-        _fallbackInstructionDescription = string.Empty;
-        StateHasChanged();
     }
 
     private string NormalizeInstructionImageUrl(string? imageUrl)
