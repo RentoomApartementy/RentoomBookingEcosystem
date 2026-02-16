@@ -247,7 +247,7 @@
                 if (_definedAddons != null)
                 {
                     var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
-                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL");
+                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == _addonslanguageMap[CurrentLanguage]);
                     var paymentType = fadesc?.PaymentTypeShortDescription;
 
                     @if (fa != null)
@@ -275,11 +275,11 @@
                     }
                     else
                     {
-                        <div class="addon-item">
+                      @*  <div class="addon-item">
                             <div class="addon-label">
                                 <span class="addon-name-empty">Brak opisu dodatku</span>
                             </div>
-                        </div>
+                        </div>*@
                     }
                 }
                 else
@@ -584,6 +584,13 @@
         { "pl-PL", "pol" },
         { "en-US", "eng" }
     };
+
+    private static Dictionary<string, string> _addonslanguageMap = new Dictionary<string, string>
+    {
+        { "pol", "PL" },
+        { "eng", "EN" }
+    };
+
 
     private string CurrentLanguage => _languageMap?.GetValueOrDefault(
         CultureInfo.CurrentUICulture.Name, 
