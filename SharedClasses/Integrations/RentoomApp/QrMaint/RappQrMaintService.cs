@@ -65,6 +65,11 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
                 .AsNoTracking()
                 .Where(x => x.ApartmentItemId == apartmentItemId)
                 .FirstOrDefaultAsync(cancellationToken);
+        }
+
+
+        }
+
 
 
         }

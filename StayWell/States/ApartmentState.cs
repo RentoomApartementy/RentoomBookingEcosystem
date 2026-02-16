@@ -1,5 +1,7 @@
 ﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.StayWell.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using System.Linq;
 
 namespace RentoomBooking.StayWell.States
