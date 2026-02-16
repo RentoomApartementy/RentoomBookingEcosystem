@@ -4,7 +4,10 @@
     gap: 20px;
     border-radius: 15px;
     padding: 10px;
-    border: solid 1px black;
+/*    border: solid 1px black;*/
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 .icon {
