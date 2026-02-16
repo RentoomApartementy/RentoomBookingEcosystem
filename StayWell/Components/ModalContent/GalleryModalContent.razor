@@ -1,0 +1,49 @@
+﻿<div class="gallery-modal-content">
+
+    @* Przycisk WSTECZ - tylko jeśli włączone sterowanie i więcej niż 1 zdjęcie *@
+    @if (ShowControls && ImageUrls.Length > 1)
+    {
+        <button class="nav-btn prev" @onclick="PrevImage">
+            <img src="/icons/chevron-left.svg" alt="<" />
+        </button>
+    }
+
+    <div class="image-wrapper">
+        <img src="@ImageUrls[_currentIndex]"
+             alt="Powiększone zdjęcie"
+             style="max-width: 100%; max-height: 80vh; object-fit: contain;" />
+    </div>
+
+    @* Przycisk DALEJ - tylko jeśli włączone sterowanie i więcej niż 1 zdjęcie *@
+    @if (ShowControls && ImageUrls.Length > 1)
+    {
+        <button class="nav-btn next" @onclick="NextImage">
+            <img src="/icons/chevron-right.svg" alt=">" />
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter] public string[] ImageUrls { get; set; } = Array.Empty<string>();
+    [Parameter] public int StartIndex { get; set; } = 0;
+    [Parameter] public bool ShowControls { get; set; } = false;
+
+    private int _currentIndex;
+
+    protected override void OnInitialized()
+    {
+        _currentIndex = StartIndex;
+    }
+
+    private void NextImage()
+    {
+        if (_currentIndex < ImageUrls.Length - 1) _currentIndex++;
+        else _currentIndex = 0;
+    }
+
+    private void PrevImage()
+    {
+        if (_currentIndex > 0) _currentIndex--;
+        else _currentIndex = ImageUrls.Length - 1;
+    }
+}

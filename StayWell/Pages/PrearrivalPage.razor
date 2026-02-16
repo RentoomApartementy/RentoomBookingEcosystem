@@ -33,51 +33,12 @@
                 Twój Panel rezerwacji jest już dostępny!
             </div>
         }
-        @* <div class="sg oooh-baby-regular" style="margin-top: 0;">Zespół Rentoom Apartamenty</div> *@
     </div>
 
     <div class="card">
 
-        @* <div class="h">Opłata za rezerwację</div>
-        @if (!_paid)
-        {
-            <div class="row">
-                <span class="m">Do zapłaty:</span>
-                <span class="a">--,-- zł</span>
-            </div>
-            <button class="btn" type="button">Zapłać Teraz</button>
-        }
-        else
-        {
-            <div class="s">Opłacono!
-                <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg"/>
-            </div>
-            <br />
-            <button class="btn" type="button" style="background-color: black;" @onclick="Navigate">Przejdź dalej 
-                <img class="white-filter pb-1" src="/icons/chevron-right.svg"/>
-            </button>
-        } *@
 
-        @if (ReservationState.IsActiveReservation)
-        {
-            <div class="s">
-                Skorzystaj z panelu
-                @* <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg" /> *@
-            </div>
-            <br />
-            <button class="btn" type="button" style="background-color: black;" @onclick="NavigateToTerms">
-                Przejdź dalej
-                <img class="white-filter pb-1" src="/icons/chevron-right.svg" />
-            </button>
-        }
-        else
-        {
-            <div class="s">
-                Dostęp do panelu otrzymasz po wypełnieniu potrzebnych informacji!
-            </div>
-        }
 
-        <hr class="b-l"/>
         @* <img src="@_apartment_image" /> *@
         <div class="pb-3">
             <Carousel ImageUrls="@urls" TransitionIntervalMs="3500" UseTimer="@true" UseSmartGlow="@false" />
@@ -85,22 +46,25 @@
         <div class="an">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName</div>
         <div class="row">
             <div class="ct">Zameldowanie</div>
-            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom().ToString("yyyy.MM.dd")</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom().ToString("dd.MM.yyyy")</div>
         </div>
         <div class="row">
             <div class="ct">Wymeldowanie</div>
-            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateTo().ToString("yyyy.MM.dd")</div>
+            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateTo().ToString("dd.MM.yyyyd")</div>
         </div>
         <hr class="b-l" />
         <div class="row">
-            <div class="ct">Karta rezerwacji</div>
-            <div class="cd">
-                @if(RegistrationCardState.CurrentCard == null)
+            @* <div class="ct">Karta rezerwacji</div> *@
+            <div class="cdc">
+                @if(1 == 1)
                 {
-                    <button class="btn-small" @onclick="NavigateToRegistration">
-                        <img class="white-filter pb-1" src="/icons/chevron-right.svg" />
-                        Wypełnij
-                    </button>
+                    <div class="row justify-content-center">
+                        <div class="cdc pb-4 text-secondary" style="font-size: 14px; text-align: center">Wypełnij Kartę zameldowania oraz zaakceptuj regulamin aby otrzymać dostęp do panelu.</div>
+                        <button class="btn-checkin" @onclick="NavigateToTerms">
+                            Przejdź dalej
+                            <img class="white-filter pb-1" src="/icons/chevron-right.svg" />
+                        </button>
+                    </div>
                 }
                 else
                 {
@@ -110,25 +74,6 @@
                 }
                 </div>
         </div>
-        <div class="row">
-            <div class="ct">Warunki pobytu</div>
-            <div class="cd">
-                @if (TermsState.CurrentTerms == null)
-                {
-                    <button class="btn-small" @onclick="NavigateToTerms">
-                        <img class="white-filter pb-1" src="/icons/chevron-right.svg" />
-                        Zaakceptuj
-                    </button>
-                }
-                else
-                {
-                    <div>
-                        Zaakceptowane <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg" />
-                    </div>
-                }
-            </div>
-        </div>
-
         <hr class="b-l" />
 
         <div class="row">
@@ -162,32 +107,6 @@
             <div class="ct">Ilość dzieci</div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren</div>
         </div>
-        }
-    </div>
-
-    <div class="card" style="border-radius: 22px; margin-top: 10px;">
-        @if (RegistrationCardState.CurrentCard == null && TermsState.CurrentTerms == null)
-        {
-            <div>
-                Wypełnij Kartę zameldowania oraz zaakceptuj regulamin aby otrzymać dostęp do swojego panelu.
-            </div>
-        }else if(RegistrationCardState.CurrentCard == null && TermsState.CurrentTerms != null)
-        {
-            <div>
-                Wypełnij Kartę zameldowania aby otrzymać dostęp do swojego panelu.
-            </div>
-        }
-        else if (RegistrationCardState.CurrentCard != null && TermsState.CurrentTerms == null)
-        {
-            <div>
-               Zaakceptuj regulamin aby otrzymać dostęp do swojego panelu.
-            </div>
-        }
-        else
-        {
-            <div style="text-align: center;">
-                Wszystko wypełnione, pozostało tylko czekać!
-            </div>
         }
     </div>
         

@@ -2,70 +2,62 @@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
-
-@using Microsoft.Extensions.Localization
-@using System.Globalization
-@inject IStringLocalizer<ManageStayPage> Localizer
-
 @inherits Models.PageBase
 
 <PageTitle>Manage Stay</PageTitle>
 
-<div class="page-info-wrapper">
-    <PageInfo Title="@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["ManageStay"]"></PageInfo>
-</div>
+<section class="reservation-section">
+    <div class="reservation-section__content">
+        <div class="manage-grid">
+            <ManageTile Category="Pomoc"
+                        Title="Zgłoś problem"
+                        Icon="/icons/frown.svg"
+                        Description="Usterka, pytanie lub prośba do obsługi."
+                        ShowPrice="false"
+                        OnClick="@(() => Navigation.NavigateTo($"reservation/{Token}/ReportPage"))" />
 
-<div class="buttons-wrapper">
-    <Button Text="@Localizer["Report"]" OnClick="@(() => Navigation.NavigateTo($"reservation/{Token}/ReportPage"))">
-        <Icon>
-            <img src="/icons/frown.svg">
-        </Icon>
-    </Button>
-    @* <Button Text="@Localizer["EarlyCheckIn"]">
-        <Icon>
-            <img src="/icons/alarm-clock-check.svg">
-        </Icon>
-    </Button>
-    <Button Text="@Localizer["LateCheckOut"]">
-        <Icon>
-            <img src="/icons/alarm-clock-minus.svg">
-        </Icon>
-    </Button>
-    <Button Disabled=true Text="@Localizer["ExtendStay"]">
-        <Icon>
-            <img src="/icons/calendar-plus.svg">
-        </Icon>
-    </Button>
-    <Button Text="@Localizer["AdditionalCleaning"]">
-        <Icon>
-            <img src="/icons/brush-cleaning.svg">
-        </Icon>
-    </Button>
-    <Button Text="@Localizer["BabyCrib"]">
-        <Icon>
-            <img src="/icons/baby.svg">
-        </Icon>
-    </Button>
-    <Button ButtonStyle="color: red; border-color: red; margin-top: 30px;" Text="@Localizer["CheckOut"]"
-    OnClick="OpenModal">
-        <Icon>
-            <img src="/icons/door-closed.svg">
-        </Icon>
-    </Button> *@
-</div>
+            <ManageTile Category="Usługi"
+                        Title="Dodatkowe sprzątanie"
+                        Icon="/icons/brush-cleaning.svg"
+                        Description="Zamów sprzątanie w trakcie pobytu."
+                        ShowPrice="true"
+                        PriceText="+ 90,00 zł"
+                        PriceInfo="za każde zamówienie" />
+
+            <ManageTile Category="Usługi"
+                        Title="Łóżeczko dziecięce"
+                        Icon="/icons/baby.svg"
+                        Description="Dodaj wyposażenie dla dziecka."
+                        ShowPrice="true"
+                        PriceText="+ 50,00 zł"
+                        PriceInfo="jednorazowo" />
+
+            <ManageTile Category="Check-in / check-out"
+                        Title="Wcześniejszy check-in"
+                        Icon="/icons/alarm-clock-check.svg"
+                        Description="Sprawdź dostępność wcześniejszego zameldowania."
+                        ShowPrice="true"
+                        PriceText="Od + 60,00 zł"
+                        PriceInfo="w zależności od godziny" />
+
+            <ManageTile Category="Check-in / check-out"
+                        Title="Późniejszy check-out"
+                        Icon="/icons/alarm-clock-minus.svg"
+                        Description="Sprawdź dostępność późniejszego wymeldowania."
+                        ShowPrice="true"
+                        PriceText="Od + 60,00 zł"
+                        PriceInfo="w zależności od godziny" />
+
+            <ManageTile Category="Pobyt"
+                        Title="Przedłuż pobyt"
+                        Icon="/icons/calendar-plus.svg"
+                        Description="Opcja chwilowo niedostępna."
+                        ShowPrice="true"
+                        PriceText=""
+                        PriceInfo="niedostępne" />
+        </div>
+    </div>
+</section>
 
 @code{
-    private bool _windows;
-    private bool _belongings;
-    private bool _trash;
-    private bool _remote;
-
-    private bool _buttonState => _windows && _belongings && _trash && _remote;
-
-    void OpenModal()
-    {
-        ModalService.ShowModal("Wymelduj się",
-        @<RentoomBooking.StayWell.Components.ModalContent.CheckOutContent></RentoomBooking.StayWell.Components.ModalContent.CheckOutContent>
-        );
-    }
 }

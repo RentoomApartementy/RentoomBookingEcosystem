@@ -1,17 +1,12 @@
-﻿
-using Microsoft.AspNetCore.Components;
-using Microsoft.Azure.Functions.Worker;
+﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.SharedClasses.Services.IdoBooking;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-
 
 public class IdoLocksApi
 {
@@ -26,7 +21,9 @@ public class IdoLocksApi
 
     [Function("GetLocks")]
     public async Task<HttpResponseData> GetLocks(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "locks/{reservationId}/{itemId}")] HttpRequestData req, int reservationId, int itemId)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "locks/{reservationId}/{itemId}")] HttpRequestData req,
+        string reservationId,
+        string itemId)
     {
         var cancellationToken = req.FunctionContext.CancellationToken;
         var response = req.CreateResponse();
@@ -34,19 +31,23 @@ public class IdoLocksApi
 
         try
         {
-            if (reservationId <= 0 || itemId <= 0)
+            if (!int.TryParse(reservationId, NumberStyles.Integer, CultureInfo.InvariantCulture, out var resId) ||
+                !int.TryParse(itemId, NumberStyles.Integer, CultureInfo.InvariantCulture, out var itmId) ||
+                resId <= 0 || itmId <= 0)
             {
                 response.StatusCode = HttpStatusCode.BadRequest;
-                await response.WriteStringAsync("Missing reservationId or itemId.");
+                await response.WriteStringAsync("Missing or invalid reservationId or itemId.");
                 return response;
             }
-            var locks = await _idoLocksService.GetLocksAsync(reservationId, itemId, cancellationToken);
+
+            var locks = await _idoLocksService.GetLocksAsync(resId, itmId, cancellationToken);
             if (locks == null)
             {
                 response.StatusCode = HttpStatusCode.NotFound;
                 await response.WriteStringAsync("No locks found for the given reservationId and itemId.");
                 return response;
             }
+
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
             await response.WriteStringAsync(JsonConvert.SerializeObject(locks));
