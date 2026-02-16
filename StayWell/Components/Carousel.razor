@@ -33,14 +33,14 @@
             </div>
         </div>
 
-        @if (!string.IsNullOrEmpty(Description))
+        @if (!string.IsNullOrWhiteSpace(CurrentDescription))
         {
             <div class="description-wrap">
                 <div class="description-title">
-                    Krok @(_index + 1)
+                    @CurrentTitle
                 </div>
                 <div class="description-text">
-                    @Description
+                    @CurrentDescription
                 </div>
             </div>
         }
@@ -49,7 +49,7 @@
         {
             <div class="control-buttons-wrapper">
                 <button class="nav-btn" @onclick="PreviousSlide" aria-label="Poprzedni">
-                    <img src="/icons/chevron-left.svg" alt="<" /> <!-- Zalecam u¿ycie ikony SVG zamiast znaku < -->
+                    <img src="/icons/chevron-left.svg" alt="<" />
                 </button>
 
                 <span class="slide-counter">
@@ -59,7 +59,7 @@
                 </span>
 
                 <button class="nav-btn" @onclick="NextSlide" aria-label="Nastêpny">
-                    <img src="/icons/chevron-right.svg" alt=">" /> <!-- Zalecam u¿ycie ikony SVG zamiast znaku > -->
+                    <img src="/icons/chevron-right.svg" alt=">" />
                 </button>
             </div>
         }
@@ -71,6 +71,8 @@
     [Parameter] public bool UseTimer { get; set; }
     [Parameter] public bool UseControlButtons { get; set; }
     [Parameter] public string Description { get; set; } = string.Empty;
+    [Parameter] public string[] Descriptions { get; set; } = Array.Empty<string>();
+    [Parameter] public string[] StepTitles { get; set; } = Array.Empty<string>();
     [Parameter] public int TransitionIntervalMs { get; set; } = 2000;
     [Parameter] public bool UseSmartGlow { get; set; } = false;
     [Parameter] public string AdditionalStyle { get; set; } = string.Empty;
@@ -78,6 +80,14 @@
 
     private int _index = 0;
     private System.Timers.Timer? _timer;
+
+    private string CurrentDescription =>
+        Descriptions.Length > _index ? Descriptions[_index] : Description;
+
+    private string CurrentTitle =>
+        StepTitles.Length > _index && !string.IsNullOrWhiteSpace(StepTitles[_index])
+            ? StepTitles[_index]
+            : $"Krok {_index + 1}";
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -91,7 +101,11 @@
         if (UseControlButtons)
         {
             ModalService.ShowModal("",
-            @<RentoomBooking.StayWell.Components.ModalContent.GalleryModalContent ImageUrls="@ImageUrls" StartIndex="@_index" ShowControls="@UseControlButtons"/>
+            @<RentoomBooking.StayWell.Components.ModalContent.GalleryModalContent 
+            ImageUrls="@ImageUrls" 
+            StartIndex="@_index" 
+            ShowControls="@UseControlButtons"/>, 
+            true /* <- styl zdjêcia*/
             );
         }
     }

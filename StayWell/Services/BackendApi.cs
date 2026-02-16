@@ -257,7 +257,12 @@ namespace RentoomBooking.StayWell.Services
         private sealed class LockCodeResponse
         {
             [JsonPropertyName("lockCode")]
-            public string? LockCode { get; init; }
+            public string? LockCode
+            {
+                get; init;
+
+            }
+        }
         public async Task<UpsellPaymentInitResult?> CreateUpsellOrderAsync(string token, UpsellOrderRequest request)
         {
             var response = await _http.PostAsJsonAsync($"reservations/{token}/upsells/orders", request, _json);

@@ -7,6 +7,7 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject StayWell.Services.ClipboardService ClipboardService
+@inject StayWell.Services.BackendApi BackendApi
 @inject IStringLocalizer<InstructionsPage> Localizer
 @inject StayWell.Services.ToastService ToastService
 
@@ -15,14 +16,14 @@
 <PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
 <div class="instructions-page">
-
-    <!-- Sekcja 1: Galeria instrukcji -->
     <section class="instructions-section">
         <header class="instructions-section__header">
             <h3 class="instructions-section__title">Wizualna instrukcja</h3>
         </header>
         <div class="carousel-wrapper">
-            <Carousel Description="Testowy opis kroku."
+            <Carousel Description="@_fallbackInstructionDescription"
+                      Descriptions="@_instructionDescriptions"
+                      StepTitles="@_instructionTitles"
                       ImageUrls="@urls"
                       UseControlButtons="@true"
                       IsInstructionCarousel=true>
@@ -30,7 +31,6 @@
         </div>
     </section>
 
-    <!-- Sekcja 2: Kody dostępu (układ kafelkowy) -->
     <section class="instructions-section">
         <header class="instructions-section__header">
             <h3 class="instructions-section__title">Kody dostępu i adres</h3>
@@ -38,7 +38,6 @@
 
         <div class="codes-grid">
 
-            <!-- Kafelki -->
             <div class="code-card">
                 <div class="code-card__icon-wrapper">
                     <img src="/icons/map-pin.svg" class="code-card__icon" />
@@ -145,8 +144,14 @@
 </div>
 
 @code {
-    // ... Twój istniejący kod C# (bez zmian) ...
     private string wifi_pass = "MV329R8VHJYT98W";
+    private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
+    private const string InstructionImageBaseUrl = "https://app.rentoom.pl/";
+    private string _fallbackInstructionDescription = "Instrukcje zameldowania są w trakcie przygotowania.";
+
+    private List<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
+    private string[] _instructionDescriptions = Array.Empty<string>();
+    private string[] _instructionTitles = Array.Empty<string>();
 
     private string[] urls = ["/images/mock_instruction/1.png",
     "/images/mock_instruction/2.png",
@@ -162,13 +167,58 @@
     private int _minutes;
     private System.Threading.Timer? _timer;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         if (!ReservationState.IsActiveReservation)
         {
             StartTimer();
         }
-        return base.OnInitializedAsync();
+
+        await base.OnInitializedAsync();
+        await LoadArrivalInstructionsAsync();
+    }
+
+    private async Task LoadArrivalInstructionsAsync()
+    {
+        var apartmentId = ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.objectId;
+        if (apartmentId is null || apartmentId <= 0) return;
+
+        var steps = await BackendApi.GetArrivalInstructionStepsAsync(apartmentId.Value);
+        if (steps.Count == 0) return;
+
+        _arrivalInstructionSteps = steps
+            .OrderBy(s => s.Sequence)
+            .ToList();
+
+        urls = _arrivalInstructionSteps
+            .Select(s => NormalizeInstructionImageUrl(s.ImageUrl))
+            .ToArray();
+
+        _instructionDescriptions = _arrivalInstructionSteps
+            .Select(s => s.Description)
+            .ToArray();
+
+        _instructionTitles = _arrivalInstructionSteps
+            .Select(s => s.Name)
+            .ToArray();
+
+        _fallbackInstructionDescription = string.Empty;
+        StateHasChanged();
+    }
+
+    private string NormalizeInstructionImageUrl(string? imageUrl)
+    {
+        if (string.IsNullOrWhiteSpace(imageUrl))
+        {
+            return InstructionPlaceholderUrl;
+        }
+
+        if (Uri.TryCreate(imageUrl, UriKind.Absolute, out var absoluteUri))
+        {
+            return absoluteUri.ToString();
+        }
+
+        return $"{InstructionImageBaseUrl.TrimEnd('/')}/{imageUrl.TrimStart('/')}";
     }
 
     private void StartTimer()
