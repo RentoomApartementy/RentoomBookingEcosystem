@@ -43,8 +43,9 @@ namespace RentoomBooking.Api.Integrations.RentoomApp
                     await response.WriteStringAsync("Missing or invalid apartmentItemId.");
                     return response;
                 }
-
-                var lockCode = await _qrMaintService.GetLockCodeAsync(apartmentItemId, cancellationToken);
+                var apartmentSettings = await _qrMaintService.GetApartmentItemCodesAsync(apartmentItemId, cancellationToken);
+                var lockCode = apartmentSettings?.TTLockId;
+                //var lockCode = await _qrMaintService.GetLockCodeAsync(apartmentItemId, cancellationToken);
                 if (string.IsNullOrEmpty(lockCode))
                 {
                     response.StatusCode = HttpStatusCode.NotFound;
@@ -98,7 +99,9 @@ namespace RentoomBooking.Api.Integrations.RentoomApp
                     return response;
                 }
 
-                var lockCode = await _qrMaintService.GetLockCodeAsync(objectItemId.Value, cancellationToken);
+                //var lockCode = await _qrMaintService.GetLockCodeAsync(objectItemId.Value, cancellationToken);
+                var apartmentSettings = await _qrMaintService.GetApartmentItemCodesAsync(objectItemId.Value, cancellationToken);
+                var lockCode = apartmentSettings?.TTLockId;
                 if (string.IsNullOrEmpty(lockCode))
                 {
                     response.StatusCode = HttpStatusCode.NotFound;

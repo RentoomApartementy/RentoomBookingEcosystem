@@ -31,5 +31,9 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 
         [Column("TTLockId")]
         public string? TTLockId { get; set; }
+        public string? GateCode { get; set; }
+        public string? GateDoorCode { get; set; }
+        public string? AdditionalDoorCode { get; set; }
+        public string? StoreroomCode { get; set; }
     }
 }

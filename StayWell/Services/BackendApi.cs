@@ -71,7 +71,7 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<List<Lock>> GetLocksAsync(int reservationId, int itemId)
         {
-            return await _http.GetFromJsonAsync<List<Lock>>($"locks/{reservationId}/{itemId}", _json)
+            return await _http.GetFromJsonAsync<List<Lock>>($"idobooking/locks/{reservationId}/{itemId}", _json)
                 ?? [];
         }
 

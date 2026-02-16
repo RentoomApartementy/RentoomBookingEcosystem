@@ -21,7 +21,7 @@ public class IdoLocksApi
 
     [Function("GetLocks")]
     public async Task<HttpResponseData> GetLocks(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "locks/{reservationId}/{itemId}")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "idobooking/locks/{reservationId}/{itemId}")] HttpRequestData req,
         string reservationId,
         string itemId)
     {
@@ -39,7 +39,7 @@ public class IdoLocksApi
                 await response.WriteStringAsync("Missing or invalid reservationId or itemId.");
                 return response;
             }
-
+           
             var locks = await _idoLocksService.GetLocksAsync(resId, itmId, cancellationToken);
             if (locks == null)
             {

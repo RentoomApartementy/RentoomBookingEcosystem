@@ -56,6 +56,20 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+
+        public async Task<ApartmentItemLocalSettings?> GetApartmentItemCodesAsync(
+            int apartmentItemId,
+            CancellationToken cancellationToken = default)
+        {
+            return await _dbContext.ApartmentItemLocalSettings
+                .AsNoTracking()
+                .Where(x => x.ApartmentItemId == apartmentItemId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+
+        }
+
+
         public async Task<bool> TestConnectionAsync()
         {
             try
