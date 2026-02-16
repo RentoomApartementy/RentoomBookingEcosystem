@@ -14,6 +14,7 @@ using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.IdoBooking.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
@@ -105,6 +106,7 @@ builder.Services.AddScoped<IUpsellVoucherRedeemService, UpsellVoucherRedeemServi
 
 
 builder.Services.AddScoped<BitrixService>();
+builder.Services.AddScoped<IIdoBookingDefinedAddonScrapingService, IdoBookingDefinedAddonScrapingService>();
 
 //Customer Terms
 builder.Services.AddScoped<CustomerTermsRepository>();
