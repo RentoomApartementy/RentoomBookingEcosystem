@@ -28,19 +28,21 @@
             <img src="/icons/external-link.svg">
         </Icon>
     </Button> *@
-    <div class="qr-maint-wrap">
-        @{
-            var formUrl = !string.IsNullOrEmpty(ApartmentState.QrMaintFormUrl)
-            ? ApartmentState.QrMaintFormUrl
-            : "https://app.qrmaint.com/request/77418950-edb4-0141-6154-34022cb5d27c";
-        }
-
-        <iframe class="qr-maint-frame"
-                src="@formUrl"
-                style="width: 1px; min-width: 100%;"
-                frameborder="0"
-                scrolling="no"
-                seamless="seamless">
-        </iframe>
-    </div>
+    @if (!string.IsNullOrEmpty(ApartmentState.QrMaintFormUrl))
+    {
+        <div class="qr-maint-wrap">
+            <iframe 
+                class="qr-maint-frame"
+                src='@ApartmentState.QrMaintFormUrl' 
+                style='position:relative;width:1px;min-width:100%;*width:100%;' 
+                frameborder='0' scrolling='no' seamless='seamless' height='1000' width='100'>
+            </iframe>
+        </div>
+    }
+    else
+    {
+        <div>
+            <p>Napisz mail!</p>
+        </div>
+    }
 </div>

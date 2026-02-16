@@ -26,7 +26,12 @@
             {
                 <div class="modal-content image-content">
                     <div class="image-wrapper">
-                        @Content
+                        <img src="@ImageUrl"
+                             alt="@Title"
+                             style="transform: rotate(@(_rotation)deg);
+                                            @(IsRotatedPerpendicular
+                                                                   ? "max-width: 98vh; max-height: 98vw;"
+                                                                   : "max-width: 100vw; max-height: 98vh;")" />
             </div>
 
                     <div class="image-controls">
@@ -57,12 +62,12 @@
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
     [Parameter] public RenderFragment? Content { get; set; }
-    [Parameter] public bool HasImage { get; set; }
+    [Parameter] public string? ImageUrl { get; set; }
 
     private ElementReference backdropRef;
     private int _rotation = 0;
 
-    // private bool HasImage => !string.IsNullOrEmpty(ImageUrl);
+    private bool HasImage => !string.IsNullOrEmpty(ImageUrl);
 
     private bool IsRotatedPerpendicular => _rotation == 90 || _rotation == 270;
 

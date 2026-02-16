@@ -13,7 +13,5 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 
         public DbSet<QRMaintIdosellMappingEntity> QRMaintIdosellMapping { get; set; }
         public DbSet<RentoomQREntity> RentoomQRs { get; set; }
-
-        public DbSet<ApartmentItemLocalSettings> ApartmentItemLocalSettings { get; set; }
     }
 }

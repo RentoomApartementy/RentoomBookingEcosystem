@@ -2,7 +2,7 @@
 @implements IDisposable
 @inject StayWell.Services.ModalService ModalService
 
-<div class="carousel-component-root @(UseSmartGlow ? "with-glow" : "")">
+<div class="carousel-component-root" style="@(UseSmartGlow ? "" : "")">
 
     @if (UseSmartGlow)
     {
@@ -18,61 +18,33 @@
         </div>
     }
 
-    <div class="carousel-card">
-        <div class="carousel-mask"
-             style="height: @(IsInstructionCarousel ? "500px;" : "250px;")">
-            <div class="slider" style="transform: translateX(calc(-@(_index * 100)%))">
-                @for (int i = 0; i < ImageUrls.Length; i++)
-                {
-                    <div class="slide" @onclick="EnlargeImage" style="cursor: pointer;" title="Kliknij, aby powiêkszyæ">
-                        <div class="slide-bg" style="background-image: url('@ImageUrls[i]')"></div>
-                        <img class="slide-img" src="@ImageUrls[i]" loading="lazy" alt="slide-@i"
-                             style="object-fit: @(IsInstructionCarousel ? "contain;" : "cover;")" />
-                    </div>
-                }
-            </div>
+    <div class="carousel-mask @(UseControlButtons ? "noradius" : "")"
+         style="height: @(IsInstructionCarousel ? "500px;" : "200px;")">
+        <div class="slider" style="transform: translateX(calc(-@(_index * 100)%))">
+            @for (int i = 0; i < ImageUrls.Length; i++)
+            {
+                <div class="slide" @onclick="EnlargeImage" style="cursor: pointer;" title="Click to enlarge">
+                    <div class="slide-bg" style="background-image: url('@ImageUrls[i]')"></div>
+                    <img class="slide-img" src="@ImageUrls[i]" loading="lazy" alt="slide-@i"
+                        style="object-fit: @(IsInstructionCarousel ? "contain;" : "cover;")" />
+                </div>
+            }
         </div>
-
-        @if (!string.IsNullOrWhiteSpace(CurrentDescription))
-        {
-            <div class="description-wrap">
-                <div class="description-title">
-                    @CurrentTitle
-                </div>
-                <div class="description-text">
-                    @CurrentDescription
-                </div>
-            </div>
-        }
-
-        @if (UseControlButtons)
-        {
-            <div class="control-buttons-wrapper">
-                <button class="nav-btn" @onclick="PreviousSlide" aria-label="Poprzedni">
-                    <img src="/icons/chevron-left.svg" alt="<" />
-                </button>
-
-                <span class="slide-counter">
-                    <span class="current">@(_index + 1)</span>
-                    <span class="divider">/</span>
-                    <span class="total">@ImageUrls.Length</span>
-                </span>
-
-                <button class="nav-btn" @onclick="NextSlide" aria-label="Nastêpny">
-                    <img src="/icons/chevron-right.svg" alt=">" />
-                </button>
-            </div>
-        }
     </div>
+    @if (UseControlButtons == true)
+    {
+        <div class="control-buttons-wrapper">
+            <button @onclick="PreviousSlide"> &lt; </button>
+            <span>@(_index + 1) / @ImageUrls.Length </span>
+            <button @onclick="NextSlide"> &gt; </button>
+        </div>
+    }
 </div>
 
 @code {
     [Parameter] public string[] ImageUrls { get; set; } = Array.Empty<string>();
     [Parameter] public bool UseTimer { get; set; }
     [Parameter] public bool UseControlButtons { get; set; }
-    [Parameter] public string Description { get; set; } = string.Empty;
-    [Parameter] public string[] Descriptions { get; set; } = Array.Empty<string>();
-    [Parameter] public string[] StepTitles { get; set; } = Array.Empty<string>();
     [Parameter] public int TransitionIntervalMs { get; set; } = 2000;
     [Parameter] public bool UseSmartGlow { get; set; } = false;
     [Parameter] public string AdditionalStyle { get; set; } = string.Empty;
@@ -80,14 +52,6 @@
 
     private int _index = 0;
     private System.Timers.Timer? _timer;
-
-    private string CurrentDescription =>
-        Descriptions.Length > _index ? Descriptions[_index] : Description;
-
-    private string CurrentTitle =>
-        StepTitles.Length > _index && !string.IsNullOrWhiteSpace(StepTitles[_index])
-            ? StepTitles[_index]
-            : $"Krok {_index + 1}";
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -98,16 +62,12 @@
     {
         if (ImageUrls == null || ImageUrls.Length == 0) return;
 
-        if (UseControlButtons)
-        {
-            ModalService.ShowModal("",
-            @<RentoomBooking.StayWell.Components.ModalContent.GalleryModalContent 
-            ImageUrls="@ImageUrls" 
-            StartIndex="@_index" 
-            ShowControls="@UseControlButtons"/>, 
-            true /* <- styl zdjêcia*/
-            );
-        }
+        var currentImageUrl = ImageUrls[_index];
+
+        ModalService.ShowModal(
+            title: "Image Preview",
+            imageUrl: currentImageUrl
+        );
     }
 
     private void NextSlide()

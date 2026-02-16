@@ -2,15 +2,6 @@
     position: relative;
     width: 100%;
     z-index: 1;
-    margin-bottom: 20px;
-}
-
-.carousel-card {
-    background: #fff;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08); /* Delikatniejszy cieñ */
-    border: 1px solid rgba(0,0,0,0.04);
 }
 
 .glow-layer {
@@ -31,8 +22,14 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    background-color: #f8f8f8;
+    border-radius: 15px;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     z-index: 2;
+}
+
+.noradius {
+    border-radius: 15px 15px 0 0;
 }
 
 .slider {
@@ -63,10 +60,10 @@
     height: 100%;
     background-size: cover;
     background-position: center;
-    filter: blur(20px);
-    opacity: 0.5;
+    filter: blur(15px);
+    opacity: 0.6;
     z-index: 0;
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .slide-img {
@@ -77,107 +74,58 @@
     z-index: 1;
 }
 
-.description-wrap {
-    width: 100%;
-    position: relative;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 16px;
-    text-align: center;
-    align-items: center;
-    background: white;
-    border-top: 1px solid rgba(0,0,0,0.05);
-}
-
-.description-title {
-    margin: 0;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.description-text {
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.4;
-}
-
 .control-buttons-wrapper {
     position: relative;
     z-index: 3;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    width: 100%;
-    background: #fafafa;
-    border-top: 1px solid rgba(0,0,0,0.05);
-}
-
-.nav-btn {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    width: 70px;
-    height: 50px;
-    border-radius: 20px;
-    border: 1px solid rgba(0,0,0,0.1);
-    background-color: white;
-    color: #222;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    gap: 30px;
+    width: 100%;
+    border-radius: 0 0 15px 15px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+    background: rgba(255, 255, 255, 0.8);
 }
 
-    .nav-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        background-color: #fff;
-        border-color: rgba(0,0,0,0.2);
-    }
-
-    .nav-btn:active {
-        transform: translateY(1px);
-        box-shadow: none;
-    }
-
-    .nav-btn img {
-        width: 20px;
-        height: 20px;
-        opacity: 0.7;
-    }
-
-.slide-counter {
-    font-family: monospace;
-    font-size: 1rem;
-    color: #555;
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-
-    .slide-counter .current {
-        font-weight: 700;
+    .control-buttons-wrapper button {
+        border-radius: 15px;
+        padding: 10px;
+        margin: 10px;
+        width: 100px;
+        border: 1.75px solid #222;
         color: #222;
+        background: linear-gradient(180deg, #fff 60%, #f3f3f3 100%);
+        box-shadow: 0 4px 16px -2px rgba(0,0,0,0.12), 0 1.5px 0 0 #fff inset;
+        cursor: pointer;
+        transition: all 0.2s ease;
     }
 
-    .slide-counter .divider {
-        opacity: 0.4;
+        .control-buttons-wrapper button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+    .control-buttons-wrapper span {
+        align-content: center;
+        font-size: large;
+        width: 50px;
+        text-align: center;
     }
 
-@media (max-width: 400px) {
-    .control-buttons-wrapper {
-        padding: 10px 15px;
-    }
-
-    .nav-btn {
-        width: 36px;
-        height: 36px;
-    }
+.big-img {
+    width: 100%;
+    height: 100%;
 }
 
 
+.instruction-wrapper {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    min-height: 50px;
+    text-align: center;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+    background: rgba(255, 255, 255, 0.8);
+}

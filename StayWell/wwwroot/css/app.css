@@ -10,18 +10,6 @@
     font-style: normal;
 }
 
-:root {
-    /* Dark Brown */
-    --rentoom-brown-dark: #965f28;
-    /* Light Brown */
-    --rentoom-brown-light: #a97949;
-    /* Deep Green */
-    --rentoom-green-dark: #21573e;
-    /* Sage Green */
-    --rentoom-green-sage: #8b9c8c;
-    /* Neutral Off-White */
-    --rentoom-neutral-white: #f7f7f7;
-}
 
 /* UKRYWANIE STYLU BITRIX */
 .b24-widget-button-visible {

@@ -9,8 +9,6 @@ namespace RentoomBooking.StayWell.States
         private readonly BackendApi _backendApi = backendApi;
 
         public bool IsLoading { get; set; }
-        public int? BatteryLevel { get; private set; }
-        public bool IsTTLockAvailable { get; private set; }
 
         public List<Lock>? CurrentLocks
         {
@@ -22,20 +20,27 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
-        public string? TTLockId { get; private set; }
-
         public async Task<List<Lock?>?> GetLocksAsync(int reservationId, int itemId)
         {
+            //if (_currentObjectId == objectId) return CurrentLocks;
+
             SetLoading(true);
             try
             {
-                var locks = await _backendApi.GetLocksAsync(reservationId, itemId);
+                if (_backendApi == null)
+                {
+                    ClearLocks();
+                    return null;
+                }
+                var locks = await _backendApi.GetLocksAsync(reservationId,itemId);
+                if (locks == null) ClearLocks();
+                //_currentObjectId = objectId;
                 CurrentLocks = locks;
                 return CurrentLocks;
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                //Console.WriteLine(e.Message);
+                Console.WriteLine(e.Message);
                 ClearLocks();
                 return null;
             }
@@ -45,38 +50,6 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
-        public async Task CheckTTLockStatusAsync(string token)
-        {
-            try
-            {
-                var result = await _backendApi.PingLockAsync(token);
-                if (result != null && result.Success)
-                {
-                    BatteryLevel = result.BatteryLevel;
-                    IsTTLockAvailable = (BatteryLevel > 20);
-                }
-                else
-                {
-                    IsTTLockAvailable = false;
-                    BatteryLevel = null;
-                }
-            }
-            catch
-            {
-                IsTTLockAvailable = false;
-            }
-            finally
-            {
-                NotifyStateChanged();
-            }
-        }
-
-        public async Task GetTTLockIdAsync(int apartmentItemId)
-        {
-            TTLockId = await _backendApi.GetLockCodeAsync(apartmentItemId);
-            //Console.WriteLine(TTLockId);
-            NotifyStateChanged();
-        }
 
         public event Action? OnChange;
 
@@ -93,14 +66,14 @@ namespace RentoomBooking.StayWell.States
             NotifyStateChanged();
         }
 
+
         public void ClearLocks()
         {
             CurrentLocks = null;
             IsLoading = false;
-            TTLockId = null;
-            BatteryLevel = null;
-            IsTTLockAvailable = false;
         }
         private void NotifyStateChanged() => OnChange?.Invoke();
+
+
     }
 }

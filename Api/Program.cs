@@ -14,11 +14,9 @@ using Newtonsoft.Json.Serialization;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
-using RentoomBooking.SharedClasses.Integrations.TTLock;
-using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
@@ -56,8 +54,6 @@ var postgresConnectionString = PostgresConnectionStringProvider
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
-builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("RentoomDbConnectionString")));
 
 var rentoomAppConnectionString = PostgresConnectionStringProvider
     .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
@@ -81,23 +77,11 @@ builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
 builder.Services.AddScoped<ApartmentRepository>();
 builder.Services.AddScoped<FiltersRepository>();
 builder.Services.AddScoped<TermsRepository>();
-builder.Services.AddScoped<RappQrMaintService>();
 builder.Services.AddScoped<RegistrationCardRepository>();
 builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
-
-builder.Services.Configure<TTLockSettings>(options =>
-{
-    options.ClientId = builder.Configuration["TTLOCK_CLIENT_ID"] ?? string.Empty;
-    options.ClientSecret = builder.Configuration["TTLOCK_APP_SECRET"] ?? string.Empty;
-    options.Username = builder.Configuration["TTLOCK_USERNAME"] ?? string.Empty;
-    options.Password = builder.Configuration["TTLOCK_PASSWORD"] ?? string.Empty;
-    options.ApiBaseUrl = builder.Configuration["TTLOCK_API_BASE_URL"] ?? options.ApiBaseUrl;
-});
-
-builder.Services.AddHttpClient<TTLockService>();
 
 //Upselle
 builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
