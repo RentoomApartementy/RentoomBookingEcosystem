@@ -1,5 +1,4 @@
-﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
-using RentoomBooking.SharedClasses.Models.IdoBooking;
+﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.StayWell.Services;
 using System.Linq;
 
@@ -13,6 +12,7 @@ namespace RentoomBooking.StayWell.States
         private string? _qrMaintFormUrl;
         private IReadOnlyList<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
         private int? _currentArrivalInstructionApartmentId;
+        private RentoomWifiInfo? _wifiInfo;
 
         public bool IsLoading { get; set; }
 
@@ -22,6 +22,16 @@ namespace RentoomBooking.StayWell.States
             private set
             {
                 _apartment = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public RentoomWifiInfo? WifiInfo
+        {
+            get => _wifiInfo;
+            private set
+            {
+                _wifiInfo = value;
                 NotifyStateChanged();
             }
         }
@@ -119,6 +129,23 @@ namespace RentoomBooking.StayWell.States
             return QrMaintFormUrl;
         }
 
+        public async Task<RentoomWifiInfo?> GetWifiInfoAsync(int apartmentId)
+        {
+            if (_currentObjectId == apartmentId && WifiInfo != null)
+            {
+                return WifiInfo;
+            }
+
+            if (_backendApi == null)
+            {
+                WifiInfo = null;
+                return WifiInfo;
+            }
+
+            WifiInfo = await _backendApi.GetApartmentWifiInfoAsync(apartmentId);
+            return WifiInfo;
+        }
+
         public event Action? OnChange;
 
         public void SetApartment(ApartmentObject? apartment)
@@ -139,6 +166,8 @@ namespace RentoomBooking.StayWell.States
             CurrentApartment = null;
             _currentObjectId = null;
             IsLoading = false;
+            QrMaintFormUrl = null;
+            WifiInfo = null;
             SetArrivalInstructionSteps([], null);
         }
 

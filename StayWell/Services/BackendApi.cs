@@ -1,4 +1,5 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
@@ -299,10 +300,38 @@ namespace RentoomBooking.StayWell.Services
 
             }
         }
-       
+        public async Task<ApartmentItemLocalSettings?> GetApartmentItemCodesAsync(
+            string reservationToken,
+            CancellationToken cancellationToken = default)
+        {
+            using var response = await _http.GetAsync(
+                $"reservation/{reservationToken}/apartmentcodes",
+                cancellationToken);
 
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
 
+            response.EnsureSuccessStatusCode();
 
+            return await response.Content.ReadFromJsonAsync<ApartmentItemLocalSettings>(
+                _json,
+                cancellationToken);
+        }
 
+        public async Task<RentoomWifiInfo?> GetApartmentWifiInfoAsync(int apartmentId)
+        {
+            using var response = await _http.GetAsync($"qrmaint/wifi/{apartmentId}");
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<RentoomWifiInfo>(_json);
+        }
     }
 }

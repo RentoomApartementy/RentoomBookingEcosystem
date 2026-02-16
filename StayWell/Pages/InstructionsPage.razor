@@ -60,81 +60,126 @@
                 </div>
             </div>
 
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/fence.svg" class="code-card__icon" />
+            @if (HasCode(LocksState.ApartmentItemCodes?.GateCode))
+            {
+                <div class="code-card">
+                    <div class="code-card__icon-wrapper">
+                        <img src="/icons/fence.svg" class="code-card__icon" />
+                    </div>
+                    <div class="code-card__content">
+                        <div class="code-card__label">Kod do furtki</div>
+                        @if (ReservationState.IsActiveReservation)
+                        {
+                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.GateCode</div>
+                        }
+                        else
+                        {
+                            <div class="code-card__meta">
+                                Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
+                            </div>
+                        }
+                    </div>
                 </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Kod do furtki</div>
-                    @if (ReservationState.IsActiveReservation)
-                    {
-                        <div class="code-card__value code-highlight">0000</div>
-                    }
-                    else
-                    {
-                        <div class="code-card__meta">
-                            Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                        </div>
-                    }
-                </div>
-            </div>
+            }
 
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/building.svg" class="code-card__icon" />
+            @if (HasCode(LocksState.ApartmentItemCodes?.GateDoorCode))
+            {
+                <div class="code-card">
+                    <div class="code-card__icon-wrapper">
+                        <img src="/icons/building.svg" class="code-card__icon" />
+                    </div>
+                    <div class="code-card__content">
+                        <div class="code-card__label">Kod do budynku</div>
+                        @if (ReservationState.IsActiveReservation)
+                        {
+                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.GateDoorCode</div>
+                        }
+                        else
+                        {
+                            <div class="code-card__meta">
+                                Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
+                            </div>
+                        }
+                    </div>
                 </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Kod do budynku</div>
-                    @if (ReservationState.IsActiveReservation)
-                    {
-                        <div class="code-card__value code-highlight">0000</div>
-                    }
-                    else
-                    {
-                        <div class="code-card__meta">
-                            Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                        </div>
-                    }
-                </div>
-            </div>
+            }
 
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/square-parking.svg" class="code-card__icon" />
+            @if (HasCode(LocksState.ApartmentItemCodes?.AdditionalDoorCode))
+            {
+                <div class="code-card">
+                    <div class="code-card__icon-wrapper">
+                        <img src="/icons/door-closed-2.svg" class="code-card__icon" />
+                    </div>
+                    <div class="code-card__content">
+                        <div class="code-card__label">Drzwi wspólne</div>
+                        @if (ReservationState.IsActiveReservation)
+                        {
+                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.AdditionalDoorCode</div>
+                        }
+                        else
+                        {
+                            <div class="code-card__meta">
+                                Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
+                            </div>
+                        }
+                    </div>
                 </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Parking</div>
-                    @if (ReservationState.IsActiveReservation)
-                    {
-                        <div class="code-card__value code-highlight">0000</div>
-                    }
-                    else
-                    {
-                        <div class="code-card__meta">
-                            Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                        </div>
-                    }
+            }
+
+            @if (HasCode(LocksState.ApartmentItemCodes?.StoreroomCode))
+            {
+                <div class="code-card">
+                    <div class="code-card__icon-wrapper">
+                        <img src="/icons/door-open.svg" class="code-card__icon" />
+                    </div>
+                    <div class="code-card__content">
+                        <div class="code-card__label">Schowek</div>
+                        @if (ReservationState.IsActiveReservation)
+                        {
+                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.StoreroomCode</div>
+                        }
+                        else
+                        {
+                            <div class="code-card__meta">
+                                Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
+            }
 
             <div class="code-card">
                 <div class="code-card__icon-wrapper">
                     <img src="/icons/wifi.svg" class="code-card__icon" />
                 </div>
                 <div class="code-card__content">
-                    <div class="code-card__label">Login i Hasło Wi-Fi</div>
+                    <div class="code-card__label">Hasło Wi-Fi</div>
                     @if (ReservationState.IsActiveReservation)
                     {
-                        <div class="code-card__row">
-                            <div class="code-card__value">@wifi_login</div>
-                        </div>
-                        <hr />
-                        <div class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 10px;">
-                            <div class="code-card__value">@wifi_pass</div>
-                            <button @onclick="CopyToClipboard" class="copy-button" title="Skopiuj">
-                                <img src="/icons/copy.svg" />
-                            </button>
-                        </div>
+                        @if (HasWifiInfo())
+                        {
+                            @if (HasCode(WifiSsid))
+                            {
+                                <div class="code-card__value">@WifiSsid</div>
+                            }
+                            @if (HasCode(WifiPassword))
+                            {
+                                <div class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 12px;">
+                                    <div class="code-card__value">@WifiPassword</div>
+                                    <button @onclick="CopyToClipboard" class="copy-button" title="Skopiuj">
+                                        <img src="/icons/copy.svg" />
+                                    </button>
+                                </div>
+                            }
+                            @if (HasCode(WifiAuth))
+                            {
+                                <div class="code-card__meta">Zabezpieczenie: @WifiAuth</div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="code-card__meta">Brak danych Wi-Fi</div>
+                        }
                     }
                     else
                     {
@@ -150,15 +195,18 @@
 </div>
 
 @code {
-    private string wifi_pass = "MV329R8VHJYT98W";
-    private string wifi_login = "5G-HAJSPID-NETŁERK";
     private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
     private const string InstructionImageBaseUrl = "https://app.rentoom.pl/";
     private const string DefaultFallbackInstructionDescription = "Instrukcje zameldowania są w trakcie przygotowania.";
 
-    private IReadOnlyList<ApartmentArrivalInstructionStepDTO> ArrivalInstructionSteps => ApartmentState.ArrivalInstructionSteps;
-    private bool InstructionAvailable => ArrivalInstructionSteps.Count > 0;
-    private string FallbackInstructionDescription => InstructionAvailable ? string.Empty : DefaultFallbackInstructionDescription;
+    private string? WifiPassword => ApartmentState.WifiInfo?.Password;
+    private string? WifiSsid => ApartmentState.WifiInfo?.Ssid;
+    private string? WifiAuth => ApartmentState.WifiInfo?.Auth;
+
+    private List<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
+    private string[] _instructionDescriptions = Array.Empty<string>();
+    private string[] _instructionTitles = Array.Empty<string>();
+    private bool _instructionAvailable = false;
 
     private string[] InstructionDescriptions => ArrivalInstructionSteps
         .Select(s => s.Description)
@@ -242,8 +290,8 @@
     {
         try
         {
-            await ClipboardService.WriteTextAsync(wifi_pass);
-            ToastService.ShowToast($"Skopiowano {wifi_pass}");
+            await ClipboardService.WriteTextAsync(WifiPassword);
+            ToastService.ShowToast($"Skopiowano {WifiPassword}");
         }
         catch
         {
@@ -251,6 +299,14 @@
         }
     }
 
+    private static bool HasCode(string? code)
+    {
+        return !string.IsNullOrWhiteSpace(code);
+    }
+    private bool HasWifiInfo()
+    {
+        return HasCode(WifiSsid) || HasCode(WifiPassword) || HasCode(WifiAuth);
+    }
     public void Dispose()
     {
         _timer?.Dispose();
