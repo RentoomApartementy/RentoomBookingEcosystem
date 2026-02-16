@@ -2,7 +2,9 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Payments;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
@@ -27,6 +29,7 @@ namespace RentoomBooking.Api.Upsell
         private readonly IUpsellCatalogService _upsellCatalogService;
         private readonly IUpsellOrderStore _upsellOrderStore;
         private readonly IPaymentOrchestrator _paymentOrchestrator;
+        private readonly TpaySettings _tpaySettings;
         private readonly ILogger<CreateUpsellOrderFunction> _logger;
 
         public CreateUpsellOrderFunction(
@@ -34,12 +37,14 @@ namespace RentoomBooking.Api.Upsell
             IUpsellCatalogService upsellCatalogService,
             IUpsellOrderStore upsellOrderStore,
             IPaymentOrchestrator paymentOrchestrator,
+            IOptions<TpaySettings> tpaySettings,
             ILogger<CreateUpsellOrderFunction> logger)
         {
             _bookingDatabase = bookingDatabase ?? throw new ArgumentNullException(nameof(bookingDatabase));
             _upsellCatalogService = upsellCatalogService ?? throw new ArgumentNullException(nameof(upsellCatalogService));
             _upsellOrderStore = upsellOrderStore ?? throw new ArgumentNullException(nameof(upsellOrderStore));
             _paymentOrchestrator = paymentOrchestrator ?? throw new ArgumentNullException(nameof(paymentOrchestrator));
+            _tpaySettings = tpaySettings.Value ?? throw new ArgumentNullException(nameof(tpaySettings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -188,9 +193,10 @@ namespace RentoomBooking.Api.Upsell
 
                 record.State.UpsellsTotal = totalGross;
                 record.State.GrandTotal = totalGross;
-                record.State.Request.NotificationUrl = payload.NotificationUrl.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString());
-                record.State.Request.SuccessUrl = payload.SuccessUrl.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString());
-                record.State.Request.ErrorUrl = payload.ErrorUrl.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString());
+
+                record.State.Request.NotificationUrl = _tpaySettings.NotificationUrl; //.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString());
+                record.State.Request.SuccessUrl = payload.SuccessUrl + _tpaySettings.SuccessUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}",payload.ReservationGuid.ToString());
+                record.State.Request.ErrorUrl = payload.ErrorUrl + _tpaySettings.ErrorUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}", payload.ReservationGuid.ToString());
 
                 await _upsellOrderStore.UpdateAsync(record, cancellationToken);
 
@@ -198,9 +204,9 @@ namespace RentoomBooking.Api.Upsell
                    {
                        FlowType = PaymentFlowType.Upsell,
                        OrderId = record.UpsellOrderGuid,
-                       SuccessUrl = payload.SuccessUrl.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()),
-                       ErrorUrl = payload.ErrorUrl.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()),
-                       NotificationUrl = payload.NotificationUrl.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString())
+                       SuccessUrl = record.State.Request.SuccessUrl,//payload.SuccessUrl +"/"+ _tpaySettings.SuccessUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()),
+                       ErrorUrl = record.State.Request.ErrorUrl,//payload.ErrorUrl + "/" +_tpaySettings.ErrorUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()),
+                       NotificationUrl = record.State.Request.NotificationUrl, //_tpaySettings.NotificationUrl //payload.NotificationUrl.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString())
                    });
 
 

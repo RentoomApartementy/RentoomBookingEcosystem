@@ -88,14 +88,8 @@ builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
 builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
 
-builder.Services.Configure<TTLockSettings>(options =>
-{
-    options.ClientId = builder.Configuration["TTLOCK_CLIENT_ID"] ?? string.Empty;
-    options.ClientSecret = builder.Configuration["TTLOCK_APP_SECRET"] ?? string.Empty;
-    options.Username = builder.Configuration["TTLOCK_USERNAME"] ?? string.Empty;
-    options.Password = builder.Configuration["TTLOCK_PASSWORD"] ?? string.Empty;
-    options.ApiBaseUrl = builder.Configuration["TTLOCK_API_BASE_URL"] ?? options.ApiBaseUrl;
-});
+var ttlockSection = builder.Configuration.GetSection("TTLOCK");
+builder.Services.Configure<TTLockSettings>(ttlockSection);
 
 builder.Services.AddHttpClient<TTLockService>();
 
@@ -135,7 +129,8 @@ builder.Services.AddScoped<IPaymentFlowHandler, UpsellPaymentFlowHandler>();
 builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
 builder.Services.AddScoped<ITpayNotificationValidator, TpayNotificationValidator>();
 builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
-builder.Services.AddSingleton<TpayClient>();
+
+/*builder.Services.AddSingleton<TpayClient>();
 
 builder.Services.AddHttpClient("Tpay", (sp, http) =>
 {
@@ -159,6 +154,18 @@ builder.Services.AddScoped<ITpayClient>(sp =>
 
     logger.LogInformation("Creating TpayClient with ApiBaseUrl: {ApiBaseUrl}", opt.Value.ApiBaseUrl);
     return new TpayClient(http, opt, logger);
+});*/
+
+builder.Services.AddHttpClient<ITpayClient, TpayClient>((sp, http) =>
+{
+    var settings = sp.GetRequiredService<IOptions<TpaySettings>>().Value;
+
+    if (string.IsNullOrWhiteSpace(settings.ApiBaseUrl))
+        throw new InvalidOperationException("Tpay:ApiBaseUrl is missing.");
+
+    http.BaseAddress = new Uri(settings.ApiBaseUrl, UriKind.Absolute);
+    http.DefaultRequestHeaders.Accept.Clear();
+    http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
 
 
