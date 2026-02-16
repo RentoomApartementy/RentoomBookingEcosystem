@@ -147,4 +147,7 @@
   <data name="ReservationID" xml:space="preserve">
     <value>numer rezerwacji</value>
   </data>
+  <data name="ExtendReservation" xml:space="preserve">
+    <value>Przedłuż rezerwację</value>
+  </data>
 </root>

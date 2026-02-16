@@ -1,0 +1,19 @@
+.page-info-wrapper {
+    width: 100%;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 20px;
+    margin: 2rem 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.description {
+    margin: 0;
+    color: #2a2a2a;
+    font-size: 0.95rem;
+}

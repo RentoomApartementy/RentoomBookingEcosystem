@@ -1,0 +1,98 @@
+@page "/reservation/{token}/ExtendReservationPage"
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@inject IStringLocalizer<ExtendReservationPage> Localizer
+@inject RentoomBooking.StayWell.Services.BackendApi BackendApi
+
+@inherits Models.PageBase
+
+<PageTitle>@Localizer["PageTitle"]</PageTitle>
+
+<div class="page-info-wrapper">
+    <PageInfo Title="@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName" Subtitle="@Localizer["Subtitle"]"></PageInfo>
+</div>
+
+<div class="content-wrapper">
+    <p class="description">@Localizer["Description"]</p>
+
+    @if (_isChecking)
+    {
+        <Button Text="@Localizer["Checking"]" Disabled="true">
+            <Icon>
+                <img src="/icons/calendar-plus.svg" alt="CheckingExtension">
+            </Icon>
+        </Button>
+    }
+    else
+    {
+        <Button Text="@(_canExtend ? Localizer["CanExtend"] : Localizer["CannotExtend"])"
+                Disabled="@(!_canExtend)"
+                ButtonStyle="@(_canExtend ? GreenButtonStyle : null)">
+            <Icon>
+                <img src="/icons/calendar-plus.svg" alt="ExtendReservationStatus">
+            </Icon>
+        </Button>
+    }
+</div>
+
+@code {
+    private bool _isChecking = true;
+    private bool _canExtend;
+
+    private const string GreenButtonStyle = "background: linear-gradient(180deg, #34c759 60%, #28a745 100%); border-color: #1f7a34; color: #ffffff;";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (!IsInitializedSuccessfully)
+        {
+            return;
+        }
+
+        _canExtend = await CheckIfReservationCanBeExtendedAsync();
+        _isChecking = false;
+    }
+
+    private async Task<bool> CheckIfReservationCanBeExtendedAsync()
+    {
+        var reservation = ReservationState?.CurrentReservation?.Reservation;
+        var item = reservation?.Items?.FirstOrDefault();
+        if (reservation?.ReservationDetails is null || item is null)
+        {
+            return false;
+        }
+
+        var checkout = reservation.ReservationDetails.getDateTo();
+        var checkoutPlusOne = checkout.AddDays(1);
+
+        var childrenNumber = 0;
+        int.TryParse(item.numberOfSmallChildren, out childrenNumber);
+
+        var request = new OfferAvailabilityAndPricesParamsSearchInternal
+        {
+            ObjectIds = [item.objectId],
+            ParamsSearch = new OfferAvailabilityAndPricesParamsSearch
+            {
+                DateFrom = checkout.ToString("yyyy-MM-dd"),
+                DateTo = checkoutPlusOne.ToString("yyyy-MM-dd"),
+                AdultsNumber = Math.Max(item.numberOfAdults ?? 1, 1),
+                ChildrenNumber = Math.Max(childrenNumber, 0),
+                Language = reservation.Client?.Language == "pol" ? "pol" : "eng",
+                Currency = reservation.ReservationDetails.currency
+            }
+        };
+
+        var availability = await BackendApi.GetAvailabilityAndPricesForDaysAsync(request);
+        var availabilityDates = availability?
+            .FirstOrDefault(o => o.ObjectId == item.objectId)?
+            .ObjectAvailability;
+
+        if (availabilityDates is null || availabilityDates.Count == 0)
+        {
+            return false;
+        }
+
+        return availabilityDates.All(d => d.ItemsNumber > 0);
+    }
+}

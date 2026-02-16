@@ -88,6 +88,12 @@
         </Icon>
     </Button>
 
+    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ExtendReservationPage"))" Text="@Localizer["ExtendReservation"]">
+        <Icon>
+            <img src="/icons/calendar-plus.svg" alt="ExtendReservationPage">
+        </Icon>
+    </Button>
+
 </div>
 @code
 {

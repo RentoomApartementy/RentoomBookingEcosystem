@@ -239,6 +239,22 @@ namespace RentoomBooking.StayWell.Services
             return await response.Content.ReadFromJsonAsync<UpsellOrderRecord>(_json);
         }
 
+        public async Task<List<OfferAvailabilityObject>?> GetAvailabilityAndPricesForDaysAsync(OfferAvailabilityAndPricesParamsSearchInternal request)
+        {
+            using var message = new HttpRequestMessage(HttpMethod.Get, "ido/offers/availability-and-prices-for-days")
+            {
+                Content = JsonContent.Create(request, options: _json)
+            };
+
+            var response = await _http.SendAsync(message);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<List<OfferAvailabilityObject>>(_json);
+        }
+
 
 
 
