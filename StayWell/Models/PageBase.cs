@@ -8,7 +8,7 @@ using ApartmentState = RentoomBooking.StayWell.States.ApartmentState;
 
 namespace RentoomBooking.StayWell.Models
 {
-    public abstract class PageBase : ComponentBase,IDisposable
+    public abstract class PageBase : ComponentBase, IDisposable
     {
         [Inject]
         protected ReservationState ReservationState { get; set; } = default!;
@@ -21,7 +21,7 @@ namespace RentoomBooking.StayWell.Models
         [Inject]
         protected StayWell.Services.GlobalizationService GlobalizationService { get; set; } = default!;
         [Inject]
-        protected StayWell.Services.BitrixService BitrixService{ get; set; } = default!;
+        protected StayWell.Services.BitrixService BitrixService { get; set; } = default!;
         [Inject]
         protected LocksState LocksState { get; set; } = default!;
         [Inject]
@@ -35,7 +35,7 @@ namespace RentoomBooking.StayWell.Models
         [Inject]
         protected ToastService ToastService { get; set; } = default!;
         [Inject]
-        protected NavigationManager NavigationManager { get;set;} = default!;
+        protected NavigationManager NavigationManager { get; set; } = default!;
 
         [Parameter]
         public string? Token { get; set; }
@@ -67,7 +67,7 @@ namespace RentoomBooking.StayWell.Models
                     NavigationManager.NavigateTo("/Error");
                     return;
                 }
-                if (!ReservationState.IsActiveReservation && DateTime.Now < ReservationState?.CurrentReservation?.Reservation?.ReservationDetails?.getDateTo())
+                if (!TermsState.IsAccepted || RegistrationCardState.CurrentCard == null)
                 {
                     NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");
                 }
@@ -80,11 +80,12 @@ namespace RentoomBooking.StayWell.Models
         {
             var lang = ReservationState.CurrentReservation?.Reservation?.Client?.Language;
 
-            if(lang == "eng" || lang == null)
+
+            if (lang == "eng" || lang == null)
             {
                 GlobalizationService.SetCulture("en-US");
             }
-            else if(lang == "pol")
+            else if (lang == "pol")
             {
                 GlobalizationService.SetCulture("pl-PL");
             }
@@ -126,18 +127,19 @@ namespace RentoomBooking.StayWell.Models
                 {
                     return;
                 }
-                    await Task.WhenAll(
-                        TermsState.GetTermsAsync(Token),
-                        RegistrationCardState.GetCardAsync(Token),
-                        MediaState.GetMediaAsync(item.objectId),
-                        ApartmentState.GetApartmentByIdAsync(item.objectId),
-                        //ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
-                        AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
-                        LocksState.GetLocksAsync(reservation.id, item.itemId)
-                    );
+                await Task.WhenAll(
+                    TermsState.GetTermsAsync(Token),
+                    RegistrationCardState.GetCardAsync(Token),
+                    MediaState.GetMediaAsync(item.objectId),
+                    ApartmentState.GetApartmentByIdAsync(item.objectId),
+                    ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
+                    AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
+                    LocksState.GetLocksAsync(reservation.id, item.itemId),
+                    LocksState.CheckTTLockStatusAsync(Token)
+                );
                 IsInitializedSuccessfully = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"LoadDataAsync failed: {ex}");
             }

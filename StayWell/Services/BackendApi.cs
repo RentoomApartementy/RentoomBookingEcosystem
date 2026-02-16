@@ -1,22 +1,26 @@
-﻿using RentoomBooking.SharedClasses.Models;
+﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using RentoomBooking.StayWell.Models;
+using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Json;
-using System.Security.Policy;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RentoomBooking.StayWell.Services
 {
-
     public record ReservationResponse(RentoomReservation? Reservation, HttpStatusCode StatusCode);
 
     public class BackendApi(IHttpClientFactory factory, JsonSerializerOptions json)
     {
-
         private readonly HttpClient _http = factory.CreateClient("FunctionsApi");
         private readonly JsonSerializerOptions _json = json;
 
@@ -25,11 +29,10 @@ namespace RentoomBooking.StayWell.Services
             public string? url { get; set; }
         }
 
-
         public async Task<ReservationResponse?> GetReservationByTokenAsync(string token)
         {
             try
-            { 
+            {
                 var response = await _http.GetAsync($"db/reservations/{token}");
                 if (response.IsSuccessStatusCode)
                 {
@@ -42,19 +45,12 @@ namespace RentoomBooking.StayWell.Services
                     return new(null, response.StatusCode);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 return new(null, System.Net.HttpStatusCode.InternalServerError);
             }
-
-            //throw new Exception($"{response.Content} {response.StatusCode}");
         }
-
-        //public async Task<RentoomReservation?> GetReservationByTokenAsync(string token)
-        //{
-        //    return await _http.GetFromJsonAsync<RentoomReservation>($"db/reservations/{token}", _json);
-        //}
 
         public async Task<List<ObjectMedium>> GetApartmentMediaAsync(int objectId)
         {
@@ -91,7 +87,6 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<AvailableUpsellsResponseDto?> GetAvailableUpsellsByReservationTokenAsync(string token, string? locale = null)
         {
-
             var url = $"db/reservations/{token}/upsells/available";
             if (!string.IsNullOrEmpty(locale))
             {
@@ -105,13 +100,7 @@ namespace RentoomBooking.StayWell.Services
             }
             return await response.Content.ReadFromJsonAsync<AvailableUpsellsResponseDto>(_json)
                    ?? null;
-
-            
-            
         }
-
-        
-
 
         public async Task<TermsEntity?> GetTermsByResTokenAsync(string resToken)
         {
@@ -123,15 +112,9 @@ namespace RentoomBooking.StayWell.Services
             return null;
         }
 
-        public async Task<bool> AddTermsAsync(TermsEntity entity)
+        public async Task<bool> SaveTermsAsync(TermsEntity entity)
         {
-            var response = await _http.PostAsJsonAsync("db/terms/AddTerms", entity, _json);
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> UpdateTermsAsync(string resToken, TermsEntity entity)
-        {
-            var response = await _http.PutAsJsonAsync($"db/terms/UpdateTerms/{resToken}", entity, _json);
+            var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
             return response.IsSuccessStatusCode;
         }
 
@@ -151,8 +134,6 @@ namespace RentoomBooking.StayWell.Services
             return response.IsSuccessStatusCode;
         }
 
-
-
         public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId)
         {
             using var response = await _http.GetAsync($"qrmaint/form-url/{apartmentId}");
@@ -168,13 +149,33 @@ namespace RentoomBooking.StayWell.Services
             return result?.url;
         }
 
-        public async Task<RedeemResultDto?> ValidateUpsellVoucherAsync(string reservationToken,string? codeShort, string? qrToken)
+        public async Task<string?> GetLockCodeAsync(
+            int apartmentItemId,
+            CancellationToken cancellationToken = default)
+        {
+            using var response = await _http.GetAsync(
+                $"lock-code/{apartmentItemId}",
+                cancellationToken);
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                return null;
+
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadFromJsonAsync<LockCodeResponse>(
+                _json,
+                cancellationToken);
+
+            return result?.LockCode;
+        }
+
+        public async Task<RedeemResultDto?> ValidateUpsellVoucherAsync(string reservationToken, string? codeShort, string? qrToken)
         {
             var request = new UpsellVoucherLookupRequestDto
             {
                 CodeShort = codeShort,
                 QrToken = qrToken,
-                ReservationToken = reservationToken 
+                ReservationToken = reservationToken
             };
 
             var response = await _http.PostAsJsonAsync("db/upsells/vouchers/validate", request, _json);
@@ -186,7 +187,7 @@ namespace RentoomBooking.StayWell.Services
             return await response.Content.ReadFromJsonAsync<RedeemResultDto>(_json);
         }
 
-        public async Task<RedeemResultDto?> RedeemUpsellVoucherAsync(string reservationToken,string? codeShort, string? qrToken)
+        public async Task<RedeemResultDto?> RedeemUpsellVoucherAsync(string reservationToken, string? codeShort, string? qrToken)
         {
             var request = new UpsellVoucherLookupRequestDto
             {
@@ -204,6 +205,37 @@ namespace RentoomBooking.StayWell.Services
             return await response.Content.ReadFromJsonAsync<RedeemResultDto>(_json);
         }
 
+        public record TTLockActionResult(bool Success, string? LockCode, string? Status, int? BatteryLevel);
+        public async Task<TTLockActionResult?> PingLockAsync(string reservationToken)
+        {
+            try
+            {
+                var response = await _http.GetAsync($"PingLockByReservationId/{reservationToken}");
+                if (!response.IsSuccessStatusCode) return null;
+
+                return await response.Content.ReadFromJsonAsync<TTLockActionResult>(_json);
+            }
+            catch { return null; }
+        }
+
+        public async Task<TTLockActionResult?> OpenLockAsync(string reservationToken)
+        {
+            try
+            {
+                var response = await _http.GetAsync($"OpenLockByReservationId/{reservationToken}");
+                if (!response.IsSuccessStatusCode) return null;
+
+                return await response.Content.ReadFromJsonAsync<TTLockActionResult>(_json);
+            }
+            catch { return null; }
+        }
+
+        public async Task<TTLockActionResult?> CloseLockAsync(string reservationToken)
+        {
+            try
+            {
+                var response = await _http.GetAsync($"CloseLockByReservationId/{reservationToken}");
+                if (!response.IsSuccessStatusCode) return null;
         public async Task<UpsellPaymentInitResult?> CreateUpsellOrderAsync(string token, UpsellOrderRequest request)
         {
             var response = await _http.PostAsJsonAsync($"reservations/{token}/upsells/orders", request, _json);
@@ -244,4 +276,69 @@ namespace RentoomBooking.StayWell.Services
 
     }
 
+                return await response.Content.ReadFromJsonAsync<TTLockActionResult>(_json);
+            }
+            catch { return null; }
+        }
+
+        public async Task<List<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId)
+        {
+            var response = await _http.GetAsync($"apartment/arrivalinstructions/{apartmentId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                return [];
+            }
+
+            return await response.Content.ReadFromJsonAsync<List<ApartmentArrivalInstructionStepDTO>>(_json)
+                   ?? [];
+        }
+
+        private sealed class LockCodeResponse
+        {
+            [JsonPropertyName("lockCode")]
+            public string? LockCode
+            {
+                get; init;
+
+            }
+        }
+        public async Task<UpsellPaymentInitResult?> CreateUpsellOrderAsync(string token, UpsellOrderRequest request)
+        {
+            var response = await _http.PostAsJsonAsync($"reservations/{token}/upsells/orders", request, _json);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<UpsellPaymentInitResult>(_json);
+        }
+     
+     
+        //Create Order and Pay
+        public async Task<UpsellPaymentInitResult?> PayUpsellOrderAsync(UpsellOrderRequest request)
+        {
+            var response = await _http.PostAsJsonAsync($"upsells/orders/pay", request,_json);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<UpsellPaymentInitResult>(_json);
+        }
+
+        public async Task<UpsellOrderRecord?> GetUpsellOrderStatusAsync(Guid upsellOrderGuid)
+        {
+            var response = await _http.GetAsync($"upsells/orders/{upsellOrderGuid}/status");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<UpsellOrderRecord>(_json);
+        }
+
+
+
+
+    }
 }

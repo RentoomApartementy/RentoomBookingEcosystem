@@ -1,0 +1,62 @@
+﻿<button class="manage-tile"
+        type="button"
+        disabled="@IsDisabled"
+        @onclick="HandleClick">
+    <span class="manage-tile__category">@Category</span>
+
+    <span class="manage-tile__title-row">
+        <span class="manage-tile__title">
+            @if (!string.IsNullOrWhiteSpace(Icon))
+            {
+                <img class="manage-tile__icon" src="@Icon" alt="" />
+            }
+            @Title
+        </span>
+
+        <img class="manage-tile__chevron" src="icons/chevron-right.svg" alt="" />
+    </span>
+
+    @if (!string.IsNullOrWhiteSpace(Description))
+    {
+        <span class="manage-tile__desc">@Description</span>
+    }
+
+    @if (ShowPrice)
+    {
+        <span class="manage-tile__price">@PriceText</span>
+
+        @if (!string.IsNullOrWhiteSpace(PriceInfo))
+        {
+            <span class="manage-tile__price-info">@PriceInfo</span>
+        }
+    }
+</button>
+
+@code {
+    [Parameter] public string Category { get; set; } = "";
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Icon { get; set; } = "";
+    [Parameter] public string Description { get; set; } = "";
+
+    [Parameter] public bool ShowPrice { get; set; } = true;
+    [Parameter] public string PriceText { get; set; } = "";
+    [Parameter] public string PriceInfo { get; set; } = "";
+
+    [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    private bool IsDisabled => Disabled || (ShowPrice && string.IsNullOrWhiteSpace(PriceText));
+
+    private async Task HandleClick()
+    {
+        if (IsDisabled)
+        {
+            return;
+        }
+
+        if (OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync();
+        }
+    }
+}

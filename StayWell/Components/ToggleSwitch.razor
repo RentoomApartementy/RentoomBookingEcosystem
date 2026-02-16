@@ -1,0 +1,39 @@
+﻿<div class="toggle-row">
+    <div class="toggle-row__switch">
+        <input class="toggle__input"
+               id="@_id"
+               type="checkbox"
+               checked="@Value"
+               @onchange="OnChanged"
+               disabled="@Disabled" />
+        <label class="toggle__track" for="@_id" aria-hidden="true"></label>
+    </div>
+
+    <div class="toggle-row__content">
+        <div class="toggle-row__text">@Text</div>
+
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <div class="toggle-row__description">@Description</div>
+        }
+    </div>
+</div>
+
+@code {
+    private readonly string _id = $"tgl_{Guid.NewGuid():N}";
+
+    [Parameter] public bool Value { get; set; }
+    [Parameter] public EventCallback<bool> ValueChanged { get; set; }
+
+    [Parameter] public string Text { get; set; } = "";
+    [Parameter] public string? Description { get; set; }
+
+    [Parameter] public bool Disabled { get; set; }
+
+    private async Task OnChanged(ChangeEventArgs e)
+    {
+        var next = e.Value is bool b && b;
+        Value = next;
+        await ValueChanged.InvokeAsync(next);
+    }
+}

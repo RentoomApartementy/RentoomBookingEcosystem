@@ -27,8 +27,7 @@ namespace RentoomBooking.StayWell.States
 
         public event Action? OnChange;
 
-        public bool IsAccepted =>
-            CurrentTerms != null;
+        public bool IsAccepted => CurrentTerms != null;
 
         public void SetLoading(bool isLoading)
         {
@@ -47,17 +46,11 @@ namespace RentoomBooking.StayWell.States
 
         public async Task<TermsEntity?> GetTermsAsync(string resToken)
         {
-            if (_currentToken == resToken) return CurrentTerms;
+            if (_currentToken == resToken && CurrentTerms != null) return CurrentTerms;
 
             SetLoading(true);
             try
             {
-                if (_backendApi == null)
-                {
-                    ClearTerms();
-                    return null;
-                }
-
                 var terms = await _backendApi.GetTermsByResTokenAsync(resToken);
                 _currentToken = resToken;
                 CurrentTerms = terms;
@@ -68,32 +61,12 @@ namespace RentoomBooking.StayWell.States
                 SetLoading(false);
             }
         }
-
-        public async Task<bool> AddTermsAsync(TermsEntity entity)
+        public async Task<bool> SaveTermsAsync(TermsEntity entity)
         {
             SetLoading(true);
             try
             {
-                var result = await _backendApi.AddTermsAsync(entity);
-                if (result)
-                {
-                    _currentToken = entity.ResToken;
-                    CurrentTerms = entity;
-                }
-                return result;
-            }
-            finally
-            {
-                SetLoading(false);
-            }
-        }
-
-        public async Task<bool> UpdateTermsAsync(TermsEntity entity)
-        {
-            SetLoading(true);
-            try
-            {
-                var result = await _backendApi.UpdateTermsAsync(entity.ResToken, entity);
+                var result = await _backendApi.SaveTermsAsync(entity);
                 if (result)
                 {
                     _currentToken = entity.ResToken;
