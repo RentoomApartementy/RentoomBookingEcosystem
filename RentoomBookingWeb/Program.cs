@@ -69,6 +69,7 @@ namespace RentoomBookingWeb
                .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
                
 
+
             builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
 
