@@ -236,6 +236,45 @@ namespace RentoomBooking.StayWell.Services
             {
                 var response = await _http.GetAsync($"CloseLockByReservationId/{reservationToken}");
                 if (!response.IsSuccessStatusCode) return null;
+        public async Task<UpsellPaymentInitResult?> CreateUpsellOrderAsync(string token, UpsellOrderRequest request)
+        {
+            var response = await _http.PostAsJsonAsync($"reservations/{token}/upsells/orders", request, _json);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<UpsellPaymentInitResult>(_json);
+        }
+     
+     
+        //Create Order and Pay
+        public async Task<UpsellPaymentInitResult?> PayUpsellOrderAsync(UpsellOrderRequest request)
+        {
+            var response = await _http.PostAsJsonAsync($"upsells/orders/pay", request,_json);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<UpsellPaymentInitResult>(_json);
+        }
+
+        public async Task<UpsellOrderRecord?> GetUpsellOrderStatusAsync(Guid upsellOrderGuid)
+        {
+            var response = await _http.GetAsync($"upsells/orders/{upsellOrderGuid}/status");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<UpsellOrderRecord>(_json);
+        }
+
+
+
+
+    }
 
                 return await response.Content.ReadFromJsonAsync<TTLockActionResult>(_json);
             }

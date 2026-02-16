@@ -27,8 +27,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
         public int Id { get; set; }
 
         public int ApartmentId { get; set; }
-
-        //public ApartmentObject Apartment { get; set; } = null!;
+        public ApartmentObject Apartment { get; set; } = null!;
 
         [Required]
         public int Sequence { get; set; }
