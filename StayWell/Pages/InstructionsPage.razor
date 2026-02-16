@@ -16,20 +16,23 @@
 <PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
 <div class="instructions-page">
-    <section class="instructions-section">
-        <header class="instructions-section__header">
-            <h3 class="instructions-section__title">Wizualna instrukcja</h3>
-        </header>
-        <div class="carousel-wrapper">
-            <Carousel Description="@_fallbackInstructionDescription"
-                      Descriptions="@_instructionDescriptions"
-                      StepTitles="@_instructionTitles"
-                      ImageUrls="@urls"
-                      UseControlButtons="@true"
-                      IsInstructionCarousel=true>
-            </Carousel>
-        </div>
-    </section>
+    @if(_instructionAvailable == true)
+    {   
+        <section class="instructions-section">
+            <header class="instructions-section__header">
+                <h3 class="instructions-section__title">Instrukcja zameldowania</h3>
+            </header>
+            <div class="carousel-wrapper">
+                <Carousel Description="@_fallbackInstructionDescription"
+                          Descriptions="@_instructionDescriptions"
+                          StepTitles="@_instructionTitles"
+                          ImageUrls="@urls"
+                          UseControlButtons="@true"
+                          IsInstructionCarousel=true>
+                </Carousel>
+            </div>
+        </section>
+    }
 
     <section class="instructions-section">
         <header class="instructions-section__header">
@@ -152,6 +155,7 @@
     private List<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
     private string[] _instructionDescriptions = Array.Empty<string>();
     private string[] _instructionTitles = Array.Empty<string>();
+    private bool _instructionAvailable = false;
 
     private string[] urls = ["/images/mock_instruction/1.png",
     "/images/mock_instruction/2.png",
@@ -180,12 +184,13 @@
 
     private async Task LoadArrivalInstructionsAsync()
     {
-        var apartmentId = ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.objectId;
+        var apartmentId = ReservationState.CurrentReservation?.Reservation?.Items.FirstOrDefault()?.objectItemId;
         if (apartmentId is null || apartmentId <= 0) return;
 
         var steps = await BackendApi.GetArrivalInstructionStepsAsync(apartmentId.Value);
         if (steps.Count == 0) return;
 
+        _instructionAvailable = true;
         _arrivalInstructionSteps = steps
             .OrderBy(s => s.Sequence)
             .ToList();
