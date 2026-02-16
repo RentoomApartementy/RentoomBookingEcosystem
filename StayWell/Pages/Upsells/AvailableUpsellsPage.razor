@@ -259,8 +259,8 @@ else
                     Quantity = Math.Max(1, s.Quantity)
                 })
                 .ToList(),
-            SuccessUrl = NavigationManager.BaseUri + $"reservation/{Token}/Vouchers/payment/UpsellOrderGuid/Success",
-            ErrorUrl = NavigationManager.BaseUri + $"reservation/{Token}/Vouchers/payment/UpsellOrderGuid/Error",
+            SuccessUrl = NavigationManager.BaseUri,// + $"reservation/{Token}/Vouchers/payment/UpsellOrderGuid/Success",
+            ErrorUrl = NavigationManager.BaseUri //+ $"reservation/{Token}/Vouchers/payment/UpsellOrderGuid/Error",
            // NotificationUrl = NavigationManager.BaseUri + $"api/upsell/UpsellOrderGuid/payment-notification"
         };
     }
