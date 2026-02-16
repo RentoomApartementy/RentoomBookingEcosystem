@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.TTLock;
+using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using System;
 using System.Linq;
@@ -174,6 +175,79 @@ namespace RentoomBooking.Api.Integrations.RentoomApp
             string reservationToken)
         {
             return await HandleLockAction(req, reservationToken, "Close", (id) => _ttLockService.LockAsync(id));
+        }
+
+        [Function("GetApartmentItemCodes")]
+        public async Task<HttpResponseData> GetApartmentItemAllCodes(
+          [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "reservation/{reservationToken}/apartmentcodes")] HttpRequestData req, string reservationToken)
+        {
+            var cancellationToken = req.FunctionContext.CancellationToken;
+            var response = req.CreateResponse();
+            _logger.LogInformation("GetApartmentItemCodes started for apartmentItemId={reservationToken} at {Time}", reservationToken, DateTime.UtcNow);
+
+            try
+            {
+                if (String.IsNullOrWhiteSpace(reservationToken))
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    await response.WriteStringAsync("Missing or invalid reservationToken.");
+                    return response;
+                }
+
+                if (!Guid.TryParse(reservationToken, out var reservationGuid))
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    await response.WriteStringAsync("Reservation token must resolve to a GUID.", cancellationToken);
+                    return response;
+                }
+
+
+                var reservation = await ResolveReservationAsync(reservationGuid, cancellationToken);
+
+                if (reservation?.Reservation is null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    await response.WriteStringAsync("Reservation not found.", cancellationToken);
+                    return response;
+                }
+
+
+                var apartmentSettings = await _qrMaintService.GetApartmentItemCodesAsync(reservation.Reservation.Items[0].objectItemId, cancellationToken);
+
+                //var lockCode = await _qrMaintService.GetLockCodeAsync(apartmentItemId, cancellationToken);
+                if (apartmentSettings == null)
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    await response.WriteStringAsync("No codes found for the given apartmentItemId.");
+                    return response;
+                }
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(apartmentSettings));
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching GetApartmentItemCodes for reservationToken={reservationToken}", reservationToken);
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("An error occurred while processing your request.");
+                return response;
+            }
+            finally
+            {
+                _logger.LogInformation("GetApartmentItemCodes finished for reservationToken={reservationToken} at {Time}", reservationToken, DateTime.UtcNow);
+            }
+        }
+
+        private async Task<RentoomReservation?> ResolveReservationAsync(Guid reservationGuid, CancellationToken cancellationToken)
+        {
+            
+            
+                var reservation = await _bookingDatabase.GetRentoomReservationByResTokenAsync(reservationGuid.ToString(), _logger, cancellationToken);
+                if (reservation is not null) return reservation;
+            
+                return null;
         }
 
         private async Task<HttpResponseData> HandleLockAction(HttpRequestData req, string reservationToken, string actionName, Func<int, Task<RentoomBooking.SharedClasses.Integrations.TTLock.Models.TTLockBaseResponse>> action)
