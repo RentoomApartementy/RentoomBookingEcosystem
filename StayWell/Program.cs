@@ -24,9 +24,9 @@ namespace RentoomBooking.StayWell
 
             builder.Services.AddSingleton<LayoutState>();
             builder.Services.AddSingleton<ToastService>();
-            builder.Services.AddSingleton<GlobalizationService>();
 
             builder.Services.AddScoped<ClipboardService>();
+            builder.Services.AddScoped<GlobalizationService>();
             builder.Services.AddScoped<ModalService>();
             builder.Services.AddScoped<BitrixService>();
 

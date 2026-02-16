@@ -45,17 +45,6 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
             return usterki?.Message;
         }
 
-        public Task<string?> GetLockCodeAsync(
-            int apartmentItemId,
-            CancellationToken cancellationToken = default)
-        {
-            return _dbContext.ApartmentItemLocalSettings
-                .AsNoTracking()
-                .Where(x => x.ApartmentItemId == apartmentItemId)
-                .Select(x => x.TTLockId)
-                .FirstOrDefaultAsync(cancellationToken);
-        }
-
         public async Task<bool> TestConnectionAsync()
         {
             try

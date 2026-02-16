@@ -1,286 +1,101 @@
 ﻿@page "/reservation/{token}/TermsPage"
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
-@using RentoomBooking.StayWell.Models
-@using RentoomBooking.SharedClasses.Models.StayWell
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @inject IJSRuntime JSRuntime
-@inject Services.ModalService ModalService
-@inject Services.ToastService ToastService
-@inject States.ReservationState ReservationState
-@inject States.RegistrationCardState RegistrationCardState
-@inject States.TermsState TermsState
 @inherits Models.PageBase
 
-<PageTitle>Regulamin i Zameldowanie</PageTitle>
+<PageTitle>Regulamin</PageTitle>
 
-<div class="terms-container">
+<div class="terms-page-root">
+
+    <div class="header-section">
+        <PageInfo Title="Regulamin" Subtitle="Zanim otrzymasz dostęp do aplikacji, zapoznaj się i zaakceptuj regulamin!" />
+    </div>
+
     <div class="content-section">
-        <div class="reservation-section main-terms-card @(IsShowingTerms ? "is-tos-view" : "") @(IsShowingRegistration ? "is-registration-view" : "")">
+        <div class="transition-container @(_isTransitioning ? "fade-out" : "fade-in")">
 
-            <div class="transition-container @(_isTransitioning ? "fade-out" : "fade-in")">
-                @if (CurrentView == ViewState.Steps)
-                {
-                    var step = steps[_currentStep];
-                    <div class="step-view">
-                        <div class="image-container">
-                            @if (!string.IsNullOrEmpty(step.Image))
-                            {
-                                <img src="@step.Image" class="step-image" alt="step" />
-                            }
-                        </div>
-                        <div class="text-container">
-                            <p>@step.Text</p>
-                        </div>
+            @if (_currentStep != steps.Length)
+            {
+                <div class="step-view">
+                    <div class="image-container">
+                        <img src="@steps[_currentStep].Image" class="step-image" alt="step" />
                     </div>
-                }
-                else if (CurrentView == ViewState.Terms)
-                {
-                    <div class="tos-view">
-                        <div id="terms-scroll-area" class="tos-scroll-area">
-                            @_termsText
-                        </div>
+                    <div class="text-container">
+                        <p>@steps[_currentStep].Text</p>
                     </div>
-                }
-                else if (CurrentView == ViewState.RegistrationCard)
-                {
-                    <div class="registration-view">
-                        <h3 class="reg-title">Karta Meldunkowa</h3>
-
-                        <div class="mail-wrapper">
-                            <label class="mail-input-title" for="email">Adres e-mail</label>
-                            <input class="editform-input @(IsEmailValid ? "is-valid" : "")"
-                                   id="email" type="email" placeholder="twój@email.pl"
-                                   @bind="_mail" @bind:event="oninput" />
-                        </div>
-
-                        <div class="form-buttons">
-                            <Button OnClick="SelectTime" ButtonStyle="padding: 22px 12px !important; width: 100%;">
-                                <RenderFragment>
-                                    <span>@(_checkInTime is null ? "Wybierz godzinę przyjazdu" : $"Godzina przyjazdu: {_checkInTime.Value.ToString(@"hh\:mm")}")</span>
-                                </RenderFragment>
-                            </Button>
-
-                            <Button OnClick="FillGuestInfo" ButtonStyle="padding: 22px 12px !important; width: 100%;">
-                                <RenderFragment>
-                                    <span>@(AreGuestsFilled() ? $"Zmień dane gości ({_guests.Count})" : "Uzupełnij dane gości")</span>
-                                </RenderFragment>
-                            </Button>
-                        </div>
+                    <div class="dots-indicator">
+                        @for (int i = 0; i < steps.Length; i++)
+                        {
+                            <span class="dot @(i == _currentStep ? "active" : "")"></span>
+                        }
                     </div>
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                <div class="tos-view">
+                    <div id="terms-scroll-area" class="tos-scroll-area">
+                        @_termsText
+                    </div>
+                </div>
+            }
 
-            <div class="dots-indicator">
-                @for (int i = 0; i < TotalStatesCount; i++)
-                {
-                    <span class="dot @(i == _currentStep ? "active" : "")"></span>
-                }
-            </div>
         </div>
     </div>
 
-    <div class="bottom-navigation">
-        <div class="buttons-row">
-            <div class="button-next-wrapper @(IsButtonDisabled ? "disabled-wrapper" : "")">
-                <Button OnClick="HandleNextClick">
-                    <Icon>
-                        @if (CurrentView != ViewState.RegistrationCard)
-                        {
-                            <img src="/icons/chevron-right.svg" alt="Next" />
-                        }
-                        else
-                        {
-                            <img src="/icons/handshake.svg" alt="Confirm" />
-                        }
-                    </Icon>
-                    <RenderFragment>
-                        <span>
-                            @(CurrentView == ViewState.Steps ? "Dalej" :
-                                                        CurrentView == ViewState.Terms ? "Akceptuję" : "Potwierdzam")
-                        </span>
-                    </RenderFragment>
-                </Button>
-            </div>
+    <div class="bottom-section">
+        <div class="buttons-wrapper @(IsButtonDisabled ? "disabled-wrapper" : "")">
+            <Button OnClick="HandleNextClick">
+                <Icon>
+                    @if (_currentStep < steps.Length)
+                    {
+                        <img src="/icons/chevron-right.svg" alt="Next" />
+                    }
+                    else
+                    {
+                        <img src="/icons/handshake.svg" alt="Accept" />
+                    }
+                </Icon>
+                <RenderFragment>
+                    <span>@(_currentStep < steps.Length ? "Dalej" : "Potwierdzam i akceptuję")</span>
+                </RenderFragment>
+            </Button>
         </div>
     </div>
+
 </div>
 
 <script>
     window.termsScrollObserver = {
         init: function (elementId, dotNetRef) {
-            setTimeout(function() {
-                var el = document.getElementById(elementId);
-                if (!el) return;
+            var el = document.getElementById(elementId);
+            if (!el) return;
 
-                function check() {
-                    // Tolerancja 5px dla różnych przeglądarek i zoomu
-                    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 5) {
-                        dotNetRef.invokeMethodAsync('OnScrollEnd');
-                        el.removeEventListener('scroll', check);
-                    }
-                }
+            // Sprawdź od razu, czy treść jest mniejsza niż okno (brak scrolla)
+            if (el.scrollHeight <= el.clientHeight) {
+                dotNetRef.invokeMethodAsync('OnScrollEnd');
+                return;
+            }
 
-                if (el.scrollHeight <= el.clientHeight) {
+            el.addEventListener('scroll', function () {
+                // Tolerancja 5px dla błędów zaokrągleń na mobile
+                if (el.scrollTop + el.clientHeight >= el.scrollHeight - 5) {
                     dotNetRef.invokeMethodAsync('OnScrollEnd');
-                } else {
-                    el.addEventListener('scroll', check);
                 }
-            }, 100);
+            });
         }
     };
 </script>
 
 @code {
-    private enum ViewState { Steps, Terms, RegistrationCard }
-
-    private readonly (string Image, string Text)[] steps = new[]
-    {
-        ("/images/clock.png", "Doba hotelowa trwa od godziny 15:00 w dniu przyjazdu do godziny 11:00 w dniu wyjazdu."),
-        ("/images/broken-window.png", "Akceptuję obowiązek zgłoszenia wszelkich szkód i uwag przy zameldowaniu."),
-        ("/images/no-smoking.png", "Akceptuję zakaz palenia wyrobów tytoniowych i elektronicznych papierosów wewnątrz obiektu."),
-        ("/images/party.png", "Zakaz organizowania imprez oraz przyjmowania osób trzecich nieujętych w rezerwacji.")
-    };
-
     private int _currentStep = 0;
     private bool _isTransitioning = false;
     private bool _termsScrolledToBottom = false;
-    private bool _observerInitialized = false;
-
-    private string? _mail;
-    private TimeSpan? _checkInTime;
-    private List<RegistrationCardGuestModel> _guests = new();
     private DotNetObjectReference<TermsPage>? _objRef;
 
-    private int TotalStatesCount => steps.Length + 2; // Steps + Terms + Registration
-
-    private ViewState CurrentView =>
-        _currentStep < steps.Length ? ViewState.Steps :
-        _currentStep == steps.Length ? ViewState.Terms :
-        ViewState.RegistrationCard;
-
-    private bool IsShowingTerms => CurrentView == ViewState.Terms;
-    private bool IsShowingRegistration => CurrentView == ViewState.RegistrationCard;
-    private bool IsEmailValid => !string.IsNullOrWhiteSpace(_mail) && _mail.Contains("@") && _mail.Contains(".");
-
-    private bool IsButtonDisabled =>
-        (IsShowingTerms && !_termsScrolledToBottom) ||
-        (IsShowingRegistration && (!IsEmailValid || _checkInTime == null || !AreGuestsFilled())) ||
-        _isTransitioning;
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        LayoutState.ShowFooter = false;
-        _objRef = DotNetObjectReference.Create(this);
-
-        int adults = ReservationState?.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.numberOfAdults ?? 1;
-        _guests = RegistrationCardState.CurrentCard?.GuestsData?.Any() == true
-            ? RegistrationCardState.CurrentCard.GuestsData
-            : Enumerable.Range(0, adults).Select(_ => new RegistrationCardGuestModel()).ToList();
-        _mail = RegistrationCardState.CurrentCard?.ContactEmail;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (IsShowingTerms && !_observerInitialized)
-        {
-            _observerInitialized = true;
-            await JSRuntime.InvokeVoidAsync("window.termsScrollObserver.init", "terms-scroll-area", _objRef);
-        }
-    }
-
-    private void SelectTime() => ModalService.ShowModal("Wybierz godzinę zameldowania",
-        @<RentoomBooking.StayWell.Components.ModalContent.TimeSelectorContent @bind-value="_checkInTime" />);
-
-    private void FillGuestInfo() => ModalService.ShowModal("Uzupełnij dane gości",
-        @<RentoomBooking.StayWell.Components.ModalContent.FillGuestDataContent InitialGuests="@_guests" OnConfirm="@HandleGuestsConfirmed" />);
-
-    private void HandleGuestsConfirmed(List<RegistrationCardGuestModel> updatedGuests)
-    {
-        _guests = updatedGuests;
-        StateHasChanged();
-    }
-
-    private bool AreGuestsFilled()
-    {
-        if (_guests == null || !_guests.Any()) return false;
-        return _guests.All(g => !string.IsNullOrWhiteSpace(g.FirstName) && !string.IsNullOrWhiteSpace(g.LastName));
-    }
-
-    private async Task HandleNextClick()
-    {
-        if (IsButtonDisabled) return;
-
-        if (IsShowingTerms)
-        {
-            await AcceptTermsAsync();
-            await MoveToNext();
-        }
-        else if (IsShowingRegistration)
-        {
-            await SaveRegistrationAndFinish();
-        }
-        else
-        {
-            await MoveToNext();
-        }
-    }
-
-    private async Task MoveToNext()
-    {
-        _isTransitioning = true;
-        StateHasChanged();
-
-        await Task.Delay(300);
-        _currentStep++;
-        _observerInitialized = false;
-
-        _isTransitioning = false;
-        StateHasChanged();
-    }
-
-    private async Task AcceptTermsAsync()
-    {
-        var terms = new TermsEntity
-        {
-            ResToken = Token,
-            VersionAccepted = "1.0",
-            TypeAccepted = "regulamin",
-            AcceptedAt = DateTime.UtcNow
-        };
-
-        await TermsState.SaveTermsAsync(terms);
-    }
-
-    private async Task SaveRegistrationAndFinish()
-    {
-        try
-        {
-            var checkInDateTime = DateTime.UtcNow.Date.Add(_checkInTime!.Value);
-            var regcard = new RegistrationCardEntity { ResToken = Token, ContactEmail = _mail, CheckInTime = checkInDateTime, GuestsData = _guests };
-            await RegistrationCardState.SaveCardAsync(regcard);
-            NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");
-        }
-        catch { ToastService.ShowToast("Błąd zapisu danych."); }
-    }
-
-    [JSInvokable]
-    public void OnScrollEnd()
-    {
-        if (!_termsScrolledToBottom)
-        {
-            _termsScrolledToBottom = true;
-            StateHasChanged();
-        }
-    }
-
-    public override void Dispose()
-    {
-        LayoutState.ShowFooter = true;
-        _objRef?.Dispose();
-        base.Dispose();
-    }
+    private bool IsButtonDisabled => _currentStep == steps.Length && !_termsScrolledToBottom;
 
     private string _termsText = @"REGULAMIN WYNAJMU
 Regulamin i Umowa określają warunki rezerwacji i najmu apartamentów będących przedmiotem najmu przez Rentoom Apartamenty Sp. z o.o. (Wynajmującego), Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS: 0000871532, REGON: 387605281 na rzecz Najemcy.
@@ -299,7 +114,7 @@ Na terenie wynajmowanego apartamentu obowiązuje cisza nocna w godzinach 22:00-0
 Organizowanie imprez towarzyskich w apartamencie jest całkowicie zabronione. Za zorganizowanie imprezy towarzyskiej, Najemca uiści na rzecz Wynajmującego dodatkową opłatę w wysokości 5 000 PLN + dodatkowe straty jakie poniósł Wynajmujący. Za wszystkie zniszczenia wynajmowanego apartamentu jak i budynku odpowiada osoba Najemcy. Najemca odpowiada za wszystkie zniszczenia wynikłe z zachowania osób trzecich przebywających z nią w apartamencie – zaproszonych do mieszkania/budynku przez tę osobę. W przypadku interwencji Policji bądź Straży Miejskiej Wynajmujący obciąży Najemcę dodatkową opłatą   w wysokości 500 PLN (pięćset).
 Liczba osób nocujących w apartamencie nie może przekraczać liczby podanej podczas rezerwacji. Stwierdzenie nieprawidłowości w tym względzie skutkuje naliczeniem opłaty dodatkowej w wysokości 200 PLN za każdą z niezgłoszonych osób za każdą dobę pobytu.
 Goście zobowiązani są do właściwego zabezpieczenia apartamentu, tj. do dokładnego zamykania wszystkich drzwi wejściowych i okien przed każdorazowym opuszczeniem apartamentu oraz do przechowywania kluczy/kodów/pilotów bez możliwości dostępu do nich osób nieupoważnionych.
-Wynajmujący nie odpowiada za zniszczone lub zgubione wartościowe przedmioty pozostawione in apartamencie.
+Wynajmujący nie odpowiada za zniszczone lub zgubione wartościowe przedmioty pozostawione w apartamencie.
 W przypadku zagubienia/zniszczenia klucza do apartamentu lub pilota do garażu naliczona jest opłata w wysokości 100 PLN za każdą sztukę.
 Sprzątanie końcowe wliczone jest w cenę pobytu. Jednakże, Gość zobowiązany jest do pozostawienia po sobie umytych naczyń oraz używanych sprzętów. Czynności te nie stanowią istoty sprzątania końcowego.
 Każde dodatkowe sprzątanie na specjalne życzenie Wynajmującego to koszt 100 PLN. W cenę wliczona jest wymiana pościeli i ręczników.
@@ -317,7 +132,7 @@ Podczas dokonywania rezerwacji Wynajmujący ma prawo do pobrania zaliczki w wyso
 Najemca obowiązany jest do dokonania płatności za cały pobyt 14 dni przed zameldowaniem.
 Za każdy pobyt wystawiana jest faktura lub paragon.
 Jeśli Najemca odstępuje od Umowy do 14 dni przed zameldowaniem lub do 2 godzin po dokonaniu rezerwacji nie ponosi żadnych kosztów rezerwacji, a ewentualnie pobrane zaliczki zostaną mu zwrócone.
-Jeśli Najemca odstępuje od umowy zawartej in obniżonej cenie w promocji bezzwrotnej lub w terminie 14 lub mniej dni przed zameldowaniem ponosi całkowity koszt rezerwacji.
+Jeśli Najemca odstępuje od umowy zawartej w obniżonej cenie w promocji bezzwrotnej lub w terminie 14 lub mniej dni przed zameldowaniem ponosi całkowity koszt rezerwacji.
 Obsługa płatności bezpośrednich realizowana jest przy współpracy z firmami :
 a) Tpay.com Krajowy Integrator Płatności Spółka Akcyjna ul. Św. Marcin 73/6 61-808 Poznań NIP: 7773061579 REGON: 300878437 KRS: 0000412357. Regulaminy płatności: https://tpay.com/regulaminy
 b) PayPro SA Sp. z o. o.  60-327 Poznań, ul. Kanclerska 15. NIP 779-236-98-87, REGON 301345068 właściciela serwisu  www.przelewy24.pl
@@ -325,4 +140,81 @@ b) PayPro SA Sp. z o. o.  60-327 Poznań, ul. Kanclerska 15. NIP 779-236-98-87, 
 REKLAMACJE
 Najemca ma prawo do reklamacji usługi. Reklamacje należy składać mailowo na adres info@rentoom.pl lub listownie, listem poleconym na adres korespondencyjny.
 Odpowiedź na reklamacje zostanie udzielona w ciągu 14 dni od jej doręczenia.";
+
+    private readonly (string Image, string Text)[] steps = new[]
+    {
+        ("/images/clock.png", "Doba hotelowa trwa od godziny 15:00 w dniu przyjazdu do godziny 11:00 w dniu wyjazdu."),
+        ("/images/broken-window.png", "Akceptuję obowiązek zgłoszenia wszelkich szkód i uwag przy zameldowaniu."),
+        ("/images/no-smoking.png", "Akceptuję zakaz palenia wyrobów tytoniowych i elektronicznych papierosów wewnątrz obiektu."),
+        ("/images/party.png", "Zakaz organizowania imprez oraz przyjmowania osób trzecich nieujętych w rezerwacji.")
+    };
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        LayoutState.ShowFooter = false;
+        _objRef = DotNetObjectReference.Create(this);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_currentStep == steps.Length)
+        {
+            await JSRuntime.InvokeVoidAsync("window.termsScrollObserver.init", "terms-scroll-area", _objRef);
+        }
+    }
+
+    public override void Dispose()
+    {
+        LayoutState.ShowFooter = true;
+        _objRef?.Dispose();
+        base.Dispose();
+    }
+
+    [JSInvokable]
+    public void OnScrollEnd()
+    {
+        if (!_termsScrolledToBottom)
+        {
+            _termsScrolledToBottom = true;
+            StateHasChanged();
+        }
+    }
+
+    private void HandleNextClick()
+    {
+        if (IsButtonDisabled) return;
+        NextStep();
+    }
+
+    private async void NextStep()
+    {
+        if (_currentStep < steps.Length)
+        {
+            _isTransitioning = true;
+            StateHasChanged();
+            await Task.Delay(300);
+            _currentStep++;
+            _isTransitioning = false;
+            StateHasChanged();
+        }
+        else
+        {
+            await AcceptTermsAsync();
+        }
+    }
+
+    private async Task AcceptTermsAsync()
+    {
+        var terms = new TermsEntity
+        {
+            ResToken = Token,
+            VersionAccepted = "1.0",
+            TypeAccepted = "regulamin",
+            AcceptedAt = DateTime.UtcNow
+        };
+
+        var res = await TermsState.AddTermsAsync(terms);
+        NavigationManager.NavigateTo($"reservation/{Token}/Prearrival");
+    }
 }

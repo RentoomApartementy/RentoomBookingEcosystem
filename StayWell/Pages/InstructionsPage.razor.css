@@ -1,152 +1,108 @@
-﻿/* Główny kontener strony */
-.instructions-page {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+﻿.page-info-wrapper {
     width: 100%;
 }
 
-/* Styl sekcji (taki sam jak reservation-section) */
-.instructions-section {
-    border-radius: 15px;
-    padding: 20px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.6); /* Delikatne tło */
-}
-
-/* Nagłówki sekcji */
-.instructions-section__header {
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-}
-
-.instructions-section__title {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #333;
-}
-
-/* Wrapper dla karuzeli, aby nie wychodziła poza zaokrąglenia */
-.carousel-wrapper {
-    overflow: hidden;
-    border-radius: 12px;
-}
-
-/* Grid dla kodów - układ kafelkowy */
-.codes-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Domyślnie 1 kolumna na mobilkach */
-    gap: 12px;
-}
-
-@media (min-width: 768px) {
-    .codes-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 kolumny na tablecie/desktopie */
-    }
-}
-
-/* Pojedynczy kafelek z kodem */
-.code-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid rgba(0,0,0,0.03);
-}
-
-    .code-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-/* Ikona w kafelku */
-.code-card__icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    /*background: #f5f5f5;*/ /* Jasne tło pod ikoną */
-    border-radius: 10px;
-    flex-shrink: 0;
-}
-
-.code-card__icon {
-    width: 24px;
-    height: 24px;
-    opacity: 0.7;
-}
-
-/* Treść kafelka */
-.code-card__content {
+.buttons-wrapper {
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Zapobiega rozpychaniu przez długi tekst */
-}
-
-.code-card__label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #666;
-    margin-bottom: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-}
-
-.code-card__value {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #222;
-    word-break: break-all; /* Łamanie długich haseł wifi */
-}
-
-/* Wyróżnienie cyfr (np. kod 0000) */
-.code-highlight {
-    font-size: 1.4rem;
-    letter-spacing: 1px;
-}
-
-.code-card__meta {
-    font-size: 0.85rem;
-    color: #888;
-}
-
-.fw-bold {
-    font-weight: 700;
-    color: #555;
-}
-
-/* Przycisk kopiowania */
-.code-card__row {
-    display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 0.25rem;
+    margin: 2rem 0;
+    height: 50%;
 }
 
-.copy-button {
+.copy-button{
     background: none;
     border: none;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
 }
 
-    .copy-button:hover {
-        background-color: #f0f0f0;
+.codes-wrapper {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    width: 100%;
+    margin-top: 10px;
+    gap: 8px;
+/*    padding: 8px;*/
+    padding-top: 0;
+    box-sizing: border-box;
+/*    padding-bottom:0;*/
+}
+
+.codes-wrapper .code {
+    width: 100%;
+/*    aspect-ratio: 2.5 / 1;*/
+    padding: 0.5rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    max-height: 120px;
+}
+
+.codes-wrapper .code img {
+    height: 25px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+/*    padding-right: 0.25rem;*/
+}
+
+.codes-wrapper .code .text-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.codes-wrapper .code .text-wrapper .title {
+    font-size: 0.9em;
+    font-weight: 600;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.codes-wrapper .code .text-wrapper .digits {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    word-break: break-all;
+}
+
+.wifi {
+    background: white;
+    border-radius: 15px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+}
+
+/*.wifi:last-child{
+    padding-bottom: 0;
+}*/
+
+@media (min-width: 768px) {
+    .codes-wrapper {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
     }
 
-    .copy-button img {
-        width: 18px;
-        height: 18px;
-        opacity: 0.6;
+    .codes-wrapper .code {
+        max-height: 90px;
     }
+
+/*    .codes-wrapper .code .text-wrapper .title {
+        font-size: clamp(0.9rem, 1vw, 1.1rem);
+    }
+
+    .codes-wrapper .code .text-wrapper .digits {
+        font-size: clamp(1.5rem, 1.9vw, 2rem);
+    }*/
+}
+
+@media (max-width: 404px){
+    .codes-wrapper .code img {
+        height: 20px;
+/*        width: auto;
+        object-fit: contain;
+        display: block;*/
+/*        padding-right: 0.25rem;*/
+    }
+}

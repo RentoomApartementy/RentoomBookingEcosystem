@@ -22,14 +22,4 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
         public int ApartmentItemId { get; set; }
         public string QrCodesJson { get; set; }
     }
-
-    [Table("ApartmentItemLocalSettings", Schema = "rentoom")]
-    public class ApartmentItemLocalSettings
-    {
-        [Key]
-        public int ApartmentItemId { get; set; }
-
-        [Column("TTLockId")]
-        public string? TTLockId { get; set; }
-    }
 }

@@ -1,13 +1,10 @@
 ﻿@page "/reservation/{token}/InstructionsPage"
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
-@using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions
-@using System.Linq
 
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject StayWell.Services.ClipboardService ClipboardService
-@inject StayWell.Services.BackendApi BackendApi
 @inject IStringLocalizer<InstructionsPage> Localizer
 @inject StayWell.Services.ToastService ToastService
 
@@ -15,147 +12,106 @@
 
 <PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
-<div class="instructions-page">
-    @if(_instructionAvailable == true)
-    {   
-        <section class="instructions-section">
-            <header class="instructions-section__header">
-                <h3 class="instructions-section__title">Instrukcja zameldowania</h3>
-            </header>
-            <div class="carousel-wrapper">
-                <Carousel Description="@_fallbackInstructionDescription"
-                          Descriptions="@_instructionDescriptions"
-                          StepTitles="@_instructionTitles"
-                          ImageUrls="@urls"
-                          UseControlButtons="@true"
-                          IsInstructionCarousel=true>
-                </Carousel>
-            </div>
-        </section>
-    }
+<Carousel ImageUrls="@urls" UseControlButtons="@true" IsInstructionCarousel=true></Carousel>
 
-    <section class="instructions-section">
-        <header class="instructions-section__header">
-            <h3 class="instructions-section__title">Kody dostępu i adres</h3>
-        </header>
-
-        <div class="codes-grid">
-
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/map-pin.svg" class="code-card__icon" />
-                </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Adres</div>
-                    <div class="code-card__value">@ApartmentState.CurrentApartment?.ObjectLocation?.Address</div>
-                </div>
-            </div>
-
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/door-open.svg" class="code-card__icon" />
-                </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Numer lokalu</div>
-                    <div class="code-card__value">@ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode</div>
-                </div>
-            </div>
-
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/fence.svg" class="code-card__icon" />
-                </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Kod do furtki</div>
-                    @if (ReservationState.IsActiveReservation)
-                    {
-                        <div class="code-card__value code-highlight">0000</div>
-                    }
-                    else
-                    {
-                        <div class="code-card__meta">
-                            Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/building.svg" class="code-card__icon" />
-                </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Kod do budynku</div>
-                    @if (ReservationState.IsActiveReservation)
-                    {
-                        <div class="code-card__value code-highlight">0000</div>
-                    }
-                    else
-                    {
-                        <div class="code-card__meta">
-                            Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/square-parking.svg" class="code-card__icon" />
-                </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Parking</div>
-                    @if (ReservationState.IsActiveReservation)
-                    {
-                        <div class="code-card__value code-highlight">0000</div>
-                    }
-                    else
-                    {
-                        <div class="code-card__meta">
-                            Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <div class="code-card">
-                <div class="code-card__icon-wrapper">
-                    <img src="/icons/wifi.svg" class="code-card__icon" />
-                </div>
-                <div class="code-card__content">
-                    <div class="code-card__label">Hasło Wi-Fi</div>
-                    @if (ReservationState.IsActiveReservation)
-                    {
-                        <div class="code-card__row">
-                            <div class="code-card__value">@wifi_pass</div>
-                            <button @onclick="CopyToClipboard" class="copy-button" title="Skopiuj">
-                                <img src="/icons/copy.svg" />
-                            </button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="code-card__meta">
-                            Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                        </div>
-                    }
-                </div>
-            </div>
-
+<div class="codes-wrapper">
+    <div class="code wifi">
+        <img src="/icons/map-pin.svg"/>
+        <div class="text-wrapper">
+            <div class="title">Adres</div>
+            <div class="digits">@ApartmentState.CurrentApartment?.ObjectLocation?.Address</div>
+            @* <div class="digits">@ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode</div> *@
         </div>
-    </section>
+    </div>
+    <div class="code wifi">
+        <img src="/icons/door-open.svg"/>
+        <div class="text-wrapper">
+            <div class="title">Numer</div>
+            @* <div class="digits">@ApartmentState.CurrentApartment?.ObjectLocation?.Address</div> *@
+            <div class="digits">@ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode</div>
+        </div>
+    </div>
+    <div class="code wifi">
+        <img src="/icons/fence.svg"/>
+        <div class="text-wrapper">
+            @if (ReservationState.IsActiveReservation)
+            {
+                <div class="title">Kod do furtki</div>
+                <div class="digits">0000</div>
+            }
+            else
+            {
+                <span>
+                    Otrzymasz dostęp za:
+                    <span class="fw-bold">
+                        @_days dni @_hours h @_minutes min
+                    </span>
+                </span>
+            }
+        </div>
+    </div>
+    <div class="code wifi">
+        <img src="/icons/building.svg"/>
+        <div class="text-wrapper">
+        @if(ReservationState.IsActiveReservation){
+            <div class="title">Kod do budynku</div>
+                <div class="digits">0000</div>
+            }
+            else
+            {
+                <span>
+                    Otrzymasz dostęp za:
+                    <span class="fw-bold">
+                        @_days dni @_hours h @_minutes min
+                    </span>
+                </span>
+            }
+        </div>
+    </div>
+    <div class="code wifi">
+        <img src="/icons/square-parking.svg"/>
+        <div class="text-wrapper">
+        @if(ReservationState.IsActiveReservation){
+            <div class="title">Parking</div>
+            <div class="digits">0000</div>
+            }
+            else
+            {
+                <span>
+                    Otrzymasz dostęp za:
+                    <span class="fw-bold">
+                        @_days dni @_hours h @_minutes min
+                    </span>
+                </span>
+            }
+        </div>
+    </div>
+    <div class="code wifi">
+        <img src="/icons/wifi.svg"/>
+        <div class="text-wrapper">
+        @if(ReservationState.IsActiveReservation){
+            <div class="title">wifi_multimedia</div>
+            <div class="digits">
+                @wifi_pass
+                <button @onclick="CopyToClipboard" class="copy-button">
+                    <img src="/icons/copy.svg"/>
+                </button>
+                </div>
+            }
+            else
+            {
+                <span>Otrzymasz dostęp za:
+                    <span class="fw-bold">
+                        @_days dni @_hours h @_minutes min
+                    </span>
+                </span>
+            }
+        </div>
+    </div>
 </div>
 
-@code {
+@code{
     private string wifi_pass = "MV329R8VHJYT98W";
-    private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
-    private const string InstructionImageBaseUrl = "https://app.rentoom.pl/";
-    private string _fallbackInstructionDescription = "Instrukcje zameldowania są w trakcie przygotowania.";
-
-    private List<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
-    private string[] _instructionDescriptions = Array.Empty<string>();
-    private string[] _instructionTitles = Array.Empty<string>();
-    private bool _instructionAvailable = false;
 
     private string[] urls = ["/images/mock_instruction/1.png",
     "/images/mock_instruction/2.png",
@@ -171,60 +127,14 @@
     private int _minutes;
     private System.Threading.Timer? _timer;
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         if (!ReservationState.IsActiveReservation)
         {
             StartTimer();
         }
-
-        await base.OnInitializedAsync();
-        await LoadArrivalInstructionsAsync();
-    }
-
-    private async Task LoadArrivalInstructionsAsync()
-    {
-        var apartmentId = ReservationState.CurrentReservation?.Reservation?.Items.FirstOrDefault()?.objectItemId;
-        if (apartmentId is null || apartmentId <= 0) return;
-
-        var steps = await BackendApi.GetArrivalInstructionStepsAsync(apartmentId.Value);
-        if (steps.Count == 0) return;
-
-        _instructionAvailable = true;
-        _arrivalInstructionSteps = steps
-            .OrderBy(s => s.Sequence)
-            .ToList();
-
-        urls = _arrivalInstructionSteps
-            .Select(s => NormalizeInstructionImageUrl(s.ImageUrl))
-            .ToArray();
-
-        _instructionDescriptions = _arrivalInstructionSteps
-            .Select(s => s.Description)
-            .ToArray();
-
-        _instructionTitles = _arrivalInstructionSteps
-            .Select(s => s.Name)
-            .ToArray();
-
-        _fallbackInstructionDescription = string.Empty;
-        StateHasChanged();
-    }
-
-    private string NormalizeInstructionImageUrl(string? imageUrl)
-    {
-        if (string.IsNullOrWhiteSpace(imageUrl))
-        {
-            return InstructionPlaceholderUrl;
-        }
-
-        if (Uri.TryCreate(imageUrl, UriKind.Absolute, out var absoluteUri))
-        {
-            return absoluteUri.ToString();
-        }
-
-        return $"{InstructionImageBaseUrl.TrimEnd('/')}/{imageUrl.TrimStart('/')}";
-    }
+        return base.OnInitializedAsync();
+    }  
 
     private void StartTimer()
     {
@@ -264,6 +174,7 @@
 
     async Task CopyToClipboard()
     {
+        // Writing to the clipboard may be denied, so you must handle the exception
         try
         {
             await ClipboardService.WriteTextAsync(wifi_pass);
@@ -277,6 +188,8 @@
 
     public void Dispose()
     {
+        // LayoutState.ShowFooter = true;
         _timer?.Dispose();
     }
+
 }

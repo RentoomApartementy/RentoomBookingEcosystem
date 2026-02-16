@@ -26,7 +26,7 @@ namespace RentoomBooking.Api
             HttpRequestData req,
             string resToken)
         {
-            _logger.LogInformation("GetTermsByResToken started for token: {resToken}", resToken);
+            _logger.LogInformation("GetTermsByResToken started at: {time}", DateTime.UtcNow);
             var res = req.CreateResponse();
 
             if (string.IsNullOrWhiteSpace(resToken))
@@ -40,6 +40,7 @@ namespace RentoomBooking.Api
             if (terms == null)
             {
                 res.StatusCode = HttpStatusCode.NotFound;
+                await res.WriteStringAsync($"No terms found for token {resToken}.");
                 return res;
             }
 
@@ -49,44 +50,60 @@ namespace RentoomBooking.Api
             return res;
         }
 
-        [Function("SaveTerms")]
-        public async Task<HttpResponseData> SaveTerms(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "db/terms/SaveTerms")]
+        [Function("AddTerms")]
+        public async Task<HttpResponseData> AddTerms(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "db/terms/AddTerms")]
             HttpRequestData req)
         {
-            _logger.LogInformation("SaveTerms started at: {time}", DateTime.UtcNow);
+            _logger.LogInformation("AddTerms started at: {time}", DateTime.UtcNow);
             var res = req.CreateResponse();
+
+            var body = await req.ReadAsStringAsync();
+            var entity = JsonConvert.DeserializeObject<TermsEntity>(body);
+
+            if (entity == null || string.IsNullOrWhiteSpace(entity.ResToken))
+            {
+                res.StatusCode = HttpStatusCode.BadRequest;
+                await res.WriteStringAsync("Invalid payload.");
+                return res;
+            }
+
+            await _termsRepository.AddTermsAsync(entity);
+
+            res.StatusCode = HttpStatusCode.Created;
+            await res.WriteStringAsync(JsonConvert.SerializeObject(entity));
+            return res;
+        }
+
+        [Function("UpdateTerms")]
+        public async Task<HttpResponseData> UpdateTerms(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "db/terms/UpdateTerms/{resToken}")]
+            HttpRequestData req,
+            string resToken)
+        {
+            _logger.LogInformation("UpdateTerms started at: {time}", DateTime.UtcNow);
+            var res = req.CreateResponse();
+
+            var body = await req.ReadAsStringAsync();
+            var entity = JsonConvert.DeserializeObject<TermsEntity>(body);
+
+            if (entity == null || string.IsNullOrWhiteSpace(resToken) || entity.ResToken != resToken)
+            {
+                res.StatusCode = HttpStatusCode.BadRequest;
+                await res.WriteStringAsync("Invalid payload or token.");
+                return res;
+            }
 
             try
             {
-                var body = await req.ReadAsStringAsync();
-                if (string.IsNullOrEmpty(body))
-                {
-                    res.StatusCode = HttpStatusCode.BadRequest;
-                    await res.WriteStringAsync("Empty body.");
-                    return res;
-                }
-
-                var entity = JsonConvert.DeserializeObject<TermsEntity>(body);
-
-                if (entity == null || string.IsNullOrWhiteSpace(entity.ResToken))
-                {
-                    res.StatusCode = HttpStatusCode.BadRequest;
-                    await res.WriteStringAsync("Invalid payload: ResToken is required.");
-                    return res;
-                }
-
-                await _termsRepository.SaveTermsAsync(entity);
-
+                await _termsRepository.UpdateTermsAsync(entity);
                 res.StatusCode = HttpStatusCode.OK;
-                res.Headers.Add("Content-Type", "application/json; charset=utf-8");
                 await res.WriteStringAsync(JsonConvert.SerializeObject(entity));
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                _logger.LogError(ex, "Error while saving terms.");
-                res.StatusCode = HttpStatusCode.InternalServerError;
-                await res.WriteStringAsync("An internal error occurred.");
+                res.StatusCode = HttpStatusCode.NotFound;
+                await res.WriteStringAsync(ex.Message);
             }
 
             return res;

@@ -46,7 +46,7 @@
 <Modal Title="@_modalTitle"
        OnClose="CloseModal"
        IsVisible="@_modalVisibility"
-       HasImage="@_modalHasImage"
+       ImageUrl="@_modalImageUrl"
        Content="@_modalContent">
 </Modal>
 
@@ -64,12 +64,11 @@
 
 @code {
     private bool _modalVisibility = false;
-    private bool _modalHasImage = false;
     private string _modalTitle = string.Empty;
 
     private RenderFragment? _modalContent;
 
-    // private string? _modalImageUrl;
+    private string? _modalImageUrl;
 
     private bool _toastVisible = false;
     private string _toastMessage = string.Empty;
@@ -107,11 +106,11 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void ShowModal(string title, RenderFragment? content, bool hasimage)
+    private void ShowModal(string title, RenderFragment? content, string? imageUrl)
     {
         _modalTitle = title;
         _modalContent = content;
-        _modalHasImage = hasimage;
+        _modalImageUrl = imageUrl;
         _modalVisibility = true;
         StateHasChanged();
     }
@@ -119,7 +118,7 @@
     private void CloseModal()
     {
         _modalVisibility = false;
-        _modalHasImage = false;
+        _modalImageUrl = null;
         _modalContent = null;
 
         StateHasChanged();
