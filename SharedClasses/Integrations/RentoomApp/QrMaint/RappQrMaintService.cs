@@ -67,14 +67,6 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-
-        }
-
-
-
-        }
-
-
         public async Task<bool> TestConnectionAsync()
         {
             try

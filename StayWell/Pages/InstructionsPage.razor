@@ -10,6 +10,7 @@
 @inject StayWell.Services.ToastService ToastService
 
 @inherits Models.PageBase
+@implements IDisposable
 
 <PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
@@ -152,7 +153,7 @@
                     <img src="/icons/wifi.svg" class="code-card__icon" />
                 </div>
                 <div class="code-card__content">
-                    <div class="code-card__label">Hasło Wi-Fi</div>
+                    <div class="code-card__label">Login i hasło WI-FI</div>
                     @if (ReservationState.IsActiveReservation)
                     {
                         @if (HasWifiInfo())
@@ -163,7 +164,7 @@
                             }
                             @if (HasCode(WifiPassword))
                             {
-                                <div class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 12px;">
+                                <div class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 12px; justify-content: center;">
                                     <div class="code-card__value">@WifiPassword</div>
                                     <button @onclick="CopyToClipboard" class="copy-button" title="Skopiuj">
                                         <img src="/icons/copy.svg" />
@@ -202,10 +203,12 @@
     private string? WifiSsid => ApartmentState.WifiInfo?.Ssid;
     private string? WifiAuth => ApartmentState.WifiInfo?.Auth;
 
-    private List<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
-    private string[] _instructionDescriptions = Array.Empty<string>();
-    private string[] _instructionTitles = Array.Empty<string>();
-    private bool _instructionAvailable = false;
+    private IReadOnlyList<ApartmentArrivalInstructionStepDTO> ArrivalInstructionSteps =>
+        ApartmentState.ArrivalInstructionSteps ?? Array.Empty<ApartmentArrivalInstructionStepDTO>();
+
+    private bool InstructionAvailable => ArrivalInstructionSteps.Count > 0;
+
+    private string FallbackInstructionDescription => DefaultFallbackInstructionDescription;
 
     private string[] InstructionDescriptions => ArrivalInstructionSteps
         .Select(s => s.Description)
@@ -285,12 +288,18 @@
         }
     }
 
-    async Task CopyToClipboard()
+    private async Task CopyToClipboard()
     {
+        var password = WifiPassword;
+        if (!HasCode(password))
+        {
+            return;
+        }
+
         try
         {
-            await ClipboardService.WriteTextAsync(WifiPassword);
-            ToastService.ShowToast($"Skopiowano {WifiPassword}");
+            await ClipboardService.WriteTextAsync(password);
+            ToastService.ShowToast($"Skopiowano {password}");
         }
         catch
         {
@@ -302,10 +311,12 @@
     {
         return !string.IsNullOrWhiteSpace(code);
     }
+
     private bool HasWifiInfo()
     {
         return HasCode(WifiSsid) || HasCode(WifiPassword) || HasCode(WifiAuth);
     }
+
     public void Dispose()
     {
         _timer?.Dispose();
