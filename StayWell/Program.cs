@@ -46,7 +46,7 @@ namespace RentoomBooking.StayWell
                 if (builder.HostEnvironment.IsDevelopment())
                 {
                     // Local dev:
-                    c.BaseAddress = new Uri("http://localhost:7238/api/");
+                    c.BaseAddress = new Uri("https://localhost:7238/api/");
                 }
                 else
                 {
