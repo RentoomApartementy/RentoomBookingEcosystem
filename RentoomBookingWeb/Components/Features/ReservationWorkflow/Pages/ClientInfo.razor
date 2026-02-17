@@ -11,6 +11,8 @@
 @inject NavigationManager Navigation
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @using Microsoft.Extensions.Localization
+@using System.Linq
+@using System.ComponentModel.DataAnnotations
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
 
 <PageTitle>Płatność</PageTitle>
@@ -62,7 +64,16 @@
                             </div>
                             <div class="input-wrapper">
                                 <small>@Localizer["Phone"]</small>
-                                <Input Placeholder="@Localizer["Phone"]" IsFull="true" @bind-Value="_form.Client.Phone"/>
+                                <div class="form-two-items">
+                                    <div class="input-wrapper phone-country-code-wrapper">
+                                        <small>+ kierunkowy</small>
+                                        <Input  IsFull="true" @bind-Value="PhoneCountryCode"/>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <small>@Localizer["Phone"]</small>
+                                        <Input  IsFull="true" @bind-Value="PhoneNumber"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -111,10 +122,11 @@
                         }
                     </div>
 
-                    <label class="addon-label">
+                   @* <label class="addon-label">
                         <input type="checkbox" class="addon-checkbox"/>
                         <span class="addon-name">@Localizer["IsSaveInfoText"]</span>
                     </label>
+                    *@
                 </div>
 
                 @if (!string.IsNullOrEmpty(_error))
@@ -122,7 +134,8 @@
                     <p class="text-danger">@_error</p>
                 }
 
-                <button type="submit" disabled="@_isSaving" class="button">
+                <button type="submit" disabled="@IsSubmitDisabled" class="button"
+                        style="@(!IsFormComplete() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
                     @(_isSaving ? Localizer["ClientInfoButtonLoading"] : Localizer["ClientInfoButton"])
                 </button>
             </div>
@@ -144,11 +157,35 @@
     private bool _isSaving;
     private bool _isFetchingGus;
     private string? _error;
+    private string _phoneCountryCode = string.Empty;
+    private string _phoneNumber = string.Empty;
     private ReservationSummaryDto? _summary;
+
+    private bool IsSubmitDisabled => _isSaving || !IsFormComplete();
+    private string PhoneCountryCode
+    {
+        get => _phoneCountryCode;
+        set
+        {
+            _phoneCountryCode = DigitsOnly(value);
+            BuildPhoneNumber();
+        }
+    }
+
+    private string PhoneNumber
+    {
+        get => _phoneNumber;
+        set
+        {
+            _phoneNumber = DigitsOnly(value);
+            BuildPhoneNumber();
+        }
+    }
     
     protected override async Task OnInitializedAsync()
     {
-        _form.Client = MockupClient();
+        //_form.Client = MockupClient();
+        ParsePhoneNumber(_form.Client.Phone);
         _editContext = new EditContext(_form);
         
         //_summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
@@ -216,6 +253,8 @@
     private async Task SaveAsync()
     {
         if (_isSaving) return;
+
+        BuildPhoneNumber();
         _isSaving = true;
         _error = null;
 
@@ -232,6 +271,105 @@
         {
             _isSaving = false;
         }
+    }
+
+    private void ParsePhoneNumber(string? phone)
+    {
+        var normalizedPhone = (phone ?? string.Empty).Trim();
+
+        if (string.IsNullOrWhiteSpace(normalizedPhone))
+        {
+            _phoneCountryCode = string.Empty;
+            _phoneNumber = string.Empty;
+            return;
+        }
+
+        if (normalizedPhone.StartsWith('+'))
+        {
+            var splitPhone = normalizedPhone[1..].Split('.', 2, StringSplitOptions.TrimEntries);
+            _phoneCountryCode = DigitsOnly(splitPhone.ElementAtOrDefault(0));
+            _phoneNumber = DigitsOnly(splitPhone.ElementAtOrDefault(1));
+        }
+        else
+        {
+            _phoneCountryCode = string.Empty;
+            _phoneNumber = DigitsOnly(normalizedPhone);
+        }
+
+        BuildPhoneNumber();
+    }
+
+    private void BuildPhoneNumber()
+    {
+        var hasCountryCode = !string.IsNullOrWhiteSpace(_phoneCountryCode);
+        var hasPhoneNumber = !string.IsNullOrWhiteSpace(_phoneNumber);
+
+        if (!hasCountryCode && !hasPhoneNumber)
+        {
+            _form.Client.Phone = string.Empty;
+            return;
+        }
+
+        if (!hasCountryCode || !hasPhoneNumber)
+        {
+            _form.Client.Phone = string.Empty;
+            return;
+        }
+
+        _form.Client.Phone = $"+{_phoneCountryCode}.{_phoneNumber}";
+    }
+
+    private bool IsFormComplete()
+    {
+        if (!HasValue(_form.Client.FirstName) ||
+            !HasValue(_form.Client.LastName) ||
+            !HasValue(_form.Client.City) ||
+            !HasValue(_form.Client.Street) ||
+            !HasValue(_form.Client.ZipCode) ||
+            !HasValue(_form.Client.Email) ||
+            !IsValidEmail(_form.Client.Email) ||
+            !HasValue(_phoneCountryCode) ||
+            !HasValue(_phoneNumber))
+        {
+            return false;
+        }
+
+        if (!_form.UseInvoice)
+        {
+            return true;
+        }
+
+        return HasValue(_form.Invoice.TaxNumber) &&
+               HasValue(_form.Invoice.CompanyName) &&
+               HasValue(_form.Invoice.City) &&
+               HasValue(_form.Invoice.Street) &&
+               HasValue(_form.Invoice.ZipCode) &&
+               HasValue(_form.Invoice.Email) &&
+               IsValidEmail(_form.Invoice.Email);
+    }
+
+    private static bool IsValidEmail(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        var validator = new EmailAddressAttribute();
+        return validator.IsValid(value.Trim());
+    }
+
+
+    private static bool HasValue(string? value) => !string.IsNullOrWhiteSpace(value);
+
+    private static string DigitsOnly(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        return new string(value.Where(char.IsDigit).ToArray());
     }
 
     private ClientInfoDto MockupClient()
