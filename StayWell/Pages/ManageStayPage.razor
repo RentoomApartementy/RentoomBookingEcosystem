@@ -1,6 +1,7 @@
 ﻿@page "/reservation/{token}/ManageStayPage"
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
+@using System.Globalization
 @inject NavigationManager Navigation
 @inherits Models.PageBase
 
@@ -16,48 +17,68 @@
                         ShowPrice="false"
                         OnClick="@(() => Navigation.NavigateTo($"reservation/{Token}/ReportPage"))" />
 
-            <ManageTile Category="Usługi"
-                        Title="Dodatkowe sprzątanie"
-                        Icon="/icons/brush-cleaning.svg"
-                        Description="Zamów sprzątanie w trakcie pobytu."
-                        ShowPrice="true"
-                        PriceText="+ 90,00 zł"
-                        PriceInfo="za każde zamówienie" />
+            @if (ApartmentState.CurrentApartment?.Addons is not null)
+            {
+                foreach (var addon in ApartmentState.CurrentApartment.Addons.Where(a => a.Id != 2))
+                {
+                    var definedAddon = addon.Id.HasValue
+                    ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
+                    : null;
+                    var details = definedAddon?.AddonDefinition?.Details
+                    .FirstOrDefault(d => string.Equals(d.Lang, CurrentAddonsLanguage, StringComparison.OrdinalIgnoreCase));
+                    var title = details?.Name ?? addon.Name ?? "Dodatek";
+                    var description = details?.Description ?? string.Empty;
+                    var priceText = definedAddon is not null ? $"+{definedAddon.PriceGross:#.00} zł" : string.Empty;
+                    var priceInfo = details?.PaymentTypeShortDescription ?? string.Empty;
+                    var icon = addon.Id.HasValue && AddonIconMap.TryGetValue(addon.Id.Value, out var iconPath)
+                    ? iconPath
+                    : string.Empty;
 
-            <ManageTile Category="Usługi"
-                        Title="Łóżeczko dziecięce"
-                        Icon="/icons/baby.svg"
-                        Description="Dodaj wyposażenie dla dziecka."
-                        ShowPrice="true"
-                        PriceText="+ 50,00 zł"
-                        PriceInfo="jednorazowo" />
-
-            <ManageTile Category="Check-in / check-out"
-                        Title="Wcześniejszy check-in"
-                        Icon="/icons/alarm-clock-check.svg"
-                        Description="Sprawdź dostępność wcześniejszego zameldowania."
-                        ShowPrice="true"
-                        PriceText="Od + 60,00 zł"
-                        PriceInfo="w zależności od godziny" />
-
-            <ManageTile Category="Check-in / check-out"
-                        Title="Późniejszy check-out"
-                        Icon="/icons/alarm-clock-minus.svg"
-                        Description="Sprawdź dostępność późniejszego wymeldowania."
-                        ShowPrice="true"
-                        PriceText="Od + 60,00 zł"
-                        PriceInfo="w zależności od godziny" />
-
-            <ManageTile Category="Pobyt"
-                        Title="Przedłuż pobyt"
-                        Icon="/icons/calendar-plus.svg"
-                        Description="Opcja chwilowo niedostępna."
-                        ShowPrice="true"
-                        PriceText=""
-                        PriceInfo="niedostępne" />
+                    <ManageTile Category="Dodatek"
+                                Title="@title"
+                                Icon="@icon"
+                                Description="@description"
+                                ShowPrice="@(definedAddon is not null)"
+                                PriceText="@priceText"
+                                PriceInfo="@priceInfo" />
+                }
+            }
         </div>
     </div>
 </section>
 
-@code{
+@code {
+    private static readonly Dictionary<string, string> AddonsLanguageMap = new()
+    {
+        ["pl-PL"] = "PL",
+        ["en-US"] = "EN"
+    };
+
+    private static readonly Dictionary<int, string> AddonIconMap = new()
+    {
+        [2] = "/icons/calendar-plus.svg",
+        [3] = "/icons/baby.svg",
+        [7] = "/icons/baby.svg",
+        [8] = "/icons/brush-cleaning.svg",
+        [9] = "/icons/calendar-plus.svg",
+        [10] = "/icons/alarm-clock-plus.svg",
+        [11] = "/icons/calendar-plus.svg",
+        [15] = "/icons/flower-2.svg",
+        [16] = "/icons/calendar-plus.svg",
+        [17] = "/icons/calendar-plus.svg",
+        [18] = "/icons/alarm-clock-minus.svg",
+        [19] = "/icons/calendar-plus.svg",
+        [20] = "/icons/crown.svg",
+        [26] = "/icons/door-closed.svg",
+        [29] = "/icons/calendar-plus.svg",
+        [30] = "/icons/calendar-plus.svg",
+        [31] = "/icons/door-closed.svg",
+        [33] = "/icons/calendar-plus.svg",
+        [34] = "/icons/brush-cleaning.svg",
+        [35] = "/icons/dog.svg",
+        [36] = "/icons/baby.svg"
+    };
+
+    private string CurrentAddonsLanguage =>
+        AddonsLanguageMap.GetValueOrDefault(CultureInfo.CurrentUICulture.Name, "PL");
 }

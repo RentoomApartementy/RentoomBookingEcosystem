@@ -1,4 +1,5 @@
-﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
+﻿using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.StayWell.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
@@ -15,7 +16,8 @@ namespace RentoomBooking.StayWell.States
         private IReadOnlyList<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
         private int? _currentArrivalInstructionApartmentId;
         private RentoomWifiInfo? _wifiInfo;
-
+        private IReadOnlyList<DefinedAddonEntity> _definedAddons = [];
+        
         public bool IsLoading { get; set; }
 
         public ApartmentObject? CurrentApartment
@@ -75,7 +77,7 @@ namespace RentoomBooking.StayWell.States
                 return null;
             }
             finally
-            {
+            { 
                 SetLoading(false);
             }
         }
@@ -170,6 +172,7 @@ namespace RentoomBooking.StayWell.States
             IsLoading = false;
             QrMaintFormUrl = null;
             WifiInfo = null;
+            DefinedAddons = [];
             SetArrivalInstructionSteps([], null);
         }
 
@@ -180,5 +183,33 @@ namespace RentoomBooking.StayWell.States
         }
 
         private void NotifyStateChanged() => OnChange?.Invoke();
+
+        public async Task<IReadOnlyList<DefinedAddonEntity>> GetDefinedAddonsAsync()
+        {
+            if (_definedAddons.Count > 0)
+            {
+                return DefinedAddons;
+            }
+
+            if (_backendApi == null)
+            {
+                DefinedAddons = [];
+                return DefinedAddons;
+            }
+
+            var addons = await _backendApi.GetDefinedAddonsAsync();
+            DefinedAddons = addons ?? [];
+            return DefinedAddons;
+        }
+
+        public IReadOnlyList<DefinedAddonEntity> DefinedAddons
+        {
+            get => _definedAddons;
+            private set
+            {
+                _definedAddons = value;
+                NotifyStateChanged();
+            }
+        }
     }
 }

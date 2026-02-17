@@ -164,9 +164,9 @@
                             }
                             @if (HasCode(WifiPassword))
                             {
-                                <div class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 12px; justify-content: center;">
+                                <div @onclick="CopyToClipboard" class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 12px; justify-content: center;">
                                     <div class="code-card__value">@WifiPassword</div>
-                                    <button @onclick="CopyToClipboard" class="copy-button" title="Skopiuj">
+                                    <button class="copy-button" title="Skopiuj">
                                         <img src="/icons/copy.svg" />
                                     </button>
                                 </div>

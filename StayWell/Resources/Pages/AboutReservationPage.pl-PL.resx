@@ -118,84 +118,84 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AcceptanceDate" xml:space="preserve">
-    <value>Acceptance date</value>
+    <value>Data zaakceptowania</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adres</value>
   </data>
   <data name="Apartment" xml:space="preserve">
-    <value>Apartment</value>
+    <value>Apartament</value>
   </data>
   <data name="ApartmentAmenities" xml:space="preserve">
-    <value>Apartment Amenities</value>
+    <value>Wyposażenie apartamentu</value>
   </data>
   <data name="ApartmentAndStayTitle" xml:space="preserve">
-    <value>Apartment and stay</value>
+    <value>Pobyt i apartament</value>
   </data>
   <data name="BookingDetailsTitle" xml:space="preserve">
-    <value>Booking details</value>
+    <value>Szczegóły rezerwacji</value>
   </data>
   <data name="CheckinCheckOutTime" xml:space="preserve">
-    <value>Check-in/out time</value>
+    <value>Zameldowanie i wymeldowanie</value>
   </data>
   <data name="CheckInDate" xml:space="preserve">
-    <value>Check-in date</value>
+    <value>Data zameldowania</value>
   </data>
   <data name="CheckInTime" xml:space="preserve">
-    <value>Check-in time</value>
+    <value>Godzina zameldowania</value>
   </data>
   <data name="CheckOutDate" xml:space="preserve">
-    <value>Check-out date</value>
+    <value>Data wymeldowania</value>
   </data>
   <data name="CheckOutTime" xml:space="preserve">
-    <value>Check-out time</value>
+    <value>Godzina wymeldowania</value>
   </data>
   <data name="Consents" xml:space="preserve">
-    <value>Consents</value>
+    <value>Zgody</value>
   </data>
   <data name="ContactMail" xml:space="preserve">
-    <value>Contact Mail</value>
+    <value>Email kontaktowy</value>
   </data>
   <data name="GDPRConsent" xml:space="preserve">
-    <value>GDPR consent</value>
+    <value>Zgoda RODO</value>
   </data>
   <data name="GDPRDescription" xml:space="preserve">
-    <value>Allows for the processing of GDPR data in accordance with the privacy policy.</value>
+    <value>Umożliwia przetwarzanie danych zgodnie z RODO i polityką prywatności.</value>
   </data>
   <data name="HideAmenitiesButton" xml:space="preserve">
-    <value>Hide amenities</value>
+    <value>Ukryj wyposażenie</value>
   </data>
   <data name="HideTOSButton" xml:space="preserve">
-    <value>Hide TOS</value>
+    <value>Ukryj regulamin</value>
   </data>
   <data name="MarketingConsent" xml:space="preserve">
-    <value>Marketing Consent</value>
+    <value>Zgoda Marketingowa</value>
   </data>
   <data name="MarketingDescription" xml:space="preserve">
-    <value>Allows contact for marketing purposes (e-mail/SMS/WhatsApp) in accordance with the privacy policy.</value>
+    <value>Wyrażam zgodę na kontakt w celach marketingowych (e-mail/SMS/WhatsApp) zgodnie z polityką prywatności.</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Imie</value>
   </data>
   <data name="RegisteredGuests" xml:space="preserve">
-    <value>Registered guests</value>
+    <value>Zarejestrowani goście</value>
   </data>
   <data name="ShowAmenitiesButton" xml:space="preserve">
-    <value>Show amenities</value>
+    <value>Pokaż wyposażenie apartamentu</value>
   </data>
   <data name="ShowFullTOSButton" xml:space="preserve">
-    <value>Show full TOS</value>
+    <value>Pokaż pełen regulamin</value>
   </data>
   <data name="StayDates" xml:space="preserve">
-    <value>Dates of stay</value>
+    <value>Daty pobytu</value>
   </data>
   <data name="Surname" xml:space="preserve">
-    <value>Surname</value>
+    <value>Nazwisko</value>
   </data>
   <data name="TOS" xml:space="preserve">
-    <value>Terms and conditions</value>
+    <value>Warunki i regulaminy</value>
   </data>
   <data name="TOSConsents" xml:space="preserve">
-    <value>Terms, Conditions and consents</value>
+    <value>Warunki, regulaminy i zgody</value>
   </data>
 </root>

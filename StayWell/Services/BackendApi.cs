@@ -333,5 +333,11 @@ namespace RentoomBooking.StayWell.Services
 
             return await response.Content.ReadFromJsonAsync<RentoomWifiInfo>(_json);
         }
+
+        public async Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync()
+        {
+            return await _http.GetFromJsonAsync<List<DefinedAddonEntity>>("db/definedaddons", _json)
+                   ?? [];
+        }
     }
 }
