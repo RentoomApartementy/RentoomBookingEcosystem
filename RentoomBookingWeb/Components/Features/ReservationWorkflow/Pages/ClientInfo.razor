@@ -12,6 +12,7 @@
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @using Microsoft.Extensions.Localization
 @using System.Linq
+@using System.ComponentModel.DataAnnotations
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
 
 <PageTitle>Płatność</PageTitle>
@@ -66,11 +67,11 @@
                                 <div class="form-two-items">
                                     <div class="input-wrapper phone-country-code-wrapper">
                                         <small>+ kierunkowy</small>
-                                        <Input Placeholder="48" IsFull="true" @bind-Value="PhoneCountryCode"/>
+                                        <Input  IsFull="true" @bind-Value="PhoneCountryCode"/>
                                     </div>
                                     <div class="input-wrapper">
                                         <small>@Localizer["Phone"]</small>
-                                        <Input Placeholder="602394436" IsFull="true" @bind-Value="PhoneNumber"/>
+                                        <Input  IsFull="true" @bind-Value="PhoneNumber"/>
                                     </div>
                                 </div>
                             </div>
@@ -121,10 +122,11 @@
                         }
                     </div>
 
-                    <label class="addon-label">
+                   @* <label class="addon-label">
                         <input type="checkbox" class="addon-checkbox"/>
                         <span class="addon-name">@Localizer["IsSaveInfoText"]</span>
                     </label>
+                    *@
                 </div>
 
                 @if (!string.IsNullOrEmpty(_error))
@@ -132,7 +134,8 @@
                     <p class="text-danger">@_error</p>
                 }
 
-                <button type="submit" disabled="@IsSubmitDisabled" class="button">
+                <button type="submit" disabled="@IsSubmitDisabled" class="button"
+                        style="@(!IsFormComplete() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
                     @(_isSaving ? Localizer["ClientInfoButtonLoading"] : Localizer["ClientInfoButton"])
                 </button>
             </div>
@@ -181,7 +184,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        _form.Client = MockupClient();
+        //_form.Client = MockupClient();
         ParsePhoneNumber(_form.Client.Phone);
         _editContext = new EditContext(_form);
         
@@ -324,6 +327,7 @@
             !HasValue(_form.Client.Street) ||
             !HasValue(_form.Client.ZipCode) ||
             !HasValue(_form.Client.Email) ||
+            !IsValidEmail(_form.Client.Email) ||
             !HasValue(_phoneCountryCode) ||
             !HasValue(_phoneNumber))
         {
@@ -340,8 +344,21 @@
                HasValue(_form.Invoice.City) &&
                HasValue(_form.Invoice.Street) &&
                HasValue(_form.Invoice.ZipCode) &&
-               HasValue(_form.Invoice.Email);
+               HasValue(_form.Invoice.Email) &&
+               IsValidEmail(_form.Invoice.Email);
     }
+
+    private static bool IsValidEmail(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        var validator = new EmailAddressAttribute();
+        return validator.IsValid(value.Trim());
+    }
+
 
     private static bool HasValue(string? value) => !string.IsNullOrWhiteSpace(value);
 
