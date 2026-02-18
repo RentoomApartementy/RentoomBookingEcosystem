@@ -117,85 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AcceptanceDate" xml:space="preserve">
-    <value>Acceptance date</value>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Kod niedostępny</value>
   </data>
-  <data name="Address" xml:space="preserve">
-    <value>Address</value>
+  <data name="Confirm" xml:space="preserve">
+    <value>Potwierdź</value>
   </data>
-  <data name="Apartment" xml:space="preserve">
-    <value>Apartment</value>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Drzwi otwarte</value>
   </data>
-  <data name="ApartmentAmenities" xml:space="preserve">
-    <value>Apartment Amenities</value>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Błąd podczas zamykania</value>
   </data>
-  <data name="ApartmentAndStayTitle" xml:space="preserve">
-    <value>Apartment and stay</value>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Błąd podczas otwierania</value>
   </data>
-  <data name="BookingDetailsTitle" xml:space="preserve">
-    <value>Booking details</value>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Błąd połączenia z serwerem</value>
   </data>
-  <data name="CheckinCheckOutTime" xml:space="preserve">
-    <value>Check-in/out time</value>
+  <data name="Or" xml:space="preserve">
+    <value>lub</value>
   </data>
-  <data name="CheckInDate" xml:space="preserve">
-    <value>Check-in date</value>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Naciśnij, aby otworzyć</value>
   </data>
-  <data name="CheckInTime" xml:space="preserve">
-    <value>Check-in time</value>
+  <data name="Processing" xml:space="preserve">
+    <value>Przetwarzanie</value>
   </data>
-  <data name="CheckOutDate" xml:space="preserve">
-    <value>Check-out date</value>
-  </data>
-  <data name="CheckOutTime" xml:space="preserve">
-    <value>Check-out time</value>
-  </data>
-  <data name="Consents" xml:space="preserve">
-    <value>Consents</value>
-  </data>
-  <data name="ContactMail" xml:space="preserve">
-    <value>Contact Mail</value>
-  </data>
-  <data name="GDPRConsent" xml:space="preserve">
-    <value>GDPR consent</value>
-  </data>
-  <data name="GDPRDescription" xml:space="preserve">
-    <value>Allows for the processing of GDPR data in accordance with the privacy policy.</value>
-  </data>
-  <data name="HideAmenitiesButton" xml:space="preserve">
-    <value>Hide amenities</value>
-  </data>
-  <data name="HideTOSButton" xml:space="preserve">
-    <value>Hide TOS</value>
-  </data>
-  <data name="MarketingConsent" xml:space="preserve">
-    <value>Marketing Consent</value>
-  </data>
-  <data name="MarketingDescription" xml:space="preserve">
-    <value>Allows contact for marketing purposes (e-mail/SMS/WhatsApp) in accordance with the privacy policy.</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="RegisteredGuests" xml:space="preserve">
-    <value>Registered guests</value>
-  </data>
-  <data name="ShowAmenitiesButton" xml:space="preserve">
-    <value>Show amenities</value>
-  </data>
-  <data name="ShowFullTOSButton" xml:space="preserve">
-    <value>Show full TOS</value>
-  </data>
-  <data name="StayDates" xml:space="preserve">
-    <value>Dates of stay</value>
-  </data>
-  <data name="Surname" xml:space="preserve">
-    <value>Surname</value>
-  </data>
-  <data name="TOS" xml:space="preserve">
-    <value>Terms and conditions</value>
-  </data>
-  <data name="TOSConsents" xml:space="preserve">
-    <value>Terms, Conditions and consents</value>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Twój indywidualny kod</value>
   </data>
 </root>

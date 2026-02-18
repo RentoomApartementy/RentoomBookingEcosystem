@@ -1,66 +1,92 @@
-﻿@using RentoomBooking.StayWell.Services
+﻿@using System.Timers
 
-@if (IsVisible)
-{
-    <div class="toast-container">
-        <div class="toast">
-            @if (Content != null)
-            {
-                <div class="toast-content">@Content</div>
-            }
-            else if (!string.IsNullOrEmpty(Message))
-            {
-                <div class="toast-message">@Message</div>
-            }
-            <button class="toast-close" @onclick="Hide" aria-label="close_modal">×</button>
+<div class="toast-viewport">
+    @foreach (var toast in _toasts)
+    {
+        var index = _toasts.IndexOf(toast);
+
+        var style = $"data-index={index}";
+
+        var isLatest = index == 0 ? "latest" : "stacked";
+        var isClosing = toast.IsClosing ? "closing" : "";
+
+        <div class="toast-card @isLatest @isClosing"
+             data-index="@index"
+             @key="toast.Id">
+
+            <div class="toast-content-wrapper">
+                @if (toast.Content != null)
+                {
+                    @toast.Content
+                }
+                else
+                {
+                    @toast.Message
+                }
+            </div>
+            <button class="toast-close" @onclick="() => CloseToast(toast.Id)">×</button>
         </div>
-    </div>
-}
+    }
+</div>
 
 @code {
-    [Parameter]
-    public string? Message { get; set; }
+    [Parameter] public string? Message { get; set; }
+    [Parameter] public RenderFragment? Content { get; set; }
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public EventCallback OnHide { get; set; }
+    [Parameter] public int DurationMs { get; set; } = 3000;
 
-    [Parameter]
-    public RenderFragment? Content { get; set; }
+    private int _maxToast = 3;
 
-    [Parameter]
-    public bool IsVisible { get; set; }
+    private List<ToastModel> _toasts = new();
 
-    [Parameter]
-    public EventCallback OnHide { get; set; }
-
-    [Parameter]
-    public int DurationMs { get; set; } = 3000;
-
-    private CancellationTokenSource? _cts;
-
-    protected override void OnParametersSet()
+    public void AddToast(string message, RenderFragment? content, int duration)
     {
-        if (IsVisible)
+        var toast = new ToastModel
         {
-            _cts?.Cancel();
-            _cts = new CancellationTokenSource();
-            _ = AutoHideAsync(_cts.Token);
+            Message = message,
+            Content = content,
+            Duration = duration
+        };
+
+        _toasts.Insert(0, toast);
+
+        _ = AutoClose(toast);
+
+        if (_toasts.Count > _maxToast)
+        {
+            var old = _toasts.Last();
+            _toasts.Remove(old);
         }
+
+        InvokeAsync(StateHasChanged);
     }
 
-    private async Task AutoHideAsync(CancellationToken token)
+    private async Task AutoClose(ToastModel toast)
     {
-        try
-        {
-            await Task.Delay(DurationMs, token);
-            if (!token.IsCancellationRequested)
-            {
-                await Hide();
-            }
-        }
-        catch (TaskCanceledException) { }
+        await Task.Delay(toast.Duration);
+        await CloseToast(toast.Id);
     }
 
-    private async Task Hide()
+    private async Task CloseToast(Guid id)
     {
-        if (OnHide.HasDelegate)
-            await OnHide.InvokeAsync();
+        var toast = _toasts.FirstOrDefault(t => t.Id == id);
+        if (toast == null || toast.IsClosing) return;
+
+        toast.IsClosing = true;
+        await InvokeAsync(StateHasChanged);
+
+        await Task.Delay(300);
+        _toasts.Remove(toast);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public class ToastModel
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string? Message { get; set; }
+        public RenderFragment? Content { get; set; }
+        public int Duration { get; set; }
+        public bool IsClosing { get; set; }
     }
 }

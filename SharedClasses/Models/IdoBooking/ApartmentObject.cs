@@ -3,6 +3,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -22,10 +23,12 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public bool? PricesPerPersons { get; set; }
         public int? BedroomsCount { get; set; }
         public bool? PriceRules { get; set; }
+        [NotMapped]
         public List<BedConfigurationArray>? BedsConfiguration { get; set; }
         public List<CategoryType>? Categories { get; set; }
         public List<ItemType>? Items { get; set; }
         public List<AddonType>? Addons { get; set; }
+        [NotMapped]
         public ObjectLocation? ObjectLocation { get; set; }
        
     }

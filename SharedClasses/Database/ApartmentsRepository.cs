@@ -105,6 +105,7 @@ namespace RentoomBooking.SharedClasses.Database
             // sortuj po Id od 1->N
             var query = context.ApartmentInfos
                 .AsNoTracking()
+                .Where(a=>!a.IsArchived) //<< tylko aktywne - moze wplywac na historyczny podglad rezerwacji, TODO: jesli apartament zostanie zarchiwizowany - wtedy nie bedzie dostepy do wyswietlania. - moze warto przechowywac snapshot apartamentu przy rezerwacji w tabeli rezerwacji Reservations?
                 .OrderBy(a => a.Id)
                 .AsQueryable();
 

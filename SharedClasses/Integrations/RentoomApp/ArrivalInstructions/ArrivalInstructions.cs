@@ -27,6 +27,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
         public int Id { get; set; }
 
         public int ApartmentId { get; set; }
+        [NotMapped]
         public ApartmentObject Apartment { get; set; } = null!;
 
         [Required]

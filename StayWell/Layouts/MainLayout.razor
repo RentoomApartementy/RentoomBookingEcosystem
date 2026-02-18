@@ -41,7 +41,7 @@
     }
 </div>
 
-<Toast Message="@_toastMessage" Content="@_toastContent" IsVisible="@_toastVisible" DurationMs="@_toastDuration" OnHide="HideToast" />
+<Toast @ref="_toastComponent" />
 
 <Modal Title="@_modalTitle"
        OnClose="CloseModal"
@@ -50,7 +50,6 @@
        Content="@_modalContent">
 </Modal>
 
-<!--CHAT BITRIX //-->
 @if (ReservationState.CurrentReservation != null)
 {
     <script>
@@ -69,18 +68,13 @@
 
     private RenderFragment? _modalContent;
 
-    // private string? _modalImageUrl;
-
-    private bool _toastVisible = false;
-    private string _toastMessage = string.Empty;
-    private RenderFragment? _toastContent;
-    private int _toastDuration = 3000;
+    private Toast? _toastComponent;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("initHeaderScroll", "main-body", "main-header"); // chowanie nagłówka przy scrollowaniu
+            await JSRuntime.InvokeVoidAsync("initHeaderScroll", "main-body", "main-header");
         }
     }
 
@@ -127,17 +121,11 @@
 
     private void ShowToast(string message, RenderFragment? content, int durationMs)
     {
-        _toastMessage = message;
-        _toastContent = content;
-        _toastDuration = durationMs;
-        _toastVisible = true;
-        StateHasChanged();
+        _toastComponent?.AddToast(message, content, durationMs);
     }
 
     private void HideToast()
     {
-        _toastVisible = false;
-        StateHasChanged();
     }
 
     public void Dispose()

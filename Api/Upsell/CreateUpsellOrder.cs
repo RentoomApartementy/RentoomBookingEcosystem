@@ -195,8 +195,8 @@ namespace RentoomBooking.Api.Upsell
                 record.State.GrandTotal = totalGross;
 
                 record.State.Request.NotificationUrl = _tpaySettings.NotificationUrl; //.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString());
-                record.State.Request.SuccessUrl = payload.SuccessUrl + _tpaySettings.SuccessUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}",payload.ReservationGuid.ToString());
-                record.State.Request.ErrorUrl = payload.ErrorUrl + _tpaySettings.ErrorUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}", payload.ReservationGuid.ToString());
+                record.State.Request.SuccessUrl = payload.SuccessUrl + "/"+ _tpaySettings.SuccessUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}",payload.ReservationGuid.ToString());
+                record.State.Request.ErrorUrl = payload.ErrorUrl + "/" + _tpaySettings.ErrorUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}", payload.ReservationGuid.ToString());
 
                 await _upsellOrderStore.UpdateAsync(record, cancellationToken);
 

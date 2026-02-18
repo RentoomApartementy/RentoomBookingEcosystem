@@ -22,7 +22,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AboutReservationPage {
+    internal class AboutReservationPage {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// Zwraca buforowane wystąpienie ResourceManager używane przez tę klasę.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RentoomBooking.StayWell.Resources.Pages.AboutReservationPage", typeof(AboutReservationPage).Assembly);
@@ -51,7 +51,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         ///   przypadków przeszukiwania zasobów za pomocą tej klasy zasobów wymagającej zdefiniowania typu.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Acceptance date.
         /// </summary>
-        public static string AcceptanceDate {
+        internal static string AcceptanceDate {
             get {
                 return ResourceManager.GetString("AcceptanceDate", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Address.
         /// </summary>
-        public static string Address {
+        internal static string Address {
             get {
                 return ResourceManager.GetString("Address", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Apartment.
         /// </summary>
-        public static string Apartment {
+        internal static string Apartment {
             get {
                 return ResourceManager.GetString("Apartment", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Apartment Amenities.
         /// </summary>
-        public static string ApartmentAmenities {
+        internal static string ApartmentAmenities {
             get {
                 return ResourceManager.GetString("ApartmentAmenities", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Apartment and stay.
         /// </summary>
-        public static string ApartmentAndStayTitle {
+        internal static string ApartmentAndStayTitle {
             get {
                 return ResourceManager.GetString("ApartmentAndStayTitle", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Booking details.
         /// </summary>
-        public static string BookingDetailsTitle {
+        internal static string BookingDetailsTitle {
             get {
                 return ResourceManager.GetString("BookingDetailsTitle", resourceCulture);
             }
@@ -117,25 +117,43 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Check-in/out time.
         /// </summary>
-        public static string CheckinCheckOutTime {
+        internal static string CheckinCheckOutTime {
             get {
                 return ResourceManager.GetString("CheckinCheckOutTime", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Check-in date.
+        /// </summary>
+        internal static string CheckInDate {
+            get {
+                return ResourceManager.GetString("CheckInDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Check-in time.
         /// </summary>
-        public static string CheckInTime {
+        internal static string CheckInTime {
             get {
                 return ResourceManager.GetString("CheckInTime", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Check-out date.
+        /// </summary>
+        internal static string CheckOutDate {
+            get {
+                return ResourceManager.GetString("CheckOutDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Check-out time.
         /// </summary>
-        public static string CheckOutTime {
+        internal static string CheckOutTime {
             get {
                 return ResourceManager.GetString("CheckOutTime", resourceCulture);
             }
@@ -144,7 +162,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Consents.
         /// </summary>
-        public static string Consents {
+        internal static string Consents {
             get {
                 return ResourceManager.GetString("Consents", resourceCulture);
             }
@@ -153,25 +171,70 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Contact Mail.
         /// </summary>
-        public static string ContactMail {
+        internal static string ContactMail {
             get {
                 return ResourceManager.GetString("ContactMail", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu GDPR consent.
+        /// </summary>
+        internal static string GDPRConsent {
+            get {
+                return ResourceManager.GetString("GDPRConsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Allows for the processing of GDPR data in accordance with the privacy policy..
+        /// </summary>
+        internal static string GDPRDescription {
+            get {
+                return ResourceManager.GetString("GDPRDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Hide amenities.
         /// </summary>
-        public static string HideAmenitiesButton {
+        internal static string HideAmenitiesButton {
             get {
                 return ResourceManager.GetString("HideAmenitiesButton", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Hide TOS.
+        /// </summary>
+        internal static string HideTOSButton {
+            get {
+                return ResourceManager.GetString("HideTOSButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Marketing Consent.
+        /// </summary>
+        internal static string MarketingConsent {
+            get {
+                return ResourceManager.GetString("MarketingConsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Allows contact for marketing purposes (e-mail/SMS/WhatsApp) in accordance with the privacy policy..
+        /// </summary>
+        internal static string MarketingDescription {
+            get {
+                return ResourceManager.GetString("MarketingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Name.
         /// </summary>
-        public static string Name {
+        internal static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
             }
@@ -180,7 +243,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Registered guests.
         /// </summary>
-        public static string RegisteredGuests {
+        internal static string RegisteredGuests {
             get {
                 return ResourceManager.GetString("RegisteredGuests", resourceCulture);
             }
@@ -189,16 +252,25 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Show amenities.
         /// </summary>
-        public static string ShowAmenitiesButton {
+        internal static string ShowAmenitiesButton {
             get {
                 return ResourceManager.GetString("ShowAmenitiesButton", resourceCulture);
             }
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Show full TOS.
+        /// </summary>
+        internal static string ShowFullTOSButton {
+            get {
+                return ResourceManager.GetString("ShowFullTOSButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Dates of stay.
         /// </summary>
-        public static string StayDates {
+        internal static string StayDates {
             get {
                 return ResourceManager.GetString("StayDates", resourceCulture);
             }
@@ -207,7 +279,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Surname.
         /// </summary>
-        public static string Surname {
+        internal static string Surname {
             get {
                 return ResourceManager.GetString("Surname", resourceCulture);
             }
@@ -216,16 +288,16 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Terms and conditions.
         /// </summary>
-        public static string TOS {
+        internal static string TOS {
             get {
                 return ResourceManager.GetString("TOS", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Terms,Conditions and consents.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Terms, Conditions and consents.
         /// </summary>
-        public static string TOSConsents {
+        internal static string TOSConsents {
             get {
                 return ResourceManager.GetString("TOSConsents", resourceCulture);
             }
