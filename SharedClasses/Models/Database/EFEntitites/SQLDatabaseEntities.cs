@@ -29,6 +29,10 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("updated_at")] 
         public DateTime UpdatedAt { get; set; }
             = DateTime.UtcNow;
+
+        [Column("is_archived")]
+        public bool IsArchived { get; set; } = false;
+           
     }
 
     public class ApartmentAmenityEntity

@@ -9,6 +9,7 @@ using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,7 +69,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
         public async Task<long> GetApartmentCountAsync(CancellationToken cancellationToken = default)
         {
             await using var _dbContext = _dbContextFactory.CreateDbContext();
-            return await _dbContext.ApartmentInfos.LongCountAsync(cancellationToken);
+            return await _dbContext.ApartmentInfos.Where(ap=>!ap.IsArchived).LongCountAsync(cancellationToken);
         }
 
         public async Task SaveApartmentsAsync(IEnumerable<ApartmentObject> apartments, ILogger log, CancellationToken cancellationToken = default)
@@ -103,6 +104,12 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
                     });
                 }
             }
+
+            var toArchive = await _dbContext.ApartmentInfos
+                                    .Where(ai => !ids.Contains(ai.Id))
+                                    .ExecuteUpdateAsync(ap =>ap.SetProperty(a => a.IsArchived, true));
+                                    
+                                    
 
             await _dbContext.SaveChangesAsync(cancellationToken);
             log.LogInformation("Saved {Count} apartments to PostgreSQL table {Table}.", list.Count, "apartment_info");
