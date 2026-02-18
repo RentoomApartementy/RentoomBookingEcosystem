@@ -1,5 +1,9 @@
-﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
+﻿using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.StayWell.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using System.Linq;
 
 namespace RentoomBooking.StayWell.States
 {
@@ -9,7 +13,11 @@ namespace RentoomBooking.StayWell.States
         private readonly BackendApi _backendApi = backendApi;
         private int? _currentObjectId;
         private string? _qrMaintFormUrl;
-
+        private IReadOnlyList<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
+        private int? _currentArrivalInstructionApartmentId;
+        private RentoomWifiInfo? _wifiInfo;
+        private IReadOnlyList<DefinedAddonEntity> _definedAddons = [];
+        
         public bool IsLoading { get; set; }
 
         public ApartmentObject? CurrentApartment
@@ -21,6 +29,28 @@ namespace RentoomBooking.StayWell.States
                 NotifyStateChanged();
             }
         }
+
+        public RentoomWifiInfo? WifiInfo
+        {
+            get => _wifiInfo;
+            private set
+            {
+                _wifiInfo = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public IReadOnlyList<ApartmentArrivalInstructionStepDTO> ArrivalInstructionSteps
+        {
+            get => _arrivalInstructionSteps;
+            private set
+            {
+                _arrivalInstructionSteps = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public bool IsArrivalInstructionAvailable => ArrivalInstructionSteps.Count > 0;
 
         public async Task<ApartmentObject?> GetApartmentByIdAsync(int objectId)
         {
@@ -47,9 +77,37 @@ namespace RentoomBooking.StayWell.States
                 return null;
             }
             finally
-            {
+            { 
                 SetLoading(false);
             }
+        }
+
+        public async Task<IReadOnlyList<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId)
+        {
+            if (apartmentId <= 0)
+            {
+                SetArrivalInstructionSteps([], null);
+                return ArrivalInstructionSteps;
+            }
+
+            if (_currentArrivalInstructionApartmentId == apartmentId)
+            {
+                return ArrivalInstructionSteps;
+            }
+
+            if (_backendApi == null)
+            {
+                SetArrivalInstructionSteps([], apartmentId);
+                return ArrivalInstructionSteps;
+            }
+
+            var steps = await _backendApi.GetArrivalInstructionStepsAsync(apartmentId);
+            var orderedSteps = steps
+                .OrderBy(s => s.Sequence)
+                .ToList();
+
+            SetArrivalInstructionSteps(orderedSteps, apartmentId);
+            return ArrivalInstructionSteps;
         }
 
         public string? QrMaintFormUrl
@@ -75,6 +133,23 @@ namespace RentoomBooking.StayWell.States
             return QrMaintFormUrl;
         }
 
+        public async Task<RentoomWifiInfo?> GetWifiInfoAsync(int apartmentId)
+        {
+            if (_currentObjectId == apartmentId && WifiInfo != null)
+            {
+                return WifiInfo;
+            }
+
+            if (_backendApi == null)
+            {
+                WifiInfo = null;
+                return WifiInfo;
+            }
+
+            WifiInfo = await _backendApi.GetApartmentWifiInfoAsync(apartmentId);
+            return WifiInfo;
+        }
+
         public event Action? OnChange;
 
         public void SetApartment(ApartmentObject? apartment)
@@ -90,14 +165,51 @@ namespace RentoomBooking.StayWell.States
             NotifyStateChanged();
         }
 
-
         public void ClearApartment()
         {
             CurrentApartment = null;
             _currentObjectId = null;
             IsLoading = false;
+            QrMaintFormUrl = null;
+            WifiInfo = null;
+            DefinedAddons = [];
+            SetArrivalInstructionSteps([], null);
         }
+
+        private void SetArrivalInstructionSteps(IReadOnlyList<ApartmentArrivalInstructionStepDTO> steps, int? apartmentId)
+        {
+            _currentArrivalInstructionApartmentId = apartmentId;
+            ArrivalInstructionSteps = steps;
+        }
+
         private void NotifyStateChanged() => OnChange?.Invoke();
 
+        public async Task<IReadOnlyList<DefinedAddonEntity>> GetDefinedAddonsAsync()
+        {
+            if (_definedAddons.Count > 0)
+            {
+                return DefinedAddons;
+            }
+
+            if (_backendApi == null)
+            {
+                DefinedAddons = [];
+                return DefinedAddons;
+            }
+
+            var addons = await _backendApi.GetDefinedAddonsAsync();
+            DefinedAddons = addons ?? [];
+            return DefinedAddons;
+        }
+
+        public IReadOnlyList<DefinedAddonEntity> DefinedAddons
+        {
+            get => _definedAddons;
+            private set
+            {
+                _definedAddons = value;
+                NotifyStateChanged();
+            }
+        }
     }
 }

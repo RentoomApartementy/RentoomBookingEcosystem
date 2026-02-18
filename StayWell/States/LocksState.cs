@@ -1,4 +1,5 @@
 ﻿using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.StayWell.Services;
 
 namespace RentoomBooking.StayWell.States
@@ -23,6 +24,7 @@ namespace RentoomBooking.StayWell.States
         }
 
         public string? TTLockId { get; private set; }
+        public ApartmentItemLocalSettings? ApartmentItemCodes { get; private set; }
 
         public async Task<List<Lock?>?> GetLocksAsync(int reservationId, int itemId)
         {
@@ -78,6 +80,25 @@ namespace RentoomBooking.StayWell.States
             NotifyStateChanged();
         }
 
+        public async Task<ApartmentItemLocalSettings?> GetApartmentItemCodesAsync(string reservationToken)
+        {
+            SetLoading(true);
+            try
+            {
+                ApartmentItemCodes = await _backendApi.GetApartmentItemCodesAsync(reservationToken);
+                return ApartmentItemCodes;
+            }
+            catch
+            {
+                ApartmentItemCodes = null;
+                return null;
+            }
+            finally
+            {
+                SetLoading(false);
+            }
+        }
+
         public event Action? OnChange;
 
         public void SetLocks(List<Lock?> media)
@@ -100,6 +121,7 @@ namespace RentoomBooking.StayWell.States
             TTLockId = null;
             BatteryLevel = null;
             IsTTLockAvailable = false;
+            ApartmentItemCodes = null;
         }
         private void NotifyStateChanged() => OnChange?.Invoke();
     }

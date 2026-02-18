@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 {
@@ -20,29 +15,34 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 
         public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId, CancellationToken cancellationToken = default)
         {
-            var mapping = await _dbContext.QRMaintIdosellMapping
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.IDOSellApartmentId == apartmentId
-                && x.QRMaintApartmentType == "APARTAMENTY", 
-                cancellationToken);
-
-            if (mapping == null)
-                return null;
-
-            var qr = await _dbContext.RentoomQRs
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.ApartmentItemId == mapping.QRMaintId, cancellationToken);
-
-            if (qr == null || string.IsNullOrEmpty(qr.QrCodesJson))
-                return null;
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var items = JsonSerializer.Deserialize<List<RentoomQrItem>>(qr.QrCodesJson, options);
-            var usterki = items?.FirstOrDefault(i => i.RentoomCodeType == "USTERKI");
+            var items = await GetQrItemsAsync(apartmentId, cancellationToken);
+            var usterki = items?.FirstOrDefault(i => string.Equals(i.RentoomCodeType, "USTERKI", StringComparison.OrdinalIgnoreCase));
             return usterki?.Message;
+        }
+
+        public async Task<RentoomWifiInfo?> GetWifiInfoAsync(int apartmentId, CancellationToken cancellationToken = default)
+        {
+            var items = await GetQrItemsAsync(apartmentId, cancellationToken);
+            var wifiItem = items?.FirstOrDefault(i =>
+                string.Equals(i.RentoomCodeType, "SIEC", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(i.Type, "WIFI", StringComparison.OrdinalIgnoreCase));
+
+            if (wifiItem == null)
+                return null;
+
+            if (string.IsNullOrWhiteSpace(wifiItem.Ssid)
+                && string.IsNullOrWhiteSpace(wifiItem.Pass)
+                && string.IsNullOrWhiteSpace(wifiItem.Auth))
+            {
+                return null;
+            }
+
+            return new RentoomWifiInfo
+            {
+                Ssid = wifiItem.Ssid,
+                Password = wifiItem.Pass,
+                Auth = wifiItem.Auth
+            };
         }
 
         public Task<string?> GetLockCodeAsync(
@@ -65,10 +65,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
                 .AsNoTracking()
                 .Where(x => x.ApartmentItemId == apartmentItemId)
                 .FirstOrDefaultAsync(cancellationToken);
-
-
         }
-
 
         public async Task<bool> TestConnectionAsync()
         {
@@ -82,6 +79,32 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
             }
         }
 
+        private async Task<List<RentoomQrItem>?> GetQrItemsAsync(int apartmentId, CancellationToken cancellationToken)
+        {
+            var mapping = await _dbContext.QRMaintIdosellMapping
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.IDOSellApartmentId == apartmentId
+                    && x.QRMaintApartmentType == "APARTAMENTY",
+                    cancellationToken);
+
+            if (mapping == null)
+                return null;
+
+            var qr = await _dbContext.RentoomQRs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ApartmentItemId == mapping.QRMaintId, cancellationToken);
+
+            if (qr == null || string.IsNullOrEmpty(qr.QrCodesJson))
+                return null;
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            return JsonSerializer.Deserialize<List<RentoomQrItem>>(qr.QrCodesJson, options);
+        }
+
         public class RentoomQrItem
         {
             [JsonPropertyName("Message")]
@@ -89,6 +112,21 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 
             [JsonPropertyName("RentoomCodeType")]
             public string? RentoomCodeType { get; set; }
+
+            [JsonPropertyName("Type")]
+            public string? Type { get; set; }
+
+            [JsonPropertyName("ssid")]
+            public string? Ssid { get; set; }
+
+            [JsonPropertyName("pass")]
+            public string? Pass { get; set; }
+
+            [JsonPropertyName("auth")]
+            public string? Auth { get; set; }
+
+            [JsonPropertyName("size")]
+            public int? Size { get; set; }
         }
     }
 }

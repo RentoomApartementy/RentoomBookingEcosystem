@@ -27,6 +27,11 @@
 
   
   <ItemGroup>
+    <Compile Update="Resources\Pages\AboutReservationPage.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AboutReservationPage.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Pages\HomePage.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -37,12 +42,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ManageStayPage.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Pages\OpenApartmentPage.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OpenApartmentPage.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   
   <ItemGroup>
     <EmbeddedResource Update="Resources\Pages\AboutReservationPage.resx">
-      <Generator></Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutReservationPage.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Pages\HomePage.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -51,6 +62,10 @@
     <EmbeddedResource Update="Resources\Pages\ManageStayPage.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ManageStayPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\OpenApartmentPage.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OpenApartmentPage.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
