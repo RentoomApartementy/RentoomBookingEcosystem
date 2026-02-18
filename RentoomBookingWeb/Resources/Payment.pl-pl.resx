@@ -87,7 +87,7 @@
         <value>Twoja rezerwacja została potwierdzona i opłacona.</value>
     </data>
     <data name="GoToStayWell" xml:space="preserve">
-        <value>Przejdź do Staywell</value>
+        <value>Sprawdź email i kontynuuj w StayWell</value>
     </data>
     <data name="ReservationPending" xml:space="preserve">
         <value>W trakcie płatności</value>

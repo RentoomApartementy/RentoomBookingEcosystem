@@ -58,7 +58,7 @@
                                 <span>@Localizer["ReservationPaidInfo"]</span>
                             </div>
                         </div>
-                        <a href="@staywellLink" class="button">@Localizer["GoToStayWell"]</a>
+                        <input class="button" value="@Localizer["GoToStayWell"]">
                     }
                     else if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
                     {

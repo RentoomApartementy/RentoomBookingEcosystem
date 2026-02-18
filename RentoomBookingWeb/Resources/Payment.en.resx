@@ -87,7 +87,7 @@
         <value>Your reservation has been confirmed and paid.</value>
     </data>
     <data name="GoToStayWell" xml:space="preserve">
-        <value>Go to staywell</value>
+        <value>Check your email and continue in StayWell</value>
     </data>
     <data name="ReservationPending" xml:space="preserve">
         <value>Payment in progress</value>
