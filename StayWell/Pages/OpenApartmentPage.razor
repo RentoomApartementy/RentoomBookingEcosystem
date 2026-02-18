@@ -12,7 +12,7 @@
 <PageTitle>OpenApartmentPage</PageTitle>
 
 <div class="buttons-wrapper">
-    @if (!LocksState.IsTTLockAvailable)
+    @if (!LocksState.IsTTLockAvailable) /*Tymczasowe włączenie aby pokazać UI*/
     {        
         <div class="tile tile--center">
             <button class="open-button @(IsOpened ? "unlocked" : "locked") @(IsProcessing ? "loading" : "")"
@@ -101,7 +101,7 @@
                 }
                 else
                 {
-                    ErrorMessage = result?.Status ?? "Błąd podczas otwierania";
+                    ErrorMessage = result?.Status ?? Localizer["ErrorOpening"];
                 }
             }
             else
@@ -113,13 +113,13 @@
                 }
                 else
                 {
-                    ErrorMessage = result?.Status ?? "Błąd podczas zamykania";
+                    ErrorMessage = result?.Status ?? Localizer["ErrorClosing"];
                 }
             }
         }
         catch (Exception ex)
         {
-            ErrorMessage = "Błąd połączenia z serwerem";
+            ErrorMessage = Localizer["ErrorServerConnection"];
         }
         finally
         {

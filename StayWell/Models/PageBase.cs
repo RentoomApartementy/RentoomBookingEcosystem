@@ -19,9 +19,9 @@ namespace RentoomBooking.StayWell.Models
         [Inject]
         protected ApartmentState ApartmentState { get; set; } = default!;
         [Inject]
-        protected StayWell.Services.GlobalizationService GlobalizationService { get; set; } = default!;
+        protected GlobalizationService GlobalizationService { get; set; } = default!;
         [Inject]
-        protected StayWell.Services.BitrixService BitrixService { get; set; } = default!;
+        protected BitrixService BitrixService { get; set; } = default!;
         [Inject]
         protected LocksState LocksState { get; set; } = default!;
         [Inject]
@@ -132,10 +132,14 @@ namespace RentoomBooking.StayWell.Models
                     RegistrationCardState.GetCardAsync(Token),
                     MediaState.GetMediaAsync(item.objectId),
                     ApartmentState.GetApartmentByIdAsync(item.objectId),
+                    ApartmentState.GetDefinedAddonsAsync(),
                     ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
+                    ApartmentState.GetWifiInfoAsync(item.objectId),
+                    ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId),
                     AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
                     LocksState.GetLocksAsync(reservation.id, item.itemId),
-                    LocksState.CheckTTLockStatusAsync(Token)
+                    LocksState.CheckTTLockStatusAsync(Token),
+                    LocksState.GetApartmentItemCodesAsync(Token)
                 );
                 IsInitializedSuccessfully = true;
             }

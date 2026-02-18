@@ -120,10 +120,10 @@
                     </span>
 
                     <span class="reservation-field__value">
-                        @Localizer["CheckInTime"]: <span>@ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateFrom().ToString("dd.MM.yyyy")</span>
+                        @Localizer["CheckInDate"]: <span>@ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateFrom().ToString("dd.MM.yyyy")</span>
                     </span>
                     <span class="reservation-field__value">
-                        @Localizer["CheckOutTime"]: <span>@ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateTo().ToString("dd.MM.yyyy")</span>
+                        @Localizer["CheckOutDate"]: <span>@ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateTo().ToString("dd.MM.yyyy")</span>
                     </span>
                 </div>
 
@@ -173,9 +173,9 @@
                         <span>@TermsState.CurrentTerms.AcceptedAt.ToShortDateString()</span>
                     </span>
 
-                    <button class="reservation-field__action">
+                    @* <button class="reservation-field__action">
                         @Localizer["ShowFullTOSButton"]
-                    </button>
+                    </button> *@
                 </div>
                 <div class="reservation-field">
                     <span class="reservation-field__label">
