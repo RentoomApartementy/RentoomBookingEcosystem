@@ -131,10 +131,41 @@
     public void UpdateItemPerPageAsync(int width)
     {
         if (_isDisposed || objRef == null) return;
-        
-        ItemsPerPage = width < 850 ? 1 : _defaultItemsPerPage;
-        SplitIntoChunks();
-        StateHasChanged();
+    
+        int newItemsPerPage;
+
+        if (_defaultItemsPerPage <= 1)
+        {
+            newItemsPerPage = 1;
+        }
+        else
+        {
+            if (width < 750) 
+            {
+                newItemsPerPage = 1;
+            }
+            else if (width < 1300) 
+            {
+                newItemsPerPage = 2;
+            }
+            else if (width < 1600) 
+            {
+                newItemsPerPage = 3;
+            }
+            else 
+            {
+                newItemsPerPage = _defaultItemsPerPage;
+            }
+
+            newItemsPerPage = Math.Min(newItemsPerPage, _defaultItemsPerPage);
+        }
+
+        if (ItemsPerPage != newItemsPerPage)
+        {
+            ItemsPerPage = newItemsPerPage;
+            SplitIntoChunks();
+            StateHasChanged();
+        }
     }
 
     public async ValueTask DisposeAsync()

@@ -4,7 +4,7 @@
 
 <div class="apartments-section-container">
     <div class="apartments-section-container-text">
-        <h1 class="city-title">@Localizer["title2"]</h1>
+        <h1 class="city-title">@Localizer["title3"]</h1>
         <h2 class="city-subtitle">@Localizer["title2subtitle"]</h2>
     </div>
     
@@ -20,13 +20,14 @@
                 @foreach (var apartment in Apartments)
                 {
                     <Item>
-                        <div @onclick="() => GoToApartmentWithOffer(apartment.Id, apartment.Name)" class="apartment-slide-col">
+                        <div @onclick="() => GoToApartmentWithOffer(apartment.Id, apartment.Name)" >
                             <Apartment 
                                 @key="apartment.Id"
                                 Item="@apartment" 
                                 Offer="@GetPricingOfferByObjectId(apartment.Id)" 
                                 ShowPrice="true"
                                 DisableForGoToReservation="true"
+                                Width="380px"
                                        />
                         </div>
                     </Item>
@@ -38,22 +39,22 @@
             <Slider ItemsPerPage="4">
                 <Item>
                     <div class="apartment-slide-col">
-                        <Apartment />
+                        <Apartment Width="400px"/>
                     </div>
                 </Item>
                 <Item>
                     <div class="apartment-slide-col">
-                        <Apartment />
+                        <Apartment Width="400px"/>
                     </div>
                 </Item>
                 <Item>
                     <div class="apartment-slide-col">
-                        <Apartment />
+                        <Apartment Width="400px"/>
                     </div>
                 </Item>
                 <Item>
                     <div class="apartment-slide-col">
-                        <Apartment />
+                        <Apartment Width="400px"/>
                     </div>
                 </Item>
             </Slider>   

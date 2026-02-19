@@ -14,9 +14,12 @@
 
 .slider-page {
     flex: 0 0 100%;
+    width: 100vw;
     display: flex;
-    justify-content: space-around;
-    gap: 1rem;
+    justify-content: center;
+    gap: 2rem;
+    box-sizing: border-box;
+    padding: 0 2rem;
 }
 
 .slider-item-wrapper {
