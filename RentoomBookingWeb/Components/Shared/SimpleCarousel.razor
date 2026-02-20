@@ -1,0 +1,107 @@
+@using Microsoft.JSInterop
+@implements IDisposable
+@inject IJSRuntime JSRuntime
+
+<div class="carousel-outer-wrapper @Theme">
+    <div class="carousel-main-container" 
+         @onwheel="HandleUserInteraction" 
+         @ontouchstart="HandleUserInteraction">
+        
+        <div class="carousel-list-wrapper" @ref="_scrollContainer">
+            @ChildContent
+        </div>
+
+        @if (ShowNavigation)
+        {
+            <div class="carousel-nav-buttons">
+                <button class="nav-btn prev" @onclick="async () => { StopTimer(); await ScrollList(-ScrollAmount); }">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="nav-btn next" @onclick="async () => { StopTimer(); await ScrollList(ScrollAmount); }">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    window.scrollUpsellContainer = (element, amount) => {
+        if (!element) return;
+
+        const maxScroll = element.scrollWidth - element.clientWidth;
+        const currentScroll = Math.ceil(element.scrollLeft);
+        
+        if (amount > 0 && currentScroll >= maxScroll - 2) {
+            element.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            element.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+    }
+</script>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Theme { get; set; } = "rentoom-theme";
+    [Parameter] public int ScrollAmount { get; set; } = 420;
+    [Parameter] public bool ShowNavigation { get; set; } = true;
+    [Parameter] public bool EnableAutoScroll { get; set; } = true; 
+    [Parameter] public int AutoScrollIntervalSeconds { get; set; } = 3;
+
+    private ElementReference _scrollContainer;
+    private System.Threading.Timer? _timer;
+    private bool _isAutoScrollActive;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && EnableAutoScroll)
+        {
+            _isAutoScrollActive = true;
+            StartTimer();
+        }
+    }
+
+    private void StartTimer()
+    {
+        var interval = TimeSpan.FromSeconds(AutoScrollIntervalSeconds);
+        _timer = new System.Threading.Timer(async _ =>
+        {
+            if (_isAutoScrollActive)
+            {
+                await InvokeAsync(async () => await ScrollList(ScrollAmount));
+            }
+        }, null, interval, interval);
+    }
+
+    private void HandleUserInteraction()
+    {
+        StopTimer();
+    }
+
+    private void StopTimer()
+    {
+        if (_isAutoScrollActive)
+        {
+            _isAutoScrollActive = false;
+            _timer?.Dispose();
+            _timer = null;
+        }
+    }
+
+    private async Task ScrollList(int offset)
+    {
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("scrollUpsellContainer", _scrollContainer, offset);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Scroll error: {ex.Message}");
+        }
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+}

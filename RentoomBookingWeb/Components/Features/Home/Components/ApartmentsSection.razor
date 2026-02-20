@@ -7,7 +7,7 @@
         <h1 class="city-title">@Localizer["title3"]</h1>
         <h2 class="city-subtitle">@Localizer["title2subtitle"]</h2>
     </div>
-    
+
     @if (!string.IsNullOrEmpty(Error))
     {
         <p class="text-red-600">@Error</p>
@@ -16,48 +16,33 @@
     {
         @if (!ApartmentsIsLoading)
         {
-            <Slider ItemsPerPage="4">
+            <SimpleCarousel>
                 @foreach (var apartment in Apartments)
                 {
-                    <Item>
-                        <div @onclick="() => GoToApartmentWithOffer(apartment.Id, apartment.Name)" >
-                            <Apartment 
-                                @key="apartment.Id"
-                                Item="@apartment" 
-                                Offer="@GetPricingOfferByObjectId(apartment.Id)" 
-                                ShowPrice="true"
-                                DisableForGoToReservation="true"
-                                Width="380px"
-                                       />
-                        </div>
-                    </Item>
-                }  
-            </Slider>   
+                    <div @onclick="() => GoToApartmentWithOffer(apartment.Id, apartment.Name)">
+                        <Apartment
+                            @key="apartment.Id"
+                            Item="@apartment"
+                            Offer="@GetPricingOfferByObjectId(apartment.Id)"
+                            ShowPrice="true"
+                            DisableForGoToReservation="true"
+                            Width="370px"/>
+                    </div>
+                }
+            </SimpleCarousel>
         }
         else
         {
-            <Slider ItemsPerPage="4">
-                <Item>
-                    <div>
-                        <Apartment Width="380px"/>
-                    </div>
-                </Item>
-                <Item>
-                    <div>
-                        <Apartment Width="380px"/>
-                    </div>
-                </Item>
-                <Item>
-                    <div >
-                        <Apartment Width="380px"/>
-                    </div>
-                </Item>
-                <Item>
-                    <div>
-                        <Apartment Width="380px"/>
-                    </div>
-                </Item>
-            </Slider>   
-        } 
+            <SimpleCarousel>
+                <Apartment Width="370px"/>
+                <Apartment Width="370px"/>
+                <Apartment Width="370px"/>
+                <Apartment Width="370px"/>
+                <Apartment Width="370px"/>
+                <Apartment Width="370px"/>
+                <Apartment Width="370px"/>
+                <Apartment Width="370px"/>
+            </SimpleCarousel>
+        }
     }
 </div>
