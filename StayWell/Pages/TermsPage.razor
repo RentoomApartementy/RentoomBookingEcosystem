@@ -57,7 +57,7 @@
                         <div class="form-buttons">
                             <Button OnClick="SelectTime" ButtonStyle="padding: 22px 12px !important; width: 100%;">
                                 <RenderFragment>
-                                    <span>@(_checkInTime is null ? "Wybierz godzinę przyjazdu" : $"Godzina przyjazdu: {_checkInTime.Value.ToString(@"hh\:mm")}")</span>
+                                    <span>@(_checkInTime is null ? "Wybierz przybliżoną godzinę przyjazdu" : $"Godzina przyjazdu: {_checkInTime.Value.ToString(@"hh\:mm")}")</span>
                                 </RenderFragment>
                             </Button>
 
