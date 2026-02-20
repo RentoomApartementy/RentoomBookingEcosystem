@@ -140,3 +140,13 @@
         height: 18px;
         opacity: 0.6;
     }
+
+.instruction-unavailable{
+    text-align: center;
+}
+
+.instruction-unavailable img{
+    height: 50px;
+    width: 50px;
+    padding-bottom: 10px;
+}
