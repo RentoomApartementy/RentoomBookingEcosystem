@@ -22,6 +22,10 @@
                 foreach (var addon in ApartmentState.CurrentApartment.Addons
                     .Where(a => a.Id != AddonServiceFeeId && a.Id != AddonCleaningFeeId && IsAddonAvailable(a.Id)))
                 {
+                    if (!IsAddonAvailable(addon.Id))
+                    {
+                        continue;
+                    }
                     var definedAddon = addon.Id.HasValue
                     ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
                     : null;
