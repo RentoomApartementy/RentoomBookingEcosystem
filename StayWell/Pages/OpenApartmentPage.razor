@@ -12,7 +12,7 @@
 <PageTitle>OpenApartmentPage</PageTitle>
 
 <div class="buttons-wrapper">
-    @if (!LocksState.IsTTLockAvailable) /*Tymczasowe włączenie aby pokazać UI*/
+    @if (LocksState.IsTTLockAvailable)
     {        
         <div class="tile tile--center">
             <button class="open-button @(IsOpened ? "unlocked" : "locked") @(IsProcessing ? "loading" : "")"
@@ -44,6 +44,17 @@
             </div>
         </div>
     }
+    else
+    {
+        <div class="tile">
+            <div class="tile__title">
+                Zdalne otwieranie drzwi
+            </div>
+            <div class="tile__content">
+                Zdalne otwieranie jest aktualnie niedostępne.
+            </div>
+        </div>
+    }
 
     @if (!string.IsNullOrEmpty(ErrorMessage))
     {
@@ -65,11 +76,23 @@
             }
             else
             {
-                <span class="bold">@LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()</span>
-                <span>@Localizer["Confirm"]</span>
-                <span class="bold">#</span>
-                <span>@Localizer["Or"]</span>
-                <img src="/icons/key-round.svg" class="icon-key" />
+                if (!string.IsNullOrEmpty(LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()))
+                {
+                    <span class="bold">@LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()</span>
+                    <span>@Localizer["Confirm"]</span>
+                    <span class="bold">#</span>
+                    <span>@Localizer["Or"]</span>
+                    <img src="/icons/key-round.svg" class="icon-key" />
+                }
+                else
+                {
+                    <div>
+                        <img style="height: 50px; width: 50px;" src="/icons/octagon-alert.svg" />
+                        <p style="padding-top: 10px;">
+                            Brak kodu do zamka. Skontaktuj się z obsługą!
+                        </p>
+                    </div>
+                }
             }
         </div>
     </div>
