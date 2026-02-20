@@ -68,16 +68,7 @@
                     </div>
                     <div class="code-card__content">
                         <div class="code-card__label">Kod do furtki</div>
-                        @if (ReservationState.IsActiveReservation)
-                        {
                             <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.GateCode</div>
-                        }
-                        else
-                        {
-                            <div class="code-card__meta">
-                                Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                            </div>
-                        }
                     </div>
                 </div>
             }
@@ -90,16 +81,7 @@
                     </div>
                     <div class="code-card__content">
                         <div class="code-card__label">Kod do budynku</div>
-                        @if (ReservationState.IsActiveReservation)
-                        {
                             <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.GateDoorCode</div>
-                        }
-                        else
-                        {
-                            <div class="code-card__meta">
-                                Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                            </div>
-                        }
                     </div>
                 </div>
             }
@@ -112,16 +94,7 @@
                     </div>
                     <div class="code-card__content">
                         <div class="code-card__label">Drzwi wspólne</div>
-                        @if (ReservationState.IsActiveReservation)
-                        {
                             <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.AdditionalDoorCode</div>
-                        }
-                        else
-                        {
-                            <div class="code-card__meta">
-                                Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                            </div>
-                        }
                     </div>
                 </div>
             }
@@ -134,16 +107,7 @@
                     </div>
                     <div class="code-card__content">
                         <div class="code-card__label">Schowek</div>
-                        @if (ReservationState.IsActiveReservation)
-                        {
                             <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.StoreroomCode</div>
-                        }
-                        else
-                        {
-                            <div class="code-card__meta">
-                                Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                            </div>
-                        }
                     </div>
                 </div>
             }
@@ -154,8 +118,6 @@
                 </div>
                 <div class="code-card__content">
                     <div class="code-card__label">Login i hasło WI-FI</div>
-                    @if (ReservationState.IsActiveReservation)
-                    {
                         @if (HasWifiInfo())
                         {
                             @if (HasCode(WifiSsid))
@@ -180,13 +142,6 @@
                         {
                             <div class="code-card__meta">Brak danych Wi-Fi</div>
                         }
-                    }
-                    else
-                    {
-                        <div class="code-card__meta">
-                            Dostęp za: <span class="fw-bold">@_days dni @_hours h @_minutes min</span>
-                        </div>
-                    }
                 </div>
             </div>
 
@@ -222,20 +177,6 @@
         .Select(s => NormalizeInstructionImageUrl(s.ImageUrl))
         .ToArray();
 
-    private int _days;
-    private int _hours;
-    private int _minutes;
-    private System.Threading.Timer? _timer;
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (!ReservationState.IsActiveReservation)
-        {
-            StartTimer();
-        }
-
-        await base.OnInitializedAsync();
-    }
 
     private string NormalizeInstructionImageUrl(string? imageUrl)
     {
@@ -250,42 +191,6 @@
         }
 
         return $"{InstructionImageBaseUrl.TrimEnd('/')}/{imageUrl.TrimStart('/')}";
-    }
-
-    private void StartTimer()
-    {
-        UpdateCountdown();
-        _timer = new System.Threading.Timer(_ =>
-        {
-            InvokeAsync(() =>
-            {
-                UpdateCountdown();
-                StateHasChanged();
-            });
-        }, null, 0, 1000 * 60);
-    }
-
-    private void UpdateCountdown()
-    {
-        var checkIn = ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom();
-        if (checkIn == null)
-        {
-            _days = _hours = _minutes = 0;
-            return;
-        }
-
-        var now = DateTime.Now;
-        var diff = checkIn.Value - now;
-        if (diff.TotalSeconds < 0)
-        {
-            _days = _hours = _minutes = 0;
-        }
-        else
-        {
-            _days = diff.Days;
-            _hours = diff.Hours;
-            _minutes = diff.Minutes;
-        }
     }
 
     private async Task CopyToClipboard()
@@ -317,8 +222,4 @@
         return HasCode(WifiSsid) || HasCode(WifiPassword) || HasCode(WifiAuth);
     }
 
-    public void Dispose()
-    {
-        _timer?.Dispose();
-    }
 }
