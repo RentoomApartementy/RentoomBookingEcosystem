@@ -2,57 +2,58 @@
     position: relative;
     display: inline-block;
     cursor: pointer;
-    font-size: 14px;
     user-select: none;
-    margin-right: 10px;
 }
 
 .language-switcher-button {
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    transition: background-color 0.2s;
-}
-
-.language-switcher-button:hover {
-    background-color: #f0f0f0;
-}
-
-.language-icon {
-    margin-right: 5px;
-    font-size: 16px;
-    color: #333;
+    padding: 6px 16px;
+    /* Domyślny stan (jasny/biały) */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background-color: transparent;
+    border-radius: 50px;
+    transition: all 0.3s ease;
 }
 
 .language-code {
-    font-weight: 600;
+    font-weight: 400;
+    font-size: 16px;
+    color: white;
+    transition: color 0.3s ease;
 }
 
-.dropdown-arrow {
-    margin-left: 8px;
-    width: 0;
-    height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 5px solid #333;
+.language-icon img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    display: block;
+}
+
+.language-switcher-button.scrolled {
+    border-color: #0c4128; 
+}
+
+.language-switcher-button.scrolled .language-code {
+    color: #0c4128; 
+}
+
+.language-switcher-button:hover {
+    background-color: rgba(40, 167, 69, 0.05);
 }
 
 .language-dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 8px);
     right: 0;
     z-index: 1000;
-    margin-top: 5px;
-    padding: 5px 0;
-    min-width: 100px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 4px;
+    min-width: 80px;
+    background-color: #2b1a12;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .language-dropdown button {
@@ -62,14 +63,16 @@
     border: none;
     background: none;
     cursor: pointer;
+    color: white;
+    border-radius: 8px;
     transition: background-color 0.15s;
 }
 
 .language-dropdown button:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .language-dropdown button.active {
     font-weight: 700;
-    background-color: #e5e5e5;
+    background-color: rgba(255, 255, 255, 0.2);
 }

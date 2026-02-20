@@ -36,7 +36,7 @@
             @* </div> *@
             <img src="@NavState.Facebook" class="menu-icon fb" alt="Ikona Facebook">
             <img src="@NavState.Instagram" class="menu-icon ig" alt="Ikona Instagram">
-            <ChangeGlobal/>
+            <ChangeGlobal IsScrolling="IsScrolling"/>
             @if (ShowMenu)
             {
                 <img @onclick="OnBurgerClick" src="@NavState.XIcon" class="menu-icon burger" alt="Ikona X">
@@ -77,6 +77,7 @@
     private DotNetObjectReference<Menu>? objRef;
     private MenuVisualState NavState { get; set; } = new();
     private bool ShowMenu = false;
+    private bool IsScrolling = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -118,6 +119,15 @@
                 XIcon = "/assets/svgs/x-white.svg",
                 ButtonTypeClass = ButtonType.Primary,
             };
+
+        if (scrollTop > 0)
+        {
+            IsScrolling = true;
+        }
+        else
+        {
+            IsScrolling = false;
+        }
 
         StateHasChanged();
     }
