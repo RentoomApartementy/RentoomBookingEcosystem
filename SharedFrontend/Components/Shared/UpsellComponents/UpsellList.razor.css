@@ -1,13 +1,12 @@
 .upsell-outer-wrapper.rentoom-theme {
     width: 100%;
     display: flex;
-    justify-content: center;
     padding: 10px 0;
     background-color: transparent;
 }
 
 .rentoom-theme .upsell-section-container {
-    width: 95%;
+    width: 100%;
     max-width: 980px;
     background: #ffffff;
     border-radius: 16px;
@@ -72,7 +71,6 @@
     color: #333;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .rentoom-theme .nav-btn:hover {
@@ -117,7 +115,7 @@
 
     .rentoom-theme .upsell-section-container {
         padding: 15px;
-        width: 95%; 
+        width: 100%; 
         box-shadow: none;
     }
 
@@ -153,7 +151,7 @@
 }
 
 .staywell-theme .upsell-section-container {
-    width: 95%;
+    width: 100%;
     max-width: 980px;
     background: #ffffff;
     border-radius: 16px;

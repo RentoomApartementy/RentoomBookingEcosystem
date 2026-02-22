@@ -124,23 +124,237 @@
             <span class="read-more-btn" @onclick="ToggleExpand" @onclick:stopPropagation="true">
                 @(_isExpanded ? @Localizer["HideDetails"] : @Localizer["ShowAll"])
             </span>
+            
+             @if (localHasOffers)
+    {
+        <hr style="width: 100%;"/>
+        
+         <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
+    
+    @* <SearchBar *@
+    @*     StartDate="@StartDate" *@
+    @*     EndDate="@EndDate" *@
+    @*     Adults="@Adults" *@
+    @*     Children="@Children" *@
+    @*     IsRoom="false" *@
+    @*     OnSearch="@(async query => await HandleSearch(query))" *@
+    @* ></SearchBar> *@
+    
+    @* @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional == false)) *@
+    @* { *@
+    @*     <h3 id="confirm-reservation" class="header-text" style="margin-bottom: -1rem;">@Localizer["MandatoryOptions"]</h3> *@
+    @*      *@
+    @*     <div class="addon-list-container"> *@
+    @*         @foreach (var addon in _apartment.Addons.Where(x => x.Optional == false)) *@
+    @*         { *@
+    @*             if (_definedAddons != null) *@
+    @*             { *@
+    @*                 var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id); *@
+    @*                 var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL"); *@
+    @*                 var paymentType = fadesc?.PaymentTypeShortDescription; *@
+    @* *@
+    @*                 @if (fa != null) *@
+    @*                 { *@
+    @*                     <div class="addon-item"> *@
+    @*                         <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true"> *@
+    @*                             <div class="addon-info-col"> *@
+    @*                                 <span class="addon-name">@fadesc?.Name</span> *@
+    @*                                 <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small> *@
+    @*                             </div> *@
+    @* *@
+    @*                             <div class="addon-quantity-col empty" @onclick:stopPropagation="true" @onclick:preventDefault="true"> *@
+    @*                             </div> *@
+    @* *@
+    @*                             <div class="price-box"> *@
+    @*                                 <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b> *@
+    @*                             </div> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                 } *@
+    @*                 else *@
+    @*                 { *@
+    @*                     <div class="addon-item"> *@
+    @*                         <div class="addon-label"> *@
+    @*                             <span class="addon-name-empty">Brak opisu dodatku</span> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                 } *@
+    @*             } *@
+    @*             else *@
+    @*             { *@
+    @*                 <div class="skeleton-row"> *@
+    @*                     <div style="flex: 1;"> *@
+    @*                         <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span> *@
+    @*                         <span class="skeleton-box" style="width: 30%; height: 12px;"></span> *@
+    @*                     </div> *@
+    @*                     <div style="display: flex; gap: 10px; align-items: center;"> *@
+    @*                         <span class="skeleton-box" style="width: 60px; height: 16px;"></span> *@
+    @*                         <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span> *@
+    @*                     </div> *@
+    @*                 </div> *@
+    @*             } *@
+    @*         } *@
+    @*     </div> *@
+    @* } *@
+
+    @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional != false))
+    {
+        <div id="confirm-reservation" class="addon-list-container">
+            <div class="addon-list-wrapper">
+                <div class="upsell-title-group">
+                    <div class="upsell-icon">
+                        <img src="assets/svgs/kid_star.svg" alt="icon" style="width: 20px; height: 20px;" />
+                    </div>
+                    <div class="upsell-text">
+                        <h2 class="upsell-main-title">@Localizer["AdditionalOptions"]</h2>
+                    </div>
+                </div>
+                
+                <div class="addons-wrapper">
+                       @foreach (var addon in _apartment.Addons.Where(x => x.Optional != false))
+                {
+                    if (_definedAddons != null)
+                    {
+                        var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
+                        var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL");
+                        var paymentType = fadesc?.PaymentTypeShortDescription;
+
+                        @if (fa != null)
+                        {
+                            <div class="addon-item">
+                                <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
+                                    <div class="addon-info-col">
+                                        <span class="addon-name">@fadesc?.Name</span>
+                                        <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
+                                    </div>
+
+                                    <div class="price-box">
+                                        <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
+                                        <input type="checkbox"
+                                               class="addon-checkbox"
+                                               checked="@(IsAddonSelected(addon.Id))"
+                                               disabled="@(IsAddonMandatory(addon.Optional))"
+                                               readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="addon-item">
+                                <div class="addon-label">
+                                    <span class="addon-name-empty">Brak opisu dodatku</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="skeleton-row">
+                            <div style="flex: 1;">
+                                <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span>
+                                <span class="skeleton-box" style="width: 30%; height: 12px;"></span>
+                            </div>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <span class="skeleton-box" style="width: 60px; height: 16px;"></span>
+                                <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span>
+                            </div>
+                        </div>
+                    }
+                }
+                </div>
+            </div>
+        </div>
+    }
+    
+    
+     @if (_reservationPricingContext is not null)
+    {
+        <UpsellList AvailableUpsellsList="_availableUpsells"
+                    ReservationContext="_reservationPricingContext"
+                    OnSelectionChanged="HandleUpsellSelectionChanged"
+                    Texts="UpsellTexts"/>
+    }
+
+    
+    @if (TotalAddonsPrice > 0)
+    {
+        <div class="additional-price">
+            +@((TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) zł
+        </div>
+    }
+    
+    @if (_isOfferLoading)
+    {
+        <div class="summary-offer-price-wrapper" style="justify-content: center; padding: 2rem;">
+            <b>@Localizer["Loading"]...</b>
+        </div>
+    }
+    else if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
+    {
+        <div class="summary-offer-price-wrapper">
+            @{
+                var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
+                var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+                var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+            }
+            
+            @if (nonRefundableOffer != null)
+            {
+                <div class="summary-offer-price">
+                    <b>@Localizer["Non-refundableOffer"]</b>
+                    <small>@Localizer["NonRefundableText"]</small>
+                    <div class="summary-offer-price-button">
+                        <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
+                        <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
+                            <Button>@Localizer["BookNow"]</Button>
+                        </div>
+                    </div>
+                </div>  
+            }
+            
+            @if (refundableOffer != null)
+            {
+                <div class="summary-offer-price refundable">
+                    <b>@Localizer["RefundableOffer"]</b>
+                    <small>@Localizer["RefundableOfferText"]</small>
+                    <div class="summary-offer-price-button">
+                        <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
+                        <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
+                            <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
+                        </div>
+                    </div>
+                </div>   
+            }
+        </div>
+    }
+    else
+    {
+        <div class="summary-offer-price-wrapper">
+            @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
+            {
+                <div class="summary-offer-price">
+                    <b>@Localizer["NoOffersAvailable"]</b>
+                    <span>@Localizer["SuggestedDate"]: <b>@_suggestionDates?.StartDate - @_suggestionDates?.EndDate</b></span>
+                    <div @onclick="GoToSuggestionDates" @onclick:stopPropagation="true">
+                        <Button>@Localizer["BookNow"]</Button>
+                    </div>
+                </div>  
+            }
+            @if (_suggestionLoading)
+            {
+                <div class="summary-offer-price">
+                    <span>@Localizer["SuggestedDate"]: <b>@Localizer["SuggestedDateLoading"]</b></span>
+                    <Button Disabled="true">@Localizer["BookNow"]</Button>
+                </div>  
+            }
+        </div>
+    }
+    }
         </div>
 
         <div class="info-box">
             <div class="reservation-info">
-                @{
-                    var localPricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
-                    var localRefundableOffer = localPricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
-                    var localNonRefundableOffer = localPricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
-                    
-                    var localMinPrice = localRefundableOffer?.Price;
-                    if (localNonRefundableOffer != null && (localMinPrice == null || localNonRefundableOffer.Price < localMinPrice))
-                    {
-                        localMinPrice = localNonRefundableOffer.Price;
-                    }
-                    var localHasOffers = localMinPrice != null;
-                }
-
                 @if (localHasOffers && !_isOfferLoading)
                 {
                     <div class="reservation-header">
@@ -284,219 +498,6 @@
     </div>
     
     <div style="margin-top: 2rem;"></div>
-    
-    <hr style="width: 90%;"/>
-    
-    <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
-    
-    <SearchBar
-        StartDate="@StartDate"
-        EndDate="@EndDate"
-        Adults="@Adults"
-        Children="@Children"
-        IsRoom="false"
-        OnSearch="@(async query => await HandleSearch(query))"
-    ></SearchBar>
-    
-    @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional == false))
-    {
-        <h3 id="confirm-reservation" class="header-text" style="margin-bottom: -1rem;">@Localizer["MandatoryOptions"]</h3>
-        
-        <div class="addon-list-container">
-            @foreach (var addon in _apartment.Addons.Where(x => x.Optional == false))
-            {
-                if (_definedAddons != null)
-                {
-                    var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
-                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL");
-                    var paymentType = fadesc?.PaymentTypeShortDescription;
-
-                    @if (fa != null)
-                    {
-                        <div class="addon-item">
-                            <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
-                                <div class="addon-info-col">
-                                    <span class="addon-name">@fadesc?.Name</span>
-                                    <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
-                                </div>
-
-                                <div class="addon-quantity-col empty" @onclick:stopPropagation="true" @onclick:preventDefault="true">
-                                </div>
-
-                                <div class="price-box">
-                                    <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="addon-item">
-                            <div class="addon-label">
-                                <span class="addon-name-empty">Brak opisu dodatku</span>
-                            </div>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="skeleton-row">
-                        <div style="flex: 1;">
-                            <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span>
-                            <span class="skeleton-box" style="width: 30%; height: 12px;"></span>
-                        </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <span class="skeleton-box" style="width: 60px; height: 16px;"></span>
-                            <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span>
-                        </div>
-                    </div>
-                }
-            }
-        </div>
-    }
-
-    @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional != false))
-    {
-        <h3 class="header-text" style="margin-bottom: -1rem;">@Localizer["AdditionalOptions"]</h3>
-        
-        <div class="addon-list-container">
-            @foreach (var addon in _apartment.Addons.Where(x => x.Optional != false))
-            {
-                if (_definedAddons != null)
-                {
-                    var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
-                    var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL");
-                    var paymentType = fadesc?.PaymentTypeShortDescription;
-
-                    @if (fa != null)
-                    {
-                        <div class="addon-item">
-                            <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
-                                <div class="addon-info-col">
-                                    <span class="addon-name">@fadesc?.Name</span>
-                                    <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
-                                </div>
-
-                                <div class="price-box">
-                                    <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
-                                    <input type="checkbox" 
-                                           class="addon-checkbox" 
-                                           checked="@(IsAddonSelected(addon.Id))"
-                                           disabled="@(IsAddonMandatory(addon.Optional))"
-                                           readonly />
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="addon-item">
-                            <div class="addon-label">
-                                <span class="addon-name-empty">Brak opisu dodatku</span>
-                            </div>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="skeleton-row">
-                        <div style="flex: 1;">
-                            <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span>
-                            <span class="skeleton-box" style="width: 30%; height: 12px;"></span>
-                        </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <span class="skeleton-box" style="width: 60px; height: 16px;"></span>
-                            <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span>
-                        </div>
-                    </div>
-                }
-            }
-        </div>
-    }
-    
-    
-     @if (_reservationPricingContext is not null)
-    {
-        <UpsellList AvailableUpsellsList="_availableUpsells"
-                    ReservationContext="_reservationPricingContext"
-                    OnSelectionChanged="HandleUpsellSelectionChanged"
-                    Texts="UpsellTexts"/>
-    }
-
-    
-    @if (TotalAddonsPrice > 0)
-    {
-        <div class="additional-price">
-            +@((TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) zł
-        </div>
-    }
-    
-    @if (_isOfferLoading)
-    {
-        <div class="summary-offer-price-wrapper" style="justify-content: center; padding: 2rem;">
-            <b>@Localizer["Loading"]...</b>
-        </div>
-    }
-    else if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
-    {
-        <div class="summary-offer-price-wrapper">
-            @{
-                var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
-                var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
-                var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
-            }
-            
-            @if (nonRefundableOffer != null)
-            {
-                <div class="summary-offer-price">
-                    <b>@Localizer["Non-refundableOffer"]</b>
-                    <small>@Localizer["NonRefundableText"]</small>
-                    <div class="summary-offer-price-button">
-                        <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
-                        <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
-                            <Button>@Localizer["BookNow"]</Button>
-                        </div>
-                    </div>
-                </div>  
-            }
-            
-            @if (refundableOffer != null)
-            {
-                <div class="summary-offer-price refundable">
-                    <b>@Localizer["RefundableOffer"]</b>
-                    <small>@Localizer["RefundableOfferText"]</small>
-                    <div class="summary-offer-price-button">
-                        <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
-                        <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
-                            <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
-                        </div>
-                    </div>
-                </div>   
-            }
-        </div>
-    }
-    else
-    {
-        <div class="summary-offer-price-wrapper">
-            @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
-            {
-                <div class="summary-offer-price">
-                    <b>@Localizer["NoOffersAvailable"]</b>
-                    <span>@Localizer["SuggestedDate"]: <b>@_suggestionDates?.StartDate - @_suggestionDates?.EndDate</b></span>
-                    <div @onclick="GoToSuggestionDates" @onclick:stopPropagation="true">
-                        <Button>@Localizer["BookNow"]</Button>
-                    </div>
-                </div>  
-            }
-            @if (_suggestionLoading)
-            {
-                <div class="summary-offer-price">
-                    <span>@Localizer["SuggestedDate"]: <b>@Localizer["SuggestedDateLoading"]</b></span>
-                    <Button Disabled="true">@Localizer["BookNow"]</Button>
-                </div>  
-            }
-        </div>
-    }
     
     <MapPopup
         @bind-IsModalOpen="_isModalOpen"
@@ -681,7 +682,7 @@
             _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
             
             _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
-            InitializeMandatoryAddons();
+            //InitializeMandatoryAddons();
 
             UpdateReservationPricingContext();
             await LoadUpsellsAsync();
@@ -1114,4 +1115,25 @@
     {
         _isModalOpen = true;
     }
+    
+    private OfferItem? localRefundableOffer => 
+        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+
+    private OfferItem? localNonRefundableOffer => 
+        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+
+    private decimal? localMinPrice
+    {
+        get
+        {
+            var minPrice = (decimal?)localRefundableOffer?.Price;
+            if (localNonRefundableOffer != null && (minPrice == null || (decimal?)localNonRefundableOffer.Price < minPrice))
+            {
+                minPrice = (decimal?)localNonRefundableOffer.Price;
+            }
+            return minPrice;
+        }
+    }
+
+    private bool localHasOffers => localMinPrice != null;
 }
