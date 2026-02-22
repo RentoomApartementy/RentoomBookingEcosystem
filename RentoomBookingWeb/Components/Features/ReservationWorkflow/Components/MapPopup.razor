@@ -51,12 +51,11 @@
     private string Id { get; } = $"mappopup-{Guid.NewGuid()}";
     
     [JSInvokable]
-    public void CloseModal()
+    public async Task CloseModal()
     {
         if (IsModalOpen)
         {
-            IsModalOpen = false;
-            StateHasChanged();
+            await IsModalOpenChanged.InvokeAsync(false); 
         }
     }
     

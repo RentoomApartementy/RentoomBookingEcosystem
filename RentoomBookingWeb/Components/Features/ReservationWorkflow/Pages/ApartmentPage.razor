@@ -121,89 +121,113 @@
                 }
             </div>
 
-            <span class="read-more-btn" @onclick="ToggleExpand">
+            <span class="read-more-btn" @onclick="ToggleExpand" @onclick:stopPropagation="true">
                 @(_isExpanded ? @Localizer["HideDetails"] : @Localizer["ShowAll"])
             </span>
         </div>
 
         <div class="info-box">
             <div class="reservation-info">
-                <div>
-                    <h5>@Localizer["SelectedDates"]</h5>
-                    @if (StartDate != null && EndDate != null)
+                @{
+                    var localPricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
+                    var localRefundableOffer = localPricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+                    var localNonRefundableOffer = localPricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+                    
+                    var localMinPrice = localRefundableOffer?.Price;
+                    if (localNonRefundableOffer != null && (localMinPrice == null || localNonRefundableOffer.Price < localMinPrice))
                     {
-                        <p>@Localizer["From"] @StartDate @Localizer["To"] @EndDate</p>
+                        localMinPrice = localNonRefundableOffer.Price;
                     }
-                    else
-                    {
-                        <p>@Localizer["NoDatesSelected"]</p>
-                    }
-                        
-                    <h5>@Localizer["NumberOfGuests"]</h5>
-                    @if (StartDate != null && EndDate != null)
-                    {
-                        <p>@Localizer["Adults"]: @Adults, @Localizer["Children"]: @(Children != null ? Children :  0)</p>
-                    }
-                    else
-                    {
-                        <p>@Localizer["NoGuestsSelected"]</p>
-                    }
-                        
+                    var localHasOffers = localMinPrice != null;
+                }
+
+                @if (localHasOffers && !_isOfferLoading)
+                {
+                    <div class="reservation-header">
+                        <div class="header-price">
+                            <span class="price-value">@Localizer["From"] @localMinPrice zł</span>
+                        </div>
+                    </div>
+                }
+
+                <div class="reservation-body">
+                    <div class="info-row">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-title">@Localizer["SelectedDates"]</span>
+                            @if (StartDate != null && EndDate != null)
+                            {
+                                <span class="info-text">@StartDate – @EndDate</span>
+                            }
+                            else
+                            {
+                                <span class="info-text missing-data">@Localizer["NoDatesSelected"]</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-title">@Localizer["NumberOfGuests"]</span>
+                            @if (StartDate != null && EndDate != null)
+                            {
+                                <span class="info-text">@Adults @Localizer["Adults"], @(Children != null ? Children : 0) @Localizer["Children"]</span>
+                            }
+                            else
+                            {
+                                <span class="info-text missing-data">@Localizer["NoGuestsSelected"]</span>
+                            }
+                        </div>
+                    </div>
+                    
                     @if (_isOfferLoading)
                     {
-                        <div class="offer-price-wrapper">
-                            <div style="width: 100%; text-align: center; padding: 1rem; color: #666;">
-                                <b>@Localizer["Loading"]...</b>
-                            </div>
+                        <div style="width: 100%; text-align: center; padding: 1rem; color: #666;">
+                            <b>@Localizer["Loading"]...</b>
                         </div>
                     }
-                    else if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
+                    else if (localHasOffers)
                     {
-                        <div class="offer-price-wrapper">
-                            @{
-                                var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
-
-                                var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
-                                var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
-                            }
-
-                            @if (refundableOffer != null)
-                            {
-                                <div class="offer-price">
-                                    <span>@Localizer["RefundableOffer"]: <b>@refundableOffer.Price zł</b></span>
-                                </div>   
-                            }
-
-                            @if (nonRefundableOffer != null)
-                            {
-                                <div class="offer-price">
-                                    <span>@Localizer["Non-refundableOffer"]: <b>@nonRefundableOffer.Price zł</b></span>
-                                </div>
-                            }
-
-                            <div style="margin-top: .2rem"></div>
-                            <div style="width: 100%;" @onclick="ScrollToReservation">
-                                <Button style="width: 100%;">@Localizer["BookNow"]</Button>
-                            </div>
+                        <div style="margin-top: 1rem; width: 100%;" @onclick="ScrollToReservation">
+                            <Button style="width: 100%;">Przejdź do podsumowania</Button>
                         </div>
                     }
-                    else
+                    else if (StartDate != null && EndDate != null)
                     {
-                        <div >
-                            @Localizer["NoOffersAvailable"]
+                        <div class="no-offers-wrapper">
+                            <div class="alert-box warning">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                <span>@Localizer["NoOffersAvailable"]</span>
+                            </div>
+                            
                             @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
                             {
-                                <div @onclick="GoToSuggestionDates" class="suggest-offer">
-                                    <span>@Localizer["SuggestedDate"]</span>
-                                    @* Michal-->: ponizej dodac czas checkintime checkouttime \/ *@
-                                    <b>@Localizer["From"] @_suggestionDates?.StartDate @Localizer["To"] @_suggestionDates?.EndDate</b> 
+                                <div @onclick="GoToSuggestionDates" class="suggest-offer-card">
+                                    <div class="suggest-icon">
+                                        <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+                                    </div>
+                                    <div class="suggest-content">
+                                        <span class="suggest-title">@Localizer["SuggestedDate"]</span>
+                                        <span class="suggest-dates">@Localizer["From"] @_suggestionDates?.StartDate @Localizer["To"] @_suggestionDates?.EndDate</span>
+                                    </div>
+                                    <div class="suggest-action">
+                                        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                                    </div>
                                 </div>  
                             }
+                            
                             @if (_suggestionLoading)
                             {
-                                <div class="suggest-offer">
-                                    <span>@Localizer["SuggestedDate"]</span>
-                                    <b>@Localizer["SuggestedDateLoading"]</b>
+                                <div class="suggest-offer-card loading">
+                                    <div class="suggest-content">
+                                        <span class="suggest-title">@Localizer["SuggestedDate"]</span>
+                                        <span class="suggest-dates">@Localizer["SuggestedDateLoading"]...</span>
+                                    </div>
                                 </div>  
                             }
                         </div>
@@ -211,12 +235,49 @@
                 </div>
             </div>
             
-            <div class="map" @onclick="OpenModal">
-                <ApartmentMap
-                    Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
-                    Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
-                    ApartmentAddress="@_apartment?.ObjectLocation?.Address"
+            <div class="map-card-wrapper">
+                <div class="map-top-section">
+                    <ApartmentMap
+                        Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
+                        Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
+                        ApartmentAddress="@_apartment?.ObjectLocation?.Address"
                     />   
+                </div>
+
+                <div class="map-bottom-section">
+                    <div class="map-address-row">
+                        <div class="map-pin-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </div>
+                        <div class="map-address-details">
+                            <span class="map-street-name">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>
+                            <span class="map-city-name">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode @_apartment?.ObjectLocation?.LocalizationItem?.City, Polska</span>
+                        </div>
+                    </div>
+
+                    <div class="map-action-row">
+                        @{
+                            var lat = _apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            var lng = _apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        }
+                        
+                        <button class="map-secondary-btn" 
+                                @onclick="OpenModal"
+                                @onclick:stopPropagation="true">
+                            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                            Zobacz więcej
+                        </button>
+
+                        <a class="map-google-btn"
+                           href="https://www.google.com/maps/search/?api=1&query=@(lat),@(lng)"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           @onclick:stopPropagation="true">
+                            <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                            Google Maps
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -253,7 +314,7 @@
                     @if (fa != null)
                     {
                         <div class="addon-item">
-                            <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))">
+                            <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
                                 <div class="addon-info-col">
                                     <span class="addon-name">@fadesc?.Name</span>
                                     <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
@@ -264,11 +325,6 @@
 
                                 <div class="price-box">
                                     <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
-                                    @* <input type="checkbox"  *@
-                                    @*        class="addon-checkbox"  *@
-                                    @*        checked="@(IsAddonSelected(addon.Id))" *@
-                                    @*        disabled="true" *@
-                                    @*        readonly /> *@
                                 </div>
                             </div>
                         </div>
@@ -315,30 +371,11 @@
                     @if (fa != null)
                     {
                         <div class="addon-item">
-                            <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))">
+                            <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
                                 <div class="addon-info-col">
                                     <span class="addon-name">@fadesc?.Name</span>
                                     <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
                                 </div>
-
-                                @* <div class="addon-quantity-col @((IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase)) ? "" : "empty")"  *@
-                                @*      @onclick:stopPropagation="true"  *@
-                                @*      @onclick:preventDefault="true"> *@
-                                @*      *@
-                                @*     @if (IsAddonSelected(addon.Id) && paymentType != null && paymentType.Contains("Za ilość", StringComparison.OrdinalIgnoreCase)) *@
-                                @*     { *@
-                                @*         var currentQty = GetSelectedAddonQuantity(addon.Id); *@
-                                @*         <div class="quantity-selector"> *@
-                                @*             <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty - 1))"> *@
-                                @*                 <span>−</span> *@
-                                @*             </button> *@
-                                @*             <span class="quantity-value">@currentQty</span> *@
-                                @*             <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty + 1))"> *@
-                                @*                 <span>+</span> *@
-                                @*             </button> *@
-                                @*         </div> *@
-                                @*     } *@
-                                @* </div> *@
 
                                 <div class="price-box">
                                     <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
@@ -416,7 +453,9 @@
                     <small>@Localizer["NonRefundableText"]</small>
                     <div class="summary-offer-price-button">
                         <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
-                        <Button @onclick="@(() => GoToPayment(OfferTypeNonrefundable))">@Localizer["BookNow"]</Button>
+                        <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
+                            <Button>@Localizer["BookNow"]</Button>
+                        </div>
                     </div>
                 </div>  
             }
@@ -428,7 +467,9 @@
                     <small>@Localizer["RefundableOfferText"]</small>
                     <div class="summary-offer-price-button">
                         <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
-                        <Button Type="ButtonType.Tertiary" @onclick="@(() => GoToPayment(OfferTypeRefundable))">@Localizer["BookNow"]</Button>
+                        <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
+                            <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
+                        </div>
                     </div>
                 </div>   
             }
@@ -442,7 +483,9 @@
                 <div class="summary-offer-price">
                     <b>@Localizer["NoOffersAvailable"]</b>
                     <span>@Localizer["SuggestedDate"]: <b>@_suggestionDates?.StartDate - @_suggestionDates?.EndDate</b></span>
-                    <Button @onclick="GoToSuggestionDates">@Localizer["BookNow"]</Button>
+                    <div @onclick="GoToSuggestionDates" @onclick:stopPropagation="true">
+                        <Button>@Localizer["BookNow"]</Button>
+                    </div>
                 </div>  
             }
             @if (_suggestionLoading)
@@ -690,7 +733,7 @@
         bool hasOffers = _offersResponse?.Result?.PricingOffers != null && 
                          _offersResponse.Result.PricingOffers.Any();
 
-        if (!hasOffers && _isOfferLoading)
+        if (!hasOffers && !_isOfferLoading)
         {
             _ = Task.Run(async () => await LoadSuggestionInBackground());
         }

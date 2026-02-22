@@ -110,13 +110,7 @@
 }
 
 @media (max-width: 768px) {
-    .upsell-nav-buttons {
-        display: none !important;
-    }
     .rentoom-theme .upsell-list-scroll-wrapper {
-        flex-direction: column;
-        overflow-x: hidden;
-        overflow-y: visible;
         padding: 10px 0;
         gap: 12px;
     }
@@ -262,9 +256,6 @@
     }
 
 @media (max-width: 768px) {
-    .upsell-nav-buttons {
-        display: none !important;
-    }
 
     .staywell-theme .upsell-list-scroll-wrapper {
         flex-direction: column;
