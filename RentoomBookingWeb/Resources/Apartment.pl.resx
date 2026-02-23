@@ -107,4 +107,13 @@
     <data name="ApartmentsMap" xml:space="preserve">
         <value>Mapa apartamentów</value>
     </data>
+    <data name="CleaningIncluded" xml:space="preserve">
+        <value>Sprzątanie jest wliczone w cene</value>
+    </data>
+    <data name="SelectOffer" xml:space="preserve">
+        <value>Wybierz ofertę</value>
+    </data>
+    <data name="SeeMore" xml:space="preserve">
+        <value>Zobacz więcej</value>
+    </data>
 </root>

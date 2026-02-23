@@ -206,16 +206,186 @@
     justify-content: end;
 }
 
+/* ========================================================= */
+/* INFO BOX (SIDEBAR) + STICKY FOOTER LOGIC */
+/* ========================================================= */
+
 .info-box {
     width: 30%;
-    height: 70vh;
+    height: 70vh; /* Przywróciłem oryginalną wysokość dla desktopu */
     position: sticky;
     top: 120px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin-top: 1rem;
+    /* transition: all 0.3s ease; <-- Usunąłem, bo mogło psuć sticky na desktopie */
+    z-index: 100;
 }
+
+/* Domyślne ukrycie elementów mobile na desktopie */
+.mobile-sticky-header, .mobile-only-row {
+    display: none;
+}
+
+/* Domyślne pokazanie elementów desktop na desktopie */
+.desktop-only, .desktop-only-map {
+    display: block;
+}
+
+/* --- MOBILE STYLES (STICKY FOOTER) --- */
+@media (max-width: 810px) {
+    .main-wrapper {
+        flex-direction: column;
+        width: 95%;
+    }
+
+    .left-container {
+        width: 100%;
+    }
+
+    /* Zmieniamy Info Box w pasek na dole */
+    .info-box {
+        display: block !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: auto; /* Resetujemy wysokość na auto dla mobile */
+        min-height: unset;
+        margin: 0;
+        top: auto; /* Resetujemy top */
+        background-color: #fff;
+        border-top: 1px solid #ddd;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .reservation-info {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    /* Ukrywamy standardowe nagłówki i przyciski z desktopu */
+    .desktop-only, .desktop-only-map {
+        display: none !important;
+    }
+
+    .mobile-only-row {
+        display: flex;
+    }
+
+    /* --- MOBILE HEADER (CENA + PRZYCISK) --- */
+    .mobile-sticky-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1.2rem;
+        background-color: #945F28; /* Brązowy kolor */
+        color: white;
+        cursor: pointer;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .mobile-price-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .mobile-price-group .label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .mobile-price-group .price {
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+
+    .mobile-price-group .chevron {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-price-group .chevron svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+    }
+
+    /* Obracanie strzałki */
+    .mobile-price-group .chevron.rotated {
+        transform: rotate(180deg);
+    }
+
+    .mobile-action-btn button {
+        background-color: white !important;
+        color: #945F28 !important;
+        border: none !important;
+        font-weight: bold;
+        border-radius: 50px; /* Zaokrąglony przycisk */
+        padding: 8px 20px !important;
+    }
+
+    /* --- EXPANDABLE CONTENT (DETAILS) --- */
+    .info-box-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+        background: white;
+    }
+
+    .info-box.mobile-expanded .info-box-content {
+        max-height: 500px; /* Wystarczająco dużo, żeby pokazać detale */
+        overflow-y: auto;
+    }
+
+    .reservation-body {
+        padding: 1rem;
+    }
+
+    /* Zmniejszamy ikony i tekst wewnątrz rozwiniętego paska */
+    .info-row {
+        margin-bottom: 0.8rem;
+    }
+
+    .info-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .info-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .apartment-wrapper {
+        padding: 0;
+    }
+
+    .image-wrapper {
+        height: 270px;
+        flex: none;
+    }
+
+    .map {
+        height: 200px;
+        flex: none;
+    }
+
+    .apartment-map-wrapper {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* ========================================================= */
+/* RESZTA STYLI BEZ ZMIAN */
+/* ========================================================= */
 
 .reservation-info {
     width: 100%;
@@ -468,39 +638,6 @@
     gap: .5rem;
 }
 
-@media (max-width: 810px) {
-    .main-wrapper {
-        flex-direction: column;
-        width: 95%;
-    }
-
-    .left-container {
-        width: 100%;
-    }
-
-    .info-box {
-        display: none;
-    }
-
-    .apartment-wrapper {
-        padding: 0;
-    }
-
-    .image-wrapper {
-        height: 270px;
-        flex: none;
-    }
-
-    .map {
-        height: 200px;
-        flex: none;
-    }
-
-    .apartment-map-wrapper {
-        flex-direction: column;
-        gap: 1rem;
-    }
-}
 
 .header-text {
     color: #1F5A41;
@@ -716,10 +853,9 @@
     background-color: #d7f1e5;
     color: #0c4128;
     font-weight: bold;
-    padding: .1rem 1rem;
-    border-radius: 1rem;
+    padding: .2rem 1rem;
+    border-radius: .5rem;
     border: #0c4128 solid 1px;
-    margin: -1rem 0;
 }
 
 .summary-offer-price-wrapper {
