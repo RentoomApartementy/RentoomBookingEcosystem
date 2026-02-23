@@ -1,19 +1,20 @@
 @using RentoomBookingWeb.Components.Features.Home.Components
 
-<Slider ItemsPerPage="1">
-    <Item>
-        <Package ImagePath="assets/images/package-test.jpeg" Title="Pakiet zaręczynowy"/>
-    </Item>
-    <Item>
-        <Package ImagePath="assets/images/package-test.jpeg" Title="Pakiet zaręczynowy"/>
-    </Item>
-    <Item>
-        <Package ImagePath="assets/images/package-test.jpeg" Title="Pakiet zaręczynowy"/>
-    </Item>
-    <Item>
-        <Package ImagePath="assets/images/package-test.jpeg" Title="Pakiet zaręczynowy"/>
-    </Item>
-    <Item>
-        <Package ImagePath="assets/images/package-test.jpeg" Title="Pakiet zaręczynowy"/>
-    </Item>
+<Slider TItem="PackageModel" Items="@_packages" ItemsPerPage="1">
+    <ItemTemplate Context="package">
+        <Package ImagePath="@package.ImagePath" Title="@package.Title" />
+    </ItemTemplate>
 </Slider>
+
+@code {
+    private record PackageModel(string ImagePath, string Title);
+
+    private static readonly IReadOnlyList<PackageModel> _packages = new[]
+    {
+        new PackageModel("assets/images/package-test.jpeg", "Pakiet zaręczynowy"),
+        new PackageModel("assets/images/package-test.jpeg", "Pakiet zaręczynowy"),
+        new PackageModel("assets/images/package-test.jpeg", "Pakiet zaręczynowy"),
+        new PackageModel("assets/images/package-test.jpeg", "Pakiet zaręczynowy"),
+        new PackageModel("assets/images/package-test.jpeg", "Pakiet zaręczynowy")
+    };
+}

@@ -1,14 +1,12 @@
 .upsell-outer-wrapper.rentoom-theme {
     width: 100%;
     display: flex;
-    justify-content: center;
     padding: 10px 0;
     background-color: transparent;
 }
 
 .rentoom-theme .upsell-section-container {
-    width: 95%;
-    max-width: 980px;
+    width: 100%;
     background: #ffffff;
     border-radius: 16px;
     padding: 15px 20px;
@@ -72,7 +70,6 @@
     color: #333;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .rentoom-theme .nav-btn:hover {
@@ -110,20 +107,14 @@
 }
 
 @media (max-width: 768px) {
-    .upsell-nav-buttons {
-        display: none !important;
-    }
     .rentoom-theme .upsell-list-scroll-wrapper {
-        flex-direction: column;
-        overflow-x: hidden;
-        overflow-y: visible;
         padding: 10px 0;
         gap: 12px;
     }
 
     .rentoom-theme .upsell-section-container {
         padding: 15px;
-        width: 95%; 
+        width: 100%; 
         box-shadow: none;
     }
 
@@ -159,8 +150,7 @@
 }
 
 .staywell-theme .upsell-section-container {
-    width: 95%;
-    max-width: 980px;
+    width: 100%;
     background: #ffffff;
     border-radius: 16px;
     padding: 15px 20px;
@@ -262,9 +252,6 @@
     }
 
 @media (max-width: 768px) {
-    .upsell-nav-buttons {
-        display: none !important;
-    }
 
     .staywell-theme .upsell-list-scroll-wrapper {
         flex-direction: column;

@@ -1,0 +1,75 @@
+.carousel-outer-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.carousel-main-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.carousel-nav-buttons {
+    display: flex;
+    justify-content: center;
+    order: 2;
+    margin-top: 15px;
+    gap: 12px;
+}
+
+.nav-btn {
+    border: 1px solid #e0e0e0;
+    background: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.nav-btn:hover {
+    background: #f8f9fa;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.carousel-list-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 22px;
+    overflow-x: auto;
+    padding: 5px 2px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    order: 1;
+}
+
+.carousel-list-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-list-wrapper ::deep > * {
+    flex: 0 0 auto;
+}
+
+@media (max-width: 768px) {
+    .carousel-nav-buttons {
+        display: flex;
+    }
+
+    .carousel-list-wrapper {
+        gap: 12px;
+    }
+
+    .nav-btn {
+        width: 44px;
+        height: 44px;
+    }
+}

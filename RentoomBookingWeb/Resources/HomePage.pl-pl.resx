@@ -12,7 +12,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="title2" xml:space="preserve">
-        <value>Apartamenty w Toruniu – komfortowe noclegi
+        <value>Rentoom Apartamenty – tworzymy wyjątkowe doświadczenia pobytu w Toruniu
 </value>
     </data>
     <data name="title2subtitle" xml:space="preserve">
@@ -28,20 +28,19 @@ Szukasz komfortowego apartamentu w Toruniu?</value>
 </value>
     </data>
     <data name="text1description" xml:space="preserve">
-        <value>Kochamy Toruń i chcemy Ci pokazać dlaczego. Pomożemy Ci poznać nasze miasto i zadbamy o to, żebyś zabrał na pamiątkę same dobre wrażenia. Wiemy, że zwiedzanie, nawet najprzyjemniejsze, bywa męczące. Dlatego jest dla nas ważne, żeby na koniec dnia wypoczął w dokładnie takich warunkach, jakich oczekujesz. Naszą ofertę apartamentów w Toruniu przygotowaliśmy specjalnie dla Ciebie. Pośród kilkudziesięciu noclegów i apartamentów z pewnością znajdziesz taki, który będzie odpowiadał Twoim potrzebom.</value>
+        <value>Rentoom Apartamenty to nowoczesna marka najmu krótkoterminowego, która łączy wysoki standard zakwaterowania z autentyczną znajomością Torunia. Tworzymy miejsca zaprojektowane z myślą o komforcie, estetyce i funkcjonalności - zarówno dla gości turystycznych, jak i biznesowych.</value>
     </data>
     <data name="text1title" xml:space="preserve">
         <value>Cieszymy się, że do nas trafiłeś!
 </value>
     </data>
     <data name="text1description2" xml:space="preserve">
-        <value>Ponieważ mieszkamy w Toruniu i kochamy to miasto. Ponieważ naszą ekipę tworzą ludzie, którzy podróżują sami i z dziećmi, w interesach i turystycznie, dla odpoczynku i dla zwiedzania. Ponieważ naprawdę wiemy, czego potrzebujesz i chcemy, żebyś czuł się u nas dobrze. Zależy nam, żebyś nie tylko zwiedził Toruń, ale również odpoczął, zrelaksował się i zabrał ze sobą najlepsze wspomnienia.
-
+        <value>Nasza oferta obejmuje kilkadziesiąt starannie wyselekcjonowanych apartamentów w najbardziej atrakcyjnych częściach miasta. Każda lokalizacja została wybrana tak, aby zapewnić łatwy dostęp do najważniejszych atrakcji, restauracji i stref biznesowych.
+Każdy apartament to przestrzeń zaprojektowana tak, aby po intensywnym dniu zwiedzania lub pracy zapewnić realny odpoczynek i prywatność.
 </value>
     </data>
     <data name="text1title2" xml:space="preserve">
-        <value>Dlaczego nasze apartamenty w Toruniu są wyjątkowe?
-</value>
+        <value>Apartamenty w najlepszych lokalizacjach Torunia</value>
     </data>
     <data name="clientsstat" xml:space="preserve">
         <value>Zadowolonych klientów</value>
@@ -59,17 +58,15 @@ Szukasz komfortowego apartamentu w Toruniu?</value>
 </value>
     </data>
     <data name="whyRentoomTitle" xml:space="preserve">
-        <value>Zalety naszych apartamentów w Toruniu.
+        <value>Rentoom Apartamenty to coś więcej niż nocleg w Toruniu. Oferujemy wysoki standard apartamentów w najlepszych lokalizacjach oraz realne korzyści, które podnoszą wartość całego pobytu.
 </value>
     </data>
     <data name="whyRentoomText1" xml:space="preserve">
-        <value>Żeby maksymalnie ułatwić Ci pobyt, w naszych apartamentach zastosowaliśmy nowoczesny system zamków. Dzięki niemu samodzielnie zameldujesz się i wymeldujesz o dowolnej porze. Nie musisz odbierać i zwracać kluczy. Każdy apartament, który proponujemy, charakteryzuje się unikalnym stylem i dbałością o szczegóły wykończenia.
-
+        <value>W ramach naszego Programu Partnerskiego goście otrzymują dostęp do specjalnych rabatów do wybranych restauracji, kawiarni oraz atrakcji turystycznych. Aktualne zniżki i rekomendacje znajdują się bezpośrednio w apartamentach, dzięki czemu możesz korzystać ze sprawdzonych miejsc i oszczędzać podczas zwiedzania.
 </value>
     </data>
     <data name="whyRentoomText2" xml:space="preserve">
-        <value>We wszystkich naszych apartamentach znajdziesz bezpłatne WiFi, telewizor z kontem Netflix oraz w pełni wyposażoną kuchnię. W naszej ofercie znajdziesz także apartamenty idealne na romantyczny weekend we dwoje oraz na dłuższy pobyt w Toruniu dla naprawdę licznej rodziny. Nasze apartamenty ulokowane są tak, jak lubisz. Wybierz odpowiedni dla siebie. Posiadamy apartamenty na toruńskiej starówce oraz na obrzeżach miasta. Z widokiem na rynek lub na Wisłę. Na pewno znajdziesz ten apartament w Toruniu, którego szukasz.
-
+        <value>Współpracujemy wyłącznie z zaufanymi, lokalnymi partnerami, dbając o jakość każdej rekomendacji. Wybierając Rentoom, zyskujesz komfort, profesjonalną obsługę oraz dodatkowe benefity, które sprawiają, że pobyt w Toruniu jest wygodniejszy, bardziej dopracowany i po prostu bardziej opłacalny.
 </value>
     </data>
     <data name="opinionText" xml:space="preserve">
