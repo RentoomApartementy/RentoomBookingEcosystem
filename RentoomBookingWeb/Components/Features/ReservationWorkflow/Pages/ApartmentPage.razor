@@ -29,6 +29,7 @@
 @inject IReservationWorkflowService ReservationWorkflowService
 @inject IUpsellCatalogService UpsellCatalogService
 @inject MediaCacheService MediaCache
+@implements IDisposable
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -132,69 +133,69 @@
          <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
     
     @* <SearchBar *@
-    @*     StartDate="@StartDate" *@
-    @*     EndDate="@EndDate" *@
-    @*     Adults="@Adults" *@
-    @*     Children="@Children" *@
-    @*     IsRoom="false" *@
-    @*     OnSearch="@(async query => await HandleSearch(query))" *@
+    @* StartDate="@StartDate" *@
+    @* EndDate="@EndDate" *@
+    @* Adults="@Adults" *@
+    @* Children="@Children" *@
+    @* IsRoom="false" *@
+    @* OnSearch="@(async query => await HandleSearch(query))" *@
     @* ></SearchBar> *@
     
     @* @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional == false)) *@
     @* { *@
-    @*     <h3 id="confirm-reservation" class="header-text" style="margin-bottom: -1rem;">@Localizer["MandatoryOptions"]</h3> *@
-    @*      *@
-    @*     <div class="addon-list-container"> *@
-    @*         @foreach (var addon in _apartment.Addons.Where(x => x.Optional == false)) *@
-    @*         { *@
-    @*             if (_definedAddons != null) *@
-    @*             { *@
-    @*                 var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id); *@
-    @*                 var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL"); *@
-    @*                 var paymentType = fadesc?.PaymentTypeShortDescription; *@
+    @* <h3 id="confirm-reservation" class="header-text" style="margin-bottom: -1rem;">@Localizer["MandatoryOptions"]</h3> *@
     @* *@
-    @*                 @if (fa != null) *@
-    @*                 { *@
-    @*                     <div class="addon-item"> *@
-    @*                         <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true"> *@
-    @*                             <div class="addon-info-col"> *@
-    @*                                 <span class="addon-name">@fadesc?.Name</span> *@
-    @*                                 <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small> *@
-    @*                             </div> *@
+    @* <div class="addon-list-container"> *@
+    @* @foreach (var addon in _apartment.Addons.Where(x => x.Optional == false)) *@
+    @* { *@
+    @* if (_definedAddons != null) *@
+    @* { *@
+    @* var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id); *@
+    @* var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == "PL"); *@
+    @* var paymentType = fadesc?.PaymentTypeShortDescription; *@
     @* *@
-    @*                             <div class="addon-quantity-col empty" @onclick:stopPropagation="true" @onclick:preventDefault="true"> *@
-    @*                             </div> *@
+    @* @if (fa != null) *@
+    @* { *@
+    @* <div class="addon-item"> *@
+    @* <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true"> *@
+    @* <div class="addon-info-col"> *@
+    @* <span class="addon-name">@fadesc?.Name</span> *@
+    @* <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small> *@
+    @* </div> *@
     @* *@
-    @*                             <div class="price-box"> *@
-    @*                                 <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b> *@
-    @*                             </div> *@
-    @*                         </div> *@
-    @*                     </div> *@
-    @*                 } *@
-    @*                 else *@
-    @*                 { *@
-    @*                     <div class="addon-item"> *@
-    @*                         <div class="addon-label"> *@
-    @*                             <span class="addon-name-empty">Brak opisu dodatku</span> *@
-    @*                         </div> *@
-    @*                     </div> *@
-    @*                 } *@
-    @*             } *@
-    @*             else *@
-    @*             { *@
-    @*                 <div class="skeleton-row"> *@
-    @*                     <div style="flex: 1;"> *@
-    @*                         <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span> *@
-    @*                         <span class="skeleton-box" style="width: 30%; height: 12px;"></span> *@
-    @*                     </div> *@
-    @*                     <div style="display: flex; gap: 10px; align-items: center;"> *@
-    @*                         <span class="skeleton-box" style="width: 60px; height: 16px;"></span> *@
-    @*                         <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span> *@
-    @*                     </div> *@
-    @*                 </div> *@
-    @*             } *@
-    @*         } *@
-    @*     </div> *@
+    @* <div class="addon-quantity-col empty" @onclick:stopPropagation="true" @onclick:preventDefault="true"> *@
+    @* </div> *@
+    @* *@
+    @* <div class="price-box"> *@
+    @* <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b> *@
+    @* </div> *@
+    @* </div> *@
+    @* </div> *@
+    @* } *@
+    @* else *@
+    @* { *@
+    @* <div class="addon-item"> *@
+    @* <div class="addon-label"> *@
+    @* <span class="addon-name-empty">Brak opisu dodatku</span> *@
+    @* </div> *@
+    @* </div> *@
+    @* } *@
+    @* } *@
+    @* else *@
+    @* { *@
+    @* <div class="skeleton-row"> *@
+    @* <div style="flex: 1;"> *@
+    @* <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span> *@
+    @* <span class="skeleton-box" style="width: 30%; height: 12px;"></span> *@
+    @* </div> *@
+    @* <div style="display: flex; gap: 10px; align-items: center;"> *@
+    @* <span class="skeleton-box" style="width: 60px; height: 16px;"></span> *@
+    @* <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span> *@
+    @* </div> *@
+    @* </div> *@
+    @* } *@
+    @* } *@
+    @* </div> *@
     @* } *@
 
     @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional != false))
@@ -292,8 +293,7 @@
     }
     else if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
     {
-        <div class="summary-offer-price-wrapper">
-            @{
+        <div id="offers-section" class="summary-offer-price-wrapper"> @{
                 var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
                 var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
                 var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
@@ -407,8 +407,8 @@
                     }
                     else if (localHasOffers)
                     {
-                        <div style="margin-top: 1rem; width: 100%;" @onclick="ScrollToReservation">
-                            <Button style="width: 100%;">Przejdź do podsumowania</Button>
+                        <div style="margin-top: 1rem; width: 100%;" @onclick="SmartScrollAction"> <Button style="width: 100%;">
+                                @(_isAtSummary ? "Przejdź do wyboru oferty" : "Przejdź do podsumowania") </Button>
                         </div>
                     }
                     else if (StartDate != null && EndDate != null)
@@ -541,6 +541,21 @@
 
     private bool _isModalOpen = false;
     
+    // dodalem zmienne do scrolla
+    private bool _isAtSummary = false;
+    private IDisposable? _scrollObjRef;
+
+    // dodalem obsluge statusu ze skryptu JS
+    [JSInvokable]
+    public void UpdateScrollState(bool isAtSummary)
+    {
+        if (_isAtSummary != isAtSummary)
+        {
+            _isAtSummary = isAtSummary;
+            StateHasChanged();
+        }
+    }
+
     private decimal TotalAddonsPrice 
     {
         get
@@ -710,8 +725,17 @@
         };
     }
 
+    private bool _observerInitialized = false; 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (!_observerInitialized)
+        {
+            _observerInitialized = true;
+            
+            _scrollObjRef = DotNetObjectReference.Create(this);
+            await Task.Delay(100); 
+            await JSRuntime.InvokeVoidAsync("registerScrollObserver", "confirm-reservation", _scrollObjRef);
+        }
     }
 
     private async Task GetOffer()
@@ -1001,10 +1025,18 @@
         Navigation.NavigateTo($"/rezerwuj/{reservationGuid}/dane-klienta", true);
     }
     
-    private async Task ScrollToReservation()
+    // usunalem ScrollToReservation i dodalem SmartScrollAction
+    private async Task SmartScrollAction()
     {
         await Task.Yield(); 
-        await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation");
+        if (_isAtSummary)
+        {
+            await JSRuntime.InvokeVoidAsync("scrollToElement", "offers-section");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation");
+        }
     }
 
     private static bool TryParseDate(string? value, out DateOnly date)
@@ -1136,4 +1168,10 @@
     }
 
     private bool localHasOffers => localMinPrice != null;
+
+    // dodalem czyszczenie po skrypcie
+    public void Dispose()
+    {
+        _scrollObjRef?.Dispose();
+    }
 }
