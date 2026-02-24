@@ -183,6 +183,11 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+        {
+            LayoutState.ShowFooter = false;
+        }
+
         if (IsShowingTerms && !_observerInitialized)
         {
             _observerInitialized = true;

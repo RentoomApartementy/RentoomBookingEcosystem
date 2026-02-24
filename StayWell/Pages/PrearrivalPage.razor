@@ -141,6 +141,16 @@
         await base.OnInitializedAsync();
     }
 
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            LayoutState.ShowFooter = false;
+        }
+
+        return Task.CompletedTask;
+    }
+
     private void NavigateToTerms()
     {
         NavigationManager.NavigateTo($"/reservation/{Token}/TermsPage");
