@@ -219,7 +219,6 @@
     flex-direction: column;
     gap: 1rem;
     margin-top: 1rem;
-    /* transition: all 0.3s ease; <-- Usunąłem, bo mogło psuć sticky na desktopie */
     z-index: 100;
 }
 
@@ -251,10 +250,10 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: auto; /* Resetujemy wysokość na auto dla mobile */
+        height: auto;
         min-height: unset;
         margin: 0;
-        top: auto; /* Resetujemy top */
+        top: auto;
         background-color: #fff;
         border-top: 1px solid #ddd;
         box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
@@ -276,7 +275,7 @@
         display: flex;
     }
 
-    /* --- MOBILE HEADER (CENA + PRZYCISK) --- */
+    /* --- MOBILE HEADER (CENA + PRZYCISKI) --- */
     .mobile-sticky-header {
         display: flex;
         align-items: center;
@@ -304,22 +303,11 @@
         font-weight: bold;
     }
 
-    .mobile-price-group .chevron {
+    /* Kontener na przycisk "Podsumowanie" i strzałkę */
+    .mobile-action-btn {
         display: flex;
         align-items: center;
-        justify-content: center;
-        transition: transform 0.3s ease;
-    }
-
-    .mobile-price-group .chevron svg {
-        width: 24px;
-        height: 24px;
-        fill: white;
-    }
-
-    /* Obracanie strzałki */
-    .mobile-price-group .chevron.rotated {
-        transform: rotate(180deg);
+        gap: 12px; /* Odstęp między przyciskiem a strzałką */
     }
 
     .mobile-action-btn button {
@@ -331,6 +319,38 @@
         padding: 8px 20px !important;
     }
 
+    /* Strzałka jako osobny, okrągły przycisk */
+    .chevron {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 40px;
+        height: 40px;
+        border-radius: 50%; /* Kółko */
+        background-color: rgba(255, 255, 255, 0.2); /* Przezroczyste tło */
+        border: 1px solid rgba(255, 255, 255, 0.4); /* Delikatna ramka */
+
+        transition: transform 0.3s ease, background-color 0.2s ease;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .chevron:active {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .chevron svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+    }
+
+    /* Obracanie strzałki */
+    .chevron.rotated {
+        transform: rotate(180deg);
+    }
+
     /* --- EXPANDABLE CONTENT (DETAILS) --- */
     .info-box-content {
         max-height: 0;
@@ -340,7 +360,7 @@
     }
 
     .info-box.mobile-expanded .info-box-content {
-        max-height: 500px; /* Wystarczająco dużo, żeby pokazać detale */
+        max-height: 500px;
         overflow-y: auto;
     }
 
