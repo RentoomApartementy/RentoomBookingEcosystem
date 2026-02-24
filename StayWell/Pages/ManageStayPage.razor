@@ -19,8 +19,12 @@
 
             @if (ApartmentState.CurrentApartment?.Addons is not null)
             {
-                foreach (var addon in ApartmentState.CurrentApartment.Addons.Where(a => a.Id != 2))
+                foreach (var addon in ApartmentState.CurrentApartment.Addons.Where(a => a.Id != 2 || a.Id != 8))
                 {
+                    if (!IsAddonAvailable(addon.Id))
+                    {
+                        continue;
+                    }
                     var definedAddon = addon.Id.HasValue
                     ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
                     : null;
@@ -81,4 +85,20 @@
 
     private string CurrentAddonsLanguage =>
         AddonsLanguageMap.GetValueOrDefault(CultureInfo.CurrentUICulture.Name, "PL");
+
+    private bool IsAddonAvailable(int? addonId)
+    {
+        if (addonId != 10)
+        {
+            return true;
+        }
+
+        var checkout = ReservationState.CurrentReservation?.Reservation?.ReservationDetails?.getDateTo();
+        if (checkout is null)
+        {
+            return true;
+        }
+
+        return DateTime.Now <= checkout.Value.AddHours(-12);
+    }
 }
