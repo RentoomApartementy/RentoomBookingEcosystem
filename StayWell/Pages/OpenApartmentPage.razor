@@ -9,11 +9,13 @@
 @inject BackendApi BackendApi
 @inherits Models.PageBase
 
+@inject IJSRuntime JS
+
 <PageTitle>OpenApartmentPage</PageTitle>
 
 <div class="buttons-wrapper">
     @if (LocksState.IsTTLockAvailable)
-    {        
+    {
         <div class="tile tile--center">
             <button class="open-button @(IsOpened ? "unlocked" : "locked") @(IsProcessing ? "loading" : "")"
                     @onclick="ToggleDoor"
@@ -96,6 +98,29 @@
             }
         </div>
     </div>
+    <div class="carousel-card">
+        <div class="carousel-track" id="lock-carousel">
+
+            <div class="carousel-slide">
+                <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
+                    Jak korzystać z zamka
+                </div>
+                <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
+            </div>
+
+            <div class="carousel-slide">
+                <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
+                    Jak korzystać z zamka
+                </div>
+                <RentoomBooking.StayWell.Components.AnimationsComponents.LockPanelAnimation />
+            </div>
+
+        </div>
+        <div class="dots-indicator" id="carousel-dots">
+            <div class="dot active" @onclick="() => ScrollToSlide(0)"></div>
+            <div class="dot" @onclick="() => ScrollToSlide(1)"></div>
+        </div>
+    </div>
 </div>
 
 @code {
@@ -106,47 +131,78 @@
     private bool IsButtonDisabled => ReservationState?.CurrentReservation?.Reservation?.ReservationDetails == null ||
                                      DateTime.Now < ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateFrom();
 
-    private async Task ToggleDoor()
-    {
-        if (IsButtonDisabled || IsProcessing) return;
 
-        IsProcessing = true;
-        ErrorMessage = null;
-
-        try
+    @code {
+        private async Task ScrollToSlide(int index)
         {
-            if (!IsOpened)
+            await JS.InvokeVoidAsync("eval", $"document.getElementById('lock-carousel').scrollTo({{ left: document.getElementById('lock-carousel').clientWidth * {index}, behavior: 'smooth' }})");
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
             {
-                var result = await BackendApi.OpenLockAsync(Token);
-                if (result != null && result.Success)
-                {
-                    IsOpened = true;
+                await JS.InvokeVoidAsync("eval", @"
+                const track = document.getElementById('lock-carousel');
+                const dots = document.getElementById('carousel-dots').children;
+                if (track && dots.length > 0) {
+                    track.addEventListener('scroll', () => {
+                        const index = Math.round(track.scrollLeft / track.clientWidth);
+                        Array.from(dots).forEach((dot, i) => {
+                            if (i === index) {
+                                dot.classList.add('active');
+                            } else {
+                                dot.classList.remove('active');
+                            }
+                        });
+                    }, { passive: true });
                 }
-                else
-                {
-                    ErrorMessage = result?.Status ?? Localizer["ErrorOpening"];
-                }
+            ");
+            }
+        }
+    }
+
+    private async Task ToggleDoor()
+        {
+    if (IsButtonDisabled || IsProcessing) return;
+
+    IsProcessing = true;
+    ErrorMessage = null;
+
+    try
+    {
+        if (!IsOpened)
+        {
+            var result = await BackendApi.OpenLockAsync(Token);
+            if (result != null && result.Success)
+            {
+                IsOpened = true;
             }
             else
             {
-                var result = await BackendApi.CloseLockAsync(Token);
-                if (result != null && result.Success)
-                {
-                    IsOpened = false;
-                }
-                else
-                {
-                    ErrorMessage = result?.Status ?? Localizer["ErrorClosing"];
-                }
+                ErrorMessage = result?.Status ?? Localizer["ErrorOpening"];
             }
         }
-        catch (Exception ex)
+        else
         {
-            ErrorMessage = Localizer["ErrorServerConnection"];
-        }
-        finally
-        {
-            IsProcessing = false;
+            var result = await BackendApi.CloseLockAsync(Token);
+            if (result != null && result.Success)
+            {
+                IsOpened = false;
+            }
+            else
+            {
+                ErrorMessage = result?.Status ?? Localizer["ErrorClosing"];
+            }
         }
     }
+    catch (Exception ex)
+    {
+        ErrorMessage = Localizer["ErrorServerConnection"];
+    }
+    finally
+    {
+        IsProcessing = false;
+    }
+        }
 }
