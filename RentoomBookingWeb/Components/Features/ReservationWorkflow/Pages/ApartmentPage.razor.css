@@ -403,6 +403,34 @@
     }
 }
 
+/* Domyślnie (Desktop): Ukryj mapę mobilną, pokaż desktopową */
+.mobile-only-map {
+    display: none !important;
+}
+
+.desktop-only-map {
+    display: flex !important; /* Zakładając, że map-card-wrapper ma display: flex */
+}
+
+/* Mobile (max-width: 810px): Pokaż mapę mobilną, ukryj desktopową */
+@media (max-width: 810px) {
+    .mobile-only-map {
+        display: flex !important;
+        flex-direction: column; /* Zachowaj styl map-card-wrapper */
+        margin-bottom: 1rem; /* Opcjonalnie: odstęp na dole */
+    }
+
+    .desktop-only-map {
+        display: none !important;
+    }
+
+    /* Upewnij się, że info-box-content pozwala na przewijanie, jeśli mapa jest wysoka */
+    .info-box.mobile-expanded .info-box-content {
+        max-height: 80vh; /* Zwiększamy max-height, żeby zmieściła się mapa */
+        overflow-y: auto;
+    }
+}
+
 /* ========================================================= */
 /* RESZTA STYLI BEZ ZMIAN */
 /* ========================================================= */

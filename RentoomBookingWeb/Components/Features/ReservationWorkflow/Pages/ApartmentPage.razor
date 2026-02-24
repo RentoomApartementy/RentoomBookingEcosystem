@@ -291,7 +291,7 @@
             }
         </div>
 
-        <div class="info-box @(_isMobileExpanded ? "mobile-expanded" : "")">
+     <div class="info-box @(_isMobileExpanded ? "mobile-expanded" : "")">
             
             <div class="mobile-sticky-header" @onclick="ToggleMobileExpand" style="@(!localHasOffers ? "width: 100%; justify-content: center;" : "")">
                 <div class="mobile-price-group">
@@ -302,21 +302,27 @@
                     }
                 </div>
 
-                @if (localHasOffers)
-                {
-                    <div class="mobile-action-btn">
+                <div class="mobile-action-btn">
+                    @if (localHasOffers)
+                    {
                         <Button Type="ButtonType.Tertiary" 
                                 style="width: 100%; padding: 0.5rem 1rem; font-size: 0.9rem;"
-                                @onclick="SmartScrollAction" 
-                                >
+                                @onclick="SmartScrollAction" >
                             @(_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"])
                         </Button>
-    
+                    }
+
+                    @if (localHasOffers)
+                    {
                         <div @onclick="ToggleMobileExpand" @onclick:stopPropagation="true" class="chevron @(_isMobileExpanded ? "rotated" : "")">
-                            <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+                            <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg> 
                         </div>
-                    </div>
-                }
+                    }
+                    else
+                    {
+                        <span @onclick="ToggleMobileExpand" @onclick:stopPropagation="true">@Localizer["ClickToCheckDetails"]</span>   
+                    }
+                </div>
             </div>
 
             <div class="info-box-content">
@@ -331,7 +337,7 @@
                     }
 
                     <div class="reservation-body">
-                        <div class="info-row">
+                         <div class="info-row">
                             <div class="info-icon">
                                 <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
                             </div>
@@ -381,7 +387,7 @@
                         }
                         else if (StartDate != null && EndDate != null)
                         {
-                            <div class="no-offers-wrapper">
+                           <div class="no-offers-wrapper">
                                 <div class="alert-box warning">
                                     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
                                     <span>@Localizer["NoOffersAvailable"]</span>
@@ -406,19 +412,53 @@
                         }
                     </div>
                 </div>
+
+                @* DODANA MAPA DLA WIDOKU MOBILNEGO - Klasa mobile-only-map *@
+                <div class="map-card-wrapper mobile-only-map" style="margin-top: 1rem;">
+                    @* <div class="map-top-section"> *@
+                    @*     <ApartmentMap *@
+                    @*         Id="apartmentMap-mobile" *@
+                    @*         Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat" *@
+                    @*         Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng" *@
+                    @*         ApartmentAddress="@_apartment?.ObjectLocation?.Address" *@
+                    @*     />    *@
+                    @* </div> *@
+    
+                    <div class="map-bottom-section">
+                        <div class="map-address-row">
+                            <div class="map-pin-icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            </div>
+                            <div class="map-address-details">
+                                <span class="map-street-name">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>
+                                <span class="map-city-name">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode @_apartment?.ObjectLocation?.LocalizationItem?.City, Polska</span>
+                            </div>
+                        </div>
+    
+                        <div class="map-action-row">
+                             <button class="map-secondary-btn" 
+                                    @onclick="OpenModal"
+                                    @onclick:stopPropagation="true">
+                                <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+                                @Localizer["SeeMore"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            @* MAPA DLA WIDOKU DESKTOPOWEGO (bez zmian) - Klasa desktop-only-map *@
             <div class="map-card-wrapper desktop-only-map">
                 <div class="map-top-section">
                     <ApartmentMap
+                        Id="apartmentMap-desktop"
                         Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat"
                         Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng"
                         ApartmentAddress="@_apartment?.ObjectLocation?.Address"
                     />   
                 </div>
-
                 <div class="map-bottom-section">
-                    <div class="map-address-row">
+                     <div class="map-address-row">
                         <div class="map-pin-icon">
                             <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                         </div>
@@ -429,26 +469,12 @@
                     </div>
 
                     <div class="map-action-row">
-                            @{
-                            var lat = _apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                            var lng = _apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        }
-                        
                         <button class="map-secondary-btn" 
                                 @onclick="OpenModal"
                                 @onclick:stopPropagation="true">
                             <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
                             @Localizer["SeeMore"]
                         </button>
-
-                        @* <a class="map-google-btn" *@
-                        @*     href="https://www.google.com/maps/search/?api=1&query=@(lat),@(lng)" *@
-                        @*     target="_blank" *@
-                        @*     rel="noopener noreferrer" *@
-                        @*     @onclick:stopPropagation="true"> *@
-                        @*     <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg> *@
-                        @*     Google Maps *@
-                        @* </a> *@
                     </div>
                 </div>
             </div>

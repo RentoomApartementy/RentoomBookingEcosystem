@@ -116,4 +116,7 @@
     <data name="SeeMore" xml:space="preserve">
         <value>View full map</value>
     </data>
+    <data name="ClickToCheckDetails" xml:space="preserve">
+        <value>Click to check details</value>
+    </data>
 </root>
