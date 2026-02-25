@@ -202,7 +202,7 @@ namespace RentoomBooking.Api.Integrations.RentoomApp
                 }
 
 
-                var reservation = await ResolveReservationAsync(reservationGuid, cancellationToken);
+                var reservation = await ResolveReservationAsync(reservationToken, cancellationToken);
 
                 if (reservation?.Reservation is null)
                 {
@@ -240,14 +240,19 @@ namespace RentoomBooking.Api.Integrations.RentoomApp
             }
         }
 
-        private async Task<RentoomReservation?> ResolveReservationAsync(Guid reservationGuid, CancellationToken cancellationToken)
+        private async Task<RentoomReservation?> ResolveReservationAsync(string reservationToken, CancellationToken cancellationToken)
         {
-            
-            
-                var reservation = await _bookingDatabase.GetRentoomReservationByResTokenAsync(reservationGuid.ToString(), _logger, cancellationToken);
+            var reservation = await _bookingDatabase.GetRentoomReservationByResTokenAsync(reservationToken, _logger, cancellationToken);
+            if (reservation is not null) return reservation;
+
+            if (Guid.TryParse(reservationToken, out var reservationGuid))
+            {
+                var normalizedToken = reservationGuid.ToString("N");
+                reservation = await _bookingDatabase.GetRentoomReservationByResTokenAsync(normalizedToken, _logger, cancellationToken);
                 if (reservation is not null) return reservation;
-            
-                return null;
+            }
+
+            return null;
         }
 
         private async Task<HttpResponseData> HandleLockAction(HttpRequestData req, string reservationToken, string actionName, Func<int, Task<RentoomBooking.SharedClasses.Integrations.TTLock.Models.TTLockBaseResponse>> action)
