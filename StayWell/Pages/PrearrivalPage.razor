@@ -10,7 +10,7 @@
     <div class="hero">
         @if (!ReservationState.IsActiveReservation)
         {
-        <div class="t">Do pobytu pozostało</div>
+            <div class="t">Do pobytu pozostało</div>
             <div class="grid">
                 <div>
                     <div class="n">@_days</div>
@@ -36,14 +36,11 @@
     </div>
 
     <div class="card">
-
-
-
-        @* <img src="@_apartment_image" /> *@
         <div class="pb-3">
             <Carousel ImageUrls="@urls" TransitionIntervalMs="3500" UseTimer="@true" UseSmartGlow="@false" />
         </div>
         <div class="an">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName</div>
+        
         <div class="row">
             <div class="ct">Zameldowanie</div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom().ToString("dd.MM.yyyy")</div>
@@ -52,28 +49,26 @@
             <div class="ct">Wymeldowanie</div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateTo().ToString("dd.MM.yyyy")</div>
         </div>
+        
         <hr class="b-l" />
-        <div class="row">
-            @* <div class="ct">Karta rezerwacji</div> *@
-            <div class="cdc">
-                @if(1 == 1)
-                {
-                    <div class="row justify-content-center">
-                        <div class="cdc pb-4 text-secondary" style="font-size: 14px; text-align: center">Wypełnij Kartę zameldowania oraz zaakceptuj regulamin aby otrzymać dostęp do panelu.</div>
-                        <button class="btn-checkin" @onclick="NavigateToTerms">
-                            Przejdź dalej
-                            <img class="white-filter pb-1" src="/icons/chevron-right.svg" />
-                        </button>
-                    </div>
-                }
-                else
-                {
+        
+        <div class="status-box">
+            @if (RegistrationCardState.CurrentCard == null || TermsState.CurrentTerms == null)
+            {
+                <div class="cdc text-secondary" style="font-size: 14px; text-align: center">
+                    Wypełnij Kartę zameldowania oraz zaakceptuj regulamin aby otrzymać dostęp do panelu.
+                </div>
+            }
+            else
+            {
+                <div class="cd">
                     <div>
                         Wypełniona <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg" />
                     </div>
-                }
                 </div>
+            }
         </div>
+
         <hr class="b-l" />
 
         <div class="row">
@@ -86,11 +81,9 @@
         </div>
         @if(!IsBookingMail())
         {
-        <div class="row">
-            <div class="ct">E-mail</div>
-            <div class="cd">
-                @ReservationState?.CurrentReservation?.Reservation.Client.Email
-            </div>
+            <div class="row">
+                <div class="ct">E-mail</div>
+                <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Client.Email</div>
             </div>
         }
         <div class="row">
@@ -103,19 +96,24 @@
         </div>
         @if (ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren != "0")
         {
-        <div class="row">
-            <div class="ct">Ilość dzieci</div>
-            <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren</div>
-        </div>
+            <div class="row">
+                <div class="ct">Ilość dzieci</div>
+                <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren</div>
+            </div>
         }
     </div>
-        
 </div>
 
-@code{
-    private bool _paid = true;
-    private string[] urls = Array.Empty<string>();
+@if (RegistrationCardState.CurrentCard == null || TermsState.CurrentTerms == null)
+{
+    <FloatingButton 
+        Text="Przejdź dalej" 
+        IconPath="/icons/chevron-right.svg"
+        OnClick="NavigateToTerms" />
+}
 
+@code {
+    private string[] urls = Array.Empty<string>();
     private int _days;
     private int _hours;
     private int _minutes;
@@ -130,7 +128,6 @@
         }
         else
         {
-            
             LayoutState.ShowFooter = false;
             LoadImages();
             if (!ReservationState.IsActiveReservation)
@@ -147,7 +144,6 @@
         {
             LayoutState.ShowFooter = false;
         }
-
         return Task.CompletedTask;
     }
 
@@ -156,16 +152,10 @@
         NavigationManager.NavigateTo($"/reservation/{Token}/TermsPage");
     }
 
-    private void NavigateToRegistration()
-    {
-        NavigationManager.NavigateTo($"/reservation/{Token}/RegistrationCardPage");
-    }
-
     private bool IsBookingMail()
     {
         string? mail = ReservationState?.CurrentReservation?.Reservation.Client.Email;
         if (string.IsNullOrEmpty(mail)) return false;
-
         return mail.EndsWith("@guest.booking.com", StringComparison.OrdinalIgnoreCase);
     }
 
@@ -216,9 +206,10 @@
             ?? new[] { placeholder };
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         LayoutState.ShowFooter = true;
         _timer?.Dispose();
+        base.Dispose();
     }
 }

@@ -74,7 +74,7 @@
         <div class="tile__content">
             @if (!ReservationState.IsActiveReservation)
             {
-                <span>@Localizer["CodeNotAvaliable"]</span>
+                <span>@Localizer["CodeNotAvailable"]</span>
             }
             else
             {
@@ -103,14 +103,14 @@
 
             <div class="carousel-slide">
                 <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
-                    Jak korzystać z zamka
+                    Jak korzystać z zamka typ.1
                 </div>
                 <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
             </div>
 
             <div class="carousel-slide">
                 <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
-                    Jak korzystać z zamka
+                    Jak korzystać z zamka typ.2
                 </div>
                 <RentoomBooking.StayWell.Components.AnimationsComponents.LockPanelAnimation />
             </div>
@@ -174,7 +174,7 @@
         if (!IsOpened)
         {
             var result = await BackendApi.OpenLockAsync(Token);
-            if (result != null && result.Success)
+            if (result is not null && result.IsSuccess)
             {
                 IsOpened = true;
             }
@@ -186,7 +186,7 @@
         else
         {
             var result = await BackendApi.CloseLockAsync(Token);
-            if (result != null && result.Success)
+            if (result is not null && result.IsSuccess)
             {
                 IsOpened = false;
             }

@@ -206,7 +206,17 @@ namespace RentoomBooking.StayWell.Services
             return await response.Content.ReadFromJsonAsync<RedeemResultDto>(_json);
         }
 
-        public record TTLockActionResult(bool Success, string? LockCode, string? Status, int? BatteryLevel);
+        public sealed class TTLockActionResult
+        {
+            public bool? Success { get; init; }
+            public string? LockCode { get; init; }
+            public string? Status { get; init; }
+            public int? BatteryLevel { get; init; }
+
+            [JsonIgnore]
+            public bool IsSuccess =>
+                Success == true || string.Equals(Status, "Success", StringComparison.OrdinalIgnoreCase);
+        }
         public async Task<TTLockActionResult?> PingLockAsync(string reservationToken)
         {
             try

@@ -52,7 +52,7 @@ namespace RentoomBooking.StayWell.States
             try
             {
                 var result = await _backendApi.PingLockAsync(token);
-                if (result != null && result.Success)
+                if (result is not null && result.IsSuccess)
                 {
                     BatteryLevel = result.BatteryLevel;
                     IsTTLockAvailable = (BatteryLevel > 20);

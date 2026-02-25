@@ -78,33 +78,14 @@
                 }
             </div>
         </div>
-    </div>
-
-    <div class="bottom-navigation">
-        <div class="buttons-row">
-            <div class="button-next-wrapper @(IsButtonDisabled ? "disabled-wrapper" : "")">
-                <Button OnClick="HandleNextClick">
-                    <Icon>
-                        @if (CurrentView != ViewState.RegistrationCard)
-                        {
-                            <img src="/icons/chevron-right.svg" alt="Next" />
-                        }
-                        else
-                        {
-                            <img src="/icons/handshake.svg" alt="Confirm" />
-                        }
-                    </Icon>
-                    <RenderFragment>
-                        <span>
-                            @(CurrentView == ViewState.Steps ? "Dalej" :
-                                                        CurrentView == ViewState.Terms ? "Akceptuję" : "Potwierdzam")
-                        </span>
-                    </RenderFragment>
-                </Button>
-            </div>
-        </div>
-    </div>
+    </div>  
 </div>
+
+    <FloatingButton 
+        Text="@(CurrentView == ViewState.Steps ? "Dalej" : CurrentView == ViewState.Terms ? "Akceptuję" : "Potwierdzam")"
+        IconPath="@(CurrentView != ViewState.RegistrationCard ? "/icons/chevron-right.svg" : "/icons/handshake.svg")"
+        IsDisabled="IsButtonDisabled"
+        OnClick="HandleNextClick" />
 
 <script>
     window.termsScrollObserver = {
@@ -178,7 +159,8 @@
         _guests = RegistrationCardState.CurrentCard?.GuestsData?.Any() == true
             ? RegistrationCardState.CurrentCard.GuestsData
             : Enumerable.Range(0, adults).Select(_ => new RegistrationCardGuestModel()).ToList();
-        _mail = RegistrationCardState.CurrentCard?.ContactEmail;
+
+        TryInitializeMail();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -186,6 +168,7 @@
         if (firstRender)
         {
             LayoutState.ShowFooter = false;
+            TryInitializeMail();
         }
 
         if (IsShowingTerms && !_observerInitialized)
@@ -193,6 +176,43 @@
             _observerInitialized = true;
             await JSRuntime.InvokeVoidAsync("window.termsScrollObserver.init", "terms-scroll-area", _objRef);
         }
+    }
+
+    private void TryInitializeMail()
+    {
+        if (!string.IsNullOrWhiteSpace(_mail))
+        {
+            return;
+        }
+
+        _mail = GetInitialEmail();
+        if (!string.IsNullOrWhiteSpace(_mail))
+        {
+            StateHasChanged();
+        }
+    }
+
+    private string? GetInitialEmail()
+    {
+        var savedEmail = RegistrationCardState.CurrentCard?.ContactEmail;
+        if (!string.IsNullOrWhiteSpace(savedEmail))
+        {
+            return savedEmail;
+        }
+
+        var reservationEmail = ReservationState?.CurrentReservation?.Reservation?.Client?.Email;
+        if (string.IsNullOrWhiteSpace(reservationEmail))
+        {
+            return null;
+        }
+
+        return IsBookingMail(reservationEmail) ? null : reservationEmail;
+    }
+
+    private static bool IsBookingMail(string? mail)
+    {
+        if (string.IsNullOrWhiteSpace(mail)) return false;
+        return mail.EndsWith("@guest.booking.com", StringComparison.OrdinalIgnoreCase);
     }
 
     private void SelectTime() => ModalService.ShowModal("Wybierz godzinę zameldowania",
