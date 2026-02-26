@@ -236,5 +236,29 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("ApartmentsMap", resourceCulture);
             }
         }
+        
+        internal static string CleaningIncluded {
+            get {
+                return ResourceManager.GetString("CleaningIncluded", resourceCulture);
+            }
+        }
+        
+        internal static string SelectOffer {
+            get {
+                return ResourceManager.GetString("SelectOffer", resourceCulture);
+            }
+        }
+        
+        internal static string SeeMore {
+            get {
+                return ResourceManager.GetString("SeeMore", resourceCulture);
+            }
+        }
+        
+        internal static string ClickToCheckDetails {
+            get {
+                return ResourceManager.GetString("ClickToCheckDetails", resourceCulture);
+            }
+        }
     }
 }

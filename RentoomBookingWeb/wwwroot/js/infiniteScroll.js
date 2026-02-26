@@ -1,28 +1,37 @@
 let dotNetHelper = null;
-let timeoutId = null;
-
-function isNearBottom() {
-    const buffer = 150;
-    return (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - buffer;
-}
-
-function handleScroll() {
-    if (!dotNetHelper) return;
-
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-        if (isNearBottom()) {
-            dotNetHelper.invokeMethodAsync('LoadMoreOnScroll');
-        }
-    }, 200);
-}
+let observer = null;
 
 export function init(helper) {
     dotNetHelper = helper;
-    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    const target = document.querySelector('#scroll-anchor');
+
+    if (!target) {
+        console.warn("Scroll anchor element not found!");
+        return;
+    }
+
+    const options = {
+        root: null,         
+        rootMargin: '600px', 
+        threshold: 0.1       
+    };
+
+    observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && dotNetHelper) {
+                dotNetHelper.invokeMethodAsync('LoadMoreOnScroll');
+            }
+        });
+    }, options);
+
+    observer.observe(target);
 }
 
 export function unregister() {
-    window.removeEventListener('scroll', handleScroll);
+    if (observer) {
+        observer.disconnect();
+        observer = null;
+    }
     dotNetHelper = null;
 }

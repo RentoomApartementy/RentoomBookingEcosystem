@@ -2,15 +2,12 @@
 @inject NavigationManager Navigation
 
 <div class="language-switcher-container">
-    <div class="language-switcher-button" @onclick="ToggleDropdown">
+    @* Dodano warunkową klasę 'scrolled' *@
+    <div class="language-switcher-button @(IsScrolling ? "scrolled" : "")" @onclick="ToggleDropdown">
         <span class="language-icon">
-            🌐
+            <img src="@(IsScrolling ? "assets/svgs/globe-green.svg" : "assets/svgs/globe.svg")" alt="Globe icon"/>
         </span>
         <span class="language-code">@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper()</span>
-        
-        <div class="dropdown-arrow">
-            <span class="down-arrow"></span>
-        </div>
     </div>
 
     @if (_isDropdownOpen)
@@ -29,6 +26,8 @@
 
 @code
 {
+    [Parameter] public bool IsScrolling { get; set; } = false;
+    
     private bool _isDropdownOpen = false;
     
     private readonly CultureInfo[] _supportedCultures = new[]
@@ -37,10 +36,7 @@
         new CultureInfo("pl-PL"),
     };
 
-    private void ToggleDropdown()
-    {
-        _isDropdownOpen = !_isDropdownOpen;
-    }
+    private void ToggleDropdown() => _isDropdownOpen = !_isDropdownOpen;
 
     private void ApplySelectedCultureAsync(string selectedCulture)
     {
@@ -51,17 +47,13 @@
         }
         
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        
         var queryParameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        
         var newParameters = new Dictionary<string, string?>();
         
         foreach (var param in queryParameters)
         {
             if (param.Key != "culture" && param.Key != "ui-culture")
-            {
                 newParameters.Add(param.Key, param.Value.FirstOrDefault());
-            }
         }
 
         newParameters.Add("culture", selectedCulture);

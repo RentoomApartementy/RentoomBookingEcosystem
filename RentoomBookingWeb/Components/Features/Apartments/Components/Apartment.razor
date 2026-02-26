@@ -15,7 +15,7 @@
 
 <article class="apartment-card" 
          @ref="_elementRef"
-         style="@(DisableForGoToReservation ? "cursor: default;" : "")"
+         style="@($"{ (DisableForGoToReservation ? "cursor: default; " : "") }{ (!string.IsNullOrEmpty(Width) ? $"width: {Width}; min-width: {Width}; max-width: {Width};" : "") }")"
          itemscope itemtype="https://schema.org/Apartment">
     <header>
         @if (_currentObjectMedium == null)
@@ -229,6 +229,8 @@
     [Parameter] public bool DisableForGoToReservation { get; set; } = false;
     
     [Parameter] public AvailableTerm? SuggestionDates { get; set; } = null;
+
+    [Parameter] public string? Width { get; set; } = null;
 
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
