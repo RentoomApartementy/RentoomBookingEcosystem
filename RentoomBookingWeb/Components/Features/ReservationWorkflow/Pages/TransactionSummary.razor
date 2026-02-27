@@ -150,14 +150,24 @@
         }
         else
         {
-            <div class="payment-success-card">
-                <div class="info-icon-wrapper">
-                    <div class="spinner" role="status" aria-label="Ładowanie"></div>
+            @* <div class="payment-success-card"> *@
+            @*     <div class="info-icon-wrapper"> *@
+            @*         <div class="spinner" role="status" aria-label="Ładowanie"></div> *@
+            @*     </div> *@
+            @* *@
+            @*     <h2 class="success-title">@Localizer["WaitingPayment"]</h2> *@
+            @* *@
+            @*     <button class="button-info" @onclick="RetryPayment">@Localizer["TryAgain"]</button> *@
+            @* </div> *@
+            
+            <div class="status-card">
+                <div class="state-content">
+                    <div class="spinner-container">
+                        <div class="loading-spinner"></div>
+                    </div>
+                    <h2>@Localizer["WaitingPayment"]</h2>
+                    <p class="sub-message" @onclick="RetryPayment">@Localizer["TryAgain"]</p>
                 </div>
-    
-                <h2 class="success-title">@Localizer["WaitingPayment"]</h2>
-
-                <button class="button-info" @onclick="RetryPayment">@Localizer["TryAgain"]</button>
             </div>
             
         }

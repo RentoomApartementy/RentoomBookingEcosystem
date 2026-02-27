@@ -398,5 +398,17 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("NoNipError", resourceCulture);
             }
         }
+        
+        internal static string Prefix {
+            get {
+                return ResourceManager.GetString("Prefix", resourceCulture);
+            }
+        }
+        
+        internal static string Required {
+            get {
+                return ResourceManager.GetString("Required", resourceCulture);
+            }
+        }
     }
 }

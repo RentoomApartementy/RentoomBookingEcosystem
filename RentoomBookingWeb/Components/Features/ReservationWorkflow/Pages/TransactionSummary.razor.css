@@ -1,5 +1,4 @@
-.summary-container
-{
+.summary-container {
     display: flex;
     width: 100%;
     min-height: 120vh;
@@ -20,16 +19,15 @@
 }
 
 .summary-wrapper {
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 20px;
-    color: #333;
-    position: relative;
+    max-width: 1440px;
+    width: 97%;
     display: flex;
-    flex-direction: column;
     gap: 2rem;
-    /*margin-top: 120px;*/
+    padding-top: 120px;
+    padding-bottom: 80px;
+    position: relative;
+    flex-direction: column;
+    align-items: center; /* Dodano, by wyśrodkować .status-card i inne wewnętrzne elementy w kolumnie */
 }
 
 .waiting {
@@ -48,12 +46,6 @@
     animation: spin 0.9s linear infinite;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .guest-info {
     display: flex;
     flex-direction: column;
@@ -62,6 +54,8 @@
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    width: 100%; /* Rozszerza do wielkości nadrzędnego kontenera */
+    max-width: 800px; /* Opcjonalne: utrzymuje w ryzach na dużym desktopie */
 }
 
 .box-text {
@@ -104,21 +98,6 @@
     margin-top: -5px;
 }
 
-@media (max-width: 800px) {
-    .guest-details-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    .summary-wrapper {
-        flex-direction: column;
-    }
-
-    .main-section {
-        width: 100%;
-    }
-}
-
 .apartment-card-summary {
     display: flex;
     align-items: center;
@@ -128,7 +107,7 @@
 .apt-image-wrapper {
     width: 80px;
     height: 80px;
-    flex-shrink: 0; 
+    flex-shrink: 0;
     border-radius: 12px;
     overflow: hidden;
     background-color: #f3f4f6;
@@ -164,7 +143,7 @@
 
 .apt-location-text {
     font-size: 14px;
-    color: #6B7280; 
+    color: #6B7280;
     font-weight: 400;
 }
 
@@ -177,6 +156,8 @@
     background-color: #ffffff;
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 800px; /* Zrównanie max-width z .guest-info */
 }
 
 .success-icon-wrapper {
@@ -210,13 +191,13 @@
 .success-title {
     font-size: 24px;
     font-weight: 700;
-    color: #111827; /* Ciemny, prawie czarny */
+    color: #111827;
     margin: 0 0 8px 0;
 }
 
 .success-subtitle {
     font-size: 16px;
-    color: #6B7280; /* Szary */
+    color: #6B7280;
     font-weight: 400;
 }
 
@@ -225,9 +206,9 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background-color: #F3F4F6; /* Bardzo jasny szary tła pastylki */
+    background-color: #F3F4F6;
     padding: 10px 24px;
-    border-radius: 9999px; /* Pill shape */
+    border-radius: 9999px;
 }
 
 .button {
@@ -237,7 +218,9 @@
     color: #092e17;
     background-color: rgba(43, 216, 109, 0.65);
     font-weight: bold;
-    padding: 4px 12px;
+    padding: 8px 24px; /* Powiększony padding dla lepszego klikania na mobile */
+    margin-top: 1rem;
+    cursor: pointer;
 }
 
 .button-info {
@@ -247,7 +230,8 @@
     color: #1e3a8a;
     background-color: rgba(59, 130, 246, 0.25);
     font-weight: bold;
-    padding: 4px 12px;
+    padding: 8px 24px;
+    margin-top: 1rem;
     transition: background-color 0.2s;
     cursor: pointer;
 }
@@ -293,8 +277,8 @@
     align-items: center;
     padding: 24px;
     background-color: #ffffff;
-    border: 1px solid #e5e7eb; 
-    border-radius: 12px;      
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -305,7 +289,7 @@
 
 .icon-container {
     margin-right: 16px;
-    color: #1f2937; 
+    color: #1f2937;
 }
 
 .content {
@@ -324,6 +308,89 @@
 
 .description {
     font-size: 14px;
-    color: #6b7280; 
+    color: #6b7280;
     font-weight: 400;
+}
+
+.state-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #e67e22;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 24px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.status-card {
+    background: #ffffff;
+    padding: 48px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08); /* Zmieniono na ten sam shadow co pozostałe karty */
+    width: 100%;
+    max-width: 800px; /* Zrównanie szerokości z innymi elementami zamiast 480px */
+    text-align: center;
+}
+
+@media (max-width: 800px) {
+    .summary-wrapper {
+        padding-top: 90px; /* Nieco mniejszy odstęp z góry na mobilce */
+        padding-bottom: 40px;
+    }
+
+    .guest-details-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .guest-info {
+        padding: 1.5rem;
+    }
+
+    .payment-success-card,
+    .status-card {
+        padding: 24px 16px;
+    }
+
+    .success-icon-wrapper,
+    .error-icon-wrapper,
+    .info-icon-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+
+    .success-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .success-title {
+        font-size: 20px;
+    }
+
+    .success-subtitle {
+        font-size: 14px;
+    }
+
+    .apartment-card-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .apt-image-wrapper {
+        width: 100%;
+        height: 140px;
+    }
 }

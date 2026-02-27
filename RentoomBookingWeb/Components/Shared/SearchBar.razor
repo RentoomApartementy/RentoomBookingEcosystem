@@ -34,10 +34,10 @@
             </div>
         </DropdownContent>
     </InputWithModal>
-    @if (IsRoom)
-    {
-        <Input IconPath="/assets/svgs/bed.svg" Placeholder="@Localizer["NumberOfRooms"]" Type="number" @bind-Value="_rooms"/>   
-    }
+    @* @if (IsRoom) *@
+    @* { *@
+    @*     <Input IconPath="/assets/svgs/bed.svg" Placeholder="@Localizer["NumberOfRooms"]" Type="number" @bind-Value="_rooms"/>    *@
+    @* } *@
     <Button @onclick="Search">@Localizer["Search"]</Button>
 </div>
 

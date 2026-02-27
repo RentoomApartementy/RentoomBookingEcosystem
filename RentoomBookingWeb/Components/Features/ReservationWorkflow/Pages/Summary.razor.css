@@ -1,5 +1,4 @@
-.summary-container
-{
+.summary-container {
     display: flex;
     width: 100%;
     min-height: 100vh;
@@ -20,15 +19,12 @@
 }
 
 .summary-wrapper {
-    width: 100%;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 20px;
-    color: #333;
-    position: relative;
+    max-width: 1440px;
+    width: 97%;
     display: flex;
     gap: 2rem;
     padding-top: 120px;
+    padding-bottom: 80px;
 }
 
 .main-section {
@@ -64,8 +60,7 @@
     flex-shrink: 0;
 }
 
-.form-wrapper-title-icon-wrapper > img
-{
+.form-wrapper-title-icon-wrapper > img {
     width: 70%;
 }
 
@@ -75,60 +70,55 @@
     justify-content: center;
 }
 
+.form-wrapper-title-text > h3 {
+    margin: 0;
+}
+
 .form-wrapper-title-text > p {
     margin: 0;
-    margin-top: -.5rem;
+    margin-top: 0.1rem;
 }
 
 .rounded-full {
     border-radius: 9999rem;
 }
 
-.pending-bg
-{
+.pending-bg {
     background-color: #FDF6EC;
     border: 1px solid #E9A23B;
 }
 
-.pending-icon-color
-{
+.pending-icon-color {
     background-color: #FBEEDA !important;
 }
 
-.pending-text-color
-{
+.pending-text-color {
     color: #E9A23B;
 }
 
-.danger-bg
-{
+.danger-bg {
     background-color: #FEF2F2;
     border: 1px solid #FCA5A5;
 }
 
-.danger-icon-color
-{
+.danger-icon-color {
     background-color: #FEE2E2 !important;
 }
 
-.danger-text-color
-{
+.danger-text-color {
     color: #991B1B;
 }
 
-.success-bg
-{
+.success-bg {
     background-color: #F0FDF4;
     border: 1px solid #BBF7D0;
 }
 
-.success-icon-color
-{
+.success-icon-color {
     background-color: #DCFCE7 !important;
 }
 
-.success-text-color
-{
+.success-text-color {
     color: #166534;
 }
 
@@ -140,6 +130,10 @@
     padding: 1rem;
 }
 
+.status-box-text h4 {
+    margin: 0 0 0.25rem 0;
+}
+
 .button-pending {
     width: 100%;
     background-color: #166534;
@@ -147,6 +141,10 @@
     padding: 1rem;
     border: #002b67 solid 1px;
     border-radius: .6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .button {
@@ -184,6 +182,7 @@
 
 .box-text-title {
     font-size: 1.4rem;
+    margin: 0;
 }
 
 .guest-details-grid {
@@ -207,21 +206,6 @@
     color: #111827;
     font-weight: 500;
     font-size: 16px;
-}
-
-@media (max-width: 800px) {
-    .guest-details-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .summary-wrapper {
-        flex-direction: column;
-    }
-    
-    .main-section {
-        width: 100%;
-    }
 }
 
 .spinner {
@@ -264,7 +248,7 @@
 .success-title {
     font-size: 24px;
     font-weight: 700;
-    color: #111827; 
+    color: #111827;
     margin: 0 0 8px 0;
 }
 
@@ -296,7 +280,7 @@
     height: 20px;
     margin-top: 2px;
     cursor: pointer;
-    accent-color: #007bff; /* Dopasuj do koloru głównego serwisu */
+    accent-color: #007bff;
 }
 
 .term-label {
@@ -329,4 +313,99 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     background: #e9ecef;
+}
+
+@media (max-width: 800px) {
+    .summary-wrapper {
+        flex-direction: column;
+    }
+
+    .main-section {
+        width: 100%;
+    }
+
+    .status-section,
+    .guest-info {
+        padding: 1.2rem;
+        gap: 1.5rem;
+    }
+
+    .form-wrapper-title-icon-wrapper {
+        width: 45px;
+        height: 45px;
+        border-radius: 0.8rem;
+    }
+
+    .form-wrapper-title-text h3 {
+        font-size: 1.15rem;
+    }
+
+    .form-wrapper-title-text p {
+        font-size: 0.9rem;
+    }
+
+    .box-text-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .box-text-title {
+        font-size: 1.2rem;
+    }
+
+    .guest-details-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .info-icon-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+
+    .success-title {
+        font-size: 20px;
+    }
+
+    .status-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .status-box .form-wrapper-title-icon-wrapper {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.state-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #e67e22;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 24px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.status-card {
+    background: #ffffff;
+    padding: 48px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
 }

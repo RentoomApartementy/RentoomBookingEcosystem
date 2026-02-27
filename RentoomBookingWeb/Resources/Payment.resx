@@ -195,4 +195,10 @@
     <data name="NoNipError" xml:space="preserve">
         <value />
     </data>
+    <data name="Prefix" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Required" xml:space="preserve">
+        <value />
+    </data>
 </root>
