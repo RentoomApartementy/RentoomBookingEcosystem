@@ -1,3 +1,4 @@
+using BlazorDateRangePicker;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -128,6 +129,8 @@ namespace RentoomBookingWeb
 
             //view scoped
             builder.Services.AddScoped<IApartmentsViewModel, ApartmentsViewModel>();
+            
+            builder.Services.AddDateRangePicker(config => { });
 
             //TPAY
             bool UseDevelopmentSettingsOnProd = true;
