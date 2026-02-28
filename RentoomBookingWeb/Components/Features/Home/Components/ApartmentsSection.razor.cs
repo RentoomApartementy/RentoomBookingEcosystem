@@ -42,7 +42,7 @@ public partial class ApartmentsSection : ComponentBase
             {
                 ObjectIds = [],
                 DateFrom = DateTime.Now.ToString("yyyy-MM-dd"),
-                DateTo = DateTime.Now.AddDays(6).ToString("yyyy-MM-dd"),
+                DateTo = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
                 NumberOfAdults = 2,
                 NumberOfBigChildren = 0,
             };
