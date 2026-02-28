@@ -51,10 +51,10 @@
         <value>guests</value>
     </data>
     <data name="ChildrenUnder2" xml:space="preserve">
-        <value>Children under 2</value>
+        <value>Children</value>
     </data>
     <data name="Adults" xml:space="preserve">
-        <value>Adults</value>
+        <value>Guests (over 2 years old)</value>
     </data>
     <data name="Guests" xml:space="preserve">
         <value>Guests</value>

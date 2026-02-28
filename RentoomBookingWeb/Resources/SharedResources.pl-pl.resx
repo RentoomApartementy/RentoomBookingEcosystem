@@ -51,10 +51,10 @@
         <value>os.</value>
     </data>
     <data name="ChildrenUnder2" xml:space="preserve">
-        <value>Dzieci do lat 2</value>
+        <value>Dzieci</value>
     </data>
     <data name="Adults" xml:space="preserve">
-        <value>Dorośli</value>
+        <value>Goście (powyżej 2 lat)</value>
     </data>
     <data name="Guests" xml:space="preserve">
         <value>Goście</value>
