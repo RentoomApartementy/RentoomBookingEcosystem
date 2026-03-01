@@ -166,7 +166,7 @@
                                             </div>
 
                                             <div class="price-box">
-                                                <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
+                                                <b class="addon-price">+@String.Format("{0:#.00}", AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, _reservationPricingContext.Nights, _reservationPricingContext.TotalGuests, quantity: 1)) zł</b>
                                                 <input type="checkbox"
                                                        class="addon-checkbox"
                                                        checked="@(IsAddonSelected(addon.Id))"

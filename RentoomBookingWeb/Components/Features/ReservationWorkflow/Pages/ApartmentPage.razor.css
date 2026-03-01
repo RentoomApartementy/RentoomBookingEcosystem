@@ -206,13 +206,9 @@
     justify-content: end;
 }
 
-/* ========================================================= */
-/* INFO BOX (SIDEBAR) + STICKY FOOTER LOGIC */
-/* ========================================================= */
-
 .info-box {
     width: 30%;
-    height: 70vh; /* Przywróciłem oryginalną wysokość dla desktopu */
+    height: 100vh;
     position: sticky;
     top: 120px;
     display: flex;
@@ -222,17 +218,14 @@
     z-index: 100;
 }
 
-/* Domyślne ukrycie elementów mobile na desktopie */
 .mobile-sticky-header, .mobile-only-row {
     display: none;
 }
 
-/* Domyślne pokazanie elementów desktop na desktopie */
 .desktop-only, .desktop-only-map {
     display: block;
 }
 
-/* --- MOBILE STYLES (STICKY FOOTER) --- */
 @media (max-width: 810px) {
     .main-wrapper {
         flex-direction: column;
@@ -243,7 +236,6 @@
         width: 100%;
     }
 
-    /* Zmieniamy Info Box w pasek na dole */
     .info-box {
         display: block !important;
         position: fixed;
@@ -266,7 +258,6 @@
         box-shadow: none;
     }
 
-    /* Ukrywamy standardowe nagłówki i przyciski z desktopu */
     .desktop-only, .desktop-only-map {
         display: none !important;
     }
@@ -275,13 +266,13 @@
         display: flex;
     }
 
-    /* --- MOBILE HEADER (CENA + PRZYCISKI) --- */
     .mobile-sticky-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 10px;
         padding: 0.8rem 1.2rem;
-        background-color: #945F28; /* Brązowy kolor */
+        background-color: #945F28;
         color: white;
         cursor: pointer;
         border-radius: 12px 12px 0 0;
@@ -291,6 +282,8 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        flex-shrink: 0;
+        white-space: nowrap;
     }
 
     .mobile-price-group .label {
@@ -303,11 +296,13 @@
         font-weight: bold;
     }
 
-    /* Kontener na przycisk "Podsumowanie" i strzałkę */
     .mobile-action-btn {
         display: flex;
         align-items: center;
-        gap: 12px; /* Odstęp między przyciskiem a strzałką */
+        justify-content: flex-end;
+        gap: 8px;
+        flex: 1;
+        min-width: 0;
     }
 
     .mobile-action-btn button {
@@ -315,22 +310,23 @@
         color: #945F28 !important;
         border: none !important;
         font-weight: bold;
-        border-radius: 50px; /* Zaokrąglony przycisk */
-        padding: 8px 20px !important;
+        border-radius: 50px;
+        padding: 8px 16px !important;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.2;
+        font-size: 0.9rem;
     }
 
-    /* Strzałka jako osobny, okrągły przycisk */
     .chevron {
         display: flex;
         align-items: center;
         justify-content: center;
-
         width: 40px;
         height: 40px;
-        border-radius: 50%; /* Kółko */
-        background-color: rgba(255, 255, 255, 0.2); /* Przezroczyste tło */
-        border: 1px solid rgba(255, 255, 255, 0.4); /* Delikatna ramka */
-
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
         transition: transform 0.3s ease, background-color 0.2s ease;
         cursor: pointer;
         flex-shrink: 0;
@@ -346,12 +342,10 @@
         fill: white;
     }
 
-    /* Obracanie strzałki */
     .chevron.rotated {
         transform: rotate(180deg);
     }
 
-    /* --- EXPANDABLE CONTENT (DETAILS) --- */
     .info-box-content {
         max-height: 0;
         overflow: hidden;
@@ -368,7 +362,6 @@
         padding: 1rem;
     }
 
-    /* Zmniejszamy ikony i tekst wewnątrz rozwiniętego paska */
     .info-row {
         margin-bottom: 0.8rem;
     }
@@ -403,37 +396,30 @@
     }
 }
 
-/* Domyślnie (Desktop): Ukryj mapę mobilną, pokaż desktopową */
 .mobile-only-map {
     display: none !important;
 }
 
 .desktop-only-map {
-    display: flex !important; /* Zakładając, że map-card-wrapper ma display: flex */
+    display: flex !important;
 }
 
-/* Mobile (max-width: 810px): Pokaż mapę mobilną, ukryj desktopową */
 @media (max-width: 810px) {
     .mobile-only-map {
         display: flex !important;
-        flex-direction: column; /* Zachowaj styl map-card-wrapper */
-        margin-bottom: 1rem; /* Opcjonalnie: odstęp na dole */
+        flex-direction: column;
+        margin-bottom: 1rem;
     }
 
     .desktop-only-map {
         display: none !important;
     }
 
-    /* Upewnij się, że info-box-content pozwala na przewijanie, jeśli mapa jest wysoka */
     .info-box.mobile-expanded .info-box-content {
-        max-height: 80vh; /* Zwiększamy max-height, żeby zmieściła się mapa */
+        max-height: 80vh;
         overflow-y: auto;
     }
 }
-
-/* ========================================================= */
-/* RESZTA STYLI BEZ ZMIAN */
-/* ========================================================= */
 
 .reservation-info {
     width: 100%;
