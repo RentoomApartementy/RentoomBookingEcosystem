@@ -233,6 +233,11 @@ code {
     z-index: 9999;
     transform-origin: center bottom;
     animation: smooth-jump 1s ease-in-out infinite;
+    background-color: #cff4e2;
+}
+
+.marker-offer.selected-marker::after {
+    background-color: #cff4e2 !important;
 }
 
 @keyframes smooth-jump {
