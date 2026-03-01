@@ -368,7 +368,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             var chunks = orderedIds.Chunk(10).ToList();
             for (int i = 0; i < chunks.Count; i++)
             {
-                var newSuggestions = await _availabilityFinder.FindNextAvailableTermsAsync(chunks[i].ToList(), StartDate, EndDate, int.TryParse(Adults, out var a) ? a : 2, int.TryParse(Children, out var c) ? c : 1);
+                var newSuggestions = await _availabilityFinder.FindNextAvailableTermsAsync(chunks[i].ToList(), StartDate, EndDate, int.TryParse(Adults, out var a) ? a : 2, 1);
                 foreach (var kvp in newSuggestions) AvailableTerms[kvp.Key] = kvp.Value;
                 NotifyStateChanged();
                 await Task.Delay(500);
