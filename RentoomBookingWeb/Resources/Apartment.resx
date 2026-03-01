@@ -126,4 +126,7 @@
     <data name="ClickToCheckDetails" xml:space="preserve">
         <value />
     </data>
+    <data name="SelectDatesAndGuests" xml:space="preserve">
+        <value />
+    </data>
 </root>

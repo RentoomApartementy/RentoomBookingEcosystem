@@ -260,5 +260,11 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("ClickToCheckDetails", resourceCulture);
             }
         }
+        
+        internal static string SelectDatesAndGuests {
+            get {
+                return ResourceManager.GetString("SelectDatesAndGuests", resourceCulture);
+            }
+        }
     }
 }

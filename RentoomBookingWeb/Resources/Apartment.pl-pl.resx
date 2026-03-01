@@ -119,4 +119,7 @@
     <data name="ClickToCheckDetails" xml:space="preserve">
         <value>Kliknij, aby sprawdzić szczegóły</value>
     </data>
+    <data name="SelectDatesAndGuests" xml:space="preserve">
+        <value>Wybierz datę i liczbę gości</value>
+    </data>
 </root>
