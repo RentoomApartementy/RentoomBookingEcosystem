@@ -10,7 +10,6 @@
     width: 100%;
     padding: 0.5rem;
     margin-bottom: 15px;
-
 }
 
 .buttons-wrapper {
@@ -71,6 +70,17 @@
     color: #333;
 }
 
+.upsells-available-wrap {
+    margin-top: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+}
+
 @media (min-width: 530px) {
     .reservation-info-wrapper {
         width: 500px;
@@ -91,23 +101,24 @@
     max-width: 500px;
     height: 200px;
     border-radius: 15px;
-    background: linear-gradient(90deg, #cccccc 25%, #e0e0e0 50%, #cccccc 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.2s infinite linear;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+    background-color: #eeeeee;
+    border-radius: 12px;
 }
 
-.reservation-info-skeleton {
-    width: 100%;
-    max-width: 500px;
-    height: 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    background: #fff;
-    border-radius: 10px;
-    margin-top: 10px;
-    padding: 12px 16px;
+.skeleton-bar {
+    height: 70px;
+    border-radius: 18px;
+    margin-top: 20px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+    background-color: #eeeeee;
+}
+
+.skeleton-tile {
+    height: 110px;
+    border-radius: 18px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+    background-color: #eeeeee;
 }
 
 .skeleton-line {
@@ -140,4 +151,58 @@
     100% {
         background-position: -200% 0;
     }
+}
+
+@keyframes skeleton-pulse {
+    0% {
+        background-color: #eeeeee;
+    }
+
+    50% {
+        background-color: #f5f5f5;
+    }
+
+    100% {
+        background-color: #eeeeee;
+    }
+}
+
+.staywell-home-skeleton {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.skeleton-row {
+    display: flex;
+    gap: 12px;
+}
+
+.skeleton-upsells {
+    height: 220px;
+    width: 100%;
+}
+
+.reservation-info-skeleton {
+    width: 100%;
+    max-width: 500px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 12px 16px;
+}
+
+.staywell-home-upsells__error {
+    color: #dc3545;
+    padding: 15px;
+    text-align: center;
+    background: #fff5f5;
+    border-radius: 8px;
+    margin: 10px;
 }

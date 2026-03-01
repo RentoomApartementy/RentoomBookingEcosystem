@@ -14,7 +14,14 @@
 <PageTitle>OpenApartmentPage</PageTitle>
 
 <div class="buttons-wrapper">
-    @if (LocksState.IsTTLockAvailable)
+    @if (LocksState.IsLoading)
+    {
+        <div class="tile tile--center">
+            <div class="skeleton skeleton--button"></div>
+            <div class="skeleton skeleton--text" style="margin-top: 15px;"></div>
+        </div>
+    }
+    else if (LocksState.IsTTLockAvailable)
     {
         <div class="tile tile--center">
             <button class="open-button @(IsOpened ? "unlocked" : "locked") @(IsProcessing ? "loading" : "")"
@@ -29,7 +36,6 @@
                     <img class="lock" src="@(IsOpened ? "/icons/lock-open.svg" : "/icons/lock.svg")" />
                 }
             </button>
-
             <div class="status-text">
                 @if (IsProcessing)
                 {
@@ -70,51 +76,50 @@
             <img src="/icons/binary.svg" class="icon-inline" />
             @Localizer["YourIndividualCode"]:
         </div>
-
         <div class="tile__content">
-            @if (!ReservationState.IsActiveReservation)
+            @if (ReservationState.IsLoading || LocksState.IsLoading)
+            {
+                <div class="skeleton skeleton--code"></div>
+                <div class="skeleton skeleton--text-short" style="margin-top: 8px;"></div>
+            }
+            else if (!ReservationState.IsActiveReservation)
             {
                 <span>@Localizer["CodeNotAvailable"]</span>
             }
+            else if (!string.IsNullOrEmpty(LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()))
+            {
+                <span class="bold">@LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()</span>
+                <span>@Localizer["Confirm"]</span>
+                <span class="bold">#</span>
+                <span>@Localizer["Or"]</span>
+                <img src="/icons/key-round.svg" class="icon-key" />
+            }
             else
             {
-                if (!string.IsNullOrEmpty(LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()))
-                {
-                    <span class="bold">@LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()</span>
-                    <span>@Localizer["Confirm"]</span>
-                    <span class="bold">#</span>
-                    <span>@Localizer["Or"]</span>
-                    <img src="/icons/key-round.svg" class="icon-key" />
-                }
-                else
-                {
-                    <div>
-                        <img style="height: 50px; width: 50px;" src="/icons/octagon-alert.svg" />
-                        <p style="padding-top: 10px;">
-                            Brak kodu do zamka. Skontaktuj się z obsługą!
-                        </p>
-                    </div>
-                }
+                <div>
+                    <img style="height: 50px; width: 50px;" src="/icons/octagon-alert.svg" />
+                    <p style="padding-top: 10px;">
+                        Brak kodu do zamka. Skontaktuj się z obsługą!
+                    </p>
+                </div>
             }
         </div>
     </div>
+
     <div class="carousel-card">
         <div class="carousel-track" id="lock-carousel">
-
             <div class="carousel-slide">
                 <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
                     Jak korzystać z zamka typ.1
                 </div>
                 <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
             </div>
-
             <div class="carousel-slide">
                 <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
                     Jak korzystać z zamka typ.2
                 </div>
                 <RentoomBooking.StayWell.Components.AnimationsComponents.LockPanelAnimation />
             </div>
-
         </div>
         <div class="dots-indicator" id="carousel-dots">
             <div class="dot active" @onclick="() => ScrollToSlide(0)"></div>
@@ -131,18 +136,16 @@
     private bool IsButtonDisabled => ReservationState?.CurrentReservation?.Reservation?.ReservationDetails == null ||
                                      DateTime.Now < ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateFrom();
 
+    private async Task ScrollToSlide(int index)
+    {
+        await JS.InvokeVoidAsync("eval", $"document.getElementById('lock-carousel').scrollTo({{ left: document.getElementById('lock-carousel').clientWidth * {index}, behavior: 'smooth' }})");
+    }
 
-    @code {
-        private async Task ScrollToSlide(int index)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
         {
-            await JS.InvokeVoidAsync("eval", $"document.getElementById('lock-carousel').scrollTo({{ left: document.getElementById('lock-carousel').clientWidth * {index}, behavior: 'smooth' }})");
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
-            {
-                await JS.InvokeVoidAsync("eval", @"
+            await JS.InvokeVoidAsync("eval", @"
                 const track = document.getElementById('lock-carousel');
                 const dots = document.getElementById('carousel-dots').children;
                 if (track && dots.length > 0) {
@@ -158,51 +161,50 @@
                     }, { passive: true });
                 }
             ");
-            }
         }
     }
 
     private async Task ToggleDoor()
-        {
-    if (IsButtonDisabled || IsProcessing) return;
-
-    IsProcessing = true;
-    ErrorMessage = null;
-
-    try
     {
-        if (!IsOpened)
+        if (IsButtonDisabled || IsProcessing) return;
+
+        IsProcessing = true;
+        ErrorMessage = null;
+
+        try
         {
-            var result = await BackendApi.OpenLockAsync(Token);
-            if (result is not null && result.IsSuccess)
+            if (!IsOpened)
             {
-                IsOpened = true;
+                var result = await BackendApi.OpenLockAsync(Token);
+                if (result is not null && result.IsSuccess)
+                {
+                    IsOpened = true;
+                }
+                else
+                {
+                    ErrorMessage = result?.Status ?? Localizer["ErrorOpening"];
+                }
             }
             else
             {
-                ErrorMessage = result?.Status ?? Localizer["ErrorOpening"];
+                var result = await BackendApi.CloseLockAsync(Token);
+                if (result is not null && result.IsSuccess)
+                {
+                    IsOpened = false;
+                }
+                else
+                {
+                    ErrorMessage = result?.Status ?? Localizer["ErrorClosing"];
+                }
             }
         }
-        else
+        catch
         {
-            var result = await BackendApi.CloseLockAsync(Token);
-            if (result is not null && result.IsSuccess)
-            {
-                IsOpened = false;
-            }
-            else
-            {
-                ErrorMessage = result?.Status ?? Localizer["ErrorClosing"];
-            }
+            ErrorMessage = Localizer["ErrorServerConnection"];
+        }
+        finally
+        {
+            IsProcessing = false;
         }
     }
-    catch (Exception ex)
-    {
-        ErrorMessage = Localizer["ErrorServerConnection"];
-    }
-    finally
-    {
-        IsProcessing = false;
-    }
-        }
 }

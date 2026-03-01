@@ -10,6 +10,7 @@
     font-weight: 700;
     position: absolute;
     width: auto;
+    min-width: 0;
     max-height: 40px;
     font-size: clamp(1rem, 2.5vw, 1.2rem);
     background-color: white;

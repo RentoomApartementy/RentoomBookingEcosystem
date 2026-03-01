@@ -1,5 +1,7 @@
 ﻿<div class="date-range-bar">
     <div class="date-labels">
+        @if (CheckInDate != default && CheckOutDate != default)
+{
         <div class="date-label">
             <div class="label-title">@CheckInLabel</div>
             <div class="label-date">@CheckInDate.ToString("dd.MM.yyyy")</div>
@@ -8,6 +10,7 @@
             <div class="label-title">@CheckOutLabel</div>
             <div class="label-date">@CheckOutDate.ToString("dd.MM.yyyy")</div>
         </div>
+}
     </div>
 
     <div class="bar-container">

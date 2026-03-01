@@ -16,32 +16,41 @@
                         Description="Usterka, pytanie lub prośba do obsługi."
                         ShowPrice="false"
                         OnClick="@(() => Navigation.NavigateTo($"reservation/{Token}/ReportPage"))" />
-
-            @if (ApartmentState.CurrentApartment?.Addons is not null)
+            @if (ApartmentState.IsLoading || ReservationState.IsLoading)
             {
-                foreach (var addon in ApartmentState.CurrentApartment.Addons
-                    .Where(a => a.Id != AddonServiceFeeId && a.Id != AddonCleaningFeeId && IsAddonAvailable(a.Id)))
+                <div class="skeleton skeleton--tile"></div>
+                <div class="skeleton skeleton--tile"></div>
+                <div class="skeleton skeleton--tile"></div>
+                <div class="skeleton skeleton--tile"></div>
+            }
+            else
+            {
+                @if (ApartmentState.CurrentApartment?.Addons is not null)
                 {
-                    var definedAddon = addon.Id.HasValue
-                    ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
-                    : null;
-                    var details = definedAddon?.AddonDefinition?.Details
-                    .FirstOrDefault(d => string.Equals(d.Lang, CurrentAddonsLanguage, StringComparison.OrdinalIgnoreCase));
-                    var title = details?.Name ?? addon.Name ?? "Dodatek";
-                    var description = details?.Description ?? string.Empty;
-                    var priceText = definedAddon is not null ? $"+{definedAddon.PriceGross:#.00} zł" : string.Empty;
-                    var priceInfo = details?.PaymentTypeShortDescription ?? string.Empty;
-                    var icon = addon.Id.HasValue && AddonIconMap.TryGetValue(addon.Id.Value, out var iconPath)
-                    ? iconPath
-                    : string.Empty;
+                    foreach (var addon in ApartmentState.CurrentApartment.Addons
+                    .Where(a => a.Id != AddonServiceFeeId && a.Id != AddonCleaningFeeId && IsAddonAvailable(a.Id)))
+                    {
+                        var definedAddon = addon.Id.HasValue
+                        ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
+                        : null;
+                        var details = definedAddon?.AddonDefinition?.Details
+                        .FirstOrDefault(d => string.Equals(d.Lang, CurrentAddonsLanguage, StringComparison.OrdinalIgnoreCase));
+                        var title = details?.Name ?? addon.Name ?? "Dodatek";
+                        var description = details?.Description ?? string.Empty;
+                        var priceText = definedAddon is not null ? $"+{definedAddon.PriceGross:#.00} zł" : string.Empty;
+                        var priceInfo = details?.PaymentTypeShortDescription ?? string.Empty;
+                        var icon = addon.Id.HasValue && AddonIconMap.TryGetValue(addon.Id.Value, out var iconPath)
+                        ? iconPath
+                        : string.Empty;
 
-                    <ManageTile Category="Dodatek"
-                                Title="@title"
-                                Icon="@icon"
-                                Description="@description"
-                                ShowPrice="@(definedAddon is not null)"
-                                PriceText="@priceText"
-                                PriceInfo="@priceInfo" />
+                        <ManageTile Category="Dodatek"
+                                    Title="@title"
+                                    Icon="@icon"
+                                    Description="@description"
+                                    ShowPrice="@(definedAddon is not null)"
+                                    PriceText="@priceText"
+                                    PriceInfo="@priceInfo" />
+                    }
                 }
             }
         </div>

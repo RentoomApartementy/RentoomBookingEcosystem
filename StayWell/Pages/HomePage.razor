@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.StayWell.Components.Upsells
 @using RentoomBooking.StayWell.States
 @inject NavigationManager Navigation
 @inject IStringLocalizer<HomePage> Localizer
@@ -11,61 +12,66 @@
 <PageTitle>Main</PageTitle>
 
 <div class="image-wrapper">
-    @if (_isLoading)
+    @if (MediaState.IsLoading || ReservationState.IsLoading || ImageUrl == string.Empty)
     {
-        <div class="skeleton">
-
-        </div>
+        <div class="skeleton"></div>
     }
     else
     {
-        <ApartmentImage Source="@ImageUrl" ApartmentName="@ApartmentName">
-
-        </ApartmentImage>
+        <ApartmentImage Source="@ImageUrl" ApartmentName="@ApartmentName" />
     }
 </div>
 
-<div style="padding-top: 20px;">
-    <DateRangeBar CheckInDate="@checkIn" CheckOutDate="@checkOut" CurrentDate="@now" CheckInLabel="@Localizer["CheckIn"]" CheckOutLabel="@Localizer["CheckOut"]"/>
-</div>
+@if (ReservationState.IsLoading)
+{
+    <div style="padding-top: 20px;">
+        <div class="skeleton skeleton-bar"></div>
+    </div>
 
-<div class="tile--row">
-    <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/Instructions")'>
-        <div class="tile-icon">
-            <img class="fas" src="/icons/book.svg" />
+    <div class="tile--row">
+        <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
+        <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
+    </div>
+}
+else
+{
+    <div style="padding-top: 20px;">
+        <DateRangeBar CheckInDate="@checkIn" CheckOutDate="@checkOut" CurrentDate="@now"
+                      CheckInLabel="@Localizer["CheckIn"]" CheckOutLabel="@Localizer["CheckOut"]" />
+    </div>
+
+    <div class="tile--row">
+        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/Instructions")'>
+            <div class="tile-icon">
+                <img class="fas" src="/icons/book.svg" />
+            </div>
+            <div class="tile-text">Instrukcja zameldowania</div>
         </div>
-        <div class="tile-text">
-            Instrukcja zameldowania
+
+        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/Unlock")'>
+            <div class="tile-icon">
+                <img class="fas" src="/icons/lock.svg" />
+            </div>
+            <div class="tile-text">@Localizer["OpenApartment"]</div>
         </div>
     </div>
 
-    <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/Unlock")'>
-        <div class="tile-icon">
-            <img class="fas" src="/icons/lock.svg" />
-        </div>
-        <div class="tile-text">
-            @Localizer["OpenApartment"]
-        </div>
-    </div>
-</div>
+}
 
 @code
 {
-
     public string? ApartmentName;
     public string? ApartmentNumber;
     public string? ApartmentAddress;
     public string? ReservationDateFrom;
     public string? ReservationDateTo;
-    public string? ImageUrl = string.Empty;
+    public string? ImageUrl = null;
 
     private DateTime checkIn;
     private DateTime checkOut;
     private DateTime now;
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
-
-    private bool _isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -76,31 +82,24 @@
         checkIn = ci;
         checkOut = co;
         now = DateTime.Now;
-        _isLoading = false;
     }
 
     private void LoadData()
-    {   
-
+    {
         ApartmentName = Reservation?.Items?.FirstOrDefault()?.objectName;
         ApartmentNumber = Reservation?.Items?.FirstOrDefault()?.itemCode;
         ApartmentAddress = ApartmentState.CurrentApartment?.ObjectLocation?.LocalizationItem?.Street;
         ReservationDateFrom = Reservation?.ReservationDetails?.dateFrom;
         ReservationDateTo = Reservation?.ReservationDetails?.dateTo;
-
         LoadImage();
-
     }
 
     private void LoadImage()
     {
         const string placeholder = "/images/placeholders/apartment_placeholder.png";
-
         ImageUrl = MediaState?.CurrentMedia?
             .FirstOrDefault(m => string.Equals(m.Extension, "jpg", StringComparison.OrdinalIgnoreCase))
             ?.Url
             ?? placeholder;
     }
-
-
 }
