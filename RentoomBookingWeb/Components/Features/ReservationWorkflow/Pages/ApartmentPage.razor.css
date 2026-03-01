@@ -226,7 +226,7 @@
     display: block;
 }
 
-@media (max-width: 810px) {
+@media (max-width: 910px) {
     .main-wrapper {
         flex-direction: column;
         width: 95%;
@@ -404,7 +404,7 @@
     display: flex !important;
 }
 
-@media (max-width: 810px) {
+@media (max-width: 910px) {
     .mobile-only-map {
         display: flex !important;
         flex-direction: column;
