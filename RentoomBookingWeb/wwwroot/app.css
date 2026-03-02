@@ -233,6 +233,9 @@ code {
     z-index: 9999;
     transform-origin: center bottom;
     animation: smooth-jump 1s ease-in-out infinite;
+}
+
+.marker-offer.selected-marker {
     background-color: #cff4e2;
 }
 
