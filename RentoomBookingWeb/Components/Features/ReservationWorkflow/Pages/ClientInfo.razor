@@ -280,15 +280,30 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ParsePhoneNumber(_form.Client.Phone);
         _editContext = new EditContext(_form);
-
         _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
 
-        if (_summary != null && _summary.StartRequest?.ObjectId != null)
+        if (_summary != null)
         {
-            _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
+            if (_summary.Client != null)
+            {
+                _form.Client = _summary.Client;
+            }
+            if (_summary.Invoice != null)
+            {
+                _form.Invoice = _summary.Invoice;
+                _form.UseInvoice = true;
+            }
+
+            if (_summary.StartRequest?.ObjectId != null)
+            {
+                _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
+            }
         }
+
+        ParsePhoneNumber(_form.Client.Phone);
+        // Ponownie inicjalizujemy, aby uwzględnić zaktualizowane dane w _form
+        _editContext = new EditContext(_form);
     }
 
     private async Task DownloadGusDataAsync()

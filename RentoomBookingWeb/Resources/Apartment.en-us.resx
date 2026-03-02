@@ -122,4 +122,10 @@
     <data name="SelectDatesAndGuests" xml:space="preserve">
         <value>Select dates and guests</value>
     </data>
+    <data name="CheckInTimeFormat" xml:space="preserve">
+        <value>Check-in: 15:00 – 22:00</value>
+    </data>
+    <data name="CheckOutTimeFormat" xml:space="preserve">
+        <value>Check-out: by 11:00</value>
+    </data>
 </root>

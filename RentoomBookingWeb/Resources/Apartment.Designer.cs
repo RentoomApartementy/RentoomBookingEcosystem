@@ -266,5 +266,17 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("SelectDatesAndGuests", resourceCulture);
             }
         }
+        
+        internal static string CheckInTimeFormat {
+            get {
+                return ResourceManager.GetString("CheckInTimeFormat", resourceCulture);
+            }
+        }
+        
+        internal static string CheckOutTimeFormat {
+            get {
+                return ResourceManager.GetString("CheckOutTimeFormat", resourceCulture);
+            }
+        }
     }
 }
