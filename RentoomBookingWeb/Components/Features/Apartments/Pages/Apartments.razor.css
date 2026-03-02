@@ -24,6 +24,7 @@
 @media (max-width: 800px) {
     .apartments-items {
         flex-direction: column;
+        padding: 1rem 1rem;
     }
 }
 

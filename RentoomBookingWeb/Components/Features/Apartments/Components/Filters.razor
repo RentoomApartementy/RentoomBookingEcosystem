@@ -7,10 +7,48 @@
 @using System.Web
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 
-<button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
-    <img src="assets/svgs/mobile-filters.svg" alt="" style="color: black;">
-    <span>@Localizer["Filters"]</span>
-</button>
+<div class="mobile-filter-wrapper">
+    <button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
+        <div class="trigger-content">
+            <img src="assets/svgs/mobile-filters.svg" alt="" class="trigger-icon">
+            <span class="trigger-text">@Localizer["Filters"]</span>
+            @if (GetSelectedCount() > 0)
+            {
+                <span class="filter-badge">@GetSelectedCount()</span>
+            }
+        </div>
+        <div class="trigger-arrow">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+    </button>
+
+    @if (HasSelectedFilters)
+    {
+        <div class="active-filters-pills">
+            @foreach (var loc in _locations.Where(l => l.IsSelected))
+            {
+                <div class="filter-pill" @onclick="() => OnLocationChanged(loc)">
+                    @Localizer[loc.Name]
+                    <span class="pill-remove">&times;</span>
+                </div>
+            }
+            @foreach (var filter in _filterOptions.Where(f => f.IsSelected))
+            {
+                <div class="filter-pill" @onclick="() => OnFilterChanged(filter)">
+                    @Localizer[filter.Name]
+                    <span class="pill-remove">&times;</span>
+                </div>
+            }
+            @if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer)
+            {
+                <div class="filter-pill" @onclick="ResetPriceOnly">
+                    @_minPrice - @_maxPrice zł
+                    <span class="pill-remove">&times;</span>
+                </div>
+            }
+        </div>
+    }
+</div>
 
 <div class="filters-container @(_isMobileFiltersOpen ? "active" : "")">
     
@@ -254,6 +292,21 @@
         
         UpdateUrl();
         await ApplyFilters();
+    }
+
+    private async Task ResetPriceOnly()
+    {
+        _minPrice = MinPriceOffer;
+        _maxPrice = MaxPriceOffer;
+        UpdateUrl();
+        await ApplyFilters();
+    }
+
+    private int GetSelectedCount()
+    {
+        int count = _locations.Count(l => l.IsSelected) + _filterOptions.Count(f => f.IsSelected);
+        if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer) count++;
+        return count;
     }
 
     private void ToggleMobileFilters() => _isMobileFiltersOpen = !_isMobileFiltersOpen;

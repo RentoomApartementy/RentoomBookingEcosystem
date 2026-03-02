@@ -172,25 +172,114 @@
     display: none;
 }
 
+.mobile-filter-wrapper {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.mobile-filter-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mobile-filter-trigger:hover {
+    background-color: #f9f9f9;
+    border-color: #d0d0d0;
+}
+
+.trigger-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.trigger-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+}
+
+.trigger-text {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.filter-badge {
+    background-color: #945F28;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trigger-arrow {
+    color: #999;
+}
+
+.active-filters-pills {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.active-filters-pills::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-pill {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    background-color: #f0f0f0;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+}
+
+.filter-pill:hover {
+    background-color: #e8e8e8;
+}
+
+.pill-remove {
+    font-size: 1.1rem;
+    line-height: 1;
+    color: #999;
+}
+
 @media (max-width: 800px) {
-    .mobile-filter-trigger {
+    .mobile-filter-wrapper {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        width: 100%;
-        padding: 0.8rem;
-        margin-bottom: 1rem;
-        background-color: #fff;
-        border: 1px solid #C1C1C1;
-        border-radius: 0.5rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.2s;
     }
 
-    .mobile-filter-trigger:hover {
-        background-color: #f9f9f9;
+    .mobile-filter-trigger {
+        display: flex;
     }
 
     .filters-container {
@@ -228,7 +317,7 @@
         display: flex;
         position: absolute;
         top: 1.5rem;
-        right: 1rem;
+        right: 1.5rem;
         background: #f3f4f6;
         border: none;
         width: 40px;
