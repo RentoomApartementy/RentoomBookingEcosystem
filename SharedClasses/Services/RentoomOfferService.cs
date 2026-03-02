@@ -59,18 +59,18 @@ namespace RentoomBooking.SharedClasses.Services
 
             var idoRequest = query.IdoOfferParams;
             var amenityFilter = query.ApartmentFilterParams?.ApartmentAmenitiesFilter;
-            var regionFilter = query.ApartmentFilterParams.ApartmentLocationsFilter;
+            var regionFilter = query.ApartmentFilterParams?.ApartmentLocationsFilter;
             List<ApartmentObject> apartmentsFromAmenities = new();
 
             
-            //KROK 1. filtruje apartementy jesli są wybrane amenities
+            //KROK 1. filtruje apartementy jesli są wybrane amenities lub regiony
             if ((amenityFilter != null && amenityFilter.Any()) || (regionFilter != null && regionFilter.Any()))
             {
                 var apartmentFilter = new ApartmentQueryFilter
                 {
                    // ApartmentIds = idoRequest.ObjectIds,
                     ApartmentAmenityIds = amenityFilter,
-                    ApartmentObjectLocalizationItemRegionNames = query.ApartmentFilterParams?.ApartmentLocationsFilter
+                    ApartmentObjectLocalizationItemRegionNames = regionFilter
                 };
 
                 apartmentsFromAmenities = await _apartmentsService.GetApartmentsByFilterAsync(apartmentFilter);
@@ -115,14 +115,15 @@ namespace RentoomBooking.SharedClasses.Services
             var offerIds = pricingOffers.Select(offer => offer.ObjectId).Distinct().ToList();
                       
 
-            //KROK 4. filtruje tylko te apartamentu które znalazły się w ofertach [po amenities i lokacjach]
+            //KROK 4. filtruje tylko te apartamentu które znalazły się w ofertach (jeśli nie ma filtrów)
+            //Lub zwraca wszystkie pasujące do filtrów (nawet te bez oferty), jeśli filtry są aktywne.
             List<ApartmentObject> apartments;
 
-            if (amenityFilter != null && amenityFilter.Any())
+            if ((amenityFilter != null && amenityFilter.Any()) || (regionFilter != null && regionFilter.Any()))
             {
-                apartments = apartmentsFromAmenities
-                    .Where(apartment => apartment.Id>0 && offerIds.Contains(apartment.Id))
-                    .ToList();
+                // Zwracamy wszystkie pasujące do meta-filtrów. 
+                // ViewModel zdecyduje które mają oferty i jak je posortować.
+                apartments = apartmentsFromAmenities;
             }
             else if (offerIds.Count > 0)
             {
@@ -135,7 +136,7 @@ namespace RentoomBooking.SharedClasses.Services
             }
 
             
-            // KROK 5. zwraca oferty (odfiltrowane lokalnie po cenie) oraz tylko te apartementy  które są w ofercie i jednocześnie spełaniają filtr amenities
+            // KROK 5. zwraca oferty (odfiltrowane lokalnie po cenie) oraz apartamenty
             return new RentoomOffer
             {
                 PricingOffers = pricingOffers,

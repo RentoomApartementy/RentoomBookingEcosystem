@@ -23,6 +23,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private ApartmentFilters? _currentFilters = null;
         
         private List<PricingOffer> _allMatchingOffers = new();
+        private List<ApartmentObject> _matchingMetaItems = new();
 
         public List<ApartmentObject> Items { get; private set; } = new();
         public List<PricingOffer> Offers { get; private set; } = new();
@@ -89,7 +90,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             var urlLocs = GetVal("locations").Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
             var urlAmes = GetVal("filters").Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
 
-            bool filtersChanged = s != StartDate || e != EndDate || a != Adults || urlMin != FilterMinPrice || urlMax != FilterMaxPrice;
+            bool filtersChanged = s != StartDate || e != EndDate || a != Adults;
 
             if (_isInitialized && !filtersChanged && Items.Any())
             {
@@ -110,9 +111,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 _currentFilters = await ReconstructFiltersFromUrl(urlLocs, urlAmes);
             }
 
-            Items.Clear(); Offers.Clear(); AvailableTerms.Clear(); _allMatchingOffers.Clear(); _token = null;
+            Items.Clear(); Offers.Clear(); AvailableTerms.Clear(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
             
-            bool hasActiveFilters = IsSearch || _currentFilters != null;
+            bool hasActiveFilters = IsSearch || (_currentFilters != null && (_currentFilters.ApartmentLocationsFilter?.Any() == true || _currentFilters.ApartmentAmenitiesFilter?.Any() == true));
 
             if (hasActiveFilters)
             {
@@ -120,7 +121,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
                 var allItems = await GetAllApartments() ?? new List<ApartmentObject>();
                 
-                await FetchAndCalculateScale(allItems, _currentFilters);
+                await FetchOffersAndSetScale(allItems, _currentFilters, updateScale: true);
                 
                 if (ScaleMaxPrice > 0)
                 {
@@ -149,13 +150,13 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         {
             UpdateUrlParams(query);
             
-            Items.Clear(); Offers.Clear(); AvailableTerms.Clear(); _allMatchingOffers.Clear(); _token = null; 
+            Items.Clear(); Offers.Clear(); AvailableTerms.Clear(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null; 
             HasMore = false; ApartmentsIsLoading = true; IsSearch = true;
             NotifyStateChanged();
 
             var allItems = await GetAllApartments() ?? new List<ApartmentObject>();
             
-            await FetchAndCalculateScale(allItems, _currentFilters);
+            await FetchOffersAndSetScale(allItems, _currentFilters, updateScale: true);
             
             FilterMinPrice = ScaleMinPrice;
             FilterMaxPrice = ScaleMaxPrice;
@@ -176,23 +177,22 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             FilterMinPrice = data.MinPrice;
             FilterMaxPrice = data.MaxPrice;
 
-            ApartmentsIsLoading = true; HasMore = false; NotifyStateChanged();
+            ApartmentsIsLoading = true; HasMore = false; 
+            
+            Items.Clear(); 
+            Offers.Clear();
+            NotifyStateChanged();
 
             var allItems = await GetAllApartments() ?? new List<ApartmentObject>();
 
-            if (metaChanged)
-            {
-                Items.Clear(); Offers.Clear(); _allMatchingOffers.Clear();
-                
-                await FetchAndCalculateScale(allItems, _currentFilters);
+            bool hasActiveMetaFilters = _currentFilters != null && (_currentFilters.ApartmentLocationsFilter?.Any() == true || _currentFilters.ApartmentAmenitiesFilter?.Any() == true);
 
-                if (ScaleMaxPrice > 0 && (FilterMaxPrice <= 0 || FilterMaxPrice < ScaleMinPrice))
-                {
-                    FilterMinPrice = ScaleMinPrice;
-                    FilterMaxPrice = ScaleMaxPrice;
-                }
-                
-                SliderResetKey = Guid.NewGuid();
+            if (metaChanged || !hasActiveMetaFilters)
+            {
+                _allMatchingOffers.Clear();
+                _matchingMetaItems.Clear();
+                // Jesli nie ma aktywnych meta-filtrow, aktualizujemy skale cen dla calego zbioru (reset skali przy resecie filtrow)
+                await FetchOffersAndSetScale(allItems, _currentFilters, updateScale: !hasActiveMetaFilters);
             }
 
             ApplyPriceFilterToItems(allItems);
@@ -203,9 +203,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             if (metaChanged) _ = FetchSuggestionsInBackground(Items);
         }
 
-        private async Task FetchAndCalculateScale(List<ApartmentObject> items, ApartmentFilters? filters)
+        private async Task FetchOffersAndSetScale(List<ApartmentObject> items, ApartmentFilters? filters, bool updateScale)
         {
-            if (items == null || !items.Any()) { ResetPriceScales(); return; }
+            if (items == null || !items.Any()) { if(updateScale) ResetPriceScales(); return; }
 
             try
             {
@@ -225,23 +225,27 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 };
 
                 var response = await _rentoomOfferService.getOfferWitFilter(queryObj);
-                
                 _allMatchingOffers = response?.PricingOffers ?? new List<PricingOffer>();
+                _matchingMetaItems = response?.ApartmentObjects ?? new List<ApartmentObject>();
 
-                if (_allMatchingOffers.Any())
+                if (updateScale)
                 {
-                    ScaleMinPrice = (int)_allMatchingOffers.Min(o => o.MinimalPrice);
-                    ScaleMaxPrice = (int)_allMatchingOffers.Max(o => o.MinimalPrice);
-                }
-                else
-                {
-                    ResetPriceScales();
+                    if (_allMatchingOffers.Any())
+                    {
+                        ScaleMinPrice = (int)_allMatchingOffers.Min(o => o.MinimalPrice);
+                        ScaleMaxPrice = (int)_allMatchingOffers.Max(o => o.MinimalPrice);
+                    }
+                    else
+                    {
+                        ResetPriceScales();
+                    }
                 }
             }
             catch 
             {
-                ResetPriceScales();
+                if(updateScale) ResetPriceScales();
                 _allMatchingOffers.Clear();
+                _matchingMetaItems.Clear();
             }
         }
 
@@ -253,35 +257,48 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             int userMin = FilterMinPrice ?? ScaleMinPrice;
             int userMax = FilterMaxPrice ?? ScaleMaxPrice;
 
-            int bufferedMin = Math.Max(0, userMin - 10);
-            int bufferedMax = userMax + 10;
+            decimal bMin = (decimal)userMin - 5;
+            decimal bMax = (decimal)userMax + 5;
 
             var visibleOffers = _allMatchingOffers
-                .Where(o => o.MinimalPrice >= bufferedMin && o.MinimalPrice <= bufferedMax)
+                .Where(o => o.MinimalPrice >= bMin && o.MinimalPrice <= bMax)
                 .ToList();
 
             Offers.AddRange(visibleOffers);
 
-            var outOfRangeOfferIds = _allMatchingOffers
-                .Where(o => o.MinimalPrice < bufferedMin || o.MinimalPrice > bufferedMax)
-                .Select(o => o.ObjectId)
-                .ToHashSet();
-
-            var itemsToShow = allItems.Where(a => !outOfRangeOfferIds.Contains(a.Id)).ToList();
+            var visibleOfferIds = visibleOffers.Select(o => o.ObjectId).ToHashSet();
+            var allOfferIdsForMeta = _allMatchingOffers.Select(o => o.ObjectId).ToHashSet();
             
-            Items.AddRange(itemsToShow);
-            SortItemsByOffers();
+            bool hasActiveMetaFilters = _currentFilters != null && (_currentFilters.ApartmentLocationsFilter?.Any() == true || _currentFilters.ApartmentAmenitiesFilter?.Any() == true);
+            var baseSet = hasActiveMetaFilters ? _matchingMetaItems : allItems;
+
+            var group1 = baseSet.Where(a => visibleOfferIds.Contains(a.Id)).ToList();
+            
+            // Sortowanie group1 (z ofertami) po cenie malejąco
+            group1.Sort((a, b) => {
+                var offerA = GetPricingOfferByObjectId(a.Id);
+                var offerB = GetPricingOfferByObjectId(b.Id);
+                if (offerA == null || offerB == null) return 0;
+                return offerB.MinimalPrice.CompareTo(offerA.MinimalPrice);
+            });
+
+            // Group 2 to te, które NIE mają żadnej oferty (sugerowane daty)
+            var group2 = baseSet.Where(a => !allOfferIdsForMeta.Contains(a.Id)).ToList();
+
+            Items.AddRange(group1);
+            Items.AddRange(group2);
         }
 
         private bool IsMetaFilterChanged(ApartmentFilters? newFilters)
         {
             if (_currentFilters == null && newFilters == null) return false;
-            if (_currentFilters == null || newFilters == null) return true;
-
-            bool locChanged = !AreListsEqual(_currentFilters.ApartmentLocationsFilter, newFilters.ApartmentLocationsFilter);
-            bool ameChanged = !AreListsEqual(_currentFilters.ApartmentAmenitiesFilter, newFilters.ApartmentAmenitiesFilter);
             
-            return locChanged || ameChanged;
+            var oldLocs = _currentFilters?.ApartmentLocationsFilter ?? new List<string>();
+            var newLocs = newFilters?.ApartmentLocationsFilter ?? new List<string>();
+            var oldAmes = _currentFilters?.ApartmentAmenitiesFilter ?? new List<int>();
+            var newAmes = newFilters?.ApartmentAmenitiesFilter ?? new List<int>();
+
+            return !AreListsEqual(oldLocs, newLocs) || !AreListsEqual(oldAmes, newAmes);
         }
 
         private bool AreListsEqual<T>(List<T>? list1, List<T>? list2)
@@ -337,20 +354,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 }
             }
             catch { }
-        }
-
-        private void SortItemsByOffers()
-        {
-             Items.Sort((a, b) => {
-                var offerA = GetPricingOfferByObjectId(a.Id);
-                var offerB = GetPricingOfferByObjectId(b.Id);
-                
-                if (offerA != null && offerB == null) return -1;
-                if (offerA == null && offerB != null) return 1;
-                if (offerA != null && offerB != null) return offerB.MinimalPrice.CompareTo(offerA.MinimalPrice);
-                
-                return 0; 
-            });
         }
 
         private async Task FetchSuggestionsInBackground(IEnumerable<ApartmentObject> items)

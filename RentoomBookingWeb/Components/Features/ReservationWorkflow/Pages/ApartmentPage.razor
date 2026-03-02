@@ -162,7 +162,7 @@
                                         <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
                                             <div class="addon-info-col">
                                                 <span class="addon-name">@fadesc?.Name</span>
-                                                <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
+                                                @* <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small> *@
                                             </div>
 
                                             <div class="price-box">
