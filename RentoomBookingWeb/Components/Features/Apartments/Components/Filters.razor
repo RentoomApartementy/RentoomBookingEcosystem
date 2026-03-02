@@ -14,6 +14,13 @@
 
 <div class="filters-container @(_isMobileFiltersOpen ? "active" : "")">
     
+    @if (_isMobileFiltersOpen)
+    {
+        <button class="close-filters-btn" @onclick="ToggleMobileFilters">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+    }
+
     @if (_isLoading)
     {
         @for (int i = 0; i < 9; i++)
@@ -35,15 +42,15 @@
         <div class="filters">
             @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
             {
-                <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
+                <label class="@(option.IsSelected ? "filter-option selected" : "filter-option")" for="@option.Id">
                     <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
                     <input type="checkbox"
                            id="@option.Id"
                            checked="@option.IsSelected"
                            @onchange="(e) => OnLocationChanged(option)"
                            style="position:absolute; opacity:0; width:0; height:0;"/>
-                    <label for="@option.Id">@Localizer[option.Name]</label>
-                </div>
+                    <span>@Localizer[option.Name]</span>
+                </label>
             }
         </div>
         
@@ -68,15 +75,15 @@
         <div class="filters">
             @foreach (var filter in _filterOptions)
             {
-                <div class="@(filter.IsSelected ? "filter-option selected" : "filter-option")">
+                <label class="@(filter.IsSelected ? "filter-option selected" : "filter-option")" for="@filter.Id">
                     <img class="filter-icon" src="@($"/assets/svgs/filter/{filter.Icon}.svg")" alt="@filter.Name">
                     <input type="checkbox"
                            id="@filter.Id"
                            checked="@filter.IsSelected"
                            @onchange="(e) => OnFilterChanged(filter)"
                            style="position:absolute; opacity:0; width:0; height:0;"/>
-                    <label for="@filter.Id">@Localizer[filter.Name]</label>
-                </div>
+                    <span>@Localizer[filter.Name]</span>
+                </label>
             }
         </div>
         
