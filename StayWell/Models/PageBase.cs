@@ -44,6 +44,7 @@ namespace RentoomBooking.StayWell.Models
         public bool IsDisabled { get; set; } = false;
         protected bool IsLoading { get; set; } = true;
 
+        protected bool ShouldRenderContent { get; private set; } = false;
         protected bool IsInitializedSuccessfully { get; private set; } = false;
 
         private readonly string _instanceId = Guid.NewGuid().ToString("N");
@@ -59,21 +60,29 @@ namespace RentoomBooking.StayWell.Models
 
             Subscribe();
 
-            if (ReservationState.CurrentReservation == null && !string.IsNullOrEmpty(Token))
+            if (ReservationState.CurrentReservation != null)
+            {
+                IsLoading = false;
+                IsInitializedSuccessfully = true;
+                //SetLanguage();
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(Token))
             {
                 await LoadDataAsync();
+
                 if (!IsInitializedSuccessfully)
                 {
                     NavigationManager.NavigateTo("/Error");
                     return;
                 }
+
                 if (!TermsState.IsAccepted || RegistrationCardState.CurrentCard == null)
                 {
                     NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");
                 }
             }
-
-
         }
 
         private void SetLanguage()
@@ -121,7 +130,6 @@ namespace RentoomBooking.StayWell.Models
                     return;
                 }
 
-                SetLanguage();
                 var item = reservation.Items?.FirstOrDefault();
                 if (item is null)
                 {
@@ -141,6 +149,7 @@ namespace RentoomBooking.StayWell.Models
                     LocksState.CheckTTLockStatusAsync(Token),
                     LocksState.GetApartmentItemCodesAsync(Token)
                 );
+                SetLanguage();
                 IsInitializedSuccessfully = true;
             }
             catch (Exception ex)
