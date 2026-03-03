@@ -135,4 +135,13 @@
     <data name="CheckOutTimeFormat" xml:space="preserve">
         <value />
     </data>
+    <data name="CheckApartmentsWithOffer" xml:space="preserve">
+        <value />
+    </data>
+    <data name="SelectedPackage" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Package" xml:space="preserve">
+        <value />
+    </data>
 </root>

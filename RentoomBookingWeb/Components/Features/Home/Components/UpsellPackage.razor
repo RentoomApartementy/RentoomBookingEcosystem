@@ -1,0 +1,73 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums
+@using RentoomBookingWeb.Components.Enums
+@inject IStringLocalizer<SharedResources> Localizer;
+
+<div class="upsell-package-container"
+     style="background-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.1) 100%), url('@ImagePath');">
+    
+    @if (Tile.Discount.HasValue && Tile.PricingDiscountType != PartnerServiceDiscountType.None)
+    {
+        <div class="package-badge">
+            @if (Tile.PricingDiscountType == PartnerServiceDiscountType.Percent)
+            {
+                <span>-@((Tile.Discount.Value * 100).ToString("F0"))%</span>
+            }
+            else
+            {
+                <span>-@Tile.Discount.Value.ToString("F2") @Tile.Currency</span>
+            }
+        </div>
+    }
+
+    <div class="package-content-wrapper">
+        <div class="package-content">
+            <h2 class="package-title">@Tile.Title</h2>
+            <p class="package-description">@Tile.ShortDescription</p>
+            
+            <div class="package-pricing">
+                <span class="price-label">@Texts.PriceLabel</span>
+                <span class="price-value">@Tile.Price.ToString("N2") @Tile.Currency</span>
+                <span class="price-unit">/ @GetPricingModelText(Tile.PricingModel)</span>
+            </div>
+
+            <div class="package-actions">
+                <Button Href="@GetFilterUrl()" Type="@ButtonType.Tertiary">@Localizer["CheckApartmentsWithOffer"]</Button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public UpsellTileDto Tile { get; set; } = new();
+    [Parameter] public UpsellTextConfig Texts { get; set; } = new();
+
+    private string GetFilterUrl()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var tomorrow = today.AddDays(1);
+        return $"/apartamenty?startDate={today:yyyy-MM-dd}&endDate={tomorrow:yyyy-MM-dd}&adults=2&upsellId={Tile.PartnerServiceId}";
+    }
+
+    private string ImagePath
+    {
+        get
+        {
+            if (Tile.BannerUrls != null && Tile.BannerUrls.TryGetValue(PartnerServiceBannerPlacementType.StayWell, out var url))
+            {
+                return url;
+            }
+            return "assets/images/package-test.jpeg";
+        }
+    }
+
+    private string GetPricingModelText(PartnerServicePricingModel model) => model switch
+    {
+        PartnerServicePricingModel.PerPersonPerDay => Texts.PricingPerPersonPerDayText,
+        PartnerServicePricingModel.PerApartmentPerDay => Texts.PricingPerApartmentPerDayText,
+        PartnerServicePricingModel.PerStay => Texts.PricingPerStayText,
+        PartnerServicePricingModel.OneTime => Texts.PricingOneTimeText,
+        _ => model.ToString()
+    };
+}

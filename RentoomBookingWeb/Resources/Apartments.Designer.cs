@@ -212,5 +212,17 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("MandatoryOptions", resourceCulture);
             }
         }
+        
+        internal static string SelectedPackage {
+            get {
+                return ResourceManager.GetString("SelectedPackage", resourceCulture);
+            }
+        }
+        
+        internal static string Package {
+            get {
+                return ResourceManager.GetString("Package", resourceCulture);
+            }
+        }
     }
 }

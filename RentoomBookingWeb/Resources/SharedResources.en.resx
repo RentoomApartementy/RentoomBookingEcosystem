@@ -77,4 +77,7 @@
     <data name="ClickToSelectDate" xml:space="preserve">
         <value>Click to select date</value>
     </data>
+    <data name="CheckApartmentsWithOffer" xml:space="preserve">
+        <value>View apartments with this offer</value>
+    </data>
 </root>

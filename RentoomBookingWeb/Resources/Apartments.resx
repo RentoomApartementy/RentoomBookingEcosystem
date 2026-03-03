@@ -102,4 +102,10 @@
     <data name="MandatoryOptions" xml:space="preserve">
         <value />
     </data>
+    <data name="SelectedPackage" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Package" xml:space="preserve">
+        <value />
+    </data>
 </root>

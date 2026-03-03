@@ -1,10 +1,13 @@
 @using System.Text
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using RentoomBooking.SharedClasses.Services.Upsell
+@using RentoomBooking.SharedClasses.Models.Upsell
 @inject IApartmentSearchFiltersService ApartmentSearchFiltersService
 @inject NavigationManager Navigation
 @using RentoomBookingWeb.Components.Enums
 @using Microsoft.Extensions.Localization
 @using System.Web
+@using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 
 <div class="mobile-filter-wrapper">
@@ -39,6 +42,13 @@
                     <span class="pill-remove">&times;</span>
                 </div>
             }
+            @if (_selectedUpsell != null)
+            {
+                <div class="filter-pill" @onclick="ResetUpsellOnly">
+                    @Localizer["Package"]: @_selectedUpsell.Title
+                    <span class="pill-remove">&times;</span>
+                </div>
+            }
             @if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer)
             {
                 <div class="filter-pill" @onclick="ResetPriceOnly">
@@ -68,6 +78,18 @@
     }
     else
     {
+        @if (_selectedUpsell != null)
+        {
+            <div class="selected-upsell-sidebar">
+                <p class="filters-title">@Localizer["SelectedPackage"]</p>
+                <div class="filter-option selected" @onclick="ResetUpsellOnly" style="cursor: pointer;">
+                    <img class="filter-icon small-icon" src="assets/svgs/kid_star.svg" alt="">
+                    <span>@_selectedUpsell.Title</span>
+                </div>
+                <hr/>
+            </div>
+        }
+
         @if (!IsMapActive)
         {
             <div @onclick="HandleClickOnMapFilter" class="map-filter">
@@ -151,8 +173,11 @@
     [Parameter] public EventCallback<(ApartmentFilters Filters, int MinPrice, int MaxPrice)> OnFiltersChanged { get; set; }
     [Parameter] public EventCallback OnClickOnMap { get; set; }
 
+    [Inject] IUpsellCatalogService UpsellCatalogService { get; set; } = default!;
+
     private List<FilterOption> _locations = new();
     private List<FilterOption> _filterOptions = new();
+    private UpsellTileDto? _selectedUpsell;
     private bool _isLoading = false;
     private int _minPrice;
     private int _maxPrice;
@@ -182,6 +207,7 @@
     {
         _isLoading = true;
         try {
+            await LoadUrlUpsell();
             var filters = await ApartmentSearchFiltersService.GetFiltersAsync();
             var locationFilters = filters.FirstOrDefault(f => f.id == "city-regions-filter")?.filtersDictionary.GetValueOrDefault("pl");
             var amenitiesFilters = filters.FirstOrDefault(f => f.id == "amenities-filter")?.filtersDictionary.GetValueOrDefault("pl");
@@ -199,6 +225,17 @@
         { 
             Console.WriteLine($"Error fetching filters definition: {ex.Message}");
             _isLoading = false;
+        }
+    }
+
+    private async Task LoadUrlUpsell()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = HttpUtility.ParseQueryString(uri.Query);
+        if (int.TryParse(query["upsellId"], out int uId))
+        {
+            var upsells = await UpsellCatalogService.GetAvailableUpsellTilesAsync(CultureInfo.CurrentUICulture.Name, "rentoombooking");
+            _selectedUpsell = upsells.FirstOrDefault(u => u.PartnerServiceId == uId);
         }
     }
 
@@ -234,6 +271,9 @@
         var selectedFilterIds = _filterOptions.Where(f => f.IsSelected).Select(f => f.Id).ToList();
         if (selectedFilterIds.Any()) query["filters"] = string.Join(",", selectedFilterIds);
         else query.Remove("filters");
+
+        if (_selectedUpsell != null) query["upsellId"] = _selectedUpsell.PartnerServiceId.ToString();
+        else query.Remove("upsellId");
 
         if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer)
         {
@@ -273,6 +313,11 @@
             ApartmentLocationsFilter = _locations.Where(l => l.IsSelected).Select(l => l.Name).ToList()
         };
 
+        if (_selectedUpsell != null)
+        {
+            filters.ApartmentAddonFilter = new List<int> { _selectedUpsell.PartnerServiceId };
+        }
+
         var priceFilters = new OfferPriceFilter
         {
             PriceFrom = _minPrice,
@@ -286,6 +331,7 @@
     {
         foreach (var location in _locations) location.IsSelected = false;
         foreach (var filter in _filterOptions) filter.IsSelected = false;
+        _selectedUpsell = null;
         
         _minPrice = MinPriceOffer;
         _maxPrice = MaxPriceOffer;
@@ -302,10 +348,18 @@
         await ApplyFilters();
     }
 
+    private async Task ResetUpsellOnly()
+    {
+        _selectedUpsell = null;
+        UpdateUrl();
+        await ApplyFilters();
+    }
+
     private int GetSelectedCount()
     {
         int count = _locations.Count(l => l.IsSelected) + _filterOptions.Count(f => f.IsSelected);
         if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer) count++;
+        if (_selectedUpsell != null) count++;
         return count;
     }
 
@@ -315,6 +369,7 @@
     private bool HasSelectedFilters => 
         _locations.Any(l => l.IsSelected) || 
         _filterOptions.Any(f => f.IsSelected) || 
+        _selectedUpsell != null ||
         (_minPrice > MinPriceOffer && MinPriceOffer > 0) || 
         (_maxPrice < MaxPriceOffer && MaxPriceOffer > 0);
 

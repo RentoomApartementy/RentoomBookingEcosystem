@@ -278,5 +278,23 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("CheckOutTimeFormat", resourceCulture);
             }
         }
+        
+        internal static string CheckApartmentsWithOffer {
+            get {
+                return ResourceManager.GetString("CheckApartmentsWithOffer", resourceCulture);
+            }
+        }
+        
+        internal static string SelectedPackage {
+            get {
+                return ResourceManager.GetString("SelectedPackage", resourceCulture);
+            }
+        }
+        
+        internal static string Package {
+            get {
+                return ResourceManager.GetString("Package", resourceCulture);
+            }
+        }
     }
 }

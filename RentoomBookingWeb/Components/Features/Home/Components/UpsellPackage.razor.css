@@ -1,0 +1,117 @@
+.upsell-package-container {
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    margin: 0 auto;
+}
+
+.package-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #1F5A41;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    z-index: 2;
+}
+
+.package-content {
+    color: white;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 2;
+}
+
+.package-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.package-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.package-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.price-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+.price-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.price-unit {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.package-actions {
+    margin-top: 1rem;
+}
+
+@media (max-width: 910px) {
+    .upsell-package-container {
+        height: 400px;
+        padding: 1.5rem;
+    }
+
+    .package-title {
+        font-size: 1.75rem;
+    }
+
+    .package-description {
+        font-size: 0.95rem;
+    }
+
+    .price-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .upsell-package-container {
+        height: 350px;
+        padding: 1.25rem;
+    }
+
+    .package-title {
+        font-size: 1.5rem;
+    }
+    
+    .package-description {
+        -webkit-line-clamp: 3;
+    }
+}

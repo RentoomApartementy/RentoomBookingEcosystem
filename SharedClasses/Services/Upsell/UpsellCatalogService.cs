@@ -17,6 +17,8 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
     public interface IUpsellCatalogService
     {
         Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentItemId, string culture, string CurrentApp,  CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<UpsellTileDto>> GetAvailableUpsellTilesAsync(string culture, string CurrentApp, CancellationToken cancellationToken = default);
+        Task<List<int>> GetApartmentIdsForUpsellAsync(int upsellId, CancellationToken cancellationToken = default);
     }
 
     public class UpsellCatalogService : IUpsellCatalogService
@@ -30,17 +32,27 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
             this.storageOptions = storageOptions;
         }
 
-      /*  public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync_RentoomBooking(int apartmentItemId, string culture, CancellationToken cancellationToken = default)
+        public async Task<List<int>> GetApartmentIdsForUpsellAsync(int upsellId, CancellationToken cancellationToken = default)
         {
-            return await GetUpsellTilesForApartmentAsync(apartmentItemId, culture,true,false, cancellationToken);
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+            return await dbContext.PartnerServiceTargets
+                .AsNoTracking()
+                .Where(t => t.ServiceId == upsellId && t.TargetType == PartnerServiceTargetType.Apartment)
+                .Select(t => t.TargetId)
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync_StayWell(int apartmentItemId, string culture, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<UpsellTileDto>> GetAvailableUpsellTilesAsync(string culture, string CurrentApp, CancellationToken cancellationToken = default)
         {
-            return await GetUpsellTilesForApartmentAsync(apartmentItemId, culture, false, true, cancellationToken);
+            return await FetchUpsellTilesAsync(null, culture, CurrentApp, cancellationToken);
         }
-      */
+
         public async Task<IReadOnlyList<UpsellTileDto>> GetUpsellTilesForApartmentAsync(int apartmentItemId, string culture, string CurrentApp, CancellationToken cancellationToken = default)
+        {
+            return await FetchUpsellTilesAsync(apartmentItemId, culture, CurrentApp, cancellationToken);
+        }
+
+        private async Task<IReadOnlyList<UpsellTileDto>> FetchUpsellTilesAsync(int? apartmentItemId, string culture, string CurrentApp, CancellationToken cancellationToken = default)
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
@@ -68,15 +80,14 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 query = query.Where(s => s.VisibleInStayWell || s.VisibleInRentoomBooking);
             }
 
-
-
-            query = query.Where(s => !s.Targets.Any() || s.Targets.Any(t => t.TargetType == PartnerServiceTargetType.Apartment && t.TargetId == apartmentItemId));
+            if (apartmentItemId.HasValue)
+            {
+                query = query.Where(s => !s.Targets.Any() || s.Targets.Any(t => t.TargetType == PartnerServiceTargetType.Apartment && t.TargetId == apartmentItemId.Value));
+            }
 
             var applicableServices = await query
                 .OrderBy(service => service.Sequence)
                 .ToListAsync(cancellationToken);
-
-          //  var applicableServices = services.Where(service => AppliesToApartment(service, apartmentItemId)).ToList();
 
             var tiles = new List<UpsellTileDto>(applicableServices.Count);
             foreach (var service in applicableServices)

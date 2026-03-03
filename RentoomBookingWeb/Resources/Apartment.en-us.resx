@@ -128,4 +128,10 @@
     <data name="CheckOutTimeFormat" xml:space="preserve">
         <value>Check-out: by 11:00</value>
     </data>
+    <data name="SelectedPackage" xml:space="preserve">
+        <value>Selected package</value>
+    </data>
+    <data name="Package" xml:space="preserve">
+        <value>Package</value>
+    </data>
 </root>
