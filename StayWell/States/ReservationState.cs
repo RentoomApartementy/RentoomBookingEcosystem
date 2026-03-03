@@ -5,16 +5,14 @@ using System.Net;
 
 namespace RentoomBooking.StayWell.States
 {
-/* https://learn.microsoft.com/en-us/aspnet/core/blazor/state-management/?view=aspnetcore-9.0#url */
     public class ReservationState(BackendApi backendApi)
     {
         private RentoomReservation? _reservation;
         private readonly BackendApi _backendApi = backendApi;
         private string? _currentToken;
         private HttpStatusCode? _currentStatus;
-        // Rezerwacja jest poprawna
-        public bool IsValidReservation => CurrentReservation != null && CurrentStatus == System.Net.HttpStatusCode.OK;
-        // Rezerwacja jest aktywna (trwa)
+
+        public bool IsValidReservation => CurrentReservation != null && CurrentStatus == HttpStatusCode.OK;
         public bool IsActiveReservation => CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom() <= DateTime.Now && DateTime.Now <= CurrentReservation?.Reservation?.ReservationDetails?.getDateTo();
 
         public RentoomReservation? CurrentReservation
@@ -29,52 +27,53 @@ namespace RentoomBooking.StayWell.States
 
         public string? CurrentToken => _currentToken;
         public HttpStatusCode? CurrentStatus => _currentStatus;
+        public event Action? OnChange;
+        public bool IsLoading { get; private set; }
 
         public async Task<RentoomReservation?> GetReservationAsync(string token)
         {
-            if (_currentToken == token) return CurrentReservation; 
+            if (_currentToken == token && _reservation != null) return CurrentReservation;
 
             SetLoading(true);
             try
             {
-                if (_backendApi == null) 
-                { 
-                    ClearReservation(); 
-                    return null; 
-                }
-
-                var reservation = await _backendApi.GetReservationByTokenAsync(token);
-                _currentStatus = reservation?.StatusCode;
-
-                if(reservation?.StatusCode == System.Net.HttpStatusCode.Gone)
+                if (_backendApi == null)
                 {
-                    CurrentReservation = null;
-                    _currentToken = token;
-
+                    ClearReservation();
                     return null;
                 }
 
-                if (reservation == null) ClearReservation();
+                var response = await _backendApi.GetReservationByTokenAsync(token);
 
+                _currentStatus = response?.StatusCode;
                 _currentToken = token;
-                CurrentReservation = reservation?.Reservation;
 
-                return CurrentReservation;
+                if (response?.StatusCode == HttpStatusCode.Gone)
+                {
+                    _reservation = null;
+                }
+                else
+                {
+                    _reservation = response?.Reservation;
+                }
+
+                NotifyStateChanged();
+                return _reservation;
+            }
+            catch
+            {
+                ClearReservation();
+                return null;
             }
             finally
             {
                 SetLoading(false);
             }
-
-
         }
-
-        public event Action? OnChange;
-        public bool IsLoading { get; private set; }
 
         public void SetReservation(RentoomReservation? reservation)
         {
-            CurrentReservation = reservation;
+            _reservation = reservation;
             IsLoading = false;
             NotifyStateChanged();
         }
@@ -87,13 +86,13 @@ namespace RentoomBooking.StayWell.States
 
         public void ClearReservation()
         {
-            CurrentReservation = null;
             _currentToken = null;
+            _currentStatus = null;
+            _reservation = null;
             IsLoading = false;
+            NotifyStateChanged();
         }
 
         private void NotifyStateChanged() => OnChange?.Invoke();
-
-
     }
 }
