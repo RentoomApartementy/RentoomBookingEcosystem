@@ -252,25 +252,47 @@
         public string Code { get; set; } = "";
         public string Region { get; set; } = "";
         public string Flag { get; set; } = "";
-        public string Display => $"{Flag} +{Code}";
+        public string Display => $"{Flag} {Region} +{Code}";
     }
 
-    private List<CountryPrefix> _countryPrefixes = new()
+    private List<CountryPrefix> _countryPrefixes = new();
+
+    private void InitializeCountryPrefixes()
     {
-        new CountryPrefix { Code = "48", Region = "PL", Flag = "🇵🇱" },
-        new CountryPrefix { Code = "44", Region = "GB", Flag = "🇬🇧" },
-        new CountryPrefix { Code = "49", Region = "DE", Flag = "🇩🇪" },
-        new CountryPrefix { Code = "1",  Region = "US", Flag = "🇺🇸" },
-        new CountryPrefix { Code = "420", Region = "CZ", Flag = "🇨🇿" },
-        new CountryPrefix { Code = "421", Region = "SK", Flag = "🇸🇰" },
-        new CountryPrefix { Code = "380", Region = "UA", Flag = "🇺🇦" },
-        new CountryPrefix { Code = "33", Region = "FR", Flag = "🇫🇷" },
-        new CountryPrefix { Code = "34", Region = "ES", Flag = "🇪🇸" },
-        new CountryPrefix { Code = "39", Region = "IT", Flag = "🇮🇹" },
-        new CountryPrefix { Code = "31", Region = "NL", Flag = "🇳🇱" },
-        new CountryPrefix { Code = "47", Region = "NO", Flag = "🇳🇴" },
-        new CountryPrefix { Code = "46", Region = "SE", Flag = "🇸🇪" }
-    };
+        var regions = _phoneUtil.GetSupportedRegions();
+        var list = new List<CountryPrefix>();
+
+        foreach (var region in regions)
+        {
+            var code = _phoneUtil.GetCountryCodeForRegion(region);
+            if (code == 0) continue;
+
+            list.Add(new CountryPrefix
+            {
+                Code = code.ToString(),
+                Region = region,
+                Flag = GetFlag(region)
+            });
+        }
+
+        _countryPrefixes = list
+            .OrderBy(x => x.Region == "PL" ? 0 : 1)
+            .ThenBy(x => x.Region)
+            .ToList();
+    }
+
+    private string GetFlag(string region)
+    {
+        if (string.IsNullOrEmpty(region) || region.Length != 2 || region == "ZZ") return "🌐";
+        try
+        {
+            return string.Concat(region.ToUpper().Select(c => char.ConvertFromUtf32(c + 0x1F1A5)));
+        }
+        catch
+        {
+            return "🌐";
+        }
+    }
 
     private bool IsSubmitDisabled => _isSaving || !IsFormComplete();
     
@@ -349,6 +371,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        InitializeCountryPrefixes();
         _editContext = new EditContext(_form);
         _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
 
