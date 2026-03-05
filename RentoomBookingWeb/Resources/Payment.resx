@@ -201,4 +201,10 @@
     <data name="Required" xml:space="preserve">
         <value />
     </data>
+    <data name="FillAllDataError" xml:space="preserve">
+        <value />
+    </data>
+    <data name="InvalidEmailError" xml:space="preserve">
+        <value />
+    </data>
 </root>
