@@ -1,19 +1,74 @@
 @using System.Text
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using RentoomBooking.SharedClasses.Services.Upsell
+@using RentoomBooking.SharedClasses.Models.Upsell
 @inject IApartmentSearchFiltersService ApartmentSearchFiltersService
 @inject NavigationManager Navigation
 @using RentoomBookingWeb.Components.Enums
 @using Microsoft.Extensions.Localization
 @using System.Web
+@using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 
-<button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
-    <img src="assets/svgs/mobile-filters.svg" alt="" style="color: black;">
-    <span>@Localizer["Filters"]</span>
-</button>
+<div class="mobile-filter-wrapper">
+    <button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
+        <div class="trigger-content">
+            <img src="assets/svgs/mobile-filters.svg" alt="" class="trigger-icon">
+            <span class="trigger-text">@Localizer["Filters"]</span>
+            @if (GetSelectedCount() > 0)
+            {
+                <span class="filter-badge">@GetSelectedCount()</span>
+            }
+        </div>
+        <div class="trigger-arrow">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+    </button>
+
+    @if (HasSelectedFilters)
+    {
+        <div class="active-filters-pills">
+            @foreach (var loc in _locations.Where(l => l.IsSelected))
+            {
+                <div class="filter-pill" @onclick="() => OnLocationChanged(loc)">
+                    @Localizer[loc.Name]
+                    <span class="pill-remove">&times;</span>
+                </div>
+            }
+            @foreach (var filter in _filterOptions.Where(f => f.IsSelected))
+            {
+                <div class="filter-pill" @onclick="() => OnFilterChanged(filter)">
+                    @Localizer[filter.Name]
+                    <span class="pill-remove">&times;</span>
+                </div>
+            }
+            @if (_selectedUpsell != null)
+            {
+                <div class="filter-pill" @onclick="ResetUpsellOnly">
+                    @Localizer["Package"]: @_selectedUpsell.Title
+                    <span class="pill-remove">&times;</span>
+                </div>
+            }
+            @if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer)
+            {
+                <div class="filter-pill" @onclick="ResetPriceOnly">
+                    @_minPrice - @_maxPrice zł
+                    <span class="pill-remove">&times;</span>
+                </div>
+            }
+        </div>
+    }
+</div>
 
 <div class="filters-container @(_isMobileFiltersOpen ? "active" : "")">
     
+    @if (_isMobileFiltersOpen)
+    {
+        <button class="close-filters-btn" @onclick="ToggleMobileFilters">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+    }
+
     @if (_isLoading)
     {
         @for (int i = 0; i < 9; i++)
@@ -23,6 +78,18 @@
     }
     else
     {
+        @if (_selectedUpsell != null)
+        {
+            <div class="selected-upsell-sidebar">
+                <p class="filters-title">@Localizer["SelectedPackage"]</p>
+                <div class="filter-option selected" @onclick="ResetUpsellOnly" style="cursor: pointer;">
+                    <img class="filter-icon small-icon" src="assets/svgs/kid_star.svg" alt="">
+                    <span>@_selectedUpsell.Title</span>
+                </div>
+                <hr/>
+            </div>
+        }
+
         @if (!IsMapActive)
         {
             <div @onclick="HandleClickOnMapFilter" class="map-filter">
@@ -35,15 +102,15 @@
         <div class="filters">
             @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
             {
-                <div class="@(option.IsSelected ? "filter-option selected" : "filter-option")">
+                <label class="@(option.IsSelected ? "filter-option selected" : "filter-option")" for="@option.Id">
                     <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
                     <input type="checkbox"
                            id="@option.Id"
                            checked="@option.IsSelected"
                            @onchange="(e) => OnLocationChanged(option)"
                            style="position:absolute; opacity:0; width:0; height:0;"/>
-                    <label for="@option.Id">@Localizer[option.Name]</label>
-                </div>
+                    <span>@Localizer[option.Name]</span>
+                </label>
             }
         </div>
         
@@ -68,15 +135,15 @@
         <div class="filters">
             @foreach (var filter in _filterOptions)
             {
-                <div class="@(filter.IsSelected ? "filter-option selected" : "filter-option")">
+                <label class="@(filter.IsSelected ? "filter-option selected" : "filter-option")" for="@filter.Id">
                     <img class="filter-icon" src="@($"/assets/svgs/filter/{filter.Icon}.svg")" alt="@filter.Name">
                     <input type="checkbox"
                            id="@filter.Id"
                            checked="@filter.IsSelected"
                            @onchange="(e) => OnFilterChanged(filter)"
                            style="position:absolute; opacity:0; width:0; height:0;"/>
-                    <label for="@filter.Id">@Localizer[filter.Name]</label>
-                </div>
+                    <span>@Localizer[filter.Name]</span>
+                </label>
             }
         </div>
         
@@ -106,8 +173,11 @@
     [Parameter] public EventCallback<(ApartmentFilters Filters, int MinPrice, int MaxPrice)> OnFiltersChanged { get; set; }
     [Parameter] public EventCallback OnClickOnMap { get; set; }
 
+    [Inject] IUpsellCatalogService UpsellCatalogService { get; set; } = default!;
+
     private List<FilterOption> _locations = new();
     private List<FilterOption> _filterOptions = new();
+    private UpsellTileDto? _selectedUpsell;
     private bool _isLoading = false;
     private int _minPrice;
     private int _maxPrice;
@@ -137,6 +207,7 @@
     {
         _isLoading = true;
         try {
+            await LoadUrlUpsell();
             var filters = await ApartmentSearchFiltersService.GetFiltersAsync();
             var locationFilters = filters.FirstOrDefault(f => f.id == "city-regions-filter")?.filtersDictionary.GetValueOrDefault("pl");
             var amenitiesFilters = filters.FirstOrDefault(f => f.id == "amenities-filter")?.filtersDictionary.GetValueOrDefault("pl");
@@ -154,6 +225,17 @@
         { 
             Console.WriteLine($"Error fetching filters definition: {ex.Message}");
             _isLoading = false;
+        }
+    }
+
+    private async Task LoadUrlUpsell()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = HttpUtility.ParseQueryString(uri.Query);
+        if (int.TryParse(query["upsellId"], out int uId))
+        {
+            var upsells = await UpsellCatalogService.GetAvailableUpsellTilesAsync(CultureInfo.CurrentUICulture.Name, "rentoombooking");
+            _selectedUpsell = upsells.FirstOrDefault(u => u.PartnerServiceId == uId);
         }
     }
 
@@ -189,6 +271,9 @@
         var selectedFilterIds = _filterOptions.Where(f => f.IsSelected).Select(f => f.Id).ToList();
         if (selectedFilterIds.Any()) query["filters"] = string.Join(",", selectedFilterIds);
         else query.Remove("filters");
+
+        if (_selectedUpsell != null) query["upsellId"] = _selectedUpsell.PartnerServiceId.ToString();
+        else query.Remove("upsellId");
 
         if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer)
         {
@@ -228,6 +313,11 @@
             ApartmentLocationsFilter = _locations.Where(l => l.IsSelected).Select(l => l.Name).ToList()
         };
 
+        if (_selectedUpsell != null)
+        {
+            filters.ApartmentAddonFilter = new List<int> { _selectedUpsell.PartnerServiceId };
+        }
+
         var priceFilters = new OfferPriceFilter
         {
             PriceFrom = _minPrice,
@@ -241,6 +331,7 @@
     {
         foreach (var location in _locations) location.IsSelected = false;
         foreach (var filter in _filterOptions) filter.IsSelected = false;
+        _selectedUpsell = null;
         
         _minPrice = MinPriceOffer;
         _maxPrice = MaxPriceOffer;
@@ -249,12 +340,36 @@
         await ApplyFilters();
     }
 
+    private async Task ResetPriceOnly()
+    {
+        _minPrice = MinPriceOffer;
+        _maxPrice = MaxPriceOffer;
+        UpdateUrl();
+        await ApplyFilters();
+    }
+
+    private async Task ResetUpsellOnly()
+    {
+        _selectedUpsell = null;
+        UpdateUrl();
+        await ApplyFilters();
+    }
+
+    private int GetSelectedCount()
+    {
+        int count = _locations.Count(l => l.IsSelected) + _filterOptions.Count(f => f.IsSelected);
+        if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer) count++;
+        if (_selectedUpsell != null) count++;
+        return count;
+    }
+
     private void ToggleMobileFilters() => _isMobileFiltersOpen = !_isMobileFiltersOpen;
     private async Task HandleClickOnMapFilter() => await OnClickOnMap.InvokeAsync();
 
     private bool HasSelectedFilters => 
         _locations.Any(l => l.IsSelected) || 
         _filterOptions.Any(f => f.IsSelected) || 
+        _selectedUpsell != null ||
         (_minPrice > MinPriceOffer && MinPriceOffer > 0) || 
         (_maxPrice < MaxPriceOffer && MaxPriceOffer > 0);
 

@@ -51,9 +51,33 @@
         <value>guests</value>
     </data>
     <data name="ChildrenUnder2" xml:space="preserve">
-        <value>Children under 2</value>
+        <value>Children</value>
     </data>
     <data name="Adults" xml:space="preserve">
-        <value>Adults</value>
+        <value>Guests (over 2 years old)</value>
+    </data>
+    <data name="Guests" xml:space="preserve">
+        <value>Guests</value>
+    </data>
+    <data name="Dates" xml:space="preserve">
+        <value>Dates</value>
+    </data>
+    <data name="AdultSingle" xml:space="preserve">
+        <value>adult</value>
+    </data>
+    <data name="AdultPlural" xml:space="preserve">
+        <value>adults</value>
+    </data>
+    <data name="ChildPlural" xml:space="preserve">
+        <value>children</value>
+    </data>
+    <data name="ChildSingle" xml:space="preserve">
+        <value>child</value>
+    </data>
+    <data name="ClickToSelectDate" xml:space="preserve">
+        <value>Click to select date</value>
+    </data>
+    <data name="CheckApartmentsWithOffer" xml:space="preserve">
+        <value>View apartments with this offer</value>
     </data>
 </root>

@@ -5,6 +5,7 @@
 @using RentoomBookingWeb.Components.Shared
 @using RentoomBookingWeb.Services
 @using RentoomBooking.SharedClasses.Services.Gus
+@using PhoneNumbers
 @inject IApartmentsService ApartmentsService
 @inject IReservationWorkflowService ReservationWorkflowService
 @inject IGusService GusService
@@ -40,59 +41,75 @@
                     <div class="form-item">
                         <div class="form-two-items">
                             <div class="input-wrapper">
-                                <small>@Localizer["Name"]</small>
+                                <small>@Localizer["Name"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                                 <Input Placeholder="@Localizer["Name"]" IsFull="true" @bind-Value="_form.Client.FirstName"/>
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["LastName"]</small>
+                                <small>@Localizer["LastName"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                                 <Input Placeholder="@Localizer["LastName"]" IsFull="true" @bind-Value="_form.Client.LastName"/>
                             </div>
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["City"]</small>
+                            <small>@Localizer["City"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                             <Input Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Client.City"/>
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["Address"]</small>
+                            <small>@Localizer["Address"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                             <Input Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Client.Street"/>
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["PostalCode"]</small>
+                            <small>@Localizer["PostalCode"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                             <Input Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Client.ZipCode"/>
                         </div>
                         <div class="form-two-items">
                             <div class="input-wrapper">
-                                <small>@Localizer["Email"]</small>
+                                <small>@Localizer["Email"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                                 <Input Placeholder="@Localizer["Email"]" IsFull="true" @bind-Value="_form.Client.Email"/>
                             </div>
-                            <div class="input-wrapper">
-                                <small>@Localizer["Phone"]</small>
-                                <div class="form-two-items">
-                                    <div class="input-wrapper phone-country-code-wrapper">
-                                        <small>+ kod państwa</small>
-                                        <Input  IsFull="true" @bind-Value="PhoneCountryCode"/>
+                        </div>
+                        
+                        <div class="input-wrapper">
+                            <small>@Localizer["Phone"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                            <div class="phone-grid-container">
+                                <div class="input-wrapper phone-prefix-container">
+                                    <div class="custom-input">
+                                        <select class="prefix-select" @bind="PhoneCountryCode">
+                                            @foreach (var prefix in _countryPrefixes)
+                                            {
+                                                <option value="@prefix.Code">@prefix.Display</option>
+                                            }
+                                        </select>
                                     </div>
-                                    <div class="input-wrapper">
-                                        <small>@Localizer["Phone"]</small>
-                                        <Input  IsFull="true" @bind-Value="PhoneNumber"/>
+                                </div>
+                                <div class="input-wrapper phone-number-container">
+                                    <div class="custom-input">
+                                        <input type="text"
+                                               maxlength="20"
+                                               @bind="PhoneNumber" 
+                                               @bind:event="oninput" 
+                                               placeholder="@DynamicPlaceholder" />
                                     </div>
                                 </div>
                             </div>
+                            @if (!string.IsNullOrEmpty(_phoneError))
+                            {
+                                <small class="text-danger" style="display: block; margin-top: 4px;">@_phoneError</small>
+                            }
                         </div>
                     </div>
 
                     <hr>
 
                     <label class="addon-label">
-                        <input type="checkbox" class="addon-checkbox" @bind="_form.UseInvoice"/>
+                        <input type="checkbox" class="addon-checkbox" @bind="UseInvoice"/>
                         <span class="addon-name">@Localizer["IsInvoiceText"]</span>
                     </label>
                     
                     <div class="form-item mt-1 mb-2">
-                        @if (_form.UseInvoice)
+                        @if (UseInvoice)
                         {
                             <div class="input-wrapper">
-                                <small>NIP</small>
+                                <small>NIP <span style="color: #999;">(@Localizer["Required"])</span></small>
                                 <div class="">
                                     <Input Placeholder="NIP" IsFull="true" @bind-Value="_form.Invoice.TaxNumber"/>
                                     <small class="download-nip-button" @onclick="DownloadGusDataAsync" style="cursor: pointer; color: var(--primary);">
@@ -101,35 +118,29 @@
                                 </div>
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["CompanyName"]</small>
+                                <small>@Localizer["CompanyName"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                                 <Input Placeholder="@Localizer["CompanyName"]" IsFull="true" @bind-Value="_form.Invoice.CompanyName"/>
                             </div>
                             <div class="form-two-items">
                                 <div class="input-wrapper">
-                                    <small>@Localizer["City"]</small>
+                                    <small>@Localizer["City"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                                     <Input Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Invoice.City"/>
                                 </div>
                                 <div class="input-wrapper">
-                                    <small>@Localizer["Address"]</small>
+                                    <small>@Localizer["Address"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                                     <Input Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Invoice.Street"/>
                                 </div>
                                 <div class="input-wrapper">
-                                    <small>@Localizer["PostalCode"]</small>
+                                    <small>@Localizer["PostalCode"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                                     <Input Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Invoice.ZipCode"/>
                                 </div>
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["Email"]</small>
+                                <small>@Localizer["Email"] <span style="color: #999;">(@Localizer["Required"])</span></small>
                                 <Input Placeholder="@Localizer["Email"]" IsFull="true" @bind-Value="_form.Invoice.Email"/>
                             </div>
                         }
                     </div>
-
-                   @* <label class="addon-label">
-                        <input type="checkbox" class="addon-checkbox"/>
-                        <span class="addon-name">@Localizer["IsSaveInfoText"]</span>
-                    </label>
-                    *@
                 </div>
 
                 @if (!string.IsNullOrEmpty(_error))
@@ -161,118 +172,209 @@
     private bool _isFetchingGus;
     private string? _error;
     private string _phoneCountryCode = "48";
-    private string _phoneNumber = string.Empty;
+    private string _phoneNumberDisplay = string.Empty; 
+    private string _phoneNumberRaw = string.Empty;     
     private ReservationSummaryDto? _summary;
+    private string _phoneError = string.Empty;
+
+    private static readonly PhoneNumberUtil _phoneUtil = PhoneNumberUtil.GetInstance();
+
+    private class CountryPrefix
+    {
+        public string Code { get; set; } = "";
+        public string Region { get; set; } = "";
+        public string Flag { get; set; } = "";
+        public string Display => $"{Flag} +{Code}";
+    }
+
+    private List<CountryPrefix> _countryPrefixes = new()
+    {
+        new CountryPrefix { Code = "48", Region = "PL", Flag = "🇵🇱" },
+        new CountryPrefix { Code = "44", Region = "GB", Flag = "🇬🇧" },
+        new CountryPrefix { Code = "49", Region = "DE", Flag = "🇩🇪" },
+        new CountryPrefix { Code = "1",  Region = "US", Flag = "🇺🇸" },
+        new CountryPrefix { Code = "420", Region = "CZ", Flag = "🇨🇿" },
+        new CountryPrefix { Code = "421", Region = "SK", Flag = "🇸🇰" },
+        new CountryPrefix { Code = "380", Region = "UA", Flag = "🇺🇦" },
+        new CountryPrefix { Code = "33", Region = "FR", Flag = "🇫🇷" },
+        new CountryPrefix { Code = "34", Region = "ES", Flag = "🇪🇸" },
+        new CountryPrefix { Code = "39", Region = "IT", Flag = "🇮🇹" },
+        new CountryPrefix { Code = "31", Region = "NL", Flag = "🇳🇱" },
+        new CountryPrefix { Code = "47", Region = "NO", Flag = "🇳🇴" },
+        new CountryPrefix { Code = "46", Region = "SE", Flag = "🇸🇪" }
+    };
 
     private bool IsSubmitDisabled => _isSaving || !IsFormComplete();
+    
+    private bool UseInvoice
+    {
+        get => _form.UseInvoice;
+        set
+        {
+            _form.UseInvoice = value;
+            if (value && string.IsNullOrWhiteSpace(_form.Invoice.Email) && !string.IsNullOrWhiteSpace(_form.Client.Email))
+            {
+                _form.Invoice.Email = _form.Client.Email;
+            }
+        }
+    }
+
     private string PhoneCountryCode
     {
         get => _phoneCountryCode;
         set
         {
-            _phoneCountryCode = DigitsOnly(value);
-            BuildPhoneNumber();
+            _phoneCountryCode = value;
+            PhoneNumber = _phoneNumberRaw; 
         }
     }
 
     private string PhoneNumber
     {
-        get => _phoneNumber;
+        get => _phoneNumberDisplay;
         set
         {
-            _phoneNumber = DigitsOnly(value);
-            BuildPhoneNumber();
+            _phoneNumberRaw = DigitsOnly(value);
+            _phoneNumberDisplay = FormatAsYouType(_phoneNumberRaw);
+            ValidateAndBuildPhone();
         }
+    }
+
+    private string DynamicPlaceholder
+    {
+        get
+        {
+            var selectedPrefix = _countryPrefixes.FirstOrDefault(c => c.Code == _phoneCountryCode);
+            if (selectedPrefix != null && !string.IsNullOrEmpty(selectedPrefix.Region))
+            {
+                var exampleNumber = _phoneUtil.GetExampleNumberForType(selectedPrefix.Region, PhoneNumberType.MOBILE);
+                
+                if (exampleNumber != null)
+                {
+                    return _phoneUtil.Format(exampleNumber, PhoneNumberFormat.NATIONAL);
+                }
+            }
+            return "123 456 789"; 
+        }
+    }
+
+    private string FormatAsYouType(string digits)
+    {
+        var selectedPrefix = _countryPrefixes.FirstOrDefault(c => c.Code == _phoneCountryCode);
+        if (selectedPrefix == null || string.IsNullOrEmpty(selectedPrefix.Region)) 
+        {
+            return digits;
+        }
+
+        var formatter = _phoneUtil.GetAsYouTypeFormatter(selectedPrefix.Region);
+        formatter.Clear();
+        string formatted = "";
+        
+        foreach (char c in digits)
+        {
+            formatted = formatter.InputDigit(c);
+        }
+        
+        return formatted;
     }
 
     protected override async Task OnInitializedAsync()
     {
-        //_form.Client = MockupClient();
-        ParsePhoneNumber(_form.Client.Phone);
         _editContext = new EditContext(_form);
-
-        //_summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
         _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
 
         if (_summary != null)
         {
+            if (_summary.Client != null)
+            {
+                _form.Client = _summary.Client;
+            }
+            if (_summary.Invoice != null)
+            {
+                _form.Invoice = _summary.Invoice;
+                _form.UseInvoice = true;
+            }
+
             if (_summary.StartRequest?.ObjectId != null)
             {
                 _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
             }
         }
+
+        ParsePhoneNumber(_form.Client.Phone);
+        // Ponownie inicjalizujemy, aby uwzględnić zaktualizowane dane w _form
+        _editContext = new EditContext(_form);
     }
 
     private async Task DownloadGusDataAsync()
     {
         if (_isFetchingGus) return;
-
         var nip = _form.Invoice.TaxNumber;
-        if (string.IsNullOrWhiteSpace(nip))
-        {
-            _error = Localizer["NoNipError"];
-            return;
-        }
-
-        _isFetchingGus = true;
-        _error = null;
-
+        if (string.IsNullOrWhiteSpace(nip)) { _error = Localizer["NoNipError"]; return; }
+        _isFetchingGus = true; _error = null;
         try
         {
             var data = await GusService.GetCompanyInfoByNipAsync(nip);
-
             if (data != null)
             {
                 _form.Invoice.CompanyName = data.Nazwa;
                 _form.Invoice.City = data.Miejscowosc;
                 _form.Invoice.ZipCode = data.KodPocztowy;
                 _form.Invoice.Street = $"{data.Ulica} {data.NrNieruchomosci}".Trim();
-
-                if (!string.IsNullOrEmpty(data.NrLokalu))
-                {
-                    _form.Invoice.Street += $"/{data.NrLokalu}";
-                }
-
+                if (!string.IsNullOrEmpty(data.NrLokalu)) _form.Invoice.Street += $"/{data.NrLokalu}";
                 _form.Invoice.Street = _form.Invoice.Street.Trim();
                 _error = null;
             }
-            else
-            {
-                _error = Localizer["NoGusInfo"];
-            }
+            else { _error = Localizer["NoGusInfo"]; }
         }
-        catch (Exception ex)
-        {
-            // _error = $"Błąd: {ex.Message}"; 
-            // Console.WriteLine(ex.ToString());
-            _error = Localizer["GusError"];
-        }
-        finally
-        {
-            _isFetchingGus = false;
-        }
+        catch (Exception) { _error = Localizer["GusError"]; }
+        finally { _isFetchingGus = false; }
     }
 
     private async Task SaveAsync()
     {
         if (_isSaving) return;
-
-        BuildPhoneNumber();
-        _isSaving = true;
-        _error = null;
-
+        ValidateAndBuildPhone();
+        if (!IsFormComplete()) return;
+        _isSaving = true; _error = null;
         try
         {
             await ReservationWorkflowService.SaveClientInfoAsync(ReservationTokenGuid, _form.Client, _form.UseInvoice ? _form.Invoice : null);
             Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
         }
-        catch (Exception ex)
+        catch (Exception ex) { _error = "Nie udało się zapisać danych klienta. " + ex.Message ; }
+        finally { _isSaving = false; }
+    }
+
+    private void ValidateAndBuildPhone()
+    {
+        _phoneError = string.Empty;
+        var cleanPrefix = DigitsOnly(_phoneCountryCode);
+        
+        if (string.IsNullOrWhiteSpace(cleanPrefix) || string.IsNullOrWhiteSpace(_phoneNumberRaw)) 
         {
-            _error = "Nie udało się zapisać danych klienta." + ex.Message ;
+            _form.Client.Phone = string.Empty;
+            return;
         }
-        finally
+
+        try
         {
-            _isSaving = false;
+            var fullNumberToParse = $"+{cleanPrefix}{_phoneNumberRaw}";
+            PhoneNumber numberProto = _phoneUtil.Parse(fullNumberToParse, null);
+
+            if (_phoneUtil.IsValidNumber(numberProto))
+            {
+                _form.Client.Phone = $"+{numberProto.CountryCode}.{numberProto.NationalNumber}";
+                _phoneError = string.Empty;
+            }
+            else
+            {
+                _form.Client.Phone = string.Empty;
+            }
+        }
+        catch (NumberParseException)
+        {
+            _form.Client.Phone = string.Empty;
         }
     }
 
@@ -282,44 +384,37 @@
 
         if (string.IsNullOrWhiteSpace(normalizedPhone))
         {
-            _phoneCountryCode = string.Empty;
-            _phoneNumber = string.Empty;
+            _phoneCountryCode = "48";
+            PhoneNumber = string.Empty; 
             return;
         }
 
-        if (normalizedPhone.StartsWith('+'))
+        if (normalizedPhone.Contains('.'))
         {
-            var splitPhone = normalizedPhone[1..].Split('.', 2, StringSplitOptions.TrimEntries);
+            var splitPhone = normalizedPhone.TrimStart('+').Split('.', 2, StringSplitOptions.TrimEntries);
             _phoneCountryCode = DigitsOnly(splitPhone.ElementAtOrDefault(0));
-            _phoneNumber = DigitsOnly(splitPhone.ElementAtOrDefault(1));
+            PhoneNumber = splitPhone.ElementAtOrDefault(1) ?? string.Empty;
         }
         else
         {
-            _phoneCountryCode = string.Empty;
-            _phoneNumber = DigitsOnly(normalizedPhone);
+            try
+            {
+                var fullNumber = normalizedPhone.StartsWith("+") ? normalizedPhone : "+" + normalizedPhone;
+                PhoneNumber numberProto = _phoneUtil.Parse(fullNumber, null);
+                _phoneCountryCode = numberProto.CountryCode.ToString();
+                PhoneNumber = numberProto.NationalNumber.ToString();
+            }
+            catch
+            {
+                _phoneCountryCode = string.Empty;
+                PhoneNumber = DigitsOnly(normalizedPhone);
+            }
         }
-
-        BuildPhoneNumber();
-    }
-
-    private void BuildPhoneNumber()
-    {
-        var hasCountryCode = !string.IsNullOrWhiteSpace(_phoneCountryCode);
-        var hasPhoneNumber = !string.IsNullOrWhiteSpace(_phoneNumber);
-
-        if (!hasCountryCode && !hasPhoneNumber)
+        
+        if (!string.IsNullOrEmpty(_phoneCountryCode) && !_countryPrefixes.Any(x => x.Code == _phoneCountryCode))
         {
-            _form.Client.Phone = string.Empty;
-            return;
+            _countryPrefixes.Add(new CountryPrefix { Code = _phoneCountryCode, Region = "ZZ", Flag = "🌐" });
         }
-
-        if (!hasCountryCode || !hasPhoneNumber)
-        {
-            _form.Client.Phone = string.Empty;
-            return;
-        }
-
-        _form.Client.Phone = $"+{_phoneCountryCode}.{_phoneNumber}";
     }
 
     private bool IsFormComplete()
@@ -331,16 +426,12 @@
             !HasValue(_form.Client.ZipCode) ||
             !HasValue(_form.Client.Email) ||
             !IsValidEmail(_form.Client.Email) ||
-            !HasValue(_phoneCountryCode) ||
-            !HasValue(_phoneNumber))
+            !HasValue(_form.Client.Phone)) 
         {
             return false;
         }
 
-        if (!_form.UseInvoice)
-        {
-            return true;
-        }
+        if (!_form.UseInvoice) return true;
 
         return HasValue(_form.Invoice.TaxNumber) &&
                HasValue(_form.Invoice.CompanyName) &&
@@ -351,94 +442,33 @@
                IsValidEmail(_form.Invoice.Email);
     }
 
-    private static bool IsValidEmailold(string? value)
+    public bool IsValidEmail(string? email)
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return false;
-        }
-
-        //var validator = new EmailAddressAttribute();
-        try{
-            var validator = new MailAddress(value);
-            return true;
-        }catch{
-            return false;
-        }
-        //return validator.IsValid(value.Trim());
-    }
-
-    //https://learn.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format?redirectedfrom=MSDN
-    public  bool IsValidEmail(string? email)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-            return false;
-
+        if (string.IsNullOrWhiteSpace(email)) return false;
         try
         {
-            // Normalize the domain
-            email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
-                                  RegexOptions.None, TimeSpan.FromMilliseconds(200));
-
-            // Examines the domain part of the email and normalizes it.
+            email = Regex.Replace(email, @"(@)(.+)$", DomainMapper, RegexOptions.None, TimeSpan.FromMilliseconds(200));
             string DomainMapper(Match match)
             {
-                // Use IdnMapping class to convert Unicode domain names.
                 var idn = new IdnMapping();
-
-                // Pull out and process domain name (throws ArgumentException on invalid)
                 string domainName = idn.GetAscii(match.Groups[2].Value);
-
                 return match.Groups[1].Value + domainName;
             }
         }
-        catch (RegexMatchTimeoutException e)
-        {
-            return false;
-        }
-        catch (ArgumentException e)
-        {
-            return false;
-        }
+        catch (Exception) { return false; }
 
         try
         {
-            return Regex.IsMatch(email,
-                @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
-                RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
         }
-        catch (RegexMatchTimeoutException)
-        {
-            return false;
-        }
+        catch (RegexMatchTimeoutException) { return false; }
     }
-
-
 
     private static bool HasValue(string? value) => !string.IsNullOrWhiteSpace(value);
-
     private static string DigitsOnly(string? value)
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return string.Empty;
-        }
-
+        if (string.IsNullOrWhiteSpace(value)) return string.Empty;
         return new string(value.Where(char.IsDigit).ToArray());
-    }
-
-    private ClientInfoDto MockupClient()
-    {
-        return new ClientInfoDto
-        {
-            FirstName = "Maciej",
-            LastName = "Stanisławski",
-            City = "Kopanino",
-            Street = "Sczęśliwa 2",
-            ZipCode = "87-162",
-            Email = "posith@gmail.com",
-            Phone = "+48.602394436"
-        };
     }
 
     private sealed class PaymentFormModel

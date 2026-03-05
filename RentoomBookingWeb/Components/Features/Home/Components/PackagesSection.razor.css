@@ -1,0 +1,23 @@
+.packages-section-wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+::deep .slider-item-wrapper {
+    padding: 0 !important;
+}
+
+::deep .slider-dots {
+    margin-top: -30px;
+    position: relative;
+    z-index: 10;
+}
+
+::deep .dot {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+::deep .dot.active {
+    background: #fff;
+}

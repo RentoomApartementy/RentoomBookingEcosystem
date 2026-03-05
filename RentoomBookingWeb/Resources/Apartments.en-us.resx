@@ -92,4 +92,10 @@
     <data name="Reset" xml:space="preserve">
         <value>Reset filters</value>
     </data>
+    <data name="SelectedPackage" xml:space="preserve">
+        <value>Selected package</value>
+    </data>
+    <data name="Package" xml:space="preserve">
+        <value>Package</value>
+    </data>
 </root>

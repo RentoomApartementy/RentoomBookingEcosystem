@@ -51,9 +51,33 @@
         <value>os.</value>
     </data>
     <data name="ChildrenUnder2" xml:space="preserve">
-        <value>Dzieci do lat 2</value>
+        <value>Dzieci</value>
     </data>
     <data name="Adults" xml:space="preserve">
-        <value>Dorośli</value>
+        <value>Goście (powyżej 2 lat)</value>
+    </data>
+    <data name="Guests" xml:space="preserve">
+        <value>Goście</value>
+    </data>
+    <data name="Dates" xml:space="preserve">
+        <value>Daty</value>
+    </data>
+    <data name="AdultSingle" xml:space="preserve">
+        <value>dorosły</value>
+    </data>
+    <data name="AdultPlural" xml:space="preserve">
+        <value>dorosłych</value>
+    </data>
+    <data name="ChildSingle" xml:space="preserve">
+        <value>dziecko</value>
+    </data>
+    <data name="ChildPlural" xml:space="preserve">
+        <value>dzieci</value>
+    </data>
+    <data name="ClickToSelectDate" xml:space="preserve">
+        <value>Kliknij, aby wybrać datę</value>
+    </data>
+    <data name="CheckApartmentsWithOffer" xml:space="preserve">
+        <value>Sprawdź apartamenty z tym pakietem</value>
     </data>
 </root>

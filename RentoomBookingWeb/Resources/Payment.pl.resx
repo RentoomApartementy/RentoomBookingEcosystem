@@ -192,4 +192,10 @@
     <data name="NoNipError" xml:space="preserve">
         <value>Proszę wpisać numer NIP</value>
     </data>
+    <data name="Prefix" xml:space="preserve">
+        <value>Numer kierunkowy</value>
+    </data>
+    <data name="Required" xml:space="preserve">
+        <value>Wymagane</value>
+    </data>
 </root>

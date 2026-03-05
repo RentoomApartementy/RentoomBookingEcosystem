@@ -100,8 +100,6 @@
                             }
                         }
                         
-                        <div id="scroll-anchor"></div>
-
                         @if (ViewModel.ApartmentsIsLoading)
                         {
                             <Apartment />
@@ -117,6 +115,8 @@
                     </div>   
                 }
                 
+                <div id="scroll-anchor" style="height: 10px; width: 100%; visibility: @(ViewModel.IsMapView ? "hidden" : "visible"); pointer-events: none;"></div>
+
                 <div class="apartments-items-map" style="display: @(ViewModel.IsMapView ? "block" : "none")">
                     <ApartmentsMap 
                         Offers="@ViewModel.Offers" 

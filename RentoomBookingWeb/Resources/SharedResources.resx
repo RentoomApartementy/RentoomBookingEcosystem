@@ -63,4 +63,28 @@
     <data name="Adults" xml:space="preserve">
         <value />
     </data>
+    <data name="Guests" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Dates" xml:space="preserve">
+        <value />
+    </data>
+    <data name="AdultSingle" xml:space="preserve">
+        <value />
+    </data>
+    <data name="AdultPlural" xml:space="preserve">
+        <value />
+    </data>
+    <data name="ChildSingle" xml:space="preserve">
+        <value />
+    </data>
+    <data name="ChildPlural" xml:space="preserve">
+        <value />
+    </data>
+    <data name="ClickToSelectDate" xml:space="preserve">
+        <value />
+    </data>
+    <data name="CheckApartmentsWithOffer" xml:space="preserve">
+        <value />
+    </data>
 </root>

@@ -208,7 +208,6 @@ namespace RentoomBooking.SharedClasses.Database
       
         private async Task<List<int>> GetApartmentIdsByAmenitiesAsync(IEnumerable<int> amenityIds, CancellationToken cancellationToken)
         {
-           
             var amenityIdSet = amenityIds?
                 .Where(id => id > 0)
                 .Distinct()
@@ -218,20 +217,25 @@ namespace RentoomBooking.SharedClasses.Database
             {
                 return new List<int>();
             }
-            await using var context = _dbContextFactory.CreateDbContext();
-            var amenities = await context.ApartmentAmenities
-                                            .Where(a => amenityIdSet.Contains(a.Id))
-                                            .Select(a => JsonConvert.DeserializeObject<ApartmentAmenitiesDocument>(a.Payload))
-                                            .Where(doc => doc != null &&
-                                                          doc.ApartmentId>0 &&
-                                                          doc.Amenities != null &&
-                                                          amenityIdSet.All(id => doc.Amenities.Any(x => x.Id == id)))
-                                            .ToListAsync();
 
-            var apartmentIds =  amenities.Select(doc => doc.ApartmentId).ToList();
+            await using var context = _dbContextFactory.CreateDbContext();
+            
+            // Pobieramy wszystkie rekordy udogodnień i filtrujemy w pamięci, 
+            // ponieważ deserializacja wewnątrz LINQ i tak wymusza pobranie danych na stronę klienta.
+            // Poprzedni błąd polegał na filtrowaniu po Id rekordu (a.Id), który nie jest Id udogodnienia.
+            var allAmenitiesEntities = await context.ApartmentAmenities.AsNoTracking().ToListAsync();
+            
+            var apartmentIds = allAmenitiesEntities
+                .Select(a => JsonConvert.DeserializeObject<ApartmentAmenitiesDocument>(a.Payload))
+                .Where(doc => doc != null && 
+                              doc.ApartmentId > 0 && 
+                              doc.Amenities != null &&
+                              amenityIdSet.All(id => doc.Amenities.Any(x => x.Id == id)))
+                .Select(doc => doc.ApartmentId)
+                .Distinct()
+                .ToList();
 
             return apartmentIds;
-
         }
 
 

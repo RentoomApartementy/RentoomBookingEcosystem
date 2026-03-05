@@ -119,4 +119,19 @@
     <data name="ClickToCheckDetails" xml:space="preserve">
         <value>Kliknij, aby sprawdzić szczegóły</value>
     </data>
+    <data name="SelectDatesAndGuests" xml:space="preserve">
+        <value>Wybierz datę i liczbę gości</value>
+    </data>
+    <data name="CheckInTimeFormat" xml:space="preserve">
+        <value>Zameldowanie: 15:00 – 22:00</value>
+    </data>
+    <data name="CheckOutTimeFormat" xml:space="preserve">
+        <value>Wymeldowanie: do 11:00</value>
+    </data>
+    <data name="SelectedPackage" xml:space="preserve">
+        <value>Wybrany pakiet</value>
+    </data>
+    <data name="Package" xml:space="preserve">
+        <value>Pakiet</value>
+    </data>
 </root>

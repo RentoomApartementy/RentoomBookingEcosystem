@@ -1,45 +1,126 @@
 @using Microsoft.AspNetCore.WebUtilities
 @inject NavigationManager NavManager;
 @using Microsoft.Extensions.Localization;
+@using BlazorDateRangePicker
 @inject IStringLocalizer<SharedResources> Localizer;
 
 <div class="@GetClass()">
-    <DatePickerRange 
-        IconPath="/assets/svgs/calendar.svg"
-        StartDateValue="@_startDate"
-        EndDateValue="@_endDate"
-        StartDateValueChanged="@(v => _startDate = v)"
-        EndDateValueChanged="@(v => _endDate = v)"
-    />
-    <InputWithModal IconPath="/assets/svgs/person.svg">
-        <ChildContent>
-            <div class="" style="font-size: .9rem;">
-                @if (CountPersons != 0)
-                {
-                    <span style="color: black;">@CountPersons @Localizer["NumberOfGuests"]</span>
-                }
-                @if (string.IsNullOrEmpty(_adults) && string.IsNullOrEmpty(_children))
-                {
-                    <span style="color: gray;">@Localizer["NumberOfPeople"]</span>
-                }
-            </div>
-        </ChildContent>
-        <DropdownContent>
-            <div>
-                <h6 class="dropdown-title">@Localizer["SelectNumberOfGuests"]</h6>
-                <div>
-                    <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["Adults"]" Type="number" @bind-Value="_adults" IsFull="true"/>
-                    <Input IconPath="/assets/svgs/person.svg" Placeholder="@Localizer["ChildrenUnder2"]" Type="number" @bind-Value="_children" IsFull="true" IsMarginTop="true"/>
+    <div class="modern-search-bar">
+        
+        <div class="search-item date-item">
+            <DateRangePicker 
+                AutoApply="true"
+                MinDate="DateTimeOffset.Now.Date" 
+                StartDate="_pickerStartDate"
+                EndDate="_pickerEndDate"
+                OnRangeSelect="OnRangeSelected"
+                class="full-width-picker">
+                <PickerTemplate>
+                    <div id="@context.Id" @onclick="context.Toggle" class="item-content full-trigger">
+                        <svg class="item-icon dark-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 2V6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 2V6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3 10H21" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        
+                        <div class="item-texts">
+                            <span class="item-label">@Localizer["Dates", "TERMIN"]</span>
+                            @if (context.TStartDate == null || context.TEndDate == null)
+                            {
+                                <span class="empty-text">@Localizer["ClickToSelectDate", "Kliknij, aby wybrać datę"]</span>
+                            }
+                            else
+                            {
+                                <span class="item-value">
+                                    @(context.TStartDate?.ToString("dd MMM")) — @(context.TEndDate?.ToString("dd MMM"))
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </PickerTemplate>
+            </DateRangePicker>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="search-item guest-item" @onclick="ToggleGuestModal">
+            <div class="item-content full-trigger">
+                <svg class="item-icon dark-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 20C17 18.3431 14.7614 17 12 17C9.23858 17 7 18.3431 7 20" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 13C14.2091 13 16 11.2091 16 9C16 6.79086 14.2091 5 12 5C9.79086 5 8 6.79086 8 9C8 11.2091 9.79086 13 12 13Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 21C21 19.8665 19.8396 18.8837 17.9542 18.2366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18.5 12.3524C19.9877 11.8344 21 10.5361 21 9C21 7.067 19.433 5.5 17.5 5.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+                <div class="item-texts">
+                    <span class="item-label">@Localizer["Guests", "GOŚCIE"]</span>
+                    <span class="item-value">
+                        @if (CountPersons > 0)
+                        {
+                            <span>@GetGuestsText()</span>
+                        }
+                        else
+                        {
+                            <span class="empty-text">@Localizer["NumberOfPeople", "Liczba osób"]</span>
+                        }
+                    </span>
                 </div>
             </div>
-        </DropdownContent>
-    </InputWithModal>
-    @if (IsRoom)
-    {
-        <Input IconPath="/assets/svgs/bed.svg" Placeholder="@Localizer["NumberOfRooms"]" Type="number" @bind-Value="_rooms"/>   
-    }
-    <Button @onclick="Search">@Localizer["Search"]</Button>
+
+            @if (_isGuestModalOpen)
+            {
+                <div class="guest-modal" @onclick:stopPropagation="true">
+                    <div class="stepper-row">
+                        <div class="stepper-label">
+                            <span class="stepper-title">@Localizer["Adults", "Dorośli"]</span>
+                        </div>
+                        <div class="stepper-controls">
+                            <button type="button" class="stepper-btn" @onclick="DecrementAdults" disabled="@(GetAdultsCount() <= 1)">
+                                <svg class="stepper-icon" width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1H12" stroke-width="1.5"/></svg>
+                            </button>
+                            <span class="stepper-value">@GetAdultsCount()</span>
+                            <button type="button" class="stepper-btn" @onclick="IncrementAdults">
+                                <svg class="stepper-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0V12M0 6H12" stroke-width="1.5"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr class="stepper-divider" />
+
+                    <div class="stepper-row">
+                        <div class="stepper-label">
+                            <span class="stepper-title">@Localizer["ChildrenUnder2", "Dzieci (do lat 2)"]</span>
+                        </div>
+                        <div class="stepper-controls">
+                            <button type="button" class="stepper-btn" @onclick="DecrementChildren" disabled="@(GetChildrenCount() <= 0)">
+                                <svg class="stepper-icon" width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1H12" stroke-width="1.5"/></svg>
+                            </button>
+                            <span class="stepper-value">@GetChildrenCount()</span>
+                            <button type="button" class="stepper-btn" @onclick="IncrementChildren">
+                                <svg class="stepper-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0V12M0 6H12" stroke-width="1.5"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="search-btn" @onclick="Search">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 21L16.65 16.65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="search-btn-text">@Localizer["Search", "Szukaj"]</span>
+        </button>
+
+    </div>
 </div>
+
+@if (_isGuestModalOpen)
+{
+    <div class="modal-backdrop" @onclick="CloseGuestModal"></div>
+}
 
 @code {
     [Parameter] public bool IsSticky { get; set; } = false;
@@ -55,15 +136,20 @@
 
     private string _startDate = "";
     private string _endDate = "";
-    private string _adults = "";
-    private string _children = "";
+    private string _adults = "1";
+    private string _children = "0";
     private string _rooms = "";
+
+    private DateTimeOffset? _pickerStartDate;
+    private DateTimeOffset? _pickerEndDate;
 
     private string _lastStartDateParam = "";
     private string _lastEndDateParam = "";
     private string _lastAdultsParam = "";
     private string _lastChildrenParam = "";
     private string _lastRoomsParam = "";
+
+    private bool _isGuestModalOpen = false;
 
     protected override void OnInitialized()
     {
@@ -73,29 +159,76 @@
     protected override void OnParametersSet()
     {
         bool changed = false;
-
         if (StartDate != _lastStartDateParam) { _startDate = StartDate; _lastStartDateParam = StartDate; changed = true; }
-        if (EndDate != _lastEndDateParam)     { _endDate = EndDate;     _lastEndDateParam = EndDate;     changed = true; }
-        if (Adults != _lastAdultsParam)       { _adults = Adults;       _lastAdultsParam = Adults;       changed = true; }
-        if (Children != _lastChildrenParam)   { _children = Children;   _lastChildrenParam = Children;   changed = true; }
-        if (Rooms != _lastRoomsParam)         { _rooms = Rooms;         _lastRoomsParam = Rooms;         changed = true; }
+        if (EndDate != _lastEndDateParam)     { _endDate = EndDate;     _lastEndDateParam = EndDate; changed = true; }
+        if (Adults != _lastAdultsParam)       { _adults = string.IsNullOrEmpty(Adults) ? "1" : Adults; _lastAdultsParam = Adults; }
+        if (Children != _lastChildrenParam)   { _children = string.IsNullOrEmpty(Children) ? "0" : Children; _lastChildrenParam = Children; }
+        if (Rooms != _lastRoomsParam)         { _rooms = Rooms;         _lastRoomsParam = Rooms; }
+
+        if (changed) ParseDatesForPicker();
     }
 
     private void SyncParamsToFields()
     {
         _startDate = StartDate; _lastStartDateParam = StartDate;
         _endDate = EndDate;     _lastEndDateParam = EndDate;
-        _adults = Adults;       _lastAdultsParam = Adults;
-        _children = Children;   _lastChildrenParam = Children;
+        _adults = string.IsNullOrEmpty(Adults) ? "1" : Adults; _lastAdultsParam = Adults;
+        _children = string.IsNullOrEmpty(Children) ? "0" : Children; _lastChildrenParam = Children;
         _rooms = Rooms;         _lastRoomsParam = Rooms;
+        
+        ParseDatesForPicker();
     }
 
-    private int CountPersons => 
-        (int.TryParse(_adults, out var a) ? a : 0) + 
-        (int.TryParse(_children, out var c) ? c : 0);
+    private void ParseDatesForPicker()
+    {
+        if (DateTimeOffset.TryParse(_startDate, out var pStart)) _pickerStartDate = pStart;
+        else _pickerStartDate = null;
+
+        if (DateTimeOffset.TryParse(_endDate, out var pEnd)) _pickerEndDate = pEnd;
+        else _pickerEndDate = null;
+    }
+
+    private void OnRangeSelected(DateRange range)
+    {
+        _pickerStartDate = range.Start;
+        _pickerEndDate = range.End;
+
+        _startDate = range.Start.ToString("yyyy-MM-dd");
+        _endDate = range.End.ToString("yyyy-MM-dd");
+    }
+
+    private int CountPersons => GetAdultsCount() + GetChildrenCount();
+    private int GetAdultsCount() => int.TryParse(_adults, out var a) ? a : 1;
+    private int GetChildrenCount() => int.TryParse(_children, out var c) ? c : 0;
+
+    private string GetGuestsText()
+    {
+        var adults = GetAdultsCount();
+        var children = GetChildrenCount();
+
+        var adultsText = $"{adults} {(adults == 1 ? Localizer["AdultSingle", "dorosły"] : Localizer["AdultPlural", "dorosłych"])}";
+        
+        if (children > 0)
+        {
+            var childrenText = $"{children} {(children == 1 ? Localizer["ChildSingle", "dziecko"] : Localizer["ChildPlural", "dzieci"])}";
+            return $"{adultsText}, {childrenText}";
+        }
+
+        return adultsText;
+    }
+
+    private void IncrementAdults() => _adults = (GetAdultsCount() + 1).ToString();
+    private void DecrementAdults() { if (GetAdultsCount() > 1) _adults = (GetAdultsCount() - 1).ToString(); }
+    private void IncrementChildren() => _children = (GetChildrenCount() + 1).ToString();
+    private void DecrementChildren() { if (GetChildrenCount() > 0) _children = (GetChildrenCount() - 1).ToString(); }
+
+    private void ToggleGuestModal() => _isGuestModalOpen = !_isGuestModalOpen;
+    private void CloseGuestModal() => _isGuestModalOpen = false;
 
     private async Task Search()
     {
+        CloseGuestModal();
+
         var query = new Dictionary<string, string>
         {
             { "startDate", _startDate },
@@ -111,18 +244,13 @@
         }
         else
         {
-            var url = QueryHelpers.AddQueryString("/apartamenty", query);
+            var url = QueryHelpers.AddQueryString("/apartamenty", query as IDictionary<string, string?>);
             NavManager.NavigateTo(url);
         }
     }
 
     private string GetClass()
     {
-        if (IsSticky)
-        {
-            return "search-container sticky";
-        }
-
-        return "search-container";
+        return IsSticky ? "search-wrapper sticky" : "search-wrapper";
     }
 }

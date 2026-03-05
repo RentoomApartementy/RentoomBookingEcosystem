@@ -74,7 +74,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             if (record is null) throw new ArgumentNullException(nameof(record));
 
-            if (record.State.StartRequest.SelectedAddons[0].PaymentType == null)
+            if (record.State.StartRequest?.SelectedAddons?.Count > 0 && record.State.StartRequest.SelectedAddons[0].PaymentType == null)
             {
                                Console.WriteLine($"[ReservationStore] Warning: Attempting to update ReservationRecord with ReservationGuid {record.ReservationGuid} where the first selected addon's PaymentType is null. This may indicate an issue with the data being saved.");
             }

@@ -235,6 +235,14 @@ code {
     animation: smooth-jump 1s ease-in-out infinite;
 }
 
+.marker-offer.selected-marker {
+    background-color: #cff4e2;
+}
+
+.marker-offer.selected-marker::after {
+    background-color: #cff4e2 !important;
+}
+
 @keyframes smooth-jump {
     0%, 100% {
         transform: translateY(0);
@@ -242,4 +250,100 @@ code {
     50% {
         transform: translateY(-7px);
     }
+}
+
+/* ========================================================
+   GLOBALNA NAPRAWA I STYLIZACJA BLAZOR DATE RANGE PICKER
+   ======================================================== */
+
+.daterangepicker {
+    font-family: inherit !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #E5E7EB !important;
+    margin-top: 12px !important;
+    background-color: #FFFFFF !important;
+    /* Odcięcie dziedziczenia koloru tekstu ze strony głównej */
+    color: #111827 !important;
+}
+
+/* Wymuszenie zachowania tabeli */
+.daterangepicker table {
+    width: 100% !important;
+    margin: 0 !important;
+    display: table !important;
+    border-collapse: collapse !important;
+}
+
+/* Twarde wymuszenie ciemnego koloru dla liczb i nazw dni (Pn, Wt) */
+.daterangepicker td,
+.daterangepicker th {
+    text-align: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 2px !important;
+    display: table-cell !important;
+    vertical-align: middle !important;
+    color: #111827 !important; /* Tutaj wymuszamy ciemny kolor */
+}
+
+/* Przeszłe / wyłączone dni (szare) */
+.daterangepicker td.off,
+.daterangepicker td.disabled {
+    color: #9CA3AF !important;
+    background-color: transparent !important;
+}
+
+/* Zaokrąglone dni w kalendarzu (zwykłe dostępne do kliknięcia) */
+.daterangepicker td.available {
+    border-radius: 999px !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.daterangepicker td.available:hover {
+    background-color: #F3F4F6 !important;
+    color: #111827 !important;
+}
+
+/* Dni w trakcie zakresu (jasnobrązowe tło, żeby ładnie łączyło daty) */
+.daterangepicker td.in-range {
+    background-color: rgba(148, 95, 40, 0.1) !important;
+    border-radius: 0 !important;
+    color: #111827 !important; /* Ciemny tekst w środku zakresu */
+}
+
+/* Aktywny wybrany dzień (Start i Koniec) - w Twoim kolorze #945F28 */
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
+    background-color: #945F28 !important;
+    color: #FFFFFF !important; /* Tylko te dni mają mieć biały tekst! */
+    border-radius: 999px !important;
+}
+
+/* Wymuszenie ciemnego koloru w dropdownach od zmiany miesiąca/roku */
+.daterangepicker select.monthselect,
+.daterangepicker select.yearselect {
+    color: #111827 !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid #D1D5DB !important;
+    border-radius: 4px !important;
+}
+
+/* Stylizacja przycisków Zastosuj / Anuluj w kalendarzu */
+.daterangepicker .btn-primary {
+    background-color: #945F28 !important;
+    border-color: #945F28 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    color: #FFFFFF !important;
+}
+
+.daterangepicker .btn-primary:hover {
+    background-color: #7E5022 !important;
+    border-color: #7E5022 !important;
+}
+
+.daterangepicker .btn-default {
+    border-radius: 8px !important;
+    color: #111827 !important;
 }

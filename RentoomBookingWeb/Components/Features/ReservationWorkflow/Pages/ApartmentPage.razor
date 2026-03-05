@@ -162,11 +162,11 @@
                                         <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
                                             <div class="addon-info-col">
                                                 <span class="addon-name">@fadesc?.Name</span>
-                                                <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small>
+                                                @* <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small> *@
                                             </div>
 
                                             <div class="price-box">
-                                                <b class="addon-price">+@String.Format("{0:#.00}", fa.PriceGross) zł</b>
+                                                <b class="addon-price">+@String.Format("{0:#.00}", AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, _reservationPricingContext.Nights, _reservationPricingContext.TotalGuests, quantity: 1)) zł</b>
                                                 <input type="checkbox"
                                                        class="addon-checkbox"
                                                        checked="@(IsAddonSelected(addon.Id))"
@@ -297,17 +297,30 @@
                 <div class="mobile-price-group">
                     @if (localHasOffers)
                     {
-                        <span class="label">Od</span>
+                        <span class="label">@Localizer["From"]</span>
                         <span class="price">@localMinPrice zł</span>
                     }
                 </div>
 
                 <div class="mobile-action-btn">
+                    @if (StartDate == null && EndDate == null)
+                    {
+                        <div @onclick="OpenSearchModal" @onclick:stopPropagation="true"> 
+                            <Button Type="ButtonType.Tertiary" style="width: 100%;">
+                                @Localizer["SelectDatesAndGuests"]
+                            </Button>
+                        </div>
+                        
+                        <div @onclick="ToggleMobileExpand" @onclick:stopPropagation="true" class="chevron @(_isMobileExpanded ? "rotated" : "")">
+                            <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+                        </div>
+                    }
+                    
                     @if (localHasOffers)
                     {
-                        <Button Type="ButtonType.Tertiary" 
+                        <Button Type="ButtonType.Tertiary"
                                 style="width: 100%; padding: 0.5rem 1rem; font-size: 0.9rem;"
-                                @onclick="SmartScrollAction" >
+                                @onclick="SmartScrollAction">
                             @(_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"])
                         </Button>
                     }
@@ -315,13 +328,15 @@
                     @if (localHasOffers)
                     {
                         <div @onclick="ToggleMobileExpand" @onclick:stopPropagation="true" class="chevron @(_isMobileExpanded ? "rotated" : "")">
-                            <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg> 
+                            <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
                         </div>
                     }
-                    else
+                    
+                    @if (!localHasOffers && StartDate != null && EndDate != null)
                     {
-                        <span @onclick="ToggleMobileExpand" @onclick:stopPropagation="true">@Localizer["ClickToCheckDetails"]</span>   
+                        <span @onclick="ToggleMobileExpand" @onclick:stopPropagation="true">@Localizer["ClickToCheckDetails"]</span>
                     }
+
                 </div>
             </div>
 
@@ -349,7 +364,7 @@
                                 }
                                 else
                                 {
-                                    <span class="info-text missing-data">@Localizer["NoDatesSelected"]</span>
+                                    <span class="info-text">@Localizer["NoDatesSelected"]</span>
                                 }
                             </div>
                         </div>
@@ -366,8 +381,18 @@
                                 }
                                 else
                                 {
-                                    <span class="info-text missing-data">@Localizer["NoGuestsSelected"]</span>
+                                    <span class="info-text">@Localizer["NoGuestsSelected"]</span>
                                 }
+                            </div>
+                        </div>
+                        
+                        <div class="info-row">
+                            <div class="info-icon">
+                                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+                            </div>
+                            <div class="info-content">
+                                <small style="font-weight: bold">@Localizer["CheckInTimeFormat"]</small>
+                                <small style="font-weight: bold">@Localizer["CheckOutTimeFormat"]</small>
                             </div>
                         </div>
                         
@@ -410,18 +435,26 @@
                                 }
                             </div>
                         }
+                        else if (StartDate == null && EndDate == null)
+                        {
+                            <div class="desktop-only" style="margin-top: 1rem; width: 100%;" @onclick="OpenSearchModal"> 
+                                <Button style="width: 100%;">
+                                    Wybierz datę i liczbę gości
+                                </Button>
+                            </div>
+                        }
                     </div>
                 </div>
 
                 @* DODANA MAPA DLA WIDOKU MOBILNEGO - Klasa mobile-only-map *@
                 <div class="map-card-wrapper mobile-only-map" style="margin-top: 1rem;">
                     @* <div class="map-top-section"> *@
-                    @*     <ApartmentMap *@
-                    @*         Id="apartmentMap-mobile" *@
-                    @*         Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat" *@
-                    @*         Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng" *@
-                    @*         ApartmentAddress="@_apartment?.ObjectLocation?.Address" *@
-                    @*     />    *@
+                    @* <ApartmentMap *@
+                    @* Id="apartmentMap-mobile" *@
+                    @* Latitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLat" *@
+                    @* Longitude="@_apartment?.ObjectLocation?.LocalizationItem?.GeoLocationLng" *@
+                    @* ApartmentAddress="@_apartment?.ObjectLocation?.Address" *@
+                    @* />    *@
                     @* </div> *@
     
                     <div class="map-bottom-section">
@@ -492,7 +525,91 @@
         Adults="@Adults"
         Children="@Children"
         />
+
+    @* MODAL WYSZUKIWANIA *@
+    @if (_isSearchModalOpen)
+    {
+        <div class="search-modal-overlay" @onclick="CloseSearchModal">
+            <div class="search-modal-content" @onclick:stopPropagation="true">
+                <div class="search-modal-header">
+                    <h3>@Localizer["SelectDatesAndGuests"]</h3>
+                    <button class="close-modal-btn" @onclick="CloseSearchModal">&times;</button>
+                </div>
+                <div class="search-modal-body">
+                    <SearchBar 
+                        OnSearch="async (query) => { await HandleSearch(query); CloseSearchModal(); }" />
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+<style>
+    .search-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        z-index: 1000;
+        padding: 10px;
+        backdrop-filter: blur(4px);
+    }
+
+    .search-modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 800px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        position: relative;
+        max-height: 95vh;
+        overflow-y: visible; 
+    }
+
+    .search-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .search-modal-header h3 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .close-modal-btn {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        line-height: 1;
+        color: #666;
+    }
+
+    @@media (max-width: 768px) {
+        .search-modal-overlay {
+            align-items: flex-start; 
+            padding-top: 5vh;        
+        }
+
+        .search-modal-content {
+            padding: 1.25rem;      
+            width: 95%;            
+            overflow-y: visible;   
+        }
+
+        .search-modal-header {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
 
 @code {
     [Parameter] public int Id { get; set; }
@@ -525,6 +642,7 @@
     public UpsellTextConfig UpsellTexts { get; set; } = new();
 
     private bool _isModalOpen = false;
+    private bool _isSearchModalOpen = false; // NOWA ZMIENNA
     
     // Zmienne do scrolla i stanu mobile
     private bool _isAtSummary = false;
@@ -546,6 +664,16 @@
     private void ToggleMobileExpand()
     {
         _isMobileExpanded = !_isMobileExpanded;
+    }
+
+    private void OpenSearchModal()
+    {
+        _isSearchModalOpen = true;
+    }
+
+    private void CloseSearchModal()
+    {
+        _isSearchModalOpen = false;
     }
 
     private decimal TotalAddonsPrice 
@@ -763,7 +891,7 @@
                 sDate, 
                 eDate, 
                 aCount, 
-                cCount
+                1
             );
 
             _suggestionDates = result;

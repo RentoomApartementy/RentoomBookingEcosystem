@@ -34,11 +34,13 @@
 .summary-box-title {
     font-size: 0.9rem;
     color: rgba(0, 0, 0, 0.63);
+    margin: 0;
 }
 
 .summary-box-dates {
     font-size: 1.2rem;
     font-weight: bold;
+    margin: 0;
 }
 
 .summary-box-prices {
@@ -56,19 +58,10 @@
     width: 65% !important;
 }
 
-@media (max-width: 800px) {
-    .order-wrapper {
-        width: 100%;
-    }
-    
-    .summary-box {
-        width: 100%;
-    }
-}
-
 .form-wrapper-title {
     display: flex;
     gap: 1rem;
+    align-items: center;
 }
 
 .form-wrapper-title-icon-wrapper {
@@ -79,10 +72,10 @@
     border-radius: 1rem;
     width: 60px;
     height: 60px;
+    flex-shrink: 0;
 }
 
-.form-wrapper-title-icon-wrapper > img
-{
+.form-wrapper-title-icon-wrapper > img {
     width: 70%;
 }
 
@@ -94,5 +87,35 @@
 
 .form-wrapper-title-text > p {
     margin: 0;
-    margin-top: -.5rem;
+    margin-top: 0.1rem;
+}
+
+@media (max-width: 800px) {
+    .order-wrapper {
+        width: 100%;
+        position: static;
+    }
+
+    .summary-box {
+        width: 100%;
+        padding: 1.2rem;
+    }
+
+    .form-wrapper-title-icon-wrapper {
+        width: 45px;
+        height: 45px;
+        border-radius: 0.8rem;
+    }
+
+    .summary-box-title {
+        font-size: 0.8rem;
+    }
+
+    .summary-box-dates {
+        font-size: 0.95rem;
+    }
+
+    .summary-box-prices-text {
+        font-size: 0.95rem;
+    }
 }

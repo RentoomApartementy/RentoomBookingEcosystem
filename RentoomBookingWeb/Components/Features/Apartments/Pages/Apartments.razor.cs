@@ -20,7 +20,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            ViewModel.OnChange += StateHasChanged;
+            ViewModel.OnChange += () => InvokeAsync(StateHasChanged);
             await ViewModel.InitializeAsync();
         }
 

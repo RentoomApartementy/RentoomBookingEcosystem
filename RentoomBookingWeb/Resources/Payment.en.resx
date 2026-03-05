@@ -188,4 +188,10 @@
     <data name="NoNipError" xml:space="preserve">
         <value>Please enter a Tax ID number</value>
     </data>
+    <data name="Prefix" xml:space="preserve">
+        <value>Country Code</value>
+    </data>
+    <data name="Required" xml:space="preserve">
+        <value>Required</value>
+    </data>
 </root>

@@ -42,7 +42,7 @@ public partial class ApartmentsSection : ComponentBase
             {
                 ObjectIds = [],
                 DateFrom = DateTime.Now.ToString("yyyy-MM-dd"),
-                DateTo = DateTime.Now.AddDays(6).ToString("yyyy-MM-dd"),
+                DateTo = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
                 NumberOfAdults = 2,
                 NumberOfBigChildren = 0,
             };
@@ -91,6 +91,6 @@ public partial class ApartmentsSection : ComponentBase
 
     public void GoToApartmentWithOffer(int apartmentId, string apartmentName)
     {
-        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(6).ToString("yyyy-MM-dd")}/2/0");
+        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")}/2/0");
     }
 }
