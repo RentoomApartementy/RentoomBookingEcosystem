@@ -159,14 +159,34 @@
 
     protected override void OnParametersSet()
     {
-        bool changed = false;
-        if (StartDate != _lastStartDateParam) { _startDate = StartDate; _lastStartDateParam = StartDate; changed = true; }
-        if (EndDate != _lastEndDateParam)     { _endDate = EndDate;     _lastEndDateParam = EndDate; changed = true; }
-        if (Adults != _lastAdultsParam)       { _adults = string.IsNullOrEmpty(Adults) ? "1" : Adults; _lastAdultsParam = Adults; }
-        if (Children != _lastChildrenParam)   { _children = string.IsNullOrEmpty(Children) ? "0" : Children; _lastChildrenParam = Children; }
-        if (Rooms != _lastRoomsParam)         { _rooms = Rooms;         _lastRoomsParam = Rooms; }
+        bool dateChanged = false;
+        bool guestsChanged = false;
 
-        if (changed) ParseDatesForPicker();
+        if (StartDate != _lastStartDateParam) { _startDate = StartDate; _lastStartDateParam = StartDate; dateChanged = true; }
+        if (EndDate != _lastEndDateParam)     { _endDate = EndDate;     _lastEndDateParam = EndDate; dateChanged = true; }
+        
+        if (Adults != _lastAdultsParam)       
+        { 
+            _adults = string.IsNullOrEmpty(Adults) ? "1" : Adults; 
+            _lastAdultsParam = Adults; 
+            guestsChanged = true;
+        }
+        
+        if (Children != _lastChildrenParam)   
+        { 
+            _children = string.IsNullOrEmpty(Children) ? "0" : Children; 
+            _lastChildrenParam = Children; 
+            guestsChanged = true;
+        }
+        
+        if (Rooms != _lastRoomsParam)         
+        { 
+            _rooms = Rooms;         
+            _lastRoomsParam = Rooms; 
+            guestsChanged = true;
+        }
+
+        if (dateChanged) ParseDatesForPicker();
     }
 
     private void SyncParamsToFields()

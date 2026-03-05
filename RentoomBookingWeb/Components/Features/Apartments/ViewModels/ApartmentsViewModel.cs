@@ -93,7 +93,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             var urlLocs = GetVal("locations").Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
             var urlAmes = GetVal("filters").Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
 
-            bool filtersChanged = s != StartDate || e != EndDate || a != Adults;
+            bool filtersChanged = s != StartDate || e != EndDate || a != Adults || c != Children;
 
             if (_isInitialized && !filtersChanged && Items.Any())
             {
