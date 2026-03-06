@@ -35,5 +35,6 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
         public string? GateDoorCode { get; set; }
         public string? AdditionalDoorCode { get; set; }
         public string? StoreroomCode { get; set; }
+        public string? ParkingSpotNumber { get; set; }
     }
 }
