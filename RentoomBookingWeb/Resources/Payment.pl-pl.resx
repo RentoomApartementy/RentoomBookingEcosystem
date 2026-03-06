@@ -198,4 +198,10 @@
     <data name="Required" xml:space="preserve">
         <value>Wymagane</value>
     </data>
+    <data name="FillAllDataError" xml:space="preserve">
+        <value>Uzupełnij dane</value>
+    </data>
+    <data name="InvalidEmailError" xml:space="preserve">
+        <value>Niepoprawny email</value>
+    </data>
 </root>

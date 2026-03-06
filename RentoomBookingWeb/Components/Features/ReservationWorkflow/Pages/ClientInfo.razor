@@ -41,35 +41,65 @@
                     <div class="form-item">
                         <div class="form-two-items">
                             <div class="input-wrapper">
-                                <small>@Localizer["Name"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                                <small>@Localizer["Name"] <span style="color: red;">*</span></small>
                                 <Input Placeholder="@Localizer["Name"]" IsFull="true" @bind-Value="_form.Client.FirstName"/>
+                                @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.FirstName))
+                                {
+                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                }
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["LastName"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                                <small>@Localizer["LastName"] <span style="color: red;">*</span></small>
                                 <Input Placeholder="@Localizer["LastName"]" IsFull="true" @bind-Value="_form.Client.LastName"/>
+                                @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.LastName))
+                                {
+                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                }
                             </div>
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["City"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                            <small>@Localizer["City"] <span style="color: red;">*</span></small>
                             <Input Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Client.City"/>
+                            @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.City))
+                            {
+                                <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                            }
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["Address"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                            <small>@Localizer["Address"] <span style="color: red;">*</span></small>
                             <Input Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Client.Street"/>
+                            @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.Street))
+                            {
+                                <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                            }
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["PostalCode"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                            <small>@Localizer["PostalCode"] <span style="color: red;">*</span></small>
                             <Input Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Client.ZipCode"/>
+                            @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.ZipCode))
+                            {
+                                <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                            }
                         </div>
                         <div class="form-two-items">
                             <div class="input-wrapper">
-                                <small>@Localizer["Email"] <span style="color: #999;">(@Localizer["Required"])</span></small>
-                                <Input Placeholder="@Localizer["Email"]" IsFull="true" @bind-Value="_form.Client.Email"/>
+                                <small>@Localizer["Email"] <span style="color: red;">*</span></small>
+                                <Input Placeholder="@Localizer["Email"]" IsFull="true" 
+                                       Value="@_form.Client.Email"
+                                       ValueChanged="@((string val) => { _form.Client.Email = val; _emailDirty = true; })"/>
+                                @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.Email))
+                                {
+                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                }
+                                else if (_emailDirty && !string.IsNullOrWhiteSpace(_form.Client.Email) && !IsValidEmail(_form.Client.Email))
+                                {
+                                    <small class="text-danger">@Localizer["InvalidEmailError"]</small>
+                                }
                             </div>
                         </div>
                         
                         <div class="input-wrapper">
-                            <small>@Localizer["Phone"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                            <small>@Localizer["Phone"] <span style="color: red;">*</span></small>
                             <div class="phone-grid-container">
                                 <div class="input-wrapper phone-prefix-container">
                                     <div class="custom-input">
@@ -91,7 +121,11 @@
                                     </div>
                                 </div>
                             </div>
-                            @if (!string.IsNullOrEmpty(_phoneError))
+                            @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.Phone))
+                            {
+                                <small class="text-danger" style="display: block; margin-top: 4px;">@Localizer["FillAllDataError"]</small>
+                            }
+                            else if (_phoneDirty && !string.IsNullOrEmpty(_phoneError))
                             {
                                 <small class="text-danger" style="display: block; margin-top: 4px;">@_phoneError</small>
                             }
@@ -109,35 +143,65 @@
                         @if (UseInvoice)
                         {
                             <div class="input-wrapper">
-                                <small>NIP <span style="color: #999;">(@Localizer["Required"])</span></small>
+                                <small>NIP <span style="color: red;">*</span></small>
                                 <div class="">
                                     <Input Placeholder="NIP" IsFull="true" @bind-Value="_form.Invoice.TaxNumber"/>
                                     <small class="download-nip-button" @onclick="DownloadGusDataAsync" style="cursor: pointer; color: var(--primary);">
                                         @(_isFetchingGus ? Localizer["Loading"] : Localizer["ClickToDownloadInfo"])
                                     </small>
                                 </div>
+                                @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.TaxNumber))
+                                {
+                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                }
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["CompanyName"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                                <small>@Localizer["CompanyName"] <span style="color: red;">*</span></small>
                                 <Input Placeholder="@Localizer["CompanyName"]" IsFull="true" @bind-Value="_form.Invoice.CompanyName"/>
+                                @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.CompanyName))
+                                {
+                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                }
                             </div>
                             <div class="form-two-items">
                                 <div class="input-wrapper">
-                                    <small>@Localizer["City"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                                    <small>@Localizer["City"] <span style="color: red;">*</span></small>
                                     <Input Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Invoice.City"/>
+                                    @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.City))
+                                    {
+                                        <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    }
                                 </div>
                                 <div class="input-wrapper">
-                                    <small>@Localizer["Address"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                                    <small>@Localizer["Address"] <span style="color: red;">*</span></small>
                                     <Input Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Invoice.Street"/>
+                                    @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.Street))
+                                    {
+                                        <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    }
                                 </div>
                                 <div class="input-wrapper">
-                                    <small>@Localizer["PostalCode"] <span style="color: #999;">(@Localizer["Required"])</span></small>
+                                    <small>@Localizer["PostalCode"] <span style="color: red;">*</span></small>
                                     <Input Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Invoice.ZipCode"/>
+                                    @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.ZipCode))
+                                    {
+                                        <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    }
                                 </div>
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["Email"] <span style="color: #999;">(@Localizer["Required"])</span></small>
-                                <Input Placeholder="@Localizer["Email"]" IsFull="true" @bind-Value="_form.Invoice.Email"/>
+                                <small>@Localizer["Email"] <span style="color: red;">*</span></small>
+                                <Input Placeholder="@Localizer["Email"]" IsFull="true" 
+                                       Value="@_form.Invoice.Email"
+                                       ValueChanged="@((string val) => { _form.Invoice.Email = val; _invoiceEmailDirty = true; })"/>
+                                @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.Email))
+                                {
+                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                }
+                                else if (_invoiceEmailDirty && !string.IsNullOrWhiteSpace(_form.Invoice.Email) && !IsValidEmail(_form.Invoice.Email))
+                                {
+                                    <small class="text-danger">@Localizer["InvalidEmailError"]</small>
+                                }
                             </div>
                         }
                     </div>
@@ -148,8 +212,7 @@
                     <p class="text-danger">@_error</p>
                 }
 
-                <button type="submit" disabled="@IsSubmitDisabled" class="button"
-                        style="@(!IsFormComplete() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
+                <button type="submit" disabled="@_isSaving" class="button">
                     @(_isSaving ? Localizer["ClientInfoButtonLoading"] : Localizer["ClientInfoButton"])
                 </button>
             </div>
@@ -176,6 +239,11 @@
     private string _phoneNumberRaw = string.Empty;     
     private ReservationSummaryDto? _summary;
     private string _phoneError = string.Empty;
+    
+    private bool _emailDirty = false;
+    private bool _invoiceEmailDirty = false;
+    private bool _phoneDirty = false;
+    private bool _submitted = false;
 
     private static readonly PhoneNumberUtil _phoneUtil = PhoneNumberUtil.GetInstance();
 
@@ -184,25 +252,47 @@
         public string Code { get; set; } = "";
         public string Region { get; set; } = "";
         public string Flag { get; set; } = "";
-        public string Display => $"{Flag} +{Code}";
+        public string Display => $"{Flag} {Region} +{Code}";
     }
 
-    private List<CountryPrefix> _countryPrefixes = new()
+    private List<CountryPrefix> _countryPrefixes = new();
+
+    private void InitializeCountryPrefixes()
     {
-        new CountryPrefix { Code = "48", Region = "PL", Flag = "🇵🇱" },
-        new CountryPrefix { Code = "44", Region = "GB", Flag = "🇬🇧" },
-        new CountryPrefix { Code = "49", Region = "DE", Flag = "🇩🇪" },
-        new CountryPrefix { Code = "1",  Region = "US", Flag = "🇺🇸" },
-        new CountryPrefix { Code = "420", Region = "CZ", Flag = "🇨🇿" },
-        new CountryPrefix { Code = "421", Region = "SK", Flag = "🇸🇰" },
-        new CountryPrefix { Code = "380", Region = "UA", Flag = "🇺🇦" },
-        new CountryPrefix { Code = "33", Region = "FR", Flag = "🇫🇷" },
-        new CountryPrefix { Code = "34", Region = "ES", Flag = "🇪🇸" },
-        new CountryPrefix { Code = "39", Region = "IT", Flag = "🇮🇹" },
-        new CountryPrefix { Code = "31", Region = "NL", Flag = "🇳🇱" },
-        new CountryPrefix { Code = "47", Region = "NO", Flag = "🇳🇴" },
-        new CountryPrefix { Code = "46", Region = "SE", Flag = "🇸🇪" }
-    };
+        var regions = _phoneUtil.GetSupportedRegions();
+        var list = new List<CountryPrefix>();
+
+        foreach (var region in regions)
+        {
+            var code = _phoneUtil.GetCountryCodeForRegion(region);
+            if (code == 0) continue;
+
+            list.Add(new CountryPrefix
+            {
+                Code = code.ToString(),
+                Region = region,
+                Flag = GetFlag(region)
+            });
+        }
+
+        _countryPrefixes = list
+            .OrderBy(x => x.Region == "PL" ? 0 : 1)
+            .ThenBy(x => x.Region)
+            .ToList();
+    }
+
+    private string GetFlag(string region)
+    {
+        if (string.IsNullOrEmpty(region) || region.Length != 2 || region == "ZZ") return "🌐";
+        try
+        {
+            return string.Concat(region.ToUpper().Select(c => char.ConvertFromUtf32(c + 0x1F1A5)));
+        }
+        catch
+        {
+            return "🌐";
+        }
+    }
 
     private bool IsSubmitDisabled => _isSaving || !IsFormComplete();
     
@@ -236,6 +326,7 @@
         {
             _phoneNumberRaw = DigitsOnly(value);
             _phoneNumberDisplay = FormatAsYouType(_phoneNumberRaw);
+            if (!string.IsNullOrEmpty(_phoneNumberRaw)) _phoneDirty = true;
             ValidateAndBuildPhone();
         }
     }
@@ -280,6 +371,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        InitializeCountryPrefixes();
         _editContext = new EditContext(_form);
         _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
 
@@ -334,8 +426,20 @@
     private async Task SaveAsync()
     {
         if (_isSaving) return;
+        
+        _submitted = true;
+        _emailDirty = true;
+        _invoiceEmailDirty = true;
+        _phoneDirty = true;
+        
         ValidateAndBuildPhone();
-        if (!IsFormComplete()) return;
+        
+        if (!IsFormComplete()) 
+        {
+            _error = null;
+            return;
+        }
+        
         _isSaving = true; _error = null;
         try
         {

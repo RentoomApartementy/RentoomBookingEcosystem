@@ -410,5 +410,17 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("Required", resourceCulture);
             }
         }
+        
+        internal static string FillAllDataError {
+            get {
+                return ResourceManager.GetString("FillAllDataError", resourceCulture);
+            }
+        }
+        
+        internal static string InvalidEmailError {
+            get {
+                return ResourceManager.GetString("InvalidEmailError", resourceCulture);
+            }
+        }
     }
 }
