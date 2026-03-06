@@ -53,6 +53,25 @@ else
         SubTitle = "Dostępne dodatki do kupienia"
     };
 
+    /*   private readonly UpsellTextConfig _texts = new ()
+    {
+        Title = UpsellLocalizer["ListTitle"],
+            SubTitle = UpsellLocalizer["ListSubtitle"],
+            BadgeInfo = UpsellLocalizer["BadgeInfo"],
+            NightsText = UpsellLocalizer["Nights"],
+            GuestsText = UpsellLocalizer["Guests"],
+            DeleteText = UpsellLocalizer["Delete"],
+            AddText = UpsellLocalizer["Add"],
+            DescriptionText = UpsellLocalizer["Description"],
+            TermsTitleText = UpsellLocalizer["TermsTitle"],
+            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
+            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
+            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
+            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
+            PriceLabel = UpsellLocalizer["Price"],
+        };
+        */
+
     private decimal TotalUpsellsPrice
     {
         get
@@ -139,7 +158,6 @@ else
     private void HandleSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
     {
         _cartSelected = selectedUpsells;
-        UpsellCartState.SetPendingUpsells(_cartSelected);
     }
 
     private void GoToCartAsync()
