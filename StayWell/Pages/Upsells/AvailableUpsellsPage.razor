@@ -10,7 +10,7 @@
 @inject AvailableUpsellsState AvailableUpsellsState
 @inject NavigationManager Navigation
 @inject IStringLocalizer<PurchasedUpsellsPage> UpsellLocalizer;
-@inject BackendApi backendApi
+@inject UpsellCartState UpsellCartState
 @inherits Models.PageBase
 
 @if (AvailableUpsellsState.IsLoading)
@@ -27,42 +27,24 @@ else if (AvailableUpsellsState.AvailableUpsells.Count == 0)
 }
 else
 {
-    if (_cartSelected != null && _cartSelected.Any()){
-    <div>
-    <p>Wybrane dodatki: @_cartSelected.Count</p>
-        <p>Razem: @TotalUpsellsPrice.ToString("F2") PLN</p>
-    </div>
-    }
-
-
     <UpsellList AvailableUpsellsList="AvailableUpsellsState.AvailableUpsells"
                 ReservationContext="_reservationContext"
                 Theme="staywell-theme"
                 Texts="_texts"
                 OnSelectionChanged="HandleSelectionChanged" />
 
-
-
-    if (_cartSelected != null && _cartSelected.Any())
-    {
-        <div style="position: sticky; bottom: 0; z-index: 20; background: white; border-top: 1px solid #ddd; padding: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-            <span>Razem: @TotalUpsellsPrice.ToString("F2") PLN</span>
-            <button disabled="@(_cartSelected.Count == 0)" @onclick="BuySelectedUpsellsAsync">Opłać</button>
-        </div>
-    }
+    <RentoomBooking.StayWell.Components.Upsells.UpsellFloatingCart
+        SelectedCount="_cartSelected.Count"
+        Total="TotalUpsellsPrice"
+        Currency="@(_reservationContext.Currency ?? "PLN")"
+        CtaText="Przejdź do koszyka"
+        IsBusy="false"
+        OnCtaClick="GoToCartAsync" />
 }
-
-
 
 @code {
     private List<SelectedUpsellDto> _cartSelected = new();
     private ReservationPricingContext _reservationContext = new();
-
-    private bool _isCartBusy;
-    private string? _cartError;
-    private string? _cartMessage;
-    private Guid? _lastCreatedOrderGuid;
-
 
     private UpsellTextConfig _texts = new()
     {
@@ -70,7 +52,24 @@ else
         SubTitle = "Dostępne dodatki do kupienia"
     };
 
-
+    /*   private readonly UpsellTextConfig _texts = new ()
+    {
+        Title = UpsellLocalizer["ListTitle"],
+            SubTitle = UpsellLocalizer["ListSubtitle"],
+            BadgeInfo = UpsellLocalizer["BadgeInfo"],
+            NightsText = UpsellLocalizer["Nights"],
+            GuestsText = UpsellLocalizer["Guests"],
+            DeleteText = UpsellLocalizer["Delete"],
+            AddText = UpsellLocalizer["Add"],
+            DescriptionText = UpsellLocalizer["Description"],
+            TermsTitleText = UpsellLocalizer["TermsTitle"],
+            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
+            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
+            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
+            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
+            PriceLabel = UpsellLocalizer["Price"],
+        };
+        */
 
     private decimal TotalUpsellsPrice
     {
@@ -92,36 +91,16 @@ else
 
                 var quantity = Math.Max(1, selected.Quantity);
                 total += UpsellPricingCalculator.CalculateTotal(
-                                                                tile.PricingModel,
-                                                                tile.Price,
-                                                                _reservationContext.Nights,
-                                                                _reservationContext.TotalGuests,
-                                                                quantity);
+                    tile.PricingModel,
+                    tile.Price,
+                    _reservationContext.Nights,
+                    _reservationContext.TotalGuests,
+                    quantity);
             }
 
             return total;
         }
     }
-
-
- /*   private readonly UpsellTextConfig _texts = new ()
-    {
-        Title = UpsellLocalizer["ListTitle"],
-            SubTitle = UpsellLocalizer["ListSubtitle"],
-            BadgeInfo = UpsellLocalizer["BadgeInfo"],
-            NightsText = UpsellLocalizer["Nights"],
-            GuestsText = UpsellLocalizer["Guests"],
-            DeleteText = UpsellLocalizer["Delete"],
-            AddText = UpsellLocalizer["Add"],
-            DescriptionText = UpsellLocalizer["Description"],
-            TermsTitleText = UpsellLocalizer["TermsTitle"],
-            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
-            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
-            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
-            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
-            PriceLabel = UpsellLocalizer["Price"],
-        };
-        */
 
     protected override async Task OnInitializedAsync()
     {
@@ -177,94 +156,53 @@ else
     private void HandleSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
     {
         _cartSelected = selectedUpsells;
-
     }
 
-    private async Task BuySelectedUpsellsAsync()
+    private void GoToCartAsync()
     {
-        if (string.IsNullOrWhiteSpace(Token) || _cartSelected.Count == 0)
+        if (_cartSelected.Count == 0)
         {
             return;
         }
 
-        _isCartBusy = true;
-        _cartError = null;
-        _cartMessage = null;
+        var tiles = _cartSelected
+            .Select(s => AvailableUpsellsState.AvailableUpsells
+                .FirstOrDefault(u => u.PartnerServiceId == s.PartnerServiceId))
+            .Where(t => t is not null)
+            .Select(t => t!);
 
-        try
+        UpsellCartState.SetVisuals(tiles);
+
+        var lines = _cartSelected.Select(s =>
         {
-            var request = BuildCreateUpsellOrderRequest();
-           
-         //   var upsellPaymentInitResult = await backendApi.CreateUpsellOrderAsync(Token, request);
-         
-            
-            
-            var upsellPaymentInitResult = await backendApi.CreateUpsellOrderAsync(Token, request);
-            
-            AvailableUpsellsState._lastInitResult = upsellPaymentInitResult;
-            
-            if (upsellPaymentInitResult is null)
+            var tile = AvailableUpsellsState.AvailableUpsells
+                .FirstOrDefault(u => u.PartnerServiceId == s.PartnerServiceId);
+
+            var lineTotal = tile is not null
+                ? UpsellPricingCalculator.CalculateTotal(
+                    tile.PricingModel,
+                    tile.Price,
+                    _reservationContext.Nights,
+                    _reservationContext.TotalGuests,
+                    s.Quantity)
+                : 0m;
+
+            return new UpsellSummaryLineDto
             {
-                _cartError = "Nie udało się utworzyć zamówienia dodatków.";
-                return;
-            }
+                PartnerServiceId = s.PartnerServiceId,
+                Title = tile?.Title ?? $"Upsell #{s.PartnerServiceId}",
+                PricingModel = tile?.PricingModel ?? default,
+                Quantity = s.Quantity,
+                UnitPriceGross = tile?.Price ?? 0m,
+                Nights = _reservationContext.Nights,
+                TotalGuests = _reservationContext.TotalGuests,
+                LineTotalGross = lineTotal,
+                DisplayText = tile?.ShortDescription ?? string.Empty
+            };
+        }).ToList();
 
-            _lastCreatedOrderGuid = upsellPaymentInitResult.UpsellOrderGuid;
+        UpsellCartState.SetFromSummary(lines, _reservationContext.Currency);
 
-           
-
-            if (!string.IsNullOrWhiteSpace(upsellPaymentInitResult.RedirectUrl))
-            {
-                NavigationManager.NavigateTo(upsellPaymentInitResult.RedirectUrl, forceLoad: true);
-                return;
-            }
-
-            _cartMessage = "Płatność nie wymagana / już opłacone";
-         //   await RefreshPurchasedUpsellsAsync();
-        }
-        catch (Exception ex)
-        {
-            _cartError = ex.Message;
-        }
-        finally
-        {
-            _isCartBusy = false;
-        }
+        Navigation.NavigateTo($"/reservation/{Token}/UpsellsCartPage");
     }
-
-    private UpsellOrderRequest BuildCreateUpsellOrderRequest()
-    {
-        var reservation = ReservationState.CurrentReservation?.Reservation;
-        var client = reservation?.Client;
-
-        return new UpsellOrderRequest
-        {
-            ReservationGuid = Guid.TryParse(Token, out var reservationGuid) ? reservationGuid : null,
-            ApartmentId = reservation?.Items?.FirstOrDefault()?.objectId ?? 0,
-            StartDate = _reservationContext.StartDate,
-            EndDate = _reservationContext.EndDate,
-            Adults = _reservationContext.Adults,
-            Children = _reservationContext.Children,
-            Currency = _reservationContext.Currency,
-            Buyer = new UpsellBuyerDto
-            {
-                Email = client?.Email ?? string.Empty,
-                Name = $"{client?.FirstName} {client?.LastName}".Trim(),
-                Phone = client?.Phone
-            },
-            SelectedUpsells = _cartSelected
-                .Select(s => new UpsellOrderLineRequest
-                {
-                    PartnerServiceId = s.PartnerServiceId,
-                    Quantity = Math.Max(1, s.Quantity)
-                })
-                .ToList(),
-            SuccessUrl = NavigationManager.BaseUri,// + $"reservation/{Token}/Vouchers/payment/UpsellOrderGuid/Success",
-            ErrorUrl = NavigationManager.BaseUri //+ $"reservation/{Token}/Vouchers/payment/UpsellOrderGuid/Error",
-           // NotificationUrl = NavigationManager.BaseUri + $"api/upsell/UpsellOrderGuid/payment-notification"
-        };
-    }
-
-   
-
 }
