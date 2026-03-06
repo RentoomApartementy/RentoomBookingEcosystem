@@ -191,12 +191,28 @@ namespace RentoomBooking.Api.Upsell
 
                 var record = await _upsellOrderStore.CreateWithLinesAsync(orderRequest, lineRecords, cancellationToken);
 
+                var baseUrl = payload.SuccessUrl?.TrimEnd('/');
+                var path = _tpaySettings.SuccessUrl?
+                    .TrimStart('/')
+                    .Replace("{Token}", payload.ReservationGuid.ToString())
+                    .Replace("{UpsellOrderGuid}", record.UpsellOrderGuid.ToString());
+
+                var successUrl = $"{baseUrl}/{path}";
+
+                var errorBaseUrl = payload.ErrorUrl?.TrimEnd('/');
+                var errorPath = _tpaySettings.ErrorUrl?
+                    .TrimStart('/')
+                    .Replace("{Token}", payload.ReservationGuid.ToString())
+                    .Replace("{UpsellOrderGuid}", record.UpsellOrderGuid.ToString());
+
+                var errorUrl = $"{errorBaseUrl}/{errorPath}";
+
                 record.State.UpsellsTotal = totalGross;
                 record.State.GrandTotal = totalGross;
 
                 record.State.Request.NotificationUrl = _tpaySettings.NotificationUrl; //.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString());
-                record.State.Request.SuccessUrl = payload.SuccessUrl + "/"+ _tpaySettings.SuccessUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}",payload.ReservationGuid.ToString());
-                record.State.Request.ErrorUrl = payload.ErrorUrl + "/" + _tpaySettings.ErrorUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}", payload.ReservationGuid.ToString());
+                record.State.Request.SuccessUrl = successUrl;//payload.SuccessUrl + "/"+ _tpaySettings.SuccessUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}",payload.ReservationGuid.ToString());
+                record.State.Request.ErrorUrl = errorUrl; //payload.ErrorUrl + "/" + _tpaySettings.ErrorUrl?.Replace("UpsellOrderGuid", record.UpsellOrderGuid.ToString()).Replace("{Token}", payload.ReservationGuid.ToString());
 
                 await _upsellOrderStore.UpdateAsync(record, cancellationToken);
 

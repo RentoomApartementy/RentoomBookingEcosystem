@@ -46,7 +46,14 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
             var payerName = string.Join(" ", new[] { record.State.Client?.FirstName, record.State.Client?.LastName }
                 .Where(x => !string.IsNullOrWhiteSpace(x)));
 
-            var successURL = _settings.RentoomSiteBaseUrl + "/" + _settings.SuccessUrl?.Replace("{ReservationTokenGuid}", reservationGuid.ToString()).Replace("{tpayGuid}", reservationGuid.ToString());
+
+            var baseUrl = _settings.RentoomSiteBaseUrl?.TrimEnd('/');
+            var path = _settings.SuccessUrl?
+                .TrimStart('/')
+                .Replace("{ReservationTokenGuid}", reservationGuid.ToString())
+                .Replace("{tpayGuid}", reservationGuid.ToString());
+
+            var successUrl = $"{baseUrl}/{path}";
             
                 var request = new TpayTransactionRequest
             {
@@ -62,7 +69,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
                     // Phone = record.State.Client?.Phone ?? string.Empty
 
                 },
-                SuccessUrl = successURL,
+                SuccessUrl = successUrl,
                 ErrorUrl = _settings.ErrorUrl,
                 NotificationUrl = _settings.NotificationUrl,
                 HiddenDescription = reservationGuid.ToString(),
