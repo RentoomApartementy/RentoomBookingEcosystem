@@ -1,34 +1,34 @@
-﻿.page-info-wrapper {
+﻿    .page-info-wrapper {
 
-    width: 100%;
+        width: 100%;
 
-}
+    }
 
-.description-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+    .description-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 
-.buttons-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-    margin: 2rem 0;
-}
+    .buttons-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+        margin: 2rem 0;
+    }
 
 .qr-maint-wrap {
     width: 100%;
-    max-width: 100%;
-    overflow: hidden;
 }
 
 .qr-maint-frame {
+    margin-top: 20px;
     display: block;
     width: 100%;
-    height: 720px;
+    min-height: 1000px;
     border: 0;
+    transition: height 0.2s ease;
 }

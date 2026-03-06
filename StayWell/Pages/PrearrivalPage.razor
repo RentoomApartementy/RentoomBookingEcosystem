@@ -121,6 +121,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         if (RegistrationCardState.CurrentCard != null && TermsState.CurrentTerms != null)
         {
             NavigationManager.NavigateTo($"/reservation/{Token}/");
@@ -135,7 +136,6 @@
                 StartTimer();
             }
         }
-        await base.OnInitializedAsync();
     }
 
     protected override Task OnAfterRenderAsync(bool firstRender)

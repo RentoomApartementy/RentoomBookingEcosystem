@@ -3,73 +3,85 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Models
 @using RentoomBooking.StayWell.States
 @inject IStringLocalizer<AboutReservationPage> Localizer
 @inject NavigationManager Navigation
+@inject CustomerAgreedTermsState CustomerAgreedTermsState
 @inherits Models.PageBase
 
 <PageTitle>About Reservation</PageTitle>
 
 <div class="reservation-page">
-    @* <div class="reservation-page__header">
-        <PageInfo Title="@Reservation?.Items.FirstOrDefault()?.objectName"
-                  Subtitle="O rezerwacji"></PageInfo>
-    </div> *@
-
     <div class="reservation-page__sections">
         <section class="reservation-section">
             <header class="reservation-section__header">
                 <h3 class="reservation-section__title">@Localizer["BookingDetailsTitle"]</h3>
             </header>
-
             <div class="reservation-section__content">
-                <div class="reservation-field">
-                    <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/users.svg" />
-                        @Localizer["Name"]:
-                    </span>
-                    <span class="reservation-field__value">
-                        @Reservation?.Client.FirstName @Reservation?.Client.LastName
-                    </span>
-                </div>
+                @if (ReservationState.IsLoading || RegistrationCardState.IsLoading)
+                {
+                    <div class="reservation-field">
+                        <div class="skeleton skeleton--label"></div>
+                        <div class="skeleton skeleton--value"></div>
+                    </div>
+                    <div class="reservation-field">
+                        <div class="skeleton skeleton--label"></div>
+                        <div class="skeleton skeleton--value"></div>
+                    </div>
+                    <div class="reservation-field">
+                        <div class="skeleton skeleton--label"></div>
+                        <div class="skeleton skeleton--guest-card"></div>
+                        <div class="skeleton skeleton--guest-card"></div>
+                    </div>
+                }
+                else
+                {
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/users.svg" />
+                            @Localizer["Name"]:
+                        </span>
+                        <span class="reservation-field__value">
+                            @Reservation?.Client.FirstName @Reservation?.Client.LastName
+                        </span>
+                    </div>
 
-                <div class="reservation-field">
-                    <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/mail.svg" />
-                        @Localizer["ContactMail"]:
-                    </span>
-                    <span class="reservation-field__value">
-                        @RegistrationCardState.CurrentCard?.ContactEmail
-                    </span>
-                </div>
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/mail.svg" />
+                            @Localizer["ContactMail"]:
+                        </span>
+                        <span class="reservation-field__value">
+                            @RegistrationCardState.CurrentCard?.ContactEmail
+                        </span>
+                    </div>
 
-                <div class="reservation-field">
-                    <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/users.svg" />
-                        @Localizer["RegisteredGuests"]:
-                    </span>
-
-                    <div class="guest-list">
-                        @foreach (var (guest, index) in RegistrationCardState?.CurrentCard?.GuestsData?.Select(
-                                                (g, i) => (g, i)))
-                        {
-                            <div class="guest-card">
-                                <div class="guest-card__avatar">@(index+1)</div>
-                                <div class="guest-card__body">
-                                    <div class="guest-card__row">
-                                        <span class="guest-card__label">@Localizer["Name"]</span>
-                                        <span class="guest-card__value">@guest.FirstName</span>
-                                    </div>
-
-                                    <div class="guest-card__row">
-                                        <span class="guest-card__label">@Localizer["Surname"]</span>
-                                        <span class="guest-card__value">@guest.LastName</span>
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/users.svg" />
+                            @Localizer["RegisteredGuests"]:
+                        </span>
+                        <div class="guest-list">
+                            @foreach (var (guest, index) in RegistrationCardState?.CurrentCard?.GuestsData?.Select((g, i) => (g, i)) ?? [])
+                            {
+                                <div class="guest-card">
+                                    <div class="guest-card__avatar">@(index + 1)</div>
+                                    <div class="guest-card__body">
+                                        <div class="guest-card__row">
+                                            <span class="guest-card__label">@Localizer["Name"]</span>
+                                            <span class="guest-card__value">@guest.FirstName</span>
+                                        </div>
+                                        <div class="guest-card__row">
+                                            <span class="guest-card__label">@Localizer["Surname"]</span>
+                                            <span class="guest-card__value">@guest.LastName</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </section>
 
@@ -77,81 +89,110 @@
             <header class="reservation-section__header">
                 <h3 class="reservation-section__title">@Localizer["ApartmentAndStayTitle"]</h3>
             </header>
-
             <div class="reservation-section__content">
-                <div class="reservation-field">
-                    <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/door-open.svg" />
-                        @Localizer["Apartment"]:
-                    </span>
-                    <span class="reservation-field__value">
-                        @Reservation?.Items?.FirstOrDefault()?.itemCode
-                    </span>
-                </div>
-
-                <div class="reservation-field">
-                    <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/map-pin.svg" />
-                        @Localizer["Address"]:
-                    </span>
-                    <span class="reservation-field__value">
-                        @ApartmentState.CurrentApartment?.ObjectLocation?.Address
-                    </span>
-                </div>
-
-                <div class="reservation-field">
-                    <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/clock.svg" />
-                        @Localizer["CheckinCheckOutTime"]:
-                    </span>
-
-                    <span class="reservation-field__value">
-                        @Localizer["CheckInTime"]: <span>15:00</span>
-                    </span>
-                    <span class="reservation-field__value">
-                        @Localizer["CheckOutTime"]: <span>11:00</span>
-                    </span>
-                </div>
-
-                <div class="reservation-field">
-                    <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/calendar-days.svg" />
-                        @Localizer["StayDates"]:
-                    </span>
-
-                    <span class="reservation-field__value">
-                        @Localizer["CheckInDate"]: <span>@ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateFrom().ToString("dd.MM.yyyy")</span>
-                    </span>
-                    <span class="reservation-field__value">
-                        @Localizer["CheckOutDate"]: <span>@ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateTo().ToString("dd.MM.yyyy")</span>
-                    </span>
-                </div>
-
-                @if (AmenitiesState.CurrentAmenities?.Count > 0)
+                @if (ReservationState.IsLoading || ApartmentState.IsLoading || AmenitiesState.IsLoading)
+                {
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <div class="reservation-field">
+                            <div class="skeleton skeleton--label"></div>
+                            <div class="skeleton skeleton--value"></div>
+                        </div>
+                    }
+                }
+                else
                 {
                     <div class="reservation-field">
                         <span class="reservation-field__label">
-                            <img class="reservation-field__icon" src="/icons/bed-double.svg" />
-                            @Localizer["ApartmentAmenities"]:
+                            <img class="reservation-field__icon" src="/icons/door-open.svg" />
+                            @Localizer["Apartment"]:
                         </span>
-
-                        <button class="reservation-field__action"
-                                @onclick="ShowAmenities">
-                            @(showAmenities ? Localizer["HideAmenitiesButton"] : Localizer["ShowAmenitiesButton"])
-                        </button>
-
-                        @if (showAmenities)
-                        {
-                            <ul class="reservation-field__list">
-                                @foreach (var amenity in AmenitiesState.CurrentAmenities)
-                                {
-                                    <li class="reservation-field__list-item">
-                                        @amenity.Name
-                                    </li>
-                                }
-                            </ul>
-                        }
+                        <span class="reservation-field__value">
+                            @Reservation?.Items?.FirstOrDefault()?.itemCode
+                        </span>
                     </div>
+
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/map-pin.svg" />
+                            @Localizer["Address"]:
+                        </span>
+                        <span class="reservation-field__value">
+                            @ApartmentState.CurrentApartment?.ObjectLocation?.Address
+                        </span>
+                    </div>
+
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/clock.svg" />
+                            @Localizer["CheckinCheckOutTime"]:
+                        </span>
+                        <span class="reservation-field__value">
+                            @Localizer["CheckInTime"]:
+                            @if (ReservationState.HasEarlyCheckIn)
+                            {
+                                <span class="time--original">15:00</span>
+                                <span class="time--updated">@ReservationState.CheckInTime.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span>15:00</span>
+                            }
+                        </span>
+                        <span class="reservation-field__value">
+                            @Localizer["CheckOutTime"]:
+                            @if (ReservationState.HasLateCheckOut)
+                            {
+                                <span class="time--original">11:00</span>
+                                <span class="time--updated">@ReservationState.CheckOutTime.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span>11:00</span>
+                            }
+                        </span>
+                    </div>
+
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/calendar-days.svg" />
+                            @Localizer["StayDates"]:
+                        </span>
+                        <span class="reservation-field__value">
+                            @Localizer["CheckInDate"]:
+                            <span>
+                                @ReservationState.CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom().ToString("dd.MM.yyyy")
+                            </span>
+                        </span>
+                        <span class="reservation-field__value">
+                            @Localizer["CheckOutDate"]:
+                            <span>
+                                @ReservationState.CurrentReservation?.Reservation?.ReservationDetails?.getDateTo().ToString("dd.MM.yyyy")
+                            </span>
+                        </span>
+                    </div>
+
+                    @if (AmenitiesState.CurrentAmenities?.Count > 0)
+                    {
+                        <div class="reservation-field">
+                            <span class="reservation-field__label">
+                                <img class="reservation-field__icon" src="/icons/bed-double.svg" />
+                                @Localizer["ApartmentAmenities"]:
+                            </span>
+                            <button class="reservation-field__action" @onclick="ShowAmenities">
+                                @(showAmenities? Localizer["HideAmenitiesButton"] : Localizer["ShowAmenitiesButton"])
+                            </button>
+                            @if (showAmenities)
+                            {
+                                <ul class="reservation-field__list">
+                                    @foreach (var amenity in AmenitiesState.CurrentAmenities)
+                                    {
+                                        <li class="reservation-field__list-item">@amenity.Name</li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    }
                 }
             </div>
         </section>
@@ -160,59 +201,197 @@
             <header class="reservation-section__header">
                 <h3 class="reservation-section__title">@Localizer["TOSConsents"]:</h3>
             </header>
-
             <div class="reservation-section__content">
+                @if (TermsState.IsLoading || RegistrationCardState.IsLoading || CustomerAgreedTermsState.IsLoading)
+                {
+                    <div class="reservation-field">
+                        <div class="skeleton skeleton--label"></div>
+                        <div class="skeleton skeleton--value"></div>
+                    </div>
+                    <div class="reservation-field">
+                        <div class="skeleton skeleton--label"></div>
+                        <div class="skeleton skeleton--toggle"></div>
+                        <div class="skeleton skeleton--toggle"></div>
+                    </div>
+                }
+                else
+                {
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/file-user.svg" />
+                            @Localizer["TOS"]:
+                        </span>
+                        <span class="reservation-field__value">
+                            <div style="font-weight:600">Regulamin pobytu</div>
+                            <span>@Localizer["AcceptanceDate"]:</span>
+                            <span>@TermsState.CurrentTerms?.AcceptedAt.ToShortDateString()</span>
+                        </span>
+                    </div>
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/list-checks.svg" />
+                            @Localizer["Consents"]:
+                        </span>
+                        @foreach (var term in CustomerAgreedTermsState.Terms.Where(t => t.IsRequired))
+                        {
+                            var capturedTerm = term;
+                            <div class="consent-toggle consent-toggle--disabled">
+                                <ToggleSwitch Value="capturedTerm.IsAccepted"
+                                              ValueChanged="EventCallback<bool>.Empty"
+                                              Text="@capturedTerm.Description"
+                                              Description="@capturedTerm.AgreedAt.ToString("dd.MM.yyyy HH:mm")" />
+                            </div>
+                        }
+                        @foreach (var term in CustomerAgreedTermsState.Terms.Where(t => !t.IsRequired))
+                        {
+                            var capturedTerm = term;
+                            var displayValue = GetDisplayValue(capturedTerm);
+                            <div class="consent-toggle">
+                                <ToggleSwitch Value="displayValue"
+                                              ValueChanged="(val) => OnTermToggled(capturedTerm, val)"
+                                              Text="@capturedTerm.Description"
+                                              Description="@capturedTerm.AgreedAt.ToString("dd.MM.yyyy HH:mm")" />
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </section>
+        <section class="reservation-section">
+            <header class="reservation-section__header">
+                <h3 class="reservation-section__title">Za twój pobyt odpowiada Rentoom</h3>
+            </header>
+            <div class="reservation-section__content">
+                    <div class="reservation-field">
+
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/files.svg" />
+                            <span style="font-weight:600">NIP / REGON:</span>
+                        </span>
+                        <span class="reservation-field__value">
+                            <span>8792727407 / 	387605281</span>
+                        </span>
+                    </div>
                 <div class="reservation-field">
                     <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/file-user.svg" />
-                        @Localizer["TOS"]:
+                        <img class="reservation-field__icon" src="/icons/building.svg" />
+                        <span style="font-weight:600">Adres siedziby:</span>
                     </span>
-
                     <span class="reservation-field__value">
-                        @Localizer["AcceptanceDate"]:
-                        <span>@TermsState.CurrentTerms.AcceptedAt.ToShortDateString()</span>
+                        <span>Stanisława Szymańskiego 1B, 87-100 Toruń, Polska</span>
                     </span>
-
-                    @* <button class="reservation-field__action">
-                        @Localizer["ShowFullTOSButton"]
-                    </button> *@
-                </div>
-                <div class="reservation-field">
-                    <span class="reservation-field__label">
-                        <img class="reservation-field__icon" src="/icons/list-checks.svg" />
-                        @Localizer["Consents"]:
-                    </span>
-
-                    <div class="consent-toggle">
-                        <ToggleSwitch @bind-Value="marketingConsent"
-                                      Text="@Localizer["MarketingConsent"]"
-                                      Description="@Localizer["MarketingDescription"]" />
-                    </div>
-
-                    <div class="consent-toggle">
-                        <ToggleSwitch @bind-Value="rodoConsent"
-                                      Text="@Localizer["GDPRConsent"]"
-                                      Description="@Localizer["GDPRDescription"]" />
-                    </div>
                 </div>
             </div>
         </section>
     </div>
 </div>
-@code{
 
+@code {
     private bool showAmenities = false;
-    private bool marketingConsent = true;
-    private bool rodoConsent = true;
+
+    private Dictionary<int, bool> _overrides = [];
+    private CustomerAgreedTermDto? _pendingCancelTerm;
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
     private ApartmentObject? Apartment => ApartmentState?.CurrentApartment;
+
+    private bool GetDisplayValue(CustomerAgreedTermDto term) =>
+        _overrides.TryGetValue(term.TermsSourceId, out var val) ? val : term.IsAccepted;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (!string.IsNullOrEmpty(Token))
+        {
+            CustomerAgreedTermsState.OnChange += OnTermsChanged;
+            ModalService.OnClose += OnModalClosed;
+            await CustomerAgreedTermsState.LoadAsync(Token);
+        }
+    }
+
+    private void OnTermsChanged()
+    {
+        _overrides.Clear();
+        _pendingCancelTerm = null;
+        StateHasChanged();
+    }
+
+    private void OnModalClosed()
+    {
+        if (_pendingCancelTerm is not null)
+        {
+            _overrides.Remove(_pendingCancelTerm.TermsSourceId);
+            _pendingCancelTerm = null;
+            StateHasChanged();
+        }
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        CustomerAgreedTermsState.OnChange -= OnTermsChanged;
+        ModalService.OnClose -= OnModalClosed;
+    }
 
     private void ShowAmenities()
     {
         showAmenities = !showAmenities;
     }
 
+    private void OnTermToggled(CustomerAgreedTermDto term, bool newValue)
+    {
+        if (!newValue)
+        {
+            _overrides[term.TermsSourceId] = false;
+            _pendingCancelTerm = term;
+            StateHasChanged();
 
+            ModalService.ShowModal(
+                "Cofnięcie zgody",
+                @<div>
+                    <p>Czy na pewno chcesz cofnąć tę zgodę?</p>
+                    <p style="font-size: 0.85rem; color: rgba(0,0,0,0.55); margin-top: 4px; padding: 5px; font-weight: 500;">@term.Description</p>
+                    <div style="display: flex; gap: 10px; margin-top: 16px;">
+                        <Button OnClick="() => ConfirmToggle(term, false)" Text="Cofnij" ButtonStyle="background-color: red;"></Button>
+                        <Button OnClick="() => CancelToggle(term)" Text="Wróć"></Button>
+                    </div>
+                </div>
+            );
+        }
+        else
+        {
+            _ = ApplyToggleAsync(term, true);
+        }
+    }
 
+    private void CancelToggle(CustomerAgreedTermDto term)
+    {
+        _pendingCancelTerm = null;
+        _overrides.Remove(term.TermsSourceId);
+        ModalService.HideModal();
+        StateHasChanged();
+    }
+
+    private void ConfirmToggle(CustomerAgreedTermDto term, bool newValue)
+    {
+        _pendingCancelTerm = null;
+        ModalService.HideModal();
+        _ = ApplyToggleAsync(term, newValue);
+    }
+
+    private async Task ApplyToggleAsync(CustomerAgreedTermDto term, bool newValue)
+    {
+        if (string.IsNullOrEmpty(Token)) return;
+
+        _overrides[term.TermsSourceId] = newValue;
+        StateHasChanged();
+
+        var success = await CustomerAgreedTermsState.UpdateAcceptanceAsync(Token, term.TermsSourceId, newValue);
+        if (!success)
+        {
+            _overrides.Remove(term.TermsSourceId);
+            StateHasChanged();
+        }
+    }
 }

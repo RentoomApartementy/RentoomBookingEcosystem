@@ -1,0 +1,226 @@
+﻿@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
+@using RentoomBooking.StayWell.States
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using System.Globalization
+@using RentoomBooking.StayWell.Components.Upsells
+@inject AvailableUpsellsState AvailableUpsellsState
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+@implements IDisposable
+
+<div class="upsell-strip-wrapper">
+    <div class="upsell-strip-header">
+        @if (!string.IsNullOrWhiteSpace(Title))
+        {
+            <img class="upsell-strip-header__icon" src="/icons/tickets.svg" alt="" />
+            <h2 class="upsell-strip-title">@Title</h2>
+        }
+        <a class="upsell-strip-more-link" href="/reservation/@Token/Vouchers">więcej <img src="/icons/chevron-right.svg"/></a>
+    </div>
+
+    @if (AvailableUpsellsState.IsLoading)
+    {
+        <div class="upsell-strip-loading">
+            @for (int i = 0; i < SkeletonCount; i++)
+            {
+                <div class="upsell-strip-skeleton"></div>
+            }
+        </div>
+    }
+    else if (!string.IsNullOrWhiteSpace(AvailableUpsellsState.Error))
+    {
+        <p class="upsell-strip-error">@AvailableUpsellsState.Error</p>
+    }
+    else if (!AvailableUpsellsState.AvailableUpsells.Any())
+    {
+        @**@
+    }
+    else
+    {
+        <div class="upsell-strip-scroll" @ref="_scrollRef">
+            @foreach (var tile in DisplayedUpsells)
+            {
+                <div class="upsell-strip-item @(_activeId == tile.PartnerServiceId ? "is-active" : "")"
+                     id="strip-item-@tile.PartnerServiceId">
+                    <CascadingValue Value="@Theme">
+                        <UpsellTile Tile="tile"
+                                    Context="_reservationContext"
+                                    Quantity="GetQuantity(tile.PartnerServiceId)"
+                                    IsSelected="IsSelected(tile.PartnerServiceId)"
+                                    OnToggled="toggled => HandleToggle(tile.PartnerServiceId, toggled)"
+                                    Texts="_texts" />
+                    </CascadingValue>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<UpsellFloatingCart 
+                SelectedCount="_cartSelected.Count"
+               Total="TotalPrice"
+               Currency="@_reservationContext.Currency"
+               CtaText="@CtaText"
+               IsBusy="_isBusy"
+               OnCtaClick="NavigateToVouchersPage" />
+
+@code {
+    [Parameter, EditorRequired] public string Token { get; set; } = string.Empty;
+    [Parameter] public ReservationPricingContext ReservationContext { get; set; } = new();
+    [Parameter] public string Title { get; set; } = "Dostępne dodatki";
+    [Parameter] public string CtaText { get; set; } = "Zobacz i opłać";
+    [Parameter] public string Theme { get; set; } = "staywell-theme";
+    [Parameter] public int MaxItems { get; set; } = 3;
+    [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
+
+    private List<SelectedUpsellDto> _cartSelected = new();
+    private ReservationPricingContext _reservationContext = new();
+    private ElementReference _scrollRef;
+    private DotNetObjectReference<AvailableUpsells>? _selfRef;
+    private int _activeId = -1;
+    private bool _isBusy;
+    private bool _jsInitialized;
+
+    private int SkeletonCount => MaxItems > 0 ? MaxItems : 4;
+
+    private IEnumerable<UpsellTileDto> DisplayedUpsells =>
+        MaxItems > 0
+            ? AvailableUpsellsState.AvailableUpsells.Take(MaxItems)
+            : AvailableUpsellsState.AvailableUpsells;
+
+    private readonly UpsellTextConfig _texts = new()
+    {
+        Title = "Vouchery",
+        SubTitle = "Dostępne dodatki",
+        BadgeInfo = "Szczegóły",
+        NightsText = "nocy",
+        GuestsText = "gości",
+        DeleteText = "Usuń",
+        AddText = "Dodaj",
+        DescriptionText = "Opis",
+        TermsTitleText = "Warunki",
+        PricingPerApartmentPerDayText = "za apartament / noc",
+        PricingOneTimeText = "jednorazowo",
+        PricingPerPersonPerDayText = "za osobę / noc",
+        PricingPerStayText = "za pobyt",
+        PriceLabel = "Cena",
+    };
+
+    protected override void OnInitialized()
+    {
+        AvailableUpsellsState.OnChange += OnStateChanged;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _reservationContext = ReservationContext;
+
+        if (!string.IsNullOrWhiteSpace(Token))
+        {
+            var locale = string.IsNullOrWhiteSpace(CultureInfo.CurrentUICulture.Name)
+                ? "pl-PL"
+                : CultureInfo.CurrentUICulture.Name;
+
+            await AvailableUpsellsState.EnsureLoadedAsync(Token, locale);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_jsInitialized) return;
+
+        var upsells = AvailableUpsellsState.AvailableUpsells;
+        if (!upsells.Any()) return;
+
+        _jsInitialized = true;
+        _activeId = upsells.First().PartnerServiceId;
+        _selfRef = DotNetObjectReference.Create(this);
+
+        try
+        {
+            await JS.InvokeVoidAsync("upsellStrip.init", _scrollRef, _selfRef);
+        }
+        catch { }
+
+        StateHasChanged();
+    }
+
+    private void OnStateChanged()
+    {
+        _jsInitialized = false;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        AvailableUpsellsState.OnChange -= OnStateChanged;
+        try { JS.InvokeVoidAsync("upsellStrip.destroy", _scrollRef); } catch { }
+        _selfRef?.Dispose();
+    }
+
+    [JSInvokable]
+    public void SetActiveItem(int id)
+    {
+        if (_activeId == id) return;
+        _activeId = id;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private bool IsSelected(int partnerServiceId) =>
+        _cartSelected.Any(x => x.PartnerServiceId == partnerServiceId);
+
+    private int GetQuantity(int partnerServiceId) =>
+        _cartSelected.FirstOrDefault(x => x.PartnerServiceId == partnerServiceId)?.Quantity ?? 1;
+
+    private async Task HandleToggle(int partnerServiceId, bool isSelected)
+    {
+        if (isSelected)
+        {
+            if (!_cartSelected.Any(x => x.PartnerServiceId == partnerServiceId))
+            {
+                _cartSelected.Add(new SelectedUpsellDto
+                {
+                    PartnerServiceId = partnerServiceId,
+                    Quantity = 1
+                });
+            }
+        }
+        else
+        {
+            _cartSelected.RemoveAll(x => x.PartnerServiceId == partnerServiceId);
+        }
+
+        if (OnSelectionChanged.HasDelegate)
+        {
+            await OnSelectionChanged.InvokeAsync(_cartSelected);
+        }
+    }
+
+    private decimal TotalPrice
+    {
+        get
+        {
+            decimal total = 0m;
+            foreach (var selected in _cartSelected)
+            {
+                var tile = AvailableUpsellsState.AvailableUpsells
+                    .FirstOrDefault(t => t.PartnerServiceId == selected.PartnerServiceId);
+                if (tile is null) continue;
+
+                total += UpsellPricingCalculator.CalculateTotal(
+                    tile.PricingModel,
+                    tile.Price,
+                    _reservationContext.Nights,
+                    _reservationContext.TotalGuests,
+                    Math.Max(1, selected.Quantity));
+            }
+            return total;
+        }
+    }
+
+    private void NavigateToVouchersPage()
+    {
+        NavigationManager.NavigateTo($"/reservation/{Token}/UpsellsCartPage");
+    }
+}

@@ -22,16 +22,9 @@
             </Header>
         </div>
     }
-    <div class="layout-body" id="main-body">
-        @if (ReservationState.IsLoading || MediaState.IsLoading || ApartmentState.IsLoading || AmenitiesState.IsLoading || LocksState.IsLoading)
-        {
-            <div class="loading"></div>
-        }
-        else
-        {
+        <div class="layout-body" id="main-body">
             @Body
-        }
-    </div>
+        </div>
     @if (LayoutState.ShowFooter)
     {
         <div class="layout-footer-nav">

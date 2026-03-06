@@ -349,5 +349,29 @@ namespace RentoomBooking.StayWell.Services
             return await _http.GetFromJsonAsync<List<DefinedAddonEntity>>("db/definedaddons", _json)
                    ?? [];
         }
+
+        public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(string reservationToken)
+        {
+            var response = await _http.GetAsync($"db/reservations/{reservationToken}/agreed-terms");
+            if (!response.IsSuccessStatusCode)
+            {
+                return [];
+            }
+
+            return await response.Content.ReadFromJsonAsync<List<CustomerAgreedTermDto>>(_json)
+                   ?? [];
+        }
+
+        public async Task<bool> UpdateAgreedTermAsync(string reservationToken, int termsSourceId, bool isAccepted)
+        {
+            var request = new UpdateAgreedTermRequest
+            {
+                TermsSourceId = termsSourceId,
+                IsAccepted = isAccepted
+            };
+
+            var response = await _http.PatchAsJsonAsync($"db/reservations/{reservationToken}/agreed-terms", request, _json);
+            return response.StatusCode == HttpStatusCode.NoContent;
+        }
     }
 }

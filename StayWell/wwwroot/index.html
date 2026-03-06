@@ -30,12 +30,60 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+    <script>
+        window.syncCartBottomPadding = function (summaryEl) {
+            if (!summaryEl) return;
+            var wrapper = document.querySelector(".cart-items-wrapper");
+            if (!wrapper) return;
+            var height = summaryEl.getBoundingClientRect().height;
+            wrapper.style.paddingBottom = (height + 100 + 24) + "px";
+        };
+
+
+        window.checkCartNeedsCollapse = function (wrapperEl, summaryEl) {
+            if (!wrapperEl || !summaryEl) return false;
+
+            var layoutBody = document.getElementById("main-body");
+            if (!layoutBody) return false;
+
+            var availableHeight = layoutBody.clientHeight;
+            var summaryHeight = summaryEl.getBoundingClientRect().height;
+
+            var contentHeight = wrapperEl.scrollHeight - (parseInt(wrapperEl.style.paddingBottom) || 0);
+
+            return contentHeight > (availableHeight - summaryHeight - 16);
+        };
+
+        window.setupCartScrollListener = function (dotnetRef) {
+            var body = document.getElementById("main-body") || document.documentElement;
+            var lastScrollTop = 0;
+
+            function onScroll() {
+                var scrollTop = body.scrollTop;
+                var direction = scrollTop > lastScrollTop ? "down" : "up";
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+                dotnetRef.invokeMethodAsync("OnCartScroll", scrollTop, direction);
+            }
+
+            body._cartScrollHandler = onScroll;
+            body.addEventListener("scroll", onScroll);
+        };
+
+        window.removeCartScrollListener = function () {
+            var body = document.getElementById("main-body") || document.documentElement;
+            if (!body || !body._cartScrollHandler) return;
+            body.removeEventListener("scroll", body._cartScrollHandler);
+            delete body._cartScrollHandler;
+        };
+    </script>
     <script src="_framework/blazor.webassembly.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oooh+Baby&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oooh+Baby&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
     </style>
 
     <script src="js/bitrixchat2.js"></script>
+    <script src="js/upsellstrip.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 
     <!--ukrywanie header'a-->

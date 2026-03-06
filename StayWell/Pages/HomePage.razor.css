@@ -10,7 +10,6 @@
     width: 100%;
     padding: 0.5rem;
     margin-bottom: 15px;
-
 }
 
 .buttons-wrapper {
@@ -34,13 +33,14 @@
     justify-content: center;
 }
 
+
 .tile {
     flex: 1;
     max-width: 180px;
     height: 110px;
     padding: 15px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.7);
+/*    background: rgba(255, 255, 255, 0.7);*/
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
@@ -51,7 +51,13 @@
     text-align: center;
     cursor: pointer;
     transition: transform 0.1s ease, background-color 0.2s ease;
+/*    background-color: red;*/
 }
+
+    .vouchers{
+        background-color: var(--rentoom-green-dark);
+/*        color: white !important;*/
+    }
 
     .tile:active {
         transform: scale(0.95);
@@ -64,11 +70,37 @@
     color: #333;
 }
 
+.tile-icon-vouchers {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: #333;
+    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7456%) hue-rotate(204deg) brightness(112%) contrast(100%);
+}
+
+
 .tile-text {
     font-size: 0.9rem;
     font-weight: 500;
     line-height: 1.2;
     color: #333;
+}
+
+.tile-text-vouchers {
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: white;
+}
+
+.upsells-available-wrap {
+    margin-top: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
 }
 
 @media (min-width: 530px) {
@@ -91,23 +123,24 @@
     max-width: 500px;
     height: 200px;
     border-radius: 15px;
-    background: linear-gradient(90deg, #cccccc 25%, #e0e0e0 50%, #cccccc 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.2s infinite linear;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+    background-color: #eeeeee;
+    border-radius: 12px;
 }
 
-.reservation-info-skeleton {
-    width: 100%;
-    max-width: 500px;
-    height: 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    background: #fff;
-    border-radius: 10px;
-    margin-top: 10px;
-    padding: 12px 16px;
+.skeleton-bar {
+    height: 70px;
+    border-radius: 18px;
+    margin-top: 20px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+    background-color: #eeeeee;
+}
+
+.skeleton-tile {
+    height: 110px;
+    border-radius: 18px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+    background-color: #eeeeee;
 }
 
 .skeleton-line {
@@ -140,4 +173,68 @@
     100% {
         background-position: -200% 0;
     }
+}
+
+@keyframes skeleton-pulse {
+    0% {
+        background-color: #eeeeee;
+    }
+
+    50% {
+        background-color: #f5f5f5;
+    }
+
+    100% {
+        background-color: #eeeeee;
+    }
+}
+
+.staywell-home-skeleton {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.skeleton-row {
+    display: flex;
+    gap: 12px;
+}
+
+.skeleton-upsells {
+    height: 220px;
+    width: 100%;
+}
+
+.reservation-info-skeleton {
+    width: 100%;
+    max-width: 500px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 12px 16px;
+}
+
+.staywell-home-upsells__error {
+    color: #dc3545;
+    padding: 15px;
+    text-align: center;
+    background: #fff5f5;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+.upsell-wrap {
+    border-radius: 15px;
+    padding: 18px;
+    border: none;
+    background: transparent;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }

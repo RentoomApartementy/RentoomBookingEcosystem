@@ -63,6 +63,7 @@
 
 .toggle-row__text {
     font-weight: 600;
+    font-size: 0.90rem;
     color: rgba(0, 0, 0, 0.85);
     cursor: default;
 }

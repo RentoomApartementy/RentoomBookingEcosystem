@@ -29,6 +29,7 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<ClipboardService>();
             builder.Services.AddScoped<ModalService>();
             builder.Services.AddScoped<BitrixService>();
+            builder.Services.AddScoped<UpsellCartState>();
 
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
@@ -37,6 +38,7 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<LocksState>();
             builder.Services.AddScoped<TermsState>();
             builder.Services.AddScoped<RegistrationCardState>();
+            builder.Services.AddScoped<CustomerAgreedTermsState>();
 
             //available upsells
             builder.Services.AddScoped<AvailableUpsellsState>();

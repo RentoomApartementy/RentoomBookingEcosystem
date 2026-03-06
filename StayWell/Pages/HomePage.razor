@@ -4,60 +4,92 @@
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.StayWell.States
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
+@using RentoomBooking.StayWell.Services
 @inject NavigationManager Navigation
 @inject IStringLocalizer<HomePage> Localizer
+@inject UpsellCartState UpsellCartState
+@inject AvailableUpsellsState AvailableUpsellsState
+@inject UpsellCartState UpsellCartState
 @inherits Models.PageBase
 
 <PageTitle>Main</PageTitle>
 
 <div class="image-wrapper">
-    @if (_isLoading)
+    @if (MediaState.IsLoading || ReservationState.IsLoading || ImageUrl == string.Empty)
     {
-        <div class="skeleton">
-
-        </div>
+        <div class="skeleton"></div>
     }
     else
     {
-        <ApartmentImage Source="@ImageUrl" ApartmentName="@ApartmentName">
-
-        </ApartmentImage>
+        <ApartmentImage Source="@ImageUrl" ApartmentName="@ApartmentName" />
     }
 </div>
 
-<div style="padding-top: 20px;">
-    <DateRangeBar CheckInDate="@checkIn" CheckOutDate="@checkOut" CurrentDate="@now" CheckInLabel="@Localizer["CheckIn"]" CheckOutLabel="@Localizer["CheckOut"]"/>
-</div>
+@if (ReservationState.IsLoading)
+{
+    <div style="padding-top: 20px;">
+        <div class="skeleton skeleton-bar"></div>
+    </div>
 
-<div class="tile--row">
-    <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/Instructions")'>
-        <div class="tile-icon">
-            <img class="fas" src="/icons/book.svg" />
+    <div class="tile--row">
+        <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
+        <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
+    </div>
+}
+else
+{
+    <div style="padding-top: 20px;">
+        <DateRangeBar CheckInDate="@checkIn" CheckOutDate="@checkOut" CurrentDate="@now"
+                      CheckInLabel="@Localizer["CheckIn"]" CheckOutLabel="@Localizer["CheckOut"]"
+                      CheckInTime="@ReservationState.CheckInTime"
+                      CheckOutTime="@ReservationState.CheckOutTime" />
+    </div>
+
+    <div class="tile--row">
+        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage")'>
+            <div class="tile-icon">
+                <img class="fas" src="/icons/book.svg" />
+            </div>
+            <div class="tile-text">Instrukcja zameldowania</div>
         </div>
-        <div class="tile-text">
-            Instrukcja zameldowania
+
+        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
+            <div class="tile-icon">
+                <img class="fas" src="/icons/lock.svg" />
+            </div>
+            <div class="tile-text">@Localizer["OpenApartment"]</div>
+        </div>
+        <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
+            <div class="tile-icon-vouchers">
+                <img class="fas" src="/icons/wallet-cards.svg" />
+            </div>
+            <div class="tile-text-vouchers">Moje Vouchery</div>
         </div>
     </div>
 
-    <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/Unlock")'>
-        <div class="tile-icon">
-            <img class="fas" src="/icons/lock.svg" />
-        </div>
-        <div class="tile-text">
-            @Localizer["OpenApartment"]
-        </div>
-    </div>
-</div>
+    <RentoomBooking.StayWell.Components.Upsells.AvailableUpsells
+        Token="@Token"
+        ReservationContext="_reservationContext"
+        Title="Ulepsz swój pobyt"
+        CtaText="Przejdź do płatności"
+        MaxItems="3"
+        Theme="staywell-theme"
+        OnSelectionChanged="OnUpsellsSelected"
+        />
+}
+
 
 @code
 {
-
     public string? ApartmentName;
     public string? ApartmentNumber;
     public string? ApartmentAddress;
     public string? ReservationDateFrom;
     public string? ReservationDateTo;
-    public string? ImageUrl = string.Empty;
+    public string? ImageUrl = null;
 
     private DateTime checkIn;
     private DateTime checkOut;
@@ -65,7 +97,77 @@
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
 
-    private bool _isLoading = true;
+    private ReservationPricingContext _reservationContext = new();
+
+    private void OnUpsellsSelected(List<SelectedUpsellDto> selected)
+    {
+        var tiles = selected
+            .Select(s => AvailableUpsellsState.AvailableUpsells
+                .FirstOrDefault(u => u.PartnerServiceId == s.PartnerServiceId))
+            .Where(t => t is not null)
+            .Select(t => t!);
+
+        UpsellCartState.SetVisuals(tiles);
+
+        var lines = selected.Select(s =>
+        {
+            var tile = AvailableUpsellsState.AvailableUpsells
+                .FirstOrDefault(u => u.PartnerServiceId == s.PartnerServiceId);
+
+            var lineTotal = tile is not null
+                ? UpsellPricingCalculator.CalculateTotal(
+                    tile.PricingModel,
+                    tile.Price,
+                    _reservationContext.Nights,
+                    _reservationContext.TotalGuests,
+                    s.Quantity)
+                : 0m;
+
+            return new UpsellSummaryLineDto
+            {
+                PartnerServiceId = s.PartnerServiceId,
+                Title = tile?.Title ?? $"Upsell #{s.PartnerServiceId}",
+                PricingModel = tile?.PricingModel ?? default,
+                Quantity = s.Quantity,
+                UnitPriceGross = tile?.Price ?? 0m,
+                Nights = _reservationContext.Nights,
+                TotalGuests = _reservationContext.TotalGuests,
+                LineTotalGross = lineTotal,
+                DisplayText = tile?.ShortDescription ?? string.Empty
+            };
+        }).ToList();
+
+        UpsellCartState.SetFromSummary(lines, _reservationContext.Currency);
+    }
+
+    private ReservationPricingContext BuildReservationPricingContext()
+    {
+        var reservation = ReservationState.CurrentReservation?.Reservation;
+        var reservationDetails = reservation?.ReservationDetails;
+        var firstItem = reservation?.Items?.FirstOrDefault();
+
+        var fromDateTime = reservationDetails?.getDateFrom() ?? DateTime.Today;
+        var toDateTime = reservationDetails?.getDateTo() ?? fromDateTime;
+
+        var adults = firstItem?.numberOfAdults ?? 0;
+        var childrenRaw = firstItem?.numberOfSmallChildren;
+        var children = int.TryParse(childrenRaw, out var parsedChildren) ? parsedChildren : 0;
+
+        var currency = reservationDetails?.currency;
+        if (string.IsNullOrWhiteSpace(currency))
+            currency = reservation?.Client?.Currency;
+        if (string.IsNullOrWhiteSpace(currency))
+            currency = "PLN";
+
+        return new ReservationPricingContext
+        {
+            StartDate = DateOnly.FromDateTime(fromDateTime),
+            EndDate = DateOnly.FromDateTime(toDateTime),
+            Adults = adults,
+            Children = children,
+            Currency = currency
+        };
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -76,31 +178,25 @@
         checkIn = ci;
         checkOut = co;
         now = DateTime.Now;
-        _isLoading = false;
     }
 
     private void LoadData()
-    {   
-
+    {
         ApartmentName = Reservation?.Items?.FirstOrDefault()?.objectName;
         ApartmentNumber = Reservation?.Items?.FirstOrDefault()?.itemCode;
         ApartmentAddress = ApartmentState.CurrentApartment?.ObjectLocation?.LocalizationItem?.Street;
         ReservationDateFrom = Reservation?.ReservationDetails?.dateFrom;
         ReservationDateTo = Reservation?.ReservationDetails?.dateTo;
-
         LoadImage();
-
+        _reservationContext = BuildReservationPricingContext();
     }
 
     private void LoadImage()
     {
         const string placeholder = "/images/placeholders/apartment_placeholder.png";
-
         ImageUrl = MediaState?.CurrentMedia?
             .FirstOrDefault(m => string.Equals(m.Extension, "jpg", StringComparison.OrdinalIgnoreCase))
             ?.Url
             ?? placeholder;
     }
-
-
 }
