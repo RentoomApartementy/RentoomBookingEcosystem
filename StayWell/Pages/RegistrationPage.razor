@@ -96,12 +96,60 @@
         if (RegistrationCardState.CurrentCard?.GuestsData?.Any() == true)
         {
             _guests = RegistrationCardState.CurrentCard.GuestsData;
-            _mail = RegistrationCardState.CurrentCard.ContactEmail;
         }
         else
         {
             _guests = Enumerable.Range(0, adults).Select(_ => new RegistrationCardGuestModel()).ToList();
         }
+
+        TryInitializeMail();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            TryInitializeMail();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private void TryInitializeMail()
+    {
+        if (!string.IsNullOrWhiteSpace(_mail))
+        {
+            return;
+        }
+
+        _mail = GetInitialEmail();
+        if (!string.IsNullOrWhiteSpace(_mail))
+        {
+            StateHasChanged();
+        }
+    }
+
+    private string? GetInitialEmail()
+    {
+        var savedEmail = RegistrationCardState.CurrentCard?.ContactEmail;
+        if (!string.IsNullOrWhiteSpace(savedEmail))
+        {
+            return savedEmail;
+        }
+
+        var reservationEmail = ReservationState?.CurrentReservation?.Reservation?.Client?.Email;
+        if (string.IsNullOrWhiteSpace(reservationEmail))
+        {
+            return null;
+        }
+
+        return IsBookingMail(reservationEmail) ? null : reservationEmail;
+    }
+
+    private static bool IsBookingMail(string? mail)
+    {
+        if (string.IsNullOrWhiteSpace(mail)) return false;
+        return mail.EndsWith("@guest.booking.com", StringComparison.OrdinalIgnoreCase);
     }
 
     private void SelectTime()

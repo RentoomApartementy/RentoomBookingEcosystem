@@ -1,0 +1,20 @@
+﻿<div class="floating-nav-container">
+    <div class="button-wrapper @(IsDisabled ? "disabled-wrapper" : "")">
+        <button class="fab-button" @onclick="OnClick" disabled="@IsDisabled">
+            <div class="button-content">
+                <span>@Text</span>
+                @if (IconPath != null)
+                {
+                    <img src="@IconPath" alt="icon" class="button-icon" />
+                }
+            </div>
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Text { get; set; } = "Dalej";
+    [Parameter] public string? IconPath { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
+}

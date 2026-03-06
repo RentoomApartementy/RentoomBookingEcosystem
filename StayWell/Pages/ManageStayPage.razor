@@ -19,7 +19,8 @@
 
             @if (ApartmentState.CurrentApartment?.Addons is not null)
             {
-                foreach (var addon in ApartmentState.CurrentApartment.Addons.Where(a => a.Id != 2))
+                foreach (var addon in ApartmentState.CurrentApartment.Addons
+                    .Where(a => a.Id != AddonServiceFeeId && a.Id != AddonCleaningFeeId && IsAddonAvailable(a.Id)))
                 {
                     var definedAddon = addon.Id.HasValue
                     ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
@@ -48,6 +49,12 @@
 </section>
 
 @code {
+    private const int AddonServiceFeeId = 2;
+    private const int AddonCleaningFeeId = 8;
+    private const int EarlyCheckInAddonId = 18;
+    private const int LateCheckOutAddonId = 10;
+    private static readonly TimeSpan LateCheckOutCutoffTime = new(20, 0, 0);
+
     private static readonly Dictionary<string, string> AddonsLanguageMap = new()
     {
         ["pl-PL"] = "PL",
@@ -81,4 +88,31 @@
 
     private string CurrentAddonsLanguage =>
         AddonsLanguageMap.GetValueOrDefault(CultureInfo.CurrentUICulture.Name, "PL");
+
+    private bool IsAddonAvailable(int? addonId)
+    {
+        if (!addonId.HasValue)
+        {
+            return true;
+        }
+
+        return addonId.Value switch
+        {
+            EarlyCheckInAddonId => false,
+            LateCheckOutAddonId => IsLateCheckOutAvailable(),
+            _ => true
+        };
+    }
+
+    private bool IsLateCheckOutAvailable()
+    {
+        var checkoutDate = ReservationState.CurrentReservation?.Reservation?.ReservationDetails?.getDateTo();
+        if (checkoutDate is null)
+        {
+            return true;
+        }
+
+        var cutoff = checkoutDate.Value.Date.AddDays(-1).Add(LateCheckOutCutoffTime);
+        return DateTime.Now <= cutoff;
+    }
 }

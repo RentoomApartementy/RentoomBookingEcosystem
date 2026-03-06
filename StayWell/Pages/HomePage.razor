@@ -25,70 +25,30 @@
     }
 </div>
 
+<div style="padding-top: 20px;">
+    <DateRangeBar CheckInDate="@checkIn" CheckOutDate="@checkOut" CurrentDate="@now" CheckInLabel="@Localizer["CheckIn"]" CheckOutLabel="@Localizer["CheckOut"]"/>
+</div>
 
-
-
-<div class="reservation-info-wrapper">
-    @if (_isLoading)
-    {
-        <div class="reservation-info-skeleton">
-            <div class="skeleton-line skeleton-line-title"></div>
-            <div class="skeleton-line skeleton-line-address"></div>
-            <div class="skeleton-line skeleton-line-dates"></div>
+<div class="tile--row">
+    <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/Instructions")'>
+        <div class="tile-icon">
+            <img class="fas" src="/icons/book.svg" />
         </div>
-    }
-    else
-    {
-        <DateRangeBar CheckInDate="@checkIn" CheckOutDate="@checkOut" CurrentDate="@now" CheckInLabel="@Localizer["CheckIn"]" CheckOutLabel="@Localizer["CheckOut"]"/>
-    }
+        <div class="tile-text">
+            Instrukcja zameldowania
+        </div>
+    </div>
+
+    <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/Unlock")'>
+        <div class="tile-icon">
+            <img class="fas" src="/icons/lock.svg" />
+        </div>
+        <div class="tile-text">
+            @Localizer["OpenApartment"]
+        </div>
+    </div>
 </div>
 
-<div class="buttons-wrapper">
-
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ClubPage"))" Text="@Localizer["ClubBenefits"]" BenefitsClub=true>
-        <Icon>
-            <img src="/icons/hand-coins.svg" alt="ClubPage">
-        </Icon>
-    </Button>
-
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage"))" Text="Twoje Vouchery" BenefitsClub=true>
-        <Icon>
-            <img src="/icons/hand-coins.svg" alt="ClubPage">
-        </Icon>
-    </Button>
-
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/Vouchers"))" Text="Vouchery" BenefitsClub=true>
-        <Icon>
-            <img src="/icons/hand-coins.svg" alt="ClubPage">
-        </Icon>
-    </Button>
-
-
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage"))" Text="@Localizer["Instructions"]">
-        <Icon>
-            <img src="/icons/book.svg" alt="InstructionsPage">
-        </Icon>
-    </Button>
-
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage"))" Text="@Localizer["OpenApartment"]">
-        <Icon>
-            <img src="/icons/door-open.svg" alt="OpenApartmentPage">
-        </Icon>
-    </Button>
-
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/AboutReservationPage"))" Text="@Localizer["AboutReservation"]">
-        <Icon>
-            <img src="/icons/info.svg" alt="AboutReservationPage">
-        </Icon>
-    </Button>
-
-    <Button OnClick="@(() => Navigation.NavigateTo($"/reservation/{Token}/ManageStayPage"))" Text="@Localizer["ManageStay"]">
-        <Icon>
-            <img src="/icons/lamp.svg" alt="ManageStayPage">
-        </Icon>
-    </Button>
-
-</div>
 @code
 {
 

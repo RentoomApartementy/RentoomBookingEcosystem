@@ -38,6 +38,9 @@
     font-size: 0.95rem;
     color: #888;
     text-decoration: none;
+    background-color: whitesmoke;
+    border-radius: 18px;
+    text-align: center;
 }
 
 .right-wrapper {

@@ -1,33 +1,48 @@
 ﻿@inject NavigationManager Navigation
 @implements IDisposable
-@* @inherits Models.PageBase *@
+
 <div class="footer-navigation-row">
-    <NavigationButton href="@($"/reservation/{Token}/InstructionsPage")" active="@IsActive($"/reservation/{Token}/InstructionsPage")">
+    <NavigationButton href="@($"/reservation/{Token}/InstructionsPage")"
+                      active="@IsActive($"/reservation/{Token}/InstructionsPage")"
+                      Text="Instrukcja">
         <Icon>
-            <img src="/icons/book.svg">
+            <img src="/icons/book.svg" alt="Instrukcja" />
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/OpenApartmentPage")" active="@IsActive($"/reservation/{Token}/OpenApartmentPage")">
+
+    <NavigationButton href="@($"/reservation/{Token}/OpenApartmentPage")"
+                      active="@IsActive($"/reservation/{Token}/OpenApartmentPage")"
+                      Text="Otwórz">
         <Icon>
-            <img src="/icons/door-open.svg">
+            <img src="/icons/lock.svg" alt="Otwórz" />
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/HomePage")" active="@IsActive([$"/reservation/{Token}/HomePage", $"/reservation/{Token}/"])">
+
+    <NavigationButton href="@($"/reservation/{Token}/HomePage")"
+                      active="@IsActive([$"/reservation/{Token}/HomePage", $"/reservation/{Token}/",$"/reservation/{Token}"])"
+                      Text="Główna">
         <Icon>
-            <img src="/icons/house.svg">
+            <img src="/icons/house.svg" alt="Główna" />
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/ManageStayPage")" active="@IsActive($"/reservation/{Token}/ManageStayPage")">
+
+    <NavigationButton href="@($"/reservation/{Token}/ManageStayPage")"
+                      active="@IsActive($"/reservation/{Token}/ManageStayPage")"
+                      Text="Zarządzaj">
         <Icon>
-            <img src="/icons/lamp.svg">
+            <img src="/icons/lamp.svg" alt="Zarządzaj" />
         </Icon>
     </NavigationButton>
-    <NavigationButton href="@($"/reservation/{Token}/AboutReservationPage")" active="@IsActive($"/reservation/{Token}/AboutReservationPage")">
+
+    <NavigationButton href="@($"/reservation/{Token}/AboutReservationPage")"
+                      active="@IsActive($"/reservation/{Token}/AboutReservationPage")"
+                      Text="Info">
         <Icon>
-            <img src="/icons/info.svg">
+            <img src="/icons/info.svg" alt="Info" />
         </Icon>
     </NavigationButton>
 </div>
+
 @code {
     [Parameter]
     public string? Token { get; set; }
@@ -38,7 +53,10 @@
         Navigation.LocationChanged += OnLocationChanged;
     }
 
-    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    private void OnLocationChanged(
+        object? sender,
+        Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e
+    )
     {
         StateHasChanged();
     }
@@ -51,19 +69,24 @@
     private bool IsActive(string href)
     {
         var currentUri = Navigation.Uri;
-        // Porównanie bez hosta, tylko ścieżka i parametry
         var baseUri = Navigation.BaseUri;
-        var relativeUri = currentUri.StartsWith(baseUri) ? currentUri.Substring(baseUri.Length - 1) : currentUri;
+        var relativeUri = currentUri.StartsWith(baseUri)
+            ? currentUri.Substring(baseUri.Length - 1)
+            : currentUri;
+
         return relativeUri.Equals(href, StringComparison.OrdinalIgnoreCase);
     }
 
     private bool IsActive(List<string> hrefs)
     {
         var currentUri = Navigation.Uri;
-        // Porównanie bez hosta, tylko ścieżka i parametry
         var baseUri = Navigation.BaseUri;
-        var relativeUri = currentUri.StartsWith(baseUri) ? currentUri.Substring(baseUri.Length - 1) : currentUri;
+        var relativeUri = currentUri.StartsWith(baseUri)
+            ? currentUri.Substring(baseUri.Length - 1)
+            : currentUri;
 
-        return hrefs.Any(href => relativeUri.Equals(href, StringComparison.OrdinalIgnoreCase));
+        return hrefs.Any(href =>
+            relativeUri.Equals(href, StringComparison.OrdinalIgnoreCase)
+        );
     }
 }

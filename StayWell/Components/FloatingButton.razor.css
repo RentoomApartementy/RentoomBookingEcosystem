@@ -1,0 +1,48 @@
+﻿.floating-nav-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 460px;
+    padding: 0 20px;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.fab-button {
+    width: 100%;
+    height: 56px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #21573e 0%, #1a4532 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.1s active, opacity 0.3s ease;
+}
+
+    .fab-button:active {
+        transform: scale(0.98);
+    }
+
+.button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button-icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+}
+
+.disabled-wrapper {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(0.5);
+}

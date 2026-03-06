@@ -1,0 +1,156 @@
+﻿@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<div class="lock-tile-container" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden; background: transparent;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: 100%;">
+        <defs>
+            <clipPath id="knob-mask">
+                <rect x="150" y="70" width="200" height="360" rx="35" />
+            </clipPath>
+
+            <linearGradient id="cylinder-shadow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#000" stop-opacity="0.8" />
+                <stop offset="15%" stop-color="#000" stop-opacity="0" />
+                <stop offset="85%" stop-color="#000" stop-opacity="0" />
+                <stop offset="100%" stop-color="#000" stop-opacity="0.8" />
+            </linearGradient>
+
+            <g id="keypad-unit">
+                <rect x="-85" y="90" width="170" height="320" rx="15" fill="#151515" />
+                @for (int i = 1; i <= 12; i++)
+                {
+                    var keyId = i switch { 10 => "star", 11 => "0", 12 => "hash", _ => i.ToString() };
+                    var cx = ((i - 1) % 3 - 1) * 55;
+                    var cy = 140 + ((i - 1) / 3) * 60;
+                    <circle id="@($"btn-{keyId}")" cx="@cx" cy="@cy" r="16" fill="#111" stroke="#333" stroke-width="2" />
+                    <g id="@($"txt-cont-{keyId}")" data-label="@(i switch { 10 => "*", 11 => "0", 12 => "#", _ => i.ToString() })" data-x="@cx" data-y="@(cy + 1)"></g>
+                }
+            </g>
+
+            <g id="stripes-unit">
+                <line x1="-80" y1="80" x2="-80" y2="420" stroke="#222" stroke-width="4" stroke-dasharray="10 5" />
+                <line x1="-40" y1="80" x2="-40" y2="420" stroke="#1a1a1a" stroke-width="8" />
+                <line x1="0" y1="80" x2="0" y2="420" stroke="#111" stroke-width="6" />
+                <line x1="40" y1="80" x2="40" y2="420" stroke="#1a1a1a" stroke-width="8" />
+                <line x1="80" y1="80" x2="80" y2="420" stroke="#222" stroke-width="4" stroke-dasharray="10 5" />
+            </g>
+
+            <g id="cycle-block">
+                <use href="#keypad-unit" x="0" />
+                <use href="#stripes-unit" x="400" />
+                <use href="#stripes-unit" x="800" />
+            </g>
+        </defs>
+
+        <style>
+            .lock-key-text {
+                font-family: sans-serif;
+                font-size: 16px;
+                font-weight: bold;
+                text-anchor: middle;
+                dominant-baseline: middle;
+                pointer-events: none;
+                fill: #777;
+            }
+        </style>
+
+        <rect x="130" y="50" width="240" height="400" rx="45" fill="#080808" stroke="#000" stroke-width="6" />
+        <rect x="150" y="70" width="200" height="360" rx="35" fill="#121212" />
+
+        <g clip-path="url(#knob-mask)">
+            <g id="lock-rotator" transform="translate(250, 0)">
+                <use href="#cycle-block" x="0" />
+                <use href="#cycle-block" x="1200" />
+                <use href="#cycle-block" x="2400" />
+                <use href="#cycle-block" x="3600" />
+            </g>
+        </g>
+
+        <rect x="150" y="70" width="200" height="360" rx="35" fill="url(#cylinder-shadow)" pointer-events="none" />
+        <rect x="150" y="70" width="200" height="360" rx="35" fill="none" stroke="#222" stroke-width="2" pointer-events="none" />
+    </svg>
+</div>
+
+<script>
+    window.initLockControl = () => {
+        const rotator = document.getElementById('lock-rotator');
+        if (!rotator) return;
+
+        const containers = document.querySelectorAll('[id^="txt-cont-"]');
+        if (containers[0] && !document.getElementById('txt-1')) {
+            containers.forEach(div => {
+                const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                txt.setAttribute("x", div.getAttribute("data-x"));
+                txt.setAttribute("y", div.getAttribute("data-y"));
+                txt.setAttribute("class", "lock-key-text");
+                txt.setAttribute("id", div.id.replace('cont-', ''));
+                txt.textContent = div.getAttribute("data-label");
+                div.appendChild(txt);
+            });
+        }
+
+        const keysToPress = ['1', '5', '9', 'hash'];
+        const allBtns = document.querySelectorAll('[id^="btn-"]');
+        const allTexts = document.querySelectorAll('[id^="txt-"]');
+        const duration = 10000;
+
+        function update(timestamp) {
+            if (!window._lStart) window._lStart = timestamp;
+            const elapsed = (timestamp - window._lStart) % duration;
+            const p = elapsed / duration;
+
+            let globalActive = false;
+
+            allBtns.forEach(b => b.setAttribute('fill', '#111'));
+
+            if (p < 0.4) {
+                const step = Math.floor(p * 10);
+                const subP = (p * 10) % 1;
+                const activeKey = keysToPress[step];
+                if (activeKey && subP > 0.5 && subP < 0.9) {
+                    const btn = document.getElementById('btn-' + activeKey);
+                    if(btn) btn.setAttribute('fill', '#00ccff');
+                }
+            }
+            else if (p < 0.55) {
+                globalActive = (p > 0.42 && p < 0.44) || (p > 0.46);
+            }
+
+            allBtns.forEach(b => {
+                b.setAttribute('stroke', globalActive ? '#00ccff' : '#333');
+                b.style.filter = globalActive ? 'drop-shadow(0 0 5px #00ccff)' : 'none';
+            });
+            allTexts.forEach(t => {
+                t.setAttribute('fill', globalActive ? '#fff' : '#777');
+                t.style.filter = globalActive ? 'drop-shadow(0 0 8px #00ccff)' : 'none';
+            });
+
+            let xPos = 250;
+            if (p >= 0.6 && p <= 0.95) {
+                const mP = (p - 0.6) / 0.35;
+                const ease = mP < 0.5 ? 4 * mP * mP * mP : 1 - Math.pow(-2 * mP + 2, 3) / 2;
+                xPos = 250 - (ease * 3600);
+            } else if (p > 0.95) {
+                xPos = 250 - 3600;
+            }
+
+            rotator.setAttribute('transform', `translate(${xPos}, 0)`);
+            window._lockReq = requestAnimationFrame(update);
+        }
+
+        if (window._lockReq) cancelAnimationFrame(window._lockReq);
+        window._lockReq = requestAnimationFrame(update);
+    };
+</script>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initLockControl");
+        }
+    }
+
+    public async ValueTask DisposeAsync() { }
+}

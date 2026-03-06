@@ -1,6 +1,12 @@
 ﻿.date-range-bar {
     width: 100%;
-    padding: 15px 0 0 0;
+    padding: 15px;
+    border-radius: 18px;
+    background: transparent;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
 }
 
 .date-labels {

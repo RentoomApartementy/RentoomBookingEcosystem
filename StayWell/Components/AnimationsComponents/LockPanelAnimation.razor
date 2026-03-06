@@ -1,0 +1,237 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+    <defs>
+        <linearGradient id="body-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#3a3a3a" />
+            <stop offset="50%" stop-color="#222222" />
+            <stop offset="100%" stop-color="#111111" />
+        </linearGradient>
+
+        <linearGradient id="handle-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#555" />
+            <stop offset="50%" stop-color="#2a2a2a" />
+            <stop offset="100%" stop-color="#111" />
+        </linearGradient>
+
+        <style type="text/css">
+            @@keyframes state-ring {
+                0%, 2% {
+                    stroke: #222;
+                    filter: none;
+                }
+
+                4%, 49% {
+                    stroke: #006699;
+                    filter: drop-shadow(0 0 2px #006699);
+                }
+
+                50% {
+                    stroke: #00ccff;
+                    filter: drop-shadow(0 0 6px #00ccff);
+                }
+
+                51% {
+                    stroke: #006699;
+                    filter: none;
+                }
+
+                52% {
+                    stroke: #00ccff;
+                    filter: drop-shadow(0 0 6px #00ccff);
+                }
+
+                53% {
+                    stroke: #006699;
+                    filter: none;
+                }
+
+                54%, 80% {
+                    stroke: #00ccff;
+                    filter: drop-shadow(0 0 6px #00ccff);
+                }
+
+                83%, 100% {
+                    stroke: #222;
+                    filter: none;
+                }
+            }
+
+            @@keyframes state-text {
+                0%, 2% {
+                    fill: #555;
+                    filter: none;
+                }
+
+                4%, 49% {
+                    fill: #bceaff;
+                    filter: none;
+                }
+
+                50% {
+                    fill: #fff;
+                    filter: drop-shadow(0 0 6px #00ccff);
+                }
+
+                51% {
+                    fill: #bceaff;
+                    filter: none;
+                }
+
+                52% {
+                    fill: #fff;
+                    filter: drop-shadow(0 0 6px #00ccff);
+                }
+
+                53% {
+                    fill: #bceaff;
+                    filter: none;
+                }
+
+                54%, 80% {
+                    fill: #fff;
+                    filter: drop-shadow(0 0 6px #00ccff);
+                }
+
+                83%, 100% {
+                    fill: #555;
+                    filter: none;
+                }
+            }
+
+            /* Podwójne wciśnięcie przycisku 1 ze znacznie większym odstępem */
+            @@keyframes press-1 {
+                0%, 3%, 7%, 19%, 23%, 100% {
+                    fill: #111;
+                }
+
+                4%, 6%, 20%, 22% {
+                    fill: #00ccff;
+                }
+            }
+
+            @@keyframes press-5 {
+                0%, 29%, 33%, 100% {
+                    fill: #111;
+                }
+
+                30%, 32% {
+                    fill: #00ccff;
+                }
+            }
+
+            @@keyframes press-8 {
+                0%, 37%, 41%, 100% {
+                    fill: #111;
+                }
+
+                38%, 40% {
+                    fill: #00ccff;
+                }
+            }
+
+            @@keyframes press-hash {
+                0%, 45%, 49%, 100% {
+                    fill: #111;
+                }
+
+                46%, 48% {
+                    fill: #00ccff;
+                }
+            }
+
+            @@keyframes pull-handle {
+                0%, 55% {
+                    transform: rotate(0deg);
+                }
+
+                60%, 75% {
+                    transform: rotate(35deg);
+                }
+
+                80%, 100% {
+                    transform: rotate(0deg);
+                }
+            }
+
+            .key-text {
+                animation: state-text 8s infinite;
+                font-family: sans-serif;
+                font-size: 14px;
+                font-weight: bold;
+                text-anchor: middle;
+                dominant-baseline: middle;
+                pointer-events: none;
+            }
+
+            .btn-base {
+                animation: state-ring 8s infinite;
+                fill: #111;
+                stroke-width: 2;
+            }
+
+            .btn-1 {
+                animation: press-1 8s infinite, state-ring 8s infinite;
+                fill: #111;
+                stroke-width: 2;
+            }
+
+            .btn-5 {
+                animation: press-5 8s infinite, state-ring 8s infinite;
+                fill: #111;
+                stroke-width: 2;
+            }
+
+            .btn-8 {
+                animation: press-8 8s infinite, state-ring 8s infinite;
+                fill: #111;
+                stroke-width: 2;
+            }
+
+            .btn-hash {
+                animation: press-hash 8s infinite, state-ring 8s infinite;
+                fill: #111;
+                stroke-width: 2;
+            }
+
+            .door-handle {
+                animation: pull-handle 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                transform-origin: 250px 350px;
+            }
+        </style>
+    </defs>
+
+    <rect x="170" y="20" width="160" height="440" rx="15" fill="url(#body-grad)" stroke="#111" stroke-width="4" />
+
+    <rect x="185" y="40" width="130" height="250" rx="10" fill="#0c0c0c" stroke="#222" stroke-width="2" />
+
+    <g id="keypad">
+        <circle cx="220" cy="70" r="14" class="btn-1" /> <text x="220" y="71" class="key-text">1</text>
+        <circle cx="280" cy="70" r="14" class="btn-base" /> <text x="280" y="71" class="key-text">2</text>
+
+        <circle cx="220" cy="105" r="14" class="btn-base" /> <text x="220" y="106" class="key-text">3</text>
+        <circle cx="280" cy="105" r="14" class="btn-base" /> <text x="280" y="106" class="key-text">4</text>
+
+        <circle cx="220" cy="140" r="14" class="btn-5" /> <text x="220" y="141" class="key-text">5</text>
+        <circle cx="280" cy="140" r="14" class="btn-base" /> <text x="280" y="141" class="key-text">6</text>
+
+        <circle cx="220" cy="175" r="14" class="btn-base" /> <text x="220" y="176" class="key-text">7</text>
+        <circle cx="280" cy="175" r="14" class="btn-8" /> <text x="280" y="176" class="key-text">8</text>
+
+        <circle cx="220" cy="210" r="14" class="btn-base" /> <text x="220" y="211" class="key-text">9</text>
+        <circle cx="280" cy="210" r="14" class="btn-base" /> <text x="280" y="211" class="key-text">0</text>
+
+        <circle cx="220" cy="245" r="14" class="btn-base" /> <text x="220" y="246" class="key-text">*</text>
+        <circle cx="280" cy="245" r="14" class="btn-hash" /> <text x="280" y="246" class="key-text">#</text>
+    </g>
+
+    <g class="door-handle">
+        <circle cx="250" cy="350" r="30" fill="#151515" stroke="#000" stroke-width="4" />
+        <circle cx="250" cy="350" r="24" fill="#2a2a2a" />
+
+        <rect x="235" y="335" width="140" height="30" rx="15" fill="url(#handle-grad)" stroke="#111" stroke-width="3" />
+
+        <rect x="255" y="340" width="110" height="6" rx="3" fill="#666" opacity="0.3" />
+
+        <circle cx="250" cy="350" r="10" fill="#111" />
+    </g>
+
+</svg>
