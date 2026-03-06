@@ -44,15 +44,24 @@ namespace RentoomBookingWeb.Services
                     Language = "pol",
                     AdultsNumber = adults,
                     ChildrenNumber = children,
-                    Currency = "PLN"
+                    Currency = "PLN",
+                    MinStay = true
                 }
             };
 
-            var result = await _offerService.GetAvailabilityAndPricesForDaysAsync(paramsSearch);
+            var availabilityResult = await _offerService.GetAvailabilityAndPricesForDaysAsync(paramsSearch);
 
-            if (result != null && result.Any())
+            if (availabilityResult != null && availabilityResult.Any())
             {
-                return FindClosestAvailableTerm(result.First(), desiredDuration, targetDate);
+                var candidates = FindPotentialAvailableTerms(availabilityResult.First(), desiredDuration, targetDate, 10);
+                
+                foreach (var candidate in candidates)
+                {
+                    if (await IsTermTrulyAvailableAsync(apartmentId, candidate, adults, children))
+                    {
+                        return candidate;
+                    }
+                }
             }
 
             return null;
@@ -86,7 +95,8 @@ namespace RentoomBookingWeb.Services
                     Language = "pol",
                     AdultsNumber = adults,
                     ChildrenNumber = children,
-                    Currency = "PLN"
+                    Currency = "PLN",
+                    MinStay = true
                 }
             };
 
@@ -96,11 +106,15 @@ namespace RentoomBookingWeb.Services
             {
                 foreach (var apartmentData in apiResult)
                 {
-                    var term = FindClosestAvailableTerm(apartmentData, desiredDuration, targetDate);
-
-                    if (term != null)
+                    var candidates = FindPotentialAvailableTerms(apartmentData, desiredDuration, targetDate, 3);
+                    
+                    foreach (var candidate in candidates)
                     {
-                        results[apartmentData.ObjectId] = term;
+                        if (await IsTermTrulyAvailableAsync(apartmentData.ObjectId, candidate, adults, children))
+                        {
+                            results[apartmentData.ObjectId] = candidate;
+                            break;
+                        }
                     }
                 }
             }
@@ -108,27 +122,74 @@ namespace RentoomBookingWeb.Services
             return results;
         }
 
-        private AvailableTerm? FindClosestAvailableTerm(RentoomBooking.SharedClasses.Models.IdoBooking.OfferAvailabilityObject apartment, int duration, DateTime targetDate)
+        private async Task<bool> IsTermTrulyAvailableAsync(int apartmentId, AvailableTerm term, int adults, int children)
         {
-            if (apartment.ObjectAvailability == null) return null;
+            var pricingRequest = new RentoomBooking.SharedClasses.Models.IdoBooking.Public.PricingOffersRequest
+            {
+                ObjectIds = new List<int> { apartmentId },
+                DateFrom = term.StartDate,
+                DateTo = term.EndDate,
+                NumberOfAdults = adults,
+                NumberOfBigChildren = children,
+                Currency = "PLN",
+                Language = "pol"
+            };
+
+            var response = await _offerService.GetPricingOffersAsync(pricingRequest);
+            
+            return response?.Result?.PricingOffers != null && 
+                   response.Result.PricingOffers.Any(o => o.ObjectId == apartmentId && o.Offers != null && o.Offers.Any());
+        }
+
+        private List<AvailableTerm> FindPotentialAvailableTerms(OfferAvailabilityObject apartment, int duration, DateTime targetDate, int maxCount)
+        {
+            var candidates = new List<AvailableTerm>();
+            if (apartment.ObjectAvailability == null) return candidates;
 
             var availabilityCalendar = apartment.ObjectAvailability
                 .Where(x => DateTime.TryParse(x.Date, out _))
-                .OrderBy(x => DateTime.Parse(x.Date))
+                .Select(x => new { Data = x, DateParsed = DateTime.Parse(x.Date) })
+                .OrderBy(x => x.DateParsed)
                 .ToList();
 
-            if (availabilityCalendar.Count < duration) return null;
+            if (availabilityCalendar.Count < duration) return candidates;
 
-            AvailableTerm? closestTerm = null;
-            double minDifference = double.MaxValue;
+            var potentialTerms = new List<(AvailableTerm Term, double Difference)>();
 
             for (int i = 0; i <= availabilityCalendar.Count - duration; i++)
             {
+                var startEntry = availabilityCalendar[i];
+
+                if (startEntry.Data.ClosedToArrival == true) continue;
+
+                if (i + duration < availabilityCalendar.Count)
+                {
+                    var checkoutEntry = availabilityCalendar[i + duration];
+                    if (checkoutEntry.DateParsed == startEntry.DateParsed.AddDays(duration))
+                    {
+                        if (checkoutEntry.Data.ClosedToDeparture == true) continue;
+                    }
+                }
+
                 bool isTermAvailable = true;
 
                 for (int j = 0; j < duration; j++)
                 {
-                    if (availabilityCalendar[i + j].ItemsNumber <= 0)
+                    var currentEntry = availabilityCalendar[i + j];
+
+                    if (currentEntry.DateParsed != startEntry.DateParsed.AddDays(j))
+                    {
+                        isTermAvailable = false;
+                        break;
+                    }
+
+                    if (currentEntry.Data.ItemsNumber <= 0)
+                    {
+                        isTermAvailable = false;
+                        break;
+                    }
+
+                    if (currentEntry.Data.MinStay.HasValue && duration < currentEntry.Data.MinStay.Value)
                     {
                         isTermAvailable = false;
                         break;
@@ -137,24 +198,20 @@ namespace RentoomBookingWeb.Services
 
                 if (isTermAvailable)
                 {
-                    if (DateTime.TryParse(availabilityCalendar[i].Date, out var start))
+                    double difference = Math.Abs((startEntry.DateParsed - targetDate).TotalDays);
+                    potentialTerms.Add((new AvailableTerm
                     {
-                        double difference = Math.Abs((start - targetDate).TotalDays);
-
-                        if (difference < minDifference)
-                        {
-                            minDifference = difference;
-                            closestTerm = new AvailableTerm
-                            {
-                                StartDate = start.ToString("yyyy-MM-dd"),
-                                EndDate = start.AddDays(duration).ToString("yyyy-MM-dd")
-                            };
-                        }
-                    }
+                        StartDate = startEntry.DateParsed.ToString("yyyy-MM-dd"),
+                        EndDate = startEntry.DateParsed.AddDays(duration).ToString("yyyy-MM-dd")
+                    }, difference));
                 }
             }
 
-            return closestTerm;
+            return potentialTerms
+                .OrderBy(x => x.Difference)
+                .Take(maxCount)
+                .Select(x => x.Term)
+                .ToList();
         }
 
         private int CalculateDaysCount(string? startDateStr, string? endDateStr)
