@@ -31,6 +31,7 @@ else
                 ReservationContext="_reservationContext"
                 Theme="staywell-theme"
                 Texts="_texts"
+                InitialSelection="_cartSelected"
                 OnSelectionChanged="HandleSelectionChanged" />
 
     <RentoomBooking.StayWell.Components.Upsells.UpsellFloatingCart
@@ -51,25 +52,6 @@ else
         Title = "Vouchery",
         SubTitle = "Dostępne dodatki do kupienia"
     };
-
-    /*   private readonly UpsellTextConfig _texts = new ()
-    {
-        Title = UpsellLocalizer["ListTitle"],
-            SubTitle = UpsellLocalizer["ListSubtitle"],
-            BadgeInfo = UpsellLocalizer["BadgeInfo"],
-            NightsText = UpsellLocalizer["Nights"],
-            GuestsText = UpsellLocalizer["Guests"],
-            DeleteText = UpsellLocalizer["Delete"],
-            AddText = UpsellLocalizer["Add"],
-            DescriptionText = UpsellLocalizer["Description"],
-            TermsTitleText = UpsellLocalizer["TermsTitle"],
-            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
-            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
-            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
-            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
-            PriceLabel = UpsellLocalizer["Price"],
-        };
-        */
 
     private decimal TotalUpsellsPrice
     {
@@ -116,6 +98,7 @@ else
             : CultureInfo.CurrentUICulture.Name;
 
         _reservationContext = BuildReservationPricingContext();
+        _cartSelected = UpsellCartState.PendingUpsells.ToList();
         await AvailableUpsellsState.EnsureLoadedAsync(Token, locale);
     }
 
@@ -156,6 +139,7 @@ else
     private void HandleSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
     {
         _cartSelected = selectedUpsells;
+        UpsellCartState.SetPendingUpsells(_cartSelected);
     }
 
     private void GoToCartAsync()

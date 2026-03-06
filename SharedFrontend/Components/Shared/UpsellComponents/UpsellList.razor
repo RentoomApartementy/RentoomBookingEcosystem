@@ -61,10 +61,23 @@
     [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
     [Parameter] public string Theme { get; set; } = "rentoom-theme";
     [Parameter] public UpsellTextConfig Texts { get; set; } = new();
+    [Parameter] public IReadOnlyList<SelectedUpsellDto>? InitialSelection { get; set; }
 
     private readonly List<SelectedUpsellDto> _selectedUpsells = new();
     private decimal _totalTotal;
     private ElementReference _scrollContainer;
+    private bool _initialized;
+
+    protected override void OnParametersSet()
+    {
+        if (_initialized) return;
+
+        if (InitialSelection is null || InitialSelection.Count == 0) return;
+
+        _initialized = true;
+        _selectedUpsells.Clear();
+        _selectedUpsells.AddRange(InitialSelection);
+    }
 
     private async Task ScrollList(int offset)
     {
