@@ -7,6 +7,14 @@ namespace RentoomBooking.StayWell.States
 {
     public class ReservationState(BackendApi backendApi)
     {
+        private const int EarlyCheckInAddonId = 18;
+        private const int LateCheckOutAddonId = 10;
+
+        private static readonly TimeOnly DefaultCheckInTime = new(15, 0);
+        private static readonly TimeOnly DefaultCheckOutTime = new(11, 0);
+        private static readonly TimeOnly EarlyCheckInTime = new(14, 0);   // 15:00 - 1h
+        private static readonly TimeOnly LateCheckOutTime = new(12, 0);   // 11:00 + 1h
+
         private RentoomReservation? _reservation;
         private readonly BackendApi _backendApi = backendApi;
         private string? _currentToken;
@@ -29,6 +37,23 @@ namespace RentoomBooking.StayWell.States
         public HttpStatusCode? CurrentStatus => _currentStatus;
         public event Action? OnChange;
         public bool IsLoading { get; private set; }
+
+        public bool HasEarlyCheckIn => HasAddon(EarlyCheckInAddonId);
+
+        public bool HasLateCheckOut => HasAddon(LateCheckOutAddonId);
+
+        public TimeOnly CheckInTime => HasEarlyCheckIn ? EarlyCheckInTime : DefaultCheckInTime;
+
+        public TimeOnly CheckOutTime => HasLateCheckOut ? LateCheckOutTime : DefaultCheckOutTime;
+
+        private bool HasAddon(int addonId)
+        {
+            var addons = CurrentReservation?.Reservation?.Items
+                ?.SelectMany(item => item.addons ?? []);
+
+            return addons?.Any(a =>
+                int.TryParse(a.addonId, out var id) && id == addonId) ?? false;
+        }
 
         public async Task<RentoomReservation?> GetReservationAsync(string token)
         {
