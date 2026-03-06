@@ -166,7 +166,7 @@
                                             </div>
 
                                             <div class="price-box">
-                                                <b class="addon-price">+@String.Format("{0:#.00}", AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, _reservationPricingContext.Nights, _reservationPricingContext.TotalGuests, quantity: 1)) zł</b>
+                                                <b class="addon-price">+@AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, _reservationPricingContext.Nights, _reservationPricingContext.TotalGuests, quantity: 1).ToString("N2") zł</b>
                                                 <input type="checkbox"
                                                        class="addon-checkbox"
                                                        checked="@(IsAddonSelected(addon.Id))"
@@ -241,7 +241,7 @@
                             <b>@Localizer["Non-refundableOffer"]</b>
                             <small>@Localizer["NonRefundableText"]</small>
                             <div class="summary-offer-price-button">
-                                <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
+                                <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
                                     <Button>@Localizer["BookNow"]</Button>
                                 </div>
@@ -255,7 +255,7 @@
                             <b>@Localizer["RefundableOffer"]</b>
                             <small>@Localizer["RefundableOfferText"]</small>
                             <div class="summary-offer-price-button">
-                                <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
+                                <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
                                     <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
                                 </div>
@@ -298,7 +298,7 @@
                     @if (localHasOffers)
                     {
                         <span class="label">@Localizer["From"]</span>
-                        <span class="price">@localMinPrice zł</span>
+                        <span class="price">@(localMinPrice?.ToString("N2")) zł</span>
                     }
                 </div>
 
@@ -346,7 +346,7 @@
                     {
                         <div class="reservation-header desktop-only">
                             <div class="header-price">
-                                <span class="price-value">@Localizer["From"] @localMinPrice zł</span>
+                                <span class="price-value">@Localizer["From"] @(localMinPrice?.ToString("N2")) zł</span>
                             </div>
                         </div>
                     }
