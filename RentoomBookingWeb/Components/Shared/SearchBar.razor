@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.WebUtilities
 @inject NavigationManager NavManager;
 @using Microsoft.Extensions.Localization;
-@using BlazorDateRangePicker
+@using System.Globalization
 @using BlazorDateRangePicker
 @inject IStringLocalizer<SharedResources> Localizer;
 
@@ -11,6 +11,7 @@
         <div class="search-item date-item">
             <DateRangePicker 
                 AutoApply="true"
+                Culture="@CultureInfo.CurrentCulture"
                 MinDate="DateTimeOffset.Now.Date" 
                 StartDate="_pickerStartDate"
                 EndDate="_pickerEndDate"
