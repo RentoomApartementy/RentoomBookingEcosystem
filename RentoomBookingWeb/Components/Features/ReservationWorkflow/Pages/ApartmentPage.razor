@@ -46,6 +46,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@GetCanonicalUrl()" />
     <meta property="og:locale" content="pl_PL" />
+
+    @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
 </HeadContent>
 
 <div class="apartment-container">
@@ -63,15 +65,15 @@
                 <div class="apartment-text-wrapper">
                     <div class="">
                         <h2>@_apartment?.Name</h2>
-                        <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>,
-                        <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>
-                        <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
+                        <span>@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>,
+                        <span>@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>
+                        <span>@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
                     </div>
                 
                     <ul class="apartment-details">
                         <li>
                             <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon"/>
-                            <span itemprop="occupancy">@_apartment?.MinCapacity - @_apartment?.Capacity</span>
+                            <span>@_apartment?.MinCapacity - @_apartment?.Capacity</span>
                         </li>
                         <li>
                             <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon"/>
@@ -83,7 +85,7 @@
                         </li>
                         <li>
                             <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon"/>
-                            <span itemprop="floorSize">@_apartment?.Area m²</span>
+                            <span>@_apartment?.Area m²</span>
                         </li>
                     </ul>
                 </div>
@@ -100,7 +102,7 @@
 
                     @if (!string.IsNullOrEmpty(_objectDescription?.LongDescription))
                     {
-                        <div class="long-description" itemprop="description">
+                        <div class="long-description">
                             @((MarkupString)_objectDescription.LongDescription)
                         </div>
                     }
@@ -795,6 +797,78 @@
     private string GetCanonicalUrl()
     {
         return $"{NavManager.BaseUri}apartamenty/{Id}/{Slug}";
+    }
+
+    private MarkupString GetJsonLd()
+    {
+        if (_apartment == null) return new MarkupString("");
+
+        var jsonLd = new Dictionary<string, object>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "Apartment",
+            ["name"] = _apartment.Name ?? "",
+            ["description"] = GetSeoDescription(),
+            ["url"] = GetCanonicalUrl()
+        };
+
+        if (_objectMediums != null && _objectMediums.Any())
+        {
+            jsonLd["image"] = _objectMediums.Select(m => m.Url).ToList();
+        }
+        else
+        {
+            jsonLd["image"] = GetSeoImage();
+        }
+
+        jsonLd["address"] = new Dictionary<string, object>
+        {
+            ["@type"] = "PostalAddress",
+            ["streetAddress"] = _apartment.ObjectLocation?.LocalizationItem?.Street ?? "",
+            ["addressLocality"] = _apartment.ObjectLocation?.LocalizationItem?.City ?? "",
+            ["postalCode"] = _apartment.ObjectLocation?.LocalizationItem?.ZipCode ?? "",
+            ["addressCountry"] = "PL"
+        };
+
+        jsonLd["geo"] = new Dictionary<string, object>
+        {
+            ["@type"] = "GeoCoordinates",
+            ["latitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
+            ["longitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? ""
+        };
+
+        jsonLd["occupancy"] = new Dictionary<string, object>
+        {
+            ["@type"] = "QuantitativeValue",
+            ["minValue"] = _apartment.MinCapacity,
+            ["maxValue"] = _apartment.Capacity
+        };
+
+        jsonLd["floorSize"] = new Dictionary<string, object>
+        {
+            ["@type"] = "QuantitativeValue",
+            ["value"] = _apartment.Area,
+            ["unitCode"] = "MTK"
+        };
+
+        if (_amenities != null && _amenities.Any())
+        {
+            jsonLd["amenityFeature"] = _amenities.Select(a => new Dictionary<string, object>
+            {
+                ["@type"] = "LocationFeatureSpecification",
+                ["name"] = a.Name,
+                ["value"] = true
+            }).ToList();
+        }
+
+        var options = new System.Text.Json.JsonSerializerOptions 
+        { 
+            WriteIndented = true,
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+        
+        string json = System.Text.Json.JsonSerializer.Serialize(jsonLd, options);
+        return new MarkupString(json);
     }
 
     protected override async Task OnInitializedAsync()
