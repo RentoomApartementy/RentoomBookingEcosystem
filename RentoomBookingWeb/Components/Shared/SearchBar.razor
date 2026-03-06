@@ -8,7 +8,7 @@
 <div class="@GetClass()">
     <div class="modern-search-bar">
         
-        <div class="search-item date-item">
+        <div class="search-item date-item @(_dateError ? "validation-error" : "")">
             <DateRangePicker 
                 AutoApply="true"
                 Culture="@CultureInfo.CurrentCulture"
@@ -19,7 +19,7 @@
                 class="full-width-picker">
                 <PickerTemplate>
                     <div id="@context.Id" @onclick="context.Toggle" class="item-content full-trigger">
-                        <svg class="item-icon dark-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="item-icon @(_dateError ? "error-icon" : "dark-icon")" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M16 2V6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M8 2V6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -30,7 +30,7 @@
                             <span class="item-label">@Localizer["Dates", "TERMIN"]</span>
                             @if (context.TStartDate == null || context.TEndDate == null)
                             {
-                                <span class="empty-text">@Localizer["ClickToSelectDate", "Kliknij, aby wybrać datę"]</span>
+                                <span class="empty-text @(_dateError ? "error-text" : "")">@Localizer["ClickToSelectDate", "Kliknij, aby wybrać datę"]</span>
                             }
                             else
                             {
@@ -46,9 +46,9 @@
 
         <div class="divider"></div>
 
-        <div class="search-item guest-item" @onclick="ToggleGuestModal">
+        <div class="search-item guest-item @(_guestError ? "validation-error" : "")" @onclick="ToggleGuestModal">
             <div class="item-content full-trigger">
-                <svg class="item-icon dark-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="item-icon @(_guestError ? "error-icon" : "dark-icon")" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 20C17 18.3431 14.7614 17 12 17C9.23858 17 7 18.3431 7 20" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M12 13C14.2091 13 16 11.2091 16 9C16 6.79086 14.2091 5 12 5C9.79086 5 8 6.79086 8 9C8 11.2091 9.79086 13 12 13Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M21 21C21 19.8665 19.8396 18.8837 17.9542 18.2366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -64,7 +64,7 @@
                         }
                         else
                         {
-                            <span class="empty-text">@Localizer["NumberOfPeople", "Liczba osób"]</span>
+                            <span class="empty-text @(_guestError ? "error-text" : "")">@Localizer["NumberOfPeople", "Liczba osób"]</span>
                         }
                     </span>
                 </div>
@@ -124,6 +124,27 @@
     <div class="modal-backdrop" @onclick="CloseGuestModal"></div>
 }
 
+<style>
+    .validation-error {
+        background-color: rgba(255, 0, 0, 0.03) !important;
+        border-bottom: 2px solid rgba(255, 0, 0, 0.3) !important;
+        transition: all 0.3s ease;
+    }
+
+    .error-text {
+        color: #d32f2f !important;
+    }
+
+    .error-icon {
+        stroke: #d32f2f !important;
+    }
+
+    .search-item {
+        transition: all 0.3s ease;
+        border-bottom: 2px solid transparent;
+    }
+</style>
+
 @code {
     [Parameter] public bool IsSticky { get; set; } = false;
     
@@ -138,7 +159,7 @@
 
     private string _startDate = "";
     private string _endDate = "";
-    private string _adults = "1";
+    private string _adults = "2";
     private string _children = "0";
     private string _rooms = "";
 
@@ -152,6 +173,8 @@
     private string _lastRoomsParam = "";
 
     private bool _isGuestModalOpen = false;
+    private bool _dateError = false;
+    private bool _guestError = false;
 
     protected override void OnInitialized()
     {
@@ -168,7 +191,7 @@
         
         if (Adults != _lastAdultsParam)       
         { 
-            _adults = string.IsNullOrEmpty(Adults) ? "1" : Adults; 
+            _adults = string.IsNullOrEmpty(Adults) ? "2" : Adults; 
             _lastAdultsParam = Adults; 
             guestsChanged = true;
         }
@@ -194,7 +217,7 @@
     {
         _startDate = StartDate; _lastStartDateParam = StartDate;
         _endDate = EndDate;     _lastEndDateParam = EndDate;
-        _adults = string.IsNullOrEmpty(Adults) ? "1" : Adults; _lastAdultsParam = Adults;
+        _adults = string.IsNullOrEmpty(Adults) ? "2" : Adults; _lastAdultsParam = Adults;
         _children = string.IsNullOrEmpty(Children) ? "0" : Children; _lastChildrenParam = Children;
         _rooms = Rooms;         _lastRoomsParam = Rooms;
         
@@ -212,6 +235,7 @@
 
     private void OnRangeSelected(DateRange range)
     {
+        _dateError = false;
         _pickerStartDate = range.Start;
         _pickerEndDate = range.End;
 
@@ -239,16 +263,25 @@
         return adultsText;
     }
 
-    private void IncrementAdults() => _adults = (GetAdultsCount() + 1).ToString();
-    private void DecrementAdults() { if (GetAdultsCount() > 1) _adults = (GetAdultsCount() - 1).ToString(); }
-    private void IncrementChildren() => _children = (GetChildrenCount() + 1).ToString();
-    private void DecrementChildren() { if (GetChildrenCount() > 0) _children = (GetChildrenCount() - 1).ToString(); }
+    private void IncrementAdults() { _guestError = false; _adults = (GetAdultsCount() + 1).ToString(); }
+    private void DecrementAdults() { _guestError = false; if (GetAdultsCount() > 1) _adults = (GetAdultsCount() - 1).ToString(); }
+    private void IncrementChildren() { _guestError = false; _children = (GetChildrenCount() + 1).ToString(); }
+    private void DecrementChildren() { _guestError = false; if (GetChildrenCount() > 0) _children = (GetChildrenCount() - 1).ToString(); }
 
-    private void ToggleGuestModal() => _isGuestModalOpen = !_isGuestModalOpen;
+    private void ToggleGuestModal() { _guestError = false; _isGuestModalOpen = !_isGuestModalOpen; }
     private void CloseGuestModal() => _isGuestModalOpen = false;
 
     private async Task Search()
     {
+        _dateError = _pickerStartDate == null || _pickerEndDate == null;
+        _guestError = CountPersons <= 0;
+
+        if (_dateError || _guestError)
+        {
+            StateHasChanged();
+            return;
+        }
+
         CloseGuestModal();
 
         var query = new Dictionary<string, string>
