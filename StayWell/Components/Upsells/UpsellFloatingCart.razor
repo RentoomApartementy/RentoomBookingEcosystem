@@ -1,0 +1,27 @@
+﻿@using RentoomBooking.SharedClasses.Models.Upsell
+
+@if (SelectedCount > 0)
+{
+    <div class="upsell-cart-bar-container">
+        <div class="upsell-cart-bar">
+            <div class="upsell-cart-bar-info">
+                <span class="upsell-cart-bar-count">dodatki: @SelectedCount</span>
+                <span class="upsell-cart-bar-total">@Total.ToString("F2") @Currency</span>
+            </div>
+            <button class="upsell-cart-bar-btn"
+                    disabled="@IsBusy"
+                    @onclick="OnCtaClick">
+                @CtaText
+            </button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int SelectedCount { get; set; }
+    [Parameter] public decimal Total { get; set; }
+    [Parameter] public string Currency { get; set; } = "PLN";
+    [Parameter] public string CtaText { get; set; } = "Zobacz i opłać";
+    [Parameter] public bool IsBusy { get; set; }
+    [Parameter] public EventCallback OnCtaClick { get; set; }
+}

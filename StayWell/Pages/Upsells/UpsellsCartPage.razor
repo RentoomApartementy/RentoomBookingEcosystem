@@ -1,0 +1,386 @@
+﻿@page "/reservation/{token}/UpsellsCartPage"
+@using System.Globalization
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.Services
+@using RentoomBooking.StayWell.States
+@inject BackendApi BackendApi
+@inject NavigationManager Navigation
+@inject UpsellCartState UpsellCartState
+@inject AvailableUpsellsState AvailableUpsellsState
+@inject IJSRuntime JS
+@inherits Models.PageBase
+@implements IAsyncDisposable
+
+<PageTitle>Koszyk - Podsumowanie</PageTitle>
+
+@if (!UpsellCartState.Items.Any())
+{
+    <div class="manage-tile">
+        <div class="cart-empty">
+            <img class="cart-empty__icon" src="/icons/shopping-cart.svg" />
+            <span class="cart-empty__text">Twój koszyk jest pusty</span>
+        </div>
+    </div>
+    <div class="cart-actions" style="margin-top: 20px;">
+        <button class="cart-actions__btn cart-actions__btn--secondary" @onclick="GoBack">
+            Wróć do strony głównej
+        </button>
+    </div>
+}
+else
+{
+    <div class="section-group">
+        <div class="cart-items-wrapper" @ref="_wrapperRef">
+            <h3 class="reservation-section__title">
+                <img class="reservation-field__icon" src="/icons/shopping-cart.svg" />
+                Twój Koszyk
+            </h3>
+            <span class="manage-tile__category"
+                  style="margin-left: 10px; margin-bottom: 8px; display: block;">
+                WYBRANE USŁUGI
+            </span>
+            @foreach (var (item, index) in UpsellCartState.Items.Select((i, idx) => (i, idx)))
+            {
+                <div class="cart-item-tile">
+                    <div class="cart-item-layout">
+                        <div class="cart-item__top">
+                            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                                @{
+                                    var imageUrl = UpsellCartState.GetBannerUrl(
+                                        item.PartnerServiceId,
+                                        PartnerServiceBannerPlacementType.StayWell
+                                    );
+                                }
+                                @if (!string.IsNullOrWhiteSpace(imageUrl))
+                                {
+                                    <img class="cart-item__thumb" src="@imageUrl" alt="@item.Title" />
+                                }
+                                else
+                                {
+                                    <div class="cart-item__thumb cart-item__thumb--placeholder"></div>
+                                }
+                                <div style="display: flex; flex-direction: column;">
+                                    <span class="manage-tile__title">@item.Title</span>
+                                    @if (!string.IsNullOrWhiteSpace(item.DisplayText))
+                                    {
+                                        <span class="cart-item__display-text">@item.DisplayText</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-item__bottom">
+                            <div class="cart-item__qty-info">
+                                <span>Ilość: <strong>@item.Quantity</strong></span>
+                                @if (item.Nights > 0)
+                                {
+                                    <span>Noce: <strong>@item.Nights</strong></span>
+                                }
+                            </div>
+                            <div class="cart-item__price-section">
+                                @{
+                                    var visual = UpsellCartState.Visuals.GetValueOrDefault(item.PartnerServiceId);
+                                    var originalTotal = visual switch
+                                    {
+                                        { PricingDiscountType: PartnerServiceDiscountType.Percent, Discount: < 1 and > 0 }
+                                            => item.LineTotalGross / (1 - visual.Discount!.Value),
+                                        { PricingDiscountType: PartnerServiceDiscountType.FixedAmount, Discount: not null }
+                                            => item.LineTotalGross + visual.Discount.Value,
+                                        _ => (decimal?)null
+                                    };
+                                }
+                                @if (originalTotal.HasValue)
+                                {
+                                    <span class="price-old">
+                                        @originalTotal.Value.ToString("F2") @UpsellCartState.Currency
+                                    </span>
+                                }
+                                <div class="manage-tile__price">
+                                    @item.LineTotalGross.ToString("F2")
+                                    <small>@UpsellCartState.Currency</small>
+                                </div>
+                                <span class="price-unit-info">
+                                    @item.UnitPriceGross.ToString("F2") / jedn.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="cart-item__remove"
+                            @onclick="() => RemoveItem(item.PartnerServiceId)"
+                            title="Usuń z koszyka">
+                        &#x2715;
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="floating-summary @(_isCollapsed ? "floating-summary--collapsed" : "")"
+         @ref="_summaryRef">
+        <div class="manage-tile summary-tile">
+            <div class="summary-details">
+                <span class="manage-tile__category title">PODSUMOWANIE PŁATNOŚCI</span>
+                @foreach (var item in UpsellCartState.Items)
+                {
+                    <div class="summary-row">
+                        <span class="summary-row__label">@item.Title</span>
+                        <span class="summary-row__value">
+                            @item.LineTotalGross.ToString("F2") @UpsellCartState.Currency
+                        </span>
+                    </div>
+                }
+                <div class="summary-divider"></div>
+                @if (TotalSavings > 0)
+                {
+                    <div class="summary-row" style="color: #16a34a; font-weight: 700;">
+                        <span>🎉 Z nami zaoszczędzisz:</span>
+                        <span>@TotalSavings.ToString("F2") @UpsellCartState.Currency</span>
+                    </div>
+                }
+            </div>
+
+            <div class="summary-footer">
+                <div class="summary-total-box">
+                    <span class="total-label">Suma do zapłaty</span>
+                    <span class="total-amount">
+                        @UpsellCartState.TotalPrice.ToString("F2") @UpsellCartState.Currency
+                    </span>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(_cartError))
+                {
+                    <div class="cart-error" style="color: red; margin-bottom: 8px;">
+                        @_cartError
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(_cartMessage))
+                {
+                    <div class="cart-message" style="color: #16a34a; margin-bottom: 8px;">
+                        @_cartMessage
+                    </div>
+                }
+
+                <div class="cart-actions">
+                    <button class="cart-actions__btn cart-actions__btn--primary"
+                            disabled="@_isCartBusy"
+                            @onclick="ConfirmAsync">
+                        @if (_isCartBusy)
+                        {
+                            <span class="loader"></span>
+                        }
+                        else
+                        {
+                            <span>Zapłać</span>
+                        }
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool _needsCollapse => UpsellCartState.Items.Count >= 2;
+    private bool _isCollapsed = false;
+    private DotNetObjectReference<UpsellsCartPage>? _objRef;
+    private ElementReference _summaryRef;
+    private ElementReference _wrapperRef;
+
+    private bool _isCartBusy;
+    private string? _cartError;
+    private string? _cartMessage;
+    private Guid? _lastCreatedOrderGuid;
+
+    private ReservationPricingContext _reservationContext = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _reservationContext = BuildReservationPricingContext();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!UpsellCartState.Items.Any())
+            return;
+
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("setupCartScrollListener", _objRef);
+
+            if (_needsCollapse)
+            {
+                _isCollapsed = true;
+                StateHasChanged();
+            }
+        }
+
+        await JS.InvokeVoidAsync("syncCartBottomPadding", _summaryRef);
+    }
+
+    [JSInvokable]
+    public void OnCartScroll(double scrollTop, string direction)
+    {
+        if (!_needsCollapse)
+            return;
+
+        bool shouldCollapse;
+
+        if (scrollTop <= 10)
+            shouldCollapse = false;
+        else if (direction == "down")
+            shouldCollapse = true;      
+        else
+            shouldCollapse = false;     
+
+        if (shouldCollapse != _isCollapsed)
+        {
+            _isCollapsed = shouldCollapse;
+            StateHasChanged();
+        }
+    }
+
+    private void RemoveItem(int partnerServiceId)
+    {
+        UpsellCartState.RemoveItem(partnerServiceId);
+    }
+
+    private decimal TotalSavings
+    {
+        get
+        {
+            decimal savings = 0;
+            foreach (var item in UpsellCartState.Items)
+            {
+                var visual = UpsellCartState.Visuals.GetValueOrDefault(item.PartnerServiceId);
+                var originalTotal = visual switch
+                {
+                    { PricingDiscountType: PartnerServiceDiscountType.Percent, Discount: < 1 and > 0 }
+                        => item.LineTotalGross / (1 - visual.Discount!.Value),
+                    { PricingDiscountType: PartnerServiceDiscountType.FixedAmount, Discount: not null }
+                        => item.LineTotalGross + visual.Discount.Value,
+                    _ => (decimal?)null
+                };
+                if (originalTotal.HasValue)
+                    savings += originalTotal.Value - item.LineTotalGross;
+            }
+            return savings;
+        }
+    }
+
+    private ReservationPricingContext BuildReservationPricingContext()
+    {
+        var reservation = ReservationState.CurrentReservation?.Reservation;
+        var reservationDetails = reservation?.ReservationDetails;
+        var firstItem = reservation?.Items?.FirstOrDefault();
+
+        var fromDateTime = reservationDetails?.getDateFrom() ?? DateTime.Today;
+        var toDateTime = reservationDetails?.getDateTo() ?? fromDateTime;
+
+        var adults = firstItem?.numberOfAdults ?? 0;
+        var childrenRaw = firstItem?.numberOfSmallChildren;
+        var children = int.TryParse(childrenRaw, out var parsedChildren) ? parsedChildren : 0;
+
+        var currency = reservationDetails?.currency;
+        if (string.IsNullOrWhiteSpace(currency))
+            currency = reservation?.Client?.Currency;
+        if (string.IsNullOrWhiteSpace(currency))
+            currency = "PLN";
+
+        return new ReservationPricingContext
+        {
+            StartDate = DateOnly.FromDateTime(fromDateTime),
+            EndDate = DateOnly.FromDateTime(toDateTime),
+            Adults = adults,
+            Children = children,
+            Currency = currency
+        };
+    }
+
+    private UpsellOrderRequest BuildCreateUpsellOrderRequest()
+    {
+        var reservation = ReservationState.CurrentReservation?.Reservation;
+        var client = reservation?.Client;
+        var selectedUpsells = UpsellCartState.ToSelectedUpsells();
+
+        return new UpsellOrderRequest
+        {
+            ReservationGuid = Guid.TryParse(Token, out var reservationGuid) ? reservationGuid : null,
+            ApartmentId = reservation?.Items?.FirstOrDefault()?.objectId ?? 0,
+            StartDate = _reservationContext.StartDate,
+            EndDate = _reservationContext.EndDate,
+            Adults = _reservationContext.Adults,
+            Children = _reservationContext.Children,
+            Currency = _reservationContext.Currency,
+            Buyer = new UpsellBuyerDto
+            {
+                Email = client?.Email ?? string.Empty,
+                Name = $"{client?.FirstName} {client?.LastName}".Trim(),
+                Phone = client?.Phone
+            },
+            SelectedUpsells = selectedUpsells
+                .Select(s => new UpsellOrderLineRequest
+                {
+                    PartnerServiceId = s.PartnerServiceId,
+                    Quantity = Math.Max(1, s.Quantity)
+                })
+                .ToList(),
+            SuccessUrl = NavigationManager.BaseUri,
+            ErrorUrl = NavigationManager.BaseUri
+        };
+    }
+
+    private async Task ConfirmAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Token) || !UpsellCartState.Items.Any())
+            return;
+
+        _isCartBusy = true;
+        _cartError = null;
+        _cartMessage = null;
+
+        try
+        {
+            var request = BuildCreateUpsellOrderRequest();
+            var result = await BackendApi.CreateUpsellOrderAsync(Token, request);
+
+            AvailableUpsellsState._lastInitResult = result;
+
+            if (result is null)
+            {
+                _cartError = "Nie udało się utworzyć zamówienia dodatków.";
+                return;
+            }
+
+            _lastCreatedOrderGuid = result.UpsellOrderGuid;
+
+            if (!string.IsNullOrWhiteSpace(result.RedirectUrl))
+            {
+                NavigationManager.NavigateTo(result.RedirectUrl, forceLoad: true);
+                return;
+            }
+
+            _cartMessage = "Płatność nie wymagana / już opłacone";
+        }
+        catch (Exception ex)
+        {
+            _cartError = ex.Message;
+        }
+        finally
+        {
+            _isCartBusy = false;
+        }
+    }
+
+    private void GoBack() =>
+        Navigation.NavigateTo($"/reservation/{Token}/HomePage");
+
+    public async ValueTask DisposeAsync()
+    {
+        await JS.InvokeVoidAsync("removeCartScrollListener");
+        _objRef?.Dispose();
+    }
+}

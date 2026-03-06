@@ -181,6 +181,11 @@
         margin-bottom: 0;
     }
 
+.consent-toggle--disabled {
+    pointer-events: none;
+    opacity: 0.55;
+}
+
 .toggle {
     display: inline-flex;
     align-items: center;
@@ -237,4 +242,15 @@
 .toggle__text {
     font-weight: 600;
     color: rgba(0, 0, 0, 0.85);
+}
+
+.time--original {
+    text-decoration: line-through;
+    color: rgba(0, 0, 0, 0.4);
+    margin-right: 6px;
+}
+
+.time--updated {
+    font-weight: 700;
+    color: #16a34a;
 }

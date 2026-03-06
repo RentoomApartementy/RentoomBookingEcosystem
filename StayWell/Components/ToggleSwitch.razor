@@ -5,6 +5,7 @@
                type="checkbox"
                checked="@Value"
                @onchange="OnChanged"
+               @onchange:preventDefault
                disabled="@Disabled" />
         <label class="toggle__track" for="@_id" aria-hidden="true"></label>
     </div>
@@ -33,7 +34,6 @@
     private async Task OnChanged(ChangeEventArgs e)
     {
         var next = e.Value is bool b && b;
-        Value = next;
         await ValueChanged.InvokeAsync(next);
     }
 }

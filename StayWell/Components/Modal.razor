@@ -1,6 +1,7 @@
 ﻿@using RentoomBooking.StayWell.Services
 @using RentoomBooking.StayWell.Components
 @inject GlobalizationService GlobalizationService
+@inject ModalService ModalService
 
 @if (IsVisible)
 {
@@ -27,21 +28,16 @@
                 <div class="modal-content image-content">
                     <div class="image-wrapper">
                         @Content
-            </div>
+                    </div>
 
                     <div class="image-controls">
-                        @* <button type="button" class="control-btn" @onclick="RotateImage" title="Rotate">
-                            <img style="filter: invert(1)" src="/icons/rotate-ccw.svg"/>
-                            <span>Obróc zdjęcie</span>
-                        </button> *@
-
                         <button type="button" class="control-btn close-btn" @onclick="Close" title="Close">
                             <img style="filter: invert(1)" src="/icons/x.svg" />
                             <span>Zamknij</span>
                         </button>
                     </div>
                 </div>
-                }
+            }
             else
             {
                 <div class="modal-content">
@@ -62,8 +58,6 @@
     private ElementReference backdropRef;
     private int _rotation = 0;
 
-    // private bool HasImage => !string.IsNullOrEmpty(ImageUrl);
-
     private bool IsRotatedPerpendicular => _rotation == 90 || _rotation == 270;
 
     protected override Task OnInitializedAsync()
@@ -80,15 +74,11 @@
         }
     }
 
-    private void RotateImage()
-    {
-        _rotation += 90;
-        if (_rotation >= 360) _rotation = 0;
-    }
-
     private async Task Close()
     {
         _rotation = 0;
+        ModalService.HideModal();
+
         if (OnClose.HasDelegate)
         {
             await OnClose.InvokeAsync();

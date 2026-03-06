@@ -3,9 +3,11 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Models
 @using RentoomBooking.StayWell.States
 @inject IStringLocalizer<AboutReservationPage> Localizer
 @inject NavigationManager Navigation
+@inject CustomerAgreedTermsState CustomerAgreedTermsState
 @inherits Models.PageBase
 
 <PageTitle>About Reservation</PageTitle>
@@ -126,10 +128,28 @@
                             @Localizer["CheckinCheckOutTime"]:
                         </span>
                         <span class="reservation-field__value">
-                            @Localizer["CheckInTime"]: <span>15:00</span>
+                            @Localizer["CheckInTime"]:
+                            @if (ReservationState.HasEarlyCheckIn)
+                            {
+                                <span class="time--original">15:00</span>
+                                <span class="time--updated">@ReservationState.CheckInTime.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span>15:00</span>
+                            }
                         </span>
                         <span class="reservation-field__value">
-                            @Localizer["CheckOutTime"]: <span>11:00</span>
+                            @Localizer["CheckOutTime"]:
+                            @if (ReservationState.HasLateCheckOut)
+                            {
+                                <span class="time--original">11:00</span>
+                                <span class="time--updated">@ReservationState.CheckOutTime.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span>11:00</span>
+                            }
                         </span>
                     </div>
 
@@ -182,7 +202,7 @@
                 <h3 class="reservation-section__title">@Localizer["TOSConsents"]:</h3>
             </header>
             <div class="reservation-section__content">
-                @if (TermsState.IsLoading || RegistrationCardState.IsLoading)
+                @if (TermsState.IsLoading || RegistrationCardState.IsLoading || CustomerAgreedTermsState.IsLoading)
                 {
                     <div class="reservation-field">
                         <div class="skeleton skeleton--label"></div>
@@ -202,7 +222,8 @@
                             @Localizer["TOS"]:
                         </span>
                         <span class="reservation-field__value">
-                            @Localizer["AcceptanceDate"]:
+                            <div style="font-weight:600">Regulamin pobytu</div>
+                            <span>@Localizer["AcceptanceDate"]:</span>
                             <span>@TermsState.CurrentTerms?.AcceptedAt.ToShortDateString()</span>
                         </span>
                     </div>
@@ -211,18 +232,55 @@
                             <img class="reservation-field__icon" src="/icons/list-checks.svg" />
                             @Localizer["Consents"]:
                         </span>
-                        <div class="consent-toggle">
-                            <ToggleSwitch @bind-Value="marketingConsent"
-                                          Text="@Localizer["MarketingConsent"]"
-                                          Description="@Localizer["MarketingDescription"]" />
-                        </div>
-                        <div class="consent-toggle">
-                            <ToggleSwitch @bind-Value="rodoConsent"
-                                          Text="@Localizer["GDPRConsent"]"
-                                          Description="@Localizer["GDPRDescription"]" />
-                        </div>
+                        @foreach (var term in CustomerAgreedTermsState.Terms.Where(t => t.IsRequired))
+                        {
+                            var capturedTerm = term;
+                            <div class="consent-toggle consent-toggle--disabled">
+                                <ToggleSwitch Value="capturedTerm.IsAccepted"
+                                              ValueChanged="EventCallback<bool>.Empty"
+                                              Text="@capturedTerm.Description"
+                                              Description="@capturedTerm.AgreedAt.ToString("dd.MM.yyyy HH:mm")" />
+                            </div>
+                        }
+                        @foreach (var term in CustomerAgreedTermsState.Terms.Where(t => !t.IsRequired))
+                        {
+                            var capturedTerm = term;
+                            var displayValue = GetDisplayValue(capturedTerm);
+                            <div class="consent-toggle">
+                                <ToggleSwitch Value="displayValue"
+                                              ValueChanged="(val) => OnTermToggled(capturedTerm, val)"
+                                              Text="@capturedTerm.Description"
+                                              Description="@capturedTerm.AgreedAt.ToString("dd.MM.yyyy HH:mm")" />
+                            </div>
+                        }
                     </div>
                 }
+            </div>
+        </section>
+        <section class="reservation-section">
+            <header class="reservation-section__header">
+                <h3 class="reservation-section__title">Za twój pobyt odpowiada Rentoom</h3>
+            </header>
+            <div class="reservation-section__content">
+                    <div class="reservation-field">
+
+                        <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/files.svg" />
+                            <span style="font-weight:600">NIP / REGON:</span>
+                        </span>
+                        <span class="reservation-field__value">
+                            <span>8792727407 / 	387605281</span>
+                        </span>
+                    </div>
+                <div class="reservation-field">
+                    <span class="reservation-field__label">
+                        <img class="reservation-field__icon" src="/icons/building.svg" />
+                        <span style="font-weight:600">Adres siedziby:</span>
+                    </span>
+                    <span class="reservation-field__value">
+                        <span>Stanisława Szymańskiego 1B, 87-100 Toruń, Polska</span>
+                    </span>
+                </div>
             </div>
         </section>
     </div>
@@ -230,14 +288,110 @@
 
 @code {
     private bool showAmenities = false;
-    private bool marketingConsent = true;
-    private bool rodoConsent = true;
+
+    private Dictionary<int, bool> _overrides = [];
+    private CustomerAgreedTermDto? _pendingCancelTerm;
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
     private ApartmentObject? Apartment => ApartmentState?.CurrentApartment;
 
+    private bool GetDisplayValue(CustomerAgreedTermDto term) =>
+        _overrides.TryGetValue(term.TermsSourceId, out var val) ? val : term.IsAccepted;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (!string.IsNullOrEmpty(Token))
+        {
+            CustomerAgreedTermsState.OnChange += OnTermsChanged;
+            ModalService.OnClose += OnModalClosed;
+            await CustomerAgreedTermsState.LoadAsync(Token);
+        }
+    }
+
+    private void OnTermsChanged()
+    {
+        _overrides.Clear();
+        _pendingCancelTerm = null;
+        StateHasChanged();
+    }
+
+    private void OnModalClosed()
+    {
+        if (_pendingCancelTerm is not null)
+        {
+            _overrides.Remove(_pendingCancelTerm.TermsSourceId);
+            _pendingCancelTerm = null;
+            StateHasChanged();
+        }
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        CustomerAgreedTermsState.OnChange -= OnTermsChanged;
+        ModalService.OnClose -= OnModalClosed;
+    }
+
     private void ShowAmenities()
     {
         showAmenities = !showAmenities;
+    }
+
+    private void OnTermToggled(CustomerAgreedTermDto term, bool newValue)
+    {
+        if (!newValue)
+        {
+            _overrides[term.TermsSourceId] = false;
+            _pendingCancelTerm = term;
+            StateHasChanged();
+
+            ModalService.ShowModal(
+                "Cofnięcie zgody",
+                @<div>
+                    <p>Czy na pewno chcesz cofnąć tę zgodę?</p>
+                    <p style="font-size: 0.85rem; color: rgba(0,0,0,0.55); margin-top: 4px; padding: 5px; font-weight: 500;">@term.Description</p>
+                    <div style="display: flex; gap: 10px; margin-top: 16px;">
+                        <Button OnClick="() => ConfirmToggle(term, false)" Text="Cofnij" ButtonStyle="background-color: red;"></Button>
+                        <Button OnClick="() => CancelToggle(term)" Text="Wróć"></Button>
+                    </div>
+                </div>
+            );
+        }
+        else
+        {
+            _ = ApplyToggleAsync(term, true);
+        }
+    }
+
+    private void CancelToggle(CustomerAgreedTermDto term)
+    {
+        _pendingCancelTerm = null;
+        _overrides.Remove(term.TermsSourceId);
+        ModalService.HideModal();
+        StateHasChanged();
+    }
+
+    private void ConfirmToggle(CustomerAgreedTermDto term, bool newValue)
+    {
+        _pendingCancelTerm = null;
+        ModalService.HideModal();
+        _ = ApplyToggleAsync(term, newValue);
+    }
+
+    private async Task ApplyToggleAsync(CustomerAgreedTermDto term, bool newValue)
+    {
+        if (string.IsNullOrEmpty(Token)) return;
+
+        _overrides[term.TermsSourceId] = newValue;
+        StateHasChanged();
+
+        var success = await CustomerAgreedTermsState.UpdateAcceptanceAsync(Token, term.TermsSourceId, newValue);
+        if (!success)
+        {
+            _overrides.Remove(term.TermsSourceId);
+            StateHasChanged();
+        }
     }
 }

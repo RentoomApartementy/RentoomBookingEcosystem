@@ -1,16 +1,24 @@
 ﻿<div class="date-range-bar">
     <div class="date-labels">
         @if (CheckInDate != default && CheckOutDate != default)
-{
-        <div class="date-label">
-            <div class="label-title">@CheckInLabel</div>
-            <div class="label-date">@CheckInDate.ToString("dd.MM.yyyy")</div>
-        </div>
-        <div class="date-label">
-            <div class="label-title">@CheckOutLabel</div>
-            <div class="label-date">@CheckOutDate.ToString("dd.MM.yyyy")</div>
-        </div>
-}
+        {
+            <div class="date-label">
+                <div class="label-title">@CheckInLabel</div>
+                <div class="label-date">@CheckInDate.ToString("dd.MM.yyyy")</div>
+                @if (CheckInTime.HasValue)
+                {
+                    <div class="label-time">@CheckInTime.Value.ToString("HH:mm")</div>
+                }
+            </div>
+            <div class="date-label">
+                <div class="label-title">@CheckOutLabel</div>
+                <div class="label-date">@CheckOutDate.ToString("dd.MM.yyyy")</div>
+                @if (CheckOutTime.HasValue)
+                {
+                    <div class="label-time">@CheckOutTime.Value.ToString("HH:mm")</div>
+                }
+            </div>
+        }
     </div>
 
     <div class="bar-container">
@@ -46,10 +54,15 @@
     [Parameter]
     public DateTime? CurrentDate { get; set; }
 
-    private int TotalDays(){
+    [Parameter]
+    public TimeOnly? CheckInTime { get; set; }
 
+    [Parameter]
+    public TimeOnly? CheckOutTime { get; set; }
+
+    private int TotalDays()
+    {
         int days = (CheckOutDate.Date - CheckInDate.Date).Days;
-
         return days;
     }
 

@@ -107,8 +107,8 @@
 
         return addonId.Value switch
         {
-            EarlyCheckInAddonId => false,
-            LateCheckOutAddonId => IsLateCheckOutAvailable(),
+            EarlyCheckInAddonId => !ReservationState.HasEarlyCheckIn,
+            LateCheckOutAddonId => !ReservationState.HasLateCheckOut && IsLateCheckOutAvailable(),
             _ => true
         };
     }
