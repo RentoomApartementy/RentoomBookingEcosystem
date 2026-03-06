@@ -5,6 +5,7 @@
 @using System.Globalization
 @using RentoomBooking.StayWell.Components.Upsells
 @inject AvailableUpsellsState AvailableUpsellsState
+@inject UpsellCartState UpsellCartState
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
 @implements IDisposable
@@ -57,13 +58,13 @@
     }
 </div>
 
-<UpsellFloatingCart 
-                SelectedCount="_cartSelected.Count"
-               Total="TotalPrice"
-               Currency="@_reservationContext.Currency"
-               CtaText="@CtaText"
-               IsBusy="_isBusy"
-               OnCtaClick="NavigateToVouchersPage" />
+<UpsellFloatingCart
+    SelectedCount="_cartSelected.Count"
+    Total="TotalPrice"
+    Currency="@_reservationContext.Currency"
+    CtaText="@CtaText"
+    IsBusy="_isBusy"
+    OnCtaClick="NavigateToVouchersPage" />
 
 @code {
     [Parameter, EditorRequired] public string Token { get; set; } = string.Empty;
@@ -115,6 +116,7 @@
     protected override async Task OnParametersSetAsync()
     {
         _reservationContext = ReservationContext;
+        _cartSelected = UpsellCartState.PendingUpsells.ToList();
 
         if (!string.IsNullOrWhiteSpace(Token))
         {
@@ -190,6 +192,8 @@
         {
             _cartSelected.RemoveAll(x => x.PartnerServiceId == partnerServiceId);
         }
+
+        UpsellCartState.SetPendingUpsells(_cartSelected);
 
         if (OnSelectionChanged.HasDelegate)
         {
