@@ -9,6 +9,7 @@
 @implements IDisposable;
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
 <PageTitle>Opłać</PageTitle>
 
@@ -92,7 +93,8 @@
                         </div>
                         <div class="guest-detail-item-text-wrapper">
                             <span class="detail-label">@Localizer["TotalAmount"]</span>
-                            <span class="detail-value">@_summary?.StartRequest?.OfferPrice?.ToString("N2") @_summary?.StartRequest?.Currency</span>
+                            @* <span class="detail-value">@_summary?.StartRequest?.OfferPrice?.ToString("N2") @_summary?.StartRequest?.Currency</span> *@
+                            <span class="detail-value">@_summary?.StartRequest?.OfferPrice?.ToString("N2") @CurrencyLocalizer["PLN"]</span>
                         </div>
                     </div>
                 </div>

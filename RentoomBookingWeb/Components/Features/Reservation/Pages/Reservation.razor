@@ -1,5 +1,6 @@
 @page "/rezerwacja/{id:int}";
 @page "/rezerwacja/{id:int}/{startDate?}/{endDate?}/{adults?}/{children?}";
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
@@ -8,6 +9,7 @@
 @inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
 @inject IIdoOfferService OfferService;
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
 <PageTitle>Rezerwacja @_apartment?.Name</PageTitle>
 

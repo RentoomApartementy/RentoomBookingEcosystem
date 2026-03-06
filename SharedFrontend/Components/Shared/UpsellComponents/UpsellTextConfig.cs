@@ -38,6 +38,8 @@ namespace RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
         public string PricingPerApartmentPerDayText { get; set; } = "apartment/day";
         public string PricingPerStayText { get; set; } = "stay";
         public string PricingOneTimeText { get; set; } = "one-time";
+        
+        public string Currency { get; set; } = "PLN";
 
     }
 }

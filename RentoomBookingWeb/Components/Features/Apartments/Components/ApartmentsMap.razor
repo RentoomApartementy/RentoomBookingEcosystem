@@ -7,6 +7,7 @@
 @using RentoomBookingWeb.Helpers
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
 <div id="map" class="map-container"></div>
 
@@ -195,6 +196,6 @@
 
     private string getMinimalPrice(int id)
     {
-        return GetPricingOfferByObjectId(id) != null ? $"Cena za pobyt: {GetPricingOfferByObjectId(id)?.MinimalPrice} zł" : "";
+        return GetPricingOfferByObjectId(id) != null ? $"Cena za pobyt: {GetPricingOfferByObjectId(id)?.MinimalPrice}" + " " +  @CurrencyLocalizer["PLN"] : "";
     }
 }

@@ -5,6 +5,7 @@
 @using Microsoft.Extensions.Localization
 @inject IUpsellCatalogService UpsellCatalogService
 @inject IStringLocalizer<RentoomBookingWeb.Upsell> UpsellLocalizer
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
 <div class="packages-section-wrapper">
     @if (_availableUpsells.Any())
@@ -55,6 +56,7 @@
             PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
             PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
             PriceLabel = UpsellLocalizer["Price"],
+            Currency = CurrencyLocalizer["PLN"],
         };
     }
 }
