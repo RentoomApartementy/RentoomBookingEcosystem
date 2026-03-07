@@ -9,6 +9,7 @@
 @using System.Web
 @using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
 <div class="mobile-filter-wrapper">
     <button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
@@ -52,7 +53,7 @@
             @if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer)
             {
                 <div class="filter-pill" @onclick="ResetPriceOnly">
-                    @_minPrice - @_maxPrice zł
+                    @_minPrice - @_maxPrice @CurrencyLocalizer["PLN"]
                     <span class="pill-remove">&times;</span>
                 </div>
             }

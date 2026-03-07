@@ -18,7 +18,7 @@
                         }
                         else
                         {
-                            <span>-@Tile.Discount.Value.ToString("F2") @Tile.Currency</span>
+                            <span>-@Tile.Discount.Value.ToString("F2") @Texts.Currency</span>
                         }
                     </div>
                 }
@@ -42,10 +42,10 @@
 
                 <div class="upsell-pricing">
                     <div class="upsell-total">
-                        <span class="current-price">@Total.ToString("F2") @Currency</span>
+                        <span class="current-price">@Total.ToString("F2") @Texts.Currency</span>
                         @if (Tile.Discount.HasValue && OldPrice > Total)
                         {
-                            <span class="old-price">@OldPrice.ToString("F2") @Currency</span>
+                            <span class="old-price">@OldPrice.ToString("F2") @Texts.Currency</span>
                         }
                     </div>
                     <div class="upsell-unit-info">@DisplayText</div>
@@ -115,7 +115,7 @@
     private string Currency => string.IsNullOrWhiteSpace(Context.Currency) ? Tile.Currency : Context.Currency;
 
     private string DisplayText => 
-        $"{Texts.PriceLabel}: {Tile.Price:F2} {Currency} / {GetPricingModelText(Tile.PricingModel)}";
+        $"{Texts.PriceLabel}: {Tile.Price:F2} {Texts.Currency} / {GetPricingModelText(Tile.PricingModel)}";
 
     private string GetPricingModelText(PartnerServicePricingModel model) => model switch
     {

@@ -23,13 +23,15 @@ namespace RentoomBooking.Api
     {
 
         private readonly IIdoOfferService _offerService;
+        private readonly IdoSellService _idoSellService;
         private readonly IRentoomOfferService _rentoomOfferService;
         private readonly ILogger<OfferApi> _logger;
-        public OfferApi(IIdoOfferService offerService, IRentoomOfferService rentoomOfferService, ILogger<OfferApi> logger)
+        public OfferApi(IIdoOfferService offerService, IRentoomOfferService rentoomOfferService, ILogger<OfferApi> logger, IdoSellService idoSellService    )
         {
             _offerService = offerService ?? throw new ArgumentNullException(nameof(offerService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _rentoomOfferService = rentoomOfferService ?? throw new ArgumentNullException(nameof(rentoomOfferService));
+            _idoSellService = idoSellService;
         }
 
         [Function("GetPricingOffers")]
@@ -158,6 +160,45 @@ namespace RentoomBooking.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching availability and prices.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.").ConfigureAwait(false);
+                return response;
+            }
+        }
+
+        [Function("GetRestrictions")]
+        public async Task<HttpResponseData> GetRestrictions(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ido/restrictions")] HttpRequestData req)
+        {
+            var response = req.CreateResponse();
+
+            try
+            {
+                GetRestrictionException? payload;
+                using (var reader = new StreamReader(req.Body, Encoding.UTF8))
+                {
+                    var body = await reader.ReadToEndAsync().ConfigureAwait(false);
+
+                    payload = JsonConvert.DeserializeObject<GetRestrictionException>(body);
+                }
+
+                if (payload is null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    await response.WriteStringAsync("Invalid payload.").ConfigureAwait(false);
+                    return response;
+                }
+
+                var restrictionExceptions = await _idoSellService.FetchRestrictionsExceptionsAsync(payload).ConfigureAwait(false);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(restrictionExceptions ?? new List<RestrictionException>())).ConfigureAwait(false);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching offers.");
                 response.StatusCode = HttpStatusCode.InternalServerError;
                 await response.WriteStringAsync("Internal server error.").ConfigureAwait(false);
                 return response;

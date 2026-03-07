@@ -14,6 +14,7 @@
 @inject MediaCacheService MediaCache
 @inject NavigationManager NavManager
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
 <div id="@Id" style="width: 100%; height: 100%;"></div>
 
@@ -171,7 +172,7 @@
             }
         }
 
-        string priceHtml = offer != null ? $"Cena za pobyt: {offer.MinimalPrice} zł" : "";
+        string priceHtml = offer != null ? $"Cena za pobyt: {offer.MinimalPrice}" + " " + @CurrencyLocalizer["PLN"] : "";
 
         return $@"
         <div id='popup-{apt.Id}' style='position: relative; background-color: white; border-radius: .5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.3);'>

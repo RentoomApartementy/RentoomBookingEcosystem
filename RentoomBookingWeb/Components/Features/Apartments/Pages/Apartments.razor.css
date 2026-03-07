@@ -29,15 +29,15 @@
 }
 
 .apartments-items-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
     gap: 2rem;
-    width: 100%; /* Upewnij się, że kontener ma 100% */
+    width: 100%;
 }
 
 @media (max-width: 1400px) {
     .apartments-items-container {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
 }
 

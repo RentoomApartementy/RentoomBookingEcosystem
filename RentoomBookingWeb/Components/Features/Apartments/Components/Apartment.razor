@@ -10,6 +10,7 @@
 @using RentoomBookingWeb.Helpers
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 @inject MediaCacheService MediaCache 
 @implements IAsyncDisposable
 
@@ -168,7 +169,7 @@
                     @if (Offer != null)
                     {
                         <div class="price-wrapper">
-                            <span class="price">@FormatHelper.FormatCurrency(Offer?.MinimalPrice)</span>
+                            <span class="price">@Offer?.MinimalPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
                             <small>@Localizer["TotalPrice"]</small>
                         </div>
                     }

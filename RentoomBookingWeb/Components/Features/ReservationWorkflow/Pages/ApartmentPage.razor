@@ -31,6 +31,7 @@
 @inject MediaCacheService MediaCache
 @implements IDisposable
 @using RentoomBookingWeb.Components.Enums;
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -45,6 +46,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@GetCanonicalUrl()" />
     <meta property="og:locale" content="pl_PL" />
+
+    @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
 </HeadContent>
 
 <div class="apartment-container">
@@ -62,15 +65,15 @@
                 <div class="apartment-text-wrapper">
                     <div class="">
                         <h2>@_apartment?.Name</h2>
-                        <span itemprop="streetAddress">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>,
-                        <span itemprop="postalCode">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>
-                        <span itemprop="addressLocality">@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
+                        <span>@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>,
+                        <span>@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>
+                        <span>@_apartment?.ObjectLocation?.LocalizationItem?.City</span>
                     </div>
                 
                     <ul class="apartment-details">
                         <li>
                             <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon"/>
-                            <span itemprop="occupancy">@_apartment?.MinCapacity - @_apartment?.Capacity</span>
+                            <span>@_apartment?.MinCapacity - @_apartment?.Capacity</span>
                         </li>
                         <li>
                             <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon"/>
@@ -82,7 +85,7 @@
                         </li>
                         <li>
                             <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon"/>
-                            <span itemprop="floorSize">@_apartment?.Area m²</span>
+                            <span>@_apartment?.Area m²</span>
                         </li>
                     </ul>
                 </div>
@@ -99,7 +102,7 @@
 
                     @if (!string.IsNullOrEmpty(_objectDescription?.LongDescription))
                     {
-                        <div class="long-description" itemprop="description">
+                        <div class="long-description">
                             @((MarkupString)_objectDescription.LongDescription)
                         </div>
                     }
@@ -166,7 +169,7 @@
                                             </div>
 
                                             <div class="price-box">
-                                                <b class="addon-price">+@String.Format("{0:#.00}", AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, _reservationPricingContext.Nights, _reservationPricingContext.TotalGuests, quantity: 1)) zł</b>
+                                                <b class="addon-price">+@AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, _reservationPricingContext.Nights, _reservationPricingContext.TotalGuests, quantity: 1).ToString("N2") @CurrencyLocalizer["PLN"]</b>
                                                 <input type="checkbox"
                                                        class="addon-checkbox"
                                                        checked="@(IsAddonSelected(addon.Id))"
@@ -217,7 +220,7 @@
             @if (TotalAddonsPrice + TotalUpsellsPrice > 0)
             {
                 <div class="additional-price">
-                    +@((TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) zł
+                    +@((TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]
                 </div>
             }
             
@@ -241,7 +244,8 @@
                             <b>@Localizer["Non-refundableOffer"]</b>
                             <small>@Localizer["NonRefundableText"]</small>
                             <div class="summary-offer-price-button">
-                                <span class="summary-offer-price-button-price"><b>@(nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
+                                @* <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
+                                <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
                                     <Button>@Localizer["BookNow"]</Button>
                                 </div>
@@ -255,7 +259,8 @@
                             <b>@Localizer["RefundableOffer"]</b>
                             <small>@Localizer["RefundableOfferText"]</small>
                             <div class="summary-offer-price-button">
-                                <span class="summary-offer-price-button-price"><b>@(refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice) @_reservationPricingContext?.Currency</b></span>
+                                @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
+                                <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
                                     <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
                                 </div>
@@ -298,7 +303,7 @@
                     @if (localHasOffers)
                     {
                         <span class="label">@Localizer["From"]</span>
-                        <span class="price">@localMinPrice zł</span>
+                        <span class="price">@(localMinPrice?.ToString("N2")) @CurrencyLocalizer["PLN"]</span>
                     }
                 </div>
 
@@ -346,7 +351,7 @@
                     {
                         <div class="reservation-header desktop-only">
                             <div class="header-price">
-                                <span class="price-value">@Localizer["From"] @localMinPrice zł</span>
+                                <span class="price-value">@Localizer["From"] @(localMinPrice?.ToString("N2")) @CurrencyLocalizer["PLN"]</span>
                             </div>
                         </div>
                     }
@@ -794,6 +799,78 @@
         return $"{NavManager.BaseUri}apartamenty/{Id}/{Slug}";
     }
 
+    private MarkupString GetJsonLd()
+    {
+        if (_apartment == null) return new MarkupString("");
+
+        var jsonLd = new Dictionary<string, object>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "Apartment",
+            ["name"] = _apartment.Name ?? "",
+            ["description"] = GetSeoDescription(),
+            ["url"] = GetCanonicalUrl()
+        };
+
+        if (_objectMediums != null && _objectMediums.Any())
+        {
+            jsonLd["image"] = _objectMediums.Select(m => m.Url).ToList();
+        }
+        else
+        {
+            jsonLd["image"] = GetSeoImage();
+        }
+
+        jsonLd["address"] = new Dictionary<string, object>
+        {
+            ["@type"] = "PostalAddress",
+            ["streetAddress"] = _apartment.ObjectLocation?.LocalizationItem?.Street ?? "",
+            ["addressLocality"] = _apartment.ObjectLocation?.LocalizationItem?.City ?? "",
+            ["postalCode"] = _apartment.ObjectLocation?.LocalizationItem?.ZipCode ?? "",
+            ["addressCountry"] = "PL"
+        };
+
+        jsonLd["geo"] = new Dictionary<string, object>
+        {
+            ["@type"] = "GeoCoordinates",
+            ["latitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
+            ["longitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? ""
+        };
+
+        jsonLd["occupancy"] = new Dictionary<string, object>
+        {
+            ["@type"] = "QuantitativeValue",
+            ["minValue"] = _apartment.MinCapacity,
+            ["maxValue"] = _apartment.Capacity
+        };
+
+        jsonLd["floorSize"] = new Dictionary<string, object>
+        {
+            ["@type"] = "QuantitativeValue",
+            ["value"] = _apartment.Area,
+            ["unitCode"] = "MTK"
+        };
+
+        if (_amenities != null && _amenities.Any())
+        {
+            jsonLd["amenityFeature"] = _amenities.Select(a => new Dictionary<string, object>
+            {
+                ["@type"] = "LocationFeatureSpecification",
+                ["name"] = a.Name,
+                ["value"] = true
+            }).ToList();
+        }
+
+        var options = new System.Text.Json.JsonSerializerOptions 
+        { 
+            WriteIndented = true,
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+        
+        string json = System.Text.Json.JsonSerializer.Serialize(jsonLd, options);
+        return new MarkupString(json);
+    }
+
     protected override async Task OnInitializedAsync()
     {
         _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
@@ -829,6 +906,7 @@
             PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
             PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
             PriceLabel = UpsellLocalizer["Price"],
+            Currency = CurrencyLocalizer["PLN"],
         };
     }
 
@@ -1117,8 +1195,8 @@
             ObjectItemId = _apartment.Items[0].Id.Value, 
             StartDate = start,
             EndDate = end,
-            //  CheckInTime = _apartment.CheckInTime, <<-- tu musisz zrobic logike ze jak jest addon  "WCZESNE ZAMELDOWANIE" to wstawic w checking time new TimeOnly(11,0)
-            //  CheckOutTime = _apartment.CheckOutTime, <<-- tu musisz zrobic logike ze jak jest addon  "POZNE WYMLEDOWANIE" to wstawic w checkout time new TimeOnly(16,0)
+            //  CheckInTime = _apartment.CheckInTime, <<-- tu musisz zrobic logike ze jak jest addon  "WCZESNE ZAMELDOWANIE" to wstawic w checking time new TimeOnly(14,0)
+            //  CheckOutTime = _apartment.CheckOutTime, <<-- tu musisz zrobic logike ze jak jest addon  "POZNE WYMLEDOWANIE" to wstawic w checkout time new TimeOnly(12,0)
             Adults = adults,
             Children = children,
             SelectedOfferType = selectedOffer?.OfferType ?? offerType,

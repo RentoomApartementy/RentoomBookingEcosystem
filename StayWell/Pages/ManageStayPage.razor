@@ -37,7 +37,7 @@
                         .FirstOrDefault(d => string.Equals(d.Lang, CurrentAddonsLanguage, StringComparison.OrdinalIgnoreCase));
                         var title = details?.Name ?? addon.Name ?? "Dodatek";
                         var description = details?.Description ?? string.Empty;
-                        var priceText = definedAddon is not null ? $"+{definedAddon.PriceGross:#.00} zł" : string.Empty;
+                        var priceText = definedAddon is not null ? $"+{definedAddon.PriceGross:#.00} PLN" : string.Empty;
                         var priceInfo = details?.PaymentTypeShortDescription ?? string.Empty;
                         var icon = addon.Id.HasValue && AddonIconMap.TryGetValue(addon.Id.Value, out var iconPath)
                         ? iconPath

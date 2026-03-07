@@ -3,6 +3,7 @@
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
 <div class="order-wrapper">
     @if (Apartment != null)
@@ -46,8 +47,10 @@
                 
         <div class="summary-box-prices">
             <div class="summary-box-prices-text">
-                <span>@_pricePerNight.ToString("N2") @Summary?.StartRequest?.Currency x @_totalDays @Localizer["NightsText"]</span>
-                <b>@_basePrice.ToString("N2") @Summary?.StartRequest?.Currency</b>
+                @* <span>@_pricePerNight.ToString("N2") @Summary?.StartRequest?.Currency x @_totalDays @Localizer["NightsText"]</span> *@
+                @* <b>@_basePrice.ToString("N2") @Summary?.StartRequest?.Currency</b> *@
+                <span>@_pricePerNight.ToString("N2") @CurrencyLocalizer["PLN"] x @_totalDays @Localizer["NightsText"]</span>
+                <b>@_basePrice.ToString("N2") @CurrencyLocalizer["PLN"]</b>
             </div>
             @if (Summary?.StartRequest?.SelectedAddons?.Count > 0)
             {
@@ -55,7 +58,7 @@
                 {
                     <div class="summary-box-prices-text">
                         <span>@GetAddonName(@addon.AddonId)</span>
-                        <b>@addon.Price.ToString("N2") zł</b>
+                        <b>@addon.Price.ToString("N2") @CurrencyLocalizer["PLN"]</b>
                     </div>
                 }
             }
@@ -66,7 +69,8 @@
                 {
                     <div class="summary-box-prices-text">
                         <span>@upsell.Title</span>
-                        <b>@upsell.LineTotalGross.ToString("N2") @Summary.Currency</b>
+                        @* <b>@upsell.LineTotalGross.ToString("N2") @Summary.Currency</b> *@
+                        <b>@upsell.LineTotalGross.ToString("N2") @CurrencyLocalizer["PLN"]</b>
                     </div>
                 }
             }
@@ -77,7 +81,8 @@
                 
         <div class="summary-box-prices-text">
             <b style="font-size: 1.2rem;">@Localizer["SummaryText"]</b>
-            <b style="font-size: 1.2rem;">@Summary?.GrandTotal.ToString("N2") @Summary?.Currency</b>
+            @* <b style="font-size: 1.2rem;">@Summary?.GrandTotal.ToString("N2") @Summary?.Currency</b> *@
+            <b style="font-size: 1.2rem;">@Summary?.GrandTotal.ToString("N2") @CurrencyLocalizer["PLN"]</b>
         </div>
     </div>
 </div>
