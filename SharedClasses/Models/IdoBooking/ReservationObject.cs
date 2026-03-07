@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -180,6 +180,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
     public class ReservationAddon
     {
         public string addonId { get; set; }
+        public int? persons { get; set; }
         public string addonName { get; set; }
         public string price { get; set; }
         public float vat { get; set; }

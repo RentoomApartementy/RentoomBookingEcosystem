@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos.Scripts;
+using Microsoft.Azure.Cosmos.Scripts;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -43,6 +44,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         private const string ReservationsGetEndpoint = "reservations/get/34/json";
         private const string ReservationsAddEndpoint = "reservations/add/34/json";
+        private const string ReservationsEditEndpoint = "reservations/edit/34/json";
         private const string ReservationsEditStatusEndpoint = "reservations/editStatus/34/json";
 
         private const string PaymentsAddEndpoint = "payments/add/34/json";
@@ -294,6 +296,89 @@ namespace RentoomBooking.SharedClasses.Services
             };
 
             var response = await _idoConnect.PostAsync<ReservationAddRequest, ReservationAddResponseType>(ReservationsAddEndpoint, request, cancellationToken);
+            return response?.Result;
+        }
+
+        public async Task<ReservationEditResponse?> EditReservationAsync(EditReservation reservation, CancellationToken cancellationToken = default)
+        {
+            if (reservation is null)
+            {
+                throw new ArgumentNullException(nameof(reservation));
+            }
+
+            return await EditReservationsAsync([reservation], cancellationToken);
+        }
+
+        public async Task<ReservationEditResponse?> EditReservationsAsync(IEnumerable<EditReservation> reservations, CancellationToken cancellationToken = default)
+        {
+            if (reservations is null)
+            {
+                throw new ArgumentNullException(nameof(reservations));
+            }
+
+            var reservationsList = reservations.ToList();
+            if (reservationsList.Count == 0)
+            {
+                throw new ArgumentException("Dodaj przynajmniej jedną rezerwację do edycji.", nameof(reservations));
+            }
+
+            if (_useDummyIdoBooking)
+            {
+                var results = new List<ReservationEditResult>();
+
+                foreach (var reservationEdit in reservationsList)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var reservation = await _bookingDatabase.GetReservationByIdAsync(reservationEdit.Id, _logger, cancellationToken);
+                    if (reservation is null)
+                    {
+                        results.Add(new ReservationEditResult
+                        {
+                            ReservationId = reservationEdit.Id,
+                            Success = false,
+                            Error = new GateErrorType
+                            {
+                                FaultCode = 404,
+                                FaultString = $"Reservation with id {reservationEdit.Id} not found in dummy storage."
+                            }
+                        });
+                        continue;
+                    }
+
+                    ApplyEditToReservation(reservation, reservationEdit);
+
+                    var updated = await _bookingDatabase.UpdateReservationJsonAsync(reservation, _logger, cancellationToken);
+                    results.Add(new ReservationEditResult
+                    {
+                        ReservationId = reservationEdit.Id,
+                        Success = updated,
+                        Error = updated
+                            ? null
+                            : new GateErrorType
+                            {
+                                FaultCode = 500,
+                                FaultString = $"Failed to persist edited reservation {reservationEdit.Id} in dummy storage."
+                            }
+                    });
+                }
+
+                return new ReservationEditResponse
+                {
+                    Reservations = results
+                };
+            }
+
+            var request = new ReservationEditRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Params = new ReservationEditParams
+                {
+                    Reservations = reservationsList
+                }
+            };
+
+            var response = await _idoConnect.PostAsync<ReservationEditRequest, ReservationEditResponseType>(ReservationsEditEndpoint, request, cancellationToken);
             return response?.Result;
         }
 
@@ -575,6 +660,137 @@ namespace RentoomBooking.SharedClasses.Services
             return reservation;
         }
 
+        private static void ApplyEditToReservation(Reservation reservation, EditReservation reservationEdit)
+        {
+            reservation.ReservationDetails ??= new ReservationDetails();
+            reservation.Items ??= new List<ReservationItem>();
+
+            var details = reservation.ReservationDetails;
+            if (!string.IsNullOrWhiteSpace(reservationEdit.DateFrom))
+            {
+                details.dateFrom = reservationEdit.DateFrom;
+            }
+
+            if (!string.IsNullOrWhiteSpace(reservationEdit.DateTo))
+            {
+                details.dateTo = reservationEdit.DateTo;
+            }
+
+            if (reservationEdit.ClientId.HasValue)
+            {
+                details.clientId = reservationEdit.ClientId.Value.ToString(CultureInfo.InvariantCulture);
+                if (reservation.Client is not null)
+                {
+                    reservation.Client.Id = reservationEdit.ClientId.Value;
+                }
+            }
+
+            if (reservationEdit.ClientNote is not null)
+            {
+                details.clientNote = reservationEdit.ClientNote;
+                if (reservation.Client is not null)
+                {
+                    reservation.Client.ClientNote = reservationEdit.ClientNote;
+                }
+            }
+
+            if (reservationEdit.ExternalNote is not null)
+            {
+                details.externalNote = reservationEdit.ExternalNote;
+            }
+
+            if (reservationEdit.ApiNote is not null)
+            {
+                details.apiNote = reservationEdit.ApiNote;
+            }
+
+            if (reservationEdit.InternalNote is not null)
+            {
+                details.internalNote = reservationEdit.InternalNote;
+            }
+
+            details.modificationDate = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+            if (reservationEdit.Items is null)
+            {
+                return;
+            }
+
+            foreach (var editItem in reservationEdit.Items)
+            {
+                var targetItem = reservation.Items.FirstOrDefault(i => i.objectItemId == editItem.ObjectItemId);
+                if (targetItem is null)
+                {
+                    targetItem = new ReservationItem
+                    {
+                        objectItemId = editItem.ObjectItemId,
+                        addons = new List<ReservationAddon>()
+                    };
+                    reservation.Items.Add(targetItem);
+                }
+
+                ApplyEditToReservationItem(targetItem, editItem);
+            }
+        }
+
+        private static void ApplyEditToReservationItem(ReservationItem targetItem, EditReservationItem editItem)
+        {
+            targetItem.addons ??= new List<ReservationAddon>();
+
+            if (editItem.Price.HasValue)
+            {
+                targetItem.price = editItem.Price.Value;
+            }
+
+            if (editItem.PriceCorrection.HasValue)
+            {
+                targetItem.priceCorrection = editItem.PriceCorrection.Value;
+            }
+
+            if (editItem.Vat.HasValue)
+            {
+                targetItem.vat = editItem.Vat.Value;
+            }
+
+            if (editItem.NumberOfAdults.HasValue)
+            {
+                targetItem.numberOfAdults = editItem.NumberOfAdults.Value;
+            }
+
+            if (editItem.NumberOfSmallChildren.HasValue)
+            {
+                targetItem.numberOfSmallChildren = editItem.NumberOfSmallChildren.Value.ToString(CultureInfo.InvariantCulture);
+            }
+            else if (editItem.NumberOfBigChildren.HasValue && string.IsNullOrWhiteSpace(targetItem.numberOfSmallChildren))
+            {
+                targetItem.numberOfSmallChildren = editItem.NumberOfBigChildren.Value.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (editItem.Addons is not null)
+            {
+                foreach (var newAddon in editItem.Addons)
+                {
+                    var found = targetItem.addons.Any(a =>
+                        int.TryParse(a.addonId, NumberStyles.Integer, CultureInfo.InvariantCulture, out var existingAddonId)
+                        && existingAddonId == newAddon.AddonId);
+                    if (!found)
+
+                        targetItem.addons.Add(new ReservationAddon
+                        {
+                            addonId = newAddon.AddonId.ToString(CultureInfo.InvariantCulture),
+                            persons = newAddon.Persons,
+                            price = newAddon.Price.ToString(CultureInfo.InvariantCulture),
+                            vat = newAddon.Vat,
+                            nights = newAddon.Nights,
+                            quantity = newAddon.Quantity,
+                            addonName = newAddon.AddonName,
+
+                        });
+
+                      
+                }
+            }
+        }
         private void ApplyReservationDetails(ReservationDetails details, NewReservation reservationRequest)
         {
             details.dateFrom = reservationRequest.DateFrom;
@@ -650,6 +866,7 @@ namespace RentoomBooking.SharedClasses.Services
                 reservationItem.addons = requestItem.Addons?.Select(addon => new ReservationAddon
                 {
                     addonId = addon.AddonId.ToString(),
+                    persons = addon.Persons,
                     price = addon.Price.ToString(CultureInfo.InvariantCulture),
                     vat = addon.Vat,
                     nights = addon.Nights,
@@ -739,3 +956,5 @@ namespace RentoomBooking.SharedClasses.Services
         }
     }
 }
+
+

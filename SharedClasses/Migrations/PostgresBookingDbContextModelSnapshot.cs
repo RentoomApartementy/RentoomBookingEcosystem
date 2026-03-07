@@ -284,6 +284,12 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("reservation_id");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("NOW()");
+
                     b.HasKey("ResToken");
 
                     b.ToTable("Reservations");
@@ -735,3 +741,4 @@ namespace RentoomBooking.SharedClasses.Migrations
         }
     }
 }
+
