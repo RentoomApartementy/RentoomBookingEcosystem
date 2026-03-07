@@ -160,14 +160,14 @@ namespace RentoomBookingWeb.Services
             {
                 var startEntry = availabilityCalendar[i];
 
-                if (startEntry.Data.ClosedToArrival == true) continue;
+               // if (startEntry.Data.ClosedToArrival == true) continue;
 
                 if (i + duration < availabilityCalendar.Count)
                 {
                     var checkoutEntry = availabilityCalendar[i + duration];
                     if (checkoutEntry.DateParsed == startEntry.DateParsed.AddDays(duration))
                     {
-                        if (checkoutEntry.Data.ClosedToDeparture == true) continue;
+                 //       if (checkoutEntry.Data.ClosedToDeparture == true) continue;
                     }
                 }
 
