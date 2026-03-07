@@ -69,6 +69,7 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.HasKey(e => e.ResToken);
                 entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
             });
 
             modelBuilder.Entity<ReservationRecordEntity>(entity =>
@@ -238,3 +239,4 @@ namespace RentoomBooking.SharedClasses.Database
     }
 
 }
+

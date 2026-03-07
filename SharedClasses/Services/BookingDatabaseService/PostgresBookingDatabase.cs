@@ -244,6 +244,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
                 ReservationId = payloadReservation.id,
                 Payload = payload,
                 CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
             try
@@ -259,6 +260,42 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             }
         }
 
+        public async Task<bool> UpdateReservationJsonAsync(Reservation payloadReservation, ILogger log, CancellationToken cancellationToken = default)
+        {
+            if (payloadReservation is null) throw new ArgumentNullException(nameof(payloadReservation));
+            if (log is null) throw new ArgumentNullException(nameof(log));
+
+            await _initializationTask;
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+            var entity = await _dbContext.Reservations
+                .Where(r => r.ReservationId == payloadReservation.id)
+                .OrderByDescending(r => r.UpdatedAt)
+                .ThenByDescending(r => r.CreatedAt)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (entity is null)
+            {
+                log.LogWarning("Reservation with id {Id} not found in PostgreSQL, update skipped.", payloadReservation.id);
+                return false;
+            }
+
+            var document = DeserializeReservationDocument(entity.Payload, entity.ResToken, payloadReservation, log);
+            entity.Payload = JsonConvert.SerializeObject(document);
+            entity.UpdatedAt = DateTime.UtcNow;
+            entity.ReservationId = payloadReservation.id;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "Failed to update reservation {Id} in PostgreSQL.", payloadReservation.id);
+                return false;
+            }
+        }
+
         public async Task<Reservation?> GetReservationByIdAsync(int reservationId, ILogger log, CancellationToken cancellationToken = default)
         {
             if (log is null) throw new ArgumentNullException(nameof(log));
@@ -266,6 +303,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             await _initializationTask;
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             var entity = await _dbContext.Reservations.AsNoTracking()
+                .OrderByDescending(r => r.UpdatedAt)
+                .ThenByDescending(r => r.CreatedAt)
                 .FirstOrDefaultAsync(r => r.ReservationId == reservationId, cancellationToken);
             if (entity?.Payload is null)
             {
@@ -322,10 +361,41 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
         {
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             var res = await _dbContext.ReservationRecords.FirstOrDefaultAsync(r => r.IdoReservationId == reservationId);
-            res.IdoStatus = status;
-            _dbContext.SaveChanges();
+            if (res is null)
+            {
+                return;
+            }
 
+            res.IdoStatus = status;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private static RentoomReservation DeserializeReservationDocument(string payload, string resToken, Reservation payloadReservation, ILogger log)
+        {
+            try
+            {
+                var current = JsonConvert.DeserializeObject<RentoomReservation>(payload);
+                if (current is not null)
+                {
+                    current.Id = payloadReservation.id;
+                    current.ResToken = string.IsNullOrWhiteSpace(current.ResToken) ? resToken : current.ResToken;
+                    current.Reservation = payloadReservation;
+                    return current;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogWarning(ex, "Failed to deserialize existing reservation payload for token {Token}. Rebuilding document.", resToken);
+            }
+
+            return new RentoomReservation
+            {
+                Id = payloadReservation.id,
+                ResToken = resToken,
+                Reservation = payloadReservation
+            };
         }
     }
 
 }
+
