@@ -58,6 +58,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         private const string AllAmenitiesGetEndpoint = "amenities/getForObjects/34/json";
         private const string RestrictionsExceptionsGetEndpoint = "restrictions/getExceptions/34/json";
+        private const string AvailabilityLocksGetEndpoint = "availabilitylocks/get/34/json";
 
 
         public IdoSellService(
@@ -256,6 +257,25 @@ namespace RentoomBooking.SharedClasses.Services
             var response = await _idoConnect.PostAsync<GetRestrictionsExceptionsRequestType, GetRestrictionsExceptionsResponseType>(RestrictionsExceptionsGetEndpoint, request, cancellationToken);
 
             return response?.Result.GetRestrictionExceptions;
+        }
+
+        public async Task<List<AvailabilityLock>?> FetchAvailabilityLocksAsync(GetAvailabilityLocksRequestPayload? payload = null, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Fetching availability locks with filters: {Filters}", payload?.ParamsSearch);
+
+            var request = new GetAvailabilityLocksRequestType
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Result = payload?.Result ?? new ResultRequestPaging
+                {
+                    Page = 1,
+                    Number = 100
+                },
+                ParamsSearch = payload?.ParamsSearch
+            };
+
+            var response = await _idoConnect.PostAsync<GetAvailabilityLocksRequestType, GetAvailabilityLocksResponseType>(AvailabilityLocksGetEndpoint, request, cancellationToken);
+            return response?.Result.AvailabilityLocks;
         }
 
         public async Task<ReservationAddResponse?> AddReservationAsync(NewReservation reservation , CancellationToken cancellationToken = default)

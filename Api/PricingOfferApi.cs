@@ -205,6 +205,42 @@ namespace RentoomBooking.Api
             }
         }
 
+        [Function("GetAvailabilityLocks")]
+        public async Task<HttpResponseData> GetAvailabilityLocks(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ido/availabilitylocks")] HttpRequestData req)
+        {
+            var response = req.CreateResponse();
+            var cancellationToken = req.FunctionContext.CancellationToken;
+
+            try
+            {
+                GetAvailabilityLocksRequestPayload payload = new();
+
+                using (var reader = new StreamReader(req.Body, Encoding.UTF8))
+                {
+                    var body = await reader.ReadToEndAsync().ConfigureAwait(false);
+                    if (!string.IsNullOrWhiteSpace(body))
+                    {
+                        payload = JsonConvert.DeserializeObject<GetAvailabilityLocksRequestPayload>(body) ?? new GetAvailabilityLocksRequestPayload();
+                    }
+                }
+
+                var availabilityLocks = await _idoSellService.FetchAvailabilityLocksAsync(payload, cancellationToken).ConfigureAwait(false);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(availabilityLocks ?? new List<AvailabilityLock>())).ConfigureAwait(false);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching availability locks.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.").ConfigureAwait(false);
+                return response;
+            }
+        }
+
     }
 
 }
