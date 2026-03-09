@@ -4,18 +4,15 @@ window.registerScrollObserver = (elementId, dotnetHelper) => {
 
     if (target) {
         // Jeśli jest od razu - super, podpinamy się
-        startIntersectionObserver(target, dotnetHelper);
+        startIntersectionObserver(target, elementId, dotnetHelper);
     } else {
         // 2. Jeśli go nie ma (bo się ładuje), uruchamiamy "czujkę" (MutationObserver)
         // która patrzy na zmiany w HTML i czeka aż element się pojawi
-        console.log(`[SmartObserver] Czekam na pojawienie się elementu: ${elementId}...`);
-
         const observer = new MutationObserver((mutations, obs) => {
             const targetNow = document.getElementById(elementId);
             if (targetNow) {
                 // Element się pojawił! Podpinamy się i wyłączamy czujkę
-                console.log(`[SmartObserver] Element ${elementId} się pojawił!`);
-                startIntersectionObserver(targetNow, dotnetHelper);
+                startIntersectionObserver(targetNow, elementId, dotnetHelper);
                 obs.disconnect(); // Przestań szukać, już mamy
             }
         });
@@ -29,11 +26,11 @@ window.registerScrollObserver = (elementId, dotnetHelper) => {
 };
 
 // Funkcja pomocnicza - właściwa logika scrolla
-function startIntersectionObserver(target, dotnetHelper) {
+function startIntersectionObserver(target, elementId, dotnetHelper) {
     const observer = new IntersectionObserver((entries) => {
         const entry = entries[0];
         const isPastOrVisible = entry.isIntersecting || entry.boundingClientRect.top < 0;
-        dotnetHelper.invokeMethodAsync('UpdateScrollState', isPastOrVisible);
+        dotnetHelper.invokeMethodAsync('UpdateScrollState', elementId, isPastOrVisible);
     }, {
         threshold: 0,
         rootMargin: "-120px 0px 0px 0px"

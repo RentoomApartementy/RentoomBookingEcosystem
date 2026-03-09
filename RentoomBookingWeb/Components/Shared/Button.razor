@@ -3,13 +3,13 @@
 
 @if (!string.IsNullOrEmpty(Href))
 {
-    <a href="@Href" class="@(Disabled ? "custom-button disabled" : GetButtonClass())" @attributes="AdditionalAttributes">
+    <a href="@Href" class="@GetFullClass()" @attributes="AdditionalAttributes">
         <span style="white-space: nowrap;">@ChildContent</span>
     </a>
 }
 else
 {
-    <button @attributes="AdditionalAttributes" @onclick="OnClick" disabled="@Disabled" class="@(Disabled ? "custom-button disabled" : GetButtonClass())">
+    <button @attributes="AdditionalAttributes" @onclick="OnClick" disabled="@Disabled" class="@GetFullClass()">
         <span style="white-space: nowrap;">@ChildContent</span>
     </button>
 }
@@ -20,7 +20,14 @@ else
     [Parameter] public bool Disabled { get; set; } = false;
     [Parameter] public ButtonType Type { get; set; } = ButtonType.Primary;
     [Parameter] public string? Href { get; set; }
+    [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetFullClass()
+    {
+        var baseClass = Disabled ? "custom-button disabled" : GetButtonClass();
+        return $"{baseClass} {Class}".Trim();
+    }
 
     private string GetButtonClass() => Type switch
     {
