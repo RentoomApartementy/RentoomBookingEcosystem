@@ -31,7 +31,8 @@ public interface IApartmentsViewModel
     int ScaleMaxPrice { get; }
     public Guid SliderResetKey { get; }
     PricingOffer? GetPricingOfferByObjectId(int objectId);
-    public AvailableTerm? GetSuggestionByObjectId(int objectId);
+    public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId);
+    public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId);
 
     Task InitializeAsync();
     Task LoadMoreAsync();

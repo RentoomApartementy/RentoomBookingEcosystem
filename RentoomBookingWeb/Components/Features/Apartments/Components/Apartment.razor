@@ -5,7 +5,6 @@
 @inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
 @using RentoomBookingWeb.Services
-@inject IAvailabilityFinderService AvailabilityFinder
 @inject IJSRuntime JS
 @using RentoomBookingWeb.Helpers
 @using Microsoft.Extensions.Localization
@@ -183,10 +182,15 @@
                     else
                     {
                         <div class="non-offer-wrapper">
-                            @if (SuggestionDates?.StartDate != null && SuggestionDates?.EndDate != null)
+                            @if (SuggestionDates?.Any() == true)
                             {
                                 <small>@Localizer["SuggestedDate"]:</small>
-                                <b>@Localizer["FromText"] @SuggestionDates?.StartDate @Localizer["To"] @SuggestionDates?.EndDate</b>
+                                <div class="suggestion-labels-row">
+                                    @foreach (var term in SuggestionDates.Take(3))
+                                    {
+                                        <span class="suggestion-label">@FormatSuggestionLabel(term)</span>
+                                    }
+                                </div>
                             }
                             else
                             {
@@ -229,7 +233,7 @@
     
     [Parameter] public bool DisableForGoToReservation { get; set; } = false;
     
-    [Parameter] public AvailableTerm? SuggestionDates { get; set; } = null;
+    [Parameter] public IReadOnlyList<AvailableTerm>? SuggestionDates { get; set; } = null;
 
     [Parameter] public string? Width { get; set; } = null;
 
@@ -355,6 +359,17 @@
             _detailsUrl = baseUrl;
         }
         _detailsUrl = _detailsUrl.Replace("//", "/");
+    }
+
+    private static string FormatSuggestionLabel(AvailableTerm term)
+    {
+        if (!DateTime.TryParse(term.StartDate, out var startDate) || !DateTime.TryParse(term.EndDate, out var endDate))
+        {
+            return $"{term.StartDate}-{term.EndDate}";
+        }
+
+        var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
+        return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} night/s)";
     }
 
     public async ValueTask DisposeAsync()

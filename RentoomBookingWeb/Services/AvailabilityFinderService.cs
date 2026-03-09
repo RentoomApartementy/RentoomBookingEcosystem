@@ -1,7 +1,6 @@
 using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
-using RentoomBookingWeb.Models;
 
 namespace RentoomBookingWeb.Services
 {

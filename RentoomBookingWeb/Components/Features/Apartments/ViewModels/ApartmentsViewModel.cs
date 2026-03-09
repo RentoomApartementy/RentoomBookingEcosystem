@@ -14,7 +14,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly IApartmentsService _apartmentsService;
         private readonly IRentoomOfferService _rentoomOfferService;
         private readonly NavigationManager _navManager;
-        private readonly IAvailabilityFinderService _availabilityFinder;
+        private readonly IAvailabilityFinderService2 _availabilityFinder;
         private readonly IApartmentSearchFiltersService _filterService;
 
         private string? _token;
@@ -28,7 +28,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         public List<ApartmentObject> Items { get; private set; } = new();
         public List<PricingOffer> Offers { get; private set; } = new();
-        public Dictionary<int, AvailableTerm> AvailableTerms { get; private set; } = new();
+        public Dictionary<int, List<AvailableTerm>> AvailableTerms { get; private set; } = new();
 
         public long? ApartmentsCount { get; private set; }
         public bool IsLoading { get; private set; } = true;
@@ -57,7 +57,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             IApartmentsService apartmentsService,
             IRentoomOfferService rentoomOfferService,
             NavigationManager navManager,
-            IAvailabilityFinderService availabilityFinder,
+            IAvailabilityFinderService2 availabilityFinder,
             IApartmentSearchFiltersService filterService)
         {
             _apartmentsService = apartmentsService;
@@ -71,7 +71,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public int MaxOfferPrice => ScaleMaxPrice;
 
         public PricingOffer? GetPricingOfferByObjectId(int objectId) => Offers.Find(o => o.ObjectId == objectId);
-        public AvailableTerm? GetSuggestionByObjectId(int objectId) => AvailableTerms.TryGetValue(objectId, out var term) ? term : null;
+        public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId) => GetSuggestionsByObjectId(objectId);
+        public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId) =>
+            AvailableTerms.TryGetValue(objectId, out var terms) ? terms : null;
 
         public async Task InitializeAsync()
         {
@@ -386,16 +388,39 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate)) return;
             var orderedIds = itemsToCheck.Where(item => !Offers.Any(o => o.ObjectId == item.Id)).Select(item => item.Id).ToList();
             if (!orderedIds.Any()) return;
-            
-            var chunks = orderedIds.Chunk(10).ToList();
-            for (int i = 0; i < chunks.Count; i++)
+
+            if (ct.IsCancellationRequested) return;
+
+            var adults = int.TryParse(Adults, out var parsedAdults) && parsedAdults > 0 ? parsedAdults : 2;
+            var children = int.TryParse(Children, out var parsedChildren) && parsedChildren > 0 ? parsedChildren : 0;
+
+            var newSuggestions = await _availabilityFinder.FindAvailableTermsAsync(
+                orderedIds,
+                StartDate,
+                EndDate,
+                adults,
+                children);
+
+            if (ct.IsCancellationRequested) return;
+
+            foreach (var apartmentId in orderedIds)
             {
-                if (ct.IsCancellationRequested) return;
-                var newSuggestions = await _availabilityFinder.FindNextAvailableTermsAsync(chunks[i].ToList(), StartDate, EndDate, int.TryParse(Adults, out var a) ? a : 2, 1);
-                foreach (var kvp in newSuggestions) AvailableTerms[kvp.Key] = kvp.Value;
-                NotifyStateChanged();
-                await Task.Delay(500, ct);
+                AvailableTerms.Remove(apartmentId);
             }
+
+            foreach (var result in newSuggestions)
+            {
+                var topTerms = (result.AvailableTerms ?? new List<AvailableTerm>())
+                    .Take(3)
+                    .ToList();
+
+                if (topTerms.Count > 0)
+                {
+                    AvailableTerms[result.ApartmentId] = topTerms;
+                }
+            }
+
+            NotifyStateChanged();
         }
 
         private void UpdateUrlParams(Dictionary<string, string> query)
