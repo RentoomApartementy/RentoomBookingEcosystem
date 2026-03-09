@@ -445,7 +445,7 @@
                                     <div class="suggest-offers-list">
                                         @foreach (var suggestion in _suggestionDates)
                                         {
-                                            <div @onclick="@(() => GoToSuggestionDates(suggestion))" class="suggest-offer-card">
+                                            <div @onclick="@(() => GoToSuggestionDates(suggestion))" @onclick:stopPropagation="true"  class="suggest-offer-card">
                                                 <div class="suggest-icon">
                                                     <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
                                                 </div>
@@ -1203,10 +1203,14 @@
         var suggestion = selectedTerm ?? _selectedSuggestionDate ?? _suggestionDates.FirstOrDefault();
         if (_apartment != null && suggestion?.StartDate != null && suggestion?.EndDate != null)
         {
+            StartDate = suggestion.StartDate;
+            EndDate = suggestion.EndDate;
+            RefreshAddonsParams();
+            UpdateReservationPricingContext();
+
             var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{suggestion.StartDate}/{suggestion.EndDate}/{Adults}/{Children}";
-            Navigation.NavigateTo(url, forceLoad: true);
+            Navigation.NavigateTo(url, forceLoad: false);
             await GetOffer();
-            StateHasChanged();
         }
     }
 
