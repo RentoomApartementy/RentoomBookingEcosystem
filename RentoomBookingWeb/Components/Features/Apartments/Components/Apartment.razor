@@ -186,12 +186,12 @@
                             {
                                 <span class="availability-status loading">
                                     <span class="mini-spinner"></span>
-                                    <span>Szukam terminów...</span>
+                                        <span>@Localizer["SuggestedDateLoading"]</span>
                                 </span>
                             }
                             else
                             {
-                                <span class="availability-status">@(SuggestionDates?.Any() == true ? "Dostępny bliski termin" : "Brak")</span>
+                                    <span class="availability-status">@(SuggestionDates?.Any() == true ? Localizer["SuggestedDateFoundText"] : Localizer["SuggestedDateNotFoundText"])</span>
                             }
                         </div>
                     } 
@@ -231,7 +231,7 @@
                         {
                             <small class="non-offer">
                                 <span class="mini-spinner"></span>
-                                <span>Szukam terminów...</span>
+                                <span>@Localizer["SuggestedDateLoading"]</span>
                             </small>
                         }
                         else
