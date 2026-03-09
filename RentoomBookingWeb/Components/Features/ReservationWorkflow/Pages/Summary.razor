@@ -2,9 +2,9 @@
 
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
-@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components;
+@using QRCoder
 @inject IReservationWorkflowService ReservationWorkflowService;
 @inject NavigationManager Navigation;
 @inject IApartmentsService ApartmentsService;
@@ -67,7 +67,43 @@
                                 <span>@Localizer["ReservationPaidInfo"]</span>
                             </div>
                         </div>
-                        <input class="button" value="@Localizer["GoToStayWell"]">
+                        <div class="staywell-popup-wrapper">
+                            <button type="button" class="button" @onclick="ToggleStaywellPopup">@Localizer["GoToStayWell"]</button>
+                            <a href="@staywellLink"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="staywell-mobile-direct-link">
+                                @Localizer["GoToStayWellQRCodePopupMobileText"]
+                            </a>
+
+                            @if (_isStaywellPopupOpen)
+                            {
+                                <div class="staywell-popup" role="dialog" aria-label="Kod QR StayWell">
+                                    <button type="button"
+                                            class="staywell-popup-close"
+                                            @onclick="CloseStaywellPopup"
+                                            aria-label="Zamknij popup StayWell">×</button>
+
+                                    <div class="staywell-popup-content">
+                                        <div class="staywell-popup-col staywell-qr-col">
+                                            @if (!string.IsNullOrWhiteSpace(_staywellQrDataUri))
+                                            {
+                                                <img src="@_staywellQrDataUri" alt="Kod QR StayWell" class="staywell-qr" />
+                                            }
+                                        </div>
+
+                                        <div class="staywell-popup-col staywell-description-col">
+                                            <strong class="staywell-popup-title">@Localizer["StaywellPopupTitle"]</strong>
+                                            <p class="staywell-popup-description">@Localizer["StaywellPopupDescription"]</p>
+
+                                            @*<a href="@staywellLink" target="_blank" rel="noopener noreferrer" class="staywell-popup-link">
+                                                @Localizer["GoToStayWellQRCodePopupText"]
+                                            </a>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     }
                     else if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
                     {
@@ -212,11 +248,17 @@
     private bool _loading = true;
     private string? _error;
     private ApartmentObject? _apartment;
+    private bool _isStaywellPopupOpen;
+    private string? _staywellQrDataUri;
+   // private const string StaywellPopupTitle = "StayWell dla Twojej rezerwacji";
+   // private const string StaywellPopupDescription = "Zeskanuj kod QR, aby natychmiast otworzyć panel StayWell przypisany do tej rezerwacji. W panelu sprawdzisz szczegóły pobytu, informacje organizacyjne, status usług dodatkowych i najważniejsze komunikaty. Jeśli wolisz przejdź dalej tym przyciskiem poniżej.";
     
-    private string? staywellLink => $"https://staywell-test.rentoom.pl/reservation/{ReservationTokenGuid}/HomePage";
+    private string staywellLink => $"https://staywell-test.rentoom.pl/reservation/{ReservationTokenGuid}/HomePage";
 
     protected override async Task OnInitializedAsync()
     {
+        _staywellQrDataUri = GenerateStaywellQrDataUri();
+
         try
         {
             _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
@@ -253,6 +295,36 @@
     private void GoToClientInfo()
     {
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/dane-klienta");
+    }
+
+    private void ToggleStaywellPopup()
+    {
+        if (string.IsNullOrWhiteSpace(_staywellQrDataUri))
+        {
+            _staywellQrDataUri = GenerateStaywellQrDataUri();
+        }
+
+        _isStaywellPopupOpen = !_isStaywellPopupOpen;
+    }
+
+    private void CloseStaywellPopup()
+    {
+        _isStaywellPopupOpen = false;
+    }
+
+    private string? GenerateStaywellQrDataUri()
+    {
+        if (string.IsNullOrWhiteSpace(staywellLink))
+        {
+            return null;
+        }
+
+        using var generator = new QRCodeGenerator();
+        using var data = generator.CreateQrCode(staywellLink, QRCodeGenerator.ECCLevel.Q);
+        var qr = new PngByteQRCode(data);
+        var bytes = qr.GetGraphic(10);
+
+        return $"data:image/png;base64,{Convert.ToBase64String(bytes)}";
     }
     
     private List<CustomerTermsAndConditionsSource>? _termsSources;
