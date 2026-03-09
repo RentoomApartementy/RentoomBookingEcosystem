@@ -182,7 +182,7 @@
                     else
                     {
                         <div class="price-wrapper">
-                            <span class="price">Brak</span>
+                            <span class="availability-status">@(SuggestionDates?.Any() == true ? "Dostępny bliski termin" : "Brak")</span>
                         </div>
                     } 
                 </div>

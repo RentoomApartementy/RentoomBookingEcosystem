@@ -162,6 +162,16 @@
     font-size: 1.2rem;
 }
 
+.availability-status {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    max-width: 170px;
+    color: #2f2f2f;
+}
+
 .non-offer {
     
 }
