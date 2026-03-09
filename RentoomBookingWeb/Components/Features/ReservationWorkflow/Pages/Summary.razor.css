@@ -157,6 +157,112 @@
     text-align: center;
 }
 
+.staywell-popup-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.staywell-mobile-direct-link {
+    display: none;
+    margin-top: 8px;
+    color: #1F5A41;
+    font-weight: 600;
+    text-decoration: underline;
+    text-align: center;
+}
+
+.staywell-popup {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(620px, calc(100vw - 48px));
+    background: #ffffff;
+    border: 1px solid #d8e5de;
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(17, 24, 39, 0.18);
+    padding: 16px 14px 16px;
+    z-index: 20;
+}
+
+.staywell-popup::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border-top: 1px solid #d8e5de;
+    border-left: 1px solid #d8e5de;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.staywell-popup-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    border: none;
+    background: transparent;
+    color: #4b5563;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.staywell-popup-content {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 14px;
+    align-items: center;
+}
+
+.staywell-popup-col {
+    min-width: 0;
+}
+
+.staywell-qr-col {
+    display: flex;
+    justify-content: center;
+}
+
+.staywell-qr {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+.staywell-description-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.staywell-popup-title {
+    font-size: 1rem;
+    color: #111827;
+}
+
+.staywell-popup-description {
+    margin: 0;
+    color: #374151;
+    line-height: 1.45;
+    font-size: 0.92rem;
+}
+
+.staywell-popup-link {
+    align-self: flex-start;
+    color: #1F5A41;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.staywell-popup-link:hover {
+    text-decoration: underline;
+}
+
 .guest-info {
     display: flex;
     flex-direction: column;
@@ -376,6 +482,14 @@
     .status-box .form-wrapper-title-icon-wrapper {
         width: 40px;
         height: 40px;
+    }
+
+    .staywell-popup {
+        display: none;
+    }
+
+    .staywell-mobile-direct-link {
+        display: block;
     }
 }
 
