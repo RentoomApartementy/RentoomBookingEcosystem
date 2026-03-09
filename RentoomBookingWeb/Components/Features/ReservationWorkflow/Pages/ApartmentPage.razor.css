@@ -609,6 +609,12 @@
     transition: all 0.2s;
 }
 
+.suggest-offers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
 .suggest-offer-card:hover {
     background-color: #f4eee7;
     border-style: solid;
@@ -920,6 +926,34 @@
     gap: 1rem;
     align-items: center;
     justify-content: space-between;
+}
+
+.summary-suggestion-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.summary-suggestion-chip {
+    border: 1px solid #d7c6b1;
+    background: #f8f2eb;
+    color: #5a3f28;
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.summary-suggestion-chip:hover {
+    border-color: #945f28;
+}
+
+.summary-suggestion-chip.selected {
+    background: #945f28;
+    color: #fff;
+    border-color: #945f28;
 }
 
 .refundable {
