@@ -1,7 +1,7 @@
+using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
-using RentoomBookingWeb.Models;
 
 namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 

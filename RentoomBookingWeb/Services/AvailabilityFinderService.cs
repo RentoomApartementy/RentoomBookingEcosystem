@@ -1,3 +1,4 @@
+using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBookingWeb.Models;
@@ -43,9 +44,9 @@ namespace RentoomBookingWeb.Services
                     DateTo = searchEnd.ToString("yyyy-MM-dd"),
                     Language = "pol",
                     AdultsNumber = adults,
-                    ChildrenNumber = children,
+                    ChildrenNumber = children>0?children:null,
                     Currency = "PLN",
-                    MinStay = true
+                    //MinStay = true
                 }
             };
 
@@ -94,9 +95,9 @@ namespace RentoomBookingWeb.Services
                     DateTo = searchEnd.ToString("yyyy-MM-dd"),
                     Language = "pol",
                     AdultsNumber = adults,
-                    ChildrenNumber = children,
-                    Currency = "PLN",
-                    MinStay = true
+                    ChildrenNumber = children > 0 ? children : null,
+                    Currency = "PLN"
+                    //MinStay = true
                 }
             };
 

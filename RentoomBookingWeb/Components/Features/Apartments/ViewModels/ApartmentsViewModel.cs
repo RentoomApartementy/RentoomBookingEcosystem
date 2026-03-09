@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
+using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services;
-using RentoomBookingWeb.Models;
 using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels

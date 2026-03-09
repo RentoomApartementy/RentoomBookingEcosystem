@@ -1,6 +1,7 @@
 @page "/apartamenty/{id:int}/{slug}"
 @page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using System.Globalization
+@using RentoomBooking.SharedClasses.Models.AvailableTerms
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
@@ -15,7 +16,6 @@
 @inject NavigationManager Navigation
 @inject IIdoOfferService OfferService
 @inject IJSRuntime JSRuntime
-@using RentoomBookingWeb.Models
 @using RentoomBookingWeb.Services
 @inject IAvailabilityFinderService AvailabilityFinder
 @using RentoomBookingWeb.Helpers

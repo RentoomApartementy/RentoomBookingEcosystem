@@ -85,6 +85,7 @@ builder.Services.AddScoped<RappQrMaintService>();
 builder.Services.AddScoped<RegistrationCardRepository>();
 builder.Services.AddScoped<IIdoOfferService,IdoOfferService>();
 builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
+builder.Services.AddScoped<IAvailabilityFinderService2, AvailabilityFinderService2>();
 builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
 

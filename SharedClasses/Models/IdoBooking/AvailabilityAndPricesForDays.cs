@@ -40,8 +40,8 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         [JsonProperty("currency")]
         public string? Currency { get; set; }
 
-        [JsonProperty("minStay")]
-        public bool MinStay { get; set; } = true;
+        //[JsonProperty("minStay")]
+       // public bool MinStay { get; set; } = true;
     }
 
     public class OfferAvailabilityAndPricesParamsSearchInternal //to allow filtering results by object id.
@@ -103,11 +103,11 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         [JsonProperty("minStay")]
         public int? MinStay { get; set; }
 
-        [JsonProperty("closedToArrival")]
-        public bool? ClosedToArrival { get; set; }
+       // [JsonProperty("closedToArrival")]
+      //  public bool? ClosedToArrival { get; set; }
 
-        [JsonProperty("closedToDeparture")]
-        public bool? ClosedToDeparture { get; set; }
+      //  [JsonProperty("closedToDeparture")]
+      //  public bool? ClosedToDeparture { get; set; }
     }
 
     public class OfferPriceDate
