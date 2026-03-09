@@ -72,7 +72,12 @@
 .apartment-button-wrapper {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.apartment-button-wrapper > :last-child {
+    flex-shrink: 0;
 }
 
 @media (max-width: 600px) {
@@ -103,7 +108,8 @@
     }
 
     .apartment-button-wrapper {
-        justify-content: center;
+        align-items: center;
+        justify-content: space-between;
     }
 }
 
@@ -141,7 +147,8 @@
 }
 
 .apartment-price-info {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
 }
 
@@ -256,20 +263,24 @@
 .non-offer-wrapper {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    margin-top: 8px;
 }
 
 .suggestion-labels-row {
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 6px;
-    margin-top: 4px;
-    overflow-x: auto;
-    padding-bottom: 2px;
+    overflow: hidden;
 }
 
 .suggestion-label {
     display: inline-flex;
     align-items: center;
+    width: fit-content;
+    max-width: 100%;
     white-space: nowrap;
     font-size: 0.72rem;
     line-height: 1;

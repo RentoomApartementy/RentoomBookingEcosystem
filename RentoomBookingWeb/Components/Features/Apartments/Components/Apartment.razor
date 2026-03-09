@@ -181,21 +181,8 @@
                     }
                     else
                     {
-                        <div class="non-offer-wrapper">
-                            @if (SuggestionDates?.Any() == true)
-                            {
-                                <small>@Localizer["SuggestedDate"]:</small>
-                                <div class="suggestion-labels-row">
-                                    @foreach (var term in SuggestionDates.Take(3))
-                                    {
-                                        <span class="suggestion-label">@FormatSuggestionLabel(term)</span>
-                                    }
-                                </div>
-                            }
-                            else
-                            {
-                                <small class="non-offer">@Localizer["NoOfferText2"]</small>
-                            }
+                        <div class="price-wrapper">
+                            <span class="price">Brak</span>
                         </div>
                     } 
                 </div>
@@ -214,7 +201,26 @@
                     @Localizer["BookNow"]
                 </Button>
             }
-        </div>
+            </div>
+
+            @if (ShowPrice && Offer == null && Item != null)
+            {
+                <div class="non-offer-wrapper">
+                    @if (SuggestionDates?.Any() == true)
+                    {
+                        <div class="suggestion-labels-row">
+                            @foreach (var term in SuggestionDates.Take(3))
+                            {
+                                <span class="suggestion-label">@FormatSuggestionLabel(term)</span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <small class="non-offer">@Localizer["NoOfferText2"]</small>
+                    }
+                </div>
+            }
         }
     </div>
 </article>
