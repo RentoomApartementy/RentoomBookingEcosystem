@@ -172,8 +172,32 @@
     color: #2f2f2f;
 }
 
+.availability-status.loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .non-offer {
-    
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mini-spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid #d7c8b8;
+    border-top-color: #945f28;
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: mini-spinner-rotate 0.8s linear infinite;
+}
+
+@keyframes mini-spinner-rotate {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /*.nav-dot-wrapper {*/

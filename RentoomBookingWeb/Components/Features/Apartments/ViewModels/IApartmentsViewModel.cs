@@ -12,6 +12,7 @@ public interface IApartmentsViewModel
     long? ApartmentsCount { get; }
     bool IsLoading { get; }
     bool ApartmentsIsLoading { get; }
+    bool IsSuggestionsLoading { get; }
     bool HasMore { get; }
     string? Error { get; }
     bool IsMapView { get; }
