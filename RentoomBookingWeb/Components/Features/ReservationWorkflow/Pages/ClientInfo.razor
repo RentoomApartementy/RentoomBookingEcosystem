@@ -212,7 +212,8 @@
                     <p class="text-danger">@_error</p>
                 }
 
-                <button type="submit" disabled="@_isSaving" class="button">
+                <button type="submit" disabled="@IsSubmitDisabled" class="button"
+                        style="@(!IsFormComplete() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
                     @(_isSaving ? Localizer["ClientInfoButtonLoading"] : Localizer["ClientInfoButton"])
                 </button>
             </div>
