@@ -1,23 +1,22 @@
-window.registerScrollObserver = (elementId, dotnetHelper) => {
-    // 1. Sprawdzamy, czy element już istnieje
+window.registerScrollObserver = (elementId, dotnetHelper, options) => {
     const target = document.getElementById(elementId);
+    
+    const observerOptions = options || {
+        threshold: 0,
+        rootMargin: "-120px 0px 0px 0px"
+    };
 
     if (target) {
-        // Jeśli jest od razu - super, podpinamy się
-        startIntersectionObserver(target, elementId, dotnetHelper);
+        startIntersectionObserver(target, elementId, dotnetHelper, observerOptions);
     } else {
-        // 2. Jeśli go nie ma (bo się ładuje), uruchamiamy "czujkę" (MutationObserver)
-        // która patrzy na zmiany w HTML i czeka aż element się pojawi
         const observer = new MutationObserver((mutations, obs) => {
             const targetNow = document.getElementById(elementId);
             if (targetNow) {
-                // Element się pojawił! Podpinamy się i wyłączamy czujkę
-                startIntersectionObserver(targetNow, elementId, dotnetHelper);
-                obs.disconnect(); // Przestań szukać, już mamy
+                startIntersectionObserver(targetNow, elementId, dotnetHelper, observerOptions);
+                obs.disconnect();
             }
         });
 
-        // Obserwuj całe body w poszukiwaniu nowych elementów
         observer.observe(document.body, {
             childList: true,
             subtree: true
@@ -25,25 +24,29 @@ window.registerScrollObserver = (elementId, dotnetHelper) => {
     }
 };
 
-// Funkcja pomocnicza - właściwa logika scrolla
-function startIntersectionObserver(target, elementId, dotnetHelper) {
+function startIntersectionObserver(target, elementId, dotnetHelper, options) {
     const observer = new IntersectionObserver((entries) => {
         const entry = entries[0];
-        const isPastOrVisible = entry.isIntersecting || entry.boundingClientRect.top < 0;
+        
+        // Element jest uznawany za "widoczny lub minięty" jeśli:
+        // 1. Przecina się z obszarem roboczym (jest widoczny)
+        // 2. Jego górna krawędź jest powyżej górnej krawędzi obszaru roboczego (minęliśmy go)
+        const rootTop = entry.rootBounds ? entry.rootBounds.top : 0;
+        const isPastOrVisible = entry.isIntersecting || entry.boundingClientRect.top < rootTop;
+        
         dotnetHelper.invokeMethodAsync('UpdateScrollState', elementId, isPastOrVisible);
-    }, {
-        threshold: 0,
-        rootMargin: "-120px 0px 0px 0px"
-    });
+    }, options);
 
     observer.observe(target);
 }
 
-// Funkcja do scrollowania (też zabezpieczona, żeby nie sypała błędami)
 window.scrollToElement = (elementId) => {
     const element = document.getElementById(elementId);
     if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Dodajemy mały offset przy przewijaniu, żeby nagłówek nie zasłonił tytułu
+        const yOffset = -100; 
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
     } else {
         console.warn(`[Scroll] Nie można przewinąć - brak elementu: ${elementId}`);
     }
