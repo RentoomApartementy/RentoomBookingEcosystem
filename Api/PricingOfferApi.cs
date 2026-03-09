@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
@@ -25,13 +26,20 @@ namespace RentoomBooking.Api
         private readonly IIdoOfferService _offerService;
         private readonly IdoSellService _idoSellService;
         private readonly IRentoomOfferService _rentoomOfferService;
+        private readonly IAvailabilityFinderService2 _availabilityFinderService2;
         private readonly ILogger<OfferApi> _logger;
-        public OfferApi(IIdoOfferService offerService, IRentoomOfferService rentoomOfferService, ILogger<OfferApi> logger, IdoSellService idoSellService    )
+        public OfferApi(
+            IIdoOfferService offerService,
+            IRentoomOfferService rentoomOfferService,
+            ILogger<OfferApi> logger,
+            IdoSellService idoSellService,
+            IAvailabilityFinderService2 availabilityFinderService2)
         {
             _offerService = offerService ?? throw new ArgumentNullException(nameof(offerService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _rentoomOfferService = rentoomOfferService ?? throw new ArgumentNullException(nameof(rentoomOfferService));
-            _idoSellService = idoSellService;
+            _idoSellService = idoSellService ?? throw new ArgumentNullException(nameof(idoSellService));
+            _availabilityFinderService2 = availabilityFinderService2 ?? throw new ArgumentNullException(nameof(availabilityFinderService2));
         }
 
         [Function("GetPricingOffers")]
@@ -199,6 +207,85 @@ namespace RentoomBooking.Api
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching offers.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.").ConfigureAwait(false);
+                return response;
+            }
+        }
+
+        [Function("GetAvailabilityLocks")]
+        public async Task<HttpResponseData> GetAvailabilityLocks(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ido/availabilitylocks")] HttpRequestData req)
+        {
+            var response = req.CreateResponse();
+            var cancellationToken = req.FunctionContext.CancellationToken;
+
+            try
+            {
+                GetAvailabilityLocksRequestPayload payload = new();
+
+                using (var reader = new StreamReader(req.Body, Encoding.UTF8))
+                {
+                    var body = await reader.ReadToEndAsync().ConfigureAwait(false);
+                    if (!string.IsNullOrWhiteSpace(body))
+                    {
+                        payload = JsonConvert.DeserializeObject<GetAvailabilityLocksRequestPayload>(body) ?? new GetAvailabilityLocksRequestPayload();
+                    }
+                }
+
+                var availabilityLocks = await _idoSellService.FetchAvailabilityLocksAsync(payload, cancellationToken).ConfigureAwait(false);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(availabilityLocks ?? new List<AvailabilityLock>())).ConfigureAwait(false);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching availability locks.");
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                await response.WriteStringAsync("Internal server error.").ConfigureAwait(false);
+                return response;
+            }
+        }
+
+        [Function("FindAvailableTerms")]
+        public async Task<HttpResponseData> FindAvailableTerms(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ido/offers/available-terms")] HttpRequestData req)
+        {
+            var response = req.CreateResponse();
+
+            try
+            {
+                FindAvailableTermsRequest? payload;
+                using (var reader = new StreamReader(req.Body, Encoding.UTF8))
+                {
+                    var body = await reader.ReadToEndAsync().ConfigureAwait(false);
+                    payload = JsonConvert.DeserializeObject<FindAvailableTermsRequest>(body);
+                }
+
+                if (payload is null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    await response.WriteStringAsync("Invalid payload.").ConfigureAwait(false);
+                    return response;
+                }
+
+                var availableTerms = await _availabilityFinderService2.FindAvailableTermsAsync(
+                    payload.ApartmentIds,
+                    payload.StartDate,
+                    payload.EndDate,
+                    payload.Adults,
+                    payload.Children).ConfigureAwait(false);
+
+                response.StatusCode = HttpStatusCode.OK;
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(availableTerms)).ConfigureAwait(false);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error finding available terms.");
                 response.StatusCode = HttpStatusCode.InternalServerError;
                 await response.WriteStringAsync("Internal server error.").ConfigureAwait(false);
                 return response;

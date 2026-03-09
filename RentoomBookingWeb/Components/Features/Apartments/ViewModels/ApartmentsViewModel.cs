@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
+using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services;
-using RentoomBookingWeb.Models;
 using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
@@ -14,7 +14,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly IApartmentsService _apartmentsService;
         private readonly IRentoomOfferService _rentoomOfferService;
         private readonly NavigationManager _navManager;
-        private readonly IAvailabilityFinderService _availabilityFinder;
+        private readonly IAvailabilityFinderService2 _availabilityFinder;
         private readonly IApartmentSearchFiltersService _filterService;
 
         private string? _token;
@@ -28,11 +28,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         public List<ApartmentObject> Items { get; private set; } = new();
         public List<PricingOffer> Offers { get; private set; } = new();
-        public Dictionary<int, AvailableTerm> AvailableTerms { get; private set; } = new();
+        public Dictionary<int, List<AvailableTerm>> AvailableTerms { get; private set; } = new();
 
         public long? ApartmentsCount { get; private set; }
         public bool IsLoading { get; private set; } = true;
         public bool ApartmentsIsLoading { get; private set; } = false;
+        public bool IsSuggestionsLoading { get; private set; } = false;
         public bool HasMore { get; private set; } = true;
         public string? Error { get; private set; }
         public bool IsMapView { get; private set; } = false;
@@ -50,6 +51,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public int ScaleMinPrice { get; private set; }
         public int ScaleMaxPrice { get; private set; }
         public Guid SliderResetKey { get; private set; } = Guid.NewGuid();
+        private int _suggestionsRunId = 0;
 
         public event Action? OnChange;
 
@@ -57,7 +59,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             IApartmentsService apartmentsService,
             IRentoomOfferService rentoomOfferService,
             NavigationManager navManager,
-            IAvailabilityFinderService availabilityFinder,
+            IAvailabilityFinderService2 availabilityFinder,
             IApartmentSearchFiltersService filterService)
         {
             _apartmentsService = apartmentsService;
@@ -71,11 +73,13 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public int MaxOfferPrice => ScaleMaxPrice;
 
         public PricingOffer? GetPricingOfferByObjectId(int objectId) => Offers.Find(o => o.ObjectId == objectId);
-        public AvailableTerm? GetSuggestionByObjectId(int objectId) => AvailableTerms.TryGetValue(objectId, out var term) ? term : null;
+        public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId) => GetSuggestionsByObjectId(objectId);
+        public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId) =>
+            AvailableTerms.TryGetValue(objectId, out var terms) ? terms : null;
 
         public async Task InitializeAsync()
         {
-            _suggestionsCts?.Cancel();
+            CancelSuggestionsFetch();
             var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
             var query = QueryHelpers.ParseQuery(uri.Query);
             string GetVal(string key) => query.TryGetValue(key, out var val) ? val.ToString() : "";
@@ -139,8 +143,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 ApplyPriceFilterToItems(allItems);
                 
                 ApartmentsIsLoading = false;
-                _suggestionsCts = new CancellationTokenSource();
-                _ = FetchSuggestionsInBackground(Items, _suggestionsCts.Token);
+                StartSuggestionsFetch(Items);
             }
             else
             {
@@ -149,8 +152,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 await LoadMoreAsync();
                 if (Items.Any()) 
                 {
-                    _suggestionsCts = new CancellationTokenSource();
-                    _ = FetchSuggestionsInBackground(Items.Take(PageSize), _suggestionsCts.Token);
+                    StartSuggestionsFetch(Items.Take(PageSize));
                 }
             }
             
@@ -160,7 +162,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         public async Task HandleSearchAsync(Dictionary<string, string> query)
         {
-            _suggestionsCts?.Cancel();
+            CancelSuggestionsFetch();
             UpdateUrlParams(query);
             
             Items.Clear(); Offers.Clear(); AvailableTerms.Clear(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null; 
@@ -179,13 +181,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             ApartmentsIsLoading = false;
             NotifyStateChanged();
-            _suggestionsCts = new CancellationTokenSource();
-            _ = FetchSuggestionsInBackground(Items, _suggestionsCts.Token);
+            StartSuggestionsFetch(Items);
         }
 
         public async Task HandleFiltersChangedAsync((ApartmentFilters Filters, int MinPrice, int MaxPrice) data)
         {
-            _suggestionsCts?.Cancel();
+            CancelSuggestionsFetch();
             bool metaChanged = IsMetaFilterChanged(data.Filters);
 
             _currentFilters = data.Filters;
@@ -216,8 +217,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             
             if (metaChanged) 
             {
-                _suggestionsCts = new CancellationTokenSource();
-                _ = FetchSuggestionsInBackground(Items, _suggestionsCts.Token);
+                StartSuggestionsFetch(Items);
             }
         }
 
@@ -374,11 +374,13 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             catch { }
         }
 
-        private async Task FetchSuggestionsInBackground(IEnumerable<ApartmentObject> items, CancellationToken ct)
+        private async Task FetchSuggestionsInBackground(IEnumerable<ApartmentObject> items, CancellationToken ct, int runId)
         {
+            SetSuggestionsLoading(runId, true);
             try { await Task.Delay(200, ct); await FetchSuggestionsForItemsWithoutOffers(items, ct); }
             catch (OperationCanceledException) { }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
+            finally { SetSuggestionsLoading(runId, false); }
         }
 
         private async Task FetchSuggestionsForItemsWithoutOffers(IEnumerable<ApartmentObject> itemsToCheck, CancellationToken ct)
@@ -386,16 +388,69 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate)) return;
             var orderedIds = itemsToCheck.Where(item => !Offers.Any(o => o.ObjectId == item.Id)).Select(item => item.Id).ToList();
             if (!orderedIds.Any()) return;
-            
-            var chunks = orderedIds.Chunk(10).ToList();
-            for (int i = 0; i < chunks.Count; i++)
+
+            if (ct.IsCancellationRequested) return;
+
+            var adults = int.TryParse(Adults, out var parsedAdults) && parsedAdults > 0 ? parsedAdults : 2;
+            var children = int.TryParse(Children, out var parsedChildren) && parsedChildren > 0 ? parsedChildren : 0;
+
+            var newSuggestions = await _availabilityFinder.FindAvailableTermsAsync(
+                orderedIds,
+                StartDate,
+                EndDate,
+                adults,
+                children);
+
+            if (ct.IsCancellationRequested) return;
+
+            foreach (var apartmentId in orderedIds)
             {
-                if (ct.IsCancellationRequested) return;
-                var newSuggestions = await _availabilityFinder.FindNextAvailableTermsAsync(chunks[i].ToList(), StartDate, EndDate, int.TryParse(Adults, out var a) ? a : 2, 1);
-                foreach (var kvp in newSuggestions) AvailableTerms[kvp.Key] = kvp.Value;
-                NotifyStateChanged();
-                await Task.Delay(500, ct);
+                AvailableTerms.Remove(apartmentId);
             }
+
+            foreach (var result in newSuggestions)
+            {
+                var topTerms = (result.AvailableTerms ?? new List<AvailableTerm>())
+                    .Take(3)
+                    .ToList();
+
+                if (topTerms.Count > 0)
+                {
+                    AvailableTerms[result.ApartmentId] = topTerms;
+                }
+            }
+
+            NotifyStateChanged();
+        }
+
+        private void StartSuggestionsFetch(IEnumerable<ApartmentObject> items)
+        {
+            CancelSuggestionsFetch();
+            _suggestionsCts = new CancellationTokenSource();
+            var runId = _suggestionsRunId;
+            _ = FetchSuggestionsInBackground(items, _suggestionsCts.Token, runId);
+        }
+
+        private void CancelSuggestionsFetch()
+        {
+            _suggestionsCts?.Cancel();
+            _suggestionsCts?.Dispose();
+            _suggestionsCts = null;
+            _suggestionsRunId++;
+
+            if (IsSuggestionsLoading)
+            {
+                IsSuggestionsLoading = false;
+                NotifyStateChanged();
+            }
+        }
+
+        private void SetSuggestionsLoading(int runId, bool isLoading)
+        {
+            if (runId != _suggestionsRunId) return;
+            if (IsSuggestionsLoading == isLoading) return;
+            IsSuggestionsLoading = isLoading;
+            NotifyStateChanged();
         }
 
         private void UpdateUrlParams(Dictionary<string, string> query)

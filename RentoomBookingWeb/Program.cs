@@ -121,6 +121,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IGusService, GusService>();
 
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
+            builder.Services.AddScoped<IAvailabilityFinderService2, AvailabilityFinderService2>();
 
             //http context provider for absoulte urls - for tpay.
             builder.Services.AddHttpContextAccessor();

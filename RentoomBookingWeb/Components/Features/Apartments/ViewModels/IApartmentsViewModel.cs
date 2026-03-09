@@ -1,7 +1,7 @@
+using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
-using RentoomBookingWeb.Models;
 
 namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 
@@ -12,6 +12,7 @@ public interface IApartmentsViewModel
     long? ApartmentsCount { get; }
     bool IsLoading { get; }
     bool ApartmentsIsLoading { get; }
+    bool IsSuggestionsLoading { get; }
     bool HasMore { get; }
     string? Error { get; }
     bool IsMapView { get; }
@@ -31,7 +32,8 @@ public interface IApartmentsViewModel
     int ScaleMaxPrice { get; }
     public Guid SliderResetKey { get; }
     PricingOffer? GetPricingOfferByObjectId(int objectId);
-    public AvailableTerm? GetSuggestionByObjectId(int objectId);
+    public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId);
+    public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId);
 
     Task InitializeAsync();
     Task LoadMoreAsync();

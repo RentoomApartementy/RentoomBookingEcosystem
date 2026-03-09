@@ -72,7 +72,12 @@
 .apartment-button-wrapper {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.apartment-button-wrapper > :last-child {
+    flex-shrink: 0;
 }
 
 @media (max-width: 600px) {
@@ -103,7 +108,8 @@
     }
 
     .apartment-button-wrapper {
-        justify-content: center;
+        align-items: center;
+        justify-content: space-between;
     }
 }
 
@@ -141,7 +147,8 @@
 }
 
 .apartment-price-info {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
 }
 
@@ -155,8 +162,42 @@
     font-size: 1.2rem;
 }
 
+.availability-status {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    max-width: 170px;
+    color: #2f2f2f;
+}
+
+.availability-status.loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .non-offer {
-    
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mini-spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid #d7c8b8;
+    border-top-color: #945f28;
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: mini-spinner-rotate 0.8s linear infinite;
+}
+
+@keyframes mini-spinner-rotate {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /*.nav-dot-wrapper {*/
@@ -256,4 +297,31 @@
 .non-offer-wrapper {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    margin-top: 8px;
+}
+
+.suggestion-labels-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    overflow: hidden;
+}
+
+.suggestion-label {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    line-height: 1;
+    padding: 5px 7px;
+    border-radius: 999px;
+    border: 1px solid #d4c6b6;
+    background: #fbf4ec;
+    color: #6c4a2d;
+    font-weight: 600;
 }

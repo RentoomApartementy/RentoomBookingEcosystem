@@ -1,11 +1,13 @@
 @page "/apartamenty/{id:int}/{slug}"
 @page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using System.Globalization
+@using RentoomBooking.SharedClasses.Models.AvailableTerms
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedClasses.Services
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.Upsell
@@ -15,9 +17,8 @@
 @inject NavigationManager Navigation
 @inject IIdoOfferService OfferService
 @inject IJSRuntime JSRuntime
-@using RentoomBookingWeb.Models
 @using RentoomBookingWeb.Services
-@inject IAvailabilityFinderService AvailabilityFinder
+@inject IAvailabilityFinderService2 AvailabilityFinder
 @using RentoomBookingWeb.Helpers
 @using System.Text.RegularExpressions
 @inject NavigationManager NavManager
@@ -274,12 +275,24 @@
             else
             {
                 <div class="summary-offer-price-wrapper">
-                    @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
+                    @if (_suggestionDates.Count > 0)
                     {
                         <div class="summary-offer-price">
                             <b>@Localizer["NoOffersAvailable"]</b>
-                            <span>@Localizer["SuggestedDate"]: <b>@_suggestionDates?.StartDate - @_suggestionDates?.EndDate</b></span>
-                            <div @onclick="GoToSuggestionDates" @onclick:stopPropagation="true">
+                            <span>@Localizer["SuggestedDate"]:</span>
+                            <div class="summary-suggestion-list">
+                                @foreach (var term in _suggestionDates)
+                                {
+                                    var isSelected = _selectedSuggestionDate?.StartDate == term.StartDate &&
+                                                     _selectedSuggestionDate?.EndDate == term.EndDate;
+                                    <button type="button"
+                                            class="summary-suggestion-chip @(isSelected ? "selected" : "")"
+                                            @onclick="@(() => SelectSuggestionDate(term))">
+                                        @FormatSuggestionDateRange(term)
+                                    </button>
+                                }
+                            </div>
+                            <div @onclick="@(() => GoToSuggestionDates(_selectedSuggestionDate))" @onclick:stopPropagation="true">
                                 <Button>@Localizer["BookNow"]</Button>
                             </div>
                         </div>  
@@ -287,7 +300,11 @@
                     @if (_suggestionLoading)
                     {
                         <div class="summary-offer-price">
-                            <span>@Localizer["SuggestedDate"]: <b>@Localizer["SuggestedDateLoading"]</b></span>
+                            <b>@Localizer["NoOffersAvailable"]</b>
+                            <div class="summary-suggestion-loading">
+                                <span class="mini-spinner"></span>
+                                    <span>@Localizer["SuggestedDateLoading"]</span>
+                            </div>
                             <Button Disabled="true">@Localizer["BookNow"]</Button>
                         </div>  
                     }
@@ -423,20 +440,34 @@
                                     <span>@Localizer["NoOffersAvailable"]</span>
                                 </div>
                                 
-                                @if (_suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
+                                @if (_suggestionDates.Count > 0)
                                 {
-                                    <div @onclick="GoToSuggestionDates" class="suggest-offer-card">
-                                        <div class="suggest-icon">
-                                            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+                                    <div class="suggest-offers-list">
+                                        @foreach (var suggestion in _suggestionDates)
+                                        {
+                                            <div @onclick="@(() => GoToSuggestionDates(suggestion))" @onclick:stopPropagation="true"  class="suggest-offer-card">
+                                                <div class="suggest-icon">
+                                                    <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+                                                </div>
+                                                <div class="suggest-content">
+                                                    <span class="suggest-title">@Localizer["SuggestedDate"]</span>
+                                                    <span class="suggest-dates">@Localizer["From"] @suggestion.StartDate @Localizer["To"] @suggestion.EndDate</span>
+                                                </div>
+                                                <div class="suggest-action">
+                                                    <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else if (_suggestionLoading)
+                                {
+                                    <div class="suggest-offer-card loading">
+                                        <div class="summary-suggestion-loading">
+                                            <span class="mini-spinner"></span>
+                                    <span>@Localizer["SuggestedDateLoading"]</span>
                                         </div>
-                                        <div class="suggest-content">
-                                            <span class="suggest-title">@Localizer["SuggestedDate"]</span>
-                                            <span class="suggest-dates">@Localizer["From"] @_suggestionDates?.StartDate @Localizer["To"] @_suggestionDates?.EndDate</span>
-                                        </div>
-                                        <div class="suggest-action">
-                                            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                                        </div>
-                                    </div>  
+                                    </div>
                                 }
                             </div>
                         }
@@ -633,7 +664,8 @@
 
     private bool _isOfferLoading = true;
 
-    private AvailableTerm? _suggestionDates = null;
+    private List<AvailableTerm> _suggestionDates = new();
+    private AvailableTerm? _selectedSuggestionDate = null;
     private bool _suggestionLoading = false;
 
     private List<DefinedAddonEntity>? _definedAddons = null;
@@ -926,7 +958,8 @@
     private async Task GetOffer()
     {
         _isOfferLoading = true;
-        _suggestionDates = null;
+        _suggestionDates.Clear();
+        _selectedSuggestionDate = null;
         _suggestionLoading = false;
         
         StateHasChanged(); 
@@ -960,19 +993,22 @@
             var sDate = StartDate;
             var eDate = EndDate;
             var aCount = int.TryParse(Adults, out var a) ? a : 2;
-            var cCount = int.TryParse(Children, out var c) ? c : 1;
+            var cCount = int.TryParse(Children, out var c) ? c : 0;
 
             if (aptId == 0) return;
 
-            var result = await AvailabilityFinder.FindNextAvailableTermAsync(
+            var result = await AvailabilityFinder.FindAvailableTermsForApartmentAsync(
                 aptId, 
                 sDate, 
                 eDate, 
                 aCount, 
-                1
+                cCount
             );
 
-            _suggestionDates = result;
+            _suggestionDates = (result.AvailableTerms ?? new List<AvailableTerm>())
+                .Take(3)
+                .ToList();
+            _selectedSuggestionDate = _suggestionDates.FirstOrDefault();
         }
         catch (Exception ex)
         {
@@ -1162,15 +1198,30 @@
         }
     }
     
-    private async Task GoToSuggestionDates()
+    private async Task GoToSuggestionDates(AvailableTerm? selectedTerm = null)
     {
-        if (_apartment != null && _suggestionDates?.StartDate != null && _suggestionDates?.EndDate != null)
+        var suggestion = selectedTerm ?? _selectedSuggestionDate ?? _suggestionDates.FirstOrDefault();
+        if (_apartment != null && suggestion?.StartDate != null && suggestion?.EndDate != null)
         {
-            var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{_suggestionDates.StartDate}/{_suggestionDates.EndDate}/{Adults}/{Children}";
-            Navigation.NavigateTo(url, forceLoad: true);
+            StartDate = suggestion.StartDate;
+            EndDate = suggestion.EndDate;
+            RefreshAddonsParams();
+            UpdateReservationPricingContext();
+
+            var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{suggestion.StartDate}/{suggestion.EndDate}/{Adults}/{Children}";
+            Navigation.NavigateTo(url, forceLoad: false);
             await GetOffer();
-            StateHasChanged();
         }
+    }
+
+    private void SelectSuggestionDate(AvailableTerm term)
+    {
+        _selectedSuggestionDate = term;
+    }
+
+    private static string FormatSuggestionDateRange(AvailableTerm term)
+    {
+        return $"{term.StartDate} - {term.EndDate}";
     }
     
     private async Task GoToPayment(string? offerType)
