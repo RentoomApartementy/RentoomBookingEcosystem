@@ -956,6 +956,30 @@
     border-color: #945f28;
 }
 
+.summary-suggestion-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b4a2c;
+    font-weight: 600;
+}
+
+.mini-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #d7c8b8;
+    border-top-color: #945f28;
+    border-radius: 50%;
+    animation: mini-spinner-rotate 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes mini-spinner-rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .refundable {
     border: #0c4128 2px solid;
 }

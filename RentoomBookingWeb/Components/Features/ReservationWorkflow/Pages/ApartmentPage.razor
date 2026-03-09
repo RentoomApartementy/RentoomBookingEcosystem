@@ -300,7 +300,11 @@
                     @if (_suggestionLoading)
                     {
                         <div class="summary-offer-price">
-                            <span>@Localizer["SuggestedDate"]: <b>@Localizer["SuggestedDateLoading"]</b></span>
+                            <b>@Localizer["NoOffersAvailable"]</b>
+                            <div class="summary-suggestion-loading">
+                                <span class="mini-spinner"></span>
+                                <span>Szukam dodatkowych terminów...</span>
+                            </div>
                             <Button Disabled="true">@Localizer["BookNow"]</Button>
                         </div>  
                     }
@@ -454,6 +458,15 @@
                                                 </div>
                                             </div>
                                         }
+                                    </div>
+                                }
+                                else if (_suggestionLoading)
+                                {
+                                    <div class="suggest-offer-card loading">
+                                        <div class="summary-suggestion-loading">
+                                            <span class="mini-spinner"></span>
+                                            <span>Szukam dodatkowych terminów...</span>
+                                        </div>
                                     </div>
                                 }
                             </div>
