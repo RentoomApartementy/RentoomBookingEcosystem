@@ -9,6 +9,7 @@
 @inject NavigationManager Navigation;
 @inject IApartmentsService ApartmentsService;
 @using Microsoft.Extensions.Localization;
+@using System.Globalization;
 @using RentoomBooking.SharedClasses.Models
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject CustomerTermsService TermsService
@@ -523,7 +524,7 @@
         return $"data:image/png;base64,{Convert.ToBase64String(bytes)}";
     }
     
-    private List<CustomerTermsAndConditionsSource>? _termsSources;
+    private List<CustomerTermDisplayDto>? _termsSources;
     private Dictionary<int, bool> _userSelections = new();
     private bool _isTermsLoading = true;
     
@@ -537,7 +538,7 @@
         try 
         {
             _isTermsLoading = true;
-            _termsSources = await TermsService.GetTermsForDisplayAsync();
+            _termsSources = await TermsService.GetTermsForDisplayAsync(CultureInfo.CurrentUICulture.Name);
             _userSelections = _termsSources.ToDictionary(t => t.Id, _ => false);
         }
         finally 

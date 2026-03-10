@@ -33,6 +33,7 @@ namespace RentoomBooking.SharedClasses.Database
         public DbSet<DefinedAddonEntity> DefinedAddons => Set<DefinedAddonEntity>();
         
         public DbSet<CustomerTermsAndConditionsSource> CustomerTermsSources => Set<CustomerTermsAndConditionsSource>();
+        public DbSet<CustomerTermsSourceTranslation> CustomerTermsSourceTranslations => Set<CustomerTermsSourceTranslation>();
         public DbSet<CustomerAgreedTerms> CustomerAgreedTerms => Set<CustomerAgreedTerms>();
 
         public DbSet<UpsellVoucherEntity> UpsellVouchers => Set<UpsellVoucherEntity>();
@@ -189,6 +190,24 @@ namespace RentoomBooking.SharedClasses.Database
                             ?? new RentoomBooking.SharedClasses.Models.RentoomBooking.DefinedAddonDefinition()
                     );
             });
+
+            modelBuilder.Entity<CustomerTermsAndConditionsSource>(entity =>
+            {
+                entity.HasIndex(e => e.Code).IsUnique();
+                entity.Property(e => e.Code).HasMaxLength(100).IsRequired();
+                entity.Property(e => e.IsActive).HasDefaultValue(true);
+                entity.Property(e => e.SortOrder).HasDefaultValue(0);
+            });
+
+            modelBuilder.Entity<CustomerTermsSourceTranslation>(entity =>
+            {
+                entity.HasIndex(e => new { e.TermsSourceId, e.Culture }).IsUnique();
+                entity.Property(e => e.Culture).HasMaxLength(20).IsRequired();
+                entity.HasOne(e => e.TermsSource)
+                    .WithMany(s => s.Translations)
+                    .HasForeignKey(e => e.TermsSourceId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
             
             var staticDate = new DateTime(2025, 2, 3, 0, 0, 0, DateTimeKind.Utc);
 
@@ -198,42 +217,70 @@ namespace RentoomBooking.SharedClasses.Database
                 {
                     Id = 1,
                     ValidFrom = staticDate,
+                    Code = "data_processing",
                     Description = "Zgoda na przetwarzanie danych osobowych przez serwis Rentoom (Administratora danych) w celu realizacji usług",
                     Link = "",
+                    IsActive = true,
+                    SortOrder = 1,
                     IsRequired = true,
                 },
                 new CustomerTermsAndConditionsSource
                 {
                     Id = 2,
                     ValidFrom = staticDate,
+                    Code = "main_terms",
                     Description = "Regulamin główny serwisu i akceptacja IdoBooking",
                     Link = "",
+                    IsActive = true,
+                    SortOrder = 2,
                     IsRequired = false,
                 },
                 new CustomerTermsAndConditionsSource
                 {
                     Id = 3,
                     ValidFrom = staticDate,
+                    Code = "whatsapp_contact",
                     Description = "Zgoda na komunikację i przesyłanie ofert przez WhatsApp",
                     Link = "",
+                    IsActive = true,
+                    SortOrder = 3,
                     IsRequired = false,
                 },
                 new CustomerTermsAndConditionsSource
                 {
                     Id = 4,
                     ValidFrom = staticDate,
+                    Code = "bitrix_processing",
                     Description = "Zgoda na przetwarzanie danych w systemie CRM Bitrix24",
                     Link = "",
+                    IsActive = true,
+                    SortOrder = 4,
                     IsRequired = false,
                 },
                 new CustomerTermsAndConditionsSource
                 {
                     Id = 5,
                     ValidFrom = staticDate,
+                    Code = "marketing_offers",
                     Description = "Zgoda marketingowa na przesyłanie ofert handlowych",
                     Link = "",
+                    IsActive = true,
+                    SortOrder = 5,
                     IsRequired = false,
                 }
+            );
+
+            modelBuilder.Entity<CustomerTermsSourceTranslation>().HasData(
+                new CustomerTermsSourceTranslation { Id = 1, TermsSourceId = 1, Culture = "pl", Description = "Zgoda na przetwarzanie danych osobowych przez serwis Rentoom (Administratora danych) w celu realizacji usług", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 2, TermsSourceId = 2, Culture = "pl", Description = "Regulamin główny serwisu i akceptacja IdoBooking", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 3, TermsSourceId = 3, Culture = "pl", Description = "Zgoda na komunikację i przesyłanie ofert przez WhatsApp", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 4, TermsSourceId = 4, Culture = "pl", Description = "Zgoda na przetwarzanie danych w systemie CRM Bitrix24", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 5, TermsSourceId = 5, Culture = "pl", Description = "Zgoda marketingowa na przesyłanie ofert handlowych", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 6, TermsSourceId = 1, Culture = "en", Description = "Consent to personal data processing by Rentoom (data controller) to provide services", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 7, TermsSourceId = 2, Culture = "en", Description = "Main platform terms and IdoBooking acceptance", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 8, TermsSourceId = 3, Culture = "en", Description = "Consent to communication and offer messages via WhatsApp", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 9, TermsSourceId = 4, Culture = "en", Description = "Consent to personal data processing in Bitrix24 CRM", Link = "" },
+                new CustomerTermsSourceTranslation { Id = 10, TermsSourceId = 5, Culture = "en", Description = "Marketing consent for commercial offer messages", Link = "" }
             );
         }
     }
