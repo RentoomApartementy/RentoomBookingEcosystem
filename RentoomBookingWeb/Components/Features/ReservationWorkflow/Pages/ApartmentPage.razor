@@ -349,7 +349,7 @@
                     @if (StartDate == null && EndDate == null)
                     {
                         <div @onclick="OpenSearchModal" @onclick:stopPropagation="true" style="flex: 1;"> 
-                            <Button Type="ButtonType.Tertiary" style="width: 100%;" Class="small">
+                            <Button Type="ButtonType.Secondary" style="width: 100%;" Class="small">
                                 @Localizer["SelectDatesAndGuests"]
                             </Button>
                         </div>
@@ -439,6 +439,12 @@
                                 <small style="font-weight: bold">@Localizer["CheckOutTimeFormat"]</small>
                             </div>
                         </div>
+
+                        <div class="@((StartDate == null && EndDate == null) ? "desktop-only" : "")" style="margin-top: 0.5rem; margin-bottom: 1rem; width: 100%;" @onclick="OpenSearchModal">
+                            <Button Type="ButtonType.Secondary" style="width: 100%;">
+                                @Localizer["SelectDatesAndGuests"]
+                            </Button>
+                        </div>
                         
                         @if (_isOfferLoading)
                         {
@@ -491,14 +497,6 @@
                                         </div>
                                     </div>
                                 }
-                            </div>
-                        }
-                        else if (StartDate == null && EndDate == null)
-                        {
-                            <div class="desktop-only" style="margin-top: 1rem; width: 100%;" @onclick="OpenSearchModal"> 
-                                <Button style="width: 100%;">
-                                    Wybierz datę i liczbę gości
-                                </Button>
                             </div>
                         }
                     </div>
