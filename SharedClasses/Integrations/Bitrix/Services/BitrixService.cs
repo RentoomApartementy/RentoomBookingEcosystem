@@ -20,7 +20,8 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
         decimal? Opportunity = null,
         string? CurrencyId = null,
         int? ContactId = null,
-        int? CompanyId = null
+        int? CompanyId = null,
+        IDictionary<string, object?>? CustomFields = null
     );
 
 
@@ -144,26 +145,38 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
         {
             var endpointMethod = "crm.contact.add.json";
 
+            var fields = new Dictionary<string, object?>
+            {
+                ["NAME"] = NewContactData.FirstName,
+                ["LAST_NAME"] = NewContactData.LastName,
+                ["OPENED"] = "Y",
+                ["TYPE_ID"] = "UC_YIVWK8",
+                ["SOURCE_ID"] = "WEB",
+                ["PHONE"] = new[]
+                {
+                    new { VALUE = NewContactData.Phone, VALUE_TYPE = "WORK" }
+                },
+                ["EMAIL"] = new[]
+                {
+                    new { VALUE = NewContactData.Email, VALUE_TYPE = "WORK" }
+                }
+            };
+
+            if (NewContactData.AssignedById.HasValue)
+            {
+                fields["ASSIGNED_BY_ID"] = NewContactData.AssignedById.Value;
+            }
+
+            if (NewContactData.ReservationId.HasValue)
+            {
+                fields["UF_CRM_1764281071779"] = NewContactData.ReservationId.Value;
+            }
+
+            ApplyContactCustomFields(fields, NewContactData);
+
             var payload = new
             {
-                fields = new
-                {
-                    UF_CRM_1764281071779 = NewContactData.ReservationId, //id rezerwacji IDB
-                    NAME = NewContactData.FirstName,
-                    LAST_NAME = NewContactData.LastName,
-                    OPENED = "Y",
-                    TYPE_ID = "UC_YIVWK8",
-                    SOURCE_ID = "WEB",
-                    ASSIGNED_BY_ID = NewContactData.AssignedById,
-                    PHONE = new[]
-                    {
-                new { VALUE = NewContactData.Phone, VALUE_TYPE = "WORK" }
-            },
-                    EMAIL = new[]
-                    {
-                new { VALUE = NewContactData.Email, VALUE_TYPE = "WORK" }
-            }
-                },
+                fields,
                 @params = new
                 {
                     REGISTER_SONET_EVENT = "Y"
@@ -241,7 +254,6 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
             var fields = new Dictionary<string, object?>
             {
-                ["UF_CRM_1764281071779"] = updatedContact.ReservationId,
                 ["NAME"] = updatedContact.FirstName,
                 ["LAST_NAME"] = updatedContact.LastName,
                 ["OPENED"] = "Y",
@@ -257,10 +269,17 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
                 }
             };
 
+            if (updatedContact.ReservationId.HasValue)
+            {
+                fields["UF_CRM_1764281071779"] = updatedContact.ReservationId.Value;
+            }
+
             if (updatedContact.AssignedById.HasValue)
             {
                 fields["ASSIGNED_BY_ID"] = updatedContact.AssignedById.Value;
             }
+
+            ApplyContactCustomFields(fields, updatedContact);
 
             using var doc = await PostAsync(endpointMethod, new
             {
@@ -308,6 +327,13 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             if (!string.IsNullOrWhiteSpace(req.CurrencyId)) fields["CURRENCY_ID"] = req.CurrencyId!;
             if (req.ContactId.HasValue) fields["CONTACT_ID"] = req.ContactId.Value;
             if (req.CompanyId.HasValue) fields["COMPANY_ID"] = req.CompanyId.Value;
+            if (req.CustomFields is not null)
+            {
+                foreach (var customField in req.CustomFields)
+                {
+                    fields[customField.Key] = customField.Value;
+                }
+            }
 
             using var doc = await PostAsync(endpointMethod, new
             {
@@ -459,6 +485,14 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
             var responseContent = await response.Content.ReadAsStringAsync();
             return JsonDocument.Parse(responseContent);
+        }
+
+        private static void ApplyContactCustomFields(IDictionary<string, object?> fields, CreateContactRequest request)
+        {
+            fields["UF_CRM_1710748755545"] = request.TaxNumber ?? string.Empty;
+            fields["UF_CRM_1711632923055"] = request.CompanyAddress ?? string.Empty;
+            fields["UF_CRM_1711632270409"] = request.CompanyName ?? string.Empty;
+            fields["UF_CRM_1773080308994"] = request.CompanyEmail ?? string.Empty;
         }
 
         private static Exception BitrixError(string responseContent, JsonDocument doc)

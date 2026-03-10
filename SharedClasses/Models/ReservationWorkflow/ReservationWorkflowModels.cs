@@ -40,6 +40,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string City { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
         public string CountryCode { get; set; } = "pl";
+        public string Language { get; set; } = "pol";
     }
 
     public class InvoiceInfoDto

@@ -92,14 +92,19 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             var record = await RequireReservationAsync(reservationGuid); //sprawdz czy rezerwacja istnieje
             record.State.Client = client ?? throw new ArgumentNullException(nameof(client));
+            record.State.Client.Language = NormalizeIdoLanguage(record.State.Client.Language);
             record.State.Invoice = invoice;
             await _store.UpdateAsync(record);
+
+          //  record = await EnsureBitrixContactAndDealAsync(record);
+          //  await UpdateBitrixDealAsync(record, "Client info updated");
         }
 
         public async Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid)
         {
             var record = await RequireReservationAsync(reservationGuid);
-                record = await EnsureBitrixContactAndDealAsync(record);
+            await EnsurePaymentTotalsAsync(reservationGuid, record); //synchronnie uaktualnij kwoty w rekordzie przed zbudowaniem podsumowania, aby mieć pewność że są aktualne
+            
 
             if (record.IdoStatus != ReservationStatusType.Accepted && record.PaymentStatus != PaymentStatuses.Paid)
             {
@@ -205,6 +210,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             var offerPrice = startRequest?.OfferPrice ?? 0m;
             
             decimal grandTotal = offerPrice + addonsTotal + upsellsTotal;
+            
+           // record.State.PaymentGrandTotal = grandTotal;
+           // record.State.PaymentUpsellsTotal = upsellsTotal;
 
             return new ReservationSummaryDto
             {
@@ -214,7 +222,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 Invoice = record.State.Invoice,
                 IdoReservationId = record.IdoReservationId,
                 IdoStatus = record.IdoStatus,
-                OfferPrice = startRequest?.OfferPrice,
+                OfferPrice = startRequest?.OfferPrice, //<<- czysta kwota za rezerwację idąca do Idobooking (bez upselli
                 Currency = startRequest?.Currency ?? "PLN",
                 PaymentStatus = record.PaymentStatus,
                 Upsells = upsellLines,
@@ -389,6 +397,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             while (true)
             {
                 var record = await RequireReservationAsync(dto.ReservationGuid);
+                await EnsurePaymentTotalsAsync(record.ReservationGuid, record);
                 record = await EnsureBitrixContactAndDealAsync(record);
                 if (record.PaymentSessionGuid != dto.PaymentSessionGuid)
                 {
@@ -575,7 +584,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
                         await _store.UpdateAsync(record);
                     }
-                    record = await EnsureBitrixContactAndDealAsync(record);
+                  //  record = await EnsureBitrixContactAndDealAsync(record);
                     return record;
                 }
                 catch (DbUpdateConcurrencyException ex)
@@ -621,7 +630,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 RentoomResrvationID = record.ReservationGuid, //TODO 7.02.26: sprawdzic czy bedzie dzialac do zapisu idobooking -czy pominie to pole.
                 DateFrom = start.StartDate.ToString("yyyy-MM-dd") +" " +start.CheckInTime.ToString("HH:mm"),
                 DateTo = start.EndDate.ToString("yyyy-MM-dd") + " " + start.CheckOutTime.ToString("HH:mm"),
-                Price = start.OfferPrice.HasValue ? (float)start.OfferPrice.Value : null,
+                Price = start.OfferPrice.HasValue ? (float)start.OfferPrice.Value : null, //TOD: 10.03.26 - sprawdzić czy ta cena powinna iść do IDB i czy powinna zawierać ceny za Addony
                 Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,
                 Items =
@@ -630,7 +639,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 {
                     ObjectItemId = start.ObjectItemId,
                     NumberOfAdults = start.Adults,
-                    NumberOfBigChildren = start.Children,
+                    //NumberOfBigChildren = start.Children,
+                    NumberOfSmallChildren = start.Children,
                     Addons = start.SelectedAddons?.Select(a => new NewReservationAddon
                     {
                         AddonId = a.AddonId,
@@ -659,6 +669,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private static ClientWithGuest? MapClient(ClientInfoDto? client, InvoiceInfoDto? invoice)
         {
             if (client is null) return null;
+            var language = NormalizeIdoLanguage(client.Language);
 
             var guests = new List<ClientGuest>
         {
@@ -669,7 +680,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 City = client.City,
                 CountryCode = client.CountryCode,
                 Email = client.Email,
-                Language = "pol",
+                Language = language,
                 Phone = client.Phone,
                 Street = client.Street,
                 Zipcode = client.ZipCode,
@@ -688,7 +699,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 City = client.City,
                 CountryCode = client.CountryCode,
                 Currency = "PLN",
-                Language = "pol",
+                Language = language,
                 Guests = guests,
                 InvoiceData = invoice is null
                     ? null
@@ -706,13 +717,81 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             };
         }
 
+        private static string NormalizeIdoLanguage(string? language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                return "pol";
+            }
+
+            var normalized = language.Trim().ToLowerInvariant();
+            if (normalized.StartsWith("en"))
+            {
+                return "eng";
+            }
+
+            if (normalized.StartsWith("pl"))
+            {
+                return "pol";
+            }
+
+            if (normalized is "eng" or "pol")
+            {
+                return normalized;
+            }
+
+            return "pol";
+        }
+
+        private static string? ResolveBitrixLanguage(string? language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                return null;
+            }
+
+            var normalized = language.Trim().ToLowerInvariant();
+            if (normalized.StartsWith("en"))
+            {
+                return "eng";
+            }
+
+            if (normalized.StartsWith("pl"))
+            {
+                return "pol";
+            }
+
+            return normalized;
+        }
+
+        private static string? BuildCompanyAddress(InvoiceInfoDto? invoice)
+        {
+            if (invoice is null)
+            {
+                return null;
+            }
+
+            var parts = new[]
+            {
+                invoice.City?.Trim(),
+                invoice.ZipCode?.Trim(),
+                invoice.Street?.Trim()
+            }
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .ToList();
+
+            return parts.Count == 0 ? null : string.Join(", ", parts);
+        }
+
 
         private async Task<ReservationRecord> EnsureBitrixContactAndDealAsync(ReservationRecord record)
         {
-            if (record.IdoReservationId is null || record.State.Client is null)
+            if (record.State.Client is null)
             {
                 return record;
             }
+
+            var invoice = record.State.Invoice;
 
             var contactRequest = new CreateContactRequest
             {
@@ -721,7 +800,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 Email = record.State.Client.Email,
                 Phone = record.State.Client.Phone,
                 ReservationId = record.IdoReservationId,
-                AssignedById = BitrixAssignedByUserId
+                AssignedById = BitrixAssignedByUserId,
+                TaxNumber = invoice?.TaxNumber,
+                CompanyName = invoice?.CompanyName,
+                CompanyEmail = invoice?.Email,
+                CompanyAddress = BuildCompanyAddress(invoice)
             };
 
             var updated = false;
@@ -738,7 +821,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 updated = true;
                 _logger.LogInformation("Updated Bitrix contact {ContactId} for reservation {ReservationGuid}.", record.ClientBitrixId, record.ReservationGuid);
             }
-
+            await EnsurePaymentTotalsAsync(record.ReservationGuid,record);
             if (!record.DealBitrixId.HasValue)
             {
                 var pipelines = await _bitrixService.GetDealPipelinesAsync();
@@ -748,17 +831,26 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 var newStage = stages.FirstOrDefault(s => string.Equals(s.Name, "W toku", StringComparison.OrdinalIgnoreCase));
 
                 var dealTitle = record.IdoReservationId.HasValue
-                    ? $"Reservation #{record.IdoReservationId}"
-                    : $"Reservation {record.ReservationGuid:D}";
+                    ? $"Rezerwacja #{record.IdoReservationId}"
+                    : $"Rezerwacja {record.ReservationGuid:D}";
 
                 record.DealBitrixId = await _bitrixService.AddDealAsync(new CreateDealRequest(
                     Title: dealTitle,
                     CategoryId: pipelineId,
                     StageId: newStage?.StageId ?? "NEW",
                     AssignedById: BitrixAssignedByUserId,
-                    Opportunity: record.State.StartRequest?.OfferPrice,
+                    Opportunity: record.State.PaymentGrandTotal, //record.State.StartRequest?.OfferPrice,
                     CurrencyId: record.State.StartRequest?.Currency ?? "PLN",
-                    ContactId: record.ClientBitrixId
+                    ContactId: record.ClientBitrixId,
+                    CustomFields: new Dictionary<string, object?>
+                    {
+                        ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
+                        ["UF_CRM_1769797476812"] = ResolveBitrixLanguage(record.State.Client.Language),
+                        ["UF_CRM_1768836801823"] = record.State.StartRequest?.Adults,
+                        ["UF_CRM_1768836818927"] = record.State.StartRequest?.EndDate.DayNumber - record.State.StartRequest?.StartDate.DayNumber,
+
+
+                    }
                 ));
 
                 updated = true;
@@ -780,7 +872,6 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 return;
             }
 
-
             Reservation? idoReservation = null;
             ApartmentObject? apartmentInf = null;
             if (record.IdoReservationId.HasValue)
@@ -788,23 +879,35 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 var idoResponse = await _idoApi.FetchReservationByIDFromIdoSellAsync(record.IdoReservationId.Value, false);
                 idoReservation = idoResponse?.ReservationResponse?.result?.Reservations?.FirstOrDefault();
 
-                apartmentInf = _apartmentStore.FindApartmentInPostgres(record.State.StartRequest.ObjectId);
+                if (record.State.StartRequest is not null)
+                {
+                    apartmentInf = _apartmentStore.FindApartmentInPostgres(record.State.StartRequest.ObjectId);
+                }
             }
 
             //pola UF_CRM* to pola customowe - tu sa wpisane na sztywno ale mozna je pobrac z bitrixa dynamicznie jesli trzeba.. ewentualne TODO.
-
             var fields = new Dictionary<string, object?>
             {
-                ["COMMENTS"] = $"{DateTime.Now.ToString()}: Status Rezerwacji (z IDB): {record.IdoStatus ?? "Unknown"}, Status Platnosci TPAY: {record.PaymentStatus} ({updateReason}).",
-
+                ["COMMENTS"] = $"{DateTime.Now.ToString()}: Status Rezerwacji {record.IdoReservationId} (z IDB): {record.IdoStatus ?? "Unknown"}, Status Platnosci TPAY: {record.PaymentStatus} ({updateReason}).",
                 //RB_Status_Platnosci
-                ["UF_CRM_1768566732609"] = record.PaymentStatus
-
+                ["UF_CRM_1768566732609"] = record.PaymentStatus,
+                //Czy faktura
+                ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
+                //Jezyk
+                ["UF_CRM_1769797476812"] = ResolveBitrixLanguage(record.State.Client?.Language),
+                //RB_Status_Rezerwacji
+                ["UF_CRM_1768566710921"] = record.IdoStatus,
+                //RB_KodTpay_Platnosci
+                ["UF_CRM_1768566766553"] = string.Empty,
+                //RB_ID_Rezrerwacji
+                ["UF_CRM_1768835556855"] = record.IdoReservationId,
+                //RB_Link_StayWell
+                ["UF_CRM_1768835603310"] = BuildStayWellLink(record.ReservationGuid.ToString())
             };
 
-            if (record.State.StartRequest?.OfferPrice is not null)
+            if (record.State.PaymentGrandTotal >0)
             {
-                fields["OPPORTUNITY"] = record.State.StartRequest.OfferPrice.Value;
+                fields["OPPORTUNITY"] = record.State.PaymentGrandTotal; //record.State.StartRequest.OfferPrice.Value;
             }
 
             if (!string.IsNullOrWhiteSpace(record.State.StartRequest?.Currency))
@@ -816,43 +919,40 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             {
                 fields["CONTACT_ID"] = record.ClientBitrixId.Value;
             }
-            
-            //RB_Nazwa_Apartamentu
-            fields["UF_CRM_1768566682522"] = idoReservation.Items[0].objectName;
 
-            //RB_Adres_Apartamentu
-            fields["UF_CRM_1768840472108"] = apartmentInf.ObjectLocation.LocalizationItem.ZipCode + " " +
-                apartmentInf.ObjectLocation.LocalizationItem.City +", ul. " + apartmentInf.ObjectLocation.LocalizationItem.Street;
+            var apartmentName = idoReservation?.Items?.FirstOrDefault()?.objectName;
+            if (!string.IsNullOrWhiteSpace(apartmentName))
+            {
+                //RB_Nazwa_Apartamentu
+                fields["UF_CRM_1768566682522"] = apartmentName;
+            }
 
-            
+            var location = apartmentInf?.ObjectLocation?.LocalizationItem;
+            if (location is not null)
+            {
+                //RB_Adres_Apartamentu
+                fields["UF_CRM_1768840472108"] = $"{location.ZipCode} {location.City}, ul. {location.Street}";
+            }
 
-            //RB_Status_Rezerwacji
-            fields["UF_CRM_1768566710921"] = record.IdoStatus;
+            if (idoReservation?.ReservationDetails is not null)
+            {
+                //RB_Poczatek_Rezerwacji
+                fields["UF_CRM_1768566963962"] = idoReservation.ReservationDetails.dateFrom;
+                fields["BEGINDATE"] = idoReservation.ReservationDetails.dateFrom; //deal field
 
-            //RB_KodTpay_Platnosci
-            fields["UF_CRM_1768566766553"] = string.Empty;
+                //RB_Koniec_Rezerwacji
+                fields["UF_CRM_1768566980297"] = idoReservation.ReservationDetails.dateTo;
+                fields["CLOSEDATE"] = idoReservation.ReservationDetails.dateTo; //deal field
 
-            //RB_Poczatek_Rezerwacji
-            fields["UF_CRM_1768566963962"] = idoReservation.ReservationDetails.dateFrom;
-            fields["BEGINDATE"] = idoReservation.ReservationDetails.dateFrom; //deal field
+                //RB_Ilosc_Nocy
+                fields["UF_CRM_1768836818927"] = idoReservation.ReservationDetails.getDuration();
+            }
 
-
-            //RB_Koniec_Rezerwacji
-            fields["UF_CRM_1768566980297"] = idoReservation.ReservationDetails.dateTo;
-            fields["CLOSEDATE"] = idoReservation.ReservationDetails.dateTo; //deal field
-
-            //RB_ID_Rezrerwacji
-            fields["UF_CRM_1768835556855"] = record.IdoReservationId;
-
-            //RB_Link_StayWell
-            fields["UF_CRM_1768835603310"] = BuildStayWellLink(record.ReservationGuid.ToString());
-
-            //RB_Ilosc_Gosci
-            fields["UF_CRM_1768836801823"] = idoReservation.Client.Guests.Count;
-
-            //RB_Ilosc_Nocy
-            fields["UF_CRM_1768836818927"] = idoReservation.ReservationDetails.getDuration();
-
+            if (idoReservation?.Client?.Guests is not null)
+            {
+                //RB_Ilosc_Gosci
+                fields["UF_CRM_1768836801823"] = idoReservation.Items[0].numberOfAdults;
+            }
 
             await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
         }
