@@ -90,10 +90,12 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                 .ToListAsync(cancellationToken);
 
             var tiles = new List<UpsellTileDto>(applicableServices.Count);
+            string normalizedCulture = culture.StartsWith("en-", StringComparison.OrdinalIgnoreCase) ? "en-EN" : culture;
+
             foreach (var service in applicableServices)
             {
-                var translation = SelectTranslation(service, culture);
-                var banners = SelectBanners(service, culture);
+                var translation = SelectTranslation(service, normalizedCulture);
+                var banners = SelectBanners(service, normalizedCulture);
 
                 tiles.Add(new UpsellTileDto
                 {

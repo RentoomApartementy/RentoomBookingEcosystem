@@ -1,4 +1,5 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/dane-klienta/"
+@using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
@@ -266,6 +267,8 @@
     private IDisposable? _scrollObjRef;
     private bool _observerInitialized = false;
 
+    private List<DefinedAddonEntity>? _definedAddons = null;
+
     [JSInvokable]
     public void UpdateScrollState(string elementId, bool isPastOrVisible)
     {
@@ -420,6 +423,7 @@
         InitializeCountryPrefixes();
         InitializeDummyClientData();
         _editContext = new EditContext(_form);
+        _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
         _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
 
         if (_summary != null)

@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -200,11 +201,33 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 }
             }
 
+
+            var addonsLines = new List<AddonSummaryLineDto>();
             decimal addonsTotal = 0m;//startRequest?.SelectedAddons?.Sum(addon => (decimal)addon.Price * addon.Quantity) ?? 0m; //wyliczenie do sprawdzenia bo nie bierze pod uwage typu addonu
 
             foreach (var addon in startRequest?.SelectedAddons ?? [])
             {
-                addonsTotal +=AddonPricingCalculator.CalculateTotal(addon.PaymentType, (decimal)addon.Price, addon.Nights, startRequest.Adults + startRequest.Children, addon.Quantity);
+                
+                
+                var addonPrice = AddonPricingCalculator.CalculateTotal(addon.PaymentType, (decimal)addon.Price, addon.Nights, startRequest.Adults + startRequest.Children, addon.Quantity);
+
+                addonsLines.Add(new AddonSummaryLineDto
+                {
+                    AddonId = addon.AddonId,
+                    LineTotalGross = addonPrice,
+                    Nights = addon.Nights,
+                    PaymentType = addon.PaymentType,
+                    Persons = addon.Persons,
+                    Price = addon.Price,
+                    Quantity = addon.Quantity,
+                    Vat = addon.Vat,
+                });
+
+
+                addonsTotal += addonPrice;
+
+
+
             }
 
             var offerPrice = startRequest?.OfferPrice ?? 0m;
@@ -226,6 +249,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 Currency = startRequest?.Currency ?? "PLN",
                 PaymentStatus = record.PaymentStatus,
                 Upsells = upsellLines,
+                Addons = addonsLines,
+                AddonsTotal = addonsTotal,
                 UpsellsTotal = upsellsTotal,
                 GrandTotal = grandTotal
             };

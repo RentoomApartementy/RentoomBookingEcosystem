@@ -816,7 +816,7 @@
     private static Dictionary<string, string> _addonslanguageMap = new Dictionary<string, string>
     {
         { "pl-PL", "PL" },
-        { "en-US", "EN" }
+        { "en-US", "EN" },
     };
     
     private string CurrentAddonLanguage => _addonslanguageMap?.GetValueOrDefault(
@@ -1093,7 +1093,8 @@
             Vat = 8f,
             Persons = persons, 
             Nights = nights,
-            PaymentType = definition?.PaymentType
+            PaymentType = definition?.PaymentType,
+            DisplayText = definition?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == CurrentAddonLanguage)?.Name ?? "Addon"
         };
 
         _selectedAddons.Add(newDto);
