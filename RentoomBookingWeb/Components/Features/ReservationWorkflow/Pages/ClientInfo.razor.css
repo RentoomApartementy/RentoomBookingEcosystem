@@ -159,8 +159,8 @@
     justify-content: space-between;
 }
 
-::deep .editform-width {
-    width: 65% !important;
+.client-form-section {
+    width: 65%;
 }
 
 .input-wrapper {
@@ -172,6 +172,10 @@
 .download-nip-button {
     cursor: pointer;
     border-bottom: 1px solid #000000;
+}
+
+.mobile-sticky-action {
+    display: none;
 }
 
 /* --- GLOBALNY STYL INPUTÓW (.custom-input) --- */
@@ -234,27 +238,30 @@
 }
 
 
-/* --- DOSTOSOWANIE POD URZĄDZENIA MOBILNE --- */
+/* --- DOSTOSOWANIE POD URZĄDZENIA MOBILNE (910px) --- */
 @media (max-width: 910px) {
-    .form-wrapper {
-        display: flex;
-        flex-direction: column;
+    .client-form-section {
+        width: 100% !important;
     }
-}
 
-@media (max-width: 800px) {
     .payment-wrapper {
+        flex-direction: column-reverse; /* SummaryBox on top */
+        padding-top: 120px; /* Increased to avoid menu overlap on mobile */
+        padding-bottom: 120px; /* Space for the floating button */
+    }
+
+    .form-wrapper {
+        width: 100%;
+        padding: 1.2rem;
+        gap: 1.5rem;
+        display: flex;
         flex-direction: column;
     }
 
     .order-wrapper {
         width: 100%;
-    }
-
-    .form-wrapper {
-        width: 100%;
-        padding: 1.2rem; /* Zmniejszony padding z 2rem na 1.2rem */
-        gap: 1.5rem;
+        position: static;
+        margin-bottom: 1rem;
     }
 
     /* Zmniejszenie ikony i tekstu nagłówka */
@@ -265,11 +272,11 @@
     }
 
     .form-wrapper-title-text h3 {
-        font-size: 1.25rem; /* Mniejszy tytuł */
+        font-size: 1.25rem;
     }
 
     .form-wrapper-title-text p {
-        font-size: 0.85rem; /* Mniejszy podtytuł */
+        font-size: 0.85rem;
         margin-top: 0;
     }
 
@@ -292,5 +299,18 @@
 
     .summary-box {
         width: 100%;
+    }
+
+    .mobile-sticky-action {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #945F28;
+        padding: 0.8rem 1.2rem;
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
+        z-index: 2000; /* High z-index to stay on top of everything */
+        border-radius: 16px 16px 0 0;
     }
 }

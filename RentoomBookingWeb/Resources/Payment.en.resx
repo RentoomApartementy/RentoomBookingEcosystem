@@ -318,4 +318,7 @@
   <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
     <value>Go to Staywell directly</value>
   </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Fill guest data</value>
+  </data>
 </root>

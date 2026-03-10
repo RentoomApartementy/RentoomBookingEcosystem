@@ -3,6 +3,7 @@
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @using RentoomBookingWeb.Components.Shared
+@using RentoomBookingWeb.Components.Enums
 @using RentoomBookingWeb.Services
 @using RentoomBooking.SharedClasses.Services.Gus
 @using PhoneNumbers
@@ -10,6 +11,8 @@
 @inject IReservationWorkflowService ReservationWorkflowService
 @inject IGusService GusService
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@implements IDisposable
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @using Microsoft.Extensions.Localization
 @using System.Linq
@@ -23,11 +26,12 @@
 
 <div class="payment-container">
     <div class="payment-wrapper">
-        <EditForm EditContext="_editContext" OnValidSubmit="SaveAsync" class="editform-width">
-            <DataAnnotationsValidator />
+        <div id="client-form" class="client-form-section">
+            <EditForm EditContext="_editContext" OnValidSubmit="SaveAsync">
+                <DataAnnotationsValidator />
 
-            <div class="form-wrapper">
-                <div class="form-wrapper-title">
+                <div class="form-wrapper">
+                    <div class="form-wrapper-title">
                     <div class="form-wrapper-title-icon-wrapper">
                         <img src="assets/svgs/user.svg" alt="ikona uzytkownika">
                     </div> 
@@ -217,12 +221,24 @@
                 </button>
             </div>
         </EditForm>
-        
+        </div>
+
         <SummaryBox 
-            Summary="_summary"
-            Apartment="_apartment"
-            />
-    </div>
+        Summary="_summary"
+        Apartment="_apartment"
+        />
+        </div>    @* MOBILE FLOATING BUTTON *@
+    @if (!_isAtForm)
+    {
+        <div class="mobile-sticky-action">
+            <Button Type="ButtonType.Tertiary" 
+                    Class="small" 
+                    style="width: 100%;" 
+                    @onclick="SmartScrollAction">
+                @Localizer["FillGuestData"]
+            </Button>
+        </div>
+    }
 </div>
 
 @code {
@@ -244,6 +260,36 @@
     private bool _invoiceEmailDirty = false;
     private bool _phoneDirty = false;
     private bool _submitted = false;
+
+    // SCROLL TRACKING
+    private bool _isAtForm = false;
+    private IDisposable? _scrollObjRef;
+    private bool _observerInitialized = false;
+
+    [JSInvokable]
+    public void UpdateScrollState(string elementId, bool isPastOrVisible)
+    {
+        if (elementId == "client-form")
+        {
+            if (_isAtForm != isPastOrVisible)
+            {
+                _isAtForm = isPastOrVisible;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task SmartScrollAction()
+    {
+        if (_isAtForm)
+        {
+            await SaveAsync();
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("scrollToElement", "client-form");
+        }
+    }
 
     private static readonly PhoneNumberUtil _phoneUtil = PhoneNumberUtil.GetInstance();
 
@@ -573,6 +619,26 @@
     {
         if (string.IsNullOrWhiteSpace(value)) return string.Empty;
         return new string(value.Where(char.IsDigit).ToArray());
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_observerInitialized)
+        {
+            _observerInitialized = true;
+            _scrollObjRef = DotNetObjectReference.Create(this);
+            await Task.Delay(100);
+            
+            // Rejestrujemy z dużym ujemnym marginesem dolnym (-50%), aby przycisk 
+            // zniknął dopiero, gdy użytkownik przewinie formularz do połowy ekranu.
+            var observerOptions = new { threshold = 0, rootMargin = "0px 0px -50% 0px" };
+            await JSRuntime.InvokeVoidAsync("registerScrollObserver", "client-form", _scrollObjRef, observerOptions);
+        }
+    }
+
+    public void Dispose()
+    {
+        _scrollObjRef?.Dispose();
     }
 
     private sealed class PaymentFormModel

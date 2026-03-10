@@ -23,6 +23,12 @@
     color: white !important;
 }
 
+.custom-button.small {
+    height: 34px;
+    padding: 0 1rem;
+    font-size: 0.85rem;
+}
+
 .disabled {
     background-color: #7a7a7a !important;
     border: 1px solid #8B9B8C;

@@ -94,7 +94,7 @@
                         <div class="guest-detail-item-text-wrapper">
                             <span class="detail-label">@Localizer["TotalAmount"]</span>
                             @* <span class="detail-value">@_summary?.StartRequest?.OfferPrice?.ToString("N2") @_summary?.StartRequest?.Currency</span> *@
-                            <span class="detail-value">@_summary?.StartRequest?.OfferPrice?.ToString("N2") @CurrencyLocalizer["PLN"]</span>
+                            <span class="detail-value">@_summary?.GrandTotal.ToString("N2") @CurrencyLocalizer["PLN"]</span>
                         </div>
                     </div>
                 </div>

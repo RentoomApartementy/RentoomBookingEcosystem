@@ -341,15 +341,15 @@
                     @if (localHasOffers)
                     {
                         <span class="label">@Localizer["From"]</span>
-                        <span class="price">@(localMinPrice?.ToString("N2")) @CurrencyLocalizer["PLN"]</span>
+                        <span class="price">@((localMinPrice + (decimal)TotalAddonsPrice + TotalUpsellsPrice)?.ToString("N2")) @CurrencyLocalizer["PLN"]</span>
                     }
                 </div>
 
                 <div class="mobile-action-btn">
                     @if (StartDate == null && EndDate == null)
                     {
-                        <div @onclick="OpenSearchModal" @onclick:stopPropagation="true"> 
-                            <Button Type="ButtonType.Tertiary" style="width: 100%;">
+                        <div @onclick="OpenSearchModal" @onclick:stopPropagation="true" style="flex: 1;"> 
+                            <Button Type="ButtonType.Tertiary" style="width: 100%;" Class="small">
                                 @Localizer["SelectDatesAndGuests"]
                             </Button>
                         </div>
@@ -362,9 +362,10 @@
                     @if (localHasOffers)
                     {
                         <Button Type="ButtonType.Tertiary"
-                                style="width: 100%; padding: 0.5rem 1rem; font-size: 0.9rem;"
+                                Class="small"
+                                style="width: 100%;"
                                 @onclick="SmartScrollAction">
-                            @(_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"])
+                            @(_isAtOffers ? Localizer["BookNow"] : (_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"]))
                         </Button>
                     }
 
@@ -389,7 +390,7 @@
                     {
                         <div class="reservation-header desktop-only">
                             <div class="header-price">
-                                <span class="price-value">@Localizer["From"] @(localMinPrice?.ToString("N2")) @CurrencyLocalizer["PLN"]</span>
+                                <span class="price-value">@Localizer["From"] @((localMinPrice + (decimal)TotalAddonsPrice + TotalUpsellsPrice)?.ToString("N2")) @CurrencyLocalizer["PLN"]</span>
                             </div>
                         </div>
                     }
@@ -449,7 +450,7 @@
                         {
                             <div class="desktop-only" style="margin-top: 1rem; width: 100%;" @onclick="SmartScrollAction"> 
                                 <Button style="width: 100%;">
-                                    @(_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"]) 
+                                    @(_isAtOffers ? Localizer["BookNow"] : (_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"])) 
                                 </Button>
                             </div>
                         }
@@ -704,18 +705,30 @@
     
     // Zmienne do scrolla i stanu mobile
     private bool _isAtSummary = false;
+    private bool _isAtOffers = false;
     private IDisposable? _scrollObjRef;
     
     // Zmienna do footera
     private bool _isMobileExpanded = false;
 
     [JSInvokable]
-    public void UpdateScrollState(bool isAtSummary)
+    public void UpdateScrollState(string elementId, bool isPastOrVisible)
     {
-        if (_isAtSummary != isAtSummary)
+        if (elementId == "confirm-reservation")
         {
-            _isAtSummary = isAtSummary;
-            StateHasChanged();
+            if (_isAtSummary != isPastOrVisible)
+            {
+                _isAtSummary = isPastOrVisible;
+                StateHasChanged();
+            }
+        }
+        else if (elementId == "offers-section")
+        {
+            if (_isAtOffers != isPastOrVisible)
+            {
+                _isAtOffers = isPastOrVisible;
+                StateHasChanged();
+            }
         }
     }
     
@@ -973,6 +986,7 @@
             _scrollObjRef = DotNetObjectReference.Create(this);
             await Task.Delay(100); 
             await JSRuntime.InvokeVoidAsync("registerScrollObserver", "confirm-reservation", _scrollObjRef);
+            await JSRuntime.InvokeVoidAsync("registerScrollObserver", "offers-section", _scrollObjRef);
         }
     }
 
@@ -1285,6 +1299,17 @@
     private async Task SmartScrollAction()
     {
         await Task.Yield(); 
+
+        if (_isAtOffers)
+        {
+            var offer = localNonRefundableOffer ?? localRefundableOffer;
+            if (offer != null)
+            {
+                await GoToPayment(offer.OfferType);
+            }
+            return;
+        }
+
         if (_isAtSummary)
         {
             await JSRuntime.InvokeVoidAsync("scrollToElement", "offers-section");
