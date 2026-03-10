@@ -7,8 +7,8 @@ namespace RentoomBooking.StayWell.States
 {
     public class ReservationState(BackendApi backendApi)
     {
-        private const int EarlyCheckInAddonId = 18;
-        private const int LateCheckOutAddonId = 10;
+        private const int EarlyCheckInAddonId = 40;
+        private const int LateCheckOutAddonId = 41;
 
         private static readonly TimeOnly DefaultCheckInTime = new(15, 0);
         private static readonly TimeOnly DefaultCheckOutTime = new(11, 0);

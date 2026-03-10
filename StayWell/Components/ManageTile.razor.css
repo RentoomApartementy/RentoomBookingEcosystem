@@ -1,10 +1,11 @@
 ﻿.manage-tile {
+    position: relative;
     width: 100%;
     box-sizing: border-box;
     text-align: left;
     border-radius: 15px;
     padding: 18px;
-    border: none;
+    border: 2px solid transparent;
     background: transparent;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -14,11 +15,54 @@
     gap: 8px;
     font-family: inherit;
     cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
     .manage-tile:disabled {
         cursor: not-allowed;
         opacity: 0.6;
+    }
+
+.manage-tile--selected {
+    transform: scale(1.02);
+    border-color: rgba(33, 87, 62, 0.45);
+    box-shadow: 0 4px 18px 0 rgba(33, 87, 62, 0.18);
+}
+
+.manage-tile--purchased {
+    opacity: 0.5;
+    filter: grayscale(0.6);
+    cursor: not-allowed;
+}
+
+.manage-tile__remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.12);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    line-height: 1;
+}
+
+    .manage-tile__remove-btn img {
+        width: 10px;
+        height: 10px;
+        filter: brightness(0) saturate(100%) invert(15%) sepia(56%) saturate(7117%) hue-rotate(356deg) brightness(102%) contrast(117%);
+        opacity: 0.6;
+        display: block;
+    }
+
+    .manage-tile__remove-btn:hover {
+        background: #fee2e2;
     }
 
 .manage-tile__category {
@@ -40,12 +84,12 @@
     gap: 6px;
     font-weight: 700;
     color: rgba(0, 0, 0, 0.9);
-    min-width: 0;
 }
 
 .manage-tile__icon {
     padding: 5px;
     padding-bottom: 7px;
+    flex: 0 0 auto;
 }
 
 .manage-tile__chevron {
@@ -53,6 +97,7 @@
     height: 18px;
     flex: 0 0 auto;
     opacity: 0.55;
+    transition: opacity 0.15s;
 }
 
 .manage-tile__desc {
@@ -70,4 +115,45 @@
     margin-top: -6px;
     font-size: 0.85rem;
     color: rgba(0, 0, 0, 0.55);
+}
+
+.manage-tile__quantity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.manage-tile__quantity-btn {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid rgba(33, 87, 62, 0.45);
+    border-radius: 50%;
+    background: transparent;
+    color: rgba(33, 87, 62, 0.9);
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+}
+
+    .manage-tile__quantity-btn:hover:not(:disabled) {
+        background: rgba(33, 87, 62, 0.1);
+    }
+
+    .manage-tile__quantity-btn:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
+
+.manage-tile__quantity-value {
+    font-weight: 700;
+    font-size: 1rem;
+    min-width: 20px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.9);
 }

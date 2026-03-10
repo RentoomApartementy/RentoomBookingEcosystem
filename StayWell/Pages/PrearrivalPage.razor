@@ -174,15 +174,17 @@
 
     private void UpdateCountdown()
     {
-        var checkIn = ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom();
-        if (checkIn == null)
+        var checkInDate = ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom();
+        if (checkInDate == null)
         {
             _days = _hours = _minutes = 0;
             return;
         }
 
+        var checkIn = checkInDate.Value.Date + ReservationState.CheckInTime.ToTimeSpan();
+
         var now = DateTime.Now;
-        var diff = checkIn.Value - now;
+        var diff = checkIn - now;
         if (diff.TotalSeconds < 0)
         {
             _days = _hours = _minutes = 0;

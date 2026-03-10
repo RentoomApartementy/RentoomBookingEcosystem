@@ -1,7 +1,19 @@
-﻿<button class="manage-tile"
+﻿<button class="manage-tile @(IsSelected ? "manage-tile--selected" : "") @(IsPurchased ? "manage-tile--purchased" : "")"
         type="button"
         disabled="@IsDisabled"
         @onclick="HandleClick">
+
+    @if (IsSelected)
+    {
+        <button type="button"
+                class="manage-tile__remove-btn"
+                @onclick:stopPropagation="true"
+                @onclick="HandleClick"
+                title="Usuń z koszyka">
+            <img src="/icons/x.svg" alt="usuń" />
+        </button>
+    }
+
     <span class="manage-tile__category">@Category</span>
 
     <span class="manage-tile__title-row">
@@ -13,7 +25,12 @@
             @Title
         </span>
 
-        <img class="manage-tile__chevron" src="icons/chevron-right.svg" alt="" />
+        @if (!IsSelected && !string.IsNullOrWhiteSpace(ActionIcon))
+        {
+            <img class="manage-tile__chevron"
+                 src="@ActionIcon"
+                 alt="" />
+        }
     </span>
 
     @if (!string.IsNullOrWhiteSpace(Description))
@@ -30,12 +47,28 @@
             <span class="manage-tile__price-info">@PriceInfo</span>
         }
     }
+
+    @if (IsSelected && ShowQuantitySelector)
+    {
+        <div class="manage-tile__quantity" @onclick:stopPropagation="true">
+            <button type="button"
+                    class="manage-tile__quantity-btn"
+                    @onclick="DecrementQuantity"
+                    disabled="@(Quantity <= 1)">−</button>
+            <span class="manage-tile__quantity-value">@Quantity</span>
+            <button type="button"
+                    class="manage-tile__quantity-btn"
+                    @onclick="IncrementQuantity"
+                    disabled="@(MaxQuantity.HasValue && Quantity >= MaxQuantity.Value)">+</button>
+        </div>
+    }
 </button>
 
 @code {
     [Parameter] public string Category { get; set; } = "";
     [Parameter] public string Title { get; set; } = "";
     [Parameter] public string Icon { get; set; } = "";
+    [Parameter] public string ActionIcon { get; set; } = "";
     [Parameter] public string Description { get; set; } = "";
 
     [Parameter] public bool ShowPrice { get; set; } = true;
@@ -43,20 +76,40 @@
     [Parameter] public string PriceInfo { get; set; } = "";
 
     [Parameter] public bool Disabled { get; set; } = false;
+    [Parameter] public bool IsPurchased { get; set; } = false;
+    [Parameter] public bool IsSelected { get; set; } = false;
     [Parameter] public EventCallback OnClick { get; set; }
 
-    private bool IsDisabled => Disabled || (ShowPrice && string.IsNullOrWhiteSpace(PriceText));
+    [Parameter] public bool ShowQuantitySelector { get; set; } = false;
+    [Parameter] public int Quantity { get; set; } = 1;
+    [Parameter] public int? MaxQuantity { get; set; } = null;
+    [Parameter] public EventCallback<int> OnQuantityChanged { get; set; }
+
+    private bool IsDisabled => Disabled || IsPurchased || (ShowPrice && string.IsNullOrWhiteSpace(PriceText));
 
     private async Task HandleClick()
     {
         if (IsDisabled)
-        {
             return;
-        }
 
         if (OnClick.HasDelegate)
-        {
             await OnClick.InvokeAsync();
-        }
+    }
+
+    private async Task IncrementQuantity()
+    {
+        if (MaxQuantity.HasValue && Quantity >= MaxQuantity.Value)
+            return;
+
+        if (OnQuantityChanged.HasDelegate)
+            await OnQuantityChanged.InvokeAsync(Quantity + 1);
+    }
+
+    private async Task DecrementQuantity()
+    {
+        if (Quantity <= 1 || !OnQuantityChanged.HasDelegate)
+            return;
+
+        await OnQuantityChanged.InvokeAsync(Quantity - 1);
     }
 }

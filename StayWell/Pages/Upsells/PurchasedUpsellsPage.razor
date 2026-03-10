@@ -16,8 +16,9 @@ else if (_isLoading)
 else
 {
     <PurchasedUpsellList PurchasedUpsells="_purchasedVouchers"
-                          ReservationContext="_context"
-                         Theme="staywell-theme" />
+                         ReservationContext="_context"
+                         Theme="staywell-theme"
+                         OnEnlargeImage="HandleEnlargeImage" />
 }
 
 @code {
@@ -39,13 +40,6 @@ else
 
         var purchasedSummary = await BackendApi.GetPurchasedUpsellsByReservationTokenAsync(Token);
         _purchasedVouchers = purchasedSummary?.PurchasedUpsellsWithVouchers ?? new();
-
-       /* _purchasedTiles = purchasedLines
-            .Select(line => line.UpsellDefinitionSnapshot)
-            .Where(tile => tile is not null)
-            .ToList();
-
-            */
 
         var firstLine = _purchasedVouchers.FirstOrDefault();
 
@@ -73,5 +67,17 @@ else
         };
 
         _isLoading = false;
+    }
+
+    private void HandleEnlargeImage(string[] imageUrls)
+    {
+        if (imageUrls.Length == 0) return;
+
+        ModalService.ShowModal("",
+            @<RentoomBooking.StayWell.Components.ModalContent.GalleryModalContent
+                ImageUrls="@imageUrls"
+                StartIndex="0"
+                ShowControls="@(imageUrls.Length > 1)" />,
+            true);
     }
 }
