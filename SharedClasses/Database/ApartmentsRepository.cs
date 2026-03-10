@@ -54,7 +54,7 @@ namespace RentoomBooking.SharedClasses.Database
         public ApartmentObject? FindApartmentInPostgres(int apartmentId, CancellationToken cancellationToken = default)
         {
             using var context = _dbContextFactory.CreateDbContext();
-            var apentity = context.ApartmentInfos.FirstOrDefault(a => a.Id == apartmentId) ?? throw new KeyNotFoundException("Apartament Not found");
+            var apentity = context.ApartmentInfos.FirstOrDefault(a => a.Id == apartmentId && !a.IsArchived) ?? throw new KeyNotFoundException("Apartament Not found");
 
             var apobj = JsonConvert.DeserializeObject<ApartmentObject>(apentity.Payload);
             return apobj;
@@ -98,7 +98,7 @@ namespace RentoomBooking.SharedClasses.Database
             _logger?.LogInformation("QueryApartmentsAsync called. continuationToken={Token}, pageSize={PageSize}", continuationToken, pageSize);
 
             await using var context = _dbContextFactory.CreateDbContext();
-            long totalCount = await context.ApartmentInfos.LongCountAsync();
+            long totalCount = await context.ApartmentInfos.Where(a => !a.IsArchived).LongCountAsync();
 
             _logger?.LogDebug("Total apartments in DB: {TotalCount}", totalCount);
 
@@ -184,7 +184,7 @@ namespace RentoomBooking.SharedClasses.Database
                 .ToList();
 
             await using var context = _dbContextFactory.CreateDbContext();
-            var ret = context.ApartmentInfos.AsNoTracking().ToList();
+            var ret = context.ApartmentInfos.Where(a => !a.IsArchived).AsNoTracking().ToList();
                 List<ApartmentObject> apObjects = new();
                 foreach(var r in ret)
                 apObjects.Add(JsonConvert.DeserializeObject<ApartmentObject>(r.Payload));
