@@ -319,10 +319,22 @@
   <data name="StaywellPopupDescription" xml:space="preserve">
     <value>Zeskanuj kod QR, aby natychmiast otworzyć panel StayWell przypisany do tej rezerwacji. W panelu sprawdzisz szczegóły pobytu, informacje organizacyjne, status usług dodatkowych i najważniejsze komunikaty.</value>
   </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Otwórz panel StayWell dla tej rezerwacji. W panelu sprawdzisz szczegóły pobytu, informacje organizacyjne, status usług dodatkowych i najważniejsze komunikaty.</value>
+  </data>
   <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
     <value>Przejdź do StayWell bezpośrednio</value>
   </data>
   <data name="FillGuestData" xml:space="preserve">
     <value>Uzupełnij dane</value>
+  </data>
+  <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
+    <value>Faktura</value>
+  </data>
+  <data name="InvoiceYes" xml:space="preserve">
+    <value>Tak</value>
+  </data>
+  <data name="InvoiceNo" xml:space="preserve">
+    <value>Nie</value>
   </data>
 </root>

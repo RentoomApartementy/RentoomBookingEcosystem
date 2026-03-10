@@ -12,6 +12,7 @@
 @using RentoomBooking.SharedClasses.Models
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject CustomerTermsService TermsService
+@implements IDisposable
 
 <PageTitle>Podsumowanie</PageTitle>
 <div class="summary-container">
@@ -55,9 +56,9 @@
                         </div>
                     </div>
                     
-                    @if (@_summary.IdoStatus == "accepted" && @_summary.PaymentStatus == "Paid")
+                    @if (IsPaid)
                     {
-                        <div class="status-box success-bg">
+                        <div class="status-box success-bg paid-status-box">
                             <div class="form-wrapper-title-icon-wrapper success-icon-color rounded-full">
                                 <img src="assets/svgs/success.svg" alt="ikona uzytkownika">
                             </div> 
@@ -65,6 +66,29 @@
                             <div class="status-box-text">
                                 <h4 class="success-text-color">@Localizer["ReservationPaid"]</h4>
                                 <span>@Localizer["ReservationPaidInfo"]</span>
+                            </div>
+                        </div>
+                        <div class="status-box info-bg email-status-box">
+                            <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
+                                <img src="assets/svgs/mail.svg" alt="ikona maila">
+                            </div>
+
+                            <div class="status-box-text">
+                                @if (!string.IsNullOrEmpty(_emailError))
+                                {
+                                    <h4 class="danger-text-color">@Localizer["ReservationDanger"]</h4>
+                                    <span>@_emailError</span>
+                                }
+                                else if (_isCheckingEmail || _emailSent != true)
+                                {
+                                    <h4 class="info-text-color">@Localizer["CheckEmailText"]</h4>
+                                    <span>@Localizer["ConfirmationWill"] @_summary?.Client?.Email</span>
+                                }
+                                else
+                                {
+                                    <h4 class="success-text-color">@Localizer["SendMailText"]</h4>
+                                    <span>@Localizer["ConfirmationHasBeenSent"] @_summary?.Client?.Email</span>
+                                }
                             </div>
                         </div>
                         <div class="staywell-popup-wrapper">
@@ -78,7 +102,7 @@
 
                             @if (_isStaywellPopupOpen)
                             {
-                                <div class="staywell-popup" role="dialog" aria-label="Kod QR StayWell">
+                                <div class="staywell-popup" role="dialog" aria-label="Informacje StayWell">
                                     <button type="button"
                                             class="staywell-popup-close"
                                             @onclick="CloseStaywellPopup"
@@ -94,18 +118,58 @@
 
                                         <div class="staywell-popup-col staywell-description-col">
                                             <strong class="staywell-popup-title">@Localizer["StaywellPopupTitle"]</strong>
-                                            <p class="staywell-popup-description">@Localizer["StaywellPopupDescription"]</p>
+                                            <p class="staywell-popup-description">
+                                                <span class="staywell-popup-description-desktop">@Localizer["StaywellPopupDescription"]</span>
+                                                <span class="staywell-popup-description-mobile">@Localizer["StaywellPopupDescriptionMobile"]</span>
+                                            </p>
 
-                                            @*<a href="@staywellLink" target="_blank" rel="noopener noreferrer" class="staywell-popup-link">
-                                                @Localizer["GoToStayWellQRCodePopupText"]
-                                            </a>*@
+                                            <a href="@staywellLink" target="_blank" rel="noopener noreferrer" class="staywell-popup-link">
+                                                <span class="staywell-popup-link-desktop">@Localizer["GoToStayWellQRCodePopupText"]</span>
+                                                <span class="staywell-popup-link-mobile">@Localizer["GoToStayWellQRCodePopupMobileText"]</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             }
                         </div>
+
+                       
                     }
-                    else if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
+                    else if (IsPaymentInitiated)
+                    {
+                        <div class="status-box info-bg">
+                            <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
+                                <img src="assets/svgs/time.svg" alt="ikona oczekiwania">
+                            </div>
+
+                            <div class="status-box-text">
+                                <h4 class="info-text-color">@Localizer["WaitingPayment"]</h4>
+                                <span>@Localizer["NotRefreshPage"]</span>
+                            </div>
+                        </div>
+
+                        <button @onclick="RetryPayment" class="button-pending">
+                            @Localizer["TryAgain"]
+                        </button>
+                    }
+                    else if (IsPaymentFailed)
+                    {
+                        <div class="status-box danger-bg">
+                            <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
+                                <img src="assets/svgs/danger.svg" alt="ikona bledu">
+                            </div>
+
+                            <div class="status-box-text">
+                                <h4 class="danger-text-color">@Localizer["PaymentFailed"]</h4>
+                                <span>@Localizer["PaymentFailedText"]</span>
+                            </div>
+                        </div>
+
+                        <button @onclick="RetryPayment" class="button-pending">
+                            @Localizer["TryAgain"]
+                        </button>
+                    }
+                    else if (ShouldShowTermsAndPayment)
                     {
                         <div class="status-box pending-bg">
                             <div class="form-wrapper-title-icon-wrapper pending-icon-color rounded-full">
@@ -203,7 +267,7 @@
                         </div>
                     </div>
                     
-                    @if (@_summary.IdoStatus == "waitingForPayment" && @_summary.PaymentStatus != "Paid")
+                    @if (ShouldShowTermsAndPayment)
                     {
                         <button class="button" @onclick="GoToClientInfo">@Localizer["Edit"]</button>   
                     }
@@ -250,8 +314,21 @@
     private ApartmentObject? _apartment;
     private bool _isStaywellPopupOpen;
     private string? _staywellQrDataUri;
-   // private const string StaywellPopupTitle = "StayWell dla Twojej rezerwacji";
-   // private const string StaywellPopupDescription = "Zeskanuj kod QR, aby natychmiast otworzyć panel StayWell przypisany do tej rezerwacji. W panelu sprawdzisz szczegóły pobytu, informacje organizacyjne, status usług dodatkowych i najważniejsze komunikaty. Jeśli wolisz przejdź dalej tym przyciskiem poniżej.";
+    private CancellationTokenSource? _paymentPollCts;
+    private CancellationTokenSource? _emailPollCts;
+
+    private bool? _emailSent;
+    private bool _isCheckingEmail;
+    private bool _emailPollStarted;
+    private string? _emailError;
+
+    private bool IsPaid => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase);
+    private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
+    private bool IsPaymentFailed => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase);
+    private bool ShouldShowTermsAndPayment => string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
+                                              && !IsPaid
+                                              && !IsPaymentInitiated
+                                              && !IsPaymentFailed;
     
     private string staywellLink => $"https://staywell-test.rentoom.pl/reservation/{ReservationTokenGuid}/HomePage";
 
@@ -261,13 +338,8 @@
 
         try
         {
-            _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
-            if (_summary != null && _summary.StartRequest?.ObjectId != null)
-            {
-                _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);   
-            }
-
-            await LoadTermsAsync();
+            await RefreshSummaryAsync();
+            await EnsureWorkflowChecksAsync();
         }
         catch (Exception ex)
         {
@@ -286,7 +358,7 @@
             await ReservationWorkflowService.SaveCustomerTermsAsync(ReservationTokenGuid, _userSelections);
             Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             _error = "Wystąpił błąd podczas zapisywania zgód. Spróbuj ponownie.";
         }
@@ -295,6 +367,130 @@
     private void GoToClientInfo()
     {
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/dane-klienta");
+    }
+
+    private void RetryPayment()
+    {
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
+    }
+
+    private async Task EnsureWorkflowChecksAsync()
+    {
+        if (ShouldShowTermsAndPayment)
+        {
+            await LoadTermsAsync();
+        }
+
+        StartPaymentPollingIfNeeded();
+        StartEmailPollingIfNeeded();
+    }
+
+    private async Task RefreshSummaryAsync()
+    {
+        _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+        if (_summary?.StartRequest?.ObjectId != null)
+        {
+            _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);
+        }
+    }
+
+    private void StartPaymentPollingIfNeeded()
+    {
+        if (!IsPaymentInitiated || _paymentPollCts is not null)
+        {
+            return;
+        }
+
+        _paymentPollCts = new CancellationTokenSource();
+        _ = PollPaymentStatusAsync(_paymentPollCts.Token);
+    }
+
+    private async Task PollPaymentStatusAsync(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            try
+            {
+                var state = await ReservationWorkflowService.GetPaymentStateAsync(ReservationTokenGuid);
+                if (_summary is not null)
+                {
+                    _summary.PaymentStatus = state.PaymentStatus;
+                    _summary.IdoStatus = state.IdoStatus ?? _summary.IdoStatus;
+                }
+
+                if (string.Equals(state.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(state.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase))
+                {
+                    await RefreshSummaryAsync();
+                    await EnsureWorkflowChecksAsync();
+                    await InvokeAsync(StateHasChanged);
+                    return;
+                }
+
+                await InvokeAsync(StateHasChanged);
+                await Task.Delay(TimeSpan.FromSeconds(20), token);
+            }
+            catch (OperationCanceledException) when (token.IsCancellationRequested)
+            {
+                return;
+            }
+            catch (Exception ex)
+            {
+                _error = "Nie udało się pobrać statusu płatności. " + ex.Message;
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+        }
+    }
+
+    private void StartEmailPollingIfNeeded()
+    {
+        if (!IsPaid || _emailPollStarted)
+        {
+            return;
+        }
+
+        _emailPollStarted = true;
+        _emailPollCts = new CancellationTokenSource();
+        _ = PollEmailStatusAsync(ReservationTokenGuid, _emailPollCts.Token);
+    }
+
+    private async Task PollEmailStatusAsync(Guid reservationGuid, CancellationToken token)
+    {
+        _isCheckingEmail = true;
+        _emailError = null;
+        _emailSent = null;
+        await InvokeAsync(StateHasChanged);
+
+        while (!token.IsCancellationRequested)
+        {
+            try
+            {
+                var emailStatus = await ReservationWorkflowService.GetDealEmailStatusAsync(reservationGuid);
+                _emailSent = emailStatus.EmailSent;
+
+                if (_emailSent == true)
+                {
+                    _isCheckingEmail = false;
+                    await InvokeAsync(StateHasChanged);
+                    return;
+                }
+
+                await InvokeAsync(StateHasChanged);
+                await Task.Delay(TimeSpan.FromSeconds(2), token);
+            }
+            catch (OperationCanceledException) when (token.IsCancellationRequested)
+            {
+                return;
+            }
+            catch (Exception)
+            {
+                _emailError = "Nie udało się sprawdzić statusu e-maila.";
+                _isCheckingEmail = false;
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+        }
     }
 
     private void ToggleStaywellPopup()
@@ -333,6 +529,11 @@
     
     private async Task LoadTermsAsync()
     {
+        if (_termsSources is not null)
+        {
+            return;
+        }
+
         try 
         {
             _isTermsLoading = true;
@@ -360,5 +561,14 @@
         return _termsSources
             .Where(t => t.IsRequired)
             .All(t => _userSelections.TryGetValue(t.Id, out var selected) && selected);
+    }
+
+    public void Dispose()
+    {
+        _paymentPollCts?.Cancel();
+        _paymentPollCts?.Dispose();
+
+        _emailPollCts?.Cancel();
+        _emailPollCts?.Dispose();
     }
 }

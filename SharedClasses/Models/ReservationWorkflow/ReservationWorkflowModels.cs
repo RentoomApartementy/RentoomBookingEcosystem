@@ -40,6 +40,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string City { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
         public string CountryCode { get; set; } = "pl";
+        public string Language { get; set; } = "pol";
     }
 
     public class InvoiceInfoDto
@@ -67,6 +68,8 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public List<UpsellSummaryLineDto> Upsells { get; set; } = new();
         public decimal UpsellsTotal { get; set; }
         public decimal GrandTotal { get; set; }
+        public List<AddonSummaryLineDto> Addons { get; internal set; }
+        public decimal AddonsTotal { get; internal set; }
     }
 
     public class PaymentInitResult
@@ -139,6 +142,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public float Price { get; set; }
         public float Vat { get; set; }
         public AddonPaymentType? PaymentType { get; set; }
+        public string DisplayText {get;set;} = string.Empty;
     }
 
     public class SelectedUpsellDto
@@ -147,6 +151,9 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public int Quantity { get; set; }
     }
 
+    public class AddonSummaryLineDto : SelectedAddonDto {
+        public decimal LineTotalGross { get; set; }
+    }
     public class UpsellSummaryLineDto
     {
         public int PartnerServiceId { get; set; }

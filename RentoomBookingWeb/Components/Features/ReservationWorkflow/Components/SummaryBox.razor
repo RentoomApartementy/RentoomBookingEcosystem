@@ -1,5 +1,6 @@
 @using Microsoft.Extensions.Localization;
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
@@ -49,16 +50,16 @@
             <div class="summary-box-prices-text">
                 @* <span>@_pricePerNight.ToString("N2") @Summary?.StartRequest?.Currency x @_totalDays @Localizer["NightsText"]</span> *@
                 @* <b>@_basePrice.ToString("N2") @Summary?.StartRequest?.Currency</b> *@
-                <span>@_pricePerNight.ToString("N2") @CurrencyLocalizer["PLN"] x @_totalDays @Localizer["NightsText"]</span>
+                <span>@Localizer["NightsText"] x @_totalDays</span>
                 <b>@_basePrice.ToString("N2") @CurrencyLocalizer["PLN"]</b>
             </div>
             @if (Summary?.StartRequest?.SelectedAddons?.Count > 0)
             {
-                @foreach (SelectedAddonDto addon in Summary.StartRequest.SelectedAddons)
+                @foreach (AddonSummaryLineDto addon in Summary.Addons)
                 {
                     <div class="summary-box-prices-text">
-                        <span>@GetAddonName(@addon.AddonId)</span>
-                        <b>@addon.Price.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                        <span>@(!string.IsNullOrWhiteSpace(addon.DisplayText) ? addon.DisplayText : GetAddonName(addon.AddonId)) @(addon.PaymentType == AddonPaymentType.PayPerAmount? "x " + @addon.Quantity:"")</span>
+                        <b>@addon.LineTotalGross.ToString("N2") @CurrencyLocalizer["PLN"]</b>
                     </div>
                 }
             }
@@ -73,6 +74,16 @@
                         <b>@upsell.LineTotalGross.ToString("N2") @CurrencyLocalizer["PLN"]</b>
                     </div>
                 }
+            }
+
+            @if (Summary?.Invoice !=null)
+            {
+               
+                    <div class="summary-box-prices-text">
+                    <span>@Localizer["InvoiceSummaryBoxLabel"]</span>
+                    <b>@(Summary?.Invoice !=null? Localizer["InvoiceYes"]:Localizer["InvoiceNo"])</b>
+                    </div>
+               
             }
 
 
@@ -91,7 +102,7 @@
 {
     [Parameter] public ReservationSummaryDto? Summary { get; set; }
     [Parameter] public ApartmentObject? Apartment { get; set; }
-    
+
     private int _totalDays;
     private decimal _pricePerNight;
     private decimal _basePrice;
@@ -108,8 +119,9 @@
 
             if (Summary?.StartRequest?.OfferPrice != null)
             {
-                var addonsTotal = (decimal)(Summary.StartRequest.SelectedAddons?.Sum(a => a.Price * a.Quantity) ?? 0);
-                _basePrice = (Summary.StartRequest.OfferPrice ?? 0) - addonsTotal;
+                //var addonsTotal = (decimal)(Summary.StartRequest.SelectedAddons?.Sum(a => a.Price * a.Quantity) ?? 0);
+                var addonsTotal = Summary.AddonsTotal;
+                _basePrice = Summary.StartRequest.OfferPrice.Value;//(Summary.StartRequest.OfferPrice ?? 0) - addonsTotal;
                 _pricePerNight = Math.Round(_basePrice / _totalDays, 2);
             }
         }

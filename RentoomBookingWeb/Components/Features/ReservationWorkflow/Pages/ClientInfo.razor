@@ -1,4 +1,5 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/dane-klienta/"
+@using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
@@ -255,7 +256,7 @@
     private string _phoneNumberRaw = string.Empty;     
     private ReservationSummaryDto? _summary;
     private string _phoneError = string.Empty;
-    
+
     private bool _emailDirty = false;
     private bool _invoiceEmailDirty = false;
     private bool _phoneDirty = false;
@@ -265,6 +266,8 @@
     private bool _isAtForm = false;
     private IDisposable? _scrollObjRef;
     private bool _observerInitialized = false;
+
+    private List<DefinedAddonEntity>? _definedAddons = null;
 
     [JSInvokable]
     public void UpdateScrollState(string elementId, bool isPastOrVisible)
@@ -341,7 +344,7 @@
     }
 
     private bool IsSubmitDisabled => _isSaving || !IsFormComplete();
-    
+
     private bool UseInvoice
     {
         get => _form.UseInvoice;
@@ -385,7 +388,7 @@
             if (selectedPrefix != null && !string.IsNullOrEmpty(selectedPrefix.Region))
             {
                 var exampleNumber = _phoneUtil.GetExampleNumberForType(selectedPrefix.Region, PhoneNumberType.MOBILE);
-                
+
                 if (exampleNumber != null)
                 {
                     return _phoneUtil.Format(exampleNumber, PhoneNumberFormat.NATIONAL);
@@ -406,19 +409,21 @@
         var formatter = _phoneUtil.GetAsYouTypeFormatter(selectedPrefix.Region);
         formatter.Clear();
         string formatted = "";
-        
+
         foreach (char c in digits)
         {
             formatted = formatter.InputDigit(c);
         }
-        
+
         return formatted;
     }
 
     protected override async Task OnInitializedAsync()
     {
         InitializeCountryPrefixes();
+        InitializeDummyClientData();
         _editContext = new EditContext(_form);
+        _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
         _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
 
         if (_summary != null)
@@ -473,6 +478,7 @@
     {
         if (_isSaving) return;
         
+        _form.Client.Language = ResolveClientLanguage(CultureInfo.CurrentUICulture.Name);
         _submitted = true;
         _emailDirty = true;
         _invoiceEmailDirty = true;
@@ -494,6 +500,16 @@
         }
         catch (Exception ex) { _error = "Nie udało się zapisać danych klienta. " + ex.Message ; }
         finally { _isSaving = false; }
+    }
+
+    private static string ResolveClientLanguage(string? cultureName)
+    {
+        if (string.IsNullOrWhiteSpace(cultureName))
+        {
+            return "pol";
+        }
+
+        return cultureName.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "eng" : "pol";
     }
 
     private void ValidateAndBuildPhone()
@@ -647,4 +663,37 @@
         public InvoiceInfoDto Invoice { get; set; } = new();
         public bool UseInvoice { get; set; }
     }
+
+
+    private void InitializeDummyClientData()
+    {
+        // Initialize with dummy data for testing purposes
+        var randEmail = Guid.NewGuid().ToString("n").Substring(0, 6);
+        _form.Client = new ClientInfoDto
+        {
+            FirstName = "Maciej",
+            LastName = "Stanisławski",
+            Email = $"posith+{randEmail}@gmail.com",
+            Phone = "+48.602394436",
+            Street = "Szczęśliwa 2",
+            City = "Kopanino",
+            ZipCode = "87-162",
+            CountryCode = "PL",
+            Language = "pol"
+        };
+
+        _form.Invoice = new InvoiceInfoDto
+        {
+            CompanyName = "Maciej Stanisławski",
+            TaxNumber = "8741622532",
+            Street = "Szczęśliwa 2",
+            City = "Kopanino",
+            ZipCode = "87-162",
+            Email = $"posith+faktura_{randEmail}@gmail.com"
+        };
+
+        _form.UseInvoice = true;
+    }
+    
+
 }
