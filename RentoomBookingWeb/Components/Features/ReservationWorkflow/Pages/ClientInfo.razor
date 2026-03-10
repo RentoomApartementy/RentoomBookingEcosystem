@@ -300,8 +300,7 @@
     {
         public string Code { get; set; } = "";
         public string Region { get; set; } = "";
-        public string Flag { get; set; } = "";
-        public string Display => $"{Flag} {Region} +{Code}";
+        public string Display => $"{Region} +{Code}";
     }
 
     private List<CountryPrefix> _countryPrefixes = new();
@@ -319,8 +318,7 @@
             list.Add(new CountryPrefix
             {
                 Code = code.ToString(),
-                Region = region,
-                Flag = GetFlag(region)
+                Region = region
             });
         }
 
@@ -328,19 +326,6 @@
             .OrderBy(x => x.Region == "PL" ? 0 : 1)
             .ThenBy(x => x.Region)
             .ToList();
-    }
-
-    private string GetFlag(string region)
-    {
-        if (string.IsNullOrEmpty(region) || region.Length != 2 || region == "ZZ") return "🌐";
-        try
-        {
-            return string.Concat(region.ToUpper().Select(c => char.ConvertFromUtf32(c + 0x1F1A5)));
-        }
-        catch
-        {
-            return "🌐";
-        }
     }
 
     private bool IsSubmitDisabled => _isSaving || !IsFormComplete();
@@ -579,7 +564,7 @@
         
         if (!string.IsNullOrEmpty(_phoneCountryCode) && !_countryPrefixes.Any(x => x.Code == _phoneCountryCode))
         {
-            _countryPrefixes.Add(new CountryPrefix { Code = _phoneCountryCode, Region = "ZZ", Flag = "🌐" });
+            _countryPrefixes.Add(new CountryPrefix { Code = _phoneCountryCode, Region = "ZZ" });
         }
     }
 
