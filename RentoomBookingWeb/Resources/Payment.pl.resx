@@ -319,6 +319,9 @@
   <data name="StaywellPopupDescription" xml:space="preserve">
     <value>Zeskanuj kod QR, aby natychmiast otworzyć panel StayWell przypisany do tej rezerwacji. W panelu sprawdzisz szczegóły pobytu, informacje organizacyjne, status usług dodatkowych i najważniejsze komunikaty.</value>
   </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Otwórz panel StayWell dla tej rezerwacji. W panelu sprawdzisz szczegóły pobytu, informacje organizacyjne, status usług dodatkowych i najważniejsze komunikaty.</value>
+  </data>
   <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
     <value>Przejdź do StayWell bezpośrednio</value>
   </data>

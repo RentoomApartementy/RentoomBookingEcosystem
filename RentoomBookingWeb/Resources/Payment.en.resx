@@ -315,6 +315,9 @@
   <data name="StaywellPopupDescription" xml:space="preserve">
     <value>Scan the QR code to instantly open the StayWell panel assigned to this reservation. In the panel, you can check your stay details, practical information, the status of additional services, and the most important messages.</value>
   </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Open the StayWell panel for this reservation. In the panel, you can check your stay details, practical information, additional services status, and the most important messages.</value>
+  </data>
   <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
     <value>Go to Staywell directly</value>
   </data>

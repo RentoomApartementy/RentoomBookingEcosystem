@@ -1275,6 +1275,22 @@
         var selectedOffer = GetOfferByType(offerType);
         var adults = int.TryParse(Adults, out var a) ? a : 1;
         var children = int.TryParse(Children, out var c) ? c : 0;
+        var hasEarlyCheckInAddon = _selectedAddons.Exists(a => a.AddonId == 40);
+        var hasLateCheckOutAddon = _selectedAddons.Exists(a => a.AddonId == 41);
+
+
+        var checkInTime = new StartReservationRequest().CheckInTime;
+        var checkOutTime = new StartReservationRequest().CheckOutTime;
+
+        if (hasEarlyCheckInAddon)
+        {
+            checkInTime = checkInTime.AddHours(-1);
+        }
+
+        if (hasLateCheckOutAddon)
+        {
+            checkOutTime = checkOutTime.AddHours(1);
+        }
 
         var request = new StartReservationRequest
         {
@@ -1282,8 +1298,8 @@
             ObjectItemId = _apartment.Items[0].Id.Value, 
             StartDate = start,
             EndDate = end,
-            //  CheckInTime = _apartment.CheckInTime, <<-- tu musisz zrobic logike ze jak jest addon  "WCZESNE ZAMELDOWANIE" to wstawic w checking time new TimeOnly(14,0)
-            //  CheckOutTime = _apartment.CheckOutTime, <<-- tu musisz zrobic logike ze jak jest addon  "POZNE WYMLEDOWANIE" to wstawic w checkout time new TimeOnly(12,0)
+            CheckInTime = checkInTime,
+            CheckOutTime = checkOutTime,
             Adults = adults,
             Children = children,
             SelectedOfferType = selectedOffer?.OfferType ?? offerType,

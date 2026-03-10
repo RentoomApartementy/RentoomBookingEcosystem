@@ -55,7 +55,7 @@
             }
             else
             {
-                Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji", true);
+                Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie", true);
             }
         }
         catch (Exception)
@@ -66,6 +66,6 @@
 
     private void GoToSummary()
     {
-        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji");
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
     }
 }

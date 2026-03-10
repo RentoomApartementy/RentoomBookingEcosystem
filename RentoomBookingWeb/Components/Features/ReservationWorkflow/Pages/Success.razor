@@ -23,7 +23,7 @@
         {
 
             await ReservationWorkflowService.MarkPaymentAsPaidAsync(ReservationTokenGuid);//<< for  testing : flag _idoApi.UseDummyIdoBooking
-            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie-transakcji/", true);
+            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie/", true);
         }
     }
 

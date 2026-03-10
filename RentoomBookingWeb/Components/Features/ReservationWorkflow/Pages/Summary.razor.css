@@ -96,6 +96,19 @@
     color: #E9A23B;
 }
 
+.info-bg {
+    background-color: #EFF6FF;
+    border: 1px solid #93C5FD;
+}
+
+.info-icon-color {
+    background-color: #DBEAFE !important;
+}
+
+.info-text-color {
+    color: #1D4ED8;
+}
+
 .danger-bg {
     background-color: #FEF2F2;
     border: 1px solid #FCA5A5;
@@ -132,6 +145,10 @@
 
 .status-box-text h4 {
     margin: 0 0 0.25rem 0;
+}
+
+.email-status-box .status-box-text span {
+    display: block;
 }
 
 .button-pending {
@@ -253,10 +270,27 @@
 }
 
 .staywell-popup-link {
+    display: none;
     align-self: flex-start;
     color: #1F5A41;
     font-weight: 600;
     text-decoration: none;
+}
+
+.staywell-popup-description-desktop {
+    display: inline;
+}
+
+.staywell-popup-description-mobile {
+    display: none;
+}
+
+.staywell-popup-link-desktop {
+    display: inline;
+}
+
+.staywell-popup-link-mobile {
+    display: none;
 }
 
 .staywell-popup-link:hover {
@@ -421,7 +455,7 @@
         background: #f59000;
     }
 
-@media (max-width: 800px) {
+@media (max-width: 800px), (hover: none) and (pointer: coarse) {
     .summary-wrapper {
         flex-direction: column;
     }
@@ -479,17 +513,77 @@
         gap: 0.75rem;
     }
 
+    .status-box.paid-status-box,
+    .status-box.email-status-box {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .status-box.paid-status-box .status-box-text,
+    .status-box.email-status-box .status-box-text {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .status-box.paid-status-box .status-box-text h4,
+    .status-box.email-status-box .status-box-text h4 {
+        margin-bottom: 0.2rem;
+        line-height: 1.2;
+    }
+
     .status-box .form-wrapper-title-icon-wrapper {
         width: 40px;
         height: 40px;
     }
 
     .staywell-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100vw - 32px);
+        max-width: 520px;
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+        z-index: 40;
+    }
+
+    .staywell-popup::before {
+        display: none;
+    }
+
+    .staywell-popup-content {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .staywell-qr-col {
         display: none;
     }
 
     .staywell-mobile-direct-link {
-        display: block;
+        display: none;
+    }
+
+    .staywell-popup-link {
+        display: inline-flex;
+    }
+
+    .staywell-popup-description-desktop {
+        display: none;
+    }
+
+    .staywell-popup-description-mobile {
+        display: inline;
+    }
+
+    .staywell-popup-link-desktop {
+        display: none;
+    }
+
+    .staywell-popup-link-mobile {
+        display: inline;
     }
 }
 

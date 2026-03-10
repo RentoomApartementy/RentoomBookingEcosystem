@@ -309,7 +309,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
                 {
                     await EnsurePaymentTotalsAsync(reservationGuid, record);
-                    var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie-transakcji";
+                    var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie";
 
 
                     return new PaymentInitResult

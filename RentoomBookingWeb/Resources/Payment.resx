@@ -315,6 +315,9 @@
   <data name="StaywellPopupDescription" xml:space="preserve">
     <value />
   </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value />
+  </data>
   <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
     <value />
   </data>
