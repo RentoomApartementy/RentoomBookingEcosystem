@@ -734,10 +734,13 @@
 }
 
 .addon-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 
+        "info price"
+        "info quantity";
+    column-gap: 1.5rem;
+    row-gap: 4px;
     padding: 10px 15px;
     border-radius: 8px;
     background-color: #f8f9fa;
@@ -745,7 +748,6 @@
     cursor: pointer;
     user-select: none;
     transition: all 0.2s ease;
-    flex-wrap: nowrap;
     height: 100%;
 }
 
@@ -761,9 +763,11 @@
 }
 
 .addon-info-col {
+    grid-area: info;
     display: flex;
     flex-direction: column;
-    flex: 0 1 auto;
+    justify-content: center;
+    min-width: 0;
 }
 
 .addon-name {
@@ -780,11 +784,11 @@
 }
 
 .price-box {
+    grid-area: price;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 12px;
-    flex: 0 0 auto;
     white-space: nowrap;
 }
 
@@ -832,11 +836,10 @@
 }
 
 .addon-quantity-col {
+    grid-area: quantity;
     display: flex;
-    flex: 0 0 auto;
     align-items: center;
     justify-content: flex-end;
-    margin-right: 15px;
     height: 36px;
 }
 
@@ -1172,7 +1175,33 @@
         min-width: unset;
     }
 
-    .addon-name, .addon-subtext {
-        white-space: normal;
+    .addon-label {
+        column-gap: 12px;
+        padding: 12px;
+    }
+
+    .addon-name {
+        font-size: 14px;
+    }
+
+    .price-box {
+        gap: 8px;
+    }
+
+    .addon-quantity-col:not(.empty) {
+        height: auto;
+    }
+
+    .quantity-selector {
+        width: 95px;
+        height: 30px;
+        background-color: #f0f0f0;
+        margin-top: 2px;
+    }
+
+    .quantity-btn {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
     }
 }
