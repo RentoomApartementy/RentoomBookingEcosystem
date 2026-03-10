@@ -324,4 +324,13 @@
   <data name="FillGuestData" xml:space="preserve">
     <value />
   </data>
+  <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
+    <value />
+  </data>
+  <data name="InvoiceYes" xml:space="preserve">
+    <value />
+  </data>
+  <data name="InvoiceNo" xml:space="preserve">
+    <value />
+  </data>
 </root>

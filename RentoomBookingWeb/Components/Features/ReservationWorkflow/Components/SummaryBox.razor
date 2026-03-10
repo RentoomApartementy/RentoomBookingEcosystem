@@ -76,6 +76,16 @@
                 }
             }
 
+            @if (Summary?.Invoice !=null)
+            {
+               
+                    <div class="summary-box-prices-text">
+                    <span>@Localizer["InvoiceSummaryBoxLabel"]</span>
+                    <b>@(Summary?.Invoice !=null? Localizer["InvoiceYes"]:Localizer["InvoiceNo"])</b>
+                    </div>
+               
+            }
+
 
         </div>
         <hr style="margin: 0;">
