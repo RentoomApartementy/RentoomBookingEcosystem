@@ -218,6 +218,12 @@
     z-index: 100;
     overflow-y: auto;
     overflow-x: hidden;
+    align-self: flex-start;
+    height: auto;
+}
+
+.info-box > div {
+    flex-shrink: 0;
 }
 
 .info-box::-webkit-scrollbar {
@@ -1042,7 +1048,7 @@
 
 .map-top-section {
     width: 100%;
-    min-height: 160px;
+    height: 200px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
