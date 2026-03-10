@@ -72,3 +72,19 @@
         opacity: 0.5;
         cursor: not-allowed;
     }
+
+.upsell-cart-bar-dismiss {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0 8px;
+    cursor: pointer;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.upsell-cart-bar-dismiss:hover {
+    opacity: 1;
+}

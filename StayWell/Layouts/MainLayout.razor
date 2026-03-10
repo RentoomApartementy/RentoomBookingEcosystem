@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using RentoomBooking.SharedClasses.Models;
 @using RentoomBooking.StayWell.Components;
+@using RentoomBooking.StayWell.Components.Upsells;
 @using RentoomBooking.StayWell.States
 @using RentoomBooking.StayWell.Services
 @inject ModalService ModalService
@@ -11,7 +12,6 @@
 @inject AmenitiesState AmenitiesState
 @inject LocksState LocksState
 @inject LayoutState LayoutState
-
 @inject IJSRuntime JSRuntime
 
 <div class="layout-page">
@@ -22,9 +22,9 @@
             </Header>
         </div>
     }
-        <div class="layout-body" id="main-body">
-            @Body
-        </div>
+    <div class="layout-body" id="main-body">
+        @Body
+    </div>
     @if (LayoutState.ShowFooter)
     {
         <div class="layout-footer-nav">
@@ -33,6 +33,8 @@
         </div>
     }
 </div>
+
+<UpsellFloatingCart Token="@ReservationState.CurrentToken" />
 
 <Toast @ref="_toastComponent" />
 
@@ -53,14 +55,11 @@
     </script>
 }
 
-
 @code {
     private bool _modalVisibility = false;
     private bool _modalHasImage = false;
     private string _modalTitle = string.Empty;
-
     private RenderFragment? _modalContent;
-
     private Toast? _toastComponent;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

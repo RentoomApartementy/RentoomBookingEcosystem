@@ -7,6 +7,7 @@
     perspective: 1200px;
     background-color: transparent;
     margin: 0;
+    padding: 8px;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -288,7 +289,7 @@
 .voucher-expand {
     border: none;
     border-radius: 999px;
-    background: #1f5a41;
+    background: var(--rentoom-green-dark, #1f5a41);
     color: #fff;
     padding: 0.55rem 1rem;
     font-weight: 600;
@@ -461,26 +462,125 @@
     transition: all 0.2s ease;
 }
 
+.staywell-theme .upsell-card-front,
+.staywell-theme .upsell-card-back {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+}
+
 .staywell-theme.is-selected .upsell-card-front,
 .staywell-theme.is-selected .upsell-card-back {
-    border: 2px solid #FF8C00;
+    border: 2px solid var(--rentoom-green-dark, #21573e);
+    box-shadow: 0 4px 18px rgba(33, 87, 62, 0.18);
+}
+
+.staywell-theme .upsell-badge {
+    background: var(--rentoom-green-dark, #21573e);
+    border-radius: 20px;
+}
+
+.staywell-theme .upsell-title {
+    font-weight: 800;
+    color: #1a1a1a;
+}
+
+.staywell-theme .current-price {
+    font-weight: 900;
+    color: var(--rentoom-green-dark, #21573e);
 }
 
 .staywell-theme .upsell-button {
-    background: linear-gradient(90deg, #FFB347 0%, #FF8C00 100%);
-    color: #000;
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 14px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    user-select: none;
+    transition: all 0.2s ease;
+    background: var(--rentoom-green-dark, #21573e);
+    color: #fff;
+    letter-spacing: 0.01em;
 }
 
-.staywell-theme.is-selected .upsell-button {
-    background: #333;
-    color: #fff;
+.staywell-theme.is_SELECTED .upsell-button {
+    background: rgba(50, 0, 5, 0.30);
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.staywell-theme .upsell-card-back {
+    background: rgba(33, 87, 62, 0.06);
+    border-top: 3px solid var(--rentoom-green-dark, #21573e);
+}
+
+.staywell-theme .upsell-back-content {
+    padding: 16px;
+    gap: 0.75rem;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.staywell-theme .upsell-back-content::-webkit-scrollbar {
+    display: none;
+}
+
+.staywell-theme .upsell-back-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--rentoom-green-dark, #21573e);
+    border-bottom: 1.5px solid rgba(33, 87, 62, 0.15);
+    padding-bottom: 8px;
+    margin-bottom: 2px;
+}
+
+.staywell-theme .upsell-back-description {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 8px 10px;
+    gap: 3px;
+    font-size: 0.82rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.staywell-theme .upsell-back-description-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--rentoom-green-dark, #21573e);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.staywell-theme .upsell-back-description-sub-title {
+    color: #444;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.staywell-theme .tile-details-link {
+    color: var(--rentoom-green-dark, #21573e);
+}
+
+.staywell-theme .voucher-expand {
+    background: var(--rentoom-green-dark, #21573e);
 }
 
 @media (max-width: 768px) {
-    .upsell-tile-container {
+    .staywell-theme.upsell-tile-container {
         width: 100%;
         max-width: 420px;
         margin: 0 auto;
         height: 420px;
+    }
+
+    .rentoom-theme.upsell-tile-container {
+        width: 240px;
+        margin: 0 auto;
+        height: 360px;
     }
 }

@@ -5,11 +5,11 @@
 @using RentoomBooking.SharedClasses.Models.StayWell
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @inject IJSRuntime JSRuntime
-@inject Services.ModalService ModalService
+@* @inject Services.ModalService ModalService
 @inject Services.ToastService ToastService
 @inject States.ReservationState ReservationState
 @inject States.RegistrationCardState RegistrationCardState
-@inject States.TermsState TermsState
+@inject States.TermsState TermsState *@
 @inherits Models.PageBase
 
 <PageTitle>Regulamin i Zameldowanie</PageTitle>
@@ -115,9 +115,9 @@
 @code {
     private enum ViewState { Steps, Terms, RegistrationCard }
 
-    private readonly (string Image, string Text)[] steps = new[]
+    private (string Image, string Text)[] steps => new[]
     {
-        ("/images/clock.png", "Doba hotelowa trwa od godziny 15:00 w dniu przyjazdu do godziny 11:00 w dniu wyjazdu."),
+        ("/images/clock.png", $"Doba hotelowa trwa od godziny {ReservationState.CheckInTime:HH\\:mm} w dniu przyjazdu do godziny {ReservationState.CheckOutTime:HH\\:mm} w dniu wyjazdu."),
         ("/images/broken-window.png", "Akceptuję obowiązek zgłoszenia wszelkich szkód i uwag przy zameldowaniu."),
         ("/images/no-smoking.png", "Akceptuję zakaz palenia wyrobów tytoniowych i elektronicznych papierosów wewnątrz obiektu."),
         ("/images/party.png", "Zakaz organizowania imprez oraz przyjmowania osób trzecich nieujętych w rezerwacji.")

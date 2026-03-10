@@ -12,6 +12,7 @@
 @inject IStringLocalizer<PurchasedUpsellsPage> UpsellLocalizer;
 @inject UpsellCartState UpsellCartState
 @inherits Models.PageBase
+@implements IDisposable
 
 @if (AvailableUpsellsState.IsLoading)
 {
@@ -27,25 +28,19 @@ else if (AvailableUpsellsState.AvailableUpsells.Count == 0)
 }
 else
 {
-    <UpsellList AvailableUpsellsList="AvailableUpsellsState.AvailableUpsells"
+    <UpsellList @key="_upsellListKey"
+                AvailableUpsellsList="AvailableUpsellsState.AvailableUpsells"
                 ReservationContext="_reservationContext"
                 Theme="staywell-theme"
                 Texts="_texts"
                 InitialSelection="_cartSelected"
                 OnSelectionChanged="HandleSelectionChanged" />
-
-    <RentoomBooking.StayWell.Components.Upsells.UpsellFloatingCart
-        SelectedCount="_cartSelected.Count"
-        Total="TotalUpsellsPrice"
-        Currency="@(_reservationContext.Currency ?? "PLN")"
-        CtaText="Przejdź do koszyka"
-        IsBusy="false"
-        OnCtaClick="GoToCartAsync" />
 }
 
 @code {
     private List<SelectedUpsellDto> _cartSelected = new();
     private ReservationPricingContext _reservationContext = new();
+    private int _upsellListKey = 0;
 
     private UpsellTextConfig _texts = new()
     {
@@ -53,64 +48,14 @@ else
         SubTitle = "Dostępne dodatki do kupienia"
     };
 
-    /*   private readonly UpsellTextConfig _texts = new ()
-    {
-        Title = UpsellLocalizer["ListTitle"],
-            SubTitle = UpsellLocalizer["ListSubtitle"],
-            BadgeInfo = UpsellLocalizer["BadgeInfo"],
-            NightsText = UpsellLocalizer["Nights"],
-            GuestsText = UpsellLocalizer["Guests"],
-            DeleteText = UpsellLocalizer["Delete"],
-            AddText = UpsellLocalizer["Add"],
-            DescriptionText = UpsellLocalizer["Description"],
-            TermsTitleText = UpsellLocalizer["TermsTitle"],
-            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
-            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
-            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
-            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
-            PriceLabel = UpsellLocalizer["Price"],
-        };
-        */
-
-    private decimal TotalUpsellsPrice
-    {
-        get
-        {
-            if (_reservationContext is null || _cartSelected.Count == 0 || AvailableUpsellsState.AvailableUpsells.Count == 0)
-            {
-                return 0m;
-            }
-
-            decimal total = 0m;
-            foreach (var selected in _cartSelected)
-            {
-                var tile = AvailableUpsellsState.AvailableUpsells.FirstOrDefault(item => item.PartnerServiceId == selected.PartnerServiceId);
-                if (tile is null)
-                {
-                    continue;
-                }
-
-                var quantity = Math.Max(1, selected.Quantity);
-                total += UpsellPricingCalculator.CalculateTotal(
-                    tile.PricingModel,
-                    tile.Price,
-                    _reservationContext.Nights,
-                    _reservationContext.TotalGuests,
-                    quantity);
-            }
-
-            return total;
-        }
-    }
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
+        UpsellCartState.OnCleared += OnCartCleared;
+
         if (string.IsNullOrWhiteSpace(Token))
-        {
             return;
-        }
 
         var locale = string.IsNullOrWhiteSpace(CultureInfo.CurrentUICulture.Name)
             ? "pl-PL"
@@ -119,6 +64,19 @@ else
         _reservationContext = BuildReservationPricingContext();
         _cartSelected = UpsellCartState.PendingUpsells.ToList();
         await AvailableUpsellsState.EnsureLoadedAsync(Token, locale);
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        UpsellCartState.OnCleared -= OnCartCleared;
+    }
+
+    private void OnCartCleared()
+    {
+        _cartSelected = [];
+        _upsellListKey++;
+        InvokeAsync(StateHasChanged);
     }
 
     private ReservationPricingContext BuildReservationPricingContext()
@@ -136,14 +94,9 @@ else
 
         var currency = reservationDetails?.currency;
         if (string.IsNullOrWhiteSpace(currency))
-        {
             currency = reservation?.Client?.Currency;
-        }
-
         if (string.IsNullOrWhiteSpace(currency))
-        {
             currency = "PLN";
-        }
 
         return new ReservationPricingContext
         {
@@ -158,14 +111,6 @@ else
     private void HandleSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
     {
         _cartSelected = selectedUpsells;
-    }
-
-    private void GoToCartAsync()
-    {
-        if (_cartSelected.Count == 0)
-        {
-            return;
-        }
 
         var tiles = _cartSelected
             .Select(s => AvailableUpsellsState.AvailableUpsells
@@ -204,7 +149,5 @@ else
         }).ToList();
 
         UpsellCartState.SetFromSummary(lines, _reservationContext.Currency);
-
-        Navigation.NavigateTo($"/reservation/{Token}/UpsellsCartPage");
     }
 }

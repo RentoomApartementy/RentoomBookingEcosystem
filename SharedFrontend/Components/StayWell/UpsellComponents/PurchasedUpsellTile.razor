@@ -10,24 +10,6 @@
         <div class="upsell-card-front">
             <div class="upsell-header" @onclick="ToggleFlip">
                 <img src="@StayWellBannerUrl" alt="@Tile.Title" class="upsell-image" />
-                
-                @if (Tile.Discount.HasValue && Tile.PricingDiscountType != PartnerServiceDiscountType.None)
-                {
-                    <div class="upsell-badge">
-                        @if (Tile.PricingDiscountType == PartnerServiceDiscountType.Percent)
-                        {
-                            <span>-@((Tile.Discount.Value * 100).ToString("F0"))%</span>
-                        }
-                        else
-                        {
-                            <span>-@Tile.Discount.Value.ToString("F2") @Tile.Currency</span>
-                        }
-                    </div>
-                }
-
-                 <div class="upsell-details-overlay">
-                    <span>@Texts.BadgeInfo</span>
-                </div>
             </div>
 
             <div class="upsell-content">
@@ -48,18 +30,6 @@
                         <span class="separator">•</span>
                         <span>@Context.TotalGuests @Texts.GuestsText</span>
                     </div>
-                </div>
-                
-                
-                <div class="upsell-pricing">
-                    <div class="upsell-total">
-                        <span class="current-price">@Total.ToString("F2") @Currency</span>
-                        @if (Tile.Discount.HasValue && OldPrice > Total)
-                        {
-                            <span class="old-price">@OldPrice.ToString("F2") @Currency</span>
-                        }
-                    </div>
-                    <div class="upsell-unit-info">@DisplayText</div>
                 </div>
 
                 <button type="button" class="tile-details-link" @onclick="ToggleDetails" @onclick:stopPropagation="true">Szczegóły</button>
@@ -96,7 +66,7 @@
                     }
                 </div>
 
-                <button type="button" class="voucher-expand" @onclick="OpenFullscreen" @onclick:stopPropagation>
+                <button type="button" class="voucher-expand" @onclick="HandleEnlargeImage" @onclick:stopPropagation>
                     Powiększ
                 </button>
 
@@ -194,6 +164,8 @@
     [Parameter] public int Quantity { get; set; } = 1;
     [Parameter] public bool IsSelected { get; set; }
     [Parameter] public EventCallback<bool> OnToggled { get; set; }
+
+    [Parameter] public EventCallback<string[]> OnEnlargeImage { get; set; }
     
     [Parameter] 
     public UpsellTextConfig Texts { get; set; } = new();
@@ -246,6 +218,21 @@
         return $"data:image/png;base64,{Convert.ToBase64String(bytes)}";
     }
 
+    private async Task HandleEnlargeImage()
+    {
+        if (!string.IsNullOrWhiteSpace(_qrDataUri))
+        {
+            await OnEnlargeImage.InvokeAsync([_qrDataUri]);
+        }
+        else if (OnEnlargeImage.HasDelegate && !string.IsNullOrWhiteSpace(StayWellBannerUrl))
+        {
+            await OnEnlargeImage.InvokeAsync([StayWellBannerUrl]);
+        }
+        else
+        {
+            OpenFullscreen();
+        }
+    }
 
     private decimal Total => UpsellPricingCalculator.CalculateTotal(
         Tile.PricingModel,

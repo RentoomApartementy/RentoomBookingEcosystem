@@ -36,12 +36,13 @@
                     {
                         var isSelected = IsSelected(upsell.UpsellDefinitionSnapshot);
                         <PurchasedUpsellTile Tile="upsell.UpsellDefinitionSnapshot" Voucher="upsell.Voucher"
-                                    Context="ReservationContext"
-                                    Quantity="1"
-                                    IsSelected="true"
-                                             OnToggled="@((bool selected) => HandleToggle(upsell.UpsellDefinitionSnapshot, selected))"
-                                    Texts="Texts"/>
-                    }
+                        Context="ReservationContext"
+                        Quantity="1"
+                        IsSelected="true"
+                        OnToggled="@((bool selected) => HandleToggle(upsell.UpsellDefinitionSnapshot, selected))"
+                        OnEnlargeImage="@(args => OnEnlargeImage.InvokeAsync(args))"
+                        Texts="Texts"/>
+                                        }
                 </CascadingValue>
             }
         </div>
@@ -63,6 +64,7 @@
     [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
     [Parameter] public string Theme { get; set; } = "rentoom-theme";
     [Parameter] public UpsellTextConfig Texts { get; set; } = new();
+    [Parameter] public EventCallback<string[]> OnEnlargeImage { get; set; }
 
     private readonly List<SelectedUpsellDto> _selectedUpsells = new();
     private ElementReference _scrollContainer;
@@ -90,6 +92,4 @@
     {
        //TODO as option: show popup with QR CODE AND HUMAN READABLE CODE ??
     }
-
- 
 }

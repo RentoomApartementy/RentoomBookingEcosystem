@@ -2,20 +2,26 @@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @using System.Globalization
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
 @inject NavigationManager Navigation
+@inject UpsellCartState UpsellCartState
 @inherits Models.PageBase
+@implements IDisposable
 
 <PageTitle>Manage Stay</PageTitle>
 
 <section class="reservation-section">
     <div class="reservation-section__content">
-        <div class="manage-grid">
-            <ManageTile Category="Pomoc"
-                        Title="Zgłoś problem"
-                        Icon="/icons/frown.svg"
-                        Description="Usterka, pytanie lub prośba do obsługi."
-                        ShowPrice="false"
-                        OnClick="@(() => Navigation.NavigateTo($"reservation/{Token}/ReportPage"))" />
+        <div class="manage-grid" style="@(!UpsellCartState.IsEmpty ? "padding-bottom: 160px;" : "")">
+            <div style="margin-bottom: 50px;">
+                <ManageTile Category="Pomoc"
+                            Title="Zgłoś problem"
+                            Icon="/icons/frown.svg"
+                            ActionIcon="/icons/chevron-right.svg"
+                            Description="Usterka, pytanie lub prośba do obsługi."
+                            ShowPrice="false"
+                            OnClick="@(() => Navigation.NavigateTo($"reservation/{Token}/ReportPage"))" />
+            </div>
             @if (ApartmentState.IsLoading || ReservationState.IsLoading)
             {
                 <div class="skeleton skeleton--tile"></div>
@@ -27,29 +33,72 @@
             {
                 @if (ApartmentState.CurrentApartment?.Addons is not null)
                 {
-                    var AvailAddons = ApartmentState.CurrentApartment.Addons.Where(a => a.Id != AddonServiceFeeId && a.Id != AddonCleaningFeeId && IsAddonAvailable(a.Id));
-                   foreach (var addon in AvailAddons)
+                    var allAddons = ApartmentState.CurrentApartment.Addons
+                        .Where(a => a.Id != AddonServiceFeeId && a.Id != AddonCleaningFeeId)
+                        .ToList();
+
+                    var activeAddons = allAddons.Where(a => IsAddonAvailable(a.Id) && !IsPurchasedAddon(a.Id)).ToList();
+                    var purchasedAddons = allAddons.Where(a => IsPurchasedAddon(a.Id)).ToList();
+
+                    foreach (var addon in activeAddons)
                     {
                         var definedAddon = addon.Id.HasValue
-                        ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
-                        : null;
+                            ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
+                            : null;
                         var details = definedAddon?.AddonDefinition?.Details
-                        .FirstOrDefault(d => string.Equals(d.Lang, CurrentAddonsLanguage, StringComparison.OrdinalIgnoreCase));
+                            .FirstOrDefault(d => string.Equals(d.Lang, CurrentAddonsLanguage, StringComparison.OrdinalIgnoreCase));
                         var title = details?.Name ?? addon.Name ?? "Dodatek";
                         var description = details?.Description ?? string.Empty;
-                        var priceText = definedAddon is not null ? $"+{definedAddon.PriceGross:#.00} PLN" : string.Empty;
+                        var priceText = definedAddon is not null ? $"{definedAddon.PriceGross:#.00} PLN" : string.Empty;
                         var priceInfo = details?.PaymentTypeShortDescription ?? string.Empty;
-                        var icon = addon.Id.HasValue && AddonIconMap.TryGetValue(addon.Id.Value, out var iconPath)
-                        ? iconPath
-                        : string.Empty;
+                        var addonId = addon.Id;
+                        var isSelected = addonId.HasValue && UpsellCartState.IsAddonSelected(addonId.Value);
+                        var allowQuantity = definedAddon is not null && AllowsQuantitySelection(definedAddon.PaymentType);
+                        var maxQty = addonId.HasValue && AddonMaxQuantityMap.TryGetValue(addonId.Value, out var max) ? max : (int?)null;
+                        var currentQty = addonId.HasValue ? UpsellCartState.GetAddonQuantity(addonId.Value) : 1;
 
                         <ManageTile Category="Dodatek"
                                     Title="@title"
-                                    Icon="@icon"
+                                    Icon=""
+                                    ActionIcon=""
                                     Description="@description"
                                     ShowPrice="@(definedAddon is not null)"
                                     PriceText="@priceText"
-                                    PriceInfo="@priceInfo" />
+                                    PriceInfo="@priceInfo"
+                                    IsSelected="@isSelected"
+                                    ShowQuantitySelector="@allowQuantity"
+                                    Quantity="@currentQty"
+                                    MaxQuantity="@maxQty"
+                                    OnQuantityChanged="@((qty) => UpsellCartState.SetAddonQuantity(addonId!.Value, qty))"
+                                    OnClick="@(() => ToggleAddon(addonId, title, description, priceText, priceInfo, definedAddon?.PriceGross, allowQuantity, maxQty))" />
+                    }
+                    @if (purchasedAddons.Count > 0)
+                    {
+                        <span class="manage-purchased-label">Zakupione</span>
+
+                        foreach (var addon in purchasedAddons)
+                        {
+                            var definedAddon = addon.Id.HasValue
+                                ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
+                                : null;
+                            var details = definedAddon?.AddonDefinition?.Details
+                                .FirstOrDefault(d => string.Equals(d.Lang, CurrentAddonsLanguage, StringComparison.OrdinalIgnoreCase));
+                            var title = details?.Name ?? addon.Name ?? "Dodatek";
+                            var description = details?.Description ?? string.Empty;
+                            var priceText = definedAddon is not null ? $"{definedAddon.PriceGross:#.00} PLN" : string.Empty;
+                            var priceInfo = details?.PaymentTypeShortDescription ?? string.Empty;
+
+                            <ManageTile Category="Zakupiony"
+                                        Title="@title"
+                                        Icon=""
+                                        ActionIcon=""
+                                        Description="@description"
+                                        ShowPrice="@(definedAddon is not null)"
+                                        PriceText="@priceText"
+                                        PriceInfo="@priceInfo"
+                                        Disabled="true"
+                                        IsPurchased="true" />
+                        }
                     }
                 }
             }
@@ -60,50 +109,71 @@
 @code {
     private const int AddonServiceFeeId = 2;
     private const int AddonCleaningFeeId = 8;
-    private const int EarlyCheckInAddonId = 18;
-    private const int LateCheckOutAddonId = 10;
+    private const int EarlyCheckInAddonId = 40;
+    private const int LateCheckOutAddonId = 41;
     private static readonly TimeSpan LateCheckOutCutoffTime = new(20, 0, 0);
 
-    private static readonly Dictionary<string, string> AddonsLanguageMap = new()
-    {
-        ["pl-PL"] = "PL",
-        ["en-US"] = "EN"
-    };
 
-    private static readonly Dictionary<int, string> AddonIconMap = new()
+    // addonId -> maxQuantity
+    private static readonly Dictionary<int, int> AddonMaxQuantityMap = new()
     {
-        [2] = "/icons/calendar-plus.svg",
-        [3] = "/icons/baby.svg",
-        [7] = "/icons/baby.svg",
-        [8] = "/icons/brush-cleaning.svg",
-        [9] = "/icons/calendar-plus.svg",
-        [10] = "/icons/alarm-clock-plus.svg",
-        [11] = "/icons/calendar-plus.svg",
-        [15] = "/icons/flower-2.svg",
-        [16] = "/icons/calendar-plus.svg",
-        [17] = "/icons/calendar-plus.svg",
-        [18] = "/icons/alarm-clock-minus.svg",
-        [19] = "/icons/calendar-plus.svg",
-        [20] = "/icons/crown.svg",
-        [26] = "/icons/door-closed.svg",
-        [29] = "/icons/calendar-plus.svg",
-        [30] = "/icons/calendar-plus.svg",
-        [31] = "/icons/door-closed.svg",
-        [33] = "/icons/calendar-plus.svg",
-        [34] = "/icons/brush-cleaning.svg",
-        [35] = "/icons/dog.svg",
-        [36] = "/icons/baby.svg"
+        [42] = 2,
+        [43] = 1
     };
 
     private string CurrentAddonsLanguage =>
-        AddonsLanguageMap.GetValueOrDefault(CultureInfo.CurrentUICulture.Name, "PL");
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpperInvariant();
+
+    private static bool AllowsQuantitySelection(AddonPaymentType paymentType) =>
+        paymentType is AddonPaymentType.PayPerAmount or AddonPaymentType.PayPerAmountPerNight;
+
+    private bool IsPurchasedAddon(int? addonId)
+    {
+        if (!addonId.HasValue)
+            return false;
+
+        return addonId.Value switch
+        {
+            EarlyCheckInAddonId => ReservationState.HasEarlyCheckIn,
+            LateCheckOutAddonId => ReservationState.HasLateCheckOut,
+            _ => false
+        };
+    }
+
+    protected override void OnInitialized()
+    {
+        UpsellCartState.OnChange += StateHasChanged;
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        UpsellCartState.OnChange -= StateHasChanged;
+    }
+
+    private void ToggleAddon(int? addonId, string title, string description, string priceText, string priceInfo, decimal? priceGross, bool allowQuantity, int? maxQuantity)
+    {
+        if (!addonId.HasValue)
+            return;
+
+        UpsellCartState.ToggleAddon(new UpsellCartState.CartAddonItem(
+            IdoBookingAddonId: addonId.Value,
+            Title: title,
+            Description: description,
+            Icon: string.Empty,
+            PriceText: priceText,
+            PriceInfo: priceInfo,
+            PriceGross: priceGross,
+            Quantity: 1,
+            AllowQuantitySelection: allowQuantity,
+            MaxQuantity: maxQuantity
+        ));
+    }
 
     private bool IsAddonAvailable(int? addonId)
     {
         if (!addonId.HasValue)
-        {
             return true;
-        }
 
         return addonId.Value switch
         {
@@ -117,9 +187,7 @@
     {
         var checkoutDate = ReservationState.CurrentReservation?.Reservation?.ReservationDetails?.getDateTo();
         if (checkoutDate is null)
-        {
             return true;
-        }
 
         var cutoff = checkoutDate.Value.Date.AddDays(-1).Add(LateCheckOutCutoffTime);
         return DateTime.Now <= cutoff;

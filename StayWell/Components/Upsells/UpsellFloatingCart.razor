@@ -1,27 +1,71 @@
 ﻿@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.StayWell.States
+@inject UpsellCartState UpsellCartState
+@inject NavigationManager Navigation
+@implements IDisposable
 
-@if (SelectedCount > 0)
+@if (!UpsellCartState.IsEmpty && IsOnAllowedPage)
 {
     <div class="upsell-cart-bar-container">
         <div class="upsell-cart-bar">
+            <button class="upsell-cart-bar-dismiss" @onclick="DismissCart" title="Wyczyść koszyk">
+                <img style="filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(317deg) brightness(107%) contrast(102%);"
+                     src="/icons/x.svg" />
+            </button>
             <div class="upsell-cart-bar-info">
-                <span class="upsell-cart-bar-count">dodatki: @SelectedCount</span>
-                <span class="upsell-cart-bar-total">@Total.ToString("F2") @Currency</span>
+                <span class="upsell-cart-bar-count">dodatki: @UpsellCartState.TotalQuantity</span>
+                @if (UpsellCartState.TotalCombinedPrice > 0)
+                {
+                    <span class="upsell-cart-bar-total">
+                        @UpsellCartState.TotalCombinedPrice.ToString("F2") @UpsellCartState.Currency
+                    </span>
+                }
             </div>
-            <button class="upsell-cart-bar-btn"
-                    disabled="@IsBusy"
-                    @onclick="OnCtaClick">
-                @CtaText
+            <button class="upsell-cart-bar-btn" @onclick="GoToCart">
+                Przejdź do koszyka
             </button>
         </div>
     </div>
 }
 
 @code {
-    [Parameter] public int SelectedCount { get; set; }
-    [Parameter] public decimal Total { get; set; }
-    [Parameter] public string Currency { get; set; } = "PLN";
-    [Parameter] public string CtaText { get; set; } = "Zobacz i opłać";
-    [Parameter] public bool IsBusy { get; set; }
-    [Parameter] public EventCallback OnCtaClick { get; set; }
+    [Parameter] public string Token { get; set; } = string.Empty;
+
+    private static readonly string[] AllowedPageSegments =
+    [
+        "/HomePage",
+        "/ManageStayPage",
+        "/Vouchers",
+        "/VouchersPage"
+    ];
+
+    private bool IsOnAllowedPage =>
+        AllowedPageSegments.Any(segment =>
+            Navigation.Uri.Contains(segment, StringComparison.OrdinalIgnoreCase))
+        || Navigation.Uri.TrimEnd('/').EndsWith($"/reservation/{Token}", StringComparison.OrdinalIgnoreCase);
+
+    protected override void OnInitialized()
+    {
+        UpsellCartState.OnChange += StateHasChanged;
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    public void Dispose()
+    {
+        UpsellCartState.OnChange -= StateHasChanged;
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void GoToCart() =>
+        Navigation.NavigateTo($"/reservation/{Token}/UpsellsCartPage");
+
+    private void DismissCart()
+    {
+        UpsellCartState.Clear();
+    }
 }

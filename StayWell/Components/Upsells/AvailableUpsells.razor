@@ -58,29 +58,18 @@
     }
 </div>
 
-<UpsellFloatingCart
-    SelectedCount="_cartSelected.Count"
-    Total="TotalPrice"
-    Currency="@_reservationContext.Currency"
-    CtaText="@CtaText"
-    IsBusy="_isBusy"
-    OnCtaClick="NavigateToVouchersPage" />
-
 @code {
     [Parameter, EditorRequired] public string Token { get; set; } = string.Empty;
     [Parameter] public ReservationPricingContext ReservationContext { get; set; } = new();
     [Parameter] public string Title { get; set; } = "Dostępne dodatki";
-    [Parameter] public string CtaText { get; set; } = "Zobacz i opłać";
     [Parameter] public string Theme { get; set; } = "staywell-theme";
     [Parameter] public int MaxItems { get; set; } = 3;
     [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
 
-    private List<SelectedUpsellDto> _cartSelected = new();
     private ReservationPricingContext _reservationContext = new();
     private ElementReference _scrollRef;
     private DotNetObjectReference<AvailableUpsells>? _selfRef;
     private int _activeId = -1;
-    private bool _isBusy;
     private bool _jsInitialized;
 
     private int SkeletonCount => MaxItems > 0 ? MaxItems : 4;
@@ -89,6 +78,12 @@
         MaxItems > 0
             ? AvailableUpsellsState.AvailableUpsells.Take(MaxItems)
             : AvailableUpsellsState.AvailableUpsells;
+
+    private bool IsSelected(int partnerServiceId) =>
+        UpsellCartState.PendingUpsells.Any(x => x.PartnerServiceId == partnerServiceId);
+
+    private int GetQuantity(int partnerServiceId) =>
+        UpsellCartState.PendingUpsells.FirstOrDefault(x => x.PartnerServiceId == partnerServiceId)?.Quantity ?? 1;
 
     private readonly UpsellTextConfig _texts = new()
     {
@@ -110,13 +105,13 @@
 
     protected override void OnInitialized()
     {
-        AvailableUpsellsState.OnChange += OnStateChanged;
+        AvailableUpsellsState.OnChange += OnAvailableUpsellsStateChanged;
+        UpsellCartState.OnChange += OnCartStateChanged;
     }
 
     protected override async Task OnParametersSetAsync()
     {
         _reservationContext = ReservationContext;
-        _cartSelected = UpsellCartState.PendingUpsells.ToList();
 
         if (!string.IsNullOrWhiteSpace(Token))
         {
@@ -148,15 +143,19 @@
         StateHasChanged();
     }
 
-    private void OnStateChanged()
+    private void OnAvailableUpsellsStateChanged()
     {
         _jsInitialized = false;
         InvokeAsync(StateHasChanged);
     }
 
+    private void OnCartStateChanged() =>
+        InvokeAsync(StateHasChanged);
+
     public void Dispose()
     {
-        AvailableUpsellsState.OnChange -= OnStateChanged;
+        AvailableUpsellsState.OnChange -= OnAvailableUpsellsStateChanged;
+        UpsellCartState.OnChange -= OnCartStateChanged;
         try { JS.InvokeVoidAsync("upsellStrip.destroy", _scrollRef); } catch { }
         _selfRef?.Dispose();
     }
@@ -169,62 +168,23 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private bool IsSelected(int partnerServiceId) =>
-        _cartSelected.Any(x => x.PartnerServiceId == partnerServiceId);
-
-    private int GetQuantity(int partnerServiceId) =>
-        _cartSelected.FirstOrDefault(x => x.PartnerServiceId == partnerServiceId)?.Quantity ?? 1;
-
     private async Task HandleToggle(int partnerServiceId, bool isSelected)
     {
+        var current = UpsellCartState.PendingUpsells.ToList();
+
         if (isSelected)
         {
-            if (!_cartSelected.Any(x => x.PartnerServiceId == partnerServiceId))
-            {
-                _cartSelected.Add(new SelectedUpsellDto
-                {
-                    PartnerServiceId = partnerServiceId,
-                    Quantity = 1
-                });
-            }
+            if (!current.Any(x => x.PartnerServiceId == partnerServiceId))
+                current.Add(new SelectedUpsellDto { PartnerServiceId = partnerServiceId, Quantity = 1 });
         }
         else
         {
-            _cartSelected.RemoveAll(x => x.PartnerServiceId == partnerServiceId);
+            current.RemoveAll(x => x.PartnerServiceId == partnerServiceId);
         }
 
-        UpsellCartState.SetPendingUpsells(_cartSelected);
+        UpsellCartState.SetPendingUpsells(current);
 
         if (OnSelectionChanged.HasDelegate)
-        {
-            await OnSelectionChanged.InvokeAsync(_cartSelected);
-        }
-    }
-
-    private decimal TotalPrice
-    {
-        get
-        {
-            decimal total = 0m;
-            foreach (var selected in _cartSelected)
-            {
-                var tile = AvailableUpsellsState.AvailableUpsells
-                    .FirstOrDefault(t => t.PartnerServiceId == selected.PartnerServiceId);
-                if (tile is null) continue;
-
-                total += UpsellPricingCalculator.CalculateTotal(
-                    tile.PricingModel,
-                    tile.Price,
-                    _reservationContext.Nights,
-                    _reservationContext.TotalGuests,
-                    Math.Max(1, selected.Quantity));
-            }
-            return total;
-        }
-    }
-
-    private void NavigateToVouchersPage()
-    {
-        NavigationManager.NavigateTo($"/reservation/{Token}/UpsellsCartPage");
+            await OnSelectionChanged.InvokeAsync(current);
     }
 }

@@ -105,3 +105,12 @@
     font-size: 0.85rem;
     color: rgba(0, 0, 0, 0.55);
 }
+
+.manage-purchased-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 16px;
+}

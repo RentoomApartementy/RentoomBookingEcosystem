@@ -16,7 +16,7 @@
 
 <PageTitle>Koszyk - Podsumowanie</PageTitle>
 
-@if (!UpsellCartState.Items.Any())
+@if (UpsellCartState.IsEmpty)
 {
     <div class="manage-tile">
         <div class="cart-empty">
@@ -38,81 +38,165 @@ else
                 <img class="reservation-field__icon" src="/icons/shopping-cart.svg" />
                 Twój Koszyk
             </h3>
-            <span class="manage-tile__category"
-                  style="margin-left: 10px; margin-bottom: 8px; display: block;">
-                WYBRANE USŁUGI
-            </span>
-            @foreach (var (item, index) in UpsellCartState.Items.Select((i, idx) => (i, idx)))
+
+            @if (UpsellCartState.Items.Any())
             {
-                <div class="cart-item-tile">
-                    <div class="cart-item-layout">
-                        <div class="cart-item__top">
-                            <div style="display: flex; align-items: flex-start; gap: 12px;">
-                                @{
-                                    var imageUrl = UpsellCartState.GetBannerUrl(
-                                        item.PartnerServiceId,
-                                        PartnerServiceBannerPlacementType.StayWell
-                                    );
-                                }
-                                @if (!string.IsNullOrWhiteSpace(imageUrl))
-                                {
-                                    <img class="cart-item__thumb" src="@imageUrl" alt="@item.Title" />
-                                }
-                                else
-                                {
-                                    <div class="cart-item__thumb cart-item__thumb--placeholder"></div>
-                                }
-                                <div style="display: flex; flex-direction: column;">
-                                    <span class="manage-tile__title">@item.Title</span>
-                                    @if (!string.IsNullOrWhiteSpace(item.DisplayText))
+                <span class="manage-tile__category"
+                      style="margin-left: 10px; margin-bottom: 8px; display: block;">
+                    VOUCHERY I USŁUGI
+                </span>
+                @foreach (var item in UpsellCartState.Items)
+                {
+                    <div class="cart-item-tile">
+                        <div class="cart-item-layout">
+                            <div class="cart-item__top">
+                                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                                    @{
+                                        var imageUrl = UpsellCartState.GetBannerUrl(
+                                            item.PartnerServiceId,
+                                            PartnerServiceBannerPlacementType.StayWell
+                                        );
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(imageUrl))
                                     {
-                                        <span class="cart-item__display-text">@item.DisplayText</span>
+                                        <img class="cart-item__thumb" src="@imageUrl" alt="@item.Title" />
+                                    }
+                                    else
+                                    {
+                                        <div class="cart-item__thumb cart-item__thumb--placeholder"></div>
+                                    }
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span class="manage-tile__title">@item.Title</span>
+                                        @if (!string.IsNullOrWhiteSpace(item.DisplayText))
+                                        {
+                                            <span class="cart-item__display-text">@item.DisplayText</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cart-item__bottom">
+                                <div class="cart-item__qty-info">
+                                    <span>Ilość: <strong>@item.Quantity</strong></span>
+                                    @if (item.Nights > 0)
+                                    {
+                                        <span>Noce: <strong>@item.Nights</strong></span>
+                                    }
+                                </div>
+                                <div class="cart-item__price-section">
+                                    @{
+                                        var visual = UpsellCartState.Visuals.GetValueOrDefault(item.PartnerServiceId);
+                                        var originalTotal = visual switch
+                                        {
+                                            { PricingDiscountType: PartnerServiceDiscountType.Percent, Discount: < 1 and > 0 }
+                                                => item.LineTotalGross / (1 - visual.Discount!.Value),
+                                            { PricingDiscountType: PartnerServiceDiscountType.FixedAmount, Discount: not null }
+                                                => item.LineTotalGross + visual.Discount.Value,
+                                            _ => (decimal?)null
+                                        };
+                                    }
+                                    @if (originalTotal.HasValue)
+                                    {
+                                        <span class="price-old">
+                                            @originalTotal.Value.ToString("F2") @UpsellCartState.Currency
+                                        </span>
+                                    }
+                                    <div class="manage-tile__price">
+                                        @item.LineTotalGross.ToString("F2")
+                                        <small>@UpsellCartState.Currency</small>
+                                    </div>
+                                    <span class="price-unit-info">
+                                        @item.UnitPriceGross.ToString("F2") / jedn.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="cart-item__remove"
+                                @onclick="() => RemoveItem(item.PartnerServiceId)"
+                                title="Usuń z koszyka">
+                           <img src="/icons/x.svg"/>
+                        </button>
+                    </div>
+                }
+            }
+
+            @if (UpsellCartState.Items.Any() && UpsellCartState.AddonItems.Any())
+            {
+                <div class="summary-divider" style="margin: 16px 10px;"></div>
+            }
+
+            @if (UpsellCartState.AddonItems.Any())
+            {
+                <span class="manage-tile__category"
+                      style="margin-left: 10px; margin-bottom: 8px; display: block;">
+                    DODATKI DO REZERWACJI
+                </span>
+                @foreach (var addon in UpsellCartState.AddonItems)
+                {
+                    <div class="cart-item-tile">
+                        <div class="cart-item-layout">
+                            <div class="cart-item__top">
+                                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                                    @if (!string.IsNullOrWhiteSpace(addon.Icon))
+                                    {
+                                        <img class="cart-item__thumb" src="@addon.Icon" alt="@addon.Title"
+                                             style="width: 48px; height: 48px; object-fit: contain;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="cart-item__thumb cart-item__thumb--placeholder"></div>
+                                    }
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span class="manage-tile__title">@addon.Title</span>
+                                        @if (!string.IsNullOrWhiteSpace(addon.Description))
+                                        {
+                                            <span class="cart-item__display-text">@addon.Description</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cart-item__bottom">
+                                <div class="cart-item__qty-info">
+                                    @if (addon.AllowQuantitySelection)
+                                    {
+                                        <span>Ilość: <strong>@addon.Quantity</strong></span>
+                                    }
+                                </div>
+                                <div class="cart-item__price-section">
+                                    @if (addon.PriceGross.HasValue)
+                                    {
+                                        <div class="manage-tile__price">
+                                            @((addon.PriceGross.Value * addon.Quantity).ToString("F2"))
+                                            <small>@UpsellCartState.Currency</small>
+                                        </div>
+                                        @if (addon.AllowQuantitySelection && addon.Quantity > 1)
+                                        {
+                                            <span class="price-unit-info">
+                                                @addon.PriceGross.Value.ToString("F2") / jedn.
+                                            </span>
+                                        }
+                                        else if (!string.IsNullOrWhiteSpace(addon.PriceInfo))
+                                        {
+                                            <span class="price-unit-info">@addon.PriceInfo</span>
+                                        }
+                                    }
+                                    else if (!string.IsNullOrWhiteSpace(addon.PriceText))
+                                    {
+                                        <div class="manage-tile__price">@addon.PriceText</div>
+                                        @if (!string.IsNullOrWhiteSpace(addon.PriceInfo))
+                                        {
+                                            <span class="price-unit-info">@addon.PriceInfo</span>
+                                        }
                                     }
                                 </div>
                             </div>
                         </div>
-                        <div class="cart-item__bottom">
-                            <div class="cart-item__qty-info">
-                                <span>Ilość: <strong>@item.Quantity</strong></span>
-                                @if (item.Nights > 0)
-                                {
-                                    <span>Noce: <strong>@item.Nights</strong></span>
-                                }
-                            </div>
-                            <div class="cart-item__price-section">
-                                @{
-                                    var visual = UpsellCartState.Visuals.GetValueOrDefault(item.PartnerServiceId);
-                                    var originalTotal = visual switch
-                                    {
-                                        { PricingDiscountType: PartnerServiceDiscountType.Percent, Discount: < 1 and > 0 }
-                                            => item.LineTotalGross / (1 - visual.Discount!.Value),
-                                        { PricingDiscountType: PartnerServiceDiscountType.FixedAmount, Discount: not null }
-                                            => item.LineTotalGross + visual.Discount.Value,
-                                        _ => (decimal?)null
-                                    };
-                                }
-                                @if (originalTotal.HasValue)
-                                {
-                                    <span class="price-old">
-                                        @originalTotal.Value.ToString("F2") @UpsellCartState.Currency
-                                    </span>
-                                }
-                                <div class="manage-tile__price">
-                                    @item.LineTotalGross.ToString("F2")
-                                    <small>@UpsellCartState.Currency</small>
-                                </div>
-                                <span class="price-unit-info">
-                                    @item.UnitPriceGross.ToString("F2") / jedn.
-                                </span>
-                            </div>
-                        </div>
+                        <button class="cart-item__remove"
+                                @onclick="() => UpsellCartState.RemoveAddonItem(addon.IdoBookingAddonId)"
+                                title="Usuń z koszyka">
+                            &#x2715;
+                        </button>
                     </div>
-                    <button class="cart-item__remove"
-                            @onclick="() => RemoveItem(item.PartnerServiceId)"
-                            title="Usuń z koszyka">
-                        &#x2715;
-                    </button>
-                </div>
+                }
             }
         </div>
     </div>
@@ -122,6 +206,7 @@ else
         <div class="manage-tile summary-tile">
             <div class="summary-details">
                 <span class="manage-tile__category title">PODSUMOWANIE PŁATNOŚCI</span>
+
                 @foreach (var item in UpsellCartState.Items)
                 {
                     <div class="summary-row">
@@ -131,6 +216,38 @@ else
                         </span>
                     </div>
                 }
+
+                @if (UpsellCartState.AddonItems.Any())
+                {
+                    @if (UpsellCartState.Items.Any())
+                    {
+                        <div class="summary-divider"></div>
+                    }
+                    @foreach (var addon in UpsellCartState.AddonItems)
+                    {
+                        <div class="summary-row">
+                            <span class="summary-row__label">
+                                @addon.Title
+                                @if (addon.AllowQuantitySelection && addon.Quantity > 1)
+                                {
+                                    <small style="opacity: 0.6;"> ×@addon.Quantity</small>
+                                }
+                            </span>
+                            <span class="summary-row__value">
+                                @if (addon.PriceGross.HasValue)
+                                {
+                                    @((addon.PriceGross.Value * addon.Quantity).ToString("F2"))
+                                    @(" ")@UpsellCartState.Currency
+                                }
+                                else
+                                {
+                                    @addon.PriceText
+                                }
+                            </span>
+                        </div>
+                    }
+                }
+
                 <div class="summary-divider"></div>
                 @if (TotalSavings > 0)
                 {
@@ -145,7 +262,7 @@ else
                 <div class="summary-total-box">
                     <span class="total-label">Suma do zapłaty</span>
                     <span class="total-amount">
-                        @UpsellCartState.TotalPrice.ToString("F2") @UpsellCartState.Currency
+                        @UpsellCartState.TotalCombinedPrice.ToString("F2") @UpsellCartState.Currency
                     </span>
                 </div>
 
@@ -164,9 +281,13 @@ else
 
                 <div class="cart-actions">
                     <button class="cart-actions__btn cart-actions__btn--primary"
-                            disabled="@_isCartBusy"
+                            disabled="@(_isCartBusy || _isRedirecting)"
                             @onclick="ConfirmAsync">
-                        @if (_isCartBusy)
+                        @if (_isRedirecting)
+                        {
+                            <span>Przekierowywanie...</span>
+                        }
+                        else if (_isCartBusy)
                         {
                             <span class="loader"></span>
                         }
@@ -182,13 +303,14 @@ else
 }
 
 @code {
-    private bool _needsCollapse => UpsellCartState.Items.Count >= 2;
+    private bool _needsCollapse => UpsellCartState.TotalLineCount >= 2;
     private bool _isCollapsed = false;
     private DotNetObjectReference<UpsellsCartPage>? _objRef;
     private ElementReference _summaryRef;
     private ElementReference _wrapperRef;
 
     private bool _isCartBusy;
+    private bool _isRedirecting;
     private string? _cartError;
     private string? _cartMessage;
     private Guid? _lastCreatedOrderGuid;
@@ -203,7 +325,7 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!UpsellCartState.Items.Any())
+        if (UpsellCartState.IsEmpty)
             return;
 
         if (firstRender)
@@ -232,9 +354,9 @@ else
         if (scrollTop <= 10)
             shouldCollapse = false;
         else if (direction == "down")
-            shouldCollapse = true;      
+            shouldCollapse = true;
         else
-            shouldCollapse = false;     
+            shouldCollapse = false;
 
         if (shouldCollapse != _isCollapsed)
         {
@@ -339,6 +461,7 @@ else
             return;
 
         _isCartBusy = true;
+        _isRedirecting = false;
         _cartError = null;
         _cartMessage = null;
 
@@ -359,6 +482,7 @@ else
 
             if (!string.IsNullOrWhiteSpace(result.RedirectUrl))
             {
+                _isRedirecting = true;
                 NavigationManager.NavigateTo(result.RedirectUrl, forceLoad: true);
                 return;
             }
