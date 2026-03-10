@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RentoomBooking.SharedClasses.Models;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,11 +16,34 @@ namespace RentoomBooking.SharedClasses.Database
             _context = context;
         }
 
-        public async Task<List<CustomerTermsAndConditionsSource>> GetActiveTermsSourcesAsync()
+        public async Task<List<CustomerTermDisplayDto>> GetActiveTermsSourcesAsync(string? cultureName)
         {
-            return await _context.CustomerTermsSources
-                .OrderBy(t => t.Id)
+            var normalizedCulture = NormalizeCulture(cultureName);
+            var neutralCulture = normalizedCulture.Split('-')[0];
+
+            var sources = await _context.CustomerTermsSources
+                .Where(t => t.IsActive)
+                .Include(t => t.Translations)
+                .OrderBy(t => t.SortOrder)
+                .ThenBy(t => t.Id)
                 .ToListAsync();
+
+            return sources.Select(source =>
+            {
+                var translation = source.Translations
+                    .FirstOrDefault(t => string.Equals(t.Culture, normalizedCulture, System.StringComparison.OrdinalIgnoreCase))
+                    ?? source.Translations.FirstOrDefault(t => string.Equals(t.Culture, neutralCulture, System.StringComparison.OrdinalIgnoreCase))
+                    ?? source.Translations.FirstOrDefault(t => string.Equals(t.Culture, "pl", System.StringComparison.OrdinalIgnoreCase))
+                    ?? source.Translations.FirstOrDefault();
+
+                return new CustomerTermDisplayDto
+                {
+                    Id = source.Id,
+                    IsRequired = source.IsRequired,
+                    Description = translation?.Description ?? source.Description,
+                    Link = translation?.Link ?? source.Link
+                };
+            }).ToList();
         }
 
         public async Task AddAgreedTermsAsync(IEnumerable<CustomerAgreedTerms> agreedTerms)
@@ -59,6 +83,23 @@ namespace RentoomBooking.SharedClasses.Database
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        private static string NormalizeCulture(string? cultureName)
+        {
+            if (string.IsNullOrWhiteSpace(cultureName))
+            {
+                return "pl";
+            }
+
+            try
+            {
+                return CultureInfo.GetCultureInfo(cultureName).Name;
+            }
+            catch (CultureNotFoundException)
+            {
+                return "pl";
+            }
         }
     }
 }
