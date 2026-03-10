@@ -182,5 +182,11 @@ namespace RentoomBookingWeb {
                 return ResourceManager.GetString("CheckApartmentsWithOffer", resourceCulture);
             }
         }
+        
+        internal static string ForInvestors {
+            get {
+                return ResourceManager.GetString("ForInvestors", resourceCulture);
+            }
+        }
     }
 }

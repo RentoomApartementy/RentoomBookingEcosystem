@@ -80,4 +80,7 @@
     <data name="CheckApartmentsWithOffer" xml:space="preserve">
         <value>Sprawdź apartamenty z tym pakietem</value>
     </data>
+    <data name="ForInvestors" xml:space="preserve">
+        <value>Dla inwestorów</value>
+    </data>
 </root>
