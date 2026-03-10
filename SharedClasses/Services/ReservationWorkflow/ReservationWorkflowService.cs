@@ -204,16 +204,32 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
             var addonsLines = new List<AddonSummaryLineDto>();
             decimal addonsTotal = 0m;//startRequest?.SelectedAddons?.Sum(addon => (decimal)addon.Price * addon.Quantity) ?? 0m; //wyliczenie do sprawdzenia bo nie bierze pod uwage typu addonu
+            var addonsDisplayLookup = new Dictionary<int, string>();
+
+            if (startRequest?.SelectedAddons?.Any(a => string.IsNullOrWhiteSpace(a.DisplayText)) == true)
+            {
+                var cultureAddonLang = ResolveAddonDetailsLanguage(CultureInfo.CurrentUICulture.Name);
+                var definedAddons = await _apartmentStore.GetDefinedAddonsAsync();
+                addonsDisplayLookup = definedAddons.ToDictionary(
+                    addon => addon.IdoBookingId,
+                    addon => addon.AddonDefinition?.Details?
+                                 .FirstOrDefault(d => string.Equals(d.Lang, cultureAddonLang, StringComparison.OrdinalIgnoreCase))?.Name
+                             ?? addon.AddonDefinition?.Details?.FirstOrDefault()?.Name
+                             ?? addon.Name);
+            }
 
             foreach (var addon in startRequest?.SelectedAddons ?? [])
             {
-                
-                
+                var addonDisplayText = !string.IsNullOrWhiteSpace(addon.DisplayText)
+                    ? addon.DisplayText
+                    : addonsDisplayLookup.GetValueOrDefault(addon.AddonId) ?? string.Empty;
+
                 var addonPrice = AddonPricingCalculator.CalculateTotal(addon.PaymentType, (decimal)addon.Price, addon.Nights, startRequest.Adults + startRequest.Children, addon.Quantity);
 
                 addonsLines.Add(new AddonSummaryLineDto
                 {
                     AddonId = addon.AddonId,
+                    DisplayText = addonDisplayText,
                     LineTotalGross = addonPrice,
                     Nights = addon.Nights,
                     PaymentType = addon.PaymentType,
@@ -787,6 +803,16 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             }
 
             return normalized;
+        }
+
+        private static string ResolveAddonDetailsLanguage(string? cultureName)
+        {
+            if (string.IsNullOrWhiteSpace(cultureName))
+            {
+                return "PL";
+            }
+
+            return cultureName.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "EN" : "PL";
         }
 
         private static string? BuildCompanyAddress(InvoiceInfoDto? invoice)
