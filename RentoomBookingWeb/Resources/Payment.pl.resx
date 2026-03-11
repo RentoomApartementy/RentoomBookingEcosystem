@@ -325,6 +325,9 @@
   <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
     <value>Przejdź do StayWell bezpośrednio</value>
   </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Zaznacz wszystkie zgody</value>
+  </data>
   <data name="FillGuestData" xml:space="preserve">
     <value>Uzupełnij dane</value>
   </data>

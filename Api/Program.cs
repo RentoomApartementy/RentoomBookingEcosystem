@@ -120,6 +120,7 @@ bool UseDevelopmentSettingsOnProd = true;
 var TpaySection = UseDevelopmentSettingsOnProd ?builder.Configuration.GetSection("TpayDev"): builder.Configuration.GetSection("Tpay");
 
 builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
+builder.Services.Configure<StorageOptions>("InstructionsStorage", builder.Configuration.GetSection("InstructionsStorage"));
 
 builder.Services.Configure<TpaySettings>(TpaySection);
 

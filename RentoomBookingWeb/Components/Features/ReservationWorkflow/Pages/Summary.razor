@@ -190,33 +190,49 @@
                             }
                             else if (_termsSources != null)
                             {
-                                @foreach (var term in _termsSources)
-                                {
-                                    <div class="customer-term-row mb-3">
-                                        <div class="term-checkbox-wrapper">
-                                            <input type="checkbox" 
-                                                   class="custom-checkbox" 
-                                                   id="term-@term.Id" 
-                                                   checked="@_userSelections[term.Id]" 
-                                                   @onchange="@(e => OnTermChanged(term.Id, e))" />
-            
-                                            <label class="term-label" for="term-@term.Id">
-                                                @term.Description
-                                                @if (term.IsRequired)
-                                                {
-                                                    <span class="required-star" title="@Localizer["FieldRequired"]">*</span>
-                                                }
-                                            </label>
-                                        </div>
+                                <div class="customer-term-row customer-term-row-select-all mb-3 @(AreAllTermsSelected ? "success-bg" : string.Empty)">
+                                    <div class="term-checkbox-wrapper">
+                                        <input type="checkbox"
+                                               class="custom-checkbox"
+                                               id="term-select-all"
+                                               checked="@AreAllTermsSelected"
+                                               @onchange="OnSelectAllTermsChanged" />
 
-                                        @if (!string.IsNullOrEmpty(term.Link))
-                                        {
-                                            <a href="@term.Link" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
-                                                <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
-                                            </a>
-                                        }
+                                        <label class="term-label" for="term-select-all">
+                                            @Localizer["SelectAllConsents"]
+                                        </label>
                                     </div>
-                                }
+                                </div>
+
+                                <div class="customer-terms-group">
+                                    @foreach (var term in _termsSources)
+                                    {
+                                        <div class="customer-term-row mb-3">
+                                            <div class="term-checkbox-wrapper">
+                                                <input type="checkbox" 
+                                                       class="custom-checkbox" 
+                                                       id="term-@term.Id" 
+                                                       checked="@_userSelections[term.Id]" 
+                                                       @onchange="@(e => OnTermChanged(term.Id, e))" />
+                
+                                                <label class="term-label" for="term-@term.Id">
+                                                    @term.Description
+                                                    @if (term.IsRequired)
+                                                    {
+                                                        <span class="required-star" title="@Localizer["FieldRequired"]">*</span>
+                                                    }
+                                                </label>
+                                            </div>
+
+                                            @if (!string.IsNullOrEmpty(term.Link))
+                                            {
+                                                <a href="@term.Link" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
+                                                    <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
+                                                </a>
+                                            }
+                                        </div>
+                                    }
+                                </div>
                             }
                         </div>
                         
@@ -549,9 +565,45 @@
 
     private void OnTermChanged(int termId, ChangeEventArgs e)
     {
-        if (e.Value is bool val)
+        if (TryGetCheckboxValue(e.Value, out var val))
         {
             _userSelections[termId] = val;
+        }
+    }
+
+    private bool AreAllTermsSelected =>
+        _termsSources is { Count: > 0 } &&
+        _termsSources.All(t => _userSelections.TryGetValue(t.Id, out var selected) && selected);
+
+    private void OnSelectAllTermsChanged(ChangeEventArgs e)
+    {
+        if (_termsSources is null || !TryGetCheckboxValue(e.Value, out var selectAll))
+        {
+            return;
+        }
+
+        foreach (var term in _termsSources)
+        {
+            _userSelections[term.Id] = selectAll;
+        }
+    }
+
+    private static bool TryGetCheckboxValue(object? value, out bool isChecked)
+    {
+        switch (value)
+        {
+            case bool boolValue:
+                isChecked = boolValue;
+                return true;
+            case string strValue when bool.TryParse(strValue, out var parsed):
+                isChecked = parsed;
+                return true;
+            case string strValue when string.Equals(strValue, "on", StringComparison.OrdinalIgnoreCase):
+                isChecked = true;
+                return true;
+            default:
+                isChecked = false;
+                return false;
         }
     }
 
