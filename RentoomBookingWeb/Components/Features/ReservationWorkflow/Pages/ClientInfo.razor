@@ -343,6 +343,7 @@
         }
     }
 
+
     private bool IsSubmitDisabled => _isSaving || !IsFormComplete();
 
     private bool UseInvoice
@@ -579,7 +580,7 @@
         
         if (!string.IsNullOrEmpty(_phoneCountryCode) && !_countryPrefixes.Any(x => x.Code == _phoneCountryCode))
         {
-            _countryPrefixes.Add(new CountryPrefix { Code = _phoneCountryCode, Region = "ZZ", Flag = "🌐" });
+            _countryPrefixes.Add(new CountryPrefix { Code = _phoneCountryCode, Region = "ZZ" });
         }
     }
 
