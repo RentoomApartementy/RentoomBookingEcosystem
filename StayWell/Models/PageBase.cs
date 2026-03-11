@@ -90,13 +90,24 @@ namespace RentoomBooking.StayWell.Models
             var lang = ReservationState.CurrentReservation?.Reservation?.Client?.Language;
 
 
-            if (lang == "eng" || lang == null)
+            if (string.Equals(lang, "eng", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(lang, "en", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(lang, "en-us", StringComparison.OrdinalIgnoreCase)
+                || string.IsNullOrWhiteSpace(lang))
             {
                 GlobalizationService.SetCulture("en-US");
             }
-            else if (lang == "pol")
+            else if (string.Equals(lang, "pol", StringComparison.OrdinalIgnoreCase)
+                     || string.Equals(lang, "pl", StringComparison.OrdinalIgnoreCase)
+                     || string.Equals(lang, "pl-pl", StringComparison.OrdinalIgnoreCase))
             {
                 GlobalizationService.SetCulture("pl-PL");
+            }
+            else if (string.Equals(lang, "de", StringComparison.OrdinalIgnoreCase)
+                     || string.Equals(lang, "deu", StringComparison.OrdinalIgnoreCase)
+                     || string.Equals(lang, "de-de", StringComparison.OrdinalIgnoreCase))
+            {
+                GlobalizationService.SetCulture("de-DE");
             }
 
             Console.WriteLine("Language set to: " + lang?.ToString() + " " + CultureInfo.CurrentCulture.Name);
@@ -130,6 +141,8 @@ namespace RentoomBooking.StayWell.Models
                     return;
                 }
 
+                SetLanguage();
+
                 var item = reservation.Items?.FirstOrDefault();
                 if (item is null)
                 {
@@ -149,7 +162,6 @@ namespace RentoomBooking.StayWell.Models
                     LocksState.CheckTTLockStatusAsync(Token),
                     LocksState.GetApartmentItemCodesAsync(Token)
                 );
-                SetLanguage();
                 IsInitializedSuccessfully = true;
             }
             catch (Exception ex)

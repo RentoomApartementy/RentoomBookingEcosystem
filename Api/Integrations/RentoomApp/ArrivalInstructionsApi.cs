@@ -28,7 +28,17 @@ public class ArrivalInstructionsApi
     {
         var cancellationToken = req.FunctionContext.CancellationToken;
         var response = req.CreateResponse();
-        _logger.LogInformation("GetArrivalInstructionSteps started for apartmentId={ApartmentId} at {Time}", apartmentId, DateTime.UtcNow);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+        var language = queryParams.Get("language")
+            ?? queryParams.Get("lang")
+            ?? queryParams.Get("locale")
+            ?? queryParams.Get("culture");
+
+        _logger.LogInformation(
+            "GetArrivalInstructionSteps started for apartmentId={ApartmentId}, language={Language} at {Time}",
+            apartmentId,
+            language,
+            DateTime.UtcNow);
 
         try
         {
@@ -39,7 +49,7 @@ public class ArrivalInstructionsApi
                 return response;
             }
 
-            var steps = await _arrivalInstructionsService.GetArrivalInstructionStepsAsync(apartmentId, cancellationToken);
+            var steps = await _arrivalInstructionsService.GetArrivalInstructionStepsAsync(apartmentId, language, cancellationToken);
             if (steps.Count == 0)
             {
                 response.StatusCode = HttpStatusCode.NotFound;

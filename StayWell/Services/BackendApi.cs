@@ -289,9 +289,15 @@ namespace RentoomBooking.StayWell.Services
             return await response.Content.ReadFromJsonAsync<UpsellOrderRecord>(_json);
         }
 
-        public async Task<List<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId)
+        public async Task<List<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId, string? language = null)
         {
-            var response = await _http.GetAsync($"apartment/arrivalinstructions/{apartmentId}");
+            var url = $"apartment/arrivalinstructions/{apartmentId}";
+            if (!string.IsNullOrWhiteSpace(language))
+            {
+                url += $"?language={Uri.EscapeDataString(language)}";
+            }
+
+            var response = await _http.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
                 return [];

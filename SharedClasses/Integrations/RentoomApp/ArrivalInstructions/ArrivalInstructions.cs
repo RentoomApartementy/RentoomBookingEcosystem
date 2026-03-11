@@ -14,6 +14,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
         public int Id { get; set; }
         public int ApartmentId { get; set; }
         public int Sequence { get; set; }
+        public string Language { get; set; } = "default";
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public int? ImageMediaAssetId { get; set; }
@@ -32,6 +33,10 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
 
         [Required]
         public int Sequence { get; set; }
+
+        [Required]
+        [MaxLength(10)]
+        public string Language { get; set; } = "default";
 
         [Required]
         [MaxLength(200)]

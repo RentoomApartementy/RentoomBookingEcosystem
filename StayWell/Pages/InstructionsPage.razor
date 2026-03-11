@@ -186,7 +186,7 @@
 
 @code {
     private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
-    private const string InstructionImageBaseUrl = "https://app.rentoom.pl/";
+    //private const string InstructionImageBaseUrl = "https://app.rentoom.pl/";
     private const string DefaultFallbackInstructionDescription = "Instrukcje zameldowania są w trakcie przygotowania.";
 
     private string? WifiPassword => ApartmentState.WifiInfo?.Password;
@@ -209,10 +209,10 @@
         .ToArray();
 
     private string[] InstructionImageUrls => ArrivalInstructionSteps
-        .Select(s => NormalizeInstructionImageUrl(s.ImageUrl))
+        .Select(s => s.ImageUrl)
         .ToArray();
 
-    private string NormalizeInstructionImageUrl(string? imageUrl)
+   /* private string NormalizeInstructionImageUrl(string? imageUrl)
     {
         if (string.IsNullOrWhiteSpace(imageUrl))
         {
@@ -226,7 +226,7 @@
 
         return $"{InstructionImageBaseUrl.TrimEnd('/')}/{imageUrl.TrimStart('/')}";
     }
-
+    */
     private async Task CopyToClipboard()
     {
         var password = WifiPassword;

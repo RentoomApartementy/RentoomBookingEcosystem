@@ -3,6 +3,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.StayWell.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using System.Globalization;
 using System.Linq;
 
 namespace RentoomBooking.StayWell.States
@@ -15,6 +16,7 @@ namespace RentoomBooking.StayWell.States
         private string? _qrMaintFormUrl;
         private IReadOnlyList<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
         private int? _currentArrivalInstructionApartmentId;
+        private string? _currentArrivalInstructionLanguage;
         private RentoomWifiInfo? _wifiInfo;
         private IReadOnlyList<DefinedAddonEntity> _definedAddons = [];
         
@@ -82,31 +84,34 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
-        public async Task<IReadOnlyList<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId)
+        public async Task<IReadOnlyList<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId, string? language = null)
         {
             if (apartmentId <= 0)
             {
-                SetArrivalInstructionSteps([], null);
+                SetArrivalInstructionSteps([], null, null);
                 return ArrivalInstructionSteps;
             }
 
-            if (_currentArrivalInstructionApartmentId == apartmentId)
+            var normalizedLanguage = NormalizeArrivalInstructionLanguage(language);
+
+            if (_currentArrivalInstructionApartmentId == apartmentId
+                && string.Equals(_currentArrivalInstructionLanguage, normalizedLanguage, StringComparison.OrdinalIgnoreCase))
             {
                 return ArrivalInstructionSteps;
             }
 
             if (_backendApi == null)
             {
-                SetArrivalInstructionSteps([], apartmentId);
+                SetArrivalInstructionSteps([], apartmentId, normalizedLanguage);
                 return ArrivalInstructionSteps;
             }
 
-            var steps = await _backendApi.GetArrivalInstructionStepsAsync(apartmentId);
+            var steps = await _backendApi.GetArrivalInstructionStepsAsync(apartmentId, normalizedLanguage);
             var orderedSteps = steps
                 .OrderBy(s => s.Sequence)
                 .ToList();
 
-            SetArrivalInstructionSteps(orderedSteps, apartmentId);
+            SetArrivalInstructionSteps(orderedSteps, apartmentId, normalizedLanguage);
             return ArrivalInstructionSteps;
         }
 
@@ -173,16 +178,52 @@ namespace RentoomBooking.StayWell.States
             QrMaintFormUrl = null;
             WifiInfo = null;
             DefinedAddons = [];
-            SetArrivalInstructionSteps([], null);
+            SetArrivalInstructionSteps([], null, null);
         }
 
-        private void SetArrivalInstructionSteps(IReadOnlyList<ApartmentArrivalInstructionStepDTO> steps, int? apartmentId)
+        private void SetArrivalInstructionSteps(IReadOnlyList<ApartmentArrivalInstructionStepDTO> steps, int? apartmentId, string? language)
         {
             _currentArrivalInstructionApartmentId = apartmentId;
+            _currentArrivalInstructionLanguage = language;
             ArrivalInstructionSteps = steps;
         }
 
         private void NotifyStateChanged() => OnChange?.Invoke();
+
+        private static string NormalizeArrivalInstructionLanguage(string? language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            }
+
+            var trimmed = language.Trim();
+            if (string.Equals(trimmed, "default", StringComparison.OrdinalIgnoreCase))
+            {
+                return "default";
+            }
+
+            var lowered = trimmed.ToLowerInvariant()
+                .Replace('_', '-');
+
+            var dashIndex = lowered.IndexOf('-', StringComparison.Ordinal);
+            if (dashIndex > 0)
+            {
+                lowered = lowered[..dashIndex];
+            }
+
+            return lowered switch
+            {
+                "pl" => "pl",
+                "pol" => "pl",
+                "en" => "en",
+                "eng" => "en",
+                "de" => "de",
+                "deu" => "de",
+                "iv" => "default",
+                _ => "default"
+            };
+        }
 
         public async Task<IReadOnlyList<DefinedAddonEntity>> GetDefinedAddonsAsync()
         {
