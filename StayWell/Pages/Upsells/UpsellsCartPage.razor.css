@@ -282,3 +282,44 @@
         transform: rotate(360deg);
     }
 }
+
+@media (max-width: 390px) {
+    .summary-tile {
+        padding: 16px;
+    }
+
+    .total-amount {
+        font-size: 1.2rem;
+        letter-spacing: -0.3px;
+    }
+
+    .total-label {
+        font-size: 0.82rem;
+    }
+
+    .floating-summary--collapsed .total-amount {
+        font-size: 1.05rem;
+    }
+
+    .summary-row {
+        font-size: 0.78rem;
+        gap: 6px;
+    }
+
+    .summary-row span {
+        min-width: 0;
+    }
+
+    .summary-row span:first-child {
+        flex: 1 1 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .summary-row span:last-child {
+        flex-shrink: 0;
+        text-align: right;
+        padding-left: 6px;
+    }
+}

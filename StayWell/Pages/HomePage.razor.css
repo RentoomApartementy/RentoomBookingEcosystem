@@ -28,19 +28,18 @@
     margin-top: 20px;
     display: flex;
     flex-direction: row;
-    gap: 15px;
+    gap: 10px;
     width: 100%;
     justify-content: center;
 }
 
-
 .tile {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
     max-width: 180px;
     height: 110px;
-    padding: 15px;
+    padding: 10px 6px;
     border-radius: 18px;
-/*    background: rgba(255, 255, 255, 0.7);*/
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
@@ -51,12 +50,10 @@
     text-align: center;
     cursor: pointer;
     transition: transform 0.1s ease, background-color 0.2s ease;
-/*    background-color: red;*/
 }
 
-    .vouchers{
+    .vouchers {
         background-color: var(--rentoom-green-dark);
-/*        color: white !important;*/
     }
 
     .tile:active {
@@ -68,28 +65,33 @@
     font-size: 1.5rem;
     margin-bottom: 8px;
     color: #333;
+    flex-shrink: 0;
 }
 
 .tile-icon-vouchers {
     font-size: 1.5rem;
     margin-bottom: 8px;
     color: #333;
+    flex-shrink: 0;
     filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7456%) hue-rotate(204deg) brightness(112%) contrast(100%);
 }
 
-
 .tile-text {
-    font-size: 0.9rem;
+    font-size: clamp(0.65rem, 2.5vw, 0.9rem);
     font-weight: 500;
     line-height: 1.2;
     color: #333;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .tile-text-vouchers {
-    font-size: 0.9rem;
+    font-size: clamp(0.65rem, 2.5vw, 0.9rem);
     font-weight: 500;
     line-height: 1.2;
     color: white;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .upsells-available-wrap {
@@ -101,6 +103,16 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+}
+
+.homepage-upsell-spacer {
+    height: 50px;
+}
+
+@media (min-width: 400px) {
+    .tile--row {
+        gap: 15px;
+    }
 }
 
 @media (min-width: 530px) {
@@ -115,6 +127,11 @@
     .buttons-wrapper {
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .tile {
+        padding: 15px;
+        max-width: 180px;
     }
 }
 
