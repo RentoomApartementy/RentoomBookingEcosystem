@@ -300,7 +300,8 @@
     {
         public string Code { get; set; } = "";
         public string Region { get; set; } = "";
-        public string Display => $"{Region} +{Code}";
+        public string Flag { get; set; } = "";
+        public string Display => $"{Flag} {Region} +{Code}";
     }
 
     private List<CountryPrefix> _countryPrefixes = new();
@@ -318,7 +319,8 @@
             list.Add(new CountryPrefix
             {
                 Code = code.ToString(),
-                Region = region
+                Region = region,
+                Flag = GetFlag(region)
             });
         }
 
@@ -327,6 +329,20 @@
             .ThenBy(x => x.Region)
             .ToList();
     }
+
+    private string GetFlag(string region)
+    {
+        if (string.IsNullOrEmpty(region) || region.Length != 2 || region == "ZZ") return "🌐";
+        try
+        {
+            return string.Concat(region.ToUpper().Select(c => char.ConvertFromUtf32(c + 0x1F1A5)));
+        }
+        catch
+        {
+            return "🌐";
+        }
+    }
+
 
     private bool IsSubmitDisabled => _isSaving || !IsFormComplete();
 
