@@ -27,6 +27,7 @@ namespace RentoomBooking.StayWell
             builder.Services.AddSingleton<LocalStorageService>();
             builder.Services.AddSingleton<ReservationTokenService>();
             builder.Services.AddSingleton<GlobalizationService>();
+            builder.Services.AddSingleton<FunctionsApiConcurrencyHandler>();
 
             builder.Services.AddScoped<ClipboardService>();
             builder.Services.AddScoped<ModalService>();
@@ -46,19 +47,20 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<AvailableUpsellsState>();
 
             builder.Services.AddHttpClient("FunctionsApi", c =>
-            {
-                if (builder.HostEnvironment.IsDevelopment())
                 {
-                    // Local dev:
-                    c.BaseAddress = new Uri("https://localhost:7238/api/");
-                }
-                else
-                {
-                    // Azure Static Web App: functions api sa deployowane oddzielne, ale sa "podpiete" w Static Website (Settings->Api) na Azure - wiec powinny byc dostepny pod adresem /api
-                    var appBase = new Uri(builder.HostEnvironment.BaseAddress);
-                    c.BaseAddress = new Uri(appBase, "api/");
-                }
-            });
+                    if (builder.HostEnvironment.IsDevelopment())
+                    {
+                        // Local dev:
+                        c.BaseAddress = new Uri("https://localhost:7238/api/");
+                    }
+                    else
+                    {
+                        // Azure Static Web App: functions api sa deployowane oddzielne, ale sa "podpiete" w Static Website (Settings->Api) na Azure - wiec powinny byc dostepny pod adresem /api
+                        var appBase = new Uri(builder.HostEnvironment.BaseAddress);
+                        c.BaseAddress = new Uri(appBase, "api/");
+                    }
+                })
+                .AddHttpMessageHandler<FunctionsApiConcurrencyHandler>();
 
             builder.Services.AddScoped<BackendApi>();
 
