@@ -256,20 +256,20 @@
             {
                 <div id="offers-section" class="summary-offer-price-wrapper"> @{
                                                                                   var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
-                                                                                  var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
-                                                                                  var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+                                                                                  var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "refundable");
+                                                                                  var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "nonrefundable");
                                                                               }
                     
                     @if (nonRefundableOffer != null)
                     {
-                        <div class="summary-offer-price">
+                        <div class="summary-offer-price @(IsSelectedOffer(OfferTypeNonrefundable) ? "selected-offer" : "")">
                             <b>@Localizer["Non-refundableOffer"]</b>
                             <small>@Localizer["NonRefundableText"]</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
-                                    <Button>@Localizer["BookNow"]</Button>
+                                        <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
                                 </div>
                             </div>
                         </div>  
@@ -277,14 +277,14 @@
                     
                     @if (refundableOffer != null)
                     {
-                        <div class="summary-offer-price refundable">
+                        <div class="summary-offer-price refundable @(IsSelectedOffer(OfferTypeRefundable) ? "selected-offer" : "")">
                             <b>@Localizer["RefundableOffer"]</b>
                             <small>@Localizer["RefundableOfferText"]</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
-                                    <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
+                                    <Button>@Localizer["BookNow"]</Button>
                                 </div>
                             </div>
                         </div>   
@@ -350,7 +350,7 @@
                     {
                         <div @onclick="OpenSearchModal" @onclick:stopPropagation="true" style="flex: 1;"> 
                             <Button Type="ButtonType.Secondary" style="width: 100%;" Class="small">
-                                @Localizer["SelectDatesAndGuests"]
+                                @Localizer["SelectDatesAndGuestsButtonLabel"]
                             </Button>
                         </div>
                         
@@ -365,7 +365,7 @@
                                 Class="small"
                                 style="width: 100%;"
                                 @onclick="SmartScrollAction">
-                            @(_isAtOffers ? Localizer["BookNow"] : (_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"]))
+                              @(_isAtOffers ? Localizer["BookNowStepButtonLabel"] : (_isAtSummary ? Localizer["SelectOfferStepButtonLabel"] : Localizer["SummaryStepButtonLabel"])) 
                         </Button>
                     }
 
@@ -442,7 +442,7 @@
 
                         <div class="@((StartDate == null && EndDate == null) ? "desktop-only" : "")" style="margin-top: 0.5rem; margin-bottom: 1rem; width: 100%;" @onclick="OpenSearchModal">
                             <Button Type="ButtonType.Secondary" style="width: 100%;">
-                                @Localizer["SelectDatesAndGuests"]
+                                @Localizer["SelectDatesAndGuestsButtonLabel"]
                             </Button>
                         </div>
                         
@@ -456,7 +456,7 @@
                         {
                             <div class="desktop-only" style="margin-top: 1rem; width: 100%;" @onclick="SmartScrollAction"> 
                                 <Button style="width: 100%;">
-                                    @(_isAtOffers ? Localizer["BookNow"] : (_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"])) 
+                                    @(_isAtOffers ? Localizer["BookNowStepButtonLabel"] : (_isAtSummary ? Localizer["SelectOfferStepButtonLabel"] : Localizer["SummaryStepButtonLabel"])) 
                                 </Button>
                             </div>
                         }
@@ -804,6 +804,7 @@
 
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
+    private string? _selectedOfferType;
 
     private static Dictionary<string, string> _languageMap = new Dictionary<string, string>
     {
@@ -1035,6 +1036,8 @@
         {
             _isOfferLoading = false;
         }
+
+        EnsureSelectedOffer();
         
         bool hasOffers = _offersResponse?.Result?.PricingOffers != null && 
                          _offersResponse.Result.PricingOffers.Any();
@@ -1082,6 +1085,35 @@
             _suggestionLoading = false;
             await InvokeAsync(StateHasChanged);
         }
+    }
+
+    private bool IsSelectedOffer(string? offerType)
+    {
+        if (string.IsNullOrWhiteSpace(offerType) || string.IsNullOrWhiteSpace(_selectedOfferType))
+        {
+            return false;
+        }
+
+        return  string.Equals(_selectedOfferType, offerType, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void EnsureSelectedOffer()
+    {
+        var offers = _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers;
+        if (offers == null || !offers.Any())
+        {
+            _selectedOfferType = null;
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(_selectedOfferType) &&
+            offers.Any(o => string.Equals(o.OfferType, _selectedOfferType, StringComparison.OrdinalIgnoreCase)))
+        {
+            return;
+        }
+
+        var nonRefundable = offers.FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase));
+        _selectedOfferType = nonRefundable?.OfferType ?? offers.First().OfferType;
     }
     
     private void InitializeMandatoryAddons()
@@ -1300,7 +1332,9 @@
             return;
         }
 
-        var selectedOffer = GetOfferByType(offerType);
+        EnsureSelectedOffer();
+        var resolvedOfferType = !string.IsNullOrWhiteSpace(offerType) ? offerType : _selectedOfferType;
+        var selectedOffer = GetOfferByType(resolvedOfferType);
         var adults = int.TryParse(Adults, out var a) ? a : 1;
         var children = int.TryParse(Children, out var c) ? c : 0;
         var hasEarlyCheckInAddon = _selectedAddons.Exists(a => a.AddonId == 40);
@@ -1330,7 +1364,7 @@
             CheckOutTime = checkOutTime,
             Adults = adults,
             Children = children,
-            SelectedOfferType = selectedOffer?.OfferType ?? offerType,
+            SelectedOfferType = selectedOffer?.OfferType ?? resolvedOfferType,
             OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
             Currency = "PLN",
             SelectedAddons = _selectedAddons,
@@ -1347,11 +1381,8 @@
 
         if (_isAtOffers)
         {
-            var offer = localNonRefundableOffer ?? localRefundableOffer;
-            if (offer != null)
-            {
-                await GoToPayment(offer.OfferType);
-            }
+            EnsureSelectedOffer();
+            await GoToPayment(_selectedOfferType);
             return;
         }
 
@@ -1403,7 +1434,8 @@
             }
         }
 
-        return offers.FirstOrDefault();
+        var nonRefundable = offers.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == OfferTypeNonrefundable);
+        return nonRefundable ?? offers.FirstOrDefault();
     }
     
     private void RefreshAddonsParams()
@@ -1482,10 +1514,12 @@
     }
     
     private OfferItem? localRefundableOffer => 
-        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?
+            .FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeRefundable, StringComparison.OrdinalIgnoreCase));
 
     private OfferItem? localNonRefundableOffer => 
-        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?
+            .FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase));
 
     private decimal? localMinPrice
     {
