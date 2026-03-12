@@ -10,6 +10,7 @@ namespace RentoomBooking.StayWell.States
         private readonly BackendApi _backendApi = backendApi;
 
         public bool IsLoading { get; set; }
+        public bool IsTTLockLoading { get; private set; }
         public int? BatteryLevel { get; private set; }
         public bool IsTTLockAvailable { get; private set; }
 
@@ -49,6 +50,7 @@ namespace RentoomBooking.StayWell.States
 
         public async Task CheckTTLockStatusAsync(string token)
         {
+            SetTTLockLoading(true);
             try
             {
                 var result = await _backendApi.PingLockAsync(token);
@@ -69,7 +71,7 @@ namespace RentoomBooking.StayWell.States
             }
             finally
             {
-                NotifyStateChanged();
+                SetTTLockLoading(false);
             }
         }
 
@@ -114,10 +116,17 @@ namespace RentoomBooking.StayWell.States
             NotifyStateChanged();
         }
 
+        public void SetTTLockLoading(bool isLoading)
+        {
+            IsTTLockLoading = isLoading;
+            NotifyStateChanged();
+        }
+
         public void ClearLocks()
         {
             CurrentLocks = null;
             IsLoading = false;
+            IsTTLockLoading = false;
             TTLockId = null;
             BatteryLevel = null;
             IsTTLockAvailable = false;

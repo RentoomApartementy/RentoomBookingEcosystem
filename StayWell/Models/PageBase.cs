@@ -167,7 +167,6 @@ namespace RentoomBooking.StayWell.Models
                     ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId),
                     AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
                     LocksState.GetLocksAsync(reservation.id, item.itemId),
-                    LocksState.CheckTTLockStatusAsync(Token),
                     LocksState.GetApartmentItemCodesAsync(Token)
                 );
                 IsInitializedSuccessfully = true;
