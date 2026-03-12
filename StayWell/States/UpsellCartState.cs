@@ -155,5 +155,36 @@ public class UpsellCartState
         NotifyStateChanged();
     }
 
+    public void RefreshItemTitlesFromCatalog(IReadOnlyList<UpsellTileDto> updatedTiles)
+    {
+        var tileLookup = updatedTiles.ToDictionary(t => t.PartnerServiceId);
+        for (var i = 0; i < _items.Count; i++)
+        {
+            var item = _items[i];
+            if (!tileLookup.TryGetValue(item.PartnerServiceId, out var tile))
+                continue;
+
+            _items[i] = new UpsellSummaryLineDto
+            {
+                PartnerServiceId = item.PartnerServiceId,
+                Title = tile.Title,
+                PricingModel = item.PricingModel,
+                Quantity = item.Quantity,
+                UnitPriceGross = item.UnitPriceGross,
+                Nights = item.Nights,
+                TotalGuests = item.TotalGuests,
+                LineTotalGross = item.LineTotalGross,
+                DisplayText = tile.ShortDescription ?? item.DisplayText
+            };
+        }
+        NotifyStateChanged();
+    }
+
+    public void ReplaceAddonItems(List<CartAddonItem> updatedAddons)
+    {
+        _addonItems = updatedAddons;
+        NotifyStateChanged();
+    }
+
     private void NotifyStateChanged() => OnChange?.Invoke();
 }

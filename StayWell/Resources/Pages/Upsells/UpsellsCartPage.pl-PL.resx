@@ -117,46 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CodeNotAvailable" xml:space="preserve">
-    <value>Code not available</value>
+  <data name="Back" xml:space="preserve">
+    <value>Wróć do strony głównej</value>
   </data>
-  <data name="Confirm" xml:space="preserve">
-    <value>Confirm</value>
+  <data name="Empty" xml:space="preserve">
+    <value>Twój koszyk jest pusty</value>
   </data>
-  <data name="DoorOpened" xml:space="preserve">
-    <value>Door opened</value>
+  <data name="Nights" xml:space="preserve">
+    <value>Noce</value>
   </data>
-  <data name="ErrorClosing" xml:space="preserve">
-    <value>Error while closing</value>
+  <data name="Quantity" xml:space="preserve">
+    <value>Ilość</value>
   </data>
-  <data name="ErrorOpening" xml:space="preserve">
-    <value>Error while opening</value>
+  <data name="Redirecting" xml:space="preserve">
+    <value>Przekierowywanie</value>
   </data>
-  <data name="ErrorServerConnection" xml:space="preserve">
-    <value>Error connecting to server</value>
+  <data name="Remove" xml:space="preserve">
+    <value>Usuń z koszyka</value>
   </data>
-  <data name="HowTo" xml:space="preserve">
-    <value> How to use door lock</value>
+  <data name="Savings" xml:space="preserve">
+    <value>Z nami zaoszczędzisz</value>
   </data>
-  <data name="NoCode" xml:space="preserve">
-    <value>No code for the lock. Contact staff!</value>
+  <data name="Summary" xml:space="preserve">
+    <value>Podsumowanie</value>
   </data>
-  <data name="Or" xml:space="preserve">
-    <value>or</value>
+  <data name="title" xml:space="preserve">
+    <value>Vouchery i Usługi</value>
   </data>
-  <data name="PressToOpen" xml:space="preserve">
-    <value>Press to open</value>
+  <data name="Total" xml:space="preserve">
+    <value>Suma do zapłaty</value>
   </data>
-  <data name="Processing" xml:space="preserve">
-    <value>Processing</value>
+  <data name="Unit" xml:space="preserve">
+    <value>jedn.</value>
   </data>
-  <data name="RemoteOpen" xml:space="preserve">
-    <value>Remote door control</value>
+  <data name="YourCart" xml:space="preserve">
+    <value>Twój koszyk</value>
   </data>
-  <data name="RemoteUnavailable" xml:space="preserve">
-    <value>Remote door control is unavailable</value>
+  <data name="Addons" xml:space="preserve">
+    <value>Dodatki do rezerwacji</value>
   </data>
-  <data name="YourIndividualCode" xml:space="preserve">
-    <value>Your apartment code</value>
+  <data name="Pay" xml:space="preserve">
+    <value>Zapłać</value>
   </data>
 </root>

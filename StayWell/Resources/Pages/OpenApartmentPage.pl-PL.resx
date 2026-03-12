@@ -135,6 +135,12 @@
   <data name="ErrorServerConnection" xml:space="preserve">
     <value>Błąd połączenia z serwerem</value>
   </data>
+  <data name="HowTo" xml:space="preserve">
+    <value>Jak korzystać z zamka</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Brak kodu do zamka. Skontaktuj się z obsługą!</value>
+  </data>
   <data name="Or" xml:space="preserve">
     <value>lub</value>
   </data>
@@ -144,7 +150,13 @@
   <data name="Processing" xml:space="preserve">
     <value>Przetwarzanie</value>
   </data>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Zdalne otwieranie drzwi</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Zdalne otwieranie jest aktualnie niedostępne.</value>
+  </data>
   <data name="YourIndividualCode" xml:space="preserve">
-    <value>Twój indywidualny kod</value>
+    <value>Twój kod do apartamentu</value>
   </data>
 </root>

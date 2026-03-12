@@ -48,19 +48,24 @@
     private string pl = "pl";
     private string en = "en";
 
-    private void ChangeLang(string lang)
+    private async Task ChangeLang(string lang)
     {
-        GlobalizationService.SetCulture(lang == "pl" ? "pl-PL" : "en-US");
+        var cultureName = lang == "pl" ? "pl-PL" : "en-US";
+        await GlobalizationService.SetCultureWithPreferenceAsync(cultureName);
         ModalService.HideModal();
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await BitrixService.InitializeAsync();
-    }
-    protected override void OnInitialized()
-    {
         GlobalizationService.OnChange += StateHasChanged;
+
+        var savedPreference = await GlobalizationService.LoadPreferenceAsync();
+        if (!string.IsNullOrWhiteSpace(savedPreference))
+        {
+            GlobalizationService.SetCulture(savedPreference);
+        }
+
+        await BitrixService.InitializeAsync();
     }
 
     private void ChangeLangButton()
@@ -70,8 +75,6 @@
     <p>@Localizer["CurrentLanguage"]: @CultureInfo.CurrentCulture</p>
             <Button OnClick="() => ChangeLang(pl)" Text="Polski"></Button>
             <Button OnClick="() => ChangeLang(en)" Text="English"></Button>
-            @* <button @onclick="() => ChangeLang("pl")>Polski</button> *@
-            @* <button @onclick="() => ChangeLang("en")>English</button> *@
         </div>
     );
     }
@@ -97,13 +100,6 @@
 
         await BitrixService.OpenChatAsync(guestData);
     }
-
-    // private void ContactMenu()
-    // {
-    //     ModalService.ShowModal("Skontaktuj się z nami",
-    //     @<ContactUsPage/>
-    //     );
-    // }
 
     public void Dispose()
     {

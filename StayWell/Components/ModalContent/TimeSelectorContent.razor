@@ -1,6 +1,11 @@
 ﻿@using System
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using Pages
 @inject Services.ModalService ModalService
 @inject Services.ToastService ToastService
+@inject StayWell.States.ReservationState ReservationState
+@inject IStringLocalizer<PrearrivalPage> Localizer
 
 <div class="content-modal">
     <ul class="List">
@@ -24,13 +29,28 @@
     [Parameter]
     public EventCallback<TimeSpan?> ValueChanged { get; set; }
 
-    private List<int> _hours = Enumerable.Range(15, 8).ToList();
+    private List<int> _hours = new();
+
+    protected override void OnInitialized()
+    {
+        _hours = Enumerable.Range(15, 8).ToList();
+
+        if (ReservationState?.HasEarlyCheckIn == true)
+        {
+            if (!_hours.Contains(14))
+            {
+                _hours.Insert(0, 14);
+            }
+        }
+    }
 
     private async Task Select(TimeSpan? time)
     {
         await ValueChanged.InvokeAsync(time);
         ModalService.HideModal();
-        ToastService.ShowToast($"Wybrałeś/aś godzinę {time}");
+        ToastService.ShowToast(
+            $"{Localizer["YouChoseTime"]} {time}"
+        );
     }
 
 }

@@ -1,12 +1,16 @@
 ﻿@using RentoomBooking.StayWell.Models
 @using RentoomBooking.SharedClasses.Models.StayWell
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using Pages
+@inject IStringLocalizer<PrearrivalPage> Localizer
 @inject Services.ModalService ModalService
 @inject Services.ToastService ToastService
 
 <div class="content-modal-guests">
     <p class="instruction-text">
-        Prosimy o podanie danych wszystkich osób, które będą przebywać w obiekcie.
+        @Localizer["gcText"]
     </p>
 
     @if (Guests != null)
@@ -17,17 +21,17 @@
                 int index = i;
                 <div class="guest-block">
                     <div class="guest-separator">
-                        <span>Gość @(index + 1)</span>
+                        <span>@Localizer["Guest"] @(index + 1)</span>
                     </div>
 
                     <div class="guest-inputs-row">
                         <input class="editform-input modal-input"
-                               placeholder="Imię"
+                               placeholder="@Localizer["Name"]"
                                value="@Guests[index].FirstName"
                                @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), true))" />
 
                         <input class="editform-input modal-input"
-                               placeholder="Nazwisko"
+                               placeholder="@Localizer["Surname"]"
                                value="@Guests[index].LastName"
                                @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), false))" />
                     </div>
@@ -39,7 +43,7 @@
     <div class="modal-actions">
         <Button Disabled="@(!IsValid)" OnClick="@Confirm">
             <RenderFragment>
-                <span>Zatwierdź</span>
+                <span>@Localizer["Accept2"]</span>
             </RenderFragment>
         </Button>
     </div>
@@ -81,7 +85,7 @@
         {
             await OnConfirm.InvokeAsync(Guests);
             ModalService.HideModal();
-            ToastService.ShowToast("Pomyślnie zapisano dane!");
+            ToastService.ShowToast(Localizer["SavedSuccesfully"]);
         }
     }
 }

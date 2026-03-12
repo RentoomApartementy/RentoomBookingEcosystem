@@ -4,10 +4,12 @@
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using System.Globalization
 @using RentoomBooking.StayWell.Components.Upsells
+@using RentoomBooking.StayWell.Services
 @inject AvailableUpsellsState AvailableUpsellsState
 @inject UpsellCartState UpsellCartState
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
+@inject GlobalizationService GlobalizationService
 @implements IDisposable
 
 <div class="upsell-strip-wrapper">
@@ -17,7 +19,7 @@
             <img class="upsell-strip-header__icon" src="/icons/tickets.svg" alt="" />
             <h2 class="upsell-strip-title">@Title</h2>
         }
-        <a class="upsell-strip-more-link" href="/reservation/@Token/Vouchers">więcej <img src="/icons/chevron-right.svg"/></a>
+        <a class="upsell-strip-more-link" href="/reservation/@Token/Vouchers">@morebuttontext <img src="/icons/chevron-right.svg"/></a>
     </div>
 
     @if (AvailableUpsellsState.IsLoading)
@@ -89,6 +91,7 @@
     [Parameter] public ReservationPricingContext ReservationContext { get; set; } = new();
     [Parameter] public string Title { get; set; } = "Dostępne dodatki";
     [Parameter] public string Theme { get; set; } = "staywell-theme";
+    [Parameter] public string morebuttontext { get; set; } = "more";
     [Parameter] public int MaxItems { get; set; } = 3;
     [Parameter] public int MaxItemsDesktop { get; set; } = 2;
     [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
@@ -139,20 +142,47 @@
     {
         AvailableUpsellsState.OnChange += OnAvailableUpsellsStateChanged;
         UpsellCartState.OnChange += OnCartStateChanged;
+        GlobalizationService.OnChange += OnLanguageChanged;
     }
+
+    private string _lastLoadedToken = string.Empty;
+    private string _lastLoadedLocale = string.Empty;
 
     protected override async Task OnParametersSetAsync()
     {
         _reservationContext = ReservationContext;
 
-        if (!string.IsNullOrWhiteSpace(Token))
-        {
-            var locale = string.IsNullOrWhiteSpace(CultureInfo.CurrentUICulture.Name)
-                ? "pl-PL"
-                : CultureInfo.CurrentUICulture.Name;
+        var locale = GlobalizationService.CurrentCulture.Name;
 
-            await AvailableUpsellsState.EnsureLoadedAsync(Token, locale);
+        if (!string.IsNullOrWhiteSpace(Token)
+            && (Token != _lastLoadedToken || locale != _lastLoadedLocale))
+        {
+            _lastLoadedToken = Token;
+            _lastLoadedLocale = locale;
+            await LoadUpsellsAsync(locale);
         }
+    }
+
+    private void OnLanguageChanged() =>
+        InvokeAsync(ReloadAsync);
+
+    private async Task ReloadAsync()
+    {
+        _jsInitialized = false;
+        AvailableUpsellsState.BeginReload();
+        StateHasChanged();
+
+        var locale = GlobalizationService.CurrentCulture.Name;
+        _lastLoadedLocale = locale;
+        _lastLoadedToken = Token;
+
+        await LoadUpsellsAsync(locale, force: true);
+    }
+
+    private async Task LoadUpsellsAsync(string locale, bool force = false)
+    {
+        var effectiveLocale = string.IsNullOrWhiteSpace(locale) ? "pl-PL" : locale;
+        await AvailableUpsellsState.EnsureLoadedAsync(Token, effectiveLocale, force: force);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -210,6 +240,7 @@
     {
         AvailableUpsellsState.OnChange -= OnAvailableUpsellsStateChanged;
         UpsellCartState.OnChange -= OnCartStateChanged;
+        GlobalizationService.OnChange -= OnLanguageChanged;
         if (_selfRef is not null)
         {
             try { JS.InvokeVoidAsync("upsellStrip.offWindowResize", _selfRef); } catch { }

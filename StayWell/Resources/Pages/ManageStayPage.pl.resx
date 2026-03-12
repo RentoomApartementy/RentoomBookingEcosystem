@@ -120,6 +120,9 @@
   <data name="AdditionalCleaning" xml:space="preserve">
     <value>Dodatkowe sprzątanie</value>
   </data>
+  <data name="Addon" xml:space="preserve">
+    <value>Dodatek</value>
+  </data>
   <data name="BabyCrib" xml:space="preserve">
     <value>Łóżeczko dziecięce</value>
   </data>
@@ -132,13 +135,22 @@
   <data name="ExtendStay" xml:space="preserve">
     <value>Przedłuż pobyt</value>
   </data>
+  <data name="Help" xml:space="preserve">
+    <value>Pomoc</value>
+  </data>
   <data name="LateCheckOut" xml:space="preserve">
     <value>Późniejsze wymeldowanie</value>
   </data>
   <data name="ManageStay" xml:space="preserve">
     <value>Zarządzaj Pobytem</value>
   </data>
+  <data name="Purchased" xml:space="preserve">
+    <value>Zakupione</value>
+  </data>
   <data name="Report" xml:space="preserve">
     <value>Zgłoś usterkę</value>
+  </data>
+  <data name="ReportDescription" xml:space="preserve">
+    <value>Usterka, pytanie lub prośba do obsługi.</value>
   </data>
 </root>

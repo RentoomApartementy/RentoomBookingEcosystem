@@ -120,6 +120,9 @@
   <data name="AdditionalCleaning" xml:space="preserve">
     <value>Additional Cleaning</value>
   </data>
+  <data name="Addon" xml:space="preserve">
+    <value>Addon</value>
+  </data>
   <data name="BabyCrib" xml:space="preserve">
     <value>Baby crib</value>
   </data>
@@ -132,13 +135,22 @@
   <data name="ExtendStay" xml:space="preserve">
     <value>Extend your stay</value>
   </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
   <data name="LateCheckOut" xml:space="preserve">
     <value>Late Check-out</value>
   </data>
   <data name="ManageStay" xml:space="preserve">
     <value>Manage Your Stay</value>
   </data>
+  <data name="Purchased" xml:space="preserve">
+    <value>Purchased</value>
+  </data>
   <data name="Report" xml:space="preserve">
     <value>Report a problem</value>
+  </data>
+  <data name="ReportDescription" xml:space="preserve">
+    <value>Defect, a question or a request to the staff.</value>
   </data>
 </root>
