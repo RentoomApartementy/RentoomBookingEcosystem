@@ -309,6 +309,22 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             return await AddContactAsync(contact);
         }
 
+        
+        public async Task<string> GetCurrentServerTime()
+        {
+            var endpointMethod = "server.time";
+
+           
+            using var doc = await PostAsync(endpointMethod,null);
+
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.ValueKind == JsonValueKind.String)
+            {
+                return resultElement.ToString();
+            }
+
+            throw BitrixError(doc.RootElement.GetRawText(), doc);
+        }
 
         public async Task<int> AddDealAsync(CreateDealRequest req)
         {
@@ -474,7 +490,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
 
 
-        private async Task<JsonDocument> PostAsync(string endpointMethod, object payload)
+        private async Task<JsonDocument> PostAsync(string endpointMethod, object? payload)
         {
             var json = JsonSerializer.Serialize(payload);
             using var content = new StringContent(json, Encoding.UTF8, "application/json");

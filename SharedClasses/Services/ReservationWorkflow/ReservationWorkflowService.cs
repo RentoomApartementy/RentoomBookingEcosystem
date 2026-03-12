@@ -80,9 +80,38 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _termsRepository = termsRepository;
         }
 
-     
 
-        public async Task<Guid> StartAsync(StartReservationRequest request)
+
+private static TimeZoneInfo GetWarsawTimeZone()
+    {
+        try
+        {
+            // Linux / Azure Linux
+            return TimeZoneInfo.FindSystemTimeZoneById("Europe/Warsaw");
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            // Windows
+            return TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+        }
+    }
+
+    private static string ToBitrixDateTime(DateOnly? date, TimeOnly? time)
+    {
+        if (date is null || time is null)
+            throw new ArgumentNullException($"Bitrix datetime requires both date and time.");
+
+        var tz = GetWarsawTimeZone();
+
+        // Build a local Warsaw wall-clock time, without guessing UTC/local kind
+        var localDateTime = date.Value.ToDateTime(time.Value, DateTimeKind.Unspecified);
+        var offset = tz.GetUtcOffset(localDateTime);
+        var dto = new DateTimeOffset(localDateTime, offset);
+
+        return dto.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture);
+    }
+
+    public async Task<Guid> StartAsync(StartReservationRequest request)
         {
             if (request is null) throw new ArgumentNullException(nameof(request));
             var record = await _store.CreateAsync(request);
@@ -884,7 +913,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 var dealTitle = record.IdoReservationId.HasValue
                     ? $"Rezerwacja #{record.IdoReservationId}"
                     : $"Rezerwacja {record.ReservationGuid:D}";
-
+                var BitrixServerTime = await _bitrixService.GetCurrentServerTime();
                 record.DealBitrixId = await _bitrixService.AddDealAsync(new CreateDealRequest(
                     Title: dealTitle,
                     CategoryId: pipelineId,
@@ -899,6 +928,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                         ["UF_CRM_1769797476812"] = ResolveBitrixLanguage(record.State.Client.Language),
                         ["UF_CRM_1768836801823"] = record.State.StartRequest?.Adults,
                         ["UF_CRM_1768836818927"] = record.State.StartRequest?.EndDate.DayNumber - record.State.StartRequest?.StartDate.DayNumber,
+                        ["UF_CRM_1773256016575"] = ToBitrixDateTime(record.State.StartRequest?.StartDate, record.State.StartRequest?.CheckInTime),
+
+                        ["UF_CRM_1773310028374"] = ToBitrixDateTime(record.State.StartRequest?.EndDate,record.State.StartRequest?.CheckOutTime),
+                        ["UF_CRM_1773310079975"]  = record.State.StartRequest?.CheckInTime == new TimeOnly(14,0),
+                        ["UF_CRM_1773310094605"]  = record.State.StartRequest?.CheckOutTime == new TimeOnly(12,0)
 
 
                     }

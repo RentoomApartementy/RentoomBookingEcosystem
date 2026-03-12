@@ -117,55 +117,110 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CodeNotAvailable" xml:space="preserve">
-    <value>Code not available</value>
+  <data name="Accept" xml:space="preserve">
+    <value>Akceptuję</value>
   </data>
-  <data name="CheckingLock" xml:space="preserve">
-    <value>Checking lock availability...</value>
+  <data name="Accept2" xml:space="preserve">
+    <value>Zatwierdź</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Ilość dorosłych</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Nie możemy się już doczekać!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Zmień dane gości</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Zameldowanie</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Wymeldowanie</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Ilość dzieci</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Confirm</value>
+    <value>Potwierdzam</value>
   </data>
-  <data name="DoorOpened" xml:space="preserve">
-    <value>Door opened</value>
+  <data name="Continue" xml:space="preserve">
+    <value>Przejdź dalej</value>
   </data>
-  <data name="ErrorClosing" xml:space="preserve">
-    <value>Error while closing</value>
+  <data name="Days" xml:space="preserve">
+    <value>Dni</value>
   </data>
-  <data name="ErrorOpening" xml:space="preserve">
-    <value>Error while opening</value>
+  <data name="Fill" xml:space="preserve">
+    <value>Wypełnij Kartę zameldowania oraz zaakceptuj regulamin aby otrzymać dostęp do panelu.
+</value>
   </data>
-  <data name="ErrorServerConnection" xml:space="preserve">
-    <value>Error connecting to server</value>
+  <data name="Filled" xml:space="preserve">
+    <value>Wypełniona</value>
   </data>
-  <data name="HowTo" xml:space="preserve">
-    <value> How to use door lock</value>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Uzupełnij dane gości</value>
   </data>
-  <data name="NoCode" xml:space="preserve">
-    <value>No code for the lock. Contact staff!</value>
+  <data name="gcText" xml:space="preserve">
+    <value>Prosimy o podanie danych wszystkich osób, które będą przebywać w obiekcie.</value>
   </data>
-  <data name="Or" xml:space="preserve">
-    <value>or</value>
+  <data name="Guest" xml:space="preserve">
+    <value>Gość</value>
   </data>
-  <data name="PressToOpen" xml:space="preserve">
-    <value>Press to open</value>
+  <data name="Hours" xml:space="preserve">
+    <value>Godzin</value>
   </data>
-  <data name="Processing" xml:space="preserve">
-    <value>Processing</value>
+  <data name="Minutes" xml:space="preserve">
+    <value>Minut</value>
   </data>
-  <data name="RemoteOpen" xml:space="preserve">
-    <value>Remote door control</value>
+  <data name="Name" xml:space="preserve">
+    <value>Imie</value>
   </data>
-  <data name="RemoteUnavailable" xml:space="preserve">
-    <value>Remote door control is unavailable</value>
+  <data name="Next" xml:space="preserve">
+    <value>Dalej</value>
   </data>
-  <data name="TryAgain" xml:space="preserve">
-    <value>Try again</value>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numer telefonu</value>
   </data>
-  <data name="TryAgainIn" xml:space="preserve">
-    <value>Try again in {0}s</value>
+  <data name="Ready" xml:space="preserve">
+    <value>Twój Panel rezerwacji jest już dostępny!</value>
   </data>
-  <data name="YourIndividualCode" xml:space="preserve">
-    <value>Your apartment code</value>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Karta meldunkowa</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Pomyślnie zapisano dane!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Akceptuję obowiązek zgłoszenia wszelkich szkód i uwag przy zameldowaniu.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Akceptuję zakaz palenia wyrobów tytoniowych i elektronicznych papierosów wewnątrz obiektu.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Zakaz organizowania imprez oraz przyjmowania osób trzecich nieujętych w rezerwacji.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Doba hotelowa trwa od godziny </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>w dniu przyjazdu do godziny</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>w dniu wyjazdu.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Nazwisko</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Do pobytu pozostało</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Wybierz przybliżoną godzinę przyjazdu</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Godzina przyjazdu</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Wybrałeś/aś godzinę</value>
   </data>
 </root>

@@ -85,8 +85,17 @@ namespace RentoomBooking.StayWell.Models
             }
         }
 
-        private void SetLanguage()
+        private async Task SetLanguageAsync()
         {
+            var savedPreference = await GlobalizationService.LoadPreferenceAsync();
+
+            if (!string.IsNullOrWhiteSpace(savedPreference))
+            {
+                GlobalizationService.SetCulture(savedPreference);
+                Console.WriteLine($"Language set from local preference: {savedPreference}");
+                return;
+            }
+
             var lang = ReservationState.CurrentReservation?.Reservation?.Client?.Language;
 
 
@@ -110,8 +119,7 @@ namespace RentoomBooking.StayWell.Models
                 GlobalizationService.SetCulture("de-DE");
             }
 
-            Console.WriteLine("Language set to: " + lang?.ToString() + " " + CultureInfo.CurrentCulture.Name);
-
+            //Console.WriteLine($"Language set from API: {lang} → {CultureInfo.CurrentCulture.Name}");
         }
 
         private async Task LoadDataAsync()
@@ -141,7 +149,7 @@ namespace RentoomBooking.StayWell.Models
                     return;
                 }
 
-                SetLanguage();
+                await SetLanguageAsync();
 
                 var item = reservation.Items?.FirstOrDefault();
                 if (item is null)
@@ -159,7 +167,6 @@ namespace RentoomBooking.StayWell.Models
                     ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId),
                     AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
                     LocksState.GetLocksAsync(reservation.id, item.itemId),
-                    LocksState.CheckTTLockStatusAsync(Token),
                     LocksState.GetApartmentItemCodesAsync(Token)
                 );
                 IsInitializedSuccessfully = true;

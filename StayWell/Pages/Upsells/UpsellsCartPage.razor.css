@@ -1,11 +1,13 @@
 ﻿.floating-summary {
     position: fixed;
     bottom: 100px;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1000;
     padding: 0 16px 16px 16px;
     transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: calc(100% - 32px);
+    max-width: 700px;
 }
 
 .summary-tile {
@@ -280,5 +282,46 @@
 
     100% {
         transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 390px) {
+    .summary-tile {
+        padding: 16px;
+    }
+
+    .total-amount {
+        font-size: 1.2rem;
+        letter-spacing: -0.3px;
+    }
+
+    .total-label {
+        font-size: 0.82rem;
+    }
+
+    .floating-summary--collapsed .total-amount {
+        font-size: 1.05rem;
+    }
+
+    .summary-row {
+        font-size: 0.78rem;
+        gap: 6px;
+    }
+
+    .summary-row span {
+        min-width: 0;
+    }
+
+    .summary-row span:first-child {
+        flex: 1 1 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .summary-row span:last-child {
+        flex-shrink: 0;
+        text-align: right;
+        padding-left: 6px;
     }
 }

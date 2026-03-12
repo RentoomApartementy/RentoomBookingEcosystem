@@ -35,6 +35,7 @@ else
                 Texts="_texts"
                 InitialSelection="_cartSelected"
                 OnSelectionChanged="HandleSelectionChanged" />
+                <div style="margin-bottom: 100px;"></div>
 }
 
 @code {
@@ -53,7 +54,34 @@ else
         await base.OnInitializedAsync();
 
         UpsellCartState.OnCleared += OnCartCleared;
+        GlobalizationService.OnChange += OnLanguageChanged; // PageBase subskrybuje StateHasChanged osobno — to jest OK, OnLanguageChanged robi fetch
 
+        if (string.IsNullOrWhiteSpace(Token))
+            return;
+
+        _reservationContext = BuildReservationPricingContext();
+        _cartSelected = UpsellCartState.PendingUpsells.ToList();
+        await LoadUpsellsAsync();
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose(); // base odpina StateHasChanged
+        UpsellCartState.OnCleared -= OnCartCleared;
+        GlobalizationService.OnChange -= OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged() =>
+        InvokeAsync(async () =>
+        {
+            AvailableUpsellsState.BeginReload();
+            await LoadUpsellsAsync(force: true);
+            _upsellListKey++;
+            StateHasChanged();
+        });
+
+    private async Task LoadUpsellsAsync(bool force = false)
+    {
         if (string.IsNullOrWhiteSpace(Token))
             return;
 
@@ -61,15 +89,7 @@ else
             ? "pl-PL"
             : CultureInfo.CurrentUICulture.Name;
 
-        _reservationContext = BuildReservationPricingContext();
-        _cartSelected = UpsellCartState.PendingUpsells.ToList();
-        await AvailableUpsellsState.EnsureLoadedAsync(Token, locale);
-    }
-
-    public override void Dispose()
-    {
-        base.Dispose();
-        UpsellCartState.OnCleared -= OnCartCleared;
+        await AvailableUpsellsState.EnsureLoadedAsync(Token, locale, force: force);
     }
 
     private void OnCartCleared()

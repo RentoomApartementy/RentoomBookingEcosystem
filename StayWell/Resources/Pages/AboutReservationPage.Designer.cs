@@ -241,6 +241,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Office address.
+        /// </summary>
+        internal static string OfficeAddress {
+            get {
+                return ResourceManager.GetString("OfficeAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Registered guests.
         /// </summary>
         internal static string RegisteredGuests {
@@ -300,6 +309,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         internal static string TOSConsents {
             get {
                 return ResourceManager.GetString("TOSConsents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your stay is managed by Rentoom.
+        /// </summary>
+        internal static string YourStay {
+            get {
+                return ResourceManager.GetString("YourStay", resourceCulture);
             }
         }
     }

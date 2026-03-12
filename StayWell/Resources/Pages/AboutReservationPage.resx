@@ -177,6 +177,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="OfficeAddress" xml:space="preserve">
+    <value>Office address</value>
+  </data>
   <data name="RegisteredGuests" xml:space="preserve">
     <value>Registered guests</value>
   </data>
@@ -197,5 +200,8 @@
   </data>
   <data name="TOSConsents" xml:space="preserve">
     <value>Terms, Conditions and consents</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Your stay is managed by Rentoom</value>
   </data>
 </root>

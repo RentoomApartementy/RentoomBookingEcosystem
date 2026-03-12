@@ -52,7 +52,7 @@ else
             <div class="tile-icon">
                 <img class="fas" src="/icons/book.svg" />
             </div>
-            <div class="tile-text">Instrukcja zameldowania</div>
+            <div class="tile-text">@Localizer["Instructions"]</div>
         </div>
 
         <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
@@ -65,17 +65,22 @@ else
             <div class="tile-icon-vouchers">
                 <img class="fas" src="/icons/wallet-cards.svg" />
             </div>
-            <div class="tile-text-vouchers">Moje Vouchery</div>
+            <div class="tile-text-vouchers">@Localizer["MyVouchers"]</div>
         </div>
     </div>
 
     <RentoomBooking.StayWell.Components.Upsells.AvailableUpsells
         Token="@Token"
         ReservationContext="_reservationContext"
-        Title="Ulepsz swój pobyt"
+        Title="@Localizer["Enhance"]"
         MaxItems="3"
+        MaxItemsDesktop="2"
         Theme="staywell-theme"
+        morebuttontext="@Localizer["More"]"
         OnSelectionChanged="OnUpsellsSelected" />
+
+        <div class="homepage-upsell-spacer"></div>
+
 }
 
 @code

@@ -256,20 +256,20 @@
             {
                 <div id="offers-section" class="summary-offer-price-wrapper"> @{
                                                                                   var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
-                                                                                  var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
-                                                                                  var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+                                                                                  var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "refundable");
+                                                                                  var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "nonrefundable");
                                                                               }
                     
                     @if (nonRefundableOffer != null)
                     {
-                        <div class="summary-offer-price">
+                        <div class="summary-offer-price @(IsSelectedOffer(OfferTypeNonrefundable) ? "selected-offer" : "")">
                             <b>@Localizer["Non-refundableOffer"]</b>
                             <small>@Localizer["NonRefundableText"]</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
-                                    <Button>@Localizer["BookNow"]</Button>
+                                        <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
                                 </div>
                             </div>
                         </div>  
@@ -277,14 +277,14 @@
                     
                     @if (refundableOffer != null)
                     {
-                        <div class="summary-offer-price refundable">
+                        <div class="summary-offer-price refundable @(IsSelectedOffer(OfferTypeRefundable) ? "selected-offer" : "")">
                             <b>@Localizer["RefundableOffer"]</b>
                             <small>@Localizer["RefundableOfferText"]</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
-                                    <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
+                                    <Button>@Localizer["BookNow"]</Button>
                                 </div>
                             </div>
                         </div>   
@@ -349,8 +349,8 @@
                     @if (StartDate == null && EndDate == null)
                     {
                         <div @onclick="OpenSearchModal" @onclick:stopPropagation="true" style="flex: 1;"> 
-                            <Button Type="ButtonType.Tertiary" style="width: 100%;" Class="small">
-                                @Localizer["SelectDatesAndGuests"]
+                            <Button Type="ButtonType.Secondary" style="width: 100%;" Class="small">
+                                @Localizer["SelectDatesAndGuestsButtonLabel"]
                             </Button>
                         </div>
                         
@@ -365,7 +365,7 @@
                                 Class="small"
                                 style="width: 100%;"
                                 @onclick="SmartScrollAction">
-                            @(_isAtOffers ? Localizer["BookNow"] : (_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"]))
+                              @(_isAtOffers ? Localizer["BookNowStepButtonLabel"] : (_isAtSummary ? Localizer["SelectOfferStepButtonLabel"] : Localizer["SummaryStepButtonLabel"])) 
                         </Button>
                     }
 
@@ -439,6 +439,12 @@
                                 <small style="font-weight: bold">@Localizer["CheckOutTimeFormat"]</small>
                             </div>
                         </div>
+
+                        <div class="@((StartDate == null && EndDate == null) ? "desktop-only" : "")" style="margin-top: 0.5rem; margin-bottom: 1rem; width: 100%;" @onclick="OpenSearchModal">
+                            <Button Type="ButtonType.Secondary" style="width: 100%;">
+                                @Localizer["SelectDatesAndGuestsButtonLabel"]
+                            </Button>
+                        </div>
                         
                         @if (_isOfferLoading)
                         {
@@ -450,7 +456,7 @@
                         {
                             <div class="desktop-only" style="margin-top: 1rem; width: 100%;" @onclick="SmartScrollAction"> 
                                 <Button style="width: 100%;">
-                                    @(_isAtOffers ? Localizer["BookNow"] : (_isAtSummary ? Localizer["SelectOffer"] : Localizer["Summary"])) 
+                                    @(_isAtOffers ? Localizer["BookNowStepButtonLabel"] : (_isAtSummary ? Localizer["SelectOfferStepButtonLabel"] : Localizer["SummaryStepButtonLabel"])) 
                                 </Button>
                             </div>
                         }
@@ -491,14 +497,6 @@
                                         </div>
                                     </div>
                                 }
-                            </div>
-                        }
-                        else if (StartDate == null && EndDate == null)
-                        {
-                            <div class="desktop-only" style="margin-top: 1rem; width: 100%;" @onclick="OpenSearchModal"> 
-                                <Button style="width: 100%;">
-                                    Wybierz datę i liczbę gości
-                                </Button>
                             </div>
                         }
                     </div>
@@ -806,6 +804,7 @@
 
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
+    private string? _selectedOfferType;
 
     private static Dictionary<string, string> _languageMap = new Dictionary<string, string>
     {
@@ -869,13 +868,15 @@
     {
         if (_apartment == null) return new MarkupString("");
 
+        // Używamy Product obok Apartment, aby wymusić Rich Results (kafelek) w Google
         var jsonLd = new Dictionary<string, object>
         {
             ["@context"] = "https://schema.org",
-            ["@type"] = "Apartment",
+            ["@type"] = new[] { "Product", "Apartment", "LodgingBusiness" },
             ["name"] = _apartment.Name ?? "",
             ["description"] = GetSeoDescription(),
-            ["url"] = GetCanonicalUrl()
+            ["url"] = GetCanonicalUrl(),
+            ["brand"] = new Dictionary<string, string> { ["@type"] = "Brand", ["name"] = "Rentoom" }
         };
 
         if (_objectMediums != null && _objectMediums.Any())
@@ -903,12 +904,40 @@
             ["longitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? ""
         };
 
+        // Cena - Google wymaga 'offers' dla Rich Results. 
+        // Jeśli nie ma dynamicznej ceny (np. Googlebot bez dat), podajemy cenę minimalną "od" (np. 199 PLN).
+        decimal displayPrice = localMinPrice ?? 199m; 
+
+        jsonLd["offers"] = new Dictionary<string, object>
+        {
+            ["@type"] = "Offer",
+            ["price"] = displayPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture),
+            ["priceCurrency"] = "PLN",
+            ["availability"] = "https://schema.org/InStock",
+            ["url"] = GetCanonicalUrl(),
+            ["priceValidUntil"] = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd")
+        };
+
+        // Ocena marki (Rich Results - Gwiazdki)
+        jsonLd["aggregateRating"] = new Dictionary<string, object>
+        {
+            ["@type"] = "AggregateRating",
+            ["ratingValue"] = "9.7",
+            ["bestRating"] = "10",
+            ["reviewCount"] = "35"
+        };
+
         jsonLd["occupancy"] = new Dictionary<string, object>
         {
             ["@type"] = "QuantitativeValue",
             ["minValue"] = _apartment.MinCapacity,
             ["maxValue"] = _apartment.Capacity
         };
+
+        if (_apartment.BedroomsCount.HasValue)
+        {
+            jsonLd["numberOfRooms"] = _apartment.BedroomsCount.Value;
+        }
 
         jsonLd["floorSize"] = new Dictionary<string, object>
         {
@@ -1007,6 +1036,8 @@
         {
             _isOfferLoading = false;
         }
+
+        EnsureSelectedOffer();
         
         bool hasOffers = _offersResponse?.Result?.PricingOffers != null && 
                          _offersResponse.Result.PricingOffers.Any();
@@ -1054,6 +1085,35 @@
             _suggestionLoading = false;
             await InvokeAsync(StateHasChanged);
         }
+    }
+
+    private bool IsSelectedOffer(string? offerType)
+    {
+        if (string.IsNullOrWhiteSpace(offerType) || string.IsNullOrWhiteSpace(_selectedOfferType))
+        {
+            return false;
+        }
+
+        return  string.Equals(_selectedOfferType, offerType, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void EnsureSelectedOffer()
+    {
+        var offers = _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers;
+        if (offers == null || !offers.Any())
+        {
+            _selectedOfferType = null;
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(_selectedOfferType) &&
+            offers.Any(o => string.Equals(o.OfferType, _selectedOfferType, StringComparison.OrdinalIgnoreCase)))
+        {
+            return;
+        }
+
+        var nonRefundable = offers.FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase));
+        _selectedOfferType = nonRefundable?.OfferType ?? offers.First().OfferType;
     }
     
     private void InitializeMandatoryAddons()
@@ -1272,7 +1332,9 @@
             return;
         }
 
-        var selectedOffer = GetOfferByType(offerType);
+        EnsureSelectedOffer();
+        var resolvedOfferType = !string.IsNullOrWhiteSpace(offerType) ? offerType : _selectedOfferType;
+        var selectedOffer = GetOfferByType(resolvedOfferType);
         var adults = int.TryParse(Adults, out var a) ? a : 1;
         var children = int.TryParse(Children, out var c) ? c : 0;
         var hasEarlyCheckInAddon = _selectedAddons.Exists(a => a.AddonId == 40);
@@ -1302,7 +1364,7 @@
             CheckOutTime = checkOutTime,
             Adults = adults,
             Children = children,
-            SelectedOfferType = selectedOffer?.OfferType ?? offerType,
+            SelectedOfferType = selectedOffer?.OfferType ?? resolvedOfferType,
             OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
             Currency = "PLN",
             SelectedAddons = _selectedAddons,
@@ -1319,11 +1381,8 @@
 
         if (_isAtOffers)
         {
-            var offer = localNonRefundableOffer ?? localRefundableOffer;
-            if (offer != null)
-            {
-                await GoToPayment(offer.OfferType);
-            }
+            EnsureSelectedOffer();
+            await GoToPayment(_selectedOfferType);
             return;
         }
 
@@ -1375,7 +1434,8 @@
             }
         }
 
-        return offers.FirstOrDefault();
+        var nonRefundable = offers.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == OfferTypeNonrefundable);
+        return nonRefundable ?? offers.FirstOrDefault();
     }
     
     private void RefreshAddonsParams()
@@ -1454,10 +1514,12 @@
     }
     
     private OfferItem? localRefundableOffer => 
-        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?.FirstOrDefault(o => o.OfferType == "refundable");
+        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?
+            .FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeRefundable, StringComparison.OrdinalIgnoreCase));
 
     private OfferItem? localNonRefundableOffer => 
-        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?.FirstOrDefault(o => o.OfferType == "nonrefundable");
+        _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?
+            .FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase));
 
     private decimal? localMinPrice
     {
