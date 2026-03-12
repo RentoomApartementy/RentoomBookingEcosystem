@@ -28,6 +28,7 @@ namespace RentoomBooking.StayWell.States
             {
                 ResetState();
                 Error = "Reservation token is required.";
+                IsLoading = false;
                 NotifyStateChanged();
                 return;
             }
@@ -36,14 +37,22 @@ namespace RentoomBooking.StayWell.States
 
             if (!force && !ShouldFetch(token, normalizedLocale))
             {
+                if (IsLoading)
+                {
+                    IsLoading = false;
+                    NotifyStateChanged();
+                }
                 return;
             }
 
             await _loadLock.WaitAsync(ct);
             try
             {
+                // Drugi caller czeka≥ na lock ó sprawdü czy pierwszy juø za≥adowa≥
                 if (!force && !ShouldFetch(token, normalizedLocale))
                 {
+                    IsLoading = false;
+                    NotifyStateChanged();
                     return;
                 }
 
@@ -56,7 +65,7 @@ namespace RentoomBooking.StayWell.States
                     NotifyStateChanged();
                 }
 
-                SetLoading(true);
+                IsLoading = true;
                 Error = null;
                 NotifyStateChanged();
 
@@ -68,7 +77,6 @@ namespace RentoomBooking.StayWell.States
                 _currentLocale = normalizedLocale;
                 LastLoadedAtUtc = DateTime.UtcNow;
                 Error = null;
-                NotifyStateChanged();
             }
             catch (OperationCanceledException)
             {
@@ -79,11 +87,12 @@ namespace RentoomBooking.StayWell.States
                 Error = ex.Message;
                 AvailableUpsells = Array.Empty<UpsellTileDto>();
                 LastLoadedAtUtc = null;
-                NotifyStateChanged();
             }
             finally
             {
-                SetLoading(false);
+                IsLoading = false;
+                NotifyStateChanged();
+                _loadLock.Release();
             }
         }
 
@@ -92,25 +101,30 @@ namespace RentoomBooking.StayWell.States
             AvailableUpsells = Array.Empty<UpsellTileDto>();
             LastLoadedAtUtc = null;
             Error = null;
+            _currentLocale = null;
+            NotifyStateChanged();
+        }
+
+        public void BeginReload()
+        {
+            AvailableUpsells = Array.Empty<UpsellTileDto>();
+            LastLoadedAtUtc = null;
+            Error = null;
+            _currentLocale = null;
+            IsLoading = true;
             NotifyStateChanged();
         }
 
         private bool ShouldFetch(string token, string? locale)
         {
             if (!string.Equals(CurrentToken, token, StringComparison.Ordinal))
-            {
                 return true;
-            }
 
             if (!string.Equals(_currentLocale, locale, StringComparison.OrdinalIgnoreCase))
-            {
                 return true;
-            }
 
             if (!LastLoadedAtUtc.HasValue)
-            {
                 return true;
-            }
 
             return DateTime.UtcNow - LastLoadedAtUtc.Value >= CacheTtl;
         }
@@ -118,12 +132,6 @@ namespace RentoomBooking.StayWell.States
         private static string? NormalizeLocale(string? locale)
         {
             return string.IsNullOrWhiteSpace(locale) ? null : locale.Trim();
-        }
-
-        private void SetLoading(bool isLoading)
-        {
-            IsLoading = isLoading;
-            NotifyStateChanged();
         }
 
         private void ResetState()

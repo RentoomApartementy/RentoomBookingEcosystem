@@ -115,6 +115,24 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu  How to use door lock.
+        /// </summary>
+        internal static string HowTo {
+            get {
+                return ResourceManager.GetString("HowTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu No code for the lock. Contact staff!.
+        /// </summary>
+        internal static string NoCode {
+            get {
+                return ResourceManager.GetString("NoCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu or.
         /// </summary>
         internal static string Or {
@@ -142,7 +160,25 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your individual code.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Remote door control.
+        /// </summary>
+        internal static string RemoteOpen {
+            get {
+                return ResourceManager.GetString("RemoteOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Remote door control is unavailable.
+        /// </summary>
+        internal static string RemoteUnavailable {
+            get {
+                return ResourceManager.GetString("RemoteUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your apartment code.
         /// </summary>
         internal static string YourIndividualCode {
             get {

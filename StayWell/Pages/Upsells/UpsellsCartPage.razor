@@ -1,11 +1,13 @@
 ﻿@page "/reservation/{token}/UpsellsCartPage"
 @using System.Globalization
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.Services
 @using RentoomBooking.StayWell.States
+@inject IStringLocalizer<UpsellsCartPage> Localizer
 @inject BackendApi BackendApi
 @inject NavigationManager Navigation
 @inject UpsellCartState UpsellCartState
@@ -21,12 +23,12 @@
     <div class="manage-tile">
         <div class="cart-empty">
             <img class="cart-empty__icon" src="/icons/shopping-cart.svg" />
-            <span class="cart-empty__text">Twój koszyk jest pusty</span>
+            <span class="cart-empty__text">@Localizer["Empty"]</span>
         </div>
     </div>
     <div class="cart-actions" style="margin-top: 20px;">
         <button class="cart-actions__btn cart-actions__btn--secondary" @onclick="GoBack">
-            Wróć do strony głównej
+            @Localizer["Back"]
         </button>
     </div>
 }
@@ -36,14 +38,14 @@ else
         <div class="cart-items-wrapper" @ref="_wrapperRef">
             <h3 class="reservation-section__title">
                 <img class="reservation-field__icon" src="/icons/shopping-cart.svg" />
-                Twój Koszyk
+                @Localizer["YourCart"]
             </h3>
 
             @if (UpsellCartState.Items.Any())
             {
                 <span class="manage-tile__category"
                       style="margin-left: 10px; margin-bottom: 8px; display: block;">
-                    VOUCHERY I USŁUGI
+                    @Localizer["title"]
                 </span>
                 @foreach (var item in UpsellCartState.Items)
                 {
@@ -76,10 +78,10 @@ else
                             </div>
                             <div class="cart-item__bottom">
                                 <div class="cart-item__qty-info">
-                                    <span>Ilość: <strong>@item.Quantity</strong></span>
+                                    <span>@Localizer["Quantity"]: <strong>@item.Quantity</strong></span>
                                     @if (item.Nights > 0)
                                     {
-                                        <span>Noce: <strong>@item.Nights</strong></span>
+                                        <span>@Localizer["Nights"]: <strong>@item.Nights</strong></span>
                                     }
                                 </div>
                                 <div class="cart-item__price-section">
@@ -105,14 +107,14 @@ else
                                         <small>@UpsellCartState.Currency</small>
                                     </div>
                                     <span class="price-unit-info">
-                                        @item.UnitPriceGross.ToString("F2") / jedn.
+                                        @item.UnitPriceGross.ToString("F2") / @Localizer["Unit"]
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <button class="cart-item__remove"
                                 @onclick="() => RemoveItem(item.PartnerServiceId)"
-                                title="Usuń z koszyka">
+                                title="@Localizer["Remove"]">
                            <img src="/icons/x.svg"/>
                         </button>
                     </div>
@@ -128,7 +130,7 @@ else
             {
                 <span class="manage-tile__category"
                       style="margin-left: 10px; margin-bottom: 8px; display: block;">
-                    DODATKI DO REZERWACJI
+                    @Localizer["Addons"]
                 </span>
                 @foreach (var addon in UpsellCartState.AddonItems)
                 {
@@ -158,7 +160,7 @@ else
                                 <div class="cart-item__qty-info">
                                     @if (addon.AllowQuantitySelection)
                                     {
-                                        <span>Ilość: <strong>@addon.Quantity</strong></span>
+                                        <span>@Localizer["Quantity"]: <strong>@addon.Quantity</strong></span>
                                     }
                                 </div>
                                 <div class="cart-item__price-section">
@@ -171,7 +173,7 @@ else
                                         @if (addon.AllowQuantitySelection && addon.Quantity > 1)
                                         {
                                             <span class="price-unit-info">
-                                                @addon.PriceGross.Value.ToString("F2") / jedn.
+                                                @addon.PriceGross.Value.ToString("F2") / @Localizer["Unit"]
                                             </span>
                                         }
                                         else if (!string.IsNullOrWhiteSpace(addon.PriceInfo))
@@ -192,7 +194,7 @@ else
                         </div>
                         <button class="cart-item__remove"
                                 @onclick="() => UpsellCartState.RemoveAddonItem(addon.IdoBookingAddonId)"
-                                title="Usuń z koszyka">
+                                title="@Localizer["Remove"]">
                             &#x2715;
                         </button>
                     </div>
@@ -205,7 +207,7 @@ else
          @ref="_summaryRef">
         <div class="manage-tile summary-tile">
             <div class="summary-details">
-                <span class="manage-tile__category title">PODSUMOWANIE PŁATNOŚCI</span>
+                <span class="manage-tile__category title">@Localizer["Summary"]</span>
 
                 @foreach (var item in UpsellCartState.Items)
                 {
@@ -252,7 +254,7 @@ else
                 @if (TotalSavings > 0)
                 {
                     <div class="summary-row" style="color: #16a34a; font-weight: 700;">
-                        <span>🎉 Z nami zaoszczędzisz:</span>
+                        <span>🎉 @Localizer["Savings"]</span>
                         <span>@TotalSavings.ToString("F2") @UpsellCartState.Currency</span>
                     </div>
                 }
@@ -260,7 +262,7 @@ else
 
             <div class="summary-footer">
                 <div class="summary-total-box">
-                    <span class="total-label">Suma do zapłaty</span>
+                    <span class="total-label"> @Localizer["Total"] </span>
                     <span class="total-amount">
                         @UpsellCartState.TotalCombinedPrice.ToString("F2") @UpsellCartState.Currency
                     </span>
@@ -285,7 +287,7 @@ else
                             @onclick="ConfirmAsync">
                         @if (_isRedirecting)
                         {
-                            <span>Przekierowywanie...</span>
+                            <span>@Localizer["Redirecting"]...</span>
                         }
                         else if (_isCartBusy)
                         {
@@ -293,7 +295,7 @@ else
                         }
                         else
                         {
-                            <span>Zapłać</span>
+                            <span>@Localizer["Pay"]</span>
                         }
                     </button>
                 </div>
@@ -321,6 +323,58 @@ else
     {
         await base.OnInitializedAsync();
         _reservationContext = BuildReservationPricingContext();
+        GlobalizationService.OnChange += OnLanguageChanged;
+
+        await RefreshUpsellTitlesAsync();
+    }
+
+    private void OnLanguageChanged() =>
+        InvokeAsync(async () =>
+        {
+            await RefreshUpsellTitlesAsync();
+            RefreshAddonTitles();
+            StateHasChanged();
+        });
+
+    private async Task RefreshUpsellTitlesAsync()
+    {
+        if (!UpsellCartState.Items.Any() || string.IsNullOrWhiteSpace(Token))
+            return;
+
+        var locale = GlobalizationService.CurrentCulture.Name;
+        await AvailableUpsellsState.EnsureLoadedAsync(Token, locale, force: false);
+
+        if (AvailableUpsellsState.AvailableUpsells.Any())
+            UpsellCartState.RefreshItemTitlesFromCatalog(AvailableUpsellsState.AvailableUpsells);
+    }
+
+    private void RefreshAddonTitles()
+    {
+        if (!UpsellCartState.AddonItems.Any())
+            return;
+
+        var lang = GlobalizationService.CurrentCulture.TwoLetterISOLanguageName.ToUpperInvariant();
+        var updatedAddons = UpsellCartState.AddonItems.Select(addon =>
+        {
+            var defined = ApartmentState.DefinedAddons
+                .FirstOrDefault(a => a.IdoBookingId == addon.IdoBookingAddonId);
+            if (defined is null)
+                return addon;
+
+            var details = defined.AddonDefinition?.Details
+                .FirstOrDefault(d => string.Equals(d.Lang, lang, StringComparison.OrdinalIgnoreCase));
+            if (details is null)
+                return addon;
+
+            return addon with
+            {
+                Title = details.Name ?? addon.Title,
+                Description = details.Description ?? addon.Description,
+                PriceInfo = details.PaymentTypeShortDescription ?? addon.PriceInfo
+            };
+        }).ToList();
+
+        UpsellCartState.ReplaceAddonItems(updatedAddons);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -504,6 +558,7 @@ else
 
     public async ValueTask DisposeAsync()
     {
+        GlobalizationService.OnChange -= OnLanguageChanged;
         await JS.InvokeVoidAsync("removeCartScrollListener");
         _objRef?.Dispose();
     }

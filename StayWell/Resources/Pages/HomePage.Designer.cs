@@ -115,6 +115,24 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Enhance your stay.
+        /// </summary>
+        internal static string Enhance {
+            get {
+                return ResourceManager.GetString("Enhance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Home.
+        /// </summary>
+        internal static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Check-in Instructions.
         /// </summary>
         internal static string Instructions {
@@ -124,11 +142,56 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Guide.
+        /// </summary>
+        internal static string InstructionsFooter {
+            get {
+                return ResourceManager.GetString("InstructionsFooter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Manage.
+        /// </summary>
+        internal static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Manage Your Stay.
         /// </summary>
         internal static string ManageStay {
             get {
                 return ResourceManager.GetString("ManageStay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu more....
+        /// </summary>
+        internal static string More {
+            get {
+                return ResourceManager.GetString("More", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu My Vouchers.
+        /// </summary>
+        internal static string MyVouchers {
+            get {
+                return ResourceManager.GetString("MyVouchers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Open.
+        /// </summary>
+        internal static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
             }
         }
         

@@ -135,11 +135,33 @@
   <data name="CurrentLanguage" xml:space="preserve">
     <value>Current Language</value>
   </data>
+  <data name="Enhance" xml:space="preserve">
+    <value>Enhance your stay</value>
+    <comment>&#x8;</comment>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="Instructions" xml:space="preserve">
     <value>Check-in Instructions</value>
   </data>
+  <data name="InstructionsFooter" xml:space="preserve">
+    <value>Guide</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
   <data name="ManageStay" xml:space="preserve">
     <value>Manage Your Stay</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>more...</value>
+  </data>
+  <data name="MyVouchers" xml:space="preserve">
+    <value>My Vouchers</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
   </data>
   <data name="OpenApartment" xml:space="preserve">
     <value>Open Apartment</value>

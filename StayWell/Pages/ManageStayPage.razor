@@ -1,8 +1,10 @@
 ﻿@page "/reservation/{token}/ManageStayPage"
+@using Microsoft.Extensions.Localization
+@using System.Globalization
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
-@using System.Globalization
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
+@inject IStringLocalizer<ManageStayPage> Localizer
 @inject NavigationManager Navigation
 @inject UpsellCartState UpsellCartState
 @inherits Models.PageBase
@@ -14,11 +16,11 @@
     <div class="reservation-section__content">
         <div class="manage-grid" style="@(!UpsellCartState.IsEmpty ? "padding-bottom: 160px;" : "")">
             <div class="manage-tile--report">
-                <ManageTile Category="Pomoc"
-                            Title="Zgłoś problem"
+                <ManageTile Category="@Localizer["Help"]"
+                            Title="@Localizer["Report"]"
                             Icon="/icons/frown.svg"
                             ActionIcon="/icons/chevron-right.svg"
-                            Description="Usterka, pytanie lub prośba do obsługi."
+                            Description="@Localizer["ReportDescription"]"
                             ShowPrice="false"
                             OnClick="@(() => Navigation.NavigateTo($"reservation/{Token}/ReportPage"))" />
             </div>
@@ -57,7 +59,7 @@
                         var maxQty = addonId.HasValue && AddonMaxQuantityMap.TryGetValue(addonId.Value, out var max) ? max : (int?)null;
                         var currentQty = addonId.HasValue ? UpsellCartState.GetAddonQuantity(addonId.Value) : 1;
 
-                        <ManageTile Category="Dodatek"
+                        <ManageTile Category="@Localizer["Addon"]"
                                     Title="@title"
                                     Icon=""
                                     ActionIcon=""
@@ -74,7 +76,7 @@
                     }
                     @if (purchasedAddons.Count > 0)
                     {
-                        <span class="manage-purchased-label">Zakupione</span>
+                        <span class="manage-purchased-label">@Localizer["Purchased"]</span>
 
                         foreach (var addon in purchasedAddons)
                         {
@@ -83,12 +85,12 @@
                                 : null;
                             var details = definedAddon?.AddonDefinition?.Details
                                 .FirstOrDefault(d => string.Equals(d.Lang, CurrentAddonsLanguage, StringComparison.OrdinalIgnoreCase));
-                            var title = details?.Name ?? addon.Name ?? "Dodatek";
+                            var title = details?.Name ?? addon.Name ?? Localizer["Addon"];
                             var description = details?.Description ?? string.Empty;
                             var priceText = definedAddon is not null ? $"{definedAddon.PriceGross:#.00} PLN" : string.Empty;
                             var priceInfo = details?.PaymentTypeShortDescription ?? string.Empty;
 
-                            <ManageTile Category="Zakupiony"
+                            <ManageTile Category="@Localizer["Addon"]"
                                         Title="@title"
                                         Icon=""
                                         ActionIcon=""

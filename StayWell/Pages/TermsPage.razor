@@ -4,12 +4,11 @@
 @using RentoomBooking.StayWell.Models
 @using RentoomBooking.SharedClasses.Models.StayWell
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<PrearrivalPage> Localizer
 @inject IJSRuntime JSRuntime
-@* @inject Services.ModalService ModalService
-@inject Services.ToastService ToastService
-@inject States.ReservationState ReservationState
-@inject States.RegistrationCardState RegistrationCardState
-@inject States.TermsState TermsState *@
+
 @inherits Models.PageBase
 
 <PageTitle>Regulamin i Zameldowanie</PageTitle>
@@ -45,10 +44,10 @@
                 else if (CurrentView == ViewState.RegistrationCard)
                 {
                     <div class="registration-view">
-                        <h3 class="reg-title">Karta Meldunkowa</h3>
+                        <h3 class="reg-title">@Localizer["RegisterCard"]</h3>
 
                         <div class="mail-wrapper">
-                            <label class="mail-input-title" for="email">Adres e-mail</label>
+                            <label class="mail-input-title" for="email">E-mail</label>
                             <input class="editform-input @(IsEmailValid ? "is-valid" : "")"
                                    id="email" type="email" placeholder="twój@email.pl"
                                    @bind="_mail" @bind:event="oninput" />
@@ -57,13 +56,13 @@
                         <div class="form-buttons">
                             <Button OnClick="SelectTime" ButtonStyle="padding: 22px 12px !important; width: 100%;">
                                 <RenderFragment>
-                                    <span>@(_checkInTime is null ? "Wybierz przybliżoną godzinę przyjazdu" : $"Godzina przyjazdu: {_checkInTime.Value.ToString(@"hh\:mm")}")</span>
+                                    <span>@(_checkInTime is null ? Localizer["TimeSelect"] : $"{Localizer["TimeSelected"]}: {_checkInTime.Value.ToString(@"hh\:mm")}")</span>
                                 </RenderFragment>
                             </Button>
 
                             <Button OnClick="FillGuestInfo" ButtonStyle="padding: 22px 12px !important; width: 100%;">
                                 <RenderFragment>
-                                    <span>@(AreGuestsFilled() ? $"Zmień dane gości ({_guests.Count})" : "Uzupełnij dane gości")</span>
+                                    <span>@(AreGuestsFilled() ? $"{Localizer["ChangeGuest"]} ({_guests.Count})" : Localizer["FillGuest"])</span>
                                 </RenderFragment>
                             </Button>
                         </div>
@@ -81,8 +80,7 @@
     </div>  
 </div>
 
-    <FloatingButton 
-        Text="@(CurrentView == ViewState.Steps ? "Dalej" : CurrentView == ViewState.Terms ? "Akceptuję" : "Potwierdzam")"
+    <FloatingButton Text="@(CurrentView == ViewState.Steps ? Localizer["Continue"] : CurrentView == ViewState.Terms ? Localizer["Accept"] : Localizer["Confirm"])"
         IconPath="@(CurrentView != ViewState.RegistrationCard ? "/icons/chevron-right.svg" : "/icons/handshake.svg")"
         IsDisabled="IsButtonDisabled"
         OnClick="HandleNextClick" />
@@ -117,10 +115,10 @@
 
     private (string Image, string Text)[] steps => new[]
     {
-        ("/images/clock.png", $"Doba hotelowa trwa od godziny {ReservationState.CheckInTime:HH\\:mm} w dniu przyjazdu do godziny {ReservationState.CheckOutTime:HH\\:mm} w dniu wyjazdu."),
-        ("/images/broken-window.png", "Akceptuję obowiązek zgłoszenia wszelkich szkód i uwag przy zameldowaniu."),
-        ("/images/no-smoking.png", "Akceptuję zakaz palenia wyrobów tytoniowych i elektronicznych papierosów wewnątrz obiektu."),
-        ("/images/party.png", "Zakaz organizowania imprez oraz przyjmowania osób trzecich nieujętych w rezerwacji.")
+        ("/images/clock.png", $"{Localizer["Step11"]} {ReservationState.CheckInTime:HH\\:mm} {Localizer["Step12"]} {ReservationState.CheckOutTime:HH\\:mm} {Localizer["Step13"]}"),
+        ("/images/broken-window.png", $"{Localizer["Step2"]}"),
+        ("/images/no-smoking.png", $"{Localizer["Step3"]}"),
+        ("/images/party.png", $"{Localizer["Step4"]}")
     };
 
     private int _currentStep = 0;
@@ -215,10 +213,10 @@
         return mail.EndsWith("@guest.booking.com", StringComparison.OrdinalIgnoreCase);
     }
 
-    private void SelectTime() => ModalService.ShowModal("Wybierz godzinę zameldowania",
+    private void SelectTime() => ModalService.ShowModal(Localizer["TimeSelect"],
         @<RentoomBooking.StayWell.Components.ModalContent.TimeSelectorContent @bind-value="_checkInTime" />);
 
-    private void FillGuestInfo() => ModalService.ShowModal("Uzupełnij dane gości",
+    private void FillGuestInfo() => ModalService.ShowModal(Localizer["FillGuest"],
         @<RentoomBooking.StayWell.Components.ModalContent.FillGuestDataContent InitialGuests="@_guests" OnConfirm="@HandleGuestsConfirmed" />);
 
     private void HandleGuestsConfirmed(List<RegistrationCardGuestModel> updatedGuests)

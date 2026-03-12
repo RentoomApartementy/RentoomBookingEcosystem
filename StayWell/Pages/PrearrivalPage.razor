@@ -3,34 +3,34 @@
 @using System.Globalization
 @using RentoomBooking.StayWell.Components
 @inject NavigationManager Navigation
-@inject IStringLocalizer<HomePage> Localizer
+@inject IStringLocalizer<PrearrivalPage> Localizer
 @inherits Models.PageBase
 
 <div class="wrap">
     <div class="hero">
         @if (!ReservationState.IsActiveReservation)
         {
-            <div class="t">Do pobytu pozostało</div>
+            <div class="t">@Localizer["TimeLeft"]</div>
             <div class="grid">
                 <div>
                     <div class="n">@_days</div>
-                    <div class="l">Dni</div>
+                    <div class="l">@Localizer["Days"]</div>
                 </div>
                 <div>
                     <div class="n">@_hours</div>
-                    <div class="l">Godzin</div>
+                    <div class="l">@Localizer["Hours"]</div>
                 </div>
                 <div>
                     <div class="n">@_minutes</div>
-                    <div class="l">Minut</div>
+                    <div class="l">@Localizer["Minutes"]</div>
                 </div>
             </div>
-            <div class="sg">Nie możemy się już doczekać!</div>
+            <div class="sg">@Localizer["CantWait"]</div>
         }
         else
         {
             <div class="t">
-                Twój Panel rezerwacji jest już dostępny!
+                @Localizer["Ready"]
             </div>
         }
     </div>
@@ -42,11 +42,11 @@
         <div class="an">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.objectName</div>
         
         <div class="row">
-            <div class="ct">Zameldowanie</div>
+            <div class="ct">@Localizer["Checkin"]</div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateFrom().ToString("dd.MM.yyyy")</div>
         </div>
         <div class="row">
-            <div class="ct">Wymeldowanie</div>
+            <div class="ct">@Localizer["Checkout"]</div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.ReservationDetails.getDateTo().ToString("dd.MM.yyyy")</div>
         </div>
         
@@ -56,14 +56,14 @@
             @if (RegistrationCardState.CurrentCard == null || TermsState.CurrentTerms == null)
             {
                 <div class="cdc text-secondary" style="font-size: 14px; text-align: center">
-                    Wypełnij Kartę zameldowania oraz zaakceptuj regulamin aby otrzymać dostęp do panelu.
+                    @Localizer["Fill"]
                 </div>
             }
             else
             {
                 <div class="cd">
                     <div>
-                        Wypełniona <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg" />
+                        @Localizer["Filled"] <img class="rentoom-green-filter pb-1" src="/icons/circle-check.svg" />
                     </div>
                 </div>
             }
@@ -72,11 +72,11 @@
         <hr class="b-l" />
 
         <div class="row">
-            <div class="ct">Imie</div>
+            <div class="ct">@Localizer["Name"] </div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Client.FirstName</div>
         </div>
         <div class="row">
-            <div class="ct">Nazwisko</div>
+            <div class="ct">@Localizer["Surname"] </div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Client.LastName</div>
         </div>
         @if(!IsBookingMail())
@@ -87,17 +87,17 @@
             </div>
         }
         <div class="row">
-            <div class="ct">Numer telefonu</div>
+            <div class="ct">@Localizer["PhoneNumber"] </div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Client.Phone</div>
         </div>
         <div class="row">
-            <div class="ct">Ilość dorosłych</div>
+            <div class="ct">@Localizer["AdultsNumber"] </div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfAdults</div>
         </div>
         @if (ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren != "0")
         {
             <div class="row">
-                <div class="ct">Ilość dzieci</div>
+                <div class="ct">@Localizer["ChildrenNumber"] </div>
                 <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren</div>
             </div>
         }
@@ -107,7 +107,7 @@
 @if (RegistrationCardState.CurrentCard == null || TermsState.CurrentTerms == null)
 {
     <FloatingButton 
-        Text="Przejdź dalej" 
+        Text="@Localizer["Continue"]"
         IconPath="/icons/chevron-right.svg"
         OnClick="NavigateToTerms" />
 }

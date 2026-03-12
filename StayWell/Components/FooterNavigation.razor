@@ -1,10 +1,15 @@
 ﻿@inject NavigationManager Navigation
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using Pages
+@inject IStringLocalizer<HomePage> Localizer
+@inject Services.GlobalizationService GlobalizationService
 @implements IDisposable
 
 <div class="footer-navigation-row">
     <NavigationButton href="@($"/reservation/{Token}/InstructionsPage")"
                       active="@IsActive($"/reservation/{Token}/InstructionsPage")"
-                      Text="Instrukcja">
+                      Text="@Localizer["InstructionsFooter"]">
         <Icon>
             <img src="/icons/book.svg" alt="Instrukcja" />
         </Icon>
@@ -12,7 +17,7 @@
 
     <NavigationButton href="@($"/reservation/{Token}/OpenApartmentPage")"
                       active="@IsActive($"/reservation/{Token}/OpenApartmentPage")"
-                      Text="Otwórz">
+                      Text="@Localizer["Open"]">
         <Icon>
             <img src="/icons/lock.svg" alt="Otwórz" />
         </Icon>
@@ -20,7 +25,7 @@
 
     <NavigationButton href="@($"/reservation/{Token}/HomePage")"
                       active="@IsActive([$"/reservation/{Token}/HomePage", $"/reservation/{Token}/",$"/reservation/{Token}"])"
-                      Text="Główna">
+                      Text="@Localizer["Home"]">
         <Icon>
             <img src="/icons/house.svg" alt="Główna" />
         </Icon>
@@ -28,7 +33,7 @@
 
     <NavigationButton href="@($"/reservation/{Token}/ManageStayPage")"
                       active="@IsActive($"/reservation/{Token}/ManageStayPage")"
-                      Text="Zarządzaj">
+                      Text="@Localizer["Manage"]">
         <Icon>
             <img src="/icons/lamp.svg" alt="Zarządzaj" />
         </Icon>
@@ -51,6 +56,7 @@
     {
         base.OnInitialized();
         Navigation.LocationChanged += OnLocationChanged;
+        GlobalizationService.OnChange += StateHasChanged;
     }
 
     private void OnLocationChanged(

@@ -24,6 +24,9 @@
     else if (LocksState.IsTTLockAvailable)
     {
         <div class="tile tile--center">
+            <div class="tile__title" style="margin-bottom: 10px;">
+                @Localizer["RemoteOpen"]
+            </div>
             <button class="open-button @(IsOpened ? "unlocked" : "locked") @(IsProcessing ? "loading" : "")"
                     @onclick="ToggleDoor"
                     disabled="@(IsButtonDisabled || IsProcessing)">
@@ -56,10 +59,10 @@
     {
         <div class="tile">
             <div class="tile__title">
-                Zdalne otwieranie drzwi
+                @Localizer["RemoteOpen"]
             </div>
             <div class="tile__content">
-                Zdalne otwieranie jest aktualnie niedostępne.
+                @Localizer["RemoteUnavailable"]
             </div>
         </div>
     }
@@ -99,7 +102,7 @@
                 <div>
                     <img style="height: 50px; width: 50px;" src="/icons/octagon-alert.svg" />
                     <p style="padding-top: 10px;">
-                        Brak kodu do zamka. Skontaktuj się z obsługą!
+                        @Localizer["NoCode"]
                     </p>
                 </div>
             }
@@ -110,13 +113,13 @@
         <div class="carousel-track" id="lock-carousel">
             <div class="carousel-slide">
                 <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
-                    Jak korzystać z zamka typ.1
+                    @Localizer["HowTo"] *1
                 </div>
                 <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
             </div>
             <div class="carousel-slide">
                 <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
-                    Jak korzystać z zamka typ.2
+                    @Localizer["HowTo"] *2
                 </div>
                 <RentoomBooking.StayWell.Components.AnimationsComponents.LockPanelAnimation />
             </div>

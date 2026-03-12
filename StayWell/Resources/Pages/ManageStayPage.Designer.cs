@@ -70,6 +70,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Addon.
+        /// </summary>
+        internal static string Addon {
+            get {
+                return ResourceManager.GetString("Addon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Baby crib.
         /// </summary>
         internal static string BabyCrib {
@@ -106,6 +115,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Help.
+        /// </summary>
+        internal static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Late Check-out.
         /// </summary>
         internal static string LateCheckOut {
@@ -124,11 +142,29 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Purchased.
+        /// </summary>
+        internal static string Purchased {
+            get {
+                return ResourceManager.GetString("Purchased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Report a problem.
         /// </summary>
         internal static string Report {
             get {
                 return ResourceManager.GetString("Report", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Defect, a question or a request to the staff..
+        /// </summary>
+        internal static string ReportDescription {
+            get {
+                return ResourceManager.GetString("ReportDescription", resourceCulture);
             }
         }
     }
