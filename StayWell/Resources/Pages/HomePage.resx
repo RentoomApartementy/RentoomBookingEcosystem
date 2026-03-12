@@ -166,6 +166,9 @@
   <data name="OpenApartment" xml:space="preserve">
     <value>Open Apartment</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Staywell - Manage Your Stay </value>
+  </data>
   <data name="ReservationID" xml:space="preserve">
     <value>reservation id</value>
   </data>
