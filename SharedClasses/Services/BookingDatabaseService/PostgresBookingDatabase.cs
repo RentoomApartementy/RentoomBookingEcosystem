@@ -28,7 +28,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
         {
             _dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _initializationTask = EnsureCreatedAsync();
+            //_initializationTask = EnsureCreatedAsync();
         }
         private async Task EnsureCreatedAsync()
         {
@@ -39,7 +39,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
         {
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-            await _initializationTask;
+           // // await _initializationTask;
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             var entities = await _dbContext.SearchFilters.ToListAsync(cancellationToken);
             var results = new List<SearchFilterDocument>(entities.Count);
@@ -162,7 +162,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             if (string.IsNullOrWhiteSpace(filterGroupName)) throw new ArgumentNullException(nameof(filterGroupName));
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-            await _initializationTask;
+            // await _initializationTask;
 
             var document = new SearchFilterDocument
             {
@@ -227,7 +227,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             if (existingResToken is null)
                 resToken = Guid.NewGuid().ToString("N");
             
-            await _initializationTask;
+            // await _initializationTask;
             
             var document = new RentoomReservation
             {
@@ -265,7 +265,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             if (payloadReservation is null) throw new ArgumentNullException(nameof(payloadReservation));
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-            await _initializationTask;
+            // await _initializationTask;
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             var entity = await _dbContext.Reservations
                 .Where(r => r.ReservationId == payloadReservation.id)
@@ -300,7 +300,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
         {
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-            await _initializationTask;
+            // await _initializationTask;
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             var entity = await _dbContext.Reservations.AsNoTracking()
                 .OrderByDescending(r => r.UpdatedAt)
@@ -329,7 +329,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             if (string.IsNullOrWhiteSpace(templateKey)) throw new ArgumentNullException(nameof(templateKey));
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-            await _initializationTask;
+            // await _initializationTask;
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             var entity = await _dbContext.ReservationTemplates.AsNoTracking()
                 .FirstOrDefaultAsync(t => t.TemplateKey == templateKey, cancellationToken);
@@ -352,7 +352,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
 
         public async Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync(CancellationToken cancellationToken = default)
         {
-            await _initializationTask;
+            // await _initializationTask;
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             return await _dbContext.DefinedAddons.AsNoTracking().ToListAsync(cancellationToken);
         }

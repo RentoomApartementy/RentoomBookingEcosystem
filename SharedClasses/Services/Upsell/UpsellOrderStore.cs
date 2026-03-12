@@ -34,7 +34,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
         public async Task<UpsellOrderRecord> CreateAsync(UpsellOrderRequest request, CancellationToken cancellationToken = default)
         {
-            await _initializationTask;
+            // await _initializationTask;
 
             var orderGuid = Guid.NewGuid();
             var state = new UpsellOrderState
@@ -73,7 +73,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
         public async Task<UpsellOrderRecord?> GetAsync(Guid upsellOrderGuid, CancellationToken cancellationToken = default)
         {
-            await _initializationTask;
+            // await _initializationTask;
 
             await using var context = _dbContextFactory.CreateDbContext();
             var entity = await context.UpsellOrderRecords.AsNoTracking()
@@ -196,7 +196,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
         {
             if (string.IsNullOrWhiteSpace(providerTransactionId)) throw new ArgumentNullException(nameof(providerTransactionId));
 
-            await _initializationTask;
+            // await _initializationTask;
 
             await using var context = _dbContextFactory.CreateDbContext();
             var entity = await context.UpsellOrderRecords.AsNoTracking()
