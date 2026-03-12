@@ -123,6 +123,9 @@
   <data name="ChangeLanguage" xml:space="preserve">
     <value>Zmień język</value>
   </data>
+  <data name="InstallApp" xml:space="preserve">
+    <value>Zainstaluj aplikację</value>
+  </data>
   <data name="CheckIn" xml:space="preserve">
     <value>Zameldowanie</value>
   </data>

@@ -2,6 +2,7 @@
 @using RentoomBooking.StayWell.Services
 @inject NavigationManager Navigation
 @inject ReservationTokenService ReservationTokenService
+@inject PwaInstallService PwaInstallService
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -17,28 +18,87 @@
 
 @code {
     private bool _checkedStartupToken;
+    private string? _lastPath;
+    private string? _lastSavedPwaToken;
+    private bool? _isStandalone;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender || _checkedStartupToken)
-        {
-            return;
-        }
-
-        _checkedStartupToken = true;
-
         var relativePath = Navigation.ToBaseRelativePath(Navigation.Uri);
         var pathOnly = relativePath.Split('?', '#')[0];
 
-        if (!string.IsNullOrWhiteSpace(pathOnly))
+        if (firstRender && !_checkedStartupToken)
+        {
+            _checkedStartupToken = true;
+
+            if (string.IsNullOrWhiteSpace(pathOnly))
+            {
+                var isStandalone = await IsStandaloneAsync();
+                var token = isStandalone
+                    ? await ReservationTokenService.GetPwaTokenAsync()
+                    : await ReservationTokenService.GetTokenAsync();
+
+                if (!string.IsNullOrWhiteSpace(token))
+                {
+                    Navigation.NavigateTo($"/reservation/{token}/");
+                    return;
+                }
+            }
+        }
+
+        if (!string.Equals(_lastPath, pathOnly, StringComparison.Ordinal))
+        {
+            _lastPath = pathOnly;
+            await PersistPwaTokenIfStandaloneAsync(pathOnly);
+        }
+    }
+
+    private async Task<bool> IsStandaloneAsync()
+    {
+        if (_isStandalone.HasValue)
+        {
+            return _isStandalone.Value;
+        }
+
+        _isStandalone = await PwaInstallService.IsStandaloneAsync();
+        return _isStandalone.Value;
+    }
+
+    private async Task PersistPwaTokenIfStandaloneAsync(string pathOnly)
+    {
+        var token = ExtractToken(pathOnly);
+        if (string.IsNullOrWhiteSpace(token))
         {
             return;
         }
 
-        var token = await ReservationTokenService.GetTokenAsync();
-        if (!string.IsNullOrWhiteSpace(token))
+        if (!await IsStandaloneAsync())
         {
-            Navigation.NavigateTo($"/reservation/{token}/");
+            return;
         }
+
+        if (string.Equals(_lastSavedPwaToken, token, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        await ReservationTokenService.SavePwaTokenAsync(token);
+        _lastSavedPwaToken = token;
+    }
+
+    private static string? ExtractToken(string pathOnly)
+    {
+        if (string.IsNullOrWhiteSpace(pathOnly))
+        {
+            return null;
+        }
+
+        var parts = pathOnly.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length >= 2 && string.Equals(parts[0], "reservation", StringComparison.OrdinalIgnoreCase))
+        {
+            return parts[1];
+        }
+
+        return null;
     }
 }

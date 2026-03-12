@@ -7,6 +7,8 @@
 @implements IDisposable
 @inject Services.BitrixService BitrixService
 @inject States.ReservationState ReservationState
+@inject ReservationTokenService ReservationTokenService
+@inject PwaInstallService PwaInstallService
 
 @inject IStringLocalizer<HomePage> Localizer
 
@@ -21,6 +23,17 @@
         </div>
     </div>
     <div class="right-wrapper">
+        @if (_showInstallButton)
+        {
+            <div class="Install">
+                <button class="install-button"
+                        title="@Localizer["InstallApp"]"
+                        aria-label="@Localizer["InstallApp"]"
+                        @onclick="PromptInstall">
+                    <img src="/icons/calendar-plus.svg" />
+                </button>
+            </div>
+        }
 
         <div class="Languages">
             <button @onclick="@ChangeLangButton" style="background: none; border: none">
@@ -47,6 +60,7 @@
 
     private string pl = "pl";
     private string en = "en";
+    private bool _showInstallButton;
 
     private async Task ChangeLang(string lang)
     {
@@ -58,6 +72,9 @@
     protected override async Task OnInitializedAsync()
     {
         GlobalizationService.OnChange += StateHasChanged;
+        PwaInstallService.OnChange += OnPwaInstallChanged;
+
+        await PwaInstallService.InitializeAsync();
 
         var savedPreference = await GlobalizationService.LoadPreferenceAsync();
         if (!string.IsNullOrWhiteSpace(savedPreference))
@@ -65,7 +82,13 @@
             GlobalizationService.SetCulture(savedPreference);
         }
 
+        await RefreshInstallButtonAsync();
         await BitrixService.InitializeAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await RefreshInstallButtonAsync();
     }
 
     private void ChangeLangButton()
@@ -101,9 +124,47 @@
         await BitrixService.OpenChatAsync(guestData);
     }
 
+    private async Task PromptInstall()
+    {
+        var installed = await PwaInstallService.PromptInstallAsync();
+        if (installed && !string.IsNullOrWhiteSpace(Token))
+        {
+            await ReservationTokenService.SavePwaTokenAsync(Token);
+        }
+
+        await RefreshInstallButtonAsync();
+    }
+
+    private async Task RefreshInstallButtonAsync()
+    {
+        var currentToken = Token ?? ReservationState.CurrentToken;
+        if (string.IsNullOrWhiteSpace(currentToken))
+        {
+            _showInstallButton = false;
+            return;
+        }
+
+        if (await PwaInstallService.IsStandaloneAsync())
+        {
+            _showInstallButton = false;
+            return;
+        }
+
+        var pwaToken = await ReservationTokenService.GetPwaTokenAsync();
+        _showInstallButton = PwaInstallService.IsInstallPromptAvailable
+                             && !string.Equals(currentToken, pwaToken, StringComparison.OrdinalIgnoreCase);
+        StateHasChanged();
+    }
+
+    private void OnPwaInstallChanged()
+    {
+        _ = RefreshInstallButtonAsync();
+    }
+
     public void Dispose()
     {
         GlobalizationService.OnChange -= StateHasChanged;
+        PwaInstallService.OnChange -= OnPwaInstallChanged;
     }
 
 }

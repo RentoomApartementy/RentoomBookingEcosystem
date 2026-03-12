@@ -44,13 +44,32 @@
 }
 
 .right-wrapper {
-    width: 70px;
+    width: auto;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: right;
     padding: 0;
     gap: 10px;
+}
+
+.Install {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.install-button {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.install-button img {
+    width: 22px;
+    height: 22px;
 }
 
 .Contact {
