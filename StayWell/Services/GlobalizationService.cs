@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Microsoft.JSInterop;
 
 namespace RentoomBooking.StayWell.Services
 {
@@ -7,14 +6,14 @@ namespace RentoomBooking.StayWell.Services
     {
         private const string LocalStorageKey = "staywell_language_preference";
 
-        private readonly IJSRuntime _jsRuntime;
+        private readonly LocalStorageService _localStorage;
         public event Action? OnChange;
 
         public CultureInfo CurrentCulture { get; private set; } = CultureInfo.CurrentCulture;
 
-        public GlobalizationService(IJSRuntime jsRuntime)
+        public GlobalizationService(LocalStorageService localStorage)
         {
-            _jsRuntime = jsRuntime;
+            _localStorage = localStorage;
         }
 
         public void SetCulture(string cultureName)
@@ -40,7 +39,7 @@ namespace RentoomBooking.StayWell.Services
         {
             try
             {
-                return await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", LocalStorageKey);
+                return await _localStorage.GetItemAsync(LocalStorageKey);
             }
             catch (Exception ex)
             {
@@ -52,7 +51,7 @@ namespace RentoomBooking.StayWell.Services
         {
             try
             {
-                await _jsRuntime.InvokeVoidAsync("localStorage.setItem", LocalStorageKey, cultureName);
+                await _localStorage.SetItemAsync(LocalStorageKey, cultureName);
             }
             catch (Exception ex)
             {
