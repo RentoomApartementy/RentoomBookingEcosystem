@@ -5,6 +5,7 @@
 @using System.Linq
 @using Microsoft.Extensions.Localization
 @using System.Globalization
+@inject NavigationManager Navigation
 @inject StayWell.Services.ClipboardService ClipboardService
 @inject IStringLocalizer<InstructionsPage> Localizer
 @inject StayWell.Services.ToastService ToastService
@@ -77,16 +78,15 @@
                         </div>
                     </div>
                 }
-
-                @if (!string.IsNullOrEmpty(ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode))
+                @if (HasCode(LocksState.ApartmentItemCodes?.ParkingSpotNumber))
                 {
                     <div class="code-card">
                         <div class="code-card__icon-wrapper">
-                            <img src="/icons/door-open.svg" class="code-card__icon" />
+                            <img src="/icons/square-parking.svg" class="code-card__icon" />
                         </div>
                         <div class="code-card__content">
-                            <div class="code-card__label">@Localizer["ApartmentNumber"]</div>
-                            <div class="code-card__value">@ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode</div>
+                            <div class="code-card__label">@Localizer["ParkingNumber"]</div>
+                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.StoreroomCode</div>
                         </div>
                     </div>
                 }
@@ -134,7 +134,7 @@
                 {
                     <div class="code-card">
                         <div class="code-card__icon-wrapper">
-                            <img src="/icons/door-open.svg" class="code-card__icon" />
+                            <img src="/icons/mailbox.svg" class="code-card__icon" />
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["KeySafeCode"]</div>
@@ -142,7 +142,31 @@
                         </div>
                     </div>
                 }
-
+                @if (!string.IsNullOrEmpty(ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode))
+                {
+                    <div class="code-card">
+                        <div class="code-card__icon-wrapper">
+                            <img src="/icons/door-open.svg" class="code-card__icon" />
+                        </div>
+                        <div class="code-card__content">
+                            <div class="code-card__label">@Localizer["ApartmentNumber"]</div>
+                            <div class="code-card__value">@ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode</div>
+                        </div>
+                    </div>
+                }
+                <div class="code-card">
+                    <div class="code-card__icon-wrapper">
+                        <img src="/icons/lock.svg" class="code-card__icon" />
+                    </div>
+                    <div class="code-card__content">
+                        <div class="code-card__label">@Localizer["GoOpen"]</div>
+                        <div class="code-card__value code-highlight">
+                            <button class="openapartment-btn" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
+                                <span>@Localizer["OpenButton"] <img class="white-filter" src="/icons/chevron-right.svg" /></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div class="code-card">
                     <div class="code-card__icon-wrapper">
                         <img src="/icons/wifi.svg" class="code-card__icon" />

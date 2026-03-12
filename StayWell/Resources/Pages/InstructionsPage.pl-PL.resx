@@ -135,6 +135,9 @@
   <data name="GateCode" xml:space="preserve">
     <value>Kod do furtki</value>
   </data>
+  <data name="GoOpen" xml:space="preserve">
+    <value>Otwórz swój apartament</value>
+  </data>
   <data name="Instructions" xml:space="preserve">
     <value>Instrukcja zameldowania</value>
   </data>
@@ -146,6 +149,12 @@
   </data>
   <data name="NoWifi" xml:space="preserve">
     <value>Brak danych Wi-Fi</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Otwórz</value>
+  </data>
+  <data name="ParkingNumber" xml:space="preserve">
+    <value>Miejsce parkingowe nr.</value>
   </data>
   <data name="ReportOnPage" xml:space="preserve">
     <value>Abyśmy mogli szybko pomóc, prosimy o dokładny opis usterki. Wskaż, co konkretnie nie działa i jeśli to możliwe, dodaj zdjęcia – to znacząco przyspieszy rozwiązanie problemu.</value>
