@@ -1,4 +1,7 @@
-﻿@using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.Components
+@using RentoomBooking.StayWell.Services
+@inject NavigationManager Navigation
+@inject ReservationTokenService ReservationTokenService
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -11,3 +14,31 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    private bool _checkedStartupToken;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || _checkedStartupToken)
+        {
+            return;
+        }
+
+        _checkedStartupToken = true;
+
+        var relativePath = Navigation.ToBaseRelativePath(Navigation.Uri);
+        var pathOnly = relativePath.Split('?', '#')[0];
+
+        if (!string.IsNullOrWhiteSpace(pathOnly))
+        {
+            return;
+        }
+
+        var token = await ReservationTokenService.GetTokenAsync();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            Navigation.NavigateTo($"/reservation/{token}/");
+        }
+    }
+}
