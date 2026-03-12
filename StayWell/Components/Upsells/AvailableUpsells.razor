@@ -39,21 +39,47 @@
     }
     else
     {
-        <div class="upsell-strip-scroll" @ref="_scrollRef">
-            @foreach (var tile in DisplayedUpsells)
-            {
-                <div class="upsell-strip-item @(_activeId == tile.PartnerServiceId ? "is-active" : "")"
-                     id="strip-item-@tile.PartnerServiceId">
-                    <CascadingValue Value="@Theme">
-                        <UpsellTile Tile="tile"
-                                    Context="_reservationContext"
-                                    Quantity="GetQuantity(tile.PartnerServiceId)"
-                                    IsSelected="IsSelected(tile.PartnerServiceId)"
-                                    OnToggled="toggled => HandleToggle(tile.PartnerServiceId, toggled)"
-                                    Texts="_texts" />
-                    </CascadingValue>
-                </div>
-            }
+        var upsellList = DisplayedUpsells.ToList();
+        var activeIndex = upsellList.FindIndex(t => t.PartnerServiceId == _activeId);
+
+        <div class="upsell-strip-dots-card">
+            <div class="upsell-strip-dots">
+                @for (int i = 0; i < upsellList.Count; i++)
+                {
+                    <span class="upsell-strip-dot @(i == activeIndex ? "active" : "")"></span>
+                }
+            </div>
+        </div>
+
+        <div class="upsell-strip-scroll-wrapper">
+            <button class="upsell-strip-nav upsell-strip-nav--prev"
+                    @onclick="ScrollPrev"
+                    aria-label="Poprzedni">
+                <img src="/icons/chevron-right.svg" />
+            </button>
+
+            <div class="upsell-strip-scroll" @ref="_scrollRef">
+                @foreach (var tile in upsellList)
+                {
+                    <div class="upsell-strip-item @(_activeId == tile.PartnerServiceId ? "is-active" : "")"
+                         id="strip-item-@tile.PartnerServiceId">
+                        <CascadingValue Value="@Theme">
+                            <UpsellTile Tile="tile"
+                                        Context="_reservationContext"
+                                        Quantity="GetQuantity(tile.PartnerServiceId)"
+                                        IsSelected="IsSelected(tile.PartnerServiceId)"
+                                        OnToggled="toggled => HandleToggle(tile.PartnerServiceId, toggled)"
+                                        Texts="_texts" />
+                        </CascadingValue>
+                    </div>
+                }
+            </div>
+
+            <button class="upsell-strip-nav upsell-strip-nav--next"
+                    @onclick="ScrollNext"
+                    aria-label="Następny">
+                <img src="/icons/chevron-right.svg" />
+            </button>
         </div>
     }
 </div>
@@ -64,19 +90,25 @@
     [Parameter] public string Title { get; set; } = "Dostępne dodatki";
     [Parameter] public string Theme { get; set; } = "staywell-theme";
     [Parameter] public int MaxItems { get; set; } = 3;
+    [Parameter] public int MaxItemsDesktop { get; set; } = 2;
     [Parameter] public EventCallback<List<SelectedUpsellDto>> OnSelectionChanged { get; set; }
+
+    private const int DesktopBreakpoint = 640;
 
     private ReservationPricingContext _reservationContext = new();
     private ElementReference _scrollRef;
     private DotNetObjectReference<AvailableUpsells>? _selfRef;
     private int _activeId = -1;
     private bool _jsInitialized;
+    private int _windowWidth = 0;
 
-    private int SkeletonCount => MaxItems > 0 ? MaxItems : 4;
+    private bool IsDesktop => _windowWidth >= DesktopBreakpoint;
+    private int EffectiveMaxItems => IsDesktop ? MaxItemsDesktop : MaxItems;
+    private int SkeletonCount => EffectiveMaxItems > 0 ? EffectiveMaxItems : 4;
 
     private IEnumerable<UpsellTileDto> DisplayedUpsells =>
-        MaxItems > 0
-            ? AvailableUpsellsState.AvailableUpsells.Take(MaxItems)
+        EffectiveMaxItems > 0
+            ? AvailableUpsellsState.AvailableUpsells.Take(EffectiveMaxItems)
             : AvailableUpsellsState.AvailableUpsells;
 
     private bool IsSelected(int partnerServiceId) =>
@@ -125,6 +157,15 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+        {
+            _selfRef = DotNetObjectReference.Create(this);
+            _windowWidth = await JS.InvokeAsync<int>("upsellStrip.getWindowWidth");
+            await JS.InvokeVoidAsync("upsellStrip.onWindowResize", _selfRef);
+            StateHasChanged();
+            return;
+        }
+
         if (_jsInitialized) return;
 
         var upsells = AvailableUpsellsState.AvailableUpsells;
@@ -132,7 +173,7 @@
 
         _jsInitialized = true;
         _activeId = upsells.First().PartnerServiceId;
-        _selfRef = DotNetObjectReference.Create(this);
+        _selfRef ??= DotNetObjectReference.Create(this);
 
         try
         {
@@ -141,6 +182,19 @@
         catch { }
 
         StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void OnWindowResize(int width)
+    {
+        if (_windowWidth == width) return;
+        var wasDesktop = IsDesktop;
+        _windowWidth = width;
+        if (IsDesktop != wasDesktop)
+        {
+            _jsInitialized = false;
+        }
+        InvokeAsync(StateHasChanged);
     }
 
     private void OnAvailableUpsellsStateChanged()
@@ -156,6 +210,10 @@
     {
         AvailableUpsellsState.OnChange -= OnAvailableUpsellsStateChanged;
         UpsellCartState.OnChange -= OnCartStateChanged;
+        if (_selfRef is not null)
+        {
+            try { JS.InvokeVoidAsync("upsellStrip.offWindowResize", _selfRef); } catch { }
+        }
         try { JS.InvokeVoidAsync("upsellStrip.destroy", _scrollRef); } catch { }
         _selfRef?.Dispose();
     }
@@ -167,6 +225,12 @@
         _activeId = id;
         InvokeAsync(StateHasChanged);
     }
+
+    private async Task ScrollPrev() =>
+        await JS.InvokeVoidAsync("upsellStrip.scrollToPrev", _scrollRef);
+
+    private async Task ScrollNext() =>
+        await JS.InvokeVoidAsync("upsellStrip.scrollToNext", _scrollRef);
 
     private async Task HandleToggle(int partnerServiceId, bool isSelected)
     {
