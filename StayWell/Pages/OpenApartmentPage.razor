@@ -157,11 +157,6 @@
     {
         if (firstRender)
         {
-            if (!string.IsNullOrWhiteSpace(Token))
-            {
-                _ = LocksState.CheckTTLockStatusAsync(Token);
-            }
-
             await JS.InvokeVoidAsync("eval", @"
                 const track = document.getElementById('lock-carousel');
                 const dots = document.getElementById('carousel-dots').children;
@@ -178,6 +173,16 @@
                     }, { passive: true });
                 }
             ");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (!string.IsNullOrWhiteSpace(Token))
+        {
+            _ = LocksState.CheckTTLockStatusAsync(Token);
         }
     }
 
