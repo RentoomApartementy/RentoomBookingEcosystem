@@ -5,7 +5,7 @@ using System.Net;
 
 namespace RentoomBooking.StayWell.States
 {
-    public class ReservationState(BackendApi backendApi)
+    public class ReservationState(BackendApi backendApi, ReservationTokenService tokenService)
     {
         private const int EarlyCheckInAddonId = 40;
         private const int LateCheckOutAddonId = 41;
@@ -17,6 +17,7 @@ namespace RentoomBooking.StayWell.States
 
         private RentoomReservation? _reservation;
         private readonly BackendApi _backendApi = backendApi;
+        private readonly ReservationTokenService _tokenService = tokenService;
         private string? _currentToken;
         private HttpStatusCode? _currentStatus;
 
@@ -80,6 +81,15 @@ namespace RentoomBooking.StayWell.States
                 else
                 {
                     _reservation = response?.Reservation;
+                }
+
+                if (response?.StatusCode == HttpStatusCode.OK && response.Reservation is not null)
+                {
+                    await _tokenService.SaveTokenAsync(token);
+                }
+                else if (response?.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.Gone)
+                {
+                    await _tokenService.ClearTokenAsync();
                 }
 
                 NotifyStateChanged();
