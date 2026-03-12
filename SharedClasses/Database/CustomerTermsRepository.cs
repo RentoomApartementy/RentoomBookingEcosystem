@@ -30,11 +30,7 @@ namespace RentoomBooking.SharedClasses.Database
 
             return sources.Select(source =>
             {
-                var translation = source.Translations
-                    .FirstOrDefault(t => string.Equals(t.Culture, normalizedCulture, System.StringComparison.OrdinalIgnoreCase))
-                    ?? source.Translations.FirstOrDefault(t => string.Equals(t.Culture, neutralCulture, System.StringComparison.OrdinalIgnoreCase))
-                    ?? source.Translations.FirstOrDefault(t => string.Equals(t.Culture, "pl", System.StringComparison.OrdinalIgnoreCase))
-                    ?? source.Translations.FirstOrDefault();
+                var translation = SelectTranslation(source.Translations, normalizedCulture, neutralCulture);
 
                 return new CustomerTermDisplayDto
                 {
@@ -52,20 +48,30 @@ namespace RentoomBooking.SharedClasses.Database
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(Guid reservationGuid)
+        public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(Guid reservationGuid, string? cultureName = null)
         {
-            return await _context.CustomerAgreedTerms
+            var normalizedCulture = NormalizeCulture(cultureName);
+            var neutralCulture = normalizedCulture.Split('-')[0];
+
+            var terms = await _context.CustomerAgreedTerms
                 .Where(t => t.ReservationGuid == reservationGuid)
                 .Include(t => t.TermsSource)
-                .Select(t => new CustomerAgreedTermDto
+                .ThenInclude(t => t.Translations)
+                .ToListAsync();
+
+            return terms.Select(t =>
+            {
+                var translation = SelectTranslation(t.TermsSource.Translations, normalizedCulture, neutralCulture);
+
+                return new CustomerAgreedTermDto
                 {
                     TermsSourceId = t.TermsSourceId,
-                    Description = t.TermsSource.Description,
+                    Description = translation?.Description ?? t.TermsSource.Description,
                     AgreedAt = t.AgreedAt,
                     IsRequired = t.TermsSource.IsRequired,
                     IsAccepted = t.IsAccepted
-                })
-                .ToListAsync();
+                };
+            }).ToList();
         }
 
         public async Task<bool> UpdateAgreedTermAsync(Guid reservationGuid, int termsSourceId, bool isAccepted)
@@ -100,6 +106,18 @@ namespace RentoomBooking.SharedClasses.Database
             {
                 return "pl";
             }
+        }
+
+        private static CustomerTermsSourceTranslation? SelectTranslation(
+            ICollection<CustomerTermsSourceTranslation> translations,
+            string normalizedCulture,
+            string neutralCulture)
+        {
+            return translations
+                       .FirstOrDefault(t => string.Equals(t.Culture, normalizedCulture, System.StringComparison.OrdinalIgnoreCase))
+                   ?? translations.FirstOrDefault(t => string.Equals(t.Culture, neutralCulture, System.StringComparison.OrdinalIgnoreCase))
+                   ?? translations.FirstOrDefault(t => string.Equals(t.Culture, "pl", System.StringComparison.OrdinalIgnoreCase))
+                   ?? translations.FirstOrDefault();
         }
     }
 }
