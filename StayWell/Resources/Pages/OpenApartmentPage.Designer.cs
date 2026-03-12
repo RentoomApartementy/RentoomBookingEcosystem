@@ -61,6 +61,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Checking lock availability....
+        /// </summary>
+        internal static string CheckingLock {
+            get {
+                return ResourceManager.GetString("CheckingLock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Code not available.
         /// </summary>
         internal static string CodeNotAvailable {
@@ -124,6 +133,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu  If the lock is cylindrical, turn the knob in the opposite direction to its position on the door until you hear the lock retract..
+        /// </summary>
+        internal static string Instruction {
+            get {
+                return ResourceManager.GetString("Instruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu No code for the lock. Contact staff!.
         /// </summary>
         internal static string NoCode {
@@ -174,6 +192,24 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         internal static string RemoteUnavailable {
             get {
                 return ResourceManager.GetString("RemoteUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Try again.
+        /// </summary>
+        internal static string TryAgain {
+            get {
+                return ResourceManager.GetString("TryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Try again in {0}s.
+        /// </summary>
+        internal static string TryAgainIn {
+            get {
+                return ResourceManager.GetString("TryAgainIn", resourceCulture);
             }
         }
         

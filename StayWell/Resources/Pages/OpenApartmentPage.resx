@@ -168,4 +168,7 @@
   <data name="YourIndividualCode" xml:space="preserve">
     <value>Your apartment code</value>
   </data>
+  <data name="Instruction" xml:space="preserve">
+    <value> If the lock is cylindrical, turn the knob in the opposite direction to its position on the door until you hear the lock retract.</value>
+  </data>
 </root>

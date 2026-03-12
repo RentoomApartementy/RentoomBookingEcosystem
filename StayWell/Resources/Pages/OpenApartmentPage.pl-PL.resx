@@ -168,4 +168,7 @@
   <data name="YourIndividualCode" xml:space="preserve">
     <value>Twój kod do apartamentu</value>
   </data>
+  <data name="Instruction" xml:space="preserve">
+    <value> Jeżeli zamek jest cylindryczny, przekręcaj gałką w kierunku przeciwnym do jej pozycji na drzwiach do momentu aż usłyszysz cofający się zamek.</value>
+  </data>
 </root>
