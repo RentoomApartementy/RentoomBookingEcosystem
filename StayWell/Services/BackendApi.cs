@@ -356,9 +356,15 @@ namespace RentoomBooking.StayWell.Services
                    ?? [];
         }
 
-        public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(string reservationToken)
+        public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(string reservationToken, string? language = null)
         {
-            var response = await _http.GetAsync($"db/reservations/{reservationToken}/agreed-terms");
+            var url = $"db/reservations/{reservationToken}/agreed-terms";
+            if (!string.IsNullOrWhiteSpace(language))
+            {
+                url += $"?language={Uri.EscapeDataString(language)}";
+            }
+
+            var response = await _http.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
                 return [];
