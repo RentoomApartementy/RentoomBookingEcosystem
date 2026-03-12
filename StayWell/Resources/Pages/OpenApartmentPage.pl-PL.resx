@@ -120,6 +120,9 @@
   <data name="CodeNotAvailable" xml:space="preserve">
     <value>Kod niedostępny</value>
   </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Sprawdzanie dostępności zamka...</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Potwierdź</value>
   </data>

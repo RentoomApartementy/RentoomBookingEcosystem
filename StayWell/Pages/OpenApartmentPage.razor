@@ -21,6 +21,15 @@
             <div class="skeleton skeleton--text" style="margin-top: 15px;"></div>
         </div>
     }
+    else if (LocksState.IsTTLockLoading)
+    {
+        <div class="tile tile--center">
+            <div class="spinner"></div>
+            <div class="status-text">
+                <span>@Localizer["CheckingLock"]</span>
+            </div>
+        </div>
+    }
     else if (LocksState.IsTTLockAvailable)
     {
         <div class="tile tile--center">
@@ -145,6 +154,11 @@
     {
         if (firstRender)
         {
+            if (!string.IsNullOrWhiteSpace(Token))
+            {
+                _ = LocksState.CheckTTLockStatusAsync(Token);
+            }
+
             await JS.InvokeVoidAsync("eval", @"
                 const track = document.getElementById('lock-carousel');
                 const dots = document.getElementById('carousel-dots').children;

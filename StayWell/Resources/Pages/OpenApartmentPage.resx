@@ -120,6 +120,9 @@
   <data name="CodeNotAvailable" xml:space="preserve">
     <value>Code not available</value>
   </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Checking lock availability...</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
