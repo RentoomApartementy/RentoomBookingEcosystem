@@ -159,6 +159,12 @@
   <data name="RemoteUnavailable" xml:space="preserve">
     <value>Zdalne otwieranie jest aktualnie niedostępne.</value>
   </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Spróbuj ponownie</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Spróbuj ponownie za {0}s</value>
+  </data>
   <data name="YourIndividualCode" xml:space="preserve">
     <value>Twój kod do apartamentu</value>
   </data>
