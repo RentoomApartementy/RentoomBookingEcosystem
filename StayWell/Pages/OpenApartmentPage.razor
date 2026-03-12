@@ -91,6 +91,12 @@
         </div>
     }
 
+    @if(IsOpened){
+        <div class="tile">
+            @Localizer["Instruction"]
+        </div>
+    }
+
     <div class="tile">
         <div class="tile__title">
             <img src="/icons/binary.svg" class="icon-inline" />

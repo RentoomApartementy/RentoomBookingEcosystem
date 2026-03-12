@@ -233,7 +233,7 @@
         .ToArray();
 
     private string[] InstructionImageUrls => ArrivalInstructionSteps
-        .Select(s => s.ImageUrl)
+        .Select(s => s.ImageUrl ?? InstructionPlaceholderUrl)
         .ToArray();
 
    /* private string NormalizeInstructionImageUrl(string? imageUrl)
