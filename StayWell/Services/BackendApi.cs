@@ -166,8 +166,11 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<bool> SaveTermsAsync(TermsEntity entity)
         {
-            var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
-            if (!response.IsSuccessStatusCode)
+           // var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
+
+           var isOk = await SaveCustomerTermsAsync(entity.ResToken, new Dictionary<int, bool> { [2] = true });
+
+            if (!isOk)
             {
                 return false;
             }
