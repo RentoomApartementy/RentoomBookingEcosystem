@@ -269,7 +269,7 @@
                                 @* <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
-                                        <Button Type="@(refundableOffer != null?ButtonType.Primary:ButtonType.Tertiary)">@Localizer["BookNow"]</Button>
+                                        <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
                                 </div>
                             </div>
                         </div>  
@@ -284,7 +284,7 @@
                                 @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
-                                    <Button>@Localizer["BookNow"]</Button>
+                                        <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Tertiary)">@Localizer["BookNow"]</Button>
                                 </div>
                             </div>
                         </div>   
