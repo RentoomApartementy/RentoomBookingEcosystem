@@ -20,10 +20,36 @@ namespace RentoomBooking.StayWell.Services
 {
     public record ReservationResponse(RentoomReservation? Reservation, HttpStatusCode StatusCode);
 
-    public class BackendApi(IHttpClientFactory factory, JsonSerializerOptions json)
+    public class BackendApi(IHttpClientFactory factory, JsonSerializerOptions json, LocalStorageService localStorage)
     {
         private readonly HttpClient _http = factory.CreateClient("FunctionsApi");
         private readonly JsonSerializerOptions _json = json;
+        private readonly LocalStorageService _localStorage = localStorage;
+
+        private const string CachePrefix = "staywell:backendapi:v1";
+        private const string NullMarker = "__null__";
+
+        private static string BuildCacheKey(string scope, params string[] parts)
+        {
+            return $"{CachePrefix}:{scope}:{string.Join("|", parts)}";
+        }
+
+        private async Task<T?> GetOrSetCacheAsync<T>(string key, Func<Task<T?>> fetch) where T : class
+        {
+            var (exists, cached) = await _localStorage.TryGetItemAsync<T>(key);
+            if (exists && cached is not null)
+            {
+                return cached;
+            }
+
+            var fresh = await fetch();
+            if (fresh is not null)
+            {
+                await _localStorage.SetItemAsync(key, fresh);
+            }
+
+            return fresh;
+        }
 
         private class QrMaintResponse
         {
@@ -61,8 +87,13 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<List<ObjectAmenity>> GetAmenitiesForObjectsAsync(int objectId)
         {
-            return await _http.GetFromJsonAsync<List<ObjectAmenity>>($"apartments/{objectId}/amenities", _json)
-                   ?? [];
+            var cacheKey = BuildCacheKey("amenities", objectId.ToString());
+
+            var result = await GetOrSetCacheAsync(
+                cacheKey,
+                async () => await _http.GetFromJsonAsync<List<ObjectAmenity>>($"apartments/{objectId}/amenities", _json) ?? []);
+
+            return result ?? [];
         }
 
         public async Task<ApartmentObject?> GetApartmentByIdAsync(int id)
@@ -105,28 +136,54 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<TermsEntity?> GetTermsByResTokenAsync(string resToken)
         {
-            var response = await _http.GetAsync($"db/terms/GetTermsByResToken/{resToken}");
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<TermsEntity>(_json);
-            }
-            return null;
+            var cacheKey = BuildCacheKey("terms", resToken);
+
+            return await GetOrSetCacheAsync(
+                cacheKey,
+                async () =>
+                {
+                    var response = await _http.GetAsync($"db/terms/GetTermsByResToken/{resToken}");
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+
+                    return await response.Content.ReadFromJsonAsync<TermsEntity>(_json);
+                });
         }
 
         public async Task<bool> SaveTermsAsync(TermsEntity entity)
         {
             var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
-            return response.IsSuccessStatusCode;
+            if (!response.IsSuccessStatusCode)
+            {
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(entity.ResToken))
+            {
+                await InvalidateCacheAsync("terms", entity.ResToken);
+            }
+
+            return true;
         }
 
         public async Task<RegistrationCardEntity?> GetRegistrationCardByResTokenAsync(string resToken)
         {
-            var response = await _http.GetAsync($"db/registrationcard/GetRegistrationCardByResToken/{resToken}");
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<RegistrationCardEntity>(_json);
-            }
-            return null;
+            var cacheKey = BuildCacheKey("registration-card", resToken);
+
+            return await GetOrSetCacheAsync(
+                cacheKey,
+                async () =>
+                {
+                    var response = await _http.GetAsync($"db/registrationcard/GetRegistrationCardByResToken/{resToken}");
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+
+                    return await response.Content.ReadFromJsonAsync<RegistrationCardEntity>(_json);
+                });
         }
 
         public async Task<bool> SaveRegistrationCardAsync(RegistrationCardEntity entity)
@@ -137,17 +194,24 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId)
         {
-            using var response = await _http.GetAsync($"qrmaint/form-url/{apartmentId}");
+            var cacheKey = BuildCacheKey("qrmaint-form-url", apartmentId.ToString());
 
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return null;
-            }
+            return await GetOrSetCacheAsync(
+                cacheKey,
+                async () =>
+                {
+                    using var response = await _http.GetAsync($"qrmaint/form-url/{apartmentId}");
 
-            response.EnsureSuccessStatusCode();
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return null;
+                    }
 
-            var result = await response.Content.ReadFromJsonAsync<QrMaintResponse>(_json);
-            return result?.url;
+                    response.EnsureSuccessStatusCode();
+
+                    var result = await response.Content.ReadFromJsonAsync<QrMaintResponse>(_json);
+                    return result?.url;
+                });
         }
 
         public async Task<string?> GetLockCodeAsync(
@@ -291,17 +355,17 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<List<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId, string? language = null)
         {
-            var url = $"apartment/arrivalinstructions/{apartmentId}";
-            if (!string.IsNullOrWhiteSpace(language))
-            {
-                url += $"?language={Uri.EscapeDataString(language)}";
-            }
+                    var url = $"apartment/arrivalinstructions/{apartmentId}";
+                    if (!string.IsNullOrWhiteSpace(language))
+                    {
+                        url += $"?language={Uri.EscapeDataString(language)}";
+                    }
 
-            var response = await _http.GetAsync(url);
-            if (!response.IsSuccessStatusCode)
-            {
-                return [];
-            }
+                    var response = await _http.GetAsync(url);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return [];
+                    }
 
             return await response.Content.ReadFromJsonAsync<List<ApartmentArrivalInstructionStepDTO>>(_json)
                    ?? [];
@@ -320,34 +384,41 @@ namespace RentoomBooking.StayWell.Services
             string reservationToken,
             CancellationToken cancellationToken = default)
         {
-            using var response = await _http.GetAsync(
-                $"reservation/{reservationToken}/apartmentcodes",
-                cancellationToken);
+                    using var response = await _http.GetAsync(
+                        $"reservation/{reservationToken}/apartmentcodes",
+                        cancellationToken);
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return null;
-            }
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return null;
+                    }
 
-            response.EnsureSuccessStatusCode();
+                    response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<ApartmentItemLocalSettings>(
-                _json,
-                cancellationToken);
+                    return await response.Content.ReadFromJsonAsync<ApartmentItemLocalSettings>(
+                        _json,
+                        cancellationToken);
         }
 
         public async Task<RentoomWifiInfo?> GetApartmentWifiInfoAsync(int apartmentId)
         {
-            using var response = await _http.GetAsync($"qrmaint/wifi/{apartmentId}");
+            var cacheKey = BuildCacheKey("qrmaint-wifi", apartmentId.ToString());
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return null;
-            }
+            return await GetOrSetCacheAsync(
+                cacheKey,
+                async () =>
+                {
+                    using var response = await _http.GetAsync($"qrmaint/wifi/{apartmentId}");
 
-            response.EnsureSuccessStatusCode();
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return null;
+                    }
 
-            return await response.Content.ReadFromJsonAsync<RentoomWifiInfo>(_json);
+                    response.EnsureSuccessStatusCode();
+
+                    return await response.Content.ReadFromJsonAsync<RentoomWifiInfo>(_json);
+                });
         }
 
         public async Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync()
@@ -361,7 +432,7 @@ namespace RentoomBooking.StayWell.Services
             var url = $"db/reservations/{reservationToken}/agreed-terms";
             if (!string.IsNullOrWhiteSpace(language))
             {
-                url += $"?language={Uri.EscapeDataString(language)}";
+                url += $"?lang={Uri.EscapeDataString(language)}";
             }
 
             var response = await _http.GetAsync(url);
@@ -384,6 +455,12 @@ namespace RentoomBooking.StayWell.Services
 
             var response = await _http.PatchAsJsonAsync($"db/reservations/{reservationToken}/agreed-terms", request, _json);
             return response.StatusCode == HttpStatusCode.NoContent;
+        }
+
+        private async Task InvalidateCacheAsync(string scope, params string[] parts)
+        {
+            var key = BuildCacheKey(scope, parts);
+            await _localStorage.RemoveItemAsync(key);
         }
     }
 }
