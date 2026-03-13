@@ -1,0 +1,13 @@
+@using Microsoft.AspNetCore.Components
+@using RentoomBooking.SharedClasses.Models
+
+@if (!string.IsNullOrEmpty(Content))
+{
+    <div class="regulation-content">
+        @((MarkupString)Content)
+    </div>
+}
+
+@code {
+    [Parameter] public string? Content { get; set; }
+}
