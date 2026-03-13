@@ -33,7 +33,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
         public async Task<ReservationRecord> CreateAsync(StartReservationRequest request, CancellationToken cancellationToken = default)
         {
-            await _initializationTask;
+            // await _initializationTask;
 
             var reservationGuid = Guid.NewGuid();
             var state = new ReservationState
@@ -61,7 +61,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
         public async Task<ReservationRecord?> GetAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
         {
-            await _initializationTask;
+            // await _initializationTask;
 
             await using var context = _dbContextFactory.CreateDbContext();
             var entity = await context.ReservationRecords.AsNoTracking()
@@ -164,7 +164,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             if (string.IsNullOrWhiteSpace(providerTransactionId)) throw new ArgumentNullException(nameof(providerTransactionId));
 
-            await _initializationTask;
+            // await _initializationTask;
 
             await using var context = _dbContextFactory.CreateDbContext();
             var entity = await context.ReservationRecords.AsNoTracking()

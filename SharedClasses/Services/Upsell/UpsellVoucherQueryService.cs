@@ -29,7 +29,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
 
           public async Task<List<UpsellVoucherDto>> GetByReservationAsync(Guid reservationGuid)
           {
-              await _initializationTask;
+              // await _initializationTask;
 
               await using var context = _dbContextFactory.CreateDbContext();
               var results = await context.UpsellVouchers.Include(v=> v.UpsellOrderLine).
@@ -50,7 +50,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                   return null;
               }
 
-             // await _initializationTask;
+             // // await _initializationTask;
 
 
               await using var context = _dbContextFactory.CreateDbContext();
@@ -79,7 +79,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                   return null;
               }
 
-              await _initializationTask;
+              // await _initializationTask;
 
               var trimmedToken = qrToken.Trim();
               await using var context = _dbContextFactory.CreateDbContext();

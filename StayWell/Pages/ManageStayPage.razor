@@ -42,7 +42,8 @@
                     var activeAddons = allAddons.Where(a => IsAddonAvailable(a.Id) && !IsPurchasedAddon(a.Id)).ToList();
                     var purchasedAddons = allAddons.Where(a => IsPurchasedAddon(a.Id)).ToList();
 
-                    foreach (var addon in activeAddons)
+                   //13.03.2026 -komentarz Maciej - Wyłaczyłem mozliwosc zakupu dodatkow poniewaz narazie implementacje jest niepelna . uzgodnione z Bartkiem.
+                    @*foreach (var addon in activeAddons)
                     {
                         var definedAddon = addon.Id.HasValue
                             ? ApartmentState.DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id.Value)
@@ -73,7 +74,7 @@
                                     MaxQuantity="@maxQty"
                                     OnQuantityChanged="@((qty) => UpsellCartState.SetAddonQuantity(addonId!.Value, qty))"
                                     OnClick="@(() => ToggleAddon(addonId, title, description, priceText, priceInfo, definedAddon?.PriceGross, allowQuantity, maxQty))" />
-                    }
+                    }*@
                     @if (purchasedAddons.Count > 0)
                     {
                         <span class="manage-purchased-label">@Localizer["Purchased"]</span>

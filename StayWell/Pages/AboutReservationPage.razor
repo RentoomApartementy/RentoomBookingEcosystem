@@ -306,7 +306,7 @@
         {
             CustomerAgreedTermsState.OnChange += OnTermsChanged;
             ModalService.OnClose += OnModalClosed;
-            await CustomerAgreedTermsState.LoadAsync(Token);
+            await CustomerAgreedTermsState.LoadAsync(Token, CultureInfo.CurrentUICulture.Name);
         }
     }
 

@@ -8,6 +8,7 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace RentoomBooking.Api.Terms;
 
@@ -41,7 +42,13 @@ public class CustomerAgreedTermsFunction
                 return response;
             }
 
-            var terms = await _termsRepository.GetAgreedTermsByReservationAsync(reservationGuid);
+            var queryParams = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+            var language = queryParams.Get("language")
+                ?? queryParams.Get("lang")
+                ?? queryParams.Get("locale")
+                ?? queryParams.Get("culture");
+
+            var terms = await _termsRepository.GetAgreedTermsByReservationAsync(reservationGuid, language);
 
             if (terms.Count == 0)
             {

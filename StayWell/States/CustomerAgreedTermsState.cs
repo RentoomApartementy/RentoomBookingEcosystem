@@ -1,5 +1,6 @@
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.StayWell.Services;
+using System.Globalization;
 
 namespace RentoomBooking.StayWell.States
 {
@@ -7,6 +8,7 @@ namespace RentoomBooking.StayWell.States
     {
         private readonly BackendApi _backendApi = backendApi;
         private string? _currentToken;
+        private string? _currentLanguage;
 
         public List<CustomerAgreedTermDto> Terms { get; private set; } = [];
         public bool IsLoading { get; private set; }
@@ -15,17 +17,24 @@ namespace RentoomBooking.StayWell.States
 
         private void NotifyStateChanged() => OnChange?.Invoke();
 
-        public async Task LoadAsync(string reservationToken)
+        public async Task LoadAsync(string reservationToken, string? language = null)
         {
-            if (_currentToken == reservationToken && Terms.Count > 0) return;
+            var normalizedLanguage = NormalizeLanguage(language);
+            if (_currentToken == reservationToken
+                && string.Equals(_currentLanguage, normalizedLanguage, StringComparison.OrdinalIgnoreCase)
+                && Terms.Count > 0)
+            {
+                return;
+            }
 
             IsLoading = true;
             NotifyStateChanged();
 
             try
             {
-                Terms = await _backendApi.GetAgreedTermsByReservationAsync(reservationToken);
+                Terms = await _backendApi.GetAgreedTermsByReservationAsync(reservationToken, normalizedLanguage);
                 _currentToken = reservationToken;
+                _currentLanguage = normalizedLanguage;
             }
             finally
             {
@@ -48,6 +57,23 @@ namespace RentoomBooking.StayWell.States
                 NotifyStateChanged();
             }
             return success;
+        }
+
+        private static string NormalizeLanguage(string? language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                return "pl";
+            }
+
+            try
+            {
+                return CultureInfo.GetCultureInfo(language).Name;
+            }
+            catch (CultureNotFoundException)
+            {
+                return "pl";
+            }
         }
     }
 }

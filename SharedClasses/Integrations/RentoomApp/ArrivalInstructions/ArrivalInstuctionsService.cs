@@ -34,7 +34,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
 
             var baseQuery = dbContext.ArrivalInstructions
                 .AsNoTracking()
-                .Where(step => step.ApartmentId == apartmentId);
+                .Where(step => step.ApartmentItemId == apartmentId);
 
             if (!string.Equals(normalizedLanguage, DefaultLanguage, StringComparison.OrdinalIgnoreCase))
             {
@@ -101,7 +101,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
             return new ApartmentArrivalInstructionStepDTO
             {
                 Id = step.Id,
-                ApartmentId = step.ApartmentId,
+                ApartmentItemId = step.ApartmentItemId,
                 Sequence = step.Sequence,
                 Language = step.Language,
                 Name = step.Name,

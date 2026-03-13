@@ -14,7 +14,7 @@
 @inject AvailableUpsellsState AvailableUpsellsState
 @inherits Models.PageBase
 
-<PageTitle>Main</PageTitle>
+<PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <div class="image-wrapper">
     @if (MediaState.IsLoading || ReservationState.IsLoading || ImageUrl == string.Empty)

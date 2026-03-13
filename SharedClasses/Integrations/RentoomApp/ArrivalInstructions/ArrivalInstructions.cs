@@ -12,7 +12,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
     public class ApartmentArrivalInstructionStepDTO
     {
         public int Id { get; set; }
-        public int ApartmentId { get; set; }
+        public int ApartmentItemId { get; set; }
         public int Sequence { get; set; }
         public string Language { get; set; } = "default";
         public string Name { get; set; } = string.Empty;
@@ -27,9 +27,9 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructio
         [Key]
         public int Id { get; set; }
 
-        public int ApartmentId { get; set; }
-        [NotMapped]
-        public ApartmentObject Apartment { get; set; } = null!;
+        public int ApartmentItemId { get; set; }
+        //[NotMapped]
+        //public ApartmentObject Apartment { get; set; } = null!;
 
         [Required]
         public int Sequence { get; set; }

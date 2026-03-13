@@ -166,6 +166,9 @@
   <data name="OpenApartment" xml:space="preserve">
     <value>Otwórz Apartament</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Staywell - Twoja Rezerwacja</value>
+  </data>
   <data name="ReservationID" xml:space="preserve">
     <value>numer rezerwacji</value>
   </data>
