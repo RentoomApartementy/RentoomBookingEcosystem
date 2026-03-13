@@ -1,4 +1,5 @@
 @using System.Timers
+@using Microsoft.AspNetCore.Components.Web
 @implements IDisposable
 @inject StayWell.Services.ModalService ModalService
 
@@ -20,7 +21,11 @@
 
     <div class="carousel-card">
         <div class="carousel-mask"
-             style="height: @(IsInstructionCarousel ? "500px;" : "250px;")">
+             @ontouchstart="HandleTouchStart"
+             @ontouchmove="HandleTouchMove"
+             @ontouchend="HandleTouchEnd"
+             @ontouchcancel="HandleTouchCancel"
+             style="height: @(IsInstructionCarousel ? "500px;" : "250px;"); touch-action: pan-y;">
             <div class="slider" style="transform: translateX(calc(-@(_index * 100)%))">
                 @for (int i = 0; i < ImageUrls.Length; i++)
                 {
@@ -81,6 +86,15 @@
     private int _index = 0;
     private System.Timers.Timer? _timer;
 
+    private double _touchStartX;
+    private double _touchStartY;
+    private double _touchLastX;
+    private double _touchLastY;
+    private bool _touchStarted;
+    private bool _suppressNextTap;
+
+    private const double SwipeThresholdPx = 50;
+
     private string CurrentDescription =>
         Descriptions.Length > _index ? Descriptions[_index] : Description;
 
@@ -96,22 +110,96 @@
 
     private void EnlargeImage()
     {
+        if (_suppressNextTap)
+        {
+            _suppressNextTap = false;
+            return;
+        }
+
         if (ImageUrls == null || ImageUrls.Length == 0) return;
 
         if (UseControlButtons)
         {
             ModalService.ShowModal("",
-            @<RentoomBooking.StayWell.Components.ModalContent.GalleryModalContent 
-            ImageUrls="@ImageUrls" 
-            StartIndex="@_index" 
-            ShowControls="@UseControlButtons"/>, 
-            true /* <- styl zdjêcia*/
+            @<RentoomBooking.StayWell.Components.ModalContent.GalleryModalContent
+            ImageUrls="@ImageUrls"
+            StartIndex="@_index"
+            ShowControls="@UseControlButtons" />,
+            true
             );
         }
     }
 
+    private void HandleTouchStart(TouchEventArgs args)
+    {
+        if (args.Touches is null || args.Touches.Count() == 0) return;
+
+        _touchStartX = args.Touches[0].ClientX;
+        _touchStartY = args.Touches[0].ClientY;
+        _touchLastX = _touchStartX;
+        _touchLastY = _touchStartY;
+        _touchStarted = true;
+    }
+
+    private void HandleTouchMove(TouchEventArgs args)
+    {
+        if (!_touchStarted || args.Touches is null || args.Touches.Count() == 0) return;
+
+        _touchLastX = args.Touches[0].ClientX;
+        _touchLastY = args.Touches[0].ClientY;
+    }
+
+    private void HandleTouchEnd(TouchEventArgs args)
+    {
+        if (!_touchStarted) return;
+
+        var endX = _touchLastX;
+        var endY = _touchLastY;
+
+        if (args.ChangedTouches is not null && args.ChangedTouches.Count() > 0)
+        {
+            endX = args.ChangedTouches[0].ClientX;
+            endY = args.ChangedTouches[0].ClientY;
+        }
+
+        var deltaX = endX - _touchStartX;
+        var deltaY = endY - _touchStartY;
+
+        if (Math.Abs(deltaX) >= SwipeThresholdPx && Math.Abs(deltaX) > Math.Abs(deltaY))
+        {
+            if (deltaX < 0)
+            {
+                NextSlide();
+            }
+            else
+            {
+                PreviousSlide();
+            }
+
+            _suppressNextTap = true;
+        }
+
+        ResetTouchState();
+    }
+
+    private void HandleTouchCancel()
+    {
+        ResetTouchState();
+    }
+
+    private void ResetTouchState()
+    {
+        _touchStarted = false;
+        _touchStartX = 0;
+        _touchStartY = 0;
+        _touchLastX = 0;
+        _touchLastY = 0;
+    }
+
     private void NextSlide()
     {
+        if (ImageUrls.Length == 0) return;
+
         if (_index < ImageUrls.Length - 1)
         {
             _index++;
@@ -124,6 +212,8 @@
 
     private void PreviousSlide()
     {
+        if (ImageUrls.Length == 0) return;
+
         if (_index > 0)
         {
             _index--;

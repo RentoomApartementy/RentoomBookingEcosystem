@@ -22,13 +22,13 @@
 {
     <div class="manage-tile">
         <div class="cart-empty">
-            <img class="cart-empty__icon" src="/icons/shopping-cart.svg" />
+            <img class="cart-empty__icon" src="/icons/shopping-cart.svg" style="padding-bottom: 10px !important;"/>
             <span class="cart-empty__text">@Localizer["Empty"]</span>
         </div>
     </div>
     <div class="cart-actions" style="margin-top: 20px;">
-        <button class="cart-actions__btn cart-actions__btn--secondary" @onclick="GoBack">
-            @Localizer["Back"]
+        <button class="back-btn" @onclick="GoBack">
+            <img class="white-filter" src="/icons/chevron-left.svg" /> @Localizer["Back"]
         </button>
     </div>
 }
@@ -37,15 +37,17 @@ else
     <div class="section-group">
         <div class="cart-items-wrapper" @ref="_wrapperRef">
             <h3 class="reservation-section__title">
-                <img class="reservation-field__icon" src="/icons/shopping-cart.svg" />
-                @Localizer["YourCart"]
+                @* <img class="reservation-field__icon tile--row" src="/icons/shopping-cart.svg" /> *@
+                @* @Localizer["YourCart"] *@
+                <button class="back-btn" @onclick="GoBack"><img class="white-filter" src="/icons/chevron-left.svg"/> @Localizer["Back"]</button>
             </h3>
 
             @if (UpsellCartState.Items.Any())
             {
                 <span class="manage-tile__category"
                       style="margin-left: 10px; margin-bottom: 8px; display: block;">
-                    @Localizer["title"]
+                    <img class="reservation-field__icon tile--row" src="/icons/shopping-cart.svg" />
+                    @Localizer["YourCart"]
                 </span>
                 @foreach (var item in UpsellCartState.Items)
                 {
@@ -121,17 +123,17 @@ else
                 }
             }
 
-            @if (UpsellCartState.Items.Any() && UpsellCartState.AddonItems.Any())
+            @* @if (UpsellCartState.Items.Any() && UpsellCartState.AddonItems.Any())
             {
                 <div class="summary-divider" style="margin: 16px 10px;"></div>
-            }
+            } *@
 
             @if (UpsellCartState.AddonItems.Any())
             {
-                <span class="manage-tile__category"
+                @* <span class="manage-tile__category"
                       style="margin-left: 10px; margin-bottom: 8px; display: block;">
                     @Localizer["Addons"]
-                </span>
+                </span> *@
                 @foreach (var addon in UpsellCartState.AddonItems)
                 {
                     <div class="cart-item-tile">

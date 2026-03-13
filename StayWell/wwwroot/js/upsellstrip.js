@@ -7,7 +7,12 @@
     },
 
     onWindowResize(dotnet) {
-        const handler = () => dotnet.invokeMethodAsync("OnWindowResize", window.innerWidth);
+        const handler = () => {
+            dotnet.invokeMethodAsync("OnWindowResize", window.innerWidth).catch(() => {
+                this.offWindowResize(dotnet);
+            });
+        };
+
         window.addEventListener("resize", handler, { passive: true });
         this._resizeListeners.set(dotnet, handler);
     },
@@ -26,15 +31,25 @@
         this.destroy(scrollEl);
 
         let ticking = false;
+        let rafId = 0;
         let isDragging = false;
         let startX = 0;
         let startScrollLeft = 0;
         let carouselActive = false;
+        let disposed = false;
 
         const isCarouselMode = () => scrollEl.scrollWidth > scrollEl.clientWidth + 4;
 
+        const safeInvoke = (method, ...args) => {
+            if (disposed) return;
+            dotnet.invokeMethodAsync(method, ...args).catch(() => {
+                disposed = true;
+                this.destroy(scrollEl);
+            });
+        };
+
         const findActiveId = () => {
-            if (!isCarouselMode()) return;
+            if (disposed || !isCarouselMode()) return;
 
             const items = scrollEl.querySelectorAll(".upsell-strip-item[id]");
             if (!items.length) return;
@@ -53,21 +68,27 @@
             });
 
             if (closestId !== null) {
-                dotnet.invokeMethodAsync("SetActiveItem", closestId);
+                safeInvoke("SetActiveItem", closestId);
             }
         };
 
         const onScroll = () => {
-            if (!isCarouselMode() || ticking) return;
+            if (disposed || !isCarouselMode() || ticking) return;
             ticking = true;
-            requestAnimationFrame(() => {
+
+            rafId = requestAnimationFrame(() => {
+                if (disposed) {
+                    ticking = false;
+                    return;
+                }
+
                 findActiveId();
                 ticking = false;
             });
         };
 
         const onMouseDown = (e) => {
-            if (!isCarouselMode()) return;
+            if (disposed || !isCarouselMode()) return;
             isDragging = true;
             startX = e.pageX - scrollEl.offsetLeft;
             startScrollLeft = scrollEl.scrollLeft;
@@ -75,7 +96,7 @@
         };
 
         const onMouseMove = (e) => {
-            if (!isDragging || !isCarouselMode()) return;
+            if (disposed || !isDragging || !isCarouselMode()) return;
             e.preventDefault();
             const x = e.pageX - scrollEl.offsetLeft;
             const walk = (x - startX) * 1.2;
@@ -89,6 +110,8 @@
         };
 
         const onResize = () => {
+            if (disposed) return;
+
             const nowCarousel = isCarouselMode();
             if (nowCarousel !== carouselActive) {
                 carouselActive = nowCarousel;
@@ -115,7 +138,13 @@
             onMouseMove,
             onMouseUp,
             resizeObserver,
-            dotnet,
+            dispose() {
+                disposed = true;
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = 0;
+                }
+            },
         });
     },
 
@@ -134,6 +163,7 @@
     destroy(scrollEl) {
         const instance = this._instances.get(scrollEl);
         if (instance) {
+            instance.dispose?.();
             scrollEl.removeEventListener("scroll", instance.onScroll);
             scrollEl.removeEventListener("mousedown", instance.onMouseDown);
             window.removeEventListener("mousemove", instance.onMouseMove);

@@ -168,4 +168,20 @@
   <data name="YourIndividualCode" xml:space="preserve">
     <value>Twój kod do apartamentu</value>
   </data>
+  <data name="InstructionCylinder" xml:space="preserve">
+    <value>1. Wpisz kod lub otwórz zdalnie.
+(Każde kliknięcie przycisku na klawiaturze będzie potwierdzone dźwiękiem)
+2. Jeżeli zaświeci się na niebiesko, przekręcaj gałką w kierunku przeciwnym do jej pozycji na drzwiach do momentu aż usłyszysz cofający się zamek.
+(Zamek po prawej stronie drzwi, kręć w lewo)
+(Zamek po lewej stronie drzwi, kręć w prawo)
+3. Otwórz drzwi</value>
+  </data>
+  <data name="InstructionPanel" xml:space="preserve">
+    <value>1. Podświetl klawiaturę wciskając dowolny przycisk na panelu
+2. Wpisz swój kod
+3. Jeżeli zaświeci się na niebiesko otwórz drzwi.</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Ważne</value>
+  </data>
 </root>

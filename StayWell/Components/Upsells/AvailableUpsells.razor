@@ -10,7 +10,7 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
 @inject GlobalizationService GlobalizationService
-@implements IDisposable
+@implements IAsyncDisposable
 
 <div class="upsell-strip-wrapper">
     <div class="upsell-strip-header">
@@ -100,7 +100,6 @@
 
     private ReservationPricingContext _reservationContext = new();
     private ElementReference _scrollRef;
-    private DotNetObjectReference<AvailableUpsells>? _selfRef;
     private int _activeId = -1;
     private bool _jsInitialized;
     private int _windowWidth = 0;
@@ -185,21 +184,47 @@
         await AvailableUpsellsState.EnsureLoadedAsync(Token, effectiveLocale, force: force);
     }
 
+    private bool _isDisposed;
+    private DotNetObjectReference<AvailableUpsells>? _selfRef;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (_isDisposed)
+        {
+            return;
+        }
+
         if (firstRender)
         {
-            _selfRef = DotNetObjectReference.Create(this);
             _windowWidth = await JS.InvokeAsync<int>("upsellStrip.getWindowWidth");
+
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            _selfRef ??= DotNetObjectReference.Create(this);
             await JS.InvokeVoidAsync("upsellStrip.onWindowResize", _selfRef);
+
+            if (_isDisposed)
+            {
+                return;
+            }
+
             StateHasChanged();
             return;
         }
 
-        if (_jsInitialized) return;
+        if (_jsInitialized)
+        {
+            return;
+        }
 
         var upsells = AvailableUpsellsState.AvailableUpsells;
-        if (!upsells.Any()) return;
+        if (!upsells.Any())
+        {
+            return;
+        }
 
         _jsInitialized = true;
         _activeId = upsells.First().PartnerServiceId;
@@ -209,9 +234,52 @@
         {
             await JS.InvokeVoidAsync("upsellStrip.init", _scrollRef, _selfRef);
         }
-        catch { }
+        catch
+        {
+        }
+
+        if (_isDisposed)
+        {
+            return;
+        }
 
         StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        _isDisposed = true;
+
+        AvailableUpsellsState.OnChange -= OnAvailableUpsellsStateChanged;
+        UpsellCartState.OnChange -= OnCartStateChanged;
+        GlobalizationService.OnChange -= OnLanguageChanged;
+
+        if (_selfRef is not null)
+        {
+            try
+            {
+                await JS.InvokeVoidAsync("upsellStrip.offWindowResize", _selfRef);
+            }
+            catch
+            {
+            }
+        }
+
+        try
+        {
+            await JS.InvokeVoidAsync("upsellStrip.destroy", _scrollRef);
+        }
+        catch
+        {
+        }
+
+        _selfRef?.Dispose();
+        _selfRef = null;
     }
 
     [JSInvokable]
@@ -235,19 +303,6 @@
 
     private void OnCartStateChanged() =>
         InvokeAsync(StateHasChanged);
-
-    public void Dispose()
-    {
-        AvailableUpsellsState.OnChange -= OnAvailableUpsellsStateChanged;
-        UpsellCartState.OnChange -= OnCartStateChanged;
-        GlobalizationService.OnChange -= OnLanguageChanged;
-        if (_selfRef is not null)
-        {
-            try { JS.InvokeVoidAsync("upsellStrip.offWindowResize", _selfRef); } catch { }
-        }
-        try { JS.InvokeVoidAsync("upsellStrip.destroy", _scrollRef); } catch { }
-        _selfRef?.Dispose();
-    }
 
     [JSInvokable]
     public void SetActiveItem(int id)

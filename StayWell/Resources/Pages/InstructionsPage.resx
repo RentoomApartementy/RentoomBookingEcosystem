@@ -135,6 +135,9 @@
   <data name="GateCode" xml:space="preserve">
     <value>Gate code</value>
   </data>
+  <data name="GoOpen" xml:space="preserve">
+    <value>Open your apartment</value>
+  </data>
   <data name="Instructions" xml:space="preserve">
     <value>Check-in instructions</value>
   </data>
@@ -146,6 +149,12 @@
   </data>
   <data name="NoWifi" xml:space="preserve">
     <value>No Wi-Fi data</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="ParkingNumber" xml:space="preserve">
+    <value>Parking spot no.</value>
   </data>
   <data name="ReportOnPage" xml:space="preserve">
     <value>In order for us to help you quickly, please provide a detailed description of the fault. Indicate what exactly is not working and, if possible, add photos – this will significantly speed up the resolution of the issue.</value>

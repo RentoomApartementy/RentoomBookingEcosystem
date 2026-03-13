@@ -8,6 +8,21 @@
     }
 }
 
+.openapartment-btn{
+    background-color: var(--rentoom-green-dark);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    min-width: 200px;
+    margin: 10px;
+}
+
+.white-filter {
+    padding-bottom: 3px;
+    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7434%) hue-rotate(154deg) brightness(114%) contrast(117%);
+}
+
 .skeleton {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 700px 100%;
