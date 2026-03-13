@@ -338,7 +338,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
                 {
                     await EnsurePaymentTotalsAsync(reservationGuid, record);
-                    var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie";
+                    //var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie";
+                    var redirectUrl = $"/rezerwuj/{reservationGuid}/podsumowanie";
 
 
                     return new PaymentInitResult

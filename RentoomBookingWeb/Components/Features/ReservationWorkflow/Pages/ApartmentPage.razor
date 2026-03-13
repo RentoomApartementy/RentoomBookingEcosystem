@@ -232,10 +232,13 @@
             
              @if (_reservationPricingContext is not null)
             {
-                <UpsellList AvailableUpsellsList="_availableUpsells"
+                    //13.03.2026 - Maciej S: wyłączamy widocznośc Upselli. Do decyzji Rentoom kiedy chcemy je włączyć spowrotem.
+              
+               @* <UpsellList AvailableUpsellsList="_availableUpsells"
                             ReservationContext="_reservationPricingContext"
                             OnSelectionChanged="HandleUpsellSelectionChanged"
                             Texts="UpsellTexts"/>
+               *@
             }
 
             
