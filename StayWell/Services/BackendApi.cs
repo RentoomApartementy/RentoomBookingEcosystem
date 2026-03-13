@@ -152,6 +152,18 @@ namespace RentoomBooking.StayWell.Services
                 });
         }
 
+        public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync()
+        {
+            var response = await _http.GetAsync("db/terms/display");
+            if (!response.IsSuccessStatusCode)
+            {
+                return [];
+            }
+
+            return await response.Content.ReadFromJsonAsync<List<CustomerTermDisplayDto>>(_json)
+                   ?? [];
+        }
+
         public async Task<bool> SaveTermsAsync(TermsEntity entity)
         {
             var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
@@ -443,6 +455,12 @@ namespace RentoomBooking.StayWell.Services
 
             return await response.Content.ReadFromJsonAsync<List<CustomerAgreedTermDto>>(_json)
                    ?? [];
+        }
+
+        public async Task<bool> SaveCustomerTermsAsync(string reservationTokenGuid, Dictionary<int, bool> userSelections)
+        {
+            var response = await _http.PostAsJsonAsync($"db/reservations/{reservationTokenGuid}/agreed-terms", userSelections, _json);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> UpdateAgreedTermAsync(string reservationToken, int termsSourceId, bool isAccepted)
