@@ -262,3 +262,53 @@
         width: 18px;
         border-radius: 10px;
     }
+
+.instruction-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 25px;
+    width: 100%;
+    max-width: 350px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.instruction-track {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.instruction-track::-webkit-scrollbar {
+    display: none;
+}
+
+.instruction-slide {
+    min-width: 100%;
+    scroll-snap-align: center;
+    padding: 16px 20px;
+    box-sizing: border-box;
+}
+
+.instruction-content {
+    white-space: pre-line;
+    line-height: 1.45;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.instruction-title {
+    padding: 16px 20px 0 20px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1f2937;
+}
