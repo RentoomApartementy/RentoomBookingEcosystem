@@ -133,11 +133,36 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu  If the lock is cylindrical, turn the knob in the opposite direction to its position on the door until you hear the lock retract..
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Important.
         /// </summary>
-        internal static string Instruction {
+        internal static string Important {
             get {
-                return ResourceManager.GetString("Instruction", resourceCulture);
+                return ResourceManager.GetString("Important", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 1. Enter the code or open remotely.
+        ///(Each click will be confirmed by a sound.)
+        ///2. If it lights up blue, turn the knob in the opposite direction to its position on the door until you hear the lock retract.
+        ///(Lock on the right side of the door, turn left)
+        ///(Lock on the left side of the door, turn right)
+        ///3. Open the door.
+        /// </summary>
+        internal static string InstructionCylinder {
+            get {
+                return ResourceManager.GetString("InstructionCylinder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 1. Light up the keyboard by pressing any button on the panel.
+        ///2. Enter your code.
+        ///3. If it lights up blue, open the door..
+        /// </summary>
+        internal static string InstructionPanel {
+            get {
+                return ResourceManager.GetString("InstructionPanel", resourceCulture);
             }
         }
         
