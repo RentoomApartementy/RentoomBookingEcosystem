@@ -29,6 +29,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
     public interface IReservationWorkflowService
     {
         Task<Guid> StartAsync(StartReservationRequest request);
+        Task UpdateStartRequestAsync(Guid reservationGuid, StartReservationRequest request);
         Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice);
         Task<ReservationSummaryDto> BuildSummaryAsync(Guid reservationGuid);
         Task<ReservationSummaryDto> BuildDraftSummaryAsync(Guid reservationGuid);
@@ -116,6 +117,15 @@ private static TimeZoneInfo GetWarsawTimeZone()
             if (request is null) throw new ArgumentNullException(nameof(request));
             var record = await _store.CreateAsync(request);
             return record.ReservationGuid; //<== to jest tez reservation token dla staywell
+        }
+
+        public async Task UpdateStartRequestAsync(Guid reservationGuid, StartReservationRequest request)
+        {
+            if (request is null) throw new ArgumentNullException(nameof(request));
+
+            var record = await RequireReservationAsync(reservationGuid);
+            record.State.StartRequest = request;
+            await _store.UpdateAsync(record);
         }
 
         public async Task SaveClientInfoAsync(Guid reservationGuid, ClientInfoDto client, InvoiceInfoDto? invoice)
@@ -338,7 +348,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
                 {
                     await EnsurePaymentTotalsAsync(reservationGuid, record);
-                    var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie";
+                    //var redirectUrl = record.State.PaymentRedirectUrl ?? $"/rezerwuj/{reservationGuid}/podsumowanie";
+                    var redirectUrl = $"/rezerwuj/{reservationGuid}/podsumowanie";
 
 
                     return new PaymentInitResult

@@ -32,6 +32,16 @@ namespace RentoomBooking.SharedClasses.Models
         [Required]
         public bool IsRequired { get; set; } = false;
 
+        [Required]
+        public bool IsRequiredForReservationWorkflow { get; set; } = false;
+
+        [Required]
+        public bool IsVisibleInStayWellOnboarding { get; set; } = false;
+
+        [Required]
+        [MaxLength(20)]
+        public string TermsType { get; set; } = "Additional";
+
         public List<CustomerTermsSourceTranslation> Translations { get; set; } = new();
     }   
 }

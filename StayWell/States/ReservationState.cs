@@ -22,7 +22,23 @@ namespace RentoomBooking.StayWell.States
         private HttpStatusCode? _currentStatus;
 
         public bool IsValidReservation => CurrentReservation != null && CurrentStatus == HttpStatusCode.OK;
-        public bool IsActiveReservation => CurrentReservation?.Reservation?.ReservationDetails?.getDateFrom() <= DateTime.Now && DateTime.Now <= CurrentReservation?.Reservation?.ReservationDetails?.getDateTo();
+        public bool IsActiveReservation
+        {
+            get
+            {
+                var details = CurrentReservation?.Reservation?.ReservationDetails;
+                if (details is null)
+                {
+                    return false;
+                }
+
+                var now = DateTime.Now;
+                var from = details.getDateFrom().Date + CheckInTime.ToTimeSpan();
+                var to = details.getDateTo().Date + CheckOutTime.ToTimeSpan();
+
+                return from <= now && now <= to;
+            }
+        }
 
         public RentoomReservation? CurrentReservation
         {

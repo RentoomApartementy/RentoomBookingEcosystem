@@ -195,9 +195,15 @@ else
     private void LoadImage()
     {
         const string placeholder = "/images/placeholders/apartment_placeholder.png";
-        ImageUrl = MediaState?.CurrentMedia?
-            .FirstOrDefault(m => string.Equals(m.Extension, "jpg", StringComparison.OrdinalIgnoreCase))
-            ?.Url
-            ?? placeholder;
+
+        var image = MediaState?.CurrentMedia?
+            .FirstOrDefault(m =>
+                !string.IsNullOrWhiteSpace(m.Url) &&
+                (string.Equals(m.Extension, "jpg", StringComparison.OrdinalIgnoreCase) ||
+                 string.Equals(m.Extension, "png", StringComparison.OrdinalIgnoreCase)))
+            ?? MediaState?.CurrentMedia?
+                .FirstOrDefault(m => !string.IsNullOrWhiteSpace(m.Url));
+
+        ImageUrl = image?.Url ?? placeholder;
     }
 }

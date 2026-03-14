@@ -1,0 +1,27 @@
+@using RentoomBooking.SharedClasses.Models
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StatutePage> Localizer
+
+<div class="other-statutes">
+    <h3>@Localizer["OtherStatutes"]</h3>
+    <div class="statutes-list">
+        @foreach (var term in Regulations)
+        {
+            <div class="statute-item">
+                <a href="/regulaminy/@term.Id/@GenerateSlug(term.Title ?? term.Description)">
+                    @(term.Title ?? term.Description)
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<CustomerTermDisplayDto> Regulations { get; set; } = new();
+
+    private string GenerateSlug(string? text)
+    {
+        if (string.IsNullOrEmpty(text)) return "regulamin";
+        return text.ToLower().Replace(" ", "-").Replace("ł", "l").Replace("ą", "a").Replace("ć", "c").Replace("ę", "e").Replace("ń", "n").Replace("ó", "o").Replace("ś", "s").Replace("ź", "z").Replace("ż", "z");
+    }
+}

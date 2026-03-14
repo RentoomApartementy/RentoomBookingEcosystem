@@ -1,4 +1,6 @@
 @page "/apartamenty/{id:int}/{slug}"
+@page "/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}"
+@page "/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.AvailableTerms
@@ -232,10 +234,14 @@
             
              @if (_reservationPricingContext is not null)
             {
-                <UpsellList AvailableUpsellsList="_availableUpsells"
+                    //13.03.2026 - Maciej S: wyłączamy widocznośc Upselli. Do decyzji Rentoom kiedy chcemy je włączyć spowrotem.
+              
+               @* <UpsellList AvailableUpsellsList="_availableUpsells"
                             ReservationContext="_reservationPricingContext"
                             OnSelectionChanged="HandleUpsellSelectionChanged"
+                            InitialSelection="_selectedUpsells"
                             Texts="UpsellTexts"/>
+               *@
             }
 
             
@@ -269,7 +275,7 @@
                                 @* <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
-                                        <Button Type="ButtonType.Tertiary">@Localizer["BookNow"]</Button>
+                                        <Button Type="ButtonType.Tertiary">@GetOfferButtonLabel(OfferTypeNonrefundable)</Button>
                                 </div>
                             </div>
                         </div>  
@@ -284,7 +290,7 @@
                                 @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
-                                    <Button>@Localizer["BookNow"]</Button>
+                                        <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Tertiary)">@GetOfferButtonLabel(OfferTypeRefundable)</Button>
                                 </div>
                             </div>
                         </div>   
@@ -670,6 +676,7 @@
 @code {
     [Parameter] public int Id { get; set; }
     [Parameter] public string? Slug { get; set; }
+    [Parameter] public Guid? ReservationTokenGuid { get; set; }
     [Parameter] public string? StartDate { get; set; }
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
@@ -683,6 +690,8 @@
     private PricingOffersResponse? _offersResponse;
 
     private bool _isOfferLoading = true;
+    private Guid? _reservationTokenGuid;
+    private ReservationSummaryDto? _reservationDraftSummary;
 
     private List<AvailableTerm> _suggestionDates = new();
     private AvailableTerm? _selectedSuggestionDate = null;
@@ -805,6 +814,15 @@
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
     private string? _selectedOfferType;
+    private bool HasActiveReservation =>
+        _reservationTokenGuid.HasValue &&
+        _reservationDraftSummary is not null &&
+        _reservationDraftSummary.PaymentStatus != PaymentStatuses.Paid;
+
+    private string GetOfferButtonLabel(string? offerType)
+        => HasActiveReservation && IsSelectedOffer(offerType)
+            ? Localizer["ContinueReservation"]
+            : Localizer["BookNow"];
 
     private static Dictionary<string, string> _languageMap = new Dictionary<string, string>
     {
@@ -968,8 +986,15 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _reservationTokenGuid = ReservationTokenGuid;
+
         _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
         await GetObjectMedia();
+
+        if (_reservationTokenGuid.HasValue)
+        {
+            await TryLoadReservationDraftAsync();
+        }
         
         if (_apartment != null)
         {
@@ -979,6 +1004,7 @@
             
             _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
             UpdateReservationPricingContext();
+            RefreshAddonsParams();
             await LoadUpsellsAsync();
 
         }
@@ -1003,6 +1029,42 @@
             PriceLabel = UpsellLocalizer["Price"],
             Currency = CurrencyLocalizer["PLN"],
         };
+    }
+
+    private async Task TryLoadReservationDraftAsync()
+    {
+        if (!_reservationTokenGuid.HasValue)
+        {
+            return;
+        }
+
+        try
+        {
+            _reservationDraftSummary = await ReservationWorkflowService.BuildDraftSummaryAsync(_reservationTokenGuid.Value);
+        }
+        catch
+        {
+            _reservationTokenGuid = null;
+            _reservationDraftSummary = null;
+            return;
+        }
+
+        var start = _reservationDraftSummary?.StartRequest;
+        if (start is null || start.ObjectItemId != Id)
+        {
+            _reservationTokenGuid = null;
+            _reservationDraftSummary = null;
+            return;
+        }
+
+        StartDate = start.StartDate.ToString("yyyy-MM-dd");
+        EndDate = start.EndDate.ToString("yyyy-MM-dd");
+        Adults = start.Adults.ToString();
+        Children = start.Children.ToString();
+
+        _selectedOfferType = start.SelectedOfferType;
+        _selectedAddons = start.SelectedAddons ?? new List<SelectedAddonDto>();
+        _selectedUpsells = start.SelectedUpsells ?? new List<SelectedUpsellDto>();
     }
 
     private bool _observerInitialized = false; 
@@ -1288,7 +1350,7 @@
 
         if (_apartment != null)
         {
-            var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{StartDate}/{EndDate}/{Adults}/{Children}";
+            var url = BuildApartmentUrl(_reservationTokenGuid);
             Navigation.NavigateTo(url, forceLoad: false);
             await GetOffer();
         }
@@ -1304,7 +1366,7 @@
             RefreshAddonsParams();
             UpdateReservationPricingContext();
 
-            var url = $"/apartamenty/{_apartment.Id}/{_apartment.Name?.ToSlug()}/{suggestion.StartDate}/{suggestion.EndDate}/{Adults}/{Children}";
+            var url = BuildApartmentUrl(_reservationTokenGuid);
             Navigation.NavigateTo(url, forceLoad: false);
             await GetOffer();
         }
@@ -1319,7 +1381,49 @@
     {
         return $"{term.StartDate} - {term.EndDate}";
     }
+
+    private string BuildApartmentUrl(Guid? reservationGuid)
+    {
+        var apartmentId = _apartment?.Id ?? Id;
+        var slug = _apartment?.Name?.ToSlug() ?? Slug ?? string.Empty;
+        var url = $"/apartamenty/{apartmentId}/{slug}";
+
+        if (reservationGuid.HasValue)
+        {
+            url += $"/{reservationGuid.Value}";
+        }
+
+        if (!string.IsNullOrWhiteSpace(StartDate) &&
+            !string.IsNullOrWhiteSpace(EndDate) &&
+            !string.IsNullOrWhiteSpace(Adults))
+        {
+            var childrenValue = string.IsNullOrWhiteSpace(Children) ? "0" : Children;
+            url += $"/{StartDate}/{EndDate}/{Adults}/{childrenValue}";
+        }
+
+        return url;
+    }
     
+    private async Task<Guid> EnsureReservationAsync(StartReservationRequest request)
+    {
+        if (HasActiveReservation && _reservationTokenGuid.HasValue)
+        {
+            try
+            {
+                await ReservationWorkflowService.UpdateStartRequestAsync(_reservationTokenGuid.Value, request);
+                return _reservationTokenGuid.Value;
+            }
+            catch
+            {
+                _reservationTokenGuid = null;
+            }
+        }
+
+        var reservationGuid = await ReservationWorkflowService.StartAsync(request);
+        _reservationTokenGuid = reservationGuid;
+        return reservationGuid;
+    }
+
     private async Task GoToPayment(string? offerType)
     {
         if (_apartment is null || string.IsNullOrWhiteSpace(StartDate) || string.IsNullOrWhiteSpace(EndDate))
@@ -1371,7 +1475,9 @@
             SelectedUpsells = _selectedUpsells
         };
 
-        var reservationGuid = await ReservationWorkflowService.StartAsync(request);
+        var reservationGuid = await EnsureReservationAsync(request);
+        var apartmentUrl = BuildApartmentUrl(reservationGuid);
+        Navigation.NavigateTo(apartmentUrl, replace: true);
         Navigation.NavigateTo($"/rezerwuj/{reservationGuid}/dane-klienta", true);
     }
     

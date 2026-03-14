@@ -255,4 +255,7 @@
   <data name="Package" xml:space="preserve">
     <value />
   </data>
+  <data name="ContinueReservation" xml:space="preserve">
+    <value>Continue reservation</value>
+  </data>
 </root>

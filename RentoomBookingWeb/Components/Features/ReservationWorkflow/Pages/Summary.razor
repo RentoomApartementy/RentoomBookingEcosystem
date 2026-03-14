@@ -224,7 +224,13 @@
                                                 </label>
                                             </div>
 
-                                            @if (!string.IsNullOrEmpty(term.Link))
+                                            @if (!string.IsNullOrEmpty(term.HtmlContent))
+                                            {
+                                                <a href="/regulaminy/@term.Id/@GenerateSlug(term.Title ?? term.Description)" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
+                                                    <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
+                                                </a>
+                                            }
+                                            else if (!string.IsNullOrEmpty(term.Link))
                                             {
                                                 <a href="@term.Link" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
                                                     <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
@@ -554,7 +560,7 @@
         try 
         {
             _isTermsLoading = true;
-            _termsSources = await TermsService.GetTermsForDisplayAsync(CultureInfo.CurrentUICulture.Name);
+            _termsSources = await TermsService.GetTermsForDisplayAsync(CultureInfo.CurrentUICulture.Name, onlyRequiredForWorkflow: true);
             _userSelections = _termsSources.ToDictionary(t => t.Id, _ => false);
         }
         finally 
@@ -605,6 +611,17 @@
                 isChecked = false;
                 return false;
         }
+    }
+
+    private string GenerateSlug(string? text)
+    {
+        if (string.IsNullOrEmpty(text)) return "regulamin";
+        return text.ToLower()
+            .Replace(" ", "-")
+            .Replace("ł", "l").Replace("ą", "a").Replace("ć", "c")
+            .Replace("ę", "e").Replace("ń", "n").Replace("ó", "o")
+            .Replace("ś", "s").Replace("ź", "z").Replace("ż", "z")
+            .Replace("\"", "").Replace("'", "");
     }
 
     private bool CanProceedToPayment()

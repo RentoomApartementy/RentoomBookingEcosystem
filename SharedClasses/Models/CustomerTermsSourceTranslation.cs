@@ -19,8 +19,13 @@ namespace RentoomBooking.SharedClasses.Models
         [MaxLength(20)]
         public string Culture { get; set; } = string.Empty;
 
+        [MaxLength(200)]
+        public string? Title { get; set; }
+
         [MaxLength(500)]
         public string? Description { get; set; }
+
+        public string? HtmlContent { get; set; }
 
         [Url]
         public string? Link { get; set; }

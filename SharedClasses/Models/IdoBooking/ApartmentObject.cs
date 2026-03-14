@@ -26,7 +26,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         [NotMapped]
         public List<BedConfigurationArray>? BedsConfiguration { get; set; }
         public List<CategoryType>? Categories { get; set; }
-        public List<ItemType>? Items { get; set; }
+        public List<ApartmentObjectItem>? Items { get; set; }
         public List<AddonType>? Addons { get; set; }
         [NotMapped]
         public ObjectLocation? ObjectLocation { get; set; }
@@ -51,7 +51,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public const string Y = "y";
     }
 
-    public class ItemType
+    public class ApartmentObjectItem
     {
         public int? Id { get; set; }
         public string? Name { get; set; }

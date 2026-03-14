@@ -4,6 +4,7 @@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
+@inject CustomerAgreedTermsState CustomerAgreedTermsState
 @inject IStringLocalizer<ManageStayPage> Localizer
 @inject NavigationManager Navigation
 @inject UpsellCartState UpsellCartState
@@ -146,6 +147,7 @@
     protected override void OnInitialized()
     {
         UpsellCartState.OnChange += StateHasChanged;
+        CustomerAgreedTermsState.InitializeLanguageSync();
     }
 
     public override void Dispose()

@@ -252,4 +252,7 @@
   <data name="Package" xml:space="preserve">
     <value>Pakiet</value>
   </data>
+  <data name="ContinueReservation" xml:space="preserve">
+    <value>Dokończ rezerwację</value>
+  </data>
 </root>

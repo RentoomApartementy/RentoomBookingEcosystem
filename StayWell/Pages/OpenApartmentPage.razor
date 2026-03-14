@@ -31,7 +31,7 @@
             </div>
         </div>
     }
-    else if (LocksState.IsTTLockAvailable)
+    else if (LocksState.IsTTLockAvailable && ReservationState.IsActiveReservation)
     {
         <div class="tile tile--center">
             <div class="tile__title" style="margin-bottom: 10px;">
@@ -146,6 +146,20 @@
             <div class="dot" @onclick="() => ScrollToSlide(1)"></div>
         </div>
     </div>
+
+    <div class="instruction-card">
+        <div class="instruction-title">
+            @Localizer["Important"]
+        </div>
+        <div class="instruction-track" id="instruction-carousel">
+            <div class="instruction-slide">
+                <div class="instruction-content">@Localizer["InstructionCylinder"]</div>
+            </div>
+            <div class="instruction-slide">
+                <div class="instruction-content">@Localizer["InstructionPanel"]</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
@@ -158,7 +172,16 @@
 
     private async Task ScrollToSlide(int index)
     {
-        await JS.InvokeVoidAsync("eval", $"document.getElementById('lock-carousel').scrollTo({{ left: document.getElementById('lock-carousel').clientWidth * {index}, behavior: 'smooth' }})");
+        await JS.InvokeVoidAsync("eval", $@"
+            const animationTrack = document.getElementById('lock-carousel');
+            const instructionTrack = document.getElementById('instruction-carousel');
+
+            [animationTrack, instructionTrack].forEach(track => {{
+                if (track) {{
+                    track.scrollTo({{ left: track.clientWidth * {index}, behavior: 'smooth' }});
+                }}
+            }});
+        ");
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -166,19 +189,33 @@
         if (firstRender)
         {
             await JS.InvokeVoidAsync("eval", @"
-                const track = document.getElementById('lock-carousel');
-                const dots = document.getElementById('carousel-dots').children;
-                if (track && dots.length > 0) {
-                    track.addEventListener('scroll', () => {
-                        const index = Math.round(track.scrollLeft / track.clientWidth);
-                        Array.from(dots).forEach((dot, i) => {
-                            if (i === index) {
-                                dot.classList.add('active');
-                            } else {
-                                dot.classList.remove('active');
-                            }
-                        });
-                    }, { passive: true });
+                const animationTrack = document.getElementById('lock-carousel');
+                const instructionTrack = document.getElementById('instruction-carousel');
+                const dotsContainer = document.getElementById('carousel-dots');
+                const dots = dotsContainer ? dotsContainer.children : [];
+                let isSyncing = false;
+
+                const updateDots = (track) => {
+                    if (!track || dots.length === 0) return;
+                    const index = Math.round(track.scrollLeft / track.clientWidth);
+                    Array.from(dots).forEach((dot, i) => {
+                        if (i === index) dot.classList.add('active');
+                        else dot.classList.remove('active');
+                    });
+                };
+
+                const sync = (source, target) => {
+                    if (!source || !target || isSyncing) return;
+                    isSyncing = true;
+                    target.scrollLeft = source.scrollLeft;
+                    updateDots(source);
+                    requestAnimationFrame(() => isSyncing = false);
+                };
+
+                if (animationTrack && instructionTrack) {
+                    animationTrack.addEventListener('scroll', () => sync(animationTrack, instructionTrack), { passive: true });
+                    instructionTrack.addEventListener('scroll', () => sync(instructionTrack, animationTrack), { passive: true });
+                    updateDots(animationTrack);
                 }
             ");
         }
