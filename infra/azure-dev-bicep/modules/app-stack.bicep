@@ -1,3 +1,15 @@
+@description('Log Analytics workspace name for monitoring.')
+param logAnalyticsWorkspaceName string
+
+@description('Application Insights name for StayWell API.')
+param staywellApiAppInsightsName string
+
+@description('Application Insights name for Rentoom Booking Web.')
+param rentoomWebAppInsightsName string
+
+@description('Storage account name for Rentoom Booking data.')
+param rentoomDataStorageAccountName string
+
 @description('Location for resources.')
 param location string
 
@@ -48,12 +60,54 @@ var storageBlobDataOwnerRoleId = 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
 var storageQueueDataContributorRoleId = '974c5e8b-45b9-4653-ba55-5f855dd0fb88'
 var storageAccountContributorRoleId = '17d1049b-9a84-46fb-8f53-869881c3d3ab'
 
-resource existingPostgres 'Microsoft.DBforPostgreSQL/flexibleServers@2022-12-01' existing = {
+
+//app Insights and log Analytics
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-07-01' = {
+  name: logAnalyticsWorkspaceName
+  location: location
+  tags: tags
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+    retentionInDays: 30
+  }
+}
+
+resource staywellApiAppInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: staywellApiAppInsightsName
+  location: location
+  tags: tags
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: logAnalyticsWorkspace.id
+  }
+}
+
+resource rentoomWebAppInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: rentoomWebAppInsightsName
+  location: location
+  tags: tags
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: logAnalyticsWorkspace.id
+  }
+}
+
+
+//postgres from rentoomApp subscription
+
+resource existingPostgres 'Microsoft.DBforPostgreSQL/flexibleServers@2025-08-01' existing = {
   name: postgresServerName
   scope: resourceGroup(postgresSubscriptionId, postgresResourceGroupName)
 }
 
-resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+//resources for staywell API and rentoom booking web app
+
+resource storage 'Microsoft.Storage/storageAccounts@2025-06-01' = {
   name: storageAccountName
   location: location
   kind: 'StorageV2'
@@ -70,13 +124,14 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   }
 }
 
-resource storageBlobService 'Microsoft.Storage/storageAccounts/blobServices@2024-01-01' = {
+
+resource storageBlobService 'Microsoft.Storage/storageAccounts/blobServices@2025-06-01' = {
   parent: storage
   name: 'default'
   properties: {}
 }
 
-resource deploymentContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2024-01-01' = {
+resource deploymentContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2025-06-01' = {
   parent: storageBlobService
   name: deploymentStorageContainerName
   properties: {
@@ -84,7 +139,27 @@ resource deploymentContainer 'Microsoft.Storage/storageAccounts/blobServices/con
   }
 }
 
-resource webPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+resource rentoomDataStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: rentoomDataStorageAccountName
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+  tags: union(tags, {
+    purpose: 'rentoombooking-files'
+  })
+  properties: {
+    supportsHttpsTrafficOnly: true
+    minimumTlsVersion: 'TLS1_2'
+    allowBlobPublicAccess: false
+    publicNetworkAccess: 'Enabled'
+  }
+}
+
+
+
+resource webPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: webPlanName
   location: location
   kind: 'app'
@@ -100,7 +175,7 @@ resource webPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   }
 }
 
-resource rentoomWeb 'Microsoft.Web/sites@2023-12-01' = {
+resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
   name: rentoomWebAppName
   location: location
   kind: 'app'
@@ -123,12 +198,16 @@ resource rentoomWeb 'Microsoft.Web/sites@2023-12-01' = {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
           value: '1'
         }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: rentoomWebAppInsights.properties.ConnectionString
+        }
       ]
     }
   }
 }
 
-resource functionPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
+resource functionPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: functionPlanName
   location: location
   kind: 'functionapp'
@@ -142,7 +221,7 @@ resource functionPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   }
 }
 
-resource staywellApi 'Microsoft.Web/sites@2024-04-01' = {
+resource staywellApi 'Microsoft.Web/sites@2025-03-01' = {
   name: staywellApiFunctionName
   location: location
   kind: 'functionapp,linux'
@@ -182,13 +261,16 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   parent: staywellApi
   name: 'appsettings'
   properties: {
-    ASPNETCORE_ENVIRONMENT: 'Development'
-    FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
-    FUNCTIONS_EXTENSION_VERSION: '~4'
+    AZURE_FUNCTIONS_ENVIRONMENT: 'Development'
+    //FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
+    //FUNCTIONS_EXTENSION_VERSION: '~4'
 
     // Azure Functions host storage via managed identity
     AzureWebJobsStorage__accountName: storage.name
     AzureWebJobsStorage__credential: 'managedidentity'
+
+    // Application Insights
+    APPLICATIONINSIGHTS_CONNECTION_STRING: staywellApiAppInsights.properties.ConnectionString
 
     // PostgreSQL connection settings
     StaywellDb__Host: '${existingPostgres.name}.postgres.database.azure.com'
@@ -231,9 +313,9 @@ resource roleAssignmentStorageAccountContributor 'Microsoft.Authorization/roleAs
   }
 }
 
-resource staywellSwa 'Microsoft.Web/staticSites@2023-12-01' = {
+resource staywellSwa 'Microsoft.Web/staticSites@2025-03-01' = {
   name: staywellStaticWebAppName
-  location: location
+  location: 'westeurope'
   tags: tags
   sku: {
     name: 'Standard'
@@ -242,7 +324,7 @@ resource staywellSwa 'Microsoft.Web/staticSites@2023-12-01' = {
   properties: {}
 }
 
-resource swaBackendLink 'Microsoft.Web/staticSites/linkedBackends@2023-12-01' = {
+resource swaBackendLink 'Microsoft.Web/staticSites/linkedBackends@2025-03-01' = {
   parent: staywellSwa
   name: 'linkedBackend'
   properties: {
@@ -257,3 +339,10 @@ output staywellApiFunctionsUrl string = 'https://${staywellApi.properties.defaul
 output postgresServerId string = existingPostgres.id
 output postgresServerHost string = '${existingPostgres.name}.postgres.database.azure.com'
 output staywellDatabaseName string = staywellDbName
+output rentoomDataStorageAccountName string = rentoomDataStorage.name
+output rentoomDataStoragePrimaryBlobEndpoint string = rentoomDataStorage.properties.primaryEndpoints.blob
+output logAnalyticsWorkspaceId string = logAnalyticsWorkspace.id
+output staywellApiAppInsightsName string = staywellApiAppInsights.name
+output staywellApiAppInsightsConnectionString string = staywellApiAppInsights.properties.ConnectionString
+output rentoomWebAppInsightsName string = rentoomWebAppInsights.name
+output rentoomWebAppInsightsConnectionString string = rentoomWebAppInsights.properties.ConnectionString

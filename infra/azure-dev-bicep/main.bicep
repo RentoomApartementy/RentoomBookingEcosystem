@@ -1,5 +1,14 @@
 targetScope = 'subscription'
 
+@description('Log Analytics workspace name for monitoring.')
+param logAnalyticsWorkspaceName string = 'log-dev-rentoombooking'
+
+@description('Application Insights name for StayWell API.')
+param staywellApiAppInsightsName string = 'app-insights-dev-api-staywell'
+
+@description('Application Insights name for Rentoom Booking Web.')
+param rentoomWebAppInsightsName string = 'app-insights-dev-rentoombooking'
+
 @description('Location for all DEV resources.')
 param location string = 'polandcentral'
 
@@ -41,6 +50,10 @@ param staywellDbName string = 'staywell_dev'
 @description('Application database user name.')
 param staywellDbAppUser string = 'staywell_dev_app'
 
+@description('Storage account name for Rentoom Booking data.')
+param rentoomDataStorageAccountName string = 'storagerentoombookingdev'
+
+
 @secure()
 @description('Application database password.')
 param staywellDbAppPassword string
@@ -57,7 +70,7 @@ var storageAccountName = take(
   24
 )
 
-resource rg 'Microsoft.Resources/resourceGroups@2023-07-01' = {
+resource rg 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: resourceGroupName
   location: location
   tags: tags
@@ -80,6 +93,10 @@ module appStack './modules/app-stack.bicep' = {
     staywellDbName: staywellDbName
     staywellDbAppUser: staywellDbAppUser
     staywellDbAppPassword: staywellDbAppPassword
+    rentoomDataStorageAccountName: rentoomDataStorageAccountName
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+    staywellApiAppInsightsName: staywellApiAppInsightsName
+    rentoomWebAppInsightsName: rentoomWebAppInsightsName
     tags: tags
   }
 }
@@ -91,3 +108,5 @@ output staywellApiFunctionsUrl string = appStack.outputs.staywellApiFunctionsUrl
 output postgresServerId string = appStack.outputs.postgresServerId
 output postgresServerHost string = appStack.outputs.postgresServerHost
 output staywellDatabaseName string = appStack.outputs.staywellDatabaseName
+output rentoomDataStorageAccountName string = appStack.outputs.rentoomDataStorageAccountName
+output rentoomDataStoragePrimaryBlobEndpoint string = appStack.outputs.rentoomDataStoragePrimaryBlobEndpoint

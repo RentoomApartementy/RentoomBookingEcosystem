@@ -36,10 +36,22 @@
       "value": "rentoom-server-db"
     },
     "staywellDbName": {
-      "value": "staywell_dev"
+      "value": "RentoomBookingDev"
     },
     "staywellDbAppUser": {
-      "value": "staywell_dev_app"
+      "value": "RentoomDbUser_Dev"
+    },
+    "rentoomDataStorageAccountName": {
+      "value": "storagerentoombookingdev"
+    },
+    "logAnalyticsWorkspaceName": {
+      "value": "log-dev-rentoombooking"
+    },
+    "staywellApiAppInsightsName": {
+      "value": "app-insights-dev-api-staywell"
+    },
+    "rentoomWebAppInsightsName": {
+      "value": "app-insights-dev-rentoombooking"
     }
   }
 }
