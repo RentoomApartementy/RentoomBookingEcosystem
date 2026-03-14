@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "polandcentral"
+    },
+    "resourceGroupName": {
+      "value": "rg-dev-rentoom-booking"
+    },
+    "rentoomWebAppName": {
+      "value": "app-dev-rentoombooking"
+    },
+    "staywellStaticWebAppName": {
+      "value": "swa-dev-staywell"
+    },
+    "staywellApiFunctionName": {
+      "value": "func-dev-api-staywell"
+    },
+    "webPlanName": {
+      "value": "plan-dev-rentoombooking"
+    },
+    "functionPlanName": {
+      "value": "plan-dev-api-staywell"
+    },
+    "storagePrefix": {
+      "value": "devstaywellapi"
+    },
+    "postgresSubscriptionId": {
+      "value": "cc504c76-e00a-4964-a54c-36ff58726690"
+    },
+    "postgresResourceGroupName": {
+      "value": "RentoomApp"
+    },
+    "postgresServerName": {
+      "value": "rentoom-server-db"
+    },
+    "staywellDbName": {
+      "value": "RentoomBookingDev"
+    },
+    "staywellDbAppUser": {
+      "value": "RentoomDbUser_Dev"
+    },
+    "rentoomDataStorageAccountName": {
+      "value": "storagerentoombookingdev"
+    },
+    "logAnalyticsWorkspaceName": {
+      "value": "log-dev-rentoombooking"
+    },
+    "staywellApiAppInsightsName": {
+      "value": "app-insights-dev-api-staywell"
+    },
+    "rentoomWebAppInsightsName": {
+      "value": "app-insights-dev-rentoombooking"
+    }
+  }
+}
