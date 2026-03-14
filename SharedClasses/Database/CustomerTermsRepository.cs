@@ -16,13 +16,20 @@ namespace RentoomBooking.SharedClasses.Database
             _context = context;
         }
 
-        public async Task<List<CustomerTermDisplayDto>> GetActiveTermsSourcesAsync(string? cultureName)
+        public async Task<List<CustomerTermDisplayDto>> GetActiveTermsSourcesAsync(string? cultureName, bool onlyRequiredForWorkflow = false)
         {
             var normalizedCulture = NormalizeCulture(cultureName);
             var neutralCulture = normalizedCulture.Split('-')[0];
 
-            var sources = await _context.CustomerTermsSources
-                .Where(t => t.IsActive)
+            var query = _context.CustomerTermsSources
+                .Where(t => t.IsActive);
+
+            if (onlyRequiredForWorkflow)
+            {
+                query = query.Where(t => t.IsRequiredForReservationWorkflow);
+            }
+
+            var sources = await query
                 .Include(t => t.Translations)
                 .OrderBy(t => t.SortOrder)
                 .ThenBy(t => t.Id)
@@ -36,10 +43,38 @@ namespace RentoomBooking.SharedClasses.Database
                 {
                     Id = source.Id,
                     IsRequired = source.IsRequired,
+                    Title = translation?.Title,
                     Description = translation?.Description ?? source.Description,
-                    Link = translation?.Link ?? source.Link
+                    HtmlContent = translation?.HtmlContent,
+                    Link = translation?.Link ?? source.Link,
+                    TermsType = source.TermsType
                 };
             }).ToList();
+        }
+
+        public async Task<CustomerTermDisplayDto?> GetTermByIdAsync(int id, string? cultureName)
+        {
+            var normalizedCulture = NormalizeCulture(cultureName);
+            var neutralCulture = normalizedCulture.Split('-')[0];
+
+            var source = await _context.CustomerTermsSources
+                .Include(t => t.Translations)
+                .FirstOrDefaultAsync(t => t.Id == id && t.IsActive);
+
+            if (source == null) return null;
+
+            var translation = SelectTranslation(source.Translations, normalizedCulture, neutralCulture);
+
+            return new CustomerTermDisplayDto
+            {
+                Id = source.Id,
+                IsRequired = source.IsRequired,
+                Title = translation?.Title,
+                Description = translation?.Description ?? source.Description,
+                HtmlContent = translation?.HtmlContent,
+                Link = translation?.Link ?? source.Link,
+                TermsType = source.TermsType
+            };
         }
 
         public async Task AddAgreedTermsAsync(IEnumerable<CustomerAgreedTerms> agreedTerms)

@@ -74,6 +74,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Currency.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\StatutePage.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StatutePage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -156,6 +160,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Currency.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\StatutePage.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StatutePage.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
