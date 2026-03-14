@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "location": {
-      "value": "westeurope"
+      "value": "polandcentral"
     },
     "resourceGroupName": {
       "value": "rg-dev-rentoom-booking"
@@ -18,13 +18,28 @@
       "value": "func-dev-api-staywell"
     },
     "webPlanName": {
-      "value": "asp-dev-rentoombooking-f1"
+      "value": "plan-dev-rentoombooking"
     },
     "functionPlanName": {
-      "value": "asp-dev-api-staywell-fc1"
+      "value": "plan-dev-api-staywell"
     },
     "storagePrefix": {
-      "value": "devstayapi"
+      "value": "devstaywellapi"
+    },
+    "postgresSubscriptionId": {
+      "value": "cc504c76-e00a-4964-a54c-36ff58726690"
+    },
+    "postgresResourceGroupName": {
+      "value": "RentoomApp"
+    },
+    "postgresServerName": {
+      "value": "rentoom-server-db"
+    },
+    "staywellDbName": {
+      "value": "staywell_dev"
+    },
+    "staywellDbAppUser": {
+      "value": "staywell_dev_app"
     }
   }
 }

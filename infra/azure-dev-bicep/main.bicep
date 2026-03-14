@@ -1,7 +1,7 @@
 targetScope = 'subscription'
 
 @description('Location for all DEV resources.')
-param location string = 'westeurope'
+param location string = 'polandcentral'
 
 @description('Resource group for DEV environment.')
 param resourceGroupName string = 'rg-dev-rentoom-booking'
@@ -26,6 +26,25 @@ param functionPlanName string = 'asp-dev-api-staywell-fc1'
 @maxLength(18)
 param storagePrefix string = 'devstayapi'
 
+@description('PostgreSQL subscription ID.')
+param postgresSubscriptionId string
+
+@description('PostgreSQL resource group name.')
+param postgresResourceGroupName string
+
+@description('Existing PostgreSQL Flexible Server name.')
+param postgresServerName string
+
+@description('Existing database name on PostgreSQL server.')
+param staywellDbName string = 'staywell_dev'
+
+@description('Application database user name.')
+param staywellDbAppUser string = 'staywell_dev_app'
+
+@secure()
+@description('Application database password.')
+param staywellDbAppPassword string
+
 @description('Common tags.')
 param tags object = {
   environment: 'dev'
@@ -33,7 +52,10 @@ param tags object = {
   managedBy: 'bicep'
 }
 
-var storageAccountName = take(toLower('${storagePrefix}${uniqueString(subscription().id, resourceGroupName)}'), 24)
+var storageAccountName = take(
+  toLower('${storagePrefix}${uniqueString(subscription().id, resourceGroupName)}'),
+  24
+)
 
 resource rg 'Microsoft.Resources/resourceGroups@2023-07-01' = {
   name: resourceGroupName
@@ -52,6 +74,12 @@ module appStack './modules/app-stack.bicep' = {
     webPlanName: webPlanName
     functionPlanName: functionPlanName
     storageAccountName: storageAccountName
+    postgresSubscriptionId: postgresSubscriptionId
+    postgresResourceGroupName: postgresResourceGroupName
+    postgresServerName: postgresServerName
+    staywellDbName: staywellDbName
+    staywellDbAppUser: staywellDbAppUser
+    staywellDbAppPassword: staywellDbAppPassword
     tags: tags
   }
 }
@@ -60,3 +88,6 @@ output resourceGroup string = rg.name
 output rentoomBookingWebUrl string = appStack.outputs.rentoomBookingWebUrl
 output staywellStaticWebUrl string = appStack.outputs.staywellStaticWebUrl
 output staywellApiFunctionsUrl string = appStack.outputs.staywellApiFunctionsUrl
+output postgresServerId string = appStack.outputs.postgresServerId
+output postgresServerHost string = appStack.outputs.postgresServerHost
+output staywellDatabaseName string = appStack.outputs.staywellDatabaseName
