@@ -70,11 +70,23 @@ param tpayJwsCertPrefix string
 @description('Tpay root CA PEM URL.')
 param tpayRootCaPemUrl string
 
-@description('Relative success URL path used by Tpay.')
-param tpaySuccessUrl string
+@description('Success URL setting for Tpay used by Rentoom Booking Web.')
+param tpayWebSuccessUrl string
 
-@description('Relative error URL path used by Tpay.')
-param tpayErrorUrl string
+@description('Error URL setting for Tpay used by Rentoom Booking Web.')
+param tpayWebErrorUrl string
+
+@description('Rentoom site base URL used by Tpay in Rentoom Booking Web.')
+param tpayWebRentoomSiteBaseUrl string
+
+@description('Success URL path used by Tpay in StayWell API.')
+param tpayApiSuccessUrl string
+
+@description('Error URL path used by Tpay in StayWell API.')
+param tpayApiErrorUrl string
+
+@description('Rentoom site base URL used by Tpay in StayWell API.')
+param tpayApiRentoomSiteBaseUrl string
 
 @description('Whether the StayWell API should use dummy IdoBooking behavior.')
 param idoBookingUseDummy bool
@@ -138,6 +150,8 @@ var deploymentStorageContainerName = 'function-releases'
 var normalizedStaywellBaseUrl = endsWith(staywellBaseUrl, '/') ? substring(staywellBaseUrl, 0, length(staywellBaseUrl) - 1) : staywellBaseUrl
 var normalizedRentoomWebBaseUrl = endsWith(rentoomWebBaseUrl, '/') ? substring(rentoomWebBaseUrl, 0, length(rentoomWebBaseUrl) - 1) : rentoomWebBaseUrl
 var normalizedStaywellApiCustomBaseUrl = endsWith(staywellApiBaseUrl, '/') ? substring(staywellApiBaseUrl, 0, length(staywellApiBaseUrl) - 1) : staywellApiBaseUrl
+var normalizedTpayWebRentoomSiteBaseUrl = endsWith(tpayWebRentoomSiteBaseUrl, '/') ? substring(tpayWebRentoomSiteBaseUrl, 0, length(tpayWebRentoomSiteBaseUrl) - 1) : tpayWebRentoomSiteBaseUrl
+var normalizedTpayApiRentoomSiteBaseUrl = endsWith(tpayApiRentoomSiteBaseUrl, '/') ? substring(tpayApiRentoomSiteBaseUrl, 0, length(tpayApiRentoomSiteBaseUrl) - 1) : tpayApiRentoomSiteBaseUrl
 var staywellReservationUrlBase = '${normalizedStaywellBaseUrl}/reservation/{resToken}/HomePage'
 var staywellUrlBase = normalizedStaywellBaseUrl
 var tpayNotificationUrl = '${normalizedStaywellApiCustomBaseUrl}/api/tpay/notification'
@@ -330,15 +344,15 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
         }
         {
           name: 'Tpay__RentoomSiteBaseUrl'
-          value: normalizedRentoomWebBaseUrl
+          value: normalizedTpayWebRentoomSiteBaseUrl
         }
         {
           name: 'Tpay__SuccessUrl'
-          value: tpaySuccessUrl
+          value: tpayWebSuccessUrl
         }
         {
           name: 'Tpay__ErrorUrl'
-          value: tpayErrorUrl
+          value: tpayWebErrorUrl
         }
         {
           name: 'IdoBooking__UseDummy'
@@ -456,9 +470,9 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     Tpay__JwsCertPrefix: tpayJwsCertPrefix
     Tpay__RootCaPemUrl: tpayRootCaPemUrl
     Tpay__NotificationUrl: tpayNotificationUrl
-    Tpay__RentoomSiteBaseUrl: normalizedRentoomWebBaseUrl
-    Tpay__SuccessUrl: tpaySuccessUrl
-    Tpay__ErrorUrl: tpayErrorUrl
+    Tpay__RentoomSiteBaseUrl: normalizedTpayApiRentoomSiteBaseUrl
+    Tpay__SuccessUrl: tpayApiSuccessUrl
+    Tpay__ErrorUrl: tpayApiErrorUrl
     
 
     // IdoBooking dummy mode
@@ -540,9 +554,9 @@ resource swaBackendLink 'Microsoft.Web/staticSites/linkedBackends@2025-03-01' = 
   }
 }
 
-output rentoomBookingWebUrl string = 'https://${rentoomWeb.properties.defaultHostName}'
-output staywellStaticWebUrl string = 'https://${staywellSwa.properties.defaultHostname}'
-output staywellApiFunctionsUrl string = 'https://${staywellApi.properties.defaultHostName}/api'
+output rentoomBookingWebUrl string = normalizedRentoomWebBaseUrl
+output staywellStaticWebUrl string = normalizedStaywellBaseUrl
+output staywellApiFunctionsUrl string = '${normalizedStaywellApiCustomBaseUrl}/api'
 output postgresServerId string = existingPostgres.id
 output postgresServerHost string = '${existingPostgres.name}.postgres.database.azure.com'
 output staywellDatabaseName string = staywellDbName

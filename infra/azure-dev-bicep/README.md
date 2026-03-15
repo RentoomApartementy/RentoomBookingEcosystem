@@ -66,6 +66,10 @@ Web App dostaje:
 - `ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL`
 - `ConnectionStrings__RentoomDbConnectionString`
 - sekcję `Tpay`
+  - `Tpay__NotificationUrl` wspólny, wskazuje na API Function
+  - `Tpay__SuccessUrl` z parametrów `tpayWebSuccessUrl`
+  - `Tpay__ErrorUrl` z parametrów `tpayWebErrorUrl`
+  - `Tpay__RentoomSiteBaseUrl` z parametrów `tpayWebRentoomSiteBaseUrl`
 - `IdoBooking__UseDummy`
 - `IdoBooking__DummyReservationTemplateKey`
 - `IDOBOOKING_BASE_API_URL`
@@ -87,6 +91,10 @@ Function App dostaje:
   - `AzureWebJobsStorage__credential=managedidentity`
 - `APPLICATIONINSIGHTS_CONNECTION_STRING`
 - sekcję `Tpay`
+  - `Tpay__NotificationUrl` wspólny, wskazuje na API Function
+  - `Tpay__SuccessUrl` z parametrów `tpayApiSuccessUrl`
+  - `Tpay__ErrorUrl` z parametrów `tpayApiErrorUrl`
+  - `Tpay__RentoomSiteBaseUrl` z parametrów `tpayApiRentoomSiteBaseUrl`
 - `IdoBooking__UseDummy`
 - `IdoBooking__DummyReservationTemplateKey`
 - `IDOBOOKING_BASE_API_URL`
@@ -115,7 +123,10 @@ Ważne:
 - `StayWellReservationUrlBase` jest wyliczany z parametru `staywellBaseUrl`
 - `StayWellUrlBase` jest ustawiany bezpośrednio z parametru `staywellBaseUrl`
 - `Tpay__NotificationUrl` jest wyliczany z parametru `staywellApiBaseUrl`
-- `Tpay__RentoomSiteBaseUrl` jest ustawiany z parametru `rentoomWebBaseUrl`
+- `RentoomBookingWeb` i `StayWell API` dostają osobne wartości:
+  - `tpayWebSuccessUrl` / `tpayApiSuccessUrl`
+  - `tpayWebErrorUrl` / `tpayApiErrorUrl`
+  - `tpayWebRentoomSiteBaseUrl` / `tpayApiRentoomSiteBaseUrl`
 - `Api` i `RentoomBookingWeb` czytają wyłącznie sekcję `Tpay`
 - link StayWell w `RentoomBookingWeb` jest budowany z `StayWellReservationUrlBase`, a nie z twardo wpisanego URL
 
@@ -157,6 +168,12 @@ Pliki parametrów zawierają też publiczne bazowe URL-e środowiska:
 - `staywellBaseUrl`
 - `rentoomWebBaseUrl`
 - `staywellApiBaseUrl`
+- `tpayWebSuccessUrl`
+- `tpayWebErrorUrl`
+- `tpayWebRentoomSiteBaseUrl`
+- `tpayApiSuccessUrl`
+- `tpayApiErrorUrl`
+- `tpayApiRentoomSiteBaseUrl`
 
 Domyślne wartości:
 
