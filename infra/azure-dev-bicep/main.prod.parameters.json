@@ -1,0 +1,144 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "polandcentral"
+    },
+    "resourceGroupName": {
+      "value": "rg-prod-rentoom-booking"
+    },
+    "rentoomWebAppName": {
+      "value": "app-prod-rentoombooking"
+    },
+    "staywellStaticWebAppName": {
+      "value": "swa-prod-staywell"
+    },
+    "staywellApiFunctionName": {
+      "value": "func-prod-api-staywell"
+    },
+    "webPlanName": {
+      "value": "plan-prod-rentoombooking"
+    },
+    "functionPlanName": {
+      "value": "plan-prod-api-staywell"
+    },
+    "storagePrefix": {
+      "value": "prodstaywellapi"
+    },
+    "postgresSubscriptionId": {
+      "value": "cc504c76-e00a-4964-a54c-36ff58726690"
+    },
+    "postgresResourceGroupName": {
+      "value": "RentoomApp"
+    },
+    "postgresServerName": {
+      "value": "rentoom-server-db"
+    },
+    "staywellDbName": {
+      "value": "RentoomBookingProd"
+    },
+    "staywellDbAppUser": {
+      "value": "RentoomAzureDbAdmin"
+    },
+    "tpayApiBaseUrl": {
+      "value": "https://openapi.tpay.com"
+    },
+    "tpayClientId": {
+      "value": "01KEA06BFSBX1DZQM0BGYV8SXK-01KEA0CVMFDY6A36CKRTCGBTGB"
+    },
+    "tpayJwsCertPrefix": {
+      "value": "https://secure.tpay.com"
+    },
+    "tpayRootCaPemUrl": {
+      "value": "https://secure.tpay.com/x509/tpay-jws-root.pem"
+    },
+    "tpayWebSuccessUrl": {
+      "value": "rezerwuj/{ReservationTokenGuid}/oplac/success"
+    },
+    "tpayWebErrorUrl": {
+      "value": "https://rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error"
+    },
+    "tpayWebRentoomSiteBaseUrl": {
+      "value": "https://rentoom.pl"
+    },
+    "tpayApiSuccessUrl": {
+      "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success"
+    },
+    "tpayApiErrorUrl": {
+      "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error"
+    },
+    "tpayApiRentoomSiteBaseUrl": {
+      "value": "https://staywell.rentoom.pl"
+    },
+    "idoBookingUseDummy": {
+      "value": true
+    },
+    "idoBookingDummyReservationTemplateKey": {
+      "value": "dummy_api_call_template"
+    },
+    "idoBookingBaseApiUrl": {
+      "value": "https://client7953.idosell.com/api/"
+    },
+    "idoBookingApiUser": {
+      "value": "apimaster"
+    },
+    "staywellBaseUrl": {
+      "value": "https://staywell.rentoom.pl"
+    },
+    "rentoomWebBaseUrl": {
+      "value": "https://rentoom.pl"
+    },
+    "staywellApiBaseUrl": {
+      "value": "https://api.rentoom.pl"
+    },
+    "staywellGithubOrganization": {
+      "value": "RentoomApartementy"
+    },
+    "staywellGithubRepositoryName": {
+      "value": "RentoomBookingEcosystem"
+    },
+    "staywellGithubBranch": {
+      "value": "main"
+    },
+    "staywellGithubAppLocation": {
+      "value": "./StayWell"
+    },
+    "staywellGithubOutputLocation": {
+      "value": "wwwroot"
+    },
+    "staywellGithubActionSecretName": {
+      "value": "AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_PROD"
+    },
+    "uploadsStorageContainerName": {
+      "value": "uploadsprod"
+    },
+    "instructionsStorageContainerName": {
+      "value": "arrivalinstructions-prod"
+    },
+    "rentoomAppDbName": {
+      "value": "rentoomdb"
+    },
+    "rentoomAppDbUser": {
+      "value": "RentoomAzureDbAdmin"
+    },
+    "ttlockClientId": {
+      "value": "ba60c2707447415183df5d6a4c617e09"
+    },
+    "ttlockUsername": {
+      "value": "+48601317506"
+    },
+    "rentoomDataStorageAccountName": {
+      "value": "storrentoombookingprod"
+    },
+    "logAnalyticsWorkspaceName": {
+      "value": "log-prod-rentoombooking"
+    },
+    "staywellApiAppInsightsName": {
+      "value": "app-insights-prod-api-staywell"
+    },
+    "rentoomWebAppInsightsName": {
+      "value": "app-insights-prod-rentoombooking"
+    }
+  }
+}
