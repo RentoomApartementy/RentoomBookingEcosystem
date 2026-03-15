@@ -133,9 +133,8 @@ namespace RentoomBookingWeb
             
             builder.Services.AddDateRangePicker(config => { });
 
-            //TPAY
-            bool UseDevelopmentSettingsOnProd = true;
-            var TpaySection = UseDevelopmentSettingsOnProd ? builder.Configuration.GetSection("TpayDev") : builder.Configuration.GetSection("TpayStage");
+            // TPAY
+            var TpaySection = builder.Configuration.GetSection("Tpay");
 
             var DummyIdoBookingApiKey = builder.Configuration.GetValue<string>("IdoBooking:UseDummy");
             tempLogger.LogInformation("Using Dummy IdoBooking Service (No Idobooking writes via API): {DummyIdoBookingApiKey}", DummyIdoBookingApiKey);

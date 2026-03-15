@@ -50,10 +50,100 @@ param staywellDbAppUser string
 @description('Application database password.')
 param staywellDbAppPassword string
 
+@description('Tpay API base URL.')
+param tpayApiBaseUrl string
+
+@description('Tpay client ID.')
+param tpayClientId string
+
+@secure()
+@description('Tpay client secret.')
+param tpayClientSecret string
+
+@secure()
+@description('Tpay merchant security code.')
+param tpayMerchantSecurityCode string
+
+@description('Expected Tpay JWS certificate prefix.')
+param tpayJwsCertPrefix string
+
+@description('Tpay root CA PEM URL.')
+param tpayRootCaPemUrl string
+
+@description('Relative success URL path used by Tpay.')
+param tpaySuccessUrl string
+
+@description('Relative error URL path used by Tpay.')
+param tpayErrorUrl string
+
+@description('Whether the StayWell API should use dummy IdoBooking behavior.')
+param idoBookingUseDummy bool
+
+@description('Template key used for dummy IdoBooking reservations.')
+param idoBookingDummyReservationTemplateKey string
+
+@description('IdoBooking API base URL.')
+param idoBookingBaseApiUrl string
+
+@description('IdoBooking API system user.')
+param idoBookingApiUser string
+
+@secure()
+@description('IdoBooking API password.')
+param idoBookingApiPassword string
+
+@description('Public base URL for StayWell (Static Web App custom domain).')
+param staywellBaseUrl string
+
+@description('Public base URL for Rentoom Booking Web (Web App custom domain).')
+param rentoomWebBaseUrl string
+
+@description('Public base URL for StayWell API (Function App custom domain).')
+param staywellApiBaseUrl string
+
+@description('Blob container used for uploaded files.')
+param uploadsStorageContainerName string
+
+@description('Blob container used for arrival instructions.')
+param instructionsStorageContainerName string
+
+@description('Rentoom App database name.')
+param rentoomAppDbName string
+
+@description('Rentoom App database user name.')
+param rentoomAppDbUser string
+
+@secure()
+@description('Rentoom App database password.')
+param rentoomAppDbPassword string
+
+@description('TTLock client ID.')
+param ttlockClientId string
+
+@secure()
+@description('TTLock client secret.')
+param ttlockClientSecret string
+
+@description('TTLock account username.')
+param ttlockUsername string
+
+@secure()
+@description('TTLock account password.')
+param ttlockPassword string
+
 @description('Common tags.')
 param tags object
 
 var deploymentStorageContainerName = 'function-releases'
+var normalizedStaywellBaseUrl = endsWith(staywellBaseUrl, '/') ? substring(staywellBaseUrl, 0, length(staywellBaseUrl) - 1) : staywellBaseUrl
+var normalizedRentoomWebBaseUrl = endsWith(rentoomWebBaseUrl, '/') ? substring(rentoomWebBaseUrl, 0, length(rentoomWebBaseUrl) - 1) : rentoomWebBaseUrl
+var normalizedStaywellApiCustomBaseUrl = endsWith(staywellApiBaseUrl, '/') ? substring(staywellApiBaseUrl, 0, length(staywellApiBaseUrl) - 1) : staywellApiBaseUrl
+var staywellReservationUrlBase = '${normalizedStaywellBaseUrl}/reservation/{resToken}/HomePage'
+var staywellUrlBase = normalizedStaywellBaseUrl
+var tpayNotificationUrl = '${normalizedStaywellApiCustomBaseUrl}/api/tpay/notification'
+var idoBookingUseDummySetting = idoBookingUseDummy ? 'True' : 'False'
+var staywellDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${staywellDbName};Port=5432;User Id=${staywellDbAppUser};Password=${staywellDbAppPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
+var rentoomAppDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${rentoomAppDbName};Port=5432;User Id=${rentoomAppDbUser};Password=${rentoomAppDbPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
 
 // Built-in role IDs
 var storageBlobDataOwnerRoleId = 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
@@ -202,6 +292,94 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
           value: rentoomWebAppInsights.properties.ConnectionString
         }
+        {
+          name: 'ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL'
+          value: staywellDbConnectionString
+        }
+        {
+          name: 'ConnectionStrings__RentoomDbConnectionString'
+          value: rentoomAppDbConnectionString
+        }
+        {
+          name: 'Tpay__ApiBaseUrl'
+          value: tpayApiBaseUrl
+        }
+        {
+          name: 'Tpay__ClientId'
+          value: tpayClientId
+        }
+        {
+          name: 'Tpay__ClientSecret'
+          value: tpayClientSecret
+        }
+        {
+          name: 'Tpay__MerchantSecurityCode'
+          value: tpayMerchantSecurityCode
+        }
+        {
+          name: 'Tpay__JwsCertPrefix'
+          value: tpayJwsCertPrefix
+        }
+        {
+          name: 'Tpay__RootCaPemUrl'
+          value: tpayRootCaPemUrl
+        }
+        {
+          name: 'Tpay__NotificationUrl'
+          value: tpayNotificationUrl
+        }
+        {
+          name: 'Tpay__RentoomSiteBaseUrl'
+          value: normalizedRentoomWebBaseUrl
+        }
+        {
+          name: 'Tpay__SuccessUrl'
+          value: tpaySuccessUrl
+        }
+        {
+          name: 'Tpay__ErrorUrl'
+          value: tpayErrorUrl
+        }
+        {
+          name: 'IdoBooking__UseDummy'
+          value: idoBookingUseDummySetting
+        }
+        {
+          name: 'IdoBooking__DummyReservationTemplateKey'
+          value: idoBookingDummyReservationTemplateKey
+        }
+        {
+          name: 'IDOBOOKING_BASE_API_URL'
+          value: idoBookingBaseApiUrl
+        }
+        {
+          name: 'IDOBOOKING_API_USER'
+          value: idoBookingApiUser
+        }
+        {
+          name: 'IDOBOOKING_API_PWD'
+          value: idoBookingApiPassword
+        }
+        {
+          name: 'StayWellUrlBase'
+          value: staywellUrlBase
+        }
+        {
+          name: 'StayWellReservationUrlBase'
+          value: staywellReservationUrlBase
+        }
+        {
+          name: 'Storage__Container'
+          value: uploadsStorageContainerName
+        }
+        {
+          name: 'Storage__ConnectionString'
+          value: ''
+        }
+        {
+          name: 'Storage__AccountName'
+          value: rentoomDataStorage.name
+        }
       ]
     }
   }
@@ -262,8 +440,6 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   name: 'appsettings'
   properties: {
     AZURE_FUNCTIONS_ENVIRONMENT: 'Development'
-    //FUNCTIONS_WORKER_RUNTIME: 'dotnet-isolated'
-    //FUNCTIONS_EXTENSION_VERSION: '~4'
 
     // Azure Functions host storage via managed identity
     AzureWebJobsStorage__accountName: storage.name
@@ -272,14 +448,45 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     // Application Insights
     APPLICATIONINSIGHTS_CONNECTION_STRING: staywellApiAppInsights.properties.ConnectionString
 
-    // PostgreSQL connection settings
-    StaywellDb__Host: '${existingPostgres.name}.postgres.database.azure.com'
-    StaywellDb__Port: '5432'
-    StaywellDb__Database: staywellDbName
-    StaywellDb__Username: staywellDbAppUser
-    StaywellDb__Password: staywellDbAppPassword
-    StaywellDb__SslMode: 'Require'
-    StaywellDb__TrustServerCertificate: 'false'
+    // Tpay configuration shared by the Functions API and RentoomBookingWeb.
+    Tpay__ApiBaseUrl: tpayApiBaseUrl
+    Tpay__ClientId: tpayClientId
+    Tpay__ClientSecret: tpayClientSecret
+    Tpay__MerchantSecurityCode: tpayMerchantSecurityCode
+    Tpay__JwsCertPrefix: tpayJwsCertPrefix
+    Tpay__RootCaPemUrl: tpayRootCaPemUrl
+    Tpay__NotificationUrl: tpayNotificationUrl
+    Tpay__RentoomSiteBaseUrl: normalizedRentoomWebBaseUrl
+    Tpay__SuccessUrl: tpaySuccessUrl
+    Tpay__ErrorUrl: tpayErrorUrl
+    
+
+    // IdoBooking dummy mode
+    IdoBooking__UseDummy: idoBookingUseDummySetting
+    IdoBooking__DummyReservationTemplateKey: idoBookingDummyReservationTemplateKey
+    IDOBOOKING_BASE_API_URL: idoBookingBaseApiUrl
+    IDOBOOKING_API_USER: idoBookingApiUser
+    IDOBOOKING_API_PWD: idoBookingApiPassword
+    StayWellUrlBase: staywellUrlBase
+    StayWellReservationUrlBase: staywellReservationUrlBase
+
+    // Blob storage configuration used by the app
+    Storage__Container: uploadsStorageContainerName
+    Storage__ConnectionString: ''
+    Storage__AccountName: rentoomDataStorage.name
+    InstructionsStorage__Container: instructionsStorageContainerName
+    InstructionsStorage__ConnectionString: ''
+    InstructionsStorage__AccountName: rentoomDataStorage.name
+
+    // TTLock configuration
+    TTLOCK__ClientId: ttlockClientId
+    TTLOCK__ClientSecret: ttlockClientSecret
+    TTLOCK__Username: ttlockUsername
+    TTLOCK__Password: ttlockPassword
+
+    // Database connection strings used by the app startup
+    ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL: staywellDbConnectionString
+    ConnectionStrings__RentoomDbConnectionString: rentoomAppDbConnectionString
   }
 }
 

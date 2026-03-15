@@ -11,8 +11,10 @@
 @using Microsoft.Extensions.Localization;
 @using System.Globalization;
 @using RentoomBooking.SharedClasses.Models
+@using Microsoft.Extensions.Configuration
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject CustomerTermsService TermsService
+@inject IConfiguration Configuration
 @implements IDisposable
 
 <PageTitle>Podsumowanie</PageTitle>
@@ -353,7 +355,7 @@
                                               && !IsPaymentInitiated
                                               && !IsPaymentFailed;
     
-    private string staywellLink => $"https://staywell-test.rentoom.pl/reservation/{ReservationTokenGuid}/HomePage";
+    private string? staywellLink => BuildStaywellLink();
 
     protected override async Task OnInitializedAsync()
     {
@@ -544,6 +546,22 @@
         var bytes = qr.GetGraphic(10);
 
         return $"data:image/png;base64,{Convert.ToBase64String(bytes)}";
+    }
+
+    private string? BuildStaywellLink()
+    {
+        var baseUrl =
+            Environment.GetEnvironmentVariable("StayWell__ReservationUrlBase") ??
+            Environment.GetEnvironmentVariable("StayWellReservationUrlBase") ??
+            Configuration["StayWell:ReservationUrlBase"] ??
+            Configuration["StayWellReservationUrlBase"];
+
+        if (string.IsNullOrWhiteSpace(baseUrl))
+        {
+            return null;
+        }
+
+        return baseUrl.Replace("{resToken}", ReservationTokenGuid.ToString(), StringComparison.OrdinalIgnoreCase).TrimEnd('/');
     }
     
     private List<CustomerTermDisplayDto>? _termsSources;

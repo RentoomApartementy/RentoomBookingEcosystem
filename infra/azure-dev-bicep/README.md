@@ -1,129 +1,272 @@
-# Azure DEV IaC (Bicep) – Rentoom Booking Ecosystem
+# Azure IaC (Bicep) - Rentoom Booking Ecosystem
 
-Ten katalog zawiera infrastrukturę Azure opisaną w **Bicep**. Obecne podejście to:
+Ten katalog zawiera infrastrukturę Azure opisaną w Bicep dla:
 
-- deployment na poziomie **subskrypcji**
-- utworzenie Resource Group z `main.bicep`
-- wdrożenie właściwych zasobów przez moduł `modules/app-stack.bicep`
-- oddzielenie **provisioningu infrastruktury** od **wdrożenia artefaktów aplikacji**
+- `RentoomBookingWeb` jako Azure Web App
+- StayWell API jako Azure Function App na Flex Consumption
+- StayWell Static Web App
+- storage, monitoring i konfigurację połączeń
 
-Nie ma tu osobnych skryptów build/deploy dla infrastruktury. Bazowy sposób uruchomienia to komendy `az deployment sub ...` uruchamiane ręcznie lub z pipeline.
+Podejście jest rozdzielone na dwa etapy:
+
+- provisioning infrastruktury przez Bicep
+- publikacja artefaktów aplikacji przez osobne pipeline'y / workflow
+
+## Struktura
+
+- `main.bicep` - deployment na poziomie subskrypcji, tworzy Resource Group i uruchamia moduł aplikacyjny
+- `modules/app-stack.bicep` - właściwe zasoby aplikacyjne, monitoring, storage i app settings
+- `main.dev.parameters.json` - parametry niesekretne dla DEV
+- `main.prod.parameters.json` - parametry niesekretne dla PROD
+- `deploy.ps1` - wrapper PowerShell uruchamiający `az deployment sub validate` i/lub `create`
 
 ## Co faktycznie tworzy deployment
 
 `main.bicep`:
 
-- tworzy Resource Group `rg-dev-rentoom-booking` w `polandcentral`
-- wylicza nazwę storage konta dla runtime Functions na podstawie `storagePrefix + uniqueString(...)`
-- przekazuje parametry do modułu aplikacyjnego
+- tworzy Resource Group zdefiniowaną w pliku parametrów
+- wylicza nazwę storage account dla runtime Function App jako `storagePrefix + uniqueString(...)`
+- przekazuje wszystkie parametry do `modules/app-stack.bicep`
 
 `modules/app-stack.bicep`:
 
-- Log Analytics Workspace dla monitoringu
-- dwa zasoby Application Insights:
-  - dla StayWell API
-  - dla Rentoom Booking Web
+- Log Analytics Workspace
+- Application Insights dla StayWell API
+- Application Insights dla Rentoom Booking Web
 - referencję do istniejącego PostgreSQL Flexible Server
-  - serwer PostgreSQL **nie jest tworzony** przez ten deployment
-  - deployment zakłada istniejący serwer w innej subskrypcji / RG wskazanej parametrami
 - Storage Account dla runtime Azure Functions
-- kontener blob `function-releases` dla pakietów deploymentu Functions
+- kontener blob `function-releases` pod pakiety Functions
 - osobny Storage Account dla danych Rentoom Booking
-- App Service Plan `F1` dla Rentoom Booking Web
-- Web App `app-dev-rentoombooking` z system-assigned managed identity
-- Flex Consumption Plan `FC1` dla StayWell API
-- Linux Function App `.NET 8 isolated` z system-assigned managed identity
-- app settings dla Function App:
-  - `AZURE_FUNCTIONS_ENVIRONMENT=Development`
-  - storage hosta Functions przez managed identity
-  - connection string do Application Insights
-  - ustawienia połączenia do PostgreSQL
-- role assignments na storage dla managed identity Function App:
-  - `Storage Blob Data Owner`
-  - `Storage Queue Data Contributor`
-  - `Storage Account Contributor`
-- Static Web App `swa-dev-staywell` w regionie `westeurope`
-- połączenie SWA -> Function App przez `staticSites/linkedBackends`
+- App Service Plan dla Rentoom Booking Web
+- Azure Web App dla `RentoomBookingWeb`
+- Flex Consumption Plan dla StayWell API
+- Linux Function App `.NET 8 isolated`
+- app settings dla Web App z konfiguracją współdzieloną z Functions tam, gdzie używa jej też `RentoomBookingWeb`
+- app settings dla Function App
+- role assignmenty dla managed identity Function App na storage runtime
+- Static Web App dla StayWell
+- `staticSites/linkedBackends` łączący SWA z Function App
 
-## Ważne cechy obecnego podejścia
+## Czego deployment nie robi
 
-- Template tworzy infrastrukturę, ale **nie publikuje kodu aplikacji**.
-- Kontener `function-releases` jest przygotowany pod pakiety Functions, ale sam Bicep nie uploaduje tam artefaktów.
-- Web App ma `WEBSITE_RUN_FROM_PACKAGE=1`, więc zakłada późniejsze dostarczenie paczki aplikacji.
-- Function App na Flex Consumption ma runtime ustawiony przez `functionAppConfig.runtime`.
-- W app settings dla Flex Consumption nie są używane `FUNCTIONS_WORKER_RUNTIME` ani `FUNCTIONS_EXTENSION_VERSION`.
-- Static Web App jest tworzony w `westeurope`, nawet jeśli reszta zasobów ma `location=polandcentral`.
+- nie tworzy serwera PostgreSQL
+- nie publikuje kodu aplikacji do Web App
+- nie publikuje paczki Functions do kontenera `function-releases`
+- nie konfiguruje Key Vault
 
-## Struktura
+## Aktualna konfiguracja aplikacji
 
-- `main.bicep` - deployment subskrypcyjny i bootstrap Resource Group
-- `modules/app-stack.bicep` - właściwe zasoby aplikacyjne i monitoring
-- `main.dev.parameters.json` - przykładowy zestaw parametrów dla DEV bez sekretów
+### Rentoom Booking Web
 
-## Parametry
+Web App dostaje:
 
-Najważniejsze parametry wejściowe:
+- `ASPNETCORE_ENVIRONMENT=Development`
+- `WEBSITE_RUN_FROM_PACKAGE=1`
+- `APPLICATIONINSIGHTS_CONNECTION_STRING`
+- `ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL`
+- `ConnectionStrings__RentoomDbConnectionString`
+- sekcję `Tpay`
+- `IdoBooking__UseDummy`
+- `IdoBooking__DummyReservationTemplateKey`
+- `IDOBOOKING_BASE_API_URL`
+- `IDOBOOKING_API_USER`
+- `IDOBOOKING_API_PWD`
+- `StayWellUrlBase`
+- `StayWellReservationUrlBase`
+- `Storage__Container`
+- `Storage__ConnectionString`
+- `Storage__AccountName`
 
-- `location`
-- `resourceGroupName`
-- `rentoomWebAppName`
-- `staywellStaticWebAppName`
-- `staywellApiFunctionName`
-- `webPlanName`
-- `functionPlanName`
-- `storagePrefix`
-- `rentoomDataStorageAccountName`
-- `logAnalyticsWorkspaceName`
-- `staywellApiAppInsightsName`
-- `rentoomWebAppInsightsName`
-- `postgresSubscriptionId`
-- `postgresResourceGroupName`
-- `postgresServerName`
-- `staywellDbName`
-- `staywellDbAppUser`
-- `staywellDbAppPassword`
+### StayWell API Function App
 
-Uwagi:
+Function App dostaje:
 
-- `staywellDbAppPassword` jest parametrem `@secure()` i nie jest zapisany w `main.dev.parameters.json`.
-- `rentoomDataStorageAccountName` musi być globalnie unikalne w Azure Storage.
-- nazwa storage konta dla runtime Functions jest generowana automatycznie i nie jest wpisywana na sztywno w parametrze końcowym
+- `AZURE_FUNCTIONS_ENVIRONMENT=Development`
+- host storage przez managed identity:
+  - `AzureWebJobsStorage__accountName`
+  - `AzureWebJobsStorage__credential=managedidentity`
+- `APPLICATIONINSIGHTS_CONNECTION_STRING`
+- sekcję `Tpay`
+- `IdoBooking__UseDummy`
+- `IdoBooking__DummyReservationTemplateKey`
+- `IDOBOOKING_BASE_API_URL`
+- `IDOBOOKING_API_USER`
+- `IDOBOOKING_API_PWD`
+- `StayWellUrlBase`
+- `StayWellReservationUrlBase`
+- `Storage__Container`
+- `Storage__ConnectionString`
+- `Storage__AccountName`
+- `InstructionsStorage__Container`
+- `InstructionsStorage__ConnectionString`
+- `InstructionsStorage__AccountName`
+- `TTLOCK__ClientId`
+- `TTLOCK__ClientSecret`
+- `TTLOCK__Username`
+- `TTLOCK__Password`
+- `ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL`
+- `ConnectionStrings__RentoomDbConnectionString`
+
+Ważne:
+
+- dla Flex Consumption runtime jest ustawiany przez `functionAppConfig.runtime`
+- template nie ustawia `FUNCTIONS_WORKER_RUNTIME`
+- template nie ustawia `FUNCTIONS_EXTENSION_VERSION`
+- `StayWellReservationUrlBase` jest wyliczany z parametru `staywellBaseUrl`
+- `StayWellUrlBase` jest ustawiany bezpośrednio z parametru `staywellBaseUrl`
+- `Tpay__NotificationUrl` jest wyliczany z parametru `staywellApiBaseUrl`
+- `Tpay__RentoomSiteBaseUrl` jest ustawiany z parametru `rentoomWebBaseUrl`
+- `Api` i `RentoomBookingWeb` czytają wyłącznie sekcję `Tpay`
+- link StayWell w `RentoomBookingWeb` jest budowany z `StayWellReservationUrlBase`, a nie z twardo wpisanego URL
+
+## Parametry i środowiska
+
+Skrypt `deploy.ps1` przyjmuje dwa parametry:
+
+- `-Environment`: `dev` albo `prod`
+- `-Operation`: `validate`, `create`, `validate-create`
+
+Na podstawie `-Environment` skrypt wybiera:
+
+- `main.dev.parameters.json`
+- `main.prod.parameters.json`
+
+Pliki parametrów zawierają wyłącznie wartości niesekretne. Sekrety są trzymane bezpośrednio w `deploy.ps1` w obiekcie:
+
+```powershell
+$secretParameters = [ordered]@{
+    staywellDbAppPassword    = 'PROVIDE_STAYWELL_DB_PASSWORD'
+    idoBookingApiPassword    = 'PROVIDE_IDOBOOKING_API_PASSWORD'
+    rentoomAppDbPassword     = 'PROVIDE_RENTOOM_APP_DB_PASSWORD'
+    tpayClientSecret         = 'PROVIDE_TPAY_CLIENT_SECRET'
+    tpayMerchantSecurityCode = 'PROVIDE_TPAY_MERCHANT_SECURITY_CODE'
+    ttlockClientSecret       = 'PROVIDE_TTLOCK_CLIENT_SECRET'
+    ttlockPassword           = 'PROVIDE_TTLOCK_PASSWORD'
+}
+```
+
+Skrypt:
+
+- odczytuje `location` z wybranego pliku parametrów
+- buduje tymczasowy plik parametrów tylko dla sekretów
+- uruchamia `az deployment sub validate` i/lub `az deployment sub create`
+- usuwa tymczasowy plik sekretów po zakończeniu
+
+Pliki parametrów zawierają też publiczne bazowe URL-e środowiska:
+
+- `staywellBaseUrl`
+- `rentoomWebBaseUrl`
+- `staywellApiBaseUrl`
+
+Domyślne wartości:
+
+`dev`
+- `staywellBaseUrl=https://dev.staywell.rentoom.pl`
+- `rentoomWebBaseUrl=https://dev.rentoom.pl`
+- `staywellApiBaseUrl=https://dev.api.rentoom.pl`
+
+`prod`
+- `staywellBaseUrl=https://staywell.rentoom.pl`
+- `rentoomWebBaseUrl=https://rentoom.pl`
+- `staywellApiBaseUrl=https://prod.api.rentoom.pl`
+
+Te parametry służą do budowy konfiguracji aplikacyjnej. Obecny Bicep nie tworzy jeszcze samych powiązań custom domain ani certyfikatów w Azure.
 
 ## Uruchomienie
 
-Przykład z katalogu `infra/azure-dev-bicep`:
+Z katalogu `infra/azure-dev-bicep`:
 
 ```bash
 az login
 az account set --subscription "<SUBSCRIPTION_ID_OR_NAME>"
+```
 
+Następnie uzupełnij placeholdery w `deploy.ps1` i uruchom:
+
+```powershell
+.\deploy.ps1 -Environment dev -Operation validate
+.\deploy.ps1 -Environment dev -Operation create
+.\deploy.ps1 -Environment dev -Operation validate-create
+
+.\deploy.ps1 -Environment prod -Operation validate
+.\deploy.ps1 -Environment prod -Operation create
+.\deploy.ps1 -Environment prod -Operation validate-create
+```
+
+## Ręczne komendy AZ
+
+Jeśli chcesz pominąć `deploy.ps1`, możesz uruchomić Azure CLI ręcznie:
+
+```bash
 az deployment sub validate \
   --location polandcentral \
   --template-file ./main.bicep \
   --parameters ./main.dev.parameters.json \
-  --parameters staywellDbAppPassword="<DB_PASSWORD>"
+  --parameters staywellDbAppPassword="<STAYWELL_DB_PASSWORD>" \
+  --parameters idoBookingApiPassword="<IDOBOOKING_API_PASSWORD>" \
+  --parameters rentoomAppDbPassword="<RENTOOM_APP_DB_PASSWORD>" \
+  --parameters tpayClientSecret="<TPAY_CLIENT_SECRET>" \
+  --parameters tpayMerchantSecurityCode="<TPAY_MERCHANT_SECURITY_CODE>" \
+  --parameters ttlockClientSecret="<TTLOCK_CLIENT_SECRET>" \
+  --parameters ttlockPassword="<TTLOCK_PASSWORD>"
 
 az deployment sub create \
   --name rentoom-dev-bootstrap \
   --location polandcentral \
   --template-file ./main.bicep \
   --parameters ./main.dev.parameters.json \
-  --parameters staywellDbAppPassword="<DB_PASSWORD>"
+  --parameters staywellDbAppPassword="<STAYWELL_DB_PASSWORD>" \
+  --parameters idoBookingApiPassword="<IDOBOOKING_API_PASSWORD>" \
+  --parameters rentoomAppDbPassword="<RENTOOM_APP_DB_PASSWORD>" \
+  --parameters tpayClientSecret="<TPAY_CLIENT_SECRET>" \
+  --parameters tpayMerchantSecurityCode="<TPAY_MERCHANT_SECURITY_CODE>" \
+  --parameters ttlockClientSecret="<TTLOCK_CLIENT_SECRET>" \
+  --parameters ttlockPassword="<TTLOCK_PASSWORD>"
 ```
 
-`--location` w `az deployment sub ...` dotyczy lokalizacji metadanych deploymentu na poziomie subskrypcji. Domyślny region zasobów kontroluje parametr `location` w Bicep.
+`--location` w `az deployment sub ...` dotyczy lokalizacji metadanych deploymentu na poziomie subskrypcji. Region zasobów kontroluje parametr `location` w pliku parametrów.
 
-## Domyślne nazwy w obecnym stanie
+## Efektywne nazwy zasobów
 
-- `rg-dev-rentoom-booking`
-- `app-dev-rentoombooking`
-- `swa-dev-staywell`
-- `func-dev-api-staywell`
-- `asp-dev-rentoombooking-f1`
-- `asp-dev-api-staywell-fc1`
-- `storagerentoombookingdev`
-- `log-dev-rentoombooking`
-- `app-insights-dev-api-staywell`
-- `app-insights-dev-rentoombooking`
+Przy uruchomieniu przez `deploy.ps1` obowiązują nazwy z plików parametrów, nie same defaulty z `main.bicep`.
 
-Jeśli chcesz inne nazwy środowiskowe, zmień odpowiednie wartości w `main.dev.parameters.json` lub w domyślnych parametrach `main.bicep`.
+### DEV
+
+- Resource Group: `rg-dev-rentoom-booking`
+- Web App: `app-dev-rentoombooking`
+- Static Web App: `swa-dev-staywell`
+- Function App: `func-dev-api-staywell`
+- Web plan: `plan-dev-rentoombooking`
+- Function plan: `plan-dev-api-staywell`
+- Data storage: `storagerentoombookingdev`
+- Log Analytics: `log-dev-rentoombooking`
+- API App Insights: `app-insights-dev-api-staywell`
+- Web App Insights: `app-insights-dev-rentoombooking`
+
+### PROD
+
+- Resource Group: `rg-prod-rentoom-booking`
+- Web App: `app-prod-rentoombooking`
+- Static Web App: `swa-prod-staywell`
+- Function App: `func-prod-api-staywell`
+- Web plan: `plan-prod-rentoombooking`
+- Function plan: `plan-prod-api-staywell`
+- Data storage: `storrentoombookingprod`
+- Log Analytics: `log-prod-rentoombooking`
+- API App Insights: `app-insights-prod-api-staywell`
+- Web App Insights: `app-insights-prod-rentoombooking`
+
+Nazwa storage account dla runtime Functions jest generowana dynamicznie i nie jest wpisana na sztywno w pliku parametrów.
+
+## Aktualne ograniczenia i niespójności
+
+Ten README opisuje aktualny stan kodu. Obecnie w template są też ważne ograniczenia:
+
+- `main.bicep` ma domyślne `tags.environment = 'dev'`
+- jeśli nie nadpiszesz `tags`, deployment `prod` nadal oznaczy zasoby tagiem `environment=dev`
+- `main.bicep` używa stałej nazwy deploymentu modułu `app-stack-dev`, także dla `prod`
+- Web App zawsze dostaje `ASPNETCORE_ENVIRONMENT=Development`
+- Function App zawsze dostaje `AZURE_FUNCTIONS_ENVIRONMENT=Development`
+- Static Web App jest tworzony zawsze w `westeurope`, niezależnie od `location` dla reszty zasobów
+
+To nie są uwagi do poprawy dokumentacji - to jest obecne zachowanie skryptów.

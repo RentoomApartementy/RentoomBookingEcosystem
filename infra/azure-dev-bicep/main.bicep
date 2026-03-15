@@ -53,10 +53,90 @@ param staywellDbAppUser string = 'staywell_dev_app'
 @description('Storage account name for Rentoom Booking data.')
 param rentoomDataStorageAccountName string = 'storagerentoombookingdev'
 
-
 @secure()
 @description('Application database password.')
 param staywellDbAppPassword string
+
+@description('Tpay API base URL.')
+param tpayApiBaseUrl string = 'https://openapi.sandbox.tpay.com'
+
+@description('Tpay client ID.')
+param tpayClientId string = '01KEA06BFSBX1DZQM0BGYV8SXK-01KEA0CVMFDY6A36CKRTCGBTGB'
+
+@secure()
+@description('Tpay client secret.')
+param tpayClientSecret string
+
+@secure()
+@description('Tpay merchant security code.')
+param tpayMerchantSecurityCode string
+
+@description('Expected Tpay JWS certificate prefix.')
+param tpayJwsCertPrefix string = 'https://secure.sandbox.tpay.com'
+
+@description('Tpay root CA PEM URL.')
+param tpayRootCaPemUrl string = 'https://secure.sandbox.tpay.com/x509/tpay-jws-root.pem'
+
+@description('Relative success URL path used by Tpay.')
+param tpaySuccessUrl string = 'reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success'
+
+@description('Relative error URL path used by Tpay.')
+param tpayErrorUrl string = 'reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error'
+
+@description('Whether the StayWell API should use dummy IdoBooking behavior.')
+param idoBookingUseDummy bool = true
+
+@description('Template key used for dummy IdoBooking reservations.')
+param idoBookingDummyReservationTemplateKey string = 'dummy_api_call_template'
+
+@description('IdoBooking API base URL.')
+param idoBookingBaseApiUrl string = 'https://client7953.idosell.com/api/'
+
+@description('IdoBooking API system user.')
+param idoBookingApiUser string = 'apimaster'
+
+@secure()
+@description('IdoBooking API password.')
+param idoBookingApiPassword string
+
+@description('Public base URL for StayWell (Static Web App custom domain).')
+param staywellBaseUrl string = 'https://dev.staywell.rentoom.pl'
+
+@description('Public base URL for Rentoom Booking Web (Web App custom domain).')
+param rentoomWebBaseUrl string = 'https://dev.rentoom.pl'
+
+@description('Public base URL for StayWell API (Function App custom domain).')
+param staywellApiBaseUrl string = 'https://dev.api.rentoom.pl'
+
+@description('Blob container used for uploaded files.')
+param uploadsStorageContainerName string = 'uploadsdev'
+
+@description('Blob container used for arrival instructions.')
+param instructionsStorageContainerName string = 'arrivalinstructions-dev'
+
+@description('Rentoom App database name.')
+param rentoomAppDbName string = 'rentoomdb'
+
+@description('Rentoom App database user name.')
+param rentoomAppDbUser string = 'RentoomAzureDbAdmin'
+
+@secure()
+@description('Rentoom App database password.')
+param rentoomAppDbPassword string
+
+@description('TTLock client ID.')
+param ttlockClientId string = 'ba60c2707447415183df5d6a4c617e09'
+
+@secure()
+@description('TTLock client secret.')
+param ttlockClientSecret string
+
+@description('TTLock account username.')
+param ttlockUsername string = '+48601317506'
+
+@secure()
+@description('TTLock account password.')
+param ttlockPassword string
 
 @description('Common tags.')
 param tags object = {
@@ -93,6 +173,31 @@ module appStack './modules/app-stack.bicep' = {
     staywellDbName: staywellDbName
     staywellDbAppUser: staywellDbAppUser
     staywellDbAppPassword: staywellDbAppPassword
+    tpayApiBaseUrl: tpayApiBaseUrl
+    tpayClientId: tpayClientId
+    tpayClientSecret: tpayClientSecret
+    tpayMerchantSecurityCode: tpayMerchantSecurityCode
+    tpayJwsCertPrefix: tpayJwsCertPrefix
+    tpayRootCaPemUrl: tpayRootCaPemUrl
+    tpaySuccessUrl: tpaySuccessUrl
+    tpayErrorUrl: tpayErrorUrl
+    idoBookingUseDummy: idoBookingUseDummy
+    idoBookingDummyReservationTemplateKey: idoBookingDummyReservationTemplateKey
+    idoBookingBaseApiUrl: idoBookingBaseApiUrl
+    idoBookingApiUser: idoBookingApiUser
+    idoBookingApiPassword: idoBookingApiPassword
+    staywellBaseUrl: staywellBaseUrl
+    rentoomWebBaseUrl: rentoomWebBaseUrl
+    staywellApiBaseUrl: staywellApiBaseUrl
+    uploadsStorageContainerName: uploadsStorageContainerName
+    instructionsStorageContainerName: instructionsStorageContainerName
+    rentoomAppDbName: rentoomAppDbName
+    rentoomAppDbUser: rentoomAppDbUser
+    rentoomAppDbPassword: rentoomAppDbPassword
+    ttlockClientId: ttlockClientId
+    ttlockClientSecret: ttlockClientSecret
+    ttlockUsername: ttlockUsername
+    ttlockPassword: ttlockPassword
     rentoomDataStorageAccountName: rentoomDataStorageAccountName
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
     staywellApiAppInsightsName: staywellApiAppInsightsName

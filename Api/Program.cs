@@ -114,11 +114,8 @@ builder.Services.AddScoped<CustomerTermsService>();
 //arrival instructions
 builder.Services.AddScoped<ArrivalInstructionsService>();
 
-//TPAY
-
-bool UseDevelopmentSettingsOnProd = true;
-var TpaySection = UseDevelopmentSettingsOnProd ?builder.Configuration.GetSection("TpayDev"): builder.Configuration.GetSection("Tpay");
-
+// TPAY
+var TpaySection = builder.Configuration.GetSection("Tpay");
 builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
 builder.Services.Configure<StorageOptions>("InstructionsStorage", builder.Configuration.GetSection("InstructionsStorage"));
 

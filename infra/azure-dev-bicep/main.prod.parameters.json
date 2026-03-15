@@ -6,25 +6,25 @@
       "value": "polandcentral"
     },
     "resourceGroupName": {
-      "value": "rg-dev-rentoom-booking"
+      "value": "rg-prod-rentoom-booking"
     },
     "rentoomWebAppName": {
-      "value": "app-dev-rentoombooking"
+      "value": "app-prod-rentoombooking"
     },
     "staywellStaticWebAppName": {
-      "value": "swa-dev-staywell"
+      "value": "swa-prod-staywell"
     },
     "staywellApiFunctionName": {
-      "value": "func-dev-api-staywell"
+      "value": "func-prod-api-staywell"
     },
     "webPlanName": {
-      "value": "plan-dev-rentoombooking"
+      "value": "plan-prod-rentoombooking"
     },
     "functionPlanName": {
-      "value": "plan-dev-api-staywell"
+      "value": "plan-prod-api-staywell"
     },
     "storagePrefix": {
-      "value": "devstaywellapi"
+      "value": "prodstaywellapi"
     },
     "postgresSubscriptionId": {
       "value": "cc504c76-e00a-4964-a54c-36ff58726690"
@@ -36,22 +36,22 @@
       "value": "rentoom-server-db"
     },
     "staywellDbName": {
-      "value": "RentoomBookingDev"
+      "value": "RentoomBookingProd"
     },
     "staywellDbAppUser": {
-      "value": "RentoomDbUser_Dev"
+      "value": "RentoomAzureDbAdmin"
     },
     "tpayApiBaseUrl": {
-      "value": "https://openapi.sandbox.tpay.com"
+      "value": "https://openapi.tpay.com"
     },
     "tpayClientId": {
       "value": "01KEA06BFSBX1DZQM0BGYV8SXK-01KEA0CVMFDY6A36CKRTCGBTGB"
     },
     "tpayJwsCertPrefix": {
-      "value": "https://secure.sandbox.tpay.com"
+      "value": "https://secure.tpay.com"
     },
     "tpayRootCaPemUrl": {
-      "value": "https://secure.sandbox.tpay.com/x509/tpay-jws-root.pem"
+      "value": "https://secure.tpay.com/x509/tpay-jws-root.pem"
     },
     "tpaySuccessUrl": {
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success"
@@ -60,7 +60,7 @@
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error"
     },
     "idoBookingUseDummy": {
-      "value": true
+      "value": false
     },
     "idoBookingDummyReservationTemplateKey": {
       "value": "dummy_api_call_template"
@@ -72,19 +72,19 @@
       "value": "apimaster"
     },
     "staywellBaseUrl": {
-      "value": "https://dev.staywell.rentoom.pl"
+      "value": "https://staywell.rentoom.pl"
     },
     "rentoomWebBaseUrl": {
-      "value": "https://dev.rentoom.pl"
+      "value": "https://rentoom.pl"
     },
     "staywellApiBaseUrl": {
-      "value": "https://dev.api.rentoom.pl"
+      "value": "https://prod.api.rentoom.pl"
     },
     "uploadsStorageContainerName": {
-      "value": "uploadsdev"
+      "value": "uploadsprod"
     },
     "instructionsStorageContainerName": {
-      "value": "arrivalinstructions-dev"
+      "value": "arrivalinstructions-prod"
     },
     "rentoomAppDbName": {
       "value": "rentoomdb"
@@ -99,16 +99,16 @@
       "value": "+48601317506"
     },
     "rentoomDataStorageAccountName": {
-      "value": "storagerentoombookingdev"
+      "value": "storrentoombookingprod"
     },
     "logAnalyticsWorkspaceName": {
-      "value": "log-dev-rentoombooking"
+      "value": "log-prod-rentoombooking"
     },
     "staywellApiAppInsightsName": {
-      "value": "app-insights-dev-api-staywell"
+      "value": "app-insights-prod-api-staywell"
     },
     "rentoomWebAppInsightsName": {
-      "value": "app-insights-dev-rentoombooking"
+      "value": "app-insights-prod-rentoombooking"
     }
   }
 }
