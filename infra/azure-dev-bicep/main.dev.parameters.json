@@ -84,13 +84,31 @@
       "value": "apimaster"
     },
     "staywellBaseUrl": {
-      "value": "https://dev.staywell.rentoom.pl"
+      "value": "https://staywell-dev.rentoom.pl"
     },
     "rentoomWebBaseUrl": {
       "value": "https://dev.rentoom.pl"
     },
     "staywellApiBaseUrl": {
-      "value": "https://dev.api.rentoom.pl"
+      "value": "https://api-dev.rentoom.pl"
+    },
+    "staywellGithubOrganization": {
+      "value": "RentoomApartementy"
+    },
+    "staywellGithubRepositoryName": {
+      "value": "RentoomBookingEcosystem"
+    },
+    "staywellGithubBranch": {
+      "value": "development-main"
+    },
+    "staywellGithubAppLocation": {
+      "value": "./StayWell"
+    },
+    "staywellGithubOutputLocation": {
+      "value": "wwwroot"
+    },
+    "staywellGithubActionSecretName": {
+      "value": "AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_DEV"
     },
     "uploadsStorageContainerName": {
       "value": "uploadsdev"

@@ -120,6 +120,28 @@ param rentoomWebBaseUrl string = 'https://dev.rentoom.pl'
 @description('Public base URL for StayWell API (Function App custom domain).')
 param staywellApiBaseUrl string = 'https://dev.api.rentoom.pl'
 
+@description('GitHub organization for StayWell Static Web App source repository.')
+param staywellGithubOrganization string = 'RentoomApartamenty'
+
+@description('GitHub repository for StayWell Static Web App source code.')
+param staywellGithubRepositoryName string = 'RentoomBookingEcosystem'
+
+@description('GitHub branch used by StayWell Static Web App.')
+param staywellGithubBranch string = 'development-main'
+
+@secure()
+@description('GitHub repository token used by Azure Static Web Apps to configure GitHub Actions workflow and secrets.')
+param staywellGithubRepositoryToken string
+
+@description('Repository path to the StayWell app for Azure Static Web Apps build.')
+param staywellGithubAppLocation string = './StayWell'
+
+@description('Build output path for the StayWell Static Web App.')
+param staywellGithubOutputLocation string = 'wwwroot'
+
+@description('GitHub Actions secret name override for the StayWell Static Web App workflow.')
+param staywellGithubActionSecretName string = 'AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_DEV'
+
 @description('Blob container used for uploaded files.')
 param uploadsStorageContainerName string = 'uploadsdev'
 
@@ -205,6 +227,13 @@ module appStack './modules/app-stack.bicep' = {
     staywellBaseUrl: staywellBaseUrl
     rentoomWebBaseUrl: rentoomWebBaseUrl
     staywellApiBaseUrl: staywellApiBaseUrl
+    staywellGithubOrganization: staywellGithubOrganization
+    staywellGithubRepositoryName: staywellGithubRepositoryName
+    staywellGithubBranch: staywellGithubBranch
+    staywellGithubRepositoryToken: staywellGithubRepositoryToken
+    staywellGithubAppLocation: staywellGithubAppLocation
+    staywellGithubOutputLocation: staywellGithubOutputLocation
+    staywellGithubActionSecretName: staywellGithubActionSecretName
     uploadsStorageContainerName: uploadsStorageContainerName
     instructionsStorageContainerName: instructionsStorageContainerName
     rentoomAppDbName: rentoomAppDbName

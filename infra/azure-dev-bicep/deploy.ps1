@@ -44,6 +44,7 @@ $secretParameters = [ordered]@{
     tpayMerchantSecurityCode   = 'PROVIDE_TPAY_MERCHANT_SECURITY_CODE'
     ttlockClientSecret         = 'PROVIDE_TTLOCK_CLIENT_SECRET'
     ttlockPassword             = 'PROVIDE_TTLOCK_PASSWORD'
+    staywellGithubRepositoryToken = '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'
 }
 
 $placeholderValues = @(
@@ -54,13 +55,15 @@ $placeholderValues = @(
     '<TPAY_MERCHANT_SECURITY_CODE>',
     '<TTLOCK_CLIENT_SECRET>',
     '<TTLOCK_PASSWORD>',
+    '<STAYWELL_GITHUB_REPOSITORY_TOKEN>',
     'STAYWELL_DB_PASSWORD',
     'IDOBOOKING_API_PASSWORD',
     'RENTOOM_APP_DB_PASSWORD',
     'TPAY_CLIENT_SECRET',
     'TPAY_MERCHANT_SECURITY_CODE',
     'TTLOCK_CLIENT_SECRET',
-    'TTLOCK_PASSWORD'
+    'TTLOCK_PASSWORD',
+    'STAYWELL_GITHUB_REPOSITORY_TOKEN'
 )
 
 $placeholderKeys = @(
