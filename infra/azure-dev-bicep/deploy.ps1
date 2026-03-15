@@ -44,7 +44,7 @@ $secretParameters = [ordered]@{
     tpayMerchantSecurityCode   = 'PROVIDE_TPAY_MERCHANT_SECURITY_CODE'
     ttlockClientSecret         = 'PROVIDE_TTLOCK_CLIENT_SECRET'
     ttlockPassword             = 'PROVIDE_TTLOCK_PASSWORD'
-    staywellGithubRepositoryToken = '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'
+    staywellGithubRepositoryToken = 'PROVIDE_STAYWELL_GITHUB_REPOSITORY_TOKEN'
 }
 
 $placeholderValues = @(
