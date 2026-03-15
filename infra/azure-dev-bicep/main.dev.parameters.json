@@ -53,11 +53,23 @@
     "tpayRootCaPemUrl": {
       "value": "https://secure.sandbox.tpay.com/x509/tpay-jws-root.pem"
     },
-    "tpaySuccessUrl": {
+    "tpayWebSuccessUrl": {
+      "value": "rezerwuj/{ReservationTokenGuid}/oplac/success"
+    },
+    "tpayWebErrorUrl": {
+      "value": "https://dev.rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error"
+    },
+    "tpayWebRentoomSiteBaseUrl": {
+      "value": "https://dev.rentoom.pl"
+    },
+    "tpayApiSuccessUrl": {
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success"
     },
-    "tpayErrorUrl": {
+    "tpayApiErrorUrl": {
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error"
+    },
+    "tpayApiRentoomSiteBaseUrl": {
+      "value": "https://dev.rentoom.pl"
     },
     "idoBookingUseDummy": {
       "value": true

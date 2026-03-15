@@ -77,11 +77,23 @@ param tpayJwsCertPrefix string = 'https://secure.sandbox.tpay.com'
 @description('Tpay root CA PEM URL.')
 param tpayRootCaPemUrl string = 'https://secure.sandbox.tpay.com/x509/tpay-jws-root.pem'
 
-@description('Relative success URL path used by Tpay.')
-param tpaySuccessUrl string = 'reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success'
+@description('Success URL setting for Tpay used by Rentoom Booking Web.')
+param tpayWebSuccessUrl string = 'rezerwuj/{ReservationTokenGuid}/oplac/success'
 
-@description('Relative error URL path used by Tpay.')
-param tpayErrorUrl string = 'reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error'
+@description('Error URL setting for Tpay used by Rentoom Booking Web.')
+param tpayWebErrorUrl string = 'https://dev.rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error'
+
+@description('Rentoom site base URL used by Tpay in Rentoom Booking Web.')
+param tpayWebRentoomSiteBaseUrl string = 'https://dev.rentoom.pl'
+
+@description('Success URL path used by Tpay in StayWell API.')
+param tpayApiSuccessUrl string = 'reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success'
+
+@description('Error URL path used by Tpay in StayWell API.')
+param tpayApiErrorUrl string = 'reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error'
+
+@description('Rentoom site base URL used by Tpay in StayWell API.')
+param tpayApiRentoomSiteBaseUrl string = 'https://dev.rentoom.pl'
 
 @description('Whether the StayWell API should use dummy IdoBooking behavior.')
 param idoBookingUseDummy bool = true
@@ -179,8 +191,12 @@ module appStack './modules/app-stack.bicep' = {
     tpayMerchantSecurityCode: tpayMerchantSecurityCode
     tpayJwsCertPrefix: tpayJwsCertPrefix
     tpayRootCaPemUrl: tpayRootCaPemUrl
-    tpaySuccessUrl: tpaySuccessUrl
-    tpayErrorUrl: tpayErrorUrl
+    tpayWebSuccessUrl: tpayWebSuccessUrl
+    tpayWebErrorUrl: tpayWebErrorUrl
+    tpayWebRentoomSiteBaseUrl: tpayWebRentoomSiteBaseUrl
+    tpayApiSuccessUrl: tpayApiSuccessUrl
+    tpayApiErrorUrl: tpayApiErrorUrl
+    tpayApiRentoomSiteBaseUrl: tpayApiRentoomSiteBaseUrl
     idoBookingUseDummy: idoBookingUseDummy
     idoBookingDummyReservationTemplateKey: idoBookingDummyReservationTemplateKey
     idoBookingBaseApiUrl: idoBookingBaseApiUrl
