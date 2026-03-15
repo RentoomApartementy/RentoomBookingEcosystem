@@ -45,6 +45,10 @@ Podejście jest rozdzielone na dwa etapy:
 - app settings dla Function App
 - role assignmenty dla managed identity Function App na storage runtime
 - Static Web App dla StayWell
+- połączenie SWA z GitHub repo `RentoomApartementy/RentoomBookingEcosystem`
+- konfigurację branch dla SWA:
+  - `development-main` dla `dev`
+  - `main` dla `prod`
 - `staticSites/linkedBackends` łączący SWA z Function App
 
 ## Czego deployment nie robi
@@ -53,6 +57,7 @@ Podejście jest rozdzielone na dwa etapy:
 - nie publikuje kodu aplikacji do Web App
 - nie publikuje paczki Functions do kontenera `function-releases`
 - nie konfiguruje Key Vault
+- nie tworzy rekordów DNS ani custom domain bindings dla SWA / Web App / Function App
 
 ## Aktualna konfiguracja aplikacji
 
@@ -153,6 +158,7 @@ $secretParameters = [ordered]@{
     tpayMerchantSecurityCode = 'PROVIDE_TPAY_MERCHANT_SECURITY_CODE'
     ttlockClientSecret       = 'PROVIDE_TTLOCK_CLIENT_SECRET'
     ttlockPassword           = 'PROVIDE_TTLOCK_PASSWORD'
+    staywellGithubRepositoryToken = 'PROVIDE_STAYWELL_GITHUB_REPOSITORY_TOKEN'
 }
 ```
 
@@ -168,6 +174,12 @@ Pliki parametrów zawierają też publiczne bazowe URL-e środowiska:
 - `staywellBaseUrl`
 - `rentoomWebBaseUrl`
 - `staywellApiBaseUrl`
+- `staywellGithubOrganization`
+- `staywellGithubRepositoryName`
+- `staywellGithubBranch`
+- `staywellGithubAppLocation`
+- `staywellGithubOutputLocation`
+- `staywellGithubActionSecretName`
 - `tpayWebSuccessUrl`
 - `tpayWebErrorUrl`
 - `tpayWebRentoomSiteBaseUrl`
@@ -178,16 +190,28 @@ Pliki parametrów zawierają też publiczne bazowe URL-e środowiska:
 Domyślne wartości:
 
 `dev`
-- `staywellBaseUrl=https://dev.staywell.rentoom.pl`
+- `staywellBaseUrl=https://staywell-dev.rentoom.pl`
 - `rentoomWebBaseUrl=https://dev.rentoom.pl`
-- `staywellApiBaseUrl=https://dev.api.rentoom.pl`
+- `staywellApiBaseUrl=https://api-dev.rentoom.pl`
+- `staywellGithubOrganization=RentoomApartamenty`
+- `staywellGithubRepositoryName=RentoomBookingEcosystem`
+- `staywellGithubBranch=development-main`
+- `staywellGithubAppLocation=./StayWell`
+- `staywellGithubOutputLocation=wwwroot`
+- `staywellGithubActionSecretName=AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_DEV`
 
 `prod`
 - `staywellBaseUrl=https://staywell.rentoom.pl`
 - `rentoomWebBaseUrl=https://rentoom.pl`
-- `staywellApiBaseUrl=https://prod.api.rentoom.pl`
+- `staywellApiBaseUrl=https://api.rentoom.pl`
+- `staywellGithubOrganization=RentoomApartamenty`
+- `staywellGithubRepositoryName=RentoomBookingEcosystem`
+- `staywellGithubBranch=main`
+- `staywellGithubAppLocation=./StayWell`
+- `staywellGithubOutputLocation=wwwroot`
+- `staywellGithubActionSecretName=AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_PROD`
 
-Te parametry służą do budowy konfiguracji aplikacyjnej. Obecny Bicep nie tworzy jeszcze samych powiązań custom domain ani certyfikatów w Azure.
+Te parametry służą do budowy konfiguracji aplikacyjnej oraz do podpięcia repo GitHub do StayWell Static Web App. Obecny Bicep nie tworzy jeszcze samych powiązań custom domain ani certyfikatów w Azure.
 
 ## Uruchomienie
 

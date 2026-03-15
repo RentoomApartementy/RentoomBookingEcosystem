@@ -113,6 +113,28 @@ param rentoomWebBaseUrl string
 @description('Public base URL for StayWell API (Function App custom domain).')
 param staywellApiBaseUrl string
 
+@description('GitHub organization for StayWell Static Web App source repository.')
+param staywellGithubOrganization string
+
+@description('GitHub repository for StayWell Static Web App source code.')
+param staywellGithubRepositoryName string
+
+@description('GitHub branch used by StayWell Static Web App.')
+param staywellGithubBranch string
+
+@secure()
+@description('GitHub repository token used by Azure Static Web Apps to configure GitHub Actions workflow and secrets.')
+param staywellGithubRepositoryToken string
+
+@description('Repository path to the StayWell app for Azure Static Web Apps build.')
+param staywellGithubAppLocation string
+
+@description('Build output path for the StayWell Static Web App.')
+param staywellGithubOutputLocation string
+
+@description('GitHub Actions secret name override for the StayWell Static Web App workflow.')
+param staywellGithubActionSecretName string
+
 @description('Blob container used for uploaded files.')
 param uploadsStorageContainerName string
 
@@ -150,6 +172,7 @@ var deploymentStorageContainerName = 'function-releases'
 var normalizedStaywellBaseUrl = endsWith(staywellBaseUrl, '/') ? substring(staywellBaseUrl, 0, length(staywellBaseUrl) - 1) : staywellBaseUrl
 var normalizedRentoomWebBaseUrl = endsWith(rentoomWebBaseUrl, '/') ? substring(rentoomWebBaseUrl, 0, length(rentoomWebBaseUrl) - 1) : rentoomWebBaseUrl
 var normalizedStaywellApiCustomBaseUrl = endsWith(staywellApiBaseUrl, '/') ? substring(staywellApiBaseUrl, 0, length(staywellApiBaseUrl) - 1) : staywellApiBaseUrl
+var staywellGithubRepositoryUrl = 'https://github.com/${staywellGithubOrganization}/${staywellGithubRepositoryName}'
 var normalizedTpayWebRentoomSiteBaseUrl = endsWith(tpayWebRentoomSiteBaseUrl, '/') ? substring(tpayWebRentoomSiteBaseUrl, 0, length(tpayWebRentoomSiteBaseUrl) - 1) : tpayWebRentoomSiteBaseUrl
 var normalizedTpayApiRentoomSiteBaseUrl = endsWith(tpayApiRentoomSiteBaseUrl, '/') ? substring(tpayApiRentoomSiteBaseUrl, 0, length(tpayApiRentoomSiteBaseUrl) - 1) : tpayApiRentoomSiteBaseUrl
 var staywellReservationUrlBase = '${normalizedStaywellBaseUrl}/reservation/{resToken}/HomePage'
@@ -542,7 +565,18 @@ resource staywellSwa 'Microsoft.Web/staticSites@2025-03-01' = {
     name: 'Standard'
     tier: 'Standard'
   }
-  properties: {}
+  properties: {
+    repositoryUrl: staywellGithubRepositoryUrl
+    repositoryToken: staywellGithubRepositoryToken
+    branch: staywellGithubBranch
+    provider: 'GitHub'
+    buildProperties: {
+      appLocation: staywellGithubAppLocation
+      outputLocation: staywellGithubOutputLocation
+      githubActionSecretNameOverride: staywellGithubActionSecretName
+      skipGithubActionWorkflowGeneration: false
+    }
+  }
 }
 
 resource swaBackendLink 'Microsoft.Web/staticSites/linkedBackends@2025-03-01' = {
