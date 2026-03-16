@@ -67,9 +67,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID_DEV }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID_DEV }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID_DEV }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_DEV }}
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
