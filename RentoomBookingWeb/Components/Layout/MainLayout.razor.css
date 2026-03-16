@@ -1,4 +1,5 @@
 .layout {
+    --environment-banner-offset: 0px;
     width: 100%;
     min-height: 50vh;
     background-color: #F7F7F7;
@@ -6,6 +7,10 @@
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+}
+
+.layout--has-environment-banner {
+    --environment-banner-offset: 40px;
 }
 
 .layout-container {
@@ -16,7 +21,7 @@
 .menu {
     width: 100%;
     position: fixed;
-    top: 0;
+    top: var(--environment-banner-offset);
     z-index: 1000;
     /*padding: 1rem 1rem;*/
 }
