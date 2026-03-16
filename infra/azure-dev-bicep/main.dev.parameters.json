@@ -39,7 +39,7 @@
       "value": "RentoomBookingDev"
     },
     "staywellDbAppUser": {
-      "value": "RentoomDbUser_Dev"
+      "value": "RentoomAzureDbAdmin"
     },
     "tpayApiBaseUrl": {
       "value": "https://openapi.sandbox.tpay.com"
@@ -60,7 +60,7 @@
       "value": "https://dev.rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error"
     },
     "tpayWebRentoomSiteBaseUrl": {
-      "value": "https://dev.rentoom.pl"
+      "value": "https://app-dev-rentoombooking.azurewebsites.net/"
     },
     "tpayApiSuccessUrl": {
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success"
@@ -69,7 +69,7 @@
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error"
     },
     "tpayApiRentoomSiteBaseUrl": {
-      "value": "https://dev.rentoom.pl"
+      "value": "https://dev.staywell.rentoom.pl"
     },
     "idoBookingUseDummy": {
       "value": true
@@ -87,7 +87,7 @@
       "value": "Rezerwacje Dev"
     },
     "staywellBaseUrl": {
-      "value": "https://staywell-dev.rentoom.pl"
+      "value": "https://dev.staywell.rentoom.pl"
     },
     "rentoomWebBaseUrl": {
       "value": "https://dev.rentoom.pl"

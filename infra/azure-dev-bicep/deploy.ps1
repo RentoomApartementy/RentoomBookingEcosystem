@@ -6,7 +6,10 @@ param(
 
     [Parameter(Mandatory = $true)]
     [ValidateSet('validate', 'create', 'validate-create')]
-    [string]$Operation
+    [string]$Operation,
+
+    [Parameter(Mandatory = $true)]
+    [string]$SecretParameterFile
 )
 
 Set-StrictMode -Version Latest
@@ -28,68 +31,44 @@ if (-not (Test-Path -Path $parameterFile -PathType Leaf)) {
     throw "Parameter file not found for environment '$Environment': $parameterFile"
 }
 
+$resolvedSecretParameterFile = Resolve-Path -LiteralPath $SecretParameterFile -ErrorAction SilentlyContinue
+if (-not $resolvedSecretParameterFile) {
+    throw "Secret parameter file not found: $SecretParameterFile"
+}
+
+$secretParameterFile = $resolvedSecretParameterFile.Path
+
 $parameterFileContent = Get-Content -Raw -Path $parameterFile | ConvertFrom-Json
+$secretParameterFileContent = Get-Content -Raw -Path $secretParameterFile | ConvertFrom-Json
 $deploymentLocation = $parameterFileContent.parameters.location.value
 
 if ([string]::IsNullOrWhiteSpace($deploymentLocation)) {
     throw "The parameter file '$parameterFile' does not define parameters.location.value."
 }
 
-# Replace these placeholder defaults before running a real deployment.
-$secretParameters = [ordered]@{
-    staywellDbAppPassword      = 'PROVIDE_STAYWELL_DB_PASSWORD'
-    idoBookingApiPassword      = 'PROVIDE_IDOBOOKING_API_PASSWORD'
-    rentoomAppDbPassword       = 'PROVIDE_RENTOOM_APP_DB_PASSWORD'
-    tpayClientSecret           = 'PROVIDE_TPAY_CLIENT_SECRET'
-    tpayMerchantSecurityCode   = 'PROVIDE_TPAY_MERCHANT_SECURITY_CODE'
-    ttlockClientSecret         = 'PROVIDE_TTLOCK_CLIENT_SECRET'
-    ttlockPassword             = 'PROVIDE_TTLOCK_PASSWORD'
-    staywellGithubRepositoryToken = 'PROVIDE_STAYWELL_GITHUB_REPOSITORY_TOKEN'
-}
-
-$placeholderValues = @(
-    '<STAYWELL_DB_PASSWORD>',
-    '<IDOBOOKING_API_PASSWORD>',
-    '<RENTOOM_APP_DB_PASSWORD>',
-    '<TPAY_CLIENT_SECRET>',
-    '<TPAY_MERCHANT_SECURITY_CODE>',
-    '<TTLOCK_CLIENT_SECRET>',
-    '<TTLOCK_PASSWORD>',
-    '<STAYWELL_GITHUB_REPOSITORY_TOKEN>',
-    'STAYWELL_DB_PASSWORD',
-    'IDOBOOKING_API_PASSWORD',
-    'RENTOOM_APP_DB_PASSWORD',
-    'TPAY_CLIENT_SECRET',
-    'TPAY_MERCHANT_SECURITY_CODE',
-    'TTLOCK_CLIENT_SECRET',
-    'TTLOCK_PASSWORD',
-    'STAYWELL_GITHUB_REPOSITORY_TOKEN'
+$requiredSecretParameters = @(
+    'staywellDbAppPassword',
+    'idoBookingApiPassword',
+    'rentoomAppDbPassword',
+    'tpayClientSecret',
+    'tpayMerchantSecurityCode',
+    'ttlockClientSecret',
+    'ttlockPassword',
+    'staywellGithubRepositoryToken'
 )
 
-$placeholderKeys = @(
-    $secretParameters.GetEnumerator() |
-    Where-Object { $placeholderValues -contains $_.Value } |
-    ForEach-Object { $_.Key }
-)
-
-if ($placeholderKeys.Count -gt 0) {
-    throw "Replace the placeholder secret values in deploy.ps1 before running deployment. Missing values: $($placeholderKeys -join ', ')"
-}
-
-$secretParameterDocument = [ordered]@{
-    '$schema' = 'https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#'
-    contentVersion = '1.0.0.0'
-    parameters = [ordered]@{}
-}
-
-foreach ($entry in $secretParameters.GetEnumerator()) {
-    $secretParameterDocument.parameters[$entry.Key] = @{
-        value = $entry.Value
+$missingSecretParameters = @(
+    foreach ($parameterName in $requiredSecretParameters) {
+        $parameterValue = $secretParameterFileContent.parameters.$parameterName.value
+        if ([string]::IsNullOrWhiteSpace([string]$parameterValue)) {
+            $parameterName
+        }
     }
-}
+)
 
-$secretParameterFile = Join-Path ([System.IO.Path]::GetTempPath()) ("rentoom.{0}.secrets.{1}.parameters.json" -f $Environment, [Guid]::NewGuid().ToString('N'))
-$secretParameterDocument | ConvertTo-Json -Depth 10 | Set-Content -Path $secretParameterFile -Encoding UTF8
+if ($missingSecretParameters.Count -gt 0) {
+    throw "The secret parameter file '$secretParameterFile' is missing values for: $($missingSecretParameters -join ', ')"
+}
 
 $deploymentName = "rentoom-$Environment-bootstrap"
 
@@ -111,31 +90,25 @@ $createArguments = @(
 Write-Host "Environment: $Environment"
 Write-Host "Template file: $templateFile"
 Write-Host "Parameter file: $parameterFile"
+Write-Host "Secret parameter file: $secretParameterFile"
 Write-Host "Deployment location: $deploymentLocation"
 Write-Host "Deployment name: $deploymentName"
 Write-Host "Operation: $Operation"
 
-try {
-    if ($Operation -in @('validate', 'validate-create')) {
-        Write-Host ''
-        Write-Host 'Validating deployment...'
-        & az @validateArguments
-        if ($LASTEXITCODE -ne 0) {
-            throw "Azure deployment validation failed."
-        }
-    }
-
-    if ($Operation -in @('create', 'validate-create')) {
-        Write-Host ''
-        Write-Host 'Creating deployment...'
-        & az @createArguments
-        if ($LASTEXITCODE -ne 0) {
-            throw "Azure deployment creation failed."
-        }
+if ($Operation -in @('validate', 'validate-create')) {
+    Write-Host ''
+    Write-Host 'Validating deployment...'
+    & az @validateArguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "Azure deployment validation failed."
     }
 }
-finally {
-    if (Test-Path -Path $secretParameterFile -PathType Leaf) {
-        Remove-Item -Path $secretParameterFile -Force
+
+if ($Operation -in @('create', 'validate-create')) {
+    Write-Host ''
+    Write-Host 'Creating deployment...'
+    & az @createArguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "Azure deployment creation failed."
     }
 }

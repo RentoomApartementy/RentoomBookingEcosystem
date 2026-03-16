@@ -36,7 +36,7 @@ Powod tej kolejnosci:
 - `modules/app-stack.bicep` - zasoby aplikacyjne, monitoring, storage i app settings
 - `main.dev.parameters.json` - parametry niesekretne dla `dev`
 - `main.prod.parameters.json` - parametry niesekretne dla `prod`
-- `deploy.ps1` - wrapper PowerShell uruchamiajacy `az deployment sub validate` i/lub `create`
+- `deploy.ps1` - wrapper PowerShell uruchamiajacy `az deployment sub validate` i/lub `create`, przyjmujacy osobny plik parametrow z sekretami
 
 ## Co faktycznie tworzy deployment
 
@@ -91,28 +91,54 @@ Token GitHub do SWA:
 
 - musi miec dostep do repo `RentoomApartementy/RentoomBookingEcosystem`
 - powinien miec scope pozwalajacy Azure SWA skonfigurowac workflow i secret w repo
-- jest przekazywany jako `staywellGithubRepositoryToken` w `deploy.ps1`
+- jest przekazywany jako `staywellGithubRepositoryToken` w osobnym pliku parametrow z sekretami
 
-## Sekrety w `deploy.ps1`
+## Sekrety w osobnym pliku parametrow
 
-Plik:
+`deploy.ps1` wymaga teraz osobnego pliku JSON z sekretami, podawanego przez parametr `-SecretParameterFile`.
 
-- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1`
+Przykladowe nazwy:
 
-Zawiera placeholdery, ktore trzeba uzupelnic przed `create`:
+- `main.dev.secrets.parameters.json`
+- `main.prod.secrets.parameters.json`
 
-```powershell
-$secretParameters = [ordered]@{
-    staywellDbAppPassword      = 'PROVIDE_STAYWELL_DB_PASSWORD'
-    idoBookingApiPassword      = 'PROVIDE_IDOBOOKING_API_PASSWORD'
-    rentoomAppDbPassword       = 'PROVIDE_RENTOOM_APP_DB_PASSWORD'
-    tpayClientSecret           = 'PROVIDE_TPAY_CLIENT_SECRET'
-    tpayMerchantSecurityCode   = 'PROVIDE_TPAY_MERCHANT_SECURITY_CODE'
-    ttlockClientSecret         = 'PROVIDE_TTLOCK_CLIENT_SECRET'
-    ttlockPassword             = 'PROVIDE_TTLOCK_PASSWORD'
-    staywellGithubRepositoryToken = 'PROVIDE_STAYWELL_GITHUB_REPOSITORY_TOKEN'
+Przykladowa struktura:
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "staywellDbAppPassword": {
+      "value": "<STAYWELL_DB_PASSWORD>"
+    },
+    "idoBookingApiPassword": {
+      "value": "<IDOBOOKING_API_PASSWORD>"
+    },
+    "rentoomAppDbPassword": {
+      "value": "<RENTOOM_APP_DB_PASSWORD>"
+    },
+    "tpayClientSecret": {
+      "value": "<TPAY_CLIENT_SECRET>"
+    },
+    "tpayMerchantSecurityCode": {
+      "value": "<TPAY_MERCHANT_SECURITY_CODE>"
+    },
+    "ttlockClientSecret": {
+      "value": "<TTLOCK_CLIENT_SECRET>"
+    },
+    "ttlockPassword": {
+      "value": "<TTLOCK_PASSWORD>"
+    },
+    "staywellGithubRepositoryToken": {
+      "value": "<STAYWELL_GITHUB_REPOSITORY_TOKEN>"
+    }
+  }
 }
 ```
+
+Skrypt sprawdza, czy wszystkie wymagane sekrety sa obecne i maja niepuste wartosci.
+Tych plikow nie nalezy commitowac do repo.
 
 ## Jak uruchomic deployment infra
 
@@ -130,22 +156,22 @@ az account set --subscription "<SUBSCRIPTION_ID_OR_NAME>"
 Walidacja:
 
 ```powershell
-.\deploy.ps1 -Environment dev -Operation validate
-.\deploy.ps1 -Environment prod -Operation validate
+.\deploy.ps1 -Environment dev -Operation validate -SecretParameterFile .\main.dev.secrets.parameters.json
+.\deploy.ps1 -Environment prod -Operation validate -SecretParameterFile .\main.prod.secrets.parameters.json
 ```
 
 Tworzenie:
 
 ```powershell
-.\deploy.ps1 -Environment dev -Operation create
-.\deploy.ps1 -Environment prod -Operation create
+.\deploy.ps1 -Environment dev -Operation create -SecretParameterFile .\main.dev.secrets.parameters.json
+.\deploy.ps1 -Environment prod -Operation create -SecretParameterFile .\main.prod.secrets.parameters.json
 ```
 
 Pelny przebieg:
 
 ```powershell
-.\deploy.ps1 -Environment dev -Operation validate-create
-.\deploy.ps1 -Environment prod -Operation validate-create
+.\deploy.ps1 -Environment dev -Operation validate-create -SecretParameterFile .\main.dev.secrets.parameters.json
+.\deploy.ps1 -Environment prod -Operation validate-create -SecretParameterFile .\main.prod.secrets.parameters.json
 ```
 
 ## Parametry niesekretne per srodowisko
@@ -270,10 +296,10 @@ Aktualny stan repo:
 
 ## Kolejnosc wdrozenia dla `dev`
 
-1. Uzupelnij sekrety w:
-   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1`
+1. Przygotuj plik sekretow, np.:
+   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\main.dev.secrets.parameters.json`
 2. Uruchom:
-   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1 -Environment dev -Operation validate-create`
+   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1 -Environment dev -Operation validate-create -SecretParameterFile C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\main.dev.secrets.parameters.json`
 3. Uruchom bootstrap:
    - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\bootstrap-identity-bicep\deploy.ps1 -Environment dev -Operation validate-create`
 4. Z outputow bootstrapu ustaw GitHub repository variables:
@@ -287,10 +313,10 @@ Aktualny stan repo:
 
 ## Kolejnosc wdrozenia dla `prod`
 
-1. Uzupelnij sekrety w:
-   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1`
+1. Przygotuj plik sekretow, np.:
+   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\main.prod.secrets.parameters.json`
 2. Uruchom:
-   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1 -Environment prod -Operation validate-create`
+   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1 -Environment prod -Operation validate-create -SecretParameterFile C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\main.prod.secrets.parameters.json`
 3. Uruchom bootstrap:
    - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\bootstrap-identity-bicep\deploy.ps1 -Environment prod -Operation validate-create`
 4. Z outputow bootstrapu ustaw GitHub repository variables:
@@ -310,14 +336,7 @@ az deployment sub validate `
   --location polandcentral `
   --template-file .\main.bicep `
   --parameters .\main.dev.parameters.json `
-  --parameters staywellDbAppPassword="<STAYWELL_DB_PASSWORD>" `
-  --parameters idoBookingApiPassword="<IDOBOOKING_API_PASSWORD>" `
-  --parameters rentoomAppDbPassword="<RENTOOM_APP_DB_PASSWORD>" `
-  --parameters tpayClientSecret="<TPAY_CLIENT_SECRET>" `
-  --parameters tpayMerchantSecurityCode="<TPAY_MERCHANT_SECURITY_CODE>" `
-  --parameters ttlockClientSecret="<TTLOCK_CLIENT_SECRET>" `
-  --parameters ttlockPassword="<TTLOCK_PASSWORD>" `
-  --parameters staywellGithubRepositoryToken="<GITHUB_REPOSITORY_TOKEN>"
+  --parameters .\main.dev.secrets.parameters.json
 ```
 
 ## Aktualne ograniczenia i niespojnosci
