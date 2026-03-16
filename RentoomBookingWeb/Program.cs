@@ -133,6 +133,9 @@ namespace RentoomBookingWeb
             
             builder.Services.AddDateRangePicker(config => { });
 
+            //config
+          
+
             // TPAY
             var TpaySection = builder.Configuration.GetSection("Tpay");
 

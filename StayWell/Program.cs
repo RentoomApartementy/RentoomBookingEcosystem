@@ -43,6 +43,9 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<RegistrationCardState>();
             builder.Services.AddScoped<CustomerAgreedTermsState>();
 
+         
+
+
             //available upsells
             builder.Services.AddScoped<AvailableUpsellsState>();
 
@@ -75,6 +78,11 @@ namespace RentoomBooking.StayWell
             var solutionname = SolutionNameClass.SolutionName_2;
 
             logger.LogInformation("Fetching for solution {SolutionName}", solutionname);
+
+            var config = builder.Configuration;
+            var env = builder.Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"];
+            logger.LogWarning("FOUND ENV: {env}", env);
+
 
             await host.RunAsync();
         }

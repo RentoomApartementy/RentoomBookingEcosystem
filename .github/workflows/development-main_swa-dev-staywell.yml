@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - development-main
-  pull_request:
-    types: [closed]
-    branches:
-      - development-main
+ # pull_request:
+ #   types: [closed]
+ #   branches:
+ #     - development-main
 
 jobs:
   build_and_deploy_job:
@@ -19,6 +19,21 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Stamp StayWell runtime environment
+        shell: bash
+        run: |
+          export STAYWELL_RUNTIME_ENV="${ASPNETCORE_ENVIRONMENT_STAYWELL:-Development}"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path("StayWell/wwwroot/appsettings.json")
+          data = json.loads(path.read_text())
+          data["ASPNETCORE_ENVIRONMENT_STAYWELL"] = os.environ["STAYWELL_RUNTIME_ENV"]
+          path.write_text(json.dumps(data, indent=2) + "\n")
+          print(f"Stamped {path} with ASPNETCORE_ENVIRONMENT_STAYWELL={data['ASPNETCORE_ENVIRONMENT_STAYWELL']}")
+          PY
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
