@@ -1,0 +1,12 @@
+﻿@if (EnvironmentBannerState.ShouldDisplay(EnvironmentName))
+{
+    <div class="environment-banner" role="status" aria-live="polite">
+        <span class="environment-banner-label">Środowisko: </span>
+        <span class="environment-banner-value">@EnvironmentBannerState.GetDisplayName(EnvironmentName)</span>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string? EnvironmentName { get; set; }
+}
