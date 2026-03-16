@@ -120,8 +120,8 @@ param rentoomWebBaseUrl string = 'https://dev.rentoom.pl'
 @description('Public base URL for StayWell API (Function App custom domain).')
 param staywellApiBaseUrl string = 'https://dev.api.rentoom.pl'
 
-@description('GitHub organization for StayWell Static Web App source repository.')
-param staywellGithubOrganization string = 'RentoomApartamenty'
+@description('GitHub organization slug for StayWell Static Web App source repository.')
+param staywellGithubOrganization string = 'RentoomApartementy'
 
 @description('GitHub repository for StayWell Static Web App source code.')
 param staywellGithubRepositoryName string = 'RentoomBookingEcosystem'
