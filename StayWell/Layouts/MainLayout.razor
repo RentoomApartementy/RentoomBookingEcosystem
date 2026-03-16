@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 @using RentoomBooking.SharedClasses.Models;
 @using RentoomBooking.StayWell.Components;
 @using RentoomBooking.StayWell.Components.Upsells;
@@ -13,8 +13,11 @@
 @inject LocksState LocksState
 @inject LayoutState LayoutState
 @inject IJSRuntime JSRuntime
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment HostEnvironment
 
-<div class="layout-page">
+<div class="layout-page @(HasEnvironmentBanner ? "layout-page--has-environment-banner" : string.Empty)">
+    <EnvironmentBanner EnvironmentName="@BannerEnvironmentName" />
     @if (LayoutState.ShowHeader)
     {
         <div class="layout-header" id="main-header">
@@ -61,6 +64,11 @@
     private string _modalTitle = string.Empty;
     private RenderFragment? _modalContent;
     private Toast? _toastComponent;
+    private string BannerEnvironmentName =>
+        string.IsNullOrWhiteSpace(Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"])
+            ? HostEnvironment.Environment
+            : Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"]!;
+    private bool HasEnvironmentBanner => EnvironmentBannerState.ShouldDisplay(BannerEnvironmentName);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

@@ -289,7 +289,7 @@
     /* Wyjątek: Telefon zostawiamy w jednej linii, zmniejszając minimalnie selecta */
     .phone-grid-container {
         display: grid;
-        grid-template-columns: 100px 1fr; /* Select na mobile ma 100px szerokości */
+        grid-template-columns: 125px 1fr; /* Select na mobile ma 100px szerokości */
         gap: 0.6rem; /* Mniejszy odstęp między nimi */
     }
 

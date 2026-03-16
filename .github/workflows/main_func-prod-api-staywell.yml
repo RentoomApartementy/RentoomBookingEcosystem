@@ -1,24 +1,23 @@
-name: PROD - Booking Website - app-prod-rentoombooking
+name: PROD - Functions API - func-prod-api-staywell
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'RentoomBookingWeb/**'
+      - 'Api/**'
       - 'SharedClasses/**'
-      - 'SharedFrontend/**'
-      - '.github/workflows/main_app-prod-rentoombooking.yml'
+      - '.github/workflows/main_func-prod-api-staywell.yml'
   workflow_dispatch:
 
 concurrency:
-  group: app-prod-rentoombooking-main
+  group: func-prod-api-staywell-main
   cancel-in-progress: true
 
 env:
-  AZURE_WEBAPP_NAME: app-prod-rentoombooking
-  PROJECT_PATH: RentoomBookingWeb/RentoomBookingWeb.csproj
-  PUBLISH_PATH: published-webapp
+  AZURE_FUNCTIONAPP_NAME: func-prod-api-staywell
+  PROJECT_PATH: Api/RentoomBooking.Api.csproj
+  PUBLISH_PATH: published-api
   DOTNET_VERSION: '8.0.x'
 
 jobs:
@@ -36,19 +35,19 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore web app project
+      - name: Restore API project
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
-      - name: Build web app project
+      - name: Build API project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
 
-      - name: Publish web app project
+      - name: Publish API project
         run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --no-build --output ${{ env.PUBLISH_PATH }}
 
       - name: Upload deployment artifact
         uses: actions/upload-artifact@v4
         with:
-          name: webapp-package-prod
+          name: api-function-package-prod
           path: ${{ env.PUBLISH_PATH }}
           include-hidden-files: true
 
@@ -63,20 +62,18 @@ jobs:
       - name: Download deployment artifact
         uses: actions/download-artifact@v4
         with:
-          name: webapp-package-prod
+          name: api-function-package-prod
           path: ${{ env.PUBLISH_PATH }}
 
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID_APP_PROD_RENTOOMBOOKING }}
+          client-id: ${{ vars.AZURE_CLIENT_ID_FUNC_PROD_API_STAYWELL }}
           tenant-id: ${{ vars.AZURE_TENANT_ID_PROD }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID_PROD }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+      - name: Deploy to Azure Functions
+        uses: Azure/functions-action@v1
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           package: ${{ env.PUBLISH_PATH }}
-          

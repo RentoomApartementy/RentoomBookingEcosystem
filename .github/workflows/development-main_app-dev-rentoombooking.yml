@@ -1,12 +1,17 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy app-dev-rentoombooking
+name: DEV - Booking Website - app-prod-rentoombooking
 
 on:
   push:
     branches:
       - development-main
+    paths:
+      - 'RentoomBookingWeb/**'
+      - 'SharedClasses/**'
+      - 'SharedFrontend/**'
+      - '.github/workflows/development-main_app-dev-rentoombooking.yml'
   workflow_dispatch:
 
 jobs:
@@ -51,9 +56,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_74A69F2DC35C4DF8A9944F296D379A56 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_30830D923BC746C496B2B21747910FFF }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A4336FF416914952955508AA7A3758FA }}
+          client-id: ${{ vars.AZURE_CLIENT_ID_APP_DEV_RENTOOMBOOKING }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID_DEV }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID_DEV }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

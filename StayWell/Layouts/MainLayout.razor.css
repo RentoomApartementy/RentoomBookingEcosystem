@@ -1,11 +1,16 @@
 
 
 .layout-page {
+    --environment-banner-offset: 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100vh;
     background-color: white;
+}
+
+.layout-page--has-environment-banner {
+    --environment-banner-offset: 40px;
 }
 
 .loading{
@@ -18,7 +23,7 @@
 
 .layout-header {
     position: fixed;
-    top: 0;
+    top: var(--environment-banner-offset);
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -49,7 +54,7 @@
     max-width: 1250px;
     flex: 1 1 auto;
     overflow-y: auto;
-    padding-top: 116px;
+    padding-top: calc(116px + var(--environment-banner-offset));
     padding-bottom: 116px;
     padding-left: 16px;
     padding-right: 16px;

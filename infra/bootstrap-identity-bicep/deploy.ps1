@@ -6,10 +6,7 @@ param(
 
     [Parameter(Mandatory = $true)]
     [ValidateSet('validate', 'create', 'validate-create')]
-    [string]$Operation,
-
-    [Parameter(Mandatory = $true)]
-    [string]$SecretParameterFile
+    [string]$Operation
 )
 
 Set-StrictMode -Version Latest
@@ -31,52 +28,20 @@ if (-not (Test-Path -Path $parameterFile -PathType Leaf)) {
     throw "Parameter file not found for environment '$Environment': $parameterFile"
 }
 
-$resolvedSecretParameterFile = Resolve-Path -LiteralPath $SecretParameterFile -ErrorAction SilentlyContinue
-if (-not $resolvedSecretParameterFile) {
-    throw "Secret parameter file not found: $SecretParameterFile"
-}
-
-$secretParameterFile = $resolvedSecretParameterFile.Path
-
 $parameterFileContent = Get-Content -Raw -Path $parameterFile | ConvertFrom-Json
-$secretParameterFileContent = Get-Content -Raw -Path $secretParameterFile | ConvertFrom-Json
 $deploymentLocation = $parameterFileContent.parameters.location.value
 
 if ([string]::IsNullOrWhiteSpace($deploymentLocation)) {
     throw "The parameter file '$parameterFile' does not define parameters.location.value."
 }
 
-$requiredSecretParameters = @(
-    'staywellDbAppPassword',
-    'idoBookingApiPassword',
-    'rentoomAppDbPassword',
-    'tpayClientSecret',
-    'tpayMerchantSecurityCode',
-    'ttlockClientSecret',
-    'ttlockPassword',
-    'staywellGithubRepositoryToken'
-)
-
-$missingSecretParameters = @(
-    foreach ($parameterName in $requiredSecretParameters) {
-        $parameterValue = $secretParameterFileContent.parameters.$parameterName.value
-        if ([string]::IsNullOrWhiteSpace([string]$parameterValue)) {
-            $parameterName
-        }
-    }
-)
-
-if ($missingSecretParameters.Count -gt 0) {
-    throw "The secret parameter file '$secretParameterFile' is missing values for: $($missingSecretParameters -join ', ')"
-}
-
-$deploymentName = "rentoom-$Environment-bootstrap"
+$deploymentName = "rentoom-$Environment-github-oidc-bootstrap"
 
 $validateArguments = @(
     'deployment', 'sub', 'validate',
     '--location', $deploymentLocation,
     '--template-file', $templateFile,
-    '--parameters', "@$parameterFile", "@$secretParameterFile"
+    '--parameters', "@$parameterFile"
 )
 
 $createArguments = @(
@@ -84,13 +49,12 @@ $createArguments = @(
     '--name', $deploymentName,
     '--location', $deploymentLocation,
     '--template-file', $templateFile,
-    '--parameters', "@$parameterFile", "@$secretParameterFile"
+    '--parameters', "@$parameterFile"
 )
 
 Write-Host "Environment: $Environment"
 Write-Host "Template file: $templateFile"
 Write-Host "Parameter file: $parameterFile"
-Write-Host "Secret parameter file: $secretParameterFile"
 Write-Host "Deployment location: $deploymentLocation"
 Write-Host "Deployment name: $deploymentName"
 Write-Host "Operation: $Operation"
