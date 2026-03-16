@@ -68,10 +68,10 @@
       "value": "rezerwuj/{ReservationTokenGuid}/oplac/success"
     },
     "tpayWebErrorUrl": {
-      "value": "https://rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error"
+      "value": "https://prod.rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error"
     },
     "tpayWebRentoomSiteBaseUrl": {
-      "value": "https://rentoom.pl"
+      "value": "https://prod.rentoom.pl"
     },
     "tpayApiSuccessUrl": {
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success"
@@ -101,7 +101,7 @@
       "value": "https://staywell.rentoom.pl"
     },
     "rentoomWebBaseUrl": {
-      "value": "https://rentoom.pl"
+      "value": "https://prod.rentoom.pl"
     },
     "staywellApiBaseUrl": {
       "value": "https://api.rentoom.pl"
