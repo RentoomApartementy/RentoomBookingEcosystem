@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
@@ -916,7 +917,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
             if (!record.DealBitrixId.HasValue)
             {
                 var pipelines = await _bitrixService.GetDealPipelinesAsync();
-                var rentalPipeline = pipelines.FirstOrDefault(p => string.Equals(p.Name, "Rezerwacje", StringComparison.OrdinalIgnoreCase));
+                var pipelineName = BitrixConfiguration.GetReservationPipelineName(_configuration);
+                var rentalPipeline = pipelines.FirstOrDefault(p => string.Equals(p.Name, pipelineName, StringComparison.OrdinalIgnoreCase));
                 var pipelineId = rentalPipeline?.Id ?? 0;
                 var stages = await _bitrixService.GetDealStagesAsync(pipelineId);
                 var newStage = stages.FirstOrDefault(s => string.Equals(s.Name, "W toku", StringComparison.OrdinalIgnoreCase));

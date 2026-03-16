@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using System.Drawing.Drawing2D;
@@ -14,11 +16,13 @@ public class GetDealFunction
 {
     private readonly ILogger<GetDealFunction> _logger;
     private readonly BitrixService _bitrixService;
+    private readonly IConfiguration _configuration;
 
-    public GetDealFunction(ILogger<GetDealFunction> logger, BitrixService bitrixService)
+    public GetDealFunction(ILogger<GetDealFunction> logger, BitrixService bitrixService, IConfiguration configuration)
     {
         _logger = logger;
         _bitrixService = bitrixService;
+        _configuration = configuration;
     }
 
     [Function("GetDealFunction")]
@@ -64,7 +68,8 @@ public class GetDealFunction
         {
 
             var pipelines = await _bitrixService.GetDealPipelinesAsync();
-            var rentalPipelineId = pipelines.Single(p => p.Name == "Rezerwacje").Id;
+            var pipelineName = BitrixConfiguration.GetReservationPipelineName(_configuration);
+            var rentalPipelineId = pipelines.Single(p => string.Equals(p.Name, pipelineName, StringComparison.OrdinalIgnoreCase)).Id;
             var stages = await _bitrixService.GetDealStagesAsync(rentalPipelineId);
             var newStageId = stages.Single(s => s.Name == "W toku").StageId;
 
