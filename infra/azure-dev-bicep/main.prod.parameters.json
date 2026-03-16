@@ -2,6 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "environment": {
+      "value": "prod"
+    },
     "location": {
       "value": "polandcentral"
     },
@@ -19,6 +22,14 @@
     },
     "webPlanName": {
       "value": "plan-prod-rentoombooking"
+    },
+    "webPlanSku": {
+      "value": {
+        "name": "F1",
+        "tier": "Free",
+        "size": "F1",
+        "capacity": 1
+      }
     },
     "functionPlanName": {
       "value": "plan-prod-api-staywell"
@@ -57,10 +68,10 @@
       "value": "rezerwuj/{ReservationTokenGuid}/oplac/success"
     },
     "tpayWebErrorUrl": {
-      "value": "https://rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error"
+      "value": "https://prod.rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error"
     },
     "tpayWebRentoomSiteBaseUrl": {
-      "value": "https://rentoom.pl"
+      "value": "https://prod.rentoom.pl"
     },
     "tpayApiSuccessUrl": {
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success"
@@ -83,11 +94,14 @@
     "idoBookingApiUser": {
       "value": "apimaster"
     },
+    "bitrixReservationPipelineName": {
+      "value": "Rezerwacje"
+    },
     "staywellBaseUrl": {
       "value": "https://staywell.rentoom.pl"
     },
     "rentoomWebBaseUrl": {
-      "value": "https://rentoom.pl"
+      "value": "https://prod.rentoom.pl"
     },
     "staywellApiBaseUrl": {
       "value": "https://api.rentoom.pl"
@@ -139,6 +153,13 @@
     },
     "rentoomWebAppInsightsName": {
       "value": "app-insights-prod-rentoombooking"
+    },
+    "tags": {
+      "value": {
+        "environment": "prod",
+        "system": "RentoomBookingEcosystem",
+        "managedBy": "bicep"
+      }
     }
   }
 }

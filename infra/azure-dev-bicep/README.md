@@ -2,13 +2,13 @@
 
 Ten katalog zawiera glowny deployment infrastruktury aplikacyjnej dla:
 
-- `RentoomBookingWeb` jako Azure Web App
+- `RentoomBookingWeb` jako Linux Azure Web App
 - StayWell API jako Azure Function App na Flex Consumption
 - StayWell Static Web App
 - storage, monitoring i konfiguracje aplikacyjne
 
 To jest warstwa `app infra`.
-Bootstrap tozsamosci GitHub OIDC dla workflowow Functions jest osobno w:
+Bootstrap tozsamosci GitHub OIDC dla workflowow Functions i Web App jest osobno w:
 
 - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\bootstrap-identity-bicep`
 
@@ -19,24 +19,24 @@ Kolejnosc dla nowego srodowiska:
 1. Uruchom glowny deployment infra z tego katalogu:
    - tworzy Function App, Web App, SWA, storage i monitoring
 2. Uruchom bootstrap OIDC z `bootstrap-identity-bicep`:
-   - tworzy `user-assigned managed identity`
-   - tworzy `federatedIdentityCredential`
-   - nadaje `Website Contributor` na Function App
+   - tworzy osobne `user-assigned managed identity` dla Functions i Web App
+   - tworzy `federatedIdentityCredential` dla obu workflowow
+   - nadaje `Website Contributor` na Function App i Web App
 3. Skonfiguruj GitHub repo variables i secrets
 4. Uruchom workflowy GitHub Actions
 
 Powod tej kolejnosci:
 
-- bootstrap OIDC nadaje dostep do istniejacej Function App, wiec Function App musi juz istniec
+- bootstrap OIDC nadaje dostep do istniejacej Function App i Web App, wiec oba zasoby musza juz istniec
 - SWA integration z GitHub jest konfigurowana podczas deploymentu z tego katalogu, wiec `staywellGithubRepositoryToken` musi byc podany juz na etapie tworzenia app infra
 
 ## Struktura
 
 - `main.bicep` - deployment na poziomie subskrypcji, tworzy Resource Group i uruchamia modul aplikacyjny
 - `modules/app-stack.bicep` - zasoby aplikacyjne, monitoring, storage i app settings
-- `main.dev.parameters.json` - parametry niesekretne dla `dev`
-- `main.prod.parameters.json` - parametry niesekretne dla `prod`
-- `deploy.ps1` - wrapper PowerShell uruchamiajacy `az deployment sub validate` i/lub `create`
+- `main.dev.parameters.json` - parametry niesekretne dla `dev`, w tym `environment`, `webPlanSku` i `tags`
+- `main.prod.parameters.json` - parametry niesekretne dla `prod`, w tym `environment`, `webPlanSku` i `tags`
+- `deploy.ps1` - wrapper PowerShell uruchamiajacy `az deployment sub validate` i/lub `create`, przyjmujacy osobny plik parametrow z sekretami
 
 ## Co faktycznie tworzy deployment
 
@@ -55,8 +55,8 @@ Powod tej kolejnosci:
 - Storage Account dla runtime Azure Functions
 - kontener blob `function-releases`
 - osobny Storage Account dla danych Rentoom Booking
-- App Service Plan dla Rentoom Booking Web
-- Azure Web App dla `RentoomBookingWeb`
+- Linux App Service Plan dla Rentoom Booking Web
+- Linux Azure Web App `.NET 8` dla `RentoomBookingWeb`
 - Flex Consumption Plan dla StayWell API
 - Linux Function App `.NET 8 isolated`
 - app settings dla Web App
@@ -74,7 +74,7 @@ Powod tej kolejnosci:
 - nie tworzy serwera PostgreSQL
 - nie publikuje kodu aplikacji do Web App
 - nie publikuje paczki Functions do kontenera `function-releases`
-- nie tworzy bootstrap OIDC dla workflowow Functions
+- nie tworzy bootstrap OIDC dla workflowow Functions i Web App
 - nie tworzy rekordow DNS ani custom domain bindings dla SWA / Web App / Function App
 - nie konfiguruje Key Vault
 
@@ -91,28 +91,54 @@ Token GitHub do SWA:
 
 - musi miec dostep do repo `RentoomApartementy/RentoomBookingEcosystem`
 - powinien miec scope pozwalajacy Azure SWA skonfigurowac workflow i secret w repo
-- jest przekazywany jako `staywellGithubRepositoryToken` w `deploy.ps1`
+- jest przekazywany jako `staywellGithubRepositoryToken` w osobnym pliku parametrow z sekretami
 
-## Sekrety w `deploy.ps1`
+## Sekrety w osobnym pliku parametrow
 
-Plik:
+`deploy.ps1` wymaga teraz osobnego pliku JSON z sekretami, podawanego przez parametr `-SecretParameterFile`.
 
-- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1`
+Przykladowe nazwy:
 
-Zawiera placeholdery, ktore trzeba uzupelnic przed `create`:
+- `main.dev.secrets.parameters.json`
+- `main.prod.secrets.parameters.json`
 
-```powershell
-$secretParameters = [ordered]@{
-    staywellDbAppPassword      = 'PROVIDE_STAYWELL_DB_PASSWORD'
-    idoBookingApiPassword      = 'PROVIDE_IDOBOOKING_API_PASSWORD'
-    rentoomAppDbPassword       = 'PROVIDE_RENTOOM_APP_DB_PASSWORD'
-    tpayClientSecret           = 'PROVIDE_TPAY_CLIENT_SECRET'
-    tpayMerchantSecurityCode   = 'PROVIDE_TPAY_MERCHANT_SECURITY_CODE'
-    ttlockClientSecret         = 'PROVIDE_TTLOCK_CLIENT_SECRET'
-    ttlockPassword             = 'PROVIDE_TTLOCK_PASSWORD'
-    staywellGithubRepositoryToken = 'PROVIDE_STAYWELL_GITHUB_REPOSITORY_TOKEN'
+Przykladowa struktura:
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "staywellDbAppPassword": {
+      "value": "<STAYWELL_DB_PASSWORD>"
+    },
+    "idoBookingApiPassword": {
+      "value": "<IDOBOOKING_API_PASSWORD>"
+    },
+    "rentoomAppDbPassword": {
+      "value": "<RENTOOM_APP_DB_PASSWORD>"
+    },
+    "tpayClientSecret": {
+      "value": "<TPAY_CLIENT_SECRET>"
+    },
+    "tpayMerchantSecurityCode": {
+      "value": "<TPAY_MERCHANT_SECURITY_CODE>"
+    },
+    "ttlockClientSecret": {
+      "value": "<TTLOCK_CLIENT_SECRET>"
+    },
+    "ttlockPassword": {
+      "value": "<TTLOCK_PASSWORD>"
+    },
+    "staywellGithubRepositoryToken": {
+      "value": "<STAYWELL_GITHUB_REPOSITORY_TOKEN>"
+    }
+  }
 }
 ```
+
+Skrypt sprawdza, czy wszystkie wymagane sekrety sa obecne i maja niepuste wartosci.
+Tych plikow nie nalezy commitowac do repo.
 
 ## Jak uruchomic deployment infra
 
@@ -130,22 +156,22 @@ az account set --subscription "<SUBSCRIPTION_ID_OR_NAME>"
 Walidacja:
 
 ```powershell
-.\deploy.ps1 -Environment dev -Operation validate
-.\deploy.ps1 -Environment prod -Operation validate
+.\deploy.ps1 -Environment dev -Operation validate -SecretParameterFile .\main.dev.secrets.parameters.json
+.\deploy.ps1 -Environment prod -Operation validate -SecretParameterFile .\main.prod.secrets.parameters.json
 ```
 
 Tworzenie:
 
 ```powershell
-.\deploy.ps1 -Environment dev -Operation create
-.\deploy.ps1 -Environment prod -Operation create
+.\deploy.ps1 -Environment dev -Operation create -SecretParameterFile .\main.dev.secrets.parameters.json
+.\deploy.ps1 -Environment prod -Operation create -SecretParameterFile .\main.prod.secrets.parameters.json
 ```
 
 Pelny przebieg:
 
 ```powershell
-.\deploy.ps1 -Environment dev -Operation validate-create
-.\deploy.ps1 -Environment prod -Operation validate-create
+.\deploy.ps1 -Environment dev -Operation validate-create -SecretParameterFile .\main.dev.secrets.parameters.json
+.\deploy.ps1 -Environment prod -Operation validate-create -SecretParameterFile .\main.prod.secrets.parameters.json
 ```
 
 ## Parametry niesekretne per srodowisko
@@ -161,6 +187,18 @@ Zawieraja m.in.:
   - `staywellBaseUrl`
   - `rentoomWebBaseUrl`
   - `staywellApiBaseUrl`
+- typ srodowiska:
+  - `environment`
+- konfiguracje Web App planu:
+  - `webPlanName`
+  - `webPlanSku.name`
+  - `webPlanSku.tier`
+  - `webPlanSku.size`
+  - `webPlanSku.capacity`
+- wspolne tagi zasobow:
+  - `tags.environment`
+  - `tags.system`
+  - `tags.managedBy`
 - ustawienia repo SWA:
   - `staywellGithubOrganization`
   - `staywellGithubRepositoryName`
@@ -173,9 +211,11 @@ Zawieraja m.in.:
 Domyslne wartosci:
 
 `dev`
-- `staywellBaseUrl=https://staywell-dev.rentoom.pl`
+- `staywellBaseUrl=https://dev.staywell.rentoom.pl`
 - `rentoomWebBaseUrl=https://dev.rentoom.pl`
 - `staywellApiBaseUrl=https://api-dev.rentoom.pl`
+- `webPlanSku=F1/Free`
+- `tags.environment=dev`
 - `staywellGithubOrganization=RentoomApartementy`
 - `staywellGithubRepositoryName=RentoomBookingEcosystem`
 - `staywellGithubBranch=development-main`
@@ -187,6 +227,8 @@ Domyslne wartosci:
 - `staywellBaseUrl=https://staywell.rentoom.pl`
 - `rentoomWebBaseUrl=https://rentoom.pl`
 - `staywellApiBaseUrl=https://api.rentoom.pl`
+- `webPlanSku=F1/Free`
+- `tags.environment=prod`
 - `staywellGithubOrganization=RentoomApartementy`
 - `staywellGithubRepositoryName=RentoomBookingEcosystem`
 - `staywellGithubBranch=main`
@@ -198,14 +240,16 @@ Domyslne wartosci:
 
 Po deploymentcie z tego katalogu trzeba miec w GitHub poprawnie ustawione secrets i variables dla workflowow.
 
-### Repository Variables dla Functions
+### Repository Variables dla Functions i Web App
 
 Te variables pochodza z outputow bootstrapu OIDC:
 
 - `AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL`
+- `AZURE_CLIENT_ID_APP_DEV_RENTOOMBOOKING`
 - `AZURE_TENANT_ID_DEV`
 - `AZURE_SUBSCRIPTION_ID_DEV`
 - `AZURE_CLIENT_ID_FUNC_PROD_API_STAYWELL`
+- `AZURE_CLIENT_ID_APP_PROD_RENTOOMBOOKING`
 - `AZURE_TENANT_ID_PROD`
 - `AZURE_SUBSCRIPTION_ID_PROD`
 
@@ -213,6 +257,8 @@ Sa one uzywane przez workflowy:
 
 - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_func-dev-api-staywell.yml`
 - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_func-prod-api-staywell.yml`
+- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_app-dev-rentoombooking.yml`
+- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_app-prod-rentoombooking.yml`
 
 ### Repository Secrets dla SWA
 
@@ -231,23 +277,6 @@ Uwaga:
 - przy tworzeniu SWA Azure probuje samo skonfigurowac repo i secret na podstawie `staywellGithubRepositoryToken`
 - jesli secret nie pojawi sie automatycznie, trzeba go dodac recznie w GitHub repo
 
-### Repository Secrets dla Web App dev
-
-Aktualny workflow Web App dev nadal korzysta z secrets, nie z OIDC bootstrapu:
-
-- `AZUREAPPSERVICE_CLIENTID_74A69F2DC35C4DF8A9944F296D379A56`
-- `AZUREAPPSERVICE_TENANTID_30830D923BC746C496B2B21747910FFF`
-- `AZUREAPPSERVICE_SUBSCRIPTIONID_A4336FF416914952955508AA7A3758FA`
-
-Sa one uzywane przez:
-
-- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_app-dev-rentoombooking.yml`
-
-Aktualny stan repo:
-
-- jest workflow deployujacy `RentoomBookingWeb` tylko dla `dev`
-- nie ma osobnego workflow dla `RentoomBookingWeb` na `prod`
-
 ## Jakie workflowy istnieja obecnie
 
 `dev`
@@ -261,45 +290,46 @@ Aktualny stan repo:
 
 `prod`
 
+- Web App:
+  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_app-prod-rentoombooking.yml`
 - Functions API:
   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_func-prod-api-staywell.yml`
 - Static Web App:
   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\azure-static-web-apps-gray-mud-05545df03.yml`
-- Web App:
-  - brak osobnego workflow w repo
 
 ## Kolejnosc wdrozenia dla `dev`
 
-1. Uzupelnij sekrety w:
-   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1`
+1. Przygotuj plik sekretow, np.:
+   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\main.dev.secrets.parameters.json`
 2. Uruchom:
-   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1 -Environment dev -Operation validate-create`
+   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1 -Environment dev -Operation validate-create -SecretParameterFile C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\main.dev.secrets.parameters.json`
 3. Uruchom bootstrap:
    - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\bootstrap-identity-bicep\deploy.ps1 -Environment dev -Operation validate-create`
 4. Z outputow bootstrapu ustaw GitHub repository variables:
    - `AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL`
+   - `AZURE_CLIENT_ID_APP_DEV_RENTOOMBOOKING`
    - `AZURE_TENANT_ID_DEV`
    - `AZURE_SUBSCRIPTION_ID_DEV`
 5. Sprawdz w GitHub repo secrets:
    - `AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_DEV`
-   - secrets do `development-main_app-dev-rentoombooking.yml`
 6. Uruchom workflowy lub zrob push na `development-main`
 
 ## Kolejnosc wdrozenia dla `prod`
 
-1. Uzupelnij sekrety w:
-   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1`
+1. Przygotuj plik sekretow, np.:
+   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\main.prod.secrets.parameters.json`
 2. Uruchom:
-   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1 -Environment prod -Operation validate-create`
+   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\deploy.ps1 -Environment prod -Operation validate-create -SecretParameterFile C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\azure-dev-bicep\main.prod.secrets.parameters.json`
 3. Uruchom bootstrap:
    - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\bootstrap-identity-bicep\deploy.ps1 -Environment prod -Operation validate-create`
 4. Z outputow bootstrapu ustaw GitHub repository variables:
    - `AZURE_CLIENT_ID_FUNC_PROD_API_STAYWELL`
+   - `AZURE_CLIENT_ID_APP_PROD_RENTOOMBOOKING`
    - `AZURE_TENANT_ID_PROD`
    - `AZURE_SUBSCRIPTION_ID_PROD`
 5. Sprawdz w GitHub repo secrets:
    - `AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_PROD`
-6. Uruchom workflow dla Functions i SWA lub zrob push na `main`
+6. Uruchom workflow dla Functions, Web App i SWA lub zrob push na `main`
 
 ## Manualne komendy `az`
 
@@ -310,14 +340,7 @@ az deployment sub validate `
   --location polandcentral `
   --template-file .\main.bicep `
   --parameters .\main.dev.parameters.json `
-  --parameters staywellDbAppPassword="<STAYWELL_DB_PASSWORD>" `
-  --parameters idoBookingApiPassword="<IDOBOOKING_API_PASSWORD>" `
-  --parameters rentoomAppDbPassword="<RENTOOM_APP_DB_PASSWORD>" `
-  --parameters tpayClientSecret="<TPAY_CLIENT_SECRET>" `
-  --parameters tpayMerchantSecurityCode="<TPAY_MERCHANT_SECURITY_CODE>" `
-  --parameters ttlockClientSecret="<TTLOCK_CLIENT_SECRET>" `
-  --parameters ttlockPassword="<TTLOCK_PASSWORD>" `
-  --parameters staywellGithubRepositoryToken="<GITHUB_REPOSITORY_TOKEN>"
+  --parameters .\main.dev.secrets.parameters.json
 ```
 
 ## Aktualne ograniczenia i niespojnosci
@@ -326,10 +349,4 @@ Ten README opisuje aktualny stan kodu.
 
 Obecne ograniczenia:
 
-- `main.bicep` ma domyslne `tags.environment = 'dev'`
-- jesli nie nadpiszesz `tags`, deployment `prod` dostanie tag `environment=dev`
-- `main.bicep` uzywa stalej nazwy deploymentu modulu `app-stack-dev`, takze dla `prod`
-- Web App zawsze dostaje `ASPNETCORE_ENVIRONMENT=Development`
-- Function App zawsze dostaje `AZURE_FUNCTIONS_ENVIRONMENT=Development`
 - Static Web App jest tworzony zawsze w `westeurope`, niezaleznie od `location`
-- workflow `RentoomBookingWeb` istnieje tylko dla `dev`

@@ -10,6 +10,13 @@ param rentoomWebAppInsightsName string
 @description('Storage account name for Rentoom Booking data.')
 param rentoomDataStorageAccountName string
 
+@allowed([
+  'dev'
+  'prod'
+])
+@description('Deployment environment.')
+param environment string
+
 @description('Location for resources.')
 param location string
 
@@ -22,8 +29,11 @@ param staywellStaticWebAppName string
 @description('Function App name for dev API Staywell.')
 param staywellApiFunctionName string
 
-@description('App Service plan name for Rentoom Booking Web (F1).')
+@description('App Service plan name for Rentoom Booking Web.')
 param webPlanName string
+
+@description('SKU configuration for the Rentoom Booking Web App Service plan.')
+param webPlanSku object
 
 @description('Flex Consumption plan name for Function App.')
 param functionPlanName string
@@ -104,6 +114,9 @@ param idoBookingApiUser string
 @description('IdoBooking API password.')
 param idoBookingApiPassword string
 
+@description('Bitrix reservation pipeline name used by Rentoom Booking Web and StayWell API.')
+param bitrixReservationPipelineName string
+
 @description('Public base URL for StayWell (Static Web App custom domain).')
 param staywellBaseUrl string
 
@@ -178,6 +191,7 @@ var normalizedTpayApiRentoomSiteBaseUrl = endsWith(tpayApiRentoomSiteBaseUrl, '/
 var staywellReservationUrlBase = '${normalizedStaywellBaseUrl}/reservation/{resToken}/HomePage'
 var staywellUrlBase = normalizedStaywellBaseUrl
 var tpayNotificationUrl = '${normalizedStaywellApiCustomBaseUrl}/api/tpay/notification'
+var applicationRuntimeEnvironment = environment == 'prod' ? 'Production' : 'Development'
 var idoBookingUseDummySetting = idoBookingUseDummy ? 'True' : 'False'
 var staywellDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${staywellDbName};Port=5432;User Id=${staywellDbAppUser};Password=${staywellDbAppPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
 var rentoomAppDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${rentoomAppDbName};Port=5432;User Id=${rentoomAppDbUser};Password=${rentoomAppDbPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
@@ -289,23 +303,23 @@ resource rentoomDataStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
 resource webPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: webPlanName
   location: location
-  kind: 'app'
+  kind: 'linux'
   sku: {
-    name: 'F1'
-    tier: 'Free'
-    size: 'F1'
-    capacity: 1
+    name: webPlanSku.name
+    tier: webPlanSku.tier
+    size: webPlanSku.size
+    capacity: webPlanSku.capacity
   }
   tags: tags
   properties: {
-    reserved: false
+    reserved: true
   }
 }
 
 resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
   name: rentoomWebAppName
   location: location
-  kind: 'app'
+  kind: 'app,linux'
   tags: tags
   identity: {
     type: 'SystemAssigned'
@@ -314,12 +328,12 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
     serverFarmId: webPlan.id
     httpsOnly: true
     siteConfig: {
-      netFrameworkVersion: 'v8.0'
+      linuxFxVersion: 'DOTNET|8.0'
       alwaysOn: false
       appSettings: [
         {
           name: 'ASPNETCORE_ENVIRONMENT'
-          value: 'Development'
+          value: applicationRuntimeEnvironment
         }
         {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
@@ -406,6 +420,10 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
           value: staywellReservationUrlBase
         }
         {
+          name: 'Bitrix__ReservationPipelineName'
+          value: bitrixReservationPipelineName
+        }
+        {
           name: 'Storage__Container'
           value: uploadsStorageContainerName
         }
@@ -476,7 +494,7 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   parent: staywellApi
   name: 'appsettings'
   properties: {
-    AZURE_FUNCTIONS_ENVIRONMENT: 'Development'
+    AZURE_FUNCTIONS_ENVIRONMENT: applicationRuntimeEnvironment
 
     // Azure Functions host storage via managed identity
     AzureWebJobsStorage__accountName: storage.name
@@ -506,6 +524,7 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     IDOBOOKING_API_PWD: idoBookingApiPassword
     StayWellUrlBase: staywellUrlBase
     StayWellReservationUrlBase: staywellReservationUrlBase
+    Bitrix__ReservationPipelineName: bitrixReservationPipelineName
 
     // Blob storage configuration used by the app
     Storage__Container: uploadsStorageContainerName

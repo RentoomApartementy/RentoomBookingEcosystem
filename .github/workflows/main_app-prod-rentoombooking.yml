@@ -1,23 +1,24 @@
-name: DEV - Functions API - func-prod-api-staywell
+name: PROD - Booking Website - app-prod-rentoombooking
 
 on:
   push:
     branches:
-      - development-main
+      - main
     paths:
-      - 'Api/**'
+      - 'RentoomBookingWeb/**'
       - 'SharedClasses/**'
-      - '.github/workflows/development-main_func-dev-api-staywell.yml'
+      - 'SharedFrontend/**'
+      - '.github/workflows/main_app-prod-rentoombooking.yml'
   workflow_dispatch:
 
 concurrency:
-  group: func-dev-api-staywell-development-main
+  group: app-prod-rentoombooking-main
   cancel-in-progress: true
 
 env:
-  AZURE_FUNCTIONAPP_NAME: func-dev-api-staywell
-  PROJECT_PATH: Api/RentoomBooking.Api.csproj
-  PUBLISH_PATH: function-releases
+  AZURE_WEBAPP_NAME: app-prod-rentoombooking
+  PROJECT_PATH: RentoomBookingWeb/RentoomBookingWeb.csproj
+  PUBLISH_PATH: published-webapp
   DOTNET_VERSION: '8.0.x'
 
 jobs:
@@ -35,19 +36,19 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore API project
+      - name: Restore web app project
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
-      - name: Build API project
+      - name: Build web app project
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
 
-      - name: Publish API project
+      - name: Publish web app project
         run: dotnet publish ${{ env.PROJECT_PATH }} --configuration Release --no-build --output ${{ env.PUBLISH_PATH }}
 
       - name: Upload deployment artifact
         uses: actions/upload-artifact@v4
         with:
-          name: api-function-package-dev
+          name: webapp-package-prod
           path: ${{ env.PUBLISH_PATH }}
           include-hidden-files: true
 
@@ -62,22 +63,20 @@ jobs:
       - name: Download deployment artifact
         uses: actions/download-artifact@v4
         with:
-          name: api-function-package-dev
+          name: webapp-package-prod
           path: ${{ env.PUBLISH_PATH }}
-      - name: Debug Azure vars presence
-        run: |
-          echo "CLIENT_ID_SET=${{ vars.AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL != '' }}"
-          echo "TENANT_ID_SET=${{ vars.AZURE_TENANT_ID_DEV != '' }}"
-          echo "SUBSCRIPTION_ID_SET=${{ vars.AZURE_SUBSCRIPTION_ID_DEV != '' }}"  
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID_DEV }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID_DEV }}
+          client-id: ${{ vars.AZURE_CLIENT_ID_APP_PROD_RENTOOMBOOKING }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID_PROD }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID_PROD }}
 
-      - name: Deploy to Azure Functions
-        uses: Azure/functions-action@v1
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ env.PUBLISH_PATH }}
+          

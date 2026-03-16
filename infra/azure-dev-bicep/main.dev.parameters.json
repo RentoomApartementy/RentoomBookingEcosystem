@@ -2,6 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "environment": {
+      "value": "dev"
+    },
     "location": {
       "value": "polandcentral"
     },
@@ -19,6 +22,14 @@
     },
     "webPlanName": {
       "value": "plan-dev-rentoombooking"
+    },
+    "webPlanSku": {
+      "value": {
+        "name": "F1",
+        "tier": "Free",
+        "size": "F1",
+        "capacity": 1
+      }
     },
     "functionPlanName": {
       "value": "plan-dev-api-staywell"
@@ -39,7 +50,7 @@
       "value": "RentoomBookingDev"
     },
     "staywellDbAppUser": {
-      "value": "RentoomDbUser_Dev"
+      "value": "RentoomAzureDbAdmin"
     },
     "tpayApiBaseUrl": {
       "value": "https://openapi.sandbox.tpay.com"
@@ -60,7 +71,7 @@
       "value": "https://dev.rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error"
     },
     "tpayWebRentoomSiteBaseUrl": {
-      "value": "https://dev.rentoom.pl"
+      "value": "https://app-dev-rentoombooking.azurewebsites.net/"
     },
     "tpayApiSuccessUrl": {
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success"
@@ -69,7 +80,7 @@
       "value": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error"
     },
     "tpayApiRentoomSiteBaseUrl": {
-      "value": "https://dev.rentoom.pl"
+      "value": "https://dev.staywell.rentoom.pl"
     },
     "idoBookingUseDummy": {
       "value": true
@@ -83,8 +94,11 @@
     "idoBookingApiUser": {
       "value": "apimaster"
     },
+    "bitrixReservationPipelineName": {
+      "value": "Rezerwacje Dev"
+    },
     "staywellBaseUrl": {
-      "value": "https://staywell-dev.rentoom.pl"
+      "value": "https://dev.staywell.rentoom.pl"
     },
     "rentoomWebBaseUrl": {
       "value": "https://dev.rentoom.pl"
@@ -139,6 +153,13 @@
     },
     "rentoomWebAppInsightsName": {
       "value": "app-insights-dev-rentoombooking"
+    },
+    "tags": {
+      "value": {
+        "environment": "dev",
+        "system": "RentoomBookingEcosystem",
+        "managedBy": "bicep"
+      }
     }
   }
 }
