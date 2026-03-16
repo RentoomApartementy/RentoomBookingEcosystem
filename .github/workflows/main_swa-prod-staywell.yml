@@ -1,4 +1,4 @@
-name: STAYWELL PROD - swa-prod-staywell
+name: PROD StayWell Static Web - swa-prod-staywell
 
 on:
   push:

@@ -14,6 +14,12 @@
     "federatedCredentialName": {
       "value": "github-main"
     },
+    "webAppManagedIdentityName": {
+      "value": "uami-prod-gha-app-rentoombooking"
+    },
+    "webAppFederatedCredentialName": {
+      "value": "github-main-webapp"
+    },
     "githubOrganizationSlug": {
       "value": "RentoomApartementy"
     },
@@ -31,6 +37,15 @@
     },
     "targetFunctionAppName": {
       "value": "func-prod-api-staywell"
+    },
+    "targetWebAppSubscriptionId": {
+      "value": "687d8cbd-fea7-4ae4-a70f-8cb4629c43c6"
+    },
+    "targetWebAppResourceGroupName": {
+      "value": "rg-prod-rentoom-booking"
+    },
+    "targetWebAppName": {
+      "value": "app-prod-rentoombooking"
     },
     "tags": {
       "value": {

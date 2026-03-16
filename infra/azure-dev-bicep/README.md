@@ -8,7 +8,7 @@ Ten katalog zawiera glowny deployment infrastruktury aplikacyjnej dla:
 - storage, monitoring i konfiguracje aplikacyjne
 
 To jest warstwa `app infra`.
-Bootstrap tozsamosci GitHub OIDC dla workflowow Functions jest osobno w:
+Bootstrap tozsamosci GitHub OIDC dla workflowow Functions i Web App jest osobno w:
 
 - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\bootstrap-identity-bicep`
 
@@ -19,15 +19,15 @@ Kolejnosc dla nowego srodowiska:
 1. Uruchom glowny deployment infra z tego katalogu:
    - tworzy Function App, Web App, SWA, storage i monitoring
 2. Uruchom bootstrap OIDC z `bootstrap-identity-bicep`:
-   - tworzy `user-assigned managed identity`
-   - tworzy `federatedIdentityCredential`
-   - nadaje `Website Contributor` na Function App
+   - tworzy osobne `user-assigned managed identity` dla Functions i Web App
+   - tworzy `federatedIdentityCredential` dla obu workflowow
+   - nadaje `Website Contributor` na Function App i Web App
 3. Skonfiguruj GitHub repo variables i secrets
 4. Uruchom workflowy GitHub Actions
 
 Powod tej kolejnosci:
 
-- bootstrap OIDC nadaje dostep do istniejacej Function App, wiec Function App musi juz istniec
+- bootstrap OIDC nadaje dostep do istniejacej Function App i Web App, wiec oba zasoby musza juz istniec
 - SWA integration z GitHub jest konfigurowana podczas deploymentu z tego katalogu, wiec `staywellGithubRepositoryToken` musi byc podany juz na etapie tworzenia app infra
 
 ## Struktura
@@ -74,7 +74,7 @@ Powod tej kolejnosci:
 - nie tworzy serwera PostgreSQL
 - nie publikuje kodu aplikacji do Web App
 - nie publikuje paczki Functions do kontenera `function-releases`
-- nie tworzy bootstrap OIDC dla workflowow Functions
+- nie tworzy bootstrap OIDC dla workflowow Functions i Web App
 - nie tworzy rekordow DNS ani custom domain bindings dla SWA / Web App / Function App
 - nie konfiguruje Key Vault
 
@@ -240,14 +240,16 @@ Domyslne wartosci:
 
 Po deploymentcie z tego katalogu trzeba miec w GitHub poprawnie ustawione secrets i variables dla workflowow.
 
-### Repository Variables dla Functions
+### Repository Variables dla Functions i Web App
 
 Te variables pochodza z outputow bootstrapu OIDC:
 
 - `AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL`
+- `AZURE_CLIENT_ID_APP_DEV_RENTOOMBOOKING`
 - `AZURE_TENANT_ID_DEV`
 - `AZURE_SUBSCRIPTION_ID_DEV`
 - `AZURE_CLIENT_ID_FUNC_PROD_API_STAYWELL`
+- `AZURE_CLIENT_ID_APP_PROD_RENTOOMBOOKING`
 - `AZURE_TENANT_ID_PROD`
 - `AZURE_SUBSCRIPTION_ID_PROD`
 
@@ -255,6 +257,8 @@ Sa one uzywane przez workflowy:
 
 - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_func-dev-api-staywell.yml`
 - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_func-prod-api-staywell.yml`
+- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_app-dev-rentoombooking.yml`
+- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_app-prod-rentoombooking.yml`
 
 ### Repository Secrets dla SWA
 
@@ -273,23 +277,6 @@ Uwaga:
 - przy tworzeniu SWA Azure probuje samo skonfigurowac repo i secret na podstawie `staywellGithubRepositoryToken`
 - jesli secret nie pojawi sie automatycznie, trzeba go dodac recznie w GitHub repo
 
-### Repository Secrets dla Web App dev
-
-Aktualny workflow Web App dev nadal korzysta z secrets, nie z OIDC bootstrapu:
-
-- `AZUREAPPSERVICE_CLIENTID_74A69F2DC35C4DF8A9944F296D379A56`
-- `AZUREAPPSERVICE_TENANTID_30830D923BC746C496B2B21747910FFF`
-- `AZUREAPPSERVICE_SUBSCRIPTIONID_A4336FF416914952955508AA7A3758FA`
-
-Sa one uzywane przez:
-
-- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_app-dev-rentoombooking.yml`
-
-Aktualny stan repo:
-
-- jest workflow deployujacy `RentoomBookingWeb` tylko dla `dev`
-- nie ma osobnego workflow dla `RentoomBookingWeb` na `prod`
-
 ## Jakie workflowy istnieja obecnie
 
 `dev`
@@ -303,12 +290,12 @@ Aktualny stan repo:
 
 `prod`
 
+- Web App:
+  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_app-prod-rentoombooking.yml`
 - Functions API:
   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_func-prod-api-staywell.yml`
 - Static Web App:
   - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\azure-static-web-apps-gray-mud-05545df03.yml`
-- Web App:
-  - brak osobnego workflow w repo
 
 ## Kolejnosc wdrozenia dla `dev`
 
@@ -320,11 +307,11 @@ Aktualny stan repo:
    - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\bootstrap-identity-bicep\deploy.ps1 -Environment dev -Operation validate-create`
 4. Z outputow bootstrapu ustaw GitHub repository variables:
    - `AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL`
+   - `AZURE_CLIENT_ID_APP_DEV_RENTOOMBOOKING`
    - `AZURE_TENANT_ID_DEV`
    - `AZURE_SUBSCRIPTION_ID_DEV`
 5. Sprawdz w GitHub repo secrets:
    - `AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_DEV`
-   - secrets do `development-main_app-dev-rentoombooking.yml`
 6. Uruchom workflowy lub zrob push na `development-main`
 
 ## Kolejnosc wdrozenia dla `prod`
@@ -337,11 +324,12 @@ Aktualny stan repo:
    - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\infra\bootstrap-identity-bicep\deploy.ps1 -Environment prod -Operation validate-create`
 4. Z outputow bootstrapu ustaw GitHub repository variables:
    - `AZURE_CLIENT_ID_FUNC_PROD_API_STAYWELL`
+   - `AZURE_CLIENT_ID_APP_PROD_RENTOOMBOOKING`
    - `AZURE_TENANT_ID_PROD`
    - `AZURE_SUBSCRIPTION_ID_PROD`
 5. Sprawdz w GitHub repo secrets:
    - `AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_PROD`
-6. Uruchom workflow dla Functions i SWA lub zrob push na `main`
+6. Uruchom workflow dla Functions, Web App i SWA lub zrob push na `main`
 
 ## Manualne komendy `az`
 
@@ -362,4 +350,3 @@ Ten README opisuje aktualny stan kodu.
 Obecne ograniczenia:
 
 - Static Web App jest tworzony zawsze w `westeurope`, niezaleznie od `location`
-- workflow `RentoomBookingWeb` istnieje tylko dla `dev`

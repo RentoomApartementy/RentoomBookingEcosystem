@@ -1,5 +1,4 @@
-name: STAYWELL DEV - Azure Static Web Apps CI/CD
-
+name: DEV StayWell Static Web - swa-prod-staywell
 on:
   push:
     branches:

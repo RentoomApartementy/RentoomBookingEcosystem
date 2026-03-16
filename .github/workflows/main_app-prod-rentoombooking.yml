@@ -1,4 +1,4 @@
-name: PROD - Web App - app-prod-rentoombooking
+name: PROD - Booking Website - app-prod-rentoombooking
 
 on:
   push:
@@ -69,9 +69,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_90905777D7AA43A49591FCBC0251DD45 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_1290CB1C386F449DA5019A29106B8197 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FCBA005BF5F84819BD8CEBE07F7E42B9 }}
+          client-id: ${{ vars.AZURE_CLIENT_ID_APP_PROD_RENTOOMBOOKING }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID_PROD }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID_PROD }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
