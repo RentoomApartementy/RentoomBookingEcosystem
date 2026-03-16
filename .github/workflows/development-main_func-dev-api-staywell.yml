@@ -17,7 +17,7 @@ concurrency:
 env:
   AZURE_FUNCTIONAPP_NAME: func-dev-api-staywell
   PROJECT_PATH: Api/RentoomBooking.Api.csproj
-  PUBLISH_PATH: published-api
+  PUBLISH_PATH: function-releases
   DOTNET_VERSION: '8.0.x'
 
 jobs:
