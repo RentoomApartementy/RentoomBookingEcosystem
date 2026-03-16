@@ -1,5 +1,12 @@
 targetScope = 'subscription'
 
+@allowed([
+  'dev'
+  'prod'
+])
+@description('Deployment environment.')
+param environment string = 'dev'
+
 @description('Log Analytics workspace name for monitoring.')
 param logAnalyticsWorkspaceName string = 'log-dev-rentoombooking'
 
@@ -24,8 +31,16 @@ param staywellStaticWebAppName string = 'swa-dev-staywell'
 @description('Function App name for dev API Staywell.')
 param staywellApiFunctionName string = 'func-dev-api-staywell'
 
-@description('App Service plan name for Rentoom Booking Web (F1).')
-param webPlanName string = 'asp-dev-rentoombooking-f1'
+@description('App Service plan name for Rentoom Booking Web.')
+param webPlanName string = 'asp-dev-rentoombooking'
+
+@description('SKU configuration for the Rentoom Booking Web App Service plan.')
+param webPlanSku object = {
+  name: 'F1'
+  tier: 'Free'
+  size: 'F1'
+  capacity: 1
+}
 
 @description('Flex Consumption plan name for Function App.')
 param functionPlanName string = 'asp-dev-api-staywell-fc1'
@@ -176,11 +191,7 @@ param ttlockUsername string = '+48601317506'
 param ttlockPassword string
 
 @description('Common tags.')
-param tags object = {
-  environment: 'dev'
-  system: 'RentoomBookingEcosystem'
-  managedBy: 'bicep'
-}
+param tags object
 
 var storageAccountName = take(
   toLower('${storagePrefix}${uniqueString(subscription().id, resourceGroupName)}'),
@@ -194,14 +205,16 @@ resource rg 'Microsoft.Resources/resourceGroups@2025-04-01' = {
 }
 
 module appStack './modules/app-stack.bicep' = {
-  name: 'app-stack-dev'
+  name: 'app-stack-${environment}'
   scope: rg
   params: {
+    environment: environment
     location: location
     rentoomWebAppName: rentoomWebAppName
     staywellStaticWebAppName: staywellStaticWebAppName
     staywellApiFunctionName: staywellApiFunctionName
     webPlanName: webPlanName
+    webPlanSku: webPlanSku
     functionPlanName: functionPlanName
     storageAccountName: storageAccountName
     postgresSubscriptionId: postgresSubscriptionId

@@ -2,7 +2,7 @@
 
 Ten katalog zawiera glowny deployment infrastruktury aplikacyjnej dla:
 
-- `RentoomBookingWeb` jako Azure Web App
+- `RentoomBookingWeb` jako Linux Azure Web App
 - StayWell API jako Azure Function App na Flex Consumption
 - StayWell Static Web App
 - storage, monitoring i konfiguracje aplikacyjne
@@ -34,8 +34,8 @@ Powod tej kolejnosci:
 
 - `main.bicep` - deployment na poziomie subskrypcji, tworzy Resource Group i uruchamia modul aplikacyjny
 - `modules/app-stack.bicep` - zasoby aplikacyjne, monitoring, storage i app settings
-- `main.dev.parameters.json` - parametry niesekretne dla `dev`
-- `main.prod.parameters.json` - parametry niesekretne dla `prod`
+- `main.dev.parameters.json` - parametry niesekretne dla `dev`, w tym `environment`, `webPlanSku` i `tags`
+- `main.prod.parameters.json` - parametry niesekretne dla `prod`, w tym `environment`, `webPlanSku` i `tags`
 - `deploy.ps1` - wrapper PowerShell uruchamiajacy `az deployment sub validate` i/lub `create`, przyjmujacy osobny plik parametrow z sekretami
 
 ## Co faktycznie tworzy deployment
@@ -55,8 +55,8 @@ Powod tej kolejnosci:
 - Storage Account dla runtime Azure Functions
 - kontener blob `function-releases`
 - osobny Storage Account dla danych Rentoom Booking
-- App Service Plan dla Rentoom Booking Web
-- Azure Web App dla `RentoomBookingWeb`
+- Linux App Service Plan dla Rentoom Booking Web
+- Linux Azure Web App `.NET 8` dla `RentoomBookingWeb`
 - Flex Consumption Plan dla StayWell API
 - Linux Function App `.NET 8 isolated`
 - app settings dla Web App
@@ -187,6 +187,18 @@ Zawieraja m.in.:
   - `staywellBaseUrl`
   - `rentoomWebBaseUrl`
   - `staywellApiBaseUrl`
+- typ srodowiska:
+  - `environment`
+- konfiguracje Web App planu:
+  - `webPlanName`
+  - `webPlanSku.name`
+  - `webPlanSku.tier`
+  - `webPlanSku.size`
+  - `webPlanSku.capacity`
+- wspolne tagi zasobow:
+  - `tags.environment`
+  - `tags.system`
+  - `tags.managedBy`
 - ustawienia repo SWA:
   - `staywellGithubOrganization`
   - `staywellGithubRepositoryName`
@@ -199,9 +211,11 @@ Zawieraja m.in.:
 Domyslne wartosci:
 
 `dev`
-- `staywellBaseUrl=https://staywell-dev.rentoom.pl`
+- `staywellBaseUrl=https://dev.staywell.rentoom.pl`
 - `rentoomWebBaseUrl=https://dev.rentoom.pl`
 - `staywellApiBaseUrl=https://api-dev.rentoom.pl`
+- `webPlanSku=F1/Free`
+- `tags.environment=dev`
 - `staywellGithubOrganization=RentoomApartementy`
 - `staywellGithubRepositoryName=RentoomBookingEcosystem`
 - `staywellGithubBranch=development-main`
@@ -213,6 +227,8 @@ Domyslne wartosci:
 - `staywellBaseUrl=https://staywell.rentoom.pl`
 - `rentoomWebBaseUrl=https://rentoom.pl`
 - `staywellApiBaseUrl=https://api.rentoom.pl`
+- `webPlanSku=F1/Free`
+- `tags.environment=prod`
 - `staywellGithubOrganization=RentoomApartementy`
 - `staywellGithubRepositoryName=RentoomBookingEcosystem`
 - `staywellGithubBranch=main`
@@ -345,10 +361,5 @@ Ten README opisuje aktualny stan kodu.
 
 Obecne ograniczenia:
 
-- `main.bicep` ma domyslne `tags.environment = 'dev'`
-- jesli nie nadpiszesz `tags`, deployment `prod` dostanie tag `environment=dev`
-- `main.bicep` uzywa stalej nazwy deploymentu modulu `app-stack-dev`, takze dla `prod`
-- Web App zawsze dostaje `ASPNETCORE_ENVIRONMENT=Development`
-- Function App zawsze dostaje `AZURE_FUNCTIONS_ENVIRONMENT=Development`
 - Static Web App jest tworzony zawsze w `westeurope`, niezaleznie od `location`
 - workflow `RentoomBookingWeb` istnieje tylko dla `dev`

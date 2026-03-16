@@ -2,6 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "environment": {
+      "value": "dev"
+    },
     "location": {
       "value": "polandcentral"
     },
@@ -19,6 +22,14 @@
     },
     "webPlanName": {
       "value": "plan-dev-rentoombooking"
+    },
+    "webPlanSku": {
+      "value": {
+        "name": "F1",
+        "tier": "Free",
+        "size": "F1",
+        "capacity": 1
+      }
     },
     "functionPlanName": {
       "value": "plan-dev-api-staywell"
@@ -142,6 +153,13 @@
     },
     "rentoomWebAppInsightsName": {
       "value": "app-insights-dev-rentoombooking"
+    },
+    "tags": {
+      "value": {
+        "environment": "dev",
+        "system": "RentoomBookingEcosystem",
+        "managedBy": "bicep"
+      }
     }
   }
 }
