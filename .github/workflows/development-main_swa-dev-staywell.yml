@@ -1,4 +1,4 @@
-name: StayWell DEV - Azure Static Web Apps CI/CD
+name: STAYWELL DEV - Azure Static Web Apps CI/CD
 
 on:
   push:
