@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "polandcentral"
+    },
+    "identityResourceGroupName": {
+      "value": "rg-prod-rentoom-github-identity"
+    },
+    "managedIdentityName": {
+      "value": "uami-prod-gha-func-api-staywell"
+    },
+    "federatedCredentialName": {
+      "value": "github-main"
+    },
+    "githubOrganizationSlug": {
+      "value": "RentoomApartementy"
+    },
+    "githubRepositoryName": {
+      "value": "RentoomBookingEcosystem"
+    },
+    "githubBranch": {
+      "value": "main"
+    },
+    "targetFunctionAppSubscriptionId": {
+      "value": "c079185e-8eeb-40dc-90b4-01cee2fa7e21"
+    },
+    "targetFunctionAppResourceGroupName": {
+      "value": "rg-prod-rentoom-booking"
+    },
+    "targetFunctionAppName": {
+      "value": "func-prod-api-staywell"
+    },
+    "tags": {
+      "value": {
+        "environment": "prod",
+        "system": "RentoomBookingEcosystem",
+        "managedBy": "bicep",
+        "scope": "github-oidc-bootstrap"
+      }
+    }
+  }
+}
