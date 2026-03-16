@@ -49,6 +49,7 @@ jobs:
         with:
           name: api-function-package-dev
           path: ${{ env.PUBLISH_PATH }}
+          include-hidden-files: true
 
   deploy:
     runs-on: ubuntu-latest
