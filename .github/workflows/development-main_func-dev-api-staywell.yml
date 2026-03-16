@@ -63,7 +63,11 @@ jobs:
         with:
           name: api-function-package-dev
           path: ${{ env.PUBLISH_PATH }}
-
+      - name: Debug Azure vars presence
+        run: |
+          echo "CLIENT_ID_SET=${{ vars.AZURE_CLIENT_ID_FUNC_DEV_API_STAYWELL != '' }}"
+          echo "TENANT_ID_SET=${{ vars.AZURE_TENANT_ID_DEV != '' }}"
+          echo "SUBSCRIPTION_ID_SET=${{ vars.AZURE_SUBSCRIPTION_ID_DEV != '' }}"  
       - name: Login to Azure
         uses: azure/login@v2
         with:
