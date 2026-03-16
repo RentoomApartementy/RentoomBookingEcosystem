@@ -104,6 +104,9 @@ param idoBookingApiUser string
 @description('IdoBooking API password.')
 param idoBookingApiPassword string
 
+@description('Bitrix reservation pipeline name used by Rentoom Booking Web and StayWell API.')
+param bitrixReservationPipelineName string
+
 @description('Public base URL for StayWell (Static Web App custom domain).')
 param staywellBaseUrl string
 
@@ -406,6 +409,10 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
           value: staywellReservationUrlBase
         }
         {
+          name: 'Bitrix__ReservationPipelineName'
+          value: bitrixReservationPipelineName
+        }
+        {
           name: 'Storage__Container'
           value: uploadsStorageContainerName
         }
@@ -506,6 +513,7 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     IDOBOOKING_API_PWD: idoBookingApiPassword
     StayWellUrlBase: staywellUrlBase
     StayWellReservationUrlBase: staywellReservationUrlBase
+    Bitrix__ReservationPipelineName: bitrixReservationPipelineName
 
     // Blob storage configuration used by the app
     Storage__Container: uploadsStorageContainerName

@@ -83,6 +83,9 @@
     "idoBookingApiUser": {
       "value": "apimaster"
     },
+    "bitrixReservationPipelineName": {
+      "value": "Rezerwacje Dev"
+    },
     "staywellBaseUrl": {
       "value": "https://staywell-dev.rentoom.pl"
     },

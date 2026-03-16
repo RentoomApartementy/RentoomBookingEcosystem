@@ -111,6 +111,9 @@ param idoBookingApiUser string = 'apimaster'
 @description('IdoBooking API password.')
 param idoBookingApiPassword string
 
+@description('Bitrix reservation pipeline name used by Rentoom Booking Web and StayWell API.')
+param bitrixReservationPipelineName string = 'Rezerwacje'
+
 @description('Public base URL for StayWell (Static Web App custom domain).')
 param staywellBaseUrl string = 'https://dev.staywell.rentoom.pl'
 
@@ -224,6 +227,7 @@ module appStack './modules/app-stack.bicep' = {
     idoBookingBaseApiUrl: idoBookingBaseApiUrl
     idoBookingApiUser: idoBookingApiUser
     idoBookingApiPassword: idoBookingApiPassword
+    bitrixReservationPipelineName: bitrixReservationPipelineName
     staywellBaseUrl: staywellBaseUrl
     rentoomWebBaseUrl: rentoomWebBaseUrl
     staywellApiBaseUrl: staywellApiBaseUrl
