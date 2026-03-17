@@ -328,7 +328,7 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
     serverFarmId: webPlan.id
     httpsOnly: true
     siteConfig: {
-      linuxFxVersion: 'DOTNET|8.0'
+      linuxFxVersion: 'DOTNETCORE|8.0'
       alwaysOn: false
       appSettings: [
         {
