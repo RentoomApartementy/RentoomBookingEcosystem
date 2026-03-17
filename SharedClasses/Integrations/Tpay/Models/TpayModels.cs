@@ -61,7 +61,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
         public string Currency { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public TpayPayer Payer { get; set; } = new();
-
+        public string lang { get; set; } = "pl";
         public string? SuccessUrl { get; set; }
 
         /// <summary>

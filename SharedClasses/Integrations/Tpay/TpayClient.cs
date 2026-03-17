@@ -228,6 +228,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
                 ["amount"] = request.Amount,
                 ["currency"] = currency,
                 ["description"] = request.Description,
+                ["lang"] = ResolveTransactionLanguage(request.lang),
                 ["payer"] = new JObject
                 {
                     ["email"] = request.Payer!.Email,
@@ -251,6 +252,16 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
                 ((JObject)root["payer"]!)["phone"] = request.Payer.Phone;
 
             return root;
+        }
+
+        private static string ResolveTransactionLanguage(string? language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                return "pl";
+            }
+
+            return language.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "en" : "pl";
         }
 
         private static string? ExtractApiErrorMessage(TpayTransactionCreatedResponse? parsed)

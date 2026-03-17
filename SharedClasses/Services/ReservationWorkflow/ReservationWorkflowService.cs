@@ -385,7 +385,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
                 var currency = record.State.StartRequest?.Currency ?? "PLN";
 
-                var paymentResult = await _tpayGateway.CreatePaymentAsync(reservationGuid, paymentSessionGuid, amount, currency);
+                var paymentResult = await _tpayGateway.CreatePaymentAsync(reservationGuid, paymentSessionGuid, amount, currency, record.IdoReservationId);
                 if (!paymentResult.Success)
                 {
                     throw new InvalidOperationException("Failed to initiate payment session.");

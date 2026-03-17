@@ -120,6 +120,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                     Description = request.ReservationGuid.HasValue
                         ? $"Upsell order {record.UpsellOrderGuid} (reservation {request.ReservationGuid})"
                         : $"Upsell order {record.UpsellOrderGuid}",
+                    lang = ResolveTpayLanguage(CultureInfo.CurrentUICulture.Name),
                     Payer = new TpayPayer
                     {
                         Email = request.Buyer.Email,
@@ -318,6 +319,16 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
         {
             var record = await _store.GetAsync(upsellOrderGuid, cancellationToken);
             return record ?? throw new InvalidOperationException($"Upsell order {upsellOrderGuid} not found.");
+        }
+
+        private static string ResolveTpayLanguage(string? language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                return "pl";
+            }
+
+            return language.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "en" : "pl";
         }
 
         private sealed class UpsellOrderSummary

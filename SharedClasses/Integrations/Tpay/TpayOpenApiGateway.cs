@@ -13,7 +13,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
 
     public interface ITpayGateway
     {
-        Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency);
+        Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency,int? IdoBookingId = null);
     }
 
     public class TpayOpenApiGateway : ITpayGateway
@@ -37,7 +37,17 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency)
+        private static string ResolveTpayLanguage(string? language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                return "pl";
+            }
+
+            return language.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "en" : "pl";
+        }
+
+        public async Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency, int? IdoBookingId = null)
         {
             var record = await _store.GetAsync(reservationGuid)
                 ?? throw new InvalidOperationException($"Reservation {reservationGuid} not found.");
@@ -54,19 +64,20 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
                 .Replace("{tpayGuid}", reservationGuid.ToString());
 
             var successUrl = $"{baseUrl}/{path}";
-            
-                var request = new TpayTransactionRequest
+
+            var lang = ResolveTpayLanguage(record.State.Client?.Language);
+            var request = new TpayTransactionRequest
             {
                 Amount = amount,
                 Currency = string.IsNullOrWhiteSpace(currency) ? _settings.DefaultCurrency : currency,
-                Description = $"Reservation {reservationGuid}",
+                Description = $"{IdoBookingId} - {reservationGuid}",
 
-                
+                lang = lang,
+
                 Payer = new TpayPayer
                 {
                     Email = payerEmail ?? string.Empty,
-                    Name = string.IsNullOrWhiteSpace(payerName) ? record.State.Client?.Email ?? "Payer" : payerName
-                    // Phone = record.State.Client?.Phone ?? string.Empty
+                    Name = string.IsNullOrWhiteSpace(payerName) ? record.State.Client?.Email ?? "Payer" : payerName,
 
                 },
                 SuccessUrl = successUrl,
