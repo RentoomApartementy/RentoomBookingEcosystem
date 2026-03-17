@@ -104,7 +104,8 @@ namespace RentoomBooking.SharedClasses.Database
                     Description = translation?.Description ?? t.TermsSource.Description,
                     AgreedAt = t.AgreedAt,
                     IsRequired = t.TermsSource.IsRequired,
-                    IsAccepted = t.IsAccepted
+                    IsAccepted = t.IsAccepted,
+                    TermsSourceType = t.TermsSource.TermsType
                 };
             }).ToList();
         }
