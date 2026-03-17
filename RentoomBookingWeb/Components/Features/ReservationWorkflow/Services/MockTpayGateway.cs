@@ -7,7 +7,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
 {
     public class MockTpayGateway_2 : ITpayGateway
     {
-        public Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency)
+        public Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency, int? idobookiingid)
         {
             var transactionId = $"TPAY-{paymentSessionGuid:N}";
             var redirect = $"/tpay-mock/{paymentSessionGuid}?reservationGuid={reservationGuid}";
