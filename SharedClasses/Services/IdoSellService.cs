@@ -39,6 +39,7 @@ namespace RentoomBooking.SharedClasses.Services
         private readonly IIdoBookingConnectService _idoConnect;
         private readonly ApartmentRepository _apartmentRepository;
         private readonly bool _useDummyIdoBooking;
+        private readonly bool _bookingProcessingFlag;
         private readonly string _dummyReservationTemplateKey;
 
 
@@ -73,6 +74,7 @@ namespace RentoomBooking.SharedClasses.Services
             _bookingDatabase = bookingDatabase;
             _apartmentRepository = apartmentRepository ?? throw new ArgumentNullException(nameof(apartmentRepository));
             _useDummyIdoBooking = configuration.GetValue("IdoBooking:UseDummy", false);
+            _bookingProcessingFlag = configuration.GetValue("BookingCom:ReservationProcessingEnabled", false);
             _dummyReservationTemplateKey = configuration.GetValue<string>("IdoBooking:DummyReservationTemplateKey") ?? "default";
 
         }
@@ -81,7 +83,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         public async Task<RentoomReservationHashRecord> FetchReservationByIDFromIdoSellAsync(int ReservationId, bool saveToDb, string? existingResToken = null, CancellationToken cancellationToken = default)
         {
-            if (_useDummyIdoBooking)
+            if (_useDummyIdoBooking && !_bookingProcessingFlag)
             {
                 var reservation = await _bookingDatabase.GetReservationByIdAsync(ReservationId, _logger, cancellationToken);
                 var response = new ReservationResponseFromIdoSellAPI
@@ -579,7 +581,7 @@ namespace RentoomBooking.SharedClasses.Services
 
         public async Task<PaymentGetResponse?> GetPaymentsAsync(PaymentGetParams? parameters = null, PaymentGetSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            if (_useDummyIdoBooking)
+            if (_useDummyIdoBooking && !_bookingProcessingFlag)
             {
                 return new PaymentGetResponse
                 {
