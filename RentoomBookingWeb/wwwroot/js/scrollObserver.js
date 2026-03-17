@@ -40,13 +40,12 @@ function startIntersectionObserver(target, elementId, dotnetHelper, options) {
     observer.observe(target);
 }
 
-window.scrollToElement = (elementId) => {
+window.scrollToElement = (elementId, offsetPx = 0) => {
     const element = document.getElementById(elementId);
     if (element) {
-        // Dodajemy mały offset przy przewijaniu, żeby nagłówek nie zasłonił tytułu
-        const yOffset = -100; 
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
+        const offset = Number(offsetPx) || 0;
+        const y = element.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
     } else {
         console.warn(`[Scroll] Nie można przewinąć - brak elementu: ${elementId}`);
     }
