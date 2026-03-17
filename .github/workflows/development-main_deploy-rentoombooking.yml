@@ -172,7 +172,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dev-deployment-packages
-          path: .
+          path: ${{ env.ARTIFACT_ROOT }}
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -202,7 +202,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dev-deployment-packages
-          path: .
+          path: ${{ env.ARTIFACT_ROOT }}
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -232,7 +232,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dev-deployment-packages
-          path: .
+          path: ${{ env.ARTIFACT_ROOT }}
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
