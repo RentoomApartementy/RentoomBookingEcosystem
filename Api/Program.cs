@@ -24,6 +24,7 @@ using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.BookingCom;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
@@ -128,6 +129,8 @@ builder.Services.AddScoped<IPaymentFlowHandler, UpsellPaymentFlowHandler>();
 builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
 builder.Services.AddScoped<ITpayNotificationValidator, TpayNotificationValidator>();
 builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
+builder.Services.AddScoped<IBookingComLogStore, BookingComLogStore>();
+builder.Services.AddScoped<IBookingComReservationWorkflowService, BookingComReservationWorkflowService>();
 
 /*builder.Services.AddSingleton<TpayClient>();
 

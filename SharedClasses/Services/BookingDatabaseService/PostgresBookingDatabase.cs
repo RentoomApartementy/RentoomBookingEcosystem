@@ -238,14 +238,26 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             };
             await using var _dbContext = _dbContextFactory.CreateDbContext();
             var payload = JsonConvert.SerializeObject(document);
-            _dbContext.Reservations.Add(new ReservationEntity
+            var existingEntity = await _dbContext.Reservations
+                .FirstOrDefaultAsync(r => r.ResToken == resToken, cancellationToken);
+
+            if (existingEntity is null)
             {
-                ResToken = resToken,
-                ReservationId = payloadReservation.id,
-                Payload = payload,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
+                _dbContext.Reservations.Add(new ReservationEntity
+                {
+                    ResToken = resToken,
+                    ReservationId = payloadReservation.id,
+                    Payload = payload,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
+            }
+            else
+            {
+                existingEntity.ReservationId = payloadReservation.id;
+                existingEntity.Payload = payload;
+                existingEntity.UpdatedAt = DateTime.UtcNow;
+            }
 
             try
             {

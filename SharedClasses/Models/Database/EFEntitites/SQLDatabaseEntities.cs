@@ -150,6 +150,44 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         public ICollection<UpsellOrderRecordEntity> UpsellOrderRecords { get; set; } = new List<UpsellOrderRecordEntity>();
     }
 
+    [Table("bookingcom_log")]
+    public class BookingComLogEntity
+    {
+        [Key]
+        [Column("bookingcom_log_guid")]
+        public Guid BookingComLogGuid { get; set; }
+
+        [Column("reservation_id")]
+        public int? ReservationId { get; set; }
+
+        [Column("reservation_guid")]
+        public Guid? ReservationGuid { get; set; }
+
+        [Column("message_id")]
+        public string? MessageId { get; set; }
+
+        [Column("subject")]
+        public string? Subject { get; set; }
+
+        [Column("status")]
+        public string Status { get; set; } = string.Empty;
+
+        [Column("processing_enabled")]
+        public bool ProcessingEnabled { get; set; }
+
+        [Column("incoming_email_json", TypeName = "jsonb")]
+        public string IncomingEmailJson { get; set; } = "{}";
+
+        [Column("steps_json", TypeName = "jsonb")]
+        public string StepsJson { get; set; } = "[]";
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
+
     [Table("upsell_order_records")]
     public class UpsellOrderRecordEntity
     {

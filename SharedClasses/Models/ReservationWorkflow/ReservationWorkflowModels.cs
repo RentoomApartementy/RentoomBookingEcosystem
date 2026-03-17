@@ -199,6 +199,15 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public List<DealEmailActivityDto> Activities { get; set; } = new();
     }
 
+    public class ImportedReservationFinalizationRequest
+    {
+        public string Provider { get; set; } = "BOOKINGCOM";
+        public string ProviderTransactionId { get; set; } = string.Empty;
+        public string PaymentStatus { get; set; } = PaymentStatuses.None;
+        public string? IdoStatus { get; set; }
+        public string UpdateReason { get; set; } = "Imported reservation synchronized";
+    }
+
 
     public class DateOnlyJsonConverter : JsonConverter<DateOnly>
     {

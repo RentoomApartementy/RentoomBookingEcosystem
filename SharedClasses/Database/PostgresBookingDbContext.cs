@@ -21,6 +21,7 @@ namespace RentoomBooking.SharedClasses.Database
         //MS: bo rezerwacje w ido NEW reservation vs Reservation to troche inne obiekty... 
         public DbSet<ReservationEntity> Reservations => Set<ReservationEntity>();
         public DbSet<ReservationRecordEntity> ReservationRecords => Set<ReservationRecordEntity>();
+        public DbSet<BookingComLogEntity> BookingComLogs => Set<BookingComLogEntity>();
         public DbSet<ReservationTemplateEntity> ReservationTemplates => Set<ReservationTemplateEntity>();
         public DbSet<UpsellOrderRecordEntity> UpsellOrderRecords => Set<UpsellOrderRecordEntity>();
         public DbSet<UpsellOrderLineEntity> UpsellOrderLines => Set<UpsellOrderLineEntity>();
@@ -79,6 +80,19 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.HasKey(e => e.ReservationGuid);
                 //entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
                 //entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+            });
+
+            modelBuilder.Entity<BookingComLogEntity>(entity =>
+            {
+                entity.HasKey(e => e.BookingComLogGuid);
+                entity.Property(e => e.IncomingEmailJson).HasColumnType("jsonb").IsRequired();
+                entity.Property(e => e.StepsJson).HasColumnType("jsonb").IsRequired();
+                entity.Property(e => e.Status).HasColumnType("varchar").IsRequired();
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+                entity.HasIndex(e => e.ReservationId).HasDatabaseName("idx_bookingcom_log_reservation_id");
+                entity.HasIndex(e => e.ReservationGuid).HasDatabaseName("idx_bookingcom_log_reservation_guid");
+                entity.HasIndex(e => e.Status).HasDatabaseName("idx_bookingcom_log_status");
             });
 
 

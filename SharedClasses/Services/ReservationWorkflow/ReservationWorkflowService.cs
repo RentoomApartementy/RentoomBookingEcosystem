@@ -39,6 +39,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task HandleTpayWebhookAsync(TpayWebhookDto dto);
         Task MarkPaymentAsPaidAsync(Guid reservationGuid); //for dummy scenario
         Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
+        Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request);
         Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections);
     }
 
@@ -472,6 +473,72 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 IdoStatus = record.IdoStatus
             };
         }
+
+        public async Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request)
+        {
+            if (request is null) throw new ArgumentNullException(nameof(request));
+
+            while (true)
+            {
+                var record = await RequireReservationAsync(reservationGuid);
+                await EnsurePaymentTotalsAsync(record.ReservationGuid, record);
+
+                var requestedPaymentStatus = string.IsNullOrWhiteSpace(request.PaymentStatus)
+                    ? record.PaymentStatus
+                    : request.PaymentStatus;
+
+                if (string.Equals(record.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
+                    && !string.Equals(requestedPaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
+                {
+                    requestedPaymentStatus = record.PaymentStatus;
+                }
+
+                var alreadyProcessedAsPaid = string.Equals(record.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(requestedPaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(record.ProviderTransactionId, request.ProviderTransactionId, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(record.Provider, request.Provider, StringComparison.OrdinalIgnoreCase);
+
+                if (!string.IsNullOrWhiteSpace(request.Provider))
+                {
+                    record.Provider = request.Provider;
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.ProviderTransactionId))
+                {
+                    record.ProviderTransactionId = request.ProviderTransactionId;
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.IdoStatus))
+                {
+                    record.IdoStatus = request.IdoStatus;
+                }
+
+                record.PaymentStatus = requestedPaymentStatus;
+
+                try
+                {
+                    await _store.UpdateAsync(record);
+                    record = await EnsureBitrixContactAndDealAsync(record);
+
+                    if (string.Equals(record.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
+                        && !alreadyProcessedAsPaid)
+                    {
+                        await CreatePaidUpsellOrderAsync(record, request.ProviderTransactionId);
+                    }
+
+                    await UpdateBitrixDealAsync(record, string.IsNullOrWhiteSpace(request.UpdateReason)
+                        ? "Imported reservation synchronized"
+                        : request.UpdateReason);
+                    return;
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    _logger.LogWarning("Concurrency conflict while finalizing imported reservation {ReservationGuid}. Retrying.", reservationGuid);
+                    await Task.Delay(TimeSpan.FromMilliseconds(50));
+                }
+            }
+        }
+
         public async Task HandleTpayWebhookAsync(TpayWebhookDto dto)
         {
             if (dto is null) throw new ArgumentNullException(nameof(dto));
