@@ -9,6 +9,7 @@ namespace RentoomBooking.SharedClasses.Models
         public DateTime AgreedAt { get; set; }
         public bool IsRequired { get; set; }
         public bool IsAccepted { get; set; }
+        public string? TermsSourceType { get; set; }
     }
 
     public class UpdateAgreedTermRequest

@@ -1,4 +1,5 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
+using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Client;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using System;
@@ -248,6 +249,42 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
             return null;
         }
+
+        public async Task UpdateContactAdditionalTermsAsync(int contactId, List<CustomerAgreedTermDto> terms)
+        {
+            var endpointMethod = "crm.contact.update.json";
+            var fields = new Dictionary<string, object?>();
+            
+                //RB_Zgoda_MKT_Komunikacja_Email
+                fields["UF_CRM_1773765574161"] = terms.FirstOrDefault(t => t.TermsSourceType == "marketing_email")?.IsAccepted == true ? "Y" : "N";
+                
+                //RB_Zgoda_MKT_Komunikacja_Whatsapp
+                fields["UF_CRM_1773765547122"] = terms.FirstOrDefault(t => t.TermsSourceType == "marketing_whatsapp")?.IsAccepted == true ? "Y" : "N";
+                
+                //RB_Zgoda_MKT_Komunikacja_Whatsapp
+                fields["UF_CRM_1773765547122"] = terms.FirstOrDefault(t => t.TermsSourceType == "marketing_email")?.IsAccepted == true ? "Y" : "N";
+
+            //RB_Zgoda_MKT_Komunikacja_Telefon
+            fields["UF_CRM_1773765599754"] = terms.FirstOrDefault(t => t.TermsSourceType == "marketing_email")?.IsAccepted == true ? "Y" : "N";
+            
+            using var doc = await PostAsync(endpointMethod, new
+
+            {
+                id = contactId,
+                fields,
+                @params = new { REGISTER_SONET_EVENT = "Y" }
+            });
+
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.ValueKind == JsonValueKind.True)
+            {
+                return;
+            }
+
+            throw BitrixError(doc.RootElement.GetRawText(), doc);
+        }
+
+
         public async Task UpdateContactAsync(int contactId, CreateContactRequest updatedContact)
         {
             var endpointMethod = "crm.contact.update.json";

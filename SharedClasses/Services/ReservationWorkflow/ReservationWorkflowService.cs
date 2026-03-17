@@ -1135,6 +1135,9 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }).ToList();
 
             await _termsRepository.AddAgreedTermsAsync(agreedEntities);
+            var agreedTermsDetails = await _termsRepository.GetAgreedTermsByReservationAsync(reservationGuid);
+
+            await _bitrixService.UpdateContactAdditionalTermsAsync(record.ClientBitrixId.Value, agreedTermsDetails);
 
             _logger.LogInformation("Saved {Count} term states for reservation {Guid}", agreedEntities.Count, reservationGuid);
         }

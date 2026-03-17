@@ -138,11 +138,11 @@
             {
                 <hr style="width: 100%;"/>
                 
-                 <h3 id="confirm-reservation" class="header-text text-lg">@Localizer["Summary"]</h3>
+                 <h3  class="header-text text-lg">@Localizer["Summary"]</h3>
 
             @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional != false))
             {
-                <div class="addon-list-container">
+                    <div id="confirm-reservation" class="addon-list-container">
                     <div class="addon-list-wrapper">
                         <div class="upsell-title-group">
                             <div class="upsell-icon">
@@ -260,11 +260,12 @@
             }
             else if (_offersResponse?.Result?.PricingOffers?.Count != null && _offersResponse?.Result?.PricingOffers?.Count > 0)
             {
-                <div id="offers-section" class="summary-offer-price-wrapper"> @{
-                                                                                  var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
-                                                                                  var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "refundable");
-                                                                                  var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "nonrefundable");
-                                                                              }
+                <div id="offers-section" class="summary-offer-price-wrapper"> 
+                    @{
+                           var pricingData = _offersResponse?.Result?.PricingOffers?.FirstOrDefault();
+                           var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "refundable");
+                           var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "nonrefundable");
+                     }
                     
                     @if (nonRefundableOffer != null)
                     {
@@ -711,6 +712,7 @@
     private bool _isSearchModalOpen = false; // NOWA ZMIENNA
     
     // Zmienne do scrolla i stanu mobile
+    private const int SmartScrollOffsetPx = 150;
     private bool _isAtSummary = false;
     private bool _isAtOffers = false;
     private IDisposable? _scrollObjRef;
@@ -1050,7 +1052,7 @@
         }
 
         var start = _reservationDraftSummary?.StartRequest;
-        if (start is null || start.ObjectItemId != Id)
+        if (start is null || start.ObjectId != Id)
         {
             _reservationTokenGuid = null;
             _reservationDraftSummary = null;
@@ -1488,17 +1490,17 @@
         if (_isAtOffers)
         {
             EnsureSelectedOffer();
-            await GoToPayment(_selectedOfferType);
+           // await GoToPayment(_selectedOfferType);
             return;
         }
 
         if (_isAtSummary)
         {
-            await JSRuntime.InvokeVoidAsync("scrollToElement", "offers-section");
+            await JSRuntime.InvokeVoidAsync("scrollToElement", "offers-section", SmartScrollOffsetPx);
         }
         else
         {
-            await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation");
+            await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation", SmartScrollOffsetPx);
         }
         
         // Na mobile po kliknięciu zwijamy panel, żeby nie zasłaniał widoku

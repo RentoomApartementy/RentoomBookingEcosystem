@@ -27,8 +27,8 @@
 
 <div class="payment-container">
     <div class="payment-wrapper">
-        <div id="client-form" class="client-form-section">
-            <EditForm EditContext="_editContext" OnValidSubmit="SaveAsync">
+        <div  class="client-form-section">
+            <EditForm id="client-form" EditContext="_editContext" OnValidSubmit="SaveAsync">
                 <DataAnnotationsValidator />
 
                 <div class="form-wrapper">
@@ -263,6 +263,7 @@
     private bool _submitted = false;
 
     // SCROLL TRACKING
+    private const int SmartScrollOffsetPx = 150;
     private bool _isAtForm = false;
     private IDisposable? _scrollObjRef;
     private bool _observerInitialized = false;
@@ -290,7 +291,7 @@
         }
         else
         {
-            await JSRuntime.InvokeVoidAsync("scrollToElement", "client-form");
+            await JSRuntime.InvokeVoidAsync("scrollToElement", "client-form", SmartScrollOffsetPx);
         }
     }
 
