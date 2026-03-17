@@ -22,12 +22,12 @@ namespace RentoomBooking.SharedClasses.Database
             var neutralCulture = normalizedCulture.Split('-')[0];
 
             var query = _context.CustomerTermsSources
-                .Where(t => t.IsActive);
+                .Where(t => t.IsActive);//.ToListAsync();
 
-            if (onlyRequiredForWorkflow)
-            {
-                query = query.Where(t => t.IsRequiredForReservationWorkflow);
-            }
+            //if (onlyRequiredForWorkflow)
+            //{
+             //   query = query.Where(t => t.IsRequiredForReservationWorkflow);
+           // }
 
             var sources = await query
                 .Include(t => t.Translations)
