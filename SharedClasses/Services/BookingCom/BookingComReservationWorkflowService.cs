@@ -16,6 +16,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
     public interface IBookingComReservationWorkflowService
     {
         Task<BookingComReservationImportResult> ProcessIncomingReservationAsync(BookingComReservationImportRequest request, CancellationToken cancellationToken = default);
+        Task<Guid?> CheckForDuplicate(int idoBookingId);
     }
 
     public class BookingComReservationWorkflowService : IBookingComReservationWorkflowService
@@ -500,6 +501,20 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 cancellationToken: cancellationToken);
 
             return false;
+        }
+
+        public async Task<Guid?> CheckForDuplicate(int idoBookingId)
+        {
+            var existing = await _reservationStore.GetByIdoReservationIdAsync(idoBookingId);
+
+
+            if (existing != null)
+            {
+                _logger.LogWarning("Duplicate reservation detected for IdoBooking reservation {Id}. Existing reservation GUID: {ExistingGuid}", idoBookingId, existing.ReservationGuid);
+                return existing?.ReservationGuid;
+            }
+        return null;
+
         }
 
         private async Task LogInfoAsync(

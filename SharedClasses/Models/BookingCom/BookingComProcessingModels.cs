@@ -45,5 +45,6 @@ namespace RentoomBooking.SharedClasses.Models.BookingCom
         public const string Ignored = "Ignored";
         public const string Completed = "Completed";
         public const string Failed = "Failed";
+        public const string Duplicate = "Duplicate";
     }
 }

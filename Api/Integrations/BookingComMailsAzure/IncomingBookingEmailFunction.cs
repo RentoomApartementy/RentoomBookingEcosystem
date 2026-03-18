@@ -145,6 +145,30 @@ public class IncomingBookingEmailFunction
                 return disabled;
             }
 
+            var existingGuid = await _bookingComReservationWorkflowService.CheckForDuplicate(reservationId.Value);
+            
+            if (existingGuid.HasValue)
+            {
+                await AppendLogStepAsync(
+                                bookingComLogGuid.Value,
+                                "processing",
+                                "Skipped",
+                                $"Reservation already exists in the system under {existingGuid}.",
+                                payload: new { reservationId },
+                                overallStatus: BookingComLogStatuses.Duplicate);
+
+                var disabled = req.CreateResponse(HttpStatusCode.OK);
+                disabled.Headers.Add("Content-Type", "application/json");
+                await disabled.WriteStringAsync(JsonSerializer.Serialize(new
+                {
+                    status = BookingComLogStatuses.Duplicate,
+                    logId = bookingComLogGuid,
+                    reservationId
+                }));
+                return disabled;
+            }
+
+
             var result = await _bookingComReservationWorkflowService.ProcessIncomingReservationAsync(
                 new BookingComReservationImportRequest
                 {
