@@ -1006,13 +1006,14 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     {
                         ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
                         ["UF_CRM_1769797476812"] = ResolveBitrixLanguage(record.State.Client.Language),
+                        ["UF_CRM_1769797498979"] = record.State.Client.CountryCode,
                         ["UF_CRM_1768836801823"] = record.State.StartRequest?.Adults,
                         ["UF_CRM_1768836818927"] = record.State.StartRequest?.EndDate.DayNumber - record.State.StartRequest?.StartDate.DayNumber,
                         ["UF_CRM_1773256016575"] = ToBitrixDateTime(record.State.StartRequest?.StartDate, record.State.StartRequest?.CheckInTime),
 
                         ["UF_CRM_1773310028374"] = ToBitrixDateTime(record.State.StartRequest?.EndDate,record.State.StartRequest?.CheckOutTime),
-                        ["UF_CRM_1773310079975"]  = record.State.StartRequest?.CheckInTime == new TimeOnly(14,0),
-                        ["UF_CRM_1773310094605"]  = record.State.StartRequest?.CheckOutTime == new TimeOnly(12,0)
+                        ["UF_CRM_1773310079975"]  = record.State.StartRequest?.CheckInTime < new TimeOnly(15,0), // wczesniej niz 15:00
+                        ["UF_CRM_1773310094605"]  = record.State.StartRequest?.CheckOutTime > new TimeOnly(11,0) // pozniej niz 11:00
 
 
                     }
