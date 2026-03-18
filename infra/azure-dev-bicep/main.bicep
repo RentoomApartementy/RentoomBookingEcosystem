@@ -138,6 +138,11 @@ param rentoomWebBaseUrl string = 'https://dev.rentoom.pl'
 @description('Public base URL for StayWell API (Function App custom domain).')
 param staywellApiBaseUrl string = 'https://dev.api.rentoom.pl'
 
+@description('Function App paths that must bypass App Service Authentication.')
+param staywellApiAuthExcludedPaths array = [
+  '/api/mail/incoming'
+]
+
 @description('GitHub organization slug for StayWell Static Web App source repository.')
 param staywellGithubOrganization string = 'RentoomApartementy'
 
@@ -244,6 +249,7 @@ module appStack './modules/app-stack.bicep' = {
     staywellBaseUrl: staywellBaseUrl
     rentoomWebBaseUrl: rentoomWebBaseUrl
     staywellApiBaseUrl: staywellApiBaseUrl
+    staywellApiAuthExcludedPaths: staywellApiAuthExcludedPaths
     staywellGithubOrganization: staywellGithubOrganization
     staywellGithubRepositoryName: staywellGithubRepositoryName
     staywellGithubBranch: staywellGithubBranch

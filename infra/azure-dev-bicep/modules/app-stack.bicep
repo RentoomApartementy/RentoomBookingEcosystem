@@ -126,6 +126,9 @@ param rentoomWebBaseUrl string
 @description('Public base URL for StayWell API (Function App custom domain).')
 param staywellApiBaseUrl string
 
+@description('Function App paths that must bypass App Service Authentication.')
+param staywellApiAuthExcludedPaths array
+
 @description('GitHub organization for StayWell Static Web App source repository.')
 param staywellGithubOrganization string
 
@@ -604,6 +607,42 @@ resource swaBackendLink 'Microsoft.Web/staticSites/linkedBackends@2025-03-01' = 
   properties: {
     backendResourceId: staywellApi.id
     region: location
+  }
+}
+
+resource staywellApiAuthSettings 'Microsoft.Web/sites/config@2024-11-01' = {
+  parent: staywellApi
+  name: 'authsettingsV2'
+  dependsOn: [
+    swaBackendLink
+  ]
+  properties: {
+    platform: {
+      enabled: true
+      runtimeVersion: '~1'
+    }
+    globalValidation: {
+      requireAuthentication: true
+      unauthenticatedClientAction: 'RedirectToLoginPage'
+      excludedPaths: staywellApiAuthExcludedPaths
+    }
+    httpSettings: {
+      requireHttps: true
+      routes: {
+        apiPrefix: '/.auth'
+      }
+      forwardProxy: {
+        convention: 'NoProxy'
+      }
+    }
+    identityProviders: {
+      azureStaticWebApps: {
+        enabled: true
+        registration: {
+          clientId: staywellSwa.properties.defaultHostname
+        }
+      }
+    }
   }
 }
 

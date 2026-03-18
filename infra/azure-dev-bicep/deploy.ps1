@@ -41,9 +41,19 @@ $secretParameterFile = $resolvedSecretParameterFile.Path
 $parameterFileContent = Get-Content -Raw -Path $parameterFile | ConvertFrom-Json
 $secretParameterFileContent = Get-Content -Raw -Path $secretParameterFile | ConvertFrom-Json
 $deploymentLocation = $parameterFileContent.parameters.location.value
+$resourceGroupName = $parameterFileContent.parameters.resourceGroupName.value
+$functionAppName = $parameterFileContent.parameters.staywellApiFunctionName.value
 
 if ([string]::IsNullOrWhiteSpace($deploymentLocation)) {
     throw "The parameter file '$parameterFile' does not define parameters.location.value."
+}
+
+if ([string]::IsNullOrWhiteSpace($resourceGroupName)) {
+    throw "The parameter file '$parameterFile' does not define parameters.resourceGroupName.value."
+}
+
+if ([string]::IsNullOrWhiteSpace($functionAppName)) {
+    throw "The parameter file '$parameterFile' does not define parameters.staywellApiFunctionName.value."
 }
 
 $requiredSecretParameters = @(
@@ -93,6 +103,8 @@ Write-Host "Parameter file: $parameterFile"
 Write-Host "Secret parameter file: $secretParameterFile"
 Write-Host "Deployment location: $deploymentLocation"
 Write-Host "Deployment name: $deploymentName"
+Write-Host "Resource group: $resourceGroupName"
+Write-Host "Function App: $functionAppName"
 Write-Host "Operation: $Operation"
 
 if ($Operation -in @('validate', 'validate-create')) {
@@ -110,5 +122,12 @@ if ($Operation -in @('create', 'validate-create')) {
     & az @createArguments
     if ($LASTEXITCODE -ne 0) {
         throw "Azure deployment creation failed."
+    }
+
+    Write-Host ''
+    Write-Host "Restarting Function App '$functionAppName' to refresh auth settings..."
+    & az functionapp restart --resource-group $resourceGroupName --name $functionAppName
+    if ($LASTEXITCODE -ne 0) {
+        throw "Azure Function App restart failed."
     }
 }

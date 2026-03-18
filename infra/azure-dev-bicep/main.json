@@ -1,0 +1,1575 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.41.2.15936",
+      "templateHash": "170363298208932991"
+    }
+  },
+  "parameters": {
+    "environment": {
+      "type": "string",
+      "defaultValue": "dev",
+      "allowedValues": [
+        "dev",
+        "prod"
+      ],
+      "metadata": {
+        "description": "Deployment environment."
+      }
+    },
+    "logAnalyticsWorkspaceName": {
+      "type": "string",
+      "defaultValue": "log-dev-rentoombooking",
+      "metadata": {
+        "description": "Log Analytics workspace name for monitoring."
+      }
+    },
+    "staywellApiAppInsightsName": {
+      "type": "string",
+      "defaultValue": "app-insights-dev-api-staywell",
+      "metadata": {
+        "description": "Application Insights name for StayWell API."
+      }
+    },
+    "rentoomWebAppInsightsName": {
+      "type": "string",
+      "defaultValue": "app-insights-dev-rentoombooking",
+      "metadata": {
+        "description": "Application Insights name for Rentoom Booking Web."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "polandcentral",
+      "metadata": {
+        "description": "Location for all DEV resources."
+      }
+    },
+    "resourceGroupName": {
+      "type": "string",
+      "defaultValue": "rg-dev-rentoom-booking",
+      "metadata": {
+        "description": "Resource group for DEV environment."
+      }
+    },
+    "rentoomWebAppName": {
+      "type": "string",
+      "defaultValue": "app-dev-rentoombooking",
+      "metadata": {
+        "description": "App Service name for dev Rentoom Booking Web."
+      }
+    },
+    "staywellStaticWebAppName": {
+      "type": "string",
+      "defaultValue": "swa-dev-staywell",
+      "metadata": {
+        "description": "Static Web App name for dev StayWell."
+      }
+    },
+    "staywellApiFunctionName": {
+      "type": "string",
+      "defaultValue": "func-dev-api-staywell",
+      "metadata": {
+        "description": "Function App name for dev API Staywell."
+      }
+    },
+    "webPlanName": {
+      "type": "string",
+      "defaultValue": "asp-dev-rentoombooking",
+      "metadata": {
+        "description": "App Service plan name for Rentoom Booking Web."
+      }
+    },
+    "webPlanSku": {
+      "type": "object",
+      "defaultValue": {
+        "name": "F1",
+        "tier": "Free",
+        "size": "F1",
+        "capacity": 1
+      },
+      "metadata": {
+        "description": "SKU configuration for the Rentoom Booking Web App Service plan."
+      }
+    },
+    "functionPlanName": {
+      "type": "string",
+      "defaultValue": "asp-dev-api-staywell-fc1",
+      "metadata": {
+        "description": "Flex Consumption plan name for Function App."
+      }
+    },
+    "storagePrefix": {
+      "type": "string",
+      "defaultValue": "devstayapi",
+      "minLength": 3,
+      "maxLength": 18,
+      "metadata": {
+        "description": "Storage account prefix (3-18 chars, lowercase + numbers). A unique suffix is appended automatically."
+      }
+    },
+    "postgresSubscriptionId": {
+      "type": "string",
+      "metadata": {
+        "description": "PostgreSQL subscription ID."
+      }
+    },
+    "postgresResourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "PostgreSQL resource group name."
+      }
+    },
+    "postgresServerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing PostgreSQL Flexible Server name."
+      }
+    },
+    "staywellDbName": {
+      "type": "string",
+      "defaultValue": "staywell_dev",
+      "metadata": {
+        "description": "Existing database name on PostgreSQL server."
+      }
+    },
+    "staywellDbAppUser": {
+      "type": "string",
+      "defaultValue": "staywell_dev_app",
+      "metadata": {
+        "description": "Application database user name."
+      }
+    },
+    "rentoomDataStorageAccountName": {
+      "type": "string",
+      "defaultValue": "storagerentoombookingdev",
+      "metadata": {
+        "description": "Storage account name for Rentoom Booking data."
+      }
+    },
+    "staywellDbAppPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Application database password."
+      }
+    },
+    "tpayApiBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://openapi.sandbox.tpay.com",
+      "metadata": {
+        "description": "Tpay API base URL."
+      }
+    },
+    "tpayClientId": {
+      "type": "string",
+      "defaultValue": "01KEA06BFSBX1DZQM0BGYV8SXK-01KEA0CVMFDY6A36CKRTCGBTGB",
+      "metadata": {
+        "description": "Tpay client ID."
+      }
+    },
+    "tpayClientSecret": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Tpay client secret."
+      }
+    },
+    "tpayMerchantSecurityCode": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Tpay merchant security code."
+      }
+    },
+    "tpayJwsCertPrefix": {
+      "type": "string",
+      "defaultValue": "https://secure.sandbox.tpay.com",
+      "metadata": {
+        "description": "Expected Tpay JWS certificate prefix."
+      }
+    },
+    "tpayRootCaPemUrl": {
+      "type": "string",
+      "defaultValue": "https://secure.sandbox.tpay.com/x509/tpay-jws-root.pem",
+      "metadata": {
+        "description": "Tpay root CA PEM URL."
+      }
+    },
+    "tpayWebSuccessUrl": {
+      "type": "string",
+      "defaultValue": "rezerwuj/{ReservationTokenGuid}/oplac/success",
+      "metadata": {
+        "description": "Success URL setting for Tpay used by Rentoom Booking Web."
+      }
+    },
+    "tpayWebErrorUrl": {
+      "type": "string",
+      "defaultValue": "https://dev.rentoom.pl/rezerwuj/{ReservationTokenGuid}/oplac/error",
+      "metadata": {
+        "description": "Error URL setting for Tpay used by Rentoom Booking Web."
+      }
+    },
+    "tpayWebRentoomSiteBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://dev.rentoom.pl",
+      "metadata": {
+        "description": "Rentoom site base URL used by Tpay in Rentoom Booking Web."
+      }
+    },
+    "tpayApiSuccessUrl": {
+      "type": "string",
+      "defaultValue": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Success",
+      "metadata": {
+        "description": "Success URL path used by Tpay in StayWell API."
+      }
+    },
+    "tpayApiErrorUrl": {
+      "type": "string",
+      "defaultValue": "reservation/{Token}/Vouchers/payment/{UpsellOrderGuid}/Error",
+      "metadata": {
+        "description": "Error URL path used by Tpay in StayWell API."
+      }
+    },
+    "tpayApiRentoomSiteBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://dev.rentoom.pl",
+      "metadata": {
+        "description": "Rentoom site base URL used by Tpay in StayWell API."
+      }
+    },
+    "idoBookingUseDummy": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether the StayWell API should use dummy IdoBooking behavior."
+      }
+    },
+    "idoBookingDummyReservationTemplateKey": {
+      "type": "string",
+      "defaultValue": "dummy_api_call_template",
+      "metadata": {
+        "description": "Template key used for dummy IdoBooking reservations."
+      }
+    },
+    "idoBookingBaseApiUrl": {
+      "type": "string",
+      "defaultValue": "https://client7953.idosell.com/api/",
+      "metadata": {
+        "description": "IdoBooking API base URL."
+      }
+    },
+    "idoBookingApiUser": {
+      "type": "string",
+      "defaultValue": "apimaster",
+      "metadata": {
+        "description": "IdoBooking API system user."
+      }
+    },
+    "idoBookingApiPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "IdoBooking API password."
+      }
+    },
+    "bitrixReservationPipelineName": {
+      "type": "string",
+      "defaultValue": "Rezerwacje",
+      "metadata": {
+        "description": "Bitrix reservation pipeline name used by Rentoom Booking Web and StayWell API."
+      }
+    },
+    "staywellBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://dev.staywell.rentoom.pl",
+      "metadata": {
+        "description": "Public base URL for StayWell (Static Web App custom domain)."
+      }
+    },
+    "rentoomWebBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://dev.rentoom.pl",
+      "metadata": {
+        "description": "Public base URL for Rentoom Booking Web (Web App custom domain)."
+      }
+    },
+    "staywellApiBaseUrl": {
+      "type": "string",
+      "defaultValue": "https://dev.api.rentoom.pl",
+      "metadata": {
+        "description": "Public base URL for StayWell API (Function App custom domain)."
+      }
+    },
+    "staywellApiAuthExcludedPaths": {
+      "type": "array",
+      "defaultValue": [
+        "/api/mail/incoming"
+      ],
+      "metadata": {
+        "description": "Function App paths that must bypass App Service Authentication."
+      }
+    },
+    "staywellGithubOrganization": {
+      "type": "string",
+      "defaultValue": "RentoomApartementy",
+      "metadata": {
+        "description": "GitHub organization slug for StayWell Static Web App source repository."
+      }
+    },
+    "staywellGithubRepositoryName": {
+      "type": "string",
+      "defaultValue": "RentoomBookingEcosystem",
+      "metadata": {
+        "description": "GitHub repository for StayWell Static Web App source code."
+      }
+    },
+    "staywellGithubBranch": {
+      "type": "string",
+      "defaultValue": "development-main",
+      "metadata": {
+        "description": "GitHub branch used by StayWell Static Web App."
+      }
+    },
+    "staywellGithubRepositoryToken": {
+      "type": "securestring",
+      "metadata": {
+        "description": "GitHub repository token used by Azure Static Web Apps to configure GitHub Actions workflow and secrets."
+      }
+    },
+    "staywellGithubAppLocation": {
+      "type": "string",
+      "defaultValue": "./StayWell",
+      "metadata": {
+        "description": "Repository path to the StayWell app for Azure Static Web Apps build."
+      }
+    },
+    "staywellGithubOutputLocation": {
+      "type": "string",
+      "defaultValue": "wwwroot",
+      "metadata": {
+        "description": "Build output path for the StayWell Static Web App."
+      }
+    },
+    "staywellGithubActionSecretName": {
+      "type": "string",
+      "defaultValue": "AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_DEV",
+      "metadata": {
+        "description": "GitHub Actions secret name override for the StayWell Static Web App workflow."
+      }
+    },
+    "uploadsStorageContainerName": {
+      "type": "string",
+      "defaultValue": "uploadsdev",
+      "metadata": {
+        "description": "Blob container used for uploaded files."
+      }
+    },
+    "instructionsStorageContainerName": {
+      "type": "string",
+      "defaultValue": "arrivalinstructions-dev",
+      "metadata": {
+        "description": "Blob container used for arrival instructions."
+      }
+    },
+    "rentoomAppDbName": {
+      "type": "string",
+      "defaultValue": "rentoomdb",
+      "metadata": {
+        "description": "Rentoom App database name."
+      }
+    },
+    "rentoomAppDbUser": {
+      "type": "string",
+      "defaultValue": "RentoomAzureDbAdmin",
+      "metadata": {
+        "description": "Rentoom App database user name."
+      }
+    },
+    "rentoomAppDbPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Rentoom App database password."
+      }
+    },
+    "ttlockClientId": {
+      "type": "string",
+      "defaultValue": "ba60c2707447415183df5d6a4c617e09",
+      "metadata": {
+        "description": "TTLock client ID."
+      }
+    },
+    "ttlockClientSecret": {
+      "type": "securestring",
+      "metadata": {
+        "description": "TTLock client secret."
+      }
+    },
+    "ttlockUsername": {
+      "type": "string",
+      "defaultValue": "+48601317506",
+      "metadata": {
+        "description": "TTLock account username."
+      }
+    },
+    "ttlockPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "TTLock account password."
+      }
+    },
+    "tags": {
+      "type": "object",
+      "metadata": {
+        "description": "Common tags."
+      }
+    }
+  },
+  "variables": {
+    "storageAccountName": "[take(toLower(format('{0}{1}', parameters('storagePrefix'), uniqueString(subscription().id, parameters('resourceGroupName')))), 24)]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2025-04-01",
+      "name": "[parameters('resourceGroupName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]"
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('app-stack-{0}', parameters('environment'))]",
+      "resourceGroup": "[parameters('resourceGroupName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "rentoomWebAppName": {
+            "value": "[parameters('rentoomWebAppName')]"
+          },
+          "staywellStaticWebAppName": {
+            "value": "[parameters('staywellStaticWebAppName')]"
+          },
+          "staywellApiFunctionName": {
+            "value": "[parameters('staywellApiFunctionName')]"
+          },
+          "webPlanName": {
+            "value": "[parameters('webPlanName')]"
+          },
+          "webPlanSku": {
+            "value": "[parameters('webPlanSku')]"
+          },
+          "functionPlanName": {
+            "value": "[parameters('functionPlanName')]"
+          },
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          },
+          "postgresSubscriptionId": {
+            "value": "[parameters('postgresSubscriptionId')]"
+          },
+          "postgresResourceGroupName": {
+            "value": "[parameters('postgresResourceGroupName')]"
+          },
+          "postgresServerName": {
+            "value": "[parameters('postgresServerName')]"
+          },
+          "staywellDbName": {
+            "value": "[parameters('staywellDbName')]"
+          },
+          "staywellDbAppUser": {
+            "value": "[parameters('staywellDbAppUser')]"
+          },
+          "staywellDbAppPassword": {
+            "value": "[parameters('staywellDbAppPassword')]"
+          },
+          "tpayApiBaseUrl": {
+            "value": "[parameters('tpayApiBaseUrl')]"
+          },
+          "tpayClientId": {
+            "value": "[parameters('tpayClientId')]"
+          },
+          "tpayClientSecret": {
+            "value": "[parameters('tpayClientSecret')]"
+          },
+          "tpayMerchantSecurityCode": {
+            "value": "[parameters('tpayMerchantSecurityCode')]"
+          },
+          "tpayJwsCertPrefix": {
+            "value": "[parameters('tpayJwsCertPrefix')]"
+          },
+          "tpayRootCaPemUrl": {
+            "value": "[parameters('tpayRootCaPemUrl')]"
+          },
+          "tpayWebSuccessUrl": {
+            "value": "[parameters('tpayWebSuccessUrl')]"
+          },
+          "tpayWebErrorUrl": {
+            "value": "[parameters('tpayWebErrorUrl')]"
+          },
+          "tpayWebRentoomSiteBaseUrl": {
+            "value": "[parameters('tpayWebRentoomSiteBaseUrl')]"
+          },
+          "tpayApiSuccessUrl": {
+            "value": "[parameters('tpayApiSuccessUrl')]"
+          },
+          "tpayApiErrorUrl": {
+            "value": "[parameters('tpayApiErrorUrl')]"
+          },
+          "tpayApiRentoomSiteBaseUrl": {
+            "value": "[parameters('tpayApiRentoomSiteBaseUrl')]"
+          },
+          "idoBookingUseDummy": {
+            "value": "[parameters('idoBookingUseDummy')]"
+          },
+          "idoBookingDummyReservationTemplateKey": {
+            "value": "[parameters('idoBookingDummyReservationTemplateKey')]"
+          },
+          "idoBookingBaseApiUrl": {
+            "value": "[parameters('idoBookingBaseApiUrl')]"
+          },
+          "idoBookingApiUser": {
+            "value": "[parameters('idoBookingApiUser')]"
+          },
+          "idoBookingApiPassword": {
+            "value": "[parameters('idoBookingApiPassword')]"
+          },
+          "bitrixReservationPipelineName": {
+            "value": "[parameters('bitrixReservationPipelineName')]"
+          },
+          "staywellBaseUrl": {
+            "value": "[parameters('staywellBaseUrl')]"
+          },
+          "rentoomWebBaseUrl": {
+            "value": "[parameters('rentoomWebBaseUrl')]"
+          },
+          "staywellApiBaseUrl": {
+            "value": "[parameters('staywellApiBaseUrl')]"
+          },
+          "staywellApiAuthExcludedPaths": {
+            "value": "[parameters('staywellApiAuthExcludedPaths')]"
+          },
+          "staywellGithubOrganization": {
+            "value": "[parameters('staywellGithubOrganization')]"
+          },
+          "staywellGithubRepositoryName": {
+            "value": "[parameters('staywellGithubRepositoryName')]"
+          },
+          "staywellGithubBranch": {
+            "value": "[parameters('staywellGithubBranch')]"
+          },
+          "staywellGithubRepositoryToken": {
+            "value": "[parameters('staywellGithubRepositoryToken')]"
+          },
+          "staywellGithubAppLocation": {
+            "value": "[parameters('staywellGithubAppLocation')]"
+          },
+          "staywellGithubOutputLocation": {
+            "value": "[parameters('staywellGithubOutputLocation')]"
+          },
+          "staywellGithubActionSecretName": {
+            "value": "[parameters('staywellGithubActionSecretName')]"
+          },
+          "uploadsStorageContainerName": {
+            "value": "[parameters('uploadsStorageContainerName')]"
+          },
+          "instructionsStorageContainerName": {
+            "value": "[parameters('instructionsStorageContainerName')]"
+          },
+          "rentoomAppDbName": {
+            "value": "[parameters('rentoomAppDbName')]"
+          },
+          "rentoomAppDbUser": {
+            "value": "[parameters('rentoomAppDbUser')]"
+          },
+          "rentoomAppDbPassword": {
+            "value": "[parameters('rentoomAppDbPassword')]"
+          },
+          "ttlockClientId": {
+            "value": "[parameters('ttlockClientId')]"
+          },
+          "ttlockClientSecret": {
+            "value": "[parameters('ttlockClientSecret')]"
+          },
+          "ttlockUsername": {
+            "value": "[parameters('ttlockUsername')]"
+          },
+          "ttlockPassword": {
+            "value": "[parameters('ttlockPassword')]"
+          },
+          "rentoomDataStorageAccountName": {
+            "value": "[parameters('rentoomDataStorageAccountName')]"
+          },
+          "logAnalyticsWorkspaceName": {
+            "value": "[parameters('logAnalyticsWorkspaceName')]"
+          },
+          "staywellApiAppInsightsName": {
+            "value": "[parameters('staywellApiAppInsightsName')]"
+          },
+          "rentoomWebAppInsightsName": {
+            "value": "[parameters('rentoomWebAppInsightsName')]"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.41.2.15936",
+              "templateHash": "12185239500023463071"
+            }
+          },
+          "parameters": {
+            "logAnalyticsWorkspaceName": {
+              "type": "string",
+              "metadata": {
+                "description": "Log Analytics workspace name for monitoring."
+              }
+            },
+            "staywellApiAppInsightsName": {
+              "type": "string",
+              "metadata": {
+                "description": "Application Insights name for StayWell API."
+              }
+            },
+            "rentoomWebAppInsightsName": {
+              "type": "string",
+              "metadata": {
+                "description": "Application Insights name for Rentoom Booking Web."
+              }
+            },
+            "rentoomDataStorageAccountName": {
+              "type": "string",
+              "metadata": {
+                "description": "Storage account name for Rentoom Booking data."
+              }
+            },
+            "environment": {
+              "type": "string",
+              "allowedValues": [
+                "dev",
+                "prod"
+              ],
+              "metadata": {
+                "description": "Deployment environment."
+              }
+            },
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Location for resources."
+              }
+            },
+            "rentoomWebAppName": {
+              "type": "string",
+              "metadata": {
+                "description": "App Service name for dev Rentoom Booking Web."
+              }
+            },
+            "staywellStaticWebAppName": {
+              "type": "string",
+              "metadata": {
+                "description": "Static Web App name for dev StayWell."
+              }
+            },
+            "staywellApiFunctionName": {
+              "type": "string",
+              "metadata": {
+                "description": "Function App name for dev API Staywell."
+              }
+            },
+            "webPlanName": {
+              "type": "string",
+              "metadata": {
+                "description": "App Service plan name for Rentoom Booking Web."
+              }
+            },
+            "webPlanSku": {
+              "type": "object",
+              "metadata": {
+                "description": "SKU configuration for the Rentoom Booking Web App Service plan."
+              }
+            },
+            "functionPlanName": {
+              "type": "string",
+              "metadata": {
+                "description": "Flex Consumption plan name for Function App."
+              }
+            },
+            "storageAccountName": {
+              "type": "string",
+              "metadata": {
+                "description": "Storage account name for Function App runtime."
+              }
+            },
+            "postgresSubscriptionId": {
+              "type": "string",
+              "metadata": {
+                "description": "PostgreSQL subscription ID."
+              }
+            },
+            "postgresResourceGroupName": {
+              "type": "string",
+              "metadata": {
+                "description": "PostgreSQL resource group name."
+              }
+            },
+            "postgresServerName": {
+              "type": "string",
+              "metadata": {
+                "description": "Existing PostgreSQL Flexible Server name."
+              }
+            },
+            "staywellDbName": {
+              "type": "string",
+              "metadata": {
+                "description": "Existing database name on PostgreSQL server."
+              }
+            },
+            "staywellDbAppUser": {
+              "type": "string",
+              "metadata": {
+                "description": "Application database user name."
+              }
+            },
+            "staywellDbAppPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Application database password."
+              }
+            },
+            "tpayApiBaseUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Tpay API base URL."
+              }
+            },
+            "tpayClientId": {
+              "type": "string",
+              "metadata": {
+                "description": "Tpay client ID."
+              }
+            },
+            "tpayClientSecret": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Tpay client secret."
+              }
+            },
+            "tpayMerchantSecurityCode": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Tpay merchant security code."
+              }
+            },
+            "tpayJwsCertPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Expected Tpay JWS certificate prefix."
+              }
+            },
+            "tpayRootCaPemUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Tpay root CA PEM URL."
+              }
+            },
+            "tpayWebSuccessUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Success URL setting for Tpay used by Rentoom Booking Web."
+              }
+            },
+            "tpayWebErrorUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Error URL setting for Tpay used by Rentoom Booking Web."
+              }
+            },
+            "tpayWebRentoomSiteBaseUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Rentoom site base URL used by Tpay in Rentoom Booking Web."
+              }
+            },
+            "tpayApiSuccessUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Success URL path used by Tpay in StayWell API."
+              }
+            },
+            "tpayApiErrorUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Error URL path used by Tpay in StayWell API."
+              }
+            },
+            "tpayApiRentoomSiteBaseUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Rentoom site base URL used by Tpay in StayWell API."
+              }
+            },
+            "idoBookingUseDummy": {
+              "type": "bool",
+              "metadata": {
+                "description": "Whether the StayWell API should use dummy IdoBooking behavior."
+              }
+            },
+            "idoBookingDummyReservationTemplateKey": {
+              "type": "string",
+              "metadata": {
+                "description": "Template key used for dummy IdoBooking reservations."
+              }
+            },
+            "idoBookingBaseApiUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "IdoBooking API base URL."
+              }
+            },
+            "idoBookingApiUser": {
+              "type": "string",
+              "metadata": {
+                "description": "IdoBooking API system user."
+              }
+            },
+            "idoBookingApiPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "IdoBooking API password."
+              }
+            },
+            "bitrixReservationPipelineName": {
+              "type": "string",
+              "metadata": {
+                "description": "Bitrix reservation pipeline name used by Rentoom Booking Web and StayWell API."
+              }
+            },
+            "staywellBaseUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Public base URL for StayWell (Static Web App custom domain)."
+              }
+            },
+            "rentoomWebBaseUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Public base URL for Rentoom Booking Web (Web App custom domain)."
+              }
+            },
+            "staywellApiBaseUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Public base URL for StayWell API (Function App custom domain)."
+              }
+            },
+            "staywellApiAuthExcludedPaths": {
+              "type": "array",
+              "metadata": {
+                "description": "Function App paths that must bypass App Service Authentication."
+              }
+            },
+            "staywellGithubOrganization": {
+              "type": "string",
+              "metadata": {
+                "description": "GitHub organization for StayWell Static Web App source repository."
+              }
+            },
+            "staywellGithubRepositoryName": {
+              "type": "string",
+              "metadata": {
+                "description": "GitHub repository for StayWell Static Web App source code."
+              }
+            },
+            "staywellGithubBranch": {
+              "type": "string",
+              "metadata": {
+                "description": "GitHub branch used by StayWell Static Web App."
+              }
+            },
+            "staywellGithubRepositoryToken": {
+              "type": "securestring",
+              "metadata": {
+                "description": "GitHub repository token used by Azure Static Web Apps to configure GitHub Actions workflow and secrets."
+              }
+            },
+            "staywellGithubAppLocation": {
+              "type": "string",
+              "metadata": {
+                "description": "Repository path to the StayWell app for Azure Static Web Apps build."
+              }
+            },
+            "staywellGithubOutputLocation": {
+              "type": "string",
+              "metadata": {
+                "description": "Build output path for the StayWell Static Web App."
+              }
+            },
+            "staywellGithubActionSecretName": {
+              "type": "string",
+              "metadata": {
+                "description": "GitHub Actions secret name override for the StayWell Static Web App workflow."
+              }
+            },
+            "uploadsStorageContainerName": {
+              "type": "string",
+              "metadata": {
+                "description": "Blob container used for uploaded files."
+              }
+            },
+            "instructionsStorageContainerName": {
+              "type": "string",
+              "metadata": {
+                "description": "Blob container used for arrival instructions."
+              }
+            },
+            "rentoomAppDbName": {
+              "type": "string",
+              "metadata": {
+                "description": "Rentoom App database name."
+              }
+            },
+            "rentoomAppDbUser": {
+              "type": "string",
+              "metadata": {
+                "description": "Rentoom App database user name."
+              }
+            },
+            "rentoomAppDbPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Rentoom App database password."
+              }
+            },
+            "ttlockClientId": {
+              "type": "string",
+              "metadata": {
+                "description": "TTLock client ID."
+              }
+            },
+            "ttlockClientSecret": {
+              "type": "securestring",
+              "metadata": {
+                "description": "TTLock client secret."
+              }
+            },
+            "ttlockUsername": {
+              "type": "string",
+              "metadata": {
+                "description": "TTLock account username."
+              }
+            },
+            "ttlockPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "TTLock account password."
+              }
+            },
+            "tags": {
+              "type": "object",
+              "metadata": {
+                "description": "Common tags."
+              }
+            }
+          },
+          "variables": {
+            "deploymentStorageContainerName": "function-releases",
+            "normalizedStaywellBaseUrl": "[if(endsWith(parameters('staywellBaseUrl'), '/'), substring(parameters('staywellBaseUrl'), 0, sub(length(parameters('staywellBaseUrl')), 1)), parameters('staywellBaseUrl'))]",
+            "normalizedRentoomWebBaseUrl": "[if(endsWith(parameters('rentoomWebBaseUrl'), '/'), substring(parameters('rentoomWebBaseUrl'), 0, sub(length(parameters('rentoomWebBaseUrl')), 1)), parameters('rentoomWebBaseUrl'))]",
+            "normalizedStaywellApiCustomBaseUrl": "[if(endsWith(parameters('staywellApiBaseUrl'), '/'), substring(parameters('staywellApiBaseUrl'), 0, sub(length(parameters('staywellApiBaseUrl')), 1)), parameters('staywellApiBaseUrl'))]",
+            "staywellGithubRepositoryUrl": "[format('https://github.com/{0}/{1}', parameters('staywellGithubOrganization'), parameters('staywellGithubRepositoryName'))]",
+            "normalizedTpayWebRentoomSiteBaseUrl": "[if(endsWith(parameters('tpayWebRentoomSiteBaseUrl'), '/'), substring(parameters('tpayWebRentoomSiteBaseUrl'), 0, sub(length(parameters('tpayWebRentoomSiteBaseUrl')), 1)), parameters('tpayWebRentoomSiteBaseUrl'))]",
+            "normalizedTpayApiRentoomSiteBaseUrl": "[if(endsWith(parameters('tpayApiRentoomSiteBaseUrl'), '/'), substring(parameters('tpayApiRentoomSiteBaseUrl'), 0, sub(length(parameters('tpayApiRentoomSiteBaseUrl')), 1)), parameters('tpayApiRentoomSiteBaseUrl'))]",
+            "staywellReservationUrlBase": "[format('{0}/reservation/{{resToken}}/HomePage', variables('normalizedStaywellBaseUrl'))]",
+            "staywellUrlBase": "[variables('normalizedStaywellBaseUrl')]",
+            "tpayNotificationUrl": "[format('{0}/api/tpay/notification', variables('normalizedStaywellApiCustomBaseUrl'))]",
+            "applicationRuntimeEnvironment": "[if(equals(parameters('environment'), 'prod'), 'Production', 'Development')]",
+            "idoBookingUseDummySetting": "[if(parameters('idoBookingUseDummy'), 'True', 'False')]",
+            "staywellDbConnectionString": "[format('Server={0}.postgres.database.azure.com;Database={1};Port=5432;User Id={2};Password={3};Ssl Mode=VerifyFull;Include Error Detail=True', parameters('postgresServerName'), parameters('staywellDbName'), parameters('staywellDbAppUser'), parameters('staywellDbAppPassword'))]",
+            "rentoomAppDbConnectionString": "[format('Server={0}.postgres.database.azure.com;Database={1};Port=5432;User Id={2};Password={3};Ssl Mode=VerifyFull;Include Error Detail=True', parameters('postgresServerName'), parameters('rentoomAppDbName'), parameters('rentoomAppDbUser'), parameters('rentoomAppDbPassword'))]",
+            "storageBlobDataOwnerRoleId": "b7e6dc6d-f1e8-4753-8033-0f276bb0955b",
+            "storageQueueDataContributorRoleId": "974c5e8b-45b9-4653-ba55-5f855dd0fb88",
+            "storageAccountContributorRoleId": "17d1049b-9a84-46fb-8f53-869881c3d3ab"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2025-07-01",
+              "name": "[parameters('logAnalyticsWorkspaceName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "sku": {
+                  "name": "PerGB2018"
+                },
+                "retentionInDays": 30
+              }
+            },
+            {
+              "type": "Microsoft.Insights/components",
+              "apiVersion": "2020-02-02",
+              "name": "[parameters('staywellApiAppInsightsName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "kind": "web",
+              "properties": {
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Insights/components",
+              "apiVersion": "2020-02-02",
+              "name": "[parameters('rentoomWebAppInsightsName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "kind": "web",
+              "properties": {
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2025-06-01",
+              "name": "[parameters('storageAccountName')]",
+              "location": "[parameters('location')]",
+              "kind": "StorageV2",
+              "sku": {
+                "name": "Standard_LRS"
+              },
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "defaultToOAuthAuthentication": true,
+                "publicNetworkAccess": "Enabled"
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices",
+              "apiVersion": "2025-06-01",
+              "name": "[format('{0}/{1}', parameters('storageAccountName'), 'default')]",
+              "properties": {},
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2025-06-01",
+              "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', variables('deploymentStorageContainerName'))]",
+              "properties": {
+                "publicAccess": "None"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2023-05-01",
+              "name": "[parameters('rentoomDataStorageAccountName')]",
+              "location": "[parameters('location')]",
+              "kind": "StorageV2",
+              "sku": {
+                "name": "Standard_LRS"
+              },
+              "tags": "[union(parameters('tags'), createObject('purpose', 'rentoombooking-files'))]",
+              "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": false,
+                "publicNetworkAccess": "Enabled"
+              }
+            },
+            {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2025-03-01",
+              "name": "[parameters('webPlanName')]",
+              "location": "[parameters('location')]",
+              "kind": "linux",
+              "sku": {
+                "name": "[parameters('webPlanSku').name]",
+                "tier": "[parameters('webPlanSku').tier]",
+                "size": "[parameters('webPlanSku').size]",
+                "capacity": "[parameters('webPlanSku').capacity]"
+              },
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "reserved": true
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2025-03-01",
+              "name": "[parameters('rentoomWebAppName')]",
+              "location": "[parameters('location')]",
+              "kind": "app,linux",
+              "tags": "[parameters('tags')]",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webPlanName'))]",
+                "httpsOnly": true,
+                "siteConfig": {
+                  "linuxFxVersion": "DOTNETCORE|8.0",
+                  "alwaysOn": false,
+                  "appSettings": [
+                    {
+                      "name": "ASPNETCORE_ENVIRONMENT",
+                      "value": "[variables('applicationRuntimeEnvironment')]"
+                    },
+                    {
+                      "name": "WEBSITE_RUN_FROM_PACKAGE",
+                      "value": "1"
+                    },
+                    {
+                      "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                      "value": "[reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString]"
+                    },
+                    {
+                      "name": "ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL",
+                      "value": "[variables('staywellDbConnectionString')]"
+                    },
+                    {
+                      "name": "ConnectionStrings__RentoomDbConnectionString",
+                      "value": "[variables('rentoomAppDbConnectionString')]"
+                    },
+                    {
+                      "name": "Tpay__ApiBaseUrl",
+                      "value": "[parameters('tpayApiBaseUrl')]"
+                    },
+                    {
+                      "name": "Tpay__ClientId",
+                      "value": "[parameters('tpayClientId')]"
+                    },
+                    {
+                      "name": "Tpay__ClientSecret",
+                      "value": "[parameters('tpayClientSecret')]"
+                    },
+                    {
+                      "name": "Tpay__MerchantSecurityCode",
+                      "value": "[parameters('tpayMerchantSecurityCode')]"
+                    },
+                    {
+                      "name": "Tpay__JwsCertPrefix",
+                      "value": "[parameters('tpayJwsCertPrefix')]"
+                    },
+                    {
+                      "name": "Tpay__RootCaPemUrl",
+                      "value": "[parameters('tpayRootCaPemUrl')]"
+                    },
+                    {
+                      "name": "Tpay__NotificationUrl",
+                      "value": "[variables('tpayNotificationUrl')]"
+                    },
+                    {
+                      "name": "Tpay__RentoomSiteBaseUrl",
+                      "value": "[variables('normalizedTpayWebRentoomSiteBaseUrl')]"
+                    },
+                    {
+                      "name": "Tpay__SuccessUrl",
+                      "value": "[parameters('tpayWebSuccessUrl')]"
+                    },
+                    {
+                      "name": "Tpay__ErrorUrl",
+                      "value": "[parameters('tpayWebErrorUrl')]"
+                    },
+                    {
+                      "name": "IdoBooking__UseDummy",
+                      "value": "[variables('idoBookingUseDummySetting')]"
+                    },
+                    {
+                      "name": "IdoBooking__DummyReservationTemplateKey",
+                      "value": "[parameters('idoBookingDummyReservationTemplateKey')]"
+                    },
+                    {
+                      "name": "IDOBOOKING_BASE_API_URL",
+                      "value": "[parameters('idoBookingBaseApiUrl')]"
+                    },
+                    {
+                      "name": "IDOBOOKING_API_USER",
+                      "value": "[parameters('idoBookingApiUser')]"
+                    },
+                    {
+                      "name": "IDOBOOKING_API_PWD",
+                      "value": "[parameters('idoBookingApiPassword')]"
+                    },
+                    {
+                      "name": "StayWellUrlBase",
+                      "value": "[variables('staywellUrlBase')]"
+                    },
+                    {
+                      "name": "StayWellReservationUrlBase",
+                      "value": "[variables('staywellReservationUrlBase')]"
+                    },
+                    {
+                      "name": "Bitrix__ReservationPipelineName",
+                      "value": "[parameters('bitrixReservationPipelineName')]"
+                    },
+                    {
+                      "name": "Storage__Container",
+                      "value": "[parameters('uploadsStorageContainerName')]"
+                    },
+                    {
+                      "name": "Storage__ConnectionString",
+                      "value": ""
+                    },
+                    {
+                      "name": "Storage__AccountName",
+                      "value": "[parameters('rentoomDataStorageAccountName')]"
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('rentoomDataStorageAccountName'))]",
+                "[resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName'))]",
+                "[resourceId('Microsoft.Web/serverfarms', parameters('webPlanName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2025-03-01",
+              "name": "[parameters('functionPlanName')]",
+              "location": "[parameters('location')]",
+              "kind": "functionapp",
+              "sku": {
+                "name": "FC1",
+                "tier": "FlexConsumption"
+              },
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "reserved": true
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2025-03-01",
+              "name": "[parameters('staywellApiFunctionName')]",
+              "location": "[parameters('location')]",
+              "kind": "functionapp,linux",
+              "tags": "[parameters('tags')]",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionPlanName'))]",
+                "httpsOnly": true,
+                "siteConfig": {
+                  "minTlsVersion": "1.2"
+                },
+                "functionAppConfig": {
+                  "runtime": {
+                    "name": "dotnet-isolated",
+                    "version": "8.0"
+                  },
+                  "deployment": {
+                    "storage": {
+                      "type": "blobContainer",
+                      "value": "[format('https://{0}.blob.core.windows.net/{1}', parameters('storageAccountName'), variables('deploymentStorageContainerName'))]",
+                      "authentication": {
+                        "type": "SystemAssignedIdentity"
+                      }
+                    }
+                  },
+                  "scaleAndConcurrency": {
+                    "maximumInstanceCount": 20,
+                    "instanceMemoryMB": 2048
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionPlanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2024-04-01",
+              "name": "[format('{0}/{1}', parameters('staywellApiFunctionName'), 'appsettings')]",
+              "properties": {
+                "AZURE_FUNCTIONS_ENVIRONMENT": "[variables('applicationRuntimeEnvironment')]",
+                "AzureWebJobsStorage__accountName": "[parameters('storageAccountName')]",
+                "AzureWebJobsStorage__credential": "managedidentity",
+                "APPLICATIONINSIGHTS_CONNECTION_STRING": "[reference(resourceId('Microsoft.Insights/components', parameters('staywellApiAppInsightsName')), '2020-02-02').ConnectionString]",
+                "Tpay__ApiBaseUrl": "[parameters('tpayApiBaseUrl')]",
+                "Tpay__ClientId": "[parameters('tpayClientId')]",
+                "Tpay__ClientSecret": "[parameters('tpayClientSecret')]",
+                "Tpay__MerchantSecurityCode": "[parameters('tpayMerchantSecurityCode')]",
+                "Tpay__JwsCertPrefix": "[parameters('tpayJwsCertPrefix')]",
+                "Tpay__RootCaPemUrl": "[parameters('tpayRootCaPemUrl')]",
+                "Tpay__NotificationUrl": "[variables('tpayNotificationUrl')]",
+                "Tpay__RentoomSiteBaseUrl": "[variables('normalizedTpayApiRentoomSiteBaseUrl')]",
+                "Tpay__SuccessUrl": "[parameters('tpayApiSuccessUrl')]",
+                "Tpay__ErrorUrl": "[parameters('tpayApiErrorUrl')]",
+                "IdoBooking__UseDummy": "[variables('idoBookingUseDummySetting')]",
+                "IdoBooking__DummyReservationTemplateKey": "[parameters('idoBookingDummyReservationTemplateKey')]",
+                "IDOBOOKING_BASE_API_URL": "[parameters('idoBookingBaseApiUrl')]",
+                "IDOBOOKING_API_USER": "[parameters('idoBookingApiUser')]",
+                "IDOBOOKING_API_PWD": "[parameters('idoBookingApiPassword')]",
+                "StayWellUrlBase": "[variables('staywellUrlBase')]",
+                "StayWellReservationUrlBase": "[variables('staywellReservationUrlBase')]",
+                "Bitrix__ReservationPipelineName": "[parameters('bitrixReservationPipelineName')]",
+                "Storage__Container": "[parameters('uploadsStorageContainerName')]",
+                "Storage__ConnectionString": "",
+                "Storage__AccountName": "[parameters('rentoomDataStorageAccountName')]",
+                "InstructionsStorage__Container": "[parameters('instructionsStorageContainerName')]",
+                "InstructionsStorage__ConnectionString": "",
+                "InstructionsStorage__AccountName": "[parameters('rentoomDataStorageAccountName')]",
+                "TTLOCK__ClientId": "[parameters('ttlockClientId')]",
+                "TTLOCK__ClientSecret": "[parameters('ttlockClientSecret')]",
+                "TTLOCK__Username": "[parameters('ttlockUsername')]",
+                "TTLOCK__Password": "[parameters('ttlockPassword')]",
+                "ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL": "[variables('staywellDbConnectionString')]",
+                "ConnectionStrings__RentoomDbConnectionString": "[variables('rentoomAppDbConnectionString')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('rentoomDataStorageAccountName'))]",
+                "[resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName'))]",
+                "[resourceId('Microsoft.Insights/components', parameters('staywellApiAppInsightsName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+              "name": "[guid(subscription().id, resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName')), 'Storage Blob Data Owner')]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('storageBlobDataOwnerRoleId'))]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName')), '2025-03-01', 'full').identity.principalId]",
+                "principalType": "ServicePrincipal"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+              "name": "[guid(subscription().id, resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName')), 'Storage Queue Data Contributor')]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('storageQueueDataContributorRoleId'))]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName')), '2025-03-01', 'full').identity.principalId]",
+                "principalType": "ServicePrincipal"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+              "name": "[guid(subscription().id, resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName')), 'Storage Account Contributor')]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', variables('storageAccountContributorRoleId'))]",
+                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName')), '2025-03-01', 'full').identity.principalId]",
+                "principalType": "ServicePrincipal"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/staticSites",
+              "apiVersion": "2025-03-01",
+              "name": "[parameters('staywellStaticWebAppName')]",
+              "location": "westeurope",
+              "tags": "[parameters('tags')]",
+              "sku": {
+                "name": "Standard",
+                "tier": "Standard"
+              },
+              "properties": {
+                "repositoryUrl": "[variables('staywellGithubRepositoryUrl')]",
+                "repositoryToken": "[parameters('staywellGithubRepositoryToken')]",
+                "branch": "[parameters('staywellGithubBranch')]",
+                "provider": "GitHub",
+                "buildProperties": {
+                  "appLocation": "[parameters('staywellGithubAppLocation')]",
+                  "outputLocation": "[parameters('staywellGithubOutputLocation')]",
+                  "githubActionSecretNameOverride": "[parameters('staywellGithubActionSecretName')]",
+                  "skipGithubActionWorkflowGeneration": false
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Web/staticSites/linkedBackends",
+              "apiVersion": "2025-03-01",
+              "name": "[format('{0}/{1}', parameters('staywellStaticWebAppName'), 'linkedBackend')]",
+              "properties": {
+                "backendResourceId": "[resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName'))]",
+                "region": "[parameters('location')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName'))]",
+                "[resourceId('Microsoft.Web/staticSites', parameters('staywellStaticWebAppName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2024-11-01",
+              "name": "[format('{0}/{1}', parameters('staywellApiFunctionName'), 'authsettingsV2')]",
+              "properties": {
+                "platform": {
+                  "enabled": true,
+                  "runtimeVersion": "~1"
+                },
+                "globalValidation": {
+                  "requireAuthentication": true,
+                  "unauthenticatedClientAction": "RedirectToLoginPage",
+                  "excludedPaths": "[parameters('staywellApiAuthExcludedPaths')]"
+                },
+                "httpSettings": {
+                  "requireHttps": true,
+                  "routes": {
+                    "apiPrefix": "/.auth"
+                  },
+                  "forwardProxy": {
+                    "convention": "NoProxy"
+                  }
+                },
+                "identityProviders": {
+                  "azureStaticWebApps": {
+                    "enabled": true,
+                    "registration": {
+                      "clientId": "[reference(resourceId('Microsoft.Web/staticSites', parameters('staywellStaticWebAppName')), '2025-03-01').defaultHostname]"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName'))]",
+                "[resourceId('Microsoft.Web/staticSites', parameters('staywellStaticWebAppName'))]",
+                "[resourceId('Microsoft.Web/staticSites/linkedBackends', parameters('staywellStaticWebAppName'), 'linkedBackend')]"
+              ]
+            }
+          ],
+          "outputs": {
+            "rentoomBookingWebUrl": {
+              "type": "string",
+              "value": "[variables('normalizedRentoomWebBaseUrl')]"
+            },
+            "staywellStaticWebUrl": {
+              "type": "string",
+              "value": "[variables('normalizedStaywellBaseUrl')]"
+            },
+            "staywellApiFunctionsUrl": {
+              "type": "string",
+              "value": "[format('{0}/api', variables('normalizedStaywellApiCustomBaseUrl'))]"
+            },
+            "postgresServerId": {
+              "type": "string",
+              "value": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', parameters('postgresSubscriptionId'), parameters('postgresResourceGroupName')), 'Microsoft.DBforPostgreSQL/flexibleServers', parameters('postgresServerName'))]"
+            },
+            "postgresServerHost": {
+              "type": "string",
+              "value": "[format('{0}.postgres.database.azure.com', parameters('postgresServerName'))]"
+            },
+            "staywellDatabaseName": {
+              "type": "string",
+              "value": "[parameters('staywellDbName')]"
+            },
+            "rentoomDataStorageAccountName": {
+              "type": "string",
+              "value": "[parameters('rentoomDataStorageAccountName')]"
+            },
+            "rentoomDataStoragePrimaryBlobEndpoint": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('rentoomDataStorageAccountName')), '2023-05-01').primaryEndpoints.blob]"
+            },
+            "logAnalyticsWorkspaceId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+            },
+            "staywellApiAppInsightsName": {
+              "type": "string",
+              "value": "[parameters('staywellApiAppInsightsName')]"
+            },
+            "staywellApiAppInsightsConnectionString": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('staywellApiAppInsightsName')), '2020-02-02').ConnectionString]"
+            },
+            "rentoomWebAppInsightsName": {
+              "type": "string",
+              "value": "[parameters('rentoomWebAppInsightsName')]"
+            },
+            "rentoomWebAppInsightsConnectionString": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('resourceGroupName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "resourceGroup": {
+      "type": "string",
+      "value": "[parameters('resourceGroupName')]"
+    },
+    "rentoomBookingWebUrl": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('resourceGroupName')), 'Microsoft.Resources/deployments', format('app-stack-{0}', parameters('environment'))), '2025-04-01').outputs.rentoomBookingWebUrl.value]"
+    },
+    "staywellStaticWebUrl": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('resourceGroupName')), 'Microsoft.Resources/deployments', format('app-stack-{0}', parameters('environment'))), '2025-04-01').outputs.staywellStaticWebUrl.value]"
+    },
+    "staywellApiFunctionsUrl": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('resourceGroupName')), 'Microsoft.Resources/deployments', format('app-stack-{0}', parameters('environment'))), '2025-04-01').outputs.staywellApiFunctionsUrl.value]"
+    },
+    "postgresServerId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('resourceGroupName')), 'Microsoft.Resources/deployments', format('app-stack-{0}', parameters('environment'))), '2025-04-01').outputs.postgresServerId.value]"
+    },
+    "postgresServerHost": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('resourceGroupName')), 'Microsoft.Resources/deployments', format('app-stack-{0}', parameters('environment'))), '2025-04-01').outputs.postgresServerHost.value]"
+    },
+    "staywellDatabaseName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('resourceGroupName')), 'Microsoft.Resources/deployments', format('app-stack-{0}', parameters('environment'))), '2025-04-01').outputs.staywellDatabaseName.value]"
+    },
+    "rentoomDataStorageAccountName": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('resourceGroupName')), 'Microsoft.Resources/deployments', format('app-stack-{0}', parameters('environment'))), '2025-04-01').outputs.rentoomDataStorageAccountName.value]"
+    },
+    "rentoomDataStoragePrimaryBlobEndpoint": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('resourceGroupName')), 'Microsoft.Resources/deployments', format('app-stack-{0}', parameters('environment'))), '2025-04-01').outputs.rentoomDataStoragePrimaryBlobEndpoint.value]"
+    }
+  }
+}
