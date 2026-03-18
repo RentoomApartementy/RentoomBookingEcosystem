@@ -10,6 +10,7 @@ using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using System.Globalization;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 
 namespace RentoomBooking.SharedClasses.Services.BookingCom
 {
@@ -98,6 +99,12 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 {
                     throw new InvalidOperationException($"IdoBooking reservation {request.ReservationId} was not found.");
                 }
+
+                if (reservation?.ReservationDetails?.status !=ReservationStatusType.Accepted)
+                {
+                    throw new InvalidOperationException($"IdoBooking reservation {request.ReservationId} has a not acceptable status {reservation?.ReservationDetails?.status}.");
+                }
+
 
                 await LogInfoAsync(
                     request.BookingComLogGuid,
@@ -213,6 +220,9 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 {
                     throw new InvalidOperationException($"Failed to store reservation {reservation.id} in backend database.");
                 }
+
+              
+
 
                 await LogInfoAsync(
                     request.BookingComLogGuid,
