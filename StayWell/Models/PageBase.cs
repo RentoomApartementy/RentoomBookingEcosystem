@@ -51,14 +51,15 @@ namespace RentoomBooking.StayWell.Models
 
         protected override async Task OnInitializedAsync()
         {
+
+            Subscribe();
+
             if (IsDisabled)
             {
                 NavigationManager.NavigateTo($"/reservation/{Token}/");
                 ToastService.ShowToast("Nie masz dostepu do tej strony.");
                 return;
             }
-
-            Subscribe();
 
             if (ReservationState.CurrentReservation != null)
             {
@@ -77,8 +78,8 @@ namespace RentoomBooking.StayWell.Models
                     NavigationManager.NavigateTo("/Error");
                     return;
                 }
-
-                if (!TermsState.IsAccepted || RegistrationCardState.CurrentCard == null)
+                
+                if (RegistrationCardState.CurrentCard == null)
                 {
                     NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");
                 }
@@ -156,19 +157,40 @@ namespace RentoomBooking.StayWell.Models
                 {
                     return;
                 }
+
                 await Task.WhenAll(
-                    TermsState.GetTermsAsync(Token),
-                    RegistrationCardState.GetCardAsync(Token),
-                    MediaState.GetMediaAsync(item.objectId),
+                    //TermsState.GetTermsAsync(Token),
+                    RegistrationCardState.GetCardAsync(Token)
+                );
+
+                await Task.WhenAll(
                     ApartmentState.GetApartmentByIdAsync(item.objectId),
+                    MediaState.GetMediaAsync(item.objectId),
+                    AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId)
+                );
+
+                await Task.WhenAll(
                     ApartmentState.GetDefinedAddonsAsync(),
                     ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
                     ApartmentState.GetWifiInfoAsync(item.objectId),
                     ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId),
-                    AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
                     LocksState.GetLocksAsync(reservation.id, item.itemId),
                     LocksState.GetApartmentItemCodesAsync(Token)
                 );
+
+                //await Task.WhenAll(
+                //    TermsState.GetTermsAsync(Token),
+                //    RegistrationCardState.GetCardAsync(Token),
+                //    MediaState.GetMediaAsync(item.objectId),
+                //    ApartmentState.GetApartmentByIdAsync(item.objectId),
+                //    ApartmentState.GetDefinedAddonsAsync(),
+                //    ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
+                //    ApartmentState.GetWifiInfoAsync(item.objectId),
+                //    ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId),
+                //    AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
+                //    LocksState.GetLocksAsync(reservation.id, item.itemId),
+                //    LocksState.GetApartmentItemCodesAsync(Token)
+                //);
                 IsInitializedSuccessfully = true;
             }
             catch (Exception ex)
@@ -206,6 +228,5 @@ namespace RentoomBooking.StayWell.Models
             TermsState.OnChange -= StateHasChanged;
             RegistrationCardState.OnChange -= StateHasChanged;
         }
-
     }
 }
