@@ -54,7 +54,7 @@
         <hr class="b-l" />
         
         <div class="status-box">
-            @if (RegistrationCardState.CurrentCard == null || TermsState.CurrentTerms == null)
+            @if (RegistrationCardState.CurrentCard == null)
             {
                 <div class="cdc text-secondary" style="font-size: 14px; text-align: center">
                     @Localizer["Fill"]
@@ -105,7 +105,7 @@
     </div>
 </div>
 
-@if (RegistrationCardState.CurrentCard == null || TermsState.CurrentTerms == null)
+@if (RegistrationCardState.CurrentCard == null)
 {
     <FloatingButton 
         Text="@Localizer["Continue"]"
@@ -123,9 +123,11 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        if (RegistrationCardState.CurrentCard != null && TermsState.CurrentTerms != null)
+
+        if (RegistrationCardState.IsFilled)
         {
-            NavigationManager.NavigateTo($"/reservation/{Token}/");
+            NavigationManager.NavigateTo($"/reservation/{Token}");
+            ToastService.ShowToast("Nie masz dostepu do tej strony.");
             LayoutState.ShowFooter = true;
         }
         else

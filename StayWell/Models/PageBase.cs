@@ -51,14 +51,15 @@ namespace RentoomBooking.StayWell.Models
 
         protected override async Task OnInitializedAsync()
         {
+
+            Subscribe();
+
             if (IsDisabled)
             {
                 NavigationManager.NavigateTo($"/reservation/{Token}/");
                 ToastService.ShowToast("Nie masz dostepu do tej strony.");
                 return;
             }
-
-            Subscribe();
 
             if (ReservationState.CurrentReservation != null)
             {
