@@ -92,6 +92,9 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public string currency { get; set; } = string.Empty;
         public string dateAdd { get; set; } = string.Empty;
 
+
+        /*Surowe wartości z IdoBooking trafiają teraz do idbDateFrom i idbDateTo, a robocze dateFrom i dateTo są automatycznie normalizowane do 15:00 i 11:00. Normalizacja jest zrobiona w NormalizeIdoDateTime, więc wszystkie obecne miejsca używające ReservationDetails.dateFrom/dateTo i getDateFrom()/getDateTo() dostają już poprawione wartości bez zmian w serwisach.
+         * */
         [JsonProperty("dateFrom")]
         public string idbDateFrom
         {
