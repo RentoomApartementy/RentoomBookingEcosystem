@@ -1014,6 +1014,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                         ["UF_CRM_1773310028374"] = ToBitrixDateTime(record.State.StartRequest?.EndDate,record.State.StartRequest?.CheckOutTime),
                         ["UF_CRM_1773310079975"]  = record.State.StartRequest?.CheckInTime < new TimeOnly(15,0), // wczesniej niz 15:00
                         ["UF_CRM_1773310094605"]  = record.State.StartRequest?.CheckOutTime > new TimeOnly(11,0) // pozniej niz 11:00
+                        //["UF_CRM_1773873147169"]  = google.maps na podstawie informacji z objectlocation z apartamentu
 
 
                     }
