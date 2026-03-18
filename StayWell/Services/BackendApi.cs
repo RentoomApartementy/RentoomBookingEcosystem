@@ -3,6 +3,7 @@ using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using RentoomBooking.StayWell.Models;
@@ -87,6 +88,7 @@ namespace RentoomBooking.StayWell.Services
                 {
                     var reservation = await response.Content.ReadFromJsonAsync<RentoomReservation>(_json);
                     Console.WriteLine(response.StatusCode);
+
                     return new(reservation!, response.StatusCode);
                 }
                 else

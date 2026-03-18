@@ -25,6 +25,8 @@ namespace RentoomBooking.SharedClasses.Models.BookingCom
         public Guid BookingComLogGuid { get; set; }
         public int ReservationId { get; set; }
         public BookingComIncomingEmail IncomingEmail { get; set; } = new();
+        public string Provider { get; set; } = string.Empty;
+        public string ProviderTransactionId { get; set; } = string.Empty;
     }
 
     public class BookingComReservationImportResult

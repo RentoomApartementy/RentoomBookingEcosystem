@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 
@@ -109,6 +111,18 @@ public class GetReservationsFunction
                 await res.WriteStringAsync($"Reservation with token {token} has expired (ToDate: {toDate:yyyy-MM-dd}).");
                 return res;
             }
+
+            var resStatus = ret.Reservation?.ReservationDetails?.status;
+
+            if (resStatus != ReservationStatusType.Accepted)
+            {
+                res.StatusCode = System.Net.HttpStatusCode.UnprocessableContent;
+                await res.WriteStringAsync($"Reservation with token {token} is not accessible (Status: {resStatus}).");
+                return res;
+            }
+
+
+            
 
 
 

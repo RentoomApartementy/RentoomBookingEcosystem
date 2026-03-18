@@ -21,7 +21,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
 
     public class BookingComReservationWorkflowService : IBookingComReservationWorkflowService
     {
-        private const string BookingComProvider = "BOOKINGCOM";
+        private const string DefaultProvider = "IDB_PANEL";
+        private const string DefaultProviderTransactionId = "IDB_PANEL_TRANSACTION";
         private const string DevelopmentPhoneOverride = "+48602394436";
         private const int BitrixEmailPollAttempts = 30;
         private static readonly TimeSpan BitrixEmailPollDelay = TimeSpan.FromSeconds(2);
@@ -65,6 +66,10 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 ReservationId = request.ReservationId,
                 Status = BookingComLogStatuses.Processing
             };
+            var provider = string.IsNullOrWhiteSpace(request.Provider) ? DefaultProvider : request.Provider.Trim();
+            var providerTransactionId = string.IsNullOrWhiteSpace(request.ProviderTransactionId)
+                ? DefaultProviderTransactionId
+                : request.ProviderTransactionId.Trim();
 
             try
             {
@@ -76,7 +81,9 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     payload: new
                     {
                         request.IncomingEmail.MessageId,
-                        request.IncomingEmail.Subject
+                        request.IncomingEmail.Subject,
+                        Provider = provider,
+                        ProviderTransactionId = providerTransactionId
                     },
                     overallStatus: BookingComLogStatuses.Processing,
                     cancellationToken: cancellationToken);
@@ -220,8 +227,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
 
                 record.IdoReservationId = reservation.id;
                 record.IdoStatus = reservation.ReservationDetails?.status;
-                record.Provider = BookingComProvider;
-                record.ProviderTransactionId = BuildProviderTransactionId(reservation.id);
+                record.Provider = provider;
+                record.ProviderTransactionId = providerTransactionId;
                 record.PaymentStatus = MapWorkflowPaymentStatus(payments);
 
                 await _reservationStore.UpdateAsync(record, cancellationToken);
@@ -237,6 +244,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     $"Bound IdoBooking reservation {reservation.id} and payment state to workflow record.",
                     payload: new
                     {
+                        record.Provider,
                         record.PaymentStatus,
                         record.ProviderTransactionId,
                         ProcessedAmount = processedAmount
@@ -248,8 +256,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     reservationGuid,
                     new ImportedReservationFinalizationRequest
                     {
-                        Provider = BookingComProvider,
-                        ProviderTransactionId = record.ProviderTransactionId ?? BuildProviderTransactionId(reservation.id),
+                        Provider = provider,
+                        ProviderTransactionId = record.ProviderTransactionId ?? providerTransactionId,
                         PaymentStatus = record.PaymentStatus,
                         IdoStatus = record.IdoStatus,
                         UpdateReason = "Booking.com reservation imported"
@@ -599,11 +607,6 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 overallStatus,
                 reservationGuid,
                 cancellationToken);
-        }
-
-        private static string BuildProviderTransactionId(int reservationId)
-        {
-            return $"BOOKINGCOM:{reservationId}";
         }
 
         private static string MapWorkflowPaymentStatus(IEnumerable<PaymentDetails> payments)

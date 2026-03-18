@@ -13,6 +13,8 @@ namespace RentoomBooking.Api.Integrations.BookingComMailsAzure;
 public class IncomingBookingEmailFunction
 {
     private const string ProcessingEnabledKey = "BookingCom:ReservationProcessingEnabled";
+    private const string DefaultProvider = "IDB_PANEL";
+    private const string DefaultProviderTransactionId = "IDB_PANEL_TRANSACTION";
 
     private readonly ILogger<IncomingBookingEmailFunction> _logger;
     private readonly IConfiguration _configuration;
@@ -76,14 +78,17 @@ public class IncomingBookingEmailFunction
             var subject = email.Subject?.Trim() ?? string.Empty;
             var reservationIdRaw = ExtractReservationId(subject);
             var reservationId = int.TryParse(reservationIdRaw, out var parsedReservationId) ? parsedReservationId : (int?)null;
+            var (provider, providerTransactionId) = ExtractProviderInfo(subject);
             var bodyLen = email.BodyHtml?.Length ?? 0;
             var bodySnippet = SafeSnippet(email.BodyHtml, 120);
 
             _logger.LogInformation(
-                "Incoming Booking.com email. MessageId={MessageId}; ReceivedDateTime={ReceivedDateTime}; ReservationId={ReservationId}; Subject=\"{Subject}\"; BodyHtmlLen={BodyHtmlLen}; BodySnippet=\"{BodySnippet}\"",
+                "Incoming booking email. MessageId={MessageId}; ReceivedDateTime={ReceivedDateTime}; ReservationId={ReservationId}; Provider={Provider}; ProviderTransactionId={ProviderTransactionId}; Subject=\"{Subject}\"; BodyHtmlLen={BodyHtmlLen}; BodySnippet=\"{BodySnippet}\"",
                 email.MessageId,
                 email.ReceivedDateTime,
                 reservationId,
+                provider,
+                providerTransactionId,
                 subject,
                 bodyLen,
                 bodySnippet);
@@ -97,6 +102,8 @@ public class IncomingBookingEmailFunction
                 payload: new
                 {
                     reservationId,
+                    provider,
+                    providerTransactionId,
                     Subject = subject,
                     BodyLength = bodyLen,
                     BodySnippet = bodySnippet
@@ -174,7 +181,9 @@ public class IncomingBookingEmailFunction
                 {
                     BookingComLogGuid = bookingComLogGuid.Value,
                     ReservationId = reservationId.Value,
-                    IncomingEmail = email
+                    IncomingEmail = email,
+                    Provider = provider,
+                    ProviderTransactionId = providerTransactionId
                 });
 
             var ok = req.CreateResponse(HttpStatusCode.OK);
@@ -268,6 +277,42 @@ public class IncomingBookingEmailFunction
         }
 
         return null;
+    }
+
+    private static (string Provider, string ProviderTransactionId) ExtractProviderInfo(string subject)
+    {
+        if (string.IsNullOrWhiteSpace(subject))
+        {
+            return (DefaultProvider, DefaultProviderTransactionId);
+        }
+
+        var match = Regex.Match(
+            subject,
+            @"\((?<content>[^)]+)\)\s*$",
+            RegexOptions.CultureInvariant);
+
+        if (!match.Success)
+        {
+            return (DefaultProvider, DefaultProviderTransactionId);
+        }
+
+        var bracketContent = match.Groups["content"].Value.Trim();
+        if (string.IsNullOrWhiteSpace(bracketContent))
+        {
+            return (DefaultProvider, DefaultProviderTransactionId);
+        }
+
+        var separatorIndex = bracketContent.IndexOf(':');
+        var provider = separatorIndex >= 0
+            ? bracketContent[..separatorIndex].Trim()
+            : bracketContent;
+
+        if (string.IsNullOrWhiteSpace(provider))
+        {
+            provider = DefaultProvider;
+        }
+
+        return (provider, bracketContent);
     }
 
     private static string SafeSnippet(string? html, int maxLen)
