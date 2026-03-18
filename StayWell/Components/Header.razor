@@ -64,6 +64,20 @@
         {
             GlobalizationService.SetCulture(savedPreference);
         }
+        else
+        {
+            var browserCulture = CultureInfo.CurrentCulture.Name;
+            var supported = GlobalizationService.GetSupportedCultures();
+            
+            if (supported.Any(c => c.Name == browserCulture))
+            {
+                GlobalizationService.SetCulture(browserCulture);
+            }
+            else
+            {
+                GlobalizationService.SetCulture("en-US");
+            }
+        }
 
         await BitrixService.InitializeAsync();
     }

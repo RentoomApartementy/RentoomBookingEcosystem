@@ -34,20 +34,42 @@ namespace RentoomBooking.StayWell.Services
             return $"{CachePrefix}:{scope}:{string.Join("|", parts)}";
         }
 
-        private async Task<T?> GetOrSetCacheAsync<T>(string key, Func<Task<T?>> fetch) where T : class
+        private async Task<T?> GetOrSetCacheAsync<T>(string key, Func<Task<T?>> fetch, bool cacheNull = false) where T : class
         {
-            var (exists, cached) = await _localStorage.TryGetItemAsync<T>(key);
-            if (exists && cached is not null)
+            var raw = await _localStorage.GetItemAsync(key);
+            if (!string.IsNullOrWhiteSpace(raw))
             {
-                return cached;
+                if (cacheNull && string.Equals(raw, NullMarker, StringComparison.Ordinal))
+                {
+                    return null;
+                }
+
+                try
+                {
+                    var cached = JsonSerializer.Deserialize<T>(raw, _json);
+                    if (cached is not null)
+                    {
+                        return cached;
+                    }
+                }
+                catch
+                {
+                }
             }
 
             var fresh = await fetch();
-            if (fresh is not null)
+
+            if (fresh is null)
             {
-                await _localStorage.SetItemAsync(key, fresh);
+                if (cacheNull)
+                {
+                    await _localStorage.SetItemAsync(key, NullMarker);
+                }
+
+                return null;
             }
 
+            await _localStorage.SetItemAsync(key, fresh);
             return fresh;
         }
 
@@ -149,7 +171,8 @@ namespace RentoomBooking.StayWell.Services
                     }
 
                     return await response.Content.ReadFromJsonAsync<TermsEntity>(_json);
-                });
+                },
+                cacheNull: true);
         }
 
         public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync()
@@ -166,19 +189,16 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<bool> SaveTermsAsync(TermsEntity entity)
         {
-           // var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
+            var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
 
-           var isOk = await SaveCustomerTermsAsync(entity.ResToken, new Dictionary<int, bool> { [2] = true });
+            var isOk = await UpdateAgreedTermAsync(entity.ResToken, 2,true);
 
             if (!isOk)
             {
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(entity.ResToken))
-            {
-                await InvalidateCacheAsync("terms", entity.ResToken);
-            }
+            await InvalidateCacheAsync("terms", entity.ResToken);
 
             return true;
         }
@@ -198,13 +218,25 @@ namespace RentoomBooking.StayWell.Services
                     }
 
                     return await response.Content.ReadFromJsonAsync<RegistrationCardEntity>(_json);
-                });
+                },
+                cacheNull: true);
         }
 
         public async Task<bool> SaveRegistrationCardAsync(RegistrationCardEntity entity)
         {
             var response = await _http.PostAsJsonAsync("db/registrationcard/SaveRegistrationCard", entity, _json);
-            return response.IsSuccessStatusCode;
+            if (!response.IsSuccessStatusCode)
+            {
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(entity.ResToken))
+            {
+                var cacheKey = BuildCacheKey("registration-card", entity.ResToken);
+                await _localStorage.SetItemAsync(cacheKey, entity);
+            }
+
+            return true;
         }
 
         public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId)
