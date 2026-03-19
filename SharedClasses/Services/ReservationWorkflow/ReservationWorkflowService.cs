@@ -712,7 +712,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 {
                     return record;
                 }
-               
+                record.State.StayWellLink = BuildStayWellLink(record.ReservationGuid.ToString());
                 var request = BuildReservationAddRequest(record, initialStatus);
                 try
                 {
@@ -774,15 +774,25 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             var start = record.State.StartRequest;
+            var reservationAddons = (start.SelectedAddons ?? [])
+                .Concat(start.MandatoryAddons ?? [])
+                .GroupBy(addon => addon.AddonId)
+                .Select(group => group.First())
+                .ToList();
+
+
+
             var reservation = new NewReservation
             {
-                RentoomResrvationID = record.ReservationGuid, //TODO 7.02.26: sprawdzic czy bedzie dzialac do zapisu idobooking -czy pominie to pole.
-                DateFrom = start.StartDate.ToString("yyyy-MM-dd") +" " +start.CheckInTime.ToString("HH:mm"),
+                RentoomResrvationID = record.ReservationGuid, //19.03.26  - działa, mozna zostawić. TODO 7.02.26: sprawdzic czy bedzie dzialac do zapisu idobooking -czy pominie to pole.
+                DateFrom = start.StartDate.ToString("yyyy-MM-dd") + " " + start.CheckInTime.ToString("HH:mm"),
                 DateTo = start.EndDate.ToString("yyyy-MM-dd") + " " + start.CheckOutTime.ToString("HH:mm"),
-                Price = start.OfferPrice.HasValue ? (float)start.OfferPrice.Value : null, //TOD: 10.03.26 - sprawdzić czy ta cena powinna iść do IDB i czy powinna zawierać ceny za Addony
+                Price = (float)start.OfferPrice.Value + (float)start.SelectedAddonsTotalPrice,  //19.03.26 - nie brało pod uwagę, zmieniłem. TODO: 10.03.26 - sprawdzić czy ta cena powinna iść do IDB i czy powinna zawierać ceny za Addony
                 Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,
-               
+                InternalNote = start.SelectedOfferType,
+                ApiNote = start.SelectedOfferType,
+                ExternalNote = record.State.StayWellLink,
                 Items =
                 [
                     new NewReservationItem
@@ -791,7 +801,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     NumberOfAdults = start.Adults,
                     //NumberOfBigChildren = start.Children,
                     NumberOfSmallChildren = start.Children,
-                    Addons = start.SelectedAddons?.Select(a => new NewReservationAddon
+                    Addons = reservationAddons.Select(a => new NewReservationAddon
                     {
                         AddonId = a.AddonId,
                         Persons = a.Persons,
@@ -815,6 +825,23 @@ private static TimeZoneInfo GetWarsawTimeZone()
              };*/
             return reservation;
         }
+
+        private string? BuildStayWellLink(string? resToken)
+        {
+            var baseUrl =
+                Environment.GetEnvironmentVariable("StayWell__ReservationUrlBase") ??
+                Environment.GetEnvironmentVariable("StayWellReservationUrlBase") ??
+                _configuration["StayWell:ReservationUrlBase"] ??
+                _configuration["StayWellReservationUrlBase"];
+
+            if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(resToken))
+            {
+                return null;
+            }
+
+            return baseUrl.Replace("{resToken}", resToken).TrimEnd('/');
+        }
+
 
         private static ClientWithGuest? MapClient(ClientInfoDto? client, InvoiceInfoDto? invoice)
         {
@@ -1128,21 +1155,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
         }
 
-        private string? BuildStayWellLink(string? resToken)
-        {
-            var baseUrl =
-                Environment.GetEnvironmentVariable("StayWell__ReservationUrlBase") ??
-                Environment.GetEnvironmentVariable("StayWellReservationUrlBase") ??
-                _configuration["StayWell:ReservationUrlBase"] ??
-                _configuration["StayWellReservationUrlBase"];
-
-            if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(resToken))
-            {
-                return null;
-            }
-
-            return baseUrl.Replace("{resToken}", resToken).TrimEnd('/');
-        }
+      
 
         public async Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid)
         {

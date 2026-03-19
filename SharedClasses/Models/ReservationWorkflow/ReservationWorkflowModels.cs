@@ -27,7 +27,10 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public decimal? OfferPrice { get; set; }
         public string Currency { get; set; } = "PLN";
         public List<SelectedAddonDto> SelectedAddons { get; set; } = new();
+        public decimal SelectedAddonsTotalPrice { get; set; } = new();
+        public List<SelectedAddonDto> MandatoryAddons { get; set; } = new();
         public List<SelectedUpsellDto> SelectedUpsells { get; set; } = new(); //tylko ID upsellu.
+        public decimal SelectedUpsellsTotalPrice { get; set; } = new();
     }
 
     public class ClientInfoDto
@@ -107,6 +110,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public ClientInfoDto? Client { get; set; }
         public InvoiceInfoDto? Invoice { get; set; }
         public string GoogleMapsLink { get; set; } = string.Empty;
+        public string StayWellLink { get; set; } = string.Empty;
 
         //  public List<TermsAndConditionsAcceptanceInfo> {get;set;}
         public string? PaymentRedirectUrl { get; set; }
