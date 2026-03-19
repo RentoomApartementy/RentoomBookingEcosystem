@@ -782,6 +782,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 Price = start.OfferPrice.HasValue ? (float)start.OfferPrice.Value : null, //TOD: 10.03.26 - sprawdzić czy ta cena powinna iść do IDB i czy powinna zawierać ceny za Addony
                 Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,
+               
                 Items =
                 [
                     new NewReservationItem
@@ -827,7 +828,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 FirstName = client.FirstName,
                 LastName = client.LastName,
                 City = client.City,
-                CountryCode = client.CountryCode,
+                CountryCode = client.CountryCode.ToLower(),
                 Email = client.Email,
                 Language = language,
                 Phone = client.Phone,
@@ -846,23 +847,26 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 Street = client.Street,
                 Zipcode = client.ZipCode,
                 City = client.City,
-                CountryCode = client.CountryCode,
+                CountryCode = client.CountryCode.ToLower(),
                 Currency = "PLN",
                 Language = language,
                 Guests = guests,
-                InvoiceData = invoice is null
-                    ? null
-                    : new ClientInvoiceData
-                    {
-                        FirstName = client.FirstName,
-                        LastName = client.LastName,
-                        CompanyName = invoice.CompanyName,
-                        TaxNumber = invoice.TaxNumber,
-                        Street = invoice.Street,
-                        Zipcode = invoice.ZipCode,
-                        City = invoice.City,
-                        CountryCode = client.CountryCode
-                    }
+                CompanyName = invoice?.CompanyName,
+                TaxNumber = invoice?.TaxNumber,
+                /*idobooking wywala błąd gdy chcemy przekazac invoice data - po rozmowie z Krystianem zostawiamy to pole puste, a dane do faktury i tak trafiają do Bitrix w Dealu */
+                /*  InvoiceData = invoice is null
+                      ? null
+                      : new ClientInvoiceData
+                      {
+                          FirstName = client.FirstName,
+                          LastName = client.LastName,
+                          CompanyName = invoice.CompanyName,
+                          TaxNumber = invoice.TaxNumber,
+                          Street = invoice.Street,
+                          Zipcode = invoice.ZipCode,
+                          City = invoice.City,
+                          CountryCode = client.CountryCode
+                      }*/
             };
         }
 
@@ -874,7 +878,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             var normalized = language.Trim().ToLowerInvariant();
-            if (normalized.StartsWith("en"))
+            if (!normalized.StartsWith("pl"))
             {
                 return "eng";
             }

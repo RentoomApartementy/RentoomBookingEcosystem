@@ -36,6 +36,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement
         public string Currency { get; set; } = string.Empty;
         public string? Notify { get; set; } = ReservationNotifyType.No; // wartości "n", "y"
         public string? NotifyService { get; set; } = ReservationNotifyType.No; // wartości "n", "y"
+    
     }
 
     public class NewReservationPackage
