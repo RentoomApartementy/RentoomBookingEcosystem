@@ -130,6 +130,8 @@ builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
 builder.Services.AddScoped<ITpayNotificationValidator, TpayNotificationValidator>();
 builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
 builder.Services.AddScoped<IBookingComLogStore, BookingComLogStore>();
+builder.Services.AddScoped<IBookingComIncomingEmailProcessor, BookingComIncomingEmailProcessor>();
+builder.Services.AddScoped<IBookingComBackfillImportBuilder, BookingComBackfillImportBuilder>();
 builder.Services.AddScoped<IBookingComReservationWorkflowService, BookingComReservationWorkflowService>();
 
 /*builder.Services.AddSingleton<TpayClient>();
