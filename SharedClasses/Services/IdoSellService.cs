@@ -47,6 +47,7 @@ namespace RentoomBooking.SharedClasses.Services
         private const string ReservationsAddEndpoint = "reservations/add/34/json";
         private const string ReservationsEditEndpoint = "reservations/edit/34/json";
         private const string ReservationsEditStatusEndpoint = "reservations/editStatus/34/json";
+        private const string ReservationsSetDiscountEndpoint = "reservations/setDiscount/34/json";
 
         private const string PaymentsAddEndpoint = "payments/add/34/json";
         private const string PaymentsCancelEndpoint = "payments/cancel/34/json";
@@ -453,6 +454,48 @@ namespace RentoomBooking.SharedClasses.Services
             return response?.Result;
         }
 
+        public async Task<ReservationSetDiscountResponse?> SetReservationDiscountAsync(SetReservationDiscount reservationDiscount, CancellationToken cancellationToken = default)
+        {
+            if (reservationDiscount is null)
+            {
+                throw new ArgumentNullException(nameof(reservationDiscount));
+            }
+
+            return await SetReservationsDiscountAsync([reservationDiscount], cancellationToken);
+        }
+
+        public async Task<ReservationSetDiscountResponse?> SetReservationsDiscountAsync(IEnumerable<SetReservationDiscount> reservationDiscounts, CancellationToken cancellationToken = default)
+        {
+            if (reservationDiscounts is null)
+            {
+                throw new ArgumentNullException(nameof(reservationDiscounts));
+            }
+
+            var reservationDiscountList = reservationDiscounts.ToList();
+            if (reservationDiscountList.Count == 0)
+            {
+                throw new ArgumentException("Podaj przynajmniej jedną rezerwację do ustawienia rabatu.", nameof(reservationDiscounts));
+            }
+
+            if (_useDummyIdoBooking)
+            {
+                return await SetReservationsDiscountDummyAsync(reservationDiscountList, cancellationToken);
+            }
+
+            var request = new ReservationSetDiscountRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Reservations = reservationDiscountList
+            };
+
+            var response = await _idoConnect.PostAsync<ReservationSetDiscountRequest, ReservationSetDiscountResponseType>(
+                ReservationsSetDiscountEndpoint,
+                request,
+                cancellationToken);
+
+            return response?.Result;
+        }
+
         public async Task<PaymentAddResponse?> AddPaymentAsync(PaymentAdd payment, CancellationToken cancellationToken = default)
         {
             if (payment is null)
@@ -657,6 +700,61 @@ namespace RentoomBooking.SharedClasses.Services
             return new ReservationAddResponse
             {
                 Reservations = results
+            };
+        }
+
+        private async Task<ReservationSetDiscountResponse> SetReservationsDiscountDummyAsync(List<SetReservationDiscount> reservationDiscounts, CancellationToken cancellationToken)
+        {
+            var appliedDiscounts = new List<SetReservationDiscount>();
+
+            foreach (var reservationDiscount in reservationDiscounts)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var reservation = await _bookingDatabase.GetReservationByIdAsync(reservationDiscount.ReservationId, _logger, cancellationToken);
+                if (reservation is null)
+                {
+                    return new ReservationSetDiscountResponse
+                    {
+                        Authenticate = _idoConnect.AuthObjectIdo(),
+                        Errors = new GateErrorType
+                        {
+                            FaultCode = 404,
+                            FaultString = $"Reservation with id {reservationDiscount.ReservationId} not found in dummy storage."
+                        }
+                    };
+                }
+
+                if (reservation.ReservationDetails != null)
+                {
+                    reservation.ReservationDetails.discount = reservationDiscount.PercentValue.ToString(CultureInfo.InvariantCulture);
+                }
+
+                var updated = await _bookingDatabase.UpdateReservationJsonAsync(reservation, _logger, cancellationToken);
+                if (!updated)
+                {
+                    return new ReservationSetDiscountResponse
+                    {
+                        Authenticate = _idoConnect.AuthObjectIdo(),
+                        Errors = new GateErrorType
+                        {
+                            FaultCode = 500,
+                            FaultString = $"Failed to persist discount for reservation {reservationDiscount.ReservationId} in dummy storage."
+                        }
+                    };
+                }
+
+                appliedDiscounts.Add(new SetReservationDiscount
+                {
+                    ReservationId = reservationDiscount.ReservationId,
+                    PercentValue = reservationDiscount.PercentValue
+                });
+            }
+
+            return new ReservationSetDiscountResponse
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Reservations = appliedDiscounts
             };
         }
 
