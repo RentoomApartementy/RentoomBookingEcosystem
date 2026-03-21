@@ -95,6 +95,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IMockTpayGateway, MockTpayGateway>();
             builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
             builder.Services.AddScoped<BitrixService>();
+            builder.Services.AddScoped<BitrixLeadCaptureService>();
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<MediaCacheService>();
 

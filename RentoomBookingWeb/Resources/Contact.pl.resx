@@ -48,4 +48,25 @@
     <data name="Send" xml:space="preserve">
         <value>Wyślij wiadomość</value>
     </data>
+    <data name="Sending" xml:space="preserve">
+        <value>Wysyłanie...</value>
+    </data>
+    <data name="RequiredFieldsError" xml:space="preserve">
+        <value>Uzupełnij wszystkie pola formularza.</value>
+    </data>
+    <data name="InvalidEmailError" xml:space="preserve">
+        <value>Podaj poprawny adres e-mail.</value>
+    </data>
+    <data name="ConsentRequiredError" xml:space="preserve">
+        <value>Zaakceptuj zgodę na przetwarzanie danych.</value>
+    </data>
+    <data name="SubmitSuccess" xml:space="preserve">
+        <value>Dziękujemy. Formularz został wysłany do Bitrix.</value>
+    </data>
+    <data name="SubmitError" xml:space="preserve">
+        <value>Nie udało się wysłać formularza. Spróbuj ponownie za chwilę.</value>
+    </data>
+    <data name="SubmitPartialError" xml:space="preserve">
+        <value>Kontakt mógł zostać zapisany, ale nie udało się utworzyć deala. Sprawdź Bitrix przed ponowną wysyłką.</value>
+    </data>
 </root>

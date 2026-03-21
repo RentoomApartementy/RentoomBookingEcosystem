@@ -142,16 +142,16 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             throw new Exception($"Unexpected Bitrix24 response: {responseContent}");
         }
 
-        public async Task<int> AddContactAsync(CreateContactRequest NewContactData)
+        public async Task<int> AddContactAsync(CreateContactRequest NewContactData, string? contactTypeId = "UC_YIVWK8") //contactTypeId = "UC_YIVWK8" = Gość Rentoom
         {
             var endpointMethod = "crm.contact.add.json";
-
+            
             var fields = new Dictionary<string, object?>
             {
                 ["NAME"] = NewContactData.FirstName,
                 ["LAST_NAME"] = NewContactData.LastName,
                 ["OPENED"] = "Y",
-                ["TYPE_ID"] = "UC_YIVWK8",
+                ["TYPE_ID"] = contactTypeId,
                 ["SOURCE_ID"] = "WEB",
                 ["PHONE"] = new[]
                 {
@@ -334,7 +334,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             throw BitrixError(doc.RootElement.GetRawText(), doc);
         }
 
-        public async Task<int> UpsertContactByEmailAsync(CreateContactRequest contact)
+        public async Task<int> UpsertContactByEmailAsync(CreateContactRequest contact, string? contactTypeId = "UC_YIVWK8")
         {
             var existingId = await FindContactIdByEmailAsync(contact.Email);
             if (existingId.HasValue)
@@ -343,7 +343,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
                 return existingId.Value;
             }
 
-            return await AddContactAsync(contact);
+            return await AddContactAsync(contact, contactTypeId);
         }
 
         

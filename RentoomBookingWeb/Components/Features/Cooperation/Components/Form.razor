@@ -1,5 +1,9 @@
+@using Microsoft.AspNetCore.Components.Web;
 @using Microsoft.Extensions.Localization;
+@using RentoomBookingWeb.Services;
+@using System.Net.Mail;
 @inject IStringLocalizer<Cooperation> Localizer;
+@inject BitrixLeadCaptureService LeadCaptureService
 
 <div class="form-container">
     <h3 class="form-title">@Localizer["FillOutForm"]</h3>
@@ -15,13 +19,35 @@
                 <Input Placeholder="@Localizer["LastName"]" Type="text" @bind-Value="_surname" IsFull="true"/>  
             </div>
             <Input Placeholder="@Localizer["PhoneNumber"]" Type="text" @bind-Value="_phone" IsFull="true"/>  
-            <Input Placeholder="Email" Type="text" @bind-Value="_email" IsFull="true"/> 
+            <Input Placeholder="@Localizer["Email"]" Type="text" @bind-Value="_email" IsFull="true"/> 
             <div class="form-names">
                 <Input Placeholder="@Localizer["NumberOfApartments"]" Type="number" @bind-Value="_apartmentsCount" IsFull="true"/>  
                 <Input Placeholder="@Localizer["District"]" Type="text" @bind-Value="_district" IsFull="true"/>  
             </div>
-            
-            <Button>@Localizer["Send"]</Button>
+            <textarea class="custom-textarea" placeholder="@Localizer["MessageContent"]" @bind="_message"></textarea>
+
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="rodo" @bind="_consent" />
+                <label for="rodo">
+                    @Localizer["ConsentText"] (<a href="/regulaminy" target="_blank">@Localizer["Privacypolicy"]</a>).
+                </label>
+            </div>
+
+            <div class="btn-wrapper">
+                <Button style="width: 100%;" Disabled="@_isSubmitting" OnClick="HandleSubmitClick">
+                    @(_isSubmitting ? Localizer["Sending"] : Localizer["Send"])
+                </Button>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(_submitMessage))
+            {
+                <p class="form-feedback success">@_submitMessage</p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(_submitError))
+            {
+                <p class="form-feedback error">@_submitError</p>
+            }
         </div>
     </div>
 </div>
@@ -33,4 +59,120 @@
     private string _email = "";
     private string _apartmentsCount = "";
     private string _district = "";
+    private string _message = "";
+    private bool _consent = false;
+    private bool _isSubmitting = false;
+    private string _submitMessage = "";
+    private string _submitError = "";
+
+    private Task HandleSubmitClick(MouseEventArgs _)
+    {
+        return SubmitAsync();
+    }
+
+    private async Task SubmitAsync()
+    {
+        if (_isSubmitting)
+        {
+            return;
+        }
+
+        _submitMessage = string.Empty;
+        _submitError = string.Empty;
+
+        if (!ValidateForm(out var apartmentsCount))
+        {
+            return;
+        }
+
+        _isSubmitting = true;
+        int? createdContactId = null;
+
+        try
+        {
+            var result = await LeadCaptureService.SubmitAsync(new BitrixLeadCaptureRequest(
+                FirstName: _name.Trim(),
+                LastName: _surname.Trim(),
+                Email: _email.Trim(),
+                Phone: _phone.Trim(),
+                Message: _message.Trim(),
+                DealTitle: BuildDealTitle(),
+                CommentFields: new[]
+                {
+                    new KeyValuePair<string, string?>("Zrodlo", "formularz wspolpracy RentoomBookingWeb (nowy rentoom.pl)"),
+                    new KeyValuePair<string, string?>("Liczba mieszkan", apartmentsCount.ToString()),
+                    new KeyValuePair<string, string?>("Dzielnica", _district.Trim())
+                }
+            ));
+
+            createdContactId = result.ContactId;
+
+            ResetForm();
+            _submitMessage = Localizer["SubmitSuccess"];
+        }
+        catch (BitrixLeadCaptureException ex)
+        {
+            _submitError = ex.ContactCreated || createdContactId.HasValue
+                ? Localizer["SubmitPartialError"]
+                : Localizer["SubmitError"];
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private bool ValidateForm(out int apartmentsCount)
+    {
+        apartmentsCount = 0;
+
+        if (string.IsNullOrWhiteSpace(_name) ||
+            string.IsNullOrWhiteSpace(_surname) ||
+            string.IsNullOrWhiteSpace(_phone) ||
+            string.IsNullOrWhiteSpace(_email) ||
+            string.IsNullOrWhiteSpace(_apartmentsCount) ||
+            string.IsNullOrWhiteSpace(_district) ||
+            string.IsNullOrWhiteSpace(_message))
+        {
+            _submitError = Localizer["RequiredFieldsError"];
+            return false;
+        }
+
+        if (!MailAddress.TryCreate(_email.Trim(), out _))
+        {
+            _submitError = Localizer["InvalidEmailError"];
+            return false;
+        }
+
+        if (!int.TryParse(_apartmentsCount.Trim(), out apartmentsCount) || apartmentsCount <= 0)
+        {
+            _submitError = Localizer["InvalidApartmentsCountError"];
+            return false;
+        }
+
+        if (!_consent)
+        {
+            _submitError = Localizer["ConsentRequiredError"];
+            return false;
+        }
+
+        return true;
+    }
+
+    private string BuildDealTitle()
+    {
+        return $"Wspolpraca - {_name.Trim()} {_surname.Trim()}";
+    }
+
+    private void ResetForm()
+    {
+        _name = string.Empty;
+        _surname = string.Empty;
+        _phone = string.Empty;
+        _email = string.Empty;
+        _apartmentsCount = string.Empty;
+        _district = string.Empty;
+        _message = string.Empty;
+        _consent = false;
+    }
 }

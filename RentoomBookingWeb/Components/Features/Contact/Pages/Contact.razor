@@ -1,8 +1,12 @@
 @page "/kontakt"
+@using Microsoft.AspNetCore.Components.Web;
 @inject IJSRuntime JSRuntime;
 @inject NavigationManager NavManager;
 @using Microsoft.Extensions.Localization;
+@using RentoomBookingWeb.Services;
+@using System.Net.Mail;
 @inject IStringLocalizer<RentoomBookingWeb.Contact> Localizer;
+@inject BitrixLeadCaptureService LeadCaptureService
 
 <PageTitle>Kontakt - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</PageTitle>
 
@@ -69,7 +73,7 @@
                 <h2 id="contact-form-heading" class="card-title">@Localizer["ContactForm"]</h2>
                 <p class="form-subtitle">@Localizer["FillOutText"]</p>
                 
-                <form class="custom-form-layout" onsubmit="return false;">
+                <div class="custom-form-layout">
                     
                     <Input Placeholder="@Localizer["FirstAndLastName"]" Type="text" @bind-Value="_name" IsFull="true" />
                     
@@ -87,9 +91,21 @@
                     </div>
 
                     <div class="btn-wrapper">
-                        <Button IsFull="true">@Localizer["Send"]</Button>
+                        <Button style="width: 100%;" Disabled="@_isSubmitting" OnClick="HandleSubmitClick">
+                            @(_isSubmitting ? Localizer["Sending"] : Localizer["Send"])
+                        </Button>
                     </div>
-                </form>
+
+                    @if (!string.IsNullOrWhiteSpace(_submitMessage))
+                    {
+                        <p class="form-feedback success">@_submitMessage</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(_submitError))
+                    {
+                        <p class="form-feedback error">@_submitError</p>
+                    }
+                </div>
             </section>
 
         </div>
@@ -102,9 +118,124 @@
     private string _phone = "";
     private string _message = "";
     private bool _consent = false;
+    private bool _isSubmitting = false;
+    private string _submitMessage = "";
+    private string _submitError = "";
 
     private async Task CopyToClipboard(string text)
     {
         await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", text);
+    }
+
+    private Task HandleSubmitClick(MouseEventArgs _)
+    {
+        return SubmitAsync();
+    }
+
+    private async Task SubmitAsync()
+    {
+        if (_isSubmitting)
+        {
+            return;
+        }
+
+        _submitMessage = string.Empty;
+        _submitError = string.Empty;
+
+        if (!ValidateForm())
+        {
+            return;
+        }
+
+        _isSubmitting = true;
+
+        try
+        {
+            var (firstName, lastName) = SplitName(_name);
+
+            await LeadCaptureService.SubmitAsync(new BitrixLeadCaptureRequest(
+                FirstName: firstName,
+                LastName: lastName,
+                Email: _email.Trim(),
+                Phone: _phone.Trim(),
+                Message: _message.Trim(),
+                DealTitle: BuildDealTitle(),
+                CommentFields: new[]
+                {
+                    new KeyValuePair<string, string?>("Zrodlo", "formularz kontaktowy RentoomBookingWeb"),
+                    new KeyValuePair<string, string?>("Imie i nazwisko", _name.Trim())
+                }
+            ));
+
+            ResetForm();
+            _submitMessage = Localizer["SubmitSuccess"];
+        }
+        catch (BitrixLeadCaptureException ex)
+        {
+            _submitError = ex.ContactCreated
+                ? Localizer["SubmitPartialError"]
+                : Localizer["SubmitError"];
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+
+    private bool ValidateForm()
+    {
+        if (string.IsNullOrWhiteSpace(_name) ||
+            string.IsNullOrWhiteSpace(_email) ||
+            string.IsNullOrWhiteSpace(_phone) ||
+            string.IsNullOrWhiteSpace(_message))
+        {
+            _submitError = Localizer["RequiredFieldsError"];
+            return false;
+        }
+
+        if (!MailAddress.TryCreate(_email.Trim(), out _))
+        {
+            _submitError = Localizer["InvalidEmailError"];
+            return false;
+        }
+
+        if (!_consent)
+        {
+            _submitError = Localizer["ConsentRequiredError"];
+            return false;
+        }
+
+        return true;
+    }
+
+    private string BuildDealTitle()
+    {
+        return $"Kontakt - {_name.Trim()}";
+    }
+
+    private void ResetForm()
+    {
+        _name = string.Empty;
+        _email = string.Empty;
+        _phone = string.Empty;
+        _message = string.Empty;
+        _consent = false;
+    }
+
+    private static (string FirstName, string LastName) SplitName(string fullName)
+    {
+        var parts = fullName.Trim().Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 0)
+        {
+            return (string.Empty, string.Empty);
+        }
+
+        if (parts.Length == 1)
+        {
+            return (parts[0], string.Empty);
+        }
+
+        return (parts[0], parts[1]);
     }
 }
