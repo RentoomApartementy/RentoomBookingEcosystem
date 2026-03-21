@@ -181,6 +181,41 @@ param rentoomAppDbUser string = 'RentoomAzureDbAdmin'
 @description('Rentoom App database password.')
 param rentoomAppDbPassword string
 
+@description('Desired max_connections value on the shared PostgreSQL Flexible Server.')
+@minValue(1)
+param postgresMaxConnections int = 429
+
+@description('Whether PostgreSQL connection pooling should be enabled in application connection strings.')
+param postgresPoolingEnabled bool = true
+
+@description('Minimum PostgreSQL pool size applied to application connection strings.')
+@minValue(0)
+param postgresPoolingMinimumPoolSize int = 0
+
+@description('Maximum PostgreSQL pool size for Rentoom Booking Web.')
+@minValue(0)
+param rentoomWebPostgresMaximumPoolSize int = 4
+
+@description('Maximum PostgreSQL pool size for StayWell API.')
+@minValue(0)
+param staywellApiPostgresMaximumPoolSize int = 1
+
+@description('Seconds after which idle PostgreSQL connections can be pruned from the pool.')
+@minValue(0)
+param postgresPoolingConnectionIdleLifetime int = 60
+
+@description('Seconds between PostgreSQL pool pruning scans.')
+@minValue(0)
+param postgresPoolingConnectionPruningInterval int = 10
+
+@description('Connection timeout in seconds for PostgreSQL.')
+@minValue(0)
+param postgresPoolingTimeout int = 15
+
+@description('Command timeout in seconds for PostgreSQL.')
+@minValue(0)
+param postgresPoolingCommandTimeout int = 30
+
 @description('TTLock client ID.')
 param ttlockClientId string = 'ba60c2707447415183df5d6a4c617e09'
 
@@ -262,6 +297,14 @@ module appStack './modules/app-stack.bicep' = {
     rentoomAppDbName: rentoomAppDbName
     rentoomAppDbUser: rentoomAppDbUser
     rentoomAppDbPassword: rentoomAppDbPassword
+    postgresPoolingEnabled: postgresPoolingEnabled
+    postgresPoolingMinimumPoolSize: postgresPoolingMinimumPoolSize
+    rentoomWebPostgresMaximumPoolSize: rentoomWebPostgresMaximumPoolSize
+    staywellApiPostgresMaximumPoolSize: staywellApiPostgresMaximumPoolSize
+    postgresPoolingConnectionIdleLifetime: postgresPoolingConnectionIdleLifetime
+    postgresPoolingConnectionPruningInterval: postgresPoolingConnectionPruningInterval
+    postgresPoolingTimeout: postgresPoolingTimeout
+    postgresPoolingCommandTimeout: postgresPoolingCommandTimeout
     ttlockClientId: ttlockClientId
     ttlockClientSecret: ttlockClientSecret
     ttlockUsername: ttlockUsername
@@ -271,6 +314,15 @@ module appStack './modules/app-stack.bicep' = {
     staywellApiAppInsightsName: staywellApiAppInsightsName
     rentoomWebAppInsightsName: rentoomWebAppInsightsName
     tags: tags
+  }
+}
+
+module postgresConfig './modules/postgres-config.bicep' = {
+  name: 'postgres-config-${environment}'
+  scope: resourceGroup(postgresSubscriptionId, postgresResourceGroupName)
+  params: {
+    postgresServerName: postgresServerName
+    postgresMaxConnections: postgresMaxConnections
   }
 }
 

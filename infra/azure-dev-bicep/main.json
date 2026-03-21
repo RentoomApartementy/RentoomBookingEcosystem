@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.41.2.15936",
-      "templateHash": "170363298208932991"
+      "templateHash": "3081888302587613930"
     }
   },
   "parameters": {
@@ -391,6 +391,77 @@
         "description": "Rentoom App database password."
       }
     },
+    "postgresMaxConnections": {
+      "type": "int",
+      "defaultValue": 429,
+      "minValue": 1,
+      "metadata": {
+        "description": "Desired max_connections value on the shared PostgreSQL Flexible Server."
+      }
+    },
+    "postgresPoolingEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether PostgreSQL connection pooling should be enabled in application connection strings."
+      }
+    },
+    "postgresPoolingMinimumPoolSize": {
+      "type": "int",
+      "defaultValue": 0,
+      "minValue": 0,
+      "metadata": {
+        "description": "Minimum PostgreSQL pool size applied to application connection strings."
+      }
+    },
+    "rentoomWebPostgresMaximumPoolSize": {
+      "type": "int",
+      "defaultValue": 4,
+      "minValue": 0,
+      "metadata": {
+        "description": "Maximum PostgreSQL pool size for Rentoom Booking Web."
+      }
+    },
+    "staywellApiPostgresMaximumPoolSize": {
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 0,
+      "metadata": {
+        "description": "Maximum PostgreSQL pool size for StayWell API."
+      }
+    },
+    "postgresPoolingConnectionIdleLifetime": {
+      "type": "int",
+      "defaultValue": 60,
+      "minValue": 0,
+      "metadata": {
+        "description": "Seconds after which idle PostgreSQL connections can be pruned from the pool."
+      }
+    },
+    "postgresPoolingConnectionPruningInterval": {
+      "type": "int",
+      "defaultValue": 10,
+      "minValue": 0,
+      "metadata": {
+        "description": "Seconds between PostgreSQL pool pruning scans."
+      }
+    },
+    "postgresPoolingTimeout": {
+      "type": "int",
+      "defaultValue": 15,
+      "minValue": 0,
+      "metadata": {
+        "description": "Connection timeout in seconds for PostgreSQL."
+      }
+    },
+    "postgresPoolingCommandTimeout": {
+      "type": "int",
+      "defaultValue": 30,
+      "minValue": 0,
+      "metadata": {
+        "description": "Command timeout in seconds for PostgreSQL."
+      }
+    },
     "ttlockClientId": {
       "type": "string",
       "defaultValue": "ba60c2707447415183df5d6a4c617e09",
@@ -593,6 +664,30 @@
           "rentoomAppDbPassword": {
             "value": "[parameters('rentoomAppDbPassword')]"
           },
+          "postgresPoolingEnabled": {
+            "value": "[parameters('postgresPoolingEnabled')]"
+          },
+          "postgresPoolingMinimumPoolSize": {
+            "value": "[parameters('postgresPoolingMinimumPoolSize')]"
+          },
+          "rentoomWebPostgresMaximumPoolSize": {
+            "value": "[parameters('rentoomWebPostgresMaximumPoolSize')]"
+          },
+          "staywellApiPostgresMaximumPoolSize": {
+            "value": "[parameters('staywellApiPostgresMaximumPoolSize')]"
+          },
+          "postgresPoolingConnectionIdleLifetime": {
+            "value": "[parameters('postgresPoolingConnectionIdleLifetime')]"
+          },
+          "postgresPoolingConnectionPruningInterval": {
+            "value": "[parameters('postgresPoolingConnectionPruningInterval')]"
+          },
+          "postgresPoolingTimeout": {
+            "value": "[parameters('postgresPoolingTimeout')]"
+          },
+          "postgresPoolingCommandTimeout": {
+            "value": "[parameters('postgresPoolingCommandTimeout')]"
+          },
           "ttlockClientId": {
             "value": "[parameters('ttlockClientId')]"
           },
@@ -628,7 +723,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.41.2.15936",
-              "templateHash": "12185239500023463071"
+              "templateHash": "2598611544780936113"
             }
           },
           "parameters": {
@@ -954,6 +1049,61 @@
                 "description": "Rentoom App database password."
               }
             },
+            "postgresPoolingEnabled": {
+              "type": "bool",
+              "metadata": {
+                "description": "Whether PostgreSQL connection pooling should be enabled in application connection strings."
+              }
+            },
+            "postgresPoolingMinimumPoolSize": {
+              "type": "int",
+              "minValue": 0,
+              "metadata": {
+                "description": "Minimum PostgreSQL pool size applied to application connection strings."
+              }
+            },
+            "rentoomWebPostgresMaximumPoolSize": {
+              "type": "int",
+              "minValue": 0,
+              "metadata": {
+                "description": "Maximum PostgreSQL pool size for Rentoom Booking Web."
+              }
+            },
+            "staywellApiPostgresMaximumPoolSize": {
+              "type": "int",
+              "minValue": 0,
+              "metadata": {
+                "description": "Maximum PostgreSQL pool size for StayWell API."
+              }
+            },
+            "postgresPoolingConnectionIdleLifetime": {
+              "type": "int",
+              "minValue": 0,
+              "metadata": {
+                "description": "Seconds after which idle PostgreSQL connections can be pruned from the pool."
+              }
+            },
+            "postgresPoolingConnectionPruningInterval": {
+              "type": "int",
+              "minValue": 0,
+              "metadata": {
+                "description": "Seconds between PostgreSQL pool pruning scans."
+              }
+            },
+            "postgresPoolingTimeout": {
+              "type": "int",
+              "minValue": 0,
+              "metadata": {
+                "description": "Connection timeout in seconds for PostgreSQL."
+              }
+            },
+            "postgresPoolingCommandTimeout": {
+              "type": "int",
+              "minValue": 0,
+              "metadata": {
+                "description": "Command timeout in seconds for PostgreSQL."
+              }
+            },
             "ttlockClientId": {
               "type": "string",
               "metadata": {
@@ -998,6 +1148,7 @@
             "tpayNotificationUrl": "[format('{0}/api/tpay/notification', variables('normalizedStaywellApiCustomBaseUrl'))]",
             "applicationRuntimeEnvironment": "[if(equals(parameters('environment'), 'prod'), 'Production', 'Development')]",
             "idoBookingUseDummySetting": "[if(parameters('idoBookingUseDummy'), 'True', 'False')]",
+            "postgresPoolingEnabledSetting": "[if(parameters('postgresPoolingEnabled'), 'true', 'false')]",
             "staywellDbConnectionString": "[format('Server={0}.postgres.database.azure.com;Database={1};Port=5432;User Id={2};Password={3};Ssl Mode=VerifyFull;Include Error Detail=True', parameters('postgresServerName'), parameters('staywellDbName'), parameters('staywellDbAppUser'), parameters('staywellDbAppPassword'))]",
             "rentoomAppDbConnectionString": "[format('Server={0}.postgres.database.azure.com;Database={1};Port=5432;User Id={2};Password={3};Ssl Mode=VerifyFull;Include Error Detail=True', parameters('postgresServerName'), parameters('rentoomAppDbName'), parameters('rentoomAppDbUser'), parameters('rentoomAppDbPassword'))]",
             "storageBlobDataOwnerRoleId": "b7e6dc6d-f1e8-4753-8033-0f276bb0955b",
@@ -1156,6 +1307,34 @@
                     {
                       "name": "ConnectionStrings__RentoomDbConnectionString",
                       "value": "[variables('rentoomAppDbConnectionString')]"
+                    },
+                    {
+                      "name": "PostgresPooling__Enabled",
+                      "value": "[variables('postgresPoolingEnabledSetting')]"
+                    },
+                    {
+                      "name": "PostgresPooling__MinimumPoolSize",
+                      "value": "[string(parameters('postgresPoolingMinimumPoolSize'))]"
+                    },
+                    {
+                      "name": "PostgresPooling__MaximumPoolSize",
+                      "value": "[string(parameters('rentoomWebPostgresMaximumPoolSize'))]"
+                    },
+                    {
+                      "name": "PostgresPooling__ConnectionIdleLifetime",
+                      "value": "[string(parameters('postgresPoolingConnectionIdleLifetime'))]"
+                    },
+                    {
+                      "name": "PostgresPooling__ConnectionPruningInterval",
+                      "value": "[string(parameters('postgresPoolingConnectionPruningInterval'))]"
+                    },
+                    {
+                      "name": "PostgresPooling__Timeout",
+                      "value": "[string(parameters('postgresPoolingTimeout'))]"
+                    },
+                    {
+                      "name": "PostgresPooling__CommandTimeout",
+                      "value": "[string(parameters('postgresPoolingCommandTimeout'))]"
                     },
                     {
                       "name": "Tpay__ApiBaseUrl",
@@ -1344,7 +1523,14 @@
                 "TTLOCK__Username": "[parameters('ttlockUsername')]",
                 "TTLOCK__Password": "[parameters('ttlockPassword')]",
                 "ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL": "[variables('staywellDbConnectionString')]",
-                "ConnectionStrings__RentoomDbConnectionString": "[variables('rentoomAppDbConnectionString')]"
+                "ConnectionStrings__RentoomDbConnectionString": "[variables('rentoomAppDbConnectionString')]",
+                "PostgresPooling__Enabled": "[variables('postgresPoolingEnabledSetting')]",
+                "PostgresPooling__MinimumPoolSize": "[string(parameters('postgresPoolingMinimumPoolSize'))]",
+                "PostgresPooling__MaximumPoolSize": "[string(parameters('staywellApiPostgresMaximumPoolSize'))]",
+                "PostgresPooling__ConnectionIdleLifetime": "[string(parameters('postgresPoolingConnectionIdleLifetime'))]",
+                "PostgresPooling__ConnectionPruningInterval": "[string(parameters('postgresPoolingConnectionPruningInterval'))]",
+                "PostgresPooling__Timeout": "[string(parameters('postgresPoolingTimeout'))]",
+                "PostgresPooling__CommandTimeout": "[string(parameters('postgresPoolingCommandTimeout'))]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('rentoomDataStorageAccountName'))]",
@@ -1532,6 +1718,64 @@
       "dependsOn": [
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('resourceGroupName'))]"
       ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('postgres-config-{0}', parameters('environment'))]",
+      "subscriptionId": "[parameters('postgresSubscriptionId')]",
+      "resourceGroup": "[parameters('postgresResourceGroupName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "postgresServerName": {
+            "value": "[parameters('postgresServerName')]"
+          },
+          "postgresMaxConnections": {
+            "value": "[parameters('postgresMaxConnections')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.41.2.15936",
+              "templateHash": "2876542734370054079"
+            }
+          },
+          "parameters": {
+            "postgresServerName": {
+              "type": "string",
+              "metadata": {
+                "description": "Existing PostgreSQL Flexible Server name."
+              }
+            },
+            "postgresMaxConnections": {
+              "type": "int",
+              "minValue": 1,
+              "metadata": {
+                "description": "Desired max_connections value on the PostgreSQL Flexible Server."
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+              "apiVersion": "2025-08-01",
+              "name": "[format('{0}/{1}', parameters('postgresServerName'), 'max_connections')]",
+              "properties": {
+                "value": "[string(parameters('postgresMaxConnections'))]",
+                "source": "user-override"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "outputs": {

@@ -167,6 +167,37 @@ param rentoomAppDbUser string
 @description('Rentoom App database password.')
 param rentoomAppDbPassword string
 
+@description('Whether PostgreSQL connection pooling should be enabled in application connection strings.')
+param postgresPoolingEnabled bool
+
+@description('Minimum PostgreSQL pool size applied to application connection strings.')
+@minValue(0)
+param postgresPoolingMinimumPoolSize int
+
+@description('Maximum PostgreSQL pool size for Rentoom Booking Web.')
+@minValue(0)
+param rentoomWebPostgresMaximumPoolSize int
+
+@description('Maximum PostgreSQL pool size for StayWell API.')
+@minValue(0)
+param staywellApiPostgresMaximumPoolSize int
+
+@description('Seconds after which idle PostgreSQL connections can be pruned from the pool.')
+@minValue(0)
+param postgresPoolingConnectionIdleLifetime int
+
+@description('Seconds between PostgreSQL pool pruning scans.')
+@minValue(0)
+param postgresPoolingConnectionPruningInterval int
+
+@description('Connection timeout in seconds for PostgreSQL.')
+@minValue(0)
+param postgresPoolingTimeout int
+
+@description('Command timeout in seconds for PostgreSQL.')
+@minValue(0)
+param postgresPoolingCommandTimeout int
+
 @description('TTLock client ID.')
 param ttlockClientId string
 
@@ -196,6 +227,7 @@ var staywellUrlBase = normalizedStaywellBaseUrl
 var tpayNotificationUrl = '${normalizedStaywellApiCustomBaseUrl}/api/tpay/notification'
 var applicationRuntimeEnvironment = environment == 'prod' ? 'Production' : 'Development'
 var idoBookingUseDummySetting = idoBookingUseDummy ? 'True' : 'False'
+var postgresPoolingEnabledSetting = postgresPoolingEnabled ? 'true' : 'false'
 var staywellDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${staywellDbName};Port=5432;User Id=${staywellDbAppUser};Password=${staywellDbAppPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
 var rentoomAppDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${rentoomAppDbName};Port=5432;User Id=${rentoomAppDbUser};Password=${rentoomAppDbPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
 
@@ -353,6 +385,34 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
         {
           name: 'ConnectionStrings__RentoomDbConnectionString'
           value: rentoomAppDbConnectionString
+        }
+        {
+          name: 'PostgresPooling__Enabled'
+          value: postgresPoolingEnabledSetting
+        }
+        {
+          name: 'PostgresPooling__MinimumPoolSize'
+          value: string(postgresPoolingMinimumPoolSize)
+        }
+        {
+          name: 'PostgresPooling__MaximumPoolSize'
+          value: string(rentoomWebPostgresMaximumPoolSize)
+        }
+        {
+          name: 'PostgresPooling__ConnectionIdleLifetime'
+          value: string(postgresPoolingConnectionIdleLifetime)
+        }
+        {
+          name: 'PostgresPooling__ConnectionPruningInterval'
+          value: string(postgresPoolingConnectionPruningInterval)
+        }
+        {
+          name: 'PostgresPooling__Timeout'
+          value: string(postgresPoolingTimeout)
+        }
+        {
+          name: 'PostgresPooling__CommandTimeout'
+          value: string(postgresPoolingCommandTimeout)
         }
         {
           name: 'Tpay__ApiBaseUrl'
@@ -546,6 +606,13 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     // Database connection strings used by the app startup
     ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL: staywellDbConnectionString
     ConnectionStrings__RentoomDbConnectionString: rentoomAppDbConnectionString
+    PostgresPooling__Enabled: postgresPoolingEnabledSetting
+    PostgresPooling__MinimumPoolSize: string(postgresPoolingMinimumPoolSize)
+    PostgresPooling__MaximumPoolSize: string(staywellApiPostgresMaximumPoolSize)
+    PostgresPooling__ConnectionIdleLifetime: string(postgresPoolingConnectionIdleLifetime)
+    PostgresPooling__ConnectionPruningInterval: string(postgresPoolingConnectionPruningInterval)
+    PostgresPooling__Timeout: string(postgresPoolingTimeout)
+    PostgresPooling__CommandTimeout: string(postgresPoolingCommandTimeout)
   }
 }
 
