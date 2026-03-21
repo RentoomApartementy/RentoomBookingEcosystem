@@ -133,7 +133,7 @@
       "value": "uploadsprod"
     },
     "instructionsStorageContainerName": {
-      "value": "arrivalinstructions-prod"
+      "value": "arrivalinstructions-dev"
     },
     "rentoomAppDbName": {
       "value": "rentoomdb"
@@ -148,7 +148,7 @@
       "value": "+48601317506"
     },
     "rentoomDataStorageAccountName": {
-      "value": "storrentoombookingprod"
+      "value": "storagerentoombooking"
     },
     "logAnalyticsWorkspaceName": {
       "value": "log-prod-rentoombooking"

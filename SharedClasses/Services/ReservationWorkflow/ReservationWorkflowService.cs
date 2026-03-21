@@ -905,12 +905,12 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             var normalized = language.Trim().ToLowerInvariant();
-            if (!normalized.StartsWith("pl"))
+            if (!normalized.StartsWith("pl") && !normalized.StartsWith("pol"))
             {
                 return "eng";
             }
 
-            if (normalized.StartsWith("pl"))
+            if (normalized.StartsWith("pl") || normalized.StartsWith("pol"))
             {
                 return "pol";
             }
