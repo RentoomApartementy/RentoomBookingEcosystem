@@ -68,7 +68,11 @@ namespace RentoomBookingWeb
 
             var rentoomAppConnectionString = PostgresConnectionStringProvider
                .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
-               
+
+            if (string.IsNullOrWhiteSpace(rentoomAppConnectionString))
+            {
+                throw new InvalidOperationException("RentoomAppDb connection string is missing.");
+            }
 
 
             builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>

@@ -52,17 +52,25 @@ var tempLogger = tempLoggerFactory.CreateLogger("DatabaseInit");
 
 var postgresConnectionString = PostgresConnectionStringProvider
     .GetPostgresConnectionString(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger);
-  
+
+var rentoomAppConnectionString = PostgresConnectionStringProvider
+    .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
+
+if (string.IsNullOrWhiteSpace(postgresConnectionString))
+{
+    throw new InvalidOperationException("PostgreSQL connection string configuration is missing.");
+}
+
+if (string.IsNullOrWhiteSpace(rentoomAppConnectionString))
+{
+    throw new InvalidOperationException("RentoomAppDb connection string configuration is missing.");
+}
 
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("RentoomDbConnectionString")));
-
-var rentoomAppConnectionString = PostgresConnectionStringProvider
-    .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
-  
+    options.UseNpgsql(rentoomAppConnectionString));
 
 builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
@@ -171,19 +179,6 @@ builder.Services.AddHttpClient<ITpayClient, TpayClient>((sp, http) =>
     http.DefaultRequestHeaders.Accept.Clear();
     http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
-
-
-//POSTGRESS
-
-if (string.IsNullOrWhiteSpace(postgresConnectionString))
-{
-    throw new InvalidOperationException("PostgreSQL connection string configuration is missing.");
-}
-
-
-
-
-
 
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 {
