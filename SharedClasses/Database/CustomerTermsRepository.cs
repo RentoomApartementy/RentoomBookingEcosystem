@@ -22,6 +22,7 @@ namespace RentoomBooking.SharedClasses.Database
             var neutralCulture = normalizedCulture.Split('-')[0];
 
             var query = _context.CustomerTermsSources
+                .AsNoTracking()
                 .Where(t => t.IsActive);//.ToListAsync();
 
             //if (onlyRequiredForWorkflow)
@@ -58,6 +59,7 @@ namespace RentoomBooking.SharedClasses.Database
             var neutralCulture = normalizedCulture.Split('-')[0];
 
             var source = await _context.CustomerTermsSources
+                .AsNoTracking()
                 .Include(t => t.Translations)
                 .FirstOrDefaultAsync(t => t.Id == id && t.IsActive);
 
@@ -89,6 +91,7 @@ namespace RentoomBooking.SharedClasses.Database
             var neutralCulture = normalizedCulture.Split('-')[0];
 
             var terms = await _context.CustomerAgreedTerms
+                .AsNoTracking()
                 .Where(t => t.ReservationGuid == reservationGuid)
                 .Include(t => t.TermsSource)
                 .ThenInclude(t => t.Translations)

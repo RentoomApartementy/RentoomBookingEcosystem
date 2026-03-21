@@ -41,7 +41,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
 
            // // await _initializationTask;
             await using var _dbContext = _dbContextFactory.CreateDbContext();
-            var entities = await _dbContext.SearchFilters.ToListAsync(cancellationToken);
+            var entities = await _dbContext.SearchFilters.AsNoTracking().ToListAsync(cancellationToken);
             var results = new List<SearchFilterDocument>(entities.Count);
 
             foreach (var entity in entities)
@@ -199,7 +199,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             if (log is null) throw new ArgumentNullException(nameof(log));
 
             await using var _dbContext = _dbContextFactory.CreateDbContext();
-            var entity = await _dbContext.Reservations.FirstOrDefaultAsync(r => r.ResToken == resToken, cancellationToken);
+            var entity = await _dbContext.Reservations.AsNoTracking().FirstOrDefaultAsync(r => r.ResToken == resToken, cancellationToken);
             if (entity?.Payload is null)
             {
                 log.LogWarning("Reservation with token {Token} not found in PostgreSQL.", resToken);

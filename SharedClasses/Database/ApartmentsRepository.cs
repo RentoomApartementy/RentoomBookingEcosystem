@@ -54,7 +54,7 @@ namespace RentoomBooking.SharedClasses.Database
         public ApartmentObject? FindApartmentInPostgres(int apartmentId, CancellationToken cancellationToken = default)
         {
             using var context = _dbContextFactory.CreateDbContext();
-            var apentity = context.ApartmentInfos.FirstOrDefault(a => a.Id == apartmentId && !a.IsArchived) ?? throw new KeyNotFoundException("Apartament Not found");
+            var apentity = context.ApartmentInfos.AsNoTracking().FirstOrDefault(a => a.Id == apartmentId && !a.IsArchived) ?? throw new KeyNotFoundException("Apartament Not found");
 
             var apobj = JsonConvert.DeserializeObject<ApartmentObject>(apentity.Payload);
             return apobj;
