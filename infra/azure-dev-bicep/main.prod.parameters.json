@@ -25,9 +25,9 @@
     },
     "webPlanSku": {
       "value": {
-        "name": "F1",
-        "tier": "Free",
-        "size": "F1",
+        "name": "B2",
+        "tier": "Basic",
+        "size": "B2",
         "capacity": 1
       }
     },

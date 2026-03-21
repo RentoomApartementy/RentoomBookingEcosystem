@@ -3,8 +3,8 @@
 Ten katalog zawiera glowny deployment infrastruktury aplikacyjnej dla:
 
 - `RentoomBookingWeb` jako Linux Azure Web App
-- StayWell API jako Azure Function App na Flex Consumption
-- StayWell Static Web App
+- `StayWell API` jako Azure Function App na Flex Consumption
+- `StayWell` Static Web App
 - storage, monitoring i konfiguracje aplikacyjne
 
 To jest warstwa `app infra`.
@@ -36,7 +36,7 @@ Powod tej kolejnosci:
 - `modules/app-stack.bicep` - zasoby aplikacyjne, monitoring, storage i app settings
 - `main.dev.parameters.json` - parametry niesekretne dla `dev`, w tym `environment`, `webPlanSku` i `tags`
 - `main.prod.parameters.json` - parametry niesekretne dla `prod`, w tym `environment`, `webPlanSku` i `tags`
-- `deploy.ps1` - wrapper PowerShell uruchamiajacy `az deployment sub validate` i/lub `create`, przyjmujacy osobny plik parametrow z sekretami
+- `deploy.ps1` - wrapper PowerShell uruchamiajacy `az deployment sub validate` i/lub `create`, przyjmujacy osobny plik parametrow z sekretami; przed deploymentem listuje subskrypcje i wymaga recznego przelaczenia na wlasciwa
 
 ## Co faktycznie tworzy deployment
 
@@ -153,6 +153,18 @@ az login
 az account set --subscription "<SUBSCRIPTION_ID_OR_NAME>"
 ```
 
+Skrypt przed walidacja lub create:
+
+- wypisuje `az account list -o table`
+- pokazuje aktualna subskrypcje
+- porownuje ja z oczekiwana dla `dev` lub `prod`
+- przerywa dzialanie, jesli jestes na zlej subskrypcji
+
+Mapowanie:
+
+- `dev` -> `c079185e-8eeb-40dc-90b4-01cee2fa7e21`
+- `prod` -> `687d8cbd-fea7-4ae4-a70f-8cb4629c43c6`
+
 Walidacja:
 
 ```powershell
@@ -227,7 +239,7 @@ Domyslne wartosci:
 - `staywellBaseUrl=https://staywell.rentoom.pl`
 - `rentoomWebBaseUrl=https://rentoom.pl`
 - `staywellApiBaseUrl=https://api.rentoom.pl`
-- `webPlanSku=F1/Free`
+- `webPlanSku=B2/Basic`
 - `tags.environment=prod`
 - `staywellGithubOrganization=RentoomApartementy`
 - `staywellGithubRepositoryName=RentoomBookingEcosystem`
