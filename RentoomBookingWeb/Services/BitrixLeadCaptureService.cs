@@ -56,7 +56,7 @@ public sealed class BitrixLeadCaptureService
                 Phone = request.Phone.Trim()
             };
 
-            contactId = await _bitrixService.AddContactAsync(contactRequest, ContactTypeId);
+            contactId = await _bitrixService.UpsertContactByEmailAsync(contactRequest, ContactTypeId);
 
             var pipelines = await _bitrixService.GetDealPipelinesAsync();
             var pipeline = pipelines.FirstOrDefault(p => string.Equals(p.Name, PipelineName, StringComparison.OrdinalIgnoreCase));
