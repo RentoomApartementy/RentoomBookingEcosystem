@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using RentoomBooking.SharedClasses.Models;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,11 +10,14 @@ namespace RentoomBooking.SharedClasses.Database
 {
     public class CustomerTermsRepository
     {
+        private static readonly TimeSpan TermsCacheTtl = TimeSpan.FromMinutes(30);
         private readonly PostgresBookingDbContext _context;
+        private readonly IMemoryCache _memoryCache;
 
-        public CustomerTermsRepository(PostgresBookingDbContext context)
+        public CustomerTermsRepository(PostgresBookingDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
         public async Task<List<CustomerTermDisplayDto>> GetActiveTermsSourcesAsync(string? cultureName, bool onlyRequiredForWorkflow = false)
@@ -21,62 +25,50 @@ namespace RentoomBooking.SharedClasses.Database
             var normalizedCulture = NormalizeCulture(cultureName);
             var neutralCulture = normalizedCulture.Split('-')[0];
 
-            var query = _context.CustomerTermsSources
-                .AsNoTracking()
-                .Where(t => t.IsActive);//.ToListAsync();
-
-            //if (onlyRequiredForWorkflow)
-            //{
-             //   query = query.Where(t => t.IsRequiredForReservationWorkflow);
-           // }
-
-            var sources = await query
-                .Include(t => t.Translations)
-                .OrderBy(t => t.SortOrder)
-                .ThenBy(t => t.Id)
-                .ToListAsync();
-
-            return sources.Select(source =>
+            var cacheKey = BuildTermsCacheKey(normalizedCulture, onlyRequiredForWorkflow);
+            var cachedTerms = await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
             {
-                var translation = SelectTranslation(source.Translations, normalizedCulture, neutralCulture);
+                entry.AbsoluteExpirationRelativeToNow = TermsCacheTtl;
 
-                return new CustomerTermDisplayDto
+                var query = _context.CustomerTermsSources
+                    .AsNoTracking()
+                    .Where(t => t.IsActive);//.ToListAsync();
+
+                //if (onlyRequiredForWorkflow)
+                //{
+                //   query = query.Where(t => t.IsRequiredForReservationWorkflow);
+                //}
+
+                var sources = await query
+                    .Include(t => t.Translations)
+                    .OrderBy(t => t.SortOrder)
+                    .ThenBy(t => t.Id)
+                    .ToListAsync();
+
+                return sources.Select(source =>
                 {
-                    Id = source.Id,
-                    IsRequired = source.IsRequired,
-                    Title = translation?.Title,
-                    Description = translation?.Description ?? source.Description,
-                    HtmlContent = translation?.HtmlContent,
-                    Link = translation?.Link ?? source.Link,
-                    TermsType = source.TermsType
-                };
-            }).ToList();
+                    var translation = SelectTranslation(source.Translations, normalizedCulture, neutralCulture);
+
+                    return new CustomerTermDisplayDto
+                    {
+                        Id = source.Id,
+                        IsRequired = source.IsRequired,
+                        Title = translation?.Title,
+                        Description = translation?.Description ?? source.Description,
+                        HtmlContent = translation?.HtmlContent,
+                        Link = translation?.Link ?? source.Link,
+                        TermsType = source.TermsType
+                    };
+                }).ToList();
+            });
+
+            return cachedTerms ?? [];
         }
 
         public async Task<CustomerTermDisplayDto?> GetTermByIdAsync(int id, string? cultureName)
         {
-            var normalizedCulture = NormalizeCulture(cultureName);
-            var neutralCulture = normalizedCulture.Split('-')[0];
-
-            var source = await _context.CustomerTermsSources
-                .AsNoTracking()
-                .Include(t => t.Translations)
-                .FirstOrDefaultAsync(t => t.Id == id && t.IsActive);
-
-            if (source == null) return null;
-
-            var translation = SelectTranslation(source.Translations, normalizedCulture, neutralCulture);
-
-            return new CustomerTermDisplayDto
-            {
-                Id = source.Id,
-                IsRequired = source.IsRequired,
-                Title = translation?.Title,
-                Description = translation?.Description ?? source.Description,
-                HtmlContent = translation?.HtmlContent,
-                Link = translation?.Link ?? source.Link,
-                TermsType = source.TermsType
-            };
+            var terms = await GetActiveTermsSourcesAsync(cultureName);
+            return terms.FirstOrDefault(t => t.Id == id);
         }
 
         public async Task AddAgreedTermsAsync(IEnumerable<CustomerAgreedTerms> agreedTerms)
@@ -157,6 +149,11 @@ namespace RentoomBooking.SharedClasses.Database
                    ?? translations.FirstOrDefault(t => string.Equals(t.Culture, neutralCulture, System.StringComparison.OrdinalIgnoreCase))
                    ?? translations.FirstOrDefault(t => string.Equals(t.Culture, "pl", System.StringComparison.OrdinalIgnoreCase))
                    ?? translations.FirstOrDefault();
+        }
+
+        private static string BuildTermsCacheKey(string normalizedCulture, bool onlyRequiredForWorkflow)
+        {
+            return $"customer-terms:{normalizedCulture}:{onlyRequiredForWorkflow}";
         }
     }
 }

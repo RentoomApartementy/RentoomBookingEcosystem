@@ -41,6 +41,7 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 builder.Services.AddHttpClient();
+builder.Services.AddMemoryCache();
 
 using var tempLoggerFactory = LoggerFactory.Create(lb =>
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
@@ -18,16 +19,21 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
 
     public class PostgresBookingDatabase
     {
+        private const string SearchFiltersCacheKey = "postgres:search-filters:all";
+        private static readonly TimeSpan SearchFiltersCacheTtl = TimeSpan.FromMinutes(30);
+
         private readonly ILogger<PostgresBookingDatabase> _logger;
         private readonly IDbContextFactory<PostgresBookingDbContext> _dbContextFactory;
+        private readonly IMemoryCache _memoryCache;
         private readonly Task _initializationTask;
 
         private const string HashDocumentId = "all-object-hashes";
 
-        public PostgresBookingDatabase(IDbContextFactory<PostgresBookingDbContext> dbContextFactory, ILogger<PostgresBookingDatabase> logger)
+        public PostgresBookingDatabase(IDbContextFactory<PostgresBookingDbContext> dbContextFactory, ILogger<PostgresBookingDatabase> logger, IMemoryCache memoryCache)
         {
             _dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
             //_initializationTask = EnsureCreatedAsync();
         }
         private async Task EnsureCreatedAsync()
@@ -39,31 +45,37 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
         {
             if (log is null) throw new ArgumentNullException(nameof(log));
 
-           // // await _initializationTask;
-            await using var _dbContext = _dbContextFactory.CreateDbContext();
-            var entities = await _dbContext.SearchFilters.AsNoTracking().ToListAsync(cancellationToken);
-            var results = new List<SearchFilterDocument>(entities.Count);
-
-            foreach (var entity in entities)
+            var cachedFilters = await _memoryCache.GetOrCreateAsync(SearchFiltersCacheKey, async entry =>
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                entry.AbsoluteExpirationRelativeToNow = SearchFiltersCacheTtl;
 
-                try
+                await using var _dbContext = _dbContextFactory.CreateDbContext();
+                var entities = await _dbContext.SearchFilters.AsNoTracking().ToListAsync(cancellationToken);
+                var results = new List<SearchFilterDocument>(entities.Count);
+
+                foreach (var entity in entities)
                 {
-                    var document = JsonConvert.DeserializeObject<SearchFilterDocument>(entity.Payload);
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                    if (document is not null)
+                    try
                     {
-                        results.Add(document);
+                        var document = JsonConvert.DeserializeObject<SearchFilterDocument>(entity.Payload);
+
+                        if (document is not null)
+                        {
+                            results.Add(document);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogError(ex, "Failed to deserialize search filters payload for group {GroupName}.", entity.FilterGroupName);
                     }
                 }
-                catch (Exception ex)
-                {
-                    log.LogError(ex, "Failed to deserialize search filters payload for group {GroupName}.", entity.FilterGroupName);
-                }
-            }
 
-            return results;
+                return results;
+            });
+
+            return cachedFilters ?? [];
         }
 
         public async Task<long> GetApartmentCountAsync(CancellationToken cancellationToken = default)
@@ -189,6 +201,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+            _memoryCache.Remove(SearchFiltersCacheKey);
             log.LogInformation("Saved search filters for group {Group} to PostgreSQL table {Table}.", filterGroupName, "search_filters");
         }
 
