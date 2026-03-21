@@ -34,6 +34,7 @@ Powod tej kolejnosci:
 
 - `main.bicep` - deployment na poziomie subskrypcji, tworzy Resource Group i uruchamia modul aplikacyjny
 - `modules/app-stack.bicep` - zasoby aplikacyjne, monitoring, storage i app settings
+- `modules/postgres-config.bicep` - ustawia parametry na istniejacym Azure Database for PostgreSQL Flexible Server
 - `main.dev.parameters.json` - parametry niesekretne dla `dev`, w tym `environment`, `webPlanSku` i `tags`
 - `main.prod.parameters.json` - parametry niesekretne dla `prod`, w tym `environment`, `webPlanSku` i `tags`
 - `deploy.ps1` - wrapper PowerShell uruchamiajacy `az deployment sub validate` i/lub `create`, przyjmujacy osobny plik parametrow z sekretami; przed deploymentem listuje subskrypcje i wymaga recznego przelaczenia na wlasciwa
@@ -45,6 +46,7 @@ Powod tej kolejnosci:
 - tworzy Resource Group zdefiniowana w pliku parametrow
 - wylicza nazwe storage account dla runtime Function App jako `storagePrefix + uniqueString(...)`
 - przekazuje wszystkie parametry do `modules/app-stack.bicep`
+- uruchamia `modules/postgres-config.bicep` na RG PostgreSQL, aby ustawic `max_connections`
 
 `modules/app-stack.bicep`:
 
@@ -61,6 +63,7 @@ Powod tej kolejnosci:
 - Linux Function App `.NET 8 isolated`
 - app settings dla Web App
 - app settings dla Function App
+- app settings `PostgresPooling__*` dla Web App i Function App
 - role assignmenty dla managed identity Function App na runtime storage
 - Static Web App dla StayWell
 - polaczenie SWA z GitHub repo `RentoomApartementy/RentoomBookingEcosystem`
@@ -77,6 +80,168 @@ Powod tej kolejnosci:
 - nie tworzy bootstrap OIDC dla workflowow Functions i Web App
 - nie tworzy rekordow DNS ani custom domain bindings dla SWA / Web App / Function App
 - nie konfiguruje Key Vault
+
+## Nowe zmiany: PostgreSQL i pooling
+
+Do infra i kodu aplikacji zostalo dodane zarzadzanie polaczeniami PostgreSQL w dwoch warstwach:
+
+1. Serwer PostgreSQL:
+   - `modules/postgres-config.bicep` ustawia parametr `max_connections` na istniejacym Flexible Server
+   - wartosc jest sterowana parametrem `postgresMaxConnections`
+2. Aplikacje `RentoomBookingWeb` i `StayWell API`:
+   - Bicep ustawia app settings `PostgresPooling__*`
+   - kod aplikacji czyta te wartosci i naklada je na connection string przez `NpgsqlConnectionStringBuilder`
+   - dzieje sie to centralnie w:
+     - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\SharedClasses\Configuration\PostgresConnectionStringProvider.cs`
+
+Po co to zostalo dodane:
+
+- sam upgrade SKU PostgreSQL nie wystarcza, jesli `max_connections` nie zostanie faktycznie ustawione
+- samo podniesienie `max_connections` nie wystarcza, jesli aplikacje otwieraja za duze poole
+- deploy Bicep ma od teraz utrzymywac oba aspekty spojnie:
+  - limit po stronie serwera
+  - limity pooli po stronie aplikacji
+
+## Nowe parametry Bicep
+
+W `main.bicep` oraz plikach `main.dev.parameters.json` i `main.prod.parameters.json` dodano:
+
+- `postgresMaxConnections`
+  - docelowa wartosc `max_connections` na PostgreSQL Flexible Server
+- `postgresPoolingEnabled`
+  - wlacza lub wylacza pooling w Npgsql
+- `postgresPoolingMinimumPoolSize`
+  - minimalny rozmiar poola
+- `rentoomWebPostgresMaximumPoolSize`
+  - maksymalny rozmiar poola dla `RentoomBookingWeb`
+- `staywellApiPostgresMaximumPoolSize`
+  - maksymalny rozmiar poola dla `StayWell API`
+- `postgresPoolingConnectionIdleLifetime`
+  - po ilu sekundach idle connection moze zostac zamkniete
+- `postgresPoolingConnectionPruningInterval`
+  - jak czesto pool sprawdza idle connections
+- `postgresPoolingTimeout`
+  - timeout otwierania polaczenia
+- `postgresPoolingCommandTimeout`
+  - timeout komendy SQL
+
+## Jakie app settings sa teraz zarzadzane przez Bicep
+
+Dla `RentoomBookingWeb` i `StayWell API` Bicep ustawia:
+
+- `PostgresPooling__Enabled`
+- `PostgresPooling__MinimumPoolSize`
+- `PostgresPooling__MaximumPoolSize`
+- `PostgresPooling__ConnectionIdleLifetime`
+- `PostgresPooling__ConnectionPruningInterval`
+- `PostgresPooling__Timeout`
+- `PostgresPooling__CommandTimeout`
+
+Sa to zwykle Azure App Settings mapowane przez .NET Configuration na sekcje:
+
+- `PostgresPooling:Enabled`
+- `PostgresPooling:MinimumPoolSize`
+- itd.
+
+## Aktualna polityka wartosci
+
+W parametrach Bicep ustawiono obecnie:
+
+- `postgresMaxConnections=429`
+- `rentoomWebPostgresMaximumPoolSize=4`
+- `staywellApiPostgresMaximumPoolSize=1`
+- `postgresPoolingMinimumPoolSize=0`
+- `postgresPoolingConnectionIdleLifetime=60`
+- `postgresPoolingConnectionPruningInterval=10`
+- `postgresPoolingTimeout=15`
+- `postgresPoolingCommandTimeout=30`
+
+Dlaczego `Web=4` i `Api=1`, a nie od razu wyzej:
+
+- Azure control plane pokazuje juz `max_connections=429`
+- ale runtime PostgreSQL moze nadal przez chwile pracowac z poprzednia wartoscia, dopoki serwer nie zostanie zrestartowany
+- bezpieczny deploy nie powinien zakladac, ze nowy limit dziala, dopoki `SHOW max_connections;` nie zwroci `429`
+
+Docelowe wartosci po potwierdzeniu runtime `429`:
+
+- `rentoomWebPostgresMaximumPoolSize=20`
+- `staywellApiPostgresMaximumPoolSize=6`
+
+## Krok po kroku: jak bezpiecznie wdrozyc zmiany PostgreSQL
+
+### Wariant A: stan przejsciowy po zmianie SKU lub parametru
+
+Uzyj tego wariantu, jesli:
+
+- Azure pokazuje zapisany `max_connections=429`
+- ale serwer nadal odpowiada `SHOW max_connections = 50`
+
+Kroki:
+
+1. Utrzymaj bezpieczne poole w parametrach:
+   - `rentoomWebPostgresMaximumPoolSize=4`
+   - `staywellApiPostgresMaximumPoolSize=1`
+2. Uruchom deployment Bicep:
+   - `.\deploy.ps1 -Environment prod -Operation validate-create -SecretParameterFile .\main.prod.secrets.parameters.json`
+3. Sprawdz zapisany parametr w Azure:
+   - `az postgres flexible-server parameter show --subscription "Subskrypcja Rentoom" --resource-group "RentoomApp" --server-name "rentoom-server-db" --name max_connections`
+4. Zrestartuj PostgreSQL Flexible Server, jesli runtime nadal pokazuje stara wartosc:
+   - `az postgres flexible-server restart --subscription "Subskrypcja Rentoom" --resource-group "RentoomApp" --name "rentoom-server-db"`
+5. Zweryfikuj ponownie runtime:
+   - przez `SHOW max_connections;`
+6. Dopiero po potwierdzeniu runtime `429` przejdz do wariantu B
+
+### Wariant B: stan docelowy po potwierdzonym runtime `429`
+
+Kroki:
+
+1. Zmien w pliku parametrow srodowiska:
+   - `rentoomWebPostgresMaximumPoolSize` z `4` na `20`
+   - `staywellApiPostgresMaximumPoolSize` z `1` na `6`
+2. Uruchom walidacje:
+   - `.\deploy.ps1 -Environment prod -Operation validate -SecretParameterFile .\main.prod.secrets.parameters.json`
+3. Uruchom deployment:
+   - `.\deploy.ps1 -Environment prod -Operation create -SecretParameterFile .\main.prod.secrets.parameters.json`
+4. Sprawdz app settings po deployu:
+   - `az webapp config appsettings list --subscription "Subskrypcja RentoomBooking Prod" --resource-group "rg-prod-rentoom-booking" --name "app-prod-rentoombooking"`
+   - `az functionapp config appsettings list --subscription "Subskrypcja RentoomBooking Prod" --resource-group "rg-prod-rentoom-booking" --name "func-prod-api-staywell"`
+5. Obserwuj metryki:
+   - `active_connections`
+   - ewentualne timeouty lub `too many clients`
+
+## Krok po kroku: jak sprawdzic aktualny stan
+
+1. Sprawdz wartosc zapisana w Azure:
+
+```powershell
+az postgres flexible-server parameter show --subscription "Subskrypcja Rentoom" --resource-group "RentoomApp" --server-name "rentoom-server-db" --name max_connections
+```
+
+2. Sprawdz app settings Web App:
+
+```powershell
+az webapp config appsettings list --subscription "Subskrypcja RentoomBooking Prod" --resource-group "rg-prod-rentoom-booking" --name "app-prod-rentoombooking"
+```
+
+3. Sprawdz app settings Function App:
+
+```powershell
+az functionapp config appsettings list --subscription "Subskrypcja RentoomBooking Prod" --resource-group "rg-prod-rentoom-booking" --name "func-prod-api-staywell"
+```
+
+4. Sprawdz metryke aktywnych polaczen:
+
+```powershell
+az monitor metrics list --subscription "Subskrypcja Rentoom" --resource "/subscriptions/cc504c76-e00a-4964-a54c-36ff58726690/resourceGroups/RentoomApp/providers/Microsoft.DBforPostgreSQL/flexibleServers/rentoom-server-db" --metric active_connections --interval PT1H --aggregation Average Maximum
+```
+
+5. Jesli masz dostep SQL do bazy, sprawdz runtime:
+
+```sql
+show max_connections;
+```
+
+To jest najwazniejszy krok, bo pokazuje faktyczna wartosc dzialajacego serwera, a nie tylko zapisany override w Azure.
 
 ## Wymagania przed deploymentem
 
@@ -219,6 +384,16 @@ Zawieraja m.in.:
   - `staywellGithubOutputLocation`
   - `staywellGithubActionSecretName`
 - osobne ustawienia Tpay dla Web App i API Functions
+- ustawienia PostgreSQL:
+  - `postgresMaxConnections`
+  - `postgresPoolingEnabled`
+  - `postgresPoolingMinimumPoolSize`
+  - `rentoomWebPostgresMaximumPoolSize`
+  - `staywellApiPostgresMaximumPoolSize`
+  - `postgresPoolingConnectionIdleLifetime`
+  - `postgresPoolingConnectionPruningInterval`
+  - `postgresPoolingTimeout`
+  - `postgresPoolingCommandTimeout`
 
 Domyslne wartosci:
 
@@ -240,6 +415,9 @@ Domyslne wartosci:
 - `rentoomWebBaseUrl=https://rentoom.pl`
 - `staywellApiBaseUrl=https://api.rentoom.pl`
 - `webPlanSku=B2/Basic`
+- `postgresMaxConnections=429`
+- `rentoomWebPostgresMaximumPoolSize=4`
+- `staywellApiPostgresMaximumPoolSize=1`
 - `tags.environment=prod`
 - `staywellGithubOrganization=RentoomApartementy`
 - `staywellGithubRepositoryName=RentoomBookingEcosystem`
@@ -362,3 +540,4 @@ Ten README opisuje aktualny stan kodu.
 Obecne ograniczenia:
 
 - Static Web App jest tworzony zawsze w `westeurope`, niezaleznie od `location`
+- zapis `max_connections=429` w Azure nie oznacza jeszcze automatycznie, ze runtime PostgreSQL juz pracuje z `429`; po zmianie parametru moze byc wymagany restart serwera
