@@ -43,7 +43,6 @@
             wrapper.style.paddingBottom = (height + 100 + 24) + "px";
         };
 
-
         window.checkCartNeedsCollapse = function (wrapperEl, summaryEl) {
             if (!wrapperEl || !summaryEl) return false;
 
@@ -87,7 +86,8 @@
     </style>
 
     <script src="js/bitrixchat2.js"></script>
-    <script src="js/upsellstrip.js"></script>
+    <!--wyłączenie do czasu wdrożenia upselli, naprawić-->
+    <!--<script src="js/upsellstrip.js"></script>--> 
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 
     <!--ukrywanie header'a-->
@@ -110,6 +110,92 @@
                     header.classList.remove('hide');
                 }
                 lastScrollTop = scrollTop;
+            });
+        };
+    </script>
+    <script>
+        window.setupInstructionShortcutScrollReset = function (dotnetRef) {
+            var container = document.getElementById("main-body") || document.documentElement;
+            if (!container) return;
+
+            if (container._instructionShortcutResetHandler) {
+                container.removeEventListener("scroll", container._instructionShortcutResetHandler);
+            }
+
+            container._instructionShortcutResetDotnetRef = dotnetRef;
+            container._instructionUserScrolling = false;
+
+            container._instructionUserIntentHandler = function () {
+                container._instructionUserScrolling = true;
+            };
+
+            container._instructionShortcutResetHandler = function () {
+                if (container._instructionAutoScrolling) return;
+                if (!container._instructionUserScrolling) return;
+                if (!container._instructionShortcutResetDotnetRef) return;
+
+                container._instructionShortcutResetDotnetRef.invokeMethodAsync("ResetActiveShortcutFromScroll");
+                container._instructionUserScrolling = false;
+            };
+
+            container.addEventListener("wheel", container._instructionUserIntentHandler, { passive: true });
+            container.addEventListener("touchmove", container._instructionUserIntentHandler, { passive: true });
+            container.addEventListener("scroll", container._instructionShortcutResetHandler, { passive: true });
+        };
+
+        window.removeInstructionShortcutScrollReset = function () {
+            var container = document.getElementById("main-body") || document.documentElement;
+            if (!container) return;
+
+            if (container._instructionShortcutResetHandler) {
+                container.removeEventListener("scroll", container._instructionShortcutResetHandler);
+                delete container._instructionShortcutResetHandler;
+            }
+
+            if (container._instructionUserIntentHandler) {
+                container.removeEventListener("wheel", container._instructionUserIntentHandler);
+                container.removeEventListener("touchmove", container._instructionUserIntentHandler);
+                delete container._instructionUserIntentHandler;
+            }
+
+            delete container._instructionShortcutResetDotnetRef;
+        };
+
+        window.scrollInMainBodyToElement = function (elementId) {
+            return new Promise(function (resolve) {
+                var target = document.getElementById(elementId);
+                if (!target) {
+                    resolve();
+                    return;
+                }
+
+                var container = document.getElementById("main-body");
+                if (!container) {
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                    setTimeout(resolve, 500);
+                    return;
+                }
+
+                container._instructionAutoScrolling = true;
+                container._instructionUserScrolling = false;
+
+                if (container._instructionAutoScrollingTimeout) {
+                    clearTimeout(container._instructionAutoScrollingTimeout);
+                }
+
+                var containerRect = container.getBoundingClientRect();
+                var targetRect = target.getBoundingClientRect();
+                var top = targetRect.top - containerRect.top + container.scrollTop - 12;
+
+                container.scrollTo({
+                    top: Math.max(top, 0),
+                    behavior: "smooth"
+                });
+
+                container._instructionAutoScrollingTimeout = setTimeout(function () {
+                    container._instructionAutoScrolling = false;
+                    resolve();
+                }, 700);
             });
         };
     </script>
