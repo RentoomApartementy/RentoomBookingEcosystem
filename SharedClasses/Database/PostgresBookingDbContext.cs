@@ -274,7 +274,9 @@ namespace RentoomBooking.SharedClasses.Database
             const int stayWellCookieNoticeId = 1001;
             const int webCookieNoticeId = 1002;
 
-            const string cookieDetailsPl = """
+            static string NormalizeSeedText(string value) => value.ReplaceLineEndings("\n");
+
+            var cookieDetailsPl = NormalizeSeedText("""
 <p>Używamy plików cookie, aby pomóc użytkownikom w sprawnej nawigacji i wykonywaniu określonych funkcji. Szczegółowe informacje na temat wszystkich plików cookie odpowiadających poszczególnym kategoriom zgody znajdują się poniżej.</p>
 <p>Pliki cookie sklasyfikowane jako "niezbędne" są przechowywane w przeglądarce użytkownika, ponieważ są niezbędne do włączenia podstawowych funkcji witryny.</p>
 <p>Korzystamy również z plików cookie innych firm, które pomagają nam analizować sposób korzystania ze strony przez użytkowników, a także przechowywać preferencje użytkownika oraz dostarczać mu istotnych dla niego treści i reklam. Tego typu pliki cookie będą przechowywane w przeglądarce tylko za uprzednią zgodą użytkownika.</p>
@@ -289,9 +291,9 @@ namespace RentoomBooking.SharedClasses.Database
 <p>Wydajnościowe pliki cookie służą do zrozumienia i analizy kluczowych wskaźników wydajności witryny, co pomaga zapewnić lepsze wrażenia użytkownika dla odwiedzających.</p>
 <h3>Reklama</h3>
 <p>Reklamowe pliki cookie służą do dostarczania użytkownikom spersonalizowanych reklam w oparciu o strony, które odwiedzili wcześniej, oraz do analizowania skuteczności kampanii reklamowej.</p>
-""";
+""");
 
-            const string cookieDetailsEn = """
+            var cookieDetailsEn = NormalizeSeedText("""
 <p>We use cookies to help users navigate efficiently and perform certain functions. Detailed information about all cookies corresponding to each consent category is available below.</p>
 <p>Cookies classified as "necessary" are stored in the user's browser because they are required to enable the basic functions of the website.</p>
 <p>We also use third-party cookies that help us analyze how users interact with the website, remember user preferences, and deliver relevant content and advertising. These cookies are stored in the browser only with the user's prior consent.</p>
@@ -306,17 +308,17 @@ namespace RentoomBooking.SharedClasses.Database
 <p>Performance cookies are used to understand and analyze the key performance indicators of the website, helping deliver a better user experience for visitors.</p>
 <h3>Advertising</h3>
 <p>Advertising cookies are used to deliver personalized ads based on pages previously visited by the user and to analyze the effectiveness of advertising campaigns.</p>
-""";
+""");
 
-            const string cookieSummaryPl = """
+            var cookieSummaryPl = NormalizeSeedText("""
 <p>Używamy plików cookie, aby pomóc użytkownikom w sprawnej nawigacji i wykonywaniu określonych funkcji.</p>
 <p>Większość narzędzi analitycznych i marketingowych uruchamiamy dopiero po akceptacji.</p>
-""";
+""");
 
-            const string cookieSummaryEn = """
+            var cookieSummaryEn = NormalizeSeedText("""
 <p>We use cookies to help users navigate efficiently and perform certain functions.</p>
 <p>Most analytics and marketing tools are enabled only after consent is accepted.</p>
-""";
+""");
 
             //CustomerTermsAndConditionsSource
             modelBuilder.Entity<CustomerTermsAndConditionsSource>().HasData(
