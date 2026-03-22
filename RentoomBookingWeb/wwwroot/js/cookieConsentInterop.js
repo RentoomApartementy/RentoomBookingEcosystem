@@ -1,0 +1,41 @@
+window.rentoomCookieInterop = {
+    trackingEnabled: false,
+
+    enableTracking: function (gtmId, gaId) {
+        if (window.rentoomCookieInterop.trackingEnabled) {
+            return;
+        }
+
+        window.rentoomCookieInterop.trackingEnabled = true;
+        window.dataLayer = window.dataLayer || [];
+
+        if (!document.getElementById("rentoom-gtm-script") && gtmId) {
+            const script = document.createElement("script");
+            script.id = "rentoom-gtm-script";
+            script.async = true;
+            script.src = "https://www.googletagmanager.com/gtm.js?id=" + encodeURIComponent(gtmId);
+            document.head.appendChild(script);
+            window.dataLayer.push({
+                "gtm.start": new Date().getTime(),
+                event: "gtm.js"
+            });
+        }
+
+        if (!document.getElementById("rentoom-ga-script") && gaId) {
+            const gaScript = document.createElement("script");
+            gaScript.id = "rentoom-ga-script";
+            gaScript.async = true;
+            gaScript.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(gaId);
+            document.head.appendChild(gaScript);
+        }
+
+        window.gtag = window.gtag || function () {
+            window.dataLayer.push(arguments);
+        };
+
+        if (gaId) {
+            window.gtag("js", new Date());
+            window.gtag("config", gaId);
+        }
+    }
+};

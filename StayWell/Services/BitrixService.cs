@@ -17,6 +17,11 @@ public class BitrixService
         await _js.InvokeVoidAsync("bitrixInterop.init");
     }
 
+    public async Task EnableLoaderAsync(string loaderUrl)
+    {
+        await _js.InvokeVoidAsync("stayWellBitrixEnableLoader", loaderUrl);
+    }
+
     public async Task OpenChatAsync(BitrixGuestData data)
     {
         var displayName = data.Name ?? "Gość";
