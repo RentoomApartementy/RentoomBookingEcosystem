@@ -14,6 +14,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
         Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
         Task HandleTpayWebhookAsync(TpayWebhookDto dto);
+        Task EnsureIdoPaymentAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
+        Task<RentoomReservation?> EnsureRentoomReservationByResTokenAsync(string resToken, CancellationToken cancellationToken = default);
         Task MarkPaymentAsPaidAsync(Guid reservationGuid); //for dummy scenario
         Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
         Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request);
@@ -48,6 +51,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private readonly IReservationStore _store;
         private readonly ApartmentRepository _apartmentStore;
         private readonly IdoSellService _idoApi;
+        private readonly PostgresBookingDatabase _bookingDatabase;
         private readonly ITpayGateway _tpayGateway;
         private readonly BitrixService _bitrixService;
         private readonly IConfiguration _configuration;
@@ -63,6 +67,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         public ReservationWorkflowService(
             IReservationStore store,
             IdoSellService idoApi,
+            PostgresBookingDatabase bookingDatabase,
             ITpayGateway tpayGateway,
             BitrixService bitrixService,
             IConfiguration configuration,
@@ -74,6 +79,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _idoApi = idoApi ?? throw new ArgumentNullException(nameof(idoApi));
+            _bookingDatabase = bookingDatabase ?? throw new ArgumentNullException(nameof(bookingDatabase));
             _tpayGateway = tpayGateway ?? throw new ArgumentNullException(nameof(tpayGateway));
             _bitrixService = bitrixService ?? throw new ArgumentNullException(nameof(bitrixService));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -400,7 +406,6 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 record.State.PaymentRedirectUrl = paymentResult.RedirectUrl;
                 record.State.PaymentUpsellsTotal = summary.UpsellsTotal;
                 record.State.PaymentGrandTotal = summary.GrandTotal;
-
                 record.IdoStatus = ReservationStatusType.WaitingForPayment;
 
                 try
@@ -427,7 +432,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
         }
 
-         private async Task<int?> AddIdoPaymentAsync(ReservationRecord record, decimal amount, string currency, string? transactionId)
+        private async Task<int?> AddIdoPaymentAsync(ReservationRecord record, decimal amount, string currency, string? transactionId)
         {
             if (record.IdoReservationId is null || string.IsNullOrWhiteSpace(transactionId))
             {
@@ -444,6 +449,112 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
             var paymentresult = await _idoApi.AddPaymentAsync(payment);
             return paymentresult?.Results[0].Id;
+        }
+
+        public async Task EnsureIdoPaymentAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        {
+            var record = await RequireReservationAsync(reservationGuid);
+            if (!string.Equals(record.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            if (record.IdoReservationId is null || string.IsNullOrWhiteSpace(record.ProviderTransactionId))
+            {
+                _logger.LogWarning("Cannot ensure IdoBooking payment for reservation {ReservationGuid}. Missing IdoReservationId or ProviderTransactionId.", reservationGuid);
+                return;
+            }
+
+            var idoReservation = await FetchIdoReservationAsync(record, refreshCache: false, cancellationToken);
+            var currentIdoStatus = idoReservation?.ReservationDetails?.status;
+            if (!string.IsNullOrWhiteSpace(currentIdoStatus) && !string.Equals(record.IdoStatus, currentIdoStatus, StringComparison.OrdinalIgnoreCase))
+            {
+                record.IdoStatus = currentIdoStatus;
+                await _store.UpdateAsync(record, cancellationToken);
+            }
+
+            var existingPayment = await GetExistingIdoPaymentByTransactionIdAsync(record, record.ProviderTransactionId!, cancellationToken);
+            var paymentId = existingPayment?.Id;
+
+            if (!paymentId.HasValue)
+            {
+                paymentId = await AddIdoPaymentAsync(
+                    record,
+                    record.State.StartRequest?.OfferPrice  + record.State.StartRequest?.SelectedAddonsTotalPrice ?? 0m,
+                    record.State.StartRequest?.Currency ?? "PLN",
+                    record.ProviderTransactionId);
+            }
+
+            if (paymentId.HasValue && !string.Equals(existingPayment?.Status, PaymentStatus.Processed, StringComparison.OrdinalIgnoreCase))
+            {
+                await ConfirmIdoPaymentAsync(paymentId.Value, cancellationToken);
+            }
+
+            if (string.Equals(currentIdoStatus, ReservationStatusType.WaitingForPayment, StringComparison.OrdinalIgnoreCase))
+            {
+                await UpdateIdoStatusAsync(record, ReservationStatusType.Accepted);
+                idoReservation = await FetchIdoReservationAsync(record, refreshCache: true, cancellationToken);
+                currentIdoStatus = idoReservation?.ReservationDetails?.status ?? ReservationStatusType.Accepted;
+            }
+            else if (paymentId.HasValue)
+            {
+                await FetchIdoReservationAsync(record, refreshCache: true, cancellationToken);
+            }
+
+            if (!string.IsNullOrWhiteSpace(currentIdoStatus) && !string.Equals(record.IdoStatus, currentIdoStatus, StringComparison.OrdinalIgnoreCase))
+            {
+                record.IdoStatus = currentIdoStatus;
+                await _store.UpdateAsync(record, cancellationToken);
+            }
+
+            record = await EnsureBitrixContactAndDealAsync(record);
+            await UpdateBitrixDealAsync(record, "Ido payment synchronized");
+        }
+
+        public async Task<RentoomReservation?> EnsureRentoomReservationByResTokenAsync(string resToken, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(resToken))
+            {
+                throw new ArgumentNullException(nameof(resToken));
+            }
+
+            ReservationRecord? reservationRecord = null;
+            Guid reservationGuid = Guid.Empty;
+
+            if (Guid.TryParse(resToken, out reservationGuid))
+            {
+                reservationRecord = await _store.GetAsync(reservationGuid, cancellationToken);
+                if (reservationRecord is not null)
+                {
+                    await EnsureIdoPaymentAsync(reservationGuid, cancellationToken);
+                    reservationRecord = await _store.GetAsync(reservationGuid, cancellationToken);
+                }
+            }
+
+            var normalizedCandidates = BuildReservationTokenCandidates(resToken);
+
+            foreach (var candidate in normalizedCandidates)
+            {
+                var existingReservation = await _bookingDatabase.GetRentoomReservationByResTokenAsync(candidate, _logger, cancellationToken);
+                if (existingReservation is not null)
+                {
+                    return existingReservation;
+                }
+            }
+
+            if (reservationGuid == Guid.Empty)
+            {
+                _logger.LogWarning("Reservation token {ReservationToken} is not a valid GUID and no cached reservation was found.", resToken);
+                return null;
+            }
+
+            if (reservationRecord is null)
+            {
+                _logger.LogWarning("Reservation record for token {ReservationToken} was not found in reservation_records.", resToken);
+                return null;
+            }
+
+            return await FetchReservationDocumentForRecordAsync(reservationRecord, reservationGuid, cancellationToken);
         }
 
         private static string MapIdoPaymentStatus(string paymentStatus)
@@ -584,11 +695,9 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
                     if (isPaid)
                     {
-                        var paymentId = await AddIdoPaymentAsync(record, record.State.StartRequest?.OfferPrice ?? 0m, record.State.StartRequest?.Currency ?? "PLN", dto.ProviderTransactionId);
-                        await ConfirmIdoPaymentAsync(paymentId.Value); 
-                        await UpdateIdoStatusAsync(record, ReservationStatusType.Accepted);
+                        await EnsureIdoPaymentAsync(record.ReservationGuid);
                         //record = await EnsureBitrixContactAndDealAsync(record);
-                        GetDealEmailStatusAsync(record.ReservationGuid);
+                        await GetDealEmailStatusAsync(record.ReservationGuid);
                         await CreatePaidUpsellOrderAsync(record, dto.ProviderTransactionId);
                     }
                     await UpdateBitrixDealAsync(record, "Payment status updated");
@@ -602,9 +711,9 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
         }
 
-        private async Task ConfirmIdoPaymentAsync(int paymentId)
+        private async Task ConfirmIdoPaymentAsync(int paymentId, CancellationToken cancellationToken = default)
         {
-            await _idoApi.ConfirmPaymentsAsync([paymentId]);
+            await _idoApi.ConfirmPaymentsAsync([paymentId], cancellationToken);
         }
 
 
@@ -703,6 +812,88 @@ private static TimeZoneInfo GetWarsawTimeZone()
         {
             var record = await _store.GetAsync(reservationGuid);
             return record ?? throw new InvalidOperationException($"Reservation {reservationGuid} not found.");
+        }
+
+        private async Task<PaymentDetails?> GetExistingIdoPaymentByTransactionIdAsync(ReservationRecord record, string transactionId, CancellationToken cancellationToken)
+        {
+            if (record.IdoReservationId is null)
+            {
+                return null;
+            }
+
+            var paymentsResponse = await _idoApi.GetPaymentsAsync(
+                new PaymentGetParams
+                {
+                    ReservationIds = new List<int> { record.IdoReservationId.Value }
+                },
+                cancellationToken: cancellationToken);
+
+            return paymentsResponse?.Results?
+                .Where(payment => payment.ReservationId == record.IdoReservationId.Value)
+                .FirstOrDefault(payment => string.Equals(payment.ExternalPaymentId, transactionId, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private async Task<RentoomReservation?> FetchReservationDocumentForRecordAsync(ReservationRecord record, Guid reservationGuid, CancellationToken cancellationToken)
+        {
+            if (!record.IdoReservationId.HasValue)
+            {
+                _logger.LogWarning("Reservation record {ReservationGuid} does not have IdoReservationId yet.", reservationGuid);
+                return null;
+            }
+
+            var canonicalToken = reservationGuid.ToString("D");
+            var fetchedReservation = await _idoApi.FetchReservationByIDFromIdoSellAsync(
+                record.IdoReservationId.Value,
+                saveToDb: true,
+                existingResToken: canonicalToken,
+                cancellationToken: cancellationToken);
+
+            var reservation = fetchedReservation.ReservationResponse?.result?.Reservations?.FirstOrDefault();
+            if (reservation is null)
+            {
+                _logger.LogWarning("IdoBooking returned no reservation for reservation {ReservationGuid} and IdoReservationId {IdoReservationId}.", reservationGuid, record.IdoReservationId);
+                return null;
+            }
+
+            return new RentoomReservation
+            {
+                Id = reservation.id,
+                ResToken = string.IsNullOrWhiteSpace(fetchedReservation.resToken) ? canonicalToken : fetchedReservation.resToken,
+                Reservation = reservation
+            };
+        }
+
+        private async Task<Reservation?> FetchIdoReservationAsync(ReservationRecord record, bool refreshCache, CancellationToken cancellationToken)
+        {
+            if (record.IdoReservationId is null)
+            {
+                return null;
+            }
+
+            var response = await _idoApi.FetchReservationByIDFromIdoSellAsync(
+                record.IdoReservationId.Value,
+                refreshCache,
+                refreshCache ? record.ReservationGuid.ToString("D") : null,
+                cancellationToken);
+
+            return response?.ReservationResponse?.result?.Reservations?.FirstOrDefault();
+        }
+
+        private static IReadOnlyList<string> BuildReservationTokenCandidates(string reservationToken)
+        {
+            if (!Guid.TryParse(reservationToken, out var reservationGuid))
+            {
+                return new[] { reservationToken };
+            }
+
+            return new[]
+            {
+                reservationGuid.ToString("D"),
+                reservationGuid.ToString("N"),
+                reservationToken
+            }
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
         }
 
         private async Task<ReservationRecord> EnsureIdoReservationAsync(ReservationRecord record, string initialStatus)

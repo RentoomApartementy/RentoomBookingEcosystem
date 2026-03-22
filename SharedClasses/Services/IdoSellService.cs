@@ -138,7 +138,6 @@ namespace RentoomBooking.SharedClasses.Services
 
             return new RentoomReservationHashRecord() { ReservationResponse= ret,resToken= stored };
         }
-
         //public Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken = null, int pageSize = 50) => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
 
         /* public async Task<List<ObjectMedium>?> FetchObjectMediaFromIdoSellAsync(int objectId, CancellationToken cancellationToken = default)
@@ -1076,6 +1075,7 @@ namespace RentoomBooking.SharedClasses.Services
                 }).ToList()
             };
         }
+
     }
 }
 

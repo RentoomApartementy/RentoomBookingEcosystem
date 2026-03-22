@@ -6,8 +6,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 
 namespace RentoomBooking.Api;
 
@@ -15,16 +17,18 @@ public class GetReservationsFunction
 {
 
     private readonly IdoSellService _bookingObjectService;
-    private readonly PostgresBookingDatabase _bookingDatabase;
+    private readonly IReservationStore _reservationStore;
+    private readonly IReservationWorkflowService _reservationWorkflowService;
     private readonly ILogger<GetReservationsFunction> _logger;
 
 
 
-    public GetReservationsFunction(ILogger<GetReservationsFunction> logger, IdoSellService bookingObjectService, PostgresBookingDatabase bookingDatabase)
+    public GetReservationsFunction(ILogger<GetReservationsFunction> logger, IdoSellService bookingObjectService, IReservationStore reservationStore, IReservationWorkflowService reservationWorkflowService)
     {
         _logger = logger;
         _bookingObjectService = bookingObjectService;
-        _bookingDatabase = bookingDatabase;
+        _reservationStore = reservationStore;
+        _reservationWorkflowService = reservationWorkflowService;
     }
 
     [Function("GetReservationsByIdFromIdoBooking")]
@@ -88,13 +92,26 @@ public class GetReservationsFunction
         try
         {
             var token = reservationToken;
-            if (string.IsNullOrWhiteSpace(token))
+           if (string.IsNullOrWhiteSpace(token))
             {
                 res.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 await res.WriteStringAsync("Provide reservationToken in path (/reservations/{reservationToken}), query (?reservationToken=).");
                 return res;
             }
-            var ret = await _bookingDatabase.GetRentoomReservationByResTokenAsync(token, _logger);
+
+            if (Guid.TryParse(token, out var reservationGuid))
+            {
+                var reservationRecord = await _reservationStore.GetAsync(reservationGuid, req.FunctionContext.CancellationToken);
+                if (reservationRecord is not null && !string.Equals(reservationRecord.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
+                {
+                    res.StatusCode = System.Net.HttpStatusCode.PaymentRequired;
+                    await res.WriteStringAsync("Payment Required");
+                    return res;
+                }
+
+            }
+
+            var ret = await _reservationWorkflowService.EnsureRentoomReservationByResTokenAsync(token, req.FunctionContext.CancellationToken);
             if (ret == null)
             {
                 res.StatusCode = System.Net.HttpStatusCode.NotFound;
@@ -113,6 +130,7 @@ public class GetReservationsFunction
             }
 
             var resStatus = ret.Reservation?.ReservationDetails?.status;
+
 
             if (resStatus != ReservationStatusType.Accepted)
             {
