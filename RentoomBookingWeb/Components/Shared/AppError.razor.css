@@ -1,0 +1,83 @@
+.app-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    width: min(100%, 42rem);
+    padding: 0.95rem 1rem;
+    border: 1px solid rgba(145, 54, 54, 0.16);
+    border-radius: 18px;
+    background:
+        linear-gradient(135deg, rgba(255, 248, 244, 0.96), rgba(255, 253, 250, 0.98));
+    box-shadow: 0 18px 45px rgba(75, 37, 24, 0.08);
+    color: #5a3127;
+}
+
+.app-error--inline {
+    margin: 0 0 1rem 0;
+}
+
+.app-error--floating {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1100;
+}
+
+.app-error__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f4c7aa, #f0a37d);
+    color: #7b2717;
+}
+
+.app-error__icon svg {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.app-error__body {
+    min-width: 0;
+    flex: 1;
+}
+
+.app-error__title {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.98rem;
+    line-height: 1.2;
+}
+
+.app-error__message {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: rgba(90, 49, 39, 0.9);
+}
+
+.app-error__close {
+    flex: 0 0 auto;
+    border: 0;
+    background: transparent;
+    color: rgba(90, 49, 39, 0.7);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.1rem;
+}
+
+.app-error__close:hover {
+    color: #5a3127;
+}
+
+@media (max-width: 768px) {
+    .app-error--floating {
+        left: 1rem;
+        right: 1rem;
+        top: 1rem;
+        width: auto;
+    }
+}

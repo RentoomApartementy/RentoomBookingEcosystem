@@ -915,6 +915,8 @@ namespace RentoomBooking.SharedClasses.Services
         {
             details.dateFrom = reservationRequest.DateFrom;
             details.dateTo = reservationRequest.DateTo;
+            details.idbDateTo = reservationRequest.DateTo;
+            details.idbDateFrom = reservationRequest.DateFrom;
             if (reservationRequest.Price.HasValue)
             {
                 details.price = reservationRequest.Price.Value;

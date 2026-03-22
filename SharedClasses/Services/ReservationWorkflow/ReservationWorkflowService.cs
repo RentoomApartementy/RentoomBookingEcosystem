@@ -794,6 +794,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 InternalNote = start.SelectedOfferType,
                 ApiNote = start.SelectedOfferType,
                 ExternalNote = record.State.StayWellLink,
+                
                 Items =
                 [
                     new NewReservationItem
