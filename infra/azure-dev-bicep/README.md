@@ -461,33 +461,73 @@ Aktualne workflowy SWA oczekuja:
 
 Sa one uzywane przez:
 
-- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_swa-dev-staywell.yml`
-- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\azure-static-web-apps-gray-mud-05545df03.yml`
+- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_deploy-rentoombooking.yml`
+- `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_deploy-rentoombooking.yml`
 
 Uwaga:
 
 - przy tworzeniu SWA Azure probuje samo skonfigurowac repo i secret na podstawie `staywellGithubRepositoryToken`
 - jesli secret nie pojawi sie automatycznie, trzeba go dodac recznie w GitHub repo
+- jesli SWA zostala odtworzona lub przepieta, stary deployment token przestaje byc poprawny i trzeba go zaktualizowac w GitHub
+
+### Skad pobrac aktualny deployment token SWA
+
+Portal Azure:
+
+1. Otworz zasob SWA:
+   - `swa-dev-staywell` w `rg-dev-rentoom-booking` dla `dev`
+   - `swa-prod-staywell` w `rg-prod-rentoom-booking` dla `prod`
+2. Wejdz w `Overview`
+3. Kliknij `Manage deployment token`
+4. Skopiuj token
+5. Ustaw go w GitHub repo `RentoomBookingEcosystem` jako secret:
+   - `AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_DEV` dla `dev`
+   - `AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_PROD` dla `prod`
+
+Azure CLI:
+
+`dev`
+
+```powershell
+az account set --subscription c079185e-8eeb-40dc-90b4-01cee2fa7e21
+az staticwebapp secrets list `
+  --name swa-dev-staywell `
+  --resource-group rg-dev-rentoom-booking `
+  --query "properties.apiKey" `
+  -o tsv
+```
+
+`prod`
+
+```powershell
+az account set --subscription 687d8cbd-fea7-4ae4-a70f-8cb4629c43c6
+az staticwebapp secrets list `
+  --name swa-prod-staywell `
+  --resource-group rg-prod-rentoom-booking `
+  --query "properties.apiKey" `
+  -o tsv
+```
+
+Jesli workflow zwraca:
+
+- `No matching Static Web App was found or the api key was invalid`
+
+to w praktyce oznacza:
+
+- secret wskazuje na inny zasob SWA
+- albo token jest nieaktualny i trzeba go pobrac ponownie z Azure
 
 ## Jakie workflowy istnieja obecnie
 
 `dev`
 
-- Web App:
-  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_app-dev-rentoombooking.yml`
-- Functions API:
-  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_func-dev-api-staywell.yml`
-- Static Web App:
-  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_swa-dev-staywell.yml`
+- Unified deployment:
+  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\development-main_deploy-rentoombooking.yml`
 
 `prod`
 
-- Web App:
-  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_app-prod-rentoombooking.yml`
-- Functions API:
-  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_func-prod-api-staywell.yml`
-- Static Web App:
-  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\azure-static-web-apps-gray-mud-05545df03.yml`
+- Unified deployment:
+  - `C:\Users\macie\source\repos\RentoomApartementy\RentoomBookingEcosystem\.github\workflows\main_deploy-rentoombooking.yml`
 
 ## Kolejnosc wdrozenia dla `dev`
 
@@ -504,6 +544,7 @@ Uwaga:
    - `AZURE_SUBSCRIPTION_ID_DEV`
 5. Sprawdz w GitHub repo secrets:
    - `AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_DEV`
+   - jesli deployment SWA zwroci blad o niewlasciwym API key, pobierz aktualny token z Azure i nadpisz secret
 6. Uruchom workflowy lub zrob push na `development-main`
 
 ## Kolejnosc wdrozenia dla `prod`
@@ -521,6 +562,7 @@ Uwaga:
    - `AZURE_SUBSCRIPTION_ID_PROD`
 5. Sprawdz w GitHub repo secrets:
    - `AZURE_STATIC_WEB_APPS_API_TOKEN_STAYWELL_PROD`
+   - jesli deployment SWA zwroci blad o niewlasciwym API key, pobierz aktualny token z Azure i nadpisz secret
 6. Uruchom workflow dla Functions, Web App i SWA lub zrob push na `main`
 
 ## Manualne komendy `az`
