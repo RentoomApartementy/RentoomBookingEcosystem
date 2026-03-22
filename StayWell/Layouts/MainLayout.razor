@@ -18,6 +18,7 @@
 
 <div class="layout-page @(HasEnvironmentBanner ? "layout-page--has-environment-banner" : string.Empty)">
     <EnvironmentBanner EnvironmentName="@BannerEnvironmentName" />
+    <CookieConsentGate />
     @if (LayoutState.ShowHeader)
     {
         <div class="layout-header" id="main-header">
@@ -47,16 +48,6 @@
        HasImage="@_modalHasImage"
        Content="@_modalContent">
 </Modal>
-
-@if (ReservationState.CurrentReservation != null)
-{
-    <script>
-        (function (w, d, u) {
-            var s = d.createElement('script'); s.async = true; s.src = u + '?' + (Date.now() / 60000 | 0);
-            var h = d.getElementsByTagName('script')[0]; h.parentNode.insertBefore(s, h);
-        })(window, document, 'https://cdn.bitrix24.pl/b27983133/crm/site_button/loader_8_cr6n1r.js');
-    </script>
-}
 
 @code {
     private bool _modalVisibility = false;

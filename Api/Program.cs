@@ -24,6 +24,8 @@ using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.BookingCom;
+using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
@@ -40,6 +42,7 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 builder.Services.AddHttpClient();
+builder.Services.AddMemoryCache();
 
 using var tempLoggerFactory = LoggerFactory.Create(lb =>
 {
@@ -51,17 +54,25 @@ var tempLogger = tempLoggerFactory.CreateLogger("DatabaseInit");
 
 var postgresConnectionString = PostgresConnectionStringProvider
     .GetPostgresConnectionString(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger);
-  
+
+var rentoomAppConnectionString = PostgresConnectionStringProvider
+    .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
+
+if (string.IsNullOrWhiteSpace(postgresConnectionString))
+{
+    throw new InvalidOperationException("PostgreSQL connection string configuration is missing.");
+}
+
+if (string.IsNullOrWhiteSpace(rentoomAppConnectionString))
+{
+    throw new InvalidOperationException("RentoomAppDb connection string configuration is missing.");
+}
 
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("RentoomDbConnectionString")));
-
-var rentoomAppConnectionString = PostgresConnectionStringProvider
-    .GetPostgresConnectionString(builder.Configuration, "RentoomDbConnectionString", builder.Environment.IsDevelopment(), tempLogger);
-  
+    options.UseNpgsql(rentoomAppConnectionString));
 
 builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
@@ -110,6 +121,8 @@ builder.Services.AddScoped<BitrixService>();
 //Customer Terms
 builder.Services.AddScoped<CustomerTermsRepository>();
 builder.Services.AddScoped<CustomerTermsService>();
+builder.Services.AddScoped<CookieConsentRepository>();
+builder.Services.AddScoped<CookieConsentService>();
 
 //arrival instructions
 builder.Services.AddScoped<ArrivalInstructionsService>();
@@ -128,6 +141,10 @@ builder.Services.AddScoped<IPaymentFlowHandler, UpsellPaymentFlowHandler>();
 builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
 builder.Services.AddScoped<ITpayNotificationValidator, TpayNotificationValidator>();
 builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
+builder.Services.AddScoped<IBookingComLogStore, BookingComLogStore>();
+builder.Services.AddScoped<IBookingComIncomingEmailProcessor, BookingComIncomingEmailProcessor>();
+builder.Services.AddScoped<IBookingComBackfillImportBuilder, BookingComBackfillImportBuilder>();
+builder.Services.AddScoped<IBookingComReservationWorkflowService, BookingComReservationWorkflowService>();
 
 /*builder.Services.AddSingleton<TpayClient>();
 
@@ -166,19 +183,6 @@ builder.Services.AddHttpClient<ITpayClient, TpayClient>((sp, http) =>
     http.DefaultRequestHeaders.Accept.Clear();
     http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 });
-
-
-//POSTGRESS
-
-if (string.IsNullOrWhiteSpace(postgresConnectionString))
-{
-    throw new InvalidOperationException("PostgreSQL connection string configuration is missing.");
-}
-
-
-
-
-
 
 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 {

@@ -28,6 +28,8 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
     public class BitrixService
     {
+        public const string IdoReservationIdFieldName = "UF_CRM_1768835556855";
+
         //private readonly  _rentoomDbContext;
      //   private SessionStorageService _sessionStorage;
         private readonly HttpClient client;
@@ -142,16 +144,16 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             throw new Exception($"Unexpected Bitrix24 response: {responseContent}");
         }
 
-        public async Task<int> AddContactAsync(CreateContactRequest NewContactData)
+        public async Task<int> AddContactAsync(CreateContactRequest NewContactData, string? contactTypeId = "UC_YIVWK8") //contactTypeId = "UC_YIVWK8" = Gość Rentoom
         {
             var endpointMethod = "crm.contact.add.json";
-
+            
             var fields = new Dictionary<string, object?>
             {
                 ["NAME"] = NewContactData.FirstName,
                 ["LAST_NAME"] = NewContactData.LastName,
                 ["OPENED"] = "Y",
-                ["TYPE_ID"] = "UC_YIVWK8",
+                ["TYPE_ID"] = contactTypeId,
                 ["SOURCE_ID"] = "WEB",
                 ["PHONE"] = new[]
                 {
@@ -334,7 +336,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             throw BitrixError(doc.RootElement.GetRawText(), doc);
         }
 
-        public async Task<int> UpsertContactByEmailAsync(CreateContactRequest contact)
+        public async Task<int> UpsertContactByEmailAsync(CreateContactRequest contact, string? contactTypeId = "UC_YIVWK8")
         {
             var existingId = await FindContactIdByEmailAsync(contact.Email);
             if (existingId.HasValue)
@@ -343,7 +345,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
                 return existingId.Value;
             }
 
-            return await AddContactAsync(contact);
+            return await AddContactAsync(contact, contactTypeId);
         }
 
         
@@ -364,29 +366,27 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
         }
 
         public async Task<int> AddDealAsync(CreateDealRequest req)
+            => await AddDealAsync(BuildDealFields(req));
+
+        public async Task<int> UpsertDealAsync(int? dealId, CreateDealRequest createRequest, IDictionary<string, object?> updateFields)
+        {
+            ArgumentNullException.ThrowIfNull(createRequest);
+            ArgumentNullException.ThrowIfNull(updateFields);
+
+            var existingDealId = await ResolveExistingDealIdAsync(dealId, createRequest.CustomFields, updateFields);
+            if (existingDealId.HasValue)
+            {
+                await UpdateDealAsync(existingDealId.Value, updateFields);
+                return existingDealId.Value;
+            }
+
+            var createFields = MergeFields(BuildDealFields(createRequest), updateFields);
+            return await AddDealAsync(createFields);
+        }
+
+        private async Task<int> AddDealAsync(IDictionary<string, object?> fields)
         {
             var endpointMethod = "crm.deal.add.json";
-
-            var fields = new Dictionary<string, object?>
-            {
-                ["TITLE"] = req.Title,
-                ["CATEGORY_ID"] = req.CategoryId,
-                ["STAGE_ID"] = req.StageId,
-                ["OPENED"] = "Y"
-            };
-
-            if (req.AssignedById.HasValue) fields["ASSIGNED_BY_ID"] = req.AssignedById.Value;
-            if (req.Opportunity.HasValue) fields["OPPORTUNITY"] = req.Opportunity.Value;
-            if (!string.IsNullOrWhiteSpace(req.CurrencyId)) fields["CURRENCY_ID"] = req.CurrencyId!;
-            if (req.ContactId.HasValue) fields["CONTACT_ID"] = req.ContactId.Value;
-            if (req.CompanyId.HasValue) fields["COMPANY_ID"] = req.CompanyId.Value;
-            if (req.CustomFields is not null)
-            {
-                foreach (var customField in req.CustomFields)
-                {
-                    fields[customField.Key] = customField.Value;
-                }
-            }
 
             using var doc = await PostAsync(endpointMethod, new
             {
@@ -401,6 +401,69 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             }
 
             throw BitrixError(doc.RootElement.GetRawText(), doc);
+        }
+
+        private async Task<int?> ResolveExistingDealIdAsync(
+            int? dealId,
+            IDictionary<string, object?>? createCustomFields,
+            IDictionary<string, object?> updateFields)
+        {
+            if (dealId.HasValue)
+            {
+                var dealIdFromBitrix = await FindDealIdAsync(new Dictionary<string, object?>
+                {
+                    ["ID"] = dealId.Value
+                });
+
+                if (dealIdFromBitrix.HasValue)
+                {
+                    return dealIdFromBitrix.Value;
+                }
+            }
+
+            var idoReservationId = GetIntFieldValue(updateFields, IdoReservationIdFieldName)
+                ?? GetIntFieldValue(createCustomFields, IdoReservationIdFieldName);
+
+            if (idoReservationId.HasValue)
+            {
+                return await FindDealIdAsync(new Dictionary<string, object?>
+                {
+                    [IdoReservationIdFieldName] = idoReservationId.Value
+                });
+            }
+
+            return null;
+        }
+
+        private async Task<int?> FindDealIdAsync(IDictionary<string, object?> filter)
+        {
+            using var doc = await PostAsync("crm.deal.list.json", new
+            {
+                filter,
+                select = new[] { "ID" },
+                order = new { ID = "ASC" }
+            });
+
+            if (!doc.RootElement.TryGetProperty("result", out var resultElement)
+                || resultElement.ValueKind != JsonValueKind.Array)
+            {
+                throw BitrixError(doc.RootElement.GetRawText(), doc);
+            }
+
+            foreach (var item in resultElement.EnumerateArray())
+            {
+                if (!item.TryGetProperty("ID", out var idElement))
+                {
+                    continue;
+                }
+
+                if (TryGetInt32(idElement, out var id))
+                {
+                    return id;
+                }
+            }
+
+            return null;
         }
 
         public async Task UpdateDealAsync(int dealId, IDictionary<string, object?> fields)
@@ -546,6 +609,78 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             fields["UF_CRM_1711632923055"] = request.CompanyAddress ?? string.Empty;
             fields["UF_CRM_1711632270409"] = request.CompanyName ?? string.Empty;
             fields["UF_CRM_1773080308994"] = request.CompanyEmail ?? string.Empty;
+        }
+
+        private static Dictionary<string, object?> BuildDealFields(CreateDealRequest req)
+        {
+            var fields = new Dictionary<string, object?>
+            {
+                ["TITLE"] = req.Title,
+                ["CATEGORY_ID"] = req.CategoryId,
+                ["STAGE_ID"] = req.StageId,
+                ["OPENED"] = "Y"
+            };
+
+            if (req.AssignedById.HasValue) fields["ASSIGNED_BY_ID"] = req.AssignedById.Value;
+            if (req.Opportunity.HasValue) fields["OPPORTUNITY"] = req.Opportunity.Value;
+            if (!string.IsNullOrWhiteSpace(req.CurrencyId)) fields["CURRENCY_ID"] = req.CurrencyId!;
+            if (req.ContactId.HasValue) fields["CONTACT_ID"] = req.ContactId.Value;
+            if (req.CompanyId.HasValue) fields["COMPANY_ID"] = req.CompanyId.Value;
+            if (req.CustomFields is not null)
+            {
+                foreach (var customField in req.CustomFields)
+                {
+                    fields[customField.Key] = customField.Value;
+                }
+            }
+
+            return fields;
+        }
+
+        private static Dictionary<string, object?> MergeFields(
+            IDictionary<string, object?> source,
+            IDictionary<string, object?> overrides)
+        {
+            var merged = new Dictionary<string, object?>(source);
+            foreach (var field in overrides)
+            {
+                merged[field.Key] = field.Value;
+            }
+
+            return merged;
+        }
+
+        private static int? GetIntFieldValue(IDictionary<string, object?>? fields, string fieldName)
+        {
+            if (fields is null || !fields.TryGetValue(fieldName, out var value) || value is null)
+            {
+                return null;
+            }
+
+            return value switch
+            {
+                int intValue => intValue,
+                long longValue when longValue >= int.MinValue && longValue <= int.MaxValue => (int)longValue,
+                string stringValue when int.TryParse(stringValue, out var parsed) => parsed,
+                JsonElement jsonElement when TryGetInt32(jsonElement, out var parsed) => parsed,
+                _ => null
+            };
+        }
+
+        private static bool TryGetInt32(JsonElement element, out int value)
+        {
+            if (element.ValueKind == JsonValueKind.Number && element.TryGetInt32(out value))
+            {
+                return true;
+            }
+
+            if (element.ValueKind == JsonValueKind.String && int.TryParse(element.GetString(), out value))
+            {
+                return true;
+            }
+
+            value = default;
+            return false;
         }
 
         private static Exception BitrixError(string responseContent, JsonDocument doc)

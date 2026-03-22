@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -70,31 +71,82 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public ReservationDetails? ReservationDetails { get; set; }
         public List<ReservationItem> Items { get; set; }
         public ClientModel Client { get; set; }
-       // public decimal? TotalPaymentsAsInAPI { get; set; }
+        // public decimal? TotalPaymentsAsInAPI { get; set; }
 
     }
 
     public class ReservationDetails
     {
+        private const string NormalizedDateFormat = "yyyy-MM-dd HH:mm";
+        private static readonly string[] SupportedDateFormats = new[] { "yyyy-MM-dd HH:mm", "yyyy-MM-dd" };
+        private static readonly TimeOnly DefaultCheckInTime = new(15, 0);
+        private static readonly TimeOnly DefaultCheckOutTime = new(11, 0);
+
+        private string _idbDateFrom = string.Empty;
+        private string _idbDateTo = string.Empty;
+        private string _dateFrom = string.Empty;
+        private string _dateTo = string.Empty;
+
         public float price { get; set; }
         public float advance { get; set; }
-        public string currency { get; set; }
-        public string dateAdd { get; set; }
-        public string dateFrom { get; set; }
-        public string dateTo { get; set; }
-        public string status { get; set; }
-        public string internalNote { get; set; }
-        public string clientNote { get; set; }
-        public string externalNote { get; set; }
-        public string apiNote { get; set; }
-        public string modificationStatus { get; set; }
-        public string modificationDate { get; set; }
-        public string clientId { get; set; }
+        public string currency { get; set; } = string.Empty;
+        public string dateAdd { get; set; } = string.Empty;
+
+
+        /*Surowe wartości z IdoBooking trafiają teraz do idbDateFrom i idbDateTo, a robocze dateFrom i dateTo są automatycznie normalizowane do 15:00 i 11:00. Normalizacja jest zrobiona w NormalizeIdoDateTime, więc wszystkie obecne miejsca używające ReservationDetails.dateFrom/dateTo i getDateFrom()/getDateTo() dostają już poprawione wartości bez zmian w serwisach.
+         * */
+        [JsonProperty("dateFrom")]
+        public string idbDateFrom
+        {
+            get => _idbDateFrom;
+            set
+            {
+                _idbDateFrom = value ?? string.Empty;
+                _dateFrom = NormalizeIdoDateTime(_idbDateFrom, DefaultCheckInTime);
+            }
+        }
+
+        [JsonProperty("dateTo")]
+        public string idbDateTo
+        {
+            get => _idbDateTo;
+            set
+            {
+                _idbDateTo = value ?? string.Empty;
+                _dateTo = NormalizeIdoDateTime(_idbDateTo, DefaultCheckOutTime);
+            }
+        }
+        
+        [JsonProperty("rentoomDateFrom")]
+        public string dateFrom
+        {
+            get => string.IsNullOrWhiteSpace(_dateFrom)
+                ? NormalizeIdoDateTime(_idbDateFrom, DefaultCheckInTime)
+                : _dateFrom;
+            set => _dateFrom = value ?? string.Empty;
+        }
+        
+        [JsonProperty("rentoomDateTo")]
+        public string dateTo
+        {
+            get => string.IsNullOrWhiteSpace(_dateTo)
+                ? NormalizeIdoDateTime(_idbDateTo, DefaultCheckOutTime)
+                : _dateTo;
+            set => _dateTo = value ?? string.Empty;
+        }
+        public string status { get; set; } = string.Empty;
+        public string internalNote { get; set; } = string.Empty;
+        public string clientNote { get; set; } = string.Empty;
+        public string externalNote { get; set; } = string.Empty;
+        public string apiNote { get; set; } = string.Empty;
+        public string modificationStatus { get; set; } = string.Empty;
+        public string modificationDate { get; set; } = string.Empty;
+        public string clientId { get; set; } = string.Empty;
         public float balance { get; set; }
-        public string discount { get; set; }
-        public string internalSourceId { get; set; }
+        public string discount { get; set; } = string.Empty;
+        public string internalSourceId { get; set; } = string.Empty;
         public int reservationSourceTypeId { get; set; }
-        public string reservationSourceId { get; set; }
+        public string reservationSourceId { get; set; } = string.Empty;
 
         public int getDuration()
         {
@@ -109,7 +161,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public DateTime getDateFrom()
         {
             return DateTime.ParseExact(dateFrom, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-
+            
         }
 
         public DateTime getDateTo()
@@ -117,6 +169,47 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
             return DateTime.ParseExact(dateTo, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
 
 
+        }
+
+        private static string NormalizeIdoDateTime(string? value, TimeOnly targetTime)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return string.Empty;
+            }
+
+            if (DateTime.TryParseExact(
+                value,
+                SupportedDateFormats,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var parsed))
+            {
+                return new DateTime(
+                    parsed.Year,
+                    parsed.Month,
+                    parsed.Day,
+                    targetTime.Hour,
+                    targetTime.Minute,
+                    0,
+                    DateTimeKind.Unspecified)
+                    .ToString(NormalizedDateFormat, CultureInfo.InvariantCulture);
+            }
+
+            if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsed))
+            {
+                return new DateTime(
+                    parsed.Year,
+                    parsed.Month,
+                    parsed.Day,
+                    targetTime.Hour,
+                    targetTime.Minute,
+                    0,
+                    DateTimeKind.Unspecified)
+                    .ToString(NormalizedDateFormat, CultureInfo.InvariantCulture);
+            }
+
+            return value;
         }
     }
 

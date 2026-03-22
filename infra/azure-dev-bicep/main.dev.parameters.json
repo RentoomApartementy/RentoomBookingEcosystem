@@ -106,6 +106,12 @@
     "staywellApiBaseUrl": {
       "value": "https://api-dev.rentoom.pl"
     },
+    "staywellApiAuthExcludedPaths": {
+      "value": [
+        "/api/mail/incoming",
+        "/api/tpay/notification"
+      ]
+    },
     "staywellGithubOrganization": {
       "value": "RentoomApartementy"
     },
@@ -135,6 +141,33 @@
     },
     "rentoomAppDbUser": {
       "value": "RentoomAzureDbAdmin"
+    },
+    "postgresMaxConnections": {
+      "value": 429
+    },
+    "postgresPoolingEnabled": {
+      "value": true
+    },
+    "postgresPoolingMinimumPoolSize": {
+      "value": 0
+    },
+    "rentoomWebPostgresMaximumPoolSize": {
+      "value": 4
+    },
+    "staywellApiPostgresMaximumPoolSize": {
+      "value": 1
+    },
+    "postgresPoolingConnectionIdleLifetime": {
+      "value": 60
+    },
+    "postgresPoolingConnectionPruningInterval": {
+      "value": 10
+    },
+    "postgresPoolingTimeout": {
+      "value": 15
+    },
+    "postgresPoolingCommandTimeout": {
+      "value": 30
     },
     "ttlockClientId": {
       "value": "ba60c2707447415183df5d6a4c617e09"

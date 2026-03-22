@@ -1,8 +1,10 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Cookies;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using RentoomBooking.StayWell.Models;
@@ -34,20 +36,42 @@ namespace RentoomBooking.StayWell.Services
             return $"{CachePrefix}:{scope}:{string.Join("|", parts)}";
         }
 
-        private async Task<T?> GetOrSetCacheAsync<T>(string key, Func<Task<T?>> fetch) where T : class
+        private async Task<T?> GetOrSetCacheAsync<T>(string key, Func<Task<T?>> fetch, bool cacheNull = false) where T : class
         {
-            var (exists, cached) = await _localStorage.TryGetItemAsync<T>(key);
-            if (exists && cached is not null)
+            var raw = await _localStorage.GetItemAsync(key);
+            if (!string.IsNullOrWhiteSpace(raw))
             {
-                return cached;
+                if (cacheNull && string.Equals(raw, NullMarker, StringComparison.Ordinal))
+                {
+                    return null;
+                }
+
+                try
+                {
+                    var cached = JsonSerializer.Deserialize<T>(raw, _json);
+                    if (cached is not null)
+                    {
+                        return cached;
+                    }
+                }
+                catch
+                {
+                }
             }
 
             var fresh = await fetch();
-            if (fresh is not null)
+
+            if (fresh is null)
             {
-                await _localStorage.SetItemAsync(key, fresh);
+                if (cacheNull)
+                {
+                    await _localStorage.SetItemAsync(key, NullMarker);
+                }
+
+                return null;
             }
 
+            await _localStorage.SetItemAsync(key, fresh);
             return fresh;
         }
 
@@ -65,6 +89,7 @@ namespace RentoomBooking.StayWell.Services
                 {
                     var reservation = await response.Content.ReadFromJsonAsync<RentoomReservation>(_json);
                     Console.WriteLine(response.StatusCode);
+
                     return new(reservation!, response.StatusCode);
                 }
                 else
@@ -149,7 +174,8 @@ namespace RentoomBooking.StayWell.Services
                     }
 
                     return await response.Content.ReadFromJsonAsync<TermsEntity>(_json);
-                });
+                },
+                cacheNull: true);
         }
 
         public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync()
@@ -166,19 +192,16 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<bool> SaveTermsAsync(TermsEntity entity)
         {
-           // var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
+            var response = await _http.PostAsJsonAsync("db/terms/SaveTerms", entity, _json);
 
-           var isOk = await SaveCustomerTermsAsync(entity.ResToken, new Dictionary<int, bool> { [2] = true });
+            var isOk = await UpdateAgreedTermAsync(entity.ResToken, 2,true);
 
             if (!isOk)
             {
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(entity.ResToken))
-            {
-                await InvalidateCacheAsync("terms", entity.ResToken);
-            }
+            await InvalidateCacheAsync("terms", entity.ResToken);
 
             return true;
         }
@@ -198,13 +221,25 @@ namespace RentoomBooking.StayWell.Services
                     }
 
                     return await response.Content.ReadFromJsonAsync<RegistrationCardEntity>(_json);
-                });
+                },
+                cacheNull: true);
         }
 
         public async Task<bool> SaveRegistrationCardAsync(RegistrationCardEntity entity)
         {
             var response = await _http.PostAsJsonAsync("db/registrationcard/SaveRegistrationCard", entity, _json);
-            return response.IsSuccessStatusCode;
+            if (!response.IsSuccessStatusCode)
+            {
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(entity.ResToken))
+            {
+                var cacheKey = BuildCacheKey("registration-card", entity.ResToken);
+                await _localStorage.SetItemAsync(cacheKey, entity);
+            }
+
+            return true;
         }
 
         public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId)
@@ -476,6 +511,34 @@ namespace RentoomBooking.StayWell.Services
 
             var response = await _http.PatchAsJsonAsync($"db/reservations/{reservationToken}/agreed-terms", request, _json);
             return response.StatusCode == HttpStatusCode.NoContent;
+        }
+
+        public async Task<CookieNoticeDto?> GetCookieNoticeAsync(string appCode, string? culture = null)
+        {
+            var url = $"db/cookies/{appCode}/notice";
+            if (!string.IsNullOrWhiteSpace(culture))
+            {
+                url += $"?culture={Uri.EscapeDataString(culture)}";
+            }
+
+            var response = await _http.GetAsync(url);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<CookieNoticeDto>(_json);
+        }
+
+        public async Task<CookieConsentAuditResultDto?> SaveCookieConsentAsync(string appCode, SaveCookieConsentRequest request)
+        {
+            var response = await _http.PostAsJsonAsync($"db/cookies/{appCode}/consents", request, _json);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<CookieConsentAuditResultDto>(_json);
         }
 
         private async Task InvalidateCacheAsync(string scope, params string[] parts)

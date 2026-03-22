@@ -12,7 +12,7 @@
 
 <div class="header">
     <div class="left">
-        @* <img class="logo" src="/icons/building.svg"/> *@
+        <img class="logo" src="/images/resized-logo.png"/>
         <div class="texts">
             <span class="name">StayWell</span>
             <span class="reservation-id">
@@ -63,6 +63,20 @@
         if (!string.IsNullOrWhiteSpace(savedPreference))
         {
             GlobalizationService.SetCulture(savedPreference);
+        }
+        else
+        {
+            var browserCulture = CultureInfo.CurrentCulture.Name;
+            var supported = GlobalizationService.GetSupportedCultures();
+            
+            if (supported.Any(c => c.Name == browserCulture))
+            {
+                GlobalizationService.SetCulture(browserCulture);
+            }
+            else
+            {
+                GlobalizationService.SetCulture("en-US");
+            }
         }
 
         await BitrixService.InitializeAsync();

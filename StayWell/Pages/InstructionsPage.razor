@@ -5,27 +5,55 @@
 @using System.Linq
 @using Microsoft.Extensions.Localization
 @using System.Globalization
+@using Microsoft.JSInterop
 @inject NavigationManager Navigation
 @inject StayWell.Services.ClipboardService ClipboardService
 @inject IStringLocalizer<InstructionsPage> Localizer
-@inject StayWell.Services.ToastService ToastService
+@* @inject StayWell.Services.ToastService ToastService *@
+@inject IJSRuntime JS
 
 @inherits Models.PageBase
 @implements IDisposable
+@implements IAsyncDisposable
 
 <PageTitle>@Localizer["InstructionsPage"]</PageTitle>
 
 <div class="instructions-page">
+    <section class="instructions-section shortcuts-section">
+        @* <header class="instructions-section__header">
+            <h3 class="instructions-section__title">@Localizer["Shortcuts"]</h3>
+        </header> *@
+
+        <div class="shortcuts-bar">
+            <button type="button"
+                    class="shortcut-btn @(IsActiveTarget("wifi-shortcut-target") ? "shortcut-btn--active" : string.Empty)"
+                    title="@Localizer["Wifi"]"
+                    aria-label="@Localizer["Wifi"]"
+                    @onclick='() => ScrollToTarget("wifi-shortcut-target")'>
+                <img src="/icons/wifi.svg" alt="@Localizer["Wifi"]" />
+            </button>
+
+            <button type="button"
+                    class="shortcut-btn @(IsActiveTarget("open-shortcut-target") ? "shortcut-btn--active" : string.Empty)"
+                    title="@Localizer["OpenButton"]"
+                    aria-label="@Localizer["OpenButton"]"
+                    @onclick='() => ScrollToTarget("open-shortcut-target")'>
+                <img src="/icons/lock.svg" alt="@Localizer["OpenButton"]" />
+            </button>
+        </div>
+    </section>
+
     <section class="instructions-section">
         <header class="instructions-section__header">
             <h3 class="instructions-section__title">@Localizer["Instructions"]</h3>
         </header>
+
         <div class="carousel-wrapper">
             @if (ApartmentState.IsLoading)
             {
                 <div class="skeleton skeleton--carousel"></div>
             }
-            else if (InstructionAvailable)
+            else if (!InstructionAvailable)
             {
                 <Carousel Description=""
                           Descriptions="@InstructionDescriptions"
@@ -86,7 +114,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["ParkingNumber"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.StoreroomCode</div>
+                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.ParkingSpotNumber</div>
                         </div>
                     </div>
                 }
@@ -142,6 +170,7 @@
                         </div>
                     </div>
                 }
+
                 @if (!string.IsNullOrEmpty(ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.itemCode))
                 {
                     <div class="code-card">
@@ -154,7 +183,8 @@
                         </div>
                     </div>
                 }
-                <div class="code-card">
+
+                <div id="open-shortcut-target" class="code-card code-card--scroll-target @(IsActiveTarget("open-shortcut-target") ? "code-card--active" : string.Empty)">
                     <div class="code-card__icon-wrapper">
                         <img src="/icons/lock.svg" class="code-card__icon" />
                     </div>
@@ -167,7 +197,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="code-card">
+
+                <div id="wifi-shortcut-target" class="code-card code-card--scroll-target @(IsActiveTarget("wifi-shortcut-target") ? "code-card--active" : string.Empty)">
                     <div class="code-card__icon-wrapper">
                         <img src="/icons/wifi.svg" class="code-card__icon" />
                     </div>
@@ -278,5 +309,88 @@
     private bool HasWifiInfo()
     {
         return HasCode(WifiSsid) || HasCode(WifiPassword) || HasCode(WifiAuth);
+    }
+
+    private DotNetObjectReference<InstructionsPage>? _dotNetRef;
+    private string? ActiveShortcutTarget { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        GlobalizationService.OnChange += OnLanguageChanged;
+    }
+
+    private bool IsActiveTarget(string targetId)
+    {
+        return string.Equals(ActiveShortcutTarget, targetId, StringComparison.Ordinal);
+    }
+
+    private void OnLanguageChanged() =>
+        InvokeAsync(async () =>
+        {
+            var apartmentItemId = ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.objectItemId;
+            if (apartmentItemId is > 0)
+            {
+                await ApartmentState.GetArrivalInstructionStepsAsync(
+                    apartmentItemId.Value,
+                    GlobalizationService.CurrentCulture.Name);
+            }
+
+            StateHasChanged();
+        });
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("setupInstructionShortcutScrollReset", _dotNetRef);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    [JSInvokable]
+    public Task ResetActiveShortcutFromScroll()
+    {
+        if (ActiveShortcutTarget is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        ActiveShortcutTarget = null;
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ScrollToTarget(string elementId)
+    {
+        ActiveShortcutTarget = null;
+        await InvokeAsync(StateHasChanged);
+
+        await JS.InvokeVoidAsync("scrollInMainBodyToElement", elementId);
+
+        ActiveShortcutTarget = elementId;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("removeInstructionShortcutScrollReset");
+        }
+        catch
+        {
+            // ignore on dispose
+        }
+
+        _dotNetRef?.Dispose();
+        _dotNetRef = null;
+    }
+
+    public override void Dispose()
+    {
+        GlobalizationService.OnChange -= OnLanguageChanged;
+        base.Dispose();
     }
 }

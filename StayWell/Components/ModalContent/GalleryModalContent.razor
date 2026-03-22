@@ -1,4 +1,6 @@
-﻿<div class="gallery-modal-content">
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<div class="gallery-modal-content">
 
     @* Przycisk WSTECZ - tylko jeśli włączone sterowanie i więcej niż 1 zdjęcie *@
     @if (ShowControls && ImageUrls.Length > 1)
@@ -8,10 +10,25 @@
         </button>
     }
 
-    <div class="image-wrapper">
-        <img src="@ImageUrls[_currentIndex]"
-             alt="Powiększone zdjęcie"
-             style="max-width: 100%; max-height: 80vh; object-fit: contain;" />
+    <div class="image-wrapper"
+         @ontouchstart="HandleTouchStart"
+         @ontouchmove="HandleTouchMove"
+         @ontouchend="HandleTouchEnd"
+         @ontouchcancel="HandleTouchCancel">
+        @if (ImageUrls.Length > 0)
+        {
+            <img class="gallery-image"
+                 src="@ImageUrls[_currentIndex]"
+                 alt="Powiększone zdjęcie"
+                 style="max-width: 100%; max-height: 80vh; object-fit: contain;" />
+
+            @if (!string.IsNullOrWhiteSpace(CurrentDescription))
+            {
+                <div class="step-description">
+                    @CurrentDescription
+                </div>
+            }
+        }
     </div>
 
     @* Przycisk DALEJ - tylko jeśli włączone sterowanie i więcej niż 1 zdjęcie *@
@@ -25,25 +42,101 @@
 
 @code {
     [Parameter] public string[] ImageUrls { get; set; } = Array.Empty<string>();
+    [Parameter] public string[] Descriptions { get; set; } = Array.Empty<string>();
     [Parameter] public int StartIndex { get; set; } = 0;
     [Parameter] public bool ShowControls { get; set; } = false;
 
     private int _currentIndex;
 
+    private double _touchStartX;
+    private double _touchStartY;
+    private double _touchLastX;
+    private double _touchLastY;
+    private bool _touchStarted;
+
+    private const double SwipeThresholdPx = 50;
+
+    private string CurrentDescription =>
+        Descriptions.Length > _currentIndex ? Descriptions[_currentIndex] : string.Empty;
+
     protected override void OnInitialized()
     {
-        _currentIndex = StartIndex;
+        _currentIndex = ImageUrls.Length == 0
+            ? 0
+            : Math.Clamp(StartIndex, 0, ImageUrls.Length - 1);
     }
 
     private void NextImage()
     {
+        if (ImageUrls.Length == 0) return;
+
         if (_currentIndex < ImageUrls.Length - 1) _currentIndex++;
         else _currentIndex = 0;
     }
 
     private void PrevImage()
     {
+        if (ImageUrls.Length == 0) return;
+
         if (_currentIndex > 0) _currentIndex--;
         else _currentIndex = ImageUrls.Length - 1;
+    }
+
+    private void HandleTouchStart(TouchEventArgs args)
+    {
+        if (args.Touches is null || args.Touches.Count() == 0) return;
+
+        _touchStartX = args.Touches[0].ClientX;
+        _touchStartY = args.Touches[0].ClientY;
+        _touchLastX = _touchStartX;
+        _touchLastY = _touchStartY;
+        _touchStarted = true;
+    }
+
+    private void HandleTouchMove(TouchEventArgs args)
+    {
+        if (!_touchStarted || args.Touches is null || args.Touches.Count() == 0) return;
+
+        _touchLastX = args.Touches[0].ClientX;
+        _touchLastY = args.Touches[0].ClientY;
+    }
+
+    private void HandleTouchEnd(TouchEventArgs args)
+    {
+        if (!_touchStarted) return;
+
+        var endX = _touchLastX;
+        var endY = _touchLastY;
+
+        if (args.ChangedTouches is not null && args.ChangedTouches.Count() > 0)
+        {
+            endX = args.ChangedTouches[0].ClientX;
+            endY = args.ChangedTouches[0].ClientY;
+        }
+
+        var deltaX = endX - _touchStartX;
+        var deltaY = endY - _touchStartY;
+
+        if (Math.Abs(deltaX) >= SwipeThresholdPx && Math.Abs(deltaX) > Math.Abs(deltaY))
+        {
+            if (deltaX < 0) NextImage();
+            else PrevImage();
+        }
+
+        ResetTouchState();
+    }
+
+    private void HandleTouchCancel()
+    {
+        ResetTouchState();
+    }
+
+    private void ResetTouchState()
+    {
+        _touchStarted = false;
+        _touchStartX = 0;
+        _touchStartY = 0;
+        _touchLastX = 0;
+        _touchLastY = 0;
     }
 }

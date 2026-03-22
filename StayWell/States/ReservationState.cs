@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.StayWell.Services;
 using System.Net;
 
@@ -36,7 +37,7 @@ namespace RentoomBooking.StayWell.States
                 var from = details.getDateFrom().Date + CheckInTime.ToTimeSpan();
                 var to = details.getDateTo().Date + CheckOutTime.ToTimeSpan();
 
-                return from <= now && now <= to;
+                return from <= now && now <= to && details.status == ReservationStatusType.Accepted;
             }
         }
 

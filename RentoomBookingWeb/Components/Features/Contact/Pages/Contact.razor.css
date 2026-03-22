@@ -196,6 +196,24 @@
     text-decoration: none;
 }
 
+.btn-wrapper {
+    width: 100%;
+}
+
+.form-feedback {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.form-feedback.success {
+    color: #1f5a41;
+}
+
+.form-feedback.error {
+    color: #b42318;
+}
+
 @media (max-width: 991px) {
     .main-wrapper {
         padding: 2rem 1rem;

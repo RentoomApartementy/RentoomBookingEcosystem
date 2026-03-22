@@ -17,12 +17,16 @@
 </head>
 
 <body>
+    <style>
+        .loading-logo {
+            width: 140px;
+            height: auto;
+            display: block;
+            margin: 40vh auto 0;
+        }
+    </style>
     <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
+        <img class="loading-logo" src="/images/resized-logo.png" alt="Loading..." />
     </div>
 
     <div id="blazor-error-ui">
@@ -38,7 +42,6 @@
             var height = summaryEl.getBoundingClientRect().height;
             wrapper.style.paddingBottom = (height + 100 + 24) + "px";
         };
-
 
         window.checkCartNeedsCollapse = function (wrapperEl, summaryEl) {
             if (!wrapperEl || !summaryEl) return false;
@@ -82,8 +85,22 @@
         @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oooh+Baby&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
     </style>
 
+    <script>
+        window.stayWellBitrixEnableLoader = function (loaderUrl) {
+            if (!loaderUrl || document.getElementById("staywell-bitrix-loader")) {
+                return;
+            }
+
+            var script = document.createElement("script");
+            script.id = "staywell-bitrix-loader";
+            script.async = true;
+            script.src = loaderUrl + "?" + ((Date.now() / 60000) | 0);
+            document.head.appendChild(script);
+        };
+    </script>
     <script src="js/bitrixchat2.js"></script>
-    <script src="js/upsellstrip.js"></script>
+    <!--wyłączenie do czasu wdrożenia upselli, naprawić-->
+    <!--<script src="js/upsellstrip.js"></script>--> 
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 
     <!--ukrywanie header'a-->
@@ -106,6 +123,92 @@
                     header.classList.remove('hide');
                 }
                 lastScrollTop = scrollTop;
+            });
+        };
+    </script>
+    <script>
+        window.setupInstructionShortcutScrollReset = function (dotnetRef) {
+            var container = document.getElementById("main-body") || document.documentElement;
+            if (!container) return;
+
+            if (container._instructionShortcutResetHandler) {
+                container.removeEventListener("scroll", container._instructionShortcutResetHandler);
+            }
+
+            container._instructionShortcutResetDotnetRef = dotnetRef;
+            container._instructionUserScrolling = false;
+
+            container._instructionUserIntentHandler = function () {
+                container._instructionUserScrolling = true;
+            };
+
+            container._instructionShortcutResetHandler = function () {
+                if (container._instructionAutoScrolling) return;
+                if (!container._instructionUserScrolling) return;
+                if (!container._instructionShortcutResetDotnetRef) return;
+
+                container._instructionShortcutResetDotnetRef.invokeMethodAsync("ResetActiveShortcutFromScroll");
+                container._instructionUserScrolling = false;
+            };
+
+            container.addEventListener("wheel", container._instructionUserIntentHandler, { passive: true });
+            container.addEventListener("touchmove", container._instructionUserIntentHandler, { passive: true });
+            container.addEventListener("scroll", container._instructionShortcutResetHandler, { passive: true });
+        };
+
+        window.removeInstructionShortcutScrollReset = function () {
+            var container = document.getElementById("main-body") || document.documentElement;
+            if (!container) return;
+
+            if (container._instructionShortcutResetHandler) {
+                container.removeEventListener("scroll", container._instructionShortcutResetHandler);
+                delete container._instructionShortcutResetHandler;
+            }
+
+            if (container._instructionUserIntentHandler) {
+                container.removeEventListener("wheel", container._instructionUserIntentHandler);
+                container.removeEventListener("touchmove", container._instructionUserIntentHandler);
+                delete container._instructionUserIntentHandler;
+            }
+
+            delete container._instructionShortcutResetDotnetRef;
+        };
+
+        window.scrollInMainBodyToElement = function (elementId) {
+            return new Promise(function (resolve) {
+                var target = document.getElementById(elementId);
+                if (!target) {
+                    resolve();
+                    return;
+                }
+
+                var container = document.getElementById("main-body");
+                if (!container) {
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                    setTimeout(resolve, 500);
+                    return;
+                }
+
+                container._instructionAutoScrolling = true;
+                container._instructionUserScrolling = false;
+
+                if (container._instructionAutoScrollingTimeout) {
+                    clearTimeout(container._instructionAutoScrollingTimeout);
+                }
+
+                var containerRect = container.getBoundingClientRect();
+                var targetRect = target.getBoundingClientRect();
+                var top = targetRect.top - containerRect.top + container.scrollTop - 12;
+
+                container.scrollTo({
+                    top: Math.max(top, 0),
+                    behavior: "smooth"
+                });
+
+                container._instructionAutoScrollingTimeout = setTimeout(function () {
+                    container._instructionAutoScrolling = false;
+                    resolve();
+                }, 700);
             });
         };
     </script>

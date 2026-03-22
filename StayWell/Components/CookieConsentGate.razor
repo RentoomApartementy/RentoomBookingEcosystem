@@ -1,0 +1,150 @@
+@using System.Globalization
+@using RentoomBooking.StayWell.Services
+@using RentoomBooking.SharedClasses.Models.Cookies
+@inject BackendApi BackendApi
+@inject LocalStorageService LocalStorageService
+@inject BitrixService BitrixService
+@inject GlobalizationService GlobalizationService
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<CookieConsentBanner Notice="@_notice"
+                     ThemeClass="cookie-banner--rentoom"
+                     IsVisible="@_isVisible"
+                     IsBusy="@_isSubmitting"
+                     ErrorMessage="@_errorMessage"
+                     OnAccept="AcceptAsync" />
+
+@code {
+    private const string AppCode = CookieConsentAppCodes.StayWell;
+    private const string StorageKey = "staywell:cookie-consent";
+    private const string BitrixLoaderUrl = "https://cdn.bitrix24.pl/b27983133/crm/site_button/loader_8_cr6n1r.js";
+
+    private CookieNoticeDto? _notice;
+    private bool _isVisible;
+    private bool _isSubmitting;
+    private string? _errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        GlobalizationService.OnChange += HandleLanguageChanged;
+        await LoadNoticeAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || _notice is null)
+        {
+            return;
+        }
+
+        await ApplyClientConsentAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task AcceptAsync()
+    {
+        if (_notice is null || _isSubmitting)
+        {
+            return;
+        }
+
+        _isSubmitting = true;
+        _errorMessage = null;
+        await InvokeAsync(StateHasChanged);
+
+        var request = new SaveCookieConsentRequest
+        {
+            CookieNoticeSourceId = _notice.SourceId,
+            CookieNoticeTranslationId = _notice.TranslationId,
+            CookieNoticeVersion = _notice.Version,
+            ClientConsentId = Guid.NewGuid(),
+            Culture = _notice.Culture,
+            RequestPath = BuildCurrentPath(),
+            ContentHash = _notice.ContentHash
+        };
+
+        var response = await BackendApi.SaveCookieConsentAsync(AppCode, request);
+        if (response is null)
+        {
+            _errorMessage = GetSaveErrorMessage();
+            _isSubmitting = false;
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        var localState = new CookieConsentClientState
+        {
+            ClientConsentId = request.ClientConsentId,
+            Version = _notice.Version,
+            AuditId = response.AuditId,
+            AcceptedAtUtc = response.AcceptedAtUtc,
+            ContentHash = response.ContentHash
+        };
+
+        await LocalStorageService.SetItemAsync(StorageKey, localState);
+        _isVisible = false;
+        _isSubmitting = false;
+        await BitrixService.EnableLoaderAsync(BitrixLoaderUrl);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LoadNoticeAsync()
+    {
+        _notice = await BackendApi.GetCookieNoticeAsync(AppCode, GlobalizationService.CurrentCulture.Name);
+    }
+
+    private async Task ApplyClientConsentAsync()
+    {
+        if (_notice is null)
+        {
+            _isVisible = false;
+            return;
+        }
+
+        var (exists, state) = await LocalStorageService.TryGetItemAsync<CookieConsentClientState>(StorageKey);
+        if (exists && state is not null && HasCurrentConsent(state))
+        {
+            _isVisible = false;
+            await BitrixService.EnableLoaderAsync(BitrixLoaderUrl);
+            return;
+        }
+
+        _isVisible = true;
+    }
+
+    private bool HasCurrentConsent(CookieConsentClientState state)
+    {
+        return _notice is not null
+            && string.Equals(state.Version, _notice.Version, StringComparison.Ordinal)
+            && string.Equals(state.ContentHash, _notice.ContentHash, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private string BuildCurrentPath()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        return string.IsNullOrWhiteSpace(uri.PathAndQuery) ? "/" : uri.PathAndQuery;
+    }
+
+    private string GetSaveErrorMessage()
+    {
+        return CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("pl", StringComparison.OrdinalIgnoreCase)
+            ? "Nie udało się zapisać zgody. Spróbuj ponownie."
+            : "Could not save consent. Please try again.";
+    }
+
+    private async void HandleLanguageChanged()
+    {
+        await InvokeAsync(async () =>
+        {
+            await LoadNoticeAsync();
+            await ApplyClientConsentAsync();
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= HandleLanguageChanged;
+    }
+}

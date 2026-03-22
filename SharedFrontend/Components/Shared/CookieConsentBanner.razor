@@ -1,0 +1,101 @@
+@using Microsoft.AspNetCore.Components.Web
+@using RentoomBooking.SharedClasses.Models.Cookies
+
+@if (Notice is not null && IsVisible)
+{
+    <section class="@BuildBannerClass()" aria-live="polite" aria-label="@Notice.Title">
+        <div class="cookie-banner__surface">
+            <div class="cookie-banner__header">
+                <h2 class="cookie-banner__title">@Notice.Title</h2>
+                @if (_isExpanded)
+                {
+                    <button type="button"
+                            class="cookie-banner__close"
+                            @onclick="Collapse"
+                            aria-label="@Notice.CloseLabel">
+                        @Notice.CloseLabel
+                    </button>
+                }
+            </div>
+
+            <div class="cookie-banner__summary">@((MarkupString)Notice.BannerSummaryHtml)</div>
+
+            @if (_isExpanded)
+            {
+                <div class="cookie-banner__details">@((MarkupString)Notice.DetailsHtml)</div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+            {
+                <p class="cookie-banner__error">@ErrorMessage</p>
+            }
+
+            <div class="cookie-banner__actions">
+                <button type="button"
+                        class="cookie-banner__secondary"
+                        @onclick="ToggleExpanded"
+                        disabled="@IsBusy">
+                    @(_isExpanded ? Notice.LessLabel : Notice.MoreLabel)
+                </button>
+
+                <button type="button"
+                        class="cookie-banner__primary"
+                        @onclick="AcceptAsync"
+                        disabled="@IsBusy">
+                    @(IsBusy ? "..." : Notice.AcceptLabel)
+                </button>
+            </div>
+        </div>
+    </section>
+}
+
+@code {
+    private bool _isExpanded;
+
+    [Parameter]
+    public CookieNoticeDto? Notice { get; set; }
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public bool IsBusy { get; set; }
+
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    [Parameter]
+    public EventCallback OnAccept { get; set; }
+
+    [Parameter]
+    public string? ThemeClass { get; set; }
+
+    private Task ToggleExpanded()
+    {
+        _isExpanded = !_isExpanded;
+        return Task.CompletedTask;
+    }
+
+    private Task Collapse()
+    {
+        _isExpanded = false;
+        return Task.CompletedTask;
+    }
+
+    private async Task AcceptAsync(MouseEventArgs _)
+    {
+        if (!OnAccept.HasDelegate || IsBusy)
+        {
+            return;
+        }
+
+        await OnAccept.InvokeAsync();
+    }
+
+    private string BuildBannerClass()
+    {
+        return string.IsNullOrWhiteSpace(ThemeClass)
+            ? "cookie-banner"
+            : $"cookie-banner {ThemeClass}";
+    }
+}

@@ -25,9 +25,9 @@
     },
     "webPlanSku": {
       "value": {
-        "name": "F1",
-        "tier": "Free",
-        "size": "F1",
+        "name": "B2",
+        "tier": "Basic",
+        "size": "B2",
         "capacity": 1
       }
     },
@@ -83,7 +83,7 @@
       "value": "https://staywell.rentoom.pl"
     },
     "idoBookingUseDummy": {
-      "value": true
+      "value": false
     },
     "idoBookingDummyReservationTemplateKey": {
       "value": "dummy_api_call_template"
@@ -105,6 +105,12 @@
     },
     "staywellApiBaseUrl": {
       "value": "https://api.rentoom.pl"
+    },
+    "staywellApiAuthExcludedPaths": {
+      "value": [
+        "/api/mail/incoming",
+        "/api/tpay/notification"
+      ]
     },
     "staywellGithubOrganization": {
       "value": "RentoomApartementy"
@@ -128,13 +134,40 @@
       "value": "uploadsprod"
     },
     "instructionsStorageContainerName": {
-      "value": "arrivalinstructions-prod"
+      "value": "arrivalinstructions-dev"
     },
     "rentoomAppDbName": {
       "value": "rentoomdb"
     },
     "rentoomAppDbUser": {
       "value": "RentoomAzureDbAdmin"
+    },
+    "postgresMaxConnections": {
+      "value": 429
+    },
+    "postgresPoolingEnabled": {
+      "value": true
+    },
+    "postgresPoolingMinimumPoolSize": {
+      "value": 0
+    },
+    "rentoomWebPostgresMaximumPoolSize": {
+      "value": 4
+    },
+    "staywellApiPostgresMaximumPoolSize": {
+      "value": 1
+    },
+    "postgresPoolingConnectionIdleLifetime": {
+      "value": 60
+    },
+    "postgresPoolingConnectionPruningInterval": {
+      "value": 10
+    },
+    "postgresPoolingTimeout": {
+      "value": 15
+    },
+    "postgresPoolingCommandTimeout": {
+      "value": 30
     },
     "ttlockClientId": {
       "value": "ba60c2707447415183df5d6a4c617e09"
@@ -143,7 +176,7 @@
       "value": "+48601317506"
     },
     "rentoomDataStorageAccountName": {
-      "value": "storrentoombookingprod"
+      "value": "storagerentoombooking"
     },
     "logAnalyticsWorkspaceName": {
       "value": "log-prod-rentoombooking"

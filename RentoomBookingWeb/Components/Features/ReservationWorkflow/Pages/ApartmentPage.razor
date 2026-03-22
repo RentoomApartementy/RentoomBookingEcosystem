@@ -700,6 +700,7 @@
 
     private List<DefinedAddonEntity>? _definedAddons = null;
     private List<SelectedAddonDto> _selectedAddons = new();
+    private List<SelectedAddonDto> _mandatoryAddons = new();
 
     private IReadOnlyList<UpsellTileDto> _availableUpsells = Array.Empty<UpsellTileDto>();
     private ReservationPricingContext? _reservationPricingContext; 
@@ -1005,6 +1006,7 @@
             _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
             
             _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
+            InitializeMandatoryAddons();
             UpdateReservationPricingContext();
             RefreshAddonsParams();
             await LoadUpsellsAsync();
@@ -1066,6 +1068,7 @@
 
         _selectedOfferType = start.SelectedOfferType;
         _selectedAddons = start.SelectedAddons ?? new List<SelectedAddonDto>();
+        _mandatoryAddons = start.MandatoryAddons ?? new List<SelectedAddonDto>();
         _selectedUpsells = start.SelectedUpsells ?? new List<SelectedUpsellDto>();
     }
 
@@ -1184,19 +1187,24 @@
     {
         if (_apartment?.Addons == null || _definedAddons == null) return;
 
-        foreach (var addon in _apartment.Addons)
+        var mandatoryAddonIds = _apartment.Addons
+            .Where(addon => addon.Id.HasValue && addon.Optional == false)
+            .Select(addon => addon.Id!.Value)
+            .Distinct()
+            .ToHashSet();
+
+        _mandatoryAddons.RemoveAll(addon => !mandatoryAddonIds.Contains(addon.AddonId));
+
+        foreach (var addonId in mandatoryAddonIds)
         {
-            if (addon.Id.HasValue && (addon.Optional == false))
+            if (!_mandatoryAddons.Any(x => x.AddonId == addonId))
             {
-                if (!_selectedAddons.Any(x => x.AddonId == addon.Id.Value))
-                {
-                    AddAddonToList(addon.Id.Value);
-                }
+                AddAddonToList(_mandatoryAddons, addonId);
             }
         }
     }
 
-    private void AddAddonToList(int addonId)
+    private void AddAddonToList(List<SelectedAddonDto> targetAddons, int addonId)
     {
         var definition = _definedAddons?.FirstOrDefault(d => d.IdoBookingId == addonId);
         
@@ -1221,7 +1229,7 @@
             DisplayText = definition?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == CurrentAddonLanguage)?.Name ?? "Addon"
         };
 
-        _selectedAddons.Add(newDto);
+        targetAddons.Add(newDto);
     }
 
     private bool IsAddonSelected(int? addonId)
@@ -1282,7 +1290,7 @@
         {
             if (!_selectedAddons.Any(x => x.AddonId == addonId.Value))
             {
-                AddAddonToList(addonId.Value);
+                AddAddonToList(_selectedAddons, addonId.Value);
             }
         }
         else
@@ -1474,7 +1482,10 @@
             OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
             Currency = "PLN",
             SelectedAddons = _selectedAddons,
-            SelectedUpsells = _selectedUpsells
+            MandatoryAddons = _mandatoryAddons,
+            SelectedUpsells = _selectedUpsells,
+            SelectedAddonsTotalPrice = TotalAddonsPrice,
+            SelectedUpsellsTotalPrice = TotalUpsellsPrice
         };
 
         var reservationGuid = await EnsureReservationAsync(request);
@@ -1559,6 +1570,12 @@
                              (int.TryParse(Children, out var c) ? c : 0);
 
         foreach (var addon in _selectedAddons)
+        {
+            addon.Nights = currentNights;
+            addon.Persons = currentPersons;
+        }
+
+        foreach (var addon in _mandatoryAddons)
         {
             addon.Nights = currentNights;
             addon.Persons = currentPersons;

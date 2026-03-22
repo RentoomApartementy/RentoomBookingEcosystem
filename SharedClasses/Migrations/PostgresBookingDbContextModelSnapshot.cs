@@ -22,6 +22,252 @@ namespace RentoomBooking.SharedClasses.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Cookies.CookieConsentAudit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AcceptedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("AppCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("AzureClientIp")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<Guid>("ClientConsentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContentHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<int>("CookieNoticeSourceId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CookieNoticeTranslationId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CookieNoticeVersion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Decision")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("ForwardedForRaw")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Referrer")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<string>("RequestPath")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<Guid?>("ReservationGuid")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CookieNoticeSourceId");
+
+                    b.HasIndex("AppCode", "AcceptedAtUtc");
+
+                    b.ToTable("cookie_consent_audits");
+                });
+
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Cookies.CookieNoticeSource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("ValidFromUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ValidToUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppCode", "Version")
+                        .IsUnique();
+
+                    b.ToTable("cookie_notice_sources");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1001,
+                            AppCode = "staywell",
+                            IsActive = true,
+                            ValidFromUtc = new DateTime(2026, 3, 22, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Version = "2026-03-basic"
+                        },
+                        new
+                        {
+                            Id = 1002,
+                            AppCode = "rentoombookingweb",
+                            IsActive = true,
+                            ValidFromUtc = new DateTime(2026, 3, 22, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Version = "2026-03-basic"
+                        });
+                });
+
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Cookies.CookieNoticeTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AcceptLabel")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("BannerSummaryHtml")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CloseLabel")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("CookieNoticeSourceId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("DetailsHtml")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LessLabel")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("MoreLabel")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CookieNoticeSourceId", "Culture")
+                        .IsUnique();
+
+                    b.ToTable("cookie_notice_translations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2001,
+                            AcceptLabel = "Akceptuję",
+                            BannerSummaryHtml = "<p>Używamy plików cookie, aby pomóc użytkownikom w sprawnej nawigacji i wykonywaniu określonych funkcji.</p>\n<p>Większość narzędzi analitycznych i marketingowych uruchamiamy dopiero po akceptacji.</p>",
+                            CloseLabel = "Close",
+                            CookieNoticeSourceId = 1001,
+                            Culture = "pl-PL",
+                            DetailsHtml = "<p>Używamy plików cookie, aby pomóc użytkownikom w sprawnej nawigacji i wykonywaniu określonych funkcji. Szczegółowe informacje na temat wszystkich plików cookie odpowiadających poszczególnym kategoriom zgody znajdują się poniżej.</p>\n<p>Pliki cookie sklasyfikowane jako \"niezbędne\" są przechowywane w przeglądarce użytkownika, ponieważ są niezbędne do włączenia podstawowych funkcji witryny.</p>\n<p>Korzystamy również z plików cookie innych firm, które pomagają nam analizować sposób korzystania ze strony przez użytkowników, a także przechowywać preferencje użytkownika oraz dostarczać mu istotnych dla niego treści i reklam. Tego typu pliki cookie będą przechowywane w przeglądarce tylko za uprzednią zgodą użytkownika.</p>\n<p>Wyłączenie niektórych plików cookie może wpłynąć na jakość przeglądania strony.</p>\n<h3>Niezbędny</h3>\n<p>Zawsze aktywne. Niezbędne pliki cookie mają kluczowe znaczenie dla podstawowych funkcji witryny i witryna nie będzie działać w zamierzony sposób bez nich. Te pliki cookie nie przechowują żadnych danych umożliwiających identyfikację osoby.</p>\n<h3>Funkcjonalny</h3>\n<p>Funkcjonalne pliki cookie pomagają wykonywać pewne funkcje, takie jak udostępnianie zawartości witryny na platformach mediów społecznościowych, zbieranie informacji zwrotnych i inne funkcje stron trzecich.</p>\n<h3>Analityka</h3>\n<p>Analityczne pliki cookie służą do zrozumienia, w jaki sposób użytkownicy wchodzą w interakcję z witryną. Te pliki cookie pomagają dostarczać informacje o metrykach liczby odwiedzających, współczynniku odrzuceń, źródle ruchu itp.</p>\n<h3>Występ</h3>\n<p>Wydajnościowe pliki cookie służą do zrozumienia i analizy kluczowych wskaźników wydajności witryny, co pomaga zapewnić lepsze wrażenia użytkownika dla odwiedzających.</p>\n<h3>Reklama</h3>\n<p>Reklamowe pliki cookie służą do dostarczania użytkownikom spersonalizowanych reklam w oparciu o strony, które odwiedzili wcześniej, oraz do analizowania skuteczności kampanii reklamowej.</p>",
+                            LessLabel = "Pokaż mniej",
+                            MoreLabel = "Więcej",
+                            Title = "O plikach cookies"
+                        },
+                        new
+                        {
+                            Id = 2002,
+                            AcceptLabel = "Accept",
+                            BannerSummaryHtml = "<p>We use cookies to help users navigate efficiently and perform certain functions.</p>\n<p>Most analytics and marketing tools are enabled only after consent is accepted.</p>",
+                            CloseLabel = "Close",
+                            CookieNoticeSourceId = 1001,
+                            Culture = "en-US",
+                            DetailsHtml = "<p>We use cookies to help users navigate efficiently and perform certain functions. Detailed information about all cookies corresponding to each consent category is available below.</p>\n<p>Cookies classified as \"necessary\" are stored in the user's browser because they are required to enable the basic functions of the website.</p>\n<p>We also use third-party cookies that help us analyze how users interact with the website, remember user preferences, and deliver relevant content and advertising. These cookies are stored in the browser only with the user's prior consent.</p>\n<p>Disabling some cookies may affect the quality of your browsing experience.</p>\n<h3>Necessary</h3>\n<p>Always active. Necessary cookies are essential for the core features of the website and the site cannot function properly without them. These cookies do not store any personally identifiable data.</p>\n<h3>Functional</h3>\n<p>Functional cookies help perform certain features such as sharing website content on social media platforms, collecting feedback, and other third-party features.</p>\n<h3>Analytics</h3>\n<p>Analytics cookies help us understand how users interact with the website. These cookies provide information about metrics such as visitor numbers, bounce rate, and traffic source.</p>\n<h3>Performance</h3>\n<p>Performance cookies are used to understand and analyze the key performance indicators of the website, helping deliver a better user experience for visitors.</p>\n<h3>Advertising</h3>\n<p>Advertising cookies are used to deliver personalized ads based on pages previously visited by the user and to analyze the effectiveness of advertising campaigns.</p>",
+                            LessLabel = "Show less",
+                            MoreLabel = "More",
+                            Title = "About cookies"
+                        },
+                        new
+                        {
+                            Id = 2003,
+                            AcceptLabel = "Akceptuję",
+                            BannerSummaryHtml = "<p>Używamy plików cookie, aby pomóc użytkownikom w sprawnej nawigacji i wykonywaniu określonych funkcji.</p>\n<p>Większość narzędzi analitycznych i marketingowych uruchamiamy dopiero po akceptacji.</p>",
+                            CloseLabel = "Close",
+                            CookieNoticeSourceId = 1002,
+                            Culture = "pl-PL",
+                            DetailsHtml = "<p>Używamy plików cookie, aby pomóc użytkownikom w sprawnej nawigacji i wykonywaniu określonych funkcji. Szczegółowe informacje na temat wszystkich plików cookie odpowiadających poszczególnym kategoriom zgody znajdują się poniżej.</p>\n<p>Pliki cookie sklasyfikowane jako \"niezbędne\" są przechowywane w przeglądarce użytkownika, ponieważ są niezbędne do włączenia podstawowych funkcji witryny.</p>\n<p>Korzystamy również z plików cookie innych firm, które pomagają nam analizować sposób korzystania ze strony przez użytkowników, a także przechowywać preferencje użytkownika oraz dostarczać mu istotnych dla niego treści i reklam. Tego typu pliki cookie będą przechowywane w przeglądarce tylko za uprzednią zgodą użytkownika.</p>\n<p>Wyłączenie niektórych plików cookie może wpłynąć na jakość przeglądania strony.</p>\n<h3>Niezbędny</h3>\n<p>Zawsze aktywne. Niezbędne pliki cookie mają kluczowe znaczenie dla podstawowych funkcji witryny i witryna nie będzie działać w zamierzony sposób bez nich. Te pliki cookie nie przechowują żadnych danych umożliwiających identyfikację osoby.</p>\n<h3>Funkcjonalny</h3>\n<p>Funkcjonalne pliki cookie pomagają wykonywać pewne funkcje, takie jak udostępnianie zawartości witryny na platformach mediów społecznościowych, zbieranie informacji zwrotnych i inne funkcje stron trzecich.</p>\n<h3>Analityka</h3>\n<p>Analityczne pliki cookie służą do zrozumienia, w jaki sposób użytkownicy wchodzą w interakcję z witryną. Te pliki cookie pomagają dostarczać informacje o metrykach liczby odwiedzających, współczynniku odrzuceń, źródle ruchu itp.</p>\n<h3>Występ</h3>\n<p>Wydajnościowe pliki cookie służą do zrozumienia i analizy kluczowych wskaźników wydajności witryny, co pomaga zapewnić lepsze wrażenia użytkownika dla odwiedzających.</p>\n<h3>Reklama</h3>\n<p>Reklamowe pliki cookie służą do dostarczania użytkownikom spersonalizowanych reklam w oparciu o strony, które odwiedzili wcześniej, oraz do analizowania skuteczności kampanii reklamowej.</p>",
+                            LessLabel = "Pokaż mniej",
+                            MoreLabel = "Więcej",
+                            Title = "O plikach cookies"
+                        },
+                        new
+                        {
+                            Id = 2004,
+                            AcceptLabel = "Accept",
+                            BannerSummaryHtml = "<p>We use cookies to help users navigate efficiently and perform certain functions.</p>\n<p>Most analytics and marketing tools are enabled only after consent is accepted.</p>",
+                            CloseLabel = "Close",
+                            CookieNoticeSourceId = 1002,
+                            Culture = "en-US",
+                            DetailsHtml = "<p>We use cookies to help users navigate efficiently and perform certain functions. Detailed information about all cookies corresponding to each consent category is available below.</p>\n<p>Cookies classified as \"necessary\" are stored in the user's browser because they are required to enable the basic functions of the website.</p>\n<p>We also use third-party cookies that help us analyze how users interact with the website, remember user preferences, and deliver relevant content and advertising. These cookies are stored in the browser only with the user's prior consent.</p>\n<p>Disabling some cookies may affect the quality of your browsing experience.</p>\n<h3>Necessary</h3>\n<p>Always active. Necessary cookies are essential for the core features of the website and the site cannot function properly without them. These cookies do not store any personally identifiable data.</p>\n<h3>Functional</h3>\n<p>Functional cookies help perform certain features such as sharing website content on social media platforms, collecting feedback, and other third-party features.</p>\n<h3>Analytics</h3>\n<p>Analytics cookies help us understand how users interact with the website. These cookies provide information about metrics such as visitor numbers, bounce rate, and traffic source.</p>\n<h3>Performance</h3>\n<p>Performance cookies are used to understand and analyze the key performance indicators of the website, helping deliver a better user experience for visitors.</p>\n<h3>Advertising</h3>\n<p>Advertising cookies are used to deliver personalized ads based on pages previously visited by the user and to analyze the effectiveness of advertising campaigns.</p>",
+                            LessLabel = "Show less",
+                            MoreLabel = "More",
+                            Title = "About cookies"
+                        });
+                });
+
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.CustomerAgreedTerms", b =>
                 {
                     b.Property<int>("Id")
@@ -373,6 +619,74 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApartmentInfos");
+                });
+
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.BookingComLogEntity", b =>
+                {
+                    b.Property<Guid>("BookingComLogGuid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("bookingcom_log_guid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<string>("IncomingEmailJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("incoming_email_json");
+
+                    b.Property<string>("MessageId")
+                        .HasColumnType("text")
+                        .HasColumnName("message_id");
+
+                    b.Property<bool>("ProcessingEnabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("processing_enabled");
+
+                    b.Property<Guid?>("ReservationGuid")
+                        .HasColumnType("uuid")
+                        .HasColumnName("reservation_guid");
+
+                    b.Property<int?>("ReservationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("reservation_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar")
+                        .HasColumnName("status");
+
+                    b.Property<string>("StepsJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("steps_json");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("text")
+                        .HasColumnName("subject");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.HasKey("BookingComLogGuid");
+
+                    b.HasIndex("ReservationGuid")
+                        .HasDatabaseName("idx_bookingcom_log_reservation_guid");
+
+                    b.HasIndex("ReservationId")
+                        .HasDatabaseName("idx_bookingcom_log_reservation_id");
+
+                    b.HasIndex("Status")
+                        .HasDatabaseName("idx_bookingcom_log_status");
+
+                    b.ToTable("bookingcom_log");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.DefinedAddonEntity", b =>
@@ -858,6 +1172,28 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.ToTable("upsell_vouchers");
                 });
 
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Cookies.CookieConsentAudit", b =>
+                {
+                    b.HasOne("RentoomBooking.SharedClasses.Models.Cookies.CookieNoticeSource", "CookieNoticeSource")
+                        .WithMany()
+                        .HasForeignKey("CookieNoticeSourceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CookieNoticeSource");
+                });
+
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Cookies.CookieNoticeTranslation", b =>
+                {
+                    b.HasOne("RentoomBooking.SharedClasses.Models.Cookies.CookieNoticeSource", "CookieNoticeSource")
+                        .WithMany("Translations")
+                        .HasForeignKey("CookieNoticeSourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CookieNoticeSource");
+                });
+
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.CustomerAgreedTerms", b =>
                 {
                     b.HasOne("RentoomBooking.SharedClasses.Models.CustomerTermsAndConditionsSource", "TermsSource")
@@ -910,6 +1246,11 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .IsRequired();
 
                     b.Navigation("UpsellOrderLine");
+                });
+
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Cookies.CookieNoticeSource", b =>
+                {
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.CustomerTermsAndConditionsSource", b =>

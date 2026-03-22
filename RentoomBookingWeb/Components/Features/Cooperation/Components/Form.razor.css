@@ -53,6 +53,66 @@
     width: 100%;
 }
 
+.custom-textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.custom-textarea:focus {
+    border-color: #d4af37;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: start;
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0.5rem 0 0;
+}
+
+.checkbox-wrapper input {
+    margin-top: 3px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checkbox-wrapper label {
+    line-height: 1.4;
+}
+
+.checkbox-wrapper a {
+    color: #d4af37;
+    text-decoration: none;
+}
+
+.btn-wrapper {
+    width: 100%;
+}
+
+.form-feedback {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.form-feedback.success {
+    color: #1f5a41;
+}
+
+.form-feedback.error {
+    color: #b42318;
+}
+
 @media (max-width: 600px) {
     .form-wrapper {
         flex-direction: column;

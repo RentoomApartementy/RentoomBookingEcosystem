@@ -221,11 +221,11 @@
                             <img class="reservation-field__icon" src="/icons/file-user.svg" />
                             @Localizer["TOS"]:
                         </span>
-                        <span class="reservation-field__value">
+                        @* <span class="reservation-field__value">
                             <div style="font-weight:600">Regulamin pobytu</div>
                             <span>@Localizer["AcceptanceDate"]:</span>
                             <span>@TermsState.CurrentTerms?.AcceptedAt.ToShortDateString()</span>
-                        </span>
+                        </span> *@
                     </div>
                     <div class="reservation-field">
                         <span class="reservation-field__label">

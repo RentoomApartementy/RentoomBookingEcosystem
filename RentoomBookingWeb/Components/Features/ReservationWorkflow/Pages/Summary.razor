@@ -17,8 +17,12 @@
 @inject IConfiguration Configuration
 @implements IDisposable
 
-<PageTitle>Podsumowanie</PageTitle>
+<PageTitle>Rentoom - Podsumowanie rezerwacji</PageTitle>
 <div class="summary-container">
+    <AppError Message=@_error
+              Title="@Localizer["SomethingWrong"]"
+              Dismissible="false" />
+
     @if (_loading)
     {
         @* <div class="payment-success-card"> *@
@@ -37,10 +41,6 @@
                 <p class="sub-message">@Localizer["NotRefreshPage"]</p>
             </div>
         </div>
-    }
-    else if (!string.IsNullOrEmpty(_error))
-    {
-        <p class="text-danger">@_error</p>
     }
     else if (_summary is not null)
     {
@@ -350,7 +350,8 @@
     private bool IsPaid => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentFailed => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase);
-    private bool ShouldShowTermsAndPayment => string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
+    private bool ShouldShowTermsAndPayment => (string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
+                                              || string.Equals(_summary?.PaymentStatus, "None", StringComparison.OrdinalIgnoreCase))
                                               && !IsPaid
                                               && !IsPaymentInitiated
                                               && !IsPaymentFailed;
@@ -413,6 +414,7 @@
     private async Task RefreshSummaryAsync()
     {
         _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+        _error = null;
         if (_summary?.StartRequest?.ObjectId != null)
         {
             _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);

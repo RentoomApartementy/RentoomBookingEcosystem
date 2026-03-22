@@ -1,0 +1,60 @@
+@if (ShouldShow)
+{
+    <div class="app-error @(Floating ? "app-error--floating" : "app-error--inline")"
+         role="alert"
+         aria-live="assertive">
+        <div class="app-error__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="7" x2="12" y2="13"></line>
+                <circle cx="12" cy="17" r="1"></circle>
+            </svg>
+        </div>
+
+        <div class="app-error__body">
+            @if (!string.IsNullOrWhiteSpace(Title))
+            {
+                <strong class="app-error__title">@Title</strong>
+            }
+
+            <p class="app-error__message">@Message</p>
+        </div>
+
+        @if (Dismissible)
+        {
+            <button type="button"
+                    class="app-error__close"
+                    @onclick="Dismiss"
+                    aria-label="@CloseAriaLabel">
+                ×
+            </button>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public string? Message { get; set; }
+    [Parameter] public string? Title { get; set; } = "Wystąpił błąd";
+    [Parameter] public bool Floating { get; set; }
+    [Parameter] public bool Dismissible { get; set; }
+    [Parameter] public string CloseAriaLabel { get; set; } = "Zamknij komunikat";
+
+    private string? _lastMessage;
+    private bool _dismissed;
+
+    private bool ShouldShow => !_dismissed && !string.IsNullOrWhiteSpace(Message);
+
+    protected override void OnParametersSet()
+    {
+        if (!string.Equals(_lastMessage, Message, StringComparison.Ordinal))
+        {
+            _lastMessage = Message;
+            _dismissed = false;
+        }
+    }
+
+    private void Dismiss()
+    {
+        _dismissed = true;
+    }
+}
