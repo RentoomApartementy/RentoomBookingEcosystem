@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.41.2.15936",
-      "templateHash": "5890782645188431554"
+      "templateHash": "7472315773125646304"
     }
   },
   "parameters": {
@@ -298,6 +298,13 @@
       "defaultValue": "https://dev.api.rentoom.pl",
       "metadata": {
         "description": "Public base URL for StayWell API (Function App custom domain)."
+      }
+    },
+    "cronSyncAllApartmentsFromIdb": {
+      "type": "string",
+      "defaultValue": "0 0 */2 * * *",
+      "metadata": {
+        "description": "Cron expression for full apartment sync from IDB executed by StayWell API."
       }
     },
     "staywellApiAuthExcludedPaths": {
@@ -625,6 +632,9 @@
           "staywellApiBaseUrl": {
             "value": "[parameters('staywellApiBaseUrl')]"
           },
+          "cronSyncAllApartmentsFromIdb": {
+            "value": "[parameters('cronSyncAllApartmentsFromIdb')]"
+          },
           "staywellApiAuthExcludedPaths": {
             "value": "[parameters('staywellApiAuthExcludedPaths')]"
           },
@@ -723,7 +733,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.41.2.15936",
-              "templateHash": "14621543439107130317"
+              "templateHash": "13677186508919713498"
             }
           },
           "parameters": {
@@ -969,6 +979,12 @@
               "type": "string",
               "metadata": {
                 "description": "Public base URL for StayWell API (Function App custom domain)."
+              }
+            },
+            "cronSyncAllApartmentsFromIdb": {
+              "type": "string",
+              "metadata": {
+                "description": "Cron expression for full apartment sync from IDB executed by StayWell API."
               }
             },
             "staywellApiAuthExcludedPaths": {
@@ -1368,6 +1384,7 @@
                 "Tpay__RentoomSiteBaseUrl": "[variables('normalizedTpayApiRentoomSiteBaseUrl')]",
                 "Tpay__SuccessUrl": "[parameters('tpayApiSuccessUrl')]",
                 "Tpay__ErrorUrl": "[parameters('tpayApiErrorUrl')]",
+                "CRON_SYNC_ALL_APARTMENTS_FROM_IDB": "[parameters('cronSyncAllApartmentsFromIdb')]",
                 "IdoBooking__UseDummy": "[variables('idoBookingUseDummySetting')]",
                 "IdoBooking__DummyReservationTemplateKey": "[parameters('idoBookingDummyReservationTemplateKey')]",
                 "IDOBOOKING_BASE_API_URL": "[parameters('idoBookingBaseApiUrl')]",

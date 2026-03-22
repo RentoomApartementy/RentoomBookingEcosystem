@@ -126,6 +126,9 @@ param rentoomWebBaseUrl string
 @description('Public base URL for StayWell API (Function App custom domain).')
 param staywellApiBaseUrl string
 
+@description('Cron expression for full apartment sync from IDB executed by StayWell API.')
+param cronSyncAllApartmentsFromIdb string
+
 @description('Function App paths that must bypass App Service Authentication.')
 param staywellApiAuthExcludedPaths array
 
@@ -715,6 +718,7 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     Tpay__RentoomSiteBaseUrl: normalizedTpayApiRentoomSiteBaseUrl
     Tpay__SuccessUrl: tpayApiSuccessUrl
     Tpay__ErrorUrl: tpayApiErrorUrl
+    CRON_SYNC_ALL_APARTMENTS_FROM_IDB: cronSyncAllApartmentsFromIdb
     
 
     // IdoBooking dummy mode
