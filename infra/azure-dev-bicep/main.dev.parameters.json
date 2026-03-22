@@ -108,7 +108,8 @@
     },
     "staywellApiAuthExcludedPaths": {
       "value": [
-        "/api/mail/incoming"
+        "/api/mail/incoming",
+        "/api/tpay/notification"
       ]
     },
     "staywellGithubOrganization": {

@@ -226,6 +226,7 @@ var staywellReservationUrlBase = '${normalizedStaywellBaseUrl}/reservation/{resT
 var staywellUrlBase = normalizedStaywellBaseUrl
 var tpayNotificationUrl = '${normalizedStaywellApiCustomBaseUrl}/api/tpay/notification'
 var applicationRuntimeEnvironment = environment == 'prod' ? 'Production' : 'Development'
+var rentoomWebIsLinux = environment == 'prod'
 var idoBookingUseDummySetting = idoBookingUseDummy ? 'True' : 'False'
 var postgresPoolingEnabledSetting = postgresPoolingEnabled ? 'true' : 'false'
 var staywellDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${staywellDbName};Port=5432;User Id=${staywellDbAppUser};Password=${staywellDbAppPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
@@ -338,7 +339,7 @@ resource rentoomDataStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
 resource webPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: webPlanName
   location: location
-  kind: 'linux'
+  kind: rentoomWebIsLinux ? 'linux' : 'app'
   sku: {
     name: webPlanSku.name
     tier: webPlanSku.tier
@@ -347,14 +348,14 @@ resource webPlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   }
   tags: tags
   properties: {
-    reserved: true
+    reserved: rentoomWebIsLinux
   }
 }
 
 resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
   name: rentoomWebAppName
   location: location
-  kind: 'app,linux'
+  kind: rentoomWebIsLinux ? 'app,linux' : 'app'
   tags: tags
   identity: {
     type: 'SystemAssigned'
@@ -362,8 +363,145 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
   properties: {
     serverFarmId: webPlan.id
     httpsOnly: true
-    siteConfig: {
+    siteConfig: rentoomWebIsLinux ? {
       linuxFxVersion: 'DOTNETCORE|8.0'
+      alwaysOn: false
+      appSettings: [
+        {
+          name: 'ASPNETCORE_ENVIRONMENT'
+          value: applicationRuntimeEnvironment
+        }
+        {
+          name: 'WEBSITE_RUN_FROM_PACKAGE'
+          value: '1'
+        }
+        {
+          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+          value: rentoomWebAppInsights.properties.ConnectionString
+        }
+        {
+          name: 'ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL'
+          value: staywellDbConnectionString
+        }
+        {
+          name: 'ConnectionStrings__RentoomDbConnectionString'
+          value: rentoomAppDbConnectionString
+        }
+        {
+          name: 'PostgresPooling__Enabled'
+          value: postgresPoolingEnabledSetting
+        }
+        {
+          name: 'PostgresPooling__MinimumPoolSize'
+          value: string(postgresPoolingMinimumPoolSize)
+        }
+        {
+          name: 'PostgresPooling__MaximumPoolSize'
+          value: string(rentoomWebPostgresMaximumPoolSize)
+        }
+        {
+          name: 'PostgresPooling__ConnectionIdleLifetime'
+          value: string(postgresPoolingConnectionIdleLifetime)
+        }
+        {
+          name: 'PostgresPooling__ConnectionPruningInterval'
+          value: string(postgresPoolingConnectionPruningInterval)
+        }
+        {
+          name: 'PostgresPooling__Timeout'
+          value: string(postgresPoolingTimeout)
+        }
+        {
+          name: 'PostgresPooling__CommandTimeout'
+          value: string(postgresPoolingCommandTimeout)
+        }
+        {
+          name: 'Tpay__ApiBaseUrl'
+          value: tpayApiBaseUrl
+        }
+        {
+          name: 'Tpay__ClientId'
+          value: tpayClientId
+        }
+        {
+          name: 'Tpay__ClientSecret'
+          value: tpayClientSecret
+        }
+        {
+          name: 'Tpay__MerchantSecurityCode'
+          value: tpayMerchantSecurityCode
+        }
+        {
+          name: 'Tpay__JwsCertPrefix'
+          value: tpayJwsCertPrefix
+        }
+        {
+          name: 'Tpay__RootCaPemUrl'
+          value: tpayRootCaPemUrl
+        }
+        {
+          name: 'Tpay__NotificationUrl'
+          value: tpayNotificationUrl
+        }
+        {
+          name: 'Tpay__RentoomSiteBaseUrl'
+          value: normalizedTpayWebRentoomSiteBaseUrl
+        }
+        {
+          name: 'Tpay__SuccessUrl'
+          value: tpayWebSuccessUrl
+        }
+        {
+          name: 'Tpay__ErrorUrl'
+          value: tpayWebErrorUrl
+        }
+        {
+          name: 'IdoBooking__UseDummy'
+          value: idoBookingUseDummySetting
+        }
+        {
+          name: 'IdoBooking__DummyReservationTemplateKey'
+          value: idoBookingDummyReservationTemplateKey
+        }
+        {
+          name: 'IDOBOOKING_BASE_API_URL'
+          value: idoBookingBaseApiUrl
+        }
+        {
+          name: 'IDOBOOKING_API_USER'
+          value: idoBookingApiUser
+        }
+        {
+          name: 'IDOBOOKING_API_PWD'
+          value: idoBookingApiPassword
+        }
+        {
+          name: 'StayWellUrlBase'
+          value: staywellUrlBase
+        }
+        {
+          name: 'StayWellReservationUrlBase'
+          value: staywellReservationUrlBase
+        }
+        {
+          name: 'Bitrix__ReservationPipelineName'
+          value: bitrixReservationPipelineName
+        }
+        {
+          name: 'Storage__Container'
+          value: uploadsStorageContainerName
+        }
+        {
+          name: 'Storage__ConnectionString'
+          value: ''
+        }
+        {
+          name: 'Storage__AccountName'
+          value: rentoomDataStorage.name
+        }
+      ]
+    } : {
+      netFrameworkVersion: 'v8.0'
       alwaysOn: false
       appSettings: [
         {

@@ -2,7 +2,7 @@
 
 Ten katalog zawiera glowny deployment infrastruktury aplikacyjnej dla:
 
-- `RentoomBookingWeb` jako Linux Azure Web App
+- `RentoomBookingWeb` jako Azure Web App
 - `StayWell API` jako Azure Function App na Flex Consumption
 - `StayWell` Static Web App
 - storage, monitoring i konfiguracje aplikacyjne
@@ -57,8 +57,8 @@ Powod tej kolejnosci:
 - Storage Account dla runtime Azure Functions
 - kontener blob `function-releases`
 - osobny Storage Account dla danych Rentoom Booking
-- Linux App Service Plan dla Rentoom Booking Web
-- Linux Azure Web App `.NET 8` dla `RentoomBookingWeb`
+- App Service Plan dla Rentoom Booking Web
+- Azure Web App `.NET 8` dla `RentoomBookingWeb`
 - Flex Consumption Plan dla StayWell API
 - Linux Function App `.NET 8 isolated`
 - app settings dla Web App
@@ -402,6 +402,7 @@ Domyslne wartosci:
 - `rentoomWebBaseUrl=https://dev.rentoom.pl`
 - `staywellApiBaseUrl=https://api-dev.rentoom.pl`
 - `webPlanSku=F1/Free`
+- `RentoomBookingWeb=Windows`
 - `tags.environment=dev`
 - `staywellGithubOrganization=RentoomApartementy`
 - `staywellGithubRepositoryName=RentoomBookingEcosystem`
@@ -415,6 +416,7 @@ Domyslne wartosci:
 - `rentoomWebBaseUrl=https://rentoom.pl`
 - `staywellApiBaseUrl=https://api.rentoom.pl`
 - `webPlanSku=B2/Basic`
+- `RentoomBookingWeb=Linux`
 - `postgresMaxConnections=429`
 - `rentoomWebPostgresMaximumPoolSize=4`
 - `staywellApiPostgresMaximumPoolSize=1`

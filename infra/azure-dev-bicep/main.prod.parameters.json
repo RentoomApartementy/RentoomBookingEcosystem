@@ -83,7 +83,7 @@
       "value": "https://staywell.rentoom.pl"
     },
     "idoBookingUseDummy": {
-      "value": true
+      "value": false
     },
     "idoBookingDummyReservationTemplateKey": {
       "value": "dummy_api_call_template"
@@ -108,7 +108,8 @@
     },
     "staywellApiAuthExcludedPaths": {
       "value": [
-        "/api/mail/incoming"
+        "/api/mail/incoming",
+        "/api/tpay/notification"
       ]
     },
     "staywellGithubOrganization": {

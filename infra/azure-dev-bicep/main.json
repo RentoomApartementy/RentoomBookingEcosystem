@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.41.2.15936",
-      "templateHash": "3081888302587613930"
+      "templateHash": "5890782645188431554"
     }
   },
   "parameters": {
@@ -723,7 +723,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.41.2.15936",
-              "templateHash": "2598611544780936113"
+              "templateHash": "14621543439107130317"
             }
           },
           "parameters": {
@@ -1147,6 +1147,7 @@
             "staywellUrlBase": "[variables('normalizedStaywellBaseUrl')]",
             "tpayNotificationUrl": "[format('{0}/api/tpay/notification', variables('normalizedStaywellApiCustomBaseUrl'))]",
             "applicationRuntimeEnvironment": "[if(equals(parameters('environment'), 'prod'), 'Production', 'Development')]",
+            "rentoomWebIsLinux": "[equals(parameters('environment'), 'prod')]",
             "idoBookingUseDummySetting": "[if(parameters('idoBookingUseDummy'), 'True', 'False')]",
             "postgresPoolingEnabledSetting": "[if(parameters('postgresPoolingEnabled'), 'true', 'false')]",
             "staywellDbConnectionString": "[format('Server={0}.postgres.database.azure.com;Database={1};Port=5432;User Id={2};Password={3};Ssl Mode=VerifyFull;Include Error Detail=True', parameters('postgresServerName'), parameters('staywellDbName'), parameters('staywellDbAppUser'), parameters('staywellDbAppPassword'))]",
@@ -1259,7 +1260,7 @@
               "apiVersion": "2025-03-01",
               "name": "[parameters('webPlanName')]",
               "location": "[parameters('location')]",
-              "kind": "linux",
+              "kind": "[if(variables('rentoomWebIsLinux'), 'linux', 'app')]",
               "sku": {
                 "name": "[parameters('webPlanSku').name]",
                 "tier": "[parameters('webPlanSku').tier]",
@@ -1268,7 +1269,7 @@
               },
               "tags": "[parameters('tags')]",
               "properties": {
-                "reserved": true
+                "reserved": "[variables('rentoomWebIsLinux')]"
               }
             },
             {
@@ -1276,7 +1277,7 @@
               "apiVersion": "2025-03-01",
               "name": "[parameters('rentoomWebAppName')]",
               "location": "[parameters('location')]",
-              "kind": "app,linux",
+              "kind": "[if(variables('rentoomWebIsLinux'), 'app,linux', 'app')]",
               "tags": "[parameters('tags')]",
               "identity": {
                 "type": "SystemAssigned"
@@ -1284,144 +1285,7 @@
               "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webPlanName'))]",
                 "httpsOnly": true,
-                "siteConfig": {
-                  "linuxFxVersion": "DOTNETCORE|8.0",
-                  "alwaysOn": false,
-                  "appSettings": [
-                    {
-                      "name": "ASPNETCORE_ENVIRONMENT",
-                      "value": "[variables('applicationRuntimeEnvironment')]"
-                    },
-                    {
-                      "name": "WEBSITE_RUN_FROM_PACKAGE",
-                      "value": "1"
-                    },
-                    {
-                      "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                      "value": "[reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString]"
-                    },
-                    {
-                      "name": "ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL",
-                      "value": "[variables('staywellDbConnectionString')]"
-                    },
-                    {
-                      "name": "ConnectionStrings__RentoomDbConnectionString",
-                      "value": "[variables('rentoomAppDbConnectionString')]"
-                    },
-                    {
-                      "name": "PostgresPooling__Enabled",
-                      "value": "[variables('postgresPoolingEnabledSetting')]"
-                    },
-                    {
-                      "name": "PostgresPooling__MinimumPoolSize",
-                      "value": "[string(parameters('postgresPoolingMinimumPoolSize'))]"
-                    },
-                    {
-                      "name": "PostgresPooling__MaximumPoolSize",
-                      "value": "[string(parameters('rentoomWebPostgresMaximumPoolSize'))]"
-                    },
-                    {
-                      "name": "PostgresPooling__ConnectionIdleLifetime",
-                      "value": "[string(parameters('postgresPoolingConnectionIdleLifetime'))]"
-                    },
-                    {
-                      "name": "PostgresPooling__ConnectionPruningInterval",
-                      "value": "[string(parameters('postgresPoolingConnectionPruningInterval'))]"
-                    },
-                    {
-                      "name": "PostgresPooling__Timeout",
-                      "value": "[string(parameters('postgresPoolingTimeout'))]"
-                    },
-                    {
-                      "name": "PostgresPooling__CommandTimeout",
-                      "value": "[string(parameters('postgresPoolingCommandTimeout'))]"
-                    },
-                    {
-                      "name": "Tpay__ApiBaseUrl",
-                      "value": "[parameters('tpayApiBaseUrl')]"
-                    },
-                    {
-                      "name": "Tpay__ClientId",
-                      "value": "[parameters('tpayClientId')]"
-                    },
-                    {
-                      "name": "Tpay__ClientSecret",
-                      "value": "[parameters('tpayClientSecret')]"
-                    },
-                    {
-                      "name": "Tpay__MerchantSecurityCode",
-                      "value": "[parameters('tpayMerchantSecurityCode')]"
-                    },
-                    {
-                      "name": "Tpay__JwsCertPrefix",
-                      "value": "[parameters('tpayJwsCertPrefix')]"
-                    },
-                    {
-                      "name": "Tpay__RootCaPemUrl",
-                      "value": "[parameters('tpayRootCaPemUrl')]"
-                    },
-                    {
-                      "name": "Tpay__NotificationUrl",
-                      "value": "[variables('tpayNotificationUrl')]"
-                    },
-                    {
-                      "name": "Tpay__RentoomSiteBaseUrl",
-                      "value": "[variables('normalizedTpayWebRentoomSiteBaseUrl')]"
-                    },
-                    {
-                      "name": "Tpay__SuccessUrl",
-                      "value": "[parameters('tpayWebSuccessUrl')]"
-                    },
-                    {
-                      "name": "Tpay__ErrorUrl",
-                      "value": "[parameters('tpayWebErrorUrl')]"
-                    },
-                    {
-                      "name": "IdoBooking__UseDummy",
-                      "value": "[variables('idoBookingUseDummySetting')]"
-                    },
-                    {
-                      "name": "IdoBooking__DummyReservationTemplateKey",
-                      "value": "[parameters('idoBookingDummyReservationTemplateKey')]"
-                    },
-                    {
-                      "name": "IDOBOOKING_BASE_API_URL",
-                      "value": "[parameters('idoBookingBaseApiUrl')]"
-                    },
-                    {
-                      "name": "IDOBOOKING_API_USER",
-                      "value": "[parameters('idoBookingApiUser')]"
-                    },
-                    {
-                      "name": "IDOBOOKING_API_PWD",
-                      "value": "[parameters('idoBookingApiPassword')]"
-                    },
-                    {
-                      "name": "StayWellUrlBase",
-                      "value": "[variables('staywellUrlBase')]"
-                    },
-                    {
-                      "name": "StayWellReservationUrlBase",
-                      "value": "[variables('staywellReservationUrlBase')]"
-                    },
-                    {
-                      "name": "Bitrix__ReservationPipelineName",
-                      "value": "[parameters('bitrixReservationPipelineName')]"
-                    },
-                    {
-                      "name": "Storage__Container",
-                      "value": "[parameters('uploadsStorageContainerName')]"
-                    },
-                    {
-                      "name": "Storage__ConnectionString",
-                      "value": ""
-                    },
-                    {
-                      "name": "Storage__AccountName",
-                      "value": "[parameters('rentoomDataStorageAccountName')]"
-                    }
-                  ]
-                }
+                "siteConfig": "[if(variables('rentoomWebIsLinux'), createObject('linuxFxVersion', 'DOTNETCORE|8.0', 'alwaysOn', false(), 'appSettings', createArray(createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', variables('applicationRuntimeEnvironment')), createObject('name', 'WEBSITE_RUN_FROM_PACKAGE', 'value', '1'), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString), createObject('name', 'ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL', 'value', variables('staywellDbConnectionString')), createObject('name', 'ConnectionStrings__RentoomDbConnectionString', 'value', variables('rentoomAppDbConnectionString')), createObject('name', 'PostgresPooling__Enabled', 'value', variables('postgresPoolingEnabledSetting')), createObject('name', 'PostgresPooling__MinimumPoolSize', 'value', string(parameters('postgresPoolingMinimumPoolSize'))), createObject('name', 'PostgresPooling__MaximumPoolSize', 'value', string(parameters('rentoomWebPostgresMaximumPoolSize'))), createObject('name', 'PostgresPooling__ConnectionIdleLifetime', 'value', string(parameters('postgresPoolingConnectionIdleLifetime'))), createObject('name', 'PostgresPooling__ConnectionPruningInterval', 'value', string(parameters('postgresPoolingConnectionPruningInterval'))), createObject('name', 'PostgresPooling__Timeout', 'value', string(parameters('postgresPoolingTimeout'))), createObject('name', 'PostgresPooling__CommandTimeout', 'value', string(parameters('postgresPoolingCommandTimeout'))), createObject('name', 'Tpay__ApiBaseUrl', 'value', parameters('tpayApiBaseUrl')), createObject('name', 'Tpay__ClientId', 'value', parameters('tpayClientId')), createObject('name', 'Tpay__ClientSecret', 'value', parameters('tpayClientSecret')), createObject('name', 'Tpay__MerchantSecurityCode', 'value', parameters('tpayMerchantSecurityCode')), createObject('name', 'Tpay__JwsCertPrefix', 'value', parameters('tpayJwsCertPrefix')), createObject('name', 'Tpay__RootCaPemUrl', 'value', parameters('tpayRootCaPemUrl')), createObject('name', 'Tpay__NotificationUrl', 'value', variables('tpayNotificationUrl')), createObject('name', 'Tpay__RentoomSiteBaseUrl', 'value', variables('normalizedTpayWebRentoomSiteBaseUrl')), createObject('name', 'Tpay__SuccessUrl', 'value', parameters('tpayWebSuccessUrl')), createObject('name', 'Tpay__ErrorUrl', 'value', parameters('tpayWebErrorUrl')), createObject('name', 'IdoBooking__UseDummy', 'value', variables('idoBookingUseDummySetting')), createObject('name', 'IdoBooking__DummyReservationTemplateKey', 'value', parameters('idoBookingDummyReservationTemplateKey')), createObject('name', 'IDOBOOKING_BASE_API_URL', 'value', parameters('idoBookingBaseApiUrl')), createObject('name', 'IDOBOOKING_API_USER', 'value', parameters('idoBookingApiUser')), createObject('name', 'IDOBOOKING_API_PWD', 'value', parameters('idoBookingApiPassword')), createObject('name', 'StayWellUrlBase', 'value', variables('staywellUrlBase')), createObject('name', 'StayWellReservationUrlBase', 'value', variables('staywellReservationUrlBase')), createObject('name', 'Bitrix__ReservationPipelineName', 'value', parameters('bitrixReservationPipelineName')), createObject('name', 'Storage__Container', 'value', parameters('uploadsStorageContainerName')), createObject('name', 'Storage__ConnectionString', 'value', ''), createObject('name', 'Storage__AccountName', 'value', parameters('rentoomDataStorageAccountName')))), createObject('netFrameworkVersion', 'v8.0', 'alwaysOn', false(), 'appSettings', createArray(createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', variables('applicationRuntimeEnvironment')), createObject('name', 'WEBSITE_RUN_FROM_PACKAGE', 'value', '1'), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString), createObject('name', 'ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL', 'value', variables('staywellDbConnectionString')), createObject('name', 'ConnectionStrings__RentoomDbConnectionString', 'value', variables('rentoomAppDbConnectionString')), createObject('name', 'PostgresPooling__Enabled', 'value', variables('postgresPoolingEnabledSetting')), createObject('name', 'PostgresPooling__MinimumPoolSize', 'value', string(parameters('postgresPoolingMinimumPoolSize'))), createObject('name', 'PostgresPooling__MaximumPoolSize', 'value', string(parameters('rentoomWebPostgresMaximumPoolSize'))), createObject('name', 'PostgresPooling__ConnectionIdleLifetime', 'value', string(parameters('postgresPoolingConnectionIdleLifetime'))), createObject('name', 'PostgresPooling__ConnectionPruningInterval', 'value', string(parameters('postgresPoolingConnectionPruningInterval'))), createObject('name', 'PostgresPooling__Timeout', 'value', string(parameters('postgresPoolingTimeout'))), createObject('name', 'PostgresPooling__CommandTimeout', 'value', string(parameters('postgresPoolingCommandTimeout'))), createObject('name', 'Tpay__ApiBaseUrl', 'value', parameters('tpayApiBaseUrl')), createObject('name', 'Tpay__ClientId', 'value', parameters('tpayClientId')), createObject('name', 'Tpay__ClientSecret', 'value', parameters('tpayClientSecret')), createObject('name', 'Tpay__MerchantSecurityCode', 'value', parameters('tpayMerchantSecurityCode')), createObject('name', 'Tpay__JwsCertPrefix', 'value', parameters('tpayJwsCertPrefix')), createObject('name', 'Tpay__RootCaPemUrl', 'value', parameters('tpayRootCaPemUrl')), createObject('name', 'Tpay__NotificationUrl', 'value', variables('tpayNotificationUrl')), createObject('name', 'Tpay__RentoomSiteBaseUrl', 'value', variables('normalizedTpayWebRentoomSiteBaseUrl')), createObject('name', 'Tpay__SuccessUrl', 'value', parameters('tpayWebSuccessUrl')), createObject('name', 'Tpay__ErrorUrl', 'value', parameters('tpayWebErrorUrl')), createObject('name', 'IdoBooking__UseDummy', 'value', variables('idoBookingUseDummySetting')), createObject('name', 'IdoBooking__DummyReservationTemplateKey', 'value', parameters('idoBookingDummyReservationTemplateKey')), createObject('name', 'IDOBOOKING_BASE_API_URL', 'value', parameters('idoBookingBaseApiUrl')), createObject('name', 'IDOBOOKING_API_USER', 'value', parameters('idoBookingApiUser')), createObject('name', 'IDOBOOKING_API_PWD', 'value', parameters('idoBookingApiPassword')), createObject('name', 'StayWellUrlBase', 'value', variables('staywellUrlBase')), createObject('name', 'StayWellReservationUrlBase', 'value', variables('staywellReservationUrlBase')), createObject('name', 'Bitrix__ReservationPipelineName', 'value', parameters('bitrixReservationPipelineName')), createObject('name', 'Storage__Container', 'value', parameters('uploadsStorageContainerName')), createObject('name', 'Storage__ConnectionString', 'value', ''), createObject('name', 'Storage__AccountName', 'value', parameters('rentoomDataStorageAccountName')))))]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('rentoomDataStorageAccountName'))]",
