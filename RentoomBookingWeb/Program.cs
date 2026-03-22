@@ -12,6 +12,7 @@ using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
@@ -110,6 +111,8 @@ namespace RentoomBookingWeb
             //Customer Terms
             builder.Services.AddScoped<CustomerTermsRepository>();
             builder.Services.AddScoped<CustomerTermsService>();
+            builder.Services.AddScoped<CookieConsentRepository>();
+            builder.Services.AddScoped<CookieConsentService>();
             builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 
             //upselle
