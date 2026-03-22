@@ -1,0 +1,216 @@
+@using System.Globalization
+@using System.Net
+@using System.Net.Sockets
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@using RentoomBooking.SharedClasses.Models.Cookies
+@using RentoomBooking.SharedClasses.Services.Cookies
+@inject CookieConsentService CookieConsentService
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<CookieConsentBanner Notice="@_notice"
+                     ThemeClass="cookie-banner--rentoom"
+                     IsVisible="@_isVisible"
+                     IsBusy="@_isSubmitting"
+                     ErrorMessage="@_errorMessage"
+                     OnAccept="AcceptAsync" />
+
+@code {
+    private const string AppCode = CookieConsentAppCodes.RentoomBookingWeb;
+    private const string StorageKey = "rentoombookingweb:cookie-consent";
+    private const string GoogleTagManagerId = "GTM-KQ34PTLN";
+    private const string GoogleAnalyticsId = "G-KWEKWNRM9H";
+
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    private CookieNoticeDto? _notice;
+    private bool _isVisible;
+    private bool _isSubmitting;
+    private string? _errorMessage;
+    private CookieConsentRequestMetadata _requestMetadata = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _notice = await CookieConsentService.GetActiveNoticeAsync(AppCode, CultureInfo.CurrentUICulture.Name);
+        _requestMetadata = BuildRequestMetadata();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || _notice is null)
+        {
+            return;
+        }
+
+        var localState = await GetLocalStateAsync();
+        if (HasCurrentConsent(localState))
+        {
+            _isVisible = false;
+            await EnableTrackingAsync();
+        }
+        else
+        {
+            _isVisible = true;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task AcceptAsync()
+    {
+        if (_notice is null || _isSubmitting)
+        {
+            return;
+        }
+
+        _isSubmitting = true;
+        _errorMessage = null;
+        await InvokeAsync(StateHasChanged);
+
+        var request = new SaveCookieConsentRequest
+        {
+            CookieNoticeSourceId = _notice.SourceId,
+            CookieNoticeTranslationId = _notice.TranslationId,
+            CookieNoticeVersion = _notice.Version,
+            ClientConsentId = Guid.NewGuid(),
+            Culture = _notice.Culture,
+            RequestPath = BuildCurrentPath(),
+            ContentHash = _notice.ContentHash
+        };
+
+        var metadata = _requestMetadata;
+        metadata.RequestPath = BuildCurrentPath();
+
+        CookieConsentAuditResultDto? response;
+        try
+        {
+            response = await CookieConsentService.SaveConsentAsync(AppCode, request, metadata);
+        }
+        catch
+        {
+            response = null;
+        }
+
+        if (response is null)
+        {
+            _errorMessage = GetSaveErrorMessage();
+            _isSubmitting = false;
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        var localState = new CookieConsentClientState
+        {
+            ClientConsentId = request.ClientConsentId,
+            Version = _notice.Version,
+            AuditId = response.AuditId,
+            AcceptedAtUtc = response.AcceptedAtUtc,
+            ContentHash = response.ContentHash
+        };
+
+        await JS.InvokeVoidAsync("localStorage.setItem", StorageKey, JsonSerializer.Serialize(localState, JsonOptions));
+        _isVisible = false;
+        _isSubmitting = false;
+        await EnableTrackingAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task<CookieConsentClientState?> GetLocalStateAsync()
+    {
+        try
+        {
+            var raw = await JS.InvokeAsync<string?>("localStorage.getItem", StorageKey);
+            return string.IsNullOrWhiteSpace(raw)
+                ? null
+                : JsonSerializer.Deserialize<CookieConsentClientState>(raw, JsonOptions);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private bool HasCurrentConsent(CookieConsentClientState? state)
+    {
+        return state is not null
+            && _notice is not null
+            && string.Equals(state.Version, _notice.Version, StringComparison.Ordinal)
+            && string.Equals(state.ContentHash, _notice.ContentHash, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private string BuildCurrentPath()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        return string.IsNullOrWhiteSpace(uri.PathAndQuery) ? "/" : uri.PathAndQuery;
+    }
+
+    private string GetSaveErrorMessage()
+    {
+        return CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("pl", StringComparison.OrdinalIgnoreCase)
+            ? "Nie udało się zapisać zgody. Spróbuj ponownie."
+            : "Could not save consent. Please try again.";
+    }
+
+    private ValueTask EnableTrackingAsync()
+    {
+        return JS.InvokeVoidAsync("rentoomCookieInterop.enableTracking", GoogleTagManagerId, GoogleAnalyticsId);
+    }
+
+    private CookieConsentRequestMetadata BuildRequestMetadata()
+    {
+        var httpContext = HttpContextAccessor.HttpContext;
+        if (httpContext is null)
+        {
+            return new CookieConsentRequestMetadata();
+        }
+
+        var request = httpContext.Request;
+        var azureClientIp = request.Headers["X-Azure-ClientIP"].FirstOrDefault();
+        var forwardedFor = request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+        return new CookieConsentRequestMetadata
+        {
+            AzureClientIp = azureClientIp,
+            ForwardedForRaw = forwardedFor,
+            IpAddress = ResolveClientIp(
+                azureClientIp,
+                forwardedFor,
+                httpContext.Connection.RemoteIpAddress?.ToString()),
+            UserAgent = request.Headers["User-Agent"].ToString(),
+            Referrer = request.Headers["Referer"].FirstOrDefault(),
+            RequestPath = $"{request.Path}{request.QueryString}"
+        };
+    }
+
+    private static string? ResolveClientIp(string? azureClientIp, string? forwardedFor, string? remoteIpAddress)
+    {
+        if (IsValidIpAddress(azureClientIp))
+        {
+            return azureClientIp;
+        }
+
+        if (!string.IsNullOrWhiteSpace(forwardedFor))
+        {
+            foreach (var candidate in forwardedFor.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                if (IsValidIpAddress(candidate))
+                {
+                    return candidate;
+                }
+            }
+        }
+
+        return IsValidIpAddress(remoteIpAddress) ? remoteIpAddress : null;
+    }
+
+    private static bool IsValidIpAddress(string? value)
+    {
+        return IPAddress.TryParse(value, out var address)
+            && address.AddressFamily is AddressFamily.InterNetwork or AddressFamily.InterNetworkV6;
+    }
+}

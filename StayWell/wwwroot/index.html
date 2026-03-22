@@ -85,6 +85,19 @@
         @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oooh+Baby&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
     </style>
 
+    <script>
+        window.stayWellBitrixEnableLoader = function (loaderUrl) {
+            if (!loaderUrl || document.getElementById("staywell-bitrix-loader")) {
+                return;
+            }
+
+            var script = document.createElement("script");
+            script.id = "staywell-bitrix-loader";
+            script.async = true;
+            script.src = loaderUrl + "?" + ((Date.now() / 60000) | 0);
+            document.head.appendChild(script);
+        };
+    </script>
     <script src="js/bitrixchat2.js"></script>
     <!--wyłączenie do czasu wdrożenia upselli, naprawić-->
     <!--<script src="js/upsellstrip.js"></script>--> 

@@ -1,6 +1,7 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.Cookies;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
@@ -510,6 +511,34 @@ namespace RentoomBooking.StayWell.Services
 
             var response = await _http.PatchAsJsonAsync($"db/reservations/{reservationToken}/agreed-terms", request, _json);
             return response.StatusCode == HttpStatusCode.NoContent;
+        }
+
+        public async Task<CookieNoticeDto?> GetCookieNoticeAsync(string appCode, string? culture = null)
+        {
+            var url = $"db/cookies/{appCode}/notice";
+            if (!string.IsNullOrWhiteSpace(culture))
+            {
+                url += $"?culture={Uri.EscapeDataString(culture)}";
+            }
+
+            var response = await _http.GetAsync(url);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<CookieNoticeDto>(_json);
+        }
+
+        public async Task<CookieConsentAuditResultDto?> SaveCookieConsentAsync(string appCode, SaveCookieConsentRequest request)
+        {
+            var response = await _http.PostAsJsonAsync($"db/cookies/{appCode}/consents", request, _json);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<CookieConsentAuditResultDto>(_json);
         }
 
         private async Task InvalidateCacheAsync(string scope, params string[] parts)

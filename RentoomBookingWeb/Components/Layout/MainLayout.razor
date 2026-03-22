@@ -3,6 +3,7 @@
 
 <div class="layout @(HasEnvironmentBanner ? "layout--has-environment-banner" : string.Empty)">
     <EnvironmentBanner EnvironmentName="@HostEnvironment.EnvironmentName" />
+    <CookieConsentGate />
     <div class="layout-container">
         <div class="menu">
             <Menu />
