@@ -15,6 +15,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject CustomerTermsService TermsService
 @inject IConfiguration Configuration
+@inject IJSRuntime JSRuntime
 @implements IDisposable
 
 <PageTitle>Rentoom - Podsumowanie rezerwacji</PageTitle>
@@ -346,6 +347,7 @@
     private bool _isCheckingEmail;
     private bool _emailPollStarted;
     private string? _emailError;
+    private bool _scrollToTopPending = true;
 
     private bool IsPaid => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
@@ -375,6 +377,17 @@
         {
             _loading = false;
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_scrollToTopPending || _loading)
+        {
+            return;
+        }
+
+        _scrollToTopPending = false;
+        await JSRuntime.InvokeVoidAsync("scrollToTop");
     }
     
     private async Task GoToPayment()
