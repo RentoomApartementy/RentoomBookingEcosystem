@@ -1210,7 +1210,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
         public async Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections)
         {
             var record = await RequireReservationAsync(reservationGuid);
-
+            record = await EnsureBitrixContactAndDealAsync(record);
             var agreedEntities = termSelections.Select(kvp => new CustomerAgreedTerms
             {
                 ReservationGuid = reservationGuid,

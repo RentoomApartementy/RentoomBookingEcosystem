@@ -350,7 +350,8 @@
     private bool IsPaid => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentFailed => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase);
-    private bool ShouldShowTermsAndPayment => string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
+    private bool ShouldShowTermsAndPayment => (string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
+                                              || string.Equals(_summary?.PaymentStatus, "None", StringComparison.OrdinalIgnoreCase))
                                               && !IsPaid
                                               && !IsPaymentInitiated
                                               && !IsPaymentFailed;
