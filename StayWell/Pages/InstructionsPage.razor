@@ -53,7 +53,7 @@
             {
                 <div class="skeleton skeleton--carousel"></div>
             }
-            else if (!InstructionAvailable)
+            else if (InstructionAvailable)
             {
                 <Carousel Description=""
                           Descriptions="@InstructionDescriptions"
@@ -264,40 +264,42 @@
         .ToArray();
 
     private string[] InstructionImageUrls => ArrivalInstructionSteps
-        .Select(s => s.ImageUrl ?? InstructionPlaceholderUrl)
+        .Select(s => NormalizeInstructionImageUrl(s.ImageUrl))
         .ToArray();
 
-   /* private string NormalizeInstructionImageUrl(string? imageUrl)
+    private string NormalizeInstructionImageUrl(string? imageUrl)
     {
         if (string.IsNullOrWhiteSpace(imageUrl))
         {
             return InstructionPlaceholderUrl;
         }
 
-        if (Uri.TryCreate(imageUrl, UriKind.Absolute, out var absoluteUri))
+        var normalizedImageUrl = imageUrl.Trim().Replace("\\", "/");
+
+        if (Uri.TryCreate(normalizedImageUrl, UriKind.Absolute, out var absoluteUri))
         {
             return absoluteUri.ToString();
         }
 
-        return $"{InstructionImageBaseUrl.TrimEnd('/')}/{imageUrl.TrimStart('/')}";
+        return Navigation.ToAbsoluteUri(normalizedImageUrl.TrimStart('/')).ToString();
     }
-    */
+
     private async Task CopyToClipboard()
     {
         var password = WifiPassword;
         if (!HasCode(password))
         {
-            return;
+    return;
         }
 
         try
         {
-            await ClipboardService.WriteTextAsync(password);
-            ToastService.ShowToast($"{Localizer["Copied"]} {password}");
+    await ClipboardService.WriteTextAsync(password);
+    ToastService.ShowToast($"{Localizer["Copied"]} {password}");
         }
         catch
         {
-            Console.WriteLine("Cannot write text to clipboard");
+    Console.WriteLine("Cannot write text to clipboard");
         }
     }
 
@@ -318,6 +320,8 @@
     {
         await base.OnInitializedAsync();
         GlobalizationService.OnChange += OnLanguageChanged;
+         OnLanguageChanged();
+        StateHasChanged();
     }
 
     private bool IsActiveTarget(string targetId)
