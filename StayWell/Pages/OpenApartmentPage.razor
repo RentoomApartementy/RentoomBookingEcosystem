@@ -31,7 +31,16 @@
             </div>
         </div>
     }
-    else if (LocksState.IsTTLockAvailable && ReservationState.IsActiveReservation)
+    else if (!ReservationState.IsActiveReservation)
+    {
+        <div class="tile tile--center">
+            <div class="inactive-reservation-badge">
+                <img src="/icons/octagon-alert.svg" class="inactive-reservation-icon" />
+                <span>@Localizer["ReservationNotActive"]</span>
+            </div>
+        </div>
+    }
+    else if (LocksState.IsTTLockAvailable)
     {
         <div class="tile tile--center">
             <div class="tile__title" style="margin-bottom: 10px;">
@@ -75,9 +84,16 @@
                 @Localizer["RemoteUnavailable"]
                 <div style="margin-top: 12px;">
                     <button class="retry-button"
-                            disabled="@IsRetryDisabled"
+                            disabled="@(LocksState.IsRetryDisabled || string.IsNullOrWhiteSpace(Token))"
                             @onclick="RetryPing">
-                        @RetryButtonText
+                        @if (LocksState.IsTTLockLoading)
+                        {
+                            <div class="spinner spinner--small"></div>
+                        }
+                        else
+                        {
+                            @RetryButtonText
+                        }
                     </button>
                 </div>
             </div>
@@ -130,13 +146,13 @@
         <div class="carousel-track" id="lock-carousel">
             <div class="carousel-slide">
                 <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
-                    @Localizer["HowTo"] *1
+                    @Localizer["HowTo"]  @Localizer["LockTypeSpinning"]
                 </div>
                 <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
             </div>
             <div class="carousel-slide">
                 <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
-                    @Localizer["HowTo"] *2
+                    @Localizer["HowTo"] @Localizer["LockTypePanel"]
                 </div>
                 <RentoomBooking.StayWell.Components.AnimationsComponents.LockPanelAnimation />
             </div>
@@ -167,12 +183,30 @@
     private bool IsProcessing = false;
     private string? ErrorMessage;
 
-    private bool IsButtonDisabled => ReservationState?.CurrentReservation?.Reservation?.ReservationDetails == null ||
-                                     DateTime.Now < ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateFrom();
+    private bool IsButtonDisabled =>
+        ReservationState?.CurrentReservation?.Reservation?.ReservationDetails
+            == null
+        || DateTime.Now
+            < ReservationState
+                .CurrentReservation
+                .Reservation
+                .ReservationDetails
+                .getDateFrom();
+
+    private string RetryButtonText =>
+        LocksState.IsRetryCountdownActive
+            ? string.Format(
+                CultureInfo.CurrentCulture,
+                Localizer["TryAgainIn"],
+                LocksState.RetrySecondsRemaining
+            )
+            : Localizer["TryAgain"];
 
     private async Task ScrollToSlide(int index)
     {
-        await JS.InvokeVoidAsync("eval", $@"
+        await JS.InvokeVoidAsync(
+            "eval",
+            $@"
             const animationTrack = document.getElementById('lock-carousel');
             const instructionTrack = document.getElementById('instruction-carousel');
 
@@ -181,14 +215,20 @@
                     track.scrollTo({{ left: track.clientWidth * {index}, behavior: 'smooth' }});
                 }}
             }});
-        ");
+        "
+        );
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await JS.InvokeVoidAsync("eval", @"
+            // Restore countdown that may still be running in state
+            LocksState.RestoreRetryCountdownIfNeeded();
+
+            await JS.InvokeVoidAsync(
+                "eval",
+                @"
                 const animationTrack = document.getElementById('lock-carousel');
                 const instructionTrack = document.getElementById('instruction-carousel');
                 const dotsContainer = document.getElementById('carousel-dots');
@@ -217,27 +257,16 @@
                     instructionTrack.addEventListener('scroll', () => sync(instructionTrack, animationTrack), { passive: true });
                     updateDots(animationTrack);
                 }
-            ");
+            "
+            );
         }
-
-        var isRemoteUnavailable = IsRemoteUnavailable;
-        if (isRemoteUnavailable && !_wasRemoteUnavailable)
-        {
-            StartRetryCountdown();
-        }
-        else if (!isRemoteUnavailable && _wasRemoteUnavailable)
-        {
-            CancelRetryCountdown();
-        }
-
-        _wasRemoteUnavailable = isRemoteUnavailable;
     }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
-        if (!string.IsNullOrWhiteSpace(Token))
+        if (!string.IsNullOrWhiteSpace(Token) && !LocksState.IsStatusResolved)
         {
             _ = LocksState.CheckTTLockStatusAsync(Token);
         }
@@ -261,7 +290,8 @@
                 }
                 else
                 {
-                    ErrorMessage = result?.Status ?? Localizer["ErrorOpening"];
+                    ErrorMessage =
+                        result?.Status ?? Localizer["ErrorOpening"];
                 }
             }
             else
@@ -273,7 +303,8 @@
                 }
                 else
                 {
-                    ErrorMessage = result?.Status ?? Localizer["ErrorClosing"];
+                    ErrorMessage =
+                        result?.Status ?? Localizer["ErrorClosing"];
                 }
             }
         }
@@ -287,87 +318,13 @@
         }
     }
 
-    private int _retrySecondsRemaining;
-    private bool _isRetryCountdownActive;
-    private bool _wasRemoteUnavailable;
-    private CancellationTokenSource? _retryCts;
-
-    private bool IsRemoteUnavailable =>
-        !LocksState.IsLoading && !LocksState.IsTTLockLoading && !LocksState.IsTTLockAvailable;
-
-    private bool IsRetryDisabled =>
-        _retrySecondsRemaining > 0 || LocksState.IsTTLockLoading || string.IsNullOrWhiteSpace(Token);
-
-    private string RetryButtonText =>
-        _isRetryCountdownActive
-            ? string.Format(CultureInfo.CurrentCulture, Localizer["TryAgainIn"], _retrySecondsRemaining)
-            : Localizer["TryAgain"];
-
-    private void StartRetryCountdown()
-    {
-        CancelRetryCountdown();
-        _retrySecondsRemaining = 30;
-        _isRetryCountdownActive = true;
-        _retryCts = new CancellationTokenSource();
-        _ = RunRetryCountdownAsync(_retryCts.Token);
-        StateHasChanged();
-    }
-
-    private void CancelRetryCountdown()
-    {
-        if (_retryCts is not null)
-        {
-            _retryCts.Cancel();
-            _retryCts.Dispose();
-            _retryCts = null;
-        }
-
-        _retrySecondsRemaining = 0;
-        _isRetryCountdownActive = false;
-    }
-
-    private async Task RunRetryCountdownAsync(CancellationToken token)
-    {
-        try
-        {
-            while (_retrySecondsRemaining > 0 && !token.IsCancellationRequested)
-            {
-                await Task.Delay(1000, token);
-                if (token.IsCancellationRequested)
-                {
-                    return;
-                }
-
-                _retrySecondsRemaining--;
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-        catch (TaskCanceledException)
-        {
-        }
-        finally
-        {
-            if (!token.IsCancellationRequested)
-            {
-                _isRetryCountdownActive = false;
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-    }
-
     private async Task RetryPing()
     {
-        if (string.IsNullOrWhiteSpace(Token) || LocksState.IsTTLockLoading)
+        if (string.IsNullOrWhiteSpace(Token))
         {
             return;
         }
 
-        await LocksState.CheckTTLockStatusAsync(Token);
-    }
-
-    public override void Dispose()
-    {
-        CancelRetryCountdown();
-        base.Dispose();
+        await LocksState.RetryCheckTTLockStatusAsync(Token);
     }
 }

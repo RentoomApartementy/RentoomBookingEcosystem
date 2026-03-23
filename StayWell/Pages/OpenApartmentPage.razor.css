@@ -312,3 +312,52 @@
     font-size: 1rem;
     color: #1f2937;
 }
+
+.inactive-reservation-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #b45309;
+}
+
+.inactive-reservation-icon {
+    height: 48px;
+    width: 48px;
+    filter: invert(40%) sepia(80%) saturate(600%) hue-rotate(10deg) brightness(90%);
+}
+
+.retry-button {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: none;
+    background-color: var(--rentoom-green-dark);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    min-width: 140px;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+    .retry-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+.spinner--small {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-left-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
