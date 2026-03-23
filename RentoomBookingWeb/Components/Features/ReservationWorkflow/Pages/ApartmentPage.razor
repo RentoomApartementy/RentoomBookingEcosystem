@@ -411,7 +411,11 @@
                                 <span class="info-title">@Localizer["SelectedDates"]</span>
                                 @if (StartDate != null && EndDate != null)
                                 {
-                                    <span class="info-text">@StartDate – @EndDate</span>
+                                    var nights = TryParseDate(StartDate, out var s) && TryParseDate(EndDate, out var e) 
+                                        ? (e.ToDateTime(TimeOnly.MinValue) - s.ToDateTime(TimeOnly.MinValue)).Days 
+                                        : 0;
+                                    var nightLabel = nights == 1 ? Localizer["Night"] : Localizer["Nights"];
+                                    <span class="info-text">@StartDate – @EndDate @(nights > 0 ? $"({nights} {nightLabel})" : "")</span>
                                 }
                                 else
                                 {
@@ -599,9 +603,14 @@
                     <button class="close-modal-btn" @onclick="CloseSearchModal">&times;</button>
                 </div>
                 <div class="search-modal-body">
-                    <SearchBar 
-                        OnSearch="async (query) => { await HandleSearch(query); CloseSearchModal(); }" />
+                   <SearchBar 
+                       StartDate="@StartDate"
+                       EndDate="@EndDate"
+                       Adults="@Adults"
+                       Children="@Children"
+                       OnSearch="async (query) => { await HandleSearch(query); CloseSearchModal(); }" />
                 </div>
+
             </div>
         </div>
     }

@@ -258,4 +258,7 @@
   <data name="ContinueReservation" xml:space="preserve">
     <value>Continue reservation</value>
   </data>
+  <data name="Nights" xml:space="preserve">
+    <value>nights</value>
+  </data>
 </root>
