@@ -135,6 +135,9 @@
   <data name="BookingDetailsTitle" xml:space="preserve">
     <value>Szczegóły rezerwacji</value>
   </data>
+  <data name="BookingPerson" xml:space="preserve">
+    <value>Osoba rezerwująca</value>
+  </data>
   <data name="CheckinCheckOutTime" xml:space="preserve">
     <value>Zameldowanie i wymeldowanie</value>
   </data>
