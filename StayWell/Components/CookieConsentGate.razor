@@ -24,6 +24,8 @@
     private bool _isVisible;
     private bool _isSubmitting;
     private string? _errorMessage;
+    private int _noticeStateVersion;
+    private int _appliedNoticeStateVersion = -1;
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,11 +35,12 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender || _notice is null)
+        if (_notice is null || _appliedNoticeStateVersion == _noticeStateVersion)
         {
             return;
         }
 
+        _appliedNoticeStateVersion = _noticeStateVersion;
         await ApplyClientConsentAsync();
         await InvokeAsync(StateHasChanged);
     }
@@ -76,6 +79,7 @@
         var localState = new CookieConsentClientState
         {
             ClientConsentId = request.ClientConsentId,
+            SourceId = _notice.SourceId,
             Version = _notice.Version,
             AuditId = response.AuditId,
             AcceptedAtUtc = response.AcceptedAtUtc,
@@ -92,6 +96,7 @@
     private async Task LoadNoticeAsync()
     {
         _notice = await BackendApi.GetCookieNoticeAsync(AppCode, GlobalizationService.CurrentCulture.Name);
+        _noticeStateVersion++;
     }
 
     private async Task ApplyClientConsentAsync()
@@ -117,7 +122,7 @@
     {
         return _notice is not null
             && string.Equals(state.Version, _notice.Version, StringComparison.Ordinal)
-            && string.Equals(state.ContentHash, _notice.ContentHash, StringComparison.OrdinalIgnoreCase);
+            && (state.SourceId <= 0 || state.SourceId == _notice.SourceId);
     }
 
     private string BuildCurrentPath()
@@ -138,7 +143,6 @@
         await InvokeAsync(async () =>
         {
             await LoadNoticeAsync();
-            await ApplyClientConsentAsync();
             StateHasChanged();
         });
     }
