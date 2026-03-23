@@ -27,33 +27,37 @@
         else
         {   
             <div class="image-container">
-                @if (!string.IsNullOrEmpty(_detailsUrl))
-                {
-                    <div class="image-wrapper" title="@Item?.Name">
-                        <img 
-                            src="@_currentObjectMedium.Url"
-                            alt="@Item?.Name"
-                            itemprop="photo"
-                            class="apartment-image" 
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </div>
-                }
-                else
-                {
-                    <div class="image-wrapper">
-                        <img 
-                            src="@_currentObjectMedium.Url"
-                            alt="@Item?.Name"
-                            title="@Item?.Name"
-                            itemprop="photo"
-                            class="apartment-image"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </div>
-                }
+                <div class="image-slider" @ref="_sliderRef">
+                    @if (_objectMediums != null)
+                    {
+                        @foreach (var medium in _objectMediums)
+                        {
+                            <div class="image-wrapper" title="@Item?.Name">
+                                <img 
+                                    src="@medium.Url"
+                                    alt="@Item?.Name"
+                                    itemprop="photo"
+                                    class="apartment-image" 
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </div>
+                        }
+                    }
+                    else if (_currentObjectMedium != null)
+                    {
+                        <div class="image-wrapper" title="@Item?.Name">
+                            <img 
+                                src="@_currentObjectMedium.Url"
+                                alt="@Item?.Name"
+                                itemprop="photo"
+                                class="apartment-image" 
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        </div>
+                    }
+                </div>
                 
                 <div @onclick="() => ChangeCurrentObjectMedium(1)" @onclick:stopPropagation @onclick:preventDefault class="right-button">
                     &gt;
@@ -271,9 +275,12 @@
     private string? _detailsUrl;
     
     private IJSObjectReference? _jsModule;
+    private IJSObjectReference? _sliderModule;
     private DotNetObjectReference<Apartment>? _objRef;
     private ElementReference _elementRef;
+    private ElementReference _sliderRef;
     private bool _isMediaLoaded = false;
+    private bool _isSliderInitialized = false;
 
     protected override void OnInitialized()
     {
@@ -299,18 +306,36 @@
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (Item != null && _objRef == null)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+        }
+
         if (firstRender && Item != null && !_isMediaLoaded)
         {
             try 
             {
                 _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
-                _objRef = DotNetObjectReference.Create(this);
                 await _jsModule.InvokeVoidAsync("observeElement", _objRef, _elementRef);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Lazy load init failed: {ex.Message}");
                 _ = LoadMedia();
+            }
+        }
+
+        if (_isMediaLoaded && !_isSliderInitialized && _objectMediums?.Count > 1)
+        {
+            _isSliderInitialized = true;
+            try
+            {
+                _sliderModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/apartmentSlider.js");
+                await _sliderModule.InvokeVoidAsync("initSlider", _objRef, _sliderRef);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Slider init failed: {ex.Message}");
             }
         }
     }
@@ -332,6 +357,16 @@
         }
     }
 
+    [JSInvokable("OnImageSwiped")]
+    public void OnImageSwiped(int index)
+    {
+        if (_objectMediums == null || index < 0 || index >= _objectMediums.Count) return;
+        
+        _currentMediumIndex = index;
+        _currentObjectMedium = _objectMediums[index];
+        StateHasChanged();
+    }
+
     private async Task GetObjectMedia()
     {
         var id = Item?.Id;
@@ -347,7 +382,7 @@
         }
     }
 
-    private void ChangeCurrentObjectMedium(int step)
+    private async Task ChangeCurrentObjectMedium(int step)
     {
         if (_objectMediums == null || !_objectMediums.Any()) return;
 
@@ -356,6 +391,11 @@
         else if (_currentMediumIndex >= _objectMediums.Count) _currentMediumIndex = 0;
 
         _currentObjectMedium = _objectMediums[_currentMediumIndex];
+
+        if (_sliderModule != null)
+        {
+            await _sliderModule.InvokeVoidAsync("scrollToImage", _sliderRef, _currentMediumIndex);
+        }
     }
 
     private void CalculateDetailsUrl()
@@ -410,6 +450,11 @@
                 } catch {  }
                 
                 await _jsModule.DisposeAsync();
+            }
+
+            if (_sliderModule != null)
+            {
+                await _sliderModule.DisposeAsync();
             }
             
             _objRef?.Dispose();

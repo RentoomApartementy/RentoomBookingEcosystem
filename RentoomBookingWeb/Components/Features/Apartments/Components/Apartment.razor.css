@@ -9,15 +9,31 @@
     max-width: 100%;
 }
 
-.image-wrapper {
-    width: 100%;
+.image-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
     height: 240px;
+}
+
+.image-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.image-wrapper {
+    flex: 0 0 100%;
+    height: 240px;
+    scroll-snap-align: start;
 }
 
 .apartment-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 .apartment-info {
@@ -220,7 +236,7 @@
 
 .image-container {
     position: relative;
-    
+    overflow: hidden;
 }
 
 .left-button {
