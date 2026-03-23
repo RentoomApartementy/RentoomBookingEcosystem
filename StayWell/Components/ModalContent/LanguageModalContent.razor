@@ -1,0 +1,40 @@
+﻿@using System.Globalization
+@using StayWell.Services
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.StayWell.Pages
+
+@inject GlobalizationService GlobalizationService
+@inject ModalService ModalService
+@inject ToastService ToastService
+@inject IStringLocalizer<HomePage> Localizer
+
+<div class="language-modal">
+    <p class="language-modal__current">
+        @Localizer["CurrentLanguage"]: <strong>@CultureInfo.CurrentCulture.NativeName</strong>
+    </p>
+
+    <div class="language-modal__options">
+        <button class="language-option @ActiveClass("pl-PL")" @onclick='() => ChangeLang("pl", "Polski")'>
+            <span class="language-option__label">Polski</span>
+        </button>
+
+        <button class="language-option @ActiveClass("en-US")" @onclick='() => ChangeLang("en", "English")'>
+            <span class="language-option__label">English</span>
+        </button>
+    </div>
+</div>
+
+@code {
+    private async Task ChangeLang(string lang, string displayName)
+    {
+        var cultureName = lang == "pl" ? "pl-PL" : "en-US";
+        await GlobalizationService.SetCultureWithPreferenceAsync(cultureName);
+        ModalService.HideModal();
+        ToastService.ShowToast($"{Localizer["LanguageChanged"]} {displayName}");
+    }
+
+    private string ActiveClass(string culture) =>
+        CultureInfo.CurrentCulture.Name == culture
+            ? "language-option--active"
+            : "";
+}

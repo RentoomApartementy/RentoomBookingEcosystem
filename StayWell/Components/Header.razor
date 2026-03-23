@@ -6,6 +6,7 @@
 @inject GlobalizationService GlobalizationService
 @implements IDisposable
 @inject Services.BitrixService BitrixService
+@inject Services.ToastService ToastService
 @inject States.ReservationState ReservationState
 
 @inject IStringLocalizer<HomePage> Localizer
@@ -45,15 +46,15 @@
     [Parameter] 
     public string reservationId { get; set; } = "brak";
 
-    private string pl = "pl";
-    private string en = "en";
+    // private string pl = "pl";
+    // private string en = "en";
 
-    private async Task ChangeLang(string lang)
-    {
-        var cultureName = lang == "pl" ? "pl-PL" : "en-US";
-        await GlobalizationService.SetCultureWithPreferenceAsync(cultureName);
-        ModalService.HideModal();
-    }
+    // private async Task ChangeLang(string lang)
+    // {
+    //     var cultureName = lang == "pl" ? "pl-PL" : "en-US";
+    //     await GlobalizationService.SetCultureWithPreferenceAsync(cultureName);
+    //     ModalService.HideModal();
+    // }
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,13 +85,10 @@
 
     private void ChangeLangButton()
     {
-        ModalService.ShowModal(Localizer["ChangeLanguage"],
-@<div>
-    <p>@Localizer["CurrentLanguage"]: @CultureInfo.CurrentCulture</p>
-            <Button OnClick="() => ChangeLang(pl)" Text="Polski"></Button>
-            <Button OnClick="() => ChangeLang(en)" Text="English"></Button>
-        </div>
-    );
+        ModalService.ShowModal(
+            Localizer["ChangeLanguage"],
+            @<RentoomBooking.StayWell.Components.ModalContent.LanguageModalContent />
+        );
     }
 
     private async Task OpenChat()
