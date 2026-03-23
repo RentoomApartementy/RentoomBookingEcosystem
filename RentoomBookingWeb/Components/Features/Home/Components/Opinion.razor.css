@@ -1,6 +1,7 @@
 .option-container {
     background-color: #ffffff;
-    max-width: 500px;
+    width: 450px; /* Fixed width for consistency on desktop */
+    max-width: 85vw; /* Don't exceed screen width on smaller viewports */
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -8,7 +9,9 @@
     border-radius: 20px;
     padding: 2.5rem;
     color: #333;
-    font-family: 'Segoe UI', sans-serif; 
+    font-family: 'Segoe UI', sans-serif;
+    scroll-snap-align: start;
+    box-sizing: border-box;
 }
 
 .option-top {
