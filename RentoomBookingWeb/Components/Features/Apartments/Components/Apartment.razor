@@ -122,7 +122,12 @@
                 }
                 else
                 {
-                    <span itemprop="occupancy">@Item.MinCapacity - @Item.Capacity</span>
+                    <span itemprop="occupancy" itemscope itemtype="https://schema.org/QuantitativeValue">
+                        <meta itemprop="minValue" content="@(Item.MinCapacity ?? 1)" />
+                        <meta itemprop="maxValue" content="@(Item.Capacity ?? 1)" />
+                        <meta itemprop="value" content="@(Item.Capacity ?? 1)" />
+                        @Item.MinCapacity - @Item.Capacity
+                    </span>
                 }
             </li>
             
@@ -158,7 +163,11 @@
                 }
                 else
                 {
-                    <span itemprop="floorSize">@Item.Area m²</span>
+                    <span itemprop="floorSize" itemscope itemtype="https://schema.org/QuantitativeValue">
+                        <meta itemprop="value" content="@(string.IsNullOrEmpty(Item.Area) ? "0" : Item.Area)" />
+                        <meta itemprop="unitCode" content="MTK" />
+                        @Item.Area m²
+                    </span>
                 }
             </li>
         </ul>
