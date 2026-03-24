@@ -148,6 +148,9 @@
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Guide</value>
   </data>
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>Language changed to:</value>
+  </data>
   <data name="Manage" xml:space="preserve">
     <value>Manage</value>
   </data>

@@ -1,0 +1,60 @@
+﻿.language-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.language-modal__current {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.language-modal__options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+    font-family: inherit;
+    font-size: 1rem;
+    text-align: left;
+    width: 100%;
+}
+
+    .language-option:hover {
+        border-color: rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+.language-option--active {
+    border-color: rgba(34, 197, 94, 0.6);
+    background: rgba(34, 197, 94, 0.06);
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
+}
+
+    .language-option--active:hover {
+        border-color: rgba(34, 197, 94, 0.7);
+    }
+
+.language-option__flag {
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.language-option__label {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.85);
+}

@@ -52,6 +52,7 @@ namespace RentoomBooking.SharedClasses.Models.Cookies
     public class CookieConsentClientState
     {
         public Guid ClientConsentId { get; set; }
+        public int SourceId { get; set; }
         public string Version { get; set; } = string.Empty;
         public int AuditId { get; set; }
         public DateTime AcceptedAtUtc { get; set; }

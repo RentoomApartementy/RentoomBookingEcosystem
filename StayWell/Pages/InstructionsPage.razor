@@ -6,10 +6,10 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @using Microsoft.JSInterop
+@using System.Text.RegularExpressions
 @inject NavigationManager Navigation
 @inject StayWell.Services.ClipboardService ClipboardService
 @inject IStringLocalizer<InstructionsPage> Localizer
-@* @inject StayWell.Services.ToastService ToastService *@
 @inject IJSRuntime JS
 
 @inherits Models.PageBase
@@ -20,10 +20,6 @@
 
 <div class="instructions-page">
     <section class="instructions-section shortcuts-section">
-        @* <header class="instructions-section__header">
-            <h3 class="instructions-section__title">@Localizer["Shortcuts"]</h3>
-        </header> *@
-
         <div class="shortcuts-bar">
             <button type="button"
                     class="shortcut-btn @(IsActiveTarget("wifi-shortcut-target") ? "shortcut-btn--active" : string.Empty)"
@@ -114,7 +110,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["ParkingNumber"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.ParkingSpotNumber</div>
+                            <div class="code-card__value">@RenderCodeValue(LocksState.ApartmentItemCodes?.ParkingSpotNumber)</div>
                         </div>
                     </div>
                 }
@@ -127,7 +123,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["GateCode"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.GateCode</div>
+                            <div class="code-card__value">@RenderCodeValue(LocksState.ApartmentItemCodes?.GateCode)</div>
                         </div>
                     </div>
                 }
@@ -140,7 +136,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["BuildingCode"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.GateDoorCode</div>
+                            <div class="code-card__value">@RenderCodeValue(LocksState.ApartmentItemCodes?.GateDoorCode)</div>
                         </div>
                     </div>
                 }
@@ -153,7 +149,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["SharedDoorsCode"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.AdditionalDoorCode</div>
+                            <div class="code-card__value">@RenderCodeValue(LocksState.ApartmentItemCodes?.AdditionalDoorCode)</div>
                         </div>
                     </div>
                 }
@@ -166,7 +162,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["KeySafeCode"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.StoreroomCode</div>
+                            <div class="code-card__value">@RenderCodeValue(LocksState.ApartmentItemCodes?.StoreroomCode)</div>
                         </div>
                     </div>
                 }
@@ -190,7 +186,7 @@
                     </div>
                     <div class="code-card__content">
                         <div class="code-card__label">@Localizer["GoOpen"]</div>
-                        <div class="code-card__value code-highlight">
+                        <div class="code-card__value">
                             <button class="openapartment-btn" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
                                 <span>@Localizer["OpenButton"] <img class="white-filter" src="/icons/chevron-right.svg" /></span>
                             </button>
@@ -241,8 +237,20 @@
 
 @code {
     private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
-    //private const string InstructionImageBaseUrl = "https://app.rentoom.pl/";
-    // private const string DefaultFallbackInstructionDescription = "Instrukcje zameldowania są w trakcie przygotowania.";
+
+    private static readonly Dictionary<string, string> CodeIconMappings = new(StringComparer.OrdinalIgnoreCase)
+    {
+        { "dzwonek", "/icons/bell-ring.svg" },
+        { "dzwon", "/icons/bell-ring.svg" },
+        { "kluczyk", "/icons/key-round.svg" },
+        { "klucz", "/icons/key-round.svg" },
+    };
+
+    private static readonly Regex CodeIconRegex = new(
+        string.Join("|", CodeIconMappings.Keys
+            .OrderByDescending(k => k.Length)
+            .Select(k => Regex.Escape(k))),
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     private string? WifiPassword => ApartmentState.WifiInfo?.Password;
     private string? WifiSsid => ApartmentState.WifiInfo?.Ssid;
@@ -252,8 +260,6 @@
         ApartmentState.ArrivalInstructionSteps ?? Array.Empty<ApartmentArrivalInstructionStepDTO>();
 
     private bool InstructionAvailable => ArrivalInstructionSteps.Count > 0;
-
-    // private string FallbackInstructionDescription => DefaultFallbackInstructionDescription;
 
     private string[] InstructionDescriptions => ArrivalInstructionSteps
         .Select(s => s.Description)
@@ -284,22 +290,58 @@
         return Navigation.ToAbsoluteUri(normalizedImageUrl.TrimStart('/')).ToString();
     }
 
+    private RenderFragment RenderCodeValue(string? code) => builder =>
+    {
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            return;
+        }
+
+        int lastIndex = 0;
+        int seq = 0;
+
+        foreach (Match match in CodeIconRegex.Matches(code))
+        {
+            if (match.Index > lastIndex)
+            {
+                builder.AddContent(seq++, code[lastIndex..match.Index]);
+            }
+
+            var iconUrl = CodeIconMappings
+                .First(kvp => string.Equals(kvp.Key, match.Value, StringComparison.OrdinalIgnoreCase))
+                .Value;
+
+            builder.OpenElement(seq++, "img");
+            builder.AddAttribute(seq++, "src", iconUrl);
+            builder.AddAttribute(seq++, "alt", match.Value);
+            builder.AddAttribute(seq++, "class", "code-inline-icon");
+            builder.CloseElement();
+
+            lastIndex = match.Index + match.Length;
+        }
+
+        if (lastIndex < code.Length)
+        {
+            builder.AddContent(seq++, code[lastIndex..]);
+        }
+    };
+
     private async Task CopyToClipboard()
     {
         var password = WifiPassword;
         if (!HasCode(password))
         {
-    return;
+            return;
         }
 
         try
         {
-    await ClipboardService.WriteTextAsync(password);
-    ToastService.ShowToast($"{Localizer["Copied"]} {password}");
+            await ClipboardService.WriteTextAsync(password);
+            ToastService.ShowToast($"{Localizer["Copied"]} {password}");
         }
         catch
         {
-    Console.WriteLine("Cannot write text to clipboard");
+            Console.WriteLine("Cannot write text to clipboard");
         }
     }
 
@@ -320,7 +362,7 @@
     {
         await base.OnInitializedAsync();
         GlobalizationService.OnChange += OnLanguageChanged;
-         OnLanguageChanged();
+        OnLanguageChanged();
         StateHasChanged();
     }
 
@@ -385,7 +427,6 @@
         }
         catch
         {
-            // ignore on dispose
         }
 
         _dotNetRef?.Dispose();
