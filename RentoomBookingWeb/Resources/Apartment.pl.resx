@@ -261,4 +261,22 @@
   <data name="Night" xml:space="preserve">
     <value>noc</value>
   </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>noc</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>noce</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>nocy</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>osoba</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>osoby</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>osób</value>
+  </data>
 </root>

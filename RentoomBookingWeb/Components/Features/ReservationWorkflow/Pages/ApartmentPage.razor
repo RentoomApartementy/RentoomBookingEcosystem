@@ -274,7 +274,10 @@
                             <small>@Localizer["NonRefundableText"]</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
-                                <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
+                                <span class="summary-offer-price-button-price">
+                                    <b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b>
+                                    <span class="stay-summary-text">@GetStaySummaryText()</span>
+                                </span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
                                         <Button Type="ButtonType.Tertiary">@GetOfferButtonLabel(OfferTypeNonrefundable)</Button>
                                 </div>
@@ -289,7 +292,10 @@
                             <small>@Localizer["RefundableOfferText"]</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
-                                <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
+                                <span class="summary-offer-price-button-price">
+                                    <b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b>
+                                    <span class="stay-summary-text">@GetStaySummaryText()</span>
+                                </span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
                                         <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Tertiary)">@GetOfferButtonLabel(OfferTypeRefundable)</Button>
                                 </div>
@@ -411,11 +417,7 @@
                                 <span class="info-title">@Localizer["SelectedDates"]</span>
                                 @if (StartDate != null && EndDate != null)
                                 {
-                                    var nights = TryParseDate(StartDate, out var s) && TryParseDate(EndDate, out var e) 
-                                        ? (e.ToDateTime(TimeOnly.MinValue) - s.ToDateTime(TimeOnly.MinValue)).Days 
-                                        : 0;
-                                    var nightLabel = nights == 1 ? Localizer["Night"] : Localizer["Nights"];
-                                    <span class="info-text">@StartDate – @EndDate @(nights > 0 ? $"({nights} {nightLabel})" : "")</span>
+                                    <span class="info-text">@StartDate – @EndDate @(!string.IsNullOrEmpty(GetNightsSummaryText()) ? $"({GetNightsSummaryText()})" : "")</span>
                                 }
                                 else
                                 {
@@ -432,7 +434,7 @@
                                 <span class="info-title">@Localizer["NumberOfGuests"]</span>
                                 @if (StartDate != null && EndDate != null)
                                 {
-                                    <span class="info-text">@Adults @Localizer["Adults"], @(Children != null ? Children : 0) @Localizer["Children"]</span>
+                                    <span class="info-text">@GetPersonsSummaryText()</span>
                                 }
                                 else
                                 {
@@ -665,6 +667,19 @@
         color: #666;
     }
 
+    #offers-section .stay-summary-text {
+        font-size: 0.75rem;
+        color: #888;
+        font-weight: normal;
+        display: block;
+        line-height: 1.2;
+        margin-top: 1px; 
+    }
+
+    #offers-section .summary-offer-price-button-price {
+        line-height: 1.2;
+    }
+
     @@media (max-width: 768px) {
         .search-modal-overlay {
             align-items: flex-start; 
@@ -826,6 +841,39 @@
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
     private string? _selectedOfferType;
+
+    private string GetNightsSummaryText()
+    {
+        if (_reservationPricingContext == null) return string.Empty;
+        var nights = _reservationPricingContext.Nights;
+        string nightsKey = nights switch
+        {
+            1 => "StayNight_1",
+            var n when n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) => "StayNight_234",
+            _ => "StayNight_Many"
+        };
+        return $"{nights} {Localizer[nightsKey]}";
+    }
+
+    private string GetPersonsSummaryText()
+    {
+        if (_reservationPricingContext == null) return string.Empty;
+        var guests = _reservationPricingContext.TotalGuests;
+        string personsKey = guests switch
+        {
+            1 => "StayPerson_1",
+            var g when g % 10 >= 2 && g % 10 <= 4 && (g % 100 < 10 || g % 100 >= 20) => "StayPerson_234",
+            _ => "StayPerson_Many"
+        };
+        return $"{guests} {Localizer[personsKey]}";
+    }
+
+    private string GetStaySummaryText()
+    {
+        if (_reservationPricingContext == null) return string.Empty;
+        return $"{GetNightsSummaryText()} / {GetPersonsSummaryText()}";
+    }
+
     private bool HasActiveReservation =>
         _reservationTokenGuid.HasValue &&
         _reservationDraftSummary is not null &&
