@@ -51,10 +51,29 @@
     <meta property="og:url" content="@GetCanonicalUrl()" />
     <meta property="og:locale" content="pl_PL" />
 
-    @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
+    @(_apartment != null ? (MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>" : (MarkupString)"")
 </HeadContent>
 
 <div class="apartment-container">
+    @if (_apartment == null && !_isOfferLoading)
+    {
+        <div class="not-found-wrapper">
+            <div class="not-found-card">
+                <div class="not-found-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                </div>
+                <h2>@Localizer["ApartmentNotFoundTitle"]</h2>
+                <p>@Localizer["ApartmentNotFoundDescription"]</p>
+                <div style="margin-top: 2rem;">
+                    <Button Type="ButtonType.Primary" @onclick='(() => Navigation.NavigateTo("/apartamenty"))'>
+                        @Localizer["BackToApartments"]
+                    </Button>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
     <HeaderSection
         ImagePath="@_objectMediums?.FirstOrDefault()?.Url"
         Title="@_apartment?.Name"
@@ -616,6 +635,7 @@
             </div>
         </div>
     }
+    }
 </div>
 
 <style>
@@ -680,7 +700,51 @@
         line-height: 1.2;
     }
 
+    .not-found-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        padding: 2rem;
+        background: #f9f9f9;
+    }
+
+    .not-found-card {
+        background: white;
+        padding: 3rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .not-found-icon {
+        color: #e74c3c;
+        margin-bottom: 1.5rem;
+    }
+
+    .not-found-icon svg {
+        width: 64px;
+        height: 64px;
+    }
+
+    .not-found-card h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .not-found-card p {
+        color: #666;
+        line-height: 1.5;
+    }
+
     @@media (max-width: 768px) {
+        .not-found-card {
+            padding: 2rem 1.5rem;
+        }
+
         .search-modal-overlay {
             align-items: flex-start; 
             padding-top: 5vh;        

@@ -255,4 +255,28 @@
   <data name="ContinueReservation" xml:space="preserve">
     <value>Dokończ rezerwację</value>
   </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Strona nie została odnaleziona</value>
+  </data>
+  <data name="PageNotFoundDescription" xml:space="preserve">
+    <value>Przepraszamy, ale strona, której szukasz, nie istnieje lub została przeniesiona.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Wróć do strony głównej</value>
+  </data>
+  <data name="NotFoundHeaderTitle" xml:space="preserve">
+    <value>Błąd 404</value>
+  </data>
+  <data name="NotFoundMaybeLookingFor" xml:space="preserve">
+    <value>Może szukasz:</value>
+  </data>
+  <data name="NotFoundApartmentsList" xml:space="preserve">
+    <value>Lista apartamentów</value>
+  </data>
+  <data name="NotFoundCooperation" xml:space="preserve">
+    <value>Współpraca</value>
+  </data>
+  <data name="NotFoundContact" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
 </root>
