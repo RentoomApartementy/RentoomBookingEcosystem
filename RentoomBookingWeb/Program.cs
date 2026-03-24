@@ -196,6 +196,10 @@ namespace RentoomBookingWeb
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
+            // error 404
+            app.UseStatusCodePagesWithReExecute("/404");
+
             app.UseAntiforgery();
             
             app.MapControllers();

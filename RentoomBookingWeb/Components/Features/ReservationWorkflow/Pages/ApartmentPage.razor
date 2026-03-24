@@ -51,10 +51,29 @@
     <meta property="og:url" content="@GetCanonicalUrl()" />
     <meta property="og:locale" content="pl_PL" />
 
-    @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
+    @(_apartment != null ? (MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>" : (MarkupString)"")
 </HeadContent>
 
 <div class="apartment-container">
+    @if (_apartment == null && !_isOfferLoading)
+    {
+        <div class="not-found-wrapper">
+            <div class="not-found-card">
+                <div class="not-found-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                </div>
+                <h2>@Localizer["ApartmentNotFoundTitle"]</h2>
+                <p>@Localizer["ApartmentNotFoundDescription"]</p>
+                <div style="margin-top: 2rem;">
+                    <Button Type="ButtonType.Primary" @onclick='(() => Navigation.NavigateTo("/apartamenty"))'>
+                        @Localizer["BackToApartments"]
+                    </Button>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
     <HeaderSection
         ImagePath="@_objectMediums?.FirstOrDefault()?.Url"
         Title="@_apartment?.Name"
@@ -274,7 +293,10 @@
                             <small>@Localizer["NonRefundableText"]</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
-                                <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
+                                <span class="summary-offer-price-button-price">
+                                    <b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b>
+                                    <span class="stay-summary-text">@GetStaySummaryText()</span>
+                                </span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
                                         <Button Type="ButtonType.Tertiary">@GetOfferButtonLabel(OfferTypeNonrefundable)</Button>
                                 </div>
@@ -289,7 +311,10 @@
                             <small>@Localizer["RefundableOfferText"]</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
-                                <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b></span>
+                                <span class="summary-offer-price-button-price">
+                                    <b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b>
+                                    <span class="stay-summary-text">@GetStaySummaryText()</span>
+                                </span>
                                 <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
                                         <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Tertiary)">@GetOfferButtonLabel(OfferTypeRefundable)</Button>
                                 </div>
@@ -411,7 +436,7 @@
                                 <span class="info-title">@Localizer["SelectedDates"]</span>
                                 @if (StartDate != null && EndDate != null)
                                 {
-                                    <span class="info-text">@StartDate – @EndDate</span>
+                                    <span class="info-text">@StartDate – @EndDate @(!string.IsNullOrEmpty(GetNightsSummaryText()) ? $"({GetNightsSummaryText()})" : "")</span>
                                 }
                                 else
                                 {
@@ -428,7 +453,7 @@
                                 <span class="info-title">@Localizer["NumberOfGuests"]</span>
                                 @if (StartDate != null && EndDate != null)
                                 {
-                                    <span class="info-text">@Adults @Localizer["Adults"], @(Children != null ? Children : 0) @Localizer["Children"]</span>
+                                    <span class="info-text">@GetPersonsSummaryText()</span>
                                 }
                                 else
                                 {
@@ -599,11 +624,17 @@
                     <button class="close-modal-btn" @onclick="CloseSearchModal">&times;</button>
                 </div>
                 <div class="search-modal-body">
-                    <SearchBar 
-                        OnSearch="async (query) => { await HandleSearch(query); CloseSearchModal(); }" />
+                   <SearchBar 
+                       StartDate="@StartDate"
+                       EndDate="@EndDate"
+                       Adults="@Adults"
+                       Children="@Children"
+                       OnSearch="async (query) => { await HandleSearch(query); CloseSearchModal(); }" />
                 </div>
+
             </div>
         </div>
+    }
     }
 </div>
 
@@ -656,7 +687,64 @@
         color: #666;
     }
 
+    #offers-section .stay-summary-text {
+        font-size: 0.75rem;
+        color: #888;
+        font-weight: normal;
+        display: block;
+        line-height: 1.2;
+        margin-top: 1px; 
+    }
+
+    #offers-section .summary-offer-price-button-price {
+        line-height: 1.2;
+    }
+
+    .not-found-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        padding: 2rem;
+        background: #f9f9f9;
+    }
+
+    .not-found-card {
+        background: white;
+        padding: 3rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .not-found-icon {
+        color: #e74c3c;
+        margin-bottom: 1.5rem;
+    }
+
+    .not-found-icon svg {
+        width: 64px;
+        height: 64px;
+    }
+
+    .not-found-card h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .not-found-card p {
+        color: #666;
+        line-height: 1.5;
+    }
+
     @@media (max-width: 768px) {
+        .not-found-card {
+            padding: 2rem 1.5rem;
+        }
+
         .search-modal-overlay {
             align-items: flex-start; 
             padding-top: 5vh;        
@@ -817,6 +905,39 @@
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
     private string? _selectedOfferType;
+
+    private string GetNightsSummaryText()
+    {
+        if (_reservationPricingContext == null) return string.Empty;
+        var nights = _reservationPricingContext.Nights;
+        string nightsKey = nights switch
+        {
+            1 => "StayNight_1",
+            var n when n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) => "StayNight_234",
+            _ => "StayNight_Many"
+        };
+        return $"{nights} {Localizer[nightsKey]}";
+    }
+
+    private string GetPersonsSummaryText()
+    {
+        if (_reservationPricingContext == null) return string.Empty;
+        var guests = _reservationPricingContext.TotalGuests;
+        string personsKey = guests switch
+        {
+            1 => "StayPerson_1",
+            var g when g % 10 >= 2 && g % 10 <= 4 && (g % 100 < 10 || g % 100 >= 20) => "StayPerson_234",
+            _ => "StayPerson_Many"
+        };
+        return $"{guests} {Localizer[personsKey]}";
+    }
+
+    private string GetStaySummaryText()
+    {
+        if (_reservationPricingContext == null) return string.Empty;
+        return $"{GetNightsSummaryText()} / {GetPersonsSummaryText()}";
+    }
+
     private bool HasActiveReservation =>
         _reservationTokenGuid.HasValue &&
         _reservationDraftSummary is not null &&
@@ -889,93 +1010,67 @@
     {
         if (_apartment == null) return new MarkupString("");
 
-        // Używamy Product obok Apartment, aby wymusić Rich Results (kafelek) w Google
-        var jsonLd = new Dictionary<string, object>
+        // Jednostka mieszkalna (Apartment)
+        var apartmentUnit = new Dictionary<string, object>
         {
-            ["@context"] = "https://schema.org",
-            ["@type"] = new[] { "Product", "Apartment", "LodgingBusiness" },
+            ["@type"] = "Apartment",
             ["name"] = _apartment.Name ?? "",
-            ["description"] = GetSeoDescription(),
-            ["url"] = GetCanonicalUrl(),
-            ["brand"] = new Dictionary<string, string> { ["@type"] = "Brand", ["name"] = "Rentoom" }
-        };
-
-        if (_objectMediums != null && _objectMediums.Any())
-        {
-            jsonLd["image"] = _objectMediums.Select(m => m.Url).ToList();
-        }
-        else
-        {
-            jsonLd["image"] = GetSeoImage();
-        }
-
-        jsonLd["address"] = new Dictionary<string, object>
-        {
-            ["@type"] = "PostalAddress",
-            ["streetAddress"] = _apartment.ObjectLocation?.LocalizationItem?.Street ?? "",
-            ["addressLocality"] = _apartment.ObjectLocation?.LocalizationItem?.City ?? "",
-            ["postalCode"] = _apartment.ObjectLocation?.LocalizationItem?.ZipCode ?? "",
-            ["addressCountry"] = "PL"
-        };
-
-        jsonLd["geo"] = new Dictionary<string, object>
-        {
-            ["@type"] = "GeoCoordinates",
-            ["latitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
-            ["longitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? ""
-        };
-
-        // Cena - Google wymaga 'offers' dla Rich Results. 
-        // Jeśli nie ma dynamicznej ceny (np. Googlebot bez dat), podajemy cenę minimalną "od" (np. 199 PLN).
-        decimal displayPrice = localMinPrice ?? 199m; 
-
-        jsonLd["offers"] = new Dictionary<string, object>
-        {
-            ["@type"] = "Offer",
-            ["price"] = displayPrice.ToString("F2", System.Globalization.CultureInfo.InvariantCulture),
-            ["priceCurrency"] = "PLN",
-            ["availability"] = "https://schema.org/InStock",
-            ["url"] = GetCanonicalUrl(),
-            ["priceValidUntil"] = DateTime.Now.AddDays(30).ToString("yyyy-MM-dd")
-        };
-
-        // Ocena marki (Rich Results - Gwiazdki)
-        jsonLd["aggregateRating"] = new Dictionary<string, object>
-        {
-            ["@type"] = "AggregateRating",
-            ["ratingValue"] = "9.7",
-            ["bestRating"] = "10",
-            ["reviewCount"] = "35"
-        };
-
-        jsonLd["occupancy"] = new Dictionary<string, object>
-        {
-            ["@type"] = "QuantitativeValue",
-            ["minValue"] = _apartment.MinCapacity,
-            ["maxValue"] = _apartment.Capacity
-        };
-
-        if (_apartment.BedroomsCount.HasValue)
-        {
-            jsonLd["numberOfRooms"] = _apartment.BedroomsCount.Value;
-        }
-
-        jsonLd["floorSize"] = new Dictionary<string, object>
-        {
-            ["@type"] = "QuantitativeValue",
-            ["value"] = _apartment.Area,
-            ["unitCode"] = "MTK"
+            ["numberOfRooms"] = _apartment.BedroomsCount ?? 1,
+            ["occupancy"] = new Dictionary<string, object>
+            {
+                ["@type"] = "QuantitativeValue",
+                ["minValue"] = _apartment.MinCapacity ?? 1,
+                ["maxValue"] = _apartment.Capacity ?? 1,
+                ["value"] = _apartment.Capacity ?? 1
+            },
+            ["floorSize"] = new Dictionary<string, object>
+            {
+                ["@type"] = "QuantitativeValue",
+                ["value"] = string.IsNullOrEmpty(_apartment.Area) ? "0" : _apartment.Area,
+                ["unitCode"] = "MTK"
+            }
         };
 
         if (_amenities != null && _amenities.Any())
         {
-            jsonLd["amenityFeature"] = _amenities.Select(a => new Dictionary<string, object>
+            apartmentUnit["amenityFeature"] = _amenities.Select(a => new Dictionary<string, object>
             {
                 ["@type"] = "LocationFeatureSpecification",
                 ["name"] = a.Name,
                 ["value"] = true
             }).ToList();
         }
+
+        // Główny obiekt VacationRental (Biznes/Miejsce)
+        var jsonLd = new Dictionary<string, object>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "VacationRental",
+            ["identifier"] = _apartment.Id.ToString(), // Rozwiązuje błąd: missing field identifier
+            ["name"] = _apartment.Name ?? "",
+            ["description"] = GetSeoDescription(),
+            ["url"] = GetCanonicalUrl(),
+            ["image"] = _objectMediums?.Select(m => m.Url).ToList() ?? new List<string> { GetSeoImage() },
+            
+            ["address"] = new Dictionary<string, object>
+            {
+                ["@type"] = "PostalAddress",
+                ["streetAddress"] = _apartment.ObjectLocation?.LocalizationItem?.Street ?? "",
+                ["addressLocality"] = _apartment.ObjectLocation?.LocalizationItem?.City ?? "",
+                ["postalCode"] = _apartment.ObjectLocation?.LocalizationItem?.ZipCode ?? "",
+                ["addressCountry"] = "PL"
+            },
+
+            ["geo"] = new Dictionary<string, object>
+            {
+                ["@type"] = "GeoCoordinates",
+                ["latitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
+                ["longitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? ""
+            },
+
+            // VacationRental zawiera konkretne miejsce (Apartment)
+            ["containsPlace"] = new[] { apartmentUnit } // Rozwiązuje błąd: missing field containsPlace
+        };
 
         var options = new System.Text.Json.JsonSerializerOptions 
         { 

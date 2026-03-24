@@ -5,6 +5,7 @@
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
+@inject IStringLocalizer<RentoomBookingWeb.Apartment> ApartmentLocalizer;
 
 <div class="order-wrapper">
     @if (Apartment != null)
@@ -50,7 +51,7 @@
             <div class="summary-box-prices-text">
                 @* <span>@_pricePerNight.ToString("N2") @Summary?.StartRequest?.Currency x @_totalDays @Localizer["NightsText"]</span> *@
                 @* <b>@_basePrice.ToString("N2") @Summary?.StartRequest?.Currency</b> *@
-                <span>@Localizer["NightsText"] x @_totalDays</span>
+                <span>@GetStaySummaryText()</span>
                 <b>@_basePrice.ToString("N2") @CurrencyLocalizer["PLN"]</b>
             </div>
             @if (Summary?.StartRequest?.SelectedAddons?.Count > 0)
@@ -106,6 +107,38 @@
     private int _totalDays;
     private decimal _pricePerNight;
     private decimal _basePrice;
+
+    private string GetNightsSummaryText()
+    {
+        if (Summary?.StartRequest == null) return string.Empty;
+        var nights = _totalDays;
+        string nightsKey = nights switch
+        {
+            1 => "StayNight_1",
+            var n when n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) => "StayNight_234",
+            _ => "StayNight_Many"
+        };
+        return $"{nights} {ApartmentLocalizer[nightsKey]}";
+    }
+
+    private string GetPersonsSummaryText()
+    {
+        if (Summary?.StartRequest == null) return string.Empty;
+        var guests = (Summary.StartRequest.Adults) + (Summary.StartRequest.Children);
+        string personsKey = guests switch
+        {
+            1 => "StayPerson_1",
+            var g when g % 10 >= 2 && g % 10 <= 4 && (g % 100 < 10 || g % 100 >= 20) => "StayPerson_234",
+            _ => "StayPerson_Many"
+        };
+        return $"{guests} {ApartmentLocalizer[personsKey]}";
+    }
+
+    private string GetStaySummaryText()
+    {
+        if (Summary?.StartRequest == null) return string.Empty;
+        return $"{GetNightsSummaryText()} / {GetPersonsSummaryText()}";
+    }
 
     protected override void OnParametersSet()
     {

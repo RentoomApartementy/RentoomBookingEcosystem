@@ -42,13 +42,15 @@
 .carousel-list-wrapper {
     display: flex;
     flex-direction: row;
-    gap: 22px;
+    gap: 24px;
     overflow-x: auto;
-    padding: 5px 2px;
+    padding: 16px 8px; /* Extra padding to avoid cutting off card shadows */
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     order: 1;
+    scroll-snap-type: x mandatory;
+    box-sizing: border-box;
 }
 
 .carousel-list-wrapper::-webkit-scrollbar {
@@ -57,6 +59,7 @@
 
 .carousel-list-wrapper ::deep > * {
     flex: 0 0 auto;
+    scroll-snap-align: start;
 }
 
 @media (max-width: 768px) {
@@ -65,7 +68,8 @@
     }
 
     .carousel-list-wrapper {
-        gap: 12px;
+        gap: 16px;
+        padding-left: 1rem;
     }
 
     .nav-btn {

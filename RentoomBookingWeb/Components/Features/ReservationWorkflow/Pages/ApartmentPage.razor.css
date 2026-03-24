@@ -13,13 +13,15 @@
     max-width: 1440px;
     width: 97%;
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .left-container {
     width: 70%;
     display: flex;
     flex-direction: column;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 .apartment-wrapper {
@@ -217,7 +219,9 @@
     margin-top: 1rem;
     z-index: 100;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: visible;
+    padding: 0 15px 40px 15px;
+    box-sizing: border-box;
     align-self: flex-start;
     height: auto;
 }
@@ -259,6 +263,7 @@
 
     .left-container {
         width: 100%;
+        padding: 0;
     }
 
     .info-box {
@@ -278,6 +283,8 @@
         z-index: 1000;
         border-radius: 12px 12px 0 0;
         overflow: visible;
+        padding: 0;
+        overflow-y: visible;
     }
 
     .reservation-info {
@@ -725,6 +732,7 @@
     border-radius: 16px;
     padding: 15px 20px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-sizing: border-box;
 }
 
 .addons-wrapper {
@@ -929,6 +937,7 @@
     background-color: #fff;
     gap: .5rem;
     box-shadow: 0 0 8px rgba(139, 115, 68, 0.3);
+    box-sizing: border-box;
 }
 
 .summary-offer-price-button-price {
