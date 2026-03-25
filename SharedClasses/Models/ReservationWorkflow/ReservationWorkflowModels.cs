@@ -90,6 +90,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
         public Guid? PaymentSessionGuid { get; set; }
         public string? ProviderTransactionId { get; set; }
+        public string? ProviderTransactionUid { get; set; }
         public string? Provider { get; set; }
         public string? RedirectUrl { get; set; }
         public string? IdoStatus { get; set; }
@@ -115,6 +116,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
 
         //  public List<TermsAndConditionsAcceptanceInfo> {get;set;}
         public string? PaymentRedirectUrl { get; set; }
+        public string? ProviderTransactionUid { get; set; }
 
         public decimal PaymentUpsellsTotal { get; set; }
         public decimal PaymentGrandTotal { get; set; }

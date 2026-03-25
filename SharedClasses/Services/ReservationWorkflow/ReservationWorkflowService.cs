@@ -38,6 +38,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<ReservationSummaryDto> BuildDraftSummaryAsync(Guid reservationGuid);
         Task<PaymentInitResult> InitiatePaymentAsync(Guid reservationGuid);
         Task<PaymentStateDto> GetPaymentStateAsync(Guid reservationGuid);
+        Task<PaymentStateDto> VerifyPaymentAfterErrorReturnAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
         Task HandleTpayWebhookAsync(TpayWebhookDto dto);
         Task EnsureIdoPaymentAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
         Task<RentoomReservation?> EnsureRentoomReservationByResTokenAsync(string resToken, CancellationToken cancellationToken = default);
@@ -505,6 +506,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 record.Provider = record.Provider ?? "TPAY";
                 record.ProviderTransactionId = paymentResult.TransactionId;
                 record.State.PaymentRedirectUrl = paymentResult.RedirectUrl;
+                record.State.ProviderTransactionUid = paymentResult.TransactionUid;
                 record.State.PaymentUpsellsTotal = summary.UpsellsTotal;
                 record.State.PaymentGrandTotal = summary.GrandTotal;
                 record.IdoStatus = ReservationStatusType.WaitingForPayment;
@@ -681,10 +683,87 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 PaymentStatus = record.PaymentStatus,
                 PaymentSessionGuid = record.PaymentSessionGuid,
                 ProviderTransactionId = record.ProviderTransactionId,
+                ProviderTransactionUid = record.State.ProviderTransactionUid,
                 Provider = record.Provider,
                 RedirectUrl = record.State.PaymentRedirectUrl,
                 IdoStatus = record.IdoStatus
             };
+        }
+
+        public async Task<PaymentStateDto> VerifyPaymentAfterErrorReturnAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        {
+            var initialState = await GetPaymentStateAsync(reservationGuid);
+            if (IsFinalPaymentStatus(initialState.PaymentStatus))
+            {
+                return initialState;
+            }
+
+            var record = await RequireReservationAsync(reservationGuid, cancellationToken);
+            var transactionUid = record.State.ProviderTransactionUid;
+            if (string.IsNullOrWhiteSpace(transactionUid))
+            {
+                return initialState;
+            }
+
+            var tpayState = await _tpayGateway.GetPaymentStatusAsync(transactionUid, cancellationToken);
+            if (!tpayState.Success)
+            {
+                _logger.LogWarning("Tpay fallback verification failed for reservation {ReservationGuid}: {Message}",
+                    reservationGuid,
+                    tpayState.Message);
+
+                return await GetPaymentStateAsync(reservationGuid);
+            }
+
+            var mappedStatus = MapTpayStatusToWorkflowStatus(tpayState.TransactionStatus, tpayState.AmountPaid);
+            if (!string.Equals(mappedStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase)
+                && record.PaymentSessionGuid.HasValue
+                && !string.IsNullOrWhiteSpace(record.ProviderTransactionId))
+            {
+                await HandleTpayWebhookAsync(new TpayWebhookDto
+                {
+                    ReservationGuid = reservationGuid,
+                    PaymentSessionGuid = record.PaymentSessionGuid.Value,
+                    ProviderTransactionId = record.ProviderTransactionId,
+                    Status = string.Equals(mappedStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase) ? "PAID" : "FAILED",
+                    Signature = "fallback-check"
+                });
+            }
+
+            return await GetPaymentStateAsync(reservationGuid);
+        }
+
+        private static bool IsFinalPaymentStatus(string? paymentStatus)
+        {
+            return string.Equals(paymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(paymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string MapTpayStatusToWorkflowStatus(string? tpayStatus, decimal? amountPaid)
+        {
+            if (amountPaid.GetValueOrDefault() > 0m)
+            {
+                return PaymentStatuses.Paid;
+            }
+
+            if (string.IsNullOrWhiteSpace(tpayStatus))
+            {
+                return PaymentStatuses.Initiated;
+            }
+
+            if (string.Equals(tpayStatus, "pending", StringComparison.OrdinalIgnoreCase))
+            {
+                return PaymentStatuses.Initiated;
+            }
+
+            if (string.Equals(tpayStatus, "correct", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(tpayStatus, "paid", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(tpayStatus, "success", StringComparison.OrdinalIgnoreCase))
+            {
+                return PaymentStatuses.Paid;
+            }
+
+            return PaymentStatuses.Failed;
         }
 
         public async Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request)
@@ -911,9 +990,9 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 DateTime.UtcNow);
         }
 
-        private async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid)
+        private async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
         {
-            var record = await _store.GetAsync(reservationGuid);
+            var record = await _store.GetAsync(reservationGuid, cancellationToken);
             return record ?? throw new InvalidOperationException($"Reservation {reservationGuid} not found.");
         }
 

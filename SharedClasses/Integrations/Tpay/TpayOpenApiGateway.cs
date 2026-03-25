@@ -14,6 +14,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
     public interface ITpayGateway
     {
         Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency,int? IdoBookingId = null);
+        Task<TpayTransactionResult> GetPaymentStatusAsync(string transactionUid, CancellationToken cancellationToken = default);
     }
 
     public class TpayOpenApiGateway : ITpayGateway
@@ -116,6 +117,11 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
             }
 
             return result;
+        }
+
+        public Task<TpayTransactionResult> GetPaymentStatusAsync(string transactionUid, CancellationToken cancellationToken = default)
+        {
+            return _client.GetTransactionAsync(transactionUid, cancellationToken);
         }
     }
 }

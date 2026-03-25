@@ -21,6 +21,17 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
 
             return Task.FromResult(result);
         }
+
+        public Task<TpayTransactionResult> GetPaymentStatusAsync(string transactionUid, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(new TpayTransactionResult
+            {
+                Success = true,
+                TransactionUid = transactionUid,
+                TransactionStatus = "pending",
+                AmountPaid = 0m
+            });
+        }
     }
 
 }

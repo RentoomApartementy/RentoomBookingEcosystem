@@ -422,7 +422,7 @@
     protected override async Task OnInitializedAsync()
     {
         InitializeCountryPrefixes();
-        //InitializeDummyClientData();
+        InitializeDummyClientData();
         _editContext = new EditContext(_form);
         _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
         _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);

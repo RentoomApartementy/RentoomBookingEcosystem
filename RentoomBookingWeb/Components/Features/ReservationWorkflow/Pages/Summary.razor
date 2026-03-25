@@ -5,6 +5,7 @@
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components;
 @using QRCoder
+@using Microsoft.AspNetCore.WebUtilities
 @inject IReservationWorkflowService ReservationWorkflowService;
 @inject NavigationManager Navigation;
 @inject IApartmentsService ApartmentsService;
@@ -59,6 +60,20 @@
                             </p>
                         </div>
                     </div>
+
+                    @if (ShouldShowPaymentReturnBanner)
+                    {
+                        <div class="status-box @(IsPaymentReturnFailed ? "danger-bg" : "info-bg")">
+                            <div class="form-wrapper-title-icon-wrapper @(IsPaymentReturnFailed ? "danger-icon-color" : "info-icon-color") rounded-full">
+                                <img src="assets/svgs/@(IsPaymentReturnFailed ? "danger.svg" : "time.svg")" alt="ikona statusu płatności">
+                            </div>
+
+                            <div class="status-box-text">
+                                <h4 class="@(IsPaymentReturnFailed ? "danger-text-color" : "info-text-color")">@PaymentReturnBannerTitle</h4>
+                                <span>@PaymentReturnBannerMessage</span>
+                            </div>
+                        </div>
+                    }
                     
                     @if (IsPaid)
                     {
@@ -152,8 +167,8 @@
                             </div>
                         </div>
 
-                        <button @onclick="RetryPayment" class="button-pending">
-                            @Localizer["TryAgain"]
+                        <button @onclick="RetryPayment" class="button-pending" disabled="@IsRetryPaymentDisabled">
+                            @RetryPaymentButtonText
                         </button>
                     }
                     else if (IsPaymentFailed)
@@ -169,8 +184,8 @@
                             </div>
                         </div>
 
-                        <button @onclick="RetryPayment" class="button-pending">
-                            @Localizer["TryAgain"]
+                        <button @onclick="RetryPayment" class="button-pending" disabled="@IsRetryPaymentDisabled">
+                            @RetryPaymentButtonText
                         </button>
                     }
                     else if (ShouldShowTermsAndPayment)
@@ -348,10 +363,19 @@
     private bool _emailPollStarted;
     private string? _emailError;
     private bool _scrollToTopPending = true;
+    private string? _paymentReturn;
+    private CancellationTokenSource? _retryCountdownCts;
+    private int _retryCountdownSeconds = RetryPaymentDelaySeconds;
+
+    private const int RetryPaymentDelaySeconds = 30;
 
     private bool IsPaid => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentFailed => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase);
+    private bool IsPaymentReturnFailed => string.Equals(_paymentReturn, "failed", StringComparison.OrdinalIgnoreCase);
+    private bool ShouldShowPaymentReturnBanner => !IsPaid && !string.IsNullOrWhiteSpace(_paymentReturn);
+    private bool ShouldShowRetryPaymentButton => IsPaymentInitiated || IsPaymentFailed;
+    private bool IsRetryPaymentDisabled => _retryCountdownSeconds > 0;
     private bool ShouldShowTermsAndPayment => (string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
                                               || string.Equals(_summary?.PaymentStatus, "None", StringComparison.OrdinalIgnoreCase))
                                               && !IsPaid
@@ -363,11 +387,13 @@
     protected override async Task OnInitializedAsync()
     {
         _staywellQrDataUri = GenerateStaywellQrDataUri();
+        ReadPaymentReturnFromQuery();
 
         try
         {
             await RefreshSummaryAsync();
             await EnsureWorkflowChecksAsync();
+            StartRetryCountdownIfNeeded();
         }
         catch (Exception ex)
         {
@@ -410,6 +436,11 @@
 
     private void RetryPayment()
     {
+        if (IsRetryPaymentDisabled)
+        {
+            return;
+        }
+
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
     }
 
@@ -432,6 +463,58 @@
         {
             _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);
         }
+
+        StartRetryCountdownIfNeeded();
+    }
+
+    private void StartRetryCountdownIfNeeded()
+    {
+        if (!ShouldShowRetryPaymentButton)
+        {
+            StopRetryCountdown();
+            _retryCountdownSeconds = RetryPaymentDelaySeconds;
+            return;
+        }
+
+        if (_retryCountdownCts is not null)
+        {
+            return;
+        }
+
+        _retryCountdownSeconds = RetryPaymentDelaySeconds;
+        _retryCountdownCts = new CancellationTokenSource();
+        _ = RunRetryCountdownAsync(_retryCountdownCts.Token);
+    }
+
+    private async Task RunRetryCountdownAsync(CancellationToken token)
+    {
+        try
+        {
+            while (_retryCountdownSeconds > 0 && !token.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1), token);
+                _retryCountdownSeconds--;
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException) when (token.IsCancellationRequested)
+        {
+        }
+        finally
+        {
+            if (!token.IsCancellationRequested)
+            {
+                _retryCountdownCts?.Dispose();
+                _retryCountdownCts = null;
+            }
+        }
+    }
+
+    private void StopRetryCountdown()
+    {
+        _retryCountdownCts?.Cancel();
+        _retryCountdownCts?.Dispose();
+        _retryCountdownCts = null;
     }
 
     private void StartPaymentPollingIfNeeded()
@@ -578,6 +661,39 @@
 
         return baseUrl.Replace("{resToken}", ReservationTokenGuid.ToString(), StringComparison.OrdinalIgnoreCase).TrimEnd('/');
     }
+
+    private void ReadPaymentReturnFromQuery()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("paymentReturn", out var paymentReturn))
+        {
+            _paymentReturn = paymentReturn.ToString();
+        }
+    }
+
+    private string PaymentReturnBannerTitle =>
+        IsEnglishCulture()
+            ? (IsPaymentReturnFailed ? "Payment was not completed" : "We could not confirm the payment yet")
+            : (IsPaymentReturnFailed ? "Płatność nie została zakończona" : "Nie potwierdziliśmy jeszcze płatności");
+
+    private string PaymentReturnBannerMessage =>
+        IsEnglishCulture()
+            ? (IsPaymentReturnFailed
+                ? "You can retry the payment from this summary. If your bank already charged the card, wait a moment before making another attempt."
+                : "If funds were charged, do not pay again immediately. Check the reservation status below and retry only if the payment is still not confirmed.")
+            : (IsPaymentReturnFailed
+                ? "Możesz ponowić płatność z tego podsumowania. Jeśli bank zdążył już pobrać środki, odczekaj chwilę przed kolejną próbą."
+                : "Jeśli środki zostały pobrane, nie wykonuj kolejnej płatności od razu. Sprawdź status rezerwacji poniżej i ponów próbę tylko wtedy, gdy płatność nadal nie jest potwierdzona.");
+
+    private static bool IsEnglishCulture()
+    {
+        return string.Equals(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, "en", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private string RetryPaymentButtonText =>
+        IsRetryPaymentDisabled
+            ? $"{Localizer["TryAgain"]} ({_retryCountdownSeconds}s)"
+            : Localizer["TryAgain"];
     
     private List<CustomerTermDisplayDto>? _termsSources;
     private Dictionary<int, bool> _userSelections = new();
@@ -668,6 +784,7 @@
 
     public void Dispose()
     {
+        StopRetryCountdown();
         _paymentPollCts?.Cancel();
         _paymentPollCts?.Dispose();
 

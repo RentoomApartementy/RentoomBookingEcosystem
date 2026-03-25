@@ -1,18 +1,138 @@
+@page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/error"
 @page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/fail"
 
-@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@inject IReservationWorkflowService ReservationWorkflowService
+@inject NavigationManager Navigation
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
 
-
-<PageTitle>Fail</PageTitle>
+<PageTitle>Rentoom - Weryfikacja płatności</PageTitle>
 
 <div class="summary-container">
-    <div class="">
-        <h2>Fail</h2>
+    <div class="status-card">
+        <div class="state-content">
+            @if (string.IsNullOrWhiteSpace(_error))
+            {
+                <div class="info-icon-wrapper alert-icon-wrapper">
+                    <img src="assets/svgs/danger.svg" alt="ikona alertu" class="status-icon" />
+                </div>
+                <div class="spinner-container">
+                    <div class="loading-spinner"></div>
+                </div>
+                <h2>@GetTitle()</h2>
+                <p class="message">@GetMessage()</p>
+                <p class="sub-message">@Localizer["NotRefreshPage"]</p>
+            }
+            else
+            {
+                <div class="error-box">
+                    <div class="info-icon-wrapper alert-icon-wrapper">
+                        <img src="assets/svgs/danger.svg" alt="ikona alertu" class="status-icon" />
+                    </div>
+
+                    <AppError Message="@_error"
+                              Title="@Localizer["SomethingWrong"]"
+                              Dismissible="false" />
+                </div>
+                <button class="btn-primary" @onclick="GoToSummary">@Localizer["BackToSummary"]</button>
+            }
+        </div>
     </div>
 </div>
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
-    [Parameter] public Guid TpayGuid { get; set; }
-    
+
+    private string? _error;
+    private string _status = "checking";
+    private bool _verificationStarted;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || _verificationStarted)
+        {
+            return;
+        }
+
+        _verificationStarted = true;
+
+        try
+        {
+            for (var attempt = 1; attempt <= 3; attempt++)
+            {
+                var paymentState = await ReservationWorkflowService.VerifyPaymentAfterErrorReturnAsync(ReservationTokenGuid);
+                if (string.Equals(paymentState.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
+                {
+                    Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie", true);
+                    return;
+                }
+
+                if (string.Equals(paymentState.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase))
+                {
+                    Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie?paymentReturn=failed", true);
+                    return;
+                }
+
+                _status = attempt == 1 ? "waiting" : "pending";
+                await InvokeAsync(StateHasChanged);
+
+                if (attempt < 3)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                }
+            }
+
+            Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie?paymentReturn=pending", true);
+        }
+        catch
+        {
+            _error = GetErrorText();
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void GoToSummary()
+    {
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
+    }
+
+    private string GetTitle()
+    {
+        return _status switch
+        {
+            "waiting" => IsEnglish() ? "Waiting for payment confirmation" : "Czekamy na potwierdzenie płatności",
+            "pending" => IsEnglish() ? "Payment status still pending" : "Status płatności nadal oczekuje",
+            _ => IsEnglish() ? "We are checking your payment" : "Sprawdzamy status Twojej płatności"
+        };
+    }
+
+    private string GetMessage()
+    {
+        return _status switch
+        {
+            "waiting" => IsEnglish()
+                ? "The payment may still be processing. We are verifying it before sending you back to the reservation summary."
+                : "Płatność może być jeszcze przetwarzana. Weryfikujemy ją zanim odeślemy Cię do podsumowania rezerwacji.",
+            "pending" => IsEnglish()
+                ? "We still do not have a final confirmation. In a moment you will return to the summary, where you can safely retry the payment if needed."
+                : "Nadal nie mamy końcowego potwierdzenia. Za chwilę wrócisz do podsumowania, gdzie w razie potrzeby będzie można bezpiecznie ponowić płatność.",
+            _ => IsEnglish()
+                ? "This does not always mean the payment failed. We first verify the final transaction status."
+                : "To nie zawsze oznacza nieudaną płatność. Najpierw sprawdzamy końcowy status transakcji."
+        };
+    }
+
+    private string GetErrorText()
+    {
+        return IsEnglish()
+            ? "We could not verify the payment status automatically. Go back to the summary and try again there."
+            : "Nie udało się automatycznie zweryfikować statusu płatności. Wróć do podsumowania i spróbuj ponownie stamtąd.";
+    }
+
+    private bool IsEnglish()
+    {
+        return string.Equals(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, "en", StringComparison.OrdinalIgnoreCase);
+    }
 }
