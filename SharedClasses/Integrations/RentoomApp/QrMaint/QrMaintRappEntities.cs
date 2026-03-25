@@ -40,5 +40,6 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
         public string? StoreroomCode { get; set; }
         public string? ParkingSpotNumber { get; set; }
         public string? ParkingMapUrl { get; set; }
+        public string? ParkingSpotNumberTranslationsJson { get; set; }
     }
 }
