@@ -264,7 +264,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
                 await _store.UpdateAsync(record);
                 await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
-                await UpdateBitrixDealAsync(record, "Reservation status updated");
+                await UpdateBitrixDealAsync(record, "BuildSummaryAsync Update");
 
                 record = await RequireReservationAsync(reservationGuid);
             }
@@ -514,7 +514,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     await _store.UpdateAsync(record);
                     await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
                     //await AddIdoPaymentAsync(record, amount, currency, paymentResult.TransactionId);
-                    await UpdateBitrixDealAsync(record, "Payment initiated");
+                    await UpdateBitrixDealAsync(record, "ReservationWorkflowService - InitiatePaymentAsync - Payment initiated");
 
                     return new PaymentInitResult
                     {
@@ -609,7 +609,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             record = await EnsureBitrixContactAndDealAsync(record);
-            await UpdateBitrixDealAsync(record, "Ido payment synchronized");
+            //await UpdateBitrixDealAsync(record, "ReservationWorkflowService - EnsureIdoPaymentAsync - Ido payment synchronized");
         }
 
         public async Task<RentoomReservation?> EnsureRentoomReservationByResTokenAsync(string resToken, CancellationToken cancellationToken = default)
@@ -801,7 +801,10 @@ private static TimeZoneInfo GetWarsawTimeZone()
                         await GetDealEmailStatusAsync(record.ReservationGuid);
                         await CreatePaidUpsellOrderAsync(record, dto.ProviderTransactionId);
                     }
-                    await UpdateBitrixDealAsync(record, "Payment status updated");
+                    else
+                    {
+                        await UpdateBitrixDealAsync(record, "API HandleTpayWebhookAsync - Payment status updated");
+                    }
                     return;
                 }
                 catch (DbUpdateConcurrencyException)
@@ -1406,6 +1409,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 {
                     dealUpdateFields[customField.Key] = customField.Value;
                 }
+
+                dealUpdateFields["COMMENT"] = DateTime.UtcNow.ToString() +  ": EnsureBitrixContactAndDealAsync";
 
                 record.DealBitrixId = await _bitrixService.UpsertDealAsync(record.DealBitrixId, new CreateDealRequest(
                     Title: dealTitle,
