@@ -6,6 +6,7 @@ using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Models;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Models;
@@ -54,6 +55,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private readonly PostgresBookingDatabase _bookingDatabase;
         private readonly ITpayGateway _tpayGateway;
         private readonly BitrixService _bitrixService;
+        private readonly RappQrMaintService _qrMaintService;
         private readonly IConfiguration _configuration;
 
         private readonly IUpsellCatalogService _upsellCatalogService;
@@ -64,12 +66,15 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private readonly ILogger<ReservationWorkflowService> _logger;
         private const int BitrixAssignedByUserId = 208;
         private const string BitrixStayWellLinkFieldName = "UF_CRM_1768835603310";
+        private const string BitrixApartmentGoogleMapsFieldName = "UF_CRM_1773873147169";
+        private const string BitrixParkingMapFieldName = "UF_CRM_1774428026254";
         public ReservationWorkflowService(
             IReservationStore store,
             IdoSellService idoApi,
             PostgresBookingDatabase bookingDatabase,
             ITpayGateway tpayGateway,
             BitrixService bitrixService,
+            RappQrMaintService qrMaintService,
             IConfiguration configuration,
             ApartmentRepository apartmentStore,
              IUpsellCatalogService upsellCatalogService,
@@ -82,6 +87,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _bookingDatabase = bookingDatabase ?? throw new ArgumentNullException(nameof(bookingDatabase));
             _tpayGateway = tpayGateway ?? throw new ArgumentNullException(nameof(tpayGateway));
             _bitrixService = bitrixService ?? throw new ArgumentNullException(nameof(bitrixService));
+            _qrMaintService = qrMaintService ?? throw new ArgumentNullException(nameof(qrMaintService));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _apartmentStore = apartmentStore ?? throw new ArgumentNullException(nameof(apartmentStore));
@@ -119,6 +125,83 @@ private static TimeZoneInfo GetWarsawTimeZone()
         var dto = new DateTimeOffset(localDateTime, offset);
 
         return dto.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture);
+    }
+
+    private ApartmentObject? ResolveApartmentInfo(StartReservationRequest? startRequest, Reservation? idoReservation = null)
+    {
+        if (startRequest?.ObjectId > 0) //najpierw sprawdz start request , bo w przypadku rezerwacji z Idobooking to on jest bardziej wiarygodny niż dane z rezerwacji ido (czasem w ido rezerwacja jest tworzona zanim Idobooking przekaże wszystkie dane, wtedy w ido może być tylko id obiektu bez szczegółów, a w start request są już pełne dane)
+            {
+            return _apartmentStore.FindApartmentInPostgres(startRequest.ObjectId);
+        }
+
+        var reservationItem = idoReservation?.Items?.FirstOrDefault();
+        if (reservationItem?.objectId > 0)
+        {
+            return _apartmentStore.FindApartmentInPostgres(reservationItem.objectId);
+        }
+
+        if (reservationItem?.objectItemId > 0)
+        {
+            return _apartmentStore.FindApartmentByItemId(reservationItem.objectItemId);
+        }
+
+        return null;
+    }
+
+    private async Task<ApartmentItemLocalSettings?> ResolveApartmentItemLocalSettingsAsync(
+        StartReservationRequest? startRequest,
+        Reservation? idoReservation = null,
+        CancellationToken cancellationToken = default)
+    {
+        var apartmentItemId = startRequest?.ObjectItemId;
+        if ((!apartmentItemId.HasValue || apartmentItemId.Value <= 0) && idoReservation?.Items?.FirstOrDefault() is { } reservationItem)
+        {
+            if (reservationItem.objectItemId > 0)
+            {
+                apartmentItemId = reservationItem.objectItemId;
+            }
+            else if (reservationItem.itemId > 0)
+            {
+                apartmentItemId = reservationItem.itemId;
+            }
+        }
+
+        if (!apartmentItemId.HasValue || apartmentItemId.Value <= 0)
+        {
+            return null;
+        }
+
+        return await _qrMaintService.GetApartmentItemCodesAsync(apartmentItemId.Value, cancellationToken);
+    }
+
+    private static string? BuildApartmentGoogleMapsUrl(ApartmentObject? apartmentInfo)
+    {
+        var location = apartmentInfo?.ObjectLocation?.LocalizationItem;
+        if (location?.GeoLocationLat is null || location.GeoLocationLng is null)
+        {
+            return null;
+        }
+
+        var latitude = location.GeoLocationLat.Value.ToString(CultureInfo.InvariantCulture);
+        var longitude = location.GeoLocationLng.Value.ToString(CultureInfo.InvariantCulture);
+        return $"https://www.google.com/maps?q={latitude},{longitude}";
+    }
+
+    private static void AddBitrixLocationFields(
+        IDictionary<string, object?> fields,
+        ApartmentObject? apartmentInfo,
+        ApartmentItemLocalSettings? apartmentItemLocalSettings)
+    {
+        var apartmentGoogleMapsUrl = BuildApartmentGoogleMapsUrl(apartmentInfo);
+        if (!string.IsNullOrWhiteSpace(apartmentGoogleMapsUrl))
+        {
+            fields[BitrixApartmentGoogleMapsFieldName] = apartmentGoogleMapsUrl;
+        }
+
+        if (!string.IsNullOrWhiteSpace(apartmentItemLocalSettings?.ParkingMapUrl))
+        {
+            fields[BitrixParkingMapFieldName] = apartmentItemLocalSettings.ParkingMapUrl;
+        }
     }
 
     public async Task<Guid> StartAsync(StartReservationRequest request)
@@ -1217,6 +1300,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 var dealTitle = record.IdoReservationId.HasValue
                     ? $"Rezerwacja #{record.IdoReservationId}"
                     : $"Rezerwacja {record.ReservationGuid:D}";
+                var apartmentInfo = ResolveApartmentInfo(record.State.StartRequest);
+                var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest);
                 var customFields = new Dictionary<string, object?>
                 {
                     ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
@@ -1231,6 +1316,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                     [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString())
                 };
+                AddBitrixLocationFields(customFields, apartmentInfo, apartmentItemLocalSettings);
 
                 var dealUpdateFields = new Dictionary<string, object?>
                 {
@@ -1289,17 +1375,13 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             Reservation? idoReservation = null;
-            ApartmentObject? apartmentInf = null;
             if (record.IdoReservationId.HasValue)
             {
                 var idoResponse = await _idoApi.FetchReservationByIDFromIdoSellAsync(record.IdoReservationId.Value, false);
                 idoReservation = idoResponse?.ReservationResponse?.result?.Reservations?.FirstOrDefault();
-
-                if (record.State.StartRequest is not null)
-                {
-                    apartmentInf = _apartmentStore.FindApartmentInPostgres(record.State.StartRequest.ObjectId);
-                }
             }
+            var apartmentInf = ResolveApartmentInfo(record.State.StartRequest, idoReservation);
+            var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest, idoReservation);
 
             //pola UF_CRM* to pola customowe - tu sa wpisane na sztywno ale mozna je pobrac z bitrixa dynamicznie jesli trzeba.. ewentualne TODO.
             var fields = new Dictionary<string, object?>
@@ -1320,6 +1402,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 //RB_Link_StayWell
                 [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString())
             };
+            AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
 
             if (record.State.PaymentGrandTotal >0)
             {
