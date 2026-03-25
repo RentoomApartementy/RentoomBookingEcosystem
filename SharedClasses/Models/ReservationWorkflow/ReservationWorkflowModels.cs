@@ -110,6 +110,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public ClientInfoDto? Client { get; set; }
         public InvoiceInfoDto? Invoice { get; set; }
         public string GoogleMapsLink { get; set; } = string.Empty;
+        public string ParkingMapUrl { get; set; } = string.Empty;
         public string StayWellLink { get; set; } = string.Empty;
 
         //  public List<TermsAndConditionsAcceptanceInfo> {get;set;}

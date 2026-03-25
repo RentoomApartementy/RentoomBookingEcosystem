@@ -204,6 +204,23 @@ private static TimeZoneInfo GetWarsawTimeZone()
         }
     }
 
+    private static bool UpdateReservationLocationState(
+        ReservationRecord record,
+        ApartmentObject? apartmentInfo,
+        ApartmentItemLocalSettings? apartmentItemLocalSettings)
+    {
+        var apartmentGoogleMapsUrl = BuildApartmentGoogleMapsUrl(apartmentInfo) ?? string.Empty;
+        var parkingMapUrl = apartmentItemLocalSettings?.ParkingMapUrl?.Trim() ?? string.Empty;
+
+        var changed =
+            !string.Equals(record.State.GoogleMapsLink, apartmentGoogleMapsUrl, StringComparison.Ordinal) ||
+            !string.Equals(record.State.ParkingMapUrl, parkingMapUrl, StringComparison.Ordinal);
+
+        record.State.GoogleMapsLink = apartmentGoogleMapsUrl;
+        record.State.ParkingMapUrl = parkingMapUrl;
+        return changed;
+    }
+
     public async Task<Guid> StartAsync(StartReservationRequest request)
         {
             if (request is null) throw new ArgumentNullException(nameof(request));
@@ -987,6 +1004,9 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 {
                     return record;
                 }
+                var apartmentInfo = ResolveApartmentInfo(record.State.StartRequest);
+                var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest);
+                UpdateReservationLocationState(record, apartmentInfo, apartmentItemLocalSettings);
                 record.State.StayWellLink = BuildStayWellLink(record.ReservationGuid.ToString());
                 var request = BuildReservationAddRequest(record, initialStatus);
                 try
@@ -1302,6 +1322,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     : $"Rezerwacja {record.ReservationGuid:D}";
                 var apartmentInfo = ResolveApartmentInfo(record.State.StartRequest);
                 var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest);
+                UpdateReservationLocationState(record, apartmentInfo, apartmentItemLocalSettings);
                 var customFields = new Dictionary<string, object?>
                 {
                     ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
@@ -1382,6 +1403,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
             var apartmentInf = ResolveApartmentInfo(record.State.StartRequest, idoReservation);
             var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest, idoReservation);
+            var stateLocationChanged = UpdateReservationLocationState(record, apartmentInf, apartmentItemLocalSettings);
 
             //pola UF_CRM* to pola customowe - tu sa wpisane na sztywno ale mozna je pobrac z bitrixa dynamicznie jesli trzeba.. ewentualne TODO.
             var fields = new Dictionary<string, object?>
@@ -1454,6 +1476,11 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
+
+            if (stateLocationChanged)
+            {
+                await _store.UpdateAsync(record);
+            }
         }
 
       
