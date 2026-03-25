@@ -84,9 +84,9 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
-        public async Task<IReadOnlyList<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId, string? language = null)
+        public async Task<IReadOnlyList<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentItemId, string? language = null)
         {
-            if (apartmentId <= 0)
+            if (apartmentItemId <= 0)
             {
                 SetArrivalInstructionSteps([], null, null);
                 return ArrivalInstructionSteps;
@@ -94,7 +94,7 @@ namespace RentoomBooking.StayWell.States
 
             var normalizedLanguage = NormalizeArrivalInstructionLanguage(language);
 
-            if (_currentArrivalInstructionApartmentId == apartmentId
+            if (_currentArrivalInstructionApartmentId == apartmentItemId
                 && string.Equals(_currentArrivalInstructionLanguage, normalizedLanguage, StringComparison.OrdinalIgnoreCase))
             {
                 return ArrivalInstructionSteps;
@@ -102,16 +102,16 @@ namespace RentoomBooking.StayWell.States
 
             if (_backendApi == null)
             {
-                SetArrivalInstructionSteps([], apartmentId, normalizedLanguage);
+                SetArrivalInstructionSteps([], apartmentItemId, normalizedLanguage);
                 return ArrivalInstructionSteps;
             }
 
-            var steps = await _backendApi.GetArrivalInstructionStepsAsync(apartmentId, normalizedLanguage);
+            var steps = await _backendApi.GetArrivalInstructionStepsAsync(apartmentItemId, normalizedLanguage);
             var orderedSteps = steps
                 .OrderBy(s => s.Sequence)
                 .ToList();
 
-            SetArrivalInstructionSteps(orderedSteps, apartmentId, normalizedLanguage);
+            SetArrivalInstructionSteps(orderedSteps, apartmentItemId, normalizedLanguage);
             return ArrivalInstructionSteps;
         }
 
@@ -125,7 +125,7 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
-        public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId)
+        public async Task<string?> GetQrMaintFormUrlAsync(int apartmentItemId)
         {
             if (!string.IsNullOrEmpty(QrMaintFormUrl)) return QrMaintFormUrl;
             if (_backendApi == null)
@@ -133,14 +133,14 @@ namespace RentoomBooking.StayWell.States
                 QrMaintFormUrl = null;
                 return QrMaintFormUrl;
             }
-            var url = await _backendApi.GetQrMaintFormUrlAsync(apartmentId);
+            var url = await _backendApi.GetQrMaintFormUrlAsync(apartmentItemId);
             QrMaintFormUrl = url;
             return QrMaintFormUrl;
         }
 
-        public async Task<RentoomWifiInfo?> GetWifiInfoAsync(int apartmentId)
+        public async Task<RentoomWifiInfo?> GetWifiInfoAsync(int apartmentItemId)
         {
-            if (_currentObjectId == apartmentId && WifiInfo != null)
+            if (_currentObjectId == apartmentItemId && WifiInfo != null)
             {
                 return WifiInfo;
             }
@@ -151,7 +151,7 @@ namespace RentoomBooking.StayWell.States
                 return WifiInfo;
             }
 
-            WifiInfo = await _backendApi.GetApartmentWifiInfoAsync(apartmentId);
+            WifiInfo = await _backendApi.GetApartmentWifiInfoAsync(apartmentItemId);
             return WifiInfo;
         }
 

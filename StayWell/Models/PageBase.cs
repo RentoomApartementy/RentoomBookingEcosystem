@@ -171,10 +171,10 @@ namespace RentoomBooking.StayWell.Models
 
                 await Task.WhenAll(
                     ApartmentState.GetDefinedAddonsAsync(),
-                    ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
-                    ApartmentState.GetWifiInfoAsync(item.objectId),
+                    ApartmentState.GetQrMaintFormUrlAsync(item.objectItemId),
+                    ApartmentState.GetWifiInfoAsync(item.objectItemId),
                     // ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId), //<< to ma być tu wyłączone - spowalnia ładowanie strony! ładują się na stronie instrukcji tylko. nie ma potrzeby ładować ich tutaj
-                    LocksState.GetLocksAsync(reservation.id, item.itemId),
+                    LocksState.GetLocksAsync(reservation.id, item.objectItemId),
                     LocksState.GetApartmentItemCodesAsync(Token)
                 );
 

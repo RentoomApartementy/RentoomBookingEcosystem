@@ -25,26 +25,26 @@ namespace RentoomBooking.Api.Integrations.RentoomApp
 
         [Function("GetQrMaintFormUrl")]
         public async Task<HttpResponseData> GetQrMaintFormUrl(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "qrmaint/form-url/{apartmentId:int}")] HttpRequestData req, int apartmentId)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "qrmaint/form-url/{apartmentItemId:int}")] HttpRequestData req, int apartmentItemId)
         {
             var cancellationToken = req.FunctionContext.CancellationToken;
             var response = req.CreateResponse();
-            _logger.LogInformation("GetQrMaintFormUrl started for apartmentId={ApartmentId} at {Time}", apartmentId, DateTime.UtcNow);
+            _logger.LogInformation("GetQrMaintFormUrl started for apartmentItemId={apartmentItemId} at {Time}", apartmentItemId, DateTime.UtcNow);
 
             try
             {
-                if (apartmentId <= 0)
+                if (apartmentItemId <= 0)
                 {
                     response.StatusCode = HttpStatusCode.BadRequest;
-                    await response.WriteStringAsync("Missing or invalid apartmentId.");
+                    await response.WriteStringAsync("Missing or invalid apartmentItemId.");
                     return response;
                 }
 
-                var url = await _qrMaintService.GetQrMaintFormUrlAsync(apartmentId, cancellationToken);
+                var url = await _qrMaintService.GetQrMaintFormUrlAsync(apartmentItemId, cancellationToken);
                 if (string.IsNullOrEmpty(url))
                 {
                     response.StatusCode = HttpStatusCode.NotFound;
-                    await response.WriteStringAsync("No QRMaint form URL found for the given apartmentId.");
+                    await response.WriteStringAsync("No QRMaint form URL found for the given apartmentItemId.");
                     return response;
                 }
 
@@ -55,14 +55,14 @@ namespace RentoomBooking.Api.Integrations.RentoomApp
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error fetching QRMaint form URL for apartmentId={ApartmentId}", apartmentId);
+                _logger.LogError(ex, "Error fetching QRMaint form URL for apartmentId={apartmentItemId}", apartmentItemId);
                 response.StatusCode = HttpStatusCode.InternalServerError;
                 await response.WriteStringAsync("An error occurred while processing your request.");
                 return response;
             }
             finally
             {
-                _logger.LogInformation("GetQrMaintFormUrl finished for apartmentId={ApartmentId} at {Time}", apartmentId, DateTime.UtcNow);
+                _logger.LogInformation("GetQrMaintFormUrl finished for apartmentId={ApartmentId} at {Time}", apartmentItemId, DateTime.UtcNow);
             }
         }
 

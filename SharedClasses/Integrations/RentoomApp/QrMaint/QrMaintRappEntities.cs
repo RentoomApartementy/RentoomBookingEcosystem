@@ -19,8 +19,11 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
     public class RentoomQREntity
     {
         [Key]
+        public int Id { get; set; }
+        public int QrMaintApartmentItemId { get; set; }
         public int ApartmentItemId { get; set; }
         public string QrCodesJson { get; set; }
+
     }
 
     [Table("ApartmentItemLocalSettings", Schema = "rentoom")]
@@ -36,5 +39,6 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
         public string? AdditionalDoorCode { get; set; }
         public string? StoreroomCode { get; set; }
         public string? ParkingSpotNumber { get; set; }
+        public string? ParkingMapUrl { get; set; }
     }
 }

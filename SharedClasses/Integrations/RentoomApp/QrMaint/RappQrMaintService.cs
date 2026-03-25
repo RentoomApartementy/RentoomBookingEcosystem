@@ -13,9 +13,9 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
             _dbContext = dbContext;
         }
 
-        public async Task<string?> GetQrMaintFormUrlAsync(int apartmentId, CancellationToken cancellationToken = default)
+        public async Task<string?> GetQrMaintFormUrlAsync(int apartmentItemId, CancellationToken cancellationToken = default)
         {
-            var items = await GetQrItemsAsync(apartmentId, cancellationToken);
+            var items = await GetQrItemsAsync(apartmentItemId, cancellationToken);
             var usterki = items?.FirstOrDefault(i => string.Equals(i.RentoomCodeType, "USTERKI", StringComparison.OrdinalIgnoreCase));
             return usterki?.Message;
         }
@@ -79,7 +79,27 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
             }
         }
 
-        private async Task<List<RentoomQrItem>?> GetQrItemsAsync(int apartmentId, CancellationToken cancellationToken)
+        private async Task<List<RentoomQrItem>?> GetQrItemsAsync(int apartmentItemId, CancellationToken cancellationToken)
+        {
+            var qr = await _dbContext.RentoomQRs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ApartmentItemId == apartmentItemId, cancellationToken);
+                   
+         
+
+            if (qr == null || string.IsNullOrEmpty(qr.QrCodesJson))
+                return null;
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            return JsonSerializer.Deserialize<List<RentoomQrItem>>(qr.QrCodesJson, options);
+        }
+
+
+        private async Task<List<RentoomQrItem>?> GetQrItemsAsync_old(int apartmentId, CancellationToken cancellationToken)
         {
             var mapping = await _dbContext.QRMaintIdosellMapping
                 .AsNoTracking()
@@ -104,6 +124,8 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint
 
             return JsonSerializer.Deserialize<List<RentoomQrItem>>(qr.QrCodesJson, options);
         }
+
+
 
         public class RentoomQrItem
         {
