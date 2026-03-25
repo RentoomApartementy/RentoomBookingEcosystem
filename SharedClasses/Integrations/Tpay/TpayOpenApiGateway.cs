@@ -65,6 +65,14 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
 
             var successUrl = $"{baseUrl}/{path}";
 
+            path = _settings.ErrorUrl?
+                .TrimStart('/')
+                .Replace("{ReservationTokenGuid}", reservationGuid.ToString())
+                .Replace("{tpayGuid}", reservationGuid.ToString());
+
+
+            var errorUrl = $"{baseUrl}/{path}";
+
             var lang = ResolveTpayLanguage(record.State.Client?.Language);
             var request = new TpayTransactionRequest
             {
@@ -81,7 +89,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
 
                 },
                 SuccessUrl = successUrl,
-                ErrorUrl = _settings.ErrorUrl,
+                ErrorUrl = errorUrl,
                 NotificationUrl = _settings.NotificationUrl,
                 HiddenDescription = reservationGuid.ToString(),
             };
