@@ -1,4 +1,5 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/dane-klienta/"
+@page "/{culture}/rezerwuj/{ReservationTokenGuid:guid}/dane-klienta/"
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
@@ -34,7 +35,7 @@
                 <div class="form-wrapper">
                     <div class="form-wrapper-title">
                     <div class="form-wrapper-title-icon-wrapper">
-                        <img src="assets/svgs/user.svg" alt="ikona uzytkownika">
+                        <img src="/assets/svgs/user.svg" alt="ikona uzytkownika">
                     </div> 
                     <div class="form-wrapper-title-text">
                         <h3>@Localizer["ClientInfoTitle"]</h3>
@@ -243,6 +244,7 @@
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
+    [Parameter] public string? culture { get; set; }
 
     private ApartmentObject? _apartment;
     private PaymentFormModel _form = new();

@@ -1,4 +1,5 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/success"
+@page "/{culture}/rezerwuj/{ReservationTokenGuid:guid}/oplac/success"
 
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
 @using Microsoft.Extensions.Localization
@@ -33,6 +34,7 @@
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
+    [Parameter] public string? culture { get; set; }
     [Parameter] public Guid tpayTransactionId { get; set; }
     private string? _error;
     private bool _confirmationStarted;

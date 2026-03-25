@@ -1,7 +1,11 @@
 @page "/apartamenty/{id:int}/{slug}"
+@page "/{culture}/apartamenty/{id:int}/{slug}"
 @page "/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}"
+@page "/{culture}/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}"
 @page "/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@page "/{culture}/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
+@page "/{culture}/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Models.AvailableTerms
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
@@ -65,7 +69,7 @@
                 <h2>@Localizer["ApartmentNotFoundTitle"]</h2>
                 <p>@Localizer["ApartmentNotFoundDescription"]</p>
                 <div style="margin-top: 2rem;">
-                    <Button Type="ButtonType.Primary" @onclick='(() => Navigation.NavigateTo("/apartamenty"))'>
+                    <Button Type="ButtonType.Primary" @onclick='(() => Navigation.NavigateTo(NavigationHelper.GetLocalizedUrl("/apartamenty")))'>
                         @Localizer["BackToApartments"]
                     </Button>
                 </div>
@@ -95,19 +99,19 @@
                 
                     <ul class="apartment-details">
                         <li>
-                            <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon"/>
+                            <img src="/assets/svgs/users.svg" alt="Liczba osób" class="icon"/>
                             <span>@_apartment?.MinCapacity - @_apartment?.Capacity</span>
                         </li>
                         <li>
-                            <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon"/>
+                            <img src="/assets/svgs/bed.svg" alt="Liczba łóżek" class="icon"/>
                             @_bedsCount
                         </li>
                         <li>
-                            <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon"/>
+                            <img src="/assets/svgs/bath.svg" alt="Liczba łazienek" class="icon"/>
                             1
                         </li>
                         <li>
-                            <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon"/>
+                            <img src="/assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon"/>
                             <span>@_apartment?.Area m²</span>
                         </li>
                     </ul>
@@ -165,7 +169,7 @@
                     <div class="addon-list-wrapper">
                         <div class="upsell-title-group">
                             <div class="upsell-icon">
-                                <img src="assets/svgs/kid_star.svg" alt="icon" style="width: 20px; height: 20px;" />
+                                <img src="/assets/svgs/kid_star.svg" alt="icon" style="width: 20px; height: 20px;" />
                             </div>
                             <div class="upsell-text">
                                 <h2 class="upsell-main-title">@Localizer["AdditionalOptions"]</h2>
@@ -765,6 +769,7 @@
 @code {
     [Parameter] public int Id { get; set; }
     [Parameter] public string? Slug { get; set; }
+    [Parameter] public string? culture { get; set; }
     [Parameter] public Guid? ReservationTokenGuid { get; set; }
     [Parameter] public string? StartDate { get; set; }
     [Parameter] public string? EndDate { get; set; }
@@ -951,13 +956,17 @@
     private static Dictionary<string, string> _languageMap = new Dictionary<string, string>
     {
         { "pl-PL", "pol" },
-        { "en-US", "eng" }
+        { "pl", "pol" },
+        { "en-US", "eng" },
+        { "en", "eng" }
     };
 
     private static Dictionary<string, string> _addonslanguageMap = new Dictionary<string, string>
     {
         { "pl-PL", "PL" },
+        { "pl", "PL" },
         { "en-US", "EN" },
+        { "en", "EN" },
     };
     
     private string CurrentAddonLanguage => _addonslanguageMap?.GetValueOrDefault(

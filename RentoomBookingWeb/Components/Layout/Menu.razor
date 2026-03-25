@@ -1,3 +1,4 @@
+@using RentoomBookingWeb.Helpers
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
 @using RentoomBookingWeb.Components.Enums;
@@ -6,21 +7,21 @@
 
 <div>
     <nav class="@NavState.NavClass" aria-label="Główne menu strony">
-        <NavLink href="/">
+        <NavLink href="@GetLocalizedUrl("/")">
             <img src="@NavState.Logo" alt="Ikona Rentoom">
         </NavLink>
         <ul>
             <li>
-                <NavLink href="/apartamenty" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Apartments"]</NavLink>
+                <NavLink href="@GetLocalizedUrl("/apartamenty")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Apartments"]</NavLink>
             </li>
             @* <li> *@
-            @*     <NavLink href="/o-nas" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["About"]</NavLink> *@
+            @*     <NavLink href="@GetLocalizedUrl("/o-nas")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["About"]</NavLink> *@
             @* </li> *@
             <li>
-                <NavLink href="/wspolpraca" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
+                <NavLink href="@GetLocalizedUrl("/wspolpraca")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
             </li>
             <li>
-                <NavLink href="/kontakt" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
+                <NavLink href="@GetLocalizedUrl("/kontakt")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
             </li>
             <li>
                 <NavLink href="https://designer.rentoom.pl/" target="_blank" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["RentoomDesigner"]</NavLink>
@@ -56,16 +57,16 @@
     {
         <div class="mobile-nav">
             <div>
-                <NavLink href="/apartamenty" class="nav-link" ActiveClass="nav-link">@Localizer["Apartments"]</NavLink>
+                <NavLink href="@GetLocalizedUrl("/apartamenty")" class="nav-link" ActiveClass="nav-link">@Localizer["Apartments"]</NavLink>
             </div>
             @* <div> *@
-            @*     <NavLink href="/o-nas" class="nav-link" ActiveClass="nav-link">@Localizer["About"]</NavLink> *@
+            @*     <NavLink href="@GetLocalizedUrl("/o-nas")" class="nav-link" ActiveClass="nav-link">@Localizer["About"]</NavLink> *@
             @* </div> *@
             <div>
-                <NavLink href="/wspolpraca" class="nav-link" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
+                <NavLink href="@GetLocalizedUrl("/wspolpraca")" class="nav-link" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
             </div>
             <div>
-                <NavLink href="/kontakt" class="nav-link" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
+                <NavLink href="@GetLocalizedUrl("/kontakt")" class="nav-link" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
             </div>
             <div>
                 <NavLink href="https://designer.rentoom.pl/" target="_blank" class="nav-link" ActiveClass="nav-link">@Localizer["RentoomDesigner"]</NavLink>
@@ -74,13 +75,14 @@
                 <NavLink href="https://app.rentoom.pl/" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["ForInvestors"]</NavLink>
             </div>
             @* <div> *@
-            @*     <NavLink href="/inne" class="nav-link" ActiveClass="nav-link">@Localizer["Others"]</NavLink> *@
+            @*     <NavLink href="@GetLocalizedUrl("/inne")" class="nav-link" ActiveClass="nav-link">@Localizer["Others"]</NavLink> *@
             @* </div> *@
         </div>
     }
 </div>
 
 @code {
+    private string GetLocalizedUrl(string path) => NavigationHelper.GetLocalizedUrl(path);
     private DotNetObjectReference<Menu>? objRef;
     private MenuVisualState NavState { get; set; } = new();
     private bool ShowMenu = false;
@@ -91,7 +93,7 @@
         if (firstRender)
         {
             objRef = DotNetObjectReference.Create(this);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "/js/menuScroll.js");
             await module.InvokeVoidAsync("init", objRef);
 
             Navigation.LocationChanged += OnLocationChanged;

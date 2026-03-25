@@ -1,11 +1,12 @@
 @using System.Globalization
+@using RentoomBookingWeb.Helpers
 @inject NavigationManager Navigation
 
 <div class="language-switcher-container">
     @* Dodano warunkową klasę 'scrolled' *@
     <div class="language-switcher-button @(IsScrolling ? "scrolled" : "")" @onclick="ToggleDropdown">
         <span class="language-icon">
-            <img src="@(IsScrolling ? "assets/svgs/globe-green.svg" : "assets/svgs/globe.svg")" alt="Globe icon"/>
+            <img src="@(IsScrolling ? "/assets/svgs/globe-green.svg" : "/assets/svgs/globe.svg")" alt="Globe icon"/>
         </span>
         <span class="language-code">@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper()</span>
     </div>
@@ -32,36 +33,44 @@
     
     private readonly CultureInfo[] _supportedCultures = new[]
     {
-        new CultureInfo("en-US"),
         new CultureInfo("pl-PL"),
+        new CultureInfo("en-US"),
     };
 
     private void ToggleDropdown() => _isDropdownOpen = !_isDropdownOpen;
 
-    private void ApplySelectedCultureAsync(string selectedCulture)
+    [Inject] public IJSRuntime JS { get; set; } = default!;
+
+    private async Task ApplySelectedCultureAsync(string selectedCultureName)
     {
-        if (CultureInfo.CurrentUICulture.Name == selectedCulture)
+        if (CultureInfo.CurrentUICulture.Name == selectedCultureName)
         {
             _isDropdownOpen = false;
             return;
         }
+
+        // Set the cookie so Blazor Server (WebSockets) knows the culture
+        // Format: c=en-US|uic=en-US
+        var cookieValue = $"c={selectedCultureName}|uic={selectedCultureName}";
+        await JS.InvokeVoidAsync("eval", $"document.cookie = '.AspNetCore.Culture={cookieValue}; path=/; max-age=31536000'");
+
+        var uri = new Uri(Navigation.Uri);
+        var path = uri.AbsolutePath;
         
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var queryParameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        var newParameters = new Dictionary<string, string?>();
+        // Remove existing culture prefix if any
+        var cleanPath = NavigationHelper.RemoveCultureFromPath(path);
         
-        foreach (var param in queryParameters)
+        // Get two-letter code for the URL
+        var culture = new CultureInfo(selectedCultureName);
+        var cultureCode = culture.TwoLetterISOLanguageName.ToLower();
+
+        // Construct new URL with prefix and preserve query string
+        var newPath = NavigationHelper.GetLocalizedUrl(cleanPath, cultureCode);
+        
+        var newUri = new UriBuilder(uri)
         {
-            if (param.Key != "culture" && param.Key != "ui-culture")
-                newParameters.Add(param.Key, param.Value.FirstOrDefault());
-        }
-
-        newParameters.Add("culture", selectedCulture);
-        newParameters.Add("ui-culture", selectedCulture);
-
-        var newUri = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(
-            uri.GetLeftPart(UriPartial.Path),
-            newParameters!); 
+            Path = newPath
+        }.ToString();
 
         _isDropdownOpen = false; 
         Navigation.NavigateTo(newUri, forceLoad: true);

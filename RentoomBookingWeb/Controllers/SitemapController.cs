@@ -32,40 +32,47 @@ namespace RentoomBookingWeb.Controllers
                 "/wspolpraca",
                 "/kontakt",
                 "/apartamenty",
-                "/o-nas"
+                "/o-nas",
+                "/apartamenty-torun"
             };
 
+            var supportedCultures = new[] { "pl", "en" };
             var baseUrl = $"{Request.Scheme}://{Request.Host}";
             XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
 
-            var sitemap = new XElement(ns + "urlset",
-                
-                new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}/"),
+            var urls = new List<XElement>();
+
+            foreach (var culture in supportedCultures)
+            {
+                // Root
+                urls.Add(new XElement(ns + "url",
+                    new XElement(ns + "loc", $"{baseUrl}/{culture}"),
                     new XElement(ns + "changefreq", "daily"),
                     new XElement(ns + "priority", "1.0")
-                ),
+                ));
 
-                new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}/apartamenty-torun"),
-                    new XElement(ns + "changefreq", "daily"),
-                    new XElement(ns + "priority", "0.9")
-                ),
+                // Static pages
+                foreach (var page in staticPages)
+                {
+                    urls.Add(new XElement(ns + "url",
+                        new XElement(ns + "loc", $"{baseUrl}/{culture}{page}"),
+                        new XElement(ns + "changefreq", "monthly"),
+                        new XElement(ns + "priority", "0.5")
+                    ));
+                }
 
-                from page in staticPages
-                select new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}{page}"),
-                    new XElement(ns + "changefreq", "monthly"),
-                    new XElement(ns + "priority", "0.5")
-                ),
+                // Apartment pages
+                foreach (var apt in apartments)
+                {
+                    urls.Add(new XElement(ns + "url",
+                        new XElement(ns + "loc", GetApartmentUrl(baseUrl, apt, culture)),
+                        new XElement(ns + "changefreq", "weekly"),
+                        new XElement(ns + "priority", "0.8")
+                    ));
+                }
+            }
 
-                from apt in apartments
-                select new XElement(ns + "url",
-                    new XElement(ns + "loc", GetApartmentUrl(baseUrl, apt)),
-                    new XElement(ns + "changefreq", "weekly"),
-                    new XElement(ns + "priority", "0.8")
-                )
-            );
+            var sitemap = new XElement(ns + "urlset", urls);
 
             return Content(new XDeclaration("1.0", "utf-8", "yes") + Environment.NewLine + sitemap.ToString(), "application/xml", Encoding.UTF8);
         }
@@ -109,7 +116,7 @@ namespace RentoomBookingWeb.Controllers
                 aptSb.AppendLine($"### {apt.Name}");
                 aptSb.AppendLine($"- **Opis:** {description}");
                 aptSb.AppendLine($"- **ID:** {apt.Id}");
-                aptSb.AppendLine($"- **Link:** {GetApartmentUrl(baseUrl, apt)}");
+                aptSb.AppendLine($"- **Link:** {GetApartmentUrl(baseUrl, apt, "pl")}");
                 aptSb.AppendLine();
         
                 return aptSb.ToString();
@@ -127,11 +134,11 @@ namespace RentoomBookingWeb.Controllers
             return Content(sb.ToString(), "text/plain", Encoding.UTF8);
         }
 
-        private string GetApartmentUrl(string baseUrl, ApartmentObject item)
+        private string GetApartmentUrl(string baseUrl, ApartmentObject item, string culture = "pl")
         {
             string slug = RentoomBookingWeb.Helpers.StringExtensions.ToSlug(item.Name ?? "details");
             
-            return $"{baseUrl}/apartamenty/{item.Id}/{slug}";
+            return $"{baseUrl}/{culture}/apartamenty/{item.Id}/{slug}";
         }
     }
 }

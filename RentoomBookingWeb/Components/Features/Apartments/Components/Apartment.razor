@@ -115,7 +115,7 @@
 
         <ul class="apartment-details">
             <li>
-                <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon" />
+                <img src="/assets/svgs/users.svg" alt="Liczba osób" class="icon" />
                 @if (Item == null)
                 {
                     <span class="skeleton skeleton-text mini"></span>
@@ -132,7 +132,7 @@
             </li>
             
             <li>
-                <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
+                <img src="/assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
                 @if (Item == null)
                 {
                     <span class="skeleton skeleton-text mini"></span>
@@ -144,7 +144,7 @@
             </li>
             
             <li>
-                <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
+                <img src="/assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
                 @if (Item == null)
                 {
                     <span class="skeleton skeleton-text mini" style="width: 20px;"></span>
@@ -156,7 +156,7 @@
             </li>
             
             <li>
-                <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
+                <img src="/assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
                 @if (Item == null)
                 {
                     <span class="skeleton skeleton-text mini"></span>
@@ -259,7 +259,7 @@
 </article>
 
 @code {
-    [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
+    [Parameter] public string ImageUrl { get; set; } = "/assets/images/rent.jpeg";
     [Parameter] public ApartmentObject? Item { get; set; } = null;
     [Parameter] public PricingOffer? Offer { get; set; } = null;
     [Parameter] public bool ShowPrice { get; set; } = false;
@@ -324,7 +324,7 @@
         {
             try 
             {
-                _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
+                _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "/js/lazyLoad.js");
                 await _jsModule.InvokeVoidAsync("observeElement", _objRef, _elementRef);
             }
             catch (Exception ex)
@@ -339,7 +339,7 @@
             _isSliderInitialized = true;
             try
             {
-                _sliderModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/apartmentSlider.js");
+                _sliderModule = await JS.InvokeAsync<IJSObjectReference>("import", "/js/apartmentSlider.js");
                 await _sliderModule.InvokeVoidAsync("initSlider", _objRef, _sliderRef);
             }
             catch (Exception ex)
@@ -421,7 +421,7 @@
         string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : GetQ("adults");
         string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : GetQ("children");
 
-        string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
+        string baseUrl = NavigationHelper.GetLocalizedUrl($"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}");
 
         if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd))
         {

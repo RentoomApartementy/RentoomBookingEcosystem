@@ -1,4 +1,10 @@
 @page "/wspolpraca";
+@page "/{culture}/wspolpraca";
+
+@code {
+    [Parameter]
+    public string? culture { get; set; }
+}
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization;

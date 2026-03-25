@@ -1,4 +1,10 @@
 @page "/apartamenty-torun"
+@page "/{culture}/apartamenty-torun"
+
+@code {
+    [Parameter]
+    public string? culture { get; set; }
+}
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Services

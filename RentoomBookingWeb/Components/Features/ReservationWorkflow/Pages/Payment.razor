@@ -1,6 +1,8 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/oplac"
+@page "/{culture}/rezerwuj/{ReservationTokenGuid:guid}/oplac"
 @using RentoomBooking.SharedClasses.Models.Payments
 @using RentoomBooking.SharedClasses.Services.Payments
+@using RentoomBookingWeb.Helpers
 @inject IPaymentOrchestrator PaymentOrchestrator;
 @inject NavigationManager Navigation
 @using Microsoft.Extensions.Localization;
@@ -33,6 +35,7 @@
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
+    [Parameter] public string? culture { get; set; }
     
     private string? _error;
 
@@ -51,7 +54,7 @@
             }
             else
             {
-                Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie", true);
+                Navigation.NavigateTo(NavigationHelper.GetLocalizedUrl($"/rezerwuj/{ReservationTokenGuid}/podsumowanie"), true);
             }
         }
         catch (Exception)
@@ -62,6 +65,6 @@
 
     private void GoToSummary()
     {
-        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
+        Navigation.NavigateTo(NavigationHelper.GetLocalizedUrl($"/rezerwuj/{ReservationTokenGuid}/podsumowanie"));
     }
 }

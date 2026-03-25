@@ -91,6 +91,7 @@ public partial class ApartmentsSection : ComponentBase
 
     public void GoToApartmentWithOffer(int apartmentId, string apartmentName)
     {
-        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")}/2/0");
+        var url = NavigationHelper.GetLocalizedUrl($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")}/2/0");
+        Navigation.NavigateTo(url);
     }
 }

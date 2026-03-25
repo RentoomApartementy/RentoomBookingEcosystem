@@ -1,4 +1,11 @@
 @page "/404"
+@page "/{culture}/404"
+
+@code {
+    [Parameter]
+    public string? culture { get; set; }
+}
+@using RentoomBookingWeb.Helpers
 @using Microsoft.Extensions.Localization
 @using RentoomBookingWeb.Components.Enums
 @using RentoomBookingWeb.Components.Shared
@@ -9,7 +16,7 @@
 
 <div class="not-found-page">
     <HeaderSection 
-        ImagePath="assets/images/header-bg-apartments.jpeg"
+        ImagePath="/assets/images/header-bg-apartments.jpeg"
         Title='@Localizer["NotFoundHeaderTitle"]'
         Height="350px"
         IsShadow="true"
@@ -27,7 +34,7 @@
                     <p class="description">@Localizer["PageNotFoundDescription"]</p>
                     
                     <div class="button-group">
-                        <Button Type="ButtonType.Primary" @onclick='(() => Navigation.NavigateTo("/"))'>
+                        <Button Type="ButtonType.Primary" @onclick='(() => Navigation.NavigateTo(NavigationHelper.GetLocalizedUrl("/")))'>
                             @Localizer["BackToHome"]
                         </Button>
                     </div>
@@ -35,9 +42,9 @@
                     <div class="links-shortcut">
                         <span>@Localizer["NotFoundMaybeLookingFor"]</span>
                         <ul>
-                            <li><a href="/apartamenty">@Localizer["NotFoundApartmentsList"]</a></li>
-                            <li><a href="/wspolpraca">@Localizer["NotFoundCooperation"]</a></li>
-                            <li><a href="/kontakt">@Localizer["NotFoundContact"]</a></li>
+                            <li><a href="@NavigationHelper.GetLocalizedUrl("/apartamenty")">@Localizer["NotFoundApartmentsList"]</a></li>
+                            <li><a href="@NavigationHelper.GetLocalizedUrl("/wspolpraca")">@Localizer["NotFoundCooperation"]</a></li>
+                            <li><a href="@NavigationHelper.GetLocalizedUrl("/kontakt")">@Localizer["NotFoundContact"]</a></li>
                         </ul>
                     </div>
                 </div>

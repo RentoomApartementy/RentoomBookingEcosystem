@@ -14,7 +14,7 @@
 <div class="mobile-filter-wrapper">
     <button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
         <div class="trigger-content">
-            <img src="assets/svgs/mobile-filters.svg" alt="" class="trigger-icon">
+            <img src="/assets/svgs/mobile-filters.svg" alt="" class="trigger-icon">
             <span class="trigger-text">@Localizer["Filters"]</span>
             @if (GetSelectedCount() > 0)
             {
@@ -84,7 +84,7 @@
             <div class="selected-upsell-sidebar">
                 <p class="filters-title">@Localizer["SelectedPackage"]</p>
                 <div class="filter-option selected" @onclick="ResetUpsellOnly" style="cursor: pointer;">
-                    <img class="filter-icon small-icon" src="assets/svgs/kid_star.svg" alt="">
+                    <img class="filter-icon small-icon" src="/assets/svgs/kid_star.svg" alt="">
                     <span>@_selectedUpsell.Title</span>
                 </div>
                 <hr/>

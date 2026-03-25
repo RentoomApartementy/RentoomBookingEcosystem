@@ -1,4 +1,5 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/oplac/fail"
+@page "/{culture}/rezerwuj/{ReservationTokenGuid:guid}/oplac/fail"
 
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Services
 
@@ -13,6 +14,7 @@
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
+    [Parameter] public string? culture { get; set; }
     [Parameter] public Guid TpayGuid { get; set; }
     
 }

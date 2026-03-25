@@ -1,4 +1,10 @@
 @page "/kontakt"
+@page "/{culture}/kontakt"
+
+@code {
+    [Parameter]
+    public string? culture { get; set; }
+}
 @using Microsoft.AspNetCore.Components.Web;
 @inject IJSRuntime JSRuntime;
 @inject NavigationManager NavManager;

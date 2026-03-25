@@ -1,6 +1,12 @@
 ﻿@page "/"
+@page "/{culture}"
 @using RentoomBookingWeb.Components.Features.Home.Components
 @inject NavigationManager Navigation
+
+@code {
+    [Parameter]
+    public string? culture { get; set; }
+}
 
 <PageTitle>Apartamenty Toruń - Wynajem Krótkoterminowy | Rentoom</PageTitle>
 

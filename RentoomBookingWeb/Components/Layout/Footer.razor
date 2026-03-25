@@ -1,11 +1,14 @@
 @inject NavigationManager Navigation;
 @using Microsoft.Extensions.Localization;
+@using RentoomBookingWeb.Helpers
 @inject IStringLocalizer<RentoomBookingWeb.Footer> Localizer;
 @inject RentoomBookingWeb.Services.FooterEnvironmentInfo FooterEnvironmentInfo;
 <div class="footer">
     <div class="footer-section-logo">
         <div class="footer-logo">
-            <img src="assets/svgs/logo-white.svg" alt="Rentoom - Apartamenty" class="logo-img"/>
+            <a href="@NavigationHelper.GetLocalizedUrl("/")">
+                <img src="/assets/svgs/logo-white.svg" alt="Rentoom - Apartamenty" class="logo-img"/>
+            </a>
         </div>
     </div>
     
@@ -25,25 +28,17 @@
         <div class="footer-section">
             <h3 class="footer-title">@Localizer["Regulations1"]</h3>
             <ul class="footer-list">
-                <li><a href="/regulaminy" class="footer-link" >@Localizer["Regulations2"]</a></li>
+                <li><a href="@NavigationHelper.GetLocalizedUrl("/regulaminy")" class="footer-link" >@Localizer["Regulations2"]</a></li>
             </ul>
         </div>
     </div>
 
     <div class="footer-social">
-        <a href="https://www.facebook.com/RentoomApartamenty" aria-label="Rentoom na Facebooku"><img src="assets/svgs/fb-white.svg" alt="Facebook" class="social-icon" /></a>
-        <a href="https://www.instagram.com/rentoomapartamenty/" aria-label="Rentoom na Instagramie"><img src="assets/svgs/ig-white.svg" alt="Instagram" class="social-icon" /></a>
-      @*  <a href="#" aria-label="Rentoom na TikToku"><img src="assets/svgs/tk-white.svg" alt="TikTok" class="social-icon"/></a>
-        <a href="#" aria-label="Rentoom na YouTube"><img src="assets/svgs/yt-white.svg" alt="YouTube" class="social-icon"/></a>
-      *@
+        <a href="https://www.facebook.com/RentoomApartamenty" target="_blank" aria-label="Rentoom na Facebooku"><img src="/assets/svgs/fb-white.svg" alt="Facebook" class="social-icon" /></a>
+        <a href="https://www.instagram.com/rentoomapartamenty/" target="_blank" aria-label="Rentoom na Instagramie"><img src="/assets/svgs/ig-white.svg" alt="Instagram" class="social-icon" /></a>
     </div>
 </div>
 
 <div class="footer-bottom">
-    <a href="/apartamenty-torun" class="all-apartments-link">@Localizer["AllApartmentsText"]</a>
-    @* @Localizer["DesignedText"] *@
-@*    <div class="footer-env">
-        <span class="footer-env-label">Env</span>
-        <span class="footer-env-details">@FooterEnvironmentInfo.Summary</span>
-    </div>*@
+    <a href="@NavigationHelper.GetLocalizedUrl("/apartamenty-torun")" class="all-apartments-link">@Localizer["AllApartmentsText"]</a>
 </div>

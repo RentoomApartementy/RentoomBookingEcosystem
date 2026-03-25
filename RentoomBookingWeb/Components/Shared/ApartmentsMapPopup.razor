@@ -157,7 +157,7 @@
             imageContent = $"<span>{loadingText}...</span>";
         }
 
-        var detailsUrl = $"/apartamenty/{apt.Id}/{apt.Name?.ToSlug()}";
+        var detailsUrl = NavigationHelper.GetLocalizedUrl($"/apartamenty/{apt.Id}/{apt.Name?.ToSlug()}");
 
         if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
         {
@@ -189,19 +189,19 @@
                     </div>
                     <div style=""display: flex; gap: .5rem;"">
                          <div>
-                            <img src=""assets/svgs/users.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <img src=""/assets/svgs/users.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
                             <span>{apt.MinCapacity} - {apt.Capacity}</span>
                         </div>
                         <div>
-                            <img src=""assets/svgs/bed.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <img src=""/assets/svgs/bed.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
                             <span>{SumBedByItem(apt)}</span>
                         </div>
                         <div>
-                            <img src=""assets/svgs/bath.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <img src=""/assets/svgs/bath.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
                             <span>1</span>
                         </div>
                         <div>
-                            <img src=""assets/svgs/m2.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <img src=""/assets/svgs/m2.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
                             <span>{apt.Area}</span>
                         </div>
                     </div>

@@ -1,4 +1,10 @@
 @page "/o-nas";
+@page "/{culture}/o-nas";
+
+@code {
+    [Parameter]
+    public string? culture { get; set; }
+}
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.AboutUs> Localizer;
 @inject NavigationManager Navigation
@@ -10,7 +16,7 @@
     <meta name="keywords" content="zarządzanie najmem, obsługa apartamentów, Rentoom, wynajem krótkoterminowy, zespół Rentoom, inwestycje w nieruchomości" />
     <meta property="og:title" content="O nas - Rentoom | Profesjonalne Zarządzanie Najmem" />
     <meta property="og:description" content="Jesteśmy grupą pasjonatów podróży i ekspertów od nieruchomości. Zobacz, jak możemy pomóc w zarządzaniu Twoim apartamentem." />
-    <meta property="og:image" content="assets/images/header-bg-about-us.jpeg" />
+    <meta property="og:image" content="/assets/images/header-bg-about-us.jpeg" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@Navigation.BaseUri/o-nas" />
     <link rel="canonical" href="@Navigation.BaseUri/o-nas" />
@@ -97,7 +103,7 @@
         <div class="team">
     <article class="team-card">
         <div class="card-image-container">
-            <img src="assets/images/test-user-opinion.jpeg" alt="Tomasz" class="card-img">
+            <img src="/assets/images/test-user-opinion.jpeg" alt="Tomasz" class="card-img">
             <div class="card-overlay">
                 <h3>Tomasz</h3>
                 <span class="role-badge">CEO & Founder</span>
@@ -117,7 +123,7 @@
     
     <article class="team-card">
         <div class="card-image-container">
-            <img src="assets/images/test-user-opinion.jpeg" alt="Kamil" class="card-img">
+            <img src="/assets/images/test-user-opinion.jpeg" alt="Kamil" class="card-img">
             <div class="card-overlay">
                 <h3>Kamil</h3>
                 <span class="role-badge">Tech Lead</span>
@@ -137,7 +143,7 @@
     
     <article class="team-card">
         <div class="card-image-container">
-            <img src="assets/images/test-user-opinion.jpeg" alt="Marta" class="card-img">
+            <img src="/assets/images/test-user-opinion.jpeg" alt="Marta" class="card-img">
             <div class="card-overlay">
                 <h3>Marta</h3>
                 <span class="role-badge">Head of Operations</span>

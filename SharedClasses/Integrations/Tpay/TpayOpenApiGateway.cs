@@ -57,15 +57,24 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
                 .Where(x => !string.IsNullOrWhiteSpace(x)));
 
 
+            var lang = ResolveTpayLanguage(record.State.Client?.Language);
             var baseUrl = _settings.RentoomSiteBaseUrl?.TrimEnd('/');
+            
+            // success/fail paths from config usually don't have culture prefix
             var path = _settings.SuccessUrl?
                 .TrimStart('/')
                 .Replace("{ReservationTokenGuid}", reservationGuid.ToString())
                 .Replace("{tpayGuid}", reservationGuid.ToString());
 
-            var successUrl = $"{baseUrl}/{path}";
+            // Add culture prefix to success URL
+            var successUrl = $"{baseUrl}/{lang}/{path}";
 
-            var lang = ResolveTpayLanguage(record.State.Client?.Language);
+            var errorUrl = _settings.ErrorUrl;
+            if (!string.IsNullOrEmpty(errorUrl) && !errorUrl.StartsWith("http"))
+            {
+                errorUrl = $"{baseUrl}/{lang}/{errorUrl.TrimStart('/')}";
+            }
+
             var request = new TpayTransactionRequest
             {
                 Amount = amount,
@@ -81,7 +90,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
 
                 },
                 SuccessUrl = successUrl,
-                ErrorUrl = _settings.ErrorUrl,
+                ErrorUrl = errorUrl,
                 NotificationUrl = _settings.NotificationUrl,
                 HiddenDescription = reservationGuid.ToString(),
             };

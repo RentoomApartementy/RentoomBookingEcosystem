@@ -139,7 +139,7 @@
             try
             {
                 objRef = DotNetObjectReference.Create(this);
-                _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/sliderGestures.js?v=" + DateTime.Now.Ticks);
+                _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "/js/sliderGestures.js?v=" + DateTime.Now.Ticks);
                 if (_isDisposed) return;
                 _jsManager = await _jsModule.InvokeAsync<IJSObjectReference>("initSlider", objRef, _sliderContainer);
             }

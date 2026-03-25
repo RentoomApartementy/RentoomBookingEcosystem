@@ -1,6 +1,9 @@
 @page "/regulaminy"
+@page "/{culture}/regulaminy"
 @page "/regulaminy/{Id:int}"
+@page "/{culture}/regulaminy/{Id:int}"
 @page "/regulaminy/{Id:int}/{Slug}"
+@page "/{culture}/regulaminy/{Id:int}/{Slug}"
 
 @using RentoomBooking.SharedClasses.Models
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
@@ -42,6 +45,7 @@
 @code {
     [Parameter] public int? Id { get; set; }
     [Parameter] public string? Slug { get; set; }
+    [Parameter] public string? culture { get; set; }
 
     private List<CustomerTermDisplayDto> _allTerms = new();
     private CustomerTermDisplayDto? _currentTerm;

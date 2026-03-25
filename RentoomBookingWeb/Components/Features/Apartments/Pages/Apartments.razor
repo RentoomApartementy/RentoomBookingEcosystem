@@ -1,7 +1,13 @@
 @page "/apartamenty"
+@page "/{culture}/apartamenty"
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
+
+@code {
+    [Parameter]
+    public string? culture { get; set; }
+}
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
