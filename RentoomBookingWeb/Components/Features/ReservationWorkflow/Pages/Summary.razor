@@ -100,18 +100,21 @@
                                 }
                                 else if (_isCheckingEmail || _emailSent != true)
                                 {
-                                    <h4 class="info-text-color">@Localizer["CheckEmailText"]</h4>
-                                    <span>@Localizer["ConfirmationWill"] @_summary?.Client?.Email</span>
+                                    <h4 class="info-text-color">@EmailDeliveryPendingTitle</h4>
+                                    <span>@EmailDeliveryPendingMessage</span>
                                 }
                                 else
                                 {
-                                    <h4 class="success-text-color">@Localizer["SendMailText"]</h4>
-                                    <span>@Localizer["ConfirmationHasBeenSent"] @_summary?.Client?.Email</span>
+                                    <h4 class="success-text-color">@MessageSentTitle</h4>
+                                    <span>@MessageSentDescription</span>
                                 }
                             </div>
                         </div>
                         <div class="staywell-popup-wrapper">
-                            <button type="button" class="button" @onclick="ToggleStaywellPopup">@Localizer["GoToStayWell"]</button>
+                            <button type="button" class="button staywell-trigger-button" @onclick="ToggleStaywellPopup">
+                                <img src="assets/svgs/qrcode.svg" alt="" class="staywell-trigger-icon" />
+                                <span>@StaywellButtonText</span>
+                            </button>
                             <a href="@staywellLink"
                                target="_blank"
                                rel="noopener noreferrer"
@@ -464,6 +467,12 @@
             _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);
         }
 
+        //aut pokazywanie QR kodu StayWell po płatności - na razie wyłączone
+      /*  if (IsPaid && !string.IsNullOrWhiteSpace(staywellLink))
+        {
+            _isStaywellPopupOpen = true;
+        }
+        */
         StartRetryCountdownIfNeeded();
     }
 
@@ -689,6 +698,27 @@
     {
         return string.Equals(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, "en", StringComparison.OrdinalIgnoreCase);
     }
+
+    private string MessageSentTitle =>
+        IsEnglishCulture() ? "Message sent" : "Wysłano wiadomość";
+
+    private string MessageSentDescription =>
+        IsEnglishCulture()
+            ? $"The confirmation was sent to {_summary?.Client?.Email} and on WhatsApp."
+            : $"Potwierdzenie wysłaliśmy na {_summary?.Client?.Email} oraz na WhatsApp.";
+
+    private string EmailDeliveryPendingTitle =>
+        IsEnglishCulture() ? "Sending message" : "Wysyłamy wiadomość";
+
+    private string EmailDeliveryPendingMessage =>
+        IsEnglishCulture()
+            ? $"We are sending the confirmation to {_summary?.Client?.Email} and on WhatsApp."
+            : $"Wysyłamy potwierdzenie na {_summary?.Client?.Email} oraz na WhatsApp.";
+
+    private string StaywellButtonText =>
+        IsEnglishCulture()
+            ? "Click to manage your reservation in Rentoom StayWell"
+            : "Kliknij aby zarządzać rezerwacją w Rentoom StayWell";
 
     private string RetryPaymentButtonText =>
         IsRetryPaymentDisabled
