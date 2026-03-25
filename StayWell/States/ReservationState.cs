@@ -3,6 +3,7 @@ using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.StayWell.Services;
 using System.Net;
+using WorkflowModels = RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 
 namespace RentoomBooking.StayWell.States
 {
@@ -17,6 +18,7 @@ namespace RentoomBooking.StayWell.States
         private static readonly TimeOnly LateCheckOutTime = new(12, 0);   // 11:00 + 1h
 
         private RentoomReservation? _reservation;
+        private WorkflowModels.StayWellReservationRecordDto? _reservationRecord;
         private readonly BackendApi _backendApi = backendApi;
         private readonly ReservationTokenService _tokenService = tokenService;
         private string? _currentToken;
@@ -53,6 +55,7 @@ namespace RentoomBooking.StayWell.States
 
         public string? CurrentToken => _currentToken;
         public HttpStatusCode? CurrentStatus => _currentStatus;
+        public WorkflowModels.StayWellReservationRecordDto? CurrentReservationRecord => _reservationRecord;
         public event Action? OnChange;
         public bool IsLoading { get; private set; }
 
@@ -94,10 +97,12 @@ namespace RentoomBooking.StayWell.States
                 if (response?.StatusCode == HttpStatusCode.Gone)
                 {
                     _reservation = null;
+                    _reservationRecord = null;
                 }
                 else
                 {
                     _reservation = response?.Reservation;
+                    _reservationRecord = response?.ReservationRecord;
                 }
 
                 if (response?.StatusCode == HttpStatusCode.OK && response.Reservation is not null)
@@ -126,6 +131,7 @@ namespace RentoomBooking.StayWell.States
         public void SetReservation(RentoomReservation? reservation)
         {
             _reservation = reservation;
+            _reservationRecord = null;
             IsLoading = false;
             NotifyStateChanged();
         }
@@ -141,6 +147,7 @@ namespace RentoomBooking.StayWell.States
             _currentToken = null;
             _currentStatus = null;
             _reservation = null;
+            _reservationRecord = null;
             IsLoading = false;
             NotifyStateChanged();
         }

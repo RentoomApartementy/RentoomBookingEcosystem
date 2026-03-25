@@ -123,6 +123,9 @@
   <data name="ApartmentNumber" xml:space="preserve">
     <value>Apartment number</value>
   </data>
+  <data name="ApartmentMap" xml:space="preserve">
+    <value>Apartment map</value>
+  </data>
   <data name="BuildingCode" xml:space="preserve">
     <value>Building code</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="GateCode" xml:space="preserve">
     <value>Gate code</value>
+  </data>
+  <data name="GoogleMaps" xml:space="preserve">
+    <value>Google Maps</value>
   </data>
   <data name="GoOpen" xml:space="preserve">
     <value>Open your apartment</value>
@@ -150,8 +156,20 @@
   <data name="NoWifi" xml:space="preserve">
     <value>No Wi-Fi data</value>
   </data>
+  <data name="NoMap" xml:space="preserve">
+    <value>No map</value>
+  </data>
   <data name="OpenButton" xml:space="preserve">
     <value>Open</value>
+  </data>
+  <data name="OpenMap" xml:space="preserve">
+    <value>Open map</value>
+  </data>
+  <data name="MapUnavailable" xml:space="preserve">
+    <value>Google Maps link unavailable</value>
+  </data>
+  <data name="ParkingMap" xml:space="preserve">
+    <value>Parking map</value>
   </data>
   <data name="ParkingNumber" xml:space="preserve">
     <value>Parking spot no.</value>

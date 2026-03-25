@@ -90,29 +90,88 @@
             }
             else
             {
-                @if (!string.IsNullOrEmpty(ApartmentState.CurrentApartment?.ObjectLocation?.Address))
+                @if (HasCode(ApartmentAddress) || HasMapLink(ApartmentMapUrl))
                 {
-                    <div class="code-card">
-                        <div class="code-card__icon-wrapper">
-                            <img src="/icons/map-pin.svg" class="code-card__icon" />
+                    @if (HasMapLink(ApartmentMapUrl))
+                    {
+                        <a class="code-card code-card--map code-card--link" href="@ApartmentMapUrl" target="_blank" rel="noopener noreferrer">
+                            <div class="code-card__icon-wrapper">
+                                <img src="/icons/map-pin.svg" class="code-card__icon" />
+                            </div>
+                            <div class="code-card__content">
+                                <div class="code-card__header">
+                                    <div class="code-card__label">@Localizer["Address"]</div>
+                                    <span class="code-card__status code-card__status--available">@Localizer["GoogleMaps"]</span>
+                                </div>
+                                <div class="code-card__value">@(!string.IsNullOrWhiteSpace(ApartmentAddress) ? ApartmentAddress : Localizer["ApartmentMap"])</div>
+                                <div class="code-card__cta">
+                                    <span>@Localizer["OpenMap"]</span>
+                                    <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="code-card code-card--map code-card--muted">
+                            <div class="code-card__icon-wrapper">
+                                <img src="/icons/map-pin.svg" class="code-card__icon" />
+                            </div>
+                            <div class="code-card__content">
+                                <div class="code-card__header">
+                                    <div class="code-card__label">@Localizer["Address"]</div>
+                                    <span class="code-card__status code-card__status--unavailable">@Localizer["NoMap"]</span>
+                                </div>
+                                <div class="code-card__value">@ApartmentAddress</div>
+                                <div class="code-card__meta">@Localizer["MapUnavailable"]</div>
+                            </div>
                         </div>
-                        <div class="code-card__content">
-                            <div class="code-card__label">@Localizer["Address"]</div>
-                            <div class="code-card__value">@ApartmentState.CurrentApartment?.ObjectLocation?.Address</div>
-                        </div>
-                    </div>
+                    }
                 }
-                @if (HasCode(LocksState.ApartmentItemCodes?.ParkingSpotNumber))
+                @if (HasCode(ParkingSpotNumber) || HasMapLink(ParkingMapUrl))
                 {
-                    <div class="code-card">
-                        <div class="code-card__icon-wrapper">
-                            <img src="/icons/square-parking.svg" class="code-card__icon" />
+                    @if (HasMapLink(ParkingMapUrl))
+                    {
+                        <a class="code-card code-card--map code-card--link" href="@ParkingMapUrl" target="_blank" rel="noopener noreferrer">
+                            <div class="code-card__icon-wrapper">
+                                <img src="/icons/square-parking.svg" class="code-card__icon" />
+                            </div>
+                            <div class="code-card__content">
+                                <div class="code-card__header">
+                                    <div class="code-card__label">@(HasCode(ParkingSpotNumber) ? Localizer["ParkingNumber"] : Localizer["ParkingMap"])</div>
+                                    <span class="code-card__status code-card__status--available">@Localizer["GoogleMaps"]</span>
+                                </div>
+                                @if (HasCode(ParkingSpotNumber))
+                                {
+                                    <div class="code-card__value">@RenderCodeValue(ParkingSpotNumber)</div>
+                                }
+                                else
+                                {
+                                    <div class="code-card__value">@Localizer["ParkingMap"]</div>
+                                }
+                                <div class="code-card__cta">
+                                    <span>@Localizer["OpenMap"]</span>
+                                    <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else if (HasCode(ParkingSpotNumber))
+                    {
+                        <div class="code-card code-card--map code-card--muted">
+                            <div class="code-card__icon-wrapper">
+                                <img src="/icons/square-parking.svg" class="code-card__icon" />
+                            </div>
+                            <div class="code-card__content">
+                                <div class="code-card__header">
+                                    <div class="code-card__label">@Localizer["ParkingNumber"]</div>
+                                    <span class="code-card__status code-card__status--unavailable">@Localizer["NoMap"]</span>
+                                </div>
+                                <div class="code-card__value">@RenderCodeValue(ParkingSpotNumber)</div>
+                                <div class="code-card__meta">@Localizer["MapUnavailable"]</div>
+                            </div>
                         </div>
-                        <div class="code-card__content">
-                            <div class="code-card__label">@Localizer["ParkingNumber"]</div>
-                            <div class="code-card__value">@RenderCodeValue(LocksState.ApartmentItemCodes?.ParkingSpotNumber)</div>
-                        </div>
-                    </div>
+                    }
                 }
 
                 @if (HasCode(LocksState.ApartmentItemCodes?.GateCode))
@@ -255,6 +314,10 @@
     private string? WifiPassword => ApartmentState.WifiInfo?.Password;
     private string? WifiSsid => ApartmentState.WifiInfo?.Ssid;
     private string? WifiAuth => ApartmentState.WifiInfo?.Auth;
+    private string? ApartmentAddress => ApartmentState.CurrentApartment?.ObjectLocation?.Address;
+    private string? ApartmentMapUrl => NormalizeMapUrl(ReservationState.CurrentReservationRecord?.State.GoogleMapsLink);
+    private string? ParkingMapUrl => NormalizeMapUrl(ReservationState.CurrentReservationRecord?.State.ParkingMapUrl);
+    private string? ParkingSpotNumber => LocksState.ApartmentItemCodes?.ParkingSpotNumber;
 
     private IReadOnlyList<ApartmentArrivalInstructionStepDTO> ArrivalInstructionSteps =>
         ApartmentState.ArrivalInstructionSteps ?? Array.Empty<ApartmentArrivalInstructionStepDTO>();
@@ -348,6 +411,16 @@
     private static bool HasCode(string? code)
     {
         return !string.IsNullOrWhiteSpace(code);
+    }
+
+    private static bool HasMapLink(string? url)
+    {
+        return !string.IsNullOrWhiteSpace(url);
+    }
+
+    private static string? NormalizeMapUrl(string? url)
+    {
+        return string.IsNullOrWhiteSpace(url) ? null : url.Trim();
     }
 
     private bool HasWifiInfo()

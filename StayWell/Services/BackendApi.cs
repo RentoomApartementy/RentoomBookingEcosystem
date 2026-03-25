@@ -5,6 +5,7 @@ using RentoomBooking.SharedClasses.Models.Cookies;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
+using WorkflowModels = RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using RentoomBooking.StayWell.Models;
@@ -20,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.StayWell.Services
 {
-    public record ReservationResponse(RentoomReservation? Reservation, HttpStatusCode StatusCode);
+    public record ReservationResponse(RentoomReservation? Reservation, WorkflowModels.StayWellReservationRecordDto? ReservationRecord, HttpStatusCode StatusCode);
 
     public class BackendApi(IHttpClientFactory factory, JsonSerializerOptions json, LocalStorageService localStorage)
     {
@@ -34,6 +35,23 @@ namespace RentoomBooking.StayWell.Services
         private static string BuildCacheKey(string scope, params string[] parts)
         {
             return $"{CachePrefix}:{scope}:{string.Join("|", parts)}";
+        }
+
+        private T? DeserializePayload<T>(string payload) where T : class
+        {
+            if (string.IsNullOrWhiteSpace(payload))
+            {
+                return null;
+            }
+
+            try
+            {
+                return JsonSerializer.Deserialize<T>(payload, _json);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private async Task<T?> GetOrSetCacheAsync<T>(string key, Func<Task<T?>> fetch, bool cacheNull = false) where T : class
@@ -87,20 +105,27 @@ namespace RentoomBooking.StayWell.Services
                 var response = await _http.GetAsync($"db/reservations/{token}");
                 if (response.IsSuccessStatusCode)
                 {
-                    var reservation = await response.Content.ReadFromJsonAsync<RentoomReservation>(_json);
+                    var payload = await response.Content.ReadAsStringAsync();
+                    var reservationLookup = DeserializePayload<WorkflowModels.StayWellReservationLookupResponse>(payload);
+                    if (reservationLookup?.Reservation is not null || reservationLookup?.ReservationRecord is not null)
+                    {
+                        return new(reservationLookup.Reservation, reservationLookup.ReservationRecord, response.StatusCode);
+                    }
+
+                    var reservation = DeserializePayload<RentoomReservation>(payload);
                     Console.WriteLine(response.StatusCode);
 
-                    return new(reservation!, response.StatusCode);
+                    return new(reservation, null, response.StatusCode);
                 }
                 else
                 {
-                    return new(null, response.StatusCode);
+                    return new(null, null, response.StatusCode);
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return new(null, System.Net.HttpStatusCode.InternalServerError);
+                return new(null, null, System.Net.HttpStatusCode.InternalServerError);
             }
         }
 
