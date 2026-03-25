@@ -801,10 +801,9 @@ private static TimeZoneInfo GetWarsawTimeZone()
                         await GetDealEmailStatusAsync(record.ReservationGuid);
                         await CreatePaidUpsellOrderAsync(record, dto.ProviderTransactionId);
                     }
-                    else
-                    {
-                        await UpdateBitrixDealAsync(record, "API HandleTpayWebhookAsync - Payment status updated");
-                    }
+                    
+                     await UpdateBitrixDealAsync(record, "API HandleTpayWebhookAsync - Payment status updated");
+                    
                     return;
                 }
                 catch (DbUpdateConcurrencyException)
