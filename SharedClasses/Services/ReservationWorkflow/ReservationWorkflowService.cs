@@ -68,6 +68,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private const string BitrixStayWellLinkFieldName = "UF_CRM_1768835603310";
         private const string BitrixApartmentGoogleMapsFieldName = "UF_CRM_1773873147169";
         private const string BitrixParkingMapFieldName = "UF_CRM_1774428026254";
+        private const string BitrixPurchasedAddonsFieldName = "UF_CRM_1768940634224";
         public ReservationWorkflowService(
             IReservationStore store,
             IdoSellService idoApi,
@@ -1250,6 +1251,45 @@ private static TimeZoneInfo GetWarsawTimeZone()
             return cultureName.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "EN" : "PL";
         }
 
+        private async Task<string> BuildPurchasedAddonsBitrixValueAsync(StartReservationRequest? startRequest)
+        {
+            var selectedAddons = startRequest?.SelectedAddons?
+                .Where(addon => addon.AddonId > 0)
+                .ToList();
+
+            if (selectedAddons is null || selectedAddons.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            var definedAddons = await _apartmentStore.GetDefinedAddonsAsync();
+            var addonNameLookup = definedAddons.ToDictionary(
+                addon => addon.IdoBookingId,
+                addon => addon.AddonDefinition?.Details?
+                             .FirstOrDefault(detail => string.Equals(detail.Lang, "PL", StringComparison.OrdinalIgnoreCase))?.Name
+                         ?? addon.Name);
+
+            var addonNames = selectedAddons
+                .GroupBy(addon => addon.AddonId)
+                .Select(group =>
+                {
+                    var addonName = addonNameLookup.GetValueOrDefault(group.Key)?.Trim();
+                    if (string.IsNullOrWhiteSpace(addonName))
+                    {
+                        return null;
+                    }
+
+                    var totalQuantity = group.Sum(addon => addon.Quantity > 0 ? addon.Quantity : 1);
+                    return $"{addonName} x {totalQuantity}";
+                })
+                .Where(name => !string.IsNullOrWhiteSpace(name))
+                .ToList();
+
+            return addonNames.Count == 0
+                ? string.Empty
+                : string.Join(", ", addonNames);
+        }
+
         private static string? BuildCompanyAddress(InvoiceInfoDto? invoice)
         {
             if (invoice is null)
@@ -1322,6 +1362,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     : $"Rezerwacja {record.ReservationGuid:D}";
                 var apartmentInfo = ResolveApartmentInfo(record.State.StartRequest);
                 var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest);
+                var purchasedAddonsValue = await BuildPurchasedAddonsBitrixValueAsync(record.State.StartRequest);
                 UpdateReservationLocationState(record, apartmentInfo, apartmentItemLocalSettings);
                 var customFields = new Dictionary<string, object?>
                 {
@@ -1334,6 +1375,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["UF_CRM_1773310028374"] = ToBitrixDateTime(record.State.StartRequest?.EndDate,record.State.StartRequest?.CheckOutTime),
                     ["UF_CRM_1773310079975"] = record.State.StartRequest?.CheckInTime < new TimeOnly(15,0),
                     ["UF_CRM_1773310094605"] = record.State.StartRequest?.CheckOutTime > new TimeOnly(11,0),
+                    [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                     [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString())
                 };
@@ -1403,6 +1445,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
             var apartmentInf = ResolveApartmentInfo(record.State.StartRequest, idoReservation);
             var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest, idoReservation);
+            var purchasedAddonsValue = await BuildPurchasedAddonsBitrixValueAsync(record.State.StartRequest);
             var stateLocationChanged = UpdateReservationLocationState(record, apartmentInf, apartmentItemLocalSettings);
 
             //pola UF_CRM* to pola customowe - tu sa wpisane na sztywno ale mozna je pobrac z bitrixa dynamicznie jesli trzeba.. ewentualne TODO.
@@ -1419,6 +1462,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 ["UF_CRM_1768566710921"] = record.IdoStatus,
                 //RB_KodTpay_Platnosci
                 ["UF_CRM_1768566766553"] = string.Empty,
+                [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
                 //RB_ID_Rezrerwacji
                 [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                 //RB_Link_StayWell
