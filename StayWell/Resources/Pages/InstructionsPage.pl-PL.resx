@@ -186,4 +186,10 @@
   <data name="Wifi" xml:space="preserve">
     <value>Login i hasło WI-FI</value>
   </data>
+  <data name="WifiSsid" xml:space="preserve">
+    <value>Nazwa sieci (SSID)</value>
+  </data>
+  <data name="WifiPassword" xml:space="preserve">
+    <value>Hasło WI-FI</value>
+  </data>
 </root>
