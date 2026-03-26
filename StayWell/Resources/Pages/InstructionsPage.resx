@@ -190,6 +190,6 @@
     <value>Network name (SSID)</value>
   </data>
   <data name="WifiPassword" xml:space="preserve">
-    <value>WI-IF Password</value>
+    <value>WI-FI Password</value>
   </data>
 </root>
