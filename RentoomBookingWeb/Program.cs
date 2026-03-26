@@ -110,6 +110,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<MediaCacheService>();
             builder.Services.AddScoped<ReservationWorkflowTelemetry>();
+            builder.Services.AddScoped<GoogleAnalyticsService>();
 
 
             builder.Services.AddScoped<IPaymentFlowHandler, ReservationPaymentFlowHandler>();

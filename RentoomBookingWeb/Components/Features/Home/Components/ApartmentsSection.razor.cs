@@ -12,6 +12,7 @@ public partial class ApartmentsSection : ComponentBase
     [Inject] private IRentoomOfferService RentoomOfferService { get; set; } = default!;
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private ReservationWorkflowTelemetry WorkflowTelemetry { get; set; } = default!;
+    [Inject] private GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
     
     public List<ApartmentObject> Apartments { get; private set; } = new();
     public List<PricingOffer> Offers { get; private set; } = new();
@@ -91,7 +92,7 @@ public partial class ApartmentsSection : ComponentBase
     public PricingOffer? GetPricingOfferByObjectId(int objectId)
         => Offers.Find(o => o.ObjectId == objectId);
 
-    public void GoToApartmentWithOffer(int apartmentId, string apartmentName)
+    public async Task GoToApartmentWithOffer(int apartmentId, string apartmentName)
     {
         WorkflowTelemetry.TrackEvent(
             "HomeApartmentClicked",
@@ -104,6 +105,16 @@ public partial class ApartmentsSection : ComponentBase
                 ["Adults"] = "2",
                 ["Children"] = "0"
             });
+        await GoogleAnalytics.TrackEventAsync("home_apartment_click", new Dictionary<string, object?>
+        {
+            ["apartment_id"] = apartmentId,
+            ["apartment_name"] = apartmentName,
+            ["listing_source"] = "home-carousel",
+            ["start_date"] = DateTime.Now.ToString("yyyy-MM-dd"),
+            ["end_date"] = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
+            ["adults"] = 2,
+            ["children"] = 0
+        });
         Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")}/2/0");
     }
 }

@@ -13,6 +13,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 @inject MediaCacheService MediaCache 
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
+@inject GoogleAnalyticsService GoogleAnalytics
 @implements IAsyncDisposable
 
 <article class="apartment-card" 
@@ -91,7 +92,7 @@
                     <h2 itemprop="name">
                         @if (!string.IsNullOrEmpty(_detailsUrl))
                         {
-                            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClick("title"))' style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
+                            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClickAsync("title"))' style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
                         }
                         else
                         {
@@ -216,7 +217,7 @@
             @if (Item == null || (ShowPrice && Offer == null))
             {
                 <Button Href="@_detailsUrl"
-                        OnClick='(() => TrackApartmentClick("button"))'
+                        OnClick='(() => TrackApartmentClickAsync("button"))'
                         Disabled="@(Item == null || (ShowPrice && Offer == null))">
                     @Localizer["Details"]
                 </Button>
@@ -224,7 +225,7 @@
             else
             {
                 <Button Href="@_detailsUrl"
-                        OnClick='(() => TrackApartmentClick("button"))'>
+                        OnClick='(() => TrackApartmentClickAsync("button"))'>
                     @Localizer["BookNow"]
                 </Button>
             }
@@ -453,7 +454,7 @@
         return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} night/s)";
     }
 
-    private void TrackApartmentClick(string target)
+    private async Task TrackApartmentClickAsync(string target)
     {
         if (Item is null || string.IsNullOrWhiteSpace(_detailsUrl))
         {
@@ -479,6 +480,20 @@
                 ["HasOffer"] = Offer is null ? 0 : 1,
                 ["MinimalPrice"] = (double?)Offer?.MinimalPrice ?? 0
             });
+
+        await GoogleAnalytics.TrackEventAsync("apartment_listing_click", new Dictionary<string, object?>
+        {
+            ["apartment_id"] = Item.Id,
+            ["apartment_name"] = Item.Name,
+            ["listing_source"] = ListingSource,
+            ["click_target"] = target,
+            ["start_date"] = StartDate,
+            ["end_date"] = EndDate,
+            ["adults"] = Adults,
+            ["children"] = Children,
+            ["has_offer"] = Offer is null ? 0 : 1,
+            ["minimal_price"] = Offer?.MinimalPrice
+        });
     }
 
     public async ValueTask DisposeAsync()

@@ -37,6 +37,7 @@
 @implements IDisposable
 @using RentoomBookingWeb.Components.Enums;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
+@inject GoogleAnalyticsService GoogleAnalytics
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -1182,6 +1183,7 @@
     }
 
     private bool _observerInitialized = false; 
+    private bool _googlePageViewTracked = false;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!_observerInitialized)
@@ -1192,6 +1194,21 @@
             await Task.Delay(100); 
             await JSRuntime.InvokeVoidAsync("registerScrollObserver", "confirm-reservation", _scrollObjRef);
             await JSRuntime.InvokeVoidAsync("registerScrollObserver", "offers-section", _scrollObjRef);
+        }
+
+        if (firstRender && !_googlePageViewTracked && _apartment != null)
+        {
+            _googlePageViewTracked = true;
+            await GoogleAnalytics.TrackEventAsync("apartment_detail_view", new Dictionary<string, object?>
+            {
+                ["apartment_id"] = _apartment.Id,
+                ["apartment_name"] = _apartment.Name,
+                ["start_date"] = StartDate,
+                ["end_date"] = EndDate,
+                ["adults"] = Adults,
+                ["children"] = Children,
+                ["has_reservation_token"] = _reservationTokenGuid.HasValue ? 1 : 0
+            });
         }
     }
 
