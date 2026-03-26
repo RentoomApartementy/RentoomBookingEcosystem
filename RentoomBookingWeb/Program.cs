@@ -202,6 +202,15 @@ namespace RentoomBookingWeb
                 app.UseHsts();
             }
 
+            if (!app.Environment.IsProduction())
+            {
+                app.Use(async (context, next) =>
+                {
+                    await next();
+                    context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
+                });
+            }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             
@@ -211,6 +220,15 @@ namespace RentoomBookingWeb
             app.UseAntiforgery();
             
             app.MapControllers();
+
+            app.MapGet("/robots.txt", () =>
+            {
+                var content = app.Environment.IsProduction()
+                    ? "User-agent: *\nAllow: /"
+                    : "User-agent: *\nDisallow: /";
+
+                return Results.Text(content, "text/plain");
+            });
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
