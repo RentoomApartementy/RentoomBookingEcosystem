@@ -16,6 +16,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly NavigationManager _navManager;
         private readonly IAvailabilityFinderService2 _availabilityFinder;
         private readonly IApartmentSearchFiltersService _filterService;
+        private readonly ReservationWorkflowTelemetry _telemetry;
+        private readonly GoogleAnalyticsService _googleAnalytics;
 
         private string? _token;
         private const int PageSize = 6;
@@ -60,13 +62,17 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             IRentoomOfferService rentoomOfferService,
             NavigationManager navManager,
             IAvailabilityFinderService2 availabilityFinder,
-            IApartmentSearchFiltersService filterService)
+            IApartmentSearchFiltersService filterService,
+            ReservationWorkflowTelemetry telemetry,
+            GoogleAnalyticsService googleAnalytics)
         {
             _apartmentsService = apartmentsService;
             _rentoomOfferService = rentoomOfferService;
             _navManager = navManager;
             _availabilityFinder = availabilityFinder;
             _filterService = filterService;
+            _telemetry = telemetry;
+            _googleAnalytics = googleAnalytics;
         }
 
         public int MinOfferPrice => ScaleMinPrice;
@@ -178,6 +184,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             SliderResetKey = Guid.NewGuid();
 
             ApplyPriceFilterToItems(allItems);
+            TrackSearchResultsEvent("ApartmentSearchResultsLoaded");
+            await TrackSearchResultsGaEventAsync("apartment_search_results");
 
             ApartmentsIsLoading = false;
             NotifyStateChanged();
@@ -211,6 +219,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             }
 
             ApplyPriceFilterToItems(allItems);
+            TrackSearchResultsEvent("ApartmentSearchFiltersApplied");
+            await TrackSearchResultsGaEventAsync("apartment_filters_applied");
 
             ApartmentsIsLoading = false;
             NotifyStateChanged();
@@ -514,6 +524,51 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         {
              try { var page = await _apartmentsService.GetAllApartmentsList(); return page?.Items?.ToList(); }
              catch { return null; }
+        }
+
+        private void TrackSearchResultsEvent(string eventName)
+        {
+            _telemetry.TrackEvent(
+                eventName,
+                new Dictionary<string, string?>
+                {
+                    ["Path"] = _navManager.ToAbsoluteUri(_navManager.Uri).AbsolutePath,
+                    ["StartDate"] = StartDate,
+                    ["EndDate"] = EndDate,
+                    ["Adults"] = Adults,
+                    ["Children"] = Children,
+                    ["Rooms"] = Rooms,
+                    ["SelectedLocations"] = string.Join(",", _currentFilters?.ApartmentLocationsFilter ?? new List<string>()),
+                    ["SelectedAmenities"] = string.Join(",", _currentFilters?.ApartmentAmenitiesFilter ?? new List<int>()),
+                    ["SelectedAddons"] = string.Join(",", _currentFilters?.ApartmentAddonFilter ?? new List<int>())
+                },
+                new Dictionary<string, double>
+                {
+                    ["VisibleApartmentsCount"] = Items.Count,
+                    ["VisibleOffersCount"] = Offers.Count,
+                    ["MinPrice"] = FilterMinPrice ?? 0,
+                    ["MaxPrice"] = FilterMaxPrice ?? 0
+                });
+        }
+
+        private Task TrackSearchResultsGaEventAsync(string eventName)
+        {
+            return _googleAnalytics.TrackEventAsync(eventName, new Dictionary<string, object?>
+            {
+                ["page_path"] = _navManager.ToAbsoluteUri(_navManager.Uri).AbsolutePath,
+                ["start_date"] = StartDate,
+                ["end_date"] = EndDate,
+                ["adults"] = Adults,
+                ["children"] = Children,
+                ["rooms"] = Rooms,
+                ["selected_locations"] = string.Join(",", _currentFilters?.ApartmentLocationsFilter ?? new List<string>()),
+                ["selected_amenities"] = string.Join(",", _currentFilters?.ApartmentAmenitiesFilter ?? new List<int>()),
+                ["selected_addons"] = string.Join(",", _currentFilters?.ApartmentAddonFilter ?? new List<int>()),
+                ["visible_apartments_count"] = Items.Count,
+                ["visible_offers_count"] = Offers.Count,
+                ["min_price"] = FilterMinPrice ?? 0,
+                ["max_price"] = FilterMaxPrice ?? 0
+            });
         }
         
         private void ResetPriceScales() { ScaleMinPrice = 0; ScaleMaxPrice = 0; FilterMinPrice = 0; FilterMaxPrice = 0; }

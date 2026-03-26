@@ -3,7 +3,10 @@
 @using Microsoft.Extensions.Localization;
 @using System.Globalization
 @using BlazorDateRangePicker
+@using RentoomBookingWeb.Services
 @inject IStringLocalizer<SharedResources> Localizer;
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
+@inject GoogleAnalyticsService GoogleAnalytics
 
 <div class="@GetClass()">
     <div class="modern-search-bar">
@@ -283,6 +286,33 @@
         }
 
         CloseGuestModal();
+
+        WorkflowTelemetry.TrackEvent(
+            "ApartmentSearchSubmitted",
+            new Dictionary<string, string?>
+            {
+                ["Path"] = NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath,
+                ["StartDate"] = _startDate,
+                ["EndDate"] = _endDate,
+                ["Adults"] = _adults,
+                ["Children"] = _children,
+                ["Rooms"] = _rooms
+            },
+            new Dictionary<string, double>
+            {
+                ["Guests"] = CountPersons
+            });
+
+        await GoogleAnalytics.TrackEventAsync("apartment_search", new Dictionary<string, object?>
+        {
+            ["page_path"] = NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath,
+            ["start_date"] = _startDate,
+            ["end_date"] = _endDate,
+            ["adults"] = GetAdultsCount(),
+            ["children"] = GetChildrenCount(),
+            ["rooms"] = _rooms,
+            ["guests"] = CountPersons
+        });
 
         var query = new Dictionary<string, string>
         {

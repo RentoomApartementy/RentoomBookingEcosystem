@@ -3,9 +3,11 @@
 @using System.Net.Sockets
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Hosting
 @using RentoomBooking.SharedClasses.Models.Cookies
 @using RentoomBooking.SharedClasses.Services.Cookies
 @inject CookieConsentService CookieConsentService
+@inject IWebHostEnvironment Environment
 @inject IHttpContextAccessor HttpContextAccessor
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
@@ -159,6 +161,11 @@
 
     private ValueTask EnableTrackingAsync()
     {
+        if (!Environment.IsProduction())
+        {
+            return ValueTask.CompletedTask;
+        }
+
         return JS.InvokeVoidAsync("rentoomCookieInterop.enableTracking", GoogleTagManagerId, GoogleAnalyticsId);
     }
 

@@ -25,6 +25,7 @@
 @using RentoomBookingWeb.Helpers
 @using System.Text.RegularExpressions
 @inject NavigationManager NavManager
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
 @using Microsoft.Extensions.Localization
 @using RentoomBookingWeb.Components.Enums
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
@@ -36,6 +37,7 @@
 @implements IDisposable
 @using RentoomBookingWeb.Components.Enums;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
+@inject GoogleAnalyticsService GoogleAnalytics
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -1096,6 +1098,19 @@
         
         if (_apartment != null)
         {
+            WorkflowTelemetry.TrackEvent(
+                "ApartmentDetailViewed",
+                new Dictionary<string, string?>
+                {
+                    ["ApartmentId"] = _apartment.Id.ToString(),
+                    ["ApartmentName"] = _apartment.Name,
+                    ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
+                    ["StartDate"] = StartDate,
+                    ["EndDate"] = EndDate,
+                    ["Adults"] = Adults,
+                    ["Children"] = Children
+                });
+
             await GetObjectDescription(_apartment.Id, CurrentLanguage);
             _amenities = await GetAmenities(_apartment.Id);
             _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
@@ -1168,6 +1183,7 @@
     }
 
     private bool _observerInitialized = false; 
+    private bool _googlePageViewTracked = false;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!_observerInitialized)
@@ -1178,6 +1194,21 @@
             await Task.Delay(100); 
             await JSRuntime.InvokeVoidAsync("registerScrollObserver", "confirm-reservation", _scrollObjRef);
             await JSRuntime.InvokeVoidAsync("registerScrollObserver", "offers-section", _scrollObjRef);
+        }
+
+        if (firstRender && !_googlePageViewTracked && _apartment != null)
+        {
+            _googlePageViewTracked = true;
+            await GoogleAnalytics.TrackEventAsync("apartment_detail_view", new Dictionary<string, object?>
+            {
+                ["apartment_id"] = _apartment.Id,
+                ["apartment_name"] = _apartment.Name,
+                ["start_date"] = StartDate,
+                ["end_date"] = EndDate,
+                ["adults"] = Adults,
+                ["children"] = Children,
+                ["has_reservation_token"] = _reservationTokenGuid.HasValue ? 1 : 0
+            });
         }
     }
 
@@ -1203,6 +1234,22 @@
         
         bool hasOffers = _offersResponse?.Result?.PricingOffers != null && 
                          _offersResponse.Result.PricingOffers.Any();
+
+        WorkflowTelemetry.TrackEvent(
+            hasOffers ? "ReservationOfferLoaded" : "ReservationOfferUnavailable",
+            new Dictionary<string, string?>
+            {
+                ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
+                ["ApartmentId"] = _apartment?.Id.ToString(),
+                ["StartDate"] = StartDate,
+                ["EndDate"] = EndDate,
+                ["Adults"] = Adults,
+                ["Children"] = Children
+            },
+            new Dictionary<string, double>
+            {
+                ["OfferCount"] = _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?.Count ?? 0
+            });
 
         if (!hasOffers && !_isOfferLoading)
         {
@@ -1466,6 +1513,16 @@
         var suggestion = selectedTerm ?? _selectedSuggestionDate ?? _suggestionDates.FirstOrDefault();
         if (_apartment != null && suggestion?.StartDate != null && suggestion?.EndDate != null)
         {
+            WorkflowTelemetry.TrackEvent(
+                "ReservationSuggestionSelected",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
+                    ["ApartmentId"] = _apartment.Id.ToString(),
+                    ["SuggestedStartDate"] = suggestion.StartDate,
+                    ["SuggestedEndDate"] = suggestion.EndDate
+                });
+
             StartDate = suggestion.StartDate;
             EndDate = suggestion.EndDate;
             RefreshAddonsParams();
@@ -1582,6 +1639,26 @@
             SelectedAddonsTotalPrice = TotalAddonsPrice,
             SelectedUpsellsTotalPrice = TotalUpsellsPrice
         };
+
+        WorkflowTelemetry.TrackEvent(
+            "ReservationStepCompleted_ApartmentSelection",
+            new Dictionary<string, string?>
+            {
+                ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
+                ["ApartmentId"] = _apartment.Id.ToString(),
+                ["OfferType"] = request.SelectedOfferType,
+                ["StartDate"] = StartDate,
+                ["EndDate"] = EndDate,
+                ["Adults"] = adults.ToString(),
+                ["Children"] = children.ToString()
+            },
+            new Dictionary<string, double>
+            {
+                ["SelectedAddonsCount"] = _selectedAddons.Count,
+                ["SelectedUpsellsCount"] = _selectedUpsells.Count,
+                ["SelectedAddonsTotalPrice"] = (double)TotalAddonsPrice,
+                ["SelectedUpsellsTotalPrice"] = (double)TotalUpsellsPrice
+            });
 
         var reservationGuid = await EnsureReservationAsync(request);
         var apartmentUrl = BuildApartmentUrl(reservationGuid);

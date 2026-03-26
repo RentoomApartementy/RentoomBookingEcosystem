@@ -22,6 +22,7 @@
 @using System.Text.RegularExpressions
 @using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
 
 <PageTitle>Rentoom Rezerwacja - Dane Klienta</PageTitle>
 
@@ -448,6 +449,14 @@
         ParsePhoneNumber(_form.Client.Phone);
         // Ponownie inicjalizujemy, aby uwzględnić zaktualizowane dane w _form
         _editContext = new EditContext(_form);
+
+        WorkflowTelemetry.TrackEvent(
+            "ReservationStepViewed_ClientInfo",
+            new Dictionary<string, string?>
+            {
+                ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                ["ApartmentId"] = _summary?.StartRequest?.ObjectId.ToString()
+            });
     }
 
     private async Task DownloadGusDataAsync()
@@ -468,10 +477,37 @@
                 if (!string.IsNullOrEmpty(data.NrLokalu)) _form.Invoice.Street += $"/{data.NrLokalu}";
                 _form.Invoice.Street = _form.Invoice.Street.Trim();
                 _error = null;
+
+                WorkflowTelemetry.TrackEvent(
+                    "ReservationInvoiceGusLookupSucceeded",
+                    new Dictionary<string, string?>
+                    {
+                        ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+                    });
             }
-            else { _error = Localizer["NoGusInfo"]; }
+            else
+            {
+                _error = Localizer["NoGusInfo"];
+                WorkflowTelemetry.TrackEvent(
+                    "ReservationInvoiceGusLookupFailed",
+                    new Dictionary<string, string?>
+                    {
+                        ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                        ["Reason"] = "NoData"
+                    });
+            }
         }
-        catch (Exception) { _error = Localizer["GusError"]; }
+        catch (Exception)
+        {
+            _error = Localizer["GusError"];
+            WorkflowTelemetry.TrackEvent(
+                "ReservationInvoiceGusLookupFailed",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                    ["Reason"] = "Exception"
+                });
+        }
         finally { _isFetchingGus = false; }
     }
 
@@ -490,6 +526,13 @@
         if (!IsFormComplete()) 
         {
             _error = null;
+            WorkflowTelemetry.TrackEvent(
+                "ReservationClientInfoValidationFailed",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                    ["UseInvoice"] = _form.UseInvoice.ToString()
+                });
             return;
         }
         
@@ -497,9 +540,27 @@
         try
         {
             await ReservationWorkflowService.SaveClientInfoAsync(ReservationTokenGuid, _form.Client, _form.UseInvoice ? _form.Invoice : null);
+            WorkflowTelemetry.TrackEvent(
+                "ReservationStepCompleted_ClientInfo",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                    ["UseInvoice"] = _form.UseInvoice.ToString(),
+                    ["Language"] = _form.Client.Language
+                });
             Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
         }
-        catch (Exception ex) { _error = "Nie udało się zapisać danych klienta. " + ex.Message ; }
+        catch (Exception ex)
+        {
+            _error = "Nie udało się zapisać danych klienta. " + ex.Message ;
+            WorkflowTelemetry.TrackEvent(
+                "ReservationClientInfoSaveFailed",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                    ["Reason"] = ex.GetType().Name
+                });
+        }
         finally { _isSaving = false; }
     }
 

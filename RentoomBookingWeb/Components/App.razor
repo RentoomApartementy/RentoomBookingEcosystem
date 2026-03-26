@@ -5,6 +5,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @if (!Environment.IsProduction())
+    {
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    }
     <base href="/" />
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="app.css" />
@@ -29,6 +33,19 @@
             gtag('js', new Date());
             gtag('config', 'G-KWEKWNRM9H');
         </script>
+    } else{//dev
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJD8GQWLCY"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-GJD8GQWLCY');
+        </script>
+
+
     }
 
     <!-- Leaflet CSS -->
@@ -38,12 +55,15 @@
 </head>
 
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ34PTLN"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    @if (Environment.IsProduction())
+    {
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ34PTLN"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    }
 <Routes @rendermode="InteractiveServer" />
 
 <!-- Leaflet JS -->

@@ -39,3 +39,23 @@ window.rentoomCookieInterop = {
         }
     }
 };
+
+window.rentoomAnalytics = {
+    trackEvent: function (eventName, parameters) {
+        if (!window.rentoomCookieInterop?.trackingEnabled || typeof window.gtag !== "function" || !eventName) {
+            return;
+        }
+
+        const normalizedParameters = {};
+        if (parameters && typeof parameters === "object") {
+            Object.keys(parameters).forEach(key => {
+                const value = parameters[key];
+                if (value !== null && value !== undefined && value !== "") {
+                    normalizedParameters[key] = value;
+                }
+            });
+        }
+
+        window.gtag("event", eventName, normalizedParameters);
+    }
+};

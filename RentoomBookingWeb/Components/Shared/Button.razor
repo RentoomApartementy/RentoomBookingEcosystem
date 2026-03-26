@@ -3,7 +3,7 @@
 
 @if (!string.IsNullOrEmpty(Href))
 {
-    <a href="@Href" class="@GetFullClass()" @attributes="AdditionalAttributes">
+    <a href="@Href" @onclick="OnClick" class="@GetFullClass()" @attributes="AdditionalAttributes">
         <span style="white-space: nowrap;">@ChildContent</span>
     </a>
 }

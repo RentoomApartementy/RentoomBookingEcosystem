@@ -38,6 +38,7 @@ namespace RentoomBookingWeb
             });
             
             builder.Services.AddControllers();
+            builder.Services.AddApplicationInsightsTelemetry();
             
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
@@ -108,6 +109,8 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixLeadCaptureService>();
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<MediaCacheService>();
+            builder.Services.AddScoped<ReservationWorkflowTelemetry>();
+            builder.Services.AddScoped<GoogleAnalyticsService>();
 
 
             builder.Services.AddScoped<IPaymentFlowHandler, ReservationPaymentFlowHandler>();
@@ -199,6 +202,15 @@ namespace RentoomBookingWeb
                 app.UseHsts();
             }
 
+            if (!app.Environment.IsProduction())
+            {
+                app.Use(async (context, next) =>
+                {
+                    await next();
+                    context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
+                });
+            }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             
@@ -208,6 +220,15 @@ namespace RentoomBookingWeb
             app.UseAntiforgery();
             
             app.MapControllers();
+
+            app.MapGet("/robots.txt", () =>
+            {
+                var content = app.Environment.IsProduction()
+                    ? "User-agent: *\nAllow: /"
+                    : "User-agent: *\nDisallow: /";
+
+                return Results.Text(content, "text/plain");
+            });
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
