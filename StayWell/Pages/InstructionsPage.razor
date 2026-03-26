@@ -290,7 +290,7 @@
                             }
                             @if (HasCode(WifiPassword))
                             {
-                                <div class="code-card__meta" style="padding-top: 10px;">@Localizer["WifiSsid"]</div>
+                                <div class="code-card__meta" style="padding-top: 10px;">@Localizer["WifiPassword"]</div>
                                 <div @onclick="CopyToClipboard" class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 12px; justify-content: center;">
                                     <div class="code-card__value">@WifiPassword</div>
                                     <button class="copy-button" title="Skopiuj">
@@ -542,6 +542,12 @@
         GlobalizationService.OnChange += OnLanguageChanged;
         LocksState.OnChange += OnStateChanged;
         OnLanguageChanged();
+
+        if (LocksState.ApartmentItemCodes is null && !string.IsNullOrEmpty(Token))
+        {
+            await LocksState.GetApartmentItemCodesAsync(Token);
+        }
+
         StateHasChanged();
     }
 
