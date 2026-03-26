@@ -3,7 +3,9 @@
 @using Microsoft.Extensions.Localization;
 @using System.Globalization
 @using BlazorDateRangePicker
+@using RentoomBookingWeb.Services
 @inject IStringLocalizer<SharedResources> Localizer;
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
 
 <div class="@GetClass()">
     <div class="modern-search-bar">
@@ -283,6 +285,22 @@
         }
 
         CloseGuestModal();
+
+        WorkflowTelemetry.TrackEvent(
+            "ApartmentSearchSubmitted",
+            new Dictionary<string, string?>
+            {
+                ["Path"] = NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath,
+                ["StartDate"] = _startDate,
+                ["EndDate"] = _endDate,
+                ["Adults"] = _adults,
+                ["Children"] = _children,
+                ["Rooms"] = _rooms
+            },
+            new Dictionary<string, double>
+            {
+                ["Guests"] = CountPersons
+            });
 
         var query = new Dictionary<string, string>
         {

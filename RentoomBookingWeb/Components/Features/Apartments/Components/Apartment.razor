@@ -8,9 +8,11 @@
 @inject IJSRuntime JS
 @using RentoomBookingWeb.Helpers
 @using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Services
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 @inject MediaCacheService MediaCache 
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
 @implements IAsyncDisposable
 
 <article class="apartment-card" 
@@ -89,7 +91,7 @@
                     <h2 itemprop="name">
                         @if (!string.IsNullOrEmpty(_detailsUrl))
                         {
-                            <a href="@_detailsUrl" style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
+                            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClick("title"))' style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
                         }
                         else
                         {
@@ -214,13 +216,15 @@
             @if (Item == null || (ShowPrice && Offer == null))
             {
                 <Button Href="@_detailsUrl"
+                        OnClick='(() => TrackApartmentClick("button"))'
                         Disabled="@(Item == null || (ShowPrice && Offer == null))">
                     @Localizer["Details"]
                 </Button>
             }
             else
             {
-                <Button Href="@_detailsUrl">
+                <Button Href="@_detailsUrl"
+                        OnClick='(() => TrackApartmentClick("button"))'>
                     @Localizer["BookNow"]
                 </Button>
             }
@@ -276,6 +280,7 @@
     [Parameter] public IReadOnlyList<AvailableTerm>? SuggestionDates { get; set; } = null;
 
     [Parameter] public string? Width { get; set; } = null;
+    [Parameter] public string ListingSource { get; set; } = "apartments-list";
 
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
@@ -446,6 +451,34 @@
 
         var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
         return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} night/s)";
+    }
+
+    private void TrackApartmentClick(string target)
+    {
+        if (Item is null || string.IsNullOrWhiteSpace(_detailsUrl))
+        {
+            return;
+        }
+
+        WorkflowTelemetry.TrackEvent(
+            "ApartmentListingClicked",
+            new Dictionary<string, string?>
+            {
+                ["ApartmentId"] = Item.Id.ToString(),
+                ["ApartmentName"] = Item.Name,
+                ["ListingSource"] = ListingSource,
+                ["ClickTarget"] = target,
+                ["DetailsUrl"] = _detailsUrl,
+                ["StartDate"] = StartDate,
+                ["EndDate"] = EndDate,
+                ["Adults"] = Adults,
+                ["Children"] = Children
+            },
+            new Dictionary<string, double>
+            {
+                ["HasOffer"] = Offer is null ? 0 : 1,
+                ["MinimalPrice"] = (double?)Offer?.MinimalPrice ?? 0
+            });
     }
 
     public async ValueTask DisposeAsync()

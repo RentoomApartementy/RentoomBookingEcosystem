@@ -1097,6 +1097,19 @@
         
         if (_apartment != null)
         {
+            WorkflowTelemetry.TrackEvent(
+                "ApartmentDetailViewed",
+                new Dictionary<string, string?>
+                {
+                    ["ApartmentId"] = _apartment.Id.ToString(),
+                    ["ApartmentName"] = _apartment.Name,
+                    ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
+                    ["StartDate"] = StartDate,
+                    ["EndDate"] = EndDate,
+                    ["Adults"] = Adults,
+                    ["Children"] = Children
+                });
+
             await GetObjectDescription(_apartment.Id, CurrentLanguage);
             _amenities = await GetAmenities(_apartment.Id);
             _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);

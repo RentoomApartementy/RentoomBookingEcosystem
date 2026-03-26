@@ -4,12 +4,14 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBookingWeb.Helpers;
+using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb.Components.Features.Home.Components;
 public partial class ApartmentsSection : ComponentBase
 {
     [Inject] private IRentoomOfferService RentoomOfferService { get; set; } = default!;
     [Inject] private NavigationManager Navigation { get; set; } = default!;
+    [Inject] private ReservationWorkflowTelemetry WorkflowTelemetry { get; set; } = default!;
     
     public List<ApartmentObject> Apartments { get; private set; } = new();
     public List<PricingOffer> Offers { get; private set; } = new();
@@ -91,6 +93,17 @@ public partial class ApartmentsSection : ComponentBase
 
     public void GoToApartmentWithOffer(int apartmentId, string apartmentName)
     {
+        WorkflowTelemetry.TrackEvent(
+            "HomeApartmentClicked",
+            new Dictionary<string, string?>
+            {
+                ["ApartmentId"] = apartmentId.ToString(),
+                ["ApartmentName"] = apartmentName,
+                ["StartDate"] = DateTime.Now.ToString("yyyy-MM-dd"),
+                ["EndDate"] = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
+                ["Adults"] = "2",
+                ["Children"] = "0"
+            });
         Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")}/2/0");
     }
 }
