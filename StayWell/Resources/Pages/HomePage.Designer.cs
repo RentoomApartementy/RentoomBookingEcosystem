@@ -70,6 +70,24 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Book on Rentoom.pl.
+        /// </summary>
+        internal static string BookOnBtn {
+            get {
+                return ResourceManager.GetString("BookOnBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Book your perfect stay in Toruń and enjoy a unique apartment..
+        /// </summary>
+        internal static string BookOnDesc {
+            get {
+                return ResourceManager.GetString("BookOnDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Change language.
         /// </summary>
         internal static string ChangeLanguage {
@@ -192,6 +210,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         internal static string MyVouchers {
             get {
                 return ResourceManager.GetString("MyVouchers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Oops, this page doesn&apos;t exist!.
+        /// </summary>
+        internal static string NoSuchPage {
+            get {
+                return ResourceManager.GetString("NoSuchPage", resourceCulture);
             }
         }
         

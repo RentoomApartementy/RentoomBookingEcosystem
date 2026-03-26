@@ -1,0 +1,42 @@
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<HomePage> Localizer
+@inject NavigationManager Navigation
+@inject States.LayoutState LayoutState
+@inject Services.GlobalizationService GlobalizationService
+@implements IDisposable
+
+<PageTitle>404</PageTitle>
+
+<div class="not-found-wrapper">
+    <div class="not-found-card">
+        <img src="/images/full-size-logo.png" alt="Rentoom" class="not-found-logo" />
+
+        <h1 class="not-found-title">@Localizer["NoSuchPage"]</h1>
+
+        <p class="not-found-text">
+            @Localizer["BookOnDesc"]
+        </p>
+
+        <a href="https://rentoom.pl" class="not-found-btn">
+            @Localizer["BookOnBtn"] <img class="white-filter" src="/icons/chevron-right.svg" />
+        </a>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        LayoutState.OnChange += StateHasChanged;
+        GlobalizationService.OnChange += StateHasChanged;
+        LayoutState.ShowFooter = false;
+    }
+
+    public void Dispose()
+    {
+        LayoutState.ShowFooter = true;
+        GlobalizationService.OnChange -= StateHasChanged;
+        LayoutState.OnChange -= StateHasChanged;
+    }
+}
+
