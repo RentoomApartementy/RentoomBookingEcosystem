@@ -124,7 +124,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu  How to use door lock.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu  How to use door lock:.
         /// </summary>
         internal static string HowTo {
             get {
@@ -142,11 +142,12 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 1. Enter the code or open remotely.
-        ///(Each click will be confirmed by a sound.)
-        ///2. If it lights up blue, turn the knob in the opposite direction to its position on the door until you hear the lock retract.
-        ///(Lock on the right side of the door, turn left)
-        ///(Lock on the left side of the door, turn right)
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 1. Enter the code or unlock remotely.
+        ///(Each keystroke will be confirmed by a beep)
+        ///2. When the light turns blue, turn the knob
+        ///(The lock is on the right-hand side of the door, turn it to the left)
+        ///(Lock on the left-hand side of the door, turn to the right)
+        ///until you hear the lock retract.
         ///3. Open the door.
         /// </summary>
         internal static string InstructionCylinder {
@@ -156,13 +157,31 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 1. Light up the keyboard by pressing any button on the panel.
-        ///2. Enter your code.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 1. Light up the keyboard by pressing any button on the panel or open it remotely.
+        ///2. Enter your code
         ///3. If it lights up blue, open the door..
         /// </summary>
         internal static string InstructionPanel {
             get {
                 return ResourceManager.GetString("InstructionPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu type panel.
+        /// </summary>
+        internal static string LockTypePanel {
+            get {
+                return ResourceManager.GetString("LockTypePanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu type spinning.
+        /// </summary>
+        internal static string LockTypeSpinning {
+            get {
+                return ResourceManager.GetString("LockTypeSpinning", resourceCulture);
             }
         }
         
@@ -217,6 +236,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         internal static string RemoteUnavailable {
             get {
                 return ResourceManager.GetString("RemoteUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your reservation is not active yet. Access will be available from the check-in date..
+        /// </summary>
+        internal static string ReservationNotActive {
+            get {
+                return ResourceManager.GetString("ReservationNotActive", resourceCulture);
             }
         }
         

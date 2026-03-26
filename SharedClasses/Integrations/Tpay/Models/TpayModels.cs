@@ -112,9 +112,17 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay.Models
         public string? RedirectUrl { get; set; }
 
         /// <summary>
-        /// transactionId (primary identifier).
+        /// Transaction title used later in webhook flow (`tr_id`).
         /// </summary>
         public string? TransactionId { get; set; }
+
+        /// <summary>
+        /// OpenAPI transaction id used for GET /transactions/{transactionId}.
+        /// </summary>
+        public string? TransactionUid { get; set; }
+
+        public string? TransactionStatus { get; set; }
+        public decimal? AmountPaid { get; set; }
 
         public string? RawResponse { get; set; }
     }

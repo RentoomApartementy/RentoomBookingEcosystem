@@ -115,6 +115,15 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Booking person.
+        /// </summary>
+        internal static string BookingPerson {
+            get {
+                return ResourceManager.GetString("BookingPerson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Check-in/out time.
         /// </summary>
         internal static string CheckinCheckOutTime {

@@ -92,6 +92,9 @@ public class GetReservationsFunction
         try
         {
             var token = reservationToken;
+            var cancellationToken = req.FunctionContext.CancellationToken;
+            ReservationRecord? reservationRecord = null;
+            Guid reservationGuid = Guid.Empty;
            if (string.IsNullOrWhiteSpace(token))
             {
                 res.StatusCode = System.Net.HttpStatusCode.BadRequest;
@@ -99,9 +102,9 @@ public class GetReservationsFunction
                 return res;
             }
 
-            if (Guid.TryParse(token, out var reservationGuid))
+            if (Guid.TryParse(token, out reservationGuid))
             {
-                var reservationRecord = await _reservationStore.GetAsync(reservationGuid, req.FunctionContext.CancellationToken);
+                reservationRecord = await _reservationStore.GetAsync(reservationGuid, cancellationToken);
                 if (reservationRecord is not null && !string.Equals(reservationRecord.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
                 {
                     res.StatusCode = System.Net.HttpStatusCode.PaymentRequired;
@@ -111,11 +114,22 @@ public class GetReservationsFunction
 
             }
 
-            var ret = await _reservationWorkflowService.EnsureRentoomReservationByResTokenAsync(token, req.FunctionContext.CancellationToken);
+            var ret = await _reservationWorkflowService.EnsureRentoomReservationByResTokenAsync(token, cancellationToken);
             if (ret == null)
             {
                 res.StatusCode = System.Net.HttpStatusCode.NotFound;
                 await res.WriteStringAsync($"Reservation with token {token} not found in database.");
+                return res;
+            }
+
+            reservationRecord = reservationGuid != Guid.Empty
+                ? await _reservationStore.GetAsync(reservationGuid, cancellationToken)
+                : await _reservationStore.GetByIdoReservationIdAsync(ret.Reservation?.id ?? ret.Id, cancellationToken);
+
+            if (reservationRecord is not null && !string.Equals(reservationRecord.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
+            {
+                res.StatusCode = System.Net.HttpStatusCode.PaymentRequired;
+                await res.WriteStringAsync("Payment Required");
                 return res;
             }
 
@@ -146,7 +160,11 @@ public class GetReservationsFunction
 
             res.StatusCode = System.Net.HttpStatusCode.OK;
             res.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            await res.WriteStringAsync(JsonConvert.SerializeObject(ret));
+            await res.WriteStringAsync(JsonConvert.SerializeObject(new StayWellReservationLookupResponse
+            {
+                Reservation = ret,
+                ReservationRecord = reservationRecord is null ? null : StayWellReservationRecordDto.FromRecord(reservationRecord)
+            }));
             return res;
         }
         catch (Exception ex)

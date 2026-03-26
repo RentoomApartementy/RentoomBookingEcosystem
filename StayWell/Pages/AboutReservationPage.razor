@@ -40,7 +40,7 @@
                     <div class="reservation-field">
                         <span class="reservation-field__label">
                             <img class="reservation-field__icon" src="/icons/users.svg" />
-                            @Localizer["Name"]:
+                            @Localizer["BookingPerson"]:
                         </span>
                         <span class="reservation-field__value">
                             @Reservation?.Client.FirstName @Reservation?.Client.LastName
@@ -106,6 +106,9 @@
                         <span class="reservation-field__label">
                             <img class="reservation-field__icon" src="/icons/door-open.svg" />
                             @Localizer["Apartment"]:
+                        </span>
+                        <span class="reservation-field__value">
+                            @Reservation?.Items?.FirstOrDefault()?.objectName
                         </span>
                         <span class="reservation-field__value">
                             @Reservation?.Items?.FirstOrDefault()?.itemCode

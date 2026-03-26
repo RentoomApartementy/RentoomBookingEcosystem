@@ -364,6 +364,8 @@ Zawieraja m.in.:
   - `staywellBaseUrl`
   - `rentoomWebBaseUrl`
   - `staywellApiBaseUrl`
+- harmonogramy / zadania aplikacyjne:
+  - `cronSyncAllApartmentsFromIdb`
 - typ srodowiska:
   - `environment`
 - konfiguracje Web App planu:
@@ -384,6 +386,7 @@ Zawieraja m.in.:
   - `staywellGithubOutputLocation`
   - `staywellGithubActionSecretName`
 - osobne ustawienia Tpay dla Web App i API Functions
+- cron job settings dla StayWell API
 - ustawienia PostgreSQL:
   - `postgresMaxConnections`
   - `postgresPoolingEnabled`
@@ -401,6 +404,7 @@ Domyslne wartosci:
 - `staywellBaseUrl=https://dev.staywell.rentoom.pl`
 - `rentoomWebBaseUrl=https://dev.rentoom.pl`
 - `staywellApiBaseUrl=https://api-dev.rentoom.pl`
+- `cronSyncAllApartmentsFromIdb=0 0 */2 * * *`
 - `webPlanSku=F1/Free`
 - `RentoomBookingWeb=Windows`
 - `tags.environment=dev`
@@ -415,6 +419,7 @@ Domyslne wartosci:
 - `staywellBaseUrl=https://staywell.rentoom.pl`
 - `rentoomWebBaseUrl=https://rentoom.pl`
 - `staywellApiBaseUrl=https://api.rentoom.pl`
+- `cronSyncAllApartmentsFromIdb=0 0 */2 * * *`
 - `webPlanSku=B2/Basic`
 - `RentoomBookingWeb=Linux`
 - `postgresMaxConnections=429`

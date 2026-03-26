@@ -23,6 +23,8 @@ namespace RentoomBooking.StayWell.Services
             if (CurrentCulture.Name == culture.Name)
                 return;
 
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
             CurrentCulture = culture;

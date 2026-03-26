@@ -171,17 +171,27 @@
   <data name="InstructionCylinder" xml:space="preserve">
     <value>1. Wpisz kod lub otwórz zdalnie.
 (Każde kliknięcie przycisku na klawiaturze będzie potwierdzone dźwiękiem)
-2. Jeżeli zaświeci się na niebiesko, przekręcaj gałką w kierunku przeciwnym do jej pozycji na drzwiach do momentu aż usłyszysz cofający się zamek.
+2. Jeżeli zaświeci się na niebiesko, przekręcaj gałką
 (Zamek po prawej stronie drzwi, kręć w lewo)
 (Zamek po lewej stronie drzwi, kręć w prawo)
+do momentu aż usłyszysz cofający się zamek.
 3. Otwórz drzwi</value>
   </data>
   <data name="InstructionPanel" xml:space="preserve">
-    <value>1. Podświetl klawiaturę wciskając dowolny przycisk na panelu
+    <value>1. Podświetl klawiaturę wciskając dowolny przycisk na panelu lub otwórz zdalnie.
 2. Wpisz swój kod
 3. Jeżeli zaświeci się na niebiesko otwórz drzwi.</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Ważne</value>
+  </data>
+  <data name="LockTypePanel" xml:space="preserve">
+    <value>panelowego</value>
+  </data>
+  <data name="LockTypeSpinning" xml:space="preserve">
+    <value>obrotowego</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Twoja rezerwacja nie jest jeszcze aktywna. Dostęp będzie możliwy od dnia zameldowania.</value>
   </data>
 </root>

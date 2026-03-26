@@ -7,56 +7,65 @@
 @implements IDisposable
 
 <div class="footer-navigation-row">
-    <NavigationButton href="@($"/reservation/{Token}/InstructionsPage")"
-                      active="@IsActive($"/reservation/{Token}/InstructionsPage")"
+    <NavigationButton href="@($"/reservation/{TokenFromUrl}/InstructionsPage")"
+                      active="@IsActive($"/reservation/{TokenFromUrl}/InstructionsPage")"
                       Text="@Localizer["InstructionsFooter"]">
         <Icon>
             <img src="/icons/book.svg" alt="Instrukcja" />
         </Icon>
     </NavigationButton>
 
-    <NavigationButton href="@($"/reservation/{Token}/OpenApartmentPage")"
-                      active="@IsActive($"/reservation/{Token}/OpenApartmentPage")"
+    <NavigationButton href="@($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
+                      active="@IsActive($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
                       Text="@Localizer["Open"]">
         <Icon>
             <img src="/icons/lock.svg" alt="Otwórz" />
         </Icon>
     </NavigationButton>
 
-    <NavigationButton href="@($"/reservation/{Token}/HomePage")"
-                      active="@IsActive([$"/reservation/{Token}/HomePage", $"/reservation/{Token}/",$"/reservation/{Token}"])"
+    <NavigationButton href="@($"/reservation/{TokenFromUrl}/HomePage")"
+                      active="@IsActive([$"/reservation/{TokenFromUrl}/HomePage", $"/reservation/{TokenFromUrl}/",$"/reservation/{TokenFromUrl}"])"
                       Text="@Localizer["Home"]">
         <Icon>
             <img src="/icons/house.svg" alt="Główna" />
         </Icon>
     </NavigationButton>
 
-    <NavigationButton href="@($"/reservation/{Token}/ManageStayPage")"
-                      active="@IsActive($"/reservation/{Token}/ManageStayPage")"
+    <NavigationButton href="@($"/reservation/{TokenFromUrl}/ManageStayPage")"
+                      active="@IsActive($"/reservation/{TokenFromUrl}/ManageStayPage")"
                       Text="@Localizer["Manage"]">
         <Icon>
             <img src="/icons/lamp.svg" alt="Zarządzaj" />
         </Icon>
     </NavigationButton>
 
-    <NavigationButton href="@($"/reservation/{Token}/AboutReservationPage")"
-                      active="@IsActive($"/reservation/{Token}/AboutReservationPage")"
+    <NavigationButton href="@($"/reservation/{TokenFromUrl}/AboutReservationPage")"
+                      active="@IsActive($"/reservation/{TokenFromUrl}/AboutReservationPage")"
                       Text="Info">
-            <Icon>
-                <img src="/icons/info.svg" alt="Info" />
-            </Icon>
+        <Icon>
+            <img src="/icons/info.svg" alt="Info" />
+        </Icon>
     </NavigationButton>
 </div>
 
 @code {
-    [Parameter]
-    public string? Token { get; set; }
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Navigation.LocationChanged += OnLocationChanged;
         GlobalizationService.OnChange += StateHasChanged;
+    }
+
+    private string? TokenFromUrl
+    {
+        get
+        {
+            var path = Navigation.ToBaseRelativePath(Navigation.Uri).Split('?', '#')[0];
+            var segments = path.Trim('/').Split('/');
+            if (segments.Length >= 2 && segments[0] == "reservation")
+                return segments[1];
+            return null;
+        }
     }
 
     private void OnLocationChanged(
@@ -70,6 +79,7 @@
     public void Dispose()
     {
         Navigation.LocationChanged -= OnLocationChanged;
+        GlobalizationService.OnChange -= StateHasChanged;
     }
 
     private bool IsActive(string href)

@@ -106,6 +106,9 @@
     "staywellApiBaseUrl": {
       "value": "https://api-dev.rentoom.pl"
     },
+    "cronSyncAllApartmentsFromIdb": {
+      "value": "0 0 */2 * * *"
+    },
     "staywellApiAuthExcludedPaths": {
       "value": [
         "/api/mail/incoming",

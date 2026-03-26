@@ -120,6 +120,12 @@
   <data name="AboutReservation" xml:space="preserve">
     <value>Your Reservation</value>
   </data>
+  <data name="BookOnBtn" xml:space="preserve">
+    <value>Book on Rentoom.pl</value>
+  </data>
+  <data name="BookOnDesc" xml:space="preserve">
+    <value>Book your perfect stay in Toruń and enjoy a unique apartment.</value>
+  </data>
   <data name="ChangeLanguage" xml:space="preserve">
     <value>Change language</value>
   </data>
@@ -148,6 +154,9 @@
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Guide</value>
   </data>
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>Language changed to:</value>
+  </data>
   <data name="Manage" xml:space="preserve">
     <value>Manage</value>
   </data>
@@ -159,6 +168,9 @@
   </data>
   <data name="MyVouchers" xml:space="preserve">
     <value>My Vouchers</value>
+  </data>
+  <data name="NoSuchPage" xml:space="preserve">
+    <value>Oops, this page doesn't exist!</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>

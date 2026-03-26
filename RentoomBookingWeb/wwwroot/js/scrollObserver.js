@@ -50,3 +50,9 @@ window.scrollToElement = (elementId, offsetPx = 0) => {
         console.warn(`[Scroll] Nie można przewinąć - brak elementu: ${elementId}`);
     }
 };
+
+window.scrollToTop = (behavior = 'auto') => {
+    window.scrollTo({ top: 0, left: 0, behavior });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+};

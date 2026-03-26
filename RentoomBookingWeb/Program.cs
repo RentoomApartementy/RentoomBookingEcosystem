@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
@@ -76,6 +77,9 @@ namespace RentoomBookingWeb
             }
 
 
+            builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
             builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
 
@@ -87,6 +91,7 @@ namespace RentoomBookingWeb
 
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<FiltersRepository>();
+            builder.Services.AddScoped<RappQrMaintService>();
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
             builder.Services.AddScoped<IdoSellService>();
@@ -196,6 +201,10 @@ namespace RentoomBookingWeb
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
+            // error 404
+            app.UseStatusCodePagesWithReExecute("/404");
+
             app.UseAntiforgery();
             
             app.MapControllers();

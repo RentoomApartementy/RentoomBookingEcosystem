@@ -11,13 +11,29 @@ namespace RentoomBooking.StayWell.States
         private readonly LocalStorageService _localStorage = localStorage;
         private const string TtLockCacheKeyPrefix = "staywell_ttlock_status_";
         private static readonly TimeSpan TtLockCacheTtl = TimeSpan.FromHours(1);
+        private static readonly TimeSpan RetryCooldown = TimeSpan.FromSeconds(30);
 
-        private sealed record TtLockCacheEntry(bool IsSuccess, int? BatteryLevel, long ExpiresAtUtcTicks);
+        private sealed record TtLockCacheEntry(
+            bool IsSuccess,
+            int? BatteryLevel,
+            long ExpiresAtUtcTicks
+        );
 
         public bool IsLoading { get; set; }
         public bool IsTTLockLoading { get; private set; }
         public int? BatteryLevel { get; private set; }
         public bool IsTTLockAvailable { get; private set; }
+
+        private CancellationTokenSource? _retryCts;
+        private DateTimeOffset? _retryUnlocksAt;
+
+        public bool IsStatusResolved { get; private set; }
+
+        public int RetrySecondsRemaining { get; private set; }
+        public bool IsRetryCountdownActive { get; private set; }
+
+        public bool IsRetryDisabled =>
+            RetrySecondsRemaining > 0 || IsTTLockLoading;
 
         public List<Lock>? CurrentLocks
         {
@@ -32,18 +48,23 @@ namespace RentoomBooking.StayWell.States
         public string? TTLockId { get; private set; }
         public ApartmentItemLocalSettings? ApartmentItemCodes { get; private set; }
 
-        public async Task<List<Lock?>?> GetLocksAsync(int reservationId, int itemId)
+        public async Task<List<Lock?>?> GetLocksAsync(
+            int reservationId,
+            int itemId
+        )
         {
             SetLoading(true);
             try
             {
-                var locks = await _backendApi.GetLocksAsync(reservationId, itemId);
+                var locks = await _backendApi.GetLocksAsync(
+                    reservationId,
+                    itemId
+                );
                 CurrentLocks = locks;
                 return CurrentLocks;
             }
-            catch (Exception e)
+            catch
             {
-                //Console.WriteLine(e.Message);
                 ClearLocks();
                 return null;
             }
@@ -58,10 +79,6 @@ namespace RentoomBooking.StayWell.States
             SetTTLockLoading(true);
             try
             {
-                //najpierw cache (wazny 1h - moze za dlugo?), żeby nie pytaci api za często przy każdym wejściu na stronę z kodem
-                //todo: do przemyslenia czy nie uzaleznic zapisu do cache od battery level np wiekszy niz 30%?
-                //      bo Mati - masz w linicje nizej availability> 20 (wiec zakladam ze przzez 1h nie spadnie o 10%)
-                //      a wtedy trzeba odpytac api
                 var cached = await TryLoadTtLockCacheAsync(token);
                 if (cached is not null)
                 {
@@ -74,7 +91,6 @@ namespace RentoomBooking.StayWell.States
                 {
                     BatteryLevel = result.BatteryLevel;
                     IsTTLockAvailable = (BatteryLevel > 20);
-                    //zapisuje do cache zamek, zeby przy kolejnych odpytkach nie pingować od razu api, tylko dać wynik z cache (nawet jesli jest dostpny, bo nie ma sensu pingować co chwilę)
                     await SaveTtLockCacheAsync(token, result);
                 }
                 else
@@ -89,23 +105,129 @@ namespace RentoomBooking.StayWell.States
             }
             finally
             {
+                IsStatusResolved = true;
                 SetTTLockLoading(false);
+
+                if (!IsTTLockAvailable)
+                {
+                    StartRetryCountdown();
+                }
+            }
+        }
+
+        public async Task RetryCheckTTLockStatusAsync(string token)
+        {
+            if (IsRetryDisabled || string.IsNullOrWhiteSpace(token))
+            {
+                return;
+            }
+
+            CancelRetryCountdown();
+            await CheckTTLockStatusAsync(token);
+        }
+
+        public void StartRetryCountdown()
+        {
+            CancelRetryCountdown();
+
+            _retryUnlocksAt = DateTimeOffset.UtcNow.Add(RetryCooldown);
+            RetrySecondsRemaining = (int)RetryCooldown.TotalSeconds;
+            IsRetryCountdownActive = true;
+            _retryCts = new CancellationTokenSource();
+
+            _ = RunRetryCountdownAsync(_retryCts.Token);
+            NotifyStateChanged();
+        }
+
+        public void RestoreRetryCountdownIfNeeded()
+        {
+            if (_retryUnlocksAt is null)
+            {
+                return;
+            }
+
+            var remaining = _retryUnlocksAt.Value - DateTimeOffset.UtcNow;
+            if (remaining.TotalSeconds <= 0)
+            {
+                CancelRetryCountdown();
+                return;
+            }
+
+            if (IsRetryCountdownActive && _retryCts is { IsCancellationRequested: false })
+            {
+                return;
+            }
+
+            RetrySecondsRemaining = (int)Math.Ceiling(remaining.TotalSeconds);
+            IsRetryCountdownActive = true;
+            _retryCts = new CancellationTokenSource();
+
+            _ = RunRetryCountdownAsync(_retryCts.Token);
+            NotifyStateChanged();
+        }
+
+        public void CancelRetryCountdown()
+        {
+            if (_retryCts is not null)
+            {
+                _retryCts.Cancel();
+                _retryCts.Dispose();
+                _retryCts = null;
+            }
+
+            RetrySecondsRemaining = 0;
+            IsRetryCountdownActive = false;
+            _retryUnlocksAt = null;
+        }
+
+        private async Task RunRetryCountdownAsync(CancellationToken token)
+        {
+            try
+            {
+                while (
+                    RetrySecondsRemaining > 0
+                    && !token.IsCancellationRequested
+                )
+                {
+                    await Task.Delay(1000, token);
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    RetrySecondsRemaining--;
+                    NotifyStateChanged();
+                }
+            }
+            catch (TaskCanceledException) { }
+            finally
+            {
+                if (!token.IsCancellationRequested)
+                {
+                    IsRetryCountdownActive = false;
+                    _retryUnlocksAt = null;
+                    NotifyStateChanged();
+                }
             }
         }
 
         public async Task GetTTLockIdAsync(int apartmentItemId)
         {
             TTLockId = await _backendApi.GetLockCodeAsync(apartmentItemId);
-            //Console.WriteLine(TTLockId);
             NotifyStateChanged();
         }
 
-        public async Task<ApartmentItemLocalSettings?> GetApartmentItemCodesAsync(string reservationToken)
+        public async Task<ApartmentItemLocalSettings?> GetApartmentItemCodesAsync(
+            string reservationToken
+        )
         {
             SetLoading(true);
             try
             {
-                ApartmentItemCodes = await _backendApi.GetApartmentItemCodesAsync(reservationToken);
+                ApartmentItemCodes =
+                    await _backendApi.GetApartmentItemCodesAsync(
+                        reservationToken
+                    );
                 return ApartmentItemCodes;
             }
             catch
@@ -148,15 +270,22 @@ namespace RentoomBooking.StayWell.States
             TTLockId = null;
             BatteryLevel = null;
             IsTTLockAvailable = false;
+            IsStatusResolved = false;
             ApartmentItemCodes = null;
+            CancelRetryCountdown();
         }
 
-        private async Task<TtLockCacheEntry?> TryLoadTtLockCacheAsync(string token)
+        private async Task<TtLockCacheEntry?> TryLoadTtLockCacheAsync(
+            string token
+        )
         {
             try
             {
                 var key = BuildTtLockCacheKey(token);
-                var (exists, entry) = await _localStorage.TryGetItemAsync<TtLockCacheEntry>(key);
+                var (exists, entry) =
+                    await _localStorage.TryGetItemAsync<TtLockCacheEntry>(
+                        key
+                    );
                 if (!exists)
                 {
                     return null;
@@ -179,25 +308,38 @@ namespace RentoomBooking.StayWell.States
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"LocksState.TryLoadTtLockCacheAsync failed: {ex.Message}");
+                Console.WriteLine(
+                    $"LocksState.TryLoadTtLockCacheAsync failed: {ex.Message}"
+                );
                 return null;
             }
         }
 
-        private async Task SaveTtLockCacheAsync(string token, BackendApi.TTLockActionResult result)
+        private async Task SaveTtLockCacheAsync(
+            string token,
+            BackendApi.TTLockActionResult result
+        )
         {
             try
             {
                 var entry = new TtLockCacheEntry(
                     IsSuccess: result.IsSuccess,
                     BatteryLevel: result.BatteryLevel,
-                    ExpiresAtUtcTicks: DateTimeOffset.UtcNow.Add(TtLockCacheTtl).Ticks);
+                    ExpiresAtUtcTicks: DateTimeOffset.UtcNow
+                        .Add(TtLockCacheTtl)
+                        .Ticks
+                );
 
-                await _localStorage.SetItemAsync(BuildTtLockCacheKey(token), entry);
+                await _localStorage.SetItemAsync(
+                    BuildTtLockCacheKey(token),
+                    entry
+                );
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"LocksState.SaveTtLockCacheAsync failed: {ex.Message}");
+                Console.WriteLine(
+                    $"LocksState.SaveTtLockCacheAsync failed: {ex.Message}"
+                );
             }
         }
 
@@ -214,6 +356,7 @@ namespace RentoomBooking.StayWell.States
                 IsTTLockAvailable = false;
             }
 
+            IsStatusResolved = true;
             NotifyStateChanged();
         }
 

@@ -6,10 +6,11 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @using Microsoft.JSInterop
+@using System.Text.Json
+@using System.Text.RegularExpressions
 @inject NavigationManager Navigation
 @inject StayWell.Services.ClipboardService ClipboardService
 @inject IStringLocalizer<InstructionsPage> Localizer
-@* @inject StayWell.Services.ToastService ToastService *@
 @inject IJSRuntime JS
 
 @inherits Models.PageBase
@@ -20,10 +21,6 @@
 
 <div class="instructions-page">
     <section class="instructions-section shortcuts-section">
-        @* <header class="instructions-section__header">
-            <h3 class="instructions-section__title">@Localizer["Shortcuts"]</h3>
-        </header> *@
-
         <div class="shortcuts-bar">
             <button type="button"
                     class="shortcut-btn @(IsActiveTarget("wifi-shortcut-target") ? "shortcut-btn--active" : string.Empty)"
@@ -40,6 +37,22 @@
                     @onclick='() => ScrollToTarget("open-shortcut-target")'>
                 <img src="/icons/lock.svg" alt="@Localizer["OpenButton"]" />
             </button>
+
+            <button type="button"
+                    class="shortcut-btn @(IsActiveTarget("map-info-target") ? "shortcut-btn--active" : string.Empty)"
+                    title="@Localizer["OpenButton"]"
+                    aria-label="@Localizer["OpenButton"]"
+                    @onclick='() => ScrollToTarget("map-info-target")'>
+                <img src="/icons/map-pin.svg" alt="@Localizer["OpenButton"]" />
+            </button>
+
+            <button type="button"
+                    class="shortcut-btn @(IsActiveTarget("parking-info-target") ? "shortcut-btn--active" : string.Empty)"
+                    title="@Localizer["OpenButton"]"
+                    aria-label="@Localizer["OpenButton"]"
+                    @onclick='() => ScrollToTarget("parking-info-target")'>
+                <img src="/icons/square-parking.svg" alt="@Localizer["OpenButton"]" />
+            </button>
         </div>
     </section>
 
@@ -53,7 +66,7 @@
             {
                 <div class="skeleton skeleton--carousel"></div>
             }
-            else if (!InstructionAvailable)
+            else if (InstructionAvailable)
             {
                 <Carousel Description=""
                           Descriptions="@InstructionDescriptions"
@@ -94,29 +107,89 @@
             }
             else
             {
-                @if (!string.IsNullOrEmpty(ApartmentState.CurrentApartment?.ObjectLocation?.Address))
+                @if (HasCode(ApartmentAddress) || HasMapLink(ApartmentMapUrl))
                 {
-                    <div class="code-card">
-                        <div class="code-card__icon-wrapper">
-                            <img src="/icons/map-pin.svg" class="code-card__icon" />
+                    @if (HasMapLink(ApartmentMapUrl))
+                    {
+                        <a id="map-info-target" class="code-card code-card--map code-card--link code-card--scroll-target @(IsActiveTarget("map-info-target") ? "code-card--active" : string.Empty)" href="@ApartmentMapUrl" target="_blank" rel="noopener noreferrer">
+                            <div class="code-card__icon-wrapper">
+                                <img src="/icons/map-pin.svg" class="code-card__icon" />
+                            </div>
+                            <div class="code-card__content">
+                                <div class="code-card__header">
+                                    <div class="code-card__label">@Localizer["Address"]</div>
+                                    <span class="code-card__status code-card__status--available">@Localizer["GoogleMaps"]</span>
+                                </div>
+                                <div class="code-card__value">@(!string.IsNullOrWhiteSpace(ApartmentAddress) ? ApartmentAddress : Localizer["ApartmentMap"])</div>
+                                <div class="code-card__cta">
+                                    <span>@Localizer["OpenMap"]</span>
+                                    <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <div id="map-info-target" class="code-card code-card--map code-card--muted code-card--scroll-target @(IsActiveTarget("map-info-target") ? "code-card--active" : string.Empty)">
+                            <div class="code-card__icon-wrapper">
+                                <img src="/icons/map-pin.svg" class="code-card__icon" />
+                            </div>
+                            <div class="code-card__content">
+                                <div class="code-card__header">
+                                    <div class="code-card__label">@Localizer["Address"]</div>
+                                    <span class="code-card__status code-card__status--unavailable">@Localizer["NoMap"]</span>
+                                </div>
+                                <div class="code-card__value">@ApartmentAddress</div>
+                                <div class="code-card__meta">@Localizer["MapUnavailable"]</div>
+                            </div>
                         </div>
-                        <div class="code-card__content">
-                            <div class="code-card__label">@Localizer["Address"]</div>
-                            <div class="code-card__value">@ApartmentState.CurrentApartment?.ObjectLocation?.Address</div>
-                        </div>
-                    </div>
+                    }
                 }
-                @if (HasCode(LocksState.ApartmentItemCodes?.ParkingSpotNumber))
+
+                @if (HasCode(ParkingSpotNumber) || HasMapLink(ParkingMapUrl))
                 {
-                    <div class="code-card">
-                        <div class="code-card__icon-wrapper">
-                            <img src="/icons/square-parking.svg" class="code-card__icon" />
+                    @if (HasMapLink(ParkingMapUrl))
+                    {
+                        <a id="parking-info-target" class="code-card code-card--map code-card--link code-card--scroll-target @(IsActiveTarget("parking-info-target") ? "code-card--active" : string.Empty)" href="@ParkingMapUrl" target="_blank" rel="noopener noreferrer">
+                            <div class="code-card__icon-wrapper">
+                                <img src="/icons/square-parking.svg" class="code-card__icon" />
+                            </div>
+                            <div class="code-card__content">
+                                <div class="code-card__header">
+                                    <div class="code-card__label">@(HasCode(ParkingSpotNumber) ? Localizer["ParkingNumber"] : Localizer["ParkingMap"])</div>
+                                    <span class="code-card__status code-card__status--available">@Localizer["GoogleMaps"]</span>
+                                </div>
+                                @if (HasCode(ParkingSpotNumber))
+                                {
+                                    <div class="code-card__value">@ParkingSpotNumber</div>
+                                }
+                                else
+                                {
+                                    <div class="code-card__value">@Localizer["ParkingMap"]</div>
+                                }
+                                <div class="code-card__cta">
+                                    <span>@Localizer["OpenMap"]</span>
+                                    <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else if (HasCode(ParkingSpotNumber))
+                    {
+                        <div id="parking-info-target" class="code-card code-card--map code-card--scroll-target @(IsActiveTarget("parking-info-target") ? "code-card--active" : string.Empty)">
+                            <div class="code-card__icon-wrapper">
+                                <img src="/icons/square-parking.svg" class="code-card__icon" />
+                            </div>
+                            <div class="code-card__content">
+                                <div class="code-card__header">
+                                    <div class="code-card__label">@Localizer["ParkingNumber"]</div>
+                                    <span class="code-card__status code-card__status--unavailable">@Localizer["NoMap"]</span>
+                                </div>
+                                <div class="code-card__value">@ParkingSpotNumber</div>
+                                <div class="code-card__meta">@Localizer["MapUnavailable"]</div>
+                            </div>
                         </div>
-                        <div class="code-card__content">
-                            <div class="code-card__label">@Localizer["ParkingNumber"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.ParkingSpotNumber</div>
-                        </div>
-                    </div>
+                    }
                 }
 
                 @if (HasCode(LocksState.ApartmentItemCodes?.GateCode))
@@ -127,7 +200,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["GateCode"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.GateCode</div>
+                            <div class="code-card__value">@RenderCodeTiles(LocksState.ApartmentItemCodes?.GateCode)</div>
                         </div>
                     </div>
                 }
@@ -140,7 +213,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["BuildingCode"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.GateDoorCode</div>
+                            <div class="code-card__value">@RenderCodeTiles(LocksState.ApartmentItemCodes?.GateDoorCode)</div>
                         </div>
                     </div>
                 }
@@ -153,7 +226,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["SharedDoorsCode"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.AdditionalDoorCode</div>
+                            <div class="code-card__value">@RenderCodeTiles(LocksState.ApartmentItemCodes?.AdditionalDoorCode)</div>
                         </div>
                     </div>
                 }
@@ -166,7 +239,7 @@
                         </div>
                         <div class="code-card__content">
                             <div class="code-card__label">@Localizer["KeySafeCode"]</div>
-                            <div class="code-card__value code-highlight">@LocksState.ApartmentItemCodes?.StoreroomCode</div>
+                            <div class="code-card__value">@RenderCodeTiles(LocksState.ApartmentItemCodes?.StoreroomCode)</div>
                         </div>
                     </div>
                 }
@@ -190,7 +263,7 @@
                     </div>
                     <div class="code-card__content">
                         <div class="code-card__label">@Localizer["GoOpen"]</div>
-                        <div class="code-card__value code-highlight">
+                        <div class="code-card__value">
                             <button class="openapartment-btn" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
                                 <span>@Localizer["OpenButton"] <img class="white-filter" src="/icons/chevron-right.svg" /></span>
                             </button>
@@ -212,10 +285,12 @@
                         {
                             @if (HasCode(WifiSsid))
                             {
+                                <div class="code-card__meta" style="padding-top: 10px;">@Localizer["WifiSsid"]</div>
                                 <div class="code-card__value">@WifiSsid</div>
                             }
                             @if (HasCode(WifiPassword))
                             {
+                                <div class="code-card__meta" style="padding-top: 10px;">@Localizer["WifiPassword"]</div>
                                 <div @onclick="CopyToClipboard" class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 12px; justify-content: center;">
                                     <div class="code-card__value">@WifiPassword</div>
                                     <button class="copy-button" title="Skopiuj">
@@ -241,19 +316,34 @@
 
 @code {
     private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
-    //private const string InstructionImageBaseUrl = "https://app.rentoom.pl/";
-    // private const string DefaultFallbackInstructionDescription = "Instrukcje zameldowania są w trakcie przygotowania.";
+
+    private static readonly Dictionary<string, string> CodeIconMappings = new(StringComparer.OrdinalIgnoreCase)
+    {
+        { "dzwonek", "/icons/bell-ring.svg" },
+        { "dzwon", "/icons/bell-ring.svg" },
+        { "kluczyk", "/icons/key-round.svg" },
+        { "klucz", "/icons/key-round.svg" },
+        { "drzwi", "/icons/door-closed-2.svg" }
+    };
+
+    private static readonly Regex CodeIconRegex = new(
+        string.Join("|", CodeIconMappings.Keys
+            .OrderByDescending(k => k.Length)
+            .Select(k => Regex.Escape(k))),
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     private string? WifiPassword => ApartmentState.WifiInfo?.Password;
     private string? WifiSsid => ApartmentState.WifiInfo?.Ssid;
     private string? WifiAuth => ApartmentState.WifiInfo?.Auth;
+    private string? ApartmentAddress => ApartmentState.CurrentApartment?.ObjectLocation?.Address;
+    private string? ApartmentMapUrl => NormalizeMapUrl(ReservationState.CurrentReservationRecord?.State.GoogleMapsLink);
+    private string? ParkingMapUrl => NormalizeMapUrl(ReservationState.CurrentReservationRecord?.State.ParkingMapUrl);
+    private string? ParkingSpotNumber => GetParkingSpotNumber();
 
     private IReadOnlyList<ApartmentArrivalInstructionStepDTO> ArrivalInstructionSteps =>
         ApartmentState.ArrivalInstructionSteps ?? Array.Empty<ApartmentArrivalInstructionStepDTO>();
 
     private bool InstructionAvailable => ArrivalInstructionSteps.Count > 0;
-
-    // private string FallbackInstructionDescription => DefaultFallbackInstructionDescription;
 
     private string[] InstructionDescriptions => ArrivalInstructionSteps
         .Select(s => s.Description)
@@ -264,24 +354,146 @@
         .ToArray();
 
     private string[] InstructionImageUrls => ArrivalInstructionSteps
-        .Select(s => s.ImageUrl ?? InstructionPlaceholderUrl)
+        .Select(s => NormalizeInstructionImageUrl(s.ImageUrl))
         .ToArray();
 
-   /* private string NormalizeInstructionImageUrl(string? imageUrl)
+    private string NormalizeInstructionImageUrl(string? imageUrl)
     {
         if (string.IsNullOrWhiteSpace(imageUrl))
         {
             return InstructionPlaceholderUrl;
         }
 
-        if (Uri.TryCreate(imageUrl, UriKind.Absolute, out var absoluteUri))
+        var normalizedImageUrl = imageUrl.Trim().Replace("\\", "/");
+
+        if (Uri.TryCreate(normalizedImageUrl, UriKind.Absolute, out var absoluteUri))
         {
             return absoluteUri.ToString();
         }
 
-        return $"{InstructionImageBaseUrl.TrimEnd('/')}/{imageUrl.TrimStart('/')}";
+        return Navigation.ToAbsoluteUri(normalizedImageUrl.TrimStart('/')).ToString();
     }
-    */
+
+    private string? GetParkingSpotNumber()
+    {
+        var apartmentItemCodes = LocksState.ApartmentItemCodes;
+        if (apartmentItemCodes is null)
+        {
+            return null;
+        }
+
+        var language = GlobalizationService.CurrentCulture.TwoLetterISOLanguageName;
+        if (string.Equals(language, "pl", StringComparison.OrdinalIgnoreCase))
+        {
+            return apartmentItemCodes.ParkingSpotNumber;
+        }
+
+        if (string.IsNullOrWhiteSpace(apartmentItemCodes.ParkingSpotNumberTranslationsJson))
+        {
+            return apartmentItemCodes.ParkingSpotNumber;
+        }
+
+        try
+        {
+            var translations = JsonSerializer.Deserialize<List<ParkingLanguage>>(
+                apartmentItemCodes.ParkingSpotNumberTranslationsJson);
+
+            if (translations is null || translations.Count == 0)
+            {
+                return apartmentItemCodes.ParkingSpotNumber;
+            }
+
+            var translationDict = translations.ToDictionary(
+                t => t.Language, t => t.Value, StringComparer.OrdinalIgnoreCase);
+
+            if (translationDict.TryGetValue(language, out var languageMatch) &&
+                HasCode(languageMatch))
+            {
+                return languageMatch;
+            }
+        }
+        catch (JsonException)
+        {
+        }
+
+        return apartmentItemCodes.ParkingSpotNumber;
+    }
+
+    private MarkupString RenderCodeTiles(string? code)
+    {
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            return new MarkupString(string.Empty);
+        }
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append("<div class=\"code-tiles\">");
+
+        var matches = CodeIconRegex.Matches(code);
+
+        if (matches.Count == 0)
+        {
+            foreach (char c in code)
+            {
+                if (!char.IsWhiteSpace(c))
+                {
+                    sb.Append("<span class=\"code-tile\">");
+                    sb.Append(System.Net.WebUtility.HtmlEncode(c.ToString()));
+                    sb.Append("</span>");
+                }
+            }
+        }
+        else
+        {
+            int lastIndex = 0;
+
+            foreach (Match match in matches)
+            {
+                for (int i = lastIndex; i < match.Index; i++)
+                {
+                    char c = code[i];
+                    if (!char.IsWhiteSpace(c))
+                    {
+                        sb.Append("<span class=\"code-tile\">");
+                        sb.Append(System.Net.WebUtility.HtmlEncode(c.ToString()));
+                        sb.Append("</span>");
+                    }
+                }
+
+                var iconUrl = CodeIconMappings
+                    .First(kvp => string.Equals(
+                        kvp.Key,
+                        match.Value,
+                        StringComparison.OrdinalIgnoreCase))
+                    .Value;
+
+                sb.Append("<span class=\"code-tile code-tile--icon\">");
+                sb.Append("<img src=\"");
+                sb.Append(System.Net.WebUtility.HtmlEncode(iconUrl));
+                sb.Append("\" alt=\"");
+                sb.Append(System.Net.WebUtility.HtmlEncode(match.Value));
+                sb.Append("\" class=\"code-tile__icon\" />");
+                sb.Append("</span>");
+
+                lastIndex = match.Index + match.Length;
+            }
+
+            for (int i = lastIndex; i < code.Length; i++)
+            {
+                char c = code[i];
+                if (!char.IsWhiteSpace(c))
+                {
+                    sb.Append("<span class=\"code-tile\">");
+                    sb.Append(System.Net.WebUtility.HtmlEncode(c.ToString()));
+                    sb.Append("</span>");
+                }
+            }
+        }
+
+        sb.Append("</div>");
+        return new MarkupString(sb.ToString());
+    }
+
     private async Task CopyToClipboard()
     {
         var password = WifiPassword;
@@ -306,6 +518,16 @@
         return !string.IsNullOrWhiteSpace(code);
     }
 
+    private static bool HasMapLink(string? url)
+    {
+        return !string.IsNullOrWhiteSpace(url);
+    }
+
+    private static string? NormalizeMapUrl(string? url)
+    {
+        return string.IsNullOrWhiteSpace(url) ? null : url.Trim();
+    }
+
     private bool HasWifiInfo()
     {
         return HasCode(WifiSsid) || HasCode(WifiPassword) || HasCode(WifiAuth);
@@ -318,6 +540,15 @@
     {
         await base.OnInitializedAsync();
         GlobalizationService.OnChange += OnLanguageChanged;
+        LocksState.OnChange += OnStateChanged;
+        OnLanguageChanged();
+
+        if (LocksState.ApartmentItemCodes is null && !string.IsNullOrEmpty(Token))
+        {
+            await LocksState.GetApartmentItemCodesAsync(Token);
+        }
+
+        StateHasChanged();
     }
 
     private bool IsActiveTarget(string targetId)
@@ -373,6 +604,11 @@
         await InvokeAsync(StateHasChanged);
     }
 
+    private void OnStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
     public async ValueTask DisposeAsync()
     {
         try
@@ -381,7 +617,6 @@
         }
         catch
         {
-            // ignore on dispose
         }
 
         _dotNetRef?.Dispose();
@@ -391,6 +626,13 @@
     public override void Dispose()
     {
         GlobalizationService.OnChange -= OnLanguageChanged;
+        LocksState.OnChange -= OnStateChanged;
         base.Dispose();
+    }
+
+    private class ParkingLanguage
+    {
+        public string Language { get; set; } = string.Empty;
+        public string? Value { get; set; }
     }
 }

@@ -57,7 +57,7 @@ namespace RentoomBooking.StayWell.Models
             if (IsDisabled)
             {
                 NavigationManager.NavigateTo($"/reservation/{Token}/");
-                ToastService.ShowToast("Nie masz dostepu do tej strony.");
+                //ToastService.ShowToast("Nie masz dostepu do tej strony.");
                 return;
             }
 
@@ -171,10 +171,10 @@ namespace RentoomBooking.StayWell.Models
 
                 await Task.WhenAll(
                     ApartmentState.GetDefinedAddonsAsync(),
-                    ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
-                    ApartmentState.GetWifiInfoAsync(item.objectId),
-                    ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId),
-                    LocksState.GetLocksAsync(reservation.id, item.itemId),
+                    ApartmentState.GetQrMaintFormUrlAsync(item.objectItemId),
+                    ApartmentState.GetWifiInfoAsync(item.objectItemId),
+                    // ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId), //<< to ma być tu wyłączone - spowalnia ładowanie strony! ładują się na stronie instrukcji tylko. nie ma potrzeby ładować ich tutaj
+                    LocksState.GetLocksAsync(reservation.id, item.objectItemId),
                     LocksState.GetApartmentItemCodesAsync(Token)
                 );
 

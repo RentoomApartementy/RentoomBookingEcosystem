@@ -135,6 +135,9 @@
   <data name="BookingDetailsTitle" xml:space="preserve">
     <value>Booking details</value>
   </data>
+  <data name="BookingPerson" xml:space="preserve">
+    <value>Booking person</value>
+  </data>
   <data name="CheckinCheckOutTime" xml:space="preserve">
     <value>Check-in/out time</value>
   </data>

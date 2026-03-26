@@ -14,6 +14,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
     public interface ITpayGateway
     {
         Task<TpayTransactionResult> CreatePaymentAsync(Guid reservationGuid, Guid paymentSessionGuid, decimal amount, string currency,int? IdoBookingId = null);
+        Task<TpayTransactionResult> GetPaymentStatusAsync(string transactionUid, CancellationToken cancellationToken = default);
     }
 
     public class TpayOpenApiGateway : ITpayGateway
@@ -65,6 +66,14 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
 
             var successUrl = $"{baseUrl}/{path}";
 
+            path = _settings.ErrorUrl?
+                .TrimStart('/')
+                .Replace("{ReservationTokenGuid}", reservationGuid.ToString())
+                .Replace("{tpayGuid}", reservationGuid.ToString());
+
+
+            var errorUrl = $"{baseUrl}/{path}";
+
             var lang = ResolveTpayLanguage(record.State.Client?.Language);
             var request = new TpayTransactionRequest
             {
@@ -81,7 +90,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
 
                 },
                 SuccessUrl = successUrl,
-                ErrorUrl = _settings.ErrorUrl,
+                ErrorUrl = errorUrl,
                 NotificationUrl = _settings.NotificationUrl,
                 HiddenDescription = reservationGuid.ToString(),
             };
@@ -108,6 +117,11 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
             }
 
             return result;
+        }
+
+        public Task<TpayTransactionResult> GetPaymentStatusAsync(string transactionUid, CancellationToken cancellationToken = default)
+        {
+            return _client.GetTransactionAsync(transactionUid, cancellationToken);
         }
     }
 }

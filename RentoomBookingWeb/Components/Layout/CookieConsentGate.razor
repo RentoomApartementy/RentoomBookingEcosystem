@@ -107,6 +107,7 @@
         var localState = new CookieConsentClientState
         {
             ClientConsentId = request.ClientConsentId,
+            SourceId = _notice.SourceId,
             Version = _notice.Version,
             AuditId = response.AuditId,
             AcceptedAtUtc = response.AcceptedAtUtc,
@@ -140,7 +141,7 @@
         return state is not null
             && _notice is not null
             && string.Equals(state.Version, _notice.Version, StringComparison.Ordinal)
-            && string.Equals(state.ContentHash, _notice.ContentHash, StringComparison.OrdinalIgnoreCase);
+            && (state.SourceId <= 0 || state.SourceId == _notice.SourceId);
     }
 
     private string BuildCurrentPath()

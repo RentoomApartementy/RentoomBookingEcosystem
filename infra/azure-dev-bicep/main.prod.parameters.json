@@ -53,7 +53,7 @@
       "value": "RentoomAzureDbAdmin"
     },
     "tpayApiBaseUrl": {
-      "value": "https://openapi.tpay.com"
+      "value": "https://api.tpay.com"
     },
     "tpayClientId": {
       "value": "01KEA06BFSBX1DZQM0BGYV8SXK-01KEA0CVMFDY6A36CKRTCGBTGB"
@@ -105,6 +105,9 @@
     },
     "staywellApiBaseUrl": {
       "value": "https://api.rentoom.pl"
+    },
+    "cronSyncAllApartmentsFromIdb": {
+      "value": "0 0 */2 * * *"
     },
     "staywellApiAuthExcludedPaths": {
       "value": [

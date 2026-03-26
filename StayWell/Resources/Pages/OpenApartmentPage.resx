@@ -139,7 +139,7 @@
     <value>Error connecting to server</value>
   </data>
   <data name="HowTo" xml:space="preserve">
-    <value> How to use door lock</value>
+    <value> How to use door lock:</value>
   </data>
   <data name="NoCode" xml:space="preserve">
     <value>No code for the lock. Contact staff!</value>
@@ -169,19 +169,29 @@
     <value>Your apartment code</value>
   </data>
   <data name="InstructionCylinder" xml:space="preserve">
-    <value>1. Enter the code or open remotely.
-(Each click will be confirmed by a sound.)
-2. If it lights up blue, turn the knob in the opposite direction to its position on the door until you hear the lock retract.
-(Lock on the right side of the door, turn left)
-(Lock on the left side of the door, turn right)
+    <value>1. Enter the code or unlock remotely.
+(Each keystroke will be confirmed by a beep)
+2. When the light turns blue, turn the knob
+(The lock is on the right-hand side of the door, turn it to the left)
+(Lock on the left-hand side of the door, turn to the right)
+until you hear the lock retract.
 3. Open the door</value>
   </data>
   <data name="InstructionPanel" xml:space="preserve">
-    <value>1. Light up the keyboard by pressing any button on the panel.
-2. Enter your code.
+    <value>1. Light up the keyboard by pressing any button on the panel or open it remotely.
+2. Enter your code
 3. If it lights up blue, open the door.</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Important</value>
+  </data>
+  <data name="LockTypePanel" xml:space="preserve">
+    <value>type panel</value>
+  </data>
+  <data name="LockTypeSpinning" xml:space="preserve">
+    <value>type spinning</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Your reservation is not active yet. Access will be available from the check-in date.</value>
   </data>
 </root>

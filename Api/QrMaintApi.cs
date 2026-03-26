@@ -20,21 +20,21 @@ namespace RentoomBooking.Api
 
         [Function("GetQrMaintWifiInfo")]
         public async Task<HttpResponseData> GetQrMaintWifiInfo(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "qrmaint/wifi/{apartmentId:int}")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "qrmaint/wifi/{apartmentItemId:int}")]
             HttpRequestData req,
-            int apartmentId)
+            int apartmentItemId)
         {
             _logger.LogInformation("GetQrMaintWifiInfo started at: {time}", DateTime.UtcNow);
             var response = req.CreateResponse();
 
-            if (apartmentId <= 0)
+            if (apartmentItemId <= 0)
             {
                 response.StatusCode = HttpStatusCode.BadRequest;
-                await response.WriteStringAsync("Invalid apartmentId.");
+                await response.WriteStringAsync("Invalid apartmentItemId.");
                 return response;
             }
 
-            var wifiInfo = await _qrMaintService.GetWifiInfoAsync(apartmentId, req.FunctionContext.CancellationToken);
+            var wifiInfo = await _qrMaintService.GetWifiInfoAsync(apartmentItemId, req.FunctionContext.CancellationToken);
             if (wifiInfo == null)
             {
                 response.StatusCode = HttpStatusCode.NotFound;

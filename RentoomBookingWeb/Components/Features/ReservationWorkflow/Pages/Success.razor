@@ -44,7 +44,7 @@
             _confirmationStarted = true;
             try
             {
-                await ReservationWorkflowService.MarkPaymentAsPaidAsync(ReservationTokenGuid);//<< for  testing : flag _idoApi.UseDummyIdoBooking
+               // await ReservationWorkflowService.MarkPaymentAsPaidAsync(ReservationTokenGuid);//<< for  testing : flag _idoApi.UseDummyIdoBooking
                 Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie/", true);
             }
             catch (Exception)
