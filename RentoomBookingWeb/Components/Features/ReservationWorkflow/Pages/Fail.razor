@@ -4,9 +4,11 @@
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.ReservationWorkflow
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@using RentoomBookingWeb.Services
 @inject IReservationWorkflowService ReservationWorkflowService
 @inject NavigationManager Navigation
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
 
 <PageTitle>Rentoom - Weryfikacja płatności</PageTitle>
 
@@ -57,6 +59,12 @@
         }
 
         _verificationStarted = true;
+        WorkflowTelemetry.TrackEvent(
+            "ReservationPaymentReturnVerificationStarted",
+            new Dictionary<string, string?>
+            {
+                ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+            });
 
         try
         {
@@ -65,12 +73,24 @@
                 var paymentState = await ReservationWorkflowService.VerifyPaymentAfterErrorReturnAsync(ReservationTokenGuid);
                 if (string.Equals(paymentState.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
                 {
+                    WorkflowTelemetry.TrackEvent(
+                        "ReservationPaymentReturnVerifiedPaid",
+                        new Dictionary<string, string?>
+                        {
+                            ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+                        });
                     Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie", true);
                     return;
                 }
 
                 if (string.Equals(paymentState.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase))
                 {
+                    WorkflowTelemetry.TrackEvent(
+                        "ReservationPaymentReturnVerifiedFailed",
+                        new Dictionary<string, string?>
+                        {
+                            ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+                        });
                     Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie?paymentReturn=failed", true);
                     return;
                 }
@@ -84,11 +104,23 @@
                 }
             }
 
+            WorkflowTelemetry.TrackEvent(
+                "ReservationPaymentReturnPending",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+                });
             Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie?paymentReturn=pending", true);
         }
         catch
         {
             _error = GetErrorText();
+            WorkflowTelemetry.TrackEvent(
+                "ReservationPaymentReturnVerificationFailed",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+                });
             await InvokeAsync(StateHasChanged);
         }
     }

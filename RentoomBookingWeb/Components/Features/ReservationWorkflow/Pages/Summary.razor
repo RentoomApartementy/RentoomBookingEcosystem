@@ -13,10 +13,12 @@
 @using System.Globalization;
 @using RentoomBooking.SharedClasses.Models
 @using Microsoft.Extensions.Configuration
+@using RentoomBookingWeb.Services
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject CustomerTermsService TermsService
 @inject IConfiguration Configuration
 @inject IJSRuntime JSRuntime
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
 @implements IDisposable
 
 <PageTitle>Rentoom - Podsumowanie rezerwacji</PageTitle>
@@ -371,6 +373,7 @@
     private int _retryCountdownSeconds = RetryPaymentDelaySeconds;
 
     private const int RetryPaymentDelaySeconds = 30;
+    private bool _summaryViewedTracked;
 
     private bool IsPaid => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
@@ -424,11 +427,29 @@
         try
         {
             await ReservationWorkflowService.SaveCustomerTermsAsync(ReservationTokenGuid, _userSelections);
+            WorkflowTelemetry.TrackEvent(
+                "ReservationStepCompleted_Summary",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                    ["ApartmentId"] = _summary?.StartRequest?.ObjectId.ToString(),
+                    ["PaymentStatus"] = _summary?.PaymentStatus
+                },
+                new Dictionary<string, double>
+                {
+                    ["AcceptedTermsCount"] = _userSelections.Count(x => x.Value)
+                });
             Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
         }
         catch (Exception)
         {
             _error = "Wystąpił błąd podczas zapisywania zgód. Spróbuj ponownie.";
+            WorkflowTelemetry.TrackEvent(
+                "ReservationSummarySaveTermsFailed",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+                });
         }
     }
     
@@ -444,6 +465,13 @@
             return;
         }
 
+        WorkflowTelemetry.TrackEvent(
+            "ReservationPaymentRetryRequested",
+            new Dictionary<string, string?>
+            {
+                ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                ["PaymentStatus"] = _summary?.PaymentStatus
+            });
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
     }
 
@@ -465,6 +493,20 @@
         if (_summary?.StartRequest?.ObjectId != null)
         {
             _apartment = await ApartmentsService.GetApartmentByIdAsync(_summary.StartRequest.ObjectId);
+        }
+
+        if (!_summaryViewedTracked)
+        {
+            _summaryViewedTracked = true;
+            WorkflowTelemetry.TrackEvent(
+                "ReservationStepViewed_Summary",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                    ["ApartmentId"] = _summary?.StartRequest?.ObjectId.ToString(),
+                    ["PaymentStatus"] = _summary?.PaymentStatus,
+                    ["IdoStatus"] = _summary?.IdoStatus
+                });
         }
 
         //aut pokazywanie QR kodu StayWell po płatności - na razie wyłączone
@@ -553,6 +595,16 @@
                 if (string.Equals(state.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
                     || string.Equals(state.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase))
                 {
+                    WorkflowTelemetry.TrackEvent(
+                        string.Equals(state.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
+                            ? "ReservationPaymentVerifiedPaid"
+                            : "ReservationPaymentVerifiedFailed",
+                        new Dictionary<string, string?>
+                        {
+                            ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                            ["PaymentStatus"] = state.PaymentStatus,
+                            ["IdoStatus"] = state.IdoStatus
+                        });
                     await RefreshSummaryAsync();
                     await EnsureWorkflowChecksAsync();
                     await InvokeAsync(StateHasChanged);

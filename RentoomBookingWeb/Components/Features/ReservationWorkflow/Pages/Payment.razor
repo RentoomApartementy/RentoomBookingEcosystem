@@ -1,10 +1,12 @@
 @page "/rezerwuj/{ReservationTokenGuid:guid}/oplac"
 @using RentoomBooking.SharedClasses.Models.Payments
 @using RentoomBooking.SharedClasses.Services.Payments
+@using RentoomBookingWeb.Services
 @inject IPaymentOrchestrator PaymentOrchestrator;
 @inject NavigationManager Navigation
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
 
 <PageTitle>Rentoom - Opłać rezerwację</PageTitle>
 
@@ -38,6 +40,13 @@
 
     protected override async Task OnInitializedAsync()
     {
+        WorkflowTelemetry.TrackEvent(
+            "ReservationPaymentInitStarted",
+            new Dictionary<string, string?>
+            {
+                ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+            });
+
         try
         {
             var payment = await PaymentOrchestrator.CreatePaymentAsync(new PaymentIntentRequest
@@ -47,16 +56,35 @@
             });
             if (!string.IsNullOrWhiteSpace(payment.RedirectUrl))
             {
+                WorkflowTelemetry.TrackEvent(
+                    "ReservationPaymentRedirectCreated",
+                    new Dictionary<string, string?>
+                    {
+                        ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+                    });
                 Navigation.NavigateTo(payment.RedirectUrl, true);
             }
             else
             {
+                WorkflowTelemetry.TrackEvent(
+                    "ReservationPaymentRedirectMissing",
+                    new Dictionary<string, string?>
+                    {
+                        ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
+                    });
                 Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie", true);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             _error = "Nie udało się zainicjować płatności.";
+            WorkflowTelemetry.TrackEvent(
+                "ReservationPaymentInitFailed",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
+                    ["Reason"] = ex.GetType().Name
+                });
         }
     }
 

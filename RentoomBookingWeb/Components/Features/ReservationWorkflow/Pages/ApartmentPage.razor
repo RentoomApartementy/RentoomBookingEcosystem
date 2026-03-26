@@ -25,6 +25,7 @@
 @using RentoomBookingWeb.Helpers
 @using System.Text.RegularExpressions
 @inject NavigationManager NavManager
+@inject ReservationWorkflowTelemetry WorkflowTelemetry
 @using Microsoft.Extensions.Localization
 @using RentoomBookingWeb.Components.Enums
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
@@ -1204,6 +1205,22 @@
         bool hasOffers = _offersResponse?.Result?.PricingOffers != null && 
                          _offersResponse.Result.PricingOffers.Any();
 
+        WorkflowTelemetry.TrackEvent(
+            hasOffers ? "ReservationOfferLoaded" : "ReservationOfferUnavailable",
+            new Dictionary<string, string?>
+            {
+                ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
+                ["ApartmentId"] = _apartment?.Id.ToString(),
+                ["StartDate"] = StartDate,
+                ["EndDate"] = EndDate,
+                ["Adults"] = Adults,
+                ["Children"] = Children
+            },
+            new Dictionary<string, double>
+            {
+                ["OfferCount"] = _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers?.Count ?? 0
+            });
+
         if (!hasOffers && !_isOfferLoading)
         {
             _ = Task.Run(async () => await LoadSuggestionInBackground());
@@ -1466,6 +1483,16 @@
         var suggestion = selectedTerm ?? _selectedSuggestionDate ?? _suggestionDates.FirstOrDefault();
         if (_apartment != null && suggestion?.StartDate != null && suggestion?.EndDate != null)
         {
+            WorkflowTelemetry.TrackEvent(
+                "ReservationSuggestionSelected",
+                new Dictionary<string, string?>
+                {
+                    ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
+                    ["ApartmentId"] = _apartment.Id.ToString(),
+                    ["SuggestedStartDate"] = suggestion.StartDate,
+                    ["SuggestedEndDate"] = suggestion.EndDate
+                });
+
             StartDate = suggestion.StartDate;
             EndDate = suggestion.EndDate;
             RefreshAddonsParams();
@@ -1582,6 +1609,26 @@
             SelectedAddonsTotalPrice = TotalAddonsPrice,
             SelectedUpsellsTotalPrice = TotalUpsellsPrice
         };
+
+        WorkflowTelemetry.TrackEvent(
+            "ReservationStepCompleted_ApartmentSelection",
+            new Dictionary<string, string?>
+            {
+                ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
+                ["ApartmentId"] = _apartment.Id.ToString(),
+                ["OfferType"] = request.SelectedOfferType,
+                ["StartDate"] = StartDate,
+                ["EndDate"] = EndDate,
+                ["Adults"] = adults.ToString(),
+                ["Children"] = children.ToString()
+            },
+            new Dictionary<string, double>
+            {
+                ["SelectedAddonsCount"] = _selectedAddons.Count,
+                ["SelectedUpsellsCount"] = _selectedUpsells.Count,
+                ["SelectedAddonsTotalPrice"] = (double)TotalAddonsPrice,
+                ["SelectedUpsellsTotalPrice"] = (double)TotalUpsellsPrice
+            });
 
         var reservationGuid = await EnsureReservationAsync(request);
         var apartmentUrl = BuildApartmentUrl(reservationGuid);

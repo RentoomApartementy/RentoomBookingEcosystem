@@ -109,6 +109,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixLeadCaptureService>();
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<MediaCacheService>();
+            builder.Services.AddScoped<ReservationWorkflowTelemetry>();
 
 
             builder.Services.AddScoped<IPaymentFlowHandler, ReservationPaymentFlowHandler>();
