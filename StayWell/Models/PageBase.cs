@@ -4,6 +4,7 @@ using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.StayWell.Services;
 using RentoomBooking.StayWell.States;
 using System.Globalization;
+using RentoomBooking.StayWell.Pages;
 using ApartmentState = RentoomBooking.StayWell.States.ApartmentState;
 
 namespace RentoomBooking.StayWell.Models
@@ -75,7 +76,7 @@ namespace RentoomBooking.StayWell.Models
 
                 if (!IsInitializedSuccessfully)
                 {
-                    NavigationManager.NavigateTo("/Error");
+                    NavigationManager.NavigateTo("/NotFound");
                     return;
                 }
                 
