@@ -37,8 +37,8 @@
     flex: 1 1 0;
     min-width: 0;
     max-width: 180px;
-    height: 110px;
-    padding: 10px 6px;
+    height: 120px;
+    padding: 14px 10px;
     border-radius: 18px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -50,45 +50,59 @@
     text-align: center;
     cursor: pointer;
     transition: transform 0.1s ease, background-color 0.2s ease;
+    gap: 8px;
 }
-
-    .vouchers {
-        background-color: var(--rentoom-green-dark);
-    }
 
     .tile:active {
         transform: scale(0.95);
         background: rgba(255, 255, 255, 0.9);
     }
 
+    .vouchers {
+        background-color: var(--rentoom-green-dark);
+    }
+
 .tile-icon {
     font-size: 1.5rem;
-    margin-bottom: 8px;
     color: #333;
     flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tile-icon img {
+    width: 28px;
+    height: 28px;
 }
 
 .tile-icon-vouchers {
     font-size: 1.5rem;
-    margin-bottom: 8px;
     color: #333;
     flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7456%) hue-rotate(204deg) brightness(112%) contrast(100%);
 }
 
 .tile-text {
-    font-size: clamp(0.65rem, 2.5vw, 0.9rem);
-    font-weight: 500;
-    line-height: 1.2;
-    color: #333;
+    font-size: clamp(0.78rem, 3vw, 0.95rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: #1a1a1a;
     overflow-wrap: break-word;
     hyphens: auto;
 }
 
 .tile-text-vouchers {
-    font-size: clamp(0.65rem, 2.5vw, 0.9rem);
-    font-weight: 500;
-    line-height: 1.2;
+    font-size: clamp(0.78rem, 3vw, 0.95rem);
+    font-weight: 600;
+    line-height: 1.25;
     color: white;
     overflow-wrap: break-word;
     hyphens: auto;
@@ -113,6 +127,15 @@
     .tile--row {
         gap: 15px;
     }
+
+    .tile {
+        max-width: 200px;
+        height: 130px;
+    }
+
+    .tile-text {
+        font-size: 0.9rem;
+    }
 }
 
 @media (min-width: 530px) {
@@ -129,9 +152,24 @@
         margin-right: auto;
     }
 
+    .tile--row {
+        gap: 20px;
+        justify-content: center;
+    }
+
     .tile {
-        padding: 15px;
-        max-width: 180px;
+        max-width: 220px;
+        height: 140px;
+        padding: 18px 14px;
+    }
+
+    .tile-icon img {
+        width: 34px;
+        height: 34px;
+    }
+
+    .tile-text {
+        font-size: 1rem;
     }
 }
 
@@ -142,7 +180,6 @@
     border-radius: 15px;
     animation: skeleton-pulse 1.5s ease-in-out infinite;
     background-color: #eeeeee;
-    border-radius: 12px;
 }
 
 .skeleton-bar {

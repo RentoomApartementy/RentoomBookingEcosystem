@@ -1,0 +1,93 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    text-align: center;
+}
+
+.not-found-container h1 {
+    font-size: 6rem;
+    font-weight: bold;
+}
+
+.not-found-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 2rem 1rem;
+}
+
+.not-found-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1.25rem;
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.6);
+    max-width: 420px;
+    width: 100%;
+}
+
+.not-found-logo {
+    width: 320px;
+    height: 120px;
+    object-fit: contain;
+    object-position: center;
+}
+
+.not-found-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--rentoom-green-dark);
+    margin: 0;
+}
+
+.not-found-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    color: #444;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.not-found-btn {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--rentoom-green-dark);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 15px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+/*    display: inline-block;*/
+}
+
+.not-found-btn:hover {
+    background-color: var(--rentoom-brown-dark);
+    color: white;
+    text-decoration: none;
+}
+
+.not-found-btn:active {
+    transform: scale(0.97);
+}
+
+.white-filter {
+    filter: brightness(0) saturate(100%) invert(99%) sepia(1%) saturate(2%) hue-rotate(260deg) brightness(114%) contrast(100%);
+}
+

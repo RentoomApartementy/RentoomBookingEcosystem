@@ -108,6 +108,9 @@
                             @Localizer["Apartment"]:
                         </span>
                         <span class="reservation-field__value">
+                            @Reservation?.Items?.FirstOrDefault()?.objectName
+                        </span>
+                        <span class="reservation-field__value">
                             @Reservation?.Items?.FirstOrDefault()?.itemCode
                         </span>
                     </div>

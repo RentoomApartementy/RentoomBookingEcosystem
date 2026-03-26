@@ -57,7 +57,7 @@ namespace RentoomBooking.StayWell.Models
             if (IsDisabled)
             {
                 NavigationManager.NavigateTo($"/reservation/{Token}/");
-                ToastService.ShowToast("Nie masz dostepu do tej strony.");
+                //ToastService.ShowToast("Nie masz dostepu do tej strony.");
                 return;
             }
 

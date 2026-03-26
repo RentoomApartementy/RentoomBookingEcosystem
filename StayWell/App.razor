@@ -1,7 +1,9 @@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.Services
+@using RentoomBooking.StayWell.Pages
 @inject NavigationManager Navigation
 @inject ReservationTokenService ReservationTokenService
+
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -10,7 +12,7 @@
     <NotFound>
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+            <NotFoundPage />
         </LayoutView>
     </NotFound>
 </Router>
@@ -30,15 +32,30 @@
         var relativePath = Navigation.ToBaseRelativePath(Navigation.Uri);
         var pathOnly = relativePath.Split('?', '#')[0];
 
-        if (!string.IsNullOrWhiteSpace(pathOnly))
+        var tokenFromUrl = ExtractTokenFromPath(pathOnly);
+        if (!string.IsNullOrWhiteSpace(tokenFromUrl))
         {
+            await ReservationTokenService.SaveTokenAsync(tokenFromUrl);
             return;
         }
 
-        var token = await ReservationTokenService.GetTokenAsync();
-        if (!string.IsNullOrWhiteSpace(token))
+        if (string.IsNullOrWhiteSpace(pathOnly))
         {
-            Navigation.NavigateTo($"/reservation/{token}/");
+            var token = await ReservationTokenService.GetTokenAsync();
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                Navigation.NavigateTo($"/reservation/{token}/");
+            }
         }
+    }
+
+    private static string? ExtractTokenFromPath(string path)
+    {
+        var segments = path.Trim('/').Split('/');
+        if (segments.Length >= 2 && segments[0] == "reservation")
+        {
+            return segments[1];
+        }
+        return null;
     }
 }

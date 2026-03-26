@@ -33,6 +33,13 @@
     color: #222;
     margin-bottom: 2px;
 }
+.name .stay {
+    color: #1F5A41;
+}
+
+.name .well {
+    color: #945F28;
+}
 
 .reservation-id {
     font-size: 0.95rem;
