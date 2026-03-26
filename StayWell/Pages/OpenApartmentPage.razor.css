@@ -299,7 +299,6 @@
 }
 
 .instruction-content {
-    white-space: pre-line;
     line-height: 1.45;
     color: #333;
     font-size: 0.95rem;
@@ -322,13 +321,13 @@
     text-align: center;
     font-weight: 600;
     font-size: 1.05rem;
-    color: #b45309;
+    color: black;
 }
 
 .inactive-reservation-icon {
     height: 48px;
     width: 48px;
-    filter: invert(40%) sepia(80%) saturate(600%) hue-rotate(10deg) brightness(90%);
+/*    filter: invert(40%) sepia(80%) saturate(600%) hue-rotate(10deg) brightness(90%);*/
 }
 
 .retry-button {
@@ -360,4 +359,84 @@
     border-left-color: #fff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+.instruction-content ::deep ol.instruction-steps {
+    counter-reset: step-counter;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.instruction-content ::deep .instruction-steps__step {
+    counter-increment: step-counter;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    grid-template-rows: auto auto auto;
+    column-gap: 10px;
+    padding-top: 8px;
+}
+
+.instruction-content ::deep .instruction-steps__step::before {
+    content: counter(step-counter);
+    grid-column: 1;
+    grid-row: 1;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #21573e;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    margin-top: 2px;
+}
+
+.instruction-content ::deep .instruction-steps__step-text {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111;
+    line-height: 1.4;
+    padding-top: 3px;
+}
+
+.instruction-content ::deep .instruction-steps__body {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px 0 4px 10px;
+    margin-left: 2px;
+    border-left: 2px solid #c8ddd5;
+}
+
+.instruction-content ::deep .instruction-steps__hint {
+    font-size: 0.78rem;
+    color: #4a7c65;
+    background: #f0f4f2;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.instruction-content ::deep .instruction-steps__continuation {
+    grid-column: 2;
+    grid-row: 3;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #444;
+    padding: 4px 0 2px 0;
+    line-height: 1.4;
+    border-top: 1px dashed #dde8e3;
+    margin-top: 4px;
 }

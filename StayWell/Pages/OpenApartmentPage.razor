@@ -1,4 +1,4 @@
-@page "/reservation/{token}/OpenApartmentPage"
+﻿@page "/reservation/{token}/OpenApartmentPage"
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @using Microsoft.Extensions.Localization
@@ -169,10 +169,10 @@
         </div>
         <div class="instruction-track" id="instruction-carousel">
             <div class="instruction-slide">
-                <div class="instruction-content">@Localizer["InstructionCylinder"]</div>
+                <div class="instruction-content">@FormatInstructionText(Localizer["InstructionCylinder"])</div>
             </div>
             <div class="instruction-slide">
-                <div class="instruction-content">@Localizer["InstructionPanel"]</div>
+                <div class="instruction-content">@FormatInstructionText(Localizer["InstructionPanel"])</div>
             </div>
         </div>
     </div>
@@ -326,5 +326,71 @@
         }
 
         await LocksState.RetryCheckTTLockStatusAsync(Token);
+    }
+
+    private static MarkupString FormatInstructionText(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return new MarkupString(string.Empty);
+
+        var lines = text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+
+        var steps = new List<(string StepText, List<string> Hints, string? Continuation)>();
+
+        foreach (var rawLine in lines)
+        {
+            var line = rawLine.Trim();
+            if (string.IsNullOrEmpty(line)) continue;
+
+            var stepMatch = System.Text.RegularExpressions.Regex.Match(line, @"^(\d+)\.\s+(.+)$");
+            if (stepMatch.Success)
+            {
+                steps.Add((stepMatch.Groups[2].Value, [], null));
+                continue;
+            }
+
+            if (steps.Count == 0)
+            {
+                steps.Add((line, [], null));
+                continue;
+            }
+
+            if (line.StartsWith('(') && line.EndsWith(')'))
+            {
+                steps[^1].Hints.Add(line[1..^1]);
+                continue;
+            }
+            var (st, hints, _) = steps[^1];
+            steps[^1] = (st, hints, line);
+        }
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append("<ol class=\"instruction-steps\">");
+
+        foreach (var (stepText, hints, continuation) in steps)
+        {
+            sb.Append("<li class=\"instruction-steps__step\">");
+            sb.Append($"<span class=\"instruction-steps__step-text\">{System.Net.WebUtility.HtmlEncode(stepText)}</span>");
+
+            if (hints.Count > 0)
+            {
+                sb.Append("<div class=\"instruction-steps__body\">");
+                foreach (var hint in hints)
+                {
+                    sb.Append($"<div class=\"instruction-steps__hint\">{System.Net.WebUtility.HtmlEncode(hint)}</div>");
+                }
+                sb.Append("</div>");
+            }
+
+            if (continuation is not null)
+            {
+                sb.Append($"<div class=\"instruction-steps__continuation\">{System.Net.WebUtility.HtmlEncode(continuation)}</div>");
+            }
+
+            sb.Append("</li>");
+        }
+
+        sb.Append("</ol>");
+        return new MarkupString(sb.ToString());
     }
 }
