@@ -38,6 +38,7 @@ namespace RentoomBookingWeb
             });
             
             builder.Services.AddControllers();
+            builder.Services.AddApplicationInsightsTelemetry();
             
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
