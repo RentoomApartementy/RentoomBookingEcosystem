@@ -48,6 +48,7 @@ namespace RentoomBooking.SharedClasses.Services
         private const string ReservationsEditEndpoint = "reservations/edit/34/json";
         private const string ReservationsEditStatusEndpoint = "reservations/editStatus/34/json";
         private const string ReservationsSetDiscountEndpoint = "reservations/setDiscount/34/json";
+        private const string ReservationsGetSourcesEndpoint = "reservations/getSources/35/json";
 
         private const string PaymentsAddEndpoint = "payments/add/34/json";
         private const string PaymentsCancelEndpoint = "payments/cancel/34/json";
@@ -489,6 +490,33 @@ namespace RentoomBooking.SharedClasses.Services
 
             var response = await _idoConnect.PostAsync<ReservationSetDiscountRequest, ReservationSetDiscountResponseType>(
                 ReservationsSetDiscountEndpoint,
+                request,
+                cancellationToken);
+
+            return response?.Result;
+        }
+
+        public async Task<ReservationSourcesResponse?> GetReservationSourcesAsync(
+            ReservationSourcesResultRequest? result = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (_useDummyIdoBooking && !_bookingProcessingFlag)
+            {
+                return new ReservationSourcesResponse
+                {
+                    Authenticate = _idoConnect.AuthObjectIdo(),
+                    Sources = new List<ReservationSourceDescription>()
+                };
+            }
+
+            var request = new ReservationSourcesRequest
+            {
+                Authenticate = _idoConnect.AuthObjectIdo(),
+                Result = result
+            };
+
+            var response = await _idoConnect.PostAsync<ReservationSourcesRequest, ReservationSourcesResponseType>(
+                ReservationsGetSourcesEndpoint,
                 request,
                 cancellationToken);
 
