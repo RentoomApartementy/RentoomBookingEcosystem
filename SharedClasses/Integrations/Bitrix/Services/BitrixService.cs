@@ -2,6 +2,8 @@
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Client;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Configuration;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,17 +35,21 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
         //private readonly  _rentoomDbContext;
      //   private SessionStorageService _sessionStorage;
         private readonly HttpClient client;
-
-        private string baseURL = "https://b24-grfccp.bitrix24.pl/rest/208/n5tri19od1ylw2fn";
+        private readonly string baseURL;
 
         public BitrixService(
             //RentoomDbContext rentoomDbContext,
             ///SessionStorageService sessionStorage, 
-            HttpClient httpClient)
+            HttpClient httpClient,
+            IConfiguration configuration)
         {
           //  _rentoomDbContext = rentoomDbContext;
           //  _sessionStorage = sessionStorage;
             client = httpClient;
+            var bitrixDomain = BitrixConfiguration.GetDomain(configuration).TrimEnd('/');
+            var userIdForWebhook = BitrixConfiguration.GetUserIdForWebhook(configuration);
+            var webhookId = BitrixConfiguration.GetWebhookId(configuration);
+            baseURL = $"{bitrixDomain}/{userIdForWebhook}/{webhookId}";
         }
 
         public async Task<BitrixFieldsDefinition> DownloadDealFieldsDefinitionJsonAsync()
