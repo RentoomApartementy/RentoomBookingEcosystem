@@ -65,7 +65,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
         private readonly CustomerTermsRepository _termsRepository;
         private readonly ILogger<ReservationWorkflowService> _logger;
-        private const int BitrixAssignedByUserId = 208;
+        private readonly int _bitrixAssignedByUserId;
         private const string BitrixStayWellLinkFieldName = "UF_CRM_1768835603310";
         private const string BitrixApartmentGoogleMapsFieldName = "UF_CRM_1773873147169";
         private const string BitrixParkingMapFieldName = "UF_CRM_1774428026254";
@@ -96,6 +96,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _upsellCatalogService = upsellCatalogService ?? throw new ArgumentNullException(nameof(upsellCatalogService));
             _upsellOrderWorkflowService = upsellOrderWorkflowService ?? throw new ArgumentNullException(nameof(upsellOrderWorkflowService));
             _termsRepository = termsRepository;
+            _bitrixAssignedByUserId = BitrixConfiguration.GetAssignedByUserId(configuration);
         }
 
 
@@ -114,17 +115,21 @@ private static TimeZoneInfo GetWarsawTimeZone()
         }
     }
 
-    private static string ToBitrixDateTime(DateOnly? date, TimeOnly? time)
+    private static TimeSpan GetWarsawOffset(DateOnly date, TimeOnly time)
+    {
+        var tz = GetWarsawTimeZone();
+        var localDateTime = date.ToDateTime(time, DateTimeKind.Unspecified);
+        return tz.GetUtcOffset(localDateTime);
+    }
+
+    private static string ToBitrixDateTime(DateOnly? date, TimeOnly? time, TimeSpan? offset = null)
     {
         if (date is null || time is null)
             throw new ArgumentNullException($"Bitrix datetime requires both date and time.");
 
-        var tz = GetWarsawTimeZone();
-
-        // Build a local Warsaw wall-clock time, without guessing UTC/local kind
         var localDateTime = date.Value.ToDateTime(time.Value, DateTimeKind.Unspecified);
-        var offset = tz.GetUtcOffset(localDateTime);
-        var dto = new DateTimeOffset(localDateTime, offset);
+        var effectiveOffset = offset ?? GetWarsawOffset(date.Value, time.Value);
+        var dto = new DateTimeOffset(localDateTime, effectiveOffset);
 
         return dto.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture);
     }
@@ -583,7 +588,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             {
                 paymentId = await AddIdoPaymentAsync(
                     record,
-                    record.State.StartRequest?.OfferPrice  + record.State.StartRequest?.SelectedAddonsTotalPrice ?? 0m,
+                    record.State.StartRequest?.OfferPrice + record.State.StartRequest?.SelectedAddonsTotalPrice ?? 0m,
                     record.State.StartRequest?.Currency ?? "PLN",
                     record.ProviderTransactionId);
             }
@@ -629,7 +634,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 reservationRecord = await _store.GetAsync(reservationGuid, cancellationToken);
                 if (reservationRecord is not null)
                 {
-                    await EnsureIdoPaymentAsync(reservationGuid, cancellationToken);
+                    //await EnsureIdoPaymentAsync(reservationGuid, cancellationToken);<< nadpisywało podwójnie 
                     reservationRecord = await _store.GetAsync(reservationGuid, cancellationToken);
                 }
             }
@@ -1407,7 +1412,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 Email = record.State.Client.Email,
                 Phone = record.State.Client.Phone,
                 ReservationId = record.IdoReservationId,
-                AssignedById = BitrixAssignedByUserId,
+                AssignedById = _bitrixAssignedByUserId,
                 TaxNumber = invoice?.TaxNumber,
                 CompanyName = invoice?.CompanyName,
                 CompanyEmail = invoice?.Email,
@@ -1431,6 +1436,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
             await EnsurePaymentTotalsAsync(record.ReservationGuid,record);
             if (!record.DealBitrixId.HasValue)
             {
+               
+
                 var pipelines = await _bitrixService.GetDealPipelinesAsync();
                 var pipelineName = BitrixConfiguration.GetReservationPipelineName(_configuration);
                 var rentalPipeline = pipelines.FirstOrDefault(p => string.Equals(p.Name, pipelineName, StringComparison.OrdinalIgnoreCase));
@@ -1445,17 +1452,25 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest);
                 var purchasedAddonsValue = await BuildPurchasedAddonsBitrixValueAsync(record.State.StartRequest);
                 UpdateReservationLocationState(record, apartmentInfo, apartmentItemLocalSettings);
+                var startRequest = record.State.StartRequest;
+                if (startRequest is null)
+                {
+                    throw new ArgumentNullException(nameof(record.State.StartRequest), "Bitrix reservation sync requires a start request.");
+                }
+
+                var reservationStartOffset = GetWarsawOffset(startRequest.StartDate, startRequest.CheckInTime);
+
                 var customFields = new Dictionary<string, object?>
                 {
                     ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
                     ["UF_CRM_1769797476812"] = ResolveBitrixLanguage(record.State.Client.Language),
                     ["UF_CRM_1769797498979"] = record.State.Client.CountryCode,
-                    ["UF_CRM_1768836801823"] = record.State.StartRequest?.Adults,
-                    ["UF_CRM_1768836818927"] = record.State.StartRequest?.EndDate.DayNumber - record.State.StartRequest?.StartDate.DayNumber,
-                    ["UF_CRM_1773256016575"] = ToBitrixDateTime(record.State.StartRequest?.StartDate, record.State.StartRequest?.CheckInTime),
-                    ["UF_CRM_1773310028374"] = ToBitrixDateTime(record.State.StartRequest?.EndDate,record.State.StartRequest?.CheckOutTime),
-                    ["UF_CRM_1773310079975"] = record.State.StartRequest?.CheckInTime < new TimeOnly(15,0),
-                    ["UF_CRM_1773310094605"] = record.State.StartRequest?.CheckOutTime > new TimeOnly(11,0),
+                    ["UF_CRM_1768836801823"] = startRequest?.Adults,
+                    ["UF_CRM_1768836818927"] = startRequest?.EndDate.DayNumber - startRequest?.StartDate.DayNumber,
+                    ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, reservationStartOffset),
+                    ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, reservationStartOffset),
+                    ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15,0),
+                    ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11,0),
                     [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                     [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString())
@@ -1465,7 +1480,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 var dealUpdateFields = new Dictionary<string, object?>
                 {
                     ["TITLE"] = dealTitle,
-                    ["ASSIGNED_BY_ID"] = BitrixAssignedByUserId
+                    ["ASSIGNED_BY_ID"] = _bitrixAssignedByUserId
                 };
 
                 if (record.State.PaymentGrandTotal > 0)
@@ -1494,7 +1509,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     Title: dealTitle,
                     CategoryId: pipelineId,
                     StageId: newStage?.StageId ?? "NEW",
-                    AssignedById: BitrixAssignedByUserId,
+                    AssignedById: _bitrixAssignedByUserId,
                     Opportunity: record.State.PaymentGrandTotal, //record.State.StartRequest?.OfferPrice,
                     CurrencyId: record.State.StartRequest?.Currency ?? "PLN",
                     ContactId: record.ClientBitrixId,

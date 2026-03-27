@@ -73,11 +73,12 @@ public class GetDealFunction
             var stages = await _bitrixService.GetDealStagesAsync(rentalPipelineId);
             var newStageId = stages.Single(s => s.Name == "W toku").StageId;
 
+            var assignedByUserId = BitrixConfiguration.GetAssignedByUserId(_configuration);
             var dealId =  await _bitrixService.AddDealAsync(new CreateDealRequest(
                                                                                     Title: "Booking #12345",
                                                                                     CategoryId: rentalPipelineId,
                                                                                     StageId: newStageId,
-                                                                                    AssignedById: 208,
+                                                                                    AssignedById: assignedByUserId,
                                                                                     Opportunity: 1500,
                                                                                     CurrencyId: "PLN",
                                                                                     ContactId: 628
