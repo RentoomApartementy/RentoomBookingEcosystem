@@ -25,7 +25,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
         private const string DefaultProvider = "IDB_PANEL";
         private const string DefaultProviderTransactionId = "IDB_PANEL_TRANSACTION";
         private const string DevelopmentPhoneOverride = "+48602394436";
-        private const int BitrixEmailPollAttempts = 30;
+        private const int BitrixEmailPollAttempts = 3;
         private static readonly TimeSpan BitrixEmailPollDelay = TimeSpan.FromSeconds(2);
 
         private readonly IdoSellService _idoApi;
@@ -427,8 +427,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 ObjectItemId = primaryItem.objectItemId,
                 StartDate = startDate,
                 EndDate = endDate,
-                CheckInTime = new TimeOnly(15, 0), //TimeOnly.FromDateTime(dateFrom),
-                CheckOutTime = new TimeOnly(11,0),//TimeOnly.FromDateTime(dateTo),
+                CheckInTime = new TimeOnly(16, 0), //TimeOnly.FromDateTime(dateFrom),
+                CheckOutTime = new TimeOnly(12,0),//TimeOnly.FromDateTime(dateTo),
                 Adults = items.Sum(item => item.numberOfAdults ?? 0),
                 Children = items.Sum(item => ParseInt(item.numberOfSmallChildren)),
                 OfferPrice = Convert.ToDecimal(items.Sum(item => item.price), CultureInfo.InvariantCulture),

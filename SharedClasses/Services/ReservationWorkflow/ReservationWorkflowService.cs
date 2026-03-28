@@ -124,12 +124,13 @@ private static TimeZoneInfo GetWarsawTimeZone()
         return tz.GetUtcOffset(localDateTime);
     }
 
-    private static string ToBitrixDateTime(DateOnly? date, TimeOnly? time, TimeSpan? offset = null)
+    private static string ToBitrixDateTime(DateOnly? date, TimeOnly? time, TimeSpan? offset = null, double hoursdiff = 0)
     {
         if (date is null || time is null)
             throw new ArgumentNullException($"Bitrix datetime requires both date and time.");
 
         var localDateTime = date.Value.ToDateTime(time.Value, DateTimeKind.Unspecified);
+            localDateTime = localDateTime.AddHours(hoursdiff);
         var effectiveOffset = offset ?? GetWarsawOffset(date.Value, time.Value);
         var dto = new DateTimeOffset(localDateTime, effectiveOffset);
 
@@ -1507,7 +1508,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 }
 
                 var reservationStartOffset = GetWarsawOffset(startRequest.StartDate, startRequest.CheckInTime);
-
+                var bitrixServerUTCOffset = await _bitrixService.GetServerUtcOffsetAsync();
+                var differenceInHours = bitrixServerUTCOffset.TotalHours - reservationStartOffset.TotalHours;
                 var customFields = new Dictionary<string, object?>
                 {
                     ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
@@ -1515,8 +1517,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["UF_CRM_1769797498979"] = record.State.Client.CountryCode,
                     ["UF_CRM_1768836801823"] = startRequest?.Adults,
                     ["UF_CRM_1768836818927"] = startRequest?.EndDate.DayNumber - startRequest?.StartDate.DayNumber,
-                    ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, reservationStartOffset),
-                    ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, reservationStartOffset),
+                    ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, bitrixServerUTCOffset,differenceInHours),
+                    ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, bitrixServerUTCOffset,differenceInHours),
                     ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15,0),
                     ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11,0),
                     [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
