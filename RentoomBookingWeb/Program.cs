@@ -206,8 +206,13 @@ namespace RentoomBookingWeb
             {
                 app.Use(async (context, next) =>
                 {
+                    context.Response.OnStarting(() =>
+                    {
+                        context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
+                        return Task.CompletedTask;
+                    });
+
                     await next();
-                    context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
                 });
             }
 

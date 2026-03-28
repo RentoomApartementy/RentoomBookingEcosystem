@@ -31,9 +31,10 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
     public class BitrixService
     {
         public const string IdoReservationIdFieldName = "UF_CRM_1768835556855";
-
+        private string? _portalTimeZoneId;
+        private TimeSpan? _serverUtcOffset;
         //private readonly  _rentoomDbContext;
-     //   private SessionStorageService _sessionStorage;
+        //   private SessionStorageService _sessionStorage;
         private readonly HttpClient client;
         private readonly string baseURL;
 
@@ -71,6 +72,93 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             var content = await response.Content.ReadAsStringAsync();
             var fields = new BitrixFieldsDefinition(content);
             return fields;
+        }
+
+        public async Task<string> GetPortalTimeZoneIdAsync()
+        {
+            if (!string.IsNullOrWhiteSpace(_portalTimeZoneId))
+            {
+                return _portalTimeZoneId;
+            }
+
+            var response = await client.GetAsync($"{baseURL}/user.current.json");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(content);
+
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.TryGetProperty("TIME_ZONE", out var timeZoneElement)
+                && timeZoneElement.ValueKind == JsonValueKind.String)
+            {
+                var timeZoneId = timeZoneElement.GetString();
+                if (!string.IsNullOrWhiteSpace(timeZoneId))
+                {
+                    _portalTimeZoneId = timeZoneId;
+                    return timeZoneId;
+                }
+            }
+
+            throw BitrixError(content, doc);
+        }
+
+        public async Task<string> GetServerTimeAsync()
+        {
+            var response = await client.GetAsync($"{baseURL}/server.time.json");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(content);
+
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.ValueKind == JsonValueKind.String)
+            {
+                return resultElement.GetString()!;
+            }
+
+            throw BitrixError(content, doc);
+        }
+
+        public async Task<TimeSpan> GetServerUtcOffsetAsync()
+        {
+            if (_serverUtcOffset.HasValue)
+            {
+                return _serverUtcOffset.Value;
+            }
+
+            var response = await client.GetAsync($"{baseURL}/server.time.json");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(content);
+
+            if (doc.RootElement.TryGetProperty("result", out var resultElement)
+                && resultElement.ValueKind == JsonValueKind.String
+                && DateTimeOffset.TryParse(resultElement.GetString(), out var parsed))
+            {
+                _serverUtcOffset = parsed.Offset;
+                return parsed.Offset;
+            }
+            throw BitrixError(content, doc);
+        }
+
+
+        public async Task<Dictionary<string, string?>> GetDealRawFieldsAsync(int dealId, params string[] fieldNames)
+        {
+            using var doc = await PostAsync("crm.deal.get.json", new { id = dealId });
+
+            if (!doc.RootElement.TryGetProperty("result", out var resultElement)
+                || resultElement.ValueKind != JsonValueKind.Object)
+            {
+                throw BitrixError(doc.RootElement.GetRawText(), doc);
+            }
+
+            var result = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
+            foreach (var fieldName in fieldNames)
+            {
+                result[fieldName] = resultElement.TryGetProperty(fieldName, out var valueElement)
+                    ? valueElement.ToString()
+                    : null;
+            }
+
+            return result;
         }
 
         public async Task<BitrixResponseObject> DownloadDealDetailsJsonAsync(int id, BitrixFieldsDefinition bitrixFieldsDefinition)

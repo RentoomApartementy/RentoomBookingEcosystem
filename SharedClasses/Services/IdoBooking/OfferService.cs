@@ -50,6 +50,17 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                     response.Errors.FaultCode, response.Errors.FaultString);
             }
 
+
+            //MS 28.03 filtr żeby tylko pojawiały się nonrefundable offers (14 dni przed data pobytu) - ustalone z Bartkiem bo IDB coś nie zawsze idzie ok.
+            if (response?.Result?.PricingOffers != null && ShouldReturnOnlyNonRefundableOffers(request.DateFrom))
+            {
+                response.Result.PricingOffers = response.Result.PricingOffers
+                    .Select(FilterToNonRefundableOffer)
+                    .Where(offer => offer != null)
+                    .Cast<PricingOffer>()
+                    .ToList();
+            }
+
             return response;
         }
 
@@ -98,6 +109,35 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             }
 
             return ret;
+        }
+
+        private static bool ShouldReturnOnlyNonRefundableOffers(string? dateFrom)
+        {
+            if (!DateOnly.TryParse(dateFrom, out var startDate))
+            {
+                return false;
+            }
+
+            return startDate.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber < 14;
+        }
+
+        private static PricingOffer? FilterToNonRefundableOffer(PricingOffer offer)
+        {
+            var nonRefundableOffers = offer.Offers?
+                .Where(item => string.Equals(item.OfferType, "nonrefundable", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (nonRefundableOffers is null || nonRefundableOffers.Count == 0)
+            {
+                return null;
+            }
+
+            return new PricingOffer
+            {
+                ObjectId = offer.ObjectId,
+                MinimalPrice = nonRefundableOffers.Min(item => item.Price),
+                Offers = nonRefundableOffers
+            };
         }
     }
 }
