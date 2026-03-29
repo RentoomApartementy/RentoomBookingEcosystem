@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using RentoomBookingWeb.Components.Features.Home.Components
+@using System.Globalization
 @inject NavigationManager Navigation
 
 <PageTitle>Apartamenty Toruń - Wynajem Krótkoterminowy | Rentoom</PageTitle>
@@ -16,6 +17,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@Navigation.BaseUri" />
     <meta property="og:image" content="@($"{Navigation.BaseUri}assets/images/hero-bg.jpeg")" />
+    <BreadcrumbJsonLd CurrentPageName="@(IsPolish ? "Strona główna" : "Home")" CurrentPagePath="/" />
 </HeadContent>
 
 <div class="home-container">
@@ -28,3 +30,7 @@
     <OpinionsSection/>
     <ContactSection/>
 </div>
+
+@code {
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+}

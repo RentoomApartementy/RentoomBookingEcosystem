@@ -53,6 +53,15 @@
     <meta property="og:url" content="@GetCanonicalUrl()" />
     <meta property="og:locale" content="pl_PL" />
 
+    @if (_apartment != null)
+    {
+        <BreadcrumbJsonLd
+            CurrentPageName="@(_apartment.Name ?? ApartmentBreadcrumbFallbackName)"
+            CurrentPagePath="@GetCanonicalUrl()"
+            ParentPageName="@(IsPolish ? "Apartamenty" : "Apartments")"
+            ParentPagePath="/apartamenty" />
+    }
+
     @(_apartment != null ? (MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>" : (MarkupString)"")
 </HeadContent>
 
@@ -1083,6 +1092,10 @@
         string json = System.Text.Json.JsonSerializer.Serialize(jsonLd, options);
         return new MarkupString(json);
     }
+
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+
+    private string ApartmentBreadcrumbFallbackName => IsPolish ? "Apartament" : "Apartment";
 
     protected override async Task OnInitializedAsync()
     {

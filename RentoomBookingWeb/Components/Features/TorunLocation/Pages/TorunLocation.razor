@@ -16,6 +16,7 @@
     <meta property="og:url" content="@CanonicalUrl" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="@CanonicalUrl" />
+    <BreadcrumbJsonLd CurrentPageName="@BreadcrumbName" CurrentPagePath="/polozenie-torunia/" />
 </HeadContent>
 
  <HeroSection/>
@@ -47,4 +48,6 @@ else
         : "Toruń location, where is Toruń, Toruń map, how to get to Toruń, Toruń Old Town";
 
     private string OgLocale => IsPolish ? "pl_PL" : "en_US";
+
+    private string BreadcrumbName => IsPolish ? "Położenie Torunia" : "Torun location";
 }

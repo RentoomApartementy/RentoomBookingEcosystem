@@ -1,6 +1,7 @@
 @page "/apartamenty"
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @using Microsoft.Extensions.Localization
+@using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
 
 <PageTitle>@GetSeoTitle()</PageTitle>
@@ -16,6 +17,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
     <meta property="og:locale" content="pl_PL" />
+    <BreadcrumbJsonLd CurrentPageName="@(IsPolish ? "Apartamenty" : "Apartments")" CurrentPagePath="/apartamenty" />
 </HeadContent>
 
 <div class="apartments-container">
@@ -132,3 +134,7 @@
             </div>
     </div>
 </div>
+
+@code {
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+}

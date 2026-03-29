@@ -1,5 +1,6 @@
 @page "/wspolpraca";
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
+@using System.Globalization
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
@@ -17,6 +18,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
     <meta property="og:locale" content="pl_PL" />
+    <BreadcrumbJsonLd CurrentPageName="@(IsPolish ? "Współpraca" : "Cooperation")" CurrentPagePath="/wspolpraca" />
 </HeadContent>
 
 <div class="cooperation-container">
@@ -30,5 +32,5 @@
 </div>
 
 @code {
-    
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
 }

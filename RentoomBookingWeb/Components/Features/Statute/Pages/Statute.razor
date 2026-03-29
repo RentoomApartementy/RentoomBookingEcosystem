@@ -13,6 +13,10 @@
 
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
+<HeadContent>
+    <BreadcrumbJsonLd CurrentPageName="@CurrentBreadcrumbName" CurrentPagePath="@CurrentBreadcrumbPath" />
+</HeadContent>
+
 <main class="statute-container">
     <HeaderSection ImagePath="/assets/images/header-bg-statute.jpg" Title="@Localizer["StatuteHeader"]" Height="230px" />
     
@@ -46,6 +50,10 @@
     private List<CustomerTermDisplayDto> _allTerms = new();
     private CustomerTermDisplayDto? _currentTerm;
     private bool _isLoading = true;
+    private string CurrentBreadcrumbName => _currentTerm?.Title ?? _currentTerm?.Description ?? Localizer["StatuteHeader"];
+    private string CurrentBreadcrumbPath => Id.HasValue
+        ? $"/regulaminy/{Id}{(string.IsNullOrWhiteSpace(Slug) ? string.Empty : $"/{Slug}")}"
+        : "/regulaminy";
 
     protected override async Task OnParametersSetAsync()
     {
