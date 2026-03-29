@@ -20,6 +20,11 @@ public partial class ApartmentsSection : ComponentBase
 
     public string? Error { get; private set; }
 
+    public DateOnly _dateFrom { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
+    public DateOnly _dateTo { get; private set; } = DateOnly.FromDateTime((DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday) ? DateTime.Now.AddDays(2) : DateTime.Now.AddDays(1));
+
+
+
     protected override async Task OnInitializedAsync()
     {
         await HandleSearchAsync();
@@ -39,13 +44,15 @@ public partial class ApartmentsSection : ComponentBase
     
     private async Task GetFilteredOffers()
     {
+
+      
         try
         {
             var idoParams = new PricingOffersRequest
             {
                 ObjectIds = [],
-                DateFrom = DateTime.Now.ToString("yyyy-MM-dd"),
-                DateTo = (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday) ?  DateTime.Now.AddDays(2).ToString("yyyy-MM-dd"): DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
+                DateFrom = _dateFrom.ToString("yyyy-MM-dd"),
+                DateTo = _dateTo.ToString("yyyy-MM-dd"),
                 NumberOfAdults = 2,
                 NumberOfBigChildren = 0,
             };
@@ -100,8 +107,8 @@ public partial class ApartmentsSection : ComponentBase
             {
                 ["ApartmentId"] = apartmentId.ToString(),
                 ["ApartmentName"] = apartmentName,
-                ["StartDate"] = DateTime.Now.ToString("yyyy-MM-dd"),
-                ["EndDate"] = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
+                ["StartDate"] = _dateFrom.ToString("yyyy-MM-dd"),
+                ["EndDate"] = _dateTo.ToString("yyyy-MM-dd"),
                 ["Adults"] = "2",
                 ["Children"] = "0"
             });
@@ -110,11 +117,11 @@ public partial class ApartmentsSection : ComponentBase
             ["apartment_id"] = apartmentId,
             ["apartment_name"] = apartmentName,
             ["listing_source"] = "home-carousel",
-            ["start_date"] = DateTime.Now.ToString("yyyy-MM-dd"),
-            ["end_date"] = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
+            ["start_date"] = _dateFrom.ToString("yyyy-MM-dd"),
+            ["end_date"] = _dateTo.ToString("yyyy-MM-dd"),
             ["adults"] = 2,
             ["children"] = 0
         });
-        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{DateTime.Now.ToString("yyyy-MM-dd")}/{DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")}/2/0");
+        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{_dateFrom:yyyy-MM-dd}/{_dateTo:yyyy-MM-dd}/2/0");
     }
 }
