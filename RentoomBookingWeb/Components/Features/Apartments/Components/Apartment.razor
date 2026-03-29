@@ -239,7 +239,11 @@
                         <div class="suggestion-labels-row">
                             @foreach (var term in SuggestionDates.Take(3))
                             {
-                                <span class="suggestion-label">@FormatSuggestionLabel(term)</span>
+                                <a href="@GetSuggestionUrl(term)"
+                                   class="suggestion-label"
+                                   @onclick='(() => TrackApartmentClickAsync("suggestion"))'>
+                                    @FormatSuggestionLabel(term)
+                                </a>
                             }
                         </div>
                     }
@@ -452,6 +456,20 @@
 
         var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
         return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} night/s)";
+    }
+
+    private string GetSuggestionUrl(AvailableTerm term)
+    {
+        if (Item == null)
+        {
+            return "#";
+        }
+
+        var slug = Item.Name?.ToSlug() ?? "szczegoly";
+        var adults = !string.IsNullOrWhiteSpace(Adults) ? Adults : "2";
+        var children = !string.IsNullOrWhiteSpace(Children) ? Children : "0";
+
+        return $"/apartamenty/{Item.Id}/{slug}/{term.StartDate}/{term.EndDate}/{adults}/{children}".Replace("//", "/");
     }
 
     private async Task TrackApartmentClickAsync(string target)
