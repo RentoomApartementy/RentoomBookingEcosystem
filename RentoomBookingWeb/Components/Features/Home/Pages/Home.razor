@@ -1,5 +1,8 @@
 ﻿@page "/"
 @using RentoomBookingWeb.Components.Features.Home.Components
+@using System.Globalization
+@using System.Text.Encodings.Web
+@using System.Text.Json
 @inject NavigationManager Navigation
 
 <PageTitle>Apartamenty Toruń - Wynajem Krótkoterminowy | Rentoom</PageTitle>
@@ -16,6 +19,9 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@Navigation.BaseUri" />
     <meta property="og:image" content="@($"{Navigation.BaseUri}assets/images/hero-bg.jpeg")" />
+    <script type="application/ld+json">
+        @((MarkupString)HomeJsonLd)
+    </script>
 </HeadContent>
 
 <div class="home-container">
@@ -28,3 +34,83 @@
     <OpinionsSection/>
     <ContactSection/>
 </div>
+
+@code {
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+
+    private string HomeJsonLd => JsonSerializer.Serialize(new
+    {
+        @context = "https://schema.org",
+        @graph = new object[]
+        {
+            new
+            {
+                @type = "WebSite",
+                @id = "https://rentoom.pl/#website",
+                url = "https://rentoom.pl/",
+                name = "Rentoom",
+                alternateName = "Rentoom Apartamenty",
+                publisher = new
+                {
+                    @id = "https://rentoom.pl/#organization"
+                }
+            },
+            new
+            {
+                @type = "Organization",
+                @id = "https://rentoom.pl/#organization",
+                name = "Rentoom",
+                legalName = "Rentoom Apartamenty sp. z o.o.",
+                alternateName = "Rentoom Apartamenty",
+                url = "https://rentoom.pl/",
+                logo = new
+                {
+                    @type = "ImageObject",
+                    url = "https://rentoom.pl/assets/images/logo-nowe-Rentoom-final-158x112.png"
+                },
+                description = "Szukasz noclegu w Toruniu? Rentoom oferuje apartamenty na wynajem krótkoterminowy w Toruniu i pobyty w najlepszych lokalizacjach miasta.",
+                email = "info@rentoom.pl",
+                telephone = "+48 881 388 001",
+                taxID = "8792727407",
+                address = new
+                {
+                    @type = "PostalAddress",
+                    streetAddress = "ul. Stanisława Szymańskiego 1B",
+                    postalCode = "87-100",
+                    addressLocality = "Toruń",
+                    addressCountry = "PL"
+                },
+                contactPoint = new
+                {
+                    @type = "ContactPoint",
+                    contactType = "customer service",
+                    telephone = "+48 881 388 001",
+                    email = "info@rentoom.pl",
+                    availableLanguage = new[] { "pl", "en" }
+                },
+                sameAs = new[]
+                {
+                    "https://www.facebook.com/RentoomApartamenty/",
+                    "https://www.instagram.com/rentoomapartamenty/"
+                }
+            },
+            new
+            {
+                @type = "BreadcrumbList",
+                itemListElement = new object[]
+                {
+                    new
+                    {
+                        @type = "ListItem",
+                        position = 1,
+                        name = IsPolish ? "Strona główna" : "Home",
+                        item = "https://rentoom.pl/"
+                    }
+                }
+            }
+        }
+    }, new JsonSerializerOptions
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    });
+}

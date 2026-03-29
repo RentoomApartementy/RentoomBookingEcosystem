@@ -24,6 +24,7 @@
                             @key="apartment.Id"
                             Item="@apartment"
                             Offer="@GetPricingOfferByObjectId(apartment.Id)"
+                            OfferLength = "@(_dateTo.DayNumber-_dateFrom.DayNumber)"
                             ShowPrice="true"
                             DisableForGoToReservation="true"
                             Width="min(370px, 85vw)"/>

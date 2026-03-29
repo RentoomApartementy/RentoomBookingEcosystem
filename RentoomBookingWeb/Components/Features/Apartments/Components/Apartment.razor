@@ -10,6 +10,7 @@
 @using Microsoft.Extensions.Localization
 @using RentoomBookingWeb.Services
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
+@inject IStringLocalizer<RentoomBookingWeb.Apartment> ApartmentLocalizer;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 @inject MediaCacheService MediaCache 
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
@@ -185,7 +186,7 @@
                     {
                         <div class="price-wrapper">
                             <span class="price">@Offer?.MinimalPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
-                            <small>@Localizer["TotalPrice"]</small>
+                                <small>@Localizer["TotalPrice"] @OfferLength @GetNightLabel(OfferLength.Value)</small>
                         </div>
                     }
                     else if (Item == null) 
@@ -239,7 +240,11 @@
                         <div class="suggestion-labels-row">
                             @foreach (var term in SuggestionDates.Take(3))
                             {
-                                <span class="suggestion-label">@FormatSuggestionLabel(term)</span>
+                                <a href="@GetSuggestionUrl(term)"
+                                   class="suggestion-label"
+                                   @onclick='(() => TrackApartmentClickAsync("suggestion"))'>
+                                    @FormatSuggestionLabel(term)
+                                </a>
                             }
                         </div>
                     }
@@ -267,6 +272,7 @@
     [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
     [Parameter] public ApartmentObject? Item { get; set; } = null;
     [Parameter] public PricingOffer? Offer { get; set; } = null;
+    [Parameter] public int? OfferLength { get; set; } = null;
     [Parameter] public bool ShowPrice { get; set; } = false;
     
     [Parameter] public string? StartDate { get; set; }
@@ -443,7 +449,7 @@
         _detailsUrl = _detailsUrl.Replace("//", "/");
     }
 
-    private static string FormatSuggestionLabel(AvailableTerm term)
+    private string FormatSuggestionLabel(AvailableTerm term)
     {
         if (!DateTime.TryParse(term.StartDate, out var startDate) || !DateTime.TryParse(term.EndDate, out var endDate))
         {
@@ -451,7 +457,52 @@
         }
 
         var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
-        return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} night/s)";
+        return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} {GetNightLabel(nights)})";
+    }
+
+    private string GetStayLengthSuffix()
+    {
+        if (!DateTime.TryParse(StartDate, out var startDate) || !DateTime.TryParse(EndDate, out var endDate))
+        {
+            return string.Empty;
+        }
+
+        var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
+        if (nights <= 0)
+        {
+            return string.Empty;
+        }
+
+        return $" ({nights} {GetNightLabel(nights)})";
+    }
+
+    private string GetNightLabel(int nights)
+    {
+        if (nights == 1)
+        {
+            return ApartmentLocalizer["StayNight_1"];
+        }
+
+        if (nights % 10 is >= 2 and <= 4 && nights % 100 is < 12 or > 14)
+        {
+            return ApartmentLocalizer["StayNight_234"];
+        }
+
+        return ApartmentLocalizer["StayNight_Many"];
+    }
+
+    private string GetSuggestionUrl(AvailableTerm term)
+    {
+        if (Item == null)
+        {
+            return "#";
+        }
+
+        var slug = Item.Name?.ToSlug() ?? "szczegoly";
+        var adults = !string.IsNullOrWhiteSpace(Adults) ? Adults : "2";
+        var children = !string.IsNullOrWhiteSpace(Children) ? Children : "0";
+
+        return $"/apartamenty/{Item.Id}/{slug}/{term.StartDate}/{term.EndDate}/{adults}/{children}".Replace("//", "/");
     }
 
     private async Task TrackApartmentClickAsync(string target)

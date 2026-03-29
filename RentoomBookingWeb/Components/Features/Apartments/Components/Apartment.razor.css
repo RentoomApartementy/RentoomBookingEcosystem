@@ -340,4 +340,13 @@
     background: #fbf4ec;
     color: #6c4a2d;
     font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.suggestion-label:hover {
+    background: #f4e6d7;
+    border-color: #c7a988;
+    color: #5b3c23;
+    text-decoration: none;
 }

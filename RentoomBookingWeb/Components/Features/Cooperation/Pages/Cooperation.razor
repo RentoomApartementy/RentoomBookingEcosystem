@@ -1,5 +1,6 @@
 @page "/wspolpraca";
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
+@using System.Globalization
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
@@ -7,6 +8,7 @@
 <PageTitle>Współpraca - Rentoom | Zarządzanie Najmem Toruń</PageTitle>
 
 <HeadContent>
+    <meta name="robots" content="index, follow" />
     <meta name="description" content="Zmień swój apartament w bezobsługową inwestycję z Rentoom. Oferujemy kompleksowe zarządzanie najmem w Toruniu, optymalizację dochodu i obsługę gości 24/7. Postaw na jakość i doświadczenie." />
     <meta name="keywords" content="zarządzanie najmem toruń, obsługa apartamentów, bezobsługowa inwestycja, rentoom współpraca, optymalizacja zysku z najmu, wynajem krótkoterminowy toruń" />
     <link rel="canonical" href="@NavManager.Uri" />
@@ -17,6 +19,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
     <meta property="og:locale" content="pl_PL" />
+    <BreadcrumbJsonLd CurrentPageName="@(IsPolish ? "Współpraca" : "Cooperation")" CurrentPagePath="/wspolpraca" />
 </HeadContent>
 
 <div class="cooperation-container">
@@ -30,5 +33,5 @@
 </div>
 
 @code {
-    
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
 }

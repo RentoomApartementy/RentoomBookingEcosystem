@@ -42,6 +42,7 @@
 <PageTitle>@GetSeoTitle()</PageTitle>
 
 <HeadContent>
+    <meta name="robots" content="@(HasRouteDates ? "noindex, nofollow" : "index, follow")" />
     <meta name="description" content="@GetSeoDescription()" />
     <meta name="keywords" content="apartament toruń, nocleg toruń, rentoom, wynajem krótkoterminowy, @_apartment?.Name" />
     <link rel="canonical" href="@GetCanonicalUrl()" />
@@ -52,6 +53,15 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@GetCanonicalUrl()" />
     <meta property="og:locale" content="pl_PL" />
+
+    @if (_apartment != null)
+    {
+        <BreadcrumbJsonLd
+            CurrentPageName="@(_apartment.Name ?? ApartmentBreadcrumbFallbackName)"
+            CurrentPagePath="@GetCanonicalUrl()"
+            ParentPageName="@(IsPolish ? "Apartamenty" : "Apartments")"
+            ParentPagePath="/apartamenty" />
+    }
 
     @(_apartment != null ? (MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>" : (MarkupString)"")
 </HeadContent>
@@ -1083,6 +1093,12 @@
         string json = System.Text.Json.JsonSerializer.Serialize(jsonLd, options);
         return new MarkupString(json);
     }
+
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+
+    private string ApartmentBreadcrumbFallbackName => IsPolish ? "Apartament" : "Apartment";
+
+    private bool HasRouteDates => TryParseDate(StartDate, out _) && TryParseDate(EndDate, out _);
 
     protected override async Task OnInitializedAsync()
     {

@@ -2,6 +2,7 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Services
+@using System.Globalization
 
 @inject IApartmentsService ApartmentsService
 @inject NavigationManager Navigation
@@ -9,7 +10,9 @@
 <PageTitle>Apartamenty Toruń - Pełna Lista Noclegów</PageTitle>
 
 <HeadContent>
+    <meta name="robots" content="index, follow" />
     <meta name="description" content="Zobacz listę wszystkich naszych apartamentów w Toruniu. Komfortowe noclegi, świetna lokalizacja blisko Starówki. Sprawdź szczegóły każdego apartamentu." />
+    <BreadcrumbJsonLd CurrentPageName="@(IsPolish ? "Apartamenty Toruń" : "Apartments in Torun")" CurrentPagePath="/apartamenty-torun" />
 </HeadContent>
 
 <div class="container my-5">
@@ -47,6 +50,7 @@
 @code {
     private List<ApartmentObject> _apartments = new();
     private bool _isLoading = true;
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
 
     protected override async Task OnInitializedAsync()
     {
