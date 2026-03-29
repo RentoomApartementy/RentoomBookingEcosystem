@@ -968,7 +968,7 @@ namespace RentoomBooking.SharedClasses.Services
             details.externalNote = reservationRequest.ExternalNote ?? details.externalNote;
             details.internalNote = reservationRequest.InternalNote ?? details.internalNote;
             details.apiNote = reservationRequest.ApiNote ?? details.apiNote;
-            details.modificationDate = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm");
+            //details.modificationDate = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm");
         }
 
         private List<ReservationItem> BuildReservationItems(List<NewReservationItem> items, List<ReservationItem> templateItems)

@@ -210,6 +210,12 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     reservationGuid: reservationGuid,
                     cancellationToken: cancellationToken);
 
+                reservation = await EnsureStayWellLinkInExternalNoteAsync(
+                    reservation,
+                    reservationGuid,
+                    request.BookingComLogGuid,
+                    cancellationToken);
+
                 var storedToken = await _bookingDatabase.SaveReservationJsonAsync(
                     reservation,
                     _logger,
@@ -674,6 +680,103 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
         private static string? SerializePayload(object? payload)
         {
             return payload is null ? null : JsonConvert.SerializeObject(payload);
+        }
+
+        private async Task<Reservation> EnsureStayWellLinkInExternalNoteAsync(
+            Reservation reservation,
+            Guid reservationGuid,
+            Guid bookingComLogGuid,
+            CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(reservation);
+
+            var stayWellLink = BuildStayWellLink(reservationGuid.ToString("D"));
+            if (string.IsNullOrWhiteSpace(stayWellLink))
+            {
+                await LogWarningAsync(
+                    bookingComLogGuid,
+                    "staywell_link_missing",
+                    $"StayWell link could not be built for reservation {reservation.id}. Skipped ExternalNote update.",
+                    reservationGuid: reservationGuid,
+                    cancellationToken: cancellationToken);
+
+                return reservation;
+            }
+
+            reservation.ReservationDetails ??= new ReservationDetails();
+
+            var existingExternalNote = reservation.ReservationDetails.externalNote ?? string.Empty;
+            var expectedPrefix = $"{stayWellLink}";
+
+            if (existingExternalNote.Contains(expectedPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                await LogInfoAsync(
+                    bookingComLogGuid,
+                    "staywell_link_already_present",
+                    "Skipped",
+                    $"StayWell link was already present in ExternalNote for reservation {reservation.id}.",
+                    reservationGuid: reservationGuid,
+                    cancellationToken: cancellationToken);
+
+                return reservation;
+            }
+
+            var updatedExternalNote = string.IsNullOrWhiteSpace(existingExternalNote)
+                ? expectedPrefix
+                : $"{expectedPrefix}{Environment.NewLine}{Environment.NewLine}{existingExternalNote.Trim()}";
+
+            var editResponse = await _idoApi.EditReservationAsync(
+                new EditReservation
+                {
+                    Id = reservation.id,
+                    ExternalNote = updatedExternalNote,
+                 //   Notify = ReservationNotifyType.No,
+                  //  NotifyService = ReservationNotifyType.No
+                },
+                cancellationToken);
+
+            var editResult = editResponse?.Reservations?.FirstOrDefault();
+            if (editResult?.Success != true)
+            {
+                var errorMessage = editResult?.Error?.FaultString
+                    ?? editResponse?.Errors?.FaultString
+                    ?? $"Unknown error while updating ExternalNote for reservation {reservation.id}.";
+
+                throw new InvalidOperationException(errorMessage);
+            }
+
+            reservation.ReservationDetails.externalNote = updatedExternalNote;
+
+            await LogInfoAsync(
+                bookingComLogGuid,
+                "staywell_link_appended",
+                "Completed",
+                $"Prepended StayWell link to ExternalNote for reservation {reservation.id}.",
+                payload: new
+                {
+                    reservation.id,
+                    StayWellLink = stayWellLink
+                },
+                reservationGuid: reservationGuid,
+                cancellationToken: cancellationToken);
+
+            return reservation;
+        }
+
+        private string? BuildStayWellLink(string? resToken)
+        {
+            var baseUrl =
+                Environment.GetEnvironmentVariable("StayWell__ReservationUrlBase") ??
+                Environment.GetEnvironmentVariable("StayWellReservationUrlBase") ??
+                _configuration["StayWell:ReservationUrlBase"] ??
+                _configuration["StayWellReservationUrlBase"];
+
+            if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(resToken))
+            {
+                return null;
+            }
+
+            return baseUrl.Replace("{resToken}", resToken).TrimEnd('/');
         }
 
         private bool IsDevelopmentEnvironment()
