@@ -63,6 +63,15 @@ namespace RentoomBookingWeb {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string AboutCity {
+            get {
+                return ResourceManager.GetString("AboutCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string AllApartmentsText {
             get {
                 return ResourceManager.GetString("AllApartmentsText", resourceCulture);
