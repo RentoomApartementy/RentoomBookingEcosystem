@@ -42,6 +42,7 @@
 <PageTitle>@GetSeoTitle()</PageTitle>
 
 <HeadContent>
+    <meta name="robots" content="@(HasRouteDates ? "noindex, nofollow" : "index, follow")" />
     <meta name="description" content="@GetSeoDescription()" />
     <meta name="keywords" content="apartament toruń, nocleg toruń, rentoom, wynajem krótkoterminowy, @_apartment?.Name" />
     <link rel="canonical" href="@GetCanonicalUrl()" />
@@ -1096,6 +1097,8 @@
     private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
 
     private string ApartmentBreadcrumbFallbackName => IsPolish ? "Apartament" : "Apartment";
+
+    private bool HasRouteDates => TryParseDate(StartDate, out _) && TryParseDate(EndDate, out _);
 
     protected override async Task OnInitializedAsync()
     {
