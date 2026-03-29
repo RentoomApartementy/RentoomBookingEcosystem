@@ -230,6 +230,33 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             }
         }
 
+        public async Task<RentoomReservation?> GetRentoomReservationByReservationIdAsync(int reservationId, ILogger log, CancellationToken cancellationToken = default)
+        {
+            if (log is null) throw new ArgumentNullException(nameof(log));
+
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+            var entity = await _dbContext.Reservations.AsNoTracking()
+                .OrderByDescending(r => r.UpdatedAt)
+                .ThenByDescending(r => r.CreatedAt)
+                .FirstOrDefaultAsync(r => r.ReservationId == reservationId, cancellationToken);
+
+            if (entity?.Payload is null)
+            {
+                log.LogWarning("Reservation with id {Id} not found in PostgreSQL.", reservationId);
+                return null;
+            }
+
+            try
+            {
+                return JsonConvert.DeserializeObject<RentoomReservation>(entity.Payload);
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "Failed to deserialize reservation {Id} from PostgreSQL.", reservationId);
+                return null;
+            }
+        }
+
         public async Task<string?> SaveReservationJsonAsync(Reservation payloadReservation, ILogger log, string? existingResToken = null, CancellationToken cancellationToken = default)
         {
             if (payloadReservation is null) throw new ArgumentNullException(nameof(payloadReservation));

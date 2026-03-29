@@ -1,0 +1,154 @@
+@using RentoomBookingWeb.Components.Features.Home.Components
+<main class="torun-location-page">
+    <section class="hero-section">
+        <div class="content-shell">
+            <div class="hero-badge">Toruń • lokalizacja • dojazd • mapa</div>
+            <h1>Położenie Torunia i wygodny punkt startowy do pobytu w mieście</h1>
+            <p class="hero-lead">
+                Toruń leży w północnej Polsce, nad Wisłą, w województwie kujawsko-pomorskim.
+                To świetna baza na weekend, rodzinny pobyt albo nocleg w trasie, szczególnie jeśli zależy Ci
+                na szybkim dostępie do starówki i głównych tras dojazdowych.
+            </p>
+
+            <div class="hero-actions">
+                <a class="action-button action-button-primary" href="https://www.google.com/maps/search/?api=1&query=Toru%C5%84" target="_blank" rel="noopener">Zobacz Toruń w Google Maps</a>
+                <a class="action-button action-button-secondary" href="https://www.google.com/maps/search/?api=1&query=Rynek+Staromiejski+Toru%C5%84" target="_blank" rel="noopener">Rynek Staromiejski</a>
+                <a class="action-button action-button-secondary" href="https://torun.pl/pl/turystyka/jak-dojechac" target="_blank" rel="noopener">Jak dojechać do Torunia</a>
+            </div>
+
+            <div class="summary-grid">
+                <article class="summary-card">
+                    <h2>Nad Wisłą</h2>
+                    <p>Toruń jest położony nad Wisłą, co tworzy charakterystyczny krajobraz miasta i bliskość spacerowych bulwarów.</p>
+                </article>
+                <article class="summary-card">
+                    <h2>Kujawsko-pomorskie</h2>
+                    <p>Miasto znajduje się w jednym z najważniejszych punktów województwa kujawsko-pomorskiego i jest silnym ośrodkiem turystycznym regionu.</p>
+                </article>
+                <article class="summary-card">
+                    <h2>Starówka UNESCO</h2>
+                    <p>Średniowieczne centrum Torunia należy do najlepiej zachowanych zespołów miejskich w Polsce i przyciąga gości przez cały rok.</p>
+                </article>
+                <article class="summary-card">
+                    <h2>Dobry dojazd</h2>
+                    <p>Do miasta można wygodnie dotrzeć autem i pociągiem, a najbliższe lotnisko pasażerskie znajduje się w Bydgoszczy.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+ 
+    <section class="content-section">
+        <div class="content-shell two-column-layout">
+            <div class="content-panel prose-panel">
+                <div class="section-header">
+                    <h2>Gdzie dokładnie leży Toruń?</h2>
+                    <p>
+                        Toruń położony jest we wschodniej części Kotliny Toruńskiej. To lokalizacja wygodna zarówno dla turystów,
+                        jak i dla osób przyjeżdżających służbowo. Bliskość Wisły, zabytkowego centrum i głównych dróg sprawia,
+                        że miasto dobrze sprawdza się na krótki oraz dłuższy pobyt.
+                    </p>
+                </div>
+
+                <p>
+                    Najbardziej rozpoznawalnym punktem miasta jest starówka z Rynkiem Staromiejskim, Ratuszem Staromiejskim
+                    i gęstą siecią restauracji, kawiarni oraz zabytków. Dla większości odwiedzających to właśnie ten rejon
+                    jest naturalnym początkiem zwiedzania.
+                </p>
+                <p>
+                    Toruń jest dobrym wyborem na city break, rodzinny wyjazd lub romantyczny weekend. Pobyt łatwo połączyć
+                    ze spacerami nad Wisłą, wizytą w muzeach oraz korzystaniem z oferty gastronomicznej ścisłego centrum.
+                </p>
+                <p>
+                    Orientacyjne współrzędne toruńskiej starówki to <strong>53.0130 N, 18.5986 E</strong>, co może być przydatne
+                    przy planowaniu dojazdu i nawigacji.
+                </p>
+            </div>
+
+            <aside class="content-panel info-panel">
+                <h2>Najważniejsze informacje</h2>
+                <ul class="fact-list">
+                    <li><strong>Region:</strong> województwo kujawsko-pomorskie</li>
+                    <li><strong>Rzeka:</strong> Wisła</li>
+                    <li><strong>Centrum miasta:</strong> Rynek Staromiejski</li>
+                    <li><strong>Najbliższe lotnisko:</strong> Bydgoszcz, około 50 km</li>
+                    <li><strong>Dojazd:</strong> samochodem, pociągiem i przez lotniska regionalne</li>
+                </ul>
+            </aside>
+        </div>
+    </section>
+    <ApartmentsSection />
+    <section class="content-section map-section">
+        <div class="content-shell">
+            <div class="section-header section-header-wide">
+                <h2>Mapa Torunia</h2>
+                <p>Osadzona mapa OpenStreetMap pozwala szybko zobaczyć położenie miasta i okolic starówki bez opuszczania strony.</p>
+            </div>
+
+            <div class="map-frame-card">
+                <iframe
+                    title="Mapa Torunia w OpenStreetMap"
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=18.5190%2C52.9700%2C18.7000%2C53.0700&amp;layer=mapnik&amp;marker=53.0130%2C18.5986"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="map-frame">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="content-shell">
+            <div class="section-header section-header-wide">
+                <h2>Przydatne mapy i linki</h2>
+                <p>Te odnośniki pomagają gościom szybko zaplanować trasę, znaleźć centrum miasta i sprawdzić oficjalne informacje o dojeździe.</p>
+            </div>
+
+            <div class="links-grid">
+                <a class="link-card" href="https://www.google.com/maps/search/?api=1&query=Toru%C5%84" target="_blank" rel="noopener">
+                    <strong>Mapa Torunia w Google Maps</strong>
+                    <span>Szybki podgląd miasta i planowanie trasy</span>
+                </a>
+                <a class="link-card" href="https://www.google.com/maps/search/?api=1&query=Rynek+Staromiejski+Toru%C5%84" target="_blank" rel="noopener">
+                    <strong>Rynek Staromiejski w Google Maps</strong>
+                    <span>Wygodny punkt startowy do zwiedzania</span>
+                </a>
+                <a class="link-card" href="https://www.openstreetmap.org/search?query=Toru%C5%84" target="_blank" rel="noopener">
+                    <strong>Toruń w OpenStreetMap</strong>
+                    <span>Alternatywna mapa miasta i okolic</span>
+                </a>
+                <a class="link-card" href="https://visittorun.com/" target="_blank" rel="noopener">
+                    <strong>Oficjalny portal turystyczny Torunia</strong>
+                    <span>Atrakcje, inspiracje i informacje przydatne podczas pobytu</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section faq-section">
+        <div class="content-shell">
+            <div class="section-header section-header-wide">
+                <h2>Krótki FAQ</h2>
+                <p>Proste odpowiedzi na najczęstsze pytania związane z lokalizacją Torunia.</p>
+            </div>
+
+            <div class="faq-list">
+                <details>
+                    <summary>W jakim województwie leży Toruń?</summary>
+                    <p>Toruń leży w województwie kujawsko-pomorskim.</p>
+                </details>
+                <details>
+                    <summary>Nad jaką rzeką leży Toruń?</summary>
+                    <p>Miasto położone jest nad Wisłą.</p>
+                </details>
+                <details>
+                    <summary>Czy do Torunia można wygodnie dojechać pociągiem?</summary>
+                    <p>Tak. Toruń ma wygodne połączenia kolejowe z większymi miastami w Polsce, dlatego dobrze sprawdza się na weekendowy wyjazd.</p>
+                </details>
+                <details>
+                    <summary>Gdzie najlepiej zacząć zwiedzanie Torunia?</summary>
+                    <p>Najlepszym punktem startowym jest Rynek Staromiejski i bezpośrednie otoczenie toruńskiej starówki.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+</main>
