@@ -208,7 +208,10 @@
     <value>The prepayment is non-refundable</value>
   </data>
   <data name="RefundableOfferText" xml:space="preserve">
-    <value>Cancellation up to 14 days before arrival is free of charge (100% refund). Cancellations made less than 14 days before arrival are non-refundable</value>
+    <value>We refund 100% of the paid amount for cancellations made by {0}</value>
+  </data>
+  <data name="RefundableOfferTextFallback" xml:space="preserve">
+    <value>Free cancellation before</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Loading</value>
