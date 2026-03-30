@@ -93,6 +93,7 @@
                                     @key="item.Id"
                                     Item="@item" 
                                     Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)" 
+                                    OfferLength="@_offerLength"
                                     ShowPrice="@ViewModel.IsSearch"
                                     StartDate="@ViewModel.StartDate"
                                     EndDate="@ViewModel.EndDate"
@@ -138,4 +139,18 @@
 
 @code {
     private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+    private int? _offerLength;
+
+    
+
+    private int? CalculateOfferLength()
+    {
+        if (!DateTime.TryParse(ViewModel.StartDate, out var startDate) || !DateTime.TryParse(ViewModel.EndDate, out var endDate))
+        {
+            return null;
+        }
+
+        var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
+        return nights > 0 ? nights : null;
+    }
 }
