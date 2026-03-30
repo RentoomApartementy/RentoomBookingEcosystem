@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /st_rental
+Disallow: /*.php
+
 
 Sitemap: https://rentoom.pl/sitemap.xml
