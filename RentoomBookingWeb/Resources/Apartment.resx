@@ -208,7 +208,10 @@
     <value />
   </data>
   <data name="RefundableOfferText" xml:space="preserve">
-    <value />
+    <value>We refund 100% of the paid amount for cancellations made by {0}</value>
+  </data>
+  <data name="RefundableOfferTextFallback" xml:space="preserve">
+    <value>Free cancellation before</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value />

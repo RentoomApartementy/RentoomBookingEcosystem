@@ -208,7 +208,10 @@
     <value>Przedpłata nie podlega zwrotowi.</value>
   </data>
   <data name="RefundableOfferText" xml:space="preserve">
-    <value>Do 14 dni przed rozpoczęciem rezerwacji zwracane jest 100% wpłaconej kwoty. Poniżej 14 dni przed rozpoczęciem rezerwacji wpłacona kwota nie podlega zwrotowi.</value>
+    <value>Zwracamy 100% wpłaconej kwoty przy odwołaniu rezerwacji do {0}</value>
+  </data>
+  <data name="RefundableOfferTextFallback" xml:space="preserve">
+    <value>Bezpłatne odwołanie przed</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Ładowanie</value>

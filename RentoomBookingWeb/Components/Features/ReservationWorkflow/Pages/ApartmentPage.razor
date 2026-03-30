@@ -320,7 +320,7 @@
                     {
                         <div class="summary-offer-price refundable @(IsSelectedOffer(OfferTypeRefundable) ? "selected-offer" : "")">
                             <b>@Localizer["RefundableOffer"]</b>
-                            <small>@Localizer["RefundableOfferText"]</small>
+                            <small>@GetRefundableOfferText()</small>
                             <div class="summary-offer-price-button">
                                 @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
                                 <span class="summary-offer-price-button-price">
@@ -1824,6 +1824,17 @@
     private void OpenModal()
     {
         _isModalOpen = true;
+    }
+
+    private string GetRefundableOfferText()
+    {
+        if (!TryParseDate(StartDate, out var startDate))
+        {
+            return Localizer["RefundableOfferTextFallback"];
+        }
+
+        var freeCancellationDeadline = startDate.AddDays(-14);
+        return Localizer["RefundableOfferText", freeCancellationDeadline.ToString("dd.MM.yyyy", CultureInfo.CurrentUICulture)];
     }
     
     private OfferItem? localRefundableOffer => 

@@ -143,19 +143,9 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         private static PricingOffer? FilterToHigherPriceOffer(PricingOffer offer)
         {
-          /*  var nonRefundableOffers = offer.Offers?
-                .Where(item => string.Equals(item.OfferType, "nonrefundable", StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            if (nonRefundableOffers is null || nonRefundableOffers.Count == 0)
-            {
-                return null;
-            }
-          */
-
-            
+                    
             var maxPriceItem = offer.Offers.MaxBy(x => x.Price);
-
+            maxPriceItem.OfferType = "nonrefundable"; // MS 29.03 - zmiana typu oferty na nonrefundable, bo IDB coś nie zawsze idzie ok, a ustalenie było takie, że ma być tylko oferta nonrefundable (czyli z najwyższą ceną) - ustalone z Bartkiem
             return new PricingOffer
             {
                 ObjectId = offer.ObjectId,
