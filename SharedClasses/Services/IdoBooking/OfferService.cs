@@ -20,7 +20,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             CancellationToken cancellationToken = default);
     }
 
-    public class IdoOfferService :IIdoOfferService
+    public class IdoOfferService : IIdoOfferService
     {
         private readonly IIdoBookingConnectService _idoBookingConnectService;
         private readonly ILogger<IdoOfferService> _logger;
@@ -36,7 +36,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         public async Task<PricingOffersResponse?> GetPricingOffersAsync(PricingOffersRequest request, CancellationToken cancellationToken = default)
         {
-         
+
             _logger.LogInformation("Requesting pricing offers for {ObjectCount} objects between {DateFrom} and {DateTo}.",
                 request.ObjectIds?.Count ?? 0, request.DateFrom, request.DateTo);
 
@@ -52,10 +52,11 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
 
             //MS 28.03 filtr żeby tylko pojawiały się nonrefundable offers (14 dni przed data pobytu) - ustalone z Bartkiem bo IDB coś nie zawsze idzie ok.
+            //MS 29.03 zmiana na filtr pokazujący tylko ofertę z najwyższą ceną (14 dni przed data pobytu) - ustalone z Bartkiem, bo IDB coś nie zawsze idzie ok
             if (response?.Result?.PricingOffers != null && ShouldReturnOnlyNonRefundableOffers(request.DateFrom))
             {
                 response.Result.PricingOffers = response.Result.PricingOffers
-                    .Select(FilterToNonRefundableOffer)
+                    .Select(FilterToHigherPriceOffer)
                     .Where(offer => offer != null)
                     .Cast<PricingOffer>()
                     .ToList();
@@ -101,7 +102,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
 
             var ret = response?.Result.OfferObjects;
-            if (payload.ObjectIds!= null && payload.ObjectIds.Any())
+            if (payload.ObjectIds != null && payload.ObjectIds.Any())
             {
                 var idsHash = payload.ObjectIds.ToHashSet();
 
@@ -118,7 +119,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 return false;
             }
 
-            return startDate.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber < 14;
+            return startDate.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber <= 14;
         }
 
         private static PricingOffer? FilterToNonRefundableOffer(PricingOffer offer)
@@ -139,5 +140,29 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 Offers = nonRefundableOffers
             };
         }
+
+        private static PricingOffer? FilterToHigherPriceOffer(PricingOffer offer)
+        {
+          /*  var nonRefundableOffers = offer.Offers?
+                .Where(item => string.Equals(item.OfferType, "nonrefundable", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (nonRefundableOffers is null || nonRefundableOffers.Count == 0)
+            {
+                return null;
+            }
+          */
+
+            
+            var maxPriceItem = offer.Offers.MaxBy(x => x.Price);
+
+            return new PricingOffer
+            {
+                ObjectId = offer.ObjectId,
+                MinimalPrice = maxPriceItem.Price,
+                Offers = [maxPriceItem]
+            };
+        }
+
     }
 }
