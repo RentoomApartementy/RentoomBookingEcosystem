@@ -100,10 +100,10 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     throw new InvalidOperationException($"IdoBooking reservation {request.ReservationId} was not found.");
                 }
 
-                if (reservation?.ReservationDetails?.status !=ReservationStatusType.Accepted)
+               /*if (reservation?.ReservationDetails?.status !=ReservationStatusType.Accepted)
                 {
                     throw new InvalidOperationException($"IdoBooking reservation {request.ReservationId} has a not acceptable status {reservation?.ReservationDetails?.status}.");
-                }
+                }*/
 
 
                 await LogInfoAsync(
@@ -173,6 +173,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 }
 
                 var existingRecord = await _reservationStore.GetByIdoReservationIdAsync(request.ReservationId, cancellationToken);
+                var isDuplicate = existingRecord is not null;
                 Guid reservationGuid;
 
                 if (existingRecord is null)
@@ -195,6 +196,19 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                         "workflow_record_reused",
                         "Completed",
                         $"Reused existing reservation workflow record {reservationGuid}.",
+                        reservationGuid: reservationGuid,
+                        cancellationToken: cancellationToken);
+
+                    await LogWarningAsync(
+                        request.BookingComLogGuid,
+                        "duplicate_reservation_detected",
+                        $"Reservation {request.ReservationId} already exists under workflow record {reservationGuid}. Synchronizing statuses and Bitrix fields.",
+                        payload: new
+                        {
+                            request.ReservationId,
+                            reservationGuid
+                        },
+                        overallStatus: BookingComLogStatuses.Duplicate,
                         reservationGuid: reservationGuid,
                         cancellationToken: cancellationToken);
                 }
@@ -276,7 +290,9 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                         ProviderTransactionId = record.ProviderTransactionId ?? providerTransactionId,
                         PaymentStatus = record.PaymentStatus,
                         IdoStatus = record.IdoStatus,
-                        UpdateReason = "External Partner reservation imported"
+                        UpdateReason = isDuplicate
+                            ? "External Partner duplicate reservation synchronized"
+                            : "External Partner reservation imported"
                     });
 
                 await LogInfoAsync(
@@ -312,10 +328,16 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 }
 
                 var finalMessage = emailConfirmed
-                    ? "External Partner reservation import completed and Bitrix email was confirmed."
+                    ? isDuplicate
+                        ? "Duplicate External Partner reservation synchronized and Bitrix email was confirmed."
+                        : "External Partner reservation import completed and Bitrix email was confirmed."
                     : string.Equals(record.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
-                        ? "External Partner reservation import completed, but Bitrix email was not confirmed within the polling window."
-                        : "External Partner reservation import completed.";
+                        ? isDuplicate
+                            ? "Duplicate External Partner reservation synchronized, but Bitrix email was not confirmed within the polling window."
+                            : "External Partner reservation import completed, but Bitrix email was not confirmed within the polling window."
+                        : isDuplicate
+                            ? "Duplicate External Partner reservation synchronized."
+                            : "External Partner reservation import completed.";
 
                 await LogInfoAsync(
                     request.BookingComLogGuid,
@@ -327,13 +349,13 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                         record.PaymentStatus,
                         EmailConfirmed = emailConfirmed
                     },
-                    overallStatus: BookingComLogStatuses.Completed,
+                    overallStatus: isDuplicate ? BookingComLogStatuses.Duplicate : BookingComLogStatuses.Completed,
                     reservationGuid: reservationGuid,
                     cancellationToken: cancellationToken);
 
                 result.ReservationGuid = reservationGuid;
                 result.EmailConfirmed = emailConfirmed;
-                result.Status = BookingComLogStatuses.Completed;
+                result.Status = isDuplicate ? BookingComLogStatuses.Duplicate : BookingComLogStatuses.Completed;
                 result.Message = finalMessage;
                 return result;
             }
@@ -433,8 +455,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 ObjectItemId = primaryItem.objectItemId,
                 StartDate = startDate,
                 EndDate = endDate,
-                CheckInTime = new TimeOnly(16, 0), //TimeOnly.FromDateTime(dateFrom),
-                CheckOutTime = new TimeOnly(12,0),//TimeOnly.FromDateTime(dateTo),
+                CheckInTime = new TimeOnly(15, 0), //TimeOnly.FromDateTime(dateFrom),
+                CheckOutTime = new TimeOnly(11,0),//TimeOnly.FromDateTime(dateTo),
                 Adults = items.Sum(item => item.numberOfAdults ?? 0),
                 Children = items.Sum(item => ParseInt(item.numberOfSmallChildren)),
                 OfferPrice = Convert.ToDecimal(items.Sum(item => item.price), CultureInfo.InvariantCulture),

@@ -130,29 +130,6 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                 };
             }
 
-            var existingGuid = await _bookingComReservationWorkflowService.CheckForDuplicate(reservationId.Value);
-            if (existingGuid.HasValue)
-            {
-                await AppendLogStepAsync(
-                    bookingComLogGuid.Value,
-                    "processing",
-                    "Skipped",
-                    $"Reservation already exists in the system under {existingGuid}.",
-                    payload: new { reservationId },
-                    overallStatus: BookingComLogStatuses.Duplicate,
-                    cancellationToken: cancellationToken);
-
-                return new BookingComEmailProcessingResult
-                {
-                    BookingComLogGuid = bookingComLogGuid,
-                    ReservationId = reservationId,
-                    ReservationGuid = existingGuid,
-                    Status = BookingComLogStatuses.Duplicate,
-                    Message = "Reservation already exists.",
-                    MessageId = email.MessageId
-                };
-            }
-
             var result = await _bookingComReservationWorkflowService.ProcessIncomingReservationAsync(
                 new BookingComReservationImportRequest
                 {
