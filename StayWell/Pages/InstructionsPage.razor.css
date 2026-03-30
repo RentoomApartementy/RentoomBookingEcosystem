@@ -370,17 +370,19 @@
 
 .code-card__value ::deep .code-tiles {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 4px;
     align-items: center;
     padding-top: 4px;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .code-card__value ::deep .code-tile {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 28px;
+    min-width: 24px;
     height: 36px;
     padding: 0 6px;
     background: #f5f5f5;
@@ -394,6 +396,7 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     user-select: all;
     flex-shrink: 1;
+    min-width: 0;
 }
 
 .code-card__value ::deep .code-tile--icon {
