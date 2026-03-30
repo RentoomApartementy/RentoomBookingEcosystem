@@ -1,4 +1,5 @@
 @page "/NotFound"
+@using Microsoft.AspNetCore.Components
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject IStringLocalizer<HomePage> Localizer
@@ -15,10 +16,10 @@
     <div class="not-found-card">
         <img src="/images/full-size-logo.png" alt="Rentoom" class="not-found-logo" />
 
-        <h1 class="not-found-title">@Localizer["NoSuchPage"]</h1>
+        <h1 class="not-found-title">@TitleText</h1>
 
         <p class="not-found-text">
-            @Localizer["BookOnDesc"]
+            @DescriptionText
         </p>
 
         <a href="https://rentoom.pl" class="not-found-btn">
@@ -28,6 +29,19 @@
 </div>
 
 @code {
+    [SupplyParameterFromQuery(Name = "reason")]
+    public string? Reason { get; set; }
+
+    private bool IsCanceledReason => string.Equals(Reason, "canceled", StringComparison.OrdinalIgnoreCase);
+
+    private string TitleText => IsCanceledReason
+        ? Localizer["ReservationCanceledTitle"]
+        : Localizer["NoSuchPage"];
+
+    private string DescriptionText => IsCanceledReason
+        ? Localizer["ReservationCanceledDesc"]
+        : Localizer["BookOnDesc"];
+
     protected override void OnInitialized()
     {
         LayoutState.OnChange += StateHasChanged;

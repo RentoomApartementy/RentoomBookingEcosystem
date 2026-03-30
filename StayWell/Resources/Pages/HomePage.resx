@@ -184,4 +184,10 @@
   <data name="ReservationID" xml:space="preserve">
     <value>reservation id</value>
   </data>
+  <data name="ReservationCanceledTitle" xml:space="preserve">
+    <value>This reservation has been canceled</value>
+  </data>
+  <data name="ReservationCanceledDesc" xml:space="preserve">
+    <value>This reservation is no longer active. Please contact Rentoom if you need help.</value>
+  </data>
 </root>
