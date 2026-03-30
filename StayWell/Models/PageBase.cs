@@ -76,10 +76,18 @@ namespace RentoomBooking.StayWell.Models
 
                 if (!IsInitializedSuccessfully)
                 {
-                    NavigationManager.NavigateTo("/NotFound");
+                    NavigationManager.NavigateTo(ReservationState.IsCanceledReservation
+                        ? "/NotFound?reason=canceled"
+                        : "/NotFound");
                     return;
                 }
-                
+
+                if (ReservationState.IsCanceledReservation)
+                NavigationManager.NavigateTo("/NotFound?reason=canceled");
+                return;
+
+
+
                 if (RegistrationCardState.CurrentCard == null)
                 {
                     NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");

@@ -25,6 +25,11 @@ namespace RentoomBooking.StayWell.States
         private HttpStatusCode? _currentStatus;
 
         public bool IsValidReservation => CurrentReservation != null && CurrentStatus == HttpStatusCode.OK;
+        public bool IsCanceledReservation =>
+            string.Equals(
+                CurrentReservation?.Reservation?.ReservationDetails?.status,
+                ReservationStatusType.Canceled,
+                StringComparison.OrdinalIgnoreCase);
         public bool IsActiveReservation
         {
             get
