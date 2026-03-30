@@ -19,12 +19,15 @@ internal static class BookingComEmailMetadataHelper
 
         var match = Regex.Match(
             subject,
-            @"\bnr\s+(?<id>\d+)\s*(?=\()",
+            @"\b(?:nr|no\.)\s+(?<id>\d+)\s*(?=\()",
             RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         if (!match.Success)
         {
-            match = Regex.Match(subject, @"\bnr\s+(?<id>\d+)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            match = Regex.Match(
+                subject,
+                @"\b(?:nr|no\.)\s+(?<id>\d+)\b",
+                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }
 
         return match.Success && int.TryParse(match.Groups["id"].Value, out var reservationId)

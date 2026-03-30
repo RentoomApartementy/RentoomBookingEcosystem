@@ -75,7 +75,7 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                 "Completed",
                 context?.IsSynthetic == true
                     ? "Synthetic booking email was generated for reservation backfill."
-                    : "Incoming Booking.com email was received.",
+                    : "Incoming External Partner email was received.",
                 payload: new
                 {
                     Source = source,
@@ -115,7 +115,7 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                     bookingComLogGuid.Value,
                     "processing_disabled",
                     "Skipped",
-                    "Booking.com reservation processing is switched off. Logged the incoming email only.",
+                    "External Partner reservation processing is switched off. Logged the incoming email only.",
                     payload: new { reservationId },
                     overallStatus: BookingComLogStatuses.Disabled,
                     cancellationToken: cancellationToken);
@@ -126,29 +126,6 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                     ReservationId = reservationId,
                     Status = BookingComLogStatuses.Disabled,
                     Message = "Processing disabled.",
-                    MessageId = email.MessageId
-                };
-            }
-
-            var existingGuid = await _bookingComReservationWorkflowService.CheckForDuplicate(reservationId.Value);
-            if (existingGuid.HasValue)
-            {
-                await AppendLogStepAsync(
-                    bookingComLogGuid.Value,
-                    "processing",
-                    "Skipped",
-                    $"Reservation already exists in the system under {existingGuid}.",
-                    payload: new { reservationId },
-                    overallStatus: BookingComLogStatuses.Duplicate,
-                    cancellationToken: cancellationToken);
-
-                return new BookingComEmailProcessingResult
-                {
-                    BookingComLogGuid = bookingComLogGuid,
-                    ReservationId = reservationId,
-                    ReservationGuid = existingGuid,
-                    Status = BookingComLogStatuses.Duplicate,
-                    Message = "Reservation already exists.",
                     MessageId = email.MessageId
                 };
             }
@@ -185,7 +162,7 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                         bookingComLogGuid.Value,
                         "processing_failed",
                         "Failed",
-                        "Booking.com email processing failed.",
+                        "External Partner email processing failed.",
                         payload: new
                         {
                             Source = source,
@@ -196,11 +173,11 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                 }
                 catch (Exception logEx)
                 {
-                    _logger.LogWarning(logEx, "Failed to append Booking.com failure log step for {LogGuid}.", bookingComLogGuid.Value);
+                    _logger.LogWarning(logEx, "Failed to append External Partner failure log step for {LogGuid}.", bookingComLogGuid.Value);
                 }
             }
 
-            _logger.LogError(ex, "Booking.com email processing failed for source {Source}.", source);
+            _logger.LogError(ex, "External Partner email processing failed for source {Source}.", source);
 
             return new BookingComEmailProcessingResult
             {

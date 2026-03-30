@@ -130,7 +130,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             throw new ArgumentNullException($"Bitrix datetime requires both date and time.");
 
         var localDateTime = date.Value.ToDateTime(time.Value, DateTimeKind.Unspecified);
-            localDateTime = localDateTime.AddHours(0);
+            localDateTime = localDateTime.AddHours(hoursdiff);
         var effectiveOffset = offset ?? GetWarsawOffset(date.Value, time.Value);
         var dto = new DateTimeOffset(localDateTime, effectiveOffset);
 

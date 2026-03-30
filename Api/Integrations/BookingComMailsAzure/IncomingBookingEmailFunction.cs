@@ -55,11 +55,11 @@ public class IncomingBookingEmailFunction
                     bookingComLogGuid.Value,
                     "payload_invalid",
                     "Failed",
-                    "Incoming Booking.com email payload contained invalid JSON.",
+                    "Incoming External Partner email payload contained invalid JSON.",
                     payload: new { Exception = ex.Message, Payload = body },
                     overallStatus: BookingComLogStatuses.Failed);
 
-                _logger.LogWarning(ex, "Invalid JSON payload for Booking.com incoming email: {Payload}", body);
+                _logger.LogWarning(ex, "Invalid JSON payload for External Partner incoming email: {Payload}", body);
                 var bad = req.CreateResponse(HttpStatusCode.BadRequest);
                 await bad.WriteStringAsync(JsonSerializer.Serialize(new
                 {
@@ -104,17 +104,17 @@ public class IncomingBookingEmailFunction
                         bookingComLogGuid.Value,
                         "function_failed",
                         "Failed",
-                        "Incoming Booking.com email processing failed.",
+                        "Incoming External Partner email processing failed.",
                         payload: new { Exception = ex.Message },
                         overallStatus: BookingComLogStatuses.Failed);
                 }
                 catch (Exception logEx)
                 {
-                    _logger.LogWarning(logEx, "Failed to append Booking.com failure log step for {LogGuid}.", bookingComLogGuid.Value);
+                    _logger.LogWarning(logEx, "Failed to append External Partner failure log step for {LogGuid}.", bookingComLogGuid.Value);
                 }
             }
 
-            _logger.LogError(ex, "Booking.com incoming email processing failed.");
+            _logger.LogError(ex, "External Partner incoming email processing failed.");
 
             var error = req.CreateResponse(HttpStatusCode.InternalServerError);
             error.Headers.Add("Content-Type", "application/json");
