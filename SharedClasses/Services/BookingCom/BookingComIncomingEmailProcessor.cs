@@ -75,7 +75,7 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                 "Completed",
                 context?.IsSynthetic == true
                     ? "Synthetic booking email was generated for reservation backfill."
-                    : "Incoming Booking.com email was received.",
+                    : "Incoming External Partner email was received.",
                 payload: new
                 {
                     Source = source,
@@ -115,7 +115,7 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                     bookingComLogGuid.Value,
                     "processing_disabled",
                     "Skipped",
-                    "Booking.com reservation processing is switched off. Logged the incoming email only.",
+                    "External Partner reservation processing is switched off. Logged the incoming email only.",
                     payload: new { reservationId },
                     overallStatus: BookingComLogStatuses.Disabled,
                     cancellationToken: cancellationToken);
@@ -185,7 +185,7 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                         bookingComLogGuid.Value,
                         "processing_failed",
                         "Failed",
-                        "Booking.com email processing failed.",
+                        "External Partner email processing failed.",
                         payload: new
                         {
                             Source = source,
@@ -196,11 +196,11 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                 }
                 catch (Exception logEx)
                 {
-                    _logger.LogWarning(logEx, "Failed to append Booking.com failure log step for {LogGuid}.", bookingComLogGuid.Value);
+                    _logger.LogWarning(logEx, "Failed to append External Partner failure log step for {LogGuid}.", bookingComLogGuid.Value);
                 }
             }
 
-            _logger.LogError(ex, "Booking.com email processing failed for source {Source}.", source);
+            _logger.LogError(ex, "External Partner email processing failed for source {Source}.", source);
 
             return new BookingComEmailProcessingResult
             {

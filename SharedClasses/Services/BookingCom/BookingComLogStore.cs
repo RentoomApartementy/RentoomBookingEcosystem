@@ -54,7 +54,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
             var entity = await context.BookingComLogs.FirstOrDefaultAsync(log => log.BookingComLogGuid == bookingComLogGuid, cancellationToken);
             if (entity is null)
             {
-                throw new InvalidOperationException($"Booking.com log {bookingComLogGuid} not found.");
+                throw new InvalidOperationException($"External Partner log {bookingComLogGuid} not found.");
             }
 
             var steps = string.IsNullOrWhiteSpace(entity.StepsJson)
