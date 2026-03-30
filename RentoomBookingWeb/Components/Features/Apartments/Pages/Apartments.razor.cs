@@ -21,6 +21,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         protected override async Task OnInitializedAsync()
         {
             ViewModel.OnChange += () => InvokeAsync(StateHasChanged);
+            _offerLength = CalculateOfferLength();
             await ViewModel.InitializeAsync();
         }
 

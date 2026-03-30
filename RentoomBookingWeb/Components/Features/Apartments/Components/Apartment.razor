@@ -186,7 +186,10 @@
                     {
                         <div class="price-wrapper">
                             <span class="price">@Offer?.MinimalPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
-                                <small>@Localizer["TotalPrice"] @OfferLength @GetNightLabel(OfferLength.Value)</small>
+                            @if (_resolvedOfferLength.HasValue && _resolvedOfferLength.Value > 0)
+                            {
+                                <small>@Localizer["TotalPrice"] @_resolvedOfferLength.Value @GetNightLabel(_resolvedOfferLength.Value)</small>
+                            }
                         </div>
                     }
                     else if (Item == null) 
@@ -294,6 +297,7 @@
     private ObjectMedium? _currentObjectMedium = null;
     private int? _bedsCount = null;
     private string? _detailsUrl;
+    private int? _resolvedOfferLength;
     
     private IJSObjectReference? _jsModule;
     private IJSObjectReference? _sliderModule;
@@ -307,6 +311,7 @@
     {
         _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
         CalculateDetailsUrl();
+        ResolveOfferLength();
         
         if (Item?.Id != null)
         {
@@ -323,6 +328,7 @@
     protected override void OnParametersSet()
     {
         CalculateDetailsUrl();
+        ResolveOfferLength();
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -447,6 +453,24 @@
             _detailsUrl = baseUrl;
         }
         _detailsUrl = _detailsUrl.Replace("//", "/");
+    }
+
+    private void ResolveOfferLength()
+    {
+        if (OfferLength.HasValue && OfferLength.Value > 0)
+        {
+            _resolvedOfferLength = OfferLength.Value;
+            return;
+        }
+
+        if (DateTime.TryParse(StartDate, out var startDate) && DateTime.TryParse(EndDate, out var endDate))
+        {
+            var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
+            _resolvedOfferLength = nights > 0 ? nights : null;
+            return;
+        }
+
+        _resolvedOfferLength = null;
     }
 
     private string FormatSuggestionLabel(AvailableTerm term)
