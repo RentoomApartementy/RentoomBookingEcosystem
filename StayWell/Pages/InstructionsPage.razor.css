@@ -100,6 +100,7 @@
 }
 
 .code-card {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -109,6 +110,8 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border: 1px solid rgba(0, 0, 0, 0.03);
+    min-width: 0;
+    overflow: hidden;
 }
 
 .code-card__icon-wrapper {
@@ -182,6 +185,8 @@
     gap: 10px;
     margin-bottom: 6px;
     flex-wrap: wrap;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .code-card__label {
@@ -191,6 +196,9 @@
     margin-bottom: 2px;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .code-card__value {
@@ -198,6 +206,8 @@
     font-weight: 700;
     color: #222;
     word-break: break-word;
+    overflow-wrap: anywhere;
+    min-width: 0;
 }
 
 .code-card__status {
@@ -210,6 +220,7 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .code-card__status--available {
@@ -260,6 +271,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .copy-button {
@@ -271,6 +284,7 @@
     transition: background 0.2s;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
     .copy-button:hover {
@@ -354,19 +368,9 @@
     will-change: transform, box-shadow;
 }
 
-/*.code-card__value ::deep .code-inline-icon {
-    display: inline-block;
-    width: 1.3em;
-    height: 1.3em;
-    vertical-align: middle;
-    margin: 0 6px;
-    position: relative;
-    top: -2px;
-}*/
-
 .code-card__value ::deep .code-tiles {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 4px;
     align-items: center;
     padding-top: 4px;
@@ -408,3 +412,79 @@
     width: 10px;
     flex-shrink: 0;
 }*/
+
+.parking-zones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.parking-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.parking-zone__top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.parking-zone__top .code-card__status {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    align-self: center;
+    width: 100%;
+    justify-content: center;
+}
+
+.parking-zone__name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #222;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.parking-zone__hours {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.parking-zone__paid {
+    font-size: 0.78rem;
+    color: #555;
+}
+
+.parking-zone__free {
+    font-size: 0.78rem;
+    color: #999;
+}
+
+.parking-city-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    color: var(--rentoom-green-dark);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+    .parking-city-link:hover {
+        text-decoration: underline;
+    }
+
+.code-card__status--paid {
+    background: rgba(220, 38, 38, 0.10);
+    color: #dc2626;
+}

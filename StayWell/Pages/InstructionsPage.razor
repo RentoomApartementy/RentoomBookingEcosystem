@@ -312,6 +312,35 @@
             }
         </div>
     </section>
+    <section class="instructions-section">
+        <header class="instructions-section__header">
+            <h3 class="instructions-section__title">@Localizer["CityParking"]</h3>
+        </header>
+
+        <div class="parking-zones">
+            @foreach (var zone in ParkingZones)
+            {
+                var isFree = IsParkingFreeNow(zone);
+                <div class="parking-zone">
+                    <div class="parking-zone__top">
+                        <span class="parking-zone__name">@zone.Name</span>
+                        <span class="code-card__status @(isFree ? "code-card__status--available" : "code-card__status--paid")">
+                            @(isFree? @Localizer["FreePark"] : @Localizer["PaidPark"])
+                        </span>
+                    </div>
+                    <div class="parking-zone__hours">
+                        <span class="parking-zone__paid">@Localizer["PaidDays"]: @zone.PaidDays, @zone.PaidFrom–@zone.PaidTo</span>
+                        <span class="parking-zone__free">@Localizer["FreeDays"]: @zone.FreeDescription</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <a class="parking-city-link" href="https://mzd.torun.pl/strefa-platnego-parkowania-w-toruniu/" target="_blank" rel="noopener noreferrer">
+            <span>@Localizer["MoreInfo"]</span>
+            <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
+        </a>
+    </section>
 </div>
 
 @code {
@@ -535,6 +564,7 @@
 
     private DotNetObjectReference<InstructionsPage>? _dotNetRef;
     private string? ActiveShortcutTarget { get; set; }
+    private Timer? _parkingRefreshTimer;
 
     protected override async Task OnInitializedAsync()
     {
@@ -547,6 +577,10 @@
         {
             await LocksState.GetApartmentItemCodesAsync(Token);
         }
+
+        _parkingRefreshTimer = new Timer(_ => InvokeAsync(StateHasChanged), null,
+            TimeSpan.FromSeconds(30),
+            TimeSpan.FromSeconds(30));
 
         StateHasChanged();
     }
@@ -611,6 +645,9 @@
 
     public async ValueTask DisposeAsync()
     {
+        _parkingRefreshTimer?.Dispose();
+        _parkingRefreshTimer = null;
+
         try
         {
             await JS.InvokeVoidAsync("removeInstructionShortcutScrollReset");
@@ -627,6 +664,8 @@
     {
         GlobalizationService.OnChange -= OnLanguageChanged;
         LocksState.OnChange -= OnStateChanged;
+        _parkingRefreshTimer?.Dispose();
+        _parkingRefreshTimer = null;
         base.Dispose();
     }
 
@@ -634,5 +673,38 @@
     {
         public string Language { get; set; } = string.Empty;
         public string? Value { get; set; }
+    }
+
+    private record ParkingZoneInfo(
+        string Name,
+        string PaidDays,
+        string PaidFrom,
+        string PaidTo,
+        string FreeDescription,
+        bool FreeSaturday,
+        bool FreeSunday);
+
+    private IReadOnlyList<ParkingZoneInfo> ParkingZones => new[]
+    {
+        new ParkingZoneInfo(Localizer["ZoneDowntownPaidParking"],  Localizer["ZoneDowntown_PaidDays"], "8:00", "18:00", Localizer["ZoneDowntown_FreeDays"], FreeSaturday: false, FreeSunday: true),
+        new ParkingZoneInfo(Localizer["ZoneA"],  Localizer["ZoneAB_PaidDays"],  "8:00", "18:00", Localizer["ZoneAB_FreeDays"],  FreeSaturday: true,  FreeSunday: true),
+        new ParkingZoneInfo(Localizer["ZoneB"],  Localizer["ZoneAB_PaidDays"],  "8:00", "18:00", Localizer["ZoneAB_FreeDays"],  FreeSaturday: true,  FreeSunday: true),
+    };
+
+    private static bool IsParkingFreeNow(ParkingZoneInfo zone)
+    {
+        var now = DateTime.Now;
+        var dow = now.DayOfWeek;
+
+        if (dow == DayOfWeek.Sunday) return true;
+        if (dow == DayOfWeek.Saturday && zone.FreeSaturday) return true;
+
+        var paidFrom = TimeSpan.Parse(zone.PaidFrom);
+        var paidTo = TimeSpan.Parse(zone.PaidTo);
+        var currentTime = now.TimeOfDay;
+
+        if (currentTime < paidFrom || currentTime >= paidTo) return true;
+
+        return false;
     }
 }
