@@ -223,6 +223,50 @@
             });
         };
     </script>
+
+    <script>
+        window._guideSwipeSyncing = false;
+
+        window.initGuideCardSwipe = function (dotNetRef) {
+            var track = document.getElementById('guide-slide-track');
+            if (!track) return;
+
+            var lastNotifiedIndex = -1;
+            var rafPending = false;
+
+            function updateDots(progress) {
+                var dots = document.querySelectorAll('.guide-card__dots .dot');
+                var snapped = Math.round(progress);
+                dots.forEach(function (dot, i) {
+                    if (i === snapped) dot.classList.add('dot--active');
+                    else dot.classList.remove('dot--active');
+                });
+            }
+
+            track.addEventListener('scroll', function () {
+                if (rafPending) return;
+                rafPending = true;
+                requestAnimationFrame(function () {
+                    rafPending = false;
+                    var progress = track.scrollLeft / track.clientWidth;
+                    updateDots(progress);
+                });
+            }, { passive: true });
+
+            track.addEventListener('scrollend', function () {
+                var index = Math.round(track.scrollLeft / track.clientWidth);
+                updateDots(index);
+                if (index === lastNotifiedIndex) return;
+                lastNotifiedIndex = index;
+                dotNetRef.invokeMethodAsync('OnSwipeSlide', index);
+            }, { passive: true });
+        };
+
+        window.scrollGuideTrack = function (index) {
+            var track = document.getElementById('guide-slide-track');
+            if (track) track.scrollTo({ left: track.clientWidth * index, behavior: 'smooth' });
+        };
+    </script>
 </body>
 
 </html>
