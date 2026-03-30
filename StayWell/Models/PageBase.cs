@@ -83,8 +83,10 @@ namespace RentoomBooking.StayWell.Models
                 }
 
                 if (ReservationState.IsCanceledReservation)
-                NavigationManager.NavigateTo("/NotFound?reason=canceled");
-                return;
+                {
+                    NavigationManager.NavigateTo("/NotFound?reason=canceled");
+                    return;
+                }
 
 
 
