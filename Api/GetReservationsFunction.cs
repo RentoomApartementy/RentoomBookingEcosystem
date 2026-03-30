@@ -105,13 +105,13 @@ public class GetReservationsFunction
             if (Guid.TryParse(token, out reservationGuid))
             {
                 reservationRecord = await _reservationStore.GetAsync(reservationGuid, cancellationToken);
-                if (reservationRecord is not null && !string.Equals(reservationRecord.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
+               /* if (reservationRecord is not null && !string.Equals(reservationRecord.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
                 {
                     res.StatusCode = System.Net.HttpStatusCode.PaymentRequired;
                     await res.WriteStringAsync("Payment Required");
                     return res;
                 }
-
+               */
             }
 
             var ret = await _reservationWorkflowService.EnsureRentoomReservationByResTokenAsync(token, cancellationToken);
@@ -126,12 +126,16 @@ public class GetReservationsFunction
                 ? await _reservationStore.GetAsync(reservationGuid, cancellationToken)
                 : await _reservationStore.GetByIdoReservationIdAsync(ret.Reservation?.id ?? ret.Id, cancellationToken);
 
-            if (reservationRecord is not null && !string.Equals(reservationRecord.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
+          /*  if (reservationRecord is not null && !string.Equals(reservationRecord.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
             {
                 res.StatusCode = System.Net.HttpStatusCode.PaymentRequired;
                 await res.WriteStringAsync("Payment Required");
                 return res;
             }
+          */
+
+
+          
 
 
             // Check if ToDate is before today
