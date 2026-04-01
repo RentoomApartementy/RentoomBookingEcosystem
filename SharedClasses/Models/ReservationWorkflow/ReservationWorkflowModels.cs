@@ -216,6 +216,20 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string UpdateReason { get; set; } = "Imported reservation synchronized";
     }
 
+    public class ReservationStatusSyncResultDto
+    {
+        public Guid ReservationGuid { get; set; }
+        public int? IdoReservationId { get; set; }
+        public string? PreviousIdoStatus { get; set; }
+        public string? CurrentIdoStatus { get; set; }
+        public string? PreviousPaymentStatus { get; set; }
+        public string? CurrentPaymentStatus { get; set; }
+        public bool TpayChecked { get; set; }
+        public bool TpayFinalStatusApplied { get; set; }
+        public bool BitrixUpdated { get; set; }
+        public string? Warning { get; set; }
+    }
+
 
     public class DateOnlyJsonConverter : JsonConverter<DateOnly>
     {

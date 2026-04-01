@@ -45,6 +45,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task MarkPaymentAsPaidAsync(Guid reservationGuid); //for dummy scenario
         Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
         Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request);
+        Task<ReservationStatusSyncResultDto> SyncReservationStatusAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
         Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections);
     }
 
@@ -882,6 +883,87 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     await Task.Delay(TimeSpan.FromMilliseconds(50));
                 }
             }
+        }
+
+        public async Task<ReservationStatusSyncResultDto> SyncReservationStatusAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        {
+            var record = await RequireReservationAsync(reservationGuid, cancellationToken);
+            if (!record.IdoReservationId.HasValue)
+            {
+                throw new InvalidOperationException($"Reservation {reservationGuid} does not have IdoReservationId.");
+            }
+
+            var result = new ReservationStatusSyncResultDto
+            {
+                ReservationGuid = reservationGuid,
+                IdoReservationId = record.IdoReservationId,
+                PreviousIdoStatus = record.IdoStatus,
+                PreviousPaymentStatus = record.PaymentStatus
+            };
+
+            if (!IsFinalPaymentStatus(record.PaymentStatus)
+                && !string.IsNullOrWhiteSpace(record.State.ProviderTransactionUid))
+            {
+                result.TpayChecked = true;
+
+                var tpayState = await _tpayGateway.GetPaymentStatusAsync(record.State.ProviderTransactionUid, cancellationToken);
+                if (!tpayState.Success)
+                {
+                    result.Warning = tpayState.Message;
+                }
+                else
+                {
+                    var mappedPaymentStatus = MapTpayStatusToWorkflowStatus(tpayState.TransactionStatus, tpayState.AmountPaid);
+
+                    if (!string.Equals(mappedPaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase)
+                        && record.PaymentSessionGuid.HasValue
+                        && !string.IsNullOrWhiteSpace(record.ProviderTransactionId))
+                    {
+                        await HandleTpayWebhookAsync(new TpayWebhookDto
+                        {
+                            ReservationGuid = reservationGuid,
+                            PaymentSessionGuid = record.PaymentSessionGuid.Value,
+                            ProviderTransactionId = record.ProviderTransactionId,
+                            Status = string.Equals(mappedPaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase) ? "PAID" : "FAILED",
+                            Signature = "cron-sync"
+                        });
+
+                        result.TpayFinalStatusApplied = true;
+                        record = await RequireReservationAsync(reservationGuid, cancellationToken);
+                    }
+                    else if (!string.Equals(mappedPaymentStatus, record.PaymentStatus, StringComparison.OrdinalIgnoreCase))
+                    {
+                        record.PaymentStatus = mappedPaymentStatus;
+                        await _store.UpdateAsync(record, cancellationToken);
+                    }
+                }
+            }
+
+            var idoReservation = await FetchIdoReservationAsync(record, true, cancellationToken);
+            var idoStatus = idoReservation?.ReservationDetails?.status;
+            if (!string.IsNullOrWhiteSpace(idoStatus)
+                && !string.Equals(idoStatus, record.IdoStatus, StringComparison.OrdinalIgnoreCase))
+            {
+                record.IdoStatus = idoStatus;
+                await _store.UpdateAsync(record, cancellationToken);
+            }
+
+            if (!record.DealBitrixId.HasValue && record.State.Client is not null)
+            {
+                record = await EnsureBitrixContactAndDealAsync(record);
+            }
+
+            if (record.DealBitrixId.HasValue)
+            {
+                await UpdateBitrixDealAsync(record, "Cron reservation status sync");
+                result.BitrixUpdated = true;
+            }
+
+            record = await RequireReservationAsync(reservationGuid, cancellationToken);
+            result.CurrentIdoStatus = record.IdoStatus;
+            result.CurrentPaymentStatus = record.PaymentStatus;
+
+            return result;
         }
 
         public async Task HandleTpayWebhookAsync(TpayWebhookDto dto)
