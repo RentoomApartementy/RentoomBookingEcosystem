@@ -116,6 +116,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
 
         //  public List<TermsAndConditionsAcceptanceInfo> {get;set;}
         public string? PaymentRedirectUrl { get; set; }
+        public string? PaymentInsideRentoomRedirectUrl { get; set; }
         public string? ProviderTransactionUid { get; set; }
 
         public decimal PaymentUpsellsTotal { get; set; }

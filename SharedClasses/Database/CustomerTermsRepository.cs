@@ -77,6 +77,38 @@ namespace RentoomBooking.SharedClasses.Database
             await _context.SaveChangesAsync();
         }
 
+        public async Task SaveAgreedTermsAsync(IEnumerable<CustomerAgreedTerms> agreedTerms)
+        {
+            var termsList = agreedTerms.ToList();
+            if (termsList.Count == 0)
+            {
+                return;
+            }
+
+            var reservationGuid = termsList[0].ReservationGuid;
+            var termIds = termsList.Select(t => t.TermsSourceId).Distinct().ToList();
+
+            var existingTerms = await _context.CustomerAgreedTerms
+                .Where(t => t.ReservationGuid == reservationGuid && termIds.Contains(t.TermsSourceId))
+                .ToListAsync();
+
+            foreach (var agreedTerm in termsList)
+            {
+                var existing = existingTerms.FirstOrDefault(t => t.TermsSourceId == agreedTerm.TermsSourceId);
+                if (existing is null)
+                {
+                    await _context.CustomerAgreedTerms.AddAsync(agreedTerm);
+                    continue;
+                }
+
+                existing.IsAccepted = agreedTerm.IsAccepted;
+                existing.AgreedAt = agreedTerm.AgreedAt;
+                existing.ClientBitrixId = agreedTerm.ClientBitrixId;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(Guid reservationGuid, string? cultureName = null)
         {
             var normalizedCulture = NormalizeCulture(cultureName);
