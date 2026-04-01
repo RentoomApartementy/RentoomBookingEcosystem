@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CodeNotAvailable" xml:space="preserve">
-    <value>Kod niedostępny</value>
+    <value>Kod niedostępny. Dostęp będzie możliwy od dnia zameldowania.</value>
   </data>
   <data name="CheckingLock" xml:space="preserve">
     <value>Sprawdzanie dostępności zamka...</value>
@@ -169,13 +169,23 @@
     <value>Twój kod do apartamentu</value>
   </data>
   <data name="InstructionCylinder" xml:space="preserve">
-    <value>1. Wpisz kod lub otwórz zdalnie.
+    <value>## Jak otworzyć drzwi
+1. Wpisz kod lub otwórz zdalnie
 (Każde kliknięcie przycisku na klawiaturze będzie potwierdzone dźwiękiem)
 2. Jeżeli zaświeci się na niebiesko, przekręcaj gałką
 (Zamek po prawej stronie drzwi, kręć w lewo)
 (Zamek po lewej stronie drzwi, kręć w prawo)
 do momentu aż usłyszysz cofający się zamek.
-3. Otwórz drzwi</value>
+3. Otwórz drzwi
+
+## Jak zamknąć drzwi
+1. Wpisz kod
+(Każde kliknięcie przycisku na klawiaturze będzie potwierdzone dźwiękiem)
+2. Jeżeli zaświeci się na niebiesko, przekręcaj gałką w przeciwnym kierunku
+(Zamek po prawej stronie drzwi, kręć w prawo)
+(Zamek po lewej stronie drzwi, kręć w lewo)
+do momentu aż usłyszysz zamykający się zamek.
+3. Drzwi są zamknięte.</value>
   </data>
   <data name="InstructionPanel" xml:space="preserve">
     <value>1. Podświetl klawiaturę wciskając dowolny przycisk na panelu lub otwórz zdalnie.
@@ -193,5 +203,53 @@ do momentu aż usłyszysz cofający się zamek.
   </data>
   <data name="ReservationNotActive" xml:space="preserve">
     <value>Twoja rezerwacja nie jest jeszcze aktywna. Dostęp będzie możliwy od dnia zameldowania.</value>
+  </data>
+  <data name="InstructionOpenTitle" xml:space="preserve">
+    <value>Jak otworzyć drzwi</value>
+  </data>
+  <data name="InstructionCloseTitle" xml:space="preserve">
+    <value>Jak zamknąć drzwi</value>
+  </data>
+  <data name="InstructionCylinderOpen" xml:space="preserve">
+    <value>## Jak otworzyć - Zamek obrotowy
+1. Wpisz kod lub otwórz zdalnie
+(Każde kliknięcie przycisku na klawiaturze będzie potwierdzone dźwiękiem)
+2. Jeżeli zaświeci się na niebiesko, przekręcaj gałką
+(Zamek po prawej stronie drzwi, kręć w lewo)
+(Zamek po lewej stronie drzwi, kręć w prawo)
+do momentu aż usłyszysz cofający się zamek.
+3. Otwórz drzwi</value>
+  </data>
+  <data name="InstructionCylinderClose" xml:space="preserve">
+    <value>## Jak zamknąć - Zamek obrotowy
+1. Wpisz kod
+(Każde kliknięcie przycisku na klawiaturze będzie potwierdzone dźwiękiem)
+2. Jeżeli zaświeci się na niebiesko, przekręcaj gałką w przeciwnym kierunku
+(Zamek po prawej stronie drzwi, kręć w prawo)
+(Zamek po lewej stronie drzwi, kręć w lewo)
+do momentu aż usłyszysz zamykający się zamek.
+3. Drzwi są zamknięte.</value>
+  </data>
+  <data name="InstructionPanelOpen" xml:space="preserve">
+    <value>## Jak otworzyć - Zamek panelowy
+1. Podświetl klawiaturę wciskając dowolny przycisk na panelu lub otwórz zdalnie.
+2. Wpisz swój kod
+3. Jeżeli zaświeci się na niebiesko otwórz drzwi.</value>
+  </data>
+  <data name="InstructionPanelClose" xml:space="preserve">
+    <value>## Jak zamknąć - Zamek panelowy
+Wystarczy zamknąć za sobą drzwi.</value>
+  </data>
+  <data name="InstructionCylinderOpenLabel" xml:space="preserve">
+    <value>Jak otworzyć - Zamek obrotowy</value>
+  </data>
+  <data name="InstructionCylinderCloseLabel" xml:space="preserve">
+    <value>Jak zamknąć - Zamek obrotowy</value>
+  </data>
+  <data name="InstructionPanelOpenLabel" xml:space="preserve">
+    <value>Jak otworzyć - Zamek panelowy</value>
+  </data>
+  <data name="InstructionPanelCloseLabel" xml:space="preserve">
+    <value>Jak zamknąć - Zamek panelowy</value>
   </data>
 </root>

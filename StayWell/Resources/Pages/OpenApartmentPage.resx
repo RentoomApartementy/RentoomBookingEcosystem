@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CodeNotAvailable" xml:space="preserve">
-    <value>Code not available</value>
+    <value>Code not available. Access will be available from the check-in date.</value>
   </data>
   <data name="CheckingLock" xml:space="preserve">
     <value>Checking lock availability...</value>
@@ -139,7 +139,7 @@
     <value>Error connecting to server</value>
   </data>
   <data name="HowTo" xml:space="preserve">
-    <value> How to use door lock:</value>
+    <value>How to use the</value>
   </data>
   <data name="NoCode" xml:space="preserve">
     <value>No code for the lock. Contact staff!</value>
@@ -169,13 +169,23 @@
     <value>Your apartment code</value>
   </data>
   <data name="InstructionCylinder" xml:space="preserve">
-    <value>1. Enter the code or unlock remotely.
+    <value>## How to open the door
+1. Enter the code or unlock remotely.
 (Each keystroke will be confirmed by a beep)
 2. When the light turns blue, turn the knob
 (The lock is on the right-hand side of the door, turn it to the left)
 (Lock on the left-hand side of the door, turn to the right)
 until you hear the lock retract.
-3. Open the door</value>
+3. Open the door
+
+## How to close the door
+1. Enter the code
+(Each keystroke will be confirmed by a beep)
+2. When the light turns blue, turn the knob in the opposite direction
+(The lock is on the right-hand side of the door, turn it to the right)
+(Lock on the left-hand side of the door, turn to the left)
+until you hear the lock engage.
+3. The door is locked.</value>
   </data>
   <data name="InstructionPanel" xml:space="preserve">
     <value>1. Light up the keyboard by pressing any button on the panel or open it remotely.
@@ -186,12 +196,60 @@ until you hear the lock retract.
     <value>Important</value>
   </data>
   <data name="LockTypePanel" xml:space="preserve">
-    <value>type panel</value>
+    <value>panel lock</value>
   </data>
   <data name="LockTypeSpinning" xml:space="preserve">
-    <value>type spinning</value>
+    <value>spinning lock</value>
   </data>
   <data name="ReservationNotActive" xml:space="preserve">
     <value>Your reservation is not active yet. Access will be available from the check-in date.</value>
+  </data>
+  <data name="InstructionOpenTitle" xml:space="preserve">
+    <value>How to open the door</value>
+  </data>
+  <data name="InstructionCloseTitle" xml:space="preserve">
+    <value>How to close the door</value>
+  </data>
+  <data name="InstructionCylinderOpen" xml:space="preserve">
+    <value>## How to open - Spinning lock
+1. Enter the code or unlock remotely.
+(Each keystroke will be confirmed by a beep)
+2. When the light turns blue, turn the knob
+(The lock is on the right-hand side of the door, turn it to the left)
+(Lock on the left-hand side of the door, turn to the right)
+until you hear the lock retract.
+3. Open the door</value>
+  </data>
+  <data name="InstructionCylinderClose" xml:space="preserve">
+    <value>## How to close - Spinning lock
+1. Enter the code
+(Each keystroke will be confirmed by a beep)
+2. When the light turns blue, turn the knob in the opposite direction
+(The lock is on the right-hand side of the door, turn it to the right)
+(Lock on the left-hand side of the door, turn to the left)
+until you hear the lock engage.
+3. The door is locked.</value>
+  </data>
+  <data name="InstructionPanelOpen" xml:space="preserve">
+    <value>## How to open - Panel lock
+1. Light up the keyboard by pressing any button on the panel or open it remotely.
+2. Enter your code
+3. If it lights up blue, open the door.</value>
+  </data>
+  <data name="InstructionPanelClose" xml:space="preserve">
+    <value>## How to close - Panel lock
+Just close the door behind you.</value>
+  </data>
+  <data name="InstructionCylinderOpenLabel" xml:space="preserve">
+    <value>How to open - Spinning lock</value>
+  </data>
+  <data name="InstructionCylinderCloseLabel" xml:space="preserve">
+    <value>How to close - Spinning lock</value>
+  </data>
+  <data name="InstructionPanelOpenLabel" xml:space="preserve">
+    <value>How to open - Panel lock</value>
+  </data>
+  <data name="InstructionPanelCloseLabel" xml:space="preserve">
+    <value>How to close - Panel lock</value>
   </data>
 </root>

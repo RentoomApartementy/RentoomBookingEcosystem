@@ -70,7 +70,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Code not available.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Code not available. Access will be available from the check-in date..
         /// </summary>
         internal static string CodeNotAvailable {
             get {
@@ -124,7 +124,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu  How to use door lock:.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu How to use the.
         /// </summary>
         internal static string HowTo {
             get {
@@ -142,7 +142,64 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 1. Enter the code or unlock remotely.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu How to close the door.
+        /// </summary>
+        internal static string InstructionCloseTitle {
+            get {
+                return ResourceManager.GetString("InstructionCloseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu ## How to open the door
+        ///1. Enter the code or unlock remotely.
+        ///(Each keystroke will be confirmed by a beep)
+        ///2. When the light turns blue, turn the knob
+        ///(The lock is on the right-hand side of the door, turn it to the left)
+        ///(Lock on the left-hand side of the door, turn to the right)
+        ///until you hear the lock retract.
+        ///3. Open the door
+        ///
+        ///## How to close the door
+        ///1. Enter the code
+        ///(Each keystroke will be confirmed by a beep)
+        ///2. When the light turns blue, turn the knob in the opposite direction
+        ///(The lock [obcięto pozostałą część ciągu]&quot;;.
+        /// </summary>
+        internal static string InstructionCylinder {
+            get {
+                return ResourceManager.GetString("InstructionCylinder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu ## How to close - Spinning lock
+        ///1. Enter the code
+        ///(Each keystroke will be confirmed by a beep)
+        ///2. When the light turns blue, turn the knob in the opposite direction
+        ///(The lock is on the right-hand side of the door, turn it to the right)
+        ///(Lock on the left-hand side of the door, turn to the left)
+        ///until you hear the lock engage.
+        ///3. The door is locked..
+        /// </summary>
+        internal static string InstructionCylinderClose {
+            get {
+                return ResourceManager.GetString("InstructionCylinderClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu How to close - Spinning lock.
+        /// </summary>
+        internal static string InstructionCylinderCloseLabel {
+            get {
+                return ResourceManager.GetString("InstructionCylinderCloseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu ## How to open - Spinning lock
+        ///1. Enter the code or unlock remotely.
         ///(Each keystroke will be confirmed by a beep)
         ///2. When the light turns blue, turn the knob
         ///(The lock is on the right-hand side of the door, turn it to the left)
@@ -150,9 +207,27 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         ///until you hear the lock retract.
         ///3. Open the door.
         /// </summary>
-        internal static string InstructionCylinder {
+        internal static string InstructionCylinderOpen {
             get {
-                return ResourceManager.GetString("InstructionCylinder", resourceCulture);
+                return ResourceManager.GetString("InstructionCylinderOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu How to open - Spinning lock.
+        /// </summary>
+        internal static string InstructionCylinderOpenLabel {
+            get {
+                return ResourceManager.GetString("InstructionCylinderOpenLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu How to open the door.
+        /// </summary>
+        internal static string InstructionOpenTitle {
+            get {
+                return ResourceManager.GetString("InstructionOpenTitle", resourceCulture);
             }
         }
         
@@ -168,7 +243,47 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu type panel.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu ## How to close - Panel lock
+        ///Just close the door behind you..
+        /// </summary>
+        internal static string InstructionPanelClose {
+            get {
+                return ResourceManager.GetString("InstructionPanelClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu How to close - Panel lock.
+        /// </summary>
+        internal static string InstructionPanelCloseLabel {
+            get {
+                return ResourceManager.GetString("InstructionPanelCloseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu ## How to open - Panel lock
+        ///1. Light up the keyboard by pressing any button on the panel or open it remotely.
+        ///2. Enter your code
+        ///3. If it lights up blue, open the door..
+        /// </summary>
+        internal static string InstructionPanelOpen {
+            get {
+                return ResourceManager.GetString("InstructionPanelOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu How to open - Panel lock.
+        /// </summary>
+        internal static string InstructionPanelOpenLabel {
+            get {
+                return ResourceManager.GetString("InstructionPanelOpenLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu panel lock.
         /// </summary>
         internal static string LockTypePanel {
             get {
@@ -177,7 +292,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu type spinning.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu spinning lock.
         /// </summary>
         internal static string LockTypeSpinning {
             get {
