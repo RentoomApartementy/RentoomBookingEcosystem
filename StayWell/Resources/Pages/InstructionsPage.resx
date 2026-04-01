@@ -192,4 +192,43 @@
   <data name="WifiPassword" xml:space="preserve">
     <value>WI-FI Password</value>
   </data>
+  <data name="CityParking" xml:space="preserve">
+    <value>City Parking</value>
+  </data>
+  <data name="FreePark" xml:space="preserve">
+    <value>Now you can park for free</value>
+  </data>
+  <data name="PaidPark" xml:space="preserve">
+    <value>Parking is now paid</value>
+  </data>
+  <data name="MoreInfo" xml:space="preserve">
+    <value>More information</value>
+  </data>
+  <data name="PaidDays" xml:space="preserve">
+    <value>Paid days</value>
+  </data>
+  <data name="FreeDays" xml:space="preserve">
+    <value>Free days</value>
+  </data>
+  <data name="ZoneA" xml:space="preserve">
+    <value>Zone A</value>
+  </data>
+  <data name="ZoneB" xml:space="preserve">
+    <value>Zone B</value>
+  </data>
+  <data name="ZoneDowntown_PaidDays" xml:space="preserve">
+    <value>Mon–Fri, Sat</value>
+  </data>
+  <data name="ZoneAB_PaidDays" xml:space="preserve">
+    <value>Mon–Fri</value>
+  </data>
+  <data name="ZoneDowntown_FreeDays" xml:space="preserve">
+    <value>Sundays and public holidays</value>
+  </data>
+  <data name="ZoneAB_FreeDays" xml:space="preserve">
+    <value>Saturdays and Sundays</value>
+  </data>
+  <data name="ZoneDowntownPaidParking" xml:space="preserve">
+    <value>Downtown Paid Parking Zone</value>
+  </data>
 </root>

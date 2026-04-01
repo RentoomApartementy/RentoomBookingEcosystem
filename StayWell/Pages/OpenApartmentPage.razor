@@ -142,43 +142,93 @@
         </div>
     </div>
 
-    <div class="carousel-card">
-        <div class="carousel-track" id="lock-carousel">
-            <div class="carousel-slide">
-                <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
-                    @Localizer["HowTo"]  @Localizer["LockTypeSpinning"]
-                </div>
-                <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
+    <div class="guide-card">
+        <div class="guide-card__controls">
+            <div class="guide-card__mode-switch">
+                <button class="guide-mode-btn @(ActiveInstructionMode == InstructionMode.Open ? "guide-mode-btn--active" : "")"
+                        @onclick="() => ActiveInstructionMode = InstructionMode.Open">
+                    <img src="/icons/door-open.svg" class="guide-mode-btn__icon" />
+                    @Localizer["InstructionOpenTitle"]
+                </button>
+                <button class="guide-mode-btn @(ActiveInstructionMode == InstructionMode.Close ? "guide-mode-btn--active" : "")"
+                        @onclick="() => ActiveInstructionMode = InstructionMode.Close">
+                    <img src="/icons/door-closed-2.svg" class="guide-mode-btn__icon" />
+                    @Localizer["InstructionCloseTitle"]
+                </button>
             </div>
-            <div class="carousel-slide">
-                <div class="tile__title" style="justify-content: center; margin-bottom: 15px;">
-                    @Localizer["HowTo"] @Localizer["LockTypePanel"]
-                </div>
-                <RentoomBooking.StayWell.Components.AnimationsComponents.LockPanelAnimation />
+            <div class="guide-card__dots">
+                <button class="dot @(ActiveLockSlide == 0 ? "dot--active" : "")"
+                        @onclick="() => SetSlide(0)"
+                        aria-label="@Localizer["LockTypeSpinning"]">
+                </button>
+                <button class="dot @(ActiveLockSlide == 1 ? "dot--active" : "")"
+                        @onclick="() => SetSlide(1)"
+                        aria-label="@Localizer["LockTypePanel"]">
+                </button>
             </div>
         </div>
-        <div class="dots-indicator" id="carousel-dots">
-            <div class="dot active" @onclick="() => ScrollToSlide(0)"></div>
-            <div class="dot" @onclick="() => ScrollToSlide(1)"></div>
-        </div>
-    </div>
 
-    <div class="instruction-card">
-        <div class="instruction-title">
-            @Localizer["Important"]
-        </div>
-        <div class="instruction-track" id="instruction-carousel">
-            <div class="instruction-slide">
-                <div class="instruction-content">@FormatInstructionText(Localizer["InstructionCylinder"])</div>
+        <div class="guide-card__slide-track" id="guide-slide-track">
+            <div class="guide-card__slide">
+                <div class="guide-card__animation-part">
+                    <div class="guide-card__animation-label">@Localizer["HowTo"] @Localizer["LockTypeSpinning"]</div>
+                    <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
+                </div>
+                <div class="guide-card__instruction-part">
+                    <div class="instruction-content">
+                        @if (ActiveInstructionMode == InstructionMode.Open)
+                        {
+                            @FormatInstructionText(Localizer["InstructionCylinderOpen"])
+                        }
+                        else
+                        {
+                            @FormatInstructionText(Localizer["InstructionCylinderClose"])
+                        }
+                    </div>
+                </div>
             </div>
-            <div class="instruction-slide">
-                <div class="instruction-content">@FormatInstructionText(Localizer["InstructionPanel"])</div>
+            <div class="guide-card__slide">
+                <div class="guide-card__animation-part">
+                    <div class="guide-card__animation-label">@Localizer["HowTo"] @Localizer["LockTypePanel"]</div>
+                    <RentoomBooking.StayWell.Components.AnimationsComponents.LockPanelAnimation />
+                </div>
+                <div class="guide-card__instruction-part">
+                    <div class="instruction-content">
+                        @if (ActiveInstructionMode == InstructionMode.Open)
+                        {
+                            @FormatInstructionText(Localizer["InstructionPanelOpen"])
+                        }
+                        else
+                        {
+                            @FormatInstructionText(Localizer["InstructionPanelClose"])
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 @code {
+    private enum InstructionMode { Open, Close }
+    private InstructionMode ActiveInstructionMode = InstructionMode.Open;
+    private int ActiveLockSlide = 0;
+
+    private DotNetObjectReference<OpenApartmentPage>? _dotNetRef;
+
+    private async Task SetSlide(int index)
+    {
+        ActiveLockSlide = index;
+        await JS.InvokeVoidAsync("scrollGuideTrack", index);
+    }
+
+    [JSInvokable]
+    public async Task OnSwipeSlide(int index)
+    {
+        ActiveLockSlide = index;
+        await InvokeAsync(StateHasChanged);
+    }
+
     private bool IsOpened = false;
     private bool IsProcessing = false;
     private string? ErrorMessage;
@@ -202,63 +252,13 @@
             )
             : Localizer["TryAgain"];
 
-    private async Task ScrollToSlide(int index)
-    {
-        await JS.InvokeVoidAsync(
-            "eval",
-            $@"
-            const animationTrack = document.getElementById('lock-carousel');
-            const instructionTrack = document.getElementById('instruction-carousel');
-
-            [animationTrack, instructionTrack].forEach(track => {{
-                if (track) {{
-                    track.scrollTo({{ left: track.clientWidth * {index}, behavior: 'smooth' }});
-                }}
-            }});
-        "
-        );
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // Restore countdown that may still be running in state
             LocksState.RestoreRetryCountdownIfNeeded();
-
-            await JS.InvokeVoidAsync(
-                "eval",
-                @"
-                const animationTrack = document.getElementById('lock-carousel');
-                const instructionTrack = document.getElementById('instruction-carousel');
-                const dotsContainer = document.getElementById('carousel-dots');
-                const dots = dotsContainer ? dotsContainer.children : [];
-                let isSyncing = false;
-
-                const updateDots = (track) => {
-                    if (!track || dots.length === 0) return;
-                    const index = Math.round(track.scrollLeft / track.clientWidth);
-                    Array.from(dots).forEach((dot, i) => {
-                        if (i === index) dot.classList.add('active');
-                        else dot.classList.remove('active');
-                    });
-                };
-
-                const sync = (source, target) => {
-                    if (!source || !target || isSyncing) return;
-                    isSyncing = true;
-                    target.scrollLeft = source.scrollLeft;
-                    updateDots(source);
-                    requestAnimationFrame(() => isSyncing = false);
-                };
-
-                if (animationTrack && instructionTrack) {
-                    animationTrack.addEventListener('scroll', () => sync(animationTrack, instructionTrack), { passive: true });
-                    instructionTrack.addEventListener('scroll', () => sync(instructionTrack, animationTrack), { passive: true });
-                    updateDots(animationTrack);
-                }
-            "
-            );
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("initGuideCardSwipe", _dotNetRef);
         }
     }
 
@@ -270,6 +270,11 @@
         {
             _ = LocksState.CheckTTLockStatusAsync(Token);
         }
+    }
+
+    public void Dispose()
+    {
+        _dotNetRef?.Dispose();
     }
 
     private async Task ToggleDoor()
@@ -335,12 +340,43 @@
 
         var lines = text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 
+        var sb = new System.Text.StringBuilder();
         var steps = new List<(string StepText, List<string> Hints, string? Continuation)>();
+
+        void FlushSteps()
+        {
+            if (steps.Count == 0) return;
+            sb.Append("<ol class=\"instruction-steps\">");
+            foreach (var (stepText, hints, continuation) in steps)
+            {
+                sb.Append("<li class=\"instruction-steps__step\">");
+                sb.Append($"<span class=\"instruction-steps__step-text\">{System.Net.WebUtility.HtmlEncode(stepText)}</span>");
+                if (hints.Count > 0)
+                {
+                    sb.Append("<div class=\"instruction-steps__body\">");
+                    foreach (var hint in hints)
+                        sb.Append($"<div class=\"instruction-steps__hint\">{System.Net.WebUtility.HtmlEncode(hint)}</div>");
+                    sb.Append("</div>");
+                }
+                if (continuation is not null)
+                    sb.Append($"<div class=\"instruction-steps__continuation\">{System.Net.WebUtility.HtmlEncode(continuation)}</div>");
+                sb.Append("</li>");
+            }
+            sb.Append("</ol>");
+            steps.Clear();
+        }
 
         foreach (var rawLine in lines)
         {
             var line = rawLine.Trim();
             if (string.IsNullOrEmpty(line)) continue;
+
+            if (line.StartsWith("## ", StringComparison.Ordinal))
+            {
+                FlushSteps();
+                sb.Append($"<div class=\"instruction-section-heading\">{System.Net.WebUtility.HtmlEncode(line[3..].Trim())}</div>");
+                continue;
+            }
 
             var stepMatch = System.Text.RegularExpressions.Regex.Match(line, @"^(\d+)\.\s+(.+)$");
             if (stepMatch.Success)
@@ -364,33 +400,7 @@
             steps[^1] = (st, hints, line);
         }
 
-        var sb = new System.Text.StringBuilder();
-        sb.Append("<ol class=\"instruction-steps\">");
-
-        foreach (var (stepText, hints, continuation) in steps)
-        {
-            sb.Append("<li class=\"instruction-steps__step\">");
-            sb.Append($"<span class=\"instruction-steps__step-text\">{System.Net.WebUtility.HtmlEncode(stepText)}</span>");
-
-            if (hints.Count > 0)
-            {
-                sb.Append("<div class=\"instruction-steps__body\">");
-                foreach (var hint in hints)
-                {
-                    sb.Append($"<div class=\"instruction-steps__hint\">{System.Net.WebUtility.HtmlEncode(hint)}</div>");
-                }
-                sb.Append("</div>");
-            }
-
-            if (continuation is not null)
-            {
-                sb.Append($"<div class=\"instruction-steps__continuation\">{System.Net.WebUtility.HtmlEncode(continuation)}</div>");
-            }
-
-            sb.Append("</li>");
-        }
-
-        sb.Append("</ol>");
+        FlushSteps();
         return new MarkupString(sb.ToString());
     }
 }
