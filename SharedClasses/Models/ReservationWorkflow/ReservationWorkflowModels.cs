@@ -136,6 +136,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
         public string? Provider { get; set; }
         public string? ProviderTransactionId { get; set; }
+        public string? SyncChangeSummary { get; set; }
         public byte[] RowVersion { get; set; } = Array.Empty<byte>();
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -225,9 +226,11 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string? CurrentIdoStatus { get; set; }
         public string? PreviousPaymentStatus { get; set; }
         public string? CurrentPaymentStatus { get; set; }
+        public string? SyncChangeSummary { get; set; }
         public bool TpayChecked { get; set; }
         public bool TpayFinalStatusApplied { get; set; }
         public bool BitrixUpdated { get; set; }
+        public bool DryRun { get; set; }
         public string? Warning { get; set; }
     }
 

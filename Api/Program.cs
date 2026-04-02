@@ -135,7 +135,10 @@ builder.Services.Configure<StorageOptions>("InstructionsStorage", builder.Config
 builder.Services.Configure<TpaySettings>(TpaySection);
 
 builder.Services.AddScoped<IReservationStore, ReservationStore>();
-builder.Services.AddScoped<IReservationWorkflowService, ReservationWorkflowService>();
+builder.Services.AddScoped<ReservationWorkflowService>();
+builder.Services.AddScoped<IReservationWorkflowService>(sp => sp.GetRequiredService<ReservationWorkflowService>());
+builder.Services.AddScoped<IReservationWorkflowSyncOperations>(sp => sp.GetRequiredService<ReservationWorkflowService>());
+builder.Services.AddScoped<IReservationSyncService, ReservationSyncService>();
 builder.Services.AddScoped<IPaymentFlowHandler, ReservationPaymentFlowHandler>();
 builder.Services.AddScoped<IPaymentFlowHandler, UpsellPaymentFlowHandler>();
 builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();

@@ -137,6 +137,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("provider_transaction_id")]
         public string? ProviderTransactionId { get; set; }
 
+        [Column("sync_change_summary")]
+        public string? SyncChangeSummary { get; set; }
+
         [Timestamp]
         [Column("row_version")]
         public byte[]? RowVersion { get; set; }

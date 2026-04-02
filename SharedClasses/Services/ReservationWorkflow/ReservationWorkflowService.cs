@@ -44,13 +44,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<RentoomReservation?> EnsureRentoomReservationByResTokenAsync(string resToken, CancellationToken cancellationToken = default);
         Task MarkPaymentAsPaidAsync(Guid reservationGuid); //for dummy scenario
         Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
-        Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request);
-        Task<ReservationStatusSyncResultDto> SyncReservationStatusAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
         Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections);
         Task CancelReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
     }
 
-    public class ReservationWorkflowService : IReservationWorkflowService
+    public class ReservationWorkflowService : IReservationWorkflowService, IReservationWorkflowSyncOperations
     {
         private readonly IReservationStore _store;
         private readonly ApartmentRepository _apartmentStore;
@@ -466,7 +464,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             };
         }
 
-        private async Task EnsurePaymentTotalsAsync(Guid reservationGuid, ReservationRecord record)
+        public async Task EnsurePaymentTotalsAsync(Guid reservationGuid, ReservationRecord record)
         {
             var summary = await BuildSummaryFromRecordAsync(reservationGuid, record);
             var updated = false;
@@ -831,184 +829,6 @@ private static TimeZoneInfo GetWarsawTimeZone()
             return PaymentStatuses.Failed;
         }
 
-        public async Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request)
-        {
-            if (request is null) throw new ArgumentNullException(nameof(request));
-
-            while (true)
-            {
-                var record = await RequireReservationAsync(reservationGuid);
-                await EnsurePaymentTotalsAsync(record.ReservationGuid, record);
-
-                var requestedPaymentStatus = string.IsNullOrWhiteSpace(request.PaymentStatus)
-                    ? record.PaymentStatus
-                    : request.PaymentStatus;
-
-                if (string.Equals(record.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
-                    && !string.Equals(requestedPaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
-                {
-                    requestedPaymentStatus = record.PaymentStatus;
-                }
-
-                var alreadyProcessedAsPaid = string.Equals(record.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
-                    && string.Equals(requestedPaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
-                    && string.Equals(record.ProviderTransactionId, request.ProviderTransactionId, StringComparison.OrdinalIgnoreCase)
-                    && string.Equals(record.Provider, request.Provider, StringComparison.OrdinalIgnoreCase);
-
-                if (!string.IsNullOrWhiteSpace(request.Provider))
-                {
-                    record.Provider = request.Provider;
-                }
-
-                if (!string.IsNullOrWhiteSpace(request.ProviderTransactionId))
-                {
-                    record.ProviderTransactionId = request.ProviderTransactionId;
-                }
-
-                if (!string.IsNullOrWhiteSpace(request.IdoStatus))
-                {
-                    record.IdoStatus = request.IdoStatus;
-                }
-
-                record.PaymentStatus = requestedPaymentStatus;
-
-                try
-                {
-                    await _store.UpdateAsync(record);
-                    record = await EnsureBitrixContactAndDealAsync(record);
-
-                    if (string.Equals(record.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
-                        && !alreadyProcessedAsPaid)
-                    {
-                        await CreatePaidUpsellOrderAsync(record, request.ProviderTransactionId);
-                    }
-
-                    await UpdateBitrixDealAsync(record, string.IsNullOrWhiteSpace(request.UpdateReason)
-                        ? "Imported reservation synchronized"
-                        : request.UpdateReason);
-                    return;
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    _logger.LogWarning("Concurrency conflict while finalizing imported reservation {ReservationGuid}. Retrying.", reservationGuid);
-                    await Task.Delay(TimeSpan.FromMilliseconds(50));
-                }
-            }
-        }
-
-        public async Task<ReservationStatusSyncResultDto> SyncReservationStatusAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
-        {
-            var record = await RequireReservationAsync(reservationGuid, cancellationToken);
-            if (!record.IdoReservationId.HasValue)
-            {
-                throw new InvalidOperationException($"Reservation {reservationGuid} does not have IdoReservationId.");
-            }
-
-            var result = new ReservationStatusSyncResultDto
-            {
-                ReservationGuid = reservationGuid,
-                IdoReservationId = record.IdoReservationId,
-                PreviousIdoStatus = record.IdoStatus,
-                PreviousPaymentStatus = record.PaymentStatus
-            };
-
-            if (!IsFinalPaymentStatus(record.PaymentStatus)
-                && !string.IsNullOrWhiteSpace(record.State.ProviderTransactionUid))
-            {
-                result.TpayChecked = true;
-
-                var tpayState = await _tpayGateway.GetPaymentStatusAsync(record.State.ProviderTransactionUid, cancellationToken);
-                if (!tpayState.Success)
-                {
-                    result.Warning = tpayState.Message;
-                }
-                else
-                {
-                    var mappedPaymentStatus = MapTpayStatusToWorkflowStatus(tpayState.TransactionStatus, tpayState.AmountPaid);
-
-                    if (!string.Equals(mappedPaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase)
-                        && record.PaymentSessionGuid.HasValue
-                        && !string.IsNullOrWhiteSpace(record.ProviderTransactionId))
-                    {
-                        await HandleTpayWebhookAsync(new TpayWebhookDto
-                        {
-                            ReservationGuid = reservationGuid,
-                            PaymentSessionGuid = record.PaymentSessionGuid.Value,
-                            ProviderTransactionId = record.ProviderTransactionId,
-                            Status = string.Equals(mappedPaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase) ? "PAID" : "FAILED",
-                            Signature = "cron-sync"
-                        });
-
-                        result.TpayFinalStatusApplied = true;
-                        record = await RequireReservationAsync(reservationGuid, cancellationToken);
-                    }
-                    else if (!string.Equals(mappedPaymentStatus, record.PaymentStatus, StringComparison.OrdinalIgnoreCase))
-                    {
-                        record.PaymentStatus = mappedPaymentStatus;
-                        await _store.UpdateAsync(record, cancellationToken);
-                    }
-                }
-            }
-
-            var idoReservation = await FetchIdoReservationAsync(record, true, cancellationToken);
-            var idoStatus = idoReservation?.ReservationDetails?.status;
-            var reservationItem = idoReservation?.Items?.FirstOrDefault();
-            var currentApartmentId = reservationItem?.objectId;
-            var currentApartmentItemId = reservationItem?.objectItemId > 0
-                ? reservationItem.objectItemId
-                : reservationItem?.itemId;
-
-            var apartmentChanged = false;
-            if (record.State.StartRequest is not null)
-            {
-                if (currentApartmentId.HasValue
-                    && currentApartmentId.Value > 0
-                    && currentApartmentId.Value != record.State.StartRequest.ObjectId)
-                {
-                    record.State.StartRequest.ObjectId = currentApartmentId.Value;
-                    apartmentChanged = true;
-                }
-
-                if (currentApartmentItemId.HasValue
-                    && currentApartmentItemId.Value > 0
-                    && currentApartmentItemId.Value != record.State.StartRequest.ObjectItemId)
-                {
-                    record.State.StartRequest.ObjectItemId = currentApartmentItemId.Value;
-                    apartmentChanged = true;
-                }
-            }
-
-            var idoStatusChanged = false;
-            if (!string.IsNullOrWhiteSpace(idoStatus)
-                && !string.Equals(idoStatus, record.IdoStatus, StringComparison.OrdinalIgnoreCase))
-            {
-                record.IdoStatus = idoStatus;
-                idoStatusChanged = true;
-            }
-
-            if (apartmentChanged || idoStatusChanged)
-            {
-                await _store.UpdateAsync(record, cancellationToken);
-            }
-
-            if (!record.DealBitrixId.HasValue && record.State.Client is not null)
-            {
-                record = await EnsureBitrixContactAndDealAsync(record);
-            }
-
-            if (record.DealBitrixId.HasValue && (apartmentChanged || idoStatusChanged))
-            {
-                await UpdateBitrixDealAsync(record, "Cron reservation status sync");
-                result.BitrixUpdated = true;
-            }
-
-            record = await RequireReservationAsync(reservationGuid, cancellationToken);
-            result.CurrentIdoStatus = record.IdoStatus;
-            result.CurrentPaymentStatus = record.PaymentStatus;
-
-            return result;
-        }
-
         public async Task CancelReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
         {
             var record = await RequireReservationAsync(reservationGuid, cancellationToken);
@@ -1115,7 +935,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
         //po potwierdzeniu płatności za rezerwację wywołuję CreatePaidOrderAsync
         //z danymi  wierszy uzyskanymi z wybranych ofert dodatkowych rezerwacji (z rekordu rezerwacji) ,
         //aby upselle zakupione w ramach rezerwacji zalogować w tej samej tabeli wierszy co zakupy w StayWell!
-        private async Task CreatePaidUpsellOrderAsync(ReservationRecord record, string providerTransactionId)
+        public async Task CreatePaidUpsellOrderAsync(ReservationRecord record, string providerTransactionId)
         {
             var request = record.State.StartRequest;
             if (request is null || request.SelectedUpsells.Count == 0)
@@ -1201,7 +1021,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 DateTime.UtcNow);
         }
 
-        private async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        public async Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
         {
             var record = await _store.GetAsync(reservationGuid, cancellationToken);
             return record ?? throw new InvalidOperationException($"Reservation {reservationGuid} not found.");
@@ -1256,7 +1076,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             };
         }
 
-        private async Task<Reservation?> FetchIdoReservationAsync(ReservationRecord record, bool refreshCache, CancellationToken cancellationToken)
+        public async Task<Reservation?> FetchIdoReservationAsync(ReservationRecord record, bool refreshCache, CancellationToken cancellationToken)
         {
             if (record.IdoReservationId is null)
             {
@@ -1622,7 +1442,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
         }
 
 
-        private async Task<ReservationRecord> EnsureBitrixContactAndDealAsync(ReservationRecord record)
+        public async Task<ReservationRecord> EnsureBitrixContactAndDealAsync(ReservationRecord record)
         {
             if (record.State.Client is null)
             {
@@ -1763,18 +1583,16 @@ private static TimeZoneInfo GetWarsawTimeZone()
             return record;
         }
 
-        private async Task UpdateBitrixDealAsync(ReservationRecord record, string updateReason)
+        public async Task UpdateBitrixDealAsync(ReservationRecord record, string updateReason, Reservation? idoReservation = null)
         {
             if (!record.DealBitrixId.HasValue)
             {
                 return;
             }
 
-            Reservation? idoReservation = null;
             if (record.IdoReservationId.HasValue)
             {
-                var idoResponse = await _idoApi.FetchReservationByIDFromIdoSellAsync(record.IdoReservationId.Value, false);
-                idoReservation = idoResponse?.ReservationResponse?.result?.Reservations?.FirstOrDefault();
+                idoReservation ??= await FetchIdoReservationAsync(record, refreshCache: false, CancellationToken.None);
             }
             var apartmentInf = ResolveApartmentInfo(record.State.StartRequest, idoReservation);
             var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest, idoReservation);
