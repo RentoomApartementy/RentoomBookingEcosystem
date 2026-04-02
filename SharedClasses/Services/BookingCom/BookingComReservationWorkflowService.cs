@@ -30,6 +30,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
 
         private readonly IdoSellService _idoApi;
         private readonly IReservationWorkflowService _reservationWorkflowService;
+        private readonly IReservationSyncService _reservationSyncService;
         private readonly IReservationStore _reservationStore;
         private readonly ApartmentRepository _apartmentRepository;
         private readonly PostgresBookingDatabase _bookingDatabase;
@@ -40,6 +41,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
         public BookingComReservationWorkflowService(
             IdoSellService idoApi,
             IReservationWorkflowService reservationWorkflowService,
+            IReservationSyncService reservationSyncService,
             IReservationStore reservationStore,
             ApartmentRepository apartmentRepository,
             PostgresBookingDatabase bookingDatabase,
@@ -49,6 +51,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
         {
             _idoApi = idoApi ?? throw new ArgumentNullException(nameof(idoApi));
             _reservationWorkflowService = reservationWorkflowService ?? throw new ArgumentNullException(nameof(reservationWorkflowService));
+            _reservationSyncService = reservationSyncService ?? throw new ArgumentNullException(nameof(reservationSyncService));
             _reservationStore = reservationStore ?? throw new ArgumentNullException(nameof(reservationStore));
             _apartmentRepository = apartmentRepository ?? throw new ArgumentNullException(nameof(apartmentRepository));
             _bookingDatabase = bookingDatabase ?? throw new ArgumentNullException(nameof(bookingDatabase));
@@ -282,7 +285,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     reservationGuid: reservationGuid,
                     cancellationToken: cancellationToken);
 
-                await _reservationWorkflowService.FinalizeImportedReservationAsync(
+                await _reservationSyncService.FinalizeImportedReservationAsync(
                     reservationGuid,
                     new ImportedReservationFinalizationRequest
                     {

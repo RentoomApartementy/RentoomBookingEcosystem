@@ -109,6 +109,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             existing.PaymentStatus = record.PaymentStatus;
             existing.Provider = record.Provider;
             existing.ProviderTransactionId = record.ProviderTransactionId;
+            existing.SyncChangeSummary = record.SyncChangeSummary;
             existing.UpdatedAt = DateTime.UtcNow;
             existing.ConfirmationEmailBitrixId = record.DealBitrixSentConfirmationEmailId;
             await context.SaveChangesAsync(cancellationToken);
@@ -139,6 +140,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 PaymentStatus = entity.PaymentStatus ?? PaymentStatuses.None,
                 Provider = entity.Provider,
                 ProviderTransactionId = entity.ProviderTransactionId,
+                SyncChangeSummary = entity.SyncChangeSummary,
                 RowVersion = entity.RowVersion ?? Array.Empty<byte>(),
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt,
@@ -160,6 +162,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 PaymentStatus = record.PaymentStatus,
                 Provider = record.Provider,
                 ProviderTransactionId = record.ProviderTransactionId,
+                SyncChangeSummary = record.SyncChangeSummary,
                 RowVersion = record.RowVersion,
                 CreatedAt = record.CreatedAt,
                 UpdatedAt = record.UpdatedAt,

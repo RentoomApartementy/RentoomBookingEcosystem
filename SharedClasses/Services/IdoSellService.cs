@@ -139,6 +139,94 @@ namespace RentoomBooking.SharedClasses.Services
 
             return new RentoomReservationHashRecord() { ReservationResponse= ret,resToken= stored };
         }
+
+        public async Task<IReadOnlyDictionary<int, Reservation>> FetchReservationsByIDsFromIdoSellAsync(
+            IEnumerable<int> reservationIds,
+            bool saveToDb,
+            IReadOnlyDictionary<int, string?>? existingResTokens = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (reservationIds is null)
+            {
+                throw new ArgumentNullException(nameof(reservationIds));
+            }
+
+            var reservationIdList = reservationIds
+                .Where(id => id > 0)
+                .Distinct()
+                .ToList();
+
+            if (reservationIdList.Count == 0)
+            {
+                return new Dictionary<int, Reservation>();
+            }
+
+            /*if (_useDummyIdoBooking && !_bookingProcessingFlag)
+            {
+                var dummyReservations = new Dictionary<int, Reservation>();
+
+                foreach (var reservationId in reservationIdList)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var reservation = await _bookingDatabase.GetReservationByIdAsync(reservationId, _logger, cancellationToken);
+                    if (reservation is null)
+                    {
+                        continue;
+                    }
+
+                    dummyReservations[reservationId] = reservation;
+                }
+
+                return dummyReservations;
+            }*/
+
+            var request = new ReservationRequestIDOSellAPI
+            {
+                authenticate = _idoConnect.AuthObjectIdo(),
+                result = new ResultSetup { page = 1, number = reservationIdList.Count },
+                paramsSearch = new ReservationsParamsSearch { ids = reservationIdList.ToArray() }
+            };
+
+            var response = await _idoConnect.PostAsync<ReservationRequestIDOSellAPI, ReservationResponseFromIdoSellAPI>(
+                ReservationsGetEndpoint,
+                request,
+                cancellationToken);
+
+            if (response.result.errors != null)
+            {
+                throw new ApplicationException(response.result.errors.FaultString);
+            }
+
+            var reservations = response?.result?.Reservations ?? new List<Reservation>();
+            var reservationMap = reservations
+                .Where(reservation => reservation.id > 0)
+                .GroupBy(reservation => reservation.id)
+                .ToDictionary(group => group.Key, group => group.First());
+
+            if (saveToDb && reservationMap.Count > 0)
+            {
+                foreach (var reservation in reservationMap.Values)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    string? existingResToken = null;
+                    existingResTokens?.TryGetValue(reservation.id, out existingResToken);
+                    var stored = await _bookingDatabase.SaveReservationJsonAsync(reservation, _logger, existingResToken);
+
+                    if (!string.IsNullOrWhiteSpace(stored))
+                    {
+                        _logger.LogInformation("Reservation {ReservationId} with token {ReservationToken} stored in DB.", reservation.id, stored);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Failed to store reservation {ReservationId} in DB.", reservation.id);
+                    }
+                }
+            }
+
+            return reservationMap;
+        }
         //public Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken = null, int pageSize = 50) => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
 
         /* public async Task<List<ObjectMedium>?> FetchObjectMediaFromIdoSellAsync(int objectId, CancellationToken cancellationToken = default)
