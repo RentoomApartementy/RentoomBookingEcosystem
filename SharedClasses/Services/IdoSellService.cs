@@ -500,15 +500,7 @@ namespace RentoomBooking.SharedClasses.Services
             ReservationSourcesResultRequest? result = null,
             CancellationToken cancellationToken = default)
         {
-            if (_useDummyIdoBooking && !_bookingProcessingFlag)
-            {
-                return new ReservationSourcesResponse
-                {
-                    Authenticate = _idoConnect.AuthObjectIdo(),
-                    Sources = new List<ReservationSourceDescription>()
-                };
-            }
-
+          
             var request = new ReservationSourcesRequest
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
