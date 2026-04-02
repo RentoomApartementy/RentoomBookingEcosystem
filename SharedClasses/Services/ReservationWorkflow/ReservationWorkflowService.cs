@@ -151,15 +151,20 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
         idoReservation ??= await FetchIdoReservationAsync(record, refreshCache: false, cancellationToken);
         var details = idoReservation?.ReservationDetails;
-        if (details is null || details.reservationSourceTypeId <= 0 || string.IsNullOrWhiteSpace(details.reservationSourceId))
-        {
-            return RentoomBookingWebReservationSourceValue;
-        }
+            if (details is null || details.reservationSourceTypeId <= 0 || string.IsNullOrWhiteSpace(details.reservationSourceId))
+            {
+                return RentoomBookingWebReservationSourceValue;
+            }
 
-        var reservationSources = await _idoApi.GetReservationSourcesAsync(
+            if (details.reservationSourceTypeId == 2) //direct selling api
+            {
+                return RentoomBookingWebReservationSourceValue;
+            }
+
+            var reservationSources = await _idoApi.GetReservationSourcesAsync(
             new ReservationSourcesResultRequest
             {
-                Page = 0,
+                Page = 1,
                 Number = 100
             },
             cancellationToken);
