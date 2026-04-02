@@ -73,7 +73,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         private const string BitrixParkingMapFieldName = "UF_CRM_1774428026254";
         private const string BitrixPurchasedAddonsFieldName = "UF_CRM_1768940634224";
         private const string BitrixReservationSourceFieldName = "UF_CRM_1774626264627";
-        private const string RentoomBookingWebReservationSourceValue = "RentoomBookingWeb";
+        private const string RentoomBookingWebReservationSourceValue = "Direct Selling_api";
         public ReservationWorkflowService(
             IReservationStore store,
             IdoSellService idoApi,
