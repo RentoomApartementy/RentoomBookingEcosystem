@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<ReservationRecord?> GetByIdoReservationIdAsync(int idoReservationId, CancellationToken cancellationToken = default);
         Task UpdateAsync(ReservationRecord record, CancellationToken cancellationToken = default);
         Task<ReservationRecord?> GetByProviderTransactionIdAsync(string providerTransactionId, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<ReservationRecord>> ListActiveWithIdoReservationAsync(CancellationToken cancellationToken = default);
     }
 
     public class ReservationStore : IReservationStore
@@ -181,6 +183,21 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 .FirstOrDefaultAsync(r => r.ProviderTransactionId == providerTransactionId, cancellationToken);
 
             return entity is null ? null : MapToRecord(entity);
+        }
+
+        public async Task<IReadOnlyList<ReservationRecord>> ListActiveWithIdoReservationAsync(CancellationToken cancellationToken = default)
+        {
+            await using var context = _dbContextFactory.CreateDbContext();
+
+            var entities = await context.ReservationRecords.AsNoTracking()
+                .Where(r => r.IdoReservationId.HasValue)
+                .Where(r => r.IdoStatus == null
+                    || (r.IdoStatus != ReservationStatusType.Canceled
+                        && r.IdoStatus != ReservationStatusType.Completed))
+                .OrderBy(r => r.UpdatedAt)
+                .ToListAsync(cancellationToken);
+
+            return entities.Select(MapToRecord).ToList();
         }
     }
 }

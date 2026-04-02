@@ -45,7 +45,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task MarkPaymentAsPaidAsync(Guid reservationGuid); //for dummy scenario
         Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
         Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request);
+        Task<ReservationStatusSyncResultDto> SyncReservationStatusAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
         Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections);
+        Task CancelReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
     }
 
     public class ReservationWorkflowService : IReservationWorkflowService
@@ -314,11 +316,11 @@ private static TimeZoneInfo GetWarsawTimeZone()
             {
                 record = await EnsureIdoReservationAsync(record, ReservationStatusType.Accepted);
                 record = await EnsureBitrixContactAndDealAsync(record);
-                record.IdoStatus = ReservationStatusType.WaitingForPayment;
+                //record.IdoStatus = ReservationStatusType.WaitingForPayment; <<usuniete bo link do retry platnosci wchodzil za pozno
 
                 await _store.UpdateAsync(record);
-                await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
-                await UpdateBitrixDealAsync(record, "BuildSummaryAsync Update");
+                //await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment); <<usuniete bo link do retry platnosci wchodzil za pozno
+                //await UpdateBitrixDealAsync(record, "BuildSummaryAsync Update"); <<usuniete bo link do retry platnosci wchodzil za pozno
 
                 record = await RequireReservationAsync(reservationGuid);
             }
@@ -331,23 +333,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             return await BuildSummaryFromRecordAsync(reservationGuid, record);
         }
 
-        private static ReservationSummaryDto BuildSummaryFromRecord(Guid reservationGuid, ReservationRecord record)
-        {
-            return new ReservationSummaryDto
-            {
-                ReservationGuid = reservationGuid,
-                StartRequest = record.State.StartRequest,
-                Client = record.State.Client,
-                Invoice = record.State.Invoice,
-                IdoReservationId = record.IdoReservationId,
-                IdoStatus = record.IdoStatus,
-                OfferPrice = record.State.StartRequest?.OfferPrice,
-                Currency = record.State.StartRequest?.Currency ?? "PLN",
-                PaymentStatus = record.PaymentStatus,
-                
-            };
-        }
-
+     
         private async Task<ReservationSummaryDto> BuildSummaryFromRecordAsync(Guid reservationGuid, ReservationRecord record)
         {
             var startRequest = record.State.StartRequest;
@@ -506,8 +492,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
             while (true)
             {
                 var record = await RequireReservationAsync(reservationGuid);
-                record = await EnsureIdoReservationAsync(record, ReservationStatusType.WaitingForPayment);
-                record = await EnsureBitrixContactAndDealAsync(record);
+                record = await EnsureIdoReservationAsync(record, ReservationStatusType.Accepted); //<< jako accepted bo waitingForPayment jest za szybko.
+                record = await EnsureBitrixContactAndDealAsync(record); //<< jako accepted bo waitingForPayment jest za szybko i nie pojdzie link retry platnosci
 
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
                 {
@@ -529,6 +515,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 if (record.PaymentStatus == PaymentStatuses.Initiated && record.PaymentSessionGuid.HasValue)
                 {
                     await EnsurePaymentTotalsAsync(reservationGuid, record);
+                    //await UpdateBitrixPaymentRetryLinkAsync(record, record.PaymentSessionGuid.Value);
                     var redirectUrl = record.State.PaymentRedirectUrl;
 
                     return new PaymentInitResult
@@ -551,7 +538,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 var paymentResult = await _tpayGateway.CreatePaymentAsync(reservationGuid, paymentSessionGuid, amount, currency, record.IdoReservationId);
                 if (!paymentResult.Success)
                 {
-                    throw new InvalidOperationException("Failed to initiate payment session.");
+                    throw new InvalidOperationException("Failed to initiate payment session: " + paymentResult.Message);
                 }
 
                 record.PaymentSessionGuid = paymentSessionGuid;
@@ -562,14 +549,15 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 record.State.ProviderTransactionUid = paymentResult.TransactionUid;
                 record.State.PaymentUpsellsTotal = summary.UpsellsTotal;
                 record.State.PaymentGrandTotal = summary.GrandTotal;
-                record.IdoStatus = ReservationStatusType.WaitingForPayment;
+                record.IdoStatus = ReservationStatusType.WaitingForPayment; //<< dopiero too
 
                 try
                 {
                     await _store.UpdateAsync(record);
-                    await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
+                    await UpdateBitrixPaymentRetryLinkAsync(record, paymentSessionGuid); //<< najpierw retry link dodajemy
+                    await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment); //<< status w ido
                     //await AddIdoPaymentAsync(record, amount, currency, paymentResult.TransactionId);
-                    await UpdateBitrixDealAsync(record, "ReservationWorkflowService - InitiatePaymentAsync - Payment initiated");
+                    await UpdateBitrixDealAsync(record, "ReservationWorkflowService - InitiatePaymentAsync - Payment initiated"); //<< update deal do waiting to payment z już obecnym linkiem retry payment - waitingforpayment przesunie automatyzacjie bitrix do"czeka na platnosci" juz z linkiem retry do maila.
 
                     return new PaymentInitResult
                     {
@@ -586,6 +574,25 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     await Task.Delay(TimeSpan.FromMilliseconds(50));
                 }
             }
+        }
+
+        private async Task UpdateBitrixPaymentRetryLinkAsync(ReservationRecord record, Guid paymentSessionGuid)
+        {
+            if (!record.DealBitrixId.HasValue)
+            {
+                return;
+            }
+
+            var paymentRetryLink = BuildPaymentRetryLink(record.ReservationGuid, paymentSessionGuid);
+            if (string.IsNullOrWhiteSpace(paymentRetryLink))
+            {
+                return;
+            }
+
+            await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, new Dictionary<string, object?>
+            {
+                ["UF_CRM_1775071642554"] = paymentRetryLink
+            });
         }
 
         private async Task<int?> AddIdoPaymentAsync(ReservationRecord record, decimal amount, string currency, string? transactionId)
@@ -881,6 +888,120 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     _logger.LogWarning("Concurrency conflict while finalizing imported reservation {ReservationGuid}. Retrying.", reservationGuid);
                     await Task.Delay(TimeSpan.FromMilliseconds(50));
                 }
+            }
+        }
+
+        public async Task<ReservationStatusSyncResultDto> SyncReservationStatusAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        {
+            var record = await RequireReservationAsync(reservationGuid, cancellationToken);
+            if (!record.IdoReservationId.HasValue)
+            {
+                throw new InvalidOperationException($"Reservation {reservationGuid} does not have IdoReservationId.");
+            }
+
+            var result = new ReservationStatusSyncResultDto
+            {
+                ReservationGuid = reservationGuid,
+                IdoReservationId = record.IdoReservationId,
+                PreviousIdoStatus = record.IdoStatus,
+                PreviousPaymentStatus = record.PaymentStatus
+            };
+
+            if (!IsFinalPaymentStatus(record.PaymentStatus)
+                && !string.IsNullOrWhiteSpace(record.State.ProviderTransactionUid))
+            {
+                result.TpayChecked = true;
+
+                var tpayState = await _tpayGateway.GetPaymentStatusAsync(record.State.ProviderTransactionUid, cancellationToken);
+                if (!tpayState.Success)
+                {
+                    result.Warning = tpayState.Message;
+                }
+                else
+                {
+                    var mappedPaymentStatus = MapTpayStatusToWorkflowStatus(tpayState.TransactionStatus, tpayState.AmountPaid);
+
+                    if (!string.Equals(mappedPaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase)
+                        && record.PaymentSessionGuid.HasValue
+                        && !string.IsNullOrWhiteSpace(record.ProviderTransactionId))
+                    {
+                        await HandleTpayWebhookAsync(new TpayWebhookDto
+                        {
+                            ReservationGuid = reservationGuid,
+                            PaymentSessionGuid = record.PaymentSessionGuid.Value,
+                            ProviderTransactionId = record.ProviderTransactionId,
+                            Status = string.Equals(mappedPaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase) ? "PAID" : "FAILED",
+                            Signature = "cron-sync"
+                        });
+
+                        result.TpayFinalStatusApplied = true;
+                        record = await RequireReservationAsync(reservationGuid, cancellationToken);
+                    }
+                    else if (!string.Equals(mappedPaymentStatus, record.PaymentStatus, StringComparison.OrdinalIgnoreCase))
+                    {
+                        record.PaymentStatus = mappedPaymentStatus;
+                        await _store.UpdateAsync(record, cancellationToken);
+                    }
+                }
+            }
+
+            var idoReservation = await FetchIdoReservationAsync(record, true, cancellationToken);
+            var idoStatus = idoReservation?.ReservationDetails?.status;
+            if (!string.IsNullOrWhiteSpace(idoStatus)
+                && !string.Equals(idoStatus, record.IdoStatus, StringComparison.OrdinalIgnoreCase))
+            {
+                record.IdoStatus = idoStatus;
+                await _store.UpdateAsync(record, cancellationToken);
+            }
+
+            if (!record.DealBitrixId.HasValue && record.State.Client is not null)
+            {
+                record = await EnsureBitrixContactAndDealAsync(record);
+            }
+
+            if (record.DealBitrixId.HasValue)
+            {
+                await UpdateBitrixDealAsync(record, "Cron reservation status sync");
+                result.BitrixUpdated = true;
+            }
+
+            record = await RequireReservationAsync(reservationGuid, cancellationToken);
+            result.CurrentIdoStatus = record.IdoStatus;
+            result.CurrentPaymentStatus = record.PaymentStatus;
+
+            return result;
+        }
+
+        public async Task CancelReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default)
+        {
+            var record = await RequireReservationAsync(reservationGuid, cancellationToken);
+            if (!record.IdoReservationId.HasValue)
+            {
+                throw new InvalidOperationException($"Reservation {reservationGuid} does not have IdoReservationId.");
+            }
+
+            if (string.Equals(record.IdoStatus, ReservationStatusType.Canceled, StringComparison.OrdinalIgnoreCase))
+            {
+                if (record.DealBitrixId.HasValue)
+                {
+                    await UpdateBitrixDealAsync(record, "Reservation canceled");
+                }
+
+                return;
+            }
+
+            await UpdateIdoStatusAsync(record, ReservationStatusType.Canceled);
+            record.IdoStatus = ReservationStatusType.Canceled;
+            await _store.UpdateAsync(record, cancellationToken);
+
+            if (!record.DealBitrixId.HasValue && record.State.Client is not null)
+            {
+                record = await EnsureBitrixContactAndDealAsync(record);
+            }
+
+            if (record.DealBitrixId.HasValue)
+            {
+                await UpdateBitrixDealAsync(record, "Reservation canceled");
             }
         }
 
@@ -1273,6 +1394,26 @@ private static TimeZoneInfo GetWarsawTimeZone()
             return baseUrl.Replace("{resToken}", resToken).TrimEnd('/');
         }
 
+        private string? BuildPaymentRetryLink(Guid reservationGuid, Guid? paymentSessionGuid, bool cancelaction = false)
+        {
+            var baseUrl =
+                Environment.GetEnvironmentVariable("Tpay__RentoomSiteBaseUrl") ??
+                Environment.GetEnvironmentVariable("Tpay:RentoomSiteBaseUrl") ??
+                Environment.GetEnvironmentVariable("RentoomSiteBaseUrl") ??
+                _configuration["Tpay:RentoomSiteBaseUrl"] ??
+                _configuration["RentoomSiteBaseUrl"];
+
+            if (string.IsNullOrWhiteSpace(baseUrl))
+            {
+                return null;
+            }
+            string cancelactionquery = string.Empty;
+            if (cancelaction)
+                cancelactionquery = "&enableaction=cancel";
+
+            return $"{baseUrl.TrimEnd('/')}/rezerwuj/{reservationGuid:D}/podsumowanie?payment_session={paymentSessionGuid:D}{cancelactionquery}";
+        }
+
 
         private static ClientWithGuest? MapClient(ClientInfoDto? client, InvoiceInfoDto? invoice)
         {
@@ -1517,14 +1658,16 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["UF_CRM_1769797498979"] = record.State.Client.CountryCode,
                     ["UF_CRM_1768836801823"] = startRequest?.Adults,
                     ["UF_CRM_1768836818927"] = startRequest?.EndDate.DayNumber - startRequest?.StartDate.DayNumber,
-                    ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, bitrixServerUTCOffset,differenceInHours),
-                    ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, bitrixServerUTCOffset,differenceInHours),
-                    ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15,0),
-                    ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11,0),
+                    ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, bitrixServerUTCOffset, differenceInHours),
+                    ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, bitrixServerUTCOffset, differenceInHours),
+                    ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15, 0),
+                    ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11, 0),
                     [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
                     [BitrixReservationSourceFieldName] = reservationSourceValue,
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
-                    [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString())
+                    [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
+                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, cancelaction: true)
+
                 };
                 AddBitrixLocationFields(customFields, apartmentInfo, apartmentItemLocalSettings);
 
@@ -1533,6 +1676,10 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["TITLE"] = dealTitle,
                     ["ASSIGNED_BY_ID"] = _bitrixAssignedByUserId
                 };
+
+                
+                    
+                
 
                 if (record.State.PaymentGrandTotal > 0)
                 {
@@ -1618,8 +1765,11 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                 //RB_Link_StayWell
                 [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString())
+                
             };
             AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
+
+                fields["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid.Value,cancelaction:true);
 
             if (record.State.PaymentGrandTotal >0)
             {
@@ -1743,7 +1893,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 ClientBitrixId = record.ClientBitrixId,
             }).ToList();
 
-            await _termsRepository.AddAgreedTermsAsync(agreedEntities);
+            await _termsRepository.SaveAgreedTermsAsync(agreedEntities);
             var agreedTermsDetails = await _termsRepository.GetAgreedTermsByReservationAsync(reservationGuid);
 
             await _bitrixService.UpdateContactAdditionalTermsAsync(record.ClientBitrixId.Value, agreedTermsDetails);
