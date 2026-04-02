@@ -952,10 +952,42 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
             var idoReservation = await FetchIdoReservationAsync(record, true, cancellationToken);
             var idoStatus = idoReservation?.ReservationDetails?.status;
+            var reservationItem = idoReservation?.Items?.FirstOrDefault();
+            var currentApartmentId = reservationItem?.objectId;
+            var currentApartmentItemId = reservationItem?.objectItemId > 0
+                ? reservationItem.objectItemId
+                : reservationItem?.itemId;
+
+            var apartmentChanged = false;
+            if (record.State.StartRequest is not null)
+            {
+                if (currentApartmentId.HasValue
+                    && currentApartmentId.Value > 0
+                    && currentApartmentId.Value != record.State.StartRequest.ObjectId)
+                {
+                    record.State.StartRequest.ObjectId = currentApartmentId.Value;
+                    apartmentChanged = true;
+                }
+
+                if (currentApartmentItemId.HasValue
+                    && currentApartmentItemId.Value > 0
+                    && currentApartmentItemId.Value != record.State.StartRequest.ObjectItemId)
+                {
+                    record.State.StartRequest.ObjectItemId = currentApartmentItemId.Value;
+                    apartmentChanged = true;
+                }
+            }
+
+            var idoStatusChanged = false;
             if (!string.IsNullOrWhiteSpace(idoStatus)
                 && !string.Equals(idoStatus, record.IdoStatus, StringComparison.OrdinalIgnoreCase))
             {
                 record.IdoStatus = idoStatus;
+                idoStatusChanged = true;
+            }
+
+            if (apartmentChanged || idoStatusChanged)
+            {
                 await _store.UpdateAsync(record, cancellationToken);
             }
 
@@ -964,7 +996,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 record = await EnsureBitrixContactAndDealAsync(record);
             }
 
-            if (record.DealBitrixId.HasValue)
+            if (record.DealBitrixId.HasValue && (apartmentChanged || idoStatusChanged))
             {
                 await UpdateBitrixDealAsync(record, "Cron reservation status sync");
                 result.BitrixUpdated = true;
