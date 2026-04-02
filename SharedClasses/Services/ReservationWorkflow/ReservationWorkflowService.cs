@@ -156,7 +156,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 return RentoomBookingWebReservationSourceValue;
             }
 
-            if (details.reservationSourceTypeId == 2) //direct selling api
+            if ( Convert.ToInt32(details.reservationSourceId) == 2) //direct selling api
             {
                 return RentoomBookingWebReservationSourceValue;
             }
@@ -1773,8 +1773,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 
             };
             AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
-
-                fields["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid.Value,cancelaction:true);
+            
+                fields["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid,cancelaction:true);
 
             if (record.State.PaymentGrandTotal >0)
             {
