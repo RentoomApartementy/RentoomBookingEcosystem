@@ -38,7 +38,13 @@ namespace RentoomBooking.SharedClasses.Database
                     continue;
                 }
 
-                using var document = JsonDocument.Parse(File.ReadAllText(candidate));
+                using var document = JsonDocument.Parse(
+                    File.ReadAllText(candidate),
+                    new JsonDocumentOptions
+                    {
+                        CommentHandling = JsonCommentHandling.Skip,
+                        AllowTrailingCommas = true
+                    });
                 if (!document.RootElement.TryGetProperty("ConnectionStrings", out var connectionStrings))
                 {
                     continue;

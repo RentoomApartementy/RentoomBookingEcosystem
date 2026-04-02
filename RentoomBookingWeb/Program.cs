@@ -101,7 +101,10 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IRentoomOfferService, RentoomOfferService>();
             builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
             
-            builder.Services.AddScoped<IReservationWorkflowService, ReservationWorkflowService>();
+            builder.Services.AddScoped<ReservationWorkflowService>();
+            builder.Services.AddScoped<IReservationWorkflowService>(sp => sp.GetRequiredService<ReservationWorkflowService>());
+            builder.Services.AddScoped<IReservationWorkflowSyncOperations>(sp => sp.GetRequiredService<ReservationWorkflowService>());
+            builder.Services.AddScoped<IReservationSyncService, ReservationSyncService>();
             builder.Services.AddScoped<IReservationStore, ReservationStore>();
             builder.Services.AddScoped<IMockTpayGateway, MockTpayGateway>();
             builder.Services.AddScoped<ITpayGateway, TpayOpenApiGateway>();
