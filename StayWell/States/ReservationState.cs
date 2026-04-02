@@ -44,7 +44,7 @@ namespace RentoomBooking.StayWell.States
                 var from = details.getDateFrom().Date + CheckInTime.ToTimeSpan();
                 var to = details.getDateTo().Date + CheckOutTime.ToTimeSpan();
 
-                return from <= now && now <= to && details.status == ReservationStatusType.Accepted;
+                return from <= now && now <= to; //&& details.status == ReservationStatusType.Accepted;
             }
         }
 
