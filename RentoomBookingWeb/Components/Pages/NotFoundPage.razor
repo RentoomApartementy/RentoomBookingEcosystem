@@ -4,6 +4,7 @@
 @using RentoomBookingWeb.Components.Enums
 @using RentoomBookingWeb.Components.Shared
 @using RentoomBookingWeb.Services
+@using Microsoft.AspNetCore.WebUtilities
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer
 @inject NavigationManager Navigation
 @inject GoogleAnalyticsService GoogleAnalytics
@@ -81,7 +82,13 @@
     private int _secondsRemaining = AutoRedirectDelaySeconds;
     private bool _showRedirectPopup = true;
     private bool _redirectTriggered;
+    private string? _reason;
     private CancellationTokenSource? _redirectCts;
+
+    protected override void OnInitialized()
+    {
+        ReadReasonFromQuery();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -91,7 +98,10 @@
         }
 
         await TrackNotFoundEventAsync("NotFoundPageDisplayed");
-        StartAutoRedirectCountdown();
+        if (ShouldAutoRedirect())
+        {
+            StartAutoRedirectCountdown();
+        }
     }
 
     private void StartAutoRedirectCountdown()
@@ -133,7 +143,7 @@
         _redirectTriggered = true;
         _redirectCts?.Cancel();
         await TrackNotFoundEventAsync(eventName);
-        Navigation.NavigateTo("/apartamenty", forceLoad: true);
+        Navigation.NavigateTo(GetRedirectTargetPath(), forceLoad: true);
     }
 
     private async Task TrackNotFoundEventAsync(string eventName)
@@ -142,8 +152,9 @@
         var aiProperties = new Dictionary<string, string?>
         {
             ["Path"] = path,
-            ["TargetPath"] = "/apartamenty",
-            ["Language"] = System.Globalization.CultureInfo.CurrentUICulture.Name
+            ["TargetPath"] = GetRedirectTargetPath(),
+            ["Language"] = System.Globalization.CultureInfo.CurrentUICulture.Name,
+            ["Reason"] = _reason
         };
 
         WorkflowTelemetry.TrackEvent(eventName, aiProperties);
@@ -153,9 +164,36 @@
             new Dictionary<string, object?>
             {
                 ["path"] = path,
-                ["target_path"] = "/apartamenty",
-                ["language"] = System.Globalization.CultureInfo.CurrentUICulture.Name
+                ["target_path"] = GetRedirectTargetPath(),
+                ["language"] = System.Globalization.CultureInfo.CurrentUICulture.Name,
+                ["reason"] = _reason
             });
+    }
+
+    private void ReadReasonFromQuery()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+
+        if (query.TryGetValue("reason", out var reason))
+        {
+            _reason = reason.ToString();
+        }
+    }
+
+    private bool IsReservationCanceledReason()
+    {
+        return string.Equals(_reason, "reservation-canceled", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool ShouldAutoRedirect()
+    {
+        return !IsReservationCanceledReason();
+    }
+
+    private string GetRedirectTargetPath()
+    {
+        return "/apartamenty";
     }
 
     private bool IsEnglish()
@@ -168,6 +206,13 @@
 
     private string GetPopupTitle()
     {
+        if (IsReservationCanceledReason())
+        {
+            return IsEnglish()
+                ? "Reservation canceled"
+                : "Rezerwacja została anulowana";
+        }
+
         return IsEnglish()
             ? "This is our new portal"
             : "To jest nasz nowy portal";
@@ -175,6 +220,13 @@
 
     private string GetPopupMessage()
     {
+        if (IsReservationCanceledReason())
+        {
+            return IsEnglish()
+                ? "This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking."
+                : "Ta rezerwacja nie jest już aktywna. Jeśli nadal potrzebujesz pobytu, wróć do listy apartamentów i utwórz nową rezerwację.";
+        }
+
         return IsEnglish()
             ? "You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page."
             : "Najprawdopodobniej trafiłeś do nas ze starego przekierowania, które już nie istnieje. Za chwilę przeniesiemy Cię na stronę apartamentów.";
@@ -182,6 +234,13 @@
 
     private string GetPopupSecondaryText()
     {
+        if (IsReservationCanceledReason())
+        {
+            return IsEnglish()
+                ? "Error 404"
+                : "Błąd 404";
+        }
+
         return IsEnglish()
             ? "Error 404"
             : "Błąd 404";
@@ -189,6 +248,13 @@
 
     private string GetRedirectButtonText()
     {
+        if (IsReservationCanceledReason())
+        {
+            return IsEnglish()
+                ? "Book an apartment"
+                : "Zarezerwuj apartament";
+        }
+
         return IsEnglish()
             ? $"Book an apartment ({_secondsRemaining}s)"
             : $"Zarezerwuj apartament ({_secondsRemaining}s)";

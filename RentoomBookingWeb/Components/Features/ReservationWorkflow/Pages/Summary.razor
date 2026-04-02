@@ -272,6 +272,16 @@
                             <img src="assets/svgs/tpay.svg" alt="Tpay icon"/>
                             @Localizer["ClickToPay"]
                         </button>
+
+                        @if (ShouldShowCancelAction)
+                        {
+                            <div class="payment-secondary-action-label">@CancelActionSeparatorText</div>
+                            <button @onclick="CancelReservation"
+                                    class="button-pending button-cancel-reservation"
+                                    disabled="@_isCancellingReservation">
+                                @(_isCancellingReservation ? CancelReservationInProgressText : CancelReservationButtonText)
+                            </button>
+                        }
                     }
                     else if (@_summary.IdoStatus != "accepted")
                     {
@@ -370,6 +380,8 @@
     private bool _scrollToTopPending = true;
     private string? _paymentReturn;
     private Guid? _resumePaymentSessionGuid;
+    private bool _enableCancelAction;
+    private bool _isCancellingReservation;
     private CancellationTokenSource? _retryCountdownCts;
     private int _retryCountdownSeconds = RetryPaymentDelaySeconds;
 
@@ -384,6 +396,7 @@
     private bool ShouldShowPaymentReturnBanner => !IsPaid && !string.IsNullOrWhiteSpace(_paymentReturn);
     private bool ShouldShowRetryPaymentButton => IsPaymentInitiated || IsPaymentFailed;
     private bool IsRetryPaymentDisabled => _retryCountdownSeconds > 0;
+    private bool ShouldShowCancelAction => _enableCancelAction && ShouldShowTermsAndPayment && !IsPaid;
     private bool ShouldShowTermsAndPayment => (string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
                                               || string.Equals(_summary?.PaymentStatus, "None", StringComparison.OrdinalIgnoreCase)
                                               || ShouldResumeInitiatedPayment)
@@ -397,6 +410,7 @@
         _staywellQrDataUri = GenerateStaywellQrDataUri();
         ReadPaymentReturnFromQuery();
         ReadResumePaymentSessionFromQuery();
+        ReadEnableActionFromQuery();
 
         try
         {
@@ -455,6 +469,30 @@
                 });
         }
     }
+
+    private async Task CancelReservation()
+    {
+        if (_isCancellingReservation)
+        {
+            return;
+        }
+
+        try
+        {
+            _isCancellingReservation = true;
+            _error = null;
+            await ReservationWorkflowService.CancelReservationAsync(ReservationTokenGuid);
+            Navigation.NavigateTo("/404?reason=reservation-canceled", forceLoad: true);
+        }
+        catch (Exception)
+        {
+            _error = CancelReservationErrorText;
+        }
+        finally
+        {
+            _isCancellingReservation = false;
+        }
+    }
     
     private void GoToClientInfo()
     {
@@ -492,6 +530,13 @@
     private async Task RefreshSummaryAsync()
     {
         _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+
+        if (string.Equals(_summary?.IdoStatus, "canceled", StringComparison.OrdinalIgnoreCase))
+        {
+            Navigation.NavigateTo("/404?reason=reservation-canceled", forceLoad: true);
+            return;
+        }
+
         _error = null;
         if (_summary?.StartRequest?.ObjectId != null)
         {
@@ -747,6 +792,17 @@
         }
     }
 
+    private void ReadEnableActionFromQuery()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+
+        if (query.TryGetValue("enableaction", out var enableAction))
+        {
+            _enableCancelAction = string.Equals(enableAction.ToString(), "cancel", StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
     private static bool TryParsePaymentSessionQueryValue(
         Dictionary<string, Microsoft.Extensions.Primitives.StringValues> query,
         string key,
@@ -801,6 +857,20 @@
         IsEnglishCulture()
             ? "Click to manage your reservation in Rentoom StayWell"
             : "Kliknij aby zarządzać rezerwacją w Rentoom StayWell";
+
+    private string CancelActionSeparatorText =>
+        IsEnglishCulture() ? "Or" : "Lub";
+
+    private string CancelReservationButtonText =>
+        IsEnglishCulture() ? "Cancel reservation" : "Anuluj rezerwację";
+
+    private string CancelReservationInProgressText =>
+        IsEnglishCulture() ? "Cancelling..." : "Anulowanie...";
+
+    private string CancelReservationErrorText =>
+        IsEnglishCulture()
+            ? "An error occurred while cancelling the reservation. Please try again."
+            : "Wystąpił błąd podczas anulowania rezerwacji. Spróbuj ponownie.";
 
     private string RetryPaymentButtonText =>
         IsRetryPaymentDisabled
