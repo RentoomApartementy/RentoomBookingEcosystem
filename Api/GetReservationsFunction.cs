@@ -150,7 +150,7 @@ public class GetReservationsFunction
             var resStatus = ret.Reservation?.ReservationDetails?.status;
 
 
-            if (resStatus != ReservationStatusType.Accepted && resStatus != ReservationStatusType.Canceled)
+            if (resStatus != ReservationStatusType.Accepted && resStatus != ReservationStatusType.InProgress && resStatus != ReservationStatusType.Canceled)
             {
                 res.StatusCode = System.Net.HttpStatusCode.UnprocessableContent;
                 await res.WriteStringAsync($"Reservation with token {token} is not accessible (Status: {resStatus}).");
