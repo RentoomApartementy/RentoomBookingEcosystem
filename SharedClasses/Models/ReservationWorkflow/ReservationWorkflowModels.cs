@@ -116,6 +116,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
 
         //  public List<TermsAndConditionsAcceptanceInfo> {get;set;}
         public string? PaymentRedirectUrl { get; set; }
+        public string? PaymentInsideRentoomRedirectUrl { get; set; }
         public string? ProviderTransactionUid { get; set; }
 
         public decimal PaymentUpsellsTotal { get; set; }
@@ -214,6 +215,20 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
         public string? IdoStatus { get; set; }
         public string UpdateReason { get; set; } = "Imported reservation synchronized";
+    }
+
+    public class ReservationStatusSyncResultDto
+    {
+        public Guid ReservationGuid { get; set; }
+        public int? IdoReservationId { get; set; }
+        public string? PreviousIdoStatus { get; set; }
+        public string? CurrentIdoStatus { get; set; }
+        public string? PreviousPaymentStatus { get; set; }
+        public string? CurrentPaymentStatus { get; set; }
+        public bool TpayChecked { get; set; }
+        public bool TpayFinalStatusApplied { get; set; }
+        public bool BitrixUpdated { get; set; }
+        public string? Warning { get; set; }
     }
 
 

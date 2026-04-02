@@ -21,5 +21,10 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         {
             return await _repository.GetTermByIdAsync(id, cultureName);
         }
+
+        public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(Guid reservationGuid, string? cultureName = null)
+        {
+            return await _repository.GetAgreedTermsByReservationAsync(reservationGuid, cultureName);
+        }
     }
 }

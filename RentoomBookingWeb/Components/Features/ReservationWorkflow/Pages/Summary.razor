@@ -159,7 +159,7 @@
 
                        
                     }
-                    else if (IsPaymentInitiated)
+                    else if (IsPaymentInitiated && !ShouldShowTermsAndPayment)
                     {
                         <div class="status-box info-bg">
                             <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
@@ -369,6 +369,7 @@
     private string? _emailError;
     private bool _scrollToTopPending = true;
     private string? _paymentReturn;
+    private Guid? _resumePaymentSessionGuid;
     private CancellationTokenSource? _retryCountdownCts;
     private int _retryCountdownSeconds = RetryPaymentDelaySeconds;
 
@@ -379,13 +380,14 @@
     private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentFailed => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentReturnFailed => string.Equals(_paymentReturn, "failed", StringComparison.OrdinalIgnoreCase);
+    private bool ShouldResumeInitiatedPayment => IsPaymentInitiated && _resumePaymentSessionGuid.HasValue;
     private bool ShouldShowPaymentReturnBanner => !IsPaid && !string.IsNullOrWhiteSpace(_paymentReturn);
     private bool ShouldShowRetryPaymentButton => IsPaymentInitiated || IsPaymentFailed;
     private bool IsRetryPaymentDisabled => _retryCountdownSeconds > 0;
     private bool ShouldShowTermsAndPayment => (string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
-                                              || string.Equals(_summary?.PaymentStatus, "None", StringComparison.OrdinalIgnoreCase))
+                                              || string.Equals(_summary?.PaymentStatus, "None", StringComparison.OrdinalIgnoreCase)
+                                              || ShouldResumeInitiatedPayment)
                                               && !IsPaid
-                                              && !IsPaymentInitiated
                                               && !IsPaymentFailed;
     
     private string? staywellLink => BuildStaywellLink();
@@ -394,6 +396,7 @@
     {
         _staywellQrDataUri = GenerateStaywellQrDataUri();
         ReadPaymentReturnFromQuery();
+        ReadResumePaymentSessionFromQuery();
 
         try
         {
@@ -732,6 +735,33 @@
         }
     }
 
+    private void ReadResumePaymentSessionFromQuery()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+
+        if (TryParsePaymentSessionQueryValue(query, "payment_session", out var paymentSessionGuid)
+            || TryParsePaymentSessionQueryValue(query, "payment_sessions", out paymentSessionGuid))
+        {
+            _resumePaymentSessionGuid = paymentSessionGuid;
+        }
+    }
+
+    private static bool TryParsePaymentSessionQueryValue(
+        Dictionary<string, Microsoft.Extensions.Primitives.StringValues> query,
+        string key,
+        out Guid paymentSessionGuid)
+    {
+        paymentSessionGuid = Guid.Empty;
+
+        if (!query.TryGetValue(key, out var rawValue))
+        {
+            return false;
+        }
+
+        return Guid.TryParse(rawValue.ToString(), out paymentSessionGuid);
+    }
+
     private string PaymentReturnBannerTitle =>
         IsEnglishCulture()
             ? (IsPaymentReturnFailed ? "Payment was not completed" : "We could not confirm the payment yet")
@@ -793,6 +823,15 @@
             _isTermsLoading = true;
             _termsSources = await TermsService.GetTermsForDisplayAsync(CultureInfo.CurrentUICulture.Name, onlyRequiredForWorkflow: true);
             _userSelections = _termsSources.ToDictionary(t => t.Id, _ => false);
+
+            var agreedTerms = await TermsService.GetAgreedTermsByReservationAsync(ReservationTokenGuid, CultureInfo.CurrentUICulture.Name);
+            foreach (var agreedTerm in agreedTerms)
+            {
+                if (_userSelections.ContainsKey(agreedTerm.TermsSourceId))
+                {
+                    _userSelections[agreedTerm.TermsSourceId] = agreedTerm.IsAccepted;
+                }
+            }
         }
         finally 
         {
