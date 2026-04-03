@@ -586,7 +586,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 return;
             }
 
-            var paymentRetryLink = BuildPaymentRetryLink(record.ReservationGuid, paymentSessionGuid);
+            var paymentRetryLink = BuildPaymentRetryLink(record.ReservationGuid, paymentSessionGuid, record.Provider);
             if (string.IsNullOrWhiteSpace(paymentRetryLink))
             {
                 return;
@@ -1251,14 +1251,19 @@ private static TimeZoneInfo GetWarsawTimeZone()
             return baseUrl.Replace("{resToken}", resToken).TrimEnd('/');
         }
 
-        private string? BuildPaymentRetryLink(Guid reservationGuid, Guid? paymentSessionGuid, bool cancelaction = false)
+        private string? BuildPaymentRetryLink(Guid reservationGuid, Guid? paymentSessionGuid, string? reservationSource, bool cancelaction = false)
         {
+           if (reservationSource != null && !reservationSource.Contains("api", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return string.Empty;
+            }
+
             var baseUrl =
-                Environment.GetEnvironmentVariable("Tpay__RentoomSiteBaseUrl") ??
-                Environment.GetEnvironmentVariable("Tpay:RentoomSiteBaseUrl") ??
-                Environment.GetEnvironmentVariable("RentoomSiteBaseUrl") ??
-                _configuration["Tpay:RentoomSiteBaseUrl"] ??
-                _configuration["RentoomSiteBaseUrl"];
+                Environment.GetEnvironmentVariable("Tpay__RetryPaymentRentoomSiteBaseUrl") ??
+                Environment.GetEnvironmentVariable("Tpay:RetryPaymentRentoomSiteBaseUrl") ??
+                Environment.GetEnvironmentVariable("RetryPaymentRentoomSiteBaseUrl") ??
+                _configuration["Tpay:RetryPaymentRentoomSiteBaseUrl"] ??
+                _configuration["RetryPaymentRentoomSiteBaseUrl"];
 
             if (string.IsNullOrWhiteSpace(baseUrl))
             {
@@ -1523,7 +1528,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     [BitrixReservationSourceFieldName] = reservationSourceValue,
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                     [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
-                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, cancelaction: true)
+                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue,cancelaction: true)
 
                 };
                 AddBitrixLocationFields(customFields, apartmentInfo, apartmentItemLocalSettings);
@@ -1624,7 +1629,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             };
             AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
             
-                fields["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid,cancelaction:true);
+                fields["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue,cancelaction: true);
 
             if (record.State.PaymentGrandTotal >0)
             {
