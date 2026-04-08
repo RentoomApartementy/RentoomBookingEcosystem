@@ -29,6 +29,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public FromToDateRange? fromDateRange { get; set; }
         public FromToDateRange? toDateRange { get; set; }
         public FromToDateRange? betweenDateRange { get; set; }
+        public FromToDateRange? addDateRange { get; set; }
         public string[]? status { get; set; }
         public string? modificationStatus { get; set; }
         public int[]? objectsIds { get; set; }

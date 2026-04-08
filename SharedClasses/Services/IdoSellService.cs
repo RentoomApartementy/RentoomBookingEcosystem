@@ -227,6 +227,75 @@ namespace RentoomBooking.SharedClasses.Services
 
             return reservationMap;
         }
+
+        public async Task<IReadOnlyList<Reservation>> FetchReservationByAddDateRangeFromIdoSellAsync(
+            DateTime startDate,
+            DateTime endDate,
+            CancellationToken cancellationToken = default)
+        {
+            if (endDate.Date < startDate.Date)
+            {
+                throw new ArgumentException("endDate must be greater than or equal to startDate.");
+            }
+
+            const int pageSize = 100;
+            var reservations = new List<Reservation>();
+            var uniqueReservationIds = new HashSet<int>();
+            var currentPage = 1;
+
+            while (true)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var request = new ReservationRequestIDOSellAPI
+                {
+                    authenticate = _idoConnect.AuthObjectIdo(),
+                    result = new ResultSetup
+                    {
+                        page = currentPage,
+                        number = pageSize
+                    },
+                    paramsSearch = new ReservationsParamsSearch
+                    {
+                        addDateRange = new FromToDateRange
+                        {
+                            startDate = startDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
+                            endDate = endDate.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)
+                        }
+                    }
+                };
+
+                var response = await _idoConnect.PostAsync<ReservationRequestIDOSellAPI, ReservationResponseFromIdoSellAPI>(
+                    ReservationsGetEndpoint,
+                    request,
+                    cancellationToken);
+
+                if (response?.result?.errors != null)
+                {
+                    throw new ApplicationException(response.result.errors.FaultString);
+                }
+
+                var pageReservations = response?.result?.Reservations ?? new List<Reservation>();
+
+                foreach (var reservation in pageReservations)
+                {
+                    if (reservation.id > 0 && uniqueReservationIds.Add(reservation.id))
+                    {
+                        reservations.Add(reservation);
+                    }
+                }
+
+                var pageAll = response?.result?.Result?.pageAll ?? currentPage;
+                if (currentPage >= pageAll || pageReservations.Count == 0)
+                {
+                    break;
+                }
+
+                currentPage++;
+            }
+
+            return reservations;
+        }
         //public Task<PagedResult<ApartmentObject>> QueryApartmentsAsync(string? continuationToken = null, int pageSize = 50) => _bookingDatabase.QueryApartmentsAsync(continuationToken, pageSize);
 
         /* public async Task<List<ObjectMedium>?> FetchObjectMediaFromIdoSellAsync(int objectId, CancellationToken cancellationToken = default)
