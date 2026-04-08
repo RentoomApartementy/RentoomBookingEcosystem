@@ -17,17 +17,41 @@ internal static class BookingComEmailMetadataHelper
             return null;
         }
 
+        var options = RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
+
+        // 1. Najbardziej jednoznaczne przypadki:
+        //    "nr 33076", "no 33076", "no. 33076"
         var match = Regex.Match(
             subject,
-            @"\b(?:nr|no\.)\s+(?<id>\d+)\s*(?=\()",
-            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            @"\b(?:nr|no\.?)\s+(?<id>\d+)\b",
+            options);
 
+        // 2. "rezerwacja 33076"
         if (!match.Success)
         {
             match = Regex.Match(
                 subject,
-                @"\b(?:nr|no\.)\s+(?<id>\d+)\b",
-                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+                @"\brezerwacj[aię]\s+(?<id>\d+)\b",
+                options);
+        }
+
+        // 3. "zameldowaniu 33076" / "zameldowaniu  33076"
+        if (!match.Success)
+        {
+            match = Regex.Match(
+                subject,
+                @"\bzameldowani[ua]\s+(?<id>\d+)\b",
+                options);
+        }
+
+        // 4. Sam numer przed datą w nawiasie:
+        //    "33076 (08.04.2026)"
+        if (!match.Success)
+        {
+            match = Regex.Match(
+                subject,
+                @"\b(?<id>\d+)\s*(?=\(\d{2}\.\d{2}\.\d{4}\))",
+                options);
         }
 
         return match.Success && int.TryParse(match.Groups["id"].Value, out var reservationId)
