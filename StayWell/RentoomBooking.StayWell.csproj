@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+	<HybridGlobalization>false</HybridGlobalization>
+	<WasmIcuDataFileName>icudt_EFIGS.dat</WasmIcuDataFileName>
   </PropertyGroup>
 
   <ItemGroup>

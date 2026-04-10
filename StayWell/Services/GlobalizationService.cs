@@ -23,6 +23,16 @@ namespace RentoomBooking.StayWell.Services
             if (CurrentCulture.Name == culture.Name)
                 return;
 
+            ApplyCulture(culture);
+        }
+        public void ForceSetCulture(string cultureName)
+        {
+            var culture = new CultureInfo(cultureName);
+            ApplyCulture(culture);
+        }
+
+        private void ApplyCulture(CultureInfo culture)
+        {
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;
             CultureInfo.DefaultThreadCurrentCulture = culture;
@@ -34,7 +44,7 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task SetCultureWithPreferenceAsync(string cultureName)
         {
-            SetCulture(cultureName);
+            ForceSetCulture(cultureName);
             await SavePreferenceAsync(cultureName);
         }
         public async Task<string?> LoadPreferenceAsync()
