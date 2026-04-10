@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CodeNotAvailable" xml:space="preserve">
-    <value>Code not available. Access will be available from the check-in date.</value>
+    <value>Your code will be available from {0} on the check-in day.</value>
   </data>
   <data name="CheckingLock" xml:space="preserve">
     <value>Checking lock availability...</value>
@@ -202,7 +202,7 @@ until you hear the lock engage.
     <value>spinning lock</value>
   </data>
   <data name="ReservationNotActive" xml:space="preserve">
-    <value>Your reservation is not active yet. Access will be available from the check-in date.</value>
+    <value>Remote access will be available from {0} on the check-in day.</value>
   </data>
   <data name="InstructionOpenTitle" xml:space="preserve">
     <value>How to open the door</value>
@@ -251,5 +251,41 @@ Just close the door behind you.</value>
   </data>
   <data name="InstructionPanelCloseLabel" xml:space="preserve">
     <value>How to close - Panel lock</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Previous codes</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Original code</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Generate new code</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>New code in {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Generating... {0}s</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Valid: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Valid from: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Valid until: {0}</value>
+  </data>
+  <data name="CylinderTopView" xml:space="preserve">
+    <value>top view</value>
+  </data>
+  <data name="GenerateAvailableFrom" xml:space="preserve">
+    <value>New code will be available from {0}.</value>
+  </data>
+  <data name="GenerateSameHourBlocked" xml:space="preserve">
+    <value>A code was already generated this hour. Next generation will be available from {0}.</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>New access code generated successfully.</value>
   </data>
 </root>
