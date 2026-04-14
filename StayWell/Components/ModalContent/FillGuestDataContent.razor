@@ -8,44 +8,56 @@
 @inject Services.ModalService ModalService
 @inject Services.ToastService ToastService
 
-<div class="content-modal-guests">
-    <p class="instruction-text">
+<div class="guest-modal">
+    <p class="guest-modal-subtitle">
         @Localizer["gcText"]
     </p>
 
     @if (Guests != null)
     {
-        <div class="guests-scroll-container">
+        <div class="guest-list">
             @for (int i = 0; i < Guests.Count; i++)
             {
                 int index = i;
-                <div class="guest-block">
-                    <div class="guest-separator">
-                        <span>@Localizer["Guest"] @(index + 1)</span>
+                var guest = Guests[index];
+                var isFilled = !string.IsNullOrWhiteSpace(guest.FirstName) && !string.IsNullOrWhiteSpace(guest.LastName);
+
+                <div class="guest-card @(isFilled ? "guest-card--filled" : "")">
+                    <div class="guest-card-header">
+                        <img src="/icons/users.svg" class="guest-card-icon" alt="" />
+                        <span class="guest-card-label">@Localizer["Guest"] @(index + 1)</span>
+                        @if (isFilled)
+                        {
+                            <img src="/icons/circle-check.svg" class="guest-card-check" alt="" />
+                        }
                     </div>
 
-                    <div class="guest-inputs-row">
-                        <input class="editform-input modal-input"
-                               placeholder="@Localizer["Name"]"
-                               value="@Guests[index].FirstName"
-                               @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), true))" />
+                    <div class="guest-card-inputs">
+                        <div class="guest-input-wrapper">
+                            <label class="guest-input-label">@Localizer["Name"]</label>
+                            <input class="guest-input"
+                                   placeholder="@Localizer["Name"]"
+                                   value="@guest.FirstName"
+                                   @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), true))" />
+                        </div>
 
-                        <input class="editform-input modal-input"
-                               placeholder="@Localizer["Surname"]"
-                               value="@Guests[index].LastName"
-                               @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), false))" />
+                        <div class="guest-input-wrapper">
+                            <label class="guest-input-label">@Localizer["Surname"]</label>
+                            <input class="guest-input"
+                                   placeholder="@Localizer["Surname"]"
+                                   value="@guest.LastName"
+                                   @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), false))" />
+                        </div>
                     </div>
                 </div>
             }
         </div>
     }
 
-    <div class="modal-actions">
-        <Button Disabled="@(!IsValid)" OnClick="@Confirm">
-            <RenderFragment>
-                <span>@Localizer["Accept2"]</span>
-            </RenderFragment>
-        </Button>
+    <div class="guest-modal-footer">
+        <button class="guest-confirm-btn" disabled="@(!IsValid)" @onclick="@Confirm">
+            @Localizer["Accept2"]
+        </button>
     </div>
 </div>
 

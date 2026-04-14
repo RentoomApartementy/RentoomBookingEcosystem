@@ -1,165 +1,159 @@
-﻿/* --- GŁÓWNY KONTENER MODALA --- */
-.content-modal-guests {
+﻿.guest-modal {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-height: 80vh; /* Zapobiega wyjściu poza ekran przy dużej liczbie gości */
 }
 
-.instruction-text {
+.guest-modal-subtitle {
     text-align: center;
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-    padding: 0 10px;
+    color: #777;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    padding: 0 4px;
 }
 
-/* --- PRZEWIJANA LISTA GOŚCI --- */
-.guests-scroll-container {
-    overflow-y: auto; /* Scrollowanie jeśli dużo gości */
-    padding: 5px 10px; /* Margines na cienie inputów */
+/* Scrollable guest list */
+.guest-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 12px;
+    max-height: 55vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 2px 2px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #ddd transparent;
 }
 
-    /* Pasek scrolla ładniejszy (opcjonalnie) */
-    .guests-scroll-container::-webkit-scrollbar {
-        width: 6px;
-    }
+.guest-list::-webkit-scrollbar {
+    width: 4px;
+}
 
-    .guests-scroll-container::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        border-radius: 4px;
-    }
+.guest-list::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 4px;
+}
 
-/* --- NAGŁÓWEK "-- GOŚĆ X --" --- */
-.guest-separator {
+/* Individual guest card */
+.guest-card {
+    border: 1.5px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.015);
+    transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.guest-card--filled {
+    border-color: rgba(40, 167, 69, 0.25);
+    background: rgba(40, 167, 69, 0.03);
+}
+
+.guest-card-header {
     display: flex;
     align-items: center;
-    width: 100%;
-    color: #888;
-    font-weight: 600;
-    font-size: 0.85rem;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.guest-card-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.45;
+}
+
+.guest-card-label {
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
+    letter-spacing: 0.8px;
+    color: #888;
+    flex: 1;
 }
 
-    .guest-separator::before,
-    .guest-separator::after {
-        content: "";
-        flex: 1;
-        border-bottom: 1px solid #e0e0e0;
-        margin: 0 10px;
-    }
+.guest-card-check {
+    width: 18px;
+    height: 18px;
+    opacity: 0.5;
+    filter: hue-rotate(90deg) saturate(1.5);
+}
 
-/* --- UKŁAD INPUTÓW (Flexbox) --- */
-.guest-inputs-row {
+/* Input layout */
+.guest-card-inputs {
     display: flex;
-    gap: 10px; /* Odstęp między imieniem a nazwiskiem */
+    gap: 10px;
 }
 
-/* Nadpisanie stylu inputa specjalnie dla modala */
-.modal-input {
-    width: 100% !important; /* Wypełnia po połowie rzędu */
-    min-width: 0 !important; /* Zapobiega rozpychaniu */
-    margin-bottom: 0 !important; /* Usuwamy dolny margines z głównego stylu */
-    padding: 10px 15px; /* Nieco mniejszy padding niż na głównej stronie */
-    font-size: 0.95rem;
-    border-radius: 15px;
-    border: 1px solid #e0e0e0;
-
+.guest-input-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
 }
 
-/* --- PRZYCISK ZAPISZ --- */
-.modal-actions {
+.guest-input-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #aaa;
+    margin-left: 4px;
+}
+
+.guest-input {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    padding: 0 14px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: #222;
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+    transition: border-color 0.2s ease;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+}
+
+.guest-input:focus {
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+.guest-input::placeholder {
+    color: #ccc;
+    font-weight: 400;
+}
+
+/* Confirm button */
+.guest-modal-footer {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
     display: flex;
     justify-content: center;
-    padding-top: 10px;
-    border-top: 1px solid #f0f0f0;
 }
 
-.save-btn {
-    background-color: #1E4D40; /* Butelkowa zieleń StayWell */
-    color: white;
+.guest-confirm-btn {
+    width: 100%;
+    padding: 14px 24px;
     border: none;
-    border-radius: 30px;
-    padding: 12px 40px;
+    border-radius: 14px;
+    background: #1E4D40;
+    color: white;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s, opacity 0.3s;
-    box-shadow: 0 4px 10px rgba(30, 77, 64, 0.2);
+    transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
-    .save-btn:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-        box-shadow: none;
-        opacity: 0.7;
-    }
-
-    .save-btn:hover:not(:disabled) {
-        background-color: #163a30;
-    }
-.modal-scroll-list {
-    width: 100%;
-    max-height: 60vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0 5px; /* Margines na focus outline/cienie */
+.guest-confirm-btn:active:not(:disabled) {
+    background: #163a30;
+    transform: scale(0.98);
 }
 
-/* Wiersz trzymający dwa inputy obok siebie */
-.modal-guest-row {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    width: 100%;
-    margin-bottom: 5px;
+.guest-confirm-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
-
-/* Nadpisanie Twojej klasy .editform-input TYLKO w modalu */
-.modal-half-input {
-    /* Resetujemy szerokości z głównego CSS */
-    width: auto !important;
-    min-width: 0 !important;
-    /* Inputy dzielą się miejscem po równo */
-    flex: 1;
-    /* Drobna korekta marginesów wewnątrz listy */
-    margin-bottom: 10px !important;
-}
-
-/* Przycisk zapisu (pasujący do zieleni StayWell) */
-.modal-actions {
-    margin-top: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.save-btn {
-    background-color: #1E4D40; /* Twoja zieleń */
-    color: white;
-    border: none;
-    border-radius: 30px;
-    padding: 12px 50px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(30, 77, 64, 0.2);
-    transition: all 0.2s;
-}
-
-    .save-btn:disabled {
-        background-color: #ccc;
-        box-shadow: none;
-        cursor: not-allowed;
-    }
-
-    .save-btn:hover:not(:disabled) {
-        background-color: #163a30;
-        transform: scale(1.02);
-    }
