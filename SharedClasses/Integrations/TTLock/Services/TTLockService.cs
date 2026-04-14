@@ -59,6 +59,36 @@ namespace RentoomBooking.SharedClasses.Integrations.TTLock
             return result;
         }
 
+        public async Task<TTLockPasscodeResponse> GetPasscodeAsync(
+            int lockId,
+            long startDateMs,
+            long endDateMs,
+            string? passcodeName = null)
+        {
+            var token = await GetTokenAsync();
+            var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            var fields = new Dictionary<string, string>
+            {
+                { "clientId",         _settings.ClientId },
+                { "accessToken",      token },
+                { "lockId",           lockId.ToString() },
+                { "keyboardPwdType",  ((int)TTLockKeyboardPwdType.Period).ToString() },
+                { "keyboardPwdName",  passcodeName ?? "StayWell" },
+                { "startDate",        startDateMs.ToString() },
+                { "endDate",          endDateMs.ToString() },
+                { "date",             now.ToString() },
+            };
+
+            var resp = await _http.PostAsync(
+                $"{_settings.ApiBaseUrl}/v3/keyboardPwd/get",
+                new FormUrlEncodedContent(fields));
+
+            var content = await resp.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<TTLockPasscodeResponse>(content)
+                   ?? new TTLockPasscodeResponse { ErrCode = -1 };
+        }
+
         private async Task<T> SendGetAsync<T>(string endpoint, int lockId) where T : TTLockBaseResponse
         {
             var token = await GetTokenAsync();

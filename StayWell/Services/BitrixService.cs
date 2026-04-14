@@ -1,4 +1,5 @@
 ﻿using Microsoft.JSInterop;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace RentoomBooking.StayWell.Services;
@@ -19,7 +20,7 @@ public class BitrixService
 
     public async Task EnableLoaderAsync(string loaderUrl)
     {
-        await _js.InvokeVoidAsync("stayWellBitrixEnableLoader", loaderUrl);
+        await _js.InvokeVoidAsync("bitrixInterop.enableLoader", loaderUrl);
     }
 
     public async Task OpenChatAsync(BitrixGuestData data)
@@ -46,7 +47,8 @@ public class BitrixService
             new { GRID = gridItems }
         };
 
-        await _js.InvokeVoidAsync("bitrixInterop.openChat", payload);
+        var json = JsonSerializer.Serialize(payload);
+        await _js.InvokeVoidAsync("bitrixInterop.openChat", json);
     }
 
     public async Task DestroyAsync()
