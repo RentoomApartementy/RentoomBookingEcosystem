@@ -4,9 +4,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <BlazorWebAssemblyLoadAllGlobalizationData>True</BlazorWebAssemblyLoadAllGlobalizationData>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
-	<HybridGlobalization>false</HybridGlobalization>
-	<WasmIcuDataFileName>icudt_EFIGS.dat</WasmIcuDataFileName>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -49,6 +50,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>OpenApartmentPage.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Pages\PurchasedUpsellPage.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PurchasedUpsellPage.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   
@@ -69,6 +75,62 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>OpenApartmentPage.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Pages\AboutReservationPage.pl-PL.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutReservationPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\Pages\HomePage.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HomePage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\HomePage.pl-PL.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HomePage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\Pages\ManageStayPage.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ManageStayPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\Pages\OpenApartmentPage.pl-PL.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OpenApartmentPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\Pages\PurchasedUpsellPage.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchasedUpsellPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\PurchasedUpsellPage.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchasedUpsellPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\PurchasedUpsellPage.en-us.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchasedUpsellPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\PurchasedUpsellPage.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchasedUpsellPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Pages\PurchasedUpsell.pl-PL.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PurchasedUpsellPage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\Pages\PrearrivalPage.resx" />
+    <EmbeddedResource Update="Resources\Pages\PrearrivalPage.pl-PL.resx" />
+
+    <EmbeddedResource Update="Resources\Pages\InstructionsPage.resx" />
+    <EmbeddedResource Update="Resources\Pages\InstructionsPage.pl-PL.resx" />
+
+    <EmbeddedResource Update="Resources\Pages\Upsells\UpsellsCartPage.resx" />
+    <EmbeddedResource Update="Resources\Pages\Upsells\UpsellsCartPage.pl-PL.resx" />
   </ItemGroup>
 
 </Project>

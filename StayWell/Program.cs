@@ -54,7 +54,7 @@ namespace RentoomBooking.StayWell
                     if (builder.HostEnvironment.IsDevelopment())
                     {
                         // Local dev:
-                        c.BaseAddress = new Uri("https://localhost:7238/api/");
+                        c.BaseAddress = new Uri("http://localhost:7238/api/");
                     }
                     else
                     {
@@ -83,6 +83,15 @@ namespace RentoomBooking.StayWell
             var env = builder.Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"];
             logger.LogWarning("FOUND ENV: {env}", env);
 
+            // Set culture BEFORE any Blazor component renders.
+            // Without this, IStringLocalizer resolves resources with the default (en-US)
+            // culture on the very first render and Safari/iOS never recovers.
+            var js = host.Services.GetRequiredService<Microsoft.JSInterop.IJSRuntime>();
+            var savedCulture = await js.InvokeAsync<string>("blazorCulture.get", System.Array.Empty<object>());
+            var cultureName = string.IsNullOrWhiteSpace(savedCulture) ? "en-US" : savedCulture;
+            var startupCulture = new System.Globalization.CultureInfo(cultureName);
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = startupCulture;
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = startupCulture;
 
             await host.RunAsync();
         }
