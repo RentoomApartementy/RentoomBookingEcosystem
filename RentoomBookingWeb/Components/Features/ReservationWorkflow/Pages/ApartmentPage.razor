@@ -191,11 +191,10 @@
                             if (_definedAddons != null)
                             {
                                 var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
-                                var fadesc = fa?.AddonDefinition.Details.FirstOrDefault(a => a.Lang == CurrentAddonLanguage);
-                                var paymentType = fa.PaymentType;
-                                        
                                 @if (fa != null)
                                 {
+                                    var fadesc = fa.AddonDefinition.Details.FirstOrDefault(a => a.Lang == CurrentAddonLanguage);
+                                    var paymentType = fa.PaymentType;
                                     <div class="addon-item">
                                         <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
                                             <div class="addon-info-col">
