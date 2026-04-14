@@ -203,9 +203,15 @@ namespace RentoomBooking.StayWell.Services
                 cacheNull: true);
         }
 
-        public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync()
+        public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync(string? language = null)
         {
-            var response = await _http.GetAsync("db/terms/display");
+            var url = "db/terms/get-available";
+            if (!string.IsNullOrWhiteSpace(language))
+            {
+                url += $"?lang={Uri.EscapeDataString(language)}";
+            }
+
+            var response = await _http.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
                 return [];
