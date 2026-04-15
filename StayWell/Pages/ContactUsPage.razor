@@ -57,7 +57,8 @@
         var client = ReservationState.CurrentReservation.Reservation.Client;
         var guestData = new Services.BitrixGuestData
         {
-            Name = $"{client.FirstName} {client.LastName}",
+            FirstName = client.FirstName,
+            LastName = client.LastName,
             Phone = client.Phone,
             Email = client.Email,
             ExternalId = client.Id.ToString()
