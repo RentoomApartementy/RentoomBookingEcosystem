@@ -879,9 +879,43 @@
                                                                 _reservationPricingContext.TotalGuests,
                                                                 quantity: selected.Quantity);
             }
+
+
+
             return total;
         }
     }
+
+
+    private decimal TotalMandatoryAddonsPrice
+    {
+        get
+        {
+            decimal total = 0;
+            if (_reservationPricingContext is null || _selectedAddons == null || _definedAddons == null) return 0m;
+
+
+            foreach (var addon in _mandatoryAddons)
+            {
+                var def = _definedAddons.FirstOrDefault(d => d.IdoBookingId == addon.AddonId);
+                var details = def?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == "PL");
+
+                if (details == null) continue;
+
+                total += AddonPricingCalculator.CalculateTotal(
+                                                                addon.PaymentType,
+                                                                (decimal)addon.Price,
+                                                                _reservationPricingContext.Nights,
+                                                                _reservationPricingContext.TotalGuests,
+                                                                quantity: addon.Quantity);
+            }
+
+
+
+            return total;
+        }
+    }
+
 
     private decimal TotalUpsellsPrice
     {
@@ -913,6 +947,7 @@
             return total;
         }
     }
+
 
     private const string OfferTypeRefundable = "refundable";
     private const string OfferTypeNonrefundable = "nonrefundable";
@@ -1653,6 +1688,7 @@
             MandatoryAddons = _mandatoryAddons,
             SelectedUpsells = _selectedUpsells,
             SelectedAddonsTotalPrice = TotalAddonsPrice,
+            MandatoryAddonsTotalPrice = TotalMandatoryAddonsPrice,
             SelectedUpsellsTotalPrice = TotalUpsellsPrice
         };
 
