@@ -42,7 +42,14 @@
             </div>
             <div class="inactive-reservation-badge">
                 <img src="/icons/octagon-alert.svg" class="inactive-reservation-icon" />
-                <span>@string.Format(CultureInfo.CurrentCulture, Localizer["ReservationNotActive"], ReservationState.CheckInTime.ToString("HH:mm"))</span>
+                @if (ReservationState.IsAfterCheckOut)
+                {
+                    <span>@Localizer["ReservationEnded"]</span>
+                }
+                else
+                {
+                    <span>@string.Format(CultureInfo.CurrentCulture, Localizer["ReservationNotActive"], ReservationState.CheckInTime.ToString("HH:mm"))</span>
+                }
             </div>
         </div>
     }
@@ -126,7 +133,14 @@
             }
             else if (!ReservationState.IsCodeAvailable && !_debugMode)
             {
-                <span>@string.Format(CultureInfo.CurrentCulture, Localizer["CodeNotAvailable"], ReservationState.CodeAvailableFromTime.ToString("HH:mm"))</span>
+                @if (ReservationState.IsAfterCheckOut)
+                {
+                    <span>@Localizer["CodeNoLongerAvailable"]</span>
+                }
+                else
+                {
+                    <span>@string.Format(CultureInfo.CurrentCulture, Localizer["CodeNotAvailable"], ReservationState.CodeAvailableFromTime.ToString("HH:mm"))</span>
+                }
             }
             else
             {

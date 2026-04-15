@@ -288,4 +288,10 @@ Wystarczy zamknąć za sobą drzwi.</value>
   <data name="PasscodeGeneratedSuccess" xml:space="preserve">
     <value>Nowy kod dostępu został wygenerowany pomyślnie.</value>
   </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Twoja rezerwacja się zakończyła. Zdalne otwieranie nie jest już dostępne.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Twoja rezerwacja się zakończyła. Kod dostępu nie jest już dostępny.</value>
+  </data>
 </root>
