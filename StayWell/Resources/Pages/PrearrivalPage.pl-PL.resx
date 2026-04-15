@@ -307,4 +307,7 @@ Rental regulations in English are available at www.rentoom.pl</value>
   <data name="DontKnowYet" xml:space="preserve">
     <value>Jeszcze nie wiem</value>
   </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Tylko litery, spacje, myślniki i apostrofy</value>
+  </data>
 </root>

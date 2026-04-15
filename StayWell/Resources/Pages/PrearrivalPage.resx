@@ -303,4 +303,7 @@ or by registered letter to the correspondence address. A response will be provid
   <data name="DontKnowYet" xml:space="preserve">
     <value>I don't know yet</value>
   </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Only letters, spaces, hyphens and apostrophes</value>
+  </data>
 </root>

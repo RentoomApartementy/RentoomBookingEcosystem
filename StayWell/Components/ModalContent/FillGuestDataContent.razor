@@ -35,18 +35,26 @@
                     <div class="guest-card-inputs">
                         <div class="guest-input-wrapper">
                             <label class="guest-input-label">@Localizer["Name"]</label>
-                            <input class="guest-input"
+                            <input class="guest-input @(GetValidationClass(guest.FirstName))"
                                    placeholder="@Localizer["Name"]"
                                    value="@guest.FirstName"
                                    @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), true))" />
+                            @if (IsInvalidName(guest.FirstName))
+                            {
+                                <span class="guest-input-error">@Localizer["InvalidName"]</span>
+                            }
                         </div>
 
                         <div class="guest-input-wrapper">
                             <label class="guest-input-label">@Localizer["Surname"]</label>
-                            <input class="guest-input"
+                            <input class="guest-input @(GetValidationClass(guest.LastName))"
                                    placeholder="@Localizer["Surname"]"
                                    value="@guest.LastName"
                                    @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), false))" />
+                            @if (IsInvalidName(guest.LastName))
+                            {
+                                <span class="guest-input-error">@Localizer["InvalidName"]</span>
+                            }
                         </div>
                     </div>
                 </div>
@@ -82,7 +90,15 @@
 
     private bool IsValid => Guests != null && Guests.All(g =>
         !string.IsNullOrWhiteSpace(g.FirstName) &&
-        !string.IsNullOrWhiteSpace(g.LastName));
+        !string.IsNullOrWhiteSpace(g.LastName) &&
+        RegistrationCardGuestModel.IsValidName(g.FirstName) &&
+        RegistrationCardGuestModel.IsValidName(g.LastName));
+
+    private static bool IsInvalidName(string? name) =>
+        !string.IsNullOrEmpty(name) && !RegistrationCardGuestModel.IsValidName(name);
+
+    private static string GetValidationClass(string? name) =>
+        IsInvalidName(name) ? "guest-input--invalid" : "";
 
     private void UpdateGuest(int index, string? value, bool isFirstName)
     {
