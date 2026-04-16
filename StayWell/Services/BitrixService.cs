@@ -16,9 +16,15 @@ public class BitrixService
         await _js.InvokeVoidAsync("bitrixInterop.init");
     }
 
+    public bool IsLoaderEnabled { get; private set; }
+
+    public event Action? OnLoaderEnabled;
+
     public async Task EnableLoaderAsync(string loaderUrl)
     {
         await _js.InvokeVoidAsync("bitrixInterop.enableLoader", loaderUrl);
+        IsLoaderEnabled = true;
+        OnLoaderEnabled?.Invoke();
     }
 
     public async Task OpenChatAsync(BitrixGuestData data)
