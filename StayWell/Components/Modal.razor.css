@@ -15,8 +15,8 @@
     position: relative;
     z-index: 1060;
     background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    border-radius: 15px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
     height: auto;
     max-height: 80vh;
     min-width: 320px;
@@ -25,7 +25,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    animation: modalFadeIn 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    animation: modalFadeIn 0.3s;
 }
 
     .modal.modal-image-mode {
@@ -44,54 +44,16 @@
     background: transparent;
     padding: 0;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 .image-wrapper {
     width: 100%;
-    flex: 1;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    cursor: pointer;
 }
-
-.image-inner {
-    position: relative;
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: default;
-}
-
-.image-close-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 1100;
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    cursor: pointer;
-    color: #fff;
-    font-size: 1.6rem;
-    line-height: 1;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-    .image-close-btn:hover {
-        background: rgba(221, 0, 0, 0.6);
-    }
 
     .image-wrapper img {
         object-fit: contain;
@@ -100,17 +62,55 @@
         box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
 
+.image-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    z-index: 1100;
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+    .control-btn:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .control-btn.close-btn:hover {
+        color: #ffcccc;
+        background-color: rgba(221, 0, 0, 0.4);
+    }
+
 .modal-header {
-    padding: 18px 24px;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 1.15rem;
-    font-weight: 700;
+    padding: 16px 24px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.25rem;
+    font-weight: 600;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #fff;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    background: #ffff;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
     .modal-header p {
@@ -129,8 +129,8 @@
     color: #333;
     flex: 1;
     background: #fff;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
     overflow-y: auto;
 }
 
@@ -163,11 +163,11 @@
 @keyframes modalFadeIn {
     from {
         opacity: 0;
-        transform: translateY(30px) scale(0.97);
+        transform: translateY(-20px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
     }
 }

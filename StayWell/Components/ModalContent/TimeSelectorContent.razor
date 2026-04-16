@@ -6,85 +6,51 @@
 @inject Services.ToastService ToastService
 @inject StayWell.States.ReservationState ReservationState
 @inject IStringLocalizer<PrearrivalPage> Localizer
-@inject IJSRuntime JSRuntime
 
-<div class="time-picker-container">
-    <div class="picker-wheel-wrapper">
-        <div class="picker-highlight"></div>
-        <div class="picker-mask picker-mask-top"></div>
-        <div class="picker-mask picker-mask-bottom"></div>
-        <div class="picker-scroll" id="timePickerScroll">
-            @foreach (var option in _options)
-            {
-                <div class="picker-item">
-                    @option.Label
-                </div>
-            }
-        </div>
-    </div>
-
-    <button class="picker-confirm-btn" @onclick="ConfirmSelection">
-        @Localizer["Confirm"]
-    </button>
+<div class="content-modal">
+    <ul class="List">
+        @foreach (int h in _hours)
+        {
+            var time = new TimeSpan(h,0,0);
+            <li class="Element"
+                @onclick="()=>Select(time)">
+                @time.ToString(@"hh\:mm")
+            </li>
+        }
+        @* <li class="Element">Ciężko oszacować</li> *@
+        @* <li class="Element">Nie wiem</li> *@
+    </ul>
 </div>
 
-@code {
+@code{
     [Parameter]
     public TimeSpan? Value { get; set; }
 
     [Parameter]
     public EventCallback<TimeSpan?> ValueChanged { get; set; }
 
-    private record PickerOption(string Label, TimeSpan? Time);
-
-    private List<PickerOption> _options = new();
+    private List<int> _hours = new();
 
     protected override void OnInitialized()
     {
-        var hours = Enumerable.Range(15, 8).ToList();
+        _hours = Enumerable.Range(15, 8).ToList();
 
         if (ReservationState?.HasEarlyCheckIn == true)
         {
-            if (!hours.Contains(14))
-                hours.Insert(0, 14);
-        }
-
-        foreach (var h in hours)
-        {
-            var ts = new TimeSpan(h, 0, 0);
-            _options.Add(new PickerOption(ts.ToString(@"hh\:mm"), ts));
-        }
-
-        _options.Add(new PickerOption(Localizer["DontKnowYet"], TimeSpan.Zero));
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            var initialIndex = 0;
-            if (Value is not null && Value != TimeSpan.Zero)
+            if (!_hours.Contains(14))
             {
-                initialIndex = _options.FindIndex(o => o.Time == Value);
-                if (initialIndex < 0) initialIndex = 0;
+                _hours.Insert(0, 14);
             }
-
-            await JSRuntime.InvokeVoidAsync("WheelPicker.init", "timePickerScroll", initialIndex);
         }
     }
 
-    private async Task ConfirmSelection()
+    private async Task Select(TimeSpan? time)
     {
-        var index = await JSRuntime.InvokeAsync<int>("WheelPicker.getSelectedIndex", "timePickerScroll");
-        index = Math.Clamp(index, 0, _options.Count - 1);
-        var selected = _options[index];
-
-        await ValueChanged.InvokeAsync(selected.Time);
+        await ValueChanged.InvokeAsync(time);
         ModalService.HideModal();
-
-        var toastText = selected.Time == TimeSpan.Zero
-            ? Localizer["DontKnowYet"]
-            : $"{Localizer["YouChoseTime"]} {selected.Time}";
-        ToastService.ShowToast(toastText);
+        ToastService.ShowToast(
+            $"{Localizer["YouChoseTime"]} {time}"
+        );
     }
+
 }

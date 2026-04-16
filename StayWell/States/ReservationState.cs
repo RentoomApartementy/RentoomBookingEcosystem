@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Configuration;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.StayWell.Services;
@@ -8,7 +7,7 @@ using WorkflowModels = RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 
 namespace RentoomBooking.StayWell.States
 {
-    public class ReservationState(BackendApi backendApi, ReservationTokenService tokenService, IConfiguration configuration)
+    public class ReservationState(BackendApi backendApi, ReservationTokenService tokenService)
     {
         private const int EarlyCheckInAddonId = 40;
         private const int LateCheckOutAddonId = 41;
@@ -18,24 +17,12 @@ namespace RentoomBooking.StayWell.States
         private static readonly TimeOnly EarlyCheckInTime = new(14, 0);   // 15:00 - 1h
         private static readonly TimeOnly LateCheckOutTime = new(12, 0);   // 11:00 + 1h
 
-        // oddzielny czas dla kodów zameldowania. Od teraz będą wyświetlane zawsze od 13:00 do 11:00, niezależnie od tego, czy gość ma wykupiony wczesny check-in lub późny check-out.
-
-        private static readonly TimeOnly DefaultCodeCheckInTime = new(13, 0); // 13:00 - niezależnie od tego, czy gość ma wykupiony wczesny check-in
-        private static readonly TimeOnly DefaultCodeCheckOutTime = new(11, 0); // 11:00 - niezależnie od tego, czy gość ma wykupiony późny check-out
-
         private RentoomReservation? _reservation;
         private WorkflowModels.StayWellReservationRecordDto? _reservationRecord;
         private readonly BackendApi _backendApi = backendApi;
         private readonly ReservationTokenService _tokenService = tokenService;
-        private readonly IConfiguration _configuration = configuration;
         private string? _currentToken;
         private HttpStatusCode? _currentStatus;
-
-        public int BeforeCheckInBufferMinutes =>
-            _configuration.GetValue("AccessTime:BeforeCheckInMinutes", 15);
-
-        public int AfterCheckOutBufferMinutes =>
-            _configuration.GetValue("AccessTime:AfterCheckOutMinutes", 15);
 
         public bool IsValidReservation => CurrentReservation != null && CurrentStatus == HttpStatusCode.OK;
         public bool IsCanceledReservation =>
@@ -43,7 +30,6 @@ namespace RentoomBooking.StayWell.States
                 CurrentReservation?.Reservation?.ReservationDetails?.status,
                 ReservationStatusType.Canceled,
                 StringComparison.OrdinalIgnoreCase);
-
         public bool IsActiveReservation
         {
             get
@@ -58,49 +44,7 @@ namespace RentoomBooking.StayWell.States
                 var from = details.getDateFrom().Date + CheckInTime.ToTimeSpan();
                 var to = details.getDateTo().Date + CheckOutTime.ToTimeSpan();
 
-                return from <= now && now <= to;
-            }
-        }
-        public bool IsPasscodeGenerationTimeAllowed
-        {
-            get
-            {
-                var details = CurrentReservation?.Reservation?.ReservationDetails;
-                if (details is null)
-                {
-                    return false;
-                }
-
-                var now = DateTime.Now;
-                var from = details.getDateFrom().Date + CheckInTime.ToTimeSpan();
-                var to = details.getDateTo().Date + CheckOutTime.ToTimeSpan();
-
-                return from <= now && now <= to;
-            }
-        }
-
-        /* 
-        Dostepnosc kodu
-        Godzina zameldowania - 15 minut
-        Godzina wymeldowania + 15 minut
-        */
-        public bool IsCodeAvailable
-        {
-            get
-            {
-                var details = CurrentReservation?.Reservation?.ReservationDetails;
-                if (details is null)
-                {
-                    return false;
-                }
-
-                var now = DateTime.Now;
-                var from = details.getDateFrom().Date + CheckInTime.ToTimeSpan()
-                           - TimeSpan.FromMinutes(BeforeCheckInBufferMinutes);
-                var to = details.getDateTo().Date + CheckOutTime.ToTimeSpan()
-                         + TimeSpan.FromMinutes(AfterCheckOutBufferMinutes);
-
-                return from <= now && now <= to;
+                return from.AddMinutes(-15) <= now && now <= to.AddMinutes(60); //&& details.status == ReservationStatusType.Accepted;
             }
         }
 
@@ -127,31 +71,6 @@ namespace RentoomBooking.StayWell.States
         public TimeOnly CheckInTime => HasEarlyCheckIn ? EarlyCheckInTime : DefaultCheckInTime;
 
         public TimeOnly CheckOutTime => HasLateCheckOut ? LateCheckOutTime : DefaultCheckOutTime;
-
-        public TimeOnly CodeCheckInTime => DefaultCodeCheckInTime;
-
-        public TimeOnly CodeCheckOutTime => DefaultCodeCheckOutTime;
-        public TimeOnly CodeAvailableFromTime =>
-            CheckInTime.Add(-TimeSpan.FromMinutes(BeforeCheckInBufferMinutes));
-
-        public TimeOnly RemoteAccessFromTime => DefaultCodeCheckInTime;
-
-        public bool IsAfterCheckOut
-        {
-            get
-            {
-                var details = CurrentReservation?.Reservation?.ReservationDetails;
-                if (details is null)
-                {
-                    return false;
-                }
-
-                var now = DateTime.Now;
-                var to = details.getDateTo().Date + CheckOutTime.ToTimeSpan();
-
-                return now > to;
-            }
-        }
 
         private bool HasAddon(int addonId)
         {

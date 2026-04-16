@@ -65,20 +65,6 @@ namespace RentoomBooking.Api
                 await res.WriteStringAsync("Invalid payload.");
                 return res;
             }
-
-            if (entity.GuestsData != null)
-            {
-                foreach (var guest in entity.GuestsData)
-                {
-                    if (!RegistrationCardGuestModel.IsValidName(guest.FirstName) ||
-                        !RegistrationCardGuestModel.IsValidName(guest.LastName))
-                    {
-                        res.StatusCode = HttpStatusCode.BadRequest;
-                        await res.WriteStringAsync("Guest names contain invalid characters.");
-                        return res;
-                    }
-                }
-            }
             await _registrationCardRepository.SaveRegistrationCardAsync(entity);
 
             res.StatusCode = HttpStatusCode.OK;
