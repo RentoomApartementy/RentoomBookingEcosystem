@@ -136,6 +136,23 @@ namespace RentoomBooking.StayWell.States
 
         public TimeOnly RemoteAccessFromTime => DefaultCodeCheckInTime;
 
+        public bool IsAfterCheckOut
+        {
+            get
+            {
+                var details = CurrentReservation?.Reservation?.ReservationDetails;
+                if (details is null)
+                {
+                    return false;
+                }
+
+                var now = DateTime.Now;
+                var to = details.getDateTo().Date + CheckOutTime.ToTimeSpan();
+
+                return now > to;
+            }
+        }
+
         private bool HasAddon(int addonId)
         {
             var addons = CurrentReservation?.Reservation?.Items

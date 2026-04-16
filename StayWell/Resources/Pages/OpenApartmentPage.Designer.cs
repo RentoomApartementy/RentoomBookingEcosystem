@@ -497,5 +497,23 @@ namespace RentoomBooking.StayWell.Resources.Pages {
                 return ResourceManager.GetString("YourIndividualCode", resourceCulture);
             }
         }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your reservation has ended. Remote access is no longer available.
+        /// </summary>
+        internal static string ReservationEnded {
+            get {
+                return ResourceManager.GetString("ReservationEnded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your reservation has ended. The access code is no longer available.
+        /// </summary>
+        internal static string CodeNoLongerAvailable {
+            get {
+                return ResourceManager.GetString("CodeNoLongerAvailable", resourceCulture);
+            }
+        }
     }
 }

@@ -5,7 +5,6 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject IStringLocalizer<ContactUsPage> Localizer
-@inject Services.BitrixService BitrixService
 
 @inherits Models.PageBase
 
@@ -53,27 +52,21 @@
 
 @code{
 
-    protected override async Task OnInitializedAsync()
-    {
-        await BitrixService.InitializeAsync();
-    }
-
     private async Task OpenChat()
     {
+        var client = ReservationState.CurrentReservation.Reservation.Client;
         var guestData = new Services.BitrixGuestData
         {
-            Name = "",
-            Phone = "",
-            ExternalId = ""
+            FirstName = client.FirstName,
+            LastName = client.LastName,
+            Phone = client.Phone,
+            Email = client.Email,
+            ExternalId = client.Id.ToString()
         };
 
-        guestData.Name = string.Concat(ReservationState.CurrentReservation.Reservation.Client.FirstName," ",ReservationState.CurrentReservation.Reservation.Client.LastName);
-        guestData.Phone = ReservationState.CurrentReservation.Reservation.Client.Phone;
-        guestData.ExternalId = ReservationState.CurrentReservation.Reservation.Client.Id.ToString();
-
         guestData.ExtraInfo.Add("Numer Rezerwacji", ReservationState.CurrentReservation.Reservation.id.ToString());
-        guestData.ExtraInfo.Add("Apartament", ReservationState.CurrentReservation.Reservation.Items.FirstOrDefault().objectName);
-        guestData.ExtraInfo.Add("Cena", ReservationState.CurrentReservation.Reservation.Items.FirstOrDefault().price.ToString());
+        guestData.ExtraInfo.Add("Apartament", ReservationState.CurrentReservation.Reservation.Items.FirstOrDefault()?.objectName ?? "");
+        guestData.ExtraInfo.Add("Cena", ReservationState.CurrentReservation.Reservation.Items.FirstOrDefault()?.price.ToString() ?? "");
         string staywellLink = $"[url=https://staywell.rentoom.pl/reservation/{Token}/HomePage]Otwórz StayWell rezerwacji[/url]";
         guestData.ExtraInfo.Add("Link do StayWell", staywellLink);
 

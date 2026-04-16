@@ -8,7 +8,6 @@
 @inject Services.BitrixService BitrixService
 @inject Services.ToastService ToastService
 @inject States.ReservationState ReservationState
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @inject IStringLocalizer<HomePage> Localizer
 
@@ -50,34 +49,12 @@
     protected override async Task OnInitializedAsync()
     {
         GlobalizationService.OnChange += StateHasChanged;
-
         var savedPreference = await GlobalizationService.LoadPreferenceAsync();
         if (!string.IsNullOrWhiteSpace(savedPreference))
         {
             GlobalizationService.SetCulture(savedPreference);
         }
-        else
-        {
-            var browserCulture = CultureInfo.CurrentCulture.Name;
-            var supported = GlobalizationService.GetSupportedCultures();
-            
-            if (supported.Any(c => c.Name == browserCulture))
-            {
-                GlobalizationService.SetCulture(browserCulture);
-            }
-            else
-            {
-                GlobalizationService.SetCulture("en-US");
-            }
-        }
 
-        await BitrixService.InitializeAsync();
-
-        var loaderUrl = Configuration["Bitrix:LiveChatLoaderUrl"];
-        if (!string.IsNullOrWhiteSpace(loaderUrl))
-        {
-            await BitrixService.EnableLoaderAsync(loaderUrl);
-        }
     }
 
     private void ChangeLangButton()
@@ -93,7 +70,8 @@
         var client = ReservationState.CurrentReservation.Reservation.Client;
         var guestData = new Services.BitrixGuestData
         {
-            Name = $"{client.FirstName} {client.LastName}",
+            FirstName = client.FirstName,
+            LastName = client.LastName,
             Phone = client.Phone,
             Email = client.Email,
             ExternalId = client.Id.ToString()

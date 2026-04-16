@@ -288,4 +288,10 @@ Just close the door behind you.</value>
   <data name="PasscodeGeneratedSuccess" xml:space="preserve">
     <value>New access code generated successfully.</value>
   </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Your reservation has ended. Remote access is no longer available.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Your reservation has ended. The access code is no longer available.</value>
+  </data>
 </root>
