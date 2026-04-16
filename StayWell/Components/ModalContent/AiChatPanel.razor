@@ -1,0 +1,243 @@
+@using Microsoft.AspNetCore.Components.Web
+@using RentoomBooking.ChatAI.Contracts
+@using RentoomBooking.StayWell.Models.Chat
+@using RentoomBooking.StayWell.States
+@implements IDisposable
+@inject AiChatClientService AiChatClientService
+@inject SafeMarkdownService MarkdownService
+@inject LocalStorageService LocalStorageService
+@inject ReservationState ReservationState
+@inject ModalService ModalService
+
+<div class="ai-chat-panel">
+    <div class="ai-chat-messages" id="ai-chat-messages">
+        @foreach (var message in _messages)
+        {
+            <div class="ai-chat-message @(message.Role == ChatRoles.User ? "ai-chat-message--user" : "ai-chat-message--assistant")">
+                <div class="ai-chat-message-role">@(message.Role == ChatRoles.User ? "Ty" : "Asystent")</div>
+                @if (message.Role == ChatRoles.User)
+                {
+                    <div class="ai-chat-message-content">@message.Markdown</div>
+                }
+                else
+                {
+                    <div class="ai-chat-message-content">@((MarkupString)MarkdownService.ToSafeHtml(message.Markdown))</div>
+                }
+            </div>
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_error))
+    {
+        <div class="ai-chat-error">@_error</div>
+    }
+    else if (_isStreaming)
+    {
+        <div class="ai-chat-loader">Asystent pisze...</div>
+    }
+
+    <div class="ai-chat-actions">
+        <textarea
+            class="ai-chat-input"
+            placeholder="Napisz wiadomość..."
+            @bind="_input"
+            @bind:event="oninput"
+            @onkeydown="HandleInputKeyDown"
+            disabled="@_isStreaming"></textarea>
+
+        <div class="ai-chat-buttons">
+            <button class="ai-chat-btn ai-chat-btn--ghost" @onclick="Close" disabled="@_isStreaming">Zamknij</button>
+            <button class="ai-chat-btn ai-chat-btn--danger" @onclick="StopAsync" disabled="@(!_isStreaming)">Stop</button>
+            <button class="ai-chat-btn ai-chat-btn--primary" @onclick="SendAsync" disabled="@(!_canSend)">Wyślij</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? Token { get; set; }
+
+    private readonly List<ChatUiMessage> _messages = new();
+    private string? _conversationId;
+    private string? _conversationStorageKey;
+    private string _input = string.Empty;
+    private string? _error;
+    private bool _isStreaming;
+    private CancellationTokenSource? _streamCts;
+
+    private bool _canSend => !_isStreaming && !string.IsNullOrWhiteSpace(_input);
+
+    protected override void OnInitialized()
+    {
+        if (_messages.Count == 0)
+        {
+            _messages.Add(new ChatUiMessage
+            {
+                Role = ChatRoles.Assistant,
+                Markdown = "Cześć! Jestem asystentem StayWell. Jak mogę pomóc podczas Twojego pobytu?"
+            });
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var token = ResolveToken();
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return;
+        }
+
+        var key = BuildConversationStorageKey(token);
+        if (string.Equals(_conversationStorageKey, key, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        _conversationStorageKey = key;
+        _conversationId = await LocalStorageService.GetItemAsync(key);
+    }
+
+    private async Task SendAsync()
+    {
+        if (!_canSend)
+        {
+            return;
+        }
+
+        var token = ResolveToken();
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            _error = "Brak tokenu rezerwacji. Odśwież stronę i spróbuj ponownie.";
+            StateHasChanged();
+            return;
+        }
+
+        var userMessage = _input.Trim();
+        _input = string.Empty;
+        _error = null;
+
+        _messages.Add(new ChatUiMessage
+        {
+            Role = ChatRoles.User,
+            Markdown = userMessage
+        });
+
+        var assistantMessage = new ChatUiMessage
+        {
+            Role = ChatRoles.Assistant,
+            Markdown = string.Empty
+        };
+
+        _messages.Add(assistantMessage);
+        _isStreaming = true;
+        StateHasChanged();
+
+        _streamCts?.Cancel();
+        _streamCts?.Dispose();
+        _streamCts = new CancellationTokenSource();
+
+        try
+        {
+            await AiChatClientService.StreamAsync(
+                new ChatRequestDto(userMessage, token,ReservationState.CurrentReservation.Id,  _conversationId),
+                async chunk =>
+                {
+                    assistantMessage.Markdown += chunk.Text;
+                    await InvokeAsync(StateHasChanged);
+                },
+                async conversationId =>
+                {
+                    if (!string.IsNullOrWhiteSpace(conversationId))
+                    {
+                        _conversationId = conversationId;
+                        if (!string.IsNullOrWhiteSpace(_conversationStorageKey))
+                        {
+                            await LocalStorageService.SetItemAsync(_conversationStorageKey, conversationId);
+                        }
+                    }
+
+                    await InvokeAsync(StateHasChanged);
+                },
+                async message =>
+                {
+                    _error = message;
+                    await InvokeAsync(StateHasChanged);
+                },
+                _streamCts.Token);
+
+            if (string.IsNullOrWhiteSpace(assistantMessage.Markdown))
+            {
+                assistantMessage.Markdown = "Brak odpowiedzi z modelu.";
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            if (string.IsNullOrWhiteSpace(assistantMessage.Markdown))
+            {
+                _messages.Remove(assistantMessage);
+            }
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+            if (ex is HttpRequestException httpEx &&
+                (httpEx.StatusCode == System.Net.HttpStatusCode.NotFound || httpEx.StatusCode == System.Net.HttpStatusCode.Forbidden))
+            {
+                _conversationId = null;
+                if (!string.IsNullOrWhiteSpace(_conversationStorageKey))
+                {
+                    await LocalStorageService.RemoveItemAsync(_conversationStorageKey);
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(assistantMessage.Markdown))
+            {
+                _messages.Remove(assistantMessage);
+            }
+        }
+        finally
+        {
+            _isStreaming = false;
+            StateHasChanged();
+        }
+    }
+
+    private Task HandleInputKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter" && !args.ShiftKey)
+        {
+            return SendAsync();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private Task StopAsync()
+    {
+        _streamCts?.Cancel();
+        return Task.CompletedTask;
+    }
+
+    private string? ResolveToken()
+    {
+        if (!string.IsNullOrWhiteSpace(Token))
+        {
+            return Token;
+        }
+
+        return ReservationState.CurrentToken;
+    }
+
+    private static string BuildConversationStorageKey(string token) => $"staywell:ai-chat:conversation:{token}";
+
+    private Task Close()
+    {
+        ModalService.HideModal();
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _streamCts?.Cancel();
+        _streamCts?.Dispose();
+    }
+}

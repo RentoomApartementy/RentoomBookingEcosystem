@@ -11,6 +11,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using RentoomBooking.Api.Chat;
+using RentoomBooking.ChatAI.Contracts;
+using RentoomBooking.ChatAI.Data;
+using RentoomBooking.ChatAI.Repositories;
+using RentoomBooking.ChatAI.Services;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
@@ -69,6 +74,9 @@ if (string.IsNullOrWhiteSpace(rentoomAppConnectionString))
 }
 
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
+
+builder.Services.AddDbContextFactory<ChatAIDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
@@ -148,6 +156,64 @@ builder.Services.AddScoped<IBookingComLogStore, BookingComLogStore>();
 builder.Services.AddScoped<IBookingComIncomingEmailProcessor, BookingComIncomingEmailProcessor>();
 builder.Services.AddScoped<IBookingComBackfillImportBuilder, BookingComBackfillImportBuilder>();
 builder.Services.AddScoped<IBookingComReservationWorkflowService, BookingComReservationWorkflowService>();
+
+builder.Services.AddOptions<StaywellChatOptions>()
+    .Configure<IConfiguration>((options, configuration) =>
+    {
+        configuration.GetSection(StaywellChatOptions.SectionName).Bind(options);
+
+        if (string.IsNullOrWhiteSpace(options.Endpoint) || string.IsNullOrWhiteSpace(options.ApiKey) || string.IsNullOrWhiteSpace(options.DeploymentName))
+        {
+            var azureSection = configuration.GetSection("StaywellChat");
+            if (!azureSection.Exists())
+            {
+                azureSection = configuration.GetSection("AzureOpenAi_general");
+            }
+
+            if (string.IsNullOrWhiteSpace(options.Endpoint))
+            {
+                options.Endpoint = azureSection["Endpoint"] ?? string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(options.ApiKey))
+            {
+                options.ApiKey = azureSection["ApiKey"] ?? string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(options.DeploymentName))
+            {
+                options.DeploymentName = azureSection["DeploymentName"] ?? string.Empty;
+            }
+        }
+
+        if (options.MaxMessageLength < 100)
+        {
+            options.MaxMessageLength = 2000;
+        }
+
+        if (options.MaxHistoryMessages < 1)
+        {
+            options.MaxHistoryMessages = 15;
+        }
+
+        if (options.MaxRequestsPerMinute < 1)
+        {
+            options.MaxRequestsPerMinute = 12;
+        }
+
+        if (options.StreamingTimeoutSeconds < 10)
+        {
+            options.StreamingTimeoutSeconds = 90;
+        }
+    });
+
+builder.Services.AddScoped<IChatConversationRepository, ChatConversationRepository>();
+builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
+builder.Services.AddScoped<IStaywellChatClient, AzureFoundryStaywellChatClient>();
+builder.Services.AddScoped<IPromptBuilder, StaywellPromptBuilder>();
+builder.Services.AddScoped<IReservationContextProvider, StaywellReservationContextProvider>();
+builder.Services.AddScoped<IStaywellChatService, StaywellChatService>();
+builder.Services.AddSingleton<IChatRateLimiter, MemoryChatRateLimiter>();
 
 /*builder.Services.AddSingleton<TpayClient>();
 

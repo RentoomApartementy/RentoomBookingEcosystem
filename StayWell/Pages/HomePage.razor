@@ -36,6 +36,7 @@
     <div class="tile--row">
         <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
         <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
+        <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
     </div>
 }
 else
@@ -60,6 +61,13 @@ else
                 <img class="fas" src="/icons/lock.svg" />
             </div>
             <div class="tile-text">@Localizer["OpenApartment"]</div>
+        </div>
+
+        <div class="tile" @onclick="OpenAiChat">
+            <div class="tile-icon">
+                <img class="fas" src="/icons/binary.svg" />
+            </div>
+            <div class="tile-text">AI Assistant</div>
         </div>
        @* <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
             <div class="tile-icon-vouchers">
@@ -207,5 +215,13 @@ else
                 .FirstOrDefault(m => !string.IsNullOrWhiteSpace(m.Url));
 
         ImageUrl = image?.Url ?? placeholder;
+    }
+
+    private void OpenAiChat()
+    {
+        ModalService.ShowModal(
+            "StayWell AI",
+            @<RentoomBooking.StayWell.Components.ModalContent.AiChatPanel Token="@Token" />
+        );
     }
 }
