@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CodeNotAvailable" xml:space="preserve">
-    <value>Kod niedostępny. Dostęp będzie możliwy od dnia zameldowania.</value>
+    <value>Twój kod będzie dostępny od {0} w dniu zameldowania.</value>
   </data>
   <data name="CheckingLock" xml:space="preserve">
     <value>Sprawdzanie dostępności zamka...</value>
@@ -202,7 +202,7 @@ do momentu aż usłyszysz zamykający się zamek.
     <value>obrotowego</value>
   </data>
   <data name="ReservationNotActive" xml:space="preserve">
-    <value>Twoja rezerwacja nie jest jeszcze aktywna. Dostęp będzie możliwy od dnia zameldowania.</value>
+    <value>Zdalne otwieranie będzie dostępne od {0} w dniu zameldowania.</value>
   </data>
   <data name="InstructionOpenTitle" xml:space="preserve">
     <value>Jak otworzyć drzwi</value>
@@ -251,5 +251,47 @@ Wystarczy zamknąć za sobą drzwi.</value>
   </data>
   <data name="InstructionPanelCloseLabel" xml:space="preserve">
     <value>Jak zamknąć - Zamek panelowy</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Poprzednie kody</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Pierwotny kod</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Wygeneruj nowy kod</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Nowy kod za {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Generowanie... {0}s</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Ważny: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Ważny od: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Ważny do: {0}</value>
+  </data>
+  <data name="CylinderTopView" xml:space="preserve">
+    <value>widok z góry</value>
+  </data>
+  <data name="GenerateAvailableFrom" xml:space="preserve">
+    <value>Generowanie nowego kodu będzie dostępne od {0}.</value>
+  </data>
+  <data name="GenerateSameHourBlocked" xml:space="preserve">
+    <value>Kod został już wygenerowany w tej godzinie. Kolejne generowanie będzie możliwe od {0}.</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Nowy kod dostępu został wygenerowany pomyślnie.</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Twoja rezerwacja się zakończyła. Zdalne otwieranie nie jest już dostępne.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Twoja rezerwacja się zakończyła. Kod dostępu nie jest już dostępny.</value>
   </data>
 </root>

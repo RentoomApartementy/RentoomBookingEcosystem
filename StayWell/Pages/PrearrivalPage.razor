@@ -147,6 +147,12 @@
         {
             LayoutState.ShowFooter = false;
         }
+
+        if (!RegistrationCardState.IsFilled)
+        {
+            LayoutState.ShowFooter = false;
+        }
+
         return Task.CompletedTask;
     }
 

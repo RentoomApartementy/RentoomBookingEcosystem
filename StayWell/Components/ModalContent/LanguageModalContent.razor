@@ -6,6 +6,7 @@
 @inject GlobalizationService GlobalizationService
 @inject ModalService ModalService
 @inject ToastService ToastService
+@inject NavigationManager NavigationManager
 @inject IStringLocalizer<HomePage> Localizer
 
 <div class="language-modal">
@@ -28,9 +29,12 @@
     private async Task ChangeLang(string lang, string displayName)
     {
         var cultureName = lang == "pl" ? "pl-PL" : "en-US";
-        await GlobalizationService.SetCultureWithPreferenceAsync(cultureName);
-        ModalService.HideModal();
-        ToastService.ShowToast($"{Localizer["LanguageChanged"]} {displayName}");
+
+        if (CultureInfo.CurrentCulture.Name == cultureName)
+            return;
+
+        await GlobalizationService.SavePreferenceAsync(cultureName);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
     private string ActiveClass(string culture) =>

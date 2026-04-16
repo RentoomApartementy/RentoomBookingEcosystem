@@ -1,19 +1,18 @@
 ﻿using System.Globalization;
+using Microsoft.JSInterop;
 
 namespace RentoomBooking.StayWell.Services
 {
     public class GlobalizationService
     {
-        private const string LocalStorageKey = "staywell_language_preference";
-
-        private readonly LocalStorageService _localStorage;
+        private readonly IJSRuntime _js;
         public event Action? OnChange;
 
         public CultureInfo CurrentCulture { get; private set; } = CultureInfo.CurrentCulture;
 
-        public GlobalizationService(LocalStorageService localStorage)
+        public GlobalizationService(IJSRuntime js)
         {
-            _localStorage = localStorage;
+            _js = js;
         }
 
         public void SetCulture(string cultureName)
@@ -23,25 +22,43 @@ namespace RentoomBooking.StayWell.Services
             if (CurrentCulture.Name == culture.Name)
                 return;
 
+            ApplyCulture(culture);
+        }
+        public void ForceSetCulture(string cultureName)
+        {
+            var culture = new CultureInfo(cultureName);
+            ApplyCulture(culture);
+        }
+
+        private void ApplyCulture(CultureInfo culture)
+        {
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
             CurrentCulture = culture;
 
+            try
+            {
+                _ = _js.InvokeVoidAsync("eval",
+                    $"document.documentElement.lang='{culture.TwoLetterISOLanguageName}'");
+            }
+            catch
+            { }
+
             OnChange?.Invoke();
         }
 
         public async Task SetCultureWithPreferenceAsync(string cultureName)
         {
-            SetCulture(cultureName);
+            ForceSetCulture(cultureName);
             await SavePreferenceAsync(cultureName);
         }
         public async Task<string?> LoadPreferenceAsync()
         {
             try
             {
-                return await _localStorage.GetItemAsync(LocalStorageKey);
+                return await _js.InvokeAsync<string?>("blazorCulture.get");
             }
             catch (Exception ex)
             {
@@ -53,7 +70,7 @@ namespace RentoomBooking.StayWell.Services
         {
             try
             {
-                await _localStorage.SetItemAsync(LocalStorageKey, cultureName);
+                await _js.InvokeVoidAsync("blazorCulture.set", cultureName);
             }
             catch (Exception ex)
             {
