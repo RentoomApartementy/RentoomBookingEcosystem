@@ -12,7 +12,7 @@
 @inject IJSRuntime JS
 
 <div class="ai-chat-panel">
-    <div class="ai-chat-messages" id="ai-chat-messages" @ref="_messagesContainerRef">
+    <div class="ai-chat-messages" id="ai-chat-messages">
         @foreach (var message in _messages)
         {
             <div class="ai-chat-message @(message.Role == ChatRoles.User ? "ai-chat-message--user" : "ai-chat-message--assistant")">
@@ -169,7 +169,7 @@
         try
         {
             await AiChatClientService.StreamAsync(
-                new ChatRequestDto(userMessage, token, reservationId.Value, _conversationId),
+                new ChatRequestDto(userMessage, token,ReservationState.CurrentReservation.Id,  _conversationId),
                 async chunk =>
                 {
                     assistantMessage.Markdown += chunk.Text;
@@ -348,48 +348,13 @@
 
     private static string BuildConversationStorageKey(string token) => $"staywell:ai-chat:conversation:{token}";
 
-    private static string MergeSpeechWithInput(string prefix, string transcript)
+    private Task Close()
     {
-        var cleanedPrefix = prefix?.TrimEnd() ?? string.Empty;
-        var cleanedTranscript = transcript?.Trim() ?? string.Empty;
-
-        if (string.IsNullOrWhiteSpace(cleanedPrefix))
-        {
-            return cleanedTranscript;
-        }
-
-        if (string.IsNullOrWhiteSpace(cleanedTranscript))
-        {
-            return cleanedPrefix;
-        }
-
-        return $"{cleanedPrefix} {cleanedTranscript}";
-    }
-
-    private string GetSpeechLanguage()
-    {
-        var lang = GlobalizationService.CurrentCulture?.Name;
-        if (string.IsNullOrWhiteSpace(lang))
-        {
-            return "pl-PL";
-        }
-
-        return lang;
-    }
-
-    private void QueueScrollToBottom()
-    {
-        _pendingScrollToBottom = true;
-    }
-
-    private async Task Close()
-    {
-        if (_isDictating)
-        {
             await StopDictationAsync();
         }
 
         ModalService.HideModal();
+        return Task.CompletedTask;
     }
 
     public void Dispose()
