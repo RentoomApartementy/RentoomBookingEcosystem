@@ -898,60 +898,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.ToTable("SearchFilters");
                 });
 
-            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.TTLockPasscodeEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTimeOffset?>("EndDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("end_date");
-
-                    b.Property<DateTimeOffset>("GeneratedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("generated_at")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<string>("KeyboardPwd")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("keyboard_pwd");
-
-                    b.Property<int>("KeyboardPwdId")
-                        .HasColumnType("integer")
-                        .HasColumnName("keyboard_pwd_id");
-
-                    b.Property<string>("PasscodeName")
-                        .HasColumnType("text")
-                        .HasColumnName("passcode_name");
-
-                    b.Property<string>("ReservationToken")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("reservation_token");
-
-                    b.Property<DateTimeOffset>("StartDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("start_date");
-
-                    b.Property<int>("TTLockId")
-                        .HasColumnType("integer")
-                        .HasColumnName("ttlock_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GeneratedAt")
-                        .HasDatabaseName("idx_ttlock_passcodes_generated_at");
-
-                    b.HasIndex("ReservationToken")
-                        .HasDatabaseName("idx_ttlock_passcodes_reservation_token");
-
-                    b.ToTable("ttlock_passcodes");
-                });
-
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.TermsEntity", b =>
                 {
                     b.Property<string>("ResToken")

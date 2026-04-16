@@ -206,13 +206,6 @@
         cursor: not-allowed;
     }
 
-.retry-button__icon {
-    width: 16px;
-    height: 16px;
-    filter: brightness(0) invert(1);
-    flex-shrink: 0;
-}
-
 .inactive-reservation-badge {
     display: flex;
     flex-direction: column;
@@ -228,128 +221,6 @@
 .inactive-reservation-icon {
     height: 48px;
     width: 48px;
-}
-
-.passcode-history-tile {
-    padding: 0;
-    overflow: hidden;
-}
-
-.passcode-history__toggle {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1rem;
-    color: #333;
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s ease;
-    border-radius: 15px;
-}
-
-.passcode-history__toggle:active {
-    background: #f0f5f2;
-}
-
-.passcode-history__toggle-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.passcode-history__left {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-    flex-wrap: wrap;
-}
-
-.passcode-history__chevron {
-    width: 20px;
-    height: 20px;
-    transition: transform 0.25s ease;
-    opacity: 1;
-    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
-    flex-shrink: 0;
-}
-
-.passcode-history__chevron--open {
-    transform: rotate(180deg);
-}
-
-.passcode-history__list {
-    display: flex;
-    flex-direction: column;
-    border-top: 1px solid #e8f0ec;
-}
-
-.passcode-history__validity {
-    font-size: 0.72rem;
-    color: #6b9b7e;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-}
-
-.passcode-history__item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 0.95rem;
-}
-
-    .passcode-history__item:last-child {
-        border-bottom: none;
-    }
-
-.passcode-history__item--ido {
-    background: #f8fbf9;
-}
-
-.passcode-history__code {
-    font-size: 1.1rem;
-    letter-spacing: 0.05em;
-    color: #111;
-}
-
-.passcode-history__meta {
-    font-size: 0.78rem;
-    color: #888;
-    text-align: right;
-    flex-shrink: 0;
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 1px;
-    padding-right: 5px;
-    padding-left: 5px;
-    border-radius: 5px;
-}
-
-.passcode-validity {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 8px;
-    font-size: 0.8rem;
-    color: #6b9b7e;
-    font-weight: 500;
-}
-
-.passcode-validity__icon {
-    width: 14px;
-    height: 14px;
-    opacity: 0.7;
-    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
-    flex-shrink: 0;
 }
 
 .guide-card {
@@ -483,14 +354,6 @@
     text-align: center;
 }
 
-.guide-card__animation-sublabel {
-    display: block;
-    font-weight: 400;
-    font-size: 0.78rem;
-    color: #888;
-    margin-top: 2px;
-}
-
 .guide-card__instruction-part {
     border-top: 1px solid #e8f0ec;
     padding: 0 20px 20px;
@@ -597,53 +460,4 @@
 
 .instruction-content ::deep .instruction-section-heading:first-child {
     margin-top: 0;
-}
-
-.passcode-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    font-size: 1.2rem;
-}
-
-.passcode-main__code {
-    font-size: 1.6rem;
-    letter-spacing: 0.1em;
-}
-
-.icon-key {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    opacity: 0.7;
-}
-
-.icon-inline {
-    width: 18px;
-    height: 18px;
-    vertical-align: middle;
-    opacity: 0.7;
-}
-
-.passcode-validity--center {
-    justify-content: center;
-}
-
-.passcode-history__confirm-hint {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.7rem;
-    color: #888;
-    white-space: nowrap;
-    margin-right: auto;
-}
-
-.passcode-history__key-icon {
-    width: 12px;
-    height: 12px;
-    opacity: 0.5;
-    vertical-align: middle;
 }

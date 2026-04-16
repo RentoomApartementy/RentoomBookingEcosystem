@@ -646,8 +646,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             {
                 paymentId = await AddIdoPaymentAsync(
                     record,
-                    //record.State.StartRequest?.OfferPrice + record.State.StartRequest?.SelectedAddonsTotalPrice ?? 0m,
-                    record.State.StartRequest.getFullReservationPrizeWithoutUpsells(),
+                    record.State.StartRequest?.OfferPrice + record.State.StartRequest?.SelectedAddonsTotalPrice ?? 0m,
                     record.State.StartRequest?.Currency ?? "PLN",
                     record.ProviderTransactionId);
             }
@@ -1196,7 +1195,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 RentoomResrvationID = record.ReservationGuid, //19.03.26  - działa, mozna zostawić. TODO 7.02.26: sprawdzic czy bedzie dzialac do zapisu idobooking -czy pominie to pole.
                 DateFrom = start.StartDate.ToString("yyyy-MM-dd") + " " + start.CheckInTime.ToString("HH:mm"),
                 DateTo = start.EndDate.ToString("yyyy-MM-dd") + " " + start.CheckOutTime.ToString("HH:mm"),
-                Price = (float)start.getFullReservationPrizeWithoutUpsells(),//(float)start.OfferPrice.Value + (float)start.SelectedAddonsTotalPrice,  //19.03.26 - nie brało pod uwagę, zmieniłem. TODO: 10.03.26 - sprawdzić czy ta cena powinna iść do IDB i czy powinna zawierać ceny za Addony
+                Price = (float)start.OfferPrice.Value + (float)start.SelectedAddonsTotalPrice,  //19.03.26 - nie brało pod uwagę, zmieniłem. TODO: 10.03.26 - sprawdzić czy ta cena powinna iść do IDB i czy powinna zawierać ceny za Addony
                 Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,
                 InternalNote = start.SelectedOfferType,

@@ -70,47 +70,11 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Original code.
-        /// </summary>
-        internal static string CodeFromIdo {
-            get {
-                return ResourceManager.GetString("CodeFromIdo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your code will be available from {0} on the check-in day..
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Code not available. Access will be available from the check-in date..
         /// </summary>
         internal static string CodeNotAvailable {
             get {
                 return ResourceManager.GetString("CodeNotAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Valid from: {0}.
-        /// </summary>
-        internal static string CodeValidFrom {
-            get {
-                return ResourceManager.GetString("CodeValidFrom", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Valid: {0} – {1}.
-        /// </summary>
-        internal static string CodeValidFromTo {
-            get {
-                return ResourceManager.GetString("CodeValidFromTo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Valid until: {0}.
-        /// </summary>
-        internal static string CodeValidTo {
-            get {
-                return ResourceManager.GetString("CodeValidTo", resourceCulture);
             }
         }
         
@@ -120,15 +84,6 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         internal static string Confirm {
             get {
                 return ResourceManager.GetString("Confirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu top view.
-        /// </summary>
-        internal static string CylinderTopView {
-            get {
-                return ResourceManager.GetString("CylinderTopView", resourceCulture);
             }
         }
         
@@ -165,42 +120,6 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         internal static string ErrorServerConnection {
             get {
                 return ResourceManager.GetString("ErrorServerConnection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu New code will be available from {0}..
-        /// </summary>
-        internal static string GenerateAvailableFrom {
-            get {
-                return ResourceManager.GetString("GenerateAvailableFrom", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Generate new code.
-        /// </summary>
-        internal static string GenerateNewCode {
-            get {
-                return ResourceManager.GetString("GenerateNewCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu A code was already generated this hour. Next generation will be available from {0}..
-        /// </summary>
-        internal static string GenerateSameHourBlocked {
-            get {
-                return ResourceManager.GetString("GenerateSameHourBlocked", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Generating... {0}s.
-        /// </summary>
-        internal static string GeneratingCode {
-            get {
-                return ResourceManager.GetString("GeneratingCode", resourceCulture);
             }
         }
         
@@ -382,15 +301,6 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu New code in {0}.
-        /// </summary>
-        internal static string NewCodeIn {
-            get {
-                return ResourceManager.GetString("NewCodeIn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu No code for the lock. Contact staff!.
         /// </summary>
         internal static string NoCode {
@@ -409,29 +319,11 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu New access code generated successfully..
-        /// </summary>
-        internal static string PasscodeGeneratedSuccess {
-            get {
-                return ResourceManager.GetString("PasscodeGeneratedSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Press to open.
         /// </summary>
         internal static string PressToOpen {
             get {
                 return ResourceManager.GetString("PressToOpen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Previous codes.
-        /// </summary>
-        internal static string PreviousCodes {
-            get {
-                return ResourceManager.GetString("PreviousCodes", resourceCulture);
             }
         }
         
@@ -463,7 +355,7 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Remote access will be available from {0} on the check-in day..
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your reservation is not active yet. Access will be available from the check-in date..
         /// </summary>
         internal static string ReservationNotActive {
             get {
@@ -495,24 +387,6 @@ namespace RentoomBooking.StayWell.Resources.Pages {
         internal static string YourIndividualCode {
             get {
                 return ResourceManager.GetString("YourIndividualCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your reservation has ended. Remote access is no longer available.
-        /// </summary>
-        internal static string ReservationEnded {
-            get {
-                return ResourceManager.GetString("ReservationEnded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Your reservation has ended. The access code is no longer available.
-        /// </summary>
-        internal static string CodeNoLongerAvailable {
-            get {
-                return ResourceManager.GetString("CodeNoLongerAvailable", resourceCulture);
             }
         }
     }

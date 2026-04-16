@@ -13,7 +13,6 @@
 @inject LocksState LocksState
 @inject LayoutState LayoutState
 @inject IJSRuntime JSRuntime
-@inject BitrixService BitrixService
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @inject Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment HostEnvironment
 
@@ -71,7 +70,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await BitrixService.InitializeAsync();
+        await JSRuntime.InvokeVoidAsync("bitrixInterop.init");
     }
 
     protected override void OnInitialized()

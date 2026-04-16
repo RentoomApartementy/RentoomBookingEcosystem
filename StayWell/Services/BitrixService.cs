@@ -1,5 +1,6 @@
 ﻿using Microsoft.JSInterop;
-using System.Text.Json;
+using System.Text.RegularExpressions;
+
 namespace RentoomBooking.StayWell.Services;
 
 public class BitrixService
@@ -18,13 +19,14 @@ public class BitrixService
 
     public async Task EnableLoaderAsync(string loaderUrl)
     {
-        await _js.InvokeVoidAsync("bitrixInterop.enableLoader", loaderUrl);
+        await _js.InvokeVoidAsync("stayWellBitrixEnableLoader", loaderUrl);
     }
 
     public async Task OpenChatAsync(BitrixGuestData data)
     {
-        var firstName = string.IsNullOrWhiteSpace(data.FirstName) ? "Gość" : data.FirstName;
-        var lastName = data.LastName ?? "";
+        var displayName = data.Name ?? "Gość";
+        var resKey = data.ExtraInfo.Keys.FirstOrDefault(k => k.ToLower().Contains("rezerwacj"));
+        if (resKey != null) displayName += $" (#{data.ExtraInfo[resKey]})";
 
         var gridItems = new List<object>
         {
@@ -40,12 +42,11 @@ public class BitrixService
 
         var payload = new object[]
         {
-            new { USER = new { NAME = firstName, LAST_NAME = lastName, EMAIL = data.Email, PERSONAL_PHONE = data.Phone } },
+            new { USER = new { NAME = displayName, EMAIL = data.Email, PERSONAL_PHONE = data.Phone } },
             new { GRID = gridItems }
         };
 
-        var json = JsonSerializer.Serialize(payload);
-        await _js.InvokeVoidAsync("bitrixInterop.openChat", json);
+        await _js.InvokeVoidAsync("bitrixInterop.openChat", payload);
     }
 
     public async Task DestroyAsync()
@@ -55,8 +56,7 @@ public class BitrixService
 }
 public class BitrixGuestData
 {
-    public string FirstName { get; set; } = "Gość";
-    public string LastName { get; set; } = "";
+    public string Name { get; set; } = "Gość";
     public string Email { get; set; } = "";
     public string Phone { get; set; } = "";
     public string ExternalId { get; set; } = "";

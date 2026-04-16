@@ -336,7 +336,7 @@
             }
         </div>
 
-        <a class="parking-city-link" href="@GetParkingInfoUrl()" target="_blank" rel="noopener noreferrer">
+        <a class="parking-city-link" href="https://mzd.torun.pl/strefa-platnego-parkowania-w-toruniu/" target="_blank" rel="noopener noreferrer">
             <span>@Localizer["MoreInfo"]</span>
             <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
         </a>
@@ -706,20 +706,5 @@
         if (currentTime < paidFrom || currentTime >= paidTo) return true;
 
         return false;
-    }
-
-    private const string ParkingInfoBaseUrl = "https://mzd.torun.pl/strefa-platnego-parkowania-w-toruniu/";
-
-    private string GetParkingInfoUrl()
-    {
-        var language = GlobalizationService.CurrentCulture.TwoLetterISOLanguageName;
-
-        if (string.Equals(language, "pl", StringComparison.OrdinalIgnoreCase))
-        {
-            return ParkingInfoBaseUrl;
-        }
-
-        var encodedUrl = Uri.EscapeDataString(ParkingInfoBaseUrl);
-        return $"https://translate.google.com/translate?sl=pl&tl={language}&u={encodedUrl}";
     }
 }

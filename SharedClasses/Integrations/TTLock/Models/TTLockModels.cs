@@ -40,31 +40,4 @@ namespace RentoomBooking.SharedClasses.Integrations.TTLock.Models
         [JsonProperty("state")]
         public int State { get; set; }
     }
-
-    public class TTLockPasscodeResponse : TTLockBaseResponse
-    {
-        [JsonProperty("keyboardPwd")]
-        public string? KeyboardPwd { get; set; }
-
-        [JsonProperty("keyboardPwdId")]
-        public int KeyboardPwdId { get; set; }
-    }
-
-    public enum TTLockKeyboardPwdType
-    {
-        OneTime = 1,
-        Permanent = 2,
-        Period = 3,
-        Delete = 4,
-        WeekendCyclic = 5,
-        DailyCyclic = 6,
-        WorkdayCyclic = 7,
-        MondayCyclic = 8,
-        TuesdayCyclic = 9,
-        WednesdayCyclic = 10,
-        ThursdayCyclic = 11,
-        FridayCyclic = 12,
-        SaturdayCyclic = 13,
-        SundayCyclic = 14,
-    }
 }

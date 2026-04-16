@@ -35,13 +35,11 @@
 }
 
     .main-terms-card.is-tos-view {
-        height: auto;
-        max-height: calc(100dvh - 300px);
-        padding: 16px 16px 20px !important;
+        height: 480px;
     }
 
     .main-terms-card.is-registration-view {
-        height: 420px;
+        height: 440px;
     }
 
 .transition-container {
@@ -50,7 +48,7 @@
     flex-direction: column;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
     min-height: 0;
-    margin-bottom: 28px;
+    margin-bottom: 35px;
 }
 
 .fade-out {
@@ -93,7 +91,6 @@
     color: #1a1a1a;
 }
 
-/* Terms view */
 .tos-view {
     flex: 1;
     display: flex;
@@ -101,279 +98,64 @@
     min-height: 0;
 }
 
-.terms-loading {
+.tos-scroll-area {
     flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
-    color: rgba(0, 0, 0, 0.5);
-}
-
-.terms-list {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-right: 4px;
-}
-
-.consent-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 0;
-    transition: opacity 0.2s ease;
-}
-
-    .consent-row--locked {
-        opacity: 0.55;
-        pointer-events: none;
-    }
-
-.view-terms-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 38px;
-    height: 38px;
-    border: 1.5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.85);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-    .view-terms-btn img {
-        width: 18px;
-        height: 18px;
-        opacity: 0.5;
-        transition: opacity 0.15s ease;
-    }
-
-    .view-terms-btn:hover {
-        border-color: rgba(0, 0, 0, 0.25);
-        background: #fff;
-    }
-
-        .view-terms-btn:hover img {
-            opacity: 0.75;
-        }
-
-    .view-terms-btn:active {
-        transform: scale(0.95);
-    }
-
-    .view-terms-btn--required {
-        border-color: var(--rentoom-green-dark, #21573e);
-        background: rgba(33, 87, 62, 0.08);
-    }
-
-        .view-terms-btn--required img {
-            opacity: 0.8;
-        }
-
-.show-full-terms-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    margin-top: 8px;
-    padding: 10px 16px;
-    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.02);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.85);
-    cursor: pointer;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: #444;
-    transition: all 0.2s ease;
-}
-
-    .show-full-terms-btn img {
-        width: 16px;
-        height: 16px;
-        opacity: 0.5;
-    }
-
-    .show-full-terms-btn:hover {
-        border-color: rgba(0, 0, 0, 0.25);
-        background: #fff;
-        color: #222;
-    }
-
-    .show-full-terms-btn:active {
-        transform: scale(0.98);
-    }
-
-/* Modal content for terms HTML */
-::deep .terms-modal-content {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: #333;
-    max-height: 60vh;
-    overflow-y: auto;
+    padding: 12px;
+    font-size: 0.85rem;
+    white-space: pre-line;
+    border: 1px solid rgba(0, 0, 0, 0.04);
     -webkit-overflow-scrolling: touch;
-    padding: 4px 0;
 }
 
-    ::deep .terms-modal-content h1,
-    ::deep .terms-modal-content h2,
-    ::deep .terms-modal-content h3 {
-        margin-top: 1.2em;
-        margin-bottom: 0.5em;
-        color: #1a1a1a;
-    }
-
-    ::deep .terms-modal-content p {
-        margin-bottom: 0.6em;
-    }
-
-    ::deep .terms-modal-content ul,
-    ::deep .terms-modal-content ol {
-        padding-left: 1.5em;
-        margin-bottom: 0.6em;
-    }
-
-    ::deep .terms-modal-content a {
-        color: #1E4D40;
-        text-decoration: underline;
-    }
-
-/* Registration view */
 .registration-view {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-}
-
-.reg-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 2px;
-}
-
-.reg-header-icon {
-    width: 22px;
-    height: 22px;
-    opacity: 0.7;
+    gap: 12px;
 }
 
 .reg-title {
     font-size: 1.1rem;
     font-weight: 800;
     text-align: center;
-    margin: 0;
+    margin-bottom: 5px;
 }
 
-.reg-field {
+.mail-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
-.reg-field-label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.mail-input-title {
     font-size: 0.75rem;
     font-weight: 600;
     color: #888;
     margin-left: 4px;
 }
 
-.field-check-icon {
-    width: 14px;
-    height: 14px;
-    opacity: 0.6;
-    filter: hue-rotate(90deg) saturate(1.5);
-}
-
-.reg-input {
+.editform-input {
     width: 100%;
     height: 46px;
     border-radius: 12px;
-    border: 1.5px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.1);
     padding: 0 15px;
-    font-size: 0.95rem;
     transition: border-color 0.2s;
-    background: rgba(255,255,255,0.8);
-    outline: none;
+    background: white;
 }
 
-.reg-input:focus {
-    border-color: rgba(0,0,0,0.25);
-}
+    .editform-input.is-valid {
+        border-color: #28a745 !important;
+    }
 
-.reg-input.is-valid {
-    border-color: #28a745 !important;
-}
-
-.reg-actions {
+.form-buttons {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-}
-
-.reg-action-btn {
-    display: flex;
-    align-items: center;
     gap: 10px;
-    width: 100%;
-    padding: 14px 14px;
-    border: 1.5px solid rgba(0,0,0,0.1);
-    border-radius: 14px;
-    background: rgba(255,255,255,0.8);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
 }
 
-.reg-action-btn:active {
-    transform: scale(0.98);
-    background: rgba(0,0,0,0.03);
-}
-
-.reg-action-btn.completed {
-    border-color: rgba(40, 167, 69, 0.3);
-    background: rgba(40, 167, 69, 0.04);
-}
-
-.action-icon {
-    width: 20px;
-    height: 20px;
-    opacity: 0.5;
-    flex-shrink: 0;
-}
-
-.reg-action-btn.completed .action-icon {
-    opacity: 0.7;
-}
-
-.action-text {
-    flex: 1;
-    text-align: left;
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: #333;
-    line-height: 1.3;
-}
-
-.action-check-icon {
-    width: 18px;
-    height: 18px;
-    opacity: 0.5;
-    flex-shrink: 0;
-    filter: hue-rotate(90deg) saturate(1.5);
-}
-
-/* Dots indicator */
 .dots-indicator {
     position: absolute;
     bottom: 15px;
@@ -441,11 +223,11 @@
     }
 
         .main-terms-card.is-tos-view {
-            max-height: calc(100dvh - 260px);
+            height: 380px;
         }
 
         .main-terms-card.is-registration-view {
-            height: 380px;
+            height: 370px;
         }
 
     .image-container {

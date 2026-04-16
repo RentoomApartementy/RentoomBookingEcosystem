@@ -103,7 +103,7 @@ namespace RentoomBooking.StayWell.Models
 
             if (!string.IsNullOrWhiteSpace(savedPreference))
             {
-                GlobalizationService.ForceSetCulture(savedPreference);
+                GlobalizationService.SetCulture(savedPreference);
                 Console.WriteLine($"Language set from local preference: {savedPreference}");
                 return;
             }
@@ -116,19 +116,19 @@ namespace RentoomBooking.StayWell.Models
                 || string.Equals(lang, "en-us", StringComparison.OrdinalIgnoreCase)
                 || string.IsNullOrWhiteSpace(lang))
             {
-                GlobalizationService.ForceSetCulture("en-US");
+                GlobalizationService.SetCulture("en-US");
             }
             else if (string.Equals(lang, "pol", StringComparison.OrdinalIgnoreCase)
                      || string.Equals(lang, "pl", StringComparison.OrdinalIgnoreCase)
                      || string.Equals(lang, "pl-pl", StringComparison.OrdinalIgnoreCase))
             {
-                GlobalizationService.ForceSetCulture("pl-PL");
+                GlobalizationService.SetCulture("pl-PL");
             }
             else if (string.Equals(lang, "de", StringComparison.OrdinalIgnoreCase)
                      || string.Equals(lang, "deu", StringComparison.OrdinalIgnoreCase)
                      || string.Equals(lang, "de-de", StringComparison.OrdinalIgnoreCase))
             {
-                GlobalizationService.ForceSetCulture("de-DE");
+                GlobalizationService.SetCulture("de-DE");
             }
 
             //Console.WriteLine($"Language set from API: {lang} → {CultureInfo.CurrentCulture.Name}");
@@ -238,20 +238,6 @@ namespace RentoomBooking.StayWell.Models
             LayoutState.OnChange -= StateHasChanged;
             TermsState.OnChange -= StateHasChanged;
             RegistrationCardState.OnChange -= StateHasChanged;
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            await base.OnAfterRenderAsync(firstRender);
-
-            if (IsInitializedSuccessfully
-                && RegistrationCardState.CurrentCard == null
-                && !NavigationManager.Uri.Contains("/Prearrival", StringComparison.OrdinalIgnoreCase)
-                && !NavigationManager.Uri.Contains("/TermsPage", StringComparison.OrdinalIgnoreCase)
-                && !NavigationManager.Uri.Contains("/RegistrationPage", StringComparison.OrdinalIgnoreCase))
-            {
-                NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival", replace: true);
-            }
         }
     }
 }
