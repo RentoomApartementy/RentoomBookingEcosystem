@@ -8,9 +8,11 @@
 @inject LocalStorageService LocalStorageService
 @inject ReservationState ReservationState
 @inject ModalService ModalService
+@inject GlobalizationService GlobalizationService
+@inject IJSRuntime JS
 
 <div class="ai-chat-panel">
-    <div class="ai-chat-messages" id="ai-chat-messages">
+    <div class="ai-chat-messages" id="ai-chat-messages" @ref="_messagesContainerRef">
         @foreach (var message in _messages)
         {
             <div class="ai-chat-message @(message.Role == ChatRoles.User ? "ai-chat-message--user" : "ai-chat-message--assistant")">
@@ -48,6 +50,13 @@
         <div class="ai-chat-buttons">
             <button class="ai-chat-btn ai-chat-btn--ghost" @onclick="Close" disabled="@_isStreaming">Zamknij</button>
             <button class="ai-chat-btn ai-chat-btn--danger" @onclick="StopAsync" disabled="@(!_isStreaming)">Stop</button>
+            <button
+                class="ai-chat-btn ai-chat-btn--mic @(_isDictating ? "ai-chat-btn--mic-active" : string.Empty)"
+                @onclick="ToggleDictationAsync"
+                disabled="@(_isStreaming || !_isSpeechSupported)">
+                <img src="/icons/radio.svg" alt="Mikrofon" />
+                @(_isDictating ? "Nasłuch..." : "Mikrofon")
+            </button>
             <button class="ai-chat-btn ai-chat-btn--primary" @onclick="SendAsync" disabled="@(!_canSend)">Wyślij</button>
         </div>
     </div>
@@ -57,12 +66,18 @@
     [Parameter] public string? Token { get; set; }
 
     private readonly List<ChatUiMessage> _messages = new();
+    private ElementReference _messagesContainerRef;
     private string? _conversationId;
     private string? _conversationStorageKey;
     private string _input = string.Empty;
     private string? _error;
     private bool _isStreaming;
+    private bool _isSpeechSupported = true;
+    private bool _isDictating;
+    private string _speechInputPrefix = string.Empty;
+    private bool _pendingScrollToBottom;
     private CancellationTokenSource? _streamCts;
+    private DotNetObjectReference<AiChatPanel>? _dotNetRef;
 
     private bool _canSend => !_isStreaming && !string.IsNullOrWhiteSpace(_input);
 
@@ -76,6 +91,8 @@
                 Markdown = "Cześć! Jestem asystentem StayWell. Jak mogę pomóc podczas Twojego pobytu?"
             });
         }
+
+        QueueScrollToBottom();
     }
 
     protected override async Task OnParametersSetAsync()
@@ -103,10 +120,23 @@
             return;
         }
 
+        if (_isDictating)
+        {
+            await StopDictationAsync();
+        }
+
         var token = ResolveToken();
         if (string.IsNullOrWhiteSpace(token))
         {
             _error = "Brak tokenu rezerwacji. Odśwież stronę i spróbuj ponownie.";
+            StateHasChanged();
+            return;
+        }
+
+        var reservationId = ReservationState.CurrentReservation?.Id;
+        if (reservationId is null || reservationId <= 0)
+        {
+            _error = "Brak danych rezerwacji. Odśwież stronę i spróbuj ponownie.";
             StateHasChanged();
             return;
         }
@@ -129,6 +159,7 @@
 
         _messages.Add(assistantMessage);
         _isStreaming = true;
+        QueueScrollToBottom();
         StateHasChanged();
 
         _streamCts?.Cancel();
@@ -138,10 +169,11 @@
         try
         {
             await AiChatClientService.StreamAsync(
-                new ChatRequestDto(userMessage, token,ReservationState.CurrentReservation.Id,  _conversationId),
+                new ChatRequestDto(userMessage, token, reservationId.Value, _conversationId),
                 async chunk =>
                 {
                     assistantMessage.Markdown += chunk.Text;
+                    QueueScrollToBottom();
                     await InvokeAsync(StateHasChanged);
                 },
                 async conversationId =>
@@ -155,11 +187,13 @@
                         }
                     }
 
+                    QueueScrollToBottom();
                     await InvokeAsync(StateHasChanged);
                 },
                 async message =>
                 {
                     _error = message;
+                    QueueScrollToBottom();
                     await InvokeAsync(StateHasChanged);
                 },
                 _streamCts.Token);
@@ -167,6 +201,7 @@
             if (string.IsNullOrWhiteSpace(assistantMessage.Markdown))
             {
                 assistantMessage.Markdown = "Brak odpowiedzi z modelu.";
+                QueueScrollToBottom();
             }
         }
         catch (OperationCanceledException)
@@ -174,6 +209,7 @@
             if (string.IsNullOrWhiteSpace(assistantMessage.Markdown))
             {
                 _messages.Remove(assistantMessage);
+                QueueScrollToBottom();
             }
         }
         catch (Exception ex)
@@ -193,12 +229,33 @@
             {
                 _messages.Remove(assistantMessage);
             }
+
+            QueueScrollToBottom();
         }
         finally
         {
             _isStreaming = false;
+            QueueScrollToBottom();
             StateHasChanged();
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            _isSpeechSupported = await JS.InvokeAsync<bool>("staywellAiChat.isSpeechSupported");
+            await InvokeAsync(StateHasChanged);
+        }
+
+        if (!_pendingScrollToBottom)
+        {
+            return;
+        }
+
+        _pendingScrollToBottom = false;
+        await JS.InvokeVoidAsync("staywellAiChat.scrollToBottom", _messagesContainerRef);
     }
 
     private Task HandleInputKeyDown(KeyboardEventArgs args)
@@ -209,6 +266,68 @@
         }
 
         return Task.CompletedTask;
+    }
+
+    private async Task ToggleDictationAsync()
+    {
+        if (!_isSpeechSupported || _isStreaming || _dotNetRef is null)
+        {
+            return;
+        }
+
+        _error = null;
+        if (_isDictating)
+        {
+            await StopDictationAsync();
+            return;
+        }
+
+        _speechInputPrefix = _input;
+        await JS.InvokeVoidAsync("staywellAiChat.startDictation", _dotNetRef, GetSpeechLanguage());
+    }
+
+    [JSInvokable]
+    public Task OnSpeechStateChanged(bool isListening)
+    {
+        _isDictating = isListening;
+        return InvokeAsync(StateHasChanged);
+    }
+
+    [JSInvokable]
+    public Task OnSpeechTranscriptChanged(string transcript)
+    {
+        _input = MergeSpeechWithInput(_speechInputPrefix, transcript);
+        return InvokeAsync(StateHasChanged);
+    }
+
+    [JSInvokable]
+    public Task OnSpeechError(string message)
+    {
+        _error = string.IsNullOrWhiteSpace(message) ? "Nie udało się uruchomić rozpoznawania mowy." : message;
+        _isDictating = false;
+        return InvokeAsync(StateHasChanged);
+    }
+
+    [JSInvokable]
+    public Task OnSpeechSupportChanged(bool isSupported)
+    {
+        _isSpeechSupported = isSupported;
+        if (!isSupported)
+        {
+            _isDictating = false;
+        }
+
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private async Task StopDictationAsync()
+    {
+        if (_isDictating)
+        {
+            await JS.InvokeVoidAsync("staywellAiChat.stopDictation");
+        }
+
+        _isDictating = false;
     }
 
     private Task StopAsync()
@@ -229,15 +348,63 @@
 
     private static string BuildConversationStorageKey(string token) => $"staywell:ai-chat:conversation:{token}";
 
-    private Task Close()
+    private static string MergeSpeechWithInput(string prefix, string transcript)
     {
+        var cleanedPrefix = prefix?.TrimEnd() ?? string.Empty;
+        var cleanedTranscript = transcript?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(cleanedPrefix))
+        {
+            return cleanedTranscript;
+        }
+
+        if (string.IsNullOrWhiteSpace(cleanedTranscript))
+        {
+            return cleanedPrefix;
+        }
+
+        return $"{cleanedPrefix} {cleanedTranscript}";
+    }
+
+    private string GetSpeechLanguage()
+    {
+        var lang = GlobalizationService.CurrentCulture?.Name;
+        if (string.IsNullOrWhiteSpace(lang))
+        {
+            return "pl-PL";
+        }
+
+        return lang;
+    }
+
+    private void QueueScrollToBottom()
+    {
+        _pendingScrollToBottom = true;
+    }
+
+    private async Task Close()
+    {
+        if (_isDictating)
+        {
+            await StopDictationAsync();
+        }
+
         ModalService.HideModal();
-        return Task.CompletedTask;
     }
 
     public void Dispose()
     {
         _streamCts?.Cancel();
         _streamCts?.Dispose();
+        _dotNetRef?.Dispose();
+
+        try
+        {
+            _ = JS.InvokeVoidAsync("staywellAiChat.stopDictation");
+        }
+        catch
+        {
+            // Ignore JS interop errors during component disposal.
+        }
     }
 }

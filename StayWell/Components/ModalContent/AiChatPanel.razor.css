@@ -122,6 +122,24 @@
     color: #222;
 }
 
+.ai-chat-btn--mic {
+    background: #e7f0ff;
+    color: #173f7a;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ai-chat-btn--mic img {
+    width: 16px;
+    height: 16px;
+}
+
+.ai-chat-btn--mic-active {
+    background: #ffdcdc;
+    color: #7a1717;
+}
+
 @media (max-width: 700px) {
     .ai-chat-panel {
         width: 100%;
