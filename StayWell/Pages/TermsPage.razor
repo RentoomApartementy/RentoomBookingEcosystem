@@ -4,10 +4,12 @@
 @using RentoomBooking.StayWell.Models
 @using RentoomBooking.SharedClasses.Models.StayWell
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
+@using RentoomBooking.SharedClasses.Models
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject IStringLocalizer<PrearrivalPage> Localizer
 @inject IJSRuntime JSRuntime
+@inject RentoomBooking.StayWell.Services.BackendApi BackendApi
 
 @inherits Models.PageBase
 
@@ -36,35 +38,111 @@
                 else if (CurrentView == ViewState.Terms)
                 {
                     <div class="tos-view">
-                        <div id="terms-scroll-area" class="tos-scroll-area">
-                            @Localizer["Terms"]
-                        </div>
+                        @if (_isTermsLoading)
+                        {
+                            <div class="terms-loading">
+                                <span>@Localizer["Loading"]</span>
+                            </div>
+                        }
+                        else if (_termsSources is { Count: > 0 })
+                        {
+                            <div class="terms-list">
+                                @foreach (var term in _termsSources)
+                                {
+                                    var t = term;
+                                    var isAccepted = _userSelections.GetValueOrDefault(t.Id);
+                                    var wasAlreadyAccepted = _initiallyAccepted.Contains(t.Id);
+
+                                    // Non-mandatory + already accepted → hide completely
+                                    if (!t.IsRequired && wasAlreadyAccepted) continue;
+
+                                    var isLocked = t.IsRequired && wasAlreadyAccepted;
+                                    var hasContent = !string.IsNullOrEmpty(t.HtmlContent) || !string.IsNullOrEmpty(t.Link);
+                                    var needsViewing = t.IsRequired && !wasAlreadyAccepted && hasContent && !_viewedTerms.Contains(t.Id);
+
+                                    <div class="consent-row @(isLocked ? "consent-row--locked" : "")">
+                                        <ToggleSwitch Value="isAccepted"
+                                                      ValueChanged="(val) => OnTermToggled(t, val)"
+                                                      Text="@t.Description"
+                                                      Disabled="isLocked"
+                                                      Description="@(isLocked ? Localizer["AlreadyAccepted"] : t.IsRequired ? Localizer["FieldRequired"] : "")" />
+                                        @if (hasContent)
+                                        {
+                                            <button class="view-terms-btn @(needsViewing ? "view-terms-btn--required" : "")"
+                                                    @onclick="() => ShowTermContent(t)"
+                                                    title="@Localizer["ViewDocument"]">
+                                                <img src="/icons/external-link.svg" alt="" />
+                                            </button>
+                                        }
+                                    </div>
+                                }
+
+                                <button class="show-full-terms-btn" @onclick="ShowFullTerms">
+                                    <img src="/icons/external-link.svg" alt="" />
+                                    <span>@Localizer["ShowFullTerms"]</span>
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="terms-loading">
+                                <span>@Localizer["Terms"]</span>
+                            </div>
+                        }
                     </div>
                 }
                 else if (CurrentView == ViewState.RegistrationCard)
                 {
                     <div class="registration-view">
-                        <h3 class="reg-title">@Localizer["RegisterCard"]</h3>
+                        <div class="reg-header">
+                            <img src="/icons/file-user.svg" class="reg-header-icon" alt="" />
+                            <h3 class="reg-title">@Localizer["RegisterCard"]</h3>
+                        </div>
 
-                        <div class="mail-wrapper">
-                            <label class="mail-input-title" for="email">E-mail</label>
-                            <input class="editform-input @(IsEmailValid ? "is-valid" : "")"
+                        <div class="reg-field">
+                            <label class="reg-field-label" for="email">
+                                E-mail
+                                @if (IsEmailValid)
+                                {
+                                    <img src="/icons/circle-check.svg" class="field-check-icon" alt="" />
+                                }
+                            </label>
+                            <input class="reg-input @(IsEmailValid ? "is-valid" : "")"
                                    id="email" type="email" placeholder="twój@email.pl"
                                    @bind="_mail" @bind:event="oninput" />
                         </div>
 
-                        <div class="form-buttons">
-                            <Button OnClick="SelectTime" ButtonStyle="padding: 22px 12px !important; width: 100%;">
-                                <RenderFragment>
-                                    <span>@(_checkInTime is null ? Localizer["TimeSelect"] : $"{Localizer["TimeSelected"]}: {_checkInTime.Value.ToString(@"hh\:mm")}")</span>
-                                </RenderFragment>
-                            </Button>
+                        <div class="reg-actions">
+                            <button class="reg-action-btn @(IsTimeSelected ? "completed" : "")" @onclick="SelectTime">
+                                <img src="/icons/clock.svg" class="action-icon" alt="" />
+                                <span class="action-text">
+                                    @if (IsTimeUnknown)
+                                    {
+                                        @Localizer["DontKnowYet"]
+                                    }
+                                    else if (_checkInTime is not null)
+                                    {
+                                        @($"{Localizer["TimeSelected"]}: {_checkInTime.Value.ToString(@"hh\:mm")}")
+                                    }
+                                    else
+                                    {
+                                        @Localizer["TimeSelect"]
+                                    }
+                                </span>
+                                @if (IsTimeSelected)
+                                {
+                                    <img src="/icons/circle-check.svg" class="action-check-icon" alt="" />
+                                }
+                            </button>
 
-                            <Button OnClick="FillGuestInfo" ButtonStyle="padding: 22px 12px !important; width: 100%;">
-                                <RenderFragment>
-                                    <span>@(AreGuestsFilled() ? $"{Localizer["ChangeGuest"]} ({_guests.Count})" : Localizer["FillGuest"])</span>
-                                </RenderFragment>
-                            </Button>
+                            <button class="reg-action-btn @(AreGuestsFilled() ? "completed" : "")" @onclick="FillGuestInfo">
+                                <img src="/icons/users.svg" class="action-icon" alt="" />
+                                <span class="action-text">@(AreGuestsFilled() ? $"{Localizer["ChangeGuest"]} ({_guests.Count})" : Localizer["FillGuest"])</span>
+                                @if (AreGuestsFilled())
+                                {
+                                    <img src="/icons/circle-check.svg" class="action-check-icon" alt="" />
+                                }
+                            </button>
                         </div>
                     </div>
                 }
@@ -77,38 +155,13 @@
                 }
             </div>
         </div>
-    </div>  
+    </div>
 </div>
 
     <FloatingButton Text="@(CurrentView == ViewState.Steps ? Localizer["Continue"] : CurrentView == ViewState.Terms ? Localizer["Accept"] : Localizer["Confirm"])"
         IconPath="@(CurrentView != ViewState.RegistrationCard ? "/icons/chevron-right.svg" : "/icons/handshake.svg")"
         IsDisabled="IsButtonDisabled"
         OnClick="HandleNextClick" />
-
-<script>
-    window.termsScrollObserver = {
-        init: function (elementId, dotNetRef) {
-            setTimeout(function() {
-                var el = document.getElementById(elementId);
-                if (!el) return;
-
-                function check() {
-                    // Tolerancja 5px dla różnych przeglądarek i zoomu
-                    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 5) {
-                        dotNetRef.invokeMethodAsync('OnScrollEnd');
-                        el.removeEventListener('scroll', check);
-                    }
-                }
-
-                if (el.scrollHeight <= el.clientHeight) {
-                    dotNetRef.invokeMethodAsync('OnScrollEnd');
-                } else {
-                    el.addEventListener('scroll', check);
-                }
-            }, 100);
-        }
-    };
-</script>
 
 @code {
     private enum ViewState { Steps, Terms, RegistrationCard }
@@ -123,15 +176,19 @@
 
     private int _currentStep = 0;
     private bool _isTransitioning = false;
-    private bool _termsScrolledToBottom = false;
-    private bool _observerInitialized = false;
 
     private string? _mail;
     private TimeSpan? _checkInTime;
     private List<RegistrationCardGuestModel> _guests = new();
-    private DotNetObjectReference<TermsPage>? _objRef;
 
-    private int TotalStatesCount => steps.Length + 2; // Steps + Terms + Registration
+    // Terms state
+    private List<CustomerTermDisplayDto>? _termsSources;
+    private Dictionary<int, bool> _userSelections = new();
+    private HashSet<int> _initiallyAccepted = new();
+    private HashSet<int> _viewedTerms = new();
+    private bool _isTermsLoading = true;
+
+    private int TotalStatesCount => steps.Length + 2;
 
     private ViewState CurrentView =>
         _currentStep < steps.Length ? ViewState.Steps :
@@ -141,11 +198,33 @@
     private bool IsShowingTerms => CurrentView == ViewState.Terms;
     private bool IsShowingRegistration => CurrentView == ViewState.RegistrationCard;
     private bool IsEmailValid => !string.IsNullOrWhiteSpace(_mail) && _mail.Contains("@") && _mail.Contains(".");
+    private bool IsTimeUnknown => _checkInTime == TimeSpan.Zero;
+    private bool IsTimeSelected => _checkInTime is not null;
 
     private bool IsButtonDisabled =>
-        (IsShowingTerms && !_termsScrolledToBottom) ||
-        (IsShowingRegistration && (!IsEmailValid || _checkInTime == null || !AreGuestsFilled())) ||
+        (IsShowingTerms && !CanAcceptTerms()) ||
+        (IsShowingRegistration && (!IsEmailValid || !IsTimeSelected || !AreGuestsFilled())) ||
         _isTransitioning;
+
+    private bool CanAcceptTerms()
+    {
+        if (_termsSources == null || _isTermsLoading) return false;
+
+        return _termsSources
+            .Where(t => t.IsRequired)
+            .All(t =>
+            {
+                var isAccepted = _userSelections.GetValueOrDefault(t.Id);
+                if (!isAccepted) return false;
+
+                // If not already accepted, must have viewed content first (if content exists)
+                var hasContent = !string.IsNullOrEmpty(t.HtmlContent) || !string.IsNullOrEmpty(t.Link);
+                if (!_initiallyAccepted.Contains(t.Id) && hasContent && !_viewedTerms.Contains(t.Id))
+                    return false;
+
+                return true;
+            });
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -163,7 +242,6 @@
         base.OnInitialized();
 
         LayoutState.ShowFooter = false;
-        _objRef = DotNetObjectReference.Create(this);
 
         int adults = ReservationState?.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.numberOfAdults ?? 1;
         _guests = RegistrationCardState.CurrentCard?.GuestsData?.Any() == true
@@ -181,19 +259,98 @@
             TryInitializeMail();
         }
 
-        if (IsShowingTerms && !_observerInitialized)
+        if (IsShowingTerms && _termsSources == null)
         {
-            _observerInitialized = true;
-            await JSRuntime.InvokeVoidAsync("window.termsScrollObserver.init", "terms-scroll-area", _objRef);
+            await LoadTermsAsync();
+            StateHasChanged();
         }
+    }
+
+    private async Task LoadTermsAsync()
+    {
+        if (_termsSources is not null) return;
+
+        try
+        {
+            _isTermsLoading = true;
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            _termsSources = await BackendApi.GetTermsForDisplayAsync(language);
+            _userSelections = _termsSources.ToDictionary(t => t.Id, _ => false);
+
+            try
+            {
+                var agreedTerms = await BackendApi.GetAgreedTermsByReservationAsync(Token!, language);
+                foreach (var agreedTerm in agreedTerms)
+                {
+                    if (_userSelections.ContainsKey(agreedTerm.TermsSourceId) && agreedTerm.IsAccepted)
+                    {
+                        _userSelections[agreedTerm.TermsSourceId] = true;
+                        _initiallyAccepted.Add(agreedTerm.TermsSourceId);
+                        _viewedTerms.Add(agreedTerm.TermsSourceId);
+                    }
+                }
+            }
+            catch
+            {
+                // No agreed terms yet
+            }
+        }
+        finally
+        {
+            _isTermsLoading = false;
+        }
+    }
+
+    private void OnTermToggled(CustomerTermDisplayDto term, bool newValue)
+    {
+        // Required + already accepted = locked (handled by Disabled on ToggleSwitch)
+        if (term.IsRequired && _initiallyAccepted.Contains(term.Id)) return;
+
+        // Required + not yet viewed = must open first
+        var hasContent = !string.IsNullOrEmpty(term.HtmlContent) || !string.IsNullOrEmpty(term.Link);
+        if (newValue && term.IsRequired && hasContent && !_viewedTerms.Contains(term.Id))
+        {
+            ShowTermContent(term);
+            return;
+        }
+
+        _userSelections[term.Id] = newValue;
+        StateHasChanged();
+    }
+
+    private void ShowFullTerms()
+    {
+        ModalService.ShowModal(Localizer["FullTermsTitle"],
+            @<div class="terms-modal-content">
+                @((MarkupString)Localizer["Terms"].Value)
+            </div>
+        );
+    }
+
+    private void ShowTermContent(CustomerTermDisplayDto term)
+    {
+        _viewedTerms.Add(term.Id);
+
+        if (!string.IsNullOrEmpty(term.Link) && string.IsNullOrEmpty(term.HtmlContent))
+        {
+            _ = JSRuntime.InvokeVoidAsync("open", term.Link, "_blank");
+            StateHasChanged();
+            return;
+        }
+
+        var title = term.Title ?? term.Description ?? Localizer["TOS"];
+        ModalService.ShowModal(title,
+            @<div class="terms-modal-content">
+                @((MarkupString)(term.HtmlContent ?? ""))
+            </div>
+        );
+        StateHasChanged();
     }
 
     private void TryInitializeMail()
     {
-        if (!string.IsNullOrWhiteSpace(_mail))
-        {
-            return;
-        }
+        if (!string.IsNullOrWhiteSpace(_mail)) return;
 
         _mail = GetInitialEmail();
         if (!string.IsNullOrWhiteSpace(_mail))
@@ -205,16 +362,10 @@
     private string? GetInitialEmail()
     {
         var savedEmail = RegistrationCardState.CurrentCard?.ContactEmail;
-        if (!string.IsNullOrWhiteSpace(savedEmail))
-        {
-            return savedEmail;
-        }
+        if (!string.IsNullOrWhiteSpace(savedEmail)) return savedEmail;
 
         var reservationEmail = ReservationState?.CurrentReservation?.Reservation?.Client?.Email;
-        if (string.IsNullOrWhiteSpace(reservationEmail))
-        {
-            return null;
-        }
+        if (string.IsNullOrWhiteSpace(reservationEmail)) return null;
 
         return IsBookingMail(reservationEmail) ? null : reservationEmail;
     }
@@ -269,7 +420,6 @@
 
         await Task.Delay(300);
         _currentStep++;
-        _observerInitialized = false;
 
         _isTransitioning = false;
         StateHasChanged();
@@ -277,15 +427,9 @@
 
     private async Task AcceptTermsAsync()
     {
-        var terms = new TermsEntity
-        {
-            ResToken = Token,
-            VersionAccepted = "1.0",
-            TypeAccepted = "regulamin",
-            AcceptedAt = DateTime.UtcNow
-        };
+        if (string.IsNullOrEmpty(Token) || _userSelections.Count == 0) return;
 
-        await TermsState.SaveTermsAsync(terms);
+        await BackendApi.SaveCustomerTermsAsync(Token, _userSelections);
     }
 
     private async Task SaveRegistrationAndFinish()
@@ -300,20 +444,9 @@
         catch { ToastService.ShowToast("Błąd zapisu danych."); }
     }
 
-    [JSInvokable]
-    public void OnScrollEnd()
-    {
-        if (!_termsScrolledToBottom)
-        {
-            _termsScrolledToBottom = true;
-            StateHasChanged();
-        }
-    }
-
     public override void Dispose()
     {
         LayoutState.ShowFooter = true;
-        _objRef?.Dispose();
         base.Dispose();
     }
 }

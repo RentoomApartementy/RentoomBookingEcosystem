@@ -25,18 +25,31 @@
     else if (LocksState.IsTTLockLoading)
     {
         <div class="tile tile--center">
+            <div class="tile__title" style="margin-bottom: 10px;">
+                @Localizer["RemoteOpen"]
+            </div>
             <div class="spinner"></div>
             <div class="status-text">
                 <span>@Localizer["CheckingLock"]</span>
             </div>
         </div>
     }
-    else if (!ReservationState.IsActiveReservation)
+    else if (!ReservationState.IsActiveReservation && !_debugMode)
     {
         <div class="tile tile--center">
+            <div class="tile__title" style="margin-bottom: 10px;">
+                @Localizer["RemoteOpen"]
+            </div>
             <div class="inactive-reservation-badge">
                 <img src="/icons/octagon-alert.svg" class="inactive-reservation-icon" />
-                <span>@Localizer["ReservationNotActive"]</span>
+                @if (ReservationState.IsAfterCheckOut)
+                {
+                    <span>@Localizer["ReservationEnded"]</span>
+                }
+                else
+                {
+                    <span>@string.Format(CultureInfo.CurrentCulture, Localizer["ReservationNotActive"], ReservationState.CheckInTime.ToString("HH:mm"))</span>
+                }
             </div>
         </div>
     }
@@ -118,29 +131,158 @@
                 <div class="skeleton skeleton--code"></div>
                 <div class="skeleton skeleton--text-short" style="margin-top: 8px;"></div>
             }
-            else if (!ReservationState.IsActiveReservation)
+            else if (!ReservationState.IsCodeAvailable && !_debugMode)
             {
-                <span>@Localizer["CodeNotAvailable"]</span>
-            }
-            else if (!string.IsNullOrEmpty(LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()))
-            {
-                <span class="bold">@LocksState.CurrentLocks?.FirstOrDefault()?.Code?.ToString()</span>
-                <span>@Localizer["Confirm"]</span>
-                <span class="bold">#</span>
-                <span>@Localizer["Or"]</span>
-                <img src="/icons/key-round.svg" class="icon-key" />
+                @if (ReservationState.IsAfterCheckOut)
+                {
+                    <span>@Localizer["CodeNoLongerAvailable"]</span>
+                }
+                else
+                {
+                    <span>@string.Format(CultureInfo.CurrentCulture, Localizer["CodeNotAvailable"], ReservationState.CodeAvailableFromTime.ToString("HH:mm"))</span>
+                }
             }
             else
             {
-                <div>
-                    <img style="height: 50px; width: 50px;" src="/icons/octagon-alert.svg" />
-                    <p style="padding-top: 10px;">
-                        @Localizer["NoCode"]
-                    </p>
-                </div>
+                @if (LocksState.LatestPasscode is not null)
+                {
+                    <div class="passcode-main">
+                        <span class="bold">@LocksState.LatestPasscode.KeyboardPwd</span>
+                        <span>@Localizer["Confirm"]</span>
+                        <span class="bold">#</span>
+                        <span>@Localizer["Or"]</span>
+                        <img src="/icons/key-round.svg" class="icon-key" />
+                    </div>
+                    <div class="passcode-validity passcode-validity--center ">
+                        <img src="/icons/clock.svg" class="passcode-validity__icon" />
+                        <span>@FormatPasscodeValidity(LocksState.LatestPasscode.StartDate, LocksState.LatestPasscode.EndDate)</span>
+                    </div>
+                }
+                else if (LocksState.AllCodes.FirstOrDefault(c => c.Source == BackendApi.PasscodeSource.Ido) is { } idoCode)
+                {
+                    <span class="bold">@idoCode.Code</span>
+                    <span>@Localizer["Confirm"]</span>
+                    <span class="bold">#</span>
+                    <span>@Localizer["Or"]</span>
+                    <img src="/icons/key-round.svg" class="icon-key" />
+                }
+                else
+                {
+                    <div>
+                        <img style="height: 50px; width: 50px;" src="/icons/octagon-alert.svg" />
+                        <p style="padding-top: 10px;">
+                            @Localizer["NoCode"]
+                        </p>
+                    </div>
+                }
+
+                @if ((ReservationState.IsActiveReservation || _debugMode))
+                {
+                    <div style="margin-top: 14px;">
+                        <button class="retry-button"
+                                disabled="@(!IsGenerateButtonEnabled && !_debugMode)"
+                                @onclick="HandleGeneratePasscode">
+                            @if (LocksState.IsPasscodeLoading)
+                            {
+                                <div class="spinner spinner--small"></div>
+                                <span>@string.Format(
+                                    CultureInfo.CurrentCulture,
+                                    Localizer["GeneratingCode"],
+                                    LocksState.PasscodeLoadingElapsedSeconds)</span>
+                            }
+                            else if (LocksState.IsPasscodeCooldownActive && !_debugMode)
+                            {
+                                <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" />
+                                @string.Format(
+                                    CultureInfo.CurrentCulture,
+                                    Localizer["NewCodeIn"],
+                                    FormatCooldown(LocksState.PasscodeCooldownSecondsRemaining))
+                            }
+                            else if (!ReservationState.IsPasscodeGenerationTimeAllowed && !_debugMode)
+                            {
+                                <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" />
+                                @string.Format(
+                                    CultureInfo.CurrentCulture,
+                                    Localizer["GenerateAvailableFrom"],
+                                    ReservationState.CheckInTime.ToString("HH:mm"))
+                            }
+                            else if (IsSameHourConflict && !_debugMode)
+                            {
+                                <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" />
+                                @string.Format(
+                                    CultureInfo.CurrentCulture,
+                                    Localizer["GenerateAvailableFrom"],
+                                    GetNextFullHour())
+                            }
+                            else
+                            {
+                                @Localizer["GenerateNewCode"]
+                            }
+                        </button>
+                    </div>
+                }
             }
         </div>
     </div>
+
+    @{
+        var hasHistory = LocksState.AllCodes.Count > 1;
+    }
+    @if (hasHistory && (ReservationState.IsActiveReservation || _debugMode) && !ReservationState.IsLoading && !LocksState.IsLoading)
+    {
+        <div class="tile passcode-history-tile">
+            <button class="passcode-history__toggle" @onclick="TogglePasscodeHistory">
+                <div class="passcode-history__toggle-left">
+                    <img src="/icons/clock.svg" class="icon-inline" />
+                    <span>@Localizer["PreviousCodes"]</span>
+                </div>
+                <img src="/icons/chevron-down.svg"
+                     class="passcode-history__chevron @(IsPasscodeHistoryOpen ? "passcode-history__chevron--open" : "")" />
+            </button>
+
+            @if (IsPasscodeHistoryOpen)
+            {
+                <div class="passcode-history__list">
+                    @foreach (var code_ in LocksState.AllCodes.Skip(1))
+                    {
+                        @if (code_.Source == BackendApi.PasscodeSource.Ido)
+                        {
+                            <div class="passcode-history__item passcode-history__item--ido">
+                                <div class="passcode-history__left">
+                                    <span class="passcode-history__code bold">@code_.Code</span>
+                                    <span class="passcode-history__confirm-hint">
+                                        @Localizer["Confirm"] <span class="bold">#</span>
+                                        @Localizer["Or"]
+                                        <img src="/icons/key-round.svg" class="passcode-history__key-icon" />
+                                    </span>
+                                </div>
+                                <span class="passcode-history__meta">@Localizer["CodeFromIdo"]</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="passcode-history__item">
+                                <div class="passcode-history__left">
+                                    <span class="passcode-history__code bold">@code_.Code</span>
+                                    <span class="passcode-history__confirm-hint">
+                                        @Localizer["Confirm"] <span class="bold">#</span>
+                                        @Localizer["Or"]
+                                        <img src="/icons/key-round.svg" class="passcode-history__key-icon" />
+                                    </span>
+                                    @if (code_.StartDate is not null || code_.EndDate is not null)
+                                    {
+                                        <span class="passcode-history__validity">
+                                            @FormatPasscodeValidity(code_.StartDate, code_.EndDate)
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
 
     <div class="guide-card">
         <div class="guide-card__controls">
@@ -171,7 +313,10 @@
         <div class="guide-card__slide-track" id="guide-slide-track">
             <div class="guide-card__slide">
                 <div class="guide-card__animation-part">
-                    <div class="guide-card__animation-label">@Localizer["HowTo"] @Localizer["LockTypeSpinning"]</div>
+                    <div class="guide-card__animation-label">
+                        @Localizer["HowTo"] @Localizer["LockTypeSpinning"]
+                        <span class="guide-card__animation-sublabel">(@Localizer["CylinderTopView"])</span>
+                    </div>
                     <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
                 </div>
                 <div class="guide-card__instruction-part">
@@ -213,8 +358,44 @@
     private enum InstructionMode { Open, Close }
     private InstructionMode ActiveInstructionMode = InstructionMode.Open;
     private int ActiveLockSlide = 0;
+    private bool IsPasscodeHistoryOpen = false;
+
+#if DEBUG
+    private bool _debugMode = false;
+#else
+    private bool _debugMode = false;
+#endif
 
     private DotNetObjectReference<OpenApartmentPage>? _dotNetRef;
+
+    private bool IsGenerateButtonEnabled =>
+        ReservationState.IsPasscodeGenerationTimeAllowed
+        && LocksState.IsPasscodeGenerationAllowed
+        && !IsSameHourConflict;
+
+    private bool IsSameHourConflict
+    {
+        get
+        {
+            var latest = LocksState.LatestPasscode;
+            if (latest?.StartDate is null) return false;
+
+            var nowUtc = DateTimeOffset.UtcNow;
+            var latestStartUtc = latest.StartDate.UtcDateTime;
+
+            return nowUtc.Year == latestStartUtc.Year
+                && nowUtc.Month == latestStartUtc.Month
+                && nowUtc.Day == latestStartUtc.Day
+                && nowUtc.Hour == latestStartUtc.Hour;
+        }
+    }
+
+    private static string GetNextFullHour()
+    {
+        var now = DateTime.Now;
+        var nextHour = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0).AddHours(1);
+        return nextHour.ToString("HH:mm");
+    }
 
     private async Task SetSlide(int index)
     {
@@ -252,6 +433,110 @@
             )
             : Localizer["TryAgain"];
 
+    private static string FormatCooldown(int seconds)
+    {
+        var h = seconds / 3600;
+        var m = (seconds % 3600) / 60;
+        var s = seconds % 60;
+        return h > 0
+            ? $"{h}:{m:D2}:{s:D2}"
+            : m > 0
+                ? $"{m}:{s:D2}"
+                : $"{s}s";
+    }
+
+    private string FormatPasscodeValidity(DateTimeOffset? startDate, DateTimeOffset? endDate)
+    {
+        var start = startDate?.ToLocalTime();
+        var end = endDate?.ToLocalTime();
+
+        if (start is not null && end is not null)
+        {
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                Localizer["CodeValidFromTo"],
+                start.Value.ToString("HH:mm dd.MM", CultureInfo.CurrentCulture),
+                end.Value.ToString("HH:mm dd.MM", CultureInfo.CurrentCulture));
+        }
+
+        if (start is not null)
+        {
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                Localizer["CodeValidFrom"],
+                start.Value.ToString("HH:mm dd.MM", CultureInfo.CurrentCulture));
+        }
+
+        if (end is not null)
+        {
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                Localizer["CodeValidTo"],
+                end.Value.ToString("HH:mm dd.MM", CultureInfo.CurrentCulture));
+        }
+
+        return string.Empty;
+    }
+
+    private void TogglePasscodeHistory() =>
+        IsPasscodeHistoryOpen = !IsPasscodeHistoryOpen;
+
+    private async Task HandleGeneratePasscode()
+    {
+        if (string.IsNullOrWhiteSpace(Token)) return;
+
+        if (_debugMode)
+        {
+            LocksState.CancelPasscodeCooldown();
+        }
+
+        if (!ReservationState.IsPasscodeGenerationTimeAllowed && !_debugMode)
+        {
+            ToastService.ShowToast(
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    Localizer["GenerateAvailableFrom"],
+                    ReservationState.CheckInTime.ToString("HH:mm")));
+            return;
+        }
+
+        if (IsSameHourConflict && !_debugMode)
+        {
+            ToastService.ShowToast(
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    Localizer["GenerateAvailableFrom"],
+                    GetNextFullHour()));
+            return;
+        }
+
+        var previousPwdId = LocksState.LatestPasscode?.KeyboardPwdId;
+
+        await LocksState.GeneratePasscodeAsync(Token);
+
+        if (LocksState.LatestPasscode is not null && !LocksState.IsPasscodeLoading)
+        {
+            if (LocksState.LatestPasscode.KeyboardPwdId != previousPwdId)
+            {
+                ToastService.ShowToast(Localizer["PasscodeGeneratedSuccess"]);
+            }
+            else
+            {
+                ToastService.ShowToast(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Localizer["GenerateAvailableFrom"],
+                        GetNextFullHour()));
+            }
+        }
+    }
+
+    private void DebugResetCooldown()
+    {
+        LocksState.CancelPasscodeCooldown();
+        StateHasChanged();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -266,9 +551,17 @@
     {
         await base.OnInitializedAsync();
 
-        if (!string.IsNullOrWhiteSpace(Token) && !LocksState.IsStatusResolved)
+        if (!string.IsNullOrWhiteSpace(Token))
         {
-            _ = LocksState.CheckTTLockStatusAsync(Token);
+            if (!LocksState.IsStatusResolved)
+            {
+                _ = LocksState.CheckTTLockStatusAsync(Token);
+            }
+
+            _ = Task.WhenAll(
+                LocksState.LoadAllCodesAsync(Token),
+                LocksState.RestorePasscodeCooldownIfNeededAsync(Token)
+            );
         }
     }
 
@@ -349,8 +642,8 @@
             sb.Append("<ol class=\"instruction-steps\">");
             foreach (var (stepText, hints, continuation) in steps)
             {
-                sb.Append("<li class=\"instruction-steps__step\">");
-                sb.Append($"<span class=\"instruction-steps__step-text\">{System.Net.WebUtility.HtmlEncode(stepText)}</span>");
+                sb.Append("<li class=\"instruction-steps__step\">")
+                    .Append($"<span class=\"instruction-steps__step-text\">{System.Net.WebUtility.HtmlEncode(stepText)}</span>");
                 if (hints.Count > 0)
                 {
                     sb.Append("<div class=\"instruction-steps__body\">");
