@@ -306,4 +306,13 @@ or by registered letter to the correspondence address. A response will be provid
   <data name="InvalidName" xml:space="preserve">
     <value>Only letters, spaces, hyphens and apostrophes</value>
   </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Failed to load consents. Please try again.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Optional consents can be changed at any time on the "Your Reservation" page.</value>
+  </data>
 </root>

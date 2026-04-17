@@ -310,4 +310,13 @@ Rental regulations in English are available at www.rentoom.pl</value>
   <data name="InvalidName" xml:space="preserve">
     <value>Tylko litery, spacje, myślniki i apostrofy</value>
   </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Nie udało się załadować zgód. Spróbuj ponownie.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Ponów</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Zgody opcjonalne możesz zmienić w dowolnym momencie na stronie „O Rezerwacji".</value>
+  </data>
 </root>
