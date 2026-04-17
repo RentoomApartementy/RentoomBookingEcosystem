@@ -44,6 +44,13 @@
                                 <span>@Localizer["Loading"]</span>
                             </div>
                         }
+                        else if (_termsLoadError)
+                        {
+                            <div class="terms-error">
+                                <span>@Localizer["TermsLoadError"]</span>
+                                <button class="retry-btn" @onclick="RetryLoadTerms">@Localizer["Retry"]</button>
+                            </div>
+                        }
                         else if (_termsSources is { Count: > 0 })
                         {
                             <div class="terms-list">
@@ -51,14 +58,8 @@
                                 {
                                     var t = term;
                                     var isAccepted = _userSelections.GetValueOrDefault(t.Id);
-                                    var wasAlreadyAccepted = _initiallyAccepted.Contains(t.Id);
-
-                                    // Non-mandatory + already accepted → hide completely
-                                    if (!t.IsRequired && wasAlreadyAccepted) continue;
-
-                                    var isLocked = t.IsRequired && wasAlreadyAccepted;
+                                    var isLocked = t.IsRequired && _preAccepted.Contains(t.Id);
                                     var hasContent = !string.IsNullOrEmpty(t.HtmlContent) || !string.IsNullOrEmpty(t.Link);
-                                    var needsViewing = t.IsRequired && !wasAlreadyAccepted && hasContent && !_viewedTerms.Contains(t.Id);
 
                                     <div class="consent-row @(isLocked ? "consent-row--locked" : "")">
                                         <ToggleSwitch Value="isAccepted"
@@ -68,7 +69,7 @@
                                                       Description="@(isLocked ? Localizer["AlreadyAccepted"] : t.IsRequired ? Localizer["FieldRequired"] : "")" />
                                         @if (hasContent)
                                         {
-                                            <button class="view-terms-btn @(needsViewing ? "view-terms-btn--required" : "")"
+                                            <button class="view-terms-btn"
                                                     @onclick="() => ShowTermContent(t)"
                                                     title="@Localizer["ViewDocument"]">
                                                 <img src="/icons/external-link.svg" alt="" />
@@ -77,16 +78,10 @@
                                     </div>
                                 }
 
-                                <button class="show-full-terms-btn" @onclick="ShowFullTerms">
-                                    <img src="/icons/external-link.svg" alt="" />
-                                    <span>@Localizer["ShowFullTerms"]</span>
-                                </button>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="terms-loading">
-                                <span>@Localizer["Terms"]</span>
+                                @if (_termsSources.Any(t => !t.IsRequired))
+                                {
+                                    <p class="optional-consents-hint">@Localizer["OptionalConsentsHint"]</p>
+                                }
                             </div>
                         }
                     </div>
@@ -181,12 +176,11 @@
     private TimeSpan? _checkInTime;
     private List<RegistrationCardGuestModel> _guests = new();
 
-    // Terms state
     private List<CustomerTermDisplayDto>? _termsSources;
     private Dictionary<int, bool> _userSelections = new();
-    private HashSet<int> _initiallyAccepted = new();
-    private HashSet<int> _viewedTerms = new();
+    private HashSet<int> _preAccepted = new();
     private bool _isTermsLoading = true;
+    private bool _termsLoadError = false;
 
     private int TotalStatesCount => steps.Length + 2;
 
@@ -202,28 +196,17 @@
     private bool IsTimeSelected => _checkInTime is not null;
 
     private bool IsButtonDisabled =>
-        (IsShowingTerms && !CanAcceptTerms()) ||
+        (IsShowingTerms && !AllRequiredTermsAccepted()) ||
         (IsShowingRegistration && (!IsEmailValid || !IsTimeSelected || !AreGuestsFilled())) ||
         _isTransitioning;
 
-    private bool CanAcceptTerms()
+    private bool AllRequiredTermsAccepted()
     {
         if (_termsSources == null || _isTermsLoading) return false;
 
         return _termsSources
             .Where(t => t.IsRequired)
-            .All(t =>
-            {
-                var isAccepted = _userSelections.GetValueOrDefault(t.Id);
-                if (!isAccepted) return false;
-
-                // If not already accepted, must have viewed content first (if content exists)
-                var hasContent = !string.IsNullOrEmpty(t.HtmlContent) || !string.IsNullOrEmpty(t.Link);
-                if (!_initiallyAccepted.Contains(t.Id) && hasContent && !_viewedTerms.Contains(t.Id))
-                    return false;
-
-                return true;
-            });
+            .All(t => _userSelections.GetValueOrDefault(t.Id));
     }
 
     protected override async Task OnInitializedAsync()
@@ -232,9 +215,11 @@
         if (RegistrationCardState.IsFilled)
         {
             NavigationManager.NavigateTo($"/reservation/{Token}");
-            ToastService.ShowToast("Nie masz dostepu do tej strony.");
             LayoutState.ShowFooter = true;
+            return;
         }
+
+        await LoadTermsAsync();
     }
 
     protected override void OnInitialized()
@@ -251,18 +236,12 @@
         TryInitializeMail();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
             LayoutState.ShowFooter = false;
             TryInitializeMail();
-        }
-
-        if (IsShowingTerms && _termsSources == null)
-        {
-            await LoadTermsAsync();
-            StateHasChanged();
         }
     }
 
@@ -273,6 +252,7 @@
         try
         {
             _isTermsLoading = true;
+            _termsLoadError = false;
             var language = CultureInfo.CurrentUICulture.Name;
 
             _termsSources = await BackendApi.GetTermsForDisplayAsync(language);
@@ -286,8 +266,7 @@
                     if (_userSelections.ContainsKey(agreedTerm.TermsSourceId) && agreedTerm.IsAccepted)
                     {
                         _userSelections[agreedTerm.TermsSourceId] = true;
-                        _initiallyAccepted.Add(agreedTerm.TermsSourceId);
-                        _viewedTerms.Add(agreedTerm.TermsSourceId);
+                        _preAccepted.Add(agreedTerm.TermsSourceId);
                     }
                 }
             }
@@ -296,46 +275,35 @@
                 // No agreed terms yet
             }
         }
+        catch
+        {
+            _termsLoadError = true;
+        }
         finally
         {
             _isTermsLoading = false;
         }
     }
 
+    private async Task RetryLoadTerms()
+    {
+        _termsSources = null;
+        await LoadTermsAsync();
+    }
+
     private void OnTermToggled(CustomerTermDisplayDto term, bool newValue)
     {
-        // Required + already accepted = locked (handled by Disabled on ToggleSwitch)
-        if (term.IsRequired && _initiallyAccepted.Contains(term.Id)) return;
-
-        // Required + not yet viewed = must open first
-        var hasContent = !string.IsNullOrEmpty(term.HtmlContent) || !string.IsNullOrEmpty(term.Link);
-        if (newValue && term.IsRequired && hasContent && !_viewedTerms.Contains(term.Id))
-        {
-            ShowTermContent(term);
-            return;
-        }
+        if (term.IsRequired && _preAccepted.Contains(term.Id)) return;
 
         _userSelections[term.Id] = newValue;
         StateHasChanged();
     }
 
-    private void ShowFullTerms()
-    {
-        ModalService.ShowModal(Localizer["FullTermsTitle"],
-            @<div class="terms-modal-content">
-                @((MarkupString)Localizer["Terms"].Value)
-            </div>
-        );
-    }
-
     private void ShowTermContent(CustomerTermDisplayDto term)
     {
-        _viewedTerms.Add(term.Id);
-
         if (!string.IsNullOrEmpty(term.Link) && string.IsNullOrEmpty(term.HtmlContent))
         {
             _ = JSRuntime.InvokeVoidAsync("open", term.Link, "_blank");
-            StateHasChanged();
             return;
         }
 
@@ -345,7 +313,6 @@
                 @((MarkupString)(term.HtmlContent ?? ""))
             </div>
         );
-        StateHasChanged();
     }
 
     private void TryInitializeMail()

@@ -29,7 +29,7 @@
             </button>
         </div>
 
-        @if (ReservationState.IsValidReservation)
+        @if (ReservationState.IsValidReservation && BitrixService.IsLoaderEnabled)
         {   
         <div class="Contact">
             <button @onclick="@OpenChat" style="background: none; border: none">
@@ -49,12 +49,17 @@
     protected override async Task OnInitializedAsync()
     {
         GlobalizationService.OnChange += StateHasChanged;
+        BitrixService.OnLoaderEnabled += OnBitrixLoaderEnabled;
         var savedPreference = await GlobalizationService.LoadPreferenceAsync();
         if (!string.IsNullOrWhiteSpace(savedPreference))
         {
             GlobalizationService.SetCulture(savedPreference);
         }
+    }
 
+    private void OnBitrixLoaderEnabled()
+    {
+        InvokeAsync(StateHasChanged);
     }
 
     private void ChangeLangButton()
@@ -89,6 +94,7 @@
     public void Dispose()
     {
         GlobalizationService.OnChange -= StateHasChanged;
+        BitrixService.OnLoaderEnabled -= OnBitrixLoaderEnabled;
     }
 
 }

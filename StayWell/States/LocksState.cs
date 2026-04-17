@@ -353,11 +353,11 @@ namespace RentoomBooking.StayWell.States
                     BackendApi.PasscodeSource.TTLock))
                 .ToList();
 
-            var idoCode = ApartmentItemCodes?.TTLockId;
-            if (!string.IsNullOrWhiteSpace(idoCode))
+            var idoLockCode = CurrentLocks?.FirstOrDefault()?.Code;
+            if (!string.IsNullOrWhiteSpace(idoLockCode))
             {
                 all.Add(new BackendApi.ReservationCodeDto(
-                    idoCode,
+                    idoLockCode,
                     null,
                     null,
                     null,
@@ -658,11 +658,11 @@ namespace RentoomBooking.StayWell.States
                         BackendApi.PasscodeSource.TTLock))
                     .ToList();
 
-                var idoCode = ApartmentItemCodes?.TTLockId;
-                if (!string.IsNullOrWhiteSpace(idoCode))
+                var idoLockCode = CurrentLocks?.FirstOrDefault()?.Code;
+                if (!string.IsNullOrWhiteSpace(idoLockCode))
                 {
                     all.Add(new BackendApi.ReservationCodeDto(
-                        idoCode,
+                        idoLockCode,
                         null,
                         null,
                         null,
