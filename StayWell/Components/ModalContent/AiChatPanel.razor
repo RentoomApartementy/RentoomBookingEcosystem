@@ -39,21 +39,19 @@
     }
 
     <div class="ai-chat-actions">
-        <textarea
-            class="ai-chat-input"
-            placeholder="Napisz wiadomość..."
-            @bind="_input"
-            @bind:event="oninput"
-            @onkeydown="HandleInputKeyDown"
-            disabled="@_isStreaming"></textarea>
+        <textarea class="ai-chat-input"
+                  placeholder="Napisz wiadomość..."
+                  @bind="_input"
+                  @bind:event="oninput"
+                  @onkeydown="HandleInputKeyDown"
+                  disabled="@_isStreaming"></textarea>
 
         <div class="ai-chat-buttons">
             <button class="ai-chat-btn ai-chat-btn--ghost" @onclick="Close" disabled="@_isStreaming">Zamknij</button>
             <button class="ai-chat-btn ai-chat-btn--danger" @onclick="StopAsync" disabled="@(!_isStreaming)">Stop</button>
-            <button
-                class="ai-chat-btn ai-chat-btn--mic @(_isDictating ? "ai-chat-btn--mic-active" : string.Empty)"
-                @onclick="ToggleDictationAsync"
-                disabled="@(_isStreaming || !_isSpeechSupported)">
+            <button class="ai-chat-btn ai-chat-btn--mic @(_isDictating ? "ai-chat-btn--mic-active" : string.Empty)"
+                    @onclick="ToggleDictationAsync"
+                    disabled="@(_isStreaming || !_isSpeechSupported)">
                 <img src="/icons/radio.svg" alt="Mikrofon" />
                 @(_isDictating ? "Nasłuch..." : "Mikrofon")
             </button>
