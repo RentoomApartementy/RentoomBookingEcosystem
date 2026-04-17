@@ -43,6 +43,8 @@ namespace RentoomBooking.SharedClasses.Database
 
         public DbSet<UpsellVoucherEntity> UpsellVouchers => Set<UpsellVoucherEntity>();
 
+        public DbSet<TTLockPasscodeEntity> TTLockPasscodes => Set<TTLockPasscodeEntity>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApartmentInfoEntity>(entity =>
@@ -268,7 +270,15 @@ namespace RentoomBooking.SharedClasses.Database
                     .HasForeignKey(e => e.CookieNoticeSourceId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
-            
+
+            modelBuilder.Entity<TTLockPasscodeEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.GeneratedAt).HasDefaultValueSql("NOW()");
+                entity.HasIndex(e => e.ReservationToken).HasDatabaseName("idx_ttlock_passcodes_reservation_token");
+                entity.HasIndex(e => e.GeneratedAt).HasDatabaseName("idx_ttlock_passcodes_generated_at");
+            });
+
             var staticDate = new DateTime(2025, 2, 3, 0, 0, 0, DateTimeKind.Utc);
             var cookieNoticeValidFrom = new DateTime(2026, 3, 22, 0, 0, 0, DateTimeKind.Utc);
             const int stayWellCookieNoticeId = 1001;

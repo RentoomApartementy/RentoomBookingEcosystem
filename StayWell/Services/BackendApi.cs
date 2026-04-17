@@ -203,9 +203,15 @@ namespace RentoomBooking.StayWell.Services
                 cacheNull: true);
         }
 
-        public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync()
+        public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync(string? language = null)
         {
-            var response = await _http.GetAsync("db/terms/display");
+            var url = "db/terms/get-available";
+            if (!string.IsNullOrWhiteSpace(language))
+            {
+                url += $"?lang={Uri.EscapeDataString(language)}";
+            }
+
+            var response = await _http.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
                 return [];
@@ -570,6 +576,77 @@ namespace RentoomBooking.StayWell.Services
         {
             var key = BuildCacheKey(scope, parts);
             await _localStorage.RemoveItemAsync(key);
+        }
+
+        public sealed record PasscodeDto(
+            string KeyboardPwd,
+            int KeyboardPwdId,
+            DateTimeOffset GeneratedAt,
+            DateTimeOffset StartDate,
+            DateTimeOffset? EndDate);
+        public enum PasscodeSource
+        {
+            TTLock,
+            Ido
+        }
+
+        public sealed record ReservationCodeDto(
+            string? Code,
+            int? KeyboardPwdId,
+            DateTimeOffset? GeneratedAt,
+            DateTimeOffset? StartDate,
+            DateTimeOffset? EndDate,
+            PasscodeSource Source);
+
+        public sealed record GeneratePasscodeRequest(
+            DateTimeOffset StartDate,
+            DateTimeOffset EndDate,
+            string PasscodeName);
+
+        public async Task<PasscodeDto?> GeneratePasscodeAsync(
+            string reservationToken,
+            GeneratePasscodeRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                using var response = await _http.PostAsJsonAsync(
+                    $"reservation/{reservationToken}/passcode/generate",
+                    request,
+                    _json,
+                    cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<PasscodeDto>(_json, cancellationToken);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<PasscodeDto>> GetPasscodeHistoryAsync(
+            string reservationToken,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                using var response = await _http.GetAsync(
+                    $"reservation/{reservationToken}/passcode/history",
+                    cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                    return [];
+
+                return await response.Content.ReadFromJsonAsync<List<PasscodeDto>>(_json, cancellationToken)
+                       ?? [];
+            }
+            catch
+            {
+                return [];
+            }
         }
     }
 }

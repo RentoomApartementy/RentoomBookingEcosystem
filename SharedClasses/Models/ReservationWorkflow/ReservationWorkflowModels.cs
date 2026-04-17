@@ -28,9 +28,14 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string Currency { get; set; } = "PLN";
         public List<SelectedAddonDto> SelectedAddons { get; set; } = new();
         public decimal SelectedAddonsTotalPrice { get; set; } = new();
+        public decimal MandatoryAddonsTotalPrice { get; set; } = new();
         public List<SelectedAddonDto> MandatoryAddons { get; set; } = new();
         public List<SelectedUpsellDto> SelectedUpsells { get; set; } = new(); //tylko ID upsellu.
         public decimal SelectedUpsellsTotalPrice { get; set; } = new();
+        public decimal getFullReservationPrizeWithoutUpsells()
+        {
+            return (OfferPrice ?? 0) + SelectedAddonsTotalPrice + MandatoryAddonsTotalPrice;
+        }
     }
 
     public class ClientInfoDto
