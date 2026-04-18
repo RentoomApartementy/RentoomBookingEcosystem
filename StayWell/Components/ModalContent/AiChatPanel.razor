@@ -7,12 +7,11 @@
 @inject SafeMarkdownService MarkdownService
 @inject LocalStorageService LocalStorageService
 @inject ReservationState ReservationState
-@inject ModalService ModalService
 @inject GlobalizationService GlobalizationService
 @inject IJSRuntime JS
 
-<div class="ai-chat-panel">
-    <div class="ai-chat-messages" id="ai-chat-messages">
+<div class="ai-chat-panel @(IsFullscreen ? "ai-chat-panel--fullscreen" : string.Empty)">
+    <div class="ai-chat-messages" id="ai-chat-messages" @ref="_messagesContainerRef">
         @foreach (var message in _messages)
         {
             <div class="ai-chat-message @(message.Role == ChatRoles.User ? "ai-chat-message--user" : "ai-chat-message--assistant")">
@@ -39,31 +38,50 @@
     }
 
     <div class="ai-chat-actions">
-        <textarea
-            class="ai-chat-input"
-            placeholder="Napisz wiadomość..."
-            @bind="_input"
-            @bind:event="oninput"
-            @onkeydown="HandleInputKeyDown"
-            disabled="@_isStreaming"></textarea>
+        <div class="ai-chat-composer">
+            <textarea class="ai-chat-input"
+                      placeholder="Napisz wiadomość..."
+                      @bind="_input"
+                      @bind:event="oninput"
+                      @onkeydown="HandleInputKeyDown"
+                      disabled="@_isStreaming"></textarea>
 
-        <div class="ai-chat-buttons">
-            <button class="ai-chat-btn ai-chat-btn--ghost" @onclick="Close" disabled="@_isStreaming">Zamknij</button>
-            <button class="ai-chat-btn ai-chat-btn--danger" @onclick="StopAsync" disabled="@(!_isStreaming)">Stop</button>
-            <button
-                class="ai-chat-btn ai-chat-btn--mic @(_isDictating ? "ai-chat-btn--mic-active" : string.Empty)"
-                @onclick="ToggleDictationAsync"
-                disabled="@(_isStreaming || !_isSpeechSupported)">
-                <img src="/icons/radio.svg" alt="Mikrofon" />
-                @(_isDictating ? "Nasłuch..." : "Mikrofon")
-            </button>
-            <button class="ai-chat-btn ai-chat-btn--primary" @onclick="SendAsync" disabled="@(!_canSend)">Wyślij</button>
+            <div class="ai-chat-composer-actions">
+                <button class="ai-chat-icon-btn ai-chat-icon-btn--mic @(_isDictating ? "ai-chat-icon-btn--mic-active" : string.Empty)"
+                        @onclick="ToggleDictationAsync"
+                        disabled="@(_isStreaming || !_isSpeechSupported)"
+                        aria-label="@(_isDictating ? "Zatrzymaj nasłuch mikrofonu" : "Uruchom mikrofon")"
+                        title="@(_isDictating ? "Nasłuch..." : "Mikrofon")">
+                    <img src="/icons/microphone-svgrepo-com.svg" alt="" />
+                </button>
+
+                @if (_isStreaming)
+                {
+                    <button class="ai-chat-icon-btn ai-chat-icon-btn--stop"
+                            @onclick="StopAsync"
+                            aria-label="Zatrzymaj generowanie"
+                            title="Stop">
+                        <img src="/icons/x.svg" alt="" />
+                    </button>
+                }
+                else
+                {
+                    <button class="ai-chat-icon-btn ai-chat-icon-btn--send"
+                            @onclick="SendAsync"
+                            disabled="@(!_canSend)"
+                            aria-label="Wyślij wiadomość"
+                            title="Wyślij">
+                        <img src="/icons/circle-arrow-right.svg" alt="" />
+                    </button>
+                }
+            </div>
         </div>
     </div>
 </div>
 
 @code {
     [Parameter] public string? Token { get; set; }
+    [Parameter] public bool IsFullscreen { get; set; }
 
     private readonly List<ChatUiMessage> _messages = new();
     private ElementReference _messagesContainerRef;
@@ -350,11 +368,36 @@
 
     private Task Close()
     {
-            await StopDictationAsync();
+        var cleanedPrefix = prefix?.TrimEnd() ?? string.Empty;
+        var cleanedTranscript = transcript?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(cleanedPrefix))
+        {
+            return cleanedTranscript;
         }
 
-        ModalService.HideModal();
-        return Task.CompletedTask;
+        if (string.IsNullOrWhiteSpace(cleanedTranscript))
+        {
+            return cleanedPrefix;
+        }
+
+        return $"{cleanedPrefix} {cleanedTranscript}";
+    }
+
+    private string GetSpeechLanguage()
+    {
+        var lang = GlobalizationService.CurrentCulture?.Name;
+        if (string.IsNullOrWhiteSpace(lang))
+        {
+            return "pl-PL";
+        }
+
+        return lang;
+    }
+
+    private void QueueScrollToBottom()
+    {
+        _pendingScrollToBottom = true;
     }
 
     public void Dispose()
