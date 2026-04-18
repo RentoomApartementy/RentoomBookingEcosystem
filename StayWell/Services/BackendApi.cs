@@ -6,6 +6,7 @@ using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using WorkflowModels = RentoomBooking.SharedClasses.Models.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Models.StayWell;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Models.Upsell.StayWell;
 using RentoomBooking.StayWell.Models;
@@ -508,6 +509,21 @@ namespace RentoomBooking.StayWell.Services
                    ?? [];
         }
 
+        public async Task<CityParkingInfoDto?> GetCityParkingInfoAsync(CancellationToken cancellationToken = default)
+        {
+            var key = BuildCacheKey("parking", "city");
+            return await GetOrSetCacheAsync<CityParkingInfoDto>(key, async () =>
+            {
+                using var response = await _http.GetAsync("parking/city", cancellationToken);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                return await response.Content.ReadFromJsonAsync<CityParkingInfoDto>(_json, cancellationToken);
+            }, cacheNull: true);
+        }
+
         public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(string reservationToken, string? language = null)
         {
             var url = $"db/reservations/{reservationToken}/agreed-terms";
@@ -602,6 +618,75 @@ namespace RentoomBooking.StayWell.Services
             DateTimeOffset StartDate,
             DateTimeOffset EndDate,
             string PasscodeName);
+
+        public sealed class AccessCodeDto
+        {
+            public string? Code { get; init; }
+            public int? KeyboardPwdId { get; init; }
+            public DateTimeOffset? GeneratedAt { get; init; }
+            public DateTimeOffset? ValidFrom { get; init; }
+            public DateTimeOffset? ValidTo { get; init; }
+            public string Source { get; init; } = "TTLock";
+
+            [JsonIgnore]
+            public bool IsTTLock => string.Equals(Source, "TTLock", StringComparison.OrdinalIgnoreCase);
+
+            [JsonIgnore]
+            public bool IsIdo => string.Equals(Source, "Ido", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public sealed class AccessCodesResponse
+        {
+            public AccessCodeDto? CurrentCode { get; init; }
+            public List<AccessCodeDto> History { get; init; } = [];
+            public bool CanGenerate { get; init; }
+            public string? GenerationBlockReason { get; init; }
+            public int? CooldownSecondsRemaining { get; init; }
+            public DateTimeOffset? NextGenerationAvailableAt { get; init; }
+        }
+
+        public async Task<AccessCodesResponse?> GetAccessCodesAsync(
+            string reservationToken,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                using var response = await _http.GetAsync(
+                    $"reservation/{reservationToken}/access-codes",
+                    cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<AccessCodesResponse>(_json, cancellationToken);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<AccessCodesResponse?> GenerateAccessCodeAsync(
+            string reservationToken,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                using var response = await _http.PostAsync(
+                    $"reservation/{reservationToken}/access-codes/generate",
+                    null,
+                    cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<AccessCodesResponse>(_json, cancellationToken);
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public async Task<PasscodeDto?> GeneratePasscodeAsync(
             string reservationToken,
