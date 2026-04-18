@@ -10,6 +10,32 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Utils
 {
+    /// <summary>
+    /// Handles IDO API responses that return a single JSON object instead of an array
+    /// for fields like "errors" when a dummy/test reservation has no access codes.
+    /// </summary>
+    public class SingleOrArrayConverter<T> : JsonConverter
+    {
+        public override bool CanConvert(Type objectType) =>
+            objectType == typeof(List<T>);
+
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null)
+                return null;
+
+            if (reader.TokenType == JsonToken.StartArray)
+                return serializer.Deserialize<List<T>>(reader);
+
+            // Single object — wrap it
+            var single = serializer.Deserialize<T>(reader);
+            return single == null ? null : new List<T> { single };
+        }
+
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) =>
+            serializer.Serialize(writer, value);
+    }
+
     public static class JsonHelper //to ommit null parameters in json.
     {
 
