@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Net;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.ChatAI.Contracts;
 using RentoomBooking.ChatAI.Services;
@@ -6,6 +8,9 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 
@@ -13,21 +18,27 @@ namespace RentoomBooking.Api.Chat;
 
 public sealed class StaywellReservationContextProvider : IReservationContextProvider
 {
-    private readonly IReservationWorkflowService _reservationWorkflowService;
+    private static readonly Regex HtmlTagRegex = new("<.*?>", RegexOptions.Compiled | RegexOptions.Singleline);
+    private static readonly Regex MultiWhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
+    private readonly IReservationStore _reservationStore;
+    private readonly ApartmentRepository _apartmentRepository;
     private readonly RappQrMaintService _qrMaintService;
     private readonly ArrivalInstructionsService _arrivalInstructionsService;
     private readonly CustomerTermsRepository _customerTermsRepository;
     private readonly ILogger<StaywellReservationContextProvider> _logger;
     private readonly IdoSellService _idosellService;
+
     public StaywellReservationContextProvider(
-        IReservationWorkflowService reservationWorkflowService,
+        IReservationStore reservationStore,
+        ApartmentRepository apartmentRepository,
         RappQrMaintService qrMaintService,
         ArrivalInstructionsService arrivalInstructionsService,
         CustomerTermsRepository customerTermsRepository,
         IdoSellService idosellService,
         ILogger<StaywellReservationContextProvider> logger)
     {
-        _reservationWorkflowService = reservationWorkflowService;
+        _reservationStore = reservationStore;
+        _apartmentRepository = apartmentRepository;
         _qrMaintService = qrMaintService;
         _arrivalInstructionsService = arrivalInstructionsService;
         _customerTermsRepository = customerTermsRepository;
@@ -35,15 +46,20 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
         _logger = logger;
     }
 
-    public async Task<ReservationPromptContext?> GetContextAsync(int reservationId,string reservationToken, CancellationToken cancellationToken = default)
+    public async Task<ReservationPromptContext?> GetContextAsync(int reservationId, string reservationToken, CancellationToken cancellationToken = default)
     {
         if (reservationId <= 0)
         {
             return null;
         }
 
-        var rentoomReservation = await _idosellService.FetchReservationByIDFromIdoSellAsync(reservationId, false,existingResToken: reservationToken);
-        var reservation = rentoomReservation?.ReservationResponse.result.Reservations[0];
+        var rentoomReservation = await _idosellService.FetchReservationByIDFromIdoSellAsync(
+            reservationId,
+            saveToDb: false,
+            existingResToken: reservationToken,
+            cancellationToken: cancellationToken);
+
+        var reservation = rentoomReservation?.ReservationResponse?.result?.Reservations?.FirstOrDefault();
         if (reservation is null)
         {
             return null;
@@ -57,25 +73,49 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
 
         var reservationItem = reservation.Items?.FirstOrDefault();
         var locale = NormalizeLanguage(reservation.Client?.Language);
+        var apartmentItemId = ResolveApartmentItemId(reservationItem);
+        var reservationRecord = await ResolveReservationRecordAsync(reservationToken, reservation.id, cancellationToken);
+        var apartmentInfo = ResolveApartmentInfo(reservationItem);
+        var location = apartmentInfo?.ObjectLocation?.LocalizationItem;
 
         string? wifiSsid = null;
         string? wifiPassword = null;
         string? instructionsSummary = null;
+        ApartmentItemLocalSettings? apartmentCodes = null;
 
-        if (reservationItem?.objectItemId > 0)
+        if (apartmentItemId > 0)
         {
-            var wifi = await _qrMaintService.GetWifiInfoAsync(reservationItem.objectItemId, cancellationToken);
+            var wifi = await _qrMaintService.GetWifiInfoAsync(apartmentItemId, cancellationToken);
             wifiSsid = wifi?.Ssid;
             wifiPassword = wifi?.Password;
 
+            apartmentCodes = await _qrMaintService.GetApartmentItemCodesAsync(apartmentItemId, cancellationToken);
+
             var instructions = await _arrivalInstructionsService
-                .GetArrivalInstructionStepsAsync(reservationItem.objectItemId, locale, cancellationToken);
+                .GetArrivalInstructionStepsAsync(apartmentItemId, locale, cancellationToken);
 
             instructionsSummary = BuildInstructionsSummary(instructions);
         }
 
         var rules = await _customerTermsRepository.GetActiveTermsSourcesAsync(locale, onlyRequiredForWorkflow: false);
         var rulesSummary = BuildRulesSummary(rules);
+        var apartmentAddress = BuildApartmentAddress(apartmentInfo, location);
+        var apartmentGoogleMapsUrl = BuildApartmentGoogleMapsUrl(
+            reservationRecord?.State?.GoogleMapsLink,
+            location?.GeoLocationLat,
+            location?.GeoLocationLng);
+        var parkingMapUrl = FirstNonEmpty(
+            reservationRecord?.State?.ParkingMapUrl,
+            apartmentCodes?.ParkingMapUrl);
+        var apartmentDirectionsSummary = BuildApartmentDirectionsSummary(location);
+        var receptionInfo = CleanToPlainText(location?.ReceptionInfo, 500);
+        var parkingSpotNumber = NormalizeValue(apartmentCodes?.ParkingSpotNumber);
+        var apartmentNumberOrItemCode = BuildApartmentNumberOrItemCode(reservationItem);
+        var remoteOpenSupported = !string.IsNullOrWhiteSpace(apartmentCodes?.TTLockId);
+        var parkingInfoSummary = BuildParkingInfoSummary(parkingSpotNumber, parkingMapUrl);
+        var accessMethodSummary = BuildAccessMethodSummary(apartmentCodes, apartmentNumberOrItemCode, remoteOpenSupported);
+        var apartmentLocationSummary = BuildApartmentLocationSummary(location, apartmentAddress, apartmentGoogleMapsUrl);
+        var nearbyGuidance = BuildNearbyAnswerGuidance(location, apartmentAddress);
 
         return new ReservationPromptContext
         {
@@ -84,7 +124,7 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
             GuestEmail = reservation.Client?.Email,
             GuestPhone = reservation.Client?.Phone,
             ApartmentName = reservationItem?.objectName,
-            ApartmentAddress = null,
+            ApartmentAddress = apartmentAddress,
             CheckInDate = reservation.ReservationDetails?.getDateFrom().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
             CheckOutDate = reservation.ReservationDetails?.getDateTo().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
             ReservationStatus = reservation.ReservationDetails?.status.ToString(),
@@ -92,8 +132,253 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
             WifiPassword = wifiPassword,
             ArrivalInstructionsSummary = instructionsSummary,
             RulesSummary = rulesSummary,
-            Locale = locale
+            Locale = locale,
+            ApartmentCity = NormalizeValue(location?.City),
+            ApartmentRegion = NormalizeValue(location?.Region),
+            ApartmentCountry = NormalizeValue(location?.Country),
+            ApartmentGeoLatitude = location?.GeoLocationLat,
+            ApartmentGeoLongitude = location?.GeoLocationLng,
+            ApartmentGoogleMapsUrl = apartmentGoogleMapsUrl,
+            ApartmentDirectionsSummary = apartmentDirectionsSummary,
+            ReceptionInfo = receptionInfo,
+            ApartmentLocationSummary = apartmentLocationSummary,
+            ParkingSpotNumber = parkingSpotNumber,
+            ParkingMapUrl = parkingMapUrl,
+            ParkingInfoSummary = parkingInfoSummary,
+            GateCode = NormalizeValue(apartmentCodes?.GateCode),
+            BuildingCode = NormalizeValue(apartmentCodes?.GateDoorCode),
+            AdditionalDoorCode = NormalizeValue(apartmentCodes?.AdditionalDoorCode),
+            StoreroomCode = NormalizeValue(apartmentCodes?.StoreroomCode),
+            ApartmentNumberOrItemCode = apartmentNumberOrItemCode,
+            RemoteOpenSupported = remoteOpenSupported,
+            AccessMethodSummary = accessMethodSummary,
+            NearbyAnswerGuidance = nearbyGuidance
         };
+    }
+
+    private async Task<ReservationRecord?> ResolveReservationRecordAsync(string reservationToken, int idoReservationId, CancellationToken cancellationToken)
+    {
+        ReservationRecord? record = null;
+
+        if (Guid.TryParse(reservationToken, out var reservationGuid))
+        {
+            record = await _reservationStore.GetAsync(reservationGuid, cancellationToken);
+        }
+
+        if (record is null && idoReservationId > 0)
+        {
+            record = await _reservationStore.GetByIdoReservationIdAsync(idoReservationId, cancellationToken);
+        }
+
+        return record;
+    }
+
+    private ApartmentObject? ResolveApartmentInfo(ReservationItem? reservationItem)
+    {
+        if (reservationItem is null)
+        {
+            return null;
+        }
+
+        try
+        {
+            if (reservationItem.objectId > 0)
+            {
+                return _apartmentRepository.FindApartmentInPostgres(reservationItem.objectId);
+            }
+
+            if (reservationItem.objectItemId > 0)
+            {
+                return _apartmentRepository.FindApartmentByItemId(reservationItem.objectItemId);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to resolve apartment metadata for objectId={ObjectId}, objectItemId={ObjectItemId}.",
+                reservationItem.objectId,
+                reservationItem.objectItemId);
+        }
+
+        return null;
+    }
+
+    private static int ResolveApartmentItemId(ReservationItem? reservationItem)
+    {
+        if (reservationItem is null)
+        {
+            return 0;
+        }
+
+        if (reservationItem.objectItemId > 0)
+        {
+            return reservationItem.objectItemId;
+        }
+
+        if (reservationItem.itemId > 0)
+        {
+            return reservationItem.itemId;
+        }
+
+        return 0;
+    }
+
+    private static string? BuildApartmentAddress(ApartmentObject? apartmentInfo, LocalizationItem? location)
+    {
+        if (!string.IsNullOrWhiteSpace(apartmentInfo?.ObjectLocation?.Address))
+        {
+            return apartmentInfo.ObjectLocation.Address.Trim();
+        }
+
+        var parts = new[]
+        {
+            NormalizeValue(location?.Street),
+            NormalizeValue(location?.ZipCode),
+            NormalizeValue(location?.City),
+            NormalizeValue(location?.Country)
+        }
+        .Where(v => !string.IsNullOrWhiteSpace(v))
+        .ToArray();
+
+        if (parts.Length == 0)
+        {
+            return null;
+        }
+
+        return string.Join(", ", parts);
+    }
+
+    private static string? BuildApartmentGoogleMapsUrl(string? workflowGoogleMapsLink, float? latitude, float? longitude)
+    {
+        var workflowLink = NormalizeValue(workflowGoogleMapsLink);
+        if (!string.IsNullOrWhiteSpace(workflowLink))
+        {
+            return workflowLink;
+        }
+
+        if (!latitude.HasValue || !longitude.HasValue)
+        {
+            return null;
+        }
+
+        var lat = latitude.Value.ToString(CultureInfo.InvariantCulture);
+        var lng = longitude.Value.ToString(CultureInfo.InvariantCulture);
+        return $"https://www.google.com/maps?q={lat},{lng}";
+    }
+
+    private static string? BuildApartmentDirectionsSummary(LocalizationItem? location)
+    {
+        var plain = CleanToPlainText(location?.DirectionsInfoPlainText, 1200);
+        if (!string.IsNullOrWhiteSpace(plain))
+        {
+            return plain;
+        }
+
+        return CleanToPlainText(location?.DirectionsInfo, 1200);
+    }
+
+    private static string? BuildApartmentLocationSummary(LocalizationItem? location, string? apartmentAddress, string? apartmentGoogleMapsUrl)
+    {
+        var parts = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(apartmentAddress))
+        {
+            parts.Add($"Address: {apartmentAddress}");
+        }
+
+        var area = string.Join(", ", new[]
+        {
+            NormalizeValue(location?.City),
+            NormalizeValue(location?.Region),
+            NormalizeValue(location?.Country)
+        }.Where(v => !string.IsNullOrWhiteSpace(v)));
+
+        if (!string.IsNullOrWhiteSpace(area))
+        {
+            parts.Add($"Area: {area}");
+        }
+
+        if (location?.GeoLocationLat is not null && location.GeoLocationLng is not null)
+        {
+            parts.Add($"GPS: {location.GeoLocationLat.Value.ToString(CultureInfo.InvariantCulture)}, {location.GeoLocationLng.Value.ToString(CultureInfo.InvariantCulture)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(apartmentGoogleMapsUrl))
+        {
+            parts.Add($"Map: {apartmentGoogleMapsUrl}");
+        }
+
+        return parts.Count == 0 ? null : string.Join(" | ", parts);
+    }
+
+    private static string? BuildParkingInfoSummary(string? parkingSpotNumber, string? parkingMapUrl)
+    {
+        if (string.IsNullOrWhiteSpace(parkingSpotNumber) && string.IsNullOrWhiteSpace(parkingMapUrl))
+        {
+            return null;
+        }
+
+        if (!string.IsNullOrWhiteSpace(parkingSpotNumber) && !string.IsNullOrWhiteSpace(parkingMapUrl))
+        {
+            return $"Parking spot: {parkingSpotNumber}. Parking map: {parkingMapUrl}";
+        }
+
+        if (!string.IsNullOrWhiteSpace(parkingSpotNumber))
+        {
+            return $"Parking spot: {parkingSpotNumber}";
+        }
+
+        return $"Parking map: {parkingMapUrl}";
+    }
+
+    private static string? BuildAccessMethodSummary(ApartmentItemLocalSettings? apartmentCodes, string? apartmentNumberOrItemCode, bool remoteOpenSupported)
+    {
+        var parts = new List<string>();
+
+        if (remoteOpenSupported)
+        {
+            parts.Add("Remote open in StayWell may be available for this apartment.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(apartmentCodes?.GateCode))
+        {
+            parts.Add($"Gate code: {apartmentCodes.GateCode.Trim()}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(apartmentCodes?.GateDoorCode))
+        {
+            parts.Add($"Building code: {apartmentCodes.GateDoorCode.Trim()}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(apartmentCodes?.AdditionalDoorCode))
+        {
+            parts.Add($"Additional door code: {apartmentCodes.AdditionalDoorCode.Trim()}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(apartmentCodes?.StoreroomCode))
+        {
+            parts.Add($"Storeroom/keysafe code: {apartmentCodes.StoreroomCode.Trim()}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(apartmentNumberOrItemCode))
+        {
+            parts.Add($"Apartment number/item code: {apartmentNumberOrItemCode}");
+        }
+
+        return parts.Count == 0 ? null : string.Join(" | ", parts);
+    }
+
+    private static string BuildNearbyAnswerGuidance(LocalizationItem? location, string? apartmentAddress)
+    {
+        var hasLocation = location?.GeoLocationLat is not null
+            || location?.GeoLocationLng is not null
+            || !string.IsNullOrWhiteSpace(apartmentAddress);
+
+        if (!hasLocation)
+        {
+            return "Brak danych lokalizacji apartamentu - powiedz to wprost i nie zgaduj informacji o miejscach w pobliżu.";
+        }
+
+        return "Dla pytań o to, co jest blisko, odpowiadaj ostrożnie i używaj sformułowania: \"na podstawie lokalizacji apartamentu wygląda, że...\". Nie podawaj niezweryfikowanych, dokładnych POI.";
     }
 
     private static string NormalizeLanguage(string? language)
@@ -145,6 +430,72 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
         return string.Join("\n", rules
             .Take(6)
             .Select(r => $"- {Trim(r.Description, 220)}"));
+    }
+
+    private static string? NormalizeValue(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+    }
+
+    private static string? FirstNonEmpty(params string?[] values)
+    {
+        foreach (var value in values)
+        {
+            var normalized = NormalizeValue(value);
+            if (!string.IsNullOrWhiteSpace(normalized))
+            {
+                return normalized;
+            }
+        }
+
+        return null;
+    }
+
+    private static string? BuildApartmentNumberOrItemCode(ReservationItem? reservationItem)
+    {
+        var itemCode = NormalizeValue(reservationItem?.itemCode);
+        if (!string.IsNullOrWhiteSpace(itemCode))
+        {
+            return itemCode;
+        }
+
+        if (reservationItem?.objectItemId > 0)
+        {
+            return reservationItem.objectItemId.ToString(CultureInfo.InvariantCulture);
+        }
+
+        return null;
+    }
+
+    private static string? CleanToPlainText(string? value, int max)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        var normalized = value
+            .Replace("\r", " ")
+            .Replace("\n", " ")
+            .Replace("<br>", " ", StringComparison.OrdinalIgnoreCase)
+            .Replace("<br/>", " ", StringComparison.OrdinalIgnoreCase)
+            .Replace("<br />", " ", StringComparison.OrdinalIgnoreCase);
+
+        var withoutHtml = HtmlTagRegex.Replace(normalized, " ");
+        var decoded = WebUtility.HtmlDecode(withoutHtml);
+        var singleSpaced = MultiWhitespaceRegex.Replace(decoded, " ").Trim();
+
+        if (singleSpaced.Length == 0)
+        {
+            return null;
+        }
+
+        if (singleSpaced.Length <= max)
+        {
+            return singleSpaced;
+        }
+
+        return singleSpaced[..max] + "...";
     }
 
     private static string Trim(string? text, int max)
