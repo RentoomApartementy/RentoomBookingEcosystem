@@ -10,6 +10,8 @@
 @using RentoomBooking.StayWell.Services
 @inject NavigationManager Navigation
 @inject IStringLocalizer<HomePage> Localizer
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment HostEnvironment
 @inject UpsellCartState UpsellCartState
 @inject AvailableUpsellsState AvailableUpsellsState
 @inherits Models.PageBase
@@ -34,6 +36,7 @@
     </div>
 
     <div class="tile--row">
+        <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
         <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
         <div class="skeleton skeleton-tile" style="max-width:180px; flex:1;"></div>
     </div>
@@ -61,6 +64,16 @@ else
             </div>
             <div class="tile-text">@Localizer["OpenApartment"]</div>
         </div>
+
+        @if (IsAiAssistantVisible)
+        {
+            <div class="tile" @onclick="OpenAiChat">
+                <div class="tile-icon">
+                    <img class="fas" src="/icons/chat-ai-staywell.jpg" />
+                </div>
+                <div class="tile-text">AI Assistant</div>
+            </div>
+        }
        @* <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
             <div class="tile-icon-vouchers">
                 <img class="fas" src="/icons/wallet-cards.svg" />
@@ -97,6 +110,13 @@ else
     private DateTime checkIn;
     private DateTime checkOut;
     private DateTime now;
+    private string CurrentEnvironmentName =>
+        string.IsNullOrWhiteSpace(Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"])
+            ? HostEnvironment.Environment
+            : Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"]!;
+    private bool IsAiAssistantVisible =>
+        string.Equals(CurrentEnvironmentName, "Development", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(CurrentEnvironmentName, "DEV", StringComparison.OrdinalIgnoreCase);
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
 
@@ -207,5 +227,13 @@ else
                 .FirstOrDefault(m => !string.IsNullOrWhiteSpace(m.Url));
 
         ImageUrl = image?.Url ?? placeholder;
+    }
+
+    private void OpenAiChat()
+    {
+        ModalService.ShowAiChatModal(
+            "StayWell AI",
+            @<RentoomBooking.StayWell.Components.ModalContent.AiChatPanel Token="@Token" IsFullscreen="true" />
+        );
     }
 }

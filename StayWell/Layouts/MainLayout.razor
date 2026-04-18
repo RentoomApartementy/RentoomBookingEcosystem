@@ -45,13 +45,13 @@
 <Modal Title="@_modalTitle"
        OnClose="CloseModal"
        IsVisible="@_modalVisibility"
-       HasImage="@_modalHasImage"
+       Variant="@_modalVariant"
        Content="@_modalContent">
 </Modal>
 
 @code {
     private bool _modalVisibility = false;
-    private bool _modalHasImage = false;
+    private ModalVariant _modalVariant = ModalVariant.Default;
     private string _modalTitle = string.Empty;
     private RenderFragment? _modalContent;
     private Toast? _toastComponent;
@@ -92,11 +92,11 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void ShowModal(string title, RenderFragment? content, bool hasimage)
+    private void ShowModal(string title, RenderFragment? content, ModalVariant variant)
     {
         _modalTitle = title;
         _modalContent = content;
-        _modalHasImage = hasimage;
+        _modalVariant = variant;
         _modalVisibility = true;
         StateHasChanged();
     }
@@ -104,7 +104,7 @@
     private void CloseModal()
     {
         _modalVisibility = false;
-        _modalHasImage = false;
+        _modalVariant = ModalVariant.Default;
         _modalContent = null;
 
         StateHasChanged();
