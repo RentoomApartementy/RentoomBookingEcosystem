@@ -366,7 +366,7 @@
 
     private static string BuildConversationStorageKey(string token) => $"staywell:ai-chat:conversation:{token}";
 
-    private Task Close()
+    private static string MergeSpeechWithInput(string prefix, string transcript)
     {
         var cleanedPrefix = prefix?.TrimEnd() ?? string.Empty;
         var cleanedTranscript = transcript?.Trim() ?? string.Empty;
