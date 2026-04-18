@@ -2,6 +2,7 @@
 @using RentoomBooking.StayWell.Components
 @using RentoomBooking.StayWell.States
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions
+@using RentoomBooking.SharedClasses.Models.StayWell
 @using System.Linq
 @using Microsoft.Extensions.Localization
 @using System.Globalization
@@ -12,6 +13,7 @@
 @inject StayWell.Services.ClipboardService ClipboardService
 @inject IStringLocalizer<InstructionsPage> Localizer
 @inject IJSRuntime JS
+@inject StayWell.Services.BackendApi BackendApi
 
 @inherits Models.PageBase
 @implements IDisposable
@@ -318,28 +320,31 @@
         </header>
 
         <div class="parking-zones">
-            @foreach (var zone in ParkingZones)
+            @foreach (var zone in _parkingInfo?.Zones ?? [])
             {
                 var isFree = IsParkingFreeNow(zone);
                 <div class="parking-zone">
                     <div class="parking-zone__top">
-                        <span class="parking-zone__name">@zone.Name</span>
+                        <span class="parking-zone__name">@Localizer[zone.NameKey]</span>
                         <span class="code-card__status @(isFree ? "code-card__status--available" : "code-card__status--paid")">
                             @(isFree? @Localizer["FreePark"] : @Localizer["PaidPark"])
                         </span>
                     </div>
                     <div class="parking-zone__hours">
-                        <span class="parking-zone__paid">@Localizer["PaidDays"]: @zone.PaidDays, @zone.PaidFrom–@zone.PaidTo</span>
-                        <span class="parking-zone__free">@Localizer["FreeDays"]: @zone.FreeDescription</span>
+                        <span class="parking-zone__paid">@Localizer["PaidDays"]: @FormatDays(zone.PaidDays), @zone.PaidFrom.ToString("HH:mm")–@zone.PaidTo.ToString("HH:mm")</span>
+                        <span class="parking-zone__free">@Localizer["FreeDays"]: @FormatDays(zone.FreeDays)</span>
                     </div>
                 </div>
             }
         </div>
 
-        <a class="parking-city-link" href="@GetParkingInfoUrl()" target="_blank" rel="noopener noreferrer">
-            <span>@Localizer["MoreInfo"]</span>
-            <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
-        </a>
+        @if (_parkingInfo is not null)
+        {
+            <a class="parking-city-link" href="@GetParkingInfoUrl(_parkingInfo.InfoUrl)" target="_blank" rel="noopener noreferrer">
+                <span>@Localizer["MoreInfo"]</span>
+                <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
+            </a>
+        }
     </section>
 </div>
 
@@ -565,6 +570,7 @@
     private DotNetObjectReference<InstructionsPage>? _dotNetRef;
     private string? ActiveShortcutTarget { get; set; }
     private Timer? _parkingRefreshTimer;
+    private CityParkingInfoDto? _parkingInfo;
 
     protected override async Task OnInitializedAsync()
     {
@@ -577,6 +583,8 @@
         {
             await LocksState.GetApartmentItemCodesAsync(Token);
         }
+
+        _parkingInfo = await BackendApi.GetCityParkingInfoAsync();
 
         _parkingRefreshTimer = new Timer(_ => InvokeAsync(StateHasChanged), null,
             TimeSpan.FromSeconds(30),
@@ -675,51 +683,34 @@
         public string? Value { get; set; }
     }
 
-    private record ParkingZoneInfo(
-        string Name,
-        string PaidDays,
-        string PaidFrom,
-        string PaidTo,
-        string FreeDescription,
-        bool FreeSaturday,
-        bool FreeSunday);
-
-    private IReadOnlyList<ParkingZoneInfo> ParkingZones => new[]
+    private string FormatDays(List<DayOfWeek> days)
     {
-        new ParkingZoneInfo(Localizer["ZoneDowntownPaidParking"],  Localizer["ZoneDowntown_PaidDays"], "8:00", "18:00", Localizer["ZoneDowntown_FreeDays"], FreeSaturday: false, FreeSunday: true),
-        new ParkingZoneInfo(Localizer["ZoneA"],  Localizer["ZoneAB_PaidDays"],  "8:00", "18:00", Localizer["ZoneAB_FreeDays"],  FreeSaturday: true,  FreeSunday: true),
-        new ParkingZoneInfo(Localizer["ZoneB"],  Localizer["ZoneAB_PaidDays"],  "8:00", "18:00", Localizer["ZoneAB_FreeDays"],  FreeSaturday: true,  FreeSunday: true),
-    };
+        return string.Join(", ", days.Select(d => Localizer[d.ToString()]));
+    }
 
-    private static bool IsParkingFreeNow(ParkingZoneInfo zone)
+    private static bool IsParkingFreeNow(ParkingZoneDto zone)
     {
         var now = DateTime.Now;
         var dow = now.DayOfWeek;
 
-        if (dow == DayOfWeek.Sunday) return true;
-        if (dow == DayOfWeek.Saturday && zone.FreeSaturday) return true;
+        if (zone.FreeDays.Contains(dow)) return true;
 
-        var paidFrom = TimeSpan.Parse(zone.PaidFrom);
-        var paidTo = TimeSpan.Parse(zone.PaidTo);
-        var currentTime = now.TimeOfDay;
-
-        if (currentTime < paidFrom || currentTime >= paidTo) return true;
+        var currentTime = TimeOnly.FromDateTime(now);
+        if (currentTime < zone.PaidFrom || currentTime >= zone.PaidTo) return true;
 
         return false;
     }
 
-    private const string ParkingInfoBaseUrl = "https://mzd.torun.pl/strefa-platnego-parkowania-w-toruniu/";
-
-    private string GetParkingInfoUrl()
+    private string GetParkingInfoUrl(string baseUrl)
     {
         var language = GlobalizationService.CurrentCulture.TwoLetterISOLanguageName;
 
         if (string.Equals(language, "pl", StringComparison.OrdinalIgnoreCase))
         {
-            return ParkingInfoBaseUrl;
+            return baseUrl;
         }
 
-        var encodedUrl = Uri.EscapeDataString(ParkingInfoBaseUrl);
+        var encodedUrl = Uri.EscapeDataString(baseUrl);
         return $"https://translate.google.com/translate?sl=pl&tl={language}&u={encodedUrl}";
     }
 }
