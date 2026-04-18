@@ -11,16 +11,16 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RentoomBooking.Api.Integrations.RentoomApp
+namespace RentoomBooking.Api.Integrations.TTLock
 {
-    public class TTLockCodeApi
+    public class TTLockReservationFunctions
     {
         private readonly RappQrMaintService _qrMaintService;
         private readonly PostgresBookingDatabase _bookingDatabase;
         private readonly TTLockService _ttLockService;
-        private readonly ILogger<TTLockCodeApi> _logger;
+        private readonly ILogger<TTLockReservationFunctions> _logger;
 
-        public TTLockCodeApi(RappQrMaintService qrMaintService, PostgresBookingDatabase bookingDatabase, ILogger<TTLockCodeApi> logger, TTLockService ttLockService)
+        public TTLockReservationFunctions(RappQrMaintService qrMaintService, PostgresBookingDatabase bookingDatabase, ILogger<TTLockReservationFunctions> logger, TTLockService ttLockService)
         {
             _ttLockService = ttLockService;
             _qrMaintService = qrMaintService;
