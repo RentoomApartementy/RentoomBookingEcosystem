@@ -134,6 +134,7 @@ builder.Services.AddScoped<CookieConsentService>();
 
 //arrival instructions
 builder.Services.AddScoped<ArrivalInstructionsService>();
+builder.Services.AddSingleton<LockInstructionsService>();
 
 // TPAY
 var TpaySection = builder.Configuration.GetSection("Tpay");

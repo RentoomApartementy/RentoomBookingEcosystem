@@ -314,11 +314,11 @@
                     <div class="instruction-content">
                         @if (ActiveInstructionMode == InstructionMode.Open)
                         {
-                            @FormatInstructionText(Localizer["InstructionCylinderOpen"])
+                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderOpen ?? Localizer["InstructionCylinderOpen"])
                         }
                         else
                         {
-                            @FormatInstructionText(Localizer["InstructionCylinderClose"])
+                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderClose ?? Localizer["InstructionCylinderClose"])
                         }
                     </div>
                 </div>
@@ -332,11 +332,11 @@
                     <div class="instruction-content">
                         @if (ActiveInstructionMode == InstructionMode.Open)
                         {
-                            @FormatInstructionText(Localizer["InstructionPanelOpen"])
+                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelOpen ?? Localizer["InstructionPanelOpen"])
                         }
                         else
                         {
-                            @FormatInstructionText(Localizer["InstructionPanelClose"])
+                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelClose ?? Localizer["InstructionPanelClose"])
                         }
                     </div>
                 </div>
@@ -519,6 +519,12 @@
             }
 
             _ = LocksState.LoadAccessCodesAsync(Token);
+        }
+
+        var apartmentItemId = ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.objectItemId;
+        if (apartmentItemId is > 0 && ApartmentState.LockInstructions is null)
+        {
+            _ = ApartmentState.GetArrivalInstructionStepsAsync(apartmentItemId.Value, GlobalizationService.CurrentCulture.Name);
         }
     }
 

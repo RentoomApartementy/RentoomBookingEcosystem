@@ -435,7 +435,7 @@ namespace RentoomBooking.StayWell.Services
             return await response.Content.ReadFromJsonAsync<UpsellOrderRecord>(_json);
         }
 
-        public async Task<List<ApartmentArrivalInstructionStepDTO>> GetArrivalInstructionStepsAsync(int apartmentId, string? language = null)
+        public async Task<ApartmentInstructionsDTO> GetArrivalInstructionStepsAsync(int apartmentId, string? language = null)
         {
                     var url = $"apartment/arrivalinstructions/{apartmentId}";
                     if (!string.IsNullOrWhiteSpace(language))
@@ -446,11 +446,11 @@ namespace RentoomBooking.StayWell.Services
                     var response = await _http.GetAsync(url);
                     if (!response.IsSuccessStatusCode)
                     {
-                        return [];
+                        return new ApartmentInstructionsDTO();
                     }
 
-            return await response.Content.ReadFromJsonAsync<List<ApartmentArrivalInstructionStepDTO>>(_json)
-                   ?? [];
+            return await response.Content.ReadFromJsonAsync<ApartmentInstructionsDTO>(_json)
+                   ?? new ApartmentInstructionsDTO();
         }
 
         private sealed class LockCodeResponse
