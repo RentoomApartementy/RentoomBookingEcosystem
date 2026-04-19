@@ -314,11 +314,11 @@
                     <div class="instruction-content">
                         @if (ActiveInstructionMode == InstructionMode.Open)
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderOpen ?? Localizer["InstructionCylinderOpen"])
+                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderOpen)
                         }
                         else
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderClose ?? Localizer["InstructionCylinderClose"])
+                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderClose)
                         }
                     </div>
                 </div>
@@ -332,11 +332,11 @@
                     <div class="instruction-content">
                         @if (ActiveInstructionMode == InstructionMode.Open)
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelOpen ?? Localizer["InstructionPanelOpen"])
+                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelOpen)
                         }
                         else
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelClose ?? Localizer["InstructionPanelClose"])
+                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelClose)
                         }
                     </div>
                 </div>
@@ -511,6 +511,8 @@
     {
         await base.OnInitializedAsync();
 
+        GlobalizationService.OnChange += OnLanguageChanged;
+
         if (!string.IsNullOrWhiteSpace(Token))
         {
             if (!LocksState.IsStatusResolved)
@@ -521,17 +523,27 @@
             _ = LocksState.LoadAccessCodesAsync(Token);
         }
 
-        var apartmentItemId = ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.objectItemId;
-        if (apartmentItemId is > 0 && ApartmentState.LockInstructions is null)
-        {
-            _ = ApartmentState.GetArrivalInstructionStepsAsync(apartmentItemId.Value, GlobalizationService.CurrentCulture.Name);
-        }
+        LoadLockInstructions();
     }
 
     public void Dispose()
     {
+        GlobalizationService.OnChange -= OnLanguageChanged;
         _dotNetRef?.Dispose();
     }
+
+    private void LoadLockInstructions() =>
+        InvokeAsync(async () =>
+        {
+            var apartmentItemId = ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.objectItemId;
+            if (apartmentItemId is > 0)
+            {
+                await ApartmentState.GetArrivalInstructionStepsAsync(apartmentItemId.Value, GlobalizationService.CurrentCulture.Name);
+            }
+            StateHasChanged();
+        });
+
+    private void OnLanguageChanged() => LoadLockInstructions();
 
     private async Task ToggleDoor()
     {
