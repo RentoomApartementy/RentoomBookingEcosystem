@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Models
 {
+    [Table("EventAiEnrichments", Schema = "events")]
     public class EventAiEnrichment
     {
+        [Key]
         public Guid Id { get; set; }
         public Guid SourceEventId { get; set; }
         public string Language { get; set; } = "pl";

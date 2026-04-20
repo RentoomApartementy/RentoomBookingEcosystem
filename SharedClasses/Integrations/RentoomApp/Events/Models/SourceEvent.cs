@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Models
 {
+    [Table("SourceEvents", Schema = "events")]
     public class SourceEvent
     {
+        [Key]
         public Guid Id { get; set; }
         public string SourceName { get; set; } = string.Empty;
         public string SourceEventKey { get; set; } = string.Empty;
@@ -32,8 +36,10 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Models
         public ICollection<EventAiEnrichment> AiEnrichments { get; set; } = new List<EventAiEnrichment>();
     }
 
+    [Table("SourceEventOccurrences", Schema = "events")]
     public class SourceEventOccurrence
     {
+        [Key]
         public Guid Id { get; set; }
         public Guid SourceEventId { get; set; }
         public DateTime StartAtLocal { get; set; }

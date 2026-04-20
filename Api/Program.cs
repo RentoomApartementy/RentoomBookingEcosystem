@@ -19,17 +19,18 @@ using RentoomBooking.ChatAI.Services;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
-using RentoomBooking.SharedClasses.Integrations.TTLock;
-using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
+using RentoomBooking.SharedClasses.Integrations.TTLock;
+using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
-using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.BookingCom;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
@@ -86,6 +87,9 @@ builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
 
 builder.Services.AddDbContextFactory<RappInstructionsDbContext>(options =>
+    options.UseNpgsql(rentoomAppConnectionString));
+
+builder.Services.AddDbContextFactory<RappEventsDbContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
 
 
@@ -214,6 +218,9 @@ builder.Services.AddScoped<IPromptBuilder, StaywellPromptBuilder>();
 builder.Services.AddScoped<IReservationContextProvider, StaywellReservationContextProvider>();
 builder.Services.AddScoped<IStaywellChatService, StaywellChatService>();
 builder.Services.AddSingleton<IChatRateLimiter, MemoryChatRateLimiter>();
+
+builder.Services.AddScoped<RappEventsDbContextFactory>();
+builder.Services.AddScoped<IEventReadRepository, EventReadRepository>();
 
 /*builder.Services.AddSingleton<TpayClient>();
 

@@ -9,19 +9,41 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Database
 {
-    public class RappEventsDbContextFactory: IDesignTimeDbContextFactory<RappEventsDbContext>
+    public class RappEventsDbContextFactory : IDbContextFactory<RappEventsDbContext>
     {
-      public RappEventsDbContext CreateDbContext(string[] args)
+        private readonly IDbContextFactory<RappEventsDbContext> _innerFactory;
+
+        public RappEventsDbContextFactory(IDbContextFactory<RappEventsDbContext> innerFactory)
         {
-            var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__RentoomDbConnectionString")
-                ?? Environment.GetEnvironmentVariable("ConnectionStrings:RentoomDbConnectionString")
-                ?? "Host=localhost;Port=5432;Database=rentoomdb;Username=postgres;Password=admin";
+            _innerFactory = innerFactory;
+        }
 
-            var options = new DbContextOptionsBuilder<RappEventsDbContext>()
-                .UseNpgsql(connectionString)
-                .Options;
+        public RappEventsDbContext CreateDbContext()
+        {
+            return _innerFactory.CreateDbContext();
+        }
 
-            return new RappEventsDbContext(options);
+        public Task<RappEventsDbContext> CreateDbContextAsync(CancellationToken cancellationToken = default)
+        {
+            return _innerFactory.CreateDbContextAsync(cancellationToken);
         }
     }
+
+
+    /*    public class RappEventsDbContextFactory: IDesignTimeDbContextFactory<RappEventsDbContext>
+        {
+          public RappEventsDbContext CreateDbContext(string[] args)
+            {
+                var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__RentoomDbConnectionString")
+                    ?? Environment.GetEnvironmentVariable("ConnectionStrings:RentoomDbConnectionString")
+                    ?? "Host=localhost;Port=5432;Database=rentoomdb;Username=postgres;Password=admin";
+
+                var options = new DbContextOptionsBuilder<RappEventsDbContext>()
+                    .UseNpgsql(connectionString)
+                    .Options;
+
+                return new RappEventsDbContext(options);
+            }
+        }
+    */
 }
