@@ -1,0 +1,346 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Rentoom Events API",
+    "description": "OpenAPI specification for querying public events from the Azure Functions API.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.rentoom.pl/api",
+      "description": "Local Azure Functions host"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Events",
+      "description": "Event search endpoints"
+    }
+  ],
+  "paths": {
+    "/events/query": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get events",
+        "description": "Returns active events whose occurrence time overlaps the requested local date range.",
+        "operationId": "getEvents",
+        "parameters": [
+          {
+            "name": "timeFrom",
+            "in": "query",
+            "description": "Start of the search window in local event time. Required. ISO date-time, for example 2026-05-01T00:00:00.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "example": "2026-05-01T00:00:00"
+          },
+          {
+            "name": "timeTo",
+            "in": "query",
+            "description": "End of the search window in local event time. Required. Must be later than timeFrom.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "example": "2026-05-07T23:59:59"
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "description": "City filter. Defaults to Torun when omitted.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "Torun"
+            },
+            "example": "Torun"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Optional category filter. Compared against AI primary category first, then source category.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "music"
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Preferred enrichment language. Defaults to pl.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "pl"
+            },
+            "example": "pl"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of events returned. Clamped to range 1-100. Defaults to 20.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Events returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetEventsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid query parameters.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "missingTimeFrom": {
+                    "value": "Missing required query parameter 'timeFrom'."
+                  },
+                  "invalidRange": {
+                    "value": "Parameter 'timeFrom' must be earlier than 'timeTo'."
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "Internal server error."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GetEventsResponse": {
+        "type": "object",
+        "required": [
+          "count",
+          "query",
+          "data"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "query": {
+            "$ref": "#/components/schemas/EventSearchQuery"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventSearchResult"
+            }
+          }
+        }
+      },
+      "EventSearchQuery": {
+        "type": "object",
+        "required": [
+          "timeFrom",
+          "timeTo",
+          "city",
+          "language",
+          "limit"
+        ],
+        "properties": {
+          "timeFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "timeTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "city": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "EventSearchResult": {
+        "type": "object",
+        "required": [
+          "eventId",
+          "occurrenceId",
+          "startAtLocal"
+        ],
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "occurrenceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceEventKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceEventUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueName": {
+            "type": "string",
+            "nullable": true
+          },
+          "venueAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "organizerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceInfoText": {
+            "type": "string",
+            "nullable": true
+          },
+          "startAtLocal": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endAtLocal": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateText": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeText": {
+            "type": "string",
+            "nullable": true
+          },
+          "ticketUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceText": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "summaryShort": {
+            "type": "string",
+            "nullable": true
+          },
+          "summaryMedium": {
+            "type": "string",
+            "nullable": true
+          },
+          "searchSummary": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryPrimary": {
+            "type": "string",
+            "nullable": true
+          },
+          "tagsJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "audienceTagsJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "whyGoJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "isFamilyFriendly": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isGoodForCouples": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isGoodForRainyWeather": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "indoorOutdoor": {
+            "type": "string",
+            "nullable": true
+          },
+          "energyLevel": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}
