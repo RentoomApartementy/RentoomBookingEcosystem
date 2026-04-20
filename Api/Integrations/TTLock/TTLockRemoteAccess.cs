@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -13,63 +13,19 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.Api.Integrations.TTLock
 {
-    public class TTLockReservationFunctions
+    public class TTLockRemoteAccess
     {
         private readonly RappQrMaintService _qrMaintService;
         private readonly PostgresBookingDatabase _bookingDatabase;
         private readonly TTLockService _ttLockService;
-        private readonly ILogger<TTLockReservationFunctions> _logger;
+        private readonly ILogger<TTLockRemoteAccess> _logger;
 
-        public TTLockReservationFunctions(RappQrMaintService qrMaintService, PostgresBookingDatabase bookingDatabase, ILogger<TTLockReservationFunctions> logger, TTLockService ttLockService)
+        public TTLockRemoteAccess(RappQrMaintService qrMaintService, PostgresBookingDatabase bookingDatabase, ILogger<TTLockRemoteAccess> logger, TTLockService ttLockService)
         {
             _ttLockService = ttLockService;
             _qrMaintService = qrMaintService;
             _bookingDatabase = bookingDatabase;
             _logger = logger;
-        }
-
-        [Function("GetLockCode")]
-        public async Task<HttpResponseData> GetLockCode(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "lockcode/{apartmentItemId:int}")] HttpRequestData req, int apartmentItemId)
-        {
-            var cancellationToken = req.FunctionContext.CancellationToken;
-            var response = req.CreateResponse();
-            _logger.LogInformation("GetLockCode started for apartmentItemId={ApartmentItemId} at {Time}", apartmentItemId, DateTime.UtcNow);
-
-            try
-            {
-                if (apartmentItemId <= 0)
-                {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    await response.WriteStringAsync("Missing or invalid apartmentItemId.");
-                    return response;
-                }
-                var apartmentSettings = await _qrMaintService.GetApartmentItemCodesAsync(apartmentItemId, cancellationToken);
-                var lockCode = apartmentSettings?.TTLockId;
-                //var lockCode = await _qrMaintService.GetLockCodeAsync(apartmentItemId, cancellationToken);
-                if (string.IsNullOrEmpty(lockCode))
-                {
-                    response.StatusCode = HttpStatusCode.NotFound;
-                    await response.WriteStringAsync("No lock code found for the given apartmentItemId.");
-                    return response;
-                }
-
-                response.StatusCode = HttpStatusCode.OK;
-                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-                await response.WriteStringAsync(JsonConvert.SerializeObject(new { lockCode }));
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error fetching lock code for apartmentItemId={ApartmentItemId}", apartmentItemId);
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                await response.WriteStringAsync("An error occurred while processing your request.");
-                return response;
-            }
-            finally
-            {
-                _logger.LogInformation("GetLockCode finished for apartmentItemId={ApartmentItemId} at {Time}", apartmentItemId, DateTime.UtcNow);
-            }
         }
 
         [Function("PingLockByReservationId")]
@@ -100,7 +56,6 @@ namespace RentoomBooking.Api.Integrations.TTLock
                     return response;
                 }
 
-                //var lockCode = await _qrMaintService.GetLockCodeAsync(objectItemId.Value, cancellationToken);
                 var apartmentSettings = await _qrMaintService.GetApartmentItemCodesAsync(objectItemId.Value, cancellationToken);
                 var lockCode = apartmentSettings?.TTLockId;
                 if (string.IsNullOrEmpty(lockCode))
@@ -110,7 +65,6 @@ namespace RentoomBooking.Api.Integrations.TTLock
                     return response;
                 }
 
-                /* TTLOCK PING (BATTERY) HERE */
                 int? batteryLevel = null;
                 string ttlockMessage = "Not a TTLock ID";
 
@@ -141,7 +95,7 @@ namespace RentoomBooking.Api.Integrations.TTLock
                 await response.WriteStringAsync(JsonConvert.SerializeObject(new
                 {
                     lockCode,
-                    batteryLevel = batteryLevel,
+                    batteryLevel,
                     status = ttlockMessage,
                     timestamp = DateTime.UtcNow
                 }));
@@ -183,7 +137,7 @@ namespace RentoomBooking.Api.Integrations.TTLock
         {
             var cancellationToken = req.FunctionContext.CancellationToken;
             var response = req.CreateResponse();
-            _logger.LogInformation("GetApartmentItemCodes started for apartmentItemId={reservationToken} at {Time}", reservationToken, DateTime.UtcNow);
+            _logger.LogInformation("GetApartmentItemCodes started for reservationToken={reservationToken} at {Time}", reservationToken, DateTime.UtcNow);
 
             try
             {
@@ -201,7 +155,6 @@ namespace RentoomBooking.Api.Integrations.TTLock
                     return response;
                 }
 
-
                 var reservation = await ResolveReservationAsync(reservationToken, cancellationToken);
 
                 if (reservation?.Reservation is null)
@@ -211,10 +164,8 @@ namespace RentoomBooking.Api.Integrations.TTLock
                     return response;
                 }
 
-
                 var apartmentSettings = await _qrMaintService.GetApartmentItemCodesAsync(reservation.Reservation.Items[0].objectItemId, cancellationToken);
 
-                //var lockCode = await _qrMaintService.GetLockCodeAsync(apartmentItemId, cancellationToken);
                 if (apartmentSettings == null)
                 {
                     response.StatusCode = HttpStatusCode.NotFound;
@@ -314,5 +265,4 @@ namespace RentoomBooking.Api.Integrations.TTLock
             }
         }
     }
-
 }

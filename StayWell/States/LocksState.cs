@@ -65,7 +65,6 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
-        public string? TTLockId { get; private set; }
         public ApartmentItemLocalSettings? ApartmentItemCodes { get; private set; }
 
         public async Task<List<Lock?>?> GetLocksAsync(
@@ -360,12 +359,6 @@ namespace RentoomBooking.StayWell.States
             catch (TaskCanceledException) { }
         }
 
-        public async Task GetTTLockIdAsync(int apartmentItemId)
-        {
-            TTLockId = await _backendApi.GetLockCodeAsync(apartmentItemId);
-            NotifyStateChanged();
-        }
-
         public async Task<ApartmentItemLocalSettings?> GetApartmentItemCodesAsync(
             string reservationToken
         )
@@ -416,7 +409,6 @@ namespace RentoomBooking.StayWell.States
             CurrentLocks = null;
             IsLoading = false;
             IsTTLockLoading = false;
-            TTLockId = null;
             BatteryLevel = null;
             IsTTLockAvailable = false;
             IsStatusResolved = false;

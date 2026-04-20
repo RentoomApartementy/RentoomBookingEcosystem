@@ -296,26 +296,6 @@ namespace RentoomBooking.StayWell.Services
                 });
         }
 
-        public async Task<string?> GetLockCodeAsync(
-            int apartmentItemId,
-            CancellationToken cancellationToken = default)
-        {
-            using var response = await _http.GetAsync(
-                $"lock-code/{apartmentItemId}",
-                cancellationToken);
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
-                return null;
-
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadFromJsonAsync<LockCodeResponse>(
-                _json,
-                cancellationToken);
-
-            return result?.LockCode;
-        }
-
         public async Task<RedeemResultDto?> ValidateUpsellVoucherAsync(string reservationToken, string? codeShort, string? qrToken)
         {
             var request = new UpsellVoucherLookupRequestDto
@@ -453,33 +433,22 @@ namespace RentoomBooking.StayWell.Services
                    ?? new ApartmentInstructionsDTO();
         }
 
-        private sealed class LockCodeResponse
-        {
-            [JsonPropertyName("lockCode")]
-            public string? LockCode
-            {
-                get; init;
-
-            }
-        }
         public async Task<ApartmentItemLocalSettings?> GetApartmentItemCodesAsync(
             string reservationToken,
             CancellationToken cancellationToken = default)
         {
-                    using var response = await _http.GetAsync(
-                        $"reservation/{reservationToken}/apartmentcodes",
-                        cancellationToken);
+            using var response = await _http.GetAsync(
+                $"reservation/{reservationToken}/apartmentcodes",
+                cancellationToken);
 
-                    if (response.StatusCode == HttpStatusCode.NotFound)
-                    {
-                        return null;
-                    }
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                return null;
 
-                    response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
 
-                    return await response.Content.ReadFromJsonAsync<ApartmentItemLocalSettings>(
-                        _json,
-                        cancellationToken);
+            return await response.Content.ReadFromJsonAsync<ApartmentItemLocalSettings>(
+                _json,
+                cancellationToken);
         }
 
         public async Task<RentoomWifiInfo?> GetApartmentWifiInfoAsync(int apartmentId)
@@ -594,31 +563,6 @@ namespace RentoomBooking.StayWell.Services
             await _localStorage.RemoveItemAsync(key);
         }
 
-        public sealed record PasscodeDto(
-            string KeyboardPwd,
-            int KeyboardPwdId,
-            DateTimeOffset GeneratedAt,
-            DateTimeOffset StartDate,
-            DateTimeOffset? EndDate);
-        public enum PasscodeSource
-        {
-            TTLock,
-            Ido
-        }
-
-        public sealed record ReservationCodeDto(
-            string? Code,
-            int? KeyboardPwdId,
-            DateTimeOffset? GeneratedAt,
-            DateTimeOffset? StartDate,
-            DateTimeOffset? EndDate,
-            PasscodeSource Source);
-
-        public sealed record GeneratePasscodeRequest(
-            DateTimeOffset StartDate,
-            DateTimeOffset EndDate,
-            string PasscodeName);
-
         public sealed class AccessCodeDto
         {
             public string? Code { get; init; }
@@ -688,50 +632,5 @@ namespace RentoomBooking.StayWell.Services
             }
         }
 
-        public async Task<PasscodeDto?> GeneratePasscodeAsync(
-            string reservationToken,
-            GeneratePasscodeRequest request,
-            CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                using var response = await _http.PostAsJsonAsync(
-                    $"reservation/{reservationToken}/passcode/generate",
-                    request,
-                    _json,
-                    cancellationToken);
-
-                if (!response.IsSuccessStatusCode)
-                    return null;
-
-                return await response.Content.ReadFromJsonAsync<PasscodeDto>(_json, cancellationToken);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public async Task<List<PasscodeDto>> GetPasscodeHistoryAsync(
-            string reservationToken,
-            CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                using var response = await _http.GetAsync(
-                    $"reservation/{reservationToken}/passcode/history",
-                    cancellationToken);
-
-                if (!response.IsSuccessStatusCode)
-                    return [];
-
-                return await response.Content.ReadFromJsonAsync<List<PasscodeDto>>(_json, cancellationToken)
-                       ?? [];
-            }
-            catch
-            {
-                return [];
-            }
-        }
     }
 }
