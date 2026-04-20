@@ -144,6 +144,8 @@ param cronSyncAllApartmentsFromIdb string = '0 0 */2 * * *'
 @description('Function App paths that must bypass App Service Authentication.')
 param staywellApiAuthExcludedPaths array = [
   '/api/mail/incoming'
+  '/api/tpay/notification'
+  '/api/events/query'
 ]
 
 @description('GitHub organization slug for StayWell Static Web App source repository.')
