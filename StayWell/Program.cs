@@ -32,6 +32,8 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<ClipboardService>();
             builder.Services.AddScoped<ModalService>();
             builder.Services.AddScoped<BitrixService>();
+            builder.Services.AddScoped<AiChatClientService>();
+            builder.Services.AddScoped<SafeMarkdownService>();
             builder.Services.AddScoped<UpsellCartState>();
 
             builder.Services.AddScoped<ReservationState>();

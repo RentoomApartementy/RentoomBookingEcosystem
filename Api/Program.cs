@@ -11,20 +11,26 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using RentoomBooking.Api.Chat;
+using RentoomBooking.ChatAI.Contracts;
+using RentoomBooking.ChatAI.Data;
+using RentoomBooking.ChatAI.Repositories;
+using RentoomBooking.ChatAI.Services;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
-using RentoomBooking.SharedClasses.Integrations.TTLock;
-using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
+using RentoomBooking.SharedClasses.Integrations.TTLock;
+using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
-using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.BookingCom;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
@@ -71,6 +77,9 @@ if (string.IsNullOrWhiteSpace(rentoomAppConnectionString))
 builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
+builder.Services.AddDbContextFactory<ChatAIDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
+
 builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
 
@@ -78,6 +87,9 @@ builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
 
 builder.Services.AddDbContextFactory<RappInstructionsDbContext>(options =>
+    options.UseNpgsql(rentoomAppConnectionString));
+
+builder.Services.AddDbContextFactory<RappEventsDbContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
 
 
@@ -148,6 +160,67 @@ builder.Services.AddScoped<IBookingComLogStore, BookingComLogStore>();
 builder.Services.AddScoped<IBookingComIncomingEmailProcessor, BookingComIncomingEmailProcessor>();
 builder.Services.AddScoped<IBookingComBackfillImportBuilder, BookingComBackfillImportBuilder>();
 builder.Services.AddScoped<IBookingComReservationWorkflowService, BookingComReservationWorkflowService>();
+
+builder.Services.AddOptions<StaywellChatOptions>()
+    .Configure<IConfiguration>((options, configuration) =>
+    {
+        configuration.GetSection(StaywellChatOptions.SectionName).Bind(options);
+
+        if (string.IsNullOrWhiteSpace(options.Endpoint) || string.IsNullOrWhiteSpace(options.ApiKey) || string.IsNullOrWhiteSpace(options.DeploymentName))
+        {
+            var azureSection = configuration.GetSection("StaywellChat");
+            if (!azureSection.Exists())
+            {
+                azureSection = configuration.GetSection("AzureOpenAi_general");
+            }
+
+            if (string.IsNullOrWhiteSpace(options.Endpoint))
+            {
+                options.Endpoint = azureSection["Endpoint"] ?? string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(options.ApiKey))
+            {
+                options.ApiKey = azureSection["ApiKey"] ?? string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(options.DeploymentName))
+            {
+                options.DeploymentName = azureSection["DeploymentName"] ?? string.Empty;
+            }
+        }
+
+        if (options.MaxMessageLength < 100)
+        {
+            options.MaxMessageLength = 2000;
+        }
+
+        if (options.MaxHistoryMessages < 1)
+        {
+            options.MaxHistoryMessages = 15;
+        }
+
+        if (options.MaxRequestsPerMinute < 1)
+        {
+            options.MaxRequestsPerMinute = 12;
+        }
+
+        if (options.StreamingTimeoutSeconds < 10)
+        {
+            options.StreamingTimeoutSeconds = 90;
+        }
+    });
+
+builder.Services.AddScoped<IChatConversationRepository, ChatConversationRepository>();
+builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
+builder.Services.AddScoped<IStaywellChatClient, AzureFoundryStaywellChatClient>();
+builder.Services.AddScoped<IPromptBuilder, StaywellPromptBuilder>();
+builder.Services.AddScoped<IReservationContextProvider, StaywellReservationContextProvider>();
+builder.Services.AddScoped<IStaywellChatService, StaywellChatService>();
+builder.Services.AddSingleton<IChatRateLimiter, MemoryChatRateLimiter>();
+
+builder.Services.AddScoped<RappEventsDbContextFactory>();
+builder.Services.AddScoped<IEventReadRepository, EventReadRepository>();
 
 /*builder.Services.AddSingleton<TpayClient>();
 

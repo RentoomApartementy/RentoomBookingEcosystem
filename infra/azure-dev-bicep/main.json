@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.41.2.15936",
-      "templateHash": "7472315773125646304"
+      "templateHash": "853651217896266282"
     }
   },
   "parameters": {
@@ -310,7 +310,9 @@
     "staywellApiAuthExcludedPaths": {
       "type": "array",
       "defaultValue": [
-        "/api/mail/incoming"
+        "/api/mail/incoming",
+        "/api/tpay/notification",
+        "/api/events/query"
       ],
       "metadata": {
         "description": "Function App paths that must bypass App Service Authentication."

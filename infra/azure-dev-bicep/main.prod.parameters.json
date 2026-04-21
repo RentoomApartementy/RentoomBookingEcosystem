@@ -112,7 +112,8 @@
     "staywellApiAuthExcludedPaths": {
       "value": [
         "/api/mail/incoming",
-        "/api/tpay/notification"
+        "/api/tpay/notification",
+        "/api/events/query"
       ]
     },
     "staywellGithubOrganization": {

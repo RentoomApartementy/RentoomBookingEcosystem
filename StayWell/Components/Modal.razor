@@ -5,15 +5,18 @@
 
 @if (IsVisible)
 {
-    <div class="modal-backdrop" @onclick="Close" tabindex="-1" @ref="backdropRef">
+    <div class="modal-backdrop @(IsAiChatFullscreenVariant ? "modal-backdrop-aichat-fullscreen-mode" : string.Empty)"
+         @onclick="Close"
+         tabindex="-1"
+         @ref="backdropRef">
 
-        <div class="modal @(HasImage ? "modal-image-mode" : "")"
-             @onclick:stopPropagation="@(!HasImage)"
+        <div class="modal @(IsImageVariant ? "modal-image-mode" : "") @(IsAiChatFullscreenVariant ? "modal-aichat-fullscreen-mode" : "")"
+             @onclick:stopPropagation="@(!IsImageVariant)"
              role="dialog"
              aria-labelledby="modal-title"
              aria-modal="true">
 
-            @if (!HasImage && !String.IsNullOrEmpty(Title))
+            @if (!IsImageVariant && !String.IsNullOrEmpty(Title))
             {
                 <div class="modal-header">
                     <button class="modal-close" @onclick="Close" aria-label="Zamknij modal">
@@ -23,7 +26,7 @@
                 </div>
             }
 
-            @if (HasImage)
+            @if (IsImageVariant)
             {
                 <div class="modal-content image-content" @onclick="Close">
                     <div class="image-wrapper" @onclick="Close">
@@ -38,7 +41,7 @@
             }
             else
             {
-                <div class="modal-content">
+                <div class="modal-content @(IsAiChatFullscreenVariant ? "modal-content-aichat-fullscreen-mode" : string.Empty)">
                     @Content
                 </div>
             }
@@ -51,12 +54,14 @@
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
     [Parameter] public RenderFragment? Content { get; set; }
-    [Parameter] public bool HasImage { get; set; }
+    [Parameter] public ModalVariant Variant { get; set; } = ModalVariant.Default;
 
     private ElementReference backdropRef;
     private int _rotation = 0;
 
     private bool IsRotatedPerpendicular => _rotation == 90 || _rotation == 270;
+    private bool IsImageVariant => Variant == ModalVariant.Image;
+    private bool IsAiChatFullscreenVariant => Variant == ModalVariant.AiChatFullscreen;
 
     protected override Task OnInitializedAsync()
     {
