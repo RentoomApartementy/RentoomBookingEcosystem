@@ -1,0 +1,18 @@
+.apartments-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.divider {
+    width: 40px;
+    height: 2px;
+    background: #1F5A41;
+    margin: 1.25rem auto;
+    opacity: 0.6;
+}
+
+.intro-text .lead {
+    color: #555;
+    font-size: 1.1rem;
+}

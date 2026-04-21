@@ -4,8 +4,11 @@
 @using RentoomBooking.SharedClasses.Services
 @using System.Globalization
 
+@using RentoomBookingWeb.Components.Features.AllApartments.Components
 @inject IApartmentsService ApartmentsService
 @inject NavigationManager Navigation
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 
 <PageTitle>Apartamenty Toruń - Pełna Lista Noclegów</PageTitle>
 
@@ -15,33 +18,43 @@
     <BreadcrumbJsonLd CurrentPageName="@(IsPolish ? "Apartamenty Toruń" : "Apartments in Torun")" CurrentPagePath="/apartamenty-torun" />
 </HeadContent>
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-12">
-            <h1>Apartamenty Toruń - Wszystkie nasze obiekty</h1>
-            <p class="mb-4">Poniżej znajduje się lista wszystkich dostępnych apartamentów w naszej ofercie w Toruniu.</p>
+<HeaderSection Title="@(IsPolish ? "Apartamenty Toruń" : "Apartments Toruń")" 
+               ImagePath="assets/images/rent.jpeg" 
+               IsShadow="true" />
+
+<div class="container my-5" style="min-height: 80vh">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="intro-text text-center mb-5">
+                <p class="lead">@(IsPolish ? "Odkryj naszą pełną ofertę komfortowych apartamentów w samym sercu Torunia." : "Discover our full range of comfortable apartments in the heart of Torun.")</p>
+                <div class="divider"></div>
+            </div>
 
             @if (_isLoading)
             {
-                <p>Ładowanie listy apartamentów...</p>
+                <div class="d-flex justify-content-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
             }
             else if (_apartments == null || !_apartments.Any())
             {
-                <p>Brak dostępnych apartamentów.</p>
+                <div class="alert alert-info text-center">
+                    @(IsPolish ? "Obecnie brak dostępnych apartamentów." : "No apartments available at the moment.")
+                </div>
             }
             else
             {
-                <ul class="list-unstyled">
+                <div class="apartments-grid">
                     @foreach (var apartment in _apartments)
                     {
-                        <li class="mb-2">
-                            <a href="@GetApartmentUrl(apartment)" title="Zobacz szczegóły: @apartment.Name">
-                                <strong>@apartment.Name</strong>
-                            </a>
-                             - Toruń
-                        </li>
+                        <ApartmentListCard Id="@apartment.Id" 
+                                           Name="@apartment.Name" 
+                                           Url="@GetApartmentUrl(apartment)"
+                                           Location="@($"{apartment?.ObjectLocation?.LocalizationItem?.Street} {apartment?.ObjectLocation?.LocalizationItem?.ZipCode} {apartment?.ObjectLocation?.LocalizationItem?.City}")" />
                     }
-                </ul>
+                </div>
             }
         </div>
     </div>
