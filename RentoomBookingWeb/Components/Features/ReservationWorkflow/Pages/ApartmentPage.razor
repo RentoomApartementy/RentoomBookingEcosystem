@@ -306,14 +306,18 @@
                         <div class="summary-offer-price @(IsSelectedOffer(OfferTypeNonrefundable) ? "selected-offer" : "")">
                             <b>@Localizer["Non-refundableOffer"]</b>
                             <small>@Localizer["NonRefundableText"]</small>
-                            <div class="summary-offer-price-button">
-                                @* <span class="summary-offer-price-button-price"><b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
+                            <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                                 <span class="summary-offer-price-button-price">
                                     <b>@((nonRefundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b>
                                     <span class="stay-summary-text">@GetStaySummaryText()</span>
                                 </span>
-                                <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true">
-                                        <Button Type="ButtonType.Tertiary">@GetOfferButtonLabel(OfferTypeNonrefundable)</Button>
+                                <div class="offer-action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
+                                    <div @onclick="OpenSearchModal" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
+                                        <Button Type="ButtonType.Secondary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@Localizer["ChangeDatesButtonLabel"]</Button>
+                                    </div>
+                                    <div @onclick="@(() => GoToPayment(OfferTypeNonrefundable))" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
+                                        <Button Type="ButtonType.Tertiary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@GetOfferButtonLabel(OfferTypeNonrefundable)</Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>  
@@ -324,14 +328,18 @@
                         <div class="summary-offer-price refundable @(IsSelectedOffer(OfferTypeRefundable) ? "selected-offer" : "")">
                             <b>@Localizer["RefundableOffer"]</b>
                             <small>@GetRefundableOfferText()</small>
-                            <div class="summary-offer-price-button">
-                                @* <span class="summary-offer-price-button-price"><b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @_reservationPricingContext?.Currency</b></span> *@
+                            <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                                 <span class="summary-offer-price-button-price">
                                     <b>@((refundableOffer.Price + (decimal)TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]</b>
                                     <span class="stay-summary-text">@GetStaySummaryText()</span>
                                 </span>
-                                <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true">
-                                        <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Tertiary)">@GetOfferButtonLabel(OfferTypeRefundable)</Button>
+                                <div class="offer-action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
+                                    <div @onclick="OpenSearchModal" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
+                                        <Button Type="ButtonType.Secondary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@Localizer["ChangeDatesButtonLabel"]</Button>
+                                    </div>
+                                    <div @onclick="@(() => GoToPayment(OfferTypeRefundable))" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
+                                        <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Tertiary)" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@GetOfferButtonLabel(OfferTypeRefundable)</Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>   
@@ -774,6 +782,19 @@
 
         .search-modal-header {
             margin-bottom: 1rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .btn-offer-mobile {
+            height: 30px !important;
+            padding: 0 8px !important;
+            font-size: 11px !important;
+            min-width: 0 !important;
+        }
+        
+        .offer-action-buttons {
+            gap: 4px !important;
         }
     }
 </style>

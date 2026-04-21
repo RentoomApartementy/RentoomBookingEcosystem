@@ -249,6 +249,9 @@
   <data name="SelectDatesButtonLabel" xml:space="preserve">
     <value>Wybierz termin</value>
   </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Zmień termin</value>
+  </data>
   <data name="CheckInTimeFormat" xml:space="preserve">
     <value>Zameldowanie: 15:00 – 22:00</value>
   </data>
