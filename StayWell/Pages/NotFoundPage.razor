@@ -4,6 +4,8 @@
 @using System.Globalization
 @inject IStringLocalizer<HomePage> Localizer
 @inject NavigationManager Navigation
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment HostEnvironment
 @inject States.LayoutState LayoutState
 @inject Services.GlobalizationService GlobalizationService
 @implements IDisposable
@@ -22,7 +24,7 @@
             @DescriptionText
         </p>
 
-        <a href="https://rentoom.pl" class="not-found-btn">
+        <a href="@RedirectUrl" class="not-found-btn">
             @Localizer["BookOnBtn"] <img class="white-filter" src="/icons/chevron-right.svg" />
         </a>
     </div>
@@ -33,6 +35,15 @@
     public string? Reason { get; set; }
 
     private bool IsCanceledReason => string.Equals(Reason, "canceled", StringComparison.OrdinalIgnoreCase);
+    private string CurrentEnvironmentName =>
+        string.IsNullOrWhiteSpace(Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"])
+            ? HostEnvironment.Environment
+            : Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"]!;
+    private string RedirectUrl =>
+        string.Equals(CurrentEnvironmentName, "Development", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(CurrentEnvironmentName, "DEV", StringComparison.OrdinalIgnoreCase)
+            ? "https://app-dev-rentoombooking.azurewebsites.net/"
+            : "https://rentoom.pl";
 
     private string TitleText => IsCanceledReason
         ? Localizer["ReservationCanceledTitle"]
