@@ -165,124 +165,128 @@
                 @(_isExpanded ? @Localizer["HideDetails"] : @Localizer["ShowAll"])
             </span>
             
-             @if (localHasOffers)
+            @if (localHasOffers || StartDate == null || EndDate == null)
             {
-                <hr style="width: 100%;"/>
-                
-                 <h3  class="header-text text-lg">@Localizer["Summary"]</h3>
+                @if (StartDate != null && EndDate != null)
+                {
+                    <hr style="width: 100%;" />
+                    <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
 
-            @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional != false))
-            {
-                    <div id="confirm-reservation" class="addon-list-container">
-                    <div class="addon-list-wrapper">
-                        <div class="upsell-title-group">
-                            <div class="upsell-icon">
-                                <img src="assets/svgs/kid_star.svg" alt="icon" style="width: 20px; height: 20px;" />
-                            </div>
-                            <div class="upsell-text">
-                                <h2 class="upsell-main-title">@Localizer["AdditionalOptions"]</h2>
-                            </div>
-                        </div>
-                        
-                        <div class="addons-wrapper">
-                               @foreach (var addon in _apartment.Addons.Where(x => x.Optional != false))
-                        {
-                            
-                            if (_definedAddons != null)
-                            {
-                                var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
-                                @if (fa != null)
-                                {
-                                    var fadesc = fa.AddonDefinition.Details.FirstOrDefault(a => a.Lang == CurrentAddonLanguage);
-                                    var paymentType = fa.PaymentType;
-                                    <div class="addon-item">
-                                        <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
-                                            <div class="addon-info-col">
-                                                <span class="addon-name">@fadesc?.Name</span>
-                                                @* <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small> *@
-                                            </div>
-
-                                                    <div class="addon-quantity-col @((IsAddonSelected(addon.Id) && paymentType == AddonPaymentType.PayPerAmount ) ? "" : "empty")"
-                                                         @onclick:stopPropagation="true"  
-                                                          @onclick:preventDefault="true">
-
-                                                        @if (IsAddonSelected(addon.Id) && paymentType == AddonPaymentType.PayPerAmount)
-                                    { 
-                                                            var currentQty = GetSelectedAddonQuantity(addon.Id); 
-                                                             <div class="quantity-selector"> 
-                                                                 <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty - 1))"> 
-                                                                     <span>−</span> 
-                                                                 </button> 
-                                                                 <span class="quantity-value">@currentQty</span> 
-                                                                 <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty + 1))"> 
-                                                                     <span>+</span> 
-                                                                 </button> 
-                                                             </div> 
-                                                         } 
-                                                     </div> 
-
-
-                                            <div class="price-box">
-                                                        <b class="addon-price">+@AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, _reservationPricingContext.Nights, _reservationPricingContext.TotalGuests, GetSelectedAddonQuantity(addon.Id)).ToString("N2") @CurrencyLocalizer["PLN"]</b>
-                                                <input type="checkbox"
-                                                       class="addon-checkbox"
-                                                       checked="@(IsAddonSelected(addon.Id))"
-                                                       disabled="@(IsAddonMandatory(addon.Optional))"
-                                                       readonly/>
-                                            </div>
-                                        </div>
+                    @if (_apartment?.Addons != null && _apartment.Addons.Any(x => x.Optional != false))
+                    {
+                        <div id="confirm-reservation" class="addon-list-container">
+                            <div class="addon-list-wrapper">
+                                <div class="upsell-title-group">
+                                    <div class="upsell-icon">
+                                        <img src="assets/svgs/kid_star.svg" alt="icon" style="width: 20px; height: 20px;" />
                                     </div>
-                                }
-                                else
-                                {
-                                    <div class="addon-item">
-                                        <div class="addon-label">
-                                            <span class="addon-name-empty">Brak opisu dodatku</span>
-                                        </div>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                <div class="skeleton-row">
-                                    <div style="flex: 1;">
-                                        <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span>
-                                        <span class="skeleton-box" style="width: 30%; height: 12px;"></span>
-                                    </div>
-                                    <div style="display: flex; gap: 10px; align-items: center;">
-                                        <span class="skeleton-box" style="width: 60px; height: 16px;"></span>
-                                        <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span>
+                                    <div class="upsell-text">
+                                        <h2 class="upsell-main-title">@Localizer["AdditionalOptions"]</h2>
                                     </div>
                                 </div>
-                            }
-                        }
+
+                                <div class="addons-wrapper">
+                                    @foreach (var addon in _apartment.Addons.Where(x => x.Optional != false))
+                                    {
+
+                                        if (_definedAddons != null)
+                                        {
+                                            var fa = _definedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
+                                            @if (fa != null)
+                                            {
+                                                var fadesc = fa.AddonDefinition.Details.FirstOrDefault(a => a.Lang == CurrentAddonLanguage);
+                                                var paymentType = fa.PaymentType;
+                                                <div class="addon-item">
+                                                    <div class="addon-label" @onclick="@(() => ToggleAddonWrapper(addon.Id, addon.Optional))" @onclick:stopPropagation="true">
+                                                        <div class="addon-info-col">
+                                                            <span class="addon-name">@fadesc?.Name</span>
+                                                            @* <small class="addon-subtext">(@fadesc?.PaymentTypeShortDescription)</small> *@
+                                                        </div>
+
+                                                        <div class="addon-quantity-col @((IsAddonSelected(addon.Id) && paymentType == AddonPaymentType.PayPerAmount ) ? "" : "empty")"
+                                                             @onclick:stopPropagation="true"
+                                                             @onclick:preventDefault="true">
+
+                                                            @if (IsAddonSelected(addon.Id) && paymentType == AddonPaymentType.PayPerAmount)
+                                                            {
+                                                                var currentQty = GetSelectedAddonQuantity(addon.Id);
+                                                                <div class="quantity-selector">
+                                                                    <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty - 1))">
+                                                                        <span>−</span>
+                                                                    </button>
+                                                                    <span class="quantity-value">@currentQty</span>
+                                                                    <button class="quantity-btn" @onclick="@(() => UpdateAddonQuantity(addon.Id, currentQty + 1))">
+                                                                        <span>+</span>
+                                                                    </button>
+                                                                </div>
+                                                            }
+                                                        </div>
+
+
+                                                        <div class="price-box">
+                                                            <b class="addon-price">+@AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, _reservationPricingContext.Nights, _reservationPricingContext.TotalGuests, GetSelectedAddonQuantity(addon.Id)).ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                                                            <input type="checkbox"
+                                                                   class="addon-checkbox"
+                                                                   checked="@(IsAddonSelected(addon.Id))"
+                                                                   disabled="@(IsAddonMandatory(addon.Optional))"
+                                                                   readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="addon-item">
+                                                    <div class="addon-label">
+                                                        <span class="addon-name-empty">Brak opisu dodatku</span>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="skeleton-row">
+                                                <div style="flex: 1;">
+                                                    <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span>
+                                                    <span class="skeleton-box" style="width: 30%; height: 12px;"></span>
+                                                </div>
+                                                <div style="display: flex; gap: 10px; align-items: center;">
+                                                    <span class="skeleton-box" style="width: 60px; height: 16px;"></span>
+                                                    <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
                         </div>
+                    }
+
+                    @if (TotalAddonsPrice + TotalUpsellsPrice > 0)
+                    {
+                        <div class="additional-price">
+                            +@((TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]
+                        </div>
+                    }
+                }
+
+                @if (StartDate == null || EndDate == null)
+            {
+                <div class="summary-offer-price placeholder-offer" style="cursor: pointer; border: 2px dashed #d0d0d0; background-color: #f9f9f9; text-align: center; padding: 3rem 2rem; margin-top: 3.5rem; border-radius: 20px; transition: all 0.3s ease;" @onclick="OpenSearchModal">
+                    <div class="placeholder-icon" style="margin-bottom: 1.25rem; color: #1F5A41; opacity: 0.8;">
+                        <svg style="width: 48px; height: 48px;" viewBox="0 0 24 24"><path fill="currentColor" d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-1V1m-1 11h-5v5h5v-5z"/></svg>
+                    </div>
+                    <b style="font-size: 1.25rem; display: block; margin-bottom: 0.75rem; color: #333;">@Localizer["PriceAvailableAfterSelectingDates"]</b>
+                    <p style="color: #666; margin-bottom: 2rem; font-size: 0.95rem;">@(IsPolish ? "Wybierz daty pobytu, aby sprawdzić dostępność i ceny naszych ofert." : "Select your stay dates to check availability and prices of our offers.")</p>
+                    <div class="summary-offer-price-button" style="justify-content: center;">
+                        <Button Type="ButtonType.Primary" style="display: flex; align-items: center; gap: 12px; padding: 0.85rem 2.5rem; font-weight: 600; border-radius: 50px;">
+                            <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                            @Localizer["SelectDatesButtonLabel"]
+                        </Button>
                     </div>
                 </div>
             }
-            
-            
-             @if (_reservationPricingContext is not null)
-            {
-                    //13.03.2026 - Maciej S: wyłączamy widocznośc Upselli. Do decyzji Rentoom kiedy chcemy je włączyć spowrotem.
-              
-               @* <UpsellList AvailableUpsellsList="_availableUpsells"
-                            ReservationContext="_reservationPricingContext"
-                            OnSelectionChanged="HandleUpsellSelectionChanged"
-                            InitialSelection="_selectedUpsells"
-                            Texts="UpsellTexts"/>
-               *@
-            }
-
-            
-            @if (TotalAddonsPrice + TotalUpsellsPrice > 0)
-            {
-                <div class="additional-price">
-                    +@((TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]
-                </div>
-            }
-            
-            @if (_isOfferLoading)
+            else if (_isOfferLoading)
             {
                 <div class="summary-offer-price-wrapper" style="justify-content: center; padding: 2rem;">
                     <b>@Localizer["Loading"]...</b>
@@ -375,6 +379,7 @@
                 </div>
             }
             }
+            
         </div>
 
      <div class="info-box @(_isMobileExpanded ? "mobile-expanded" : "")">
