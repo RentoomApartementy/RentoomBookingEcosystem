@@ -1252,7 +1252,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             return baseUrl.Replace("{resToken}", resToken).TrimEnd('/');
         }
 
-        private string? BuildPaymentRetryLink(Guid reservationGuid, Guid? paymentSessionGuid, string? reservationSource, bool cancelaction = false)
+        private string? BuildPaymentRetryLink(Guid reservationGuid, Guid? paymentSessionGuid, string? reservationSource, bool cancelaction = true)
         {
            if (reservationSource != null && !reservationSource.Contains("api", StringComparison.CurrentCultureIgnoreCase))
             {
