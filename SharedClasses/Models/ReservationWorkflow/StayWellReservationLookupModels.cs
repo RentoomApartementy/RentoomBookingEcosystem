@@ -1,4 +1,5 @@
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using System;
 
 namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
@@ -15,6 +16,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public string Status { get; set; } =string.Empty;
         public StayWellReservationRecordStateDto State { get; set; } = new();
 
         public static StayWellReservationRecordDto FromRecord(ReservationRecord record)
@@ -27,11 +29,12 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
                 PaymentStatus = record.PaymentStatus,
                 CreatedAt = record.CreatedAt,
                 UpdatedAt = record.UpdatedAt,
+                Status = record.IdoStatus ?? string.Empty,
                 State = new StayWellReservationRecordStateDto
                 {
                     GoogleMapsLink = record.State.GoogleMapsLink,
                     ParkingMapUrl = record.State.ParkingMapUrl,
-                    StayWellLink = record.State.StayWellLink
+                    StayWellLink = record.State.StayWellLink,
                 }
             };
         }

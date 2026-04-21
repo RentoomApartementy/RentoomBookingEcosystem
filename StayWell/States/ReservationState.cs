@@ -42,6 +42,9 @@ namespace RentoomBooking.StayWell.States
             string.Equals(
                 CurrentReservation?.Reservation?.ReservationDetails?.status,
                 ReservationStatusType.Canceled,
+                StringComparison.OrdinalIgnoreCase) || string.Equals(
+                _reservationRecord?.Status,
+                ReservationStatusType.Canceled,
                 StringComparison.OrdinalIgnoreCase);
 
         public bool IsActiveReservation

@@ -146,7 +146,7 @@ public class GetReservationsFunction
                 await res.WriteStringAsync($"Reservation with token {token} has expired (ToDate: {toDate:yyyy-MM-dd}).");
                 return res;
             }
-
+            
             var resStatus = ret.Reservation?.ReservationDetails?.status;
 
 
