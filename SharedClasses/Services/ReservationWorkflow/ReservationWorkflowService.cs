@@ -593,7 +593,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, new Dictionary<string, object?>
-            {
+            { //RB_Link_Do_Platnosci
                 ["UF_CRM_1775071642554"] = paymentRetryLink
             });
         }
@@ -1529,7 +1529,12 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     [BitrixReservationSourceFieldName] = reservationSourceValue,
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                     [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
-                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue,cancelaction: true)
+                    //RB_Link_Anuluj_Rezerwacje
+                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue,cancelaction: true),
+                    //RB_Link_Do_Platnosci
+                    ["UF_CRM_1775071642554"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: false)
+
+
 
                 };
                 AddBitrixLocationFields(customFields, apartmentInfo, apartmentItemLocalSettings);
@@ -1629,8 +1634,12 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 
             };
             AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
-            
-                fields["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue,cancelaction: true);
+
+            //RB_Link_Anuluj_Rezerwacje
+            fields["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true);
+
+            //RB_Link_Do_Platnosci
+            fields["UF_CRM_1775071642554"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: false);
 
             if (record.State.PaymentGrandTotal >0)
             {
