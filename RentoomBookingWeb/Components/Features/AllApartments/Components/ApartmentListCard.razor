@@ -1,0 +1,104 @@
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Services.IdoBooking
+@using RentoomBookingWeb.Services
+@using Microsoft.Extensions.Localization
+@inject IIdoApartmentService IdoApartmentService
+@inject MediaCacheService MediaCache
+@inject IJSRuntime JS
+@inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
+@implements IAsyncDisposable
+
+<a href="@Url" class="apartment-card-minimal" @ref="_elementRef" title="@Name">
+    <div class="card-layout">
+        <div class="image-section">
+            @if (!string.IsNullOrEmpty(_imageUrl))
+            {
+                <img src="@_imageUrl" alt="@Name" loading="lazy" />
+            }
+            else
+            {
+                <div class="skeleton-image">
+                    <div class="pulse"></div>
+                </div>
+            }
+        </div>
+        <div class="content-section">
+            <div class="info">
+                <h2 class="apartment-name">@Name</h2>
+                <span class="apartment-city">
+                    <img src="assets/svgs/search-green.svg" alt="Location" class="icon-small" />
+                    @Location
+                </span>
+            </div>
+            <div class="action">
+                <span class="action-text">@Localizer["Details"]</span>
+                <span class="arrow">&rarr;</span>
+            </div>
+        </div>
+    </div>
+</a>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    [Parameter] public string Name { get; set; } = string.Empty;
+    [Parameter] public string Url { get; set; } = "#";
+    [Parameter] public string Location { get; set; } = "Toruń";
+
+    private string? _imageUrl;
+    private ElementReference _elementRef;
+    private DotNetObjectReference<ApartmentListCard>? _objRef;
+    private IJSObjectReference? _jsModule;
+    private bool _isLoaded = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            try
+            {
+                _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/lazyLoad.js");
+                await _jsModule.InvokeVoidAsync("observeElement", _objRef, _elementRef);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lazy load error for {Id}: {ex.Message}");
+                // Fallback: try to load anyway if JS fails
+                _ = LoadMedia();
+            }
+        }
+    }
+
+    [JSInvokable("LoadMedia")]
+    public async Task LoadMedia()
+    {
+        if (_isLoaded) return;
+        _isLoaded = true;
+
+        try
+        {
+            var media = await MediaCache.GetOrFetchMediaAsync(Id, () => IdoApartmentService.GetObjectMediaFromIdoSellAsync(Id));
+            _imageUrl = media?.FirstOrDefault()?.Url;
+            
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching image for apartment {Id}: {ex.Message}");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            if (_jsModule != null)
+            {
+                await _jsModule.InvokeVoidAsync("unobserveElement", _elementRef);
+                await _jsModule.DisposeAsync();
+            }
+            _objRef?.Dispose();
+        }
+        catch { }
+    }
+}

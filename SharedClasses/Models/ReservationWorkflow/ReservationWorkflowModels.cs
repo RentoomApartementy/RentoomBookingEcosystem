@@ -34,7 +34,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public decimal SelectedUpsellsTotalPrice { get; set; } = new();
         public decimal getFullReservationPrizeWithoutUpsells()
         {
-            return (OfferPrice ?? 0) + SelectedAddonsTotalPrice + MandatoryAddonsTotalPrice;
+            return (OfferPrice - MandatoryAddonsTotalPrice ?? 0) + SelectedAddonsTotalPrice + MandatoryAddonsTotalPrice;
         }
     }
 
