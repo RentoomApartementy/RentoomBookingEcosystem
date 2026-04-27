@@ -1,0 +1,84 @@
+.apartments-search-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.apartments-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #F7F7F7;
+    border-radius: 999px;
+    padding: 6px 12px 6px 20px;
+    height: 64px;
+    max-width: 925px;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid #E5E7EB;
+}
+
+.apartments-search-bar .item-icon {
+    width: 22px;
+    height: 22px;
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+.apartments-search-bar .dark-icon path {
+    stroke: #111827;
+}
+
+.apartments-search-input {
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: #111827;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding-right: 4px;
+}
+
+.apartments-search-input::placeholder {
+    color: #9CA3AF;
+    font-weight: 400;
+}
+
+.clear-search-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #D1D5DB;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+    border-color: #111827;
+    background-color: #F9FAFB;
+}
+
+.clear-search-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.clear-search-btn path {
+    stroke: #4B5563;
+}
+
+@media (max-width: 910px) {
+    .apartments-search-bar {
+        border-radius: 24px;
+        height: 56px;
+        padding: 6px 10px 6px 16px;
+    }
+}

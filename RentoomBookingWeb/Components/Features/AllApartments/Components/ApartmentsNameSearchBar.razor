@@ -1,0 +1,48 @@
+<div class="apartments-search-wrapper">
+    <div class="apartments-search-bar">
+        <svg class="item-icon dark-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M21 21L16.65 16.65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+
+        <input type="text"
+               class="apartments-search-input"
+               value="@SearchText"
+               @oninput="OnInputChanged"
+               placeholder="@Placeholder"
+               aria-label="@AriaLabel" />
+
+        @if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            <button type="button"
+                    class="clear-search-btn"
+                    @onclick="ClearSearch"
+                    aria-label="@ClearAriaLabel">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M18 6L6 18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6 6L18 18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public string SearchText { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> SearchTextChanged { get; set; }
+    [Parameter] public string Placeholder { get; set; } = string.Empty;
+    [Parameter] public string AriaLabel { get; set; } = string.Empty;
+    [Parameter] public string ClearAriaLabel { get; set; } = string.Empty;
+
+    private async Task OnInputChanged(ChangeEventArgs e)
+    {
+        SearchText = e.Value?.ToString() ?? string.Empty;
+        await SearchTextChanged.InvokeAsync(SearchText);
+    }
+
+    private async Task ClearSearch()
+    {
+        SearchText = string.Empty;
+        await SearchTextChanged.InvokeAsync(SearchText);
+    }
+}
