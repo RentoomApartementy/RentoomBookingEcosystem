@@ -1,24 +1,26 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Web;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.LiveChat;
+using RentoomBooking.LiveChat;
 using RentoomBooking.SharedClasses.LiveChat;
 
 namespace RentoomBooking.Api.LiveChat.Functions;
 
 public sealed class LiveChatStreamFunction
 {
-    private readonly BitrixLiveChatService _liveChatService;
-    private readonly ILiveChatSseSubscriptions _sseSubscriptions;
-    private readonly ILogger<LiveChatStreamFunction> _logger;
     private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly TimeSpan PollTimeout = TimeSpan.FromSeconds(25);
     private static readonly TimeSpan StreamMaxDuration = TimeSpan.FromMinutes(4);
+    private readonly BitrixLiveChatService _liveChatService;
+    private readonly ILogger<LiveChatStreamFunction> _logger;
+    private readonly ILiveChatSseSubscriptions _sseSubscriptions;
 
-    public LiveChatStreamFunction(BitrixLiveChatService liveChatService, ILiveChatSseSubscriptions sseSubscriptions, ILogger<LiveChatStreamFunction> logger)
+    public LiveChatStreamFunction(BitrixLiveChatService liveChatService, ILiveChatSseSubscriptions sseSubscriptions,
+        ILogger<LiveChatStreamFunction> logger)
     {
         _liveChatService = liveChatService;
         _sseSubscriptions = sseSubscriptions;
@@ -27,10 +29,11 @@ public sealed class LiveChatStreamFunction
 
     [Function("LiveChatStream")]
     public async Task<HttpResponseData> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "staywell/livechat/stream")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "staywell/livechat/stream")]
+        HttpRequestData req,
         CancellationToken ct)
     {
-        var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+        var query = HttpUtility.ParseQueryString(req.Url.Query);
         var reservationToken = query["reservationToken"];
 
         if (string.IsNullOrWhiteSpace(reservationToken))
@@ -57,7 +60,6 @@ public sealed class LiveChatStreamFunction
 
         await using var writer = new StreamWriter(response.Body, new UTF8Encoding(false), leaveOpen: true);
 
-        // Send heartbeat so client knows connection is alive
         await WriteSseAsync(writer, "connected", new { sessionId = session.Id }, ct);
 
         var subscriptionId = _sseSubscriptions.Subscribe(session.Id);
@@ -67,16 +69,15 @@ public sealed class LiveChatStreamFunction
         {
             while (!ct.IsCancellationRequested && DateTime.UtcNow < deadline)
             {
-                var msg = await _sseSubscriptions.WaitForOperatorMessageAsync(session.Id, subscriptionId, PollTimeout, ct);
+                var msg = await _sseSubscriptions.WaitForOperatorMessageAsync(session.Id, subscriptionId, PollTimeout,
+                    ct);
                 if (msg is not null)
-                {
-                    await WriteSseAsync(writer, "message", new LiveChatMessageDto(msg.Id, msg.Sender, msg.Content, msg.CreatedAt, msg.OperatorName, msg.OperatorAvatarUrl, _liveChatService.DeserializeAttachments(msg), msg.OperatorBitrixUserId), ct);
-                }
+                    await WriteSseAsync(writer, "message",
+                        new LiveChatMessageDto(msg.Id, msg.Sender, msg.Content, msg.CreatedAt, msg.OperatorName,
+                            msg.OperatorAvatarUrl, _liveChatService.DeserializeAttachments(msg),
+                            msg.OperatorBitrixUserId), ct);
                 else
-                {
-                    // Heartbeat to keep connection alive
                     await WriteSseAsync(writer, "heartbeat", new { ts = DateTime.UtcNow }, ct);
-                }
             }
         }
         catch (OperationCanceledException)
@@ -100,7 +101,8 @@ public sealed class LiveChatStreamFunction
         return response;
     }
 
-    private async Task WriteSseAsync(StreamWriter writer, string eventName, object payload, CancellationToken ct = default)
+    private async Task WriteSseAsync(StreamWriter writer, string eventName, object payload,
+        CancellationToken ct = default)
     {
         var json = JsonSerializer.Serialize(payload, _jsonOptions);
         await writer.WriteAsync($"event: {eventName}\n".AsMemory(), ct);

@@ -90,7 +90,7 @@ builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
 builder.Services.AddDbContextFactory<ChatAIDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
-builder.Services.AddDbContextFactory<RentoomBooking.Api.LiveChat.Data.LiveChatDbContext>(options =>
+builder.Services.AddDbContextFactory<RentoomBooking.LiveChat.Data.LiveChatDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
@@ -233,7 +233,7 @@ builder.Services.AddScoped<IReservationContextProvider, StaywellReservationConte
 builder.Services.AddScoped<IStaywellChatService, StaywellChatService>();
 builder.Services.AddSingleton<IChatRateLimiter, MemoryChatRateLimiter>();
 
-// LiveChat (Bitrix Open Lines)
+// LiveChat
 builder.Services.AddOptions<RentoomBooking.SharedClasses.Configuration.BitrixLiveChatOptions>()
     .Configure<IConfiguration>((options, configuration) =>
     {
@@ -246,18 +246,18 @@ builder.Services.AddOptions<RentoomBooking.SharedClasses.Configuration.BitrixLiv
     })
     .ValidateDataAnnotations()
     .ValidateOnStart();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.ILiveChatRateLimiter, RentoomBooking.Api.LiveChat.MemoryLiveChatRateLimiter>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.ILiveChatSseSubscriptions, RentoomBooking.Api.LiveChat.LiveChatSseSubscriptions>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.Bitrix.IBitrixOAuthService, RentoomBooking.Api.LiveChat.Bitrix.BitrixOAuthService>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.Bitrix.IBitrixMessageSender, RentoomBooking.Api.LiveChat.Bitrix.BitrixMessageSender>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.Bitrix.IBitrixUserService, RentoomBooking.Api.LiveChat.Bitrix.BitrixUserService>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.Bitrix.IBitrixWebhookService, RentoomBooking.Api.LiveChat.Bitrix.BitrixWebhookService>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.Bitrix.IBitrixLandingService, RentoomBooking.Api.LiveChat.Bitrix.BitrixLandingService>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.IBitrixRestClient, RentoomBooking.Api.LiveChat.Bitrix.BitrixRestClient>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.Repositories.ILiveChatSessionRepository, RentoomBooking.Api.LiveChat.Repositories.LiveChatSessionRepository>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.Repositories.ILiveChatMessageRepository, RentoomBooking.Api.LiveChat.Repositories.LiveChatMessageRepository>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.Repositories.IBitrixPortalRepository, RentoomBooking.Api.LiveChat.Repositories.BitrixPortalRepository>();
-builder.Services.AddSingleton<RentoomBooking.Api.LiveChat.BitrixLiveChatService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.ILiveChatRateLimiter, RentoomBooking.LiveChat.MemoryLiveChatRateLimiter>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.ILiveChatSseSubscriptions, RentoomBooking.LiveChat.LiveChatSseSubscriptions>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixOAuthService, RentoomBooking.LiveChat.Bitrix.BitrixOAuthService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixMessageSender, RentoomBooking.LiveChat.Bitrix.BitrixMessageSender>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixUserService, RentoomBooking.LiveChat.Bitrix.BitrixUserService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixWebhookService, RentoomBooking.LiveChat.Bitrix.BitrixWebhookService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixLandingService, RentoomBooking.LiveChat.Bitrix.BitrixLandingService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.IBitrixRestClient, RentoomBooking.LiveChat.Bitrix.BitrixRestClient>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.ILiveChatSessionRepository, RentoomBooking.LiveChat.Repositories.LiveChatSessionRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.ILiveChatMessageRepository, RentoomBooking.LiveChat.Repositories.LiveChatMessageRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.IBitrixPortalRepository, RentoomBooking.LiveChat.Repositories.BitrixPortalRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.BitrixLiveChatService>();
 
 builder.Services.AddScoped<RappEventsDbContextFactory>();
 builder.Services.AddScoped<IEventReadRepository, EventReadRepository>();

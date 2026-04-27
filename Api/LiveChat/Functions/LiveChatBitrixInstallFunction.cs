@@ -1,83 +1,16 @@
 using System.Net;
 using System.Text.Json;
+using System.Web;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.LiveChat;
-using RentoomBooking.Api.LiveChat.Bitrix;
+using RentoomBooking.LiveChat;
+using RentoomBooking.LiveChat.Bitrix;
 
 namespace RentoomBooking.Api.LiveChat.Functions;
 
 public sealed class LiveChatBitrixInstallFunction
 {
-    private readonly BitrixLiveChatService _liveChatService;
-    private readonly ILogger<LiveChatBitrixInstallFunction> _logger;
-
-    public LiveChatBitrixInstallFunction(
-        BitrixLiveChatService liveChatService,
-        ILogger<LiveChatBitrixInstallFunction> logger)
-    {
-        _liveChatService = liveChatService;
-        _logger = logger;
-    }
-
-    [Function("LiveChatBitrixInstall")]
-    public async Task<HttpResponseData> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "staywell/livechat/bitrix-install")] HttpRequestData req,
-        CancellationToken ct)
-    {
-        var payload = await BitrixInstallRequestParser.ParseAsync(req, ct);
-        if (payload is null)
-        {
-            return await CreateTextResponseAsync(req, HttpStatusCode.BadRequest, "Missing required Bitrix installation parameters.");
-        }
-
-        var webhookUrl = new Uri($"{req.Url.Scheme}://{req.Url.Authority}/api/staywell/livechat/bitrix-webhook");
-
-        try
-        {
-            var portal = await _liveChatService.InstallPortalAsync(payload, webhookUrl, ct);
-            _logger.LogInformation(
-                "Bitrix livechat app installed for member={MemberId}, domain={Domain}, handler={Handler}",
-                portal.MemberId,
-                portal.Domain,
-                portal.EventHandlerUrl);
-
-            return await CreateHtmlResponseAsync(req, HttpStatusCode.OK, InstallationCompletedHtml);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Bitrix livechat installation failed");
-            return await CreateTextResponseAsync(req, HttpStatusCode.InternalServerError, $"Bitrix installation failed: {ex.Message}");
-        }
-    }
-
-    private static async Task<HttpResponseData> CreateTextResponseAsync(HttpRequestData req, HttpStatusCode statusCode, string message)
-    {
-        var response = req.CreateResponse(statusCode);
-        SetContentType(response, "text/plain; charset=utf-8");
-        await response.WriteStringAsync(message);
-        return response;
-    }
-
-    private static async Task<HttpResponseData> CreateHtmlResponseAsync(HttpRequestData req, HttpStatusCode statusCode, string html)
-    {
-        var response = req.CreateResponse(statusCode);
-        SetContentType(response, "text/html; charset=utf-8");
-        await response.WriteStringAsync(html);
-        return response;
-    }
-
-    private static void SetContentType(HttpResponseData response, string contentType)
-    {
-        if (response.Headers.Contains("Content-Type"))
-        {
-            response.Headers.Remove("Content-Type");
-        }
-
-        response.Headers.Add("Content-Type", contentType);
-    }
-
     private const string InstallationCompletedHtml =
         """
         <!DOCTYPE html>
@@ -106,9 +39,78 @@ public sealed class LiveChatBitrixInstallFunction
         </html>
         """;
 
+    private readonly BitrixLiveChatService _liveChatService;
+    private readonly ILogger<LiveChatBitrixInstallFunction> _logger;
+
+    public LiveChatBitrixInstallFunction(
+        BitrixLiveChatService liveChatService,
+        ILogger<LiveChatBitrixInstallFunction> logger)
+    {
+        _liveChatService = liveChatService;
+        _logger = logger;
+    }
+
+    [Function("LiveChatBitrixInstall")]
+    public async Task<HttpResponseData> RunAsync(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "staywell/livechat/bitrix-install")]
+        HttpRequestData req,
+        CancellationToken ct)
+    {
+        var payload = await BitrixInstallRequestParser.ParseAsync(req, ct);
+        if (payload is null)
+            return await CreateTextResponseAsync(req, HttpStatusCode.BadRequest,
+                "Missing required Bitrix installation parameters.");
+
+        var webhookUrl = new Uri($"{req.Url.Scheme}://{req.Url.Authority}/api/staywell/livechat/bitrix-webhook");
+
+        try
+        {
+            var portal = await _liveChatService.InstallPortalAsync(payload, webhookUrl, ct);
+            _logger.LogInformation(
+                "Bitrix livechat app installed for member={MemberId}, domain={Domain}, handler={Handler}",
+                portal.MemberId,
+                portal.Domain,
+                portal.EventHandlerUrl);
+
+            return await CreateHtmlResponseAsync(req, HttpStatusCode.OK, InstallationCompletedHtml);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Bitrix livechat installation failed");
+            return await CreateTextResponseAsync(req, HttpStatusCode.InternalServerError,
+                $"Bitrix installation failed: {ex.Message}");
+        }
+    }
+
+    private static async Task<HttpResponseData> CreateTextResponseAsync(HttpRequestData req, HttpStatusCode statusCode,
+        string message)
+    {
+        var response = req.CreateResponse(statusCode);
+        SetContentType(response, "text/plain; charset=utf-8");
+        await response.WriteStringAsync(message);
+        return response;
+    }
+
+    private static async Task<HttpResponseData> CreateHtmlResponseAsync(HttpRequestData req, HttpStatusCode statusCode,
+        string html)
+    {
+        var response = req.CreateResponse(statusCode);
+        SetContentType(response, "text/html; charset=utf-8");
+        await response.WriteStringAsync(html);
+        return response;
+    }
+
+    private static void SetContentType(HttpResponseData response, string contentType)
+    {
+        if (response.Headers.Contains("Content-Type")) response.Headers.Remove("Content-Type");
+
+        response.Headers.Add("Content-Type", contentType);
+    }
+
     private static class BitrixInstallRequestParser
     {
-        public static async Task<BitrixLiveChatPortalInstallation?> ParseAsync(HttpRequestData req, CancellationToken ct)
+        public static async Task<BitrixLiveChatPortalInstallation?> ParseAsync(HttpRequestData req,
+            CancellationToken ct)
         {
             var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -118,14 +120,11 @@ public sealed class LiveChatBitrixInstallFunction
             if (!string.IsNullOrWhiteSpace(body))
             {
                 var trimmed = body.TrimStart();
-                if (trimmed.StartsWith("{", StringComparison.Ordinal) || trimmed.StartsWith("[", StringComparison.Ordinal))
-                {
+                if (trimmed.StartsWith("{", StringComparison.Ordinal) ||
+                    trimmed.StartsWith("[", StringComparison.Ordinal))
                     AddJsonValues(body, values);
-                }
                 else
-                {
                     AddQueryStringValues(body, values);
-                }
             }
 
             var memberId = GetFirst(values, "member_id", "auth.member_id", "auth[member_id]", "memberId");
@@ -135,13 +134,14 @@ public sealed class LiveChatBitrixInstallFunction
             if (string.IsNullOrWhiteSpace(memberId) ||
                 string.IsNullOrWhiteSpace(domain) ||
                 string.IsNullOrWhiteSpace(accessToken))
-            {
                 return null;
-            }
 
-            var refreshToken = GetFirst(values, "REFRESH_ID", "refresh_token", "auth.refresh_token", "auth[refresh_token]");
-            var clientEndpoint = GetFirst(values, "client_endpoint", "CLIENT_ENDPOINT", "auth.client_endpoint", "auth[client_endpoint]");
-            var serverEndpoint = GetFirst(values, "server_endpoint", "SERVER_ENDPOINT", "auth.server_endpoint", "auth[server_endpoint]");
+            var refreshToken = GetFirst(values, "REFRESH_ID", "refresh_token", "auth.refresh_token",
+                "auth[refresh_token]");
+            var clientEndpoint = GetFirst(values, "client_endpoint", "CLIENT_ENDPOINT", "auth.client_endpoint",
+                "auth[client_endpoint]");
+            var serverEndpoint = GetFirst(values, "server_endpoint", "SERVER_ENDPOINT", "auth.server_endpoint",
+                "auth[server_endpoint]");
 
             return new BitrixLiveChatPortalInstallation(
                 memberId.Trim(),
@@ -162,34 +162,23 @@ public sealed class LiveChatBitrixInstallFunction
 
             var unixTimestamp = GetFirst(values, "auth.expires", "auth[expires]");
             if (long.TryParse(unixTimestamp, out var epochSeconds) && epochSeconds > 1_000_000_000)
-            {
                 return DateTimeOffset.FromUnixTimeSeconds(epochSeconds).UtcDateTime;
-            }
 
             var secondsToExpire = GetFirst(values, "AUTH_EXPIRES", "expires_in", "auth.expires_in", "auth[expires_in]");
-            if (double.TryParse(secondsToExpire, out var seconds))
-            {
-                return now.AddSeconds(seconds);
-            }
+            if (double.TryParse(secondsToExpire, out var seconds)) return now.AddSeconds(seconds);
 
             return null;
         }
 
         private static void AddQueryStringValues(string queryOrFormBody, IDictionary<string, string> target)
         {
-            var parsed = System.Web.HttpUtility.ParseQueryString(queryOrFormBody.TrimStart('?'));
+            var parsed = HttpUtility.ParseQueryString(queryOrFormBody.TrimStart('?'));
             foreach (var key in parsed.AllKeys)
             {
-                if (string.IsNullOrWhiteSpace(key))
-                {
-                    continue;
-                }
+                if (string.IsNullOrWhiteSpace(key)) continue;
 
                 var value = parsed[key];
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    target[key] = value;
-                }
+                if (!string.IsNullOrWhiteSpace(value)) target[key] = value;
             }
         }
 
@@ -211,6 +200,7 @@ public sealed class LiveChatBitrixInstallFunction
                             : $"{prefix}.{property.Name}";
                         FlattenJson(property.Value, childPrefix, target);
                     }
+
                     break;
                 case JsonValueKind.Array:
                     break;
@@ -228,12 +218,8 @@ public sealed class LiveChatBitrixInstallFunction
         private static string? GetFirst(IReadOnlyDictionary<string, string> values, params string[] keys)
         {
             foreach (var key in keys)
-            {
                 if (values.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value))
-                {
                     return value;
-                }
-            }
 
             return null;
         }

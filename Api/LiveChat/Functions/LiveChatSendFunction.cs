@@ -1,21 +1,19 @@
 using System.Net;
-using System.Text;
 using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.LiveChat;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat;
 using RentoomBooking.SharedClasses.LiveChat;
 
 namespace RentoomBooking.Api.LiveChat.Functions;
 
 public sealed class LiveChatSendFunction
 {
-    private readonly BitrixLiveChatService _liveChatService;
-    private readonly ILiveChatRateLimiter _rateLimiter;
-    private readonly ILogger<LiveChatSendFunction> _logger;
     private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
+    private readonly BitrixLiveChatService _liveChatService;
+    private readonly ILogger<LiveChatSendFunction> _logger;
+    private readonly ILiveChatRateLimiter _rateLimiter;
 
     public LiveChatSendFunction(
         BitrixLiveChatService liveChatService,
@@ -29,14 +27,14 @@ public sealed class LiveChatSendFunction
 
     [Function("LiveChatSend")]
     public async Task<HttpResponseData> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "staywell/livechat/send")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "staywell/livechat/send")]
+        HttpRequestData req,
         CancellationToken ct)
     {
         var body = await req.ReadAsStringAsync();
         if (string.IsNullOrWhiteSpace(body))
-        {
-            return await CreateJsonResponse(req, HttpStatusCode.BadRequest, new { message = "Request body is required." });
-        }
+            return await CreateJsonResponse(req, HttpStatusCode.BadRequest,
+                new { message = "Request body is required." });
 
         LiveChatSendRequest? request;
         try
@@ -48,19 +46,19 @@ public sealed class LiveChatSendFunction
             return await CreateJsonResponse(req, HttpStatusCode.BadRequest, new { message = "Invalid JSON." });
         }
 
-        if (request is null || string.IsNullOrWhiteSpace(request.ReservationToken) || string.IsNullOrWhiteSpace(request.Message))
-        {
-            return await CreateJsonResponse(req, HttpStatusCode.BadRequest, new { message = "ReservationToken and Message are required." });
-        }
+        if (request is null || string.IsNullOrWhiteSpace(request.ReservationToken) ||
+            string.IsNullOrWhiteSpace(request.Message))
+            return await CreateJsonResponse(req, HttpStatusCode.BadRequest,
+                new { message = "ReservationToken and Message are required." });
 
         if (request.Message.Length > 4000)
-        {
-            return await CreateJsonResponse(req, HttpStatusCode.BadRequest, new { message = "Message too long (max 4000 characters)." });
-        }
+            return await CreateJsonResponse(req, HttpStatusCode.BadRequest,
+                new { message = "Message too long (max 4000 characters)." });
 
         if (!_rateLimiter.TryAcquire(request.ReservationToken, out var retryAfter))
         {
-            var response429 = await CreateJsonResponse(req, HttpStatusCode.TooManyRequests, new { message = "Too many requests. Please slow down." });
+            var response429 = await CreateJsonResponse(req, HttpStatusCode.TooManyRequests,
+                new { message = "Too many requests. Please slow down." });
             response429.Headers.Add("Retry-After", ((int)retryAfter.TotalSeconds + 1).ToString());
             return response429;
         }
@@ -78,7 +76,8 @@ public sealed class LiveChatSendFunction
         catch (Exception ex)
         {
             _logger.LogError(ex, "LiveChatSend failed for token {Token}", request.ReservationToken);
-            return await CreateJsonResponse(req, HttpStatusCode.InternalServerError, new { message = "Failed to send message." });
+            return await CreateJsonResponse(req, HttpStatusCode.InternalServerError,
+                new { message = "Failed to send message." });
         }
     }
 

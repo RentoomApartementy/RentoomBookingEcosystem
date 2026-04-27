@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Caching.Memory;
-using RentoomBooking.Api.LiveChat;
+using RentoomBooking.LiveChat;
 using RentoomBooking.SharedClasses.LiveChat;
 
 namespace RentoomBooking.Api.LinkPreview;
@@ -21,8 +21,7 @@ public sealed class LinkPreviewFunction
     private const int MaxBodyBytes = 256 * 1024;
     private const string CacheKeyPrefix = "og_preview:";
     private static readonly TimeSpan CacheTtl = TimeSpan.FromHours(1);
-
-    // Both attribute orders are handled (property=…content=… and content=…property=…)
+    
     private static readonly Regex OgTitleRx    = new(@"<meta[^>]+property\s*=\s*[""']og:title[""'][^>]+content\s*=\s*[""']([^""'<>]{1,300})[""']",     RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex OgTitleRx2   = new(@"<meta[^>]+content\s*=\s*[""']([^""'<>]{1,300})[""'][^>]+property\s*=\s*[""']og:title[""']",      RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex OgDescRx     = new(@"<meta[^>]+property\s*=\s*[""']og:description[""'][^>]+content\s*=\s*[""']([^""'<>]{1,500})[""']", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -79,7 +78,7 @@ public sealed class LinkPreviewFunction
 
     private async Task<LinkPreviewDto> FetchPreviewAsync(string originalUrl, Uri uri, CancellationToken ct)
     {
-        // For Bitrix24 landing page links (/~CODE), try the official API first
+        // Dla stron bitrixa (z api)
         var path = uri.AbsolutePath.TrimStart('/');
         if (path.StartsWith('~'))
         {
@@ -95,7 +94,7 @@ public sealed class LinkPreviewFunction
             }
         }
 
-        // General fallback: scrape OG tags from HTML
+        // (ogólne rozwiązanie)
         try
         {
             using var http = _httpClientFactory.CreateClient("LinkPreview");

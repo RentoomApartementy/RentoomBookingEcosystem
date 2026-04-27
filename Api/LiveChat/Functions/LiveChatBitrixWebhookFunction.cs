@@ -1,24 +1,22 @@
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Web;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.LiveChat;
+using RentoomBooking.LiveChat;
 using RentoomBooking.SharedClasses.LiveChat;
 
 namespace RentoomBooking.Api.LiveChat.Functions;
 
-/// <summary>
-/// Receives operator messages from Bitrix24 via webhook (event: OnImConnectorMessageAdd).
-/// Register this URL in Bitrix24: POST https://&lt;api-domain&gt;/api/staywell/livechat/bitrix-webhook
-/// </summary>
 public sealed class LiveChatBitrixWebhookFunction
 {
     private readonly BitrixLiveChatService _liveChatService;
     private readonly ILogger<LiveChatBitrixWebhookFunction> _logger;
 
-    public LiveChatBitrixWebhookFunction(BitrixLiveChatService liveChatService, ILogger<LiveChatBitrixWebhookFunction> logger)
+    public LiveChatBitrixWebhookFunction(BitrixLiveChatService liveChatService,
+        ILogger<LiveChatBitrixWebhookFunction> logger)
     {
         _liveChatService = liveChatService;
         _logger = logger;
@@ -26,7 +24,8 @@ public sealed class LiveChatBitrixWebhookFunction
 
     [Function("LiveChatBitrixWebhook")]
     public async Task<HttpResponseData> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "staywell/livechat/bitrix-webhook")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "staywell/livechat/bitrix-webhook")]
+        HttpRequestData req,
         CancellationToken ct)
     {
         var body = await req.ReadAsStringAsync();
@@ -37,19 +36,14 @@ public sealed class LiveChatBitrixWebhookFunction
         _logger.LogInformation("Bitrix webhook received. Content-Type={ContentType}", contentType);
         _logger.LogDebug("Bitrix webhook raw body: {Body}", body);
 
-        if (string.IsNullOrWhiteSpace(body))
-        {
-            return req.CreateResponse(HttpStatusCode.OK);
-        }
+        if (string.IsNullOrWhiteSpace(body)) return req.CreateResponse(HttpStatusCode.OK);
 
-        // Verify the application_token before processing any messages to prevent spoofed webhooks.
         var (authMemberId, authAppToken) = ExtractAuthFields(body);
         if (!await _liveChatService.VerifyWebhookApplicationTokenAsync(authMemberId, authAppToken, ct))
         {
             _logger.LogWarning(
                 "Bitrix webhook: application_token verification failed for member_id={MemberId}",
                 authMemberId);
-            // Return 200 OK intentionally: Bitrix24 retries on non-2xx, returning 403 would cause a flood of retries.
             return req.CreateResponse(HttpStatusCode.OK);
         }
 
@@ -99,11 +93,8 @@ public sealed class LiveChatBitrixWebhookFunction
 
                 if (result is null) continue;
 
-                // Confirm delivery only when message was successfully processed
                 if (!string.IsNullOrWhiteSpace(msg.MessageId) && !string.IsNullOrWhiteSpace(msg.ChatId))
-                {
                     await _liveChatService.SendDeliveryStatusAsync(msg.MessageId, msg.ChatId, ct);
-                }
             }
         }
         catch (Exception ex)
@@ -116,25 +107,15 @@ public sealed class LiveChatBitrixWebhookFunction
 
     private static List<IncomingBitrixMessage> ParseIncomingMessages(string body, ILogger logger)
     {
-        if (TryParseJsonMessages(body, logger, out var jsonMessages) && jsonMessages.Count > 0)
-        {
-            return jsonMessages;
-        }
+        if (TryParseJsonMessages(body, logger, out var jsonMessages) && jsonMessages.Count > 0) return jsonMessages;
 
         return ParseFormMessages(body);
     }
 
-    /// <summary>
-    /// Extracts <c>auth[member_id]</c> and <c>auth[application_token]</c> from the webhook body.
-    /// Supports both JSON (<c>{ "auth": { "member_id": "...", "application_token": "..." } }</c>)
-    /// and form-encoded (<c>auth[member_id]=...&amp;auth[application_token]=...</c>) payloads.
-    /// Returns nulls for both if the fields are absent.
-    /// </summary>
     private static (string? MemberId, string? ApplicationToken) ExtractAuthFields(string body)
     {
         var trimmed = body.TrimStart();
         if (trimmed.StartsWith("{", StringComparison.Ordinal))
-        {
             try
             {
                 using var doc = JsonDocument.Parse(body);
@@ -142,9 +123,7 @@ public sealed class LiveChatBitrixWebhookFunction
 
                 if (!TryGetPropertyIgnoreCase(root, "auth", out var authElement) ||
                     authElement.ValueKind != JsonValueKind.Object)
-                {
                     return (null, null);
-                }
 
                 var memberId = GetStringIgnoreCase(authElement, "member_id");
                 var appToken = GetStringIgnoreCase(authElement, "application_token");
@@ -154,10 +133,8 @@ public sealed class LiveChatBitrixWebhookFunction
             {
                 return (null, null);
             }
-        }
 
-        // Form-encoded: auth[member_id]=...&auth[application_token]=...
-        var form = System.Web.HttpUtility.ParseQueryString(body);
+        var form = HttpUtility.ParseQueryString(body);
         var formMemberId = form["auth[member_id]"];
         var formAppToken = form["auth[application_token]"];
         return (formMemberId, formAppToken);
@@ -168,29 +145,23 @@ public sealed class LiveChatBitrixWebhookFunction
         messages = [];
 
         var trimmed = body.TrimStart();
-        if (!trimmed.StartsWith("{", StringComparison.Ordinal) && !trimmed.StartsWith("[", StringComparison.Ordinal))
-        {
-            return false;
-        }
+        if (!trimmed.StartsWith("{", StringComparison.Ordinal) &&
+            !trimmed.StartsWith("[", StringComparison.Ordinal)) return false;
 
         try
         {
             using var doc = JsonDocument.Parse(body);
             var root = doc.RootElement;
 
-            // Documented payload format for OnImConnectorMessageAdd:
-            // { "event": "ONIMCONNECTORMESSAGEADD", "data": { "CONNECTOR": "...", "LINE": ..., "MESSAGES": [...] }, "auth": {...} }
             var data = TryGetPropertyIgnoreCase(root, "data", out var dataElement) ? dataElement : root;
-            if (!TryGetPropertyIgnoreCase(data, "MESSAGES", out var messagesElement) || messagesElement.ValueKind != JsonValueKind.Array)
-            {
-                return true;
-            }
+            if (!TryGetPropertyIgnoreCase(data, "MESSAGES", out var messagesElement) ||
+                messagesElement.ValueKind != JsonValueKind.Array) return true;
 
             foreach (var msg in messagesElement.EnumerateArray())
             {
                 var attachments = ParseJsonFiles(msg, logger);
                 var authorId = GetNestedStringIgnoreCase(msg, "message", "user_id")
-                    ?? GetNestedStringIgnoreCase(msg, "message", "author_id");
+                               ?? GetNestedStringIgnoreCase(msg, "message", "author_id");
                 messages.Add(new IncomingBitrixMessage(
                     GetNestedStringIgnoreCase(msg, "chat", "id"),
                     GetNestedStringIgnoreCase(msg, "im", "chat_id"),
@@ -209,26 +180,17 @@ public sealed class LiveChatBitrixWebhookFunction
         }
     }
 
-    /// <summary>
-    /// Extracts file attachments from a Bitrix24 MESSAGES[N] element.
-    /// Handles both array format and keyed-object format for the "files" property.
-    /// </summary>
     private static IReadOnlyList<LiveChatAttachmentDto> ParseJsonFiles(JsonElement msgElement, ILogger logger)
     {
         if (!TryGetPropertyIgnoreCase(msgElement, "message", out var messageElement) ||
             messageElement.ValueKind != JsonValueKind.Object)
-        {
             return [];
-        }
 
-        if (!TryGetPropertyIgnoreCase(messageElement, "files", out var filesElement))
-        {
-            return [];
-        }
+        if (!TryGetPropertyIgnoreCase(messageElement, "files", out var filesElement)) return [];
 
         var result = new List<LiveChatAttachmentDto>();
 
-        IEnumerable<JsonElement> fileItems = filesElement.ValueKind switch
+        var fileItems = filesElement.ValueKind switch
         {
             JsonValueKind.Array => filesElement.EnumerateArray(),
             JsonValueKind.Object => filesElement.EnumerateObject().Select(p => p.Value),
@@ -239,28 +201,26 @@ public sealed class LiveChatBitrixWebhookFunction
         {
             if (file.ValueKind != JsonValueKind.Object) continue;
 
-            // Log just the property names to help diagnose unexpected payload structures
             var fileKeys = file.EnumerateObject().Select(p => p.Name).ToArray();
             logger.LogTrace("Bitrix file object keys: [{Keys}]", string.Join(", ", fileKeys));
 
             var name = GetStringIgnoreCase(file, "name") ?? string.Empty;
             if (string.IsNullOrWhiteSpace(name)) continue;
 
-            // Bitrix24 uses "type" (e.g. "image") rather than MIME type; accept both fields
             var mimeType = GetStringIgnoreCase(file, "mimeType")
-                ?? GetStringIgnoreCase(file, "mime_type")
-                ?? GetStringIgnoreCase(file, "type");
+                           ?? GetStringIgnoreCase(file, "mime_type")
+                           ?? GetStringIgnoreCase(file, "type");
 
             _ = long.TryParse(GetStringIgnoreCase(file, "size") ?? "", out var size);
 
             var urlPreview = GetStringIgnoreCase(file, "urlPreview")
-                ?? GetStringIgnoreCase(file, "url_preview");
+                             ?? GetStringIgnoreCase(file, "url_preview");
             var urlDownload = GetStringIgnoreCase(file, "urlDownload")
-                ?? GetStringIgnoreCase(file, "url_download")
-                ?? GetStringIgnoreCase(file, "urlShow")
-                ?? GetStringIgnoreCase(file, "url_show")
-                ?? GetStringIgnoreCase(file, "link")
-                ?? GetStringIgnoreCase(file, "url");
+                              ?? GetStringIgnoreCase(file, "url_download")
+                              ?? GetStringIgnoreCase(file, "urlShow")
+                              ?? GetStringIgnoreCase(file, "url_show")
+                              ?? GetStringIgnoreCase(file, "link")
+                              ?? GetStringIgnoreCase(file, "url");
 
             result.Add(new LiveChatAttachmentDto(
                 name,
@@ -276,17 +236,14 @@ public sealed class LiveChatBitrixWebhookFunction
     private static string? GetStringIgnoreCase(JsonElement element, string prop)
     {
         if (TryGetPropertyIgnoreCase(element, prop, out var val))
-        {
             return val.ValueKind == JsonValueKind.String ? val.GetString() : null;
-        }
         return null;
     }
 
     private static List<IncomingBitrixMessage> ParseFormMessages(string body)
     {
-        var form = System.Web.HttpUtility.ParseQueryString(body);
+        var form = HttpUtility.ParseQueryString(body);
         var byIndex = new Dictionary<int, IncomingBitrixMessageBuilder>();
-        // files[msgIndex][fileIndex][field]
         var filesByMsgIndex = new Dictionary<int, Dictionary<int, IncomingBitrixFileBuilder>>();
 
         foreach (var rawKey in form.AllKeys)
@@ -298,7 +255,6 @@ public sealed class LiveChatBitrixWebhookFunction
             if (string.IsNullOrWhiteSpace(value))
                 continue;
 
-            // Try standard message fields first
             if (TryParseFormMessageKey(rawKey, out var index, out var section, out var field))
             {
                 if (!byIndex.TryGetValue(index, out var builder))
@@ -326,10 +282,10 @@ public sealed class LiveChatBitrixWebhookFunction
                         builder.AuthorId ??= value;
                         break;
                 }
+
                 continue;
             }
 
-            // Try file fields: data[MESSAGES][msgIdx][message][files][fileIdx][field]
             if (TryParseFormFileKey(rawKey, out var msgIdx, out var fileIdx, out var fileField))
             {
                 if (!byIndex.ContainsKey(msgIdx))
@@ -390,25 +346,19 @@ public sealed class LiveChatBitrixWebhookFunction
             .Select(match => match.Value)
             .ToArray();
 
-        if (segments.Length < 4)
-        {
-            return false;
-        }
+        if (segments.Length < 4) return false;
 
         var offset = segments[0].Equals("data", StringComparison.OrdinalIgnoreCase) ? 1 : 0;
         if (segments.Length != offset + 4 ||
             !segments[offset].Equals("MESSAGES", StringComparison.OrdinalIgnoreCase) ||
             !int.TryParse(segments[offset + 1], out index))
-        {
             return false;
-        }
 
         section = segments[offset + 2];
         field = segments[offset + 3];
         return true;
     }
 
-    // Parses keys like: data[MESSAGES][0][message][files][0][name]
     private static bool TryParseFormFileKey(string key, out int msgIndex, out int fileIndex, out string fileField)
     {
         msgIndex = -1;
@@ -421,7 +371,6 @@ public sealed class LiveChatBitrixWebhookFunction
 
         var offset = segments.Length > 0 && segments[0].Equals("data", StringComparison.OrdinalIgnoreCase) ? 1 : 0;
 
-        // Expected: MESSAGES[msgIdx][message][files][fileIdx][field] → offset+6 segments total
         if (segments.Length != offset + 6)
             return false;
 
@@ -448,9 +397,7 @@ public sealed class LiveChatBitrixWebhookFunction
     {
         if (TryGetPropertyIgnoreCase(element, parentProp, out var parent) && parent.ValueKind == JsonValueKind.Object &&
             TryGetPropertyIgnoreCase(parent, childProp, out var child))
-        {
             return child.ValueKind == JsonValueKind.String ? child.GetString() : child.ToString();
-        }
 
         return null;
     }
@@ -458,19 +405,24 @@ public sealed class LiveChatBitrixWebhookFunction
     private static bool TryGetPropertyIgnoreCase(JsonElement element, string propertyName, out JsonElement value)
     {
         foreach (var property in element.EnumerateObject())
-        {
-            if (property.NameEquals(propertyName) || string.Equals(property.Name, propertyName, StringComparison.OrdinalIgnoreCase))
+            if (property.NameEquals(propertyName) ||
+                string.Equals(property.Name, propertyName, StringComparison.OrdinalIgnoreCase))
             {
                 value = property.Value;
                 return true;
             }
-        }
 
         value = default;
         return false;
     }
 
-    private sealed record IncomingBitrixMessage(string? ChatId, string? BitrixChatId, string? MessageId, string? Text, string? AuthorId, IReadOnlyList<LiveChatAttachmentDto> Attachments);
+    private sealed record IncomingBitrixMessage(
+        string? ChatId,
+        string? BitrixChatId,
+        string? MessageId,
+        string? Text,
+        string? AuthorId,
+        IReadOnlyList<LiveChatAttachmentDto> Attachments);
 
     private sealed class IncomingBitrixMessageBuilder
     {
@@ -482,14 +434,12 @@ public sealed class LiveChatBitrixWebhookFunction
 
         public IncomingBitrixMessage? Build(IReadOnlyList<LiveChatAttachmentDto>? files = null)
         {
-            var hasContent = !string.IsNullOrWhiteSpace(Text) || (files?.Count > 0);
+            var hasContent = !string.IsNullOrWhiteSpace(Text) || files?.Count > 0;
             if (string.IsNullOrWhiteSpace(ChatId) &&
                 string.IsNullOrWhiteSpace(BitrixChatId) &&
                 string.IsNullOrWhiteSpace(MessageId) &&
                 !hasContent)
-            {
                 return null;
-            }
 
             return new IncomingBitrixMessage(ChatId, BitrixChatId, MessageId, Text, AuthorId, files ?? []);
         }
