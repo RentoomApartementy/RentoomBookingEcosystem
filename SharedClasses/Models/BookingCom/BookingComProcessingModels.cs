@@ -38,6 +38,8 @@ namespace RentoomBooking.SharedClasses.Models.BookingCom
         public bool EmailConfirmed { get; set; }
         public string Status { get; set; } = BookingComLogStatuses.Pending;
         public string Message { get; set; } = string.Empty;
+        public string? Provider { get; internal set; }
+        public string? ProviderTransactionId { get; internal set; }
     }
 
     public class BookingComEmailProcessingContext
@@ -58,6 +60,8 @@ namespace RentoomBooking.SharedClasses.Models.BookingCom
         public string Status { get; set; } = BookingComLogStatuses.Pending;
         public string Message { get; set; } = string.Empty;
         public string? MessageId { get; set; }
+        public string? Provider { get; internal set; }
+        public string? ProviderTransactionId { get; internal set; }
     }
 
     public class BookingComBackfillRequest
