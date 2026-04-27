@@ -241,7 +241,16 @@
     <value>Wybierz datę i liczbę gości</value>
   </data>
   <data name="SelectDatesAndGuestsButtonLabel" xml:space="preserve">
-    <value>Zmień</value>
+    <value>Wybierz termin</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Cena dostępna po wybraniu terminu</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Wybierz termin</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Zmień termin</value>
   </data>
   <data name="CheckInTimeFormat" xml:space="preserve">
     <value>Zameldowanie: 15:00 – 22:00</value>

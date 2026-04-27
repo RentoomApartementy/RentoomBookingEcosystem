@@ -243,6 +243,15 @@
   <data name="SelectDatesAndGuestsButtonLabel" xml:space="preserve">
     <value>Change dates and guests</value>
   </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Price available after selecting dates</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Select dates</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Change dates</value>
+  </data>
   <data name="CheckInTimeFormat" xml:space="preserve">
     <value>Check-in: 15:00 – 22:00</value>
   </data>
