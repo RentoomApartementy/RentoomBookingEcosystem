@@ -30,6 +30,13 @@
                 <div class="divider"></div>
             </div>
 
+            <div class="mb-4">
+                <ApartmentsNameSearchBar @bind-SearchText="_searchText"
+                                         Placeholder="@(IsPolish ? "Wyszukaj apartament po nazwie..." : "Search apartments by name...")"
+                                         AriaLabel="@(IsPolish ? "Wyszukaj apartament po nazwie" : "Search apartment by name")"
+                                         ClearAriaLabel="@(IsPolish ? "Wyczyść wyszukiwanie" : "Clear search")" />
+            </div>
+
             @if (_isLoading)
             {
                 <div class="d-flex justify-content-center py-5">
@@ -46,15 +53,24 @@
             }
             else
             {
-                <div class="apartments-grid">
-                    @foreach (var apartment in _apartments)
-                    {
-                        <ApartmentListCard Id="@apartment.Id" 
-                                           Name="@apartment.Name" 
-                                           Url="@GetApartmentUrl(apartment)"
-                                           Location="@($"{apartment?.ObjectLocation?.LocalizationItem?.Street} {apartment?.ObjectLocation?.LocalizationItem?.ZipCode} {apartment?.ObjectLocation?.LocalizationItem?.City}")" />
-                    }
-                </div>
+                @if (!FilteredApartments.Any())
+                {
+                    <div class="alert alert-info text-center">
+                        @(IsPolish ? "Nie znaleziono apartamentów dla podanej nazwy." : "No apartments found for the entered name.")
+                    </div>
+                }
+                else
+                {
+                    <div class="apartments-grid">
+                        @foreach (var apartment in FilteredApartments)
+                        {
+                            <ApartmentListCard Id="@apartment.Id" 
+                                               Name="@apartment.Name" 
+                                               Url="@GetApartmentUrl(apartment)"
+                                               Location="@($"{apartment?.ObjectLocation?.LocalizationItem?.Street} {apartment?.ObjectLocation?.LocalizationItem?.ZipCode} {apartment?.ObjectLocation?.LocalizationItem?.City}")" />
+                        }
+                    </div>
+                }
             }
         </div>
     </div>
@@ -63,7 +79,14 @@
 @code {
     private List<ApartmentObject> _apartments = new();
     private bool _isLoading = true;
+    private string _searchText = string.Empty;
     private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+    private IEnumerable<ApartmentObject> FilteredApartments =>
+        string.IsNullOrWhiteSpace(_searchText)
+            ? _apartments
+            : _apartments.Where(apartment =>
+                !string.IsNullOrWhiteSpace(apartment?.Name) &&
+                apartment.Name.Contains(_searchText, StringComparison.OrdinalIgnoreCase));
 
     protected override async Task OnInitializedAsync()
     {
