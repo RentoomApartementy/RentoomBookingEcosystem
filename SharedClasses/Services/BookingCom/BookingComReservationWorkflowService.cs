@@ -214,6 +214,15 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                         overallStatus: BookingComLogStatuses.Duplicate,
                         reservationGuid: reservationGuid,
                         cancellationToken: cancellationToken);
+                    // tymczasowy fix - zeby nie przetwarzal zduplikowanych.
+
+                    result.ReservationGuid = reservationGuid;
+                    //result.EmailConfirmed = emailConfirmed;
+                    result.Status = isDuplicate ? BookingComLogStatuses.Duplicate : BookingComLogStatuses.Completed;
+                    result.Message = "Duplikat - przerywam aktualizowanie";
+                    return result;
+
+
                 }
 
                 result.ReservationGuid = reservationGuid;
