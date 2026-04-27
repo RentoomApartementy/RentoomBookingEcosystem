@@ -397,11 +397,17 @@
     private bool ShouldShowRetryPaymentButton => IsPaymentInitiated || IsPaymentFailed;
     private bool IsRetryPaymentDisabled => _retryCountdownSeconds > 0;
     private bool ShouldShowCancelAction => _enableCancelAction && ShouldShowTermsAndPayment && !IsPaid;
-    private bool ShouldShowTermsAndPayment => (string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
-                                              || string.Equals(_summary?.PaymentStatus, "None", StringComparison.OrdinalIgnoreCase)
-                                              || ShouldResumeInitiatedPayment)
-                                              && !IsPaid
-                                              && !IsPaymentFailed;
+    private bool ShouldShowTermsAndPayment => 
+                                                 (  ( (
+                                                      string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
+                                                      || string.Equals(_summary?.IdoStatus, "accepted", StringComparison.OrdinalIgnoreCase)
+                                                   )
+                                                  && string.Equals(_summary?.PaymentStatus, "None", StringComparison.OrdinalIgnoreCase)
+                                                
+                                                )
+                                                || ShouldResumeInitiatedPayment)
+                                                && !IsPaid
+                                                && !IsPaymentFailed;
     
     private string? staywellLink => BuildStaywellLink();
 
