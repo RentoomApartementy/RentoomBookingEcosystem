@@ -5,12 +5,12 @@
 
 @if (IsVisible)
 {
-    <div class="modal-backdrop @(IsAiChatFullscreenVariant ? "modal-backdrop-aichat-fullscreen-mode" : string.Empty)"
+    <div class="modal-backdrop @(IsFullscreenVariant ? "modal-backdrop-aichat-fullscreen-mode" : string.Empty)"
          @onclick="Close"
          tabindex="-1"
          @ref="backdropRef">
 
-        <div class="modal @(IsImageVariant ? "modal-image-mode" : "") @(IsAiChatFullscreenVariant ? "modal-aichat-fullscreen-mode" : "")"
+        <div class="modal @(IsImageVariant ? "modal-image-mode" : "") @(IsFullscreenVariant ? "modal-aichat-fullscreen-mode" : "")"
              @onclick:stopPropagation="@(!IsImageVariant)"
              role="dialog"
              aria-labelledby="modal-title"
@@ -41,7 +41,7 @@
             }
             else
             {
-                <div class="modal-content @(IsAiChatFullscreenVariant ? "modal-content-aichat-fullscreen-mode" : string.Empty)">
+                <div class="modal-content @(IsFullscreenVariant ? "modal-content-aichat-fullscreen-mode" : string.Empty)">
                     @Content
                 </div>
             }
@@ -62,6 +62,8 @@
     private bool IsRotatedPerpendicular => _rotation == 90 || _rotation == 270;
     private bool IsImageVariant => Variant == ModalVariant.Image;
     private bool IsAiChatFullscreenVariant => Variant == ModalVariant.AiChatFullscreen;
+    private bool IsLiveChatFullscreenVariant => Variant == ModalVariant.LiveChatFullscreen;
+    private bool IsFullscreenVariant => IsAiChatFullscreenVariant || IsLiveChatFullscreenVariant;
 
     protected override Task OnInitializedAsync()
     {

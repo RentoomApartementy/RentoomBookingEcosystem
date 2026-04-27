@@ -33,9 +33,12 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<ModalService>();
             builder.Services.AddScoped<BitrixService>();
             builder.Services.AddScoped<AiChatClientService>();
+            builder.Services.AddScoped<LiveChatClientService>();
             builder.Services.AddScoped<SafeMarkdownService>();
             builder.Services.AddScoped<UpsellCartState>();
 
+            builder.Services.AddMemoryCache();
+            builder.Services.AddScoped<LiveChatNotificationState>();
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
             builder.Services.AddScoped<AmenitiesState>();
@@ -56,7 +59,7 @@ namespace RentoomBooking.StayWell
                     if (builder.HostEnvironment.IsDevelopment())
                     {
                         // Local dev:
-                        c.BaseAddress = new Uri("https://localhost:7238/api/");
+                        c.BaseAddress = new Uri("http://localhost:7238/api/");
                     }
                     else
                     {

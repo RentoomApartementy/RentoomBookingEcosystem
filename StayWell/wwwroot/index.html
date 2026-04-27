@@ -105,6 +105,7 @@
             delete body._cartScrollHandler;
         };
     </script>
+    <script src="js/bitrixchat2.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oooh+Baby&display=swap');
@@ -113,18 +114,15 @@
 
     <script>
         window.stayWellBitrixEnableLoader = function (loaderUrl) {
-            if (!loaderUrl || document.getElementById("staywell-bitrix-loader")) {
-                return;
-            }
+            // Legacy: kept as no-op for backward compat during transition
+        };
 
-            var script = document.createElement("script");
-            script.id = "staywell-bitrix-loader";
-            script.async = true;
-            script.src = loaderUrl + "?" + ((Date.now() / 60000) | 0);
-            document.head.appendChild(script);
+        window.staywellLiveChat = {
+            scrollToBottom: function (el) {
+                if (el) { el.scrollTop = el.scrollHeight; }
+            }
         };
     </script>
-    <script src="js/bitrixchat2.js"></script>
     <script src="js/wheelPicker.js"></script>
     <!--wyłączenie do czasu wdrożenia upselli, naprawić-->
     <!--<script src="js/upsellstrip.js"></script>--> 
