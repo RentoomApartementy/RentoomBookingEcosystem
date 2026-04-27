@@ -228,7 +228,7 @@ namespace RentoomBooking.SharedClasses.Services
             return reservationMap;
         }
 
-        public async Task<IReadOnlyList<Reservation>> FetchReservationByAddDateRangeFromIdoSellAsync(
+        public async Task<List<Reservation>> FetchReservationByAddDateRangeFromIdoSellAsync(
             DateTime startDate,
             DateTime endDate,
             CancellationToken cancellationToken = default)

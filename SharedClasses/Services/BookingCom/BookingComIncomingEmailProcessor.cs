@@ -149,7 +149,9 @@ public class BookingComIncomingEmailProcessor : IBookingComIncomingEmailProcesso
                 EmailConfirmed = result.EmailConfirmed,
                 Status = result.Status,
                 Message = result.Message,
-                MessageId = email.MessageId
+                MessageId = email.MessageId,
+                Provider = result.Provider ?? provider,
+                ProviderTransactionId = result.ProviderTransactionId ?? providerTransactionId
             };
         }
         catch (Exception ex)

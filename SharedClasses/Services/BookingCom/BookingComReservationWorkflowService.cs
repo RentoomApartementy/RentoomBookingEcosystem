@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
@@ -217,11 +217,13 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     // tymczasowy fix - zeby nie przetwarzal zduplikowanych.
 
                     result.ReservationGuid = reservationGuid;
-                    //result.EmailConfirmed = emailConfirmed;
+                    result.EmailConfirmed = existingRecord.DealBitrixSentConfirmationEmailId is not null;
                     result.Status = isDuplicate ? BookingComLogStatuses.Duplicate : BookingComLogStatuses.Completed;
                     result.Message = "Duplikat - przerywam aktualizowanie";
+                    result.Provider = existingRecord.Provider;
+                    result.ProviderTransactionId = existingRecord.ProviderTransactionId;
                     return result;
-
+                 
 
                 }
 
@@ -408,6 +410,9 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     cancellationToken: cancellationToken);
             }
 
+            var _apartment = _apartmentRepository.FindApartmentInPostgres(reservation.Items[0].objectId, cancellationToken);
+            var mandatoryAddonsIds = _apartment.Addons.Where(a => !a.Optional.Value).Select(a=>a.Id).ToList();
+
             var details = reservation.ReservationDetails ?? throw new InvalidOperationException($"Reservation {reservation.id} is missing details.");
             var dateFrom = details.getDateFrom();
             var dateTo = details.getDateTo();
@@ -419,6 +424,9 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
             var definedAddonsLookup = definedAddons.ToDictionary(addon => addon.IdoBookingId);
 
             var selectedAddons = new List<SelectedAddonDto>();
+            var mandatoryAddons = new List<SelectedAddonDto>();
+            var mandatoryTotal = 0m;
+            var selectedTotal = 0m;
             foreach (var addon in items.SelectMany(item => item.addons ?? new List<ReservationAddon>()))
             {
                 if (!int.TryParse(addon.addonId, NumberStyles.Integer, CultureInfo.InvariantCulture, out var addonId))
@@ -446,7 +454,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                         cancellationToken: cancellationToken);
                 }
 
-                selectedAddons.Add(new SelectedAddonDto
+                var addonObject = new SelectedAddonDto
                 {
                     AddonId = addonId,
                     Persons = addon.persons ?? 1,
@@ -458,8 +466,23 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                     DisplayText = !string.IsNullOrWhiteSpace(addon.addonName)
                         ? addon.addonName
                         : definedAddon?.Name ?? string.Empty
-                });
+                };
+
+                if (mandatoryAddonsIds.Contains(addonId))
+                { 
+                mandatoryAddons.Add(addonObject);
+
+                    mandatoryTotal += AddonPricingCalculator.CalculateTotal(paymentType,(decimal)addonObject.Price, addonObject.Nights, addonObject.Persons, addonObject.Quantity);
+
+                }
+                else
+                {
+                    selectedAddons.Add(addonObject);
+                    selectedTotal += AddonPricingCalculator.CalculateTotal(paymentType,(decimal)addonObject.Price, addonObject.Nights, addonObject.Persons, addonObject.Quantity);
+                }   
             }
+
+            
 
             return new StartReservationRequest
             {
@@ -471,9 +494,12 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 CheckOutTime = new TimeOnly(11,0),//TimeOnly.FromDateTime(dateTo),
                 Adults = items.Sum(item => item.numberOfAdults ?? 0),
                 Children = items.Sum(item => ParseInt(item.numberOfSmallChildren)),
-                OfferPrice = Convert.ToDecimal(items.Sum(item => item.price), CultureInfo.InvariantCulture),
+                OfferPrice = Convert.ToDecimal((decimal)details.price - selectedTotal), //cena pełnej rezerwacji - suma dodatków opcjonalnych
                 Currency = string.IsNullOrWhiteSpace(details.currency) ? "PLN" : details.currency,
-                SelectedAddons = selectedAddons
+                SelectedAddons = selectedAddons,
+                MandatoryAddons = mandatoryAddons,
+                MandatoryAddonsTotalPrice = mandatoryTotal,
+                SelectedAddonsTotalPrice = selectedTotal
             };
         }
 

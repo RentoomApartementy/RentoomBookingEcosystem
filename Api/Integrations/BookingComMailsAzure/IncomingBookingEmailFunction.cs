@@ -89,7 +89,9 @@ public class IncomingBookingEmailFunction
                 reservationGuid = result.ReservationGuid,
                 emailConfirmed = result.EmailConfirmed,
                 messageId = result.MessageId,
-                message = result.Message
+                message = result.Message,
+                provider = result.Provider,
+                providerTransactionId = result.ProviderTransactionId    
             }));
 
             return response;

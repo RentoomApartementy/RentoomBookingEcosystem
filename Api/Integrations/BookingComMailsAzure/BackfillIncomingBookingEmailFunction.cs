@@ -79,8 +79,8 @@ public class BackfillIncomingBookingEmailFunction
             {
                 RequestedReservationId = reservationId,
                 Subject = email.Subject ?? string.Empty,
-                Provider = context.Provider,
-                ProviderTransactionId = context.ProviderTransactionId,
+                Provider = result.Provider ?? context.Provider,
+                ProviderTransactionId = result.ProviderTransactionId ?? context.ProviderTransactionId,
                 BookingComLogGuid = result.BookingComLogGuid,
                 ReservationGuid = result.ReservationGuid,
                 ReservationId = result.ReservationId,

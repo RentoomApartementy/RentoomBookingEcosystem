@@ -2,6 +2,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models.BookingCom;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingCom;
 using System.Globalization;
@@ -118,11 +119,18 @@ public class BackfillIncomingBookingEmailFromIdoAddDateRangeFunction
 
     private async Task<BackfillExecutionResult> ExecuteAsync(AddDateRangeRequest request, CancellationToken cancellationToken)
     {
-        var reservations = await _idoSellService.FetchReservationByAddDateRangeFromIdoSellAsync(
-            request.StartDate,
-            request.EndDate,
-            cancellationToken);
-
+        List<Reservation> reservations = new();
+        if (request.ReservationId is not null)
+        {
+            var res = await _idoSellService.FetchReservationByIDFromIdoSellAsync(request.ReservationId.Value, saveToDb: false, existingResToken: null, cancellationToken: cancellationToken);
+            reservations.Add(res.ReservationResponse.result.Reservations[0]);
+        }
+        else { 
+            reservations = await _idoSellService.FetchReservationByAddDateRangeFromIdoSellAsync(
+                request.StartDate,
+                request.EndDate,
+                cancellationToken);
+        }
         var reservationIds = reservations
             .Select(reservation => reservation.id)
             .Where(reservationId => reservationId > 0)
@@ -134,6 +142,8 @@ public class BackfillIncomingBookingEmailFromIdoAddDateRangeFunction
         foreach (var reservationId in reservationIds)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
+            
 
             BookingComIncomingEmail email;
             BookingComEmailProcessingContext context;
@@ -167,8 +177,8 @@ public class BackfillIncomingBookingEmailFromIdoAddDateRangeFunction
             {
                 RequestedReservationId = reservationId,
                 Subject = email.Subject ?? string.Empty,
-                Provider = context.Provider,
-                ProviderTransactionId = context.ProviderTransactionId,
+                Provider = result.Provider ?? context.Provider,
+                ProviderTransactionId = result.ProviderTransactionId ?? context.ProviderTransactionId,
                 BookingComLogGuid = result.BookingComLogGuid,
                 ReservationGuid = result.ReservationGuid,
                 ReservationId = result.ReservationId,
@@ -192,7 +202,7 @@ public class BackfillIncomingBookingEmailFromIdoAddDateRangeFunction
         var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
         var startDateRaw = query["startDate"] ?? query["from"];
         var endDateRaw = query["endDate"] ?? query["to"];
-
+        var reservationIdRaw = query["reservationId"] ?? query["resId"];
         if (string.IsNullOrWhiteSpace(startDateRaw) || string.IsNullOrWhiteSpace(endDateRaw))
         {
             var body = await new StreamReader(req.Body).ReadToEndAsync(cancellationToken);
@@ -210,6 +220,15 @@ public class BackfillIncomingBookingEmailFromIdoAddDateRangeFunction
             }
         }
 
+        if (!string.IsNullOrWhiteSpace(reservationIdRaw))
+        {
+            return new AddDateRangeRequest
+            {
+                ReservationId = int.TryParse(reservationIdRaw, out var resIdx) ? resIdx : null
+
+            };
+        }
+
         if (string.IsNullOrWhiteSpace(startDateRaw) && string.IsNullOrWhiteSpace(endDateRaw))
         {
             return CreateDefaultRequest();
@@ -223,7 +242,9 @@ public class BackfillIncomingBookingEmailFromIdoAddDateRangeFunction
         return new AddDateRangeRequest
         {
             StartDate = startDate,
-            EndDate = endDate
+            EndDate = endDate,
+            ReservationId = int.TryParse(reservationIdRaw, out var resId) ? resId : null
+
         };
     }
 
@@ -273,12 +294,14 @@ public class BackfillIncomingBookingEmailFromIdoAddDateRangeFunction
     {
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
+        public int? ReservationId { get; set; }
     }
 
     private sealed class AddDateRangeRequest
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int? ReservationId { get;  set; }
     }
 
     private sealed class BackfillExecutionResult
