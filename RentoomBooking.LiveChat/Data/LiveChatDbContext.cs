@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat.Data;
+namespace RentoomBooking.LiveChat.Data;
 
 public sealed class LiveChatDbContext : DbContext
 {

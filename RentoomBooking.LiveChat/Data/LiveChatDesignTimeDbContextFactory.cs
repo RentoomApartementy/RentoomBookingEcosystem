@@ -2,7 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace RentoomBooking.Api.LiveChat.Data;
+namespace RentoomBooking.LiveChat.Data;
 
 public sealed class LiveChatDesignTimeDbContextFactory : IDesignTimeDbContextFactory<LiveChatDbContext>
 {
@@ -11,19 +11,17 @@ public sealed class LiveChatDesignTimeDbContextFactory : IDesignTimeDbContextFac
         "POSTGRES_RENTOOM_BOOKING_DB_LOCAL",
         "LIVECHAT_DB_CONNECTION",
         "ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL",
-        "ConnectionStrings:POSTGRES_RENTOOM_BOOKING_DB_LOCAL",
+        "ConnectionStrings:POSTGRES_RENTOOM_BOOKING_DB_LOCAL"
     };
 
     public LiveChatDbContext CreateDbContext(string[] args)
     {
         var connectionString = ResolveConnectionString(args);
         if (string.IsNullOrWhiteSpace(connectionString))
-        {
             throw new InvalidOperationException(
                 "Unable to resolve LiveChatDbContext connection string. " +
                 "Set environment variable POSTGRES_RENTOOM_BOOKING_DB_LOCAL or LIVECHAT_DB_CONNECTION, " +
                 "or define ConnectionStrings.POSTGRES_RENTOOM_BOOKING_DB_LOCAL in Api/local.settings.json.");
-        }
 
         var optionsBuilder = new DbContextOptionsBuilder<LiveChatDbContext>();
         optionsBuilder.UseNpgsql(connectionString);
@@ -66,6 +64,7 @@ public sealed class LiveChatDesignTimeDbContextFactory : IDesignTimeDbContextFac
                     return value;
             }
         }
+
         return null;
     }
 
@@ -147,7 +146,6 @@ public sealed class LiveChatDesignTimeDbContextFactory : IDesignTimeDbContextFac
             return false;
 
         foreach (var key in ConnectionStringKeys)
-        {
             if (section.TryGetProperty(key, out var prop) && prop.ValueKind == JsonValueKind.String)
             {
                 var candidate = prop.GetString();
@@ -157,7 +155,6 @@ public sealed class LiveChatDesignTimeDbContextFactory : IDesignTimeDbContextFac
                     return true;
                 }
             }
-        }
 
         return false;
     }

@@ -1,6 +1,6 @@
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat.Repositories;
+namespace RentoomBooking.LiveChat.Repositories;
 
 public interface ILiveChatSessionRepository
 {

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RentoomBooking.Api.LiveChat.Migrations
+namespace RentoomBooking.LiveChat.Migrations
 {
     /// <inheritdoc />
     public partial class AddBitrixUserIdToMessages : Migration

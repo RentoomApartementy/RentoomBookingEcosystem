@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using RentoomBooking.Api.LiveChat.Data;
+using RentoomBooking.LiveChat.Data;
 
 #nullable disable
 
-namespace RentoomBooking.Api.LiveChat.Migrations
+namespace RentoomBooking.LiveChat.Migrations
 {
     [DbContext(typeof(LiveChatDbContext))]
     partial class LiveChatDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace RentoomBooking.Api.LiveChat.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("RentoomBooking.Api.LiveChat.Entities.BitrixLiveChatPortalEntity", b =>
+            modelBuilder.Entity("RentoomBooking.LiveChat.Entities.BitrixLiveChatPortalEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +105,7 @@ namespace RentoomBooking.Api.LiveChat.Migrations
                     b.ToTable("bitrix_livechat_portals");
                 });
 
-            modelBuilder.Entity("RentoomBooking.Api.LiveChat.Entities.LiveChatMessageEntity", b =>
+            modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatMessageEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,7 +165,7 @@ namespace RentoomBooking.Api.LiveChat.Migrations
                     b.ToTable("livechat_messages");
                 });
 
-            modelBuilder.Entity("RentoomBooking.Api.LiveChat.Entities.LiveChatSessionEntity", b =>
+            modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatSessionEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -234,9 +234,9 @@ namespace RentoomBooking.Api.LiveChat.Migrations
                     b.ToTable("livechat_sessions");
                 });
 
-            modelBuilder.Entity("RentoomBooking.Api.LiveChat.Entities.LiveChatMessageEntity", b =>
+            modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatMessageEntity", b =>
                 {
-                    b.HasOne("RentoomBooking.Api.LiveChat.Entities.LiveChatSessionEntity", "Session")
+                    b.HasOne("RentoomBooking.LiveChat.Entities.LiveChatSessionEntity", "Session")
                         .WithMany("Messages")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -245,7 +245,7 @@ namespace RentoomBooking.Api.LiveChat.Migrations
                     b.Navigation("Session");
                 });
 
-            modelBuilder.Entity("RentoomBooking.Api.LiveChat.Entities.LiveChatSessionEntity", b =>
+            modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatSessionEntity", b =>
                 {
                     b.Navigation("Messages");
                 });

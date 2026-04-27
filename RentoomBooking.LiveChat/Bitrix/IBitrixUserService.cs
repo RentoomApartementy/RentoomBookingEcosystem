@@ -1,4 +1,4 @@
-namespace RentoomBooking.Api.LiveChat.Bitrix;
+namespace RentoomBooking.LiveChat.Bitrix;
 
 public interface IBitrixUserService
 {

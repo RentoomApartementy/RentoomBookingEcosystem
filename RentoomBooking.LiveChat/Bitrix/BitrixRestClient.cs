@@ -1,20 +1,19 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.LiveChat;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat.Bitrix;
+namespace RentoomBooking.LiveChat.Bitrix;
 
 public sealed class BitrixRestClient : IBitrixRestClient
 {
-    private readonly IBitrixOAuthService _oauthService;
+    private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
+    private readonly HttpClient _httpClient;
+    private readonly IBitrixLandingService _landingService;
+    private readonly ILogger<BitrixRestClient> _logger;
     private readonly IBitrixMessageSender _messageSender;
+    private readonly IBitrixOAuthService _oauthService;
     private readonly IBitrixUserService _userService;
     private readonly IBitrixWebhookService _webhookService;
-    private readonly IBitrixLandingService _landingService;
-    private readonly HttpClient _httpClient;
-    private readonly ILogger<BitrixRestClient> _logger;
-    private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
 
     public BitrixRestClient(
         IBitrixOAuthService oauthService,
@@ -35,24 +34,37 @@ public sealed class BitrixRestClient : IBitrixRestClient
     }
 
     public Task<BitrixRestConnection> GetConnectionAsync(CancellationToken ct)
-        => _oauthService.GetConnectionAsync(ct);
+    {
+        return _oauthService.GetConnectionAsync(ct);
+    }
 
     public Task<bool> SendGuestMessageToBitrixAsync(
         LiveChatSessionEntity session,
         LiveChatMessageEntity message,
         LiveChatCrmBindingTarget? crmTarget,
         CancellationToken ct)
-        => _messageSender.SendGuestMessageToBitrixAsync(session, message, crmTarget, ct);
+    {
+        return _messageSender.SendGuestMessageToBitrixAsync(session, message, crmTarget, ct);
+    }
 
     public Task SendDeliveryStatusAsync(string messageId, string connectorChatId, CancellationToken ct)
-        => _messageSender.SendDeliveryStatusAsync(messageId, connectorChatId, ct);
+    {
+        return _messageSender.SendDeliveryStatusAsync(messageId, connectorChatId, ct);
+    }
 
-    public Task<(string? FirstName, string? AvatarUrl)> FetchOperatorInfoAsync(string bitrixUserId, CancellationToken ct)
-        => _userService.FetchOperatorInfoAsync(bitrixUserId, ct);
+    public Task<(string? FirstName, string? AvatarUrl)> FetchOperatorInfoAsync(string bitrixUserId,
+        CancellationToken ct)
+    {
+        return _userService.FetchOperatorInfoAsync(bitrixUserId, ct);
+    }
 
     public Task<long?> BindWebhookEventAsync(BitrixLiveChatPortalEntity portal, Uri webhookUrl, CancellationToken ct)
-        => _webhookService.BindWebhookEventAsync(portal, webhookUrl, ct);
+    {
+        return _webhookService.BindWebhookEventAsync(portal, webhookUrl, ct);
+    }
 
     public Task<string?> GetLandingPreviewUrlAsync(string url, CancellationToken ct)
-        => _landingService.GetLandingPreviewUrlAsync(url, ct);
+    {
+        return _landingService.GetLandingPreviewUrlAsync(url, ct);
+    }
 }

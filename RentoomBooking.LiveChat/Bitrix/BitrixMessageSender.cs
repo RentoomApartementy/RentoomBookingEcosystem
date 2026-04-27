@@ -1,21 +1,22 @@
+using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RentoomBooking.Api.LiveChat.Entities;
-using RentoomBooking.Api.LiveChat.Repositories;
+using RentoomBooking.LiveChat.Entities;
+using RentoomBooking.LiveChat.Repositories;
 using RentoomBooking.SharedClasses.Configuration;
 
-namespace RentoomBooking.Api.LiveChat.Bitrix;
+namespace RentoomBooking.LiveChat.Bitrix;
 
 public sealed class BitrixMessageSender : IBitrixMessageSender
 {
-    private readonly HttpClient _httpClient;
-    private readonly IBitrixOAuthService _oauthService;
-    private readonly ILiveChatSessionRepository _sessionRepo;
-    private readonly string _connectorId;
-    private readonly int _openLineId;
-    private readonly ILogger<BitrixMessageSender> _logger;
     private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
+    private readonly string _connectorId;
+    private readonly HttpClient _httpClient;
+    private readonly ILogger<BitrixMessageSender> _logger;
+    private readonly IBitrixOAuthService _oauthService;
+    private readonly int _openLineId;
+    private readonly ILiveChatSessionRepository _sessionRepo;
 
     public BitrixMessageSender(
         HttpClient httpClient,
@@ -48,18 +49,20 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
 
             var jsonContent = new StringContent(
                 JsonSerializer.Serialize(payload, _jsonOptions),
-                System.Text.Encoding.UTF8,
+                Encoding.UTF8,
                 "application/json");
 
             _logger.LogInformation("Sending imconnector.send.messages CONNECTOR={Connector}, LINE={Line}, USER={User}",
                 _connectorId, _openLineId, userCode);
 
             var response = await _httpClient.PostAsync(
-                BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "imconnector.send.messages", connection.AccessToken),
+                BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "imconnector.send.messages",
+                    connection.AccessToken),
                 jsonContent, ct);
 
             var body = await response.Content.ReadAsStringAsync(ct);
-            _logger.LogInformation("imconnector.send.messages response (HTTP {StatusCode}): {Body}", (int)response.StatusCode, body);
+            _logger.LogInformation("imconnector.send.messages response (HTTP {StatusCode}): {Body}",
+                (int)response.StatusCode, body);
 
             if (response.IsSuccessStatusCode)
             {
@@ -97,11 +100,12 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
 
             var jsonContent = new StringContent(
                 JsonSerializer.Serialize(payload, _jsonOptions),
-                System.Text.Encoding.UTF8,
+                Encoding.UTF8,
                 "application/json");
 
             var response = await _httpClient.PostAsync(
-                BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "imconnector.send.status.delivery", connection.AccessToken),
+                BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "imconnector.send.status.delivery",
+                    connection.AccessToken),
                 jsonContent, ct);
             var body = await response.Content.ReadAsStringAsync(ct);
             _logger.LogDebug("imconnector.send.status.delivery response: {Body}", body);
@@ -112,27 +116,27 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
         }
     }
 
-    private async Task UpdateSessionBitrixIdentifiersAsync(LiveChatSessionEntity session, string responseBody, CancellationToken ct)
+    private async Task UpdateSessionBitrixIdentifiersAsync(LiveChatSessionEntity session, string responseBody,
+        CancellationToken ct)
     {
         var identifiers = ExtractSessionIdentifiers(responseBody);
         var updated = false;
 
-        if (!string.IsNullOrWhiteSpace(identifiers.ChatId) && !string.Equals(session.BitrixChatId, identifiers.ChatId, StringComparison.Ordinal))
+        if (!string.IsNullOrWhiteSpace(identifiers.ChatId) &&
+            !string.Equals(session.BitrixChatId, identifiers.ChatId, StringComparison.Ordinal))
         {
             session.BitrixChatId = identifiers.ChatId;
             updated = true;
         }
 
-        if (!string.IsNullOrWhiteSpace(identifiers.SessionId) && !string.Equals(session.BitrixSessionId, identifiers.SessionId, StringComparison.Ordinal))
+        if (!string.IsNullOrWhiteSpace(identifiers.SessionId) && !string.Equals(session.BitrixSessionId,
+                identifiers.SessionId, StringComparison.Ordinal))
         {
             session.BitrixSessionId = identifiers.SessionId;
             updated = true;
         }
 
-        if (!updated)
-        {
-            return;
-        }
+        if (!updated) return;
 
         session.UpdatedAt = DateTime.UtcNow;
         await _sessionRepo.UpdateAsync(session, ct);
@@ -149,10 +153,7 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
         try
         {
             using var document = JsonDocument.Parse(responseBody);
-            if (TryFindSessionIdentifiers(document.RootElement, out var identifiers))
-            {
-                return identifiers;
-            }
+            if (TryFindSessionIdentifiers(document.RootElement, out var identifiers)) return identifiers;
         }
         catch (JsonException)
         {
@@ -163,42 +164,29 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
 
     private static bool TryFindSessionIdentifiers(JsonElement element, out BitrixSessionIdentifiers identifiers)
     {
-        if (TryExtractSessionIdentifiers(element, allowIdFallback: false, out identifiers))
-        {
-            return true;
-        }
+        if (TryExtractSessionIdentifiers(element, false, out identifiers)) return true;
 
         if (element.ValueKind == JsonValueKind.Object)
         {
             if (BitrixRestHelpers.TryGetPropertyIgnoreCase(element, "session", out var sessionElement) &&
-                TryExtractSessionIdentifiers(sessionElement, allowIdFallback: true, out identifiers))
-            {
+                TryExtractSessionIdentifiers(sessionElement, true, out identifiers))
                 return true;
-            }
 
             foreach (var property in element.EnumerateObject())
             {
-                if ((property.NameEquals("session") || string.Equals(property.Name, "session", StringComparison.OrdinalIgnoreCase)) &&
+                if ((property.NameEquals("session") ||
+                     string.Equals(property.Name, "session", StringComparison.OrdinalIgnoreCase)) &&
                     property.Value.ValueKind == JsonValueKind.Object)
-                {
                     continue;
-                }
 
-                if (TryFindSessionIdentifiers(property.Value, out identifiers))
-                {
-                    return true;
-                }
+                if (TryFindSessionIdentifiers(property.Value, out identifiers)) return true;
             }
         }
         else if (element.ValueKind == JsonValueKind.Array)
         {
             foreach (var item in element.EnumerateArray())
-            {
                 if (TryFindSessionIdentifiers(item, out identifiers))
-                {
                     return true;
-                }
-            }
         }
 
         identifiers = BitrixSessionIdentifiers.Empty;
@@ -212,23 +200,15 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
     {
         identifiers = BitrixSessionIdentifiers.Empty;
 
-        if (element.ValueKind != JsonValueKind.Object)
-        {
-            return false;
-        }
+        if (element.ValueKind != JsonValueKind.Object) return false;
 
         var chatId = BitrixRestHelpers.GetJsonString(element, "CHAT_ID");
         var sessionId = BitrixRestHelpers.GetJsonString(element, "SESSION_ID");
 
         if (allowIdFallback && string.IsNullOrWhiteSpace(sessionId))
-        {
             sessionId = BitrixRestHelpers.GetJsonString(element, "ID");
-        }
 
-        if (string.IsNullOrWhiteSpace(chatId) && string.IsNullOrWhiteSpace(sessionId))
-        {
-            return false;
-        }
+        if (string.IsNullOrWhiteSpace(chatId) && string.IsNullOrWhiteSpace(sessionId)) return false;
 
         identifiers = new BitrixSessionIdentifiers(chatId, sessionId);
         return true;
@@ -248,19 +228,14 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
             ["avatar"] = string.Empty
         };
 
-        if (!string.IsNullOrWhiteSpace(session.GuestEmail))
-        {
-            user["email"] = session.GuestEmail;
-        }
+        if (!string.IsNullOrWhiteSpace(session.GuestEmail)) user["email"] = session.GuestEmail;
 
         if (crmTarget is not null)
-        {
             user["crm_entity"] = new Dictionary<string, object?>
             {
                 ["type"] = crmTarget.EntityType,
                 ["id"] = crmTarget.EntityId
             };
-        }
 
         var chat = new Dictionary<string, object?>
         {
@@ -268,13 +243,11 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
         };
 
         if (crmTarget is not null)
-        {
             chat["crm_entity"] = new Dictionary<string, object?>
             {
                 ["type"] = crmTarget.EntityType,
                 ["id"] = crmTarget.EntityId
             };
-        }
 
         var outgoingMessage = new Dictionary<string, object?>
         {
@@ -291,13 +264,9 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
         {
             outgoingMessage["CRM_CREATE"] = "N";
             if (string.Equals(crmTarget.EntityType, "DEAL", StringComparison.OrdinalIgnoreCase))
-            {
                 outgoingMessage["CRM_DEAL_ID"] = crmTarget.EntityId;
-            }
             else if (string.Equals(crmTarget.EntityType, "CONTACT", StringComparison.OrdinalIgnoreCase))
-            {
                 outgoingMessage["CRM_CONTACT_ID"] = crmTarget.EntityId;
-            }
         }
 
         return new Dictionary<string, object?>

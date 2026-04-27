@@ -1,16 +1,17 @@
+using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.LiveChat.Repositories;
+using RentoomBooking.LiveChat.Repositories;
 
-namespace RentoomBooking.Api.LiveChat.Bitrix;
+namespace RentoomBooking.LiveChat.Bitrix;
 
 public sealed class BitrixLandingService : IBitrixLandingService
 {
     private readonly HttpClient _httpClient;
+    private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
+    private readonly ILogger<BitrixLandingService> _logger;
     private readonly IBitrixOAuthService _oauthService;
     private readonly IBitrixPortalRepository _portalRepo;
-    private readonly ILogger<BitrixLandingService> _logger;
-    private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
 
     public BitrixLandingService(
         HttpClient httpClient,
@@ -36,31 +37,26 @@ public sealed class BitrixLandingService : IBitrixLandingService
         var portals = await _portalRepo.GetAllAsync(ct: ct);
 
         var portal = portals.FirstOrDefault(p =>
-            string.Equals(BitrixRestHelpers.NormalizeDomain(p.ClientEndpoint), urlHost, StringComparison.OrdinalIgnoreCase)
+            string.Equals(BitrixRestHelpers.NormalizeDomain(p.ClientEndpoint), urlHost,
+                StringComparison.OrdinalIgnoreCase)
             || string.Equals(p.Domain, urlHost, StringComparison.OrdinalIgnoreCase));
 
-        if (portal is null && portals.Count == 0)
-        {
-            return null;
-        }
+        if (portal is null && portals.Count == 0) return null;
 
         try
         {
             BitrixRestConnection connection;
             if (portal is not null)
-            {
                 connection = await _oauthService.GetPortalConnectionAsync(portal, ct);
-            }
             else
-            {
                 connection = await _oauthService.GetConnectionAsync(ct);
-            }
 
-            var listUrl = BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "landing.site.getList", connection.AccessToken);
+            var listUrl = BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "landing.site.getList",
+                connection.AccessToken);
             var listPayload = new { filter = new { CODE = siteCode }, select = new[] { "ID", "CODE" } };
             using var listContent = new StringContent(
                 JsonSerializer.Serialize(listPayload, _jsonOptions),
-                System.Text.Encoding.UTF8, "application/json");
+                Encoding.UTF8, "application/json");
 
             var listResponse = await _httpClient.PostAsync(listUrl, listContent, ct);
             var listJson = await listResponse.Content.ReadAsStringAsync(ct);
@@ -70,7 +66,9 @@ public sealed class BitrixLandingService : IBitrixLandingService
 
             JsonElement? itemsEl = resultEl.ValueKind == JsonValueKind.Array
                 ? resultEl
-                : resultEl.TryGetProperty("items", out var items) ? items : null;
+                : resultEl.TryGetProperty("items", out var items)
+                    ? items
+                    : null;
 
             if (itemsEl is null || itemsEl.Value.GetArrayLength() == 0) return null;
 
@@ -82,10 +80,11 @@ public sealed class BitrixLandingService : IBitrixLandingService
 
             if (siteId == 0) return null;
 
-            var previewUrl = BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "landing.site.getPreview", connection.AccessToken);
+            var previewUrl = BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "landing.site.getPreview",
+                connection.AccessToken);
             using var previewContent = new StringContent(
                 JsonSerializer.Serialize(new { id = siteId }, _jsonOptions),
-                System.Text.Encoding.UTF8, "application/json");
+                Encoding.UTF8, "application/json");
 
             var previewResponse = await _httpClient.PostAsync(previewUrl, previewContent, ct);
             var previewJson = await previewResponse.Content.ReadAsStringAsync(ct);

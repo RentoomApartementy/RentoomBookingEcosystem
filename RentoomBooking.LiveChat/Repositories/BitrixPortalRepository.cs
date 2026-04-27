@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using RentoomBooking.Api.LiveChat.Data;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Data;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat.Repositories;
+namespace RentoomBooking.LiveChat.Repositories;
 
 public sealed class BitrixPortalRepository : IBitrixPortalRepository
 {
@@ -13,7 +13,8 @@ public sealed class BitrixPortalRepository : IBitrixPortalRepository
         _dbContextFactory = dbContextFactory;
     }
 
-    public async Task<BitrixLiveChatPortalEntity?> GetByMemberIdAsync(string memberId, bool trackChanges = false, CancellationToken ct = default)
+    public async Task<BitrixLiveChatPortalEntity?> GetByMemberIdAsync(string memberId, bool trackChanges = false,
+        CancellationToken ct = default)
     {
         await using var db = await _dbContextFactory.CreateDbContextAsync(ct);
         var query = db.BitrixLiveChatPortals.Where(p => p.MemberId == memberId);
@@ -21,7 +22,8 @@ public sealed class BitrixPortalRepository : IBitrixPortalRepository
         return await query.FirstOrDefaultAsync(ct);
     }
 
-    public async Task<BitrixLiveChatPortalEntity?> GetByDomainAsync(string domain, bool trackChanges = false, CancellationToken ct = default)
+    public async Task<BitrixLiveChatPortalEntity?> GetByDomainAsync(string domain, bool trackChanges = false,
+        CancellationToken ct = default)
     {
         await using var db = await _dbContextFactory.CreateDbContextAsync(ct);
         var query = db.BitrixLiveChatPortals.Where(p => p.Domain == domain);
@@ -29,7 +31,8 @@ public sealed class BitrixPortalRepository : IBitrixPortalRepository
         return await query.FirstOrDefaultAsync(ct);
     }
 
-    public async Task<List<BitrixLiveChatPortalEntity>> GetAllAsync(bool trackChanges = false, CancellationToken ct = default)
+    public async Task<List<BitrixLiveChatPortalEntity>> GetAllAsync(bool trackChanges = false,
+        CancellationToken ct = default)
     {
         await using var db = await _dbContextFactory.CreateDbContextAsync(ct);
         var query = (IQueryable<BitrixLiveChatPortalEntity>)db.BitrixLiveChatPortals;
@@ -37,7 +40,8 @@ public sealed class BitrixPortalRepository : IBitrixPortalRepository
         return await query.ToListAsync(ct);
     }
 
-    public async Task<BitrixLiveChatPortalEntity> UpsertAsync(BitrixLiveChatPortalEntity portal, CancellationToken ct = default)
+    public async Task<BitrixLiveChatPortalEntity> UpsertAsync(BitrixLiveChatPortalEntity portal,
+        CancellationToken ct = default)
     {
         await using var db = await _dbContextFactory.CreateDbContextAsync(ct);
 

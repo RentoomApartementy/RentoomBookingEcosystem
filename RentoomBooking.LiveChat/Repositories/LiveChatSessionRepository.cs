@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using RentoomBooking.Api.LiveChat.Data;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Data;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat.Repositories;
+namespace RentoomBooking.LiveChat.Repositories;
 
 public sealed class LiveChatSessionRepository : ILiveChatSessionRepository
 {
@@ -13,7 +13,8 @@ public sealed class LiveChatSessionRepository : ILiveChatSessionRepository
         _dbContextFactory = dbContextFactory;
     }
 
-    public async Task<LiveChatSessionEntity?> GetActiveByReservationTokenAsync(string token, CancellationToken ct = default)
+    public async Task<LiveChatSessionEntity?> GetActiveByReservationTokenAsync(string token,
+        CancellationToken ct = default)
     {
         await using var db = await _dbContextFactory.CreateDbContextAsync(ct);
         return await db.LiveChatSessions
@@ -29,7 +30,8 @@ public sealed class LiveChatSessionRepository : ILiveChatSessionRepository
             .FirstOrDefaultAsync(s => s.Id == id && s.Status == LiveChatSessionStatuses.Active, ct);
     }
 
-    public async Task<LiveChatSessionEntity?> GetActiveByBitrixChatIdAsync(string bitrixChatId, CancellationToken ct = default)
+    public async Task<LiveChatSessionEntity?> GetActiveByBitrixChatIdAsync(string bitrixChatId,
+        CancellationToken ct = default)
     {
         await using var db = await _dbContextFactory.CreateDbContextAsync(ct);
         return await db.LiveChatSessions
@@ -51,8 +53,6 @@ public sealed class LiveChatSessionRepository : ILiveChatSessionRepository
         var tracked = await db.LiveChatSessions.FirstOrDefaultAsync(s => s.Id == updated.Id, ct);
         if (tracked is null) return;
 
-        // Copy only mutable fields — never overwrite immutable (Id, ReservationToken, CreatedAt)
-        // or concurrency-managed fields (AgentJoinedNotifiedAt — updated via raw SQL).
         tracked.BitrixChatId = updated.BitrixChatId;
         tracked.BitrixSessionId = updated.BitrixSessionId;
         tracked.GuestName = updated.GuestName;

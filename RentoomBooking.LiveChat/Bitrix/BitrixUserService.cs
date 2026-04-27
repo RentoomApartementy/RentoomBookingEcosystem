@@ -2,16 +2,15 @@ using System.Text.Json;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
-namespace RentoomBooking.Api.LiveChat.Bitrix;
+namespace RentoomBooking.LiveChat.Bitrix;
 
 public sealed class BitrixUserService : IBitrixUserService
 {
-    private readonly HttpClient _httpClient;
-    private readonly IBitrixOAuthService _oauthService;
-    private readonly IMemoryCache _cache;
-    private readonly ILogger<BitrixUserService> _logger;
-
     private static readonly TimeSpan OperatorInfoCacheTtl = TimeSpan.FromHours(2);
+    private readonly IMemoryCache _cache;
+    private readonly HttpClient _httpClient;
+    private readonly ILogger<BitrixUserService> _logger;
+    private readonly IBitrixOAuthService _oauthService;
 
     public BitrixUserService(
         HttpClient httpClient,
@@ -25,7 +24,8 @@ public sealed class BitrixUserService : IBitrixUserService
         _logger = logger;
     }
 
-    public async Task<(string? FirstName, string? AvatarUrl)> FetchOperatorInfoAsync(string bitrixUserId, CancellationToken ct)
+    public async Task<(string? FirstName, string? AvatarUrl)> FetchOperatorInfoAsync(string bitrixUserId,
+        CancellationToken ct)
     {
         BitrixRestConnection connection;
         try
@@ -39,16 +39,13 @@ public sealed class BitrixUserService : IBitrixUserService
         }
 
         var cacheKey = $"bitrix-operator-info:{connection.ClientEndpoint}:{bitrixUserId}";
-        if (_cache.TryGetValue<(string? FirstName, string? AvatarUrl)>(cacheKey, out var cached))
-        {
-            return cached;
-        }
+        if (_cache.TryGetValue<(string? FirstName, string? AvatarUrl)>(cacheKey, out var cached)) return cached;
 
         try
         {
-            // user.get requires "user" scope; im.user.get requires "im" scope which is typically unavailable.
-            var url = BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "user.get", connection.AccessToken)
-                + $"&ID={Uri.EscapeDataString(bitrixUserId)}";
+            var url = BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "user.get",
+                          connection.AccessToken)
+                      + $"&ID={Uri.EscapeDataString(bitrixUserId)}";
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
             cts.CancelAfter(TimeSpan.FromSeconds(5));
@@ -56,7 +53,8 @@ public sealed class BitrixUserService : IBitrixUserService
             var response = await _httpClient.GetAsync(url, cts.Token);
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogWarning("user.get returned HTTP {Status} for user {UserId}", (int)response.StatusCode, bitrixUserId);
+                _logger.LogWarning("user.get returned HTTP {Status} for user {UserId}", (int)response.StatusCode,
+                    bitrixUserId);
                 return (null, null);
             }
 
@@ -70,22 +68,14 @@ public sealed class BitrixUserService : IBitrixUserService
                 return (null, null);
             }
 
-            if (!root.TryGetProperty("result", out var resultProp))
-            {
-                return (null, null);
-            }
+            if (!root.TryGetProperty("result", out var resultProp)) return (null, null);
 
-            // user.get always returns an array
             var userElement = resultProp.ValueKind == JsonValueKind.Array
-                ? (resultProp.GetArrayLength() > 0 ? resultProp[0] : (JsonElement?)null)
+                ? resultProp.GetArrayLength() > 0 ? resultProp[0] : null
                 : (JsonElement?)resultProp;
 
-            if (userElement is null)
-            {
-                return (null, null);
-            }
+            if (userElement is null) return (null, null);
 
-            // user.get returns NAME (first name) and PERSONAL_PHOTO (avatar URL)
             var firstName = userElement.Value.TryGetProperty("NAME", out var fnProp)
                 ? fnProp.GetString()?.Trim()
                 : null;
@@ -94,10 +84,7 @@ public sealed class BitrixUserService : IBitrixUserService
                 ? avProp.GetString()?.Trim()
                 : null;
 
-            if (string.IsNullOrEmpty(avatar))
-            {
-                avatar = null;
-            }
+            if (string.IsNullOrEmpty(avatar)) avatar = null;
 
             var info = (string.IsNullOrEmpty(firstName) ? null : firstName, avatar);
             _cache.Set(cacheKey, info, OperatorInfoCacheTtl);

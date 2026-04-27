@@ -2,16 +2,10 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Configuration;
 
-namespace RentoomBooking.Api.LiveChat;
+namespace RentoomBooking.LiveChat;
 
-/// <summary>
-/// In-memory sliding-window rate limiter for guest chat messages.
-/// Allows at most <see cref="BitrixLiveChatOptions.MaxMessagesPerMinute"/> messages per session token per minute.
-/// </summary>
 public sealed class MemoryLiveChatRateLimiter : ILiveChatRateLimiter
 {
-    private sealed record RateEntry(int Count, DateTimeOffset WindowStart);
-
     private readonly IMemoryCache _cache;
     private readonly int _maxRequestsPerMinute;
     private readonly object _sync = new();
@@ -48,4 +42,6 @@ public sealed class MemoryLiveChatRateLimiter : ILiveChatRateLimiter
             return true;
         }
     }
+
+    private sealed record RateEntry(int Count, DateTimeOffset WindowStart);
 }

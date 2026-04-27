@@ -2,26 +2,26 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RentoomBooking.Api.LiveChat.Data;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Data;
+using RentoomBooking.LiveChat.Entities;
 using RentoomBooking.SharedClasses.Configuration;
 
-namespace RentoomBooking.Api.LiveChat.Bitrix;
+namespace RentoomBooking.LiveChat.Bitrix;
 
 public sealed class BitrixOAuthService : IBitrixOAuthService
 {
-    private readonly HttpClient _httpClient;
     private readonly string _configuredClientEndpoint;
-    private readonly string _oauthClientId;
-    private readonly string _oauthClientSecret;
     private readonly string _configuredRefreshToken;
     private readonly IDbContextFactory<LiveChatDbContext> _dbContextFactory;
+    private readonly HttpClient _httpClient;
     private readonly ILogger<BitrixOAuthService> _logger;
+    private readonly string _oauthClientId;
+    private readonly string _oauthClientSecret;
+    private readonly SemaphoreSlim _tokenLock = new(1, 1);
 
     private string? _fallbackAccessToken;
     private string? _fallbackRefreshToken;
     private DateTime _fallbackTokenExpiry = DateTime.MinValue;
-    private readonly SemaphoreSlim _tokenLock = new(1, 1);
 
     public BitrixOAuthService(
         HttpClient httpClient,
@@ -44,43 +44,41 @@ public sealed class BitrixOAuthService : IBitrixOAuthService
     public async Task<BitrixRestConnection> GetConnectionAsync(CancellationToken ct)
     {
         await using var db = _dbContextFactory.CreateDbContext();
-        var portal = await GetPreferredPortalAsync(db, trackChanges: true, ct);
+        var portal = await GetPreferredPortalAsync(db, true, ct);
         if (portal is not null)
-        {
             return new BitrixRestConnection(
                 portal.ClientEndpoint,
                 await GetPortalAccessTokenAsync(db, portal, ct));
-        }
 
         return new BitrixRestConnection(
             _configuredClientEndpoint,
             await GetFallbackAccessTokenAsync(ct));
     }
 
-    public async Task<BitrixRestConnection> GetPortalConnectionAsync(BitrixLiveChatPortalEntity portal, CancellationToken ct)
+    public async Task<BitrixRestConnection> GetPortalConnectionAsync(BitrixLiveChatPortalEntity portal,
+        CancellationToken ct)
     {
         await using var db = _dbContextFactory.CreateDbContext();
         var trackedPortal = await db.BitrixLiveChatPortals
-            .FirstOrDefaultAsync(p => p.Id == portal.Id, ct)
-            ?? throw new InvalidOperationException($"Bitrix portal {portal.Domain} not found in database.");
+                                .FirstOrDefaultAsync(p => p.Id == portal.Id, ct)
+                            ?? throw new InvalidOperationException(
+                                $"Bitrix portal {portal.Domain} not found in database.");
 
         return new BitrixRestConnection(
             trackedPortal.ClientEndpoint,
             await GetPortalAccessTokenAsync(db, trackedPortal, ct));
     }
 
-    private async Task<string> GetPortalAccessTokenAsync(LiveChatDbContext db, BitrixLiveChatPortalEntity portal, CancellationToken ct)
+    private async Task<string> GetPortalAccessTokenAsync(LiveChatDbContext db, BitrixLiveChatPortalEntity portal,
+        CancellationToken ct)
     {
         if (!string.IsNullOrWhiteSpace(portal.AccessToken) &&
-            (!portal.AccessTokenExpiresAt.HasValue || DateTime.UtcNow < portal.AccessTokenExpiresAt.Value.AddSeconds(-60)))
-        {
+            (!portal.AccessTokenExpiresAt.HasValue ||
+             DateTime.UtcNow < portal.AccessTokenExpiresAt.Value.AddSeconds(-60)))
             return portal.AccessToken;
-        }
 
         if (string.IsNullOrWhiteSpace(portal.RefreshToken))
-        {
             throw new InvalidOperationException($"Bitrix portal {portal.Domain} does not have a refresh token.");
-        }
 
         await _tokenLock.WaitAsync(ct);
         try
@@ -88,10 +86,9 @@ public sealed class BitrixOAuthService : IBitrixOAuthService
             await db.Entry(portal).ReloadAsync(ct);
 
             if (!string.IsNullOrWhiteSpace(portal.AccessToken) &&
-                (!portal.AccessTokenExpiresAt.HasValue || DateTime.UtcNow < portal.AccessTokenExpiresAt.Value.AddSeconds(-60)))
-            {
+                (!portal.AccessTokenExpiresAt.HasValue ||
+                 DateTime.UtcNow < portal.AccessTokenExpiresAt.Value.AddSeconds(-60)))
                 return portal.AccessToken;
-            }
 
             var refreshed = await RefreshAccessTokenAsync(portal.RefreshToken, ct);
             portal.AccessToken = refreshed.AccessToken;
@@ -111,22 +108,16 @@ public sealed class BitrixOAuthService : IBitrixOAuthService
     private async Task<string> GetFallbackAccessTokenAsync(CancellationToken ct)
     {
         if (!string.IsNullOrWhiteSpace(_fallbackAccessToken) && DateTime.UtcNow < _fallbackTokenExpiry)
-        {
             return _fallbackAccessToken;
-        }
 
         if (string.IsNullOrWhiteSpace(_fallbackRefreshToken))
-        {
             throw new InvalidOperationException("Bitrix livechat OAuth refresh token is not configured.");
-        }
 
         await _tokenLock.WaitAsync(ct);
         try
         {
             if (!string.IsNullOrWhiteSpace(_fallbackAccessToken) && DateTime.UtcNow < _fallbackTokenExpiry)
-            {
                 return _fallbackAccessToken;
-            }
 
             var refreshed = await RefreshAccessTokenAsync(_fallbackRefreshToken, ct);
             _fallbackAccessToken = refreshed.AccessToken;
@@ -150,24 +141,20 @@ public sealed class BitrixOAuthService : IBitrixOAuthService
         _logger.LogDebug("OAuth refresh response: {Body}", body);
 
         if (!response.IsSuccessStatusCode)
-        {
-            throw new InvalidOperationException($"Failed to refresh Bitrix OAuth token (HTTP {(int)response.StatusCode}): {body}");
-        }
+            throw new InvalidOperationException(
+                $"Failed to refresh Bitrix OAuth token (HTTP {(int)response.StatusCode}): {body}");
 
         using var doc = JsonDocument.Parse(body);
         var root = doc.RootElement;
         if (!root.TryGetProperty("access_token", out var accessTokenProp))
-        {
             throw new InvalidOperationException($"Failed to refresh Bitrix OAuth token: {body}");
-        }
 
         var accessToken = accessTokenProp.GetString();
         if (string.IsNullOrWhiteSpace(accessToken))
-        {
             throw new InvalidOperationException("Bitrix OAuth response did not include an access token.");
-        }
 
-        var expiresIn = root.TryGetProperty("expires_in", out var expiresInProp) && expiresInProp.TryGetInt32(out var parsedExpires)
+        var expiresIn = root.TryGetProperty("expires_in", out var expiresInProp) &&
+                        expiresInProp.TryGetInt32(out var parsedExpires)
             ? parsedExpires
             : 3600;
 
@@ -177,7 +164,8 @@ public sealed class BitrixOAuthService : IBitrixOAuthService
             DateTime.UtcNow.AddSeconds(Math.Max(60, expiresIn - 60)));
     }
 
-    private async Task<BitrixLiveChatPortalEntity?> GetPreferredPortalAsync(LiveChatDbContext db, bool trackChanges, CancellationToken ct)
+    private async Task<BitrixLiveChatPortalEntity?> GetPreferredPortalAsync(LiveChatDbContext db, bool trackChanges,
+        CancellationToken ct)
     {
         IQueryable<BitrixLiveChatPortalEntity> query = db.BitrixLiveChatPortals;
         if (!trackChanges)
@@ -185,7 +173,6 @@ public sealed class BitrixOAuthService : IBitrixOAuthService
 
         var configuredHost = BitrixRestHelpers.NormalizeDomain(_configuredClientEndpoint);
 
-        // Prefer the portal whose domain matches configuration; fall back to the most-recently updated one.
         var preferred = await query
             .Where(x => x.Domain == configuredHost)
             .FirstOrDefaultAsync(ct);

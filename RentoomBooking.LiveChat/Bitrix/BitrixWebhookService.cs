@@ -1,14 +1,14 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat.Bitrix;
+namespace RentoomBooking.LiveChat.Bitrix;
 
 public sealed class BitrixWebhookService : IBitrixWebhookService
 {
     private readonly HttpClient _httpClient;
-    private readonly IBitrixOAuthService _oauthService;
     private readonly ILogger<BitrixWebhookService> _logger;
+    private readonly IBitrixOAuthService _oauthService;
 
     public BitrixWebhookService(
         HttpClient httpClient,
@@ -20,7 +20,8 @@ public sealed class BitrixWebhookService : IBitrixWebhookService
         _logger = logger;
     }
 
-    public async Task<long?> BindWebhookEventAsync(BitrixLiveChatPortalEntity portal, Uri webhookUrl, CancellationToken ct)
+    public async Task<long?> BindWebhookEventAsync(BitrixLiveChatPortalEntity portal, Uri webhookUrl,
+        CancellationToken ct)
     {
         var connection = await _oauthService.GetPortalConnectionAsync(portal, ct);
 
@@ -53,9 +54,7 @@ public sealed class BitrixWebhookService : IBitrixWebhookService
         }
 
         if (!response.IsSuccessStatusCode)
-        {
             throw new InvalidOperationException($"Bitrix event.bind failed (HTTP {(int)response.StatusCode}): {body}");
-        }
 
         if (document.RootElement.TryGetProperty("error", out var errorProp))
         {
@@ -65,30 +64,20 @@ public sealed class BitrixWebhookService : IBitrixWebhookService
             throw new InvalidOperationException($"Bitrix event.bind failed: {errorProp} - {description}");
         }
 
-        if (!document.RootElement.TryGetProperty("result", out var resultProp))
-        {
-            return null;
-        }
+        if (!document.RootElement.TryGetProperty("result", out var resultProp)) return null;
 
         if (resultProp.ValueKind == JsonValueKind.Number && resultProp.TryGetInt64(out var numericResult))
-        {
             return numericResult;
-        }
 
         if (resultProp.ValueKind == JsonValueKind.String && long.TryParse(resultProp.GetString(), out numericResult))
-        {
             return numericResult;
-        }
 
         return null;
     }
 
     private static bool IsAlreadyBoundResponse(JsonElement root)
     {
-        if (!root.TryGetProperty("error_description", out var descriptionProp))
-        {
-            return false;
-        }
+        if (!root.TryGetProperty("error_description", out var descriptionProp)) return false;
 
         var description = descriptionProp.GetString();
         return !string.IsNullOrWhiteSpace(description) &&

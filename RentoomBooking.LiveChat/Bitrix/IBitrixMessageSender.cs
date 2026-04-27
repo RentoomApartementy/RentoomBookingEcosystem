@@ -1,6 +1,6 @@
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat.Bitrix;
+namespace RentoomBooking.LiveChat.Bitrix;
 
 public interface IBitrixMessageSender
 {

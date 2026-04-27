@@ -1,27 +1,30 @@
 using System.Collections.Concurrent;
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat;
+namespace RentoomBooking.LiveChat;
 
 public sealed class LiveChatSseSubscriptions : ILiveChatSseSubscriptions, IDisposable
 {
-    private sealed record SubscriptionEntry(Channel<LiveChatMessageEntity> Channel, DateTimeOffset CreatedAt);
-
-    private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<Guid, SubscriptionEntry>> _sessionSubscriptions = new();
-    private readonly ILogger<LiveChatSseSubscriptions> _logger;
-    private readonly Timer _cleanupTimer;
-
-    // Max lifetime of any subscription — longer than StreamMaxDuration in LiveChatStreamFunction (4 min).
     private static readonly TimeSpan StaleSubscriptionAge = TimeSpan.FromMinutes(10);
+    private readonly Timer _cleanupTimer;
+    private readonly ILogger<LiveChatSseSubscriptions> _logger;
+
+    private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<Guid, SubscriptionEntry>> _sessionSubscriptions =
+        new();
 
     public LiveChatSseSubscriptions(ILogger<LiveChatSseSubscriptions> logger)
     {
         _logger = logger;
         _cleanupTimer = new Timer(_ => CleanupStaleSubscriptions(), null,
-            dueTime: StaleSubscriptionAge,
-            period: StaleSubscriptionAge);
+            StaleSubscriptionAge,
+            StaleSubscriptionAge);
+    }
+
+    public void Dispose()
+    {
+        _cleanupTimer.Dispose();
     }
 
     public Guid Subscribe(Guid sessionId)
@@ -45,13 +48,12 @@ public sealed class LiveChatSseSubscriptions : ILiveChatSseSubscriptions, IDispo
         }
     }
 
-    public async Task<LiveChatMessageEntity?> WaitForOperatorMessageAsync(Guid sessionId, Guid subscriptionId, TimeSpan timeout, CancellationToken ct = default)
+    public async Task<LiveChatMessageEntity?> WaitForOperatorMessageAsync(Guid sessionId, Guid subscriptionId,
+        TimeSpan timeout, CancellationToken ct = default)
     {
         if (!_sessionSubscriptions.TryGetValue(sessionId, out var subscribers) ||
             !subscribers.TryGetValue(subscriptionId, out var entry))
-        {
             return null;
-        }
 
         try
         {
@@ -68,17 +70,11 @@ public sealed class LiveChatSseSubscriptions : ILiveChatSseSubscriptions, IDispo
     public void Notify(Guid sessionId, LiveChatMessageEntity message)
     {
         if (_sessionSubscriptions.TryGetValue(sessionId, out var subscribers))
-        {
             foreach (var (subscriptionId, entry) in subscribers)
-            {
                 if (!entry.Channel.Writer.TryWrite(message))
-                {
                     _logger.LogWarning(
                         "SSE channel full for session {SessionId}, subscription {SubscriptionId} — message {MessageId} dropped.",
                         sessionId, subscriptionId, message.Id);
-                }
-            }
-        }
     }
 
     private void CleanupStaleSubscriptions()
@@ -89,13 +85,11 @@ public sealed class LiveChatSseSubscriptions : ILiveChatSseSubscriptions, IDispo
         foreach (var (sessionId, subscribers) in _sessionSubscriptions)
         {
             foreach (var (subscriptionId, entry) in subscribers)
-            {
                 if (entry.CreatedAt < cutoff)
                 {
                     subscribers.TryRemove(subscriptionId, out _);
                     staleCount++;
                 }
-            }
 
             if (subscribers.IsEmpty)
                 _sessionSubscriptions.TryRemove(sessionId, out _);
@@ -105,5 +99,5 @@ public sealed class LiveChatSseSubscriptions : ILiveChatSseSubscriptions, IDispo
             _logger.LogInformation("SSE cleanup: removed {Count} stale subscription(s).", staleCount);
     }
 
-    public void Dispose() => _cleanupTimer.Dispose();
+    private sealed record SubscriptionEntry(Channel<LiveChatMessageEntity> Channel, DateTimeOffset CreatedAt);
 }

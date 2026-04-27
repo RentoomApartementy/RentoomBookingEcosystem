@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using RentoomBooking.Api.LiveChat.Data;
-using RentoomBooking.Api.LiveChat.Entities;
+using RentoomBooking.LiveChat.Data;
+using RentoomBooking.LiveChat.Entities;
 
-namespace RentoomBooking.Api.LiveChat.Repositories;
+namespace RentoomBooking.LiveChat.Repositories;
 
 public sealed class LiveChatMessageRepository : ILiveChatMessageRepository
 {
@@ -13,7 +13,8 @@ public sealed class LiveChatMessageRepository : ILiveChatMessageRepository
         _dbContextFactory = dbContextFactory;
     }
 
-    public async Task<List<LiveChatMessageEntity>> GetBySessionAsync(Guid sessionId, DateTime? after = null, CancellationToken ct = default)
+    public async Task<List<LiveChatMessageEntity>> GetBySessionAsync(Guid sessionId, DateTime? after = null,
+        CancellationToken ct = default)
     {
         await using var db = await _dbContextFactory.CreateDbContextAsync(ct);
         var query = db.LiveChatMessages
@@ -26,7 +27,8 @@ public sealed class LiveChatMessageRepository : ILiveChatMessageRepository
         return await query.OrderBy(m => m.CreatedAt).ToListAsync(ct);
     }
 
-    public async Task<LiveChatMessageEntity?> GetByBitrixMessageIdAsync(string bitrixMessageId, CancellationToken ct = default)
+    public async Task<LiveChatMessageEntity?> GetByBitrixMessageIdAsync(string bitrixMessageId,
+        CancellationToken ct = default)
     {
         await using var db = await _dbContextFactory.CreateDbContextAsync(ct);
         return await db.LiveChatMessages
