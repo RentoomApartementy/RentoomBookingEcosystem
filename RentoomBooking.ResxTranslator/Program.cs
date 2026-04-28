@@ -8,51 +8,52 @@ var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.Local.json", optional: true)
     .Build();
 
-var rootCommand = new RootCommand("Translate .resx files using Azure AI Translator");
+var rootCommand = new RootCommand(
+    "Translate .resx resource files to multiple target languages using Azure Cognitive Services Translator API");
 
 // ── Shared options ──
 var sourceOption = new Option<string>(
     "--source",
     getDefaultValue: () => "pl-PL",
-    description: "Source culture (e.g. pl-PL)");
+    description: "Source culture code (e.g. pl-PL). Specifies the original language of the .resx files.");
 
 var includeProjectsOption = new Option<string[]>(
     "--include",
-    description: "Only affect these projects (e.g. RentoomBookingWeb StayWell). Matches folder names.")
+    description: "Process only specified projects (e.g. RentoomBookingWeb StayWell). Matches project folder names in repository.")
 { AllowMultipleArgumentsPerToken = true };
 
 var excludeProjectsOption = new Option<string[]>(
     "--exclude",
-    description: "Skip these projects (e.g. StayWell). Matches folder names.")
+    description: "Skip specified projects (e.g. StayWell). Matches project folder names in repository.")
 { AllowMultipleArgumentsPerToken = true };
 
 var repoRootOption = new Option<string?>(
     "--repo-root",
-    description: "Repository root path. Defaults to current directory.");
+    description: "Path to repository root directory. Defaults to current working directory if not specified.");
 
 // ── Translate command (default) ──
 var targetOption = new Option<string[]>(
     "--target",
-    description: "Target cultures (e.g. en-US de-DE). If omitted, translates to all existing target cultures found in repo.")
+    description: "Target culture codes (e.g. en-US de-DE pl-PL). Omit to auto-detect and translate to all existing target cultures found in repository.")
 { AllowMultipleArgumentsPerToken = true };
 
 var allOption = new Option<bool>(
     "--all",
     getDefaultValue: () => false,
-    description: "Force re-translate all keys (ignore hash cache)");
+    description: "Re-translate all keys regardless of cache. Ignores cached translations and forces Azure API calls.");
 
 var dryRunOption = new Option<bool>(
     "--dry-run",
     getDefaultValue: () => false,
-    description: "Show what would be translated without making changes");
+    description: "Preview changes without modifying any files. Useful for testing translation before committing.");
 
 var translatorKeyOption = new Option<string?>(
     "--translator-key",
-    description: "Azure Translator subscription key. Falls back to AZURE_TRANSLATOR_KEY env var.");
+    description: "Azure Translator API subscription key. If not provided, falls back to AZURE_TRANSLATOR_KEY environment variable.");
 
 var translatorRegionOption = new Option<string?>(
     "--translator-region",
-    description: "Azure Translator region. Falls back to AZURE_TRANSLATOR_REGION env var or appsettings.Local.json.");
+    description: "Azure Translator API region (e.g. polandcentral). Fallback order: AZURE_TRANSLATOR_REGION env var, appsettings.Local.json, default (polandcentral).");
 
 rootCommand.AddOption(sourceOption);
 rootCommand.AddOption(targetOption);
@@ -67,11 +68,11 @@ rootCommand.AddOption(translatorRegionOption);
 // ── Rollback command ──
 var rollbackCultureOption = new Option<string>(
     "--culture",
-    description: "Target culture to roll back (e.g. en-US). Must not be the source culture.")
+    description: "Target culture code to remove (e.g. en-US). Must be different from --source culture.")
 { IsRequired = true };
 
 var rollbackCommand = new Command("rollback",
-    "Remove a target culture from the repo: deletes .resx files and cleans up supported-languages.json / SupportedLanguagesConfig.cs.");
+    "Remove a target language from the repository. Deletes culture-specific .resx files and updates configuration (supported-languages.json and SupportedLanguagesConfig.cs).");
 
 rollbackCommand.AddOption(sourceOption);
 rollbackCommand.AddOption(rollbackCultureOption);
