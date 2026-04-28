@@ -9,7 +9,7 @@ var config = new ConfigurationBuilder()
     .Build();
 
 var rootCommand = new RootCommand(
-    "Translate .resx resource files to multiple target languages using Azure Cognitive Services Translator API");
+    "Manage .resx resource file translations using Azure Cognitive Services Translator API. Use subcommands: translate (default) or rollback.");
 
 // ── Shared options ──
 var sourceOption = new Option<string>(
@@ -55,51 +55,21 @@ var translatorRegionOption = new Option<string?>(
     "--translator-region",
     description: "Azure Translator API region (e.g. polandcentral). Fallback order: AZURE_TRANSLATOR_REGION env var, appsettings.Local.json, default (polandcentral).");
 
-rootCommand.AddOption(sourceOption);
-rootCommand.AddOption(targetOption);
-rootCommand.AddOption(allOption);
-rootCommand.AddOption(dryRunOption);
-rootCommand.AddOption(includeProjectsOption);
-rootCommand.AddOption(excludeProjectsOption);
-rootCommand.AddOption(repoRootOption);
-rootCommand.AddOption(translatorKeyOption);
-rootCommand.AddOption(translatorRegionOption);
+// ── Translate command ──
+var translateCommand = new Command("translate",
+    "Translate .resx resource files to target languages using Azure Cognitive Services Translator API.");
 
-// ── Rollback command ──
-var rollbackCultureOption = new Option<string>(
-    "--culture",
-    description: "Target culture code to remove (e.g. en-US). Must be different from --source culture.")
-{ IsRequired = true };
+translateCommand.AddOption(sourceOption);
+translateCommand.AddOption(targetOption);
+translateCommand.AddOption(allOption);
+translateCommand.AddOption(dryRunOption);
+translateCommand.AddOption(includeProjectsOption);
+translateCommand.AddOption(excludeProjectsOption);
+translateCommand.AddOption(repoRootOption);
+translateCommand.AddOption(translatorKeyOption);
+translateCommand.AddOption(translatorRegionOption);
 
-var rollbackCommand = new Command("rollback",
-    "Remove a target language from the repository. Deletes culture-specific .resx files and updates configuration (supported-languages.json and SupportedLanguagesConfig.cs).");
-
-rollbackCommand.AddOption(sourceOption);
-rollbackCommand.AddOption(rollbackCultureOption);
-rollbackCommand.AddOption(dryRunOption);
-rollbackCommand.AddOption(includeProjectsOption);
-rollbackCommand.AddOption(excludeProjectsOption);
-rollbackCommand.AddOption(repoRootOption);
-
-rollbackCommand.SetHandler((InvocationContext ctx) =>
-{
-    var source          = ctx.ParseResult.GetValueForOption(sourceOption)!;
-    var culture         = ctx.ParseResult.GetValueForOption(rollbackCultureOption)!;
-    var dryRun          = ctx.ParseResult.GetValueForOption(dryRunOption);
-    var includeProjects = ctx.ParseResult.GetValueForOption(includeProjectsOption) ?? [];
-    var excludeProjects = ctx.ParseResult.GetValueForOption(excludeProjectsOption) ?? [];
-    var repoRoot        = ctx.ParseResult.GetValueForOption(repoRootOption)
-                          ?? FindRepoRoot(Directory.GetCurrentDirectory());
-
-    var service = new RollbackService(
-        repoRoot, culture, source, dryRun, includeProjects, excludeProjects);
-
-    ctx.ExitCode = service.Execute();
-});
-
-rootCommand.AddCommand(rollbackCommand);
-
-rootCommand.SetHandler(async (InvocationContext ctx) =>
+translateCommand.SetHandler(async (InvocationContext ctx) =>
 {
     var source = ctx.ParseResult.GetValueForOption(sourceOption)!;
     var targets = ctx.ParseResult.GetValueForOption(targetOption) ?? [];
@@ -138,6 +108,42 @@ rootCommand.SetHandler(async (InvocationContext ctx) =>
 
     await orchestrator.RunAsync();
 });
+
+rootCommand.AddCommand(translateCommand);
+
+// ── Rollback command ──
+var rollbackCultureOption = new Option<string>(
+    "--culture",
+    description: "Target culture code to remove (e.g. en-US). Must be different from --source culture.")
+{ IsRequired = true };
+
+var rollbackCommand = new Command("rollback",
+    "Remove a target language from the repository. Deletes culture-specific .resx files and updates configuration (supported-languages.json and SupportedLanguagesConfig.cs).");
+
+rollbackCommand.AddOption(sourceOption);
+rollbackCommand.AddOption(rollbackCultureOption);
+rollbackCommand.AddOption(dryRunOption);
+rollbackCommand.AddOption(includeProjectsOption);
+rollbackCommand.AddOption(excludeProjectsOption);
+rollbackCommand.AddOption(repoRootOption);
+
+rollbackCommand.SetHandler((InvocationContext ctx) =>
+{
+    var source          = ctx.ParseResult.GetValueForOption(sourceOption)!;
+    var culture         = ctx.ParseResult.GetValueForOption(rollbackCultureOption)!;
+    var dryRun          = ctx.ParseResult.GetValueForOption(dryRunOption);
+    var includeProjects = ctx.ParseResult.GetValueForOption(includeProjectsOption) ?? [];
+    var excludeProjects = ctx.ParseResult.GetValueForOption(excludeProjectsOption) ?? [];
+    var repoRoot        = ctx.ParseResult.GetValueForOption(repoRootOption)
+                          ?? FindRepoRoot(Directory.GetCurrentDirectory());
+
+    var service = new RollbackService(
+        repoRoot, culture, source, dryRun, includeProjects, excludeProjects);
+
+    ctx.ExitCode = service.Execute();
+});
+
+rootCommand.AddCommand(rollbackCommand);
 
 return await rootCommand.InvokeAsync(args);
 
