@@ -9,14 +9,16 @@
 @using RentoomBooking.StayWell.States
 @inject AvailableUpsellsState AvailableUpsellsState
 @inject NavigationManager Navigation
-@inject IStringLocalizer<PurchasedUpsellsPage> UpsellLocalizer;
+@inject IStringLocalizer<AvailableUpsellsPage> Localizer
 @inject UpsellCartState UpsellCartState
 @inherits Models.PageBase
 @implements IDisposable
 
+<PageTitle>@Localizer["PageTitle"]</PageTitle>
+
 @if (AvailableUpsellsState.IsLoading)
 {
-    <p>Loading...</p>
+    <p>@Localizer["Loading"]</p>
 }
 else if (!string.IsNullOrWhiteSpace(AvailableUpsellsState.Error))
 {
@@ -24,7 +26,7 @@ else if (!string.IsNullOrWhiteSpace(AvailableUpsellsState.Error))
 }
 else if (AvailableUpsellsState.AvailableUpsells.Count == 0)
 {
-    <p>Brak dostępnych dodatków</p>
+    <p>@Localizer["NoAvailableUpsells"]</p>
 }
 else
 {
@@ -45,8 +47,8 @@ else
 
     private UpsellTextConfig _texts = new()
     {
-        Title = "Vouchery",
-        SubTitle = "Dostępne dodatki do kupienia"
+        Title = string.Empty,
+        SubTitle = string.Empty
     };
 
     protected override async Task OnInitializedAsync()
@@ -58,6 +60,12 @@ else
 
         if (string.IsNullOrWhiteSpace(Token))
             return;
+
+        _texts = new UpsellTextConfig
+        {
+            Title = Localizer["UpsellsListTitle"],
+            SubTitle = Localizer["UpsellsListSubtitle"]
+        };
 
         _reservationContext = BuildReservationPricingContext();
         _cartSelected = UpsellCartState.PendingUpsells.ToList();

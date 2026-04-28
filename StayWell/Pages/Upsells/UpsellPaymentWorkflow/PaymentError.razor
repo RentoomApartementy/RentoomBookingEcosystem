@@ -1,4 +1,7 @@
-﻿<h3>PaymentError</h3>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<PurchasedUpsellsPage> Localizer
+
+<h3>@Localizer["PaymentErrorTitle"]</h3>
 
 @code {
 

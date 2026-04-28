@@ -190,4 +190,10 @@
   <data name="ReservationCanceledDesc" xml:space="preserve">
     <value>This reservation is no longer active. Please contact Rentoom if you need help.</value>
   </data>
+  <data name="AiChatTitle" xml:space="preserve">
+    <value>StayWell AI</value>
+  </data>
+  <data name="AiAssistant" xml:space="preserve">
+    <value>AI Assistant</value>
+  </data>
 </root>

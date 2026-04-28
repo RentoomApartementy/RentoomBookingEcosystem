@@ -71,20 +71,22 @@ else
                 <div class="tile-icon">
                     <img class="fas" src="/icons/chat-ai-staywell.jpg" />
                 </div>
-                <div class="tile-text">AI Assistant</div>
+                <div class="tile-text">@Localizer["AiAssistant"]</div>
             </div>
         }
-       @* <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
+        <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
             <div class="tile-icon-vouchers">
                 <img class="fas" src="/icons/wallet-cards.svg" />
             </div>
             <div class="tile-text-vouchers">@Localizer["MyVouchers"]</div>
         </div>
-        *@
+        
     </div>
 
-    @* /MS 17.03: Sekcja narazie jest ukryta - flow biznesowy jest jeszcze do obgadania.
-       <RentoomBooking.StayWell.Components.Upsells.AvailableUpsells
+    @if (IsUpsellsFeatureVisible)
+    {
+        //MS 17.03: Sekcja narazie jest ukryta - flow biznesowy jest jeszcze do obgadania.
+        <RentoomBooking.StayWell.Components.Upsells.AvailableUpsells
         Token="@Token"
         ReservationContext="_reservationContext"
         Title="@Localizer["Enhance"]"
@@ -95,7 +97,7 @@ else
         OnSelectionChanged="OnUpsellsSelected" />
 
         <div class="homepage-upsell-spacer"></div>
-        *@
+    }
 }
 
 @code
@@ -117,6 +119,10 @@ else
     private bool IsAiAssistantVisible =>
         string.Equals(CurrentEnvironmentName, "Development", StringComparison.OrdinalIgnoreCase) ||
         string.Equals(CurrentEnvironmentName, "DEV", StringComparison.OrdinalIgnoreCase);
+
+    private bool IsUpsellsFeatureVisible =>
+       string.Equals(CurrentEnvironmentName, "Development", StringComparison.OrdinalIgnoreCase) ||
+       string.Equals(CurrentEnvironmentName, "DEV", StringComparison.OrdinalIgnoreCase);
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
 
@@ -232,7 +238,7 @@ else
     private void OpenAiChat()
     {
         ModalService.ShowAiChatModal(
-            "StayWell AI",
+            Localizer["AiChatTitle"],
             @<RentoomBooking.StayWell.Components.ModalContent.AiChatPanel Token="@Token" IsFullscreen="true" />
         );
     }

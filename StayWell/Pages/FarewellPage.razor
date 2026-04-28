@@ -1,10 +1,11 @@
-﻿@page "/reservation/{token}/FarewellPage"
+@page "/reservation/{token}/FarewellPage"
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<FarewellPage> Localizer
 
 @inherits Models.PageBase
 
 <div class="main-wrapper">
-
-    <p>Hej, @ReservationState.CurrentReservation.Reservation.Client.FirstName</p>
+    <p>@Localizer["Greeting"] @ReservationState.CurrentReservation.Reservation.Client.FirstName</p>
 </div>
 
 

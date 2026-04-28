@@ -4,21 +4,24 @@
 @using RentoomBooking.StayWell.Models
 @using RentoomBooking.SharedClasses.Models.StayWell
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
+@using Microsoft.Extensions.Localization
+@using System.Globalization
 
 @* @inject IStringLocalizer<InstructionsPage> Localizer *@
 @inject Services.ModalService ModalService
 @inject Services.ToastService ToastService
 @inject States.ReservationState ReservationState
 @inject States.RegistrationCardState RegistrationCardState
+@inject IStringLocalizer<RegistrationPage> Localizer
 
 @implements IDisposable
 
 @inherits Models.PageBase
 
-<PageTitle>Karta Meldunkowa</PageTitle>
+<PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <div class="page-info-wrapper">
-    <PageInfo Title="Karta Meldunkowa" Subtitle="Wypełnij potrzebne informacje."></PageInfo>
+    <PageInfo Title="@Localizer["PageTitle"]" Subtitle="@Localizer["PageSubtitle"]"></PageInfo>
 </div>
 
 <div class="description-wrapper">
@@ -26,15 +29,15 @@
         <Icon><img src="/icons/info.svg" /></Icon>
         <DescriptionContent>
             <span style="font-size: 0.9rem">
-                Witaj, @ReservationState?.CurrentReservation?.Reservation?.Client?.FirstName. Zanim otrzymasz dostęp do swojej aplikacji, prosimy o wypełnienie Karty Meldunkowej!
+                @Localizer["WelcomePrefix"] @ReservationState?.CurrentReservation?.Reservation?.Client?.FirstName. @Localizer["WelcomeSuffix"]
             </span>
         </DescriptionContent>
     </Description>
 </div>
 
 <div class="mail-wrapper">
-    <label class="mail-input-title" for="email">Podaj swój adres mailowy</label>
-    <input class="editform-input" id="email" type="email" placeholder="adres mail" @bind="_mail" />
+    <label class="mail-input-title" for="email">@Localizer["EmailLabel"]</label>
+    <input class="editform-input" id="email" type="email" placeholder="@Localizer["EmailPlaceholder"]" @bind="_mail" />
 </div>
 
 <div class="form-buttons">
@@ -42,11 +45,11 @@
         <RenderFragment>
             @if (_checkInTime is null)
             {
-                <span>Wybierz godzinę zameldowania</span>
+                <span>@Localizer["SelectCheckInTime"]</span>
             }
             else
             {
-                <span>Zmień godzinę z @_checkInTime.Value.ToString(@"hh\:mm")</span>
+                <span>@string.Format(CultureInfo.CurrentCulture, Localizer["ChangeCheckInTime"], _checkInTime.Value.ToString(@"hh\:mm"))</span>
             }
         </RenderFragment>
     </Button>
@@ -55,11 +58,11 @@
         <RenderFragment>
             @if (AreGuestsFilled())
             {
-                <span>Zmień dane gości</span>
+                <span>@Localizer["ChangeGuestData"]</span>
             }
             else
             {
-                <span>Uzupełnij dane gości</span>
+                <span>@Localizer["FillGuestData"]</span>
             }
         </RenderFragment>
     </Button>
@@ -69,13 +72,13 @@
     @if (IsFormSet())
     {
         <span class="info">
-            <img src="/icons/info.svg" /> Wciskając poniższy przycisk potwierdzam poprawność danych.
+            <img src="/icons/info.svg" /> @Localizer["ConfirmDataInfo"]
         </span>
     }
 
     <Button Disabled="!IsFormSet()" OnClick="SaveAndNavigate">
         <RenderFragment>
-            <span>Zapisz i przejdź dalej &#10140;</span>
+            <span>@Localizer["SaveAndContinue"] &#10140;</span>
         </RenderFragment>
     </Button>
 </div>
@@ -155,14 +158,14 @@
     private void SelectTime()
     {
         ModalService.ShowModal(
-            "Wybierz szacowaną godzinę zameldowania",
+            Localizer["SelectEstimatedCheckInTimeTitle"],
             @<RentoomBooking.StayWell.Components.ModalContent.TimeSelectorContent @bind-value="_checkInTime" />
         );
     }
 
     private void FillGuestInfo()
     {
-        ModalService.ShowModal("Uzupełnij dane gości",
+        ModalService.ShowModal(Localizer["FillGuestDataTitle"],
             @<RentoomBooking.StayWell.Components.ModalContent.FillGuestDataContent InitialGuests="@_guests"
                                                                       OnConfirm="@HandleGuestsConfirmed" />
         );
@@ -213,7 +216,7 @@
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            ToastService.ShowToast("Wystąpił błąd podczas zapisywania danych. Spróbuj ponownie.");
+            ToastService.ShowToast(Localizer["SaveError"]);
         }
     }
 

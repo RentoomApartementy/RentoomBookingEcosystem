@@ -3,11 +3,11 @@
 
 @using Microsoft.Extensions.Localization
 @using System.Globalization
-@inject IStringLocalizer<InstructionsPage> Localizer
+@inject IStringLocalizer<ReportPage> Localizer
 
 @inherits Models.PageBase
 
-<PageTitle>Report</PageTitle>
+<PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 @* <div class="page-info-wrapper">
     <PageInfo Title="Szeroka Premier No 2A" Subtitle="Zgłoś usterkę"></PageInfo>

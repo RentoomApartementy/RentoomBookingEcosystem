@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -207,4 +207,36 @@
   <data name="YourStay" xml:space="preserve">
     <value>Za twój pobyt odpowiada Rentoom</value>
   </data>
+  <data name="WithdrawConsentModalTitle" xml:space="preserve">
+    
+    
+  <value>Cofnięcie zgody</value></data>
+  <data name="TaxIdValue" xml:space="preserve">
+    
+    
+  <value>8792727407 / 387605281</value></data>
+  <data name="PageTitle" xml:space="preserve">
+    
+    
+  <value>O rezerwacji</value></data>
+  <data name="OfficeAddressValue" xml:space="preserve">
+    
+    
+  <value>Stanisława Szymańskiego 1B, 87-100 Toruń, Polska</value></data>
+  <data name="WithdrawConsentModalConfirm" xml:space="preserve">
+    
+    
+  <value>Cofnij</value></data>
+  <data name="TaxIdLabel" xml:space="preserve">
+    
+    
+  <value>NIP / REGON:</value></data>
+  <data name="WithdrawConsentModalCancel" xml:space="preserve">
+    
+    
+  <value>Wróć</value></data>
+  <data name="WithdrawConsentModalQuestion" xml:space="preserve">
+    
+    
+  <value>Czy na pewno chcesz cofnąć tę zgodę?</value></data>
 </root>

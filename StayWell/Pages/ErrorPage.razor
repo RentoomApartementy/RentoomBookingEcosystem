@@ -1,8 +1,11 @@
-﻿@page "/Error"
+@page "/Error"
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<ErrorPage> Localizer
+
 <div class="w-100 h-100 text-center">
-    <h3>Error Błąd</h3>
-    <p>Rezerwacja o takim tokenie nie istnieje.</p>
-    <p>Proszę skorzystaj z linku który otrzymałeś.</p>
+    <h3>@Localizer["Title"]</h3>
+    <p>@Localizer["ReservationNotFound"]</p>
+    <p>@Localizer["UseReceivedLink"]</p>
 </div>
 
 @code {
