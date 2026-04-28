@@ -50,6 +50,26 @@ namespace RentoomBooking.SharedClasses.Integrations.TTLock.Models
         public int KeyboardPwdId { get; set; }
     }
 
+    public sealed class AccessCodeDto
+    {
+        public string? Code { get; init; }
+        public int? KeyboardPwdId { get; init; }
+        public DateTimeOffset? GeneratedAt { get; init; }
+        public DateTimeOffset? ValidFrom { get; init; }
+        public DateTimeOffset? ValidTo { get; init; }
+        public string Source { get; init; } = "TTLock";
+    }
+
+    public sealed class AccessCodesResponse
+    {
+        public AccessCodeDto? CurrentCode { get; init; }
+        public List<AccessCodeDto> History { get; init; } = [];
+        public bool CanGenerate { get; init; }
+        public string? GenerationBlockReason { get; init; }
+        public int? CooldownSecondsRemaining { get; init; }
+        public DateTimeOffset? NextGenerationAvailableAt { get; init; }
+    }
+
     public enum TTLockKeyboardPwdType
     {
         OneTime = 1,

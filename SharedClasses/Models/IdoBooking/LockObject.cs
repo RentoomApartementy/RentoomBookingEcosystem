@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Utils;
 
 namespace RentoomBooking.SharedClasses.Models.IdoBooking
 {
@@ -29,6 +31,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
     public class LockResponse
     {
         public AuthenticateType? Authenticate { get; set; }
+        [JsonConverter(typeof(SingleOrArrayConverter<GateErrorType>))]
         public List<GateErrorType>? Errors { get; set; }
         public bool? Success { get; set; }
         public List<Lock>? Locks { get; set; }

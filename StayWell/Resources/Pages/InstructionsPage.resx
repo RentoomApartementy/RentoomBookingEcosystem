@@ -216,17 +216,26 @@
   <data name="ZoneB" xml:space="preserve">
     <value>Zone B</value>
   </data>
-  <data name="ZoneDowntown_PaidDays" xml:space="preserve">
-    <value>Mon–Fri, Sat</value>
+  <data name="Monday" xml:space="preserve">
+    <value>Mon</value>
   </data>
-  <data name="ZoneAB_PaidDays" xml:space="preserve">
-    <value>Mon–Fri</value>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tue</value>
   </data>
-  <data name="ZoneDowntown_FreeDays" xml:space="preserve">
-    <value>Sundays and public holidays</value>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wed</value>
   </data>
-  <data name="ZoneAB_FreeDays" xml:space="preserve">
-    <value>Saturdays and Sundays</value>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thu</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Fri</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sat</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sun</value>
   </data>
   <data name="ZoneDowntownPaidParking" xml:space="preserve">
     <value>Downtown Paid Parking Zone</value>
