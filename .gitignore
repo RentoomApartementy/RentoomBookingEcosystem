@@ -365,3 +365,6 @@ FodyWeavers.xsd
 /RentoomWebsite/RentoomWebsite.sln
 /Api/Properties/launchSettings.json
 /.codex-build/api-verify
+
+# ResxTranslator cache
+Tools/ResxTranslator/.resx-hashes.json
