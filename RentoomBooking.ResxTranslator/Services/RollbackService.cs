@@ -5,7 +5,7 @@ namespace ResxTranslator.Services;
 public sealed class RollbackService
 {
     private readonly string _repoRoot;
-    private readonly string _culture;
+    private readonly string[] _cultures;
     private readonly string _sourceCulture;
     private readonly bool _dryRun;
     private readonly string[] _includeProjects;
@@ -13,14 +13,14 @@ public sealed class RollbackService
 
     public RollbackService(
         string repoRoot,
-        string culture,
+        string[] cultures,
         string sourceCulture,
         bool dryRun,
         string[] includeProjects,
         string[] excludeProjects)
     {
         _repoRoot = repoRoot;
-        _culture = culture;
+        _cultures = cultures;
         _sourceCulture = sourceCulture;
         _dryRun = dryRun;
         _includeProjects = includeProjects;
@@ -30,7 +30,7 @@ public sealed class RollbackService
     public int Execute()
     {
         Console.WriteLine($"ResxTranslator Rollback — repo: {_repoRoot}");
-        Console.WriteLine($"  Rolling back: {_culture}");
+        Console.WriteLine($"  Rolling back: {string.Join(", ", _cultures)}");
         Console.WriteLine($"  Dry run: {_dryRun}");
         if (_includeProjects.Length > 0)
             Console.WriteLine($"  Include only: {string.Join(", ", _includeProjects)}");
@@ -38,25 +38,40 @@ public sealed class RollbackService
             Console.WriteLine($"  Exclude: {string.Join(", ", _excludeProjects)}");
         Console.WriteLine();
 
-        if (_culture.Equals(_sourceCulture, StringComparison.OrdinalIgnoreCase))
+        foreach (var culture in _cultures)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Error.WriteLine($"ERROR: Cannot roll back the source culture '{_sourceCulture}'.");
-            Console.ResetColor();
-            return 1;
+            if (culture.Equals(_sourceCulture, StringComparison.OrdinalIgnoreCase))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Error.WriteLine($"ERROR: Cannot roll back the source culture '{_sourceCulture}'.");
+                Console.ResetColor();
+                return 1;
+            }
         }
 
-        if (!IsValidCultureFormat(_culture))
+        var overallExitCode = 0;
+        foreach (var culture in _cultures)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Error.WriteLine($"ERROR: '{_culture}' is not a valid culture code (expected format: xx-XX).");
-            Console.ResetColor();
-            return 1;
+            if (_cultures.Length > 1)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"── {culture} ──");
+                Console.ResetColor();
+            }
+
+            var result = ExecuteForCulture(culture);
+            if (result != 0) overallExitCode = result;
+
+            if (_cultures.Length > 1)
+                Console.WriteLine();
         }
 
-        // Derive target files from source files — mirrors TranslationOrchestrator logic,
-        // ensuring only translator-managed files are touched.
-        var filesToDelete = FindTargetFiles();
+        return overallExitCode;
+    }
+
+    private int ExecuteForCulture(string culture)
+    {
+        var filesToDelete = FindTargetFiles(culture);
 
         if (filesToDelete.Count == 0)
         {
@@ -64,24 +79,22 @@ public sealed class RollbackService
             var filterNote = _includeProjects.Length > 0 || _excludeProjects.Length > 0
                 ? " (with current project filter)"
                 : "";
-            Console.WriteLine($"No .{_culture}.resx files found{filterNote}. Nothing to do.");
+            Console.WriteLine($"No .{culture}.resx files found{filterNote}. Nothing to do.");
             Console.ResetColor();
             return 0;
         }
 
-        // Determine how many culture files remain repo-wide after this deletion.
-        // Config (supported-languages.json) is only updated when the culture is fully gone from the repo.
-        var allRepoWide = FindAllCultureFilesRepoWide();
+        var allRepoWide = FindAllCultureFilesRepoWide(culture);
         var remainingAfterDeletion = allRepoWide
             .Except(filesToDelete, StringComparer.OrdinalIgnoreCase)
             .ToList();
         var shouldUpdateConfig = remainingAfterDeletion.Count == 0;
 
-        if (shouldUpdateConfig && IsDefaultCulture(_culture))
+        if (shouldUpdateConfig && IsDefaultCulture(culture))
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Error.WriteLine(
-                $"ERROR: '{_culture}' is the default culture in supported-languages.json. " +
+                $"ERROR: '{culture}' is the default culture in supported-languages.json. " +
                 "Assign a different default culture before rolling back.");
             Console.ResetColor();
             return 1;
@@ -89,11 +102,10 @@ public sealed class RollbackService
 
         if (_dryRun)
         {
-            PrintDryRun(filesToDelete, shouldUpdateConfig, remainingAfterDeletion.Count);
+            PrintDryRun(culture, filesToDelete, shouldUpdateConfig, remainingAfterDeletion.Count);
             return 0;
         }
 
-        // Delete files
         var deleted = 0;
         var errors = 0;
         foreach (var file in filesToDelete)
@@ -113,20 +125,19 @@ public sealed class RollbackService
             }
         }
 
-        // Update config only when no culture files remain repo-wide
         if (shouldUpdateConfig)
         {
-            LanguageConfigUpdater.RemoveCulture(_repoRoot, _culture);
+            LanguageConfigUpdater.RemoveCulture(_repoRoot, culture);
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine();
             Console.WriteLine(
-                $"  ⚠ {remainingAfterDeletion.Count} file(s) for '{_culture}' remain outside the filtered scope — " +
+                $"  ⚠ {remainingAfterDeletion.Count} file(s) for '{culture}' remain outside the filtered scope — " +
                 "supported-languages.json was NOT modified.");
             Console.WriteLine(
-                $"  Run again without --include/--exclude to fully remove '{_culture}' and clean up config.");
+                $"  Run again without --include/--exclude to fully remove '{culture}' and clean up config.");
             Console.ResetColor();
         }
 
@@ -146,29 +157,22 @@ public sealed class RollbackService
         return errors > 0 ? 1 : 0;
     }
 
-    /// <summary>
-    /// Derives target paths from source .resx files (same enumeration as TranslationOrchestrator),
-    /// applying project filters, and returns only files that actually exist on disk.
-    /// </summary>
-    private List<string> FindTargetFiles()
+    private List<string> FindTargetFiles(string culture)
     {
         var sourceSuffix = $".{_sourceCulture}.resx";
         return Directory.GetFiles(_repoRoot, "*.resx", SearchOption.AllDirectories)
             .Where(f => f.EndsWith(sourceSuffix, StringComparison.OrdinalIgnoreCase))
             .Where(IsNotBinOrObj)
             .Where(MatchesProjectFilter)
-            .Select(sf => $"{sf[..^sourceSuffix.Length]}.{_culture}.resx")
+            .Select(sf => $"{sf[..^sourceSuffix.Length]}.{culture}.resx")
             .Where(File.Exists)
             .OrderBy(f => f)
             .ToList();
     }
 
-    /// <summary>
-    /// Finds all .{culture}.resx files in the entire repo (no project filter), for config-update decisions.
-    /// </summary>
-    private List<string> FindAllCultureFilesRepoWide()
+    private List<string> FindAllCultureFilesRepoWide(string culture)
     {
-        var suffix = $".{_culture}.resx";
+        var suffix = $".{culture}.resx";
         return Directory.GetFiles(_repoRoot, "*.resx", SearchOption.AllDirectories)
             .Where(f => f.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
             .Where(IsNotBinOrObj)
@@ -208,7 +212,7 @@ public sealed class RollbackService
         }
     }
 
-    private void PrintDryRun(List<string> filesToDelete, bool wouldUpdateConfig, int remainingCount)
+    private void PrintDryRun(string culture, List<string> filesToDelete, bool wouldUpdateConfig, int remainingCount)
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("=== DRY RUN — no changes will be made ===\n");
@@ -223,13 +227,13 @@ public sealed class RollbackService
         if (wouldUpdateConfig)
         {
             Console.WriteLine("Config changes:");
-            Console.WriteLine($"  - Remove '{_culture}' from supported-languages.json");
+            Console.WriteLine($"  - Remove '{culture}' from supported-languages.json");
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(
-                $"Config: NOT modified — {remainingCount} file(s) for '{_culture}' remain outside the current filter.");
+                $"Config: NOT modified — {remainingCount} file(s) for '{culture}' remain outside the current filter.");
             Console.ResetColor();
         }
     }
@@ -240,7 +244,4 @@ public sealed class RollbackService
     private static bool IsNotBinOrObj(string filePath)
         => !filePath.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar) &&
            !filePath.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar);
-
-    private static bool IsValidCultureFormat(string culture)
-        => System.Text.RegularExpressions.Regex.IsMatch(culture, @"^[a-zA-Z]{2,3}-[a-zA-Z]{2,4}$");
 }
