@@ -66,6 +66,27 @@
     height: 30px;
     align-items: center;
     justify-content: center;
+    overflow: visible;
+}
+
+.chat-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    overflow: visible;
+}
+
+.chat-btn img {
+    width: 24px;
+    height: 24px;
+    display: block;
 }
 
 .Languages {
@@ -74,4 +95,26 @@
     height: 30px;
     align-items: center;
     justify-content: center
+}
+
+.chat-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e53935;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    min-width: 15px;
+    height: 15px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    pointer-events: none;
+    line-height: 1;
+    z-index: 10;
+    box-sizing: border-box;
+    white-space: nowrap;
 }

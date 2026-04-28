@@ -6,7 +6,8 @@ namespace RentoomBooking.StayWell.Services
     {
         Default = 0,
         Image = 1,
-        AiChatFullscreen = 2
+        AiChatFullscreen = 2,
+        LiveChatFullscreen = 3
     }
 
     public class ModalService
@@ -23,6 +24,11 @@ namespace RentoomBooking.StayWell.Services
         public void ShowAiChatModal(string title, RenderFragment? renderFragment = null)
         {
             OnShow?.Invoke(title, renderFragment, ModalVariant.AiChatFullscreen);
+        }
+
+        public void ShowLiveChatModal(string title, RenderFragment? renderFragment = null)
+        {
+            OnShow?.Invoke(title, renderFragment, ModalVariant.LiveChatFullscreen);
         }
 
         public void HideModal()

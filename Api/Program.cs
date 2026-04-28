@@ -19,6 +19,7 @@ using RentoomBooking.ChatAI.Services;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
@@ -27,8 +28,11 @@ using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Integrations.TTLock;
 using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
+using RentoomBooking.SharedClasses.Integrations.Tpay;
+using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.BookingCom;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.Cookies;
@@ -48,6 +52,12 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("LinkPreview")
+    .ConfigureHttpClient(c =>
+    {
+        c.Timeout = TimeSpan.FromSeconds(15);
+        c.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; RentoomBot/1.0)");
+    });
 builder.Services.AddMemoryCache();
 
 using var tempLoggerFactory = LoggerFactory.Create(lb =>
@@ -78,6 +88,9 @@ builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContextFactory<ChatAIDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
+
+builder.Services.AddDbContextFactory<RentoomBooking.LiveChat.Data.LiveChatDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
@@ -220,6 +233,32 @@ builder.Services.AddScoped<IReservationContextProvider, StaywellReservationConte
 builder.Services.AddScoped<IStaywellChatService, StaywellChatService>();
 builder.Services.AddSingleton<IChatRateLimiter, MemoryChatRateLimiter>();
 
+// LiveChat
+builder.Services.AddOptions<RentoomBooking.SharedClasses.Configuration.BitrixLiveChatOptions>()
+    .Configure<IConfiguration>((options, configuration) =>
+    {
+        options.Domain = RentoomBooking.SharedClasses.Configuration.BitrixConfiguration.GetDomain(configuration);
+        options.ConnectorId = RentoomBooking.SharedClasses.Configuration.BitrixLiveChatConfiguration.GetConnectorId(configuration);
+        options.OpenLineId = RentoomBooking.SharedClasses.Configuration.BitrixLiveChatConfiguration.GetOpenLineId(configuration);
+        options.OAuthClientId = configuration["Bitrix:LiveChat:OAuthClientId"] ?? string.Empty;
+        options.OAuthClientSecret = configuration["Bitrix:LiveChat:OAuthClientSecret"] ?? string.Empty;
+        options.OAuthRefreshToken = configuration["Bitrix:LiveChat:OAuthRefreshToken"] ?? string.Empty;
+    })
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.ILiveChatRateLimiter, RentoomBooking.LiveChat.MemoryLiveChatRateLimiter>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.ILiveChatSseSubscriptions, RentoomBooking.LiveChat.LiveChatSseSubscriptions>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixOAuthService, RentoomBooking.LiveChat.Bitrix.BitrixOAuthService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixMessageSender, RentoomBooking.LiveChat.Bitrix.BitrixMessageSender>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixUserService, RentoomBooking.LiveChat.Bitrix.BitrixUserService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixWebhookService, RentoomBooking.LiveChat.Bitrix.BitrixWebhookService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixLandingService, RentoomBooking.LiveChat.Bitrix.BitrixLandingService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.IBitrixRestClient, RentoomBooking.LiveChat.Bitrix.BitrixRestClient>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.ILiveChatSessionRepository, RentoomBooking.LiveChat.Repositories.LiveChatSessionRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.ILiveChatMessageRepository, RentoomBooking.LiveChat.Repositories.LiveChatMessageRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.IBitrixPortalRepository, RentoomBooking.LiveChat.Repositories.BitrixPortalRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.BitrixLiveChatService>();
+
 builder.Services.AddScoped<RappEventsDbContextFactory>();
 builder.Services.AddScoped<IEventReadRepository, EventReadRepository>();
 
@@ -266,5 +305,6 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
     ContractResolver = new CamelCasePropertyNamesContractResolver()
 };
 
+var host = builder.Build();
 
-builder.Build().Run();
+host.Run();

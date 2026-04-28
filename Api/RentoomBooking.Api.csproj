@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SharedClasses\RentoomBooking.SharedClasses.csproj" />
     <ProjectReference Include="..\RentoomBooking.ChatAI\RentoomBooking.ChatAI.csproj" />
+    <ProjectReference Include="..\RentoomBooking.LiveChat\RentoomBooking.LiveChat.csproj" />
   </ItemGroup>
  
 </Project>
