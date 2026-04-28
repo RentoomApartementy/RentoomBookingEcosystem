@@ -10,6 +10,7 @@
 @inject States.LiveChatNotificationState LiveChatNotificationState
 
 @inject IStringLocalizer<HomePage> Localizer
+@inject IStringLocalizer<RentoomBooking.StayWell.Components.ModalContent.LiveChatPanel> LiveChatLocalizer
 
 <div class="header">
     <div class="left">
@@ -81,7 +82,7 @@
     private void OpenLiveChat()
     {
         ModalService.ShowLiveChatModal(
-            "Czat z obsługą",
+            LiveChatLocalizer["ChatTitle"],
             @<RentoomBooking.StayWell.Components.ModalContent.LiveChatPanel Token="@Token" />
         );
     }

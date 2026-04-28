@@ -5,6 +5,7 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject IStringLocalizer<ContactUsPage> Localizer
+@inject IStringLocalizer<RentoomBooking.StayWell.Components.ModalContent.LiveChatPanel> LiveChatLocalizer
 
 @inherits Models.PageBase
 
@@ -55,7 +56,7 @@
     private void OpenChat()
     {
         ModalService.ShowLiveChatModal(
-            "Czat z obsługą",
+            LiveChatLocalizer["ChatTitle"],
             @<RentoomBooking.StayWell.Components.ModalContent.LiveChatPanel Token="@Token" />
         );
     }

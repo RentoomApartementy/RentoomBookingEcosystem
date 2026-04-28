@@ -1,5 +1,6 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.Extensions.Logging
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.LiveChat
 @using RentoomBooking.StayWell.States
 @using RentoomBooking.StayWell.Utils
@@ -9,27 +10,28 @@
 @inject LiveChatNotificationState NotificationState
 @inject IJSRuntime JS
 @inject ILogger<LiveChatPanel> Logger
+@inject IStringLocalizer<LiveChatPanel> Localizer
 
 <div class="livechat-panel">
 
     @if (_lightboxUrls.Length > 0)
     {
         <div class="lightbox-overlay" @onclick="CloseLightbox">
-            <button class="lightbox-close" type="button" @onclick="CloseLightbox" @onclick:stopPropagation aria-label="Zamknij">
+            <button class="lightbox-close" type="button" @onclick="CloseLightbox" @onclick:stopPropagation aria-label="@Localizer["CloseButtonAriaLabel"]">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                     <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
             </button>
             @if (_lightboxUrls.Length > 1)
             {
-                <button class="lightbox-nav lightbox-nav--prev" type="button" @onclick="LightboxPrev" @onclick:stopPropagation aria-label="Poprzednie">
+                <button class="lightbox-nav lightbox-nav--prev" type="button" @onclick="LightboxPrev" @onclick:stopPropagation aria-label="@Localizer["PreviousButtonAriaLabel"]">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
                 </button>
             }
             <img class="lightbox-image" src="@_lightboxUrls[_lightboxIndex]" alt="" @onclick:stopPropagation />
             @if (_lightboxUrls.Length > 1)
             {
-                <button class="lightbox-nav lightbox-nav--next" type="button" @onclick="LightboxNext" @onclick:stopPropagation aria-label="Następne">
+                <button class="lightbox-nav lightbox-nav--next" type="button" @onclick="LightboxNext" @onclick:stopPropagation aria-label="@Localizer["NextButtonAriaLabel"]">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                 </button>
                 <div class="lightbox-counter">@(_lightboxIndex + 1) / @_lightboxUrls.Length</div>
@@ -41,8 +43,8 @@
     {
         <div class="form-overlay">
             <div class="form-overlay-header">
-                <span class="form-overlay-title">Formularz</span>
-                <button class="form-overlay-close" @onclick="CloseForm" aria-label="Zamknij">
+                <span class="form-overlay-title">@Localizer["FormTitle"]</span>
+                <button class="form-overlay-close" @onclick="CloseForm" aria-label="@Localizer["CloseButtonAriaLabel"]">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                     </svg>
@@ -51,18 +53,18 @@
             <iframe src="@_activeFormUrl"
                     class="form-overlay-iframe"
                     sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
-                    title="Formularz"></iframe>
+                    title="@Localizer["FormTitle"]"></iframe>
         </div>
     }
 
     <div class="livechat-messages" @ref="_messagesRef">
         @if (_isLoading)
         {
-            <div class="livechat-loader">Ładowanie...</div>
+            <div class="livechat-loader">@Localizer["Loading"]</div>
         }
         else if (_messages.Count == 0)
         {
-            <div class="livechat-empty">Napisz wiadomość, aby rozpocząć rozmowę z obsługą.</div>
+            <div class="livechat-empty">@Localizer["StartConversation"]</div>
         }
 
         @for (int _msgIdx = 0; _msgIdx < _messages.Count; _msgIdx++)
@@ -93,14 +95,14 @@
                 @if (isOperator && isFirstInGroup)
                 {
                     <div class="livechat-operator-name-label @(isAutomated ? "livechat-operator-name-label--automated" : "")">
-                        @(isAutomated ? "Wiadomość automatyczna" : (msg.OperatorName ?? "Obsługa"))
+                        @(isAutomated ? Localizer["AutomatedMessage"] : (msg.OperatorName ?? Localizer["Support"]))
                     </div>
                 }
 
             <div class="livechat-message-row @(msg.Sender == "guest" ? "livechat-message-row--guest" : "livechat-message-row--operator")">
                 @if (msg.Sender == "guest" && _sendStatus.TryGetValue(msg.Id, out var retryStatus) && retryStatus == MessageSendStatus.Failed)
                 {
-                    <button class="livechat-retry-btn" @onclick="() => RetryAsync(msg)" title="Wyślij ponownie" type="button">
+                    <button class="livechat-retry-btn" @onclick="() => RetryAsync(msg)" title="@Localizer["RetryTooltip"]" type="button">
                         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M2 8a6 6 0 1 0 1-3.2"/>
                             <polyline points="2 2 2 6 6 6"/>
@@ -144,7 +146,7 @@
             <div class="livechat-message @(msg.Sender == "guest" ? "livechat-message--guest" : "livechat-message--operator") @(isAutomated ? "livechat-message--automated" : "") @(!isFirstInGroup && !isLastInGroup ? "livechat-message--middle" : "") @(isLastInGroup && !isFirstInGroup ? "livechat-message--last" : "")">
                 @if (msg.Sender == "guest")
                 {
-                    <div class="livechat-message-sender">Ty</div>
+                    <div class="livechat-message-sender">@Localizer["You"]</div>
                 }
                 <div class="livechat-message-content @(string.IsNullOrWhiteSpace(msg.Content) ? "livechat-message-content--hidden" : "")">@((MarkupString)BbCodeParser.ToHtml(msg.Content, _formEmbedUrls))</div>
                 @if (msg.Attachments is { Count: > 0 })
@@ -240,12 +242,12 @@
                                     </svg>
                                 </div>
                                 <div class="form-card-btn-text">
-                                    <span class="form-card-btn-label">Formularz do wypełnienia</span>
-                                    <span class="form-card-btn-action">Wypełnij →</span>
+                                    <span class="form-card-btn-label">@Localizer["FormLabel"]</span>
+                                    <span class="form-card-btn-action">@Localizer["FormAction"]</span>
                                 </div>
                             </button>
                             <a class="form-card-ext-link" href="@ogUrl" target="_blank" rel="noopener noreferrer">
-                                Otwórz w przeglądarce
+                                @Localizer["OpenInBrowser"]
                             </a>
                         </div>
                     }
@@ -276,7 +278,7 @@
                     {
                         @if (status == MessageSendStatus.Sending)
                         {
-                            <span class="livechat-msg-status livechat-msg-status--sending" title="Wysyłanie...">
+                            <span class="livechat-msg-status livechat-msg-status--sending" title="@Localizer["SendingStatus"]">
                                 <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.8" stroke-dasharray="25 13" stroke-linecap="round"/>
                                 </svg>
@@ -284,7 +286,7 @@
                         }
                         else if (status == MessageSendStatus.Sent)
                         {
-                            <span class="livechat-msg-status livechat-msg-status--sent" title="Wysłano">
+                            <span class="livechat-msg-status livechat-msg-status--sent" title="@Localizer["SentStatus"]">
                                 <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <polyline points="2.5,8.5 6,12 13.5,4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -292,7 +294,7 @@
                         }
                         else if (status == MessageSendStatus.Failed)
                         {
-                            <span class="livechat-msg-status livechat-msg-status--failed" title="Błąd wysyłania">
+                            <span class="livechat-msg-status livechat-msg-status--failed" title="@Localizer["FailedStatus"]">
                                 <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.8"/>
                                     <line x1="8" y1="5" x2="8" y2="9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -309,7 +311,7 @@
 
         @if (_isOperatorTyping)
         {
-            <div class="livechat-typing">Obsługa pisze...</div>
+            <div class="livechat-typing">@Localizer["OperatorTyping"]</div>
         }
     </div>
 
@@ -320,7 +322,7 @@
 
     <div class="livechat-composer">
         <textarea class="livechat-input"
-                  placeholder="Napisz wiadomość..."
+                  placeholder="@Localizer["MessageInputPlaceholder"]"
                   @bind="_input"
                   @bind:event="oninput"
                   @onkeydown="HandleKeyDown"
@@ -328,7 +330,7 @@
         <button class="livechat-send-btn"
                 @onclick="SendAsync"
                 disabled="@(!_canSend)">
-            <img src="/icons/circle-arrow-right.svg" alt="Wyślij" />
+            <img src="/icons/circle-arrow-right.svg" alt="@Localizer["SendButtonAlt"]" />
         </button>
     </div>
 </div>
@@ -412,7 +414,7 @@
         catch (Exception ex)
         {
             Logger.LogError(ex, "[LiveChat] LoadHistory failed");
-            _error = "Nie udało się załadować historii.";
+            _error = Localizer["HistoryLoadError"];
         }
         finally
         {
@@ -426,12 +428,10 @@
         var existingIndex = _messages.FindIndex(m => m.Id == msg.Id);
         if (existingIndex >= 0)
         {
-            // Message already exists — update it (handles avatar enrichment and other updates)
             _messages[existingIndex] = msg;
         }
         else
         {
-            // New message
             _messages.Add(msg);
             IndexAndQueuePreview(msg);
             QueueScroll();
@@ -446,7 +446,7 @@
         var token = ResolveToken();
         if (string.IsNullOrWhiteSpace(token))
         {
-            _error = "Brak tokenu rezerwacji.";
+            _error = Localizer["MissingTokenError"];
             return;
         }
 
@@ -454,8 +454,7 @@
         _input = string.Empty;
         _isSending = true;
         _error = null;
-
-        // Optimistic: show message immediately with a temp id
+        
         var tempId = Guid.NewGuid();
         var optimisticMsg = new LiveChatMessageDto(tempId, "guest", text, DateTime.UtcNow);
         _messages.Add(optimisticMsg);
@@ -471,15 +470,13 @@
 
             var msg = await LiveChatClient.SendMessageAsync(token, text, guestName, guestEmail);
             LiveChatClient.InvalidateHistory(token);
-            NotificationState.StartListening(token); // resume stream now that a session exists
-
-            // Remove optimistic placeholder
+            NotificationState.StartListening(token);
+            
             _messages.Remove(optimisticMsg);
             _sendStatus.Remove(tempId);
 
             if (msg is not null)
             {
-                // Stream may have already delivered the real message
                 if (!_messages.Any(m => m.Id == msg.Id))
                 {
                     _messages.Add(msg);
@@ -492,7 +489,7 @@
         {
             Logger.LogError(ex, "[LiveChat] Send failed");
             _sendStatus[tempId] = MessageSendStatus.Failed;
-            _error = "Nie udało się wysłać wiadomości. Spróbuj ponownie.";
+            _error = Localizer["SendError"];
         }
         finally
         {
@@ -538,7 +535,7 @@
         {
             Logger.LogError(ex, "[LiveChat] Retry failed");
             _sendStatus[msg.Id] = MessageSendStatus.Failed;
-            _error = "Nie udało się wysłać wiadomości. Spróbuj ponownie.";
+            _error = Localizer["SendError"];
         }
         finally
         {
@@ -572,8 +569,7 @@
         var url = BbCodeParser.ExtractFirstUrl(msg.Content);
         if (url is null) return;
         _msgUrlMap[msg.Id] = url;
-
-        // Bitrix24 landing/form URLs (/~CODE) are rendered as embedded iframes — no OG fetch needed
+        
         if (Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
             uri.AbsolutePath.TrimStart('/').StartsWith('~'))
         {
@@ -611,7 +607,6 @@
     private static string GetOperatorColor(string? name)
     {
         if (string.IsNullOrEmpty(name)) return _avatarColors[0];
-        // FNV-1a hash — order-sensitive, so "AB" and "BA" produce different colors
         var hash = name.Aggregate(2166136261u, (acc, c) => (acc ^ c) * 16777619u);
         return _avatarColors[hash % (uint)_avatarColors.Length];
     }
@@ -619,7 +614,7 @@
     private static readonly System.Globalization.CultureInfo _plCulture =
         new System.Globalization.CultureInfo("pl-PL");
 
-    private static string GetDayLabel(DateTime localTime)
+    private string GetDayLabel(DateTime localTime)
     {
         var today = DateOnly.FromDateTime(DateTime.Now);
         var msgDay = DateOnly.FromDateTime(localTime);
@@ -627,12 +622,24 @@
 
         return diff switch
         {
-            0 => "dzisiaj",
-            1 => "wczoraj",
-            < 7 => localTime.ToString("dddd", _plCulture),
+            0 => Localizer["Today"],
+            1 => Localizer["Yesterday"],
+            < 7 => TranslateDayName(localTime.ToString("dddd", _plCulture)),
             _ => localTime.ToString("d MMMM yyyy", _plCulture)
         };
     }
+
+    private string TranslateDayName(string dayName) => dayName.ToLower() switch
+    {
+        "poniedziałek" => Localizer["Monday"],
+        "wtorek" => Localizer["Tuesday"],
+        "środa" => Localizer["Wednesday"],
+        "czwartek" => Localizer["Thursday"],
+        "piątek" => Localizer["Friday"],
+        "sobota" => Localizer["Saturday"],
+        "niedziela" => Localizer["Sunday"],
+        _ => dayName
+    };
 
     private string? ResolveToken()
     {
@@ -645,15 +652,13 @@
 
     private static bool IsImageAttachment(LiveChatAttachmentDto att)
     {
-        // Check MIME type first (Bitrix sends "image" as the type value, not a full MIME)
         if (!string.IsNullOrEmpty(att.MimeType) &&
             (att.MimeType.StartsWith("image/", StringComparison.OrdinalIgnoreCase) ||
              att.MimeType.Equals("image", StringComparison.OrdinalIgnoreCase)))
         {
             return true;
         }
-
-        // Fall back to file extension
+        
         var ext = Path.GetExtension(att.Name);
         return !string.IsNullOrEmpty(ext) && _imageExtensions.Contains(ext);
     }
@@ -680,9 +685,9 @@
 
     private bool IsLastInGroup(int i) => i == _messages.Count - 1 || IsGroupBreak(i + 1);
 
-    private static string TranslateSystemMessage(string? content) => content switch
+    private string TranslateSystemMessage(string? content) => content switch
     {
-        "agent_joined" => "Pracownik dołączył do rozmowy",
+        "agent_joined" => Localizer["SystemMessageAgentJoined"],
         _ => content ?? string.Empty
     };
 
