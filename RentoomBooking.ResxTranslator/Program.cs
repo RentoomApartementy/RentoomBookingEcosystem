@@ -55,6 +55,13 @@ var translatorRegionOption = new Option<string?>(
     "--translator-region",
     description: "Azure Translator API region (e.g. polandcentral). Fallback order: AZURE_TRANSLATOR_REGION env var, appsettings.Local.json, default (polandcentral).");
 
+// ── Add shared options to root ──
+rootCommand.AddOption(sourceOption);
+rootCommand.AddOption(dryRunOption);
+rootCommand.AddOption(includeProjectsOption);
+rootCommand.AddOption(excludeProjectsOption);
+rootCommand.AddOption(repoRootOption);
+
 // ── Translate command ──
 var translateCommand = new Command("translate",
     "Translate .resx resource files to target languages using Azure Cognitive Services Translator API.");
