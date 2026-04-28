@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -212,5 +212,57 @@
   </data>
   <data name="SuggestedDateNotFoundText" xml:space="preserve">
     <value>Brak dostępności</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value />
+    <value>Apartamenty Toruń - Pełna Lista Noclegów</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value />
+    <value>Obecnie brak dostępnych apartamentów.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value />
+    <value>Ładowanie...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value />
+    <value>Apartamenty Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value />
+    <value>Wyczyść wyszukiwanie</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value />
+    <value>Wyszukaj apartament po nazwie...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value />
+    <value>Apartamenty</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value />
+    <value>Wyszukaj apartament po nazwie</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value />
+    <value>Zobacz listę wszystkich naszych apartamentów w Toruniu. Komfortowe noclegi, świetna lokalizacja blisko Starówki. Sprawdź szczegóły każdego apartamentu.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value />
+    <value>Apartamenty Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value />
+    <value>Odkryj naszą pełną ofertę komfortowych apartamentów w samym sercu Torunia.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value />
+    <value>apartamenty na wynajem, noclegi, booking, rezerwacja apartamentów, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value />
+    <value>Nie znaleziono apartamentów dla podanej nazwy.</value>
   </data>
 </root>

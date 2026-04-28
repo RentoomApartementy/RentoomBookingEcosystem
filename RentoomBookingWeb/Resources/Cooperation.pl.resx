@@ -1,133 +1,157 @@
 <root>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>1.3</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <data name="CooperationText" xml:space="preserve">
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
         <value>Współpraca</value>
     </data>
-    <data name="WhyUsText" xml:space="preserve">
+  <data name="WhyUsText" xml:space="preserve">
         <value>O nas i dlaczego my?</value>
     </data>
-    <data name="ExperienceText1" xml:space="preserve">
+  <data name="ExperienceText1" xml:space="preserve">
         <value>Doświadczenie
 </value>
     </data>
-    <data name="Experience2Text" xml:space="preserve">
+  <data name="Experience2Text" xml:space="preserve">
         <value>Rentoom Apartamenty to nowoczesna marka zarządzająca najmem krótkoterminowym w Toruniu. Zaufało nam już ponad 100 inwestorów. Zarządzamy ponad 150 apartamentami i obsługujemy rocznie ponad 7000 rezerwacji.
 </value>
     </data>
-    <data name="QualityText1" xml:space="preserve">
+  <data name="QualityText1" xml:space="preserve">
         <value>Jakość</value>
     </data>
-    <data name="QualityText2" xml:space="preserve">
+  <data name="QualityText2" xml:space="preserve">
         <value>Zajmujemy się całym procesem – od profesjonalnego przygotowania mieszkania i skutecznej promocji, przez dynamiczne zarządzanie ceną, aż po całodobową obsługę gości, sprzątanie i serwis techniczny. Zapewniamy przejrzyste rozliczenia i pełną transparentność finansową.</value>
     </data>
-    <data name="ProfessionalismText1" xml:space="preserve">
+  <data name="ProfessionalismText1" xml:space="preserve">
         <value>Profesjonalizm</value>
     </data>
-    <data name="Professionalism2" xml:space="preserve">
+  <data name="Professionalism2" xml:space="preserve">
         <value>Dzięki doświadczeniu i sprawdzonemu modelowi działania możliwe jest osiąganie przychodów sięgających nawet 30% wartości nieruchomości rocznie*.</value>
     </data>
-    <data name="InnovationText1" xml:space="preserve">
+  <data name="InnovationText1" xml:space="preserve">
         <value>Innowacyjność</value>
     </data>
-    <data name="InnovationText2" xml:space="preserve">
+  <data name="InnovationText2" xml:space="preserve">
         <value>Dodatkowo nasz Program Partnerski, oferujący rabaty do restauracji i atrakcji w Toruniu, zwiększa atrakcyjność apartamentów i wpływa na ich obłożenie.
 </value>
     </data>
-    <data name="AdvantagesOfCooperation" xml:space="preserve">
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
         <value>Zalety współpracy
 </value>
     </data>
-    <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
         <value>Bezobsługowa inwestycja</value>
     </data>
-    <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
         <value>Oferowana przez nas obsługa jest kompletna. Możesz spać spokojnie, my pracujemy za Ciebie.</value>
     </data>
-    <data name="IncomeOptimizationText1" xml:space="preserve">
+  <data name="IncomeOptimizationText1" xml:space="preserve">
         <value>Optymalizacja dochodu</value>
     </data>
-    <data name="IncomeOptimizationText2" xml:space="preserve">
+  <data name="IncomeOptimizationText2" xml:space="preserve">
         <value>Na bieżąco monitorujemy rynek i dostosowujemy ceny za wynajem apartamentu pod Twój zysk.</value>
     </data>
-    <data name="ReadyToHelpText1" xml:space="preserve">
+  <data name="ReadyToHelpText1" xml:space="preserve">
         <value>Gotowi do pomocy 24/7
 </value>
     </data>
-    <data name="ReadyToHelpText2" xml:space="preserve">
+  <data name="ReadyToHelpText2" xml:space="preserve">
         <value>Gwarantujemy naszym wspólnym klientom obsługę przez całą dobę, siedem dni w tygodniu.
 
 </value>
     </data>
-    <data name="FillOutForm" xml:space="preserve">
+  <data name="FillOutForm" xml:space="preserve">
         <value>Jesli chcesz nawiązać współpracę, wypełnij formularz
 </value>
     </data>
-    <data name="Name" xml:space="preserve">
+  <data name="Name" xml:space="preserve">
         <value>Imię</value>
     </data>
-    <data name="LastName" xml:space="preserve">
+  <data name="LastName" xml:space="preserve">
         <value>Nazwisko</value>
     </data>
-    <data name="PhoneNumber" xml:space="preserve">
+  <data name="PhoneNumber" xml:space="preserve">
         <value>Numer telefonu</value>
     </data>
-    <data name="NumberOfApartments" xml:space="preserve">
+  <data name="NumberOfApartments" xml:space="preserve">
         <value>Ilość mieszkań</value>
     </data>
-    <data name="District" xml:space="preserve">
+  <data name="District" xml:space="preserve">
         <value>Dzielnica Torunia</value>
     </data>
-    <data name="Send" xml:space="preserve">
+  <data name="Send" xml:space="preserve">
         <value>Wyślij</value>
     </data>
-    <data name="CooperationText1" xml:space="preserve">
+  <data name="CooperationText1" xml:space="preserve">
         <value>Współpraca</value>
     </data>
-    <data name="Email" xml:space="preserve">
+  <data name="Email" xml:space="preserve">
         <value>Email</value>
     </data>
-    <data name="MessageContent" xml:space="preserve">
+  <data name="MessageContent" xml:space="preserve">
         <value>Treść wiadomości</value>
     </data>
-    <data name="ConsentText" xml:space="preserve">
+  <data name="ConsentText" xml:space="preserve">
         <value>Wyrażam zgodę na przetwarzanie moich danych osobowych w celu kontaktu i obsługi zapytania</value>
     </data>
-    <data name="Privacypolicy" xml:space="preserve">
+  <data name="Privacypolicy" xml:space="preserve">
         <value>polityka prywatności</value>
     </data>
-    <data name="Sending" xml:space="preserve">
+  <data name="Sending" xml:space="preserve">
         <value>Wysyłanie...</value>
     </data>
-    <data name="RequiredFieldsError" xml:space="preserve">
+  <data name="RequiredFieldsError" xml:space="preserve">
         <value>Uzupełnij wszystkie pola formularza.</value>
     </data>
-    <data name="InvalidEmailError" xml:space="preserve">
+  <data name="InvalidEmailError" xml:space="preserve">
         <value>Podaj poprawny adres e-mail.</value>
     </data>
-    <data name="InvalidApartmentsCountError" xml:space="preserve">
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
         <value>Podaj prawidłową liczbę mieszkań.</value>
     </data>
-    <data name="ConsentRequiredError" xml:space="preserve">
+  <data name="ConsentRequiredError" xml:space="preserve">
         <value>Zaakceptuj zgodę na przetwarzanie danych.</value>
     </data>
-    <data name="SubmitSuccess" xml:space="preserve">
+  <data name="SubmitSuccess" xml:space="preserve">
         <value>Dziękujemy. Formularz został wysłany do Bitrix.</value>
     </data>
-    <data name="SubmitError" xml:space="preserve">
+  <data name="SubmitError" xml:space="preserve">
         <value>Nie udało się wysłać formularza. Spróbuj ponownie za chwilę.</value>
     </data>
-    <data name="SubmitPartialError" xml:space="preserve">
+  <data name="SubmitPartialError" xml:space="preserve">
         <value>Kontakt mógł zostać zapisany, ale nie udało się utworzyć deala. Sprawdź Bitrix przed ponowną wysyłką.</value>
     </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value />
+    <value>zarządzanie najmem toruń, obsługa apartamentów, bezobsługowa inwestycja, rentoom współpraca, optymalizacja zysku z najmu, wynajem krótkoterminowy toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value />
+    <value>Zmień swój apartament w bezobsługową inwestycję z Rentoom. Oferujemy kompleksowe zarządzanie najmem w Toruniu, optymalizację dochodu i obsługę gości 24/7. Postaw na jakość i doświadczenie.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value />
+    <value>Współpraca - Rentoom | Profesjonalne Zarządzanie Najmem</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value />
+    <value>Współpraca</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value />
+    <value>Jesteśmy liderem rynku w Toruniu. Oferujemy pełną obsługę, innowacyjne technologie i maksymalizację Twoich zysków. Śpij spokojnie, my pracujemy na Ciebie.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value />
+    <value>Współpraca - Rentoom | Zarządzanie Najmem Toruń</value>
+  </data>
 </root>

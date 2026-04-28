@@ -1,21 +1,22 @@
 ﻿@page "/"
 @using RentoomBookingWeb.Components.Features.Home.Components
-@using System.Globalization
 @using System.Text.Encodings.Web
 @using System.Text.Json
+@using Microsoft.Extensions.Localization
 @inject NavigationManager Navigation
+@inject IStringLocalizer<RentoomBookingWeb.HomePage> Localizer
 
-<PageTitle>Apartamenty Toruń - Wynajem Krótkoterminowy | Rentoom</PageTitle>
+<PageTitle>@Localizer["Home_PageTitle"]</PageTitle>
 
 <HeadContent>
-    <meta name="description" content="Szukasz noclegu w Toruniu? Oferujemy komfortowe apartamenty w centrum i na Starówce. Rezerwuj bezpośrednio online - najniższe ceny, bez prowizji pośredników." />
+    <meta name="description" content="@Localizer["Home_MetaDescription"]" />
 
-    <meta name="keywords" content="apartamenty toruń, noclegi toruń, wynajem krótkoterminowy, apartamenty starówka, rentoom" />
+    <meta name="keywords" content="@Localizer["Home_MetaKeywords"]" />
 
     <link rel="canonical" href="@Navigation.BaseUri" />
 
-    <meta property="og:title" content="Apartamenty Toruń - Twój komfortowy nocleg" />
-    <meta property="og:description" content="Sprawdź nasze apartamenty w sercu Torunia. Idealne na weekend i dłuższy pobyt." />
+    <meta property="og:title" content="@Localizer["Home_OgTitle"]" />
+    <meta property="og:description" content="@Localizer["Home_OgDescription"]" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@Navigation.BaseUri" />
     <meta property="og:image" content="@($"{Navigation.BaseUri}assets/images/hero-bg.jpeg")" />
@@ -36,8 +37,6 @@
 </div>
 
 @code {
-    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
-
     private string HomeJsonLd => JsonSerializer.Serialize(new
     {
         @context = "https://schema.org",
@@ -68,7 +67,7 @@
                     @type = "ImageObject",
                     url = "https://rentoom.pl/assets/images/logo-nowe-Rentoom-final-158x112.png"
                 },
-                description = "Szukasz noclegu w Toruniu? Rentoom oferuje apartamenty na wynajem krótkoterminowy w Toruniu i pobyty w najlepszych lokalizacjach miasta.",
+                description = Localizer["Home_OrganizationDescription"].Value,
                 email = "info@rentoom.pl",
                 telephone = "+48 881 388 001",
                 taxID = "8792727407",
@@ -103,7 +102,7 @@
                     {
                         @type = "ListItem",
                         position = 1,
-                        name = IsPolish ? "Strona główna" : "Home",
+                        name = Localizer["Home_BreadcrumbName"].Value,
                         item = "https://rentoom.pl/"
                     }
                 }

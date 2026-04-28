@@ -1,104 +1,132 @@
 <root>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>1.3</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <data name="title2" xml:space="preserve">
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
         <value>Rentoom Apartamenty – tworzymy wyjątkowe doświadczenia pobytu w Toruniu
 </value>
     </data>
-    <data name="title2subtitle" xml:space="preserve">
+  <data name="title2subtitle" xml:space="preserve">
         <value>
 Szukasz komfortowego apartamentu w Toruniu?</value>
     </data>
-    <data name="title3" xml:space="preserve">
+  <data name="title3" xml:space="preserve">
         <value>Apartamenty w Toruniu – komfortowe noclegi</value>
     </data>
-    <data name="title3subtitle" xml:space="preserve">
+  <data name="title3subtitle" xml:space="preserve">
         <value>Szukasz komfortowego apartamentu w Toruniu?
 
 </value>
     </data>
-    <data name="text1title" xml:space="preserve">
+  <data name="text1title" xml:space="preserve">
         <value>Cieszymy się, że do nas trafiłeś!
 </value>
     </data>
-    <data name="text1description" xml:space="preserve">
+  <data name="text1description" xml:space="preserve">
         <value>Rentoom Apartamenty to nowoczesna marka najmu krótkoterminowego, która łączy wysoki standard zakwaterowania z autentyczną znajomością Torunia. Tworzymy miejsca zaprojektowane z myślą o komforcie, estetyce i funkcjonalności - zarówno dla gości turystycznych, jak i biznesowych.</value>
     </data>
-    <data name="text1title2" xml:space="preserve">
+  <data name="text1title2" xml:space="preserve">
         <value>Apartamenty w najlepszych lokalizacjach Torunia</value>
     </data>
-    <data name="text1description2" xml:space="preserve">
+  <data name="text1description2" xml:space="preserve">
         <value>Nasza oferta obejmuje kilkadziesiąt starannie wyselekcjonowanych apartamentów w najbardziej atrakcyjnych częściach miasta. Każda lokalizacja została wybrana tak, aby zapewnić łatwy dostęp do najważniejszych atrakcji, restauracji i stref biznesowych.
 Każdy apartament to przestrzeń zaprojektowana tak, aby po intensywnym dniu zwiedzania lub pracy zapewnić realny odpoczynek i prywatność.
 </value>
     </data>
-    <data name="clientsstat" xml:space="preserve">
+  <data name="clientsstat" xml:space="preserve">
         <value>Zadowolonych klientów</value>
     </data>
-    <data name="apartmentsstats" xml:space="preserve">
+  <data name="apartmentsstats" xml:space="preserve">
         <value>Apartamentów w Toruniu
 
 </value>
     </data>
-    <data name="locationsstats" xml:space="preserve">
+  <data name="locationsstats" xml:space="preserve">
         <value>Lokalizacji w Toruniu</value>
     </data>
-    <data name="whyRentoom" xml:space="preserve">
+  <data name="whyRentoom" xml:space="preserve">
         <value>Dlaczego Rentoom?
 </value>
     </data>
-    <data name="whyRentoomTitle" xml:space="preserve">
+  <data name="whyRentoomTitle" xml:space="preserve">
         <value>Rentoom Apartamenty to coś więcej niż nocleg w Toruniu. Oferujemy wysoki standard apartamentów w najlepszych lokalizacjach oraz realne korzyści, które podnoszą wartość całego pobytu.
 </value>
     </data>
-    <data name="whyRentoomText1" xml:space="preserve">
+  <data name="whyRentoomText1" xml:space="preserve">
         <value>W ramach naszego Programu Partnerskiego goście otrzymują dostęp do specjalnych rabatów do wybranych restauracji, kawiarni oraz atrakcji turystycznych. Aktualne zniżki i rekomendacje znajdują się bezpośrednio w apartamentach, dzięki czemu możesz korzystać ze sprawdzonych miejsc i oszczędzać podczas zwiedzania.
 </value>
     </data>
-    <data name="whyRentoomText2" xml:space="preserve">
+  <data name="whyRentoomText2" xml:space="preserve">
         <value>Współpracujemy wyłącznie z zaufanymi, lokalnymi partnerami, dbając o jakość każdej rekomendacji. Wybierając Rentoom, zyskujesz komfort, profesjonalną obsługę oraz dodatkowe benefity, które sprawiają, że pobyt w Toruniu jest wygodniejszy, bardziej dopracowany i po prostu bardziej opłacalny.
 </value>
     </data>
-    <data name="opinionText" xml:space="preserve">
+  <data name="opinionText" xml:space="preserve">
         <value>Poznaj opinie osób, które spały w naszych apartamentach w Toruniu.
 
 </value>
     </data>
-    <data name="formtext" xml:space="preserve">
+  <data name="formtext" xml:space="preserve">
         <value>Zostaw swoje informacje kontaktowe, a my się z tobą skontaktujemy!
 </value>
     </data>
-    <data name="formContactText" xml:space="preserve">
+  <data name="formContactText" xml:space="preserve">
         <value>Formularz kontaktowy</value>
     </data>
-    <data name="formConfirm" xml:space="preserve">
+  <data name="formConfirm" xml:space="preserve">
         <value>Wyrażam zgodę na przetwarzanie moich danych osobowych podanych w powyższym formularzu</value>
     </data>
-    <data name="name" xml:space="preserve">
+  <data name="name" xml:space="preserve">
         <value>Imię</value>
     </data>
-    <data name="lastName" xml:space="preserve">
+  <data name="lastName" xml:space="preserve">
         <value>Nazwisko</value>
     </data>
-    <data name="phone" xml:space="preserve">
+  <data name="phone" xml:space="preserve">
         <value>Telefon</value>
     </data>
-    <data name="send" xml:space="preserve">
+  <data name="send" xml:space="preserve">
         <value>Wyślij</value>
     </data>
-    <data name="whyRentoomSubtitle" xml:space="preserve">
+  <data name="whyRentoomSubtitle" xml:space="preserve">
         <value>Co wyróżnia nasze apartamenty od innych?
 
 </value>
     </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value />
+    <value>Apartamenty Toruń - Wynajem Krótkoterminowy | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value />
+    <value>Sprawdź nasze apartamenty w sercu Torunia. Idealne na weekend i dłuższy pobyt.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value />
+    <value>Apartamenty Toruń - Twój komfortowy nocleg</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value />
+    <value>apartamenty toruń, noclegi toruń, wynajem krótkoterminowy, apartamenty starówka, rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value />
+    <value>Strona główna</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value />
+    <value>Szukasz noclegu w Toruniu? Oferujemy komfortowe apartamenty w centrum i na Starówce. Rezerwuj bezpośrednio online - najniższe ceny, bez prowizji pośredników.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value />
+    <value>Szukasz noclegu w Toruniu? Rentoom oferuje apartamenty na wynajem krótkoterminowy w Toruniu i pobyty w najlepszych lokalizacjach miasta.</value>
+  </data>
 </root>

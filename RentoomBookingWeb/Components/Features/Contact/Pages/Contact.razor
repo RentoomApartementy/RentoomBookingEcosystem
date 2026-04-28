@@ -8,16 +8,16 @@
 @inject IStringLocalizer<RentoomBookingWeb.Contact> Localizer;
 @inject BitrixLeadCaptureService LeadCaptureService
 
-<PageTitle>Kontakt - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</PageTitle>
+<PageTitle>@Localizer["Contact_PageTitle"]</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
-    <meta name="description" content="Skontaktuj się z zespołem Rentoom w Toruniu. Dane adresowe, numery kont bankowych (PLN/EUR) oraz formularz kontaktowy. Profesjonalna obsługa najmu." />
-    <meta name="keywords" content="kontakt rentoom, biuro rentoom toruń, zarządzanie najmem kontakt, dane do faktury rentoom" />
+    <meta name="description" content="@Localizer["Contact_MetaDescription"]" />
+    <meta name="keywords" content="@Localizer["Contact_MetaKeywords"]" />
     <link rel="canonical" href="@NavManager.Uri" />
 
-    <meta property="og:title" content="Kontakt - Rentoom | Profesjonalne Zarządzanie Najmem" />
-    <meta property="og:description" content="Masz pytania dotyczące zarządzania najmem? Skontaktuj się z nami! Sprawdź nasze dane adresowe i bankowe." />
+    <meta property="og:title" content="@Localizer["Contact_OgTitle"]" />
+    <meta property="og:description" content="@Localizer["Contact_OgDescription"]" />
     <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg")" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
@@ -55,7 +55,7 @@
                 <div class="bank-account">
                     <div class="currency-badge pln">PLN</div>
                     <span class="iban">25 1050 1979 1000 0090 8110 5711</span>
-                    <button class="copy-btn" @onclick='() => CopyToClipboard("25105019791000009081105711")' aria-label="Skopiuj numer konta PLN do schowka" title="Kopiuj numer PLN">
+                    <button class="copy-btn" @onclick='() => CopyToClipboard("25105019791000009081105711")' aria-label="@Localizer["Contact_CopyPlnAriaLabel"]" title="@Localizer["Contact_CopyPlnTitle"]">
                         📋
                     </button>
                 </div>
@@ -63,7 +63,7 @@
                 <div class="bank-account">
                     <div class="currency-badge eur">EUR</div>
                     <span class="iban">24 1050 1979 1000 0090 8110 5729</span>
-                    <button class="copy-btn" @onclick='() => CopyToClipboard("24105019791000009081105729")' aria-label="Skopiuj numer konta EUR do schowka" title="Kopiuj numer EUR">
+                    <button class="copy-btn" @onclick='() => CopyToClipboard("24105019791000009081105729")' aria-label="@Localizer["Contact_CopyEurAriaLabel"]" title="@Localizer["Contact_CopyEurTitle"]">
                         📋
                     </button>
                 </div>
@@ -212,7 +212,7 @@
 
     private string BuildDealTitle()
     {
-        return $"Kontakt - {_name.Trim()}";
+        return $"{Localizer["Contact_DealTitlePrefix"]} - {_name.Trim()}";
     }
 
     private void ResetForm()

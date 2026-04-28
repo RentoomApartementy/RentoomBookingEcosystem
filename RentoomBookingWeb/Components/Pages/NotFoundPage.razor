@@ -196,68 +196,39 @@
         return "/apartamenty";
     }
 
-    private bool IsEnglish()
-    {
-        return string.Equals(
-            System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
-            "en",
-            StringComparison.OrdinalIgnoreCase);
-    }
-
     private string GetPopupTitle()
     {
         if (IsReservationCanceledReason())
         {
-            return IsEnglish()
-                ? "Reservation canceled"
-                : "Rezerwacja została anulowana";
+            return Localizer["NotFoundPopupTitleReservationCanceled"];
         }
 
-        return IsEnglish()
-            ? "This is our new portal"
-            : "To jest nasz nowy portal";
+        return Localizer["NotFoundPopupTitleDefault"];
     }
 
     private string GetPopupMessage()
     {
         if (IsReservationCanceledReason())
         {
-            return IsEnglish()
-                ? "This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking."
-                : "Ta rezerwacja nie jest już aktywna. Jeśli nadal potrzebujesz pobytu, wróć do listy apartamentów i utwórz nową rezerwację.";
+            return Localizer["NotFoundPopupMessageReservationCanceled"];
         }
 
-        return IsEnglish()
-            ? "You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page."
-            : "Najprawdopodobniej trafiłeś do nas ze starego przekierowania, które już nie istnieje. Za chwilę przeniesiemy Cię na stronę apartamentów.";
+        return Localizer["NotFoundPopupMessageDefault"];
     }
 
     private string GetPopupSecondaryText()
     {
-        if (IsReservationCanceledReason())
-        {
-            return IsEnglish()
-                ? "Error 404"
-                : "Błąd 404";
-        }
-
-        return IsEnglish()
-            ? "Error 404"
-            : "Błąd 404";
+        return Localizer["NotFoundPopupSecondaryText"];
     }
 
     private string GetRedirectButtonText()
     {
         if (IsReservationCanceledReason())
         {
-            return IsEnglish()
-                ? "Book an apartment"
-                : "Zarezerwuj apartament";
+            return Localizer["NotFoundPopupButton"];
         }
 
-        return IsEnglish()
-            ? $"Book an apartment ({_secondsRemaining}s)"
-            : $"Zarezerwuj apartament ({_secondsRemaining}s)";
+        return Localizer["NotFoundPopupButtonWithCountdown", _secondsRemaining];
     }
 
     public void Dispose()

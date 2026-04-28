@@ -44,7 +44,7 @@
 <HeadContent>
     <meta name="robots" content="@(HasRouteDates ? "noindex, nofollow" : "index, follow")" />
     <meta name="description" content="@GetSeoDescription()" />
-    <meta name="keywords" content="apartament toruń, nocleg toruń, rentoom, wynajem krótkoterminowy, @_apartment?.Name" />
+    <meta name="keywords" content="@GetSeoKeywords()" />
     <link rel="canonical" href="@GetCanonicalUrl()" />
 
     <meta property="og:title" content="@GetSeoTitle()" />
@@ -59,7 +59,7 @@
         <BreadcrumbJsonLd
             CurrentPageName="@(_apartment.Name ?? ApartmentBreadcrumbFallbackName)"
             CurrentPagePath="@GetCanonicalUrl()"
-            ParentPageName="@(IsPolish ? "Apartamenty" : "Apartments")"
+            ParentPageName="@Localizer["Apartment_BreadcrumbParentName"]"
             ParentPagePath="/apartamenty" />
     }
 
@@ -238,7 +238,7 @@
                                             {
                                                 <div class="addon-item">
                                                     <div class="addon-label">
-                                                        <span class="addon-name-empty">Brak opisu dodatku</span>
+                                                <span class="addon-name-empty">@Localizer["Apartment_NoAddonDescription"]</span>
                                                     </div>
                                                 </div>
                                             }
@@ -277,7 +277,7 @@
                         <svg style="width: 48px; height: 48px;" viewBox="0 0 24 24"><path fill="currentColor" d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-1V1m-1 11h-5v5h5v-5z"/></svg>
                     </div>
                     <b style="font-size: 1.25rem; display: block; margin-bottom: 0.75rem; color: #333;">@Localizer["PriceAvailableAfterSelectingDates"]</b>
-                    <p style="color: #666; margin-bottom: 2rem; font-size: 0.95rem;">@(IsPolish ? "Wybierz daty pobytu, aby sprawdzić dostępność i ceny naszych ofert." : "Select your stay dates to check availability and prices of our offers.")</p>
+                    <p style="color: #666; margin-bottom: 2rem; font-size: 0.95rem;">@Localizer["Apartment_PriceSelectDatesDescription"]</p>
                     <div class="summary-offer-price-button" style="justify-content: center;">
                         <Button Type="ButtonType.Primary" style="display: flex; align-items: center; gap: 12px; padding: 0.85rem 2.5rem; font-weight: 600; border-radius: 50px;">
                             <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
@@ -576,7 +576,7 @@
                             </div>
                             <div class="map-address-details">
                                 <span class="map-street-name">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>
-                                <span class="map-city-name">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode @_apartment?.ObjectLocation?.LocalizationItem?.City, Polska</span>
+                                <span class="map-city-name">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode @_apartment?.ObjectLocation?.LocalizationItem?.City, @Localizer["Apartment_CountryName"]</span>
                             </div>
                         </div>
     
@@ -609,7 +609,7 @@
                         </div>
                         <div class="map-address-details">
                             <span class="map-street-name">@_apartment?.ObjectLocation?.LocalizationItem?.Street</span>
-                            <span class="map-city-name">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode @_apartment?.ObjectLocation?.LocalizationItem?.City, Polska</span>
+                            <span class="map-city-name">@_apartment?.ObjectLocation?.LocalizationItem?.ZipCode @_apartment?.ObjectLocation?.LocalizationItem?.City, @Localizer["Apartment_CountryName"]</span>
                         </div>
                     </div>
 
@@ -1044,7 +1044,7 @@
 
     private string GetSeoTitle()
     {
-        if (_apartment == null) return "Szczegóły apartamentu - Rentoom";
+        if (_apartment == null) return Localizer["Apartment_SeoTitleFallback"];
         return $"{_apartment.Name} - Rentoom";
     }
 
@@ -1057,10 +1057,15 @@
         
         if (_apartment != null)
         {
-            return $"Zarezerwuj {_apartment.Name} w Rentoom. Świetna lokalizacja, {_bedsCount} pokoje, wysoki standard.";
+            return Localizer["Apartment_SeoDescriptionWithName", _apartment.Name ?? string.Empty, _bedsCount?.ToString() ?? "0"];
         }
         
-        return "Sprawdź szczegóły apartamentu i zarezerwuj pobyt w Rentoom.";
+        return Localizer["Apartment_SeoDescriptionFallback"];
+    }
+
+    private string GetSeoKeywords()
+    {
+        return Localizer["Apartment_SeoKeywords", _apartment?.Name ?? string.Empty];
     }
 
     private string GetSeoImage()
@@ -1156,7 +1161,7 @@
 
     private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
 
-    private string ApartmentBreadcrumbFallbackName => IsPolish ? "Apartament" : "Apartment";
+    private string ApartmentBreadcrumbFallbackName => Localizer["Apartment_BreadcrumbFallbackName"];
 
     private bool HasRouteDates => TryParseDate(StartDate, out _) && TryParseDate(EndDate, out _);
 

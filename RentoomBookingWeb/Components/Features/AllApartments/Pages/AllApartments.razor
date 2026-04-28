@@ -2,7 +2,6 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Services
-@using System.Globalization
 
 @using RentoomBookingWeb.Components.Features.AllApartments.Components
 @inject IApartmentsService ApartmentsService
@@ -10,15 +9,15 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 
-<PageTitle>Apartamenty Toruń - Pełna Lista Noclegów</PageTitle>
+<PageTitle>@Localizer["AllApartments_PageTitle"]</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
-    <meta name="description" content="Zobacz listę wszystkich naszych apartamentów w Toruniu. Komfortowe noclegi, świetna lokalizacja blisko Starówki. Sprawdź szczegóły każdego apartamentu." />
-    <BreadcrumbJsonLd CurrentPageName="@(IsPolish ? "Apartamenty Toruń" : "Apartments in Torun")" CurrentPagePath="/apartamenty-torun" />
+    <meta name="description" content="@Localizer["AllApartments_MetaDescription"]" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["AllApartments_BreadcrumbName"]" CurrentPagePath="/apartamenty-torun" />
 </HeadContent>
 
-<HeaderSection Title="@(IsPolish ? "Apartamenty Toruń" : "Apartments Toruń")" 
+<HeaderSection Title="@Localizer["AllApartments_HeaderTitle"]" 
                ImagePath="assets/images/rent.jpeg" 
                IsShadow="true" />
 
@@ -26,29 +25,29 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="intro-text text-center mb-5">
-                <p class="lead">@(IsPolish ? "Odkryj naszą pełną ofertę komfortowych apartamentów w samym sercu Torunia." : "Discover our full range of comfortable apartments in the heart of Torun.")</p>
+                <p class="lead">@Localizer["AllApartments_IntroText"]</p>
                 <div class="divider"></div>
             </div>
 
             <div class="mb-4">
                 <ApartmentsNameSearchBar @bind-SearchText="_searchText"
-                                         Placeholder="@(IsPolish ? "Wyszukaj apartament po nazwie..." : "Search apartments by name...")"
-                                         AriaLabel="@(IsPolish ? "Wyszukaj apartament po nazwie" : "Search apartment by name")"
-                                         ClearAriaLabel="@(IsPolish ? "Wyczyść wyszukiwanie" : "Clear search")" />
+                                         Placeholder="@Localizer["AllApartments_SearchPlaceholder"]"
+                                         AriaLabel="@Localizer["AllApartments_SearchAriaLabel"]"
+                                         ClearAriaLabel="@Localizer["AllApartments_SearchClearAriaLabel"]" />
             </div>
 
             @if (_isLoading)
             {
                 <div class="d-flex justify-content-center py-5">
                     <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                        <span class="visually-hidden">@Localizer["AllApartments_Loading"]</span>
                     </div>
                 </div>
             }
             else if (_apartments == null || !_apartments.Any())
             {
                 <div class="alert alert-info text-center">
-                    @(IsPolish ? "Obecnie brak dostępnych apartamentów." : "No apartments available at the moment.")
+                    @Localizer["AllApartments_NoApartments"]
                 </div>
             }
             else
@@ -56,7 +55,7 @@
                 @if (!FilteredApartments.Any())
                 {
                     <div class="alert alert-info text-center">
-                        @(IsPolish ? "Nie znaleziono apartamentów dla podanej nazwy." : "No apartments found for the entered name.")
+                        @Localizer["AllApartments_NoApartmentsFound"]
                     </div>
                 }
                 else
@@ -80,7 +79,6 @@
     private List<ApartmentObject> _apartments = new();
     private bool _isLoading = true;
     private string _searchText = string.Empty;
-    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
     private IEnumerable<ApartmentObject> FilteredApartments =>
         string.IsNullOrWhiteSpace(_searchText)
             ? _apartments

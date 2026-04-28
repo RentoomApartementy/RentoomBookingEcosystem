@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -191,5 +191,53 @@
   </data>
   <data name="AboutCity" xml:space="preserve">
     <value>O Toruniu</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value />
+    <value>Identyfikator żądania:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value />
+    <value>Błąd.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value />
+    <value>położenie Torunia, gdzie leży Toruń, mapa Torunia, dojazd do Torunia, starówka Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value />
+    <value>Położenie Torunia</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value />
+    <value>Wystąpił błąd podczas przetwarzania Twojego żądania.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value />
+    <value>Środowisko Development nie powinno być włączone na produkcji.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value />
+    <value>Może to ujawniać użytkownikom końcowym wrażliwe informacje z wyjątków. Do lokalnego debugowania ustaw zmienną środowiskową ASPNETCORE_ENVIRONMENT na Development i uruchom aplikację ponownie.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value />
+    <value>Położenie Torunia, mapa i dojazd | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value />
+    <value>Przełączenie środowiska na Development wyświetli bardziej szczegółowe informacje o błędzie.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value />
+    <value>Sprawdź, gdzie leży Toruń, jak dotrzeć do starówki i zobacz praktyczną mapę OpenStreetMap z lokalizacją miasta.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value />
+    <value>Błąd</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value />
+    <value>Tryb deweloperski</value>
   </data>
 </root>
