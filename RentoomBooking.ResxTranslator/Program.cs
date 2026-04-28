@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using ResxTranslator.Services;
 
@@ -31,10 +32,10 @@ var repoRootOption = new Option<string?>(
     "--repo-root",
     description: "Path to repository root directory. Defaults to current working directory if not specified.");
 
-// ── Translate command (default) ──
-var targetOption = new Option<string[]>(
-    "--target",
-    description: "Target culture codes (e.g. en-US de-DE pl-PL). Required — specify at least one target culture.")
+// ── Culture option — shared between translate and rollback ──
+var cultureOption = new Option<string[]>(
+    "--culture",
+    description: "Culture codes to process (e.g. en-US de-DE fr-FR). Required — specify at least one culture code.")
 { AllowMultipleArgumentsPerToken = true };
 
 var allOption = new Option<bool>(
@@ -67,7 +68,7 @@ var translateCommand = new Command("translate",
     "Translate .resx resource files to target languages using Azure Cognitive Services Translator API.");
 
 translateCommand.AddOption(sourceOption);
-translateCommand.AddOption(targetOption);
+translateCommand.AddOption(cultureOption);
 translateCommand.AddOption(allOption);
 translateCommand.AddOption(dryRunOption);
 translateCommand.AddOption(includeProjectsOption);
@@ -79,7 +80,7 @@ translateCommand.AddOption(translatorRegionOption);
 translateCommand.SetHandler(async (InvocationContext ctx) =>
 {
     var source = ctx.ParseResult.GetValueForOption(sourceOption)!;
-    var targets = ctx.ParseResult.GetValueForOption(targetOption) ?? [];
+    var cultures = ctx.ParseResult.GetValueForOption(cultureOption) ?? [];
     var all = ctx.ParseResult.GetValueForOption(allOption);
     var dryRun = ctx.ParseResult.GetValueForOption(dryRunOption);
     var includeProjects = ctx.ParseResult.GetValueForOption(includeProjectsOption) ?? [];
@@ -93,10 +94,19 @@ translateCommand.SetHandler(async (InvocationContext ctx) =>
                            ?? config["AzureTranslator:Region"]
                            ?? "polandcentral";
 
-    if (targets.Length == 0)
+    if (cultures.Length == 0)
     {
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.Error.WriteLine("ERROR: --target is required. Specify one or more target culture codes (e.g. --target en-US de-DE).");
+        Console.Error.WriteLine("ERROR: --culture is required. Specify one or more culture codes (e.g. --culture en-US de-DE).");
+        Console.ResetColor();
+        ctx.ExitCode = 1;
+        return;
+    }
+
+    if (!ValidateCultures(cultures, out var cultureError))
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Error.WriteLine($"ERROR: {cultureError}");
         Console.ResetColor();
         ctx.ExitCode = 1;
         return;
@@ -114,7 +124,7 @@ translateCommand.SetHandler(async (InvocationContext ctx) =>
     var orchestrator = new TranslationOrchestrator(
         repoRoot,
         source,
-        targets,
+        cultures,
         translatorKey ?? "",
         translatorRegion,
         all,
@@ -128,16 +138,11 @@ translateCommand.SetHandler(async (InvocationContext ctx) =>
 rootCommand.AddCommand(translateCommand);
 
 // ── Rollback command ──
-var rollbackCultureOption = new Option<string>(
-    "--culture",
-    description: "Target culture code to remove (e.g. en-US). Must be different from --source culture.")
-{ IsRequired = true };
-
 var rollbackCommand = new Command("rollback",
-    "Remove a target language from the repository. Deletes culture-specific .resx files and updates configuration (supported-languages.json and SupportedLanguagesConfig.cs).");
+    "Remove one or more target languages from the repository. Deletes culture-specific .resx files and updates configuration (supported-languages.json).");
 
 rollbackCommand.AddOption(sourceOption);
-rollbackCommand.AddOption(rollbackCultureOption);
+rollbackCommand.AddOption(cultureOption);
 rollbackCommand.AddOption(dryRunOption);
 rollbackCommand.AddOption(includeProjectsOption);
 rollbackCommand.AddOption(excludeProjectsOption);
@@ -146,15 +151,33 @@ rollbackCommand.AddOption(repoRootOption);
 rollbackCommand.SetHandler((InvocationContext ctx) =>
 {
     var source          = ctx.ParseResult.GetValueForOption(sourceOption)!;
-    var culture         = ctx.ParseResult.GetValueForOption(rollbackCultureOption)!;
+    var cultures        = ctx.ParseResult.GetValueForOption(cultureOption) ?? [];
     var dryRun          = ctx.ParseResult.GetValueForOption(dryRunOption);
     var includeProjects = ctx.ParseResult.GetValueForOption(includeProjectsOption) ?? [];
     var excludeProjects = ctx.ParseResult.GetValueForOption(excludeProjectsOption) ?? [];
     var repoRoot        = ctx.ParseResult.GetValueForOption(repoRootOption)
                           ?? FindRepoRoot(Directory.GetCurrentDirectory());
 
+    if (cultures.Length == 0)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Error.WriteLine("ERROR: --culture is required. Specify one or more culture codes to roll back (e.g. --culture en-US de-DE).");
+        Console.ResetColor();
+        ctx.ExitCode = 1;
+        return;
+    }
+
+    if (!ValidateCultures(cultures, out var cultureError))
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Error.WriteLine($"ERROR: {cultureError}");
+        Console.ResetColor();
+        ctx.ExitCode = 1;
+        return;
+    }
+
     var service = new RollbackService(
-        repoRoot, culture, source, dryRun, includeProjects, excludeProjects);
+        repoRoot, cultures, source, dryRun, includeProjects, excludeProjects);
 
     ctx.ExitCode = service.Execute();
 });
@@ -173,4 +196,22 @@ static string FindRepoRoot(string startDir)
         dir = dir.Parent;
     }
     return startDir;
+}
+
+static bool ValidateCultures(string[] cultures, out string? error)
+{
+    var known = new HashSet<string>(
+        CultureInfo.GetCultures(CultureTypes.AllCultures).Select(c => c.Name),
+        StringComparer.OrdinalIgnoreCase);
+
+    foreach (var code in cultures)
+    {
+        if (!known.Contains(code))
+        {
+            error = $"'{code}' is not a recognised culture code (e.g. en-US, de-DE, fr-FR).";
+            return false;
+        }
+    }
+    error = null;
+    return true;
 }
