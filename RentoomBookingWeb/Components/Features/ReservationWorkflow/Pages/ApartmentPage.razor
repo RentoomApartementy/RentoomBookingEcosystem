@@ -38,6 +38,7 @@
 @using RentoomBookingWeb.Components.Enums;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 @inject GoogleAnalyticsService GoogleAnalytics
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -261,6 +262,15 @@
                             </div>
                         </div>
                     }
+
+                        @if (Environment.IsDevelopment() && _reservationPricingContext is not null)
+                        {
+                            <UpsellList AvailableUpsellsList="_availableUpsells"
+                                        ReservationContext="_reservationPricingContext"
+                                        OnSelectionChanged="HandleUpsellSelectionChanged"
+                                        Texts="UpsellTexts" />
+                        }
+
 
                     @if (TotalAddonsPrice + TotalUpsellsPrice > 0)
                     {
