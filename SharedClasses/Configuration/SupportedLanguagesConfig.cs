@@ -6,7 +6,7 @@ namespace RentoomBooking.SharedClasses.Configuration;
 public sealed class SupportedLanguagesConfig
 {
     public string DefaultCulture { get; set; } = "en-US";
-    public List<string> Cultures { get; set; } = ["en-US", "pl-PL"];
+    public List<string> Cultures { get; set; } = ["en-US", "fr-FR", "pl-PL"];
 
     public string[] GetCultureNames() => Cultures.ToArray();
 
