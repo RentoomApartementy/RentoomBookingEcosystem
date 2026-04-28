@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -159,4 +159,16 @@
   <data name="Pay" xml:space="preserve">
     <value>Pay</value>
   </data>
+  <data name="CartPageTitle" xml:space="preserve">
+    
+    
+  <value>Cart - summary</value></data>
+  <data name="PaymentNotRequiredMessage" xml:space="preserve">
+    
+    
+  <value>Payment not required / already paid</value></data>
+  <data name="CreateOrderError" xml:space="preserve">
+    
+    
+  <value>Failed to create upsell order.</value></data>
 </root>

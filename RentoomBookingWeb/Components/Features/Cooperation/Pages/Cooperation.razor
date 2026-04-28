@@ -1,25 +1,24 @@
 @page "/wspolpraca";
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
-@using System.Globalization
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
 
-<PageTitle>Współpraca - Rentoom | Zarządzanie Najmem Toruń</PageTitle>
+<PageTitle>@Localizer["Cooperation_PageTitle"]</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
-    <meta name="description" content="Zmień swój apartament w bezobsługową inwestycję z Rentoom. Oferujemy kompleksowe zarządzanie najmem w Toruniu, optymalizację dochodu i obsługę gości 24/7. Postaw na jakość i doświadczenie." />
-    <meta name="keywords" content="zarządzanie najmem toruń, obsługa apartamentów, bezobsługowa inwestycja, rentoom współpraca, optymalizacja zysku z najmu, wynajem krótkoterminowy toruń" />
+    <meta name="description" content="@Localizer["Cooperation_MetaDescription"]" />
+    <meta name="keywords" content="@Localizer["Cooperation_MetaKeywords"]" />
     <link rel="canonical" href="@NavManager.Uri" />
 
-    <meta property="og:title" content="Współpraca - Rentoom | Profesjonalne Zarządzanie Najmem" />
-    <meta property="og:description" content="Jesteśmy liderem rynku w Toruniu. Oferujemy pełną obsługę, innowacyjne technologie i maksymalizację Twoich zysków. Śpij spokojnie, my pracujemy na Ciebie." />
+    <meta property="og:title" content="@Localizer["Cooperation_OgTitle"]" />
+    <meta property="og:description" content="@Localizer["Cooperation_OgDescription"]" />
     <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-coop.jpeg")" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
     <meta property="og:locale" content="pl_PL" />
-    <BreadcrumbJsonLd CurrentPageName="@(IsPolish ? "Współpraca" : "Cooperation")" CurrentPagePath="/wspolpraca" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="/wspolpraca" />
 </HeadContent>
 
 <div class="cooperation-container">
@@ -31,7 +30,3 @@
     <Advantages/>
     <Form/>
 </div>
-
-@code {
-    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
-}

@@ -10,8 +10,9 @@
 @inject NavigationManager Navigation;
 @inject IIdoOfferService OfferService;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
+@inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer;
 
-<PageTitle>Rezerwacja @_apartment?.Name</PageTitle>
+<PageTitle>@Localizer["Reservation_PageTitlePrefix"] @_apartment?.Name</PageTitle>
 
 <div class="reservation-container">
     <div class="reservation-wrapper">
@@ -34,26 +35,26 @@
         
         <ul class="apartment-details">
             <li>
-                <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon" />
+                <img src="assets/svgs/users.svg" alt="@Localizer["Reservation_AltOccupancy"]" class="icon" />
                 <span itemprop="occupancy">@_apartment?.MinCapacity - @_apartment?.Capacity</span>
             </li>
             <li>
-                <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
+                <img src="assets/svgs/bed.svg" alt="@Localizer["Reservation_AltBeds"]" class="icon" />
                 @_bedsCount
             </li>
             <li>
-                <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
+                <img src="assets/svgs/bath.svg" alt="@Localizer["Reservation_AltBathrooms"]" class="icon" />
                 1
             </li>
             <li>
-                <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
+                <img src="assets/svgs/m2.svg" alt="@Localizer["Reservation_AltArea"]" class="icon" />
                 <span itemprop="floorSize">@_apartment?.Area m²</span>
             </li>
         </ul>
         
         <hr/>
         
-        <h3 class="header-text">Podgląd</h3>
+        <h3 class="header-text">@Localizer["Reservation_Preview"]</h3>
         <div class="preview">
             <div class="image-wrapper">
                 @if (_currentObjectMedium == null)
@@ -104,7 +105,7 @@
         
         <div style="margin-top: 1rem;"></div>
         
-        <h3 class="header-text">Dodatkowe opcje</h3>
+        <h3 class="header-text">@Localizer["AdditionalOptions"]</h3>
         <div class="addon-list-container">
             @if (_apartment?.Addons != null)
             {
@@ -118,7 +119,7 @@
                             <input type="checkbox" class="addon-checkbox" />
                             <span class="addon-name">@fadesc.Name</span>
                             <span class="addon-name">@fadesc.Description</span>
-                            <span class="addon-price">@String.Format("#, ## PLN",fa.PriceGross)</span>
+                            <span class="addon-price">@fa.PriceGross.ToString("N0") @CurrencyLocalizer["PLN"]</span>
                         </label>
                         </div>
                     }
@@ -126,7 +127,7 @@
                     {
                        <div class="addon-item">
                         <label class="addon-label">
-                                <span class="addon-name-empty">Brak dodatków</span> @*<<<// zrób to klasę add-name-empty*@
+                                <span class="addon-name-empty">@Localizer["Reservation_NoAddons"]</span> @*<<<// zrób to klasę add-name-empty*@
                             </label>
                         </div>
                     }
@@ -138,17 +139,17 @@
         <div style="margin-top: 1rem;"></div>
         <hr/>
         
-        <h3 class="header-text">Podsumowanie</h3>
+        <h3 class="header-text">@Localizer["Summary"]</h3>
         @if (StartDate == null || EndDate == null || Adults == null)
         {
             <div class="alert">
-                <span>Aby zarezerwować apartament wybierz termin i ilość osób</span>
+                <span>@Localizer["Reservation_SelectDateAndGuests"]</span>
             </div>
         }
         else if (_offersResponse?.Result?.PricingOffers == null || _offersResponse.Result.PricingOffers.Count == 0)
         {
             <div class="alert">
-                <span>Niestety w tym terminie nie ma ofert dla tego apartamentu</span>
+                <span>@Localizer["Reservation_NoOffersForDate"]</span>
             </div>
         }
         else
@@ -156,26 +157,26 @@
             <div class="summary">
                 <div class="summary-wrapper">
                     <div class="summary-info">
-                        <b class="info-text">Liczba osób</b>
+                        <b class="info-text">@Localizer["NumberOfGuests"]</b>
                         <p class="info-text">@Adults</p>
                     </div>
 
                     <div class="summary-info">
-                        <b class="info-text">Od</b>
+                        <b class="info-text">@Localizer["From"]</b>
                         <p class="info-text">@StartDate</p>
                     </div>
 
                     <div class="summary-info">
-                        <b class="info-text">Do</b>
+                        <b class="info-text">@Localizer["To"]</b>
                         <p class="info-text">@EndDate</p>
                     </div>
 
                     <div class="summary-info">
-                        <b class="info-text">Koszt</b>
-                        <p class="price-text">@_offersResponse.Result.PricingOffers[0].MinimalPrice zł</p>
+                        <b class="info-text">@Localizer["Reservation_Cost"]</b>
+                        <p class="price-text">@_offersResponse.Result.PricingOffers[0].MinimalPrice @CurrencyLocalizer["PLN"]</p>
                     </div>
                 </div>
-                <p>Liczba nocy: @GetNumberOfNights()</p>
+                <p>@Localizer["Reservation_NightsCount"]: @GetNumberOfNights()</p>
             </div>
         }
         
@@ -186,10 +187,10 @@
             <div class="confirm-wrapper">
                 <label class="addon-label">
                     <input type="checkbox" class="addon-checkbox" />
-                    <span class="addon-name">Chcę otrzymać fakture VAT</span>
+                    <span class="addon-name">@Localizer["Reservation_InvoiceCheckbox"]</span>
                 </label>
             
-                <Button @onclick="GoToPayment">Przejdź dalej</Button>
+                <Button @onclick="GoToPayment">@Localizer["Reservation_NextButton"]</Button>
             </div>   
         }
         

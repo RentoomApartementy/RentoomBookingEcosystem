@@ -16,7 +16,7 @@
 @inherits Models.PageBase
 @implements IAsyncDisposable
 
-<PageTitle>Koszyk - Podsumowanie</PageTitle>
+<PageTitle>@Localizer["CartPageTitle"]</PageTitle>
 
 @if (UpsellCartState.IsEmpty)
 {
@@ -530,7 +530,7 @@ else
 
             if (result is null)
             {
-                _cartError = "Nie udało się utworzyć zamówienia dodatków.";
+                _cartError = Localizer["CreateOrderError"];
                 return;
             }
 
@@ -543,7 +543,7 @@ else
                 return;
             }
 
-            _cartMessage = "Płatność nie wymagana / już opłacone";
+            _cartMessage = Localizer["PaymentNotRequiredMessage"];
         }
         catch (Exception ex)
         {

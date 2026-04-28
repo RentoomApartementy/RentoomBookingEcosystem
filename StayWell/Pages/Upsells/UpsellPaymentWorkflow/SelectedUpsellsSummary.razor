@@ -1,4 +1,7 @@
-﻿<h3>SelectedUpsellsSummary</h3>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<PurchasedUpsellsPage> Localizer
+
+<h3>@Localizer["SelectedUpsellsSummaryTitle"]</h3>
 
 @code {
 

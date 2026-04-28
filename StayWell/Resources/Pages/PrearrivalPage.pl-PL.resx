@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -318,5 +318,28 @@ Rental regulations in English are available at www.rentoom.pl</value>
   </data>
   <data name="OptionalConsentsHint" xml:space="preserve">
     <value>Zgody opcjonalne możesz zmienić w dowolnym momencie na stronie „O Rezerwacji".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    
+    
+  <value>twój@email.pl</value></data>
+  <data name="Email" xml:space="preserve">
+    
+    
+  <value>E-mail</value></data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    
+    
+  <value>Regulamin i zameldowanie</value></data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    
+    
+  <value>Błąd zapisu danych.</value></data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    
+    
+  <value>Nie masz dostępu do tej strony.</value></data>
+  <data name="TOS" xml:space="preserve">
+    <value>Regulaminy i zgody</value>
   </data>
 </root>

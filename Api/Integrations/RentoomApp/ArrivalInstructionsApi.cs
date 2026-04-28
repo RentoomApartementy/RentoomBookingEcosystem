@@ -12,13 +12,16 @@ public class ArrivalInstructionsApi
 {
     private readonly ILogger<ArrivalInstructionsApi> _logger;
     private readonly ArrivalInstructionsService _arrivalInstructionsService;
+    private readonly LockInstructionsService _lockInstructionsService;
 
     public ArrivalInstructionsApi(
         ILogger<ArrivalInstructionsApi> logger,
-        ArrivalInstructionsService arrivalInstructionsService)
+        ArrivalInstructionsService arrivalInstructionsService,
+        LockInstructionsService lockInstructionsService)
     {
         _logger = logger;
         _arrivalInstructionsService = arrivalInstructionsService;
+        _lockInstructionsService = lockInstructionsService;
     }
 
     [Function("GetArrivalInstructionStepsForApartment")]
@@ -50,16 +53,16 @@ public class ArrivalInstructionsApi
             }
 
             var steps = await _arrivalInstructionsService.GetArrivalInstructionStepsAsync(apartmentId, language, cancellationToken);
-            if (steps.Count == 0)
+            var lockInstructions = _lockInstructionsService.GetLockInstructions(language);
+            var result = new ApartmentInstructionsDTO
             {
-                response.StatusCode = HttpStatusCode.NotFound;
-                await response.WriteStringAsync("No arrival instructions found for the given apartmentId.");
-                return response;
-            }
+                ArrivalSteps = steps,
+                LockInstructions = lockInstructions
+            };
 
             response.StatusCode = HttpStatusCode.OK;
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            await response.WriteStringAsync(JsonConvert.SerializeObject(steps));
+            await response.WriteStringAsync(JsonConvert.SerializeObject(result));
             return response;
         }
         catch (Exception ex)

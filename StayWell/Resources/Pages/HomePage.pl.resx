@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -189,4 +189,12 @@
   <data name="ReservationCanceledDesc" xml:space="preserve">
     <value>Ta rezerwacja nie jest już aktywna. Skontaktuj się z Rentoom, jeśli potrzebujesz pomocy.</value>
   </data>
+  <data name="AiChatTitle" xml:space="preserve">
+    
+    
+  <value>StayWell AI</value></data>
+  <data name="AiAssistant" xml:space="preserve">
+    
+    
+  <value>Asystent AI</value></data>
 </root>

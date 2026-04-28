@@ -1,9 +1,13 @@
-﻿@page "/reservation/{Token}/MyVouchersPage"
+@page "/reservation/{Token}/MyVouchersPage"
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.Upsell
-@inject RentoomBooking.StayWell.Services.BackendApi BackendApi
 @using RentoomBooking.SharedFrontend.Components.StayWell.UpsellComponents
+@inject RentoomBooking.StayWell.Services.BackendApi BackendApi
+@inject IStringLocalizer<PurchasedUpsellsPage> Localizer
 
 @inherits Models.PageBase
+
+<PageTitle>@Localizer["PurchasedUpsellsPageTitle"]</PageTitle>
 
 @if (!string.IsNullOrWhiteSpace(_errorMessage))
 {
@@ -11,7 +15,7 @@
 }
 else if (_isLoading)
 {
-    <p>Loading...</p>
+    <p>@Localizer["Loading"]</p>
 }
 else
 {
@@ -33,7 +37,7 @@ else
 
         if (string.IsNullOrWhiteSpace(Token))
         {
-            _errorMessage = "Token is missing.";
+            _errorMessage = Localizer["TokenMissingError"];
             _isLoading = false;
             return;
         }

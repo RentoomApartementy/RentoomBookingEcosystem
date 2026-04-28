@@ -9,6 +9,20 @@ using System.Threading.Tasks;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions
 {
+    public class LockInstructionsDTO
+    {
+        public string CylinderOpen { get; set; } = string.Empty;
+        public string CylinderClose { get; set; } = string.Empty;
+        public string PanelOpen { get; set; } = string.Empty;
+        public string PanelClose { get; set; } = string.Empty;
+    }
+
+    public class ApartmentInstructionsDTO
+    {
+        public IReadOnlyList<ApartmentArrivalInstructionStepDTO> ArrivalSteps { get; set; } = [];
+        public LockInstructionsDTO LockInstructions { get; set; } = new();
+    }
+
     public class ApartmentArrivalInstructionStepDTO
     {
         public int Id { get; set; }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -159,4 +159,16 @@
   <data name="Pay" xml:space="preserve">
     <value>Zapłać</value>
   </data>
+  <data name="CartPageTitle" xml:space="preserve">
+    
+    
+  <value>Koszyk - podsumowanie</value></data>
+  <data name="PaymentNotRequiredMessage" xml:space="preserve">
+    
+    
+  <value>Płatność nie wymagana / już opłacone</value></data>
+  <data name="CreateOrderError" xml:space="preserve">
+    
+    
+  <value>Nie udało się utworzyć zamówienia dodatków.</value></data>
 </root>

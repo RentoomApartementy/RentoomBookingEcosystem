@@ -83,7 +83,7 @@
         @if(!IsBookingMail())
         {
             <div class="row">
-                <div class="ct">E-mail</div>
+                <div class="ct">@Localizer["Email"]</div>
                 <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Client.Email</div>
             </div>
         }
@@ -127,7 +127,7 @@
         if (RegistrationCardState.IsFilled)
         {
             NavigationManager.NavigateTo($"/reservation/{Token}");
-            ToastService.ShowToast("Nie masz dostepu do tej strony.");
+            ToastService.ShowToast(Localizer["NoAccessToPage"]);
             LayoutState.ShowFooter = true;
         }
         else

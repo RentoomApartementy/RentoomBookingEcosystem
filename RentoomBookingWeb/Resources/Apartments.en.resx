@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -212,5 +212,57 @@
   </data>
   <data name="SuggestedDateNotFoundText" xml:space="preserve">
     <value>Not Available</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value />
+    <value>Apartments Torun - Full List of Accommodations</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value />
+    <value>No apartments available at the moment.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value />
+    <value>Loading...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value />
+    <value>Apartments Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value />
+    <value>Clear search</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value />
+    <value>Search apartments by name...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value />
+    <value>Apartments</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value />
+    <value>Search apartment by name</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value />
+    <value>See the full list of our apartments in Torun. Comfortable stays, great location near the Old Town. Check details of each apartment.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value />
+    <value>Apartments in Torun</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value />
+    <value>Discover our full range of comfortable apartments in the heart of Torun.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value />
+    <value>apartments for rent, accommodation, booking, apartment reservation, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value />
+    <value>No apartments found for the entered name.</value>
   </data>
 </root>

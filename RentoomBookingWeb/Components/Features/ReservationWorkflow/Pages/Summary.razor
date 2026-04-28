@@ -21,7 +21,7 @@
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @implements IDisposable
 
-<PageTitle>Rentoom - Podsumowanie rezerwacji</PageTitle>
+<PageTitle>@Localizer["SummaryPageTitle"]</PageTitle>
 <div class="summary-container">
     <AppError Message=@_error
               Title="@Localizer["SomethingWrong"]"
@@ -126,11 +126,11 @@
 
                             @if (_isStaywellPopupOpen)
                             {
-                                <div class="staywell-popup" role="dialog" aria-label="Informacje StayWell">
+                                <div class="staywell-popup" role="dialog" aria-label="@Localizer["StaywellPopupAriaLabel"]">
                                     <button type="button"
                                             class="staywell-popup-close"
                                             @onclick="CloseStaywellPopup"
-                                            aria-label="Zamknij popup StayWell">×</button>
+                                            aria-label="@Localizer["StaywellPopupCloseAriaLabel"]">×</button>
 
                                     <div class="staywell-popup-content">
                                         <div class="staywell-popup-col staywell-qr-col">
@@ -426,7 +426,7 @@
         }
         catch (Exception ex)
         {
-            _error = $"Nie udało się zbudować podsumowania. {ex.Source} {ex.Message} ";
+            _error = $"{Localizer["SummaryBuildError"]} {ex.Source} {ex.Message} ";
         }
         finally
         {
@@ -466,7 +466,7 @@
         }
         catch (Exception)
         {
-            _error = "Wystąpił błąd podczas zapisywania zgód. Spróbuj ponownie.";
+            _error = Localizer["SummarySaveTermsError"];
             WorkflowTelemetry.TrackEvent(
                 "ReservationSummarySaveTermsFailed",
                 new Dictionary<string, string?>
@@ -674,7 +674,7 @@
             }
             catch (Exception ex)
             {
-                _error = "Nie udało się pobrać statusu płatności. " + ex.Message;
+                _error = Localizer["PaymentStatusFetchError"] + " " + ex.Message;
                 await InvokeAsync(StateHasChanged);
                 return;
             }
@@ -723,7 +723,7 @@
             }
             catch (Exception)
             {
-                _emailError = "Nie udało się sprawdzić statusu e-maila.";
+                _emailError = Localizer["EmailStatusFetchError"];
                 _isCheckingEmail = false;
                 await InvokeAsync(StateHasChanged);
                 return;
@@ -825,58 +825,41 @@
     }
 
     private string PaymentReturnBannerTitle =>
-        IsEnglishCulture()
-            ? (IsPaymentReturnFailed ? "Payment was not completed" : "We could not confirm the payment yet")
-            : (IsPaymentReturnFailed ? "Płatność nie została zakończona" : "Nie potwierdziliśmy jeszcze płatności");
+        IsPaymentReturnFailed
+            ? Localizer["PaymentReturnFailedBannerTitle"]
+            : Localizer["PaymentReturnPendingBannerTitle"];
 
     private string PaymentReturnBannerMessage =>
-        IsEnglishCulture()
-            ? (IsPaymentReturnFailed
-                ? "You can retry the payment from this summary. If your bank already charged the card, wait a moment before making another attempt."
-                : "If funds were charged, do not pay again immediately. Check the reservation status below and retry only if the payment is still not confirmed.")
-            : (IsPaymentReturnFailed
-                ? "Możesz ponowić płatność z tego podsumowania. Jeśli bank zdążył już pobrać środki, odczekaj chwilę przed kolejną próbą."
-                : "Jeśli środki zostały pobrane, nie wykonuj kolejnej płatności od razu. Sprawdź status rezerwacji poniżej i ponów próbę tylko wtedy, gdy płatność nadal nie jest potwierdzona.");
-
-    private static bool IsEnglishCulture()
-    {
-        return string.Equals(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, "en", StringComparison.OrdinalIgnoreCase);
-    }
+        IsPaymentReturnFailed
+            ? Localizer["PaymentReturnFailedBannerMessage"]
+            : Localizer["PaymentReturnPendingBannerMessage"];
 
     private string MessageSentTitle =>
-        IsEnglishCulture() ? "Message sent" : "Wysłano wiadomość";
+        Localizer["MessageSentTitle"];
 
     private string MessageSentDescription =>
-        IsEnglishCulture()
-            ? $"The confirmation was sent to {_summary?.Client?.Email} and on WhatsApp."
-            : $"Potwierdzenie wysłaliśmy na {_summary?.Client?.Email} oraz na WhatsApp.";
+        Localizer["MessageSentDescription", _summary?.Client?.Email ?? string.Empty];
 
     private string EmailDeliveryPendingTitle =>
-        IsEnglishCulture() ? "Sending message" : "Wysyłamy wiadomość";
+        Localizer["EmailDeliveryPendingTitle"];
 
     private string EmailDeliveryPendingMessage =>
-        IsEnglishCulture()
-            ? $"We are sending the confirmation to {_summary?.Client?.Email} and on WhatsApp."
-            : $"Wysyłamy potwierdzenie na {_summary?.Client?.Email} oraz na WhatsApp.";
+        Localizer["EmailDeliveryPendingMessage", _summary?.Client?.Email ?? string.Empty];
 
     private string StaywellButtonText =>
-        IsEnglishCulture()
-            ? "Click to manage your reservation in Rentoom StayWell"
-            : "Kliknij aby zarządzać rezerwacją w Rentoom StayWell";
+        Localizer["StaywellButtonText"];
 
     private string CancelActionSeparatorText =>
-        IsEnglishCulture() ? "Or" : "Lub";
+        Localizer["CancelActionSeparatorText"];
 
     private string CancelReservationButtonText =>
-        IsEnglishCulture() ? "Cancel reservation" : "Anuluj rezerwację";
+        Localizer["CancelReservationButtonText"];
 
     private string CancelReservationInProgressText =>
-        IsEnglishCulture() ? "Cancelling..." : "Anulowanie...";
+        Localizer["CancelReservationInProgressText"];
 
     private string CancelReservationErrorText =>
-        IsEnglishCulture()
-            ? "An error occurred while cancelling the reservation. Please try again."
-            : "Wystąpił błąd podczas anulowania rezerwacji. Spróbuj ponownie.";
+        Localizer["CancelReservationErrorText"];
 
     private string RetryPaymentButtonText =>
         IsRetryPaymentDisabled

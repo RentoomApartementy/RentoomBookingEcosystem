@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -294,4 +294,8 @@ Just close the door behind you.</value>
   <data name="CodeNoLongerAvailable" xml:space="preserve">
     <value>Your reservation has ended. The access code is no longer available.</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    
+    
+  <value>Open apartment</value></data>
 </root>

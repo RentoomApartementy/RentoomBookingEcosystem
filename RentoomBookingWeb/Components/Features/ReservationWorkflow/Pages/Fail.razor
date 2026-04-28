@@ -10,7 +10,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 
-<PageTitle>Rentoom - Weryfikacja płatności</PageTitle>
+<PageTitle>@Localizer["FailPageTitle"]</PageTitle>
 
 <div class="summary-container">
     <div class="status-card">
@@ -18,7 +18,7 @@
             @if (string.IsNullOrWhiteSpace(_error))
             {
                 <div class="info-icon-wrapper alert-icon-wrapper">
-                    <img src="assets/svgs/danger.svg" alt="ikona alertu" class="status-icon" />
+                    <img src="assets/svgs/danger.svg" alt="@Localizer["FailIconAlt"]" class="status-icon" />
                 </div>
                 <div class="spinner-container">
                     <div class="loading-spinner"></div>
@@ -31,7 +31,7 @@
             {
                 <div class="error-box">
                     <div class="info-icon-wrapper alert-icon-wrapper">
-                        <img src="assets/svgs/danger.svg" alt="ikona alertu" class="status-icon" />
+                        <img src="assets/svgs/danger.svg" alt="@Localizer["FailIconAlt"]" class="status-icon" />
                     </div>
 
                     <AppError Message="@_error"
@@ -134,9 +134,9 @@
     {
         return _status switch
         {
-            "waiting" => IsEnglish() ? "Waiting for payment confirmation" : "Czekamy na potwierdzenie płatności",
-            "pending" => IsEnglish() ? "Payment status still pending" : "Status płatności nadal oczekuje",
-            _ => IsEnglish() ? "We are checking your payment" : "Sprawdzamy status Twojej płatności"
+            "waiting" => Localizer["PaymentReturnWaitingTitle"],
+            "pending" => Localizer["PaymentReturnPendingTitle"],
+            _ => Localizer["PaymentReturnCheckingTitle"]
         };
     }
 
@@ -144,27 +144,14 @@
     {
         return _status switch
         {
-            "waiting" => IsEnglish()
-                ? "The payment may still be processing. We are verifying it before sending you back to the reservation summary."
-                : "Płatność może być jeszcze przetwarzana. Weryfikujemy ją zanim odeślemy Cię do podsumowania rezerwacji.",
-            "pending" => IsEnglish()
-                ? "We still do not have a final confirmation. In a moment you will return to the summary, where you can safely retry the payment if needed."
-                : "Nadal nie mamy końcowego potwierdzenia. Za chwilę wrócisz do podsumowania, gdzie w razie potrzeby będzie można bezpiecznie ponowić płatność.",
-            _ => IsEnglish()
-                ? "This does not always mean the payment failed. We first verify the final transaction status."
-                : "To nie zawsze oznacza nieudaną płatność. Najpierw sprawdzamy końcowy status transakcji."
+            "waiting" => Localizer["PaymentReturnWaitingMessage"],
+            "pending" => Localizer["PaymentReturnPendingMessage"],
+            _ => Localizer["PaymentReturnCheckingMessage"]
         };
     }
 
     private string GetErrorText()
     {
-        return IsEnglish()
-            ? "We could not verify the payment status automatically. Go back to the summary and try again there."
-            : "Nie udało się automatycznie zweryfikować statusu płatności. Wróć do podsumowania i spróbuj ponownie stamtąd.";
-    }
-
-    private bool IsEnglish()
-    {
-        return string.Equals(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, "en", StringComparison.OrdinalIgnoreCase);
+        return Localizer["PaymentReturnVerificationError"];
     }
 }

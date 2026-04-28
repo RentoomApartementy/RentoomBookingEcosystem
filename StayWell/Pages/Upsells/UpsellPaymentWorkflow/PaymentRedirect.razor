@@ -1,18 +1,14 @@
-﻿@using RentoomBooking.SharedClasses.Models.Upsell
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.StayWell.Services
 @using RentoomBooking.StayWell.States
 @inject AvailableUpsellsState AvailableUpsellsState
 @inject NavigationManager Navigation
 @inject BackendApi backendApi
+@inject IStringLocalizer<PurchasedUpsellsPage> Localizer
 @inherits Models.PageBase
-<h3>UpsellPaymentRedirect</h3>
+
+<h3>@Localizer["UpsellPaymentRedirectTitle"]</h3>
 
 @code {
-
-
-   /* 
-    }
-
-    */
-
 }

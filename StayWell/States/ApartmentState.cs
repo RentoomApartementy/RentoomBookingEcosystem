@@ -15,6 +15,7 @@ namespace RentoomBooking.StayWell.States
         private int? _currentObjectId;
         private string? _qrMaintFormUrl;
         private IReadOnlyList<ApartmentArrivalInstructionStepDTO> _arrivalInstructionSteps = [];
+        private LockInstructionsDTO? _lockInstructions;
         private int? _currentArrivalInstructionApartmentId;
         private string? _currentArrivalInstructionLanguage;
         private RentoomWifiInfo? _wifiInfo;
@@ -48,6 +49,16 @@ namespace RentoomBooking.StayWell.States
             private set
             {
                 _arrivalInstructionSteps = value;
+                NotifyStateChanged();
+            }
+        }
+
+        public LockInstructionsDTO? LockInstructions
+        {
+            get => _lockInstructions;
+            private set
+            {
+                _lockInstructions = value;
                 NotifyStateChanged();
             }
         }
@@ -88,7 +99,7 @@ namespace RentoomBooking.StayWell.States
         {
             if (apartmentItemId <= 0)
             {
-                SetArrivalInstructionSteps([], null, null);
+                SetArrivalInstructionSteps([], null, null, null);
                 return ArrivalInstructionSteps;
             }
 
@@ -102,16 +113,16 @@ namespace RentoomBooking.StayWell.States
 
             if (_backendApi == null)
             {
-                SetArrivalInstructionSteps([], apartmentItemId, normalizedLanguage);
+                SetArrivalInstructionSteps([], null, apartmentItemId, normalizedLanguage);
                 return ArrivalInstructionSteps;
             }
 
-            var steps = await _backendApi.GetArrivalInstructionStepsAsync(apartmentItemId, normalizedLanguage);
-            var orderedSteps = steps
+            var result = await _backendApi.GetArrivalInstructionStepsAsync(apartmentItemId, normalizedLanguage);
+            var orderedSteps = result.ArrivalSteps
                 .OrderBy(s => s.Sequence)
                 .ToList();
 
-            SetArrivalInstructionSteps(orderedSteps, apartmentItemId, normalizedLanguage);
+            SetArrivalInstructionSteps(orderedSteps, result.LockInstructions, apartmentItemId, normalizedLanguage);
             return ArrivalInstructionSteps;
         }
 
@@ -178,13 +189,14 @@ namespace RentoomBooking.StayWell.States
             QrMaintFormUrl = null;
             WifiInfo = null;
             DefinedAddons = [];
-            SetArrivalInstructionSteps([], null, null);
+            SetArrivalInstructionSteps([], null, null, null);
         }
 
-        private void SetArrivalInstructionSteps(IReadOnlyList<ApartmentArrivalInstructionStepDTO> steps, int? apartmentId, string? language)
+        private void SetArrivalInstructionSteps(IReadOnlyList<ApartmentArrivalInstructionStepDTO> steps, LockInstructionsDTO? lockInstructions, int? apartmentId, string? language)
         {
             _currentArrivalInstructionApartmentId = apartmentId;
             _currentArrivalInstructionLanguage = language;
+            _lockInstructions = lockInstructions;
             ArrivalInstructionSteps = steps;
         }
 

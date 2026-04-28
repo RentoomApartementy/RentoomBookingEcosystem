@@ -95,7 +95,7 @@ builder.Services.AddDbContextFactory<RappEventsDbContext>(options =>
 
 builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoSellService>();
-builder.Services.AddScoped<IdoLocksService, IdoLocksService>();
+builder.Services.AddScoped<IIdoLocksService, IdoLocksService>();
 builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
@@ -138,6 +138,7 @@ builder.Services.AddScoped<CookieConsentService>();
 
 //arrival instructions
 builder.Services.AddScoped<ArrivalInstructionsService>();
+builder.Services.AddSingleton<LockInstructionsService>();
 
 // TPAY
 var TpaySection = builder.Configuration.GetSection("Tpay");

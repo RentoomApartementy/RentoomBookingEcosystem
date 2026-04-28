@@ -3,7 +3,9 @@
 @using System.Globalization
 @using RentoomBookingWeb.Components.Features.Home.Components
 @using RentoomBookingWeb.Components.Features.TorunLocation.Components
+@using Microsoft.Extensions.Localization
 @inject NavigationManager Navigation
+@inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
 
 <PageTitle>@PageTitleText</PageTitle>
 
@@ -37,19 +39,13 @@ else
 
     private string CanonicalUrl => $"{Navigation.BaseUri.TrimEnd('/')}/polozenie-torunia/";
 
-    private string PageTitleText => IsPolish
-        ? "Położenie Torunia, mapa i dojazd | Rentoom"
-        : "Toruń location, map and access | Rentoom";
+    private string PageTitleText => Localizer["TorunLocation_PageTitle"];
 
-    private string DescriptionText => IsPolish
-        ? "Sprawdź, gdzie leży Toruń, jak dotrzeć do starówki i zobacz praktyczną mapę OpenStreetMap z lokalizacją miasta."
-        : "See where Toruń is located, how to reach the Old Town, and use a practical OpenStreetMap embed for the city.";
+    private string DescriptionText => Localizer["TorunLocation_Description"];
 
-    private string KeywordsText => IsPolish
-        ? "położenie Torunia, gdzie leży Toruń, mapa Torunia, dojazd do Torunia, starówka Toruń"
-        : "Toruń location, where is Toruń, Toruń map, how to get to Toruń, Toruń Old Town";
+    private string KeywordsText => Localizer["TorunLocation_Keywords"];
 
     private string OgLocale => IsPolish ? "pl_PL" : "en_US";
 
-    private string BreadcrumbName => IsPolish ? "Położenie Torunia" : "Torun location";
+    private string BreadcrumbName => Localizer["TorunLocation_Breadcrumb"];
 }

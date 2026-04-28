@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 public class IdoLocksApi
 {
-    private readonly IdoLocksService _idoLocksService;
+    private readonly IIdoLocksService _idoLocksService;
     private readonly ILogger<IdoLocksApi> _logger;
 
-    public IdoLocksApi(IdoLocksService idoLocksService, ILogger<IdoLocksApi> logger)
+    public IdoLocksApi(IIdoLocksService idoLocksService, ILogger<IdoLocksApi> logger)
     {
         _idoLocksService = idoLocksService;
         _logger = logger;

@@ -13,7 +13,7 @@
 
 @inherits Models.PageBase
 
-<PageTitle>Regulamin i Zameldowanie</PageTitle>
+<PageTitle>@Localizer["TermsAndRegistrationPageTitle"]</PageTitle>
 
 <div class="terms-container">
     <div class="content-section">
@@ -96,14 +96,14 @@
 
                         <div class="reg-field">
                             <label class="reg-field-label" for="email">
-                                E-mail
+                                @Localizer["Email"]
                                 @if (IsEmailValid)
                                 {
                                     <img src="/icons/circle-check.svg" class="field-check-icon" alt="" />
                                 }
                             </label>
                             <input class="reg-input @(IsEmailValid ? "is-valid" : "")"
-                                   id="email" type="email" placeholder="twój@email.pl"
+                                   id="email" type="email" placeholder="@Localizer["EmailPlaceholder"]"
                                    @bind="_mail" @bind:event="oninput" />
                         </div>
 
@@ -408,7 +408,7 @@
             await RegistrationCardState.SaveCardAsync(regcard);
             NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");
         }
-        catch { ToastService.ShowToast("Błąd zapisu danych."); }
+        catch { ToastService.ShowToast(Localizer["RegistrationSaveError"]); }
     }
 
     public override void Dispose()
