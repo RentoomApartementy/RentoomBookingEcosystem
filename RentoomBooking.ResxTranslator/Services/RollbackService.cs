@@ -70,8 +70,7 @@ public sealed class RollbackService
         }
 
         // Determine how many culture files remain repo-wide after this deletion.
-        // Config (supported-languages.json, SupportedLanguagesConfig.cs) is only
-        // updated when the culture is fully gone from the repo.
+        // Config (supported-languages.json) is only updated when the culture is fully gone from the repo.
         var allRepoWide = FindAllCultureFilesRepoWide();
         var remainingAfterDeletion = allRepoWide
             .Except(filesToDelete, StringComparer.OrdinalIgnoreCase)
@@ -225,7 +224,6 @@ public sealed class RollbackService
         {
             Console.WriteLine("Config changes:");
             Console.WriteLine($"  - Remove '{_culture}' from supported-languages.json");
-            Console.WriteLine($"  - Remove '{_culture}' from SupportedLanguagesConfig.cs");
         }
         else
         {
