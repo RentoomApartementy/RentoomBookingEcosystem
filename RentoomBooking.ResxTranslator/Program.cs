@@ -34,7 +34,7 @@ var repoRootOption = new Option<string?>(
 // ── Translate command (default) ──
 var targetOption = new Option<string[]>(
     "--target",
-    description: "Target culture codes (e.g. en-US de-DE pl-PL). Omit to auto-detect and translate to all existing target cultures found in repository.")
+    description: "Target culture codes (e.g. en-US de-DE pl-PL). Required — specify at least one target culture.")
 { AllowMultipleArgumentsPerToken = true };
 
 var allOption = new Option<bool>(
@@ -92,6 +92,15 @@ translateCommand.SetHandler(async (InvocationContext ctx) =>
                            ?? ctx.ParseResult.GetValueForOption(translatorRegionOption)
                            ?? config["AzureTranslator:Region"]
                            ?? "polandcentral";
+
+    if (targets.Length == 0)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Error.WriteLine("ERROR: --target is required. Specify one or more target culture codes (e.g. --target en-US de-DE).");
+        Console.ResetColor();
+        ctx.ExitCode = 1;
+        return;
+    }
 
     if (string.IsNullOrWhiteSpace(translatorKey) && !dryRun)
     {

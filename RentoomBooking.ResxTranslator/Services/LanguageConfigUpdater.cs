@@ -9,7 +9,7 @@ public static class LanguageConfigUpdater
 {
     public static void EnsureCultureExists(string repoRoot, string culture)
     {
-        var configPath = Path.Combine(repoRoot, "supported-languages.json");
+        var configPath = Path.Combine(repoRoot, "SharedClasses", "supported-languages.json");
 
         LanguageConfig config;
         if (File.Exists(configPath))
@@ -47,7 +47,7 @@ public static class LanguageConfigUpdater
     /// </summary>
     public static void RemoveCulture(string repoRoot, string culture)
     {
-        var configPath = Path.Combine(repoRoot, "supported-languages.json");
+        var configPath = Path.Combine(repoRoot, "SharedClasses", "supported-languages.json");
         if (!File.Exists(configPath))
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
