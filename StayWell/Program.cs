@@ -37,7 +37,6 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<SafeMarkdownService>();
             builder.Services.AddScoped<UpsellCartState>();
 
-            builder.Services.AddMemoryCache();
             builder.Services.AddScoped<LiveChatNotificationState>();
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();

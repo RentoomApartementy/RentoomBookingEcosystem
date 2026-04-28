@@ -1,22 +1,23 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Microsoft.Extensions.Caching.Memory;
 using RentoomBooking.SharedClasses.LiveChat;
 
 namespace RentoomBooking.StayWell.Services;
 
 public sealed class LiveChatClientService
 {
+    private sealed record CachedHistory(LiveChatSessionDto Data, DateTimeOffset CachedAt);
+
     private readonly HttpClient _http;
-    private readonly IMemoryCache _cache;
+    private readonly LocalStorageService _localStorage;
     private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly TimeSpan _historyCacheTtl = TimeSpan.FromSeconds(60);
 
-    public LiveChatClientService(IHttpClientFactory httpClientFactory, IMemoryCache cache)
+    public LiveChatClientService(IHttpClientFactory httpClientFactory, LocalStorageService localStorage)
     {
         _http = httpClientFactory.CreateClient("FunctionsApi");
-        _cache = cache;
+        _localStorage = localStorage;
     }
 
     public async Task<LiveChatMessageDto?> SendMessageAsync(string reservationToken, string message, string? guestName = null, string? guestEmail = null, CancellationToken ct = default)
@@ -29,22 +30,26 @@ public sealed class LiveChatClientService
 
     public async Task<LiveChatSessionDto?> GetHistoryAsync(string reservationToken, CancellationToken ct = default)
     {
-        var key = $"livechat:history:{reservationToken}";
-        if (_cache.TryGetValue(key, out LiveChatSessionDto? cached))
-            return cached;
+        var key = BuildCacheKey(reservationToken);
+
+        var (exists, cached) = await _localStorage.TryGetItemAsync<CachedHistory>(key);
+        if (exists && cached is not null && DateTimeOffset.UtcNow - cached.CachedAt < _historyCacheTtl)
+            return cached.Data;
 
         var response = await _http.GetAsync($"staywell/livechat/history?reservationToken={Uri.EscapeDataString(reservationToken)}", ct);
         if (!response.IsSuccessStatusCode) return null;
 
         var result = await response.Content.ReadFromJsonAsync<LiveChatSessionDto>(_jsonOptions, ct);
         if (result is not null)
-            _cache.Set(key, result, _historyCacheTtl);
+            await _localStorage.SetItemAsync(key, new CachedHistory(result, DateTimeOffset.UtcNow));
 
         return result;
     }
 
-    public void InvalidateHistory(string reservationToken)
-        => _cache.Remove($"livechat:history:{reservationToken}");
+    public async Task InvalidateHistory(string reservationToken)
+        => await _localStorage.RemoveItemAsync(BuildCacheKey(reservationToken));
+
+    private static string BuildCacheKey(string reservationToken) => $"staywell:livechat:history:{reservationToken}";
 
     public async Task StreamMessagesAsync(
         string reservationToken,

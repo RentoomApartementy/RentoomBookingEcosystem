@@ -430,7 +430,7 @@
             var guestEmail = client?.Email;
 
             var msg = await LiveChatClient.SendMessageAsync(token, text, guestName, guestEmail);
-            LiveChatClient.InvalidateHistory(token);
+            await LiveChatClient.InvalidateHistory(token);
             NotificationState.StartListening(token);
             
             _messages.Remove(optimisticMsg);
@@ -477,7 +477,7 @@
             var guestEmail = client?.Email;
 
             var result = await LiveChatClient.SendMessageAsync(token, msg.Content, guestName, guestEmail);
-            LiveChatClient.InvalidateHistory(token);
+            await LiveChatClient.InvalidateHistory(token);
 
             _messages.Remove(msg);
             _sendStatus.Remove(msg.Id);
