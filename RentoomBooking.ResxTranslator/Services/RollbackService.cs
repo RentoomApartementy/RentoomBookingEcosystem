@@ -191,7 +191,7 @@ public sealed class RollbackService
 
     private bool IsDefaultCulture(string culture)
     {
-        var configPath = Path.Combine(_repoRoot, "supported-languages.json");
+        var configPath = Path.Combine(_repoRoot, "SharedClasses", "supported-languages.json");
         if (!File.Exists(configPath)) return false;
 
         try
