@@ -9,8 +9,19 @@ var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.Local.json", optional: true)
     .Build();
 
-var rootCommand = new RootCommand(
-    "Manage .resx resource file translations using Azure Cognitive Services Translator API. Use subcommands: translate (default) or rollback.");
+var rootCommand = new RootCommand("""
+    Manage .resx resource file translations using Azure Cognitive Services Translator API.
+
+    Subcommands:
+      translate   Translate .resx files to one or more target languages
+      rollback    Remove one or more target languages from the repository
+
+    Examples:
+      translate --culture en-US --translator-key <key>
+      translate --culture en-US de-DE fr-FR --translator-key <key>
+      rollback  --culture en-US
+      rollback  --culture de-DE fr-FR
+    """);
 
 // ── Shared options ──
 var sourceOption = new Option<string>(
@@ -64,8 +75,16 @@ rootCommand.AddOption(excludeProjectsOption);
 rootCommand.AddOption(repoRootOption);
 
 // ── Translate command ──
-var translateCommand = new Command("translate",
-    "Translate .resx resource files to target languages using Azure Cognitive Services Translator API.");
+var translateCommand = new Command("translate", """
+    Translate .resx resource files to target languages using Azure Cognitive Services Translator API.
+
+    Examples:
+      translate --culture en-US --translator-key <key>
+      translate --culture en-US de-DE fr-FR --source pl-PL --translator-key <key>
+      translate --culture en-US --dry-run
+      translate --culture en-US --all --translator-key <key>
+      translate --culture en-US --include RentoomBookingWeb --translator-key <key>
+    """);
 
 translateCommand.AddOption(sourceOption);
 translateCommand.AddOption(cultureOption);
@@ -138,8 +157,16 @@ translateCommand.SetHandler(async (InvocationContext ctx) =>
 rootCommand.AddCommand(translateCommand);
 
 // ── Rollback command ──
-var rollbackCommand = new Command("rollback",
-    "Remove one or more target languages from the repository. Deletes culture-specific .resx files and updates configuration (supported-languages.json).");
+var rollbackCommand = new Command("rollback", """
+    Remove one or more target languages from the repository.
+    Deletes culture-specific .resx files and updates SharedClasses/supported-languages.json.
+
+    Examples:
+      rollback --culture en-US
+      rollback --culture de-DE fr-FR
+      rollback --culture en-US --dry-run
+      rollback --culture en-US --include RentoomBookingWeb
+    """);
 
 rollbackCommand.AddOption(sourceOption);
 rollbackCommand.AddOption(cultureOption);
