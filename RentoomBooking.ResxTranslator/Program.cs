@@ -64,6 +64,40 @@ rootCommand.AddOption(repoRootOption);
 rootCommand.AddOption(translatorKeyOption);
 rootCommand.AddOption(translatorRegionOption);
 
+// ── Rollback command ──
+var rollbackCultureOption = new Option<string>(
+    "--culture",
+    description: "Target culture to roll back (e.g. en-US). Must not be the source culture.")
+{ IsRequired = true };
+
+var rollbackCommand = new Command("rollback",
+    "Remove a target culture from the repo: deletes .resx files and cleans up supported-languages.json / SupportedLanguagesConfig.cs.");
+
+rollbackCommand.AddOption(sourceOption);
+rollbackCommand.AddOption(rollbackCultureOption);
+rollbackCommand.AddOption(dryRunOption);
+rollbackCommand.AddOption(includeProjectsOption);
+rollbackCommand.AddOption(excludeProjectsOption);
+rollbackCommand.AddOption(repoRootOption);
+
+rollbackCommand.SetHandler((InvocationContext ctx) =>
+{
+    var source          = ctx.ParseResult.GetValueForOption(sourceOption)!;
+    var culture         = ctx.ParseResult.GetValueForOption(rollbackCultureOption)!;
+    var dryRun          = ctx.ParseResult.GetValueForOption(dryRunOption);
+    var includeProjects = ctx.ParseResult.GetValueForOption(includeProjectsOption) ?? [];
+    var excludeProjects = ctx.ParseResult.GetValueForOption(excludeProjectsOption) ?? [];
+    var repoRoot        = ctx.ParseResult.GetValueForOption(repoRootOption)
+                          ?? FindRepoRoot(Directory.GetCurrentDirectory());
+
+    var service = new RollbackService(
+        repoRoot, culture, source, dryRun, includeProjects, excludeProjects);
+
+    ctx.ExitCode = service.Execute();
+});
+
+rootCommand.AddCommand(rollbackCommand);
+
 rootCommand.SetHandler(async (InvocationContext ctx) =>
 {
     var source = ctx.ParseResult.GetValueForOption(sourceOption)!;

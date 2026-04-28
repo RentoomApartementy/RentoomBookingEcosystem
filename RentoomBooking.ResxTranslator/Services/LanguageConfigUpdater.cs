@@ -45,6 +45,96 @@ public static class LanguageConfigUpdater
         Console.ResetColor();
     }
 
+    /// <summary>
+    /// Removes a culture from supported-languages.json and SupportedLanguagesConfig.cs.
+    /// No-op if the culture is not present. Caller is responsible for ensuring the culture
+    /// is not the default and that no .resx files for it remain.
+    /// </summary>
+    public static void RemoveCulture(string repoRoot, string culture)
+    {
+        var configPath = Path.Combine(repoRoot, "supported-languages.json");
+        if (!File.Exists(configPath))
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("  ⚠ supported-languages.json not found — skipping config update.");
+            Console.ResetColor();
+            return;
+        }
+
+        var json = File.ReadAllText(configPath);
+        LanguageConfig config;
+        try
+        {
+            config = JsonSerializer.Deserialize<LanguageConfig>(json, JsonOptions) ?? new();
+        }
+        catch (JsonException ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine($"  ERROR reading supported-languages.json: {ex.Message}");
+            Console.ResetColor();
+            return;
+        }
+
+        var before = config.Cultures.Count;
+        config.Cultures.RemoveAll(c => c.Equals(culture, StringComparison.OrdinalIgnoreCase));
+
+        if (config.Cultures.Count == before)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"  ⚠ '{culture}' was not found in supported-languages.json.");
+            Console.ResetColor();
+        }
+        else
+        {
+            var updatedJson = JsonSerializer.Serialize(config, new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+            File.WriteAllText(configPath, updatedJson + Environment.NewLine);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"  ✓ Removed '{culture}' from supported-languages.json");
+            Console.ResetColor();
+        }
+
+        // Update C# defaults regardless (even if JSON was already clean, keep them in sync)
+        RemoveFromCSharpDefaults(repoRoot, culture);
+    }
+
+    private static void RemoveFromCSharpDefaults(string repoRoot, string culture)
+    {
+        var csPath = Path.Combine(repoRoot, "SharedClasses", "Configuration", "SupportedLanguagesConfig.cs");
+        if (!File.Exists(csPath)) return;
+
+        var content = File.ReadAllText(csPath);
+
+        // Remove the culture literal from the list initializer, handling both:
+        //   "de-DE", "en-US", "pl-PL"  →  remove "de-DE",
+        //   "en-US", "de-DE", "pl-PL"  →  remove , "de-DE"
+        var escapedCulture = Regex.Escape($"\"{culture}\"");
+        var removeWithTrailingComma = new Regex($@"{escapedCulture},\s*");
+        var removeWithLeadingComma  = new Regex($@",\s*{escapedCulture}");
+
+        string updated;
+        if (removeWithTrailingComma.IsMatch(content))
+            updated = removeWithTrailingComma.Replace(content, "", count: 1);
+        else if (removeWithLeadingComma.IsMatch(content))
+            updated = removeWithLeadingComma.Replace(content, "", count: 1);
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"  ⚠ '{culture}' not found in SupportedLanguagesConfig.cs — file unchanged.");
+            Console.ResetColor();
+            return;
+        }
+
+        File.WriteAllText(csPath, updated);
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"  ✓ Removed '{culture}' from SupportedLanguagesConfig.cs");
+        Console.ResetColor();
+    }
+
     private static void UpdateCSharpDefaults(string repoRoot, List<string> cultures)
     {
         var csPath = Path.Combine(repoRoot, "SharedClasses", "Configuration", "SupportedLanguagesConfig.cs");
