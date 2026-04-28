@@ -11,7 +11,7 @@ namespace RentoomBooking.LiveChat.Bitrix;
 public sealed class BitrixOAuthService : IBitrixOAuthService
 {
     private readonly string _configuredClientEndpoint;
-    private readonly string _configuredRefreshToken;
+    private readonly string? _configuredRefreshToken;
     private readonly IDbContextFactory<LiveChatDbContext> _dbContextFactory;
     private readonly HttpClient _httpClient;
     private readonly ILogger<BitrixOAuthService> _logger;
@@ -77,8 +77,12 @@ public sealed class BitrixOAuthService : IBitrixOAuthService
              DateTime.UtcNow < portal.AccessTokenExpiresAt.Value.AddSeconds(-60)))
             return portal.AccessToken;
 
-        if (string.IsNullOrWhiteSpace(portal.RefreshToken))
-            throw new InvalidOperationException($"Bitrix portal {portal.Domain} does not have a refresh token.");
+        var effectiveRefreshToken = string.IsNullOrWhiteSpace(portal.RefreshToken)
+            ? _configuredRefreshToken
+            : portal.RefreshToken;
+
+        if (string.IsNullOrWhiteSpace(effectiveRefreshToken))
+            throw new InvalidOperationException($"Bitrix portal {portal.Domain} does not have a refresh token and no fallback is configured.");
 
         await _tokenLock.WaitAsync(ct);
         try
@@ -90,9 +94,13 @@ public sealed class BitrixOAuthService : IBitrixOAuthService
                  DateTime.UtcNow < portal.AccessTokenExpiresAt.Value.AddSeconds(-60)))
                 return portal.AccessToken;
 
-            var refreshed = await RefreshAccessTokenAsync(portal.RefreshToken, ct);
+            var tokenToRefresh = string.IsNullOrWhiteSpace(portal.RefreshToken)
+                ? _configuredRefreshToken
+                : portal.RefreshToken;
+
+            var refreshed = await RefreshAccessTokenAsync(tokenToRefresh!, ct);
             portal.AccessToken = refreshed.AccessToken;
-            portal.RefreshToken = refreshed.RefreshToken ?? portal.RefreshToken;
+            portal.RefreshToken = refreshed.RefreshToken ?? portal.RefreshToken ?? tokenToRefresh;
             portal.AccessTokenExpiresAt = refreshed.ExpiresAt;
             portal.UpdatedAt = DateTime.UtcNow;
             await db.SaveChangesAsync(ct);

@@ -30,9 +30,11 @@ public sealed class BitrixLiveChatOptions
     [Required]
     public string OAuthClientSecret { get; set; } = string.Empty;
 
-    /// <summary>Initial OAuth2 refresh token (bootstraps token rotation).</summary>
-    [Required]
-    public string OAuthRefreshToken { get; set; } = string.Empty;
+    /// <summary>
+    /// Initial OAuth2 refresh token (bootstraps token rotation).
+    /// Optional when a portal with its own refresh token already exists in the database.
+    /// </summary>
+    public string? OAuthRefreshToken { get; set; }
 
     /// <summary>Max guest messages per session token per minute.</summary>
     [Range(1, 1000)]

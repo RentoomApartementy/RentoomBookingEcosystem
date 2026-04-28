@@ -242,7 +242,7 @@ builder.Services.AddOptions<RentoomBooking.SharedClasses.Configuration.BitrixLiv
         options.OpenLineId = RentoomBooking.SharedClasses.Configuration.BitrixLiveChatConfiguration.GetOpenLineId(configuration);
         options.OAuthClientId = configuration["Bitrix:LiveChat:OAuthClientId"] ?? string.Empty;
         options.OAuthClientSecret = configuration["Bitrix:LiveChat:OAuthClientSecret"] ?? string.Empty;
-        options.OAuthRefreshToken = configuration["Bitrix:LiveChat:OAuthRefreshToken"] ?? string.Empty;
+        options.OAuthRefreshToken = configuration["Bitrix:LiveChat:OAuthRefreshToken"];
     })
     .ValidateDataAnnotations()
     .ValidateOnStart();
