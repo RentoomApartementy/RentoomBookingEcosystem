@@ -16,7 +16,7 @@ public sealed class LiveChatMessageEntity
 
     [Column("bitrix_message_id")] public string? BitrixMessageId { get; set; }
 
-    [Column("operator_name")] public string? OperatorName { get; set; }
+    [Column("sender_name")] public string? SenderName { get; set; }
 
     // TODO: TEMP — remove after debugging user.id resolution
     [Column("operator_bitrix_user_id")] public string? OperatorBitrixUserId { get; set; }

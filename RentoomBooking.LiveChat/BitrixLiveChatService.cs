@@ -171,7 +171,8 @@ public sealed class BitrixLiveChatService
         {
             SessionId = sessionId,
             Sender = LiveChatSenders.Guest,
-            Content = content
+            Content = content,
+            SenderName = session.GuestName
         };
 
         await _messageRepo.CreateAsync(message, ct);
@@ -273,7 +274,7 @@ public sealed class BitrixLiveChatService
             Sender = LiveChatSenders.Operator,
             Content = cleanText,
             BitrixMessageId = incoming.BitrixMessageId,
-            OperatorName = parsedName,
+            SenderName = parsedName,
             OperatorBitrixUserId = incoming.AuthorId,
             OperatorAvatarUrl = preEnrichedAvatarUrl,
             Attachments = safeAttachments.Count > 0
@@ -297,7 +298,7 @@ public sealed class BitrixLiveChatService
                     SessionId = session.Id,
                     Sender = LiveChatSenders.System,
                     Content = "agent_joined",
-                    OperatorName = parsedName
+                    SenderName = parsedName
                 };
                 db.LiveChatMessages.Add(joinMessage);
             }
@@ -340,7 +341,7 @@ public sealed class BitrixLiveChatService
                             await bgDb.LiveChatMessages.FindAsync(new object[] { capturedMessageId }, stoppingToken);
                         if (bgMessage is not null)
                         {
-                            bgMessage.OperatorName = info.FirstName ?? bgMessage.OperatorName;
+                            bgMessage.SenderName = info.FirstName ?? bgMessage.SenderName;
                             bgMessage.OperatorAvatarUrl = info.AvatarUrl;
                             await bgDb.SaveChangesAsync(stoppingToken);
 

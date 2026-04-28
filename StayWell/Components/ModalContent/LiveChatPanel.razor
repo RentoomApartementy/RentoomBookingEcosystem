@@ -95,7 +95,7 @@
                 @if (isOperator && isFirstInGroup)
                 {
                     <div class="livechat-operator-name-label @(isAutomated ? "livechat-operator-name-label--automated" : "")">
-                        @(isAutomated ? Localizer["AutomatedMessage"] : (msg.OperatorName ?? Localizer["Support"]))
+                        @(isAutomated ? Localizer["AutomatedMessage"] : (msg.SenderName ?? Localizer["Support"]))
                     </div>
                 }
 
@@ -133,7 +133,7 @@
                             else
                             {
                                 <span class="livechat-operator-avatar livechat-operator-avatar--fallback"
-                                      style="background:@GetOperatorColor(msg.OperatorName)">
+                                      style="background:@GetOperatorColor(msg.SenderName)">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <circle cx="12" cy="8" r="4" fill="white"/>
                                         <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="white" stroke-width="2" stroke-linecap="round"/>

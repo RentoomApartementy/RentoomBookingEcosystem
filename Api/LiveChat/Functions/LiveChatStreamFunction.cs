@@ -73,7 +73,7 @@ public sealed class LiveChatStreamFunction
                     ct);
                 if (msg is not null)
                     await WriteSseAsync(writer, "message",
-                        new LiveChatMessageDto(msg.Id, msg.Sender, msg.Content, msg.CreatedAt, msg.OperatorName,
+                        new LiveChatMessageDto(msg.Id, msg.Sender, msg.Content, msg.CreatedAt, msg.SenderName,
                             msg.OperatorAvatarUrl, _liveChatService.DeserializeAttachments(msg),
                             msg.OperatorBitrixUserId), ct);
                 else
