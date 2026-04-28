@@ -62,13 +62,13 @@
         }
     }
 
-    protected override Task OnParametersSetAsync()
+    protected override async Task OnParametersSetAsync()
     {
         if (ReservationState.IsValidReservation && !string.IsNullOrWhiteSpace(Token))
         {
+            await LiveChatNotificationState.LoadUnreadAsync(Token);
             LiveChatNotificationState.StartListening(Token);
         }
-        return Task.CompletedTask;
     }
 
     private void ChangeLangButton()

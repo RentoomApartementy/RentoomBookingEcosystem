@@ -7,20 +7,23 @@ namespace RentoomBooking.StayWell.States;
 public sealed class LiveChatNotificationState : IDisposable
 {
     private readonly LiveChatClientService _liveChatClient;
+    private readonly LocalStorageService _localStorage;
     private readonly ILogger<LiveChatNotificationState> _logger;
     private CancellationTokenSource? _streamCts;
     private string? _currentToken;
     private int _unreadCount;
     private bool _isChatOpen;
+    private readonly HashSet<Guid> _countedMessageIds = new();
 
     public int UnreadCount => _unreadCount;
 
     public event Action? OnChange;
     public event Func<LiveChatMessageDto, Task>? OnNewMessage;
 
-    public LiveChatNotificationState(LiveChatClientService liveChatClient, ILogger<LiveChatNotificationState> logger)
+    public LiveChatNotificationState(LiveChatClientService liveChatClient, LocalStorageService localStorage, ILogger<LiveChatNotificationState> logger)
     {
         _liveChatClient = liveChatClient;
+        _localStorage = localStorage;
         _logger = logger;
     }
 
@@ -45,9 +48,11 @@ public sealed class LiveChatNotificationState : IDisposable
                         {
                             _liveChatClient.InvalidateHistory(token);
 
-                            if (msg.Sender != "guest" && msg.Sender != "system" && !_isChatOpen)
+                            if (msg.Sender != "guest" && msg.Sender != "system" && !_isChatOpen
+                                && _countedMessageIds.Add(msg.Id))
                             {
                                 _unreadCount++;
+                                _ = PersistUnreadAsync();
                                 OnChange?.Invoke();
                             }
 
@@ -77,7 +82,23 @@ public sealed class LiveChatNotificationState : IDisposable
         _streamCts?.Dispose();
         _streamCts = null;
         _currentToken = null;
+        _countedMessageIds.Clear();
     }
+
+    public async Task LoadUnreadAsync(string token)
+    {
+        var (exists, count) = await _localStorage.TryGetItemAsync<int>($"livechat:unread:{token}");
+        if (exists && count > 0)
+        {
+            _unreadCount = count;
+            OnChange?.Invoke();
+        }
+    }
+
+    private Task PersistUnreadAsync()
+        => _currentToken is not null
+            ? _localStorage.SetItemAsync($"livechat:unread:{_currentToken}", _unreadCount)
+            : Task.CompletedTask;
 
     public void SetChatOpen(bool isOpen)
     {
@@ -89,6 +110,7 @@ public sealed class LiveChatNotificationState : IDisposable
     {
         if (_unreadCount == 0) return;
         _unreadCount = 0;
+        _ = PersistUnreadAsync();
         OnChange?.Invoke();
     }
 
