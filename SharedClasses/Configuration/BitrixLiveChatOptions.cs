@@ -4,11 +4,11 @@ namespace RentoomBooking.SharedClasses.Configuration;
 
 /// <summary>
 /// Strongly-typed options for the Bitrix24 Open Lines (LiveChat) integration.
-/// Bind from the "Bitrix:LiveChat" configuration section.
+/// Bind from the "BitrixLiveChat" configuration section.
 /// </summary>
 public sealed class BitrixLiveChatOptions
 {
-    public const string SectionName = "Bitrix:LiveChat";
+    public const string SectionName = "BitrixLiveChat";
 
     /// <summary>Bitrix24 REST API base URL (e.g. https://your-portal.bitrix24.pl/rest).</summary>
     [Required]
