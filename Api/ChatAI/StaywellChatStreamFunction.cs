@@ -27,9 +27,9 @@ public sealed class StaywellChatStreamFunction
         _logger = logger;
     }
 
-    [Function("StaywellChatStream")]
+    [Function("StaywellChatAIStream")]
     public async Task<HttpResponseData> StreamAsync(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "staywell/chat/stream")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "staywell/chatai/stream")] HttpRequestData req,
         CancellationToken cancellationToken)
     {
         var correlationId = GetOrCreateCorrelationId(req);
@@ -186,6 +186,7 @@ public sealed class StaywellChatStreamFunction
         int? retryAfterSeconds = null)
     {
         var response = req.CreateResponse(statusCode);
+        response.Headers.Remove("Content-Type");
         response.Headers.Add("Content-Type", "application/json; charset=utf-8");
 
         if (retryAfterSeconds.HasValue)

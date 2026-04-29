@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using RentoomBooking.LiveChat;
 using RentoomBooking.LiveChat.Bitrix;
 
-namespace RentoomBooking.Api.LiveChat.Functions;
+namespace RentoomBooking.Api.Integrations.BitrixLiveChat.Functions;
 
 public sealed class LiveChatBitrixInstallFunction
 {

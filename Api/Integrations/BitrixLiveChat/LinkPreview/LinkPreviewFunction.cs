@@ -9,7 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 using RentoomBooking.LiveChat;
 using RentoomBooking.SharedClasses.LiveChat;
 
-namespace RentoomBooking.Api.LinkPreview;
+namespace RentoomBooking.Api.Integrations.BitrixLiveChat.LinkPreview;
 
 public sealed class LinkPreviewFunction
 {
@@ -198,8 +198,8 @@ public sealed class LinkPreviewFunction
 
         var b = ip.GetAddressBytes();
         return b[0] == 10
-            || (b[0] == 172 && b[1] >= 16 && b[1] <= 31)
-            || (b[0] == 192 && b[1] == 168)
-            || (b[0] == 169 && b[1] == 254);
+            || b[0] == 172 && b[1] >= 16 && b[1] <= 31
+            || b[0] == 192 && b[1] == 168
+            || b[0] == 169 && b[1] == 254;
     }
 }

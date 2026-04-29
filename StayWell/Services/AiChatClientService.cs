@@ -26,7 +26,7 @@ public sealed class AiChatClientService
         Func<string, Task> onError,
         CancellationToken cancellationToken = default)
     {
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, "staywell/chat/stream")
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, "staywell/chatai/stream")
         {
             Content = JsonContent.Create(request, options: _jsonOptions)
         };
