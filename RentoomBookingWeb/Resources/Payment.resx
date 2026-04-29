@@ -336,4 +336,55 @@
   <data name="InvoiceNo" xml:space="preserve">
     <value />
   </data>
+  <data name="PaymentReturnCheckingTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnPendingBannerTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnFailedBannerMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnVerificationError" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentPageTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="MessageSentDescription" xml:space="preserve">
+    <value>Potwierdzenie wysłaliśmy na {0} oraz na WhatsApp.</value>
+  </data>
+  <data name="PaymentReturnPendingMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnWaitingTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentStatusFetchError" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentVerificationError" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnWaitingMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="MessageSentTitle" xml:space="preserve">
+    <value>Wysłano wiadomość</value>
+  </data>
+  <data name="PaymentReturnCheckingMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnPendingTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnPendingBannerMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentInitError" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnFailedBannerTitle" xml:space="preserve">
+    <value> </value>
+  </data>
 </root>

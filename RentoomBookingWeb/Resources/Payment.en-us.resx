@@ -315,6 +315,9 @@
   <data name="StaywellPopupDescription" xml:space="preserve">
     <value>Scan the QR code to instantly open the StayWell panel assigned to this reservation. In the panel, you can check your stay details, practical information, the status of additional services, and the most important messages.</value>
   </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Open the StayWell panel for this reservation. In the panel, you can check your stay details, practical information, additional services status, and the most important messages.</value>
+  </data>
   <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
     <value>Go to Staywell directly</value>
   </data>
@@ -334,175 +337,132 @@
     <value>No</value>
   </data>
   <data name="FailPageTitle" xml:space="preserve">
-    <value />
     <value>Rentoom - Payment verification</value>
   </data>
   <data name="PaymentReturnCheckingTitle" xml:space="preserve">
-    <value />
     <value>We are checking your payment</value>
   </data>
   <data name="PaymentReturnPendingBannerTitle" xml:space="preserve">
-    <value />
     <value>We could not confirm the payment yet</value>
   </data>
   <data name="StaywellPopupAriaLabel" xml:space="preserve">
-    <value />
     <value>StayWell information</value>
   </data>
   <data name="PaymentReturnFailedBannerMessage" xml:space="preserve">
-    <value />
     <value>You can retry the payment from this summary. If your bank already charged the card, wait a moment before making another attempt.</value>
   </data>
   <data name="SummaryPageTitle" xml:space="preserve">
-    <value />
     <value>Rentoom - Reservation summary</value>
   </data>
   <data name="TpayMockCancelButton" xml:space="preserve">
-    <value />
     <value>Cancel</value>
   </data>
   <data name="CancelActionSeparatorText" xml:space="preserve">
-    <value />
     <value>Or</value>
   </data>
   <data name="TpayMockReservationLabel" xml:space="preserve">
-    <value />
     <value>Reservation</value>
   </data>
   <data name="PaymentReturnVerificationError" xml:space="preserve">
-    <value />
     <value>We could not verify the payment status automatically. Go back to the summary and try again there.</value>
   </data>
   <data name="SuccessPageTitle" xml:space="preserve">
-    <value />
     <value>Rentoom - Paid</value>
   </data>
   <data name="PaymentPageTitle" xml:space="preserve">
-    <value />
     <value>Rentoom - Pay for reservation</value>
   </data>
   <data name="StaywellButtonText" xml:space="preserve">
-    <value />
     <value>Click to manage your reservation in Rentoom StayWell</value>
   </data>
   <data name="MessageSentDescription" xml:space="preserve">
-    <value />
     <value>The confirmation was sent to {0} and on WhatsApp.</value>
   </data>
   <data name="PaymentReturnPendingMessage" xml:space="preserve">
-    <value />
     <value>We still do not have a final confirmation. In a moment you will return to the summary, where you can safely retry the payment if needed.</value>
   </data>
   <data name="EmailDeliveryPendingTitle" xml:space="preserve">
-    <value />
     <value>Sending message</value>
   </data>
   <data name="SummaryBuildError" xml:space="preserve">
-    <value />
     <value>Could not build reservation summary.</value>
   </data>
   <data name="TpayMockMissingReservation" xml:space="preserve">
-    <value />
     <value>Missing reservation identifier in URL.</value>
   </data>
   <data name="EmailStatusFetchError" xml:space="preserve">
-    <value />
     <value>Could not check email status.</value>
   </data>
   <data name="FailIconAlt" xml:space="preserve">
-    <value />
     <value>alert icon</value>
   </data>
   <data name="TpayMockPaymentSessionLabel" xml:space="preserve">
-    <value />
     <value>Payment session</value>
   </data>
   <data name="PaymentReturnWaitingTitle" xml:space="preserve">
-    <value />
     <value>Waiting for payment confirmation</value>
   </data>
   <data name="CancelReservationInProgressText" xml:space="preserve">
-    <value />
     <value>Cancelling...</value>
   </data>
   <data name="PaymentStatusFetchError" xml:space="preserve">
-    <value />
     <value>Could not fetch payment status.</value>
   </data>
   <data name="SummarySaveTermsError" xml:space="preserve">
-    <value />
     <value>An error occurred while saving consents. Please try again.</value>
   </data>
   <data name="TpayMockPayButton" xml:space="preserve">
-    <value />
     <value>Pay</value>
   </data>
   <data name="EmailDeliveryPendingMessage" xml:space="preserve">
-    <value />
     <value>We are sending the confirmation to {0} and on WhatsApp.</value>
   </data>
   <data name="ClientInfoNipLabel" xml:space="preserve">
-    <value />
     <value>Tax ID</value>
   </data>
   <data name="PaymentVerificationError" xml:space="preserve">
-    <value />
     <value>Could not confirm payment.</value>
   </data>
   <data name="StaywellPopupCloseAriaLabel" xml:space="preserve">
-    <value />
     <value>Close StayWell popup</value>
   </data>
   <data name="ClientInfoSaveError" xml:space="preserve">
-    <value />
     <value>Could not save client details.</value>
   </data>
   <data name="TpayMockPageTitle" xml:space="preserve">
-    <value />
     <value>Mock TPAY</value>
   </data>
   <data name="ClientInfoPageTitle" xml:space="preserve">
-    <value />
     <value>Rentoom Reservation - Client Details</value>
   </data>
   <data name="PaymentReturnWaitingMessage" xml:space="preserve">
-    <value />
     <value>The payment may still be processing. We are verifying it before sending you back to the reservation summary.</value>
   </data>
   <data name="TpayMockHeader" xml:space="preserve">
-    <value />
     <value>Payment simulation</value>
   </data>
   <data name="MessageSentTitle" xml:space="preserve">
-    <value />
     <value>Message sent</value>
   </data>
   <data name="PaymentReturnCheckingMessage" xml:space="preserve">
-    <value />
     <value>This does not always mean the payment failed. We first verify the final transaction status.</value>
   </data>
   <data name="PaymentReturnPendingTitle" xml:space="preserve">
-    <value />
     <value>Payment status still pending</value>
   </data>
   <data name="PaymentReturnPendingBannerMessage" xml:space="preserve">
-    <value />
     <value>If funds were charged, do not pay again immediately. Check the reservation status below and retry only if the payment is still not confirmed.</value>
   </data>
   <data name="PaymentInitError" xml:space="preserve">
-    <value />
     <value>Could not initialize payment.</value>
   </data>
   <data name="CancelReservationErrorText" xml:space="preserve">
-    <value />
     <value>An error occurred while cancelling the reservation. Please try again.</value>
   </data>
   <data name="PaymentReturnFailedBannerTitle" xml:space="preserve">
-    <value />
     <value>Payment was not completed</value>
   </data>
   <data name="CancelReservationButtonText" xml:space="preserve">
-    <value />
     <value>Cancel reservation</value>
   </data>
 </root>
