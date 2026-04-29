@@ -121,8 +121,9 @@
 
     private bool _canSend => !_isStreaming && !string.IsNullOrWhiteSpace(_input);
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await SetTransportModeAsync(AiChatTransportMode.Agent);
         EnsureWelcomeMessage();
         QueueScrollToBottom();
     }
@@ -134,7 +135,7 @@
         {
             return;
         }
-
+        await SetTransportModeAsync(AiChatTransportMode.Agent);
         await LoadConversationContextAsync(token);
     }
 
