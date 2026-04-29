@@ -1,0 +1,121 @@
+@page "/reservation/{token}/ParkingPage"
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@using RentoomBooking.SharedClasses.Models.StayWell
+@using RentoomBooking.StayWell.Services
+@using RentoomBooking.StayWell.States
+@inject NavigationManager Navigation
+@inject IStringLocalizer<ParkingPage> Localizer
+@inject StayWell.Services.BackendApi BackendApi
+
+@inherits Models.PageBase
+
+<PageTitle>@Localizer["ParkingPage"]</PageTitle>
+
+<div class="parking-page">
+    <section class="instructions-section">
+        <header class="instructions-section__header">
+            <h3 class="instructions-section__title">@Localizer["CityParking"]</h3>
+        </header>
+
+        <div class="codes-grid">
+            @foreach (var zone in _parkingInfo?.Zones ?? [])
+            {
+                var isFree = IsParkingFreeNow(zone);
+                <div class="code-card code-card--map">
+                    <div class="code-card__icon-wrapper">
+                        <img src="/icons/square-parking.svg" class="code-card__icon" />
+                    </div>
+                    <div class="code-card__content">
+                        <div class="code-card__header">
+                            <div class="code-card__label">@Localizer[zone.NameKey]</div>
+                            <span class="code-card__status @(isFree ? "code-card__status--available" : "code-card__status--paid")">
+                                @(isFree ? @Localizer["FreePark"] : @Localizer["PaidPark"])
+                            </span>
+                        </div>
+                        <div class="code-card__value">@Localizer["PaidDays"]: @FormatDays(zone.PaidDays), @zone.PaidFrom.ToString("HH:mm")–@zone.PaidTo.ToString("HH:mm")</div>
+                        <div class="code-card__meta">@Localizer["FreeDays"]: @FormatDays(zone.FreeDays)</div>
+                    </div>
+                </div>
+            }
+
+            @if (_parkingInfo is not null)
+            {
+                <a class="code-card code-card--map code-card--link" href="@GetParkingInfoUrl(_parkingInfo.InfoUrl)" target="_blank" rel="noopener noreferrer">
+                    <div class="code-card__icon-wrapper">
+                        <img src="/icons/external-link.svg" class="code-card__icon" />
+                    </div>
+                    <div class="code-card__content">
+                        <div class="code-card__label">@Localizer["MoreInfo"]</div>
+                        <div class="code-card__cta">
+                            <span>@Localizer["MoreInfo"]</span>
+                            <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </section>
+</div>
+
+@code {
+    private Timer? _parkingRefreshTimer;
+    private CityParkingInfoDto? _parkingInfo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        
+        _parkingInfo = await BackendApi.GetCityParkingInfoAsync();
+
+        _parkingRefreshTimer = new Timer(_ => InvokeAsync(StateHasChanged), null,
+            TimeSpan.FromSeconds(30),
+            TimeSpan.FromSeconds(30));
+
+        StateHasChanged();
+    }
+
+    private string FormatDays(List<DayOfWeek> days)
+    {
+        if (!days.Any()) return string.Empty;
+
+        var dayNames = days.Select(d => Localizer[d.ToString()]).ToList();
+        
+        if (dayNames.Count == 1) return dayNames[0];
+        if (dayNames.Count == 2) return string.Join(" i ", dayNames);
+        
+        return string.Join(", ", dayNames.Take(dayNames.Count - 1)) + " i " + dayNames.Last();
+    }
+
+    private bool IsParkingFreeNow(ParkingZoneDto zone)
+    {
+        var now = DateTime.Now;
+        var currentDay = now.DayOfWeek;
+        var currentTime = TimeOnly.FromDateTime(now);
+
+        if (zone.FreeDays.Contains(currentDay)) return true;
+        if (!zone.PaidDays.Contains(currentDay)) return true;
+        if (currentTime < zone.PaidFrom || currentTime >= zone.PaidTo) return true;
+
+        return false;
+    }
+
+    private string GetParkingInfoUrl(string baseUrl)
+    {
+        var language = GlobalizationService.CurrentCulture.TwoLetterISOLanguageName;
+
+        if (string.Equals(language, "pl", StringComparison.OrdinalIgnoreCase))
+        {
+            return baseUrl;
+        }
+
+        var encodedUrl = Uri.EscapeDataString(baseUrl);
+        return $"https://translate.google.com/translate?sl=pl&tl={language}&u={encodedUrl}";
+    }
+
+    public override void Dispose()
+    {
+        _parkingRefreshTimer?.Dispose();
+        base.Dispose();
+    }
+}
