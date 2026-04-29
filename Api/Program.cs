@@ -28,6 +28,7 @@ using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Integrations.TTLock;
 using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
+using RentoomBooking.SharedClasses.Integrations.TTLock.Services;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
@@ -129,6 +130,7 @@ var ttlockSection = builder.Configuration.GetSection("TTLOCK");
 builder.Services.Configure<TTLockSettings>(ttlockSection);
 
 builder.Services.AddHttpClient<TTLockService>();
+builder.Services.AddScoped<ITTLockPasscodeAppService, TTLockPasscodeAppService>();
 
 //Upselle
 builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
