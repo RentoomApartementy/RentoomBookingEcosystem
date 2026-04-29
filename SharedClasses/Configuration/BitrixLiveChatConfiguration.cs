@@ -8,7 +8,7 @@ public static class BitrixLiveChatConfiguration
     public const string OpenLineIdFlatKey = "BitrixOpenLineId";
     public const int DefaultOpenLineId = 32;
 
-    public const string ConnectorIdKey = "Bitrix:LiveChat:ConnectorId";
+    public const string ConnectorIdKey = "BitrixLiveChat:ConnectorId";
     public const string DefaultConnectorId = "staywell_livechat";
 
     public static int GetOpenLineId(IConfiguration configuration)

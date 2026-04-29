@@ -240,9 +240,9 @@ builder.Services.AddOptions<RentoomBooking.SharedClasses.Configuration.BitrixLiv
         options.Domain = RentoomBooking.SharedClasses.Configuration.BitrixConfiguration.GetDomain(configuration);
         options.ConnectorId = RentoomBooking.SharedClasses.Configuration.BitrixLiveChatConfiguration.GetConnectorId(configuration);
         options.OpenLineId = RentoomBooking.SharedClasses.Configuration.BitrixLiveChatConfiguration.GetOpenLineId(configuration);
-        options.OAuthClientId = configuration["Bitrix:LiveChat:OAuthClientId"] ?? string.Empty;
-        options.OAuthClientSecret = configuration["Bitrix:LiveChat:OAuthClientSecret"] ?? string.Empty;
-        options.OAuthRefreshToken = configuration["Bitrix:LiveChat:OAuthRefreshToken"];
+        options.OAuthClientId = configuration["BitrixLiveChat:OAuthClientId"] ?? string.Empty;
+        options.OAuthClientSecret = configuration["BitrixLiveChat:OAuthClientSecret"] ?? string.Empty;
+        options.OAuthRefreshToken = configuration["BitrixLiveChat:OAuthRefreshToken"];
     })
     .ValidateDataAnnotations()
     .ValidateOnStart();
