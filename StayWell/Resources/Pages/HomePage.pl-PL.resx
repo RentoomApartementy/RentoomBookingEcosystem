@@ -198,4 +198,10 @@
     
     
   <value>Asystent AI</value></data>
+  <data name="ParkingFooter" xml:space="preserve">
+    <value>Parking miejski</value>
+  </data>
+  <data name="AboutReservationFooter" xml:space="preserve">
+    <value>Informacje o rezerwacji</value>
+  </data>
 </root>
