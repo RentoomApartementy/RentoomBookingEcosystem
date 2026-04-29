@@ -87,6 +87,40 @@
     flex: 0 0 auto;
 }
 
+.ai-chat-mode-toggle {
+    display: inline-grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    width: min(100%, 260px);
+    padding: 4px;
+    border: 1px solid #d7d7d7;
+    border-radius: 8px;
+    background: #f6f6f6;
+}
+
+.ai-chat-mode-option {
+    min-height: 34px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #555;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.ai-chat-mode-option--active {
+    background: #21573e;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(17, 24, 39, 0.12);
+}
+
+.ai-chat-mode-option:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
 .ai-chat-composer {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;

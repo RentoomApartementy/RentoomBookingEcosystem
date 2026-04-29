@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using RentoomBooking.ChatAI.Contracts;
+using RentoomBooking.StayWell.Models.Chat;
 
 namespace RentoomBooking.StayWell.Services;
 
@@ -21,12 +22,13 @@ public sealed class AiChatClientService
 
     public async Task StreamAsync(
         ChatRequestDto request,
+        AiChatTransportMode transportMode,
         Func<ChatChunkDto, Task> onChunk,
         Func<string?, Task> onDone,
         Func<string, Task> onError,
         CancellationToken cancellationToken = default)
     {
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, "staywell/chatai/stream")
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, ResolveStreamPath(transportMode))
         {
             Content = JsonContent.Create(request, options: _jsonOptions)
         };
@@ -105,6 +107,13 @@ public sealed class AiChatClientService
                 }
             }
         }
+    }
+
+    private static string ResolveStreamPath(AiChatTransportMode transportMode)
+    {
+        return transportMode == AiChatTransportMode.Agent
+            ? "staywell/chatai/agent/stream"
+            : "staywell/chatai/stream";
     }
 
     private static async Task<string> ReadErrorMessageAsync(HttpResponseMessage response, CancellationToken cancellationToken)
