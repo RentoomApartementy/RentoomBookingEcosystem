@@ -314,38 +314,6 @@
             }
         </div>
     </section>
-    <section class="instructions-section">
-        <header class="instructions-section__header">
-            <h3 class="instructions-section__title">@Localizer["CityParking"]</h3>
-        </header>
-
-        <div class="parking-zones">
-            @foreach (var zone in _parkingInfo?.Zones ?? [])
-            {
-                var isFree = IsParkingFreeNow(zone);
-                <div class="parking-zone">
-                    <div class="parking-zone__top">
-                        <span class="parking-zone__name">@Localizer[zone.NameKey]</span>
-                        <span class="code-card__status @(isFree ? "code-card__status--available" : "code-card__status--paid")">
-                            @(isFree? @Localizer["FreePark"] : @Localizer["PaidPark"])
-                        </span>
-                    </div>
-                    <div class="parking-zone__hours">
-                        <span class="parking-zone__paid">@Localizer["PaidDays"]: @FormatDays(zone.PaidDays), @zone.PaidFrom.ToString("HH:mm")–@zone.PaidTo.ToString("HH:mm")</span>
-                        <span class="parking-zone__free">@Localizer["FreeDays"]: @FormatDays(zone.FreeDays)</span>
-                    </div>
-                </div>
-            }
-        </div>
-
-        @if (_parkingInfo is not null)
-        {
-            <a class="parking-city-link" href="@GetParkingInfoUrl(_parkingInfo.InfoUrl)" target="_blank" rel="noopener noreferrer">
-                <span>@Localizer["MoreInfo"]</span>
-                <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
-            </a>
-        }
-    </section>
 </div>
 
 @code {
@@ -569,8 +537,6 @@
 
     private DotNetObjectReference<InstructionsPage>? _dotNetRef;
     private string? ActiveShortcutTarget { get; set; }
-    private Timer? _parkingRefreshTimer;
-    private CityParkingInfoDto? _parkingInfo;
 
     protected override async Task OnInitializedAsync()
     {
@@ -583,12 +549,6 @@
         {
             await LocksState.GetApartmentItemCodesAsync(Token);
         }
-
-        _parkingInfo = await BackendApi.GetCityParkingInfoAsync();
-
-        _parkingRefreshTimer = new Timer(_ => InvokeAsync(StateHasChanged), null,
-            TimeSpan.FromSeconds(30),
-            TimeSpan.FromSeconds(30));
 
         StateHasChanged();
     }
@@ -653,9 +613,6 @@
 
     public async ValueTask DisposeAsync()
     {
-        _parkingRefreshTimer?.Dispose();
-        _parkingRefreshTimer = null;
-
         try
         {
             await JS.InvokeVoidAsync("removeInstructionShortcutScrollReset");
@@ -672,8 +629,6 @@
     {
         GlobalizationService.OnChange -= OnLanguageChanged;
         LocksState.OnChange -= OnStateChanged;
-        _parkingRefreshTimer?.Dispose();
-        _parkingRefreshTimer = null;
         base.Dispose();
     }
 
@@ -683,34 +638,4 @@
         public string? Value { get; set; }
     }
 
-    private string FormatDays(List<DayOfWeek> days)
-    {
-        return string.Join(", ", days.Select(d => Localizer[d.ToString()]));
-    }
-
-    private static bool IsParkingFreeNow(ParkingZoneDto zone)
-    {
-        var now = DateTime.Now;
-        var dow = now.DayOfWeek;
-
-        if (zone.FreeDays.Contains(dow)) return true;
-
-        var currentTime = TimeOnly.FromDateTime(now);
-        if (currentTime < zone.PaidFrom || currentTime >= zone.PaidTo) return true;
-
-        return false;
-    }
-
-    private string GetParkingInfoUrl(string baseUrl)
-    {
-        var language = GlobalizationService.CurrentCulture.TwoLetterISOLanguageName;
-
-        if (string.Equals(language, "pl", StringComparison.OrdinalIgnoreCase))
-        {
-            return baseUrl;
-        }
-
-        var encodedUrl = Uri.EscapeDataString(baseUrl);
-        return $"https://translate.google.com/translate?sl=pl&tl={language}&u={encodedUrl}";
-    }
 }

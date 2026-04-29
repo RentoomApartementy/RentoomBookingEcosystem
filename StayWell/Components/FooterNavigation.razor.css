@@ -1,9 +1,217 @@
-﻿.footer-navigation-row {
+﻿.footer-nav-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.footer-navigation-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 100%;
     width: 100%;
     padding: 0 24px;
+    background: linear-gradient(0deg, rgba(255,255,255,0.92) 80%, rgba(255,255,255,0.75) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    position: relative;
+    z-index: 101;
+}
+
+/* ── Burger button (mirrors NavigationButton styles, scoped here) ── */
+.footer-nav-btn-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-nav-btn {
+    width: 100%;
+    max-width: 76px;
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 14px;
+    padding: 6px 2px;
+    margin: 0;
+    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.footer-nav-btn.active {
+    background: rgba(33, 87, 62, 0.12);
+    transform: translate3d(0, -4px, 0);
+}
+
+.footer-nav-btn:not(.active) {
+    transform: translate3d(0, 0, 0);
+}
+
+.footer-nav-btn:active {
+    transform: translate3d(0, 2px, 0) scale(0.96);
+    background: rgba(33, 87, 62, 0.08);
+}
+
+.footer-nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    margin-bottom: 4px;
+}
+
+.footer-nav-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: #000;
+    line-height: 1.1;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: color 0.3s ease;
+}
+
+.footer-nav-btn.active .footer-nav-text {
+    color: #21573e;
+}
+
+@media (max-width: 370px) {
+    .footer-nav-btn {
+        height: 60px;
+    }
+
+    .footer-nav-text {
+        font-size: 11px;
+    }
+}
+
+@media (min-width: 501px) {
+    .footer-nav-btn {
+        max-width: 80px;
+        height: 70px;
+    }
+
+    .footer-nav-text {
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    .footer-nav-icon {
+        height: 30px;
+    }
+}
+
+/* ── Burger icon ──────────────────────────────── */
+.burger-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: 22px;
+    height: 22px;
+}
+
+.burger-icon span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: #000;
+    transition: background 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+}
+
+/* Active (open) state — animate to X */
+.footer-nav-btn.active .burger-icon span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+    background: #21573e;
+}
+
+.footer-nav-btn.active .burger-icon span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.footer-nav-btn.active .burger-icon span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+    background: #21573e;
+}
+
+/* ── Backdrop ─────────────────────────────────── */
+.footer-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: transparent;
+}
+
+/* ── Slide-up panel ───────────────────────────── */
+.footer-menu-panel {
+    position: absolute;
+    bottom: calc(100% - 10px);
+    right: 0;
+    left: 0;
+    z-index: 100;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+    padding: 12px 0 8px;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(calc(100% + 10px));
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.28s ease-out, opacity 0.2s ease-out;
+}
+
+.footer-menu-panel.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ── Menu items ───────────────────────────────── */
+.footer-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 24px;
     background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111;
+    text-align: left;
+    border-radius: 12px;
+    transition: background 0.18s ease, color 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.footer-menu-item:active {
+    background: rgba(33, 87, 62, 0.08);
+    color: #21573e;
+}
+
+.footer-menu-item img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
