@@ -24,6 +24,7 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
     private readonly ApartmentRepository _apartmentRepository;
     private readonly RappQrMaintService _qrMaintService;
     private readonly ArrivalInstructionsService _arrivalInstructionsService;
+    private readonly LockInstructionsService _lockInstructionsService;
     private readonly CustomerTermsRepository _customerTermsRepository;
     private readonly ILogger<StaywellReservationContextProvider> _logger;
     private readonly IdoSellService _idosellService;
@@ -33,6 +34,7 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
         ApartmentRepository apartmentRepository,
         RappQrMaintService qrMaintService,
         ArrivalInstructionsService arrivalInstructionsService,
+        LockInstructionsService lockInstructionsService,
         CustomerTermsRepository customerTermsRepository,
         IdoSellService idosellService,
         ILogger<StaywellReservationContextProvider> logger)
@@ -41,6 +43,7 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
         _apartmentRepository = apartmentRepository;
         _qrMaintService = qrMaintService;
         _arrivalInstructionsService = arrivalInstructionsService;
+        _lockInstructionsService = lockInstructionsService;
         _customerTermsRepository = customerTermsRepository;
         _idosellService = idosellService;
         _logger = logger;
@@ -99,6 +102,7 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
 
         var rules = await _customerTermsRepository.GetActiveTermsSourcesAsync(locale, onlyRequiredForWorkflow: false);
         var rulesSummary = BuildRulesSummary(rules);
+        var lockInstructionsSummary = BuildLockInstructionsSummary(_lockInstructionsService.GetLockInstructions(locale));
         var apartmentAddress = BuildApartmentAddress(apartmentInfo, location);
         var apartmentGoogleMapsUrl = BuildApartmentGoogleMapsUrl(
             reservationRecord?.State?.GoogleMapsLink,
@@ -131,6 +135,7 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
             WifiSsid = wifiSsid,
             WifiPassword = wifiPassword,
             ArrivalInstructionsSummary = instructionsSummary,
+            LockInstructionsSummary = lockInstructionsSummary,
             RulesSummary = rulesSummary,
             Locale = locale,
             ApartmentCity = NormalizeValue(location?.City),
@@ -430,6 +435,24 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
         return string.Join("\n", rules
             .Take(6)
             .Select(r => $"- {Trim(r.Description, 220)}"));
+    }
+
+    private static string BuildLockInstructionsSummary(LockInstructionsDTO instructions)
+    {
+        var parts = new[]
+        {
+            instructions.CylinderOpen,
+            instructions.CylinderClose,
+            instructions.PanelOpen,
+            instructions.PanelClose
+        }
+        .Where(v => !string.IsNullOrWhiteSpace(v))
+        .Select(v => v.Trim())
+        .ToArray();
+
+        return parts.Length == 0
+            ? "No lock instructions are available."
+            : string.Join("\n\n", parts);
     }
 
     private static string? NormalizeValue(string? value)

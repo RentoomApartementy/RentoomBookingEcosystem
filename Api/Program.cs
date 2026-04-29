@@ -28,6 +28,7 @@ using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Integrations.TTLock;
 using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
+using RentoomBooking.SharedClasses.Integrations.TTLock.Services;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
@@ -129,6 +130,7 @@ var ttlockSection = builder.Configuration.GetSection("TTLOCK");
 builder.Services.Configure<TTLockSettings>(ttlockSection);
 
 builder.Services.AddHttpClient<TTLockService>();
+builder.Services.AddScoped<ITTLockPasscodeAppService, TTLockPasscodeAppService>();
 
 //Upselle
 builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
@@ -225,12 +227,50 @@ builder.Services.AddOptions<StaywellChatOptions>()
         }
     });
 
+builder.Services.AddOptions<StaywellAgentChatOptions>()
+    .Configure<IConfiguration>((options, configuration) =>
+    {
+        configuration.GetSection(StaywellAgentChatOptions.SectionName).Bind(options);
+
+        if (string.IsNullOrWhiteSpace(options.AgentName))
+        {
+            options.AgentName = "staywell-events-mvp";
+        }
+
+        if (string.IsNullOrWhiteSpace(options.TokenScope))
+        {
+            options.TokenScope = "https://ai.azure.com/.default";
+        }
+
+        if (options.MaxMessageLength < 100)
+        {
+            options.MaxMessageLength = 2000;
+        }
+
+        if (options.MaxHistoryMessages < 1)
+        {
+            options.MaxHistoryMessages = 15;
+        }
+
+        if (options.MaxRequestsPerMinute < 1)
+        {
+            options.MaxRequestsPerMinute = 12;
+        }
+
+        if (options.StreamingTimeoutSeconds < 10)
+        {
+            options.StreamingTimeoutSeconds = 90;
+        }
+    });
+
 builder.Services.AddScoped<IChatConversationRepository, ChatConversationRepository>();
 builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 builder.Services.AddScoped<IStaywellChatClient, AzureFoundryStaywellChatClient>();
+builder.Services.AddScoped<IStaywellAgentChatClient, FoundryAgentStaywellChatClient>();
 builder.Services.AddScoped<IPromptBuilder, StaywellPromptBuilder>();
 builder.Services.AddScoped<IReservationContextProvider, StaywellReservationContextProvider>();
 builder.Services.AddScoped<IStaywellChatService, StaywellChatService>();
+builder.Services.AddScoped<IStaywellAgentChatService, StaywellAgentChatService>();
 builder.Services.AddSingleton<IChatRateLimiter, MemoryChatRateLimiter>();
 
 // LiveChat

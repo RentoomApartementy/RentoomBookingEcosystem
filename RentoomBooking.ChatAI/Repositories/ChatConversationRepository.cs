@@ -22,6 +22,16 @@ public sealed class ChatConversationRepository : IChatConversationRepository
             .FirstOrDefaultAsync(c => c.Id == conversationId, cancellationToken);
     }
 
+    public async Task<ChatConversationEntity?> GetLatestByReservationTokenAsync(string reservationToken, CancellationToken cancellationToken = default)
+    {
+        await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        return await context.ChatConversations
+            .AsNoTracking()
+            .Where(c => c.ReservationToken == reservationToken)
+            .OrderByDescending(c => c.UpdatedAt)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<ChatConversationEntity> CreateAsync(string reservationToken, CancellationToken cancellationToken = default)
     {
         await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);

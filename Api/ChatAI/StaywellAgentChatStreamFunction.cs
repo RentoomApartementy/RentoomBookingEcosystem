@@ -12,24 +12,24 @@ using RentoomBooking.ChatAI.Services;
 
 namespace RentoomBooking.Api.Chat;
 
-public sealed class StaywellChatStreamFunction
+public sealed class StaywellAgentChatStreamFunction
 {
-    private readonly IStaywellChatService _chatService;
-    private readonly ILogger<StaywellChatStreamFunction> _logger;
+    private readonly IStaywellAgentChatService _agentChatService;
+    private readonly ILogger<StaywellAgentChatStreamFunction> _logger;
     private readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    public StaywellChatStreamFunction(IStaywellChatService chatService, ILogger<StaywellChatStreamFunction> logger)
+    public StaywellAgentChatStreamFunction(IStaywellAgentChatService agentChatService, ILogger<StaywellAgentChatStreamFunction> logger)
     {
-        _chatService = chatService;
+        _agentChatService = agentChatService;
         _logger = logger;
     }
 
-    [Function("StaywellChatStream")]
+    [Function("StaywellAgentChatAIStream")]
     public async Task<HttpResponseData> StreamAsync(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "staywell/chat/stream")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "staywell/chatai/agent/stream")] HttpRequestData req,
         CancellationToken cancellationToken)
     {
         var correlationId = GetOrCreateCorrelationId(req);
@@ -58,7 +58,7 @@ public sealed class StaywellChatStreamFunction
 
         var reservationIdHash = HashToken(request.ReservationId.ToString());
         _logger.LogInformation(
-            "StaywellChatStream started. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, ConversationId={ConversationId}",
+            "StaywellAgentChatStream started. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, ConversationId={ConversationId}",
             correlationId,
             reservationIdHash,
             request.ConversationId ?? "new");
@@ -73,7 +73,7 @@ public sealed class StaywellChatStreamFunction
 
         try
         {
-            var result = await _chatService.StreamAsync(
+            var result = await _agentChatService.StreamAsync(
                 request,
                 async (chunk, token) =>
                 {
@@ -91,7 +91,7 @@ public sealed class StaywellChatStreamFunction
             streamStarted = true;
 
             _logger.LogInformation(
-                "StaywellChatStream completed. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, ConversationId={ConversationId}, ChunkCount={ChunkCount}, PromptTokenCount={PromptTokenCount}, CompletionTokenCount={CompletionTokenCount}, TtfbMs={TtfbMs}, TotalMs={TotalMs}",
+                "StaywellAgentChatStream completed. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, ConversationId={ConversationId}, ChunkCount={ChunkCount}, PromptTokenCount={PromptTokenCount}, CompletionTokenCount={CompletionTokenCount}, TtfbMs={TtfbMs}, TotalMs={TotalMs}",
                 correlationId,
                 reservationIdHash,
                 result.ConversationId,
@@ -106,7 +106,7 @@ public sealed class StaywellChatStreamFunction
         catch (ChatRateLimitException ex)
         {
             _logger.LogWarning(
-                "StaywellChatStream rate-limited. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, RetryAfterSeconds={RetryAfterSeconds}",
+                "StaywellAgentChatStream rate-limited. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, RetryAfterSeconds={RetryAfterSeconds}",
                 correlationId,
                 reservationIdHash,
                 (int)Math.Ceiling(ex.RetryAfter.TotalSeconds));
@@ -152,7 +152,7 @@ public sealed class StaywellChatStreamFunction
         catch (OperationCanceledException)
         {
             _logger.LogWarning(
-                "StaywellChatStream canceled. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, ElapsedMs={ElapsedMs}",
+                "StaywellAgentChatStream canceled. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, ElapsedMs={ElapsedMs}",
                 correlationId,
                 reservationIdHash,
                 start.Elapsed.TotalMilliseconds);
@@ -163,7 +163,7 @@ public sealed class StaywellChatStreamFunction
         {
             _logger.LogError(
                 ex,
-                "StaywellChatStream failed. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, ElapsedMs={ElapsedMs}",
+                "StaywellAgentChatStream failed. CorrelationId={CorrelationId}, ReservationIdHash={ReservationIdHash}, ElapsedMs={ElapsedMs}",
                 correlationId,
                 reservationIdHash,
                 start.Elapsed.TotalMilliseconds);
@@ -186,6 +186,7 @@ public sealed class StaywellChatStreamFunction
         int? retryAfterSeconds = null)
     {
         var response = req.CreateResponse(statusCode);
+        response.Headers.Remove("Content-Type");
         response.Headers.Add("Content-Type", "application/json; charset=utf-8");
 
         if (retryAfterSeconds.HasValue)

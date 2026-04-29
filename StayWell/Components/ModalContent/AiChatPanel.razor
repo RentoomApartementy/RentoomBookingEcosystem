@@ -38,6 +38,25 @@
     }
 
     <div class="ai-chat-actions">
+        <div class="ai-chat-mode-toggle" role="group" aria-label="Tryb rozmowy AI">
+            <button type="button"
+                    class="ai-chat-mode-option @GetTransportModeClass(AiChatTransportMode.Classic)"
+                    @onclick="async () => await SetTransportModeAsync(AiChatTransportMode.Classic)"
+                    disabled="@_isStreaming"
+                    aria-pressed="@(_transportMode == AiChatTransportMode.Classic)"
+                    title="Klasyczna ścieżka chatu">
+                Klasyczny
+            </button>
+            <button type="button"
+                    class="ai-chat-mode-option @GetTransportModeClass(AiChatTransportMode.Agent)"
+                    @onclick="async () => await SetTransportModeAsync(AiChatTransportMode.Agent)"
+                    disabled="@_isStreaming"
+                    aria-pressed="@(_transportMode == AiChatTransportMode.Agent)"
+                    title="Ścieżka przez agenta Foundry">
+                Agent
+            </button>
+        </div>
+
         <div class="ai-chat-composer">
             <textarea class="ai-chat-input"
                       placeholder="Napisz wiadomość..."
@@ -83,10 +102,12 @@
     [Parameter] public string? Token { get; set; }
     [Parameter] public bool IsFullscreen { get; set; }
 
+    private const string WelcomeMessage = "Cześć! Jestem asystentem StayWell. Jak mogę pomóc podczas Twojego pobytu?";
     private readonly List<ChatUiMessage> _messages = new();
     private ElementReference _messagesContainerRef;
     private string? _conversationId;
     private string? _conversationStorageKey;
+    private string? _loadedConversationContextKey;
     private string _input = string.Empty;
     private string? _error;
     private bool _isStreaming;
@@ -96,20 +117,14 @@
     private bool _pendingScrollToBottom;
     private CancellationTokenSource? _streamCts;
     private DotNetObjectReference<AiChatPanel>? _dotNetRef;
+    private AiChatTransportMode _transportMode = AiChatTransportMode.Classic;
 
     private bool _canSend => !_isStreaming && !string.IsNullOrWhiteSpace(_input);
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        if (_messages.Count == 0)
-        {
-            _messages.Add(new ChatUiMessage
-            {
-                Role = ChatRoles.Assistant,
-                Markdown = "Cześć! Jestem asystentem StayWell. Jak mogę pomóc podczas Twojego pobytu?"
-            });
-        }
-
+        await SetTransportModeAsync(AiChatTransportMode.Agent);
+        EnsureWelcomeMessage();
         QueueScrollToBottom();
     }
 
@@ -120,15 +135,8 @@
         {
             return;
         }
-
-        var key = BuildConversationStorageKey(token);
-        if (string.Equals(_conversationStorageKey, key, StringComparison.Ordinal))
-        {
-            return;
-        }
-
-        _conversationStorageKey = key;
-        _conversationId = await LocalStorageService.GetItemAsync(key);
+        await SetTransportModeAsync(AiChatTransportMode.Agent);
+        await LoadConversationContextAsync(token);
     }
 
     private async Task SendAsync()
@@ -188,6 +196,7 @@
         {
             await AiChatClientService.StreamAsync(
                 new ChatRequestDto(userMessage, token, reservationId.Value, _conversationId),
+                _transportMode,
                 async chunk =>
                 {
                     assistantMessage.Markdown += chunk.Text;
@@ -354,6 +363,31 @@
         return Task.CompletedTask;
     }
 
+    private async Task SetTransportModeAsync(AiChatTransportMode transportMode)
+    {
+        if (_isStreaming || _transportMode == transportMode)
+        {
+            return;
+        }
+
+        _transportMode = transportMode;
+        _conversationStorageKey = null;
+        _loadedConversationContextKey = null;
+
+        var token = ResolveToken();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            await LoadConversationContextAsync(token);
+        }
+
+        StateHasChanged();
+    }
+
+    private string GetTransportModeClass(AiChatTransportMode transportMode)
+    {
+        return _transportMode == transportMode ? "ai-chat-mode-option--active" : string.Empty;
+    }
+
     private string? ResolveToken()
     {
         if (!string.IsNullOrWhiteSpace(Token))
@@ -364,7 +398,75 @@
         return ReservationState.CurrentToken;
     }
 
-    private static string BuildConversationStorageKey(string token) => $"staywell:ai-chat:conversation:{token}";
+    private async Task LoadConversationContextAsync(string token)
+    {
+        var key = BuildConversationStorageKey(token, _transportMode);
+        if (string.Equals(_loadedConversationContextKey, key, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        _conversationStorageKey = key;
+        _conversationId = await LocalStorageService.GetItemAsync(key);
+
+        await LoadMessagesFromHistoryAsync(token, _conversationId);
+        _loadedConversationContextKey = key;
+    }
+
+    private static string BuildConversationStorageKey(string token, AiChatTransportMode transportMode)
+    {
+        return transportMode == AiChatTransportMode.Agent
+            ? $"staywell:ai-chat:agent-conversation:{token}"
+            : $"staywell:ai-chat:conversation:{token}";
+    }
+
+    private async Task LoadMessagesFromHistoryAsync(string token, string? conversationId)
+    {
+        _messages.Clear();
+
+        if (!string.IsNullOrWhiteSpace(conversationId))
+        {
+            try
+            {
+                var history = await AiChatClientService.GetHistoryAsync(token, conversationId, _transportMode);
+                if (history?.Messages is not null)
+                {
+                    foreach (var message in history.Messages)
+                    {
+                        if (!string.IsNullOrWhiteSpace(message.Role))
+                        {
+                            _messages.Add(new ChatUiMessage
+                            {
+                                Role = message.Role,
+                                Markdown = message.Content ?? string.Empty
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore history-load failures and fall back to welcome message.
+            }
+        }
+
+        EnsureWelcomeMessage();
+        QueueScrollToBottom();
+    }
+
+    private void EnsureWelcomeMessage()
+    {
+        if (_messages.Count > 0)
+        {
+            return;
+        }
+
+        _messages.Add(new ChatUiMessage
+        {
+            Role = ChatRoles.Assistant,
+            Markdown = WelcomeMessage
+        });
+    }
 
     private static string MergeSpeechWithInput(string prefix, string transcript)
     {

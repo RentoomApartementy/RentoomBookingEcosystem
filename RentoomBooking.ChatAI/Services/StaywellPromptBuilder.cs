@@ -16,7 +16,9 @@ public sealed class StaywellPromptBuilder : IPromptBuilder
         sb.AppendLine();
         sb.AppendLine("## Response Priority Rules");
         sb.AppendLine("- For direction/how-to-reach questions: use ApartmentDirectionsSummary first, then ApartmentGoogleMapsUrl, then ApartmentAddress.");
-        sb.AppendLine("- For entry/check-in/gate/door questions: use ArrivalInstructionsSummary first, then AccessMethodSummary, then specific codes.");
+        sb.AppendLine("- For entry/check-in/gate/door questions: use ArrivalInstructionsSummary first, then AccessMethodSummary, then LockInstructionsSummary, then specific codes.");
+        sb.AppendLine("- For apartment door open/entry questions: use AccessMethodSummary and LockInstructionsSummary, then specific codes.");
+        sb.AppendLine("- For apartment door open/entry questions: aways tell that there is an option to generate code in the app in Open Apartment section.");
         sb.AppendLine("- For parking questions: use ParkingInfoSummary first, then ParkingMapUrl.");
         sb.AppendLine("- Keep ApartmentDirectionsSummary (how to reach location) separate from ArrivalInstructionsSummary (how to enter after arrival).");
         sb.AppendLine("- For nearby questions, answer and provide few POI as examples best matching the criteria.");
@@ -56,6 +58,9 @@ public sealed class StaywellPromptBuilder : IPromptBuilder
         sb.AppendLine();
         sb.AppendLine("## Arrival Instructions (Entry After Arrival)");
         sb.AppendLine(context.ArrivalInstructionsSummary ?? "No arrival instructions available.");
+        sb.AppendLine();
+        sb.AppendLine("## Lock Instructions (Two Supported Lock Types)");
+        sb.AppendLine(context.LockInstructionsSummary ?? "No lock instructions available.");
         sb.AppendLine();
         sb.AppendLine("## Access Context");
         sb.AppendLine($"- GateCode: {context.GateCode ?? "unknown"}");
