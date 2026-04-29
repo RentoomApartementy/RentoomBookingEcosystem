@@ -102,10 +102,12 @@
     [Parameter] public string? Token { get; set; }
     [Parameter] public bool IsFullscreen { get; set; }
 
+    private const string WelcomeMessage = "Cześć! Jestem asystentem StayWell. Jak mogę pomóc podczas Twojego pobytu?";
     private readonly List<ChatUiMessage> _messages = new();
     private ElementReference _messagesContainerRef;
     private string? _conversationId;
     private string? _conversationStorageKey;
+    private string? _loadedConversationContextKey;
     private string _input = string.Empty;
     private string? _error;
     private bool _isStreaming;
@@ -121,15 +123,7 @@
 
     protected override void OnInitialized()
     {
-        if (_messages.Count == 0)
-        {
-            _messages.Add(new ChatUiMessage
-            {
-                Role = ChatRoles.Assistant,
-                Markdown = "Cześć! Jestem asystentem StayWell. Jak mogę pomóc podczas Twojego pobytu?"
-            });
-        }
-
+        EnsureWelcomeMessage();
         QueueScrollToBottom();
     }
 
@@ -141,7 +135,7 @@
             return;
         }
 
-        await LoadConversationIdAsync(token);
+        await LoadConversationContextAsync(token);
     }
 
     private async Task SendAsync()
@@ -377,11 +371,12 @@
 
         _transportMode = transportMode;
         _conversationStorageKey = null;
+        _loadedConversationContextKey = null;
 
         var token = ResolveToken();
         if (!string.IsNullOrWhiteSpace(token))
         {
-            await LoadConversationIdAsync(token);
+            await LoadConversationContextAsync(token);
         }
 
         StateHasChanged();
@@ -402,16 +397,19 @@
         return ReservationState.CurrentToken;
     }
 
-    private async Task LoadConversationIdAsync(string token)
+    private async Task LoadConversationContextAsync(string token)
     {
         var key = BuildConversationStorageKey(token, _transportMode);
-        if (string.Equals(_conversationStorageKey, key, StringComparison.Ordinal))
+        if (string.Equals(_loadedConversationContextKey, key, StringComparison.Ordinal))
         {
             return;
         }
 
         _conversationStorageKey = key;
         _conversationId = await LocalStorageService.GetItemAsync(key);
+
+        await LoadMessagesFromHistoryAsync(token, _conversationId);
+        _loadedConversationContextKey = key;
     }
 
     private static string BuildConversationStorageKey(string token, AiChatTransportMode transportMode)
@@ -419,6 +417,54 @@
         return transportMode == AiChatTransportMode.Agent
             ? $"staywell:ai-chat:agent-conversation:{token}"
             : $"staywell:ai-chat:conversation:{token}";
+    }
+
+    private async Task LoadMessagesFromHistoryAsync(string token, string? conversationId)
+    {
+        _messages.Clear();
+
+        if (!string.IsNullOrWhiteSpace(conversationId))
+        {
+            try
+            {
+                var history = await AiChatClientService.GetHistoryAsync(token, conversationId, _transportMode);
+                if (history?.Messages is not null)
+                {
+                    foreach (var message in history.Messages)
+                    {
+                        if (!string.IsNullOrWhiteSpace(message.Role))
+                        {
+                            _messages.Add(new ChatUiMessage
+                            {
+                                Role = message.Role,
+                                Markdown = message.Content ?? string.Empty
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore history-load failures and fall back to welcome message.
+            }
+        }
+
+        EnsureWelcomeMessage();
+        QueueScrollToBottom();
+    }
+
+    private void EnsureWelcomeMessage()
+    {
+        if (_messages.Count > 0)
+        {
+            return;
+        }
+
+        _messages.Add(new ChatUiMessage
+        {
+            Role = ChatRoles.Assistant,
+            Markdown = WelcomeMessage
+        });
     }
 
     private static string MergeSpeechWithInput(string prefix, string transcript)
