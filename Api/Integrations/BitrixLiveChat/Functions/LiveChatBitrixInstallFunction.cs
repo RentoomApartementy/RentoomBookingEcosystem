@@ -58,10 +58,22 @@ public sealed class LiveChatBitrixInstallFunction
     {
         var payload = await BitrixInstallRequestParser.ParseAsync(req, ct);
         if (payload is null)
+        {
+            _logger.LogWarning(
+                "Bitrix install: missing required parameters. Method={Method}, Query={Query}",
+                req.Method, req.Url.Query);
             return await CreateTextResponseAsync(req, HttpStatusCode.BadRequest,
                 "Missing required Bitrix installation parameters.");
+        }
 
-        var webhookUrl = new Uri($"{req.Url.Scheme}://{req.Url.Authority}/api/staywell/livechat/bitrix-webhook");
+        var host = req.Headers.TryGetValues("X-Forwarded-Host", out var forwardedHosts)
+            ? forwardedHosts.First()
+            : req.Url.Authority;
+        var scheme = req.Headers.TryGetValues("X-Forwarded-Proto", out var forwardedProtos)
+            ? forwardedProtos.First()
+            : req.Url.Scheme;
+        var webhookUrl = new Uri($"{scheme}://{host}/api/staywell/livechat/bitrix-webhook");
+        _logger.LogInformation("Bitrix install: registering webhook URL={WebhookUrl}", webhookUrl);
 
         try
         {
