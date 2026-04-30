@@ -95,7 +95,7 @@
             }
 
             body._cartScrollHandler = onScroll;
-            body.addEventListener("scroll", onScroll);
+            body.addEventListener("scroll", onScroll, { passive: true });
         };
 
         window.removeCartScrollListener = function () {
@@ -134,21 +134,38 @@
             const scrollContainer = document.getElementById(bodyId);
             const header = document.getElementById(headerId);
             let lastScrollTop = 0;
+            let rafPending = false;
 
             if (!scrollContainer || !header) return;
 
-            scrollContainer.addEventListener('scroll', () => {
-                const scrollTop = scrollContainer.scrollTop;
+            if (scrollContainer._headerScrollHandler) {
+                scrollContainer.removeEventListener('scroll', scrollContainer._headerScrollHandler);
+            }
 
-                if (scrollTop < 0) return;
+            scrollContainer._headerScrollHandler = () => {
+                if (rafPending) return;
+                rafPending = true;
+                requestAnimationFrame(() => {
+                    rafPending = false;
+                    const scrollTop = scrollContainer.scrollTop;
+                    if (scrollTop < 0) return;
+                    if (scrollTop > lastScrollTop && scrollTop > 30) {
+                        header.classList.add('hide');
+                    } else {
+                        header.classList.remove('hide');
+                    }
+                    lastScrollTop = scrollTop;
+                });
+            };
 
-                if (scrollTop > lastScrollTop && scrollTop > 30) {
-                    header.classList.add('hide');
-                } else {
-                    header.classList.remove('hide');
-                }
-                lastScrollTop = scrollTop;
-            });
+            scrollContainer.addEventListener('scroll', scrollContainer._headerScrollHandler, { passive: true });
+        };
+
+        window.removeHeaderScroll = (bodyId) => {
+            const scrollContainer = document.getElementById(bodyId);
+            if (!scrollContainer || !scrollContainer._headerScrollHandler) return;
+            scrollContainer.removeEventListener('scroll', scrollContainer._headerScrollHandler);
+            delete scrollContainer._headerScrollHandler;
         };
     </script>
     <script>
