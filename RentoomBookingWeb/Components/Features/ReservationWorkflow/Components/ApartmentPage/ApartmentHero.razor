@@ -1,0 +1,40 @@
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using RentoomBookingWeb.Components.Features.Apartments.Components
+
+<div class="apartment-text-wrapper">
+    <div class="">
+        <h2>@Apartment?.Name</h2>
+        <span>@Apartment?.ObjectLocation?.LocalizationItem?.Street</span>,
+        <span>@Apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>
+        <span>@Apartment?.ObjectLocation?.LocalizationItem?.City</span>
+    </div>
+
+    <ul class="apartment-details">
+        <li>
+            <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon"/>
+            <span>@Apartment?.MinCapacity - @Apartment?.Capacity</span>
+        </li>
+        <li>
+            <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon"/>
+            @BedsCount
+        </li>
+        <li>
+            <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon"/>
+            1
+        </li>
+        <li>
+            <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon"/>
+            <span>@Apartment?.Area m²</span>
+        </li>
+    </ul>
+</div>
+
+<div style="margin-top: 1rem;"></div>
+
+<Images ImagesList="Mediums"></Images>
+
+@code {
+    [Parameter] public ApartmentObject? Apartment { get; set; }
+    [Parameter] public List<ObjectMedium>? Mediums { get; set; }
+    [Parameter] public int? BedsCount { get; set; }
+}

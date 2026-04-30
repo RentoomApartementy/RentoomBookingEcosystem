@@ -1,0 +1,207 @@
+.addon-list-container {
+    width: 100%;
+    display: flex;
+    padding: 10px 0;
+}
+
+.addon-list-wrapper {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+
+.addons-wrapper {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+}
+
+.addon-item {
+    flex: 1 1 320px;
+    max-width: 100%;
+}
+
+.addon-label {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 
+        "info price"
+        "info quantity";
+    column-gap: 1.5rem;
+    row-gap: 4px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    height: 100%;
+}
+
+.addon-label:hover {
+    background-color: #d7f1e5;
+    border-color: #abefd0;
+}
+
+.addon-info-col {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.addon-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+    line-height: 1.3;
+}
+
+.price-box {
+    grid-area: price;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    white-space: nowrap;
+}
+
+.addon-price {
+    white-space: nowrap;
+    font-size: 15px;
+    color: #333;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.addon-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #8b7344;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    outline: none;
+    vertical-align: middle;
+}
+
+.addon-checkbox:checked {
+    background-color: #4a6755;
+    border-color: #8b7344;
+}
+
+.addon-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 11px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
+}
+
+.addon-quantity-col {
+    grid-area: quantity;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 36px;
+}
+
+.addon-quantity-col.empty {
+    display: none;
+}
+
+.quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #F7F5F0;
+    border-radius: 50px;
+    padding: 4px;
+    width: 104px;
+    height: 36px;
+    box-sizing: border-box;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.quantity-btn {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    line-height: 0;
+    cursor: pointer;
+    color: #333;
+    font-size: 18px;
+}
+
+.quantity-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-align: center;
+    width: 30px;
+}
+
+.upsell-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.upsell-icon {
+    background: #c8ffc8;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.upsell-main-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.skeleton-row {
+    display: flex;
+    padding: 1rem;
+    gap: 15px;
+    align-items: center;
+}
+
+.skeleton-box {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    display: block;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}

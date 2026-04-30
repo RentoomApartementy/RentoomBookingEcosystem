@@ -1,0 +1,32 @@
+.apartment-text-wrapper h2 {
+    font-size: 2.25rem;
+    margin: 0 0 0.5rem 0;
+    color: #1F5A41;
+}
+
+.apartment-text-wrapper span {
+    color: #666;
+    font-size: 1rem;
+}
+
+.apartment-details {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+    gap: 1.5rem;
+}
+
+.apartment-details li {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    color: #333;
+    font-size: 1rem;
+}
+
+.apartment-details .icon {
+    width: 30px;
+    height: 30px;
+}
