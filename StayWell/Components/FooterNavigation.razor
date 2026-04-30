@@ -8,10 +8,7 @@
 
 <div class="footer-nav-wrapper">
 
-    @if (_menuOpen)
-    {
-        <div class="footer-menu-backdrop" @onclick="CloseMenu"></div>
-    }
+    <div class="footer-menu-backdrop @(_menuOpen ? "open" : "")" @onclick="CloseMenu"></div>
 
     <div class="footer-menu-panel @(_menuOpen ? "open" : "")">
         <button class="footer-menu-item" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/AboutReservationPage"))">
