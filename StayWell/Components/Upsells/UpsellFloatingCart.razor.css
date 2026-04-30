@@ -1,11 +1,11 @@
-﻿.upsell-cart-bar-container {
+.upsell-cart-bar-container {
     position: fixed;
     bottom: 110px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 460px;
-    padding: 0 20px;
+    right: 20px;
+    left: auto;
+    transform: none;
+    width: auto;
+    max-width: 300px;
     z-index: 10;
     box-sizing: border-box;
     animation: cart-bar-slide-up 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -14,12 +14,12 @@
 @keyframes cart-bar-slide-up {
     from {
         opacity: 0;
-        transform: translateX(-50%) translateY(16px);
+        transform: translateY(16px);
     }
 
     to {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0);
     }
 }
 
@@ -27,15 +27,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 16px;
+    padding: 10px 14px;
     border-radius: 16px;
     background: linear-gradient(135deg, #21573e 0%, #1a4532 100%);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
     color: #fff;
-}
-
-.upsell-cart-bar-top {
-    display: contents;
+    gap: 14px;
+    white-space: nowrap;
 }
 
 .upsell-cart-bar-info {
@@ -45,18 +43,18 @@
 }
 
 .upsell-cart-bar-count {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     opacity: 0.8;
     font-weight: 500;
 }
 
 .upsell-cart-bar-total {
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 700;
 }
 
 .upsell-cart-bar-btn {
-    padding: 10px 22px;
+    padding: 8px 12px;
     border: none;
     border-radius: 12px;
     background: #fff;
@@ -65,7 +63,10 @@
     font-weight: 700;
     cursor: pointer;
     transition: transform 0.1s, opacity 0.2s;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
     .upsell-cart-bar-btn:active:not(:disabled) {
@@ -77,41 +78,8 @@
         cursor: not-allowed;
     }
 
-.upsell-cart-bar-dismiss {
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: 1rem;
-    line-height: 1;
-    padding: 0 8px;
-    cursor: pointer;
-    opacity: 0.6;
-    flex-shrink: 0;
-}
-
-.upsell-cart-bar-dismiss:hover {
-    opacity: 1;
-}
-
-@media (max-width: 420px) {
-    .upsell-cart-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-
-    .upsell-cart-bar-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .upsell-cart-bar-dismiss {
-        padding: 0;
-    }
-
-    .upsell-cart-bar-btn {
-        width: 100%;
-        text-align: center;
-    }
+.upsell-cart-btn-icon {
+    width: 22px;
+    height: 22px;
+    filter: invert(17%) sepia(50%) saturate(600%) hue-rotate(108deg) brightness(80%) contrast(95%);
 }

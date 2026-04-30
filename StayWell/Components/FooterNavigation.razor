@@ -11,11 +11,11 @@
     <div class="footer-menu-backdrop @(_menuOpen ? "open" : "")" @onclick="CloseMenu"></div>
 
     <div class="footer-menu-panel @(_menuOpen ? "open" : "")">
-        <button class="footer-menu-item" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/AboutReservationPage"))">
+        <button class="footer-menu-item @(IsActive($"/reservation/{TokenFromUrl}/AboutReservationPage") ? "active" : "")" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/AboutReservationPage"))">
             <img src="/icons/info.svg" alt="@Localizer["AboutReservationFooter"]" />
             <span>@Localizer["AboutReservationFooter"]</span>
         </button>
-        <button class="footer-menu-item" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/ParkingPage"))">
+        <button class="footer-menu-item @(IsActive($"/reservation/{TokenFromUrl}/ParkingPage") ? "active" : "")" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/ParkingPage"))">
             <img src="/icons/square-parking.svg" alt="@Localizer["ParkingFooter"]" />
             <span>@Localizer["ParkingFooter"]</span>
         </button>

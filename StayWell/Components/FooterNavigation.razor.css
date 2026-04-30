@@ -1,4 +1,4 @@
-﻿.footer-nav-wrapper {
+﻿﻿.footer-nav-wrapper {
     position: relative;
     height: 100%;
     width: 100%;
@@ -256,4 +256,13 @@
     height: 22px;
     object-fit: contain;
     flex-shrink: 0;
+}
+
+.footer-menu-item.active {
+    background: rgba(33, 87, 62, 0.12);
+    color: #21573e;
+}
+
+.footer-menu-item.active img {
+    filter: invert(27%) sepia(47%) saturate(537%) hue-rotate(108deg) brightness(87%) contrast(94%);
 }

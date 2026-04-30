@@ -36,19 +36,24 @@ else
 {
     <div class="section-group">
         <div class="cart-items-wrapper" @ref="_wrapperRef">
-            <h3 class="reservation-section__title">
-                @* <img class="reservation-field__icon tile--row" src="/icons/shopping-cart.svg" /> *@
-                @* @Localizer["YourCart"] *@
-                <button class="back-btn" @onclick="GoBack"><img class="white-filter" src="/icons/chevron-left.svg"/> @Localizer["Back"]</button>
-            </h3>
+            <header class="instructions-section__header">
+                <h3 class="instructions-section__title">
+                    <img src="/icons/shopping-cart.svg" class="cart-title-icon" alt="" aria-hidden="true" />
+                    @Localizer["YourCart"]
+                </h3>
+            </header>
+
+            <div class="cart-header-actions">
+                <button class="back-btn" @onclick="GoBack">
+                    <img class="white-filter" src="/icons/chevron-left.svg" /> @Localizer["Back"]
+                </button>
+                <button class="back-btn cart-clear-btn" @onclick="ClearCart">
+                    @Localizer["ClearCart"]
+                </button>
+            </div>
 
             @if (UpsellCartState.Items.Any())
             {
-                <span class="manage-tile__category"
-                      style="margin-left: 10px; margin-bottom: 8px; display: block;">
-                    <img class="reservation-field__icon tile--row" src="/icons/shopping-cart.svg" />
-                    @Localizer["YourCart"]
-                </span>
                 @foreach (var item in UpsellCartState.Items)
                 {
                     <div class="cart-item-tile">
@@ -557,6 +562,12 @@ else
 
     private void GoBack() =>
         Navigation.NavigateTo($"/reservation/{Token}/HomePage");
+
+    private void ClearCart()
+    {
+        UpsellCartState.Clear();
+        Navigation.NavigateTo($"/reservation/{Token}/HomePage");
+    }
 
     public async ValueTask DisposeAsync()
     {

@@ -27,34 +27,24 @@
                         <img src="/icons/square-parking.svg" class="code-card__icon" />
                     </div>
                     <div class="code-card__content">
-                        <div class="code-card__header">
-                            <div class="code-card__label">@Localizer[zone.NameKey]</div>
-                            <span class="code-card__status @(isFree ? "code-card__status--available" : "code-card__status--paid")">
-                                @(isFree ? @Localizer["FreePark"] : @Localizer["PaidPark"])
-                            </span>
-                        </div>
+                        <div class="code-card__label">@Localizer[zone.NameKey]</div>
+                        <span class="code-card__status @(isFree ? "code-card__status--available" : "code-card__status--paid")">
+                            @(isFree ? @Localizer["FreePark"] : @Localizer["PaidPark"])
+                        </span>
                         <div class="code-card__value">@Localizer["PaidDays"]: @FormatDays(zone.PaidDays), @zone.PaidFrom.ToString("HH:mm")–@zone.PaidTo.ToString("HH:mm")</div>
                         <div class="code-card__meta">@Localizer["FreeDays"]: @FormatDays(zone.FreeDays)</div>
                     </div>
                 </div>
             }
-
-            @if (_parkingInfo is not null)
-            {
-                <a class="code-card code-card--map code-card--link" href="@GetParkingInfoUrl(_parkingInfo.InfoUrl)" target="_blank" rel="noopener noreferrer">
-                    <div class="code-card__icon-wrapper">
-                        <img src="/icons/external-link.svg" class="code-card__icon" />
-                    </div>
-                    <div class="code-card__content">
-                        <div class="code-card__label">@Localizer["MoreInfo"]</div>
-                        <div class="code-card__cta">
-                            <span>@Localizer["MoreInfo"]</span>
-                            <img src="/icons/external-link.svg" class="code-card__cta-icon" alt="" aria-hidden="true" />
-                        </div>
-                    </div>
-                </a>
-            }
         </div>
+        
+        @if (_parkingInfo is not null)
+        {
+            <a class="parking-info-link" href="@GetParkingInfoUrl(_parkingInfo.InfoUrl)" target="_blank" rel="noopener noreferrer">
+                <span>@Localizer["MoreInfo"]</span>
+                <img src="/icons/external-link.svg" class="parking-info-link__icon" alt="" aria-hidden="true" />
+            </a>
+        }
     </section>
 </div>
 

@@ -167,6 +167,9 @@
     
     
   <value>Płatność nie wymagana / już opłacone</value></data>
+  <data name="ClearCart" xml:space="preserve">
+    <value>Wyczyść koszyk</value>
+  </data>
   <data name="CreateOrderError" xml:space="preserve">
     
     
