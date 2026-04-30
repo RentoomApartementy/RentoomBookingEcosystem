@@ -202,4 +202,10 @@
   <data name="AboutReservationFooter" xml:space="preserve">
     <value>Reservation Info</value>
   </data>
+  <data name="AddonsLabel" xml:space="preserve">
+    <value>Add-ons</value>
+  </data>
+  <data name="CartButtonAlt" xml:space="preserve">
+    <value>Shopping Cart</value>
+  </data>
 </root>

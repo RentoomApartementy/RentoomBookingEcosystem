@@ -1,7 +1,10 @@
 ﻿@using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.StayWell.States
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.StayWell.Pages
 @inject UpsellCartState UpsellCartState
 @inject NavigationManager Navigation
+@inject IStringLocalizer<HomePage> Localizer
 @implements IDisposable
 
 @if (!UpsellCartState.IsEmpty && IsOnAllowedPage)
@@ -9,7 +12,7 @@
     <div class="upsell-cart-bar-container">
         <div class="upsell-cart-bar">
             <div class="upsell-cart-bar-info">
-                <span class="upsell-cart-bar-count">dodatki: @UpsellCartState.TotalQuantity</span>
+                <span class="upsell-cart-bar-count">@Localizer["AddonsLabel"]: @UpsellCartState.TotalQuantity</span>
                 @if (UpsellCartState.TotalCombinedPrice > 0)
                 {
                     <span class="upsell-cart-bar-total">
@@ -18,7 +21,7 @@
                 }
             </div>
             <button class="upsell-cart-bar-btn" @onclick="GoToCart">
-                <img src="/icons/shopping-cart.svg" alt="Koszyk" class="upsell-cart-btn-icon" />
+                <img src="/icons/shopping-cart.svg" alt="@Localizer["CartButtonAlt"]" class="upsell-cart-btn-icon" />
             </button>
         </div>
     </div>
