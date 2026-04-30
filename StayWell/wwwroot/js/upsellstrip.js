@@ -26,7 +26,10 @@
     },
 
     init(scrollEl, dotnet) {
-        if (!scrollEl) return;
+        if (!(scrollEl instanceof Element)) {
+            console.warn("upsellStrip.init: scrollEl must be a valid DOM Element");
+            return;
+        }
 
         this.destroy(scrollEl);
 
