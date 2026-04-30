@@ -1,10 +1,19 @@
-.apartment-text-wrapper h2 {
+.apartment-text-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.apartment-title-address h2 {
     font-size: 2.25rem;
     margin: 0 0 0.5rem 0;
     color: #1F5A41;
 }
 
-.apartment-text-wrapper span {
+.apartment-title-address span {
     color: #666;
     font-size: 1rem;
 }
@@ -14,7 +23,7 @@
     flex-wrap: wrap;
     list-style: none;
     padding: 0;
-    margin: 1.5rem 0;
+    margin: 0;
     gap: 1.5rem;
 }
 
@@ -29,4 +38,14 @@
 .apartment-details .icon {
     width: 30px;
     height: 30px;
+}
+
+@media (max-width: 768px) {
+    .apartment-text-wrapper {
+        align-items: flex-start;
+    }
+    
+    .apartment-title-address h2 {
+        font-size: 1.75rem;
+    }
 }
