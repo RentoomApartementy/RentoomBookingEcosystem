@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Localization
 
 <div class="apartment-wrapper @(IsExpanded ? "expanded" : "collapsed")">
+    <span>ZWYKLY OPIS</span>
     <article class="description-wrapper">
         @if (!string.IsNullOrEmpty(Description?.ShortDescription))
         {

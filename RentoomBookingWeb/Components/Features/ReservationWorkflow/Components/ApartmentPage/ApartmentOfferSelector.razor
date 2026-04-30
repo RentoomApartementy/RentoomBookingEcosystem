@@ -29,8 +29,8 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
     <div id="offers-section" class="summary-offer-price-wrapper"> 
         @{
                var pricingData = OffersResponse?.Result?.PricingOffers?.FirstOrDefault();
-               var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "refundable");
-               var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == "nonrefundable");
+               var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => string.Equals(o.OfferType, "refundable", StringComparison.OrdinalIgnoreCase));
+               var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => string.Equals(o.OfferType, "nonrefundable", StringComparison.OrdinalIgnoreCase));
          }
         
         @if (nonRefundableOffer != null)

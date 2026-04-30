@@ -1,0 +1,44 @@
+.ai-highlights-container {
+    margin: 1.5rem 0;
+    width: 100%;
+}
+
+.highlights-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background-color: #f0f7f4;
+    padding: 0.6rem 1rem;
+    border-radius: 50px;
+    border: 1px solid #d1e7dd;
+    transition: transform 0.2s;
+}
+
+.highlight-item:hover {
+    transform: translateY(-2px);
+}
+
+.highlight-icon {
+    display: flex;
+    align-items: center;
+    color: #1f5a41;
+}
+
+.highlight-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.highlight-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1f5a41;
+    white-space: nowrap;
+}

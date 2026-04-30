@@ -12,6 +12,7 @@ using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
@@ -43,6 +44,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] internal IStringLocalizer<Apartment> Localizer { get; set; } = default!;
         [Inject] internal IStringLocalizer<Upsell> UpsellLocalizer { get; set; } = default!;
         [Inject] public IReservationWorkflowService ReservationWorkflowService { get; set; } = default!;
+        [Inject] public IApartmentAiDescriptionService AiDescriptionService { get; set; } = default!;
         [Inject] public IUpsellCatalogService UpsellCatalogService { get; set; } = default!;
         [Inject] public MediaCacheService MediaCache { get; set; } = default!;
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
@@ -50,6 +52,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
 
         protected ApartmentObject? _apartment;
+        protected ApartmentAiDescriptionDto? _aiDescription;
         protected List<ObjectMedium>? _objectMediums = null;
         protected List<ObjectAmenity>? _amenities = null;
         protected int? _bedsCount = null;
@@ -274,12 +277,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected string GetSeoTitle()
         {
+            if (_aiDescription != null && !string.IsNullOrEmpty(_aiDescription.MetaTitle)) return _aiDescription.MetaTitle;
             if (_apartment == null) return Localizer["Apartment_SeoTitleFallback"];
             return $"{_apartment.Name} - Rentoom";
         }
 
         protected string GetSeoDescription()
         {
+            if (_aiDescription != null && !string.IsNullOrEmpty(_aiDescription.MetaDescription)) return _aiDescription.MetaDescription;
             if (_objectDescription != null && !string.IsNullOrEmpty(_objectDescription.ShortDescription))
             {
                 return Regex.Replace(_objectDescription.ShortDescription, "<.*?>", String.Empty).Trim();
@@ -315,24 +320,25 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected MarkupString GetJsonLd()
         {
-            if (_apartment == null) return new MarkupString("");
+            var apartment = _apartment;
+            if (apartment == null) return new MarkupString("");
 
             var apartmentUnit = new Dictionary<string, object>
             {
                 ["@type"] = "Apartment",
-                ["name"] = _apartment.Name ?? "",
-                ["numberOfRooms"] = _apartment.BedroomsCount ?? 1,
+                ["name"] = apartment.Name ?? "",
+                ["numberOfRooms"] = apartment.BedroomsCount ?? 1,
                 ["occupancy"] = new Dictionary<string, object>
                 {
                     ["@type"] = "QuantitativeValue",
-                    ["minValue"] = _apartment.MinCapacity ?? 1,
-                    ["maxValue"] = _apartment.Capacity ?? 1,
-                    ["value"] = _apartment.Capacity ?? 1
+                    ["minValue"] = apartment.MinCapacity ?? 1,
+                    ["maxValue"] = apartment.Capacity ?? 1,
+                    ["value"] = apartment.Capacity ?? 1
                 },
                 ["floorSize"] = new Dictionary<string, object>
                 {
                     ["@type"] = "QuantitativeValue",
-                    ["value"] = string.IsNullOrEmpty(_apartment.Area) ? "0" : _apartment.Area,
+                    ["value"] = string.IsNullOrEmpty(apartment.Area) ? "0" : apartment.Area,
                     ["unitCode"] = "MTK"
                 }
             };
@@ -351,26 +357,26 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             {
                 ["@context"] = "https://schema.org",
                 ["@type"] = "VacationRental",
-                ["identifier"] = _apartment.Id.ToString(),
-                ["name"] = _apartment.Name ?? "",
+                ["identifier"] = apartment.Id.ToString(),
+                ["name"] = apartment.Name ?? "",
                 ["description"] = GetSeoDescription(),
                 ["url"] = GetCanonicalUrl(),
-                ["image"] = _objectMediums?.Select(m => m.Url).ToList() ?? new List<string> { GetSeoImage() },
+                ["image"] = _objectMediums?.Select(m => m.Url ?? string.Empty).ToList() ?? new List<string> { GetSeoImage() },
 
                 ["address"] = new Dictionary<string, object>
                 {
                     ["@type"] = "PostalAddress",
-                    ["streetAddress"] = _apartment.ObjectLocation?.LocalizationItem?.Street ?? "",
-                    ["addressLocality"] = _apartment.ObjectLocation?.LocalizationItem?.City ?? "",
-                    ["postalCode"] = _apartment.ObjectLocation?.LocalizationItem?.ZipCode ?? "",
+                    ["streetAddress"] = apartment.ObjectLocation?.LocalizationItem?.Street ?? "",
+                    ["addressLocality"] = apartment.ObjectLocation?.LocalizationItem?.City ?? "",
+                    ["postalCode"] = apartment.ObjectLocation?.LocalizationItem?.ZipCode ?? "",
                     ["addressCountry"] = "PL"
                 },
 
                 ["geo"] = new Dictionary<string, object>
                 {
                     ["@type"] = "GeoCoordinates",
-                    ["latitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
-                    ["longitude"] = _apartment.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? ""
+                    ["latitude"] = apartment.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
+                    ["longitude"] = apartment.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? ""
                 },
 
                 ["containsPlace"] = new[] { apartmentUnit }
@@ -420,6 +426,24 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                     });
 
                 await GetObjectDescription(_apartment.Id, CurrentLanguage);
+
+                try
+                {
+                    _aiDescription = await AiDescriptionService.GetActiveDescriptionAsync(_apartment.Id, CultureInfo.CurrentUICulture.Name);
+                    if (_aiDescription != null)
+                    {
+                        Console.WriteLine($"[AI-Description] SUCCESS: Found AI description for ApartmentId: {_apartment.Id}, Language: {CultureInfo.CurrentUICulture.Name}, Variant: {_aiDescription.VariantType}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[AI-Description] INFO: No AI description found for ApartmentId: {_apartment.Id}, Language: {CultureInfo.CurrentUICulture.Name}. Using IdoBooking fallback.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[AI-Description] ERROR: Exception while fetching AI description: {ex.Message}");
+                }
+
                 _amenities = await GetAmenities(_apartment.Id);
                 _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
 
@@ -629,7 +653,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 return;
             }
 
-            var nonRefundable = offers.FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase));
+            var nonRefundable = offers.FirstOrDefault(o => o != null && string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase));
             _selectedOfferType = nonRefundable?.OfferType ?? offers.First().OfferType;
         }
 
@@ -772,6 +796,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected ObjectDescription? _objectDescription = null;
         protected async Task GetObjectDescription(int objectId, string? language)
         {
+            Console.WriteLine("Object description from ido");
             var descriptions = await IdoApartmentService.GetObjectDescriptionsAsync(objectId, language);
             _objectDescription = descriptions?.FirstOrDefault();
         }
@@ -896,7 +921,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected async Task GoToPayment(string? offerType)
         {
-            if (_apartment is null || string.IsNullOrWhiteSpace(StartDate) || string.IsNullOrWhiteSpace(EndDate))
+            var apartment = _apartment;
+            if (apartment is null || string.IsNullOrWhiteSpace(StartDate) || string.IsNullOrWhiteSpace(EndDate))
             {
                 return;
             }
@@ -929,15 +955,15 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             var request = new StartReservationRequest
             {
-                ObjectId = _apartment.Id,
-                ObjectItemId = _apartment.Items[0].Id.Value,
+                ObjectId = apartment.Id,
+                ObjectItemId = apartment.Items.FirstOrDefault()?.Id ?? 0,
                 StartDate = start,
                 EndDate = end,
                 CheckInTime = checkInTime,
                 CheckOutTime = checkOutTime,
                 Adults = adults,
                 Children = children,
-                SelectedOfferType = selectedOffer?.OfferType ?? resolvedOfferType,
+                SelectedOfferType = selectedOffer?.OfferType ?? resolvedOfferType ?? string.Empty,
                 OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
                 Currency = "PLN",
                 SelectedAddons = _selectedAddons,
@@ -953,7 +979,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 new Dictionary<string, string?>
                 {
                     ["ReservationTokenGuid"] = _reservationTokenGuid?.ToString(),
-                    ["ApartmentId"] = _apartment.Id.ToString(),
+                    ["ApartmentId"] = apartment.Id.ToString(),
                     ["OfferType"] = request.SelectedOfferType,
                     ["StartDate"] = StartDate,
                     ["EndDate"] = EndDate,
@@ -1024,14 +1050,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             if (!string.IsNullOrWhiteSpace(offerType))
             {
-                var match = offers.FirstOrDefault(o => string.Equals(o.OfferType, offerType, StringComparison.OrdinalIgnoreCase));
+                var match = offers.FirstOrDefault(o => o != null && string.Equals(o.OfferType, offerType, StringComparison.OrdinalIgnoreCase));
                 if (match is not null)
                 {
                     return match;
                 }
             }
 
-            var nonRefundable = offers.FirstOrDefault(o => o.OfferType.ToLowerInvariant() == OfferTypeNonrefundable);
+            var nonRefundable = offers.FirstOrDefault(o => o != null && string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase));
             return nonRefundable ?? offers.FirstOrDefault();
         }
 

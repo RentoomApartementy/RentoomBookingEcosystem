@@ -61,18 +61,29 @@
         <div class="main-wrapper">
             <div class="left-container">
                 
-                <ApartmentHero 
-                    Apartment="_apartment" 
-                    Mediums="_objectMediums" 
+                <ApartmentHero
+                    Apartment="_apartment"
+                    Mediums="_objectMediums"
                     BedsCount="_bedsCount" />
 
-                <ApartmentDescription 
-                    Description="_objectDescription" 
-                    Amenities="_amenities" 
-                    IsExpanded="_isExpanded" 
-                    OnToggleExpand="ToggleExpand" 
-                    Localizer="Localizer" />
-                
+                @if (_aiDescription != null)
+                {
+                    <ApartmentAiDescription 
+                        Data="_aiDescription" 
+                        Amenities="_amenities"
+                        IsExpanded="_isExpanded"
+                        OnToggleExpand="ToggleExpand"
+                        Localizer="Localizer" />
+                }
+                else
+                {
+                    <ApartmentDescription
+                        Description="_objectDescription"
+                        Amenities="_amenities"
+                        IsExpanded="_isExpanded"
+                        OnToggleExpand="ToggleExpand"
+                        Localizer="Localizer" />
+                }
                 @if (localHasOffers || StartDate == null || EndDate == null)
                 {
                     @if (StartDate != null && EndDate != null)
