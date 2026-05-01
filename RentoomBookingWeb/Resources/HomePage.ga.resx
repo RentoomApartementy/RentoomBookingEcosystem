@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – cruthaímid eispéiris uathúla fanacht i Toruń
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+An bhfuil tú ag lorg árasán compordach i Toruń?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Árasáin i Toruń - cóiríocht chompordach</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>An bhfuil tú ag lorg árasán compordach i Toruń?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Is branda nua-aimseartha ar cíos gearrthéarmach é Rentoom Apartamenty a chomhcheanglaíonn ardchaighdeán cóiríochta le heolas barántúil ar Toruń. Cruthaímid áiteanna atá deartha le compord, aeistéitic agus feidhmiúlacht i gcuimhne - d'aíonna turasóireachta agus d'aíonna gnó araon.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Tá áthas orainn gur tháinig tú chugainn!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Cuimsíonn ár dtairiscint mórán árasán roghnaithe go cúramach sna codanna is tarraingtí den chathair. Roghnaíodh gach suíomh chun rochtain éasca a sholáthar ar phríomhnithe is díol spéise, bialanna agus criosanna gnó.
+Is spás é gach árasán atá deartha chun fíor-scíth agus príobháideacht a sholáthar tar éis lá dian fámaireachta nó oibre.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Árasáin sna háiteanna is fearr i Toruń</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Custaiméirí sásta</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Árasáin i Toruń
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Suíomh i Toruń</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Cén fáth Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Tá níos mó i gceist le Rentoom Apartments ná fanacht thar oíche i Toruń. Cuirimid árasán ar ardchaighdeán ar fáil sna suíomhanna is fearr agus fíorbhuntáistí a mhéadaíonn luach an fhanachta ar fad.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Mar chuid dár gClár Comhpháirtíochta, faigheann aíonna rochtain ar lascainí speisialta ar bhialanna, caiféanna agus nithe is díol spéise do thurasóirí roghnaithe. Tá lascainí agus moltaí reatha suite go díreach sna hárasáin, ionas gur féidir leat áiteanna cruthaithe a úsáid agus airgead a shábháil agus tú ag fámaireacht.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Ní oibrímid ach le comhpháirtithe áitiúla iontaofa, ag tabhairt aire do cháilíocht gach molta. Trí Rentoom a roghnú, gheobhaidh tú compord, seirbhís ghairmiúil agus buntáistí breise a fhágann go bhfuil do fanacht i Toruń níos compordaí, níos scagtha agus níos brabúsaí.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Cuir aithne ar thuairimí na ndaoine a chodail inár n-árasáin i Toruń.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Fág do chuid faisnéise teagmhála agus rachaimid ar ais chugat!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Déan teagmháil leis an soláthraí</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Aontaím le mo shonraí pearsanta a phróiseáil a chuirtear ar fáil san fhoirm thuas</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Ainm</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Sloinne</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Fón</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Seol</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Cad a dhéanann idirdhealú idir ár n-árasáin agus daoine eile?
+
+</value>
+  </data>
+</root>

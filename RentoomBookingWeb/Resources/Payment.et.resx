@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Name" xml:space="preserve">
+    <value>Nimi</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Perekonnanimi</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Linn</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Aadress</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postiindeks</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telefoninumber</value>
+  </data>
+  <data name="IsInvoiceText" xml:space="preserve">
+    <value>Ma tahan saada arvet</value>
+  </data>
+  <data name="IsSaveInfoText" xml:space="preserve">
+    <value>Salvesta minu andmed tulevaste tehingute jaoks</value>
+  </data>
+  <data name="ClickToDownloadInfo" xml:space="preserve">
+    <value>Klõpsa, et alla laadida NIP-i infot</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Ettevõtte nimi</value>
+  </data>
+  <data name="ClientInfoButton" xml:space="preserve">
+    <value>Mine kokkuvõte juurde</value>
+  </data>
+  <data name="ClientInfoButtonLoading" xml:space="preserve">
+    <value>Päästmine...</value>
+  </data>
+  <data name="ClientInfoTitle" xml:space="preserve">
+    <value>Põhiinfo</value>
+  </data>
+  <data name="ClientInfoSubtitle" xml:space="preserve">
+    <value>Täida detailid</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Sinu viibimine</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Alates</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Kuni</value>
+  </data>
+  <data name="SummaryText" xml:space="preserve">
+    <value>Kokkuvõte</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Ööd</value>
+  </data>
+  <data name="SummaryLoadingText" xml:space="preserve">
+    <value>Laadimise kokkuvõte</value>
+  </data>
+  <data name="ReservationSummary" xml:space="preserve">
+    <value>Broneeringute kokkuvõte</value>
+  </data>
+  <data name="SummaryDetailsText" xml:space="preserve">
+    <value>Kontrolli broneeringu üksikasju</value>
+  </data>
+  <data name="ReservationPaid" xml:space="preserve">
+    <value>Broneering makstud</value>
+  </data>
+  <data name="ReservationPaidInfo" xml:space="preserve">
+    <value>Sinu broneering on kinnitatud ja tasutud.</value>
+  </data>
+  <data name="GoToStayWell" xml:space="preserve">
+    <value>Vaata oma e-posti ja jätka StayWellis</value>
+  </data>
+  <data name="ReservationPending" xml:space="preserve">
+    <value>Makse ajal</value>
+  </data>
+  <data name="ReservationPendingInfo" xml:space="preserve">
+    <value>Sinu broneering on kinnitatud, kuid pole veel tasutud</value>
+  </data>
+  <data name="ClickToPay" xml:space="preserve">
+    <value>Kliki, et broneeringute eest maksta</value>
+  </data>
+  <data name="ReservationDanger" xml:space="preserve">
+    <value>Kinnitust ei ole</value>
+  </data>
+  <data name="ReservationDangerInfo" xml:space="preserve">
+    <value>Sinu broneering pole veel kinnitatud</value>
+  </data>
+  <data name="NameLastName" xml:space="preserve">
+    <value>Nimi ja perekonnanimi</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Muuda</value>
+  </data>
+  <data name="ReservationDetails" xml:space="preserve">
+    <value>Broneerimise üksikasjad</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Väljamakse</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Külalised</value>
+  </data>
+  <data name="ConfirmationNumber" xml:space="preserve">
+    <value>Broneeringu number</value>
+  </data>
+  <data name="PaymentSuccessful" xml:space="preserve">
+    <value>Makse õnnestus!</value>
+  </data>
+  <data name="PaymentSuccessfulText" xml:space="preserve">
+    <value>Sinu korter on edukalt broneeritud</value>
+  </data>
+  <data name="BackToSummary" xml:space="preserve">
+    <value>Tagasi kokkuvõtte juurde</value>
+  </data>
+  <data name="ConfimationSendToMail" xml:space="preserve">
+    <value>Kinnitus saadetud e-posti teel</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Kogus</value>
+  </data>
+  <data name="PaymentFailed" xml:space="preserve">
+    <value>Makse ebaõnnestus
+
+</value>
+  </data>
+  <data name="PaymentFailedText" xml:space="preserve">
+    <value>Sinu korter pole broneeritud</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Palun proovi uuesti</value>
+  </data>
+  <data name="WaitingPayment" xml:space="preserve">
+    <value>Ootan makse kinnitust...
+
+</value>
+  </data>
+  <data name="SomethingWrong" xml:space="preserve">
+    <value>Ups! Midagi läks valesti</value>
+  </data>
+  <data name="RedirectingToPayment" xml:space="preserve">
+    <value>Suunamine maksele...</value>
+  </data>
+  <data name="RedirectToPaymentText" xml:space="preserve">
+    <value>Sind viiakse turvalisse maksesüsteemi</value>
+  </data>
+  <data name="NotRefreshPage" xml:space="preserve">
+    <value>Palun ärge värskendage lehte</value>
+  </data>
+  <data name="CheckEmailText" xml:space="preserve">
+    <value>Kontrollin e-kirju...</value>
+  </data>
+  <data name="SendMailText" xml:space="preserve">
+    <value>E-kiri saadetud</value>
+  </data>
+  <data name="ConfirmationWill" xml:space="preserve">
+    <value>Kinnitus saadetakse:</value>
+  </data>
+  <data name="ConfirmationHasBeenSent" xml:space="preserve">
+    <value>Kinnitus saadeti:</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laadin...</value>
+  </data>
+  <data name="NoGusInfo" xml:space="preserve">
+    <value>Esitatud maksuidentifitseerimisnumbri kohta andmeid ei leitud.</value>
+  </data>
+  <data name="GusError" xml:space="preserve">
+    <value>Viga andmete allalaadimisel Keskstatistikaametist</value>
+  </data>
+  <data name="NoNipError" xml:space="preserve">
+    <value>Palun sisestage oma NIP-number</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Suunakood</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Vajalik</value>
+  </data>
+  <data name="FillAllDataError" xml:space="preserve">
+    <value>Täida detailid</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Vale e-kiri</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupText" xml:space="preserve">
+    <value>Skaneeri QR-kood, et minna Staywelli </value>
+  </data>
+  <data name="StaywellPopupTitle" xml:space="preserve">
+    <value>Halda oma broneeringut StayWellis</value>
+  </data>
+  <data name="StaywellPopupDescription" xml:space="preserve">
+    <value>Skaneeri QR-kood, et kohe avada StayWelli juhtpaneel, mis on sellele broneeringule määratud. Armatuurlaual saad kontrollida oma viibimise üksikasju, organisatsiooniandmeid, lisateenuste staatust ja kõige olulisemaid sõnumeid.</value>
+  </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Ava StayWelli juhtpaneel selle broneeringu jaoks. Armatuurlaual saad kontrollida oma viibimise üksikasju, organisatsiooniandmeid, lisateenuste staatust ja kõige olulisemaid sõnumeid.</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
+    <value>Mine otse StayWelli</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Vali kõik nõusolekud</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Täida detailid</value>
+  </data>
+  <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
+    <value>Arve</value>
+  </data>
+  <data name="InvoiceYes" xml:space="preserve">
+    <value>Jah</value>
+  </data>
+  <data name="InvoiceNo" xml:space="preserve">
+    <value>Ei</value>
+  </data>
+  <data name="FailPageTitle" xml:space="preserve">
+    <value>Rentoom – maksete kinnitamine</value>
+  </data>
+  <data name="PaymentReturnCheckingTitle" xml:space="preserve">
+    <value>Kontrollime teie makse staatust</value>
+  </data>
+  <data name="PaymentReturnPendingBannerTitle" xml:space="preserve">
+    <value>Me pole veel makset kinnitanud</value>
+  </data>
+  <data name="StaywellPopupAriaLabel" xml:space="preserve">
+    <value>StayWell info</value>
+  </data>
+  <data name="PaymentReturnFailedBannerMessage" xml:space="preserve">
+    <value>Saad makset uuesti proovida selle kokkuvõtte kaudu. Kui pank on juba raha välja võtnud, oota hetk enne uuesti proovimist.</value>
+  </data>
+  <data name="SummaryPageTitle" xml:space="preserve">
+    <value>Rentoom – broneeringute kokkuvõte</value>
+  </data>
+  <data name="TpayMockCancelButton" xml:space="preserve">
+    <value>Tühista</value>
+  </data>
+  <data name="CancelActionSeparatorText" xml:space="preserve">
+    <value>või</value>
+  </data>
+  <data name="TpayMockReservationLabel" xml:space="preserve">
+    <value>Reservatsioon</value>
+  </data>
+  <data name="PaymentReturnVerificationError" xml:space="preserve">
+    <value>Makse staatust ei saanud automaatselt kontrollida. Mine tagasi kokkuvõtte juurde ja proovi sealt uuesti.</value>
+  </data>
+  <data name="SuccessPageTitle" xml:space="preserve">
+    <value>Rentoom - Tasuline</value>
+  </data>
+  <data name="PaymentPageTitle" xml:space="preserve">
+    <value>Rentoom – Maksa oma broneeringu eest</value>
+  </data>
+  <data name="StaywellButtonText" xml:space="preserve">
+    <value>Klõpsa, et hallata oma broneeringut Rentoom StayWellis</value>
+  </data>
+  <data name="MessageSentDescription" xml:space="preserve">
+    <value>Saatsime kinnituse {0} ja WhatsAppi.</value>
+  </data>
+  <data name="PaymentReturnPendingMessage" xml:space="preserve">
+    <value>Meil pole endiselt lõplikku kinnitust. Sind viiakse kohe tagasi kokkuvõtte juurde, kus saad vajadusel oma makset turvaliselt uuesti proovida.</value>
+  </data>
+  <data name="EmailDeliveryPendingTitle" xml:space="preserve">
+    <value>Me saadame sõnumi</value>
+  </data>
+  <data name="SummaryBuildError" xml:space="preserve">
+    <value>Kokkuvõtet ei olnud võimalik koostada.</value>
+  </data>
+  <data name="TpayMockMissingReservation" xml:space="preserve">
+    <value>Broneeringu ID puudub URL-ist.</value>
+  </data>
+  <data name="EmailStatusFetchError" xml:space="preserve">
+    <value>E-posti staatust ei saanud kontrollida.</value>
+  </data>
+  <data name="FailIconAlt" xml:space="preserve">
+    <value>Häireikoon</value>
+  </data>
+  <data name="TpayMockPaymentSessionLabel" xml:space="preserve">
+    <value>Makseseanss</value>
+  </data>
+  <data name="PaymentReturnWaitingTitle" xml:space="preserve">
+    <value>Ootame makse kinnitust</value>
+  </data>
+  <data name="CancelReservationInProgressText" xml:space="preserve">
+    <value>Tühistamine...</value>
+  </data>
+  <data name="PaymentStatusFetchError" xml:space="preserve">
+    <value>Makse staatust ei õnnestunud taastada.</value>
+  </data>
+  <data name="SummarySaveTermsError" xml:space="preserve">
+    <value>Lubade salvestamisel tekkis viga. Palun proovi uuesti.</value>
+  </data>
+  <data name="TpayMockPayButton" xml:space="preserve">
+    <value>Tasu</value>
+  </data>
+  <data name="EmailDeliveryPendingMessage" xml:space="preserve">
+    <value>Saadame kinnituse {0} ja WhatsAppis.</value>
+  </data>
+  <data name="ClientInfoNipLabel" xml:space="preserve">
+    <value>NIP</value>
+  </data>
+  <data name="PaymentVerificationError" xml:space="preserve">
+    <value>Makset ei õnnestunud kinnitada.</value>
+  </data>
+  <data name="StaywellPopupCloseAriaLabel" xml:space="preserve">
+    <value>Sulge StayWell hüpikaken</value>
+  </data>
+  <data name="ClientInfoSaveError" xml:space="preserve">
+    <value>Kliendiandmete salvestamine ebaõnnestus.</value>
+  </data>
+  <data name="TpayMockPageTitle" xml:space="preserve">
+    <value>Mock TPAY</value>
+  </data>
+  <data name="ClientInfoPageTitle" xml:space="preserve">
+    <value>Rentoomi broneering – kliendiandmed</value>
+  </data>
+  <data name="PaymentReturnWaitingMessage" xml:space="preserve">
+    <value>Makset saab siiski töödelda. Me kontrollime seda enne, kui saadame sind tagasi broneeringu kokkuvõtte juurde.</value>
+  </data>
+  <data name="TpayMockHeader" xml:space="preserve">
+    <value>Maksesimulatsioon</value>
+  </data>
+  <data name="MessageSentTitle" xml:space="preserve">
+    <value>Sõnum on saadetud</value>
+  </data>
+  <data name="PaymentReturnCheckingMessage" xml:space="preserve">
+    <value>See ei tähenda alati makse ebaõnnestumist. Esmalt kontrollime tehingu lõplikku staatust.</value>
+  </data>
+  <data name="PaymentReturnPendingTitle" xml:space="preserve">
+    <value>Makse staatus on endiselt menetluses</value>
+  </data>
+  <data name="PaymentReturnPendingBannerMessage" xml:space="preserve">
+    <value>Kui raha on arvestatud, ära tee kohe uut makset. Palun kontrollige allpool oma broneeringu staatust ja proovige uuesti ainult siis, kui makse pole endiselt kinnitatud.</value>
+  </data>
+  <data name="PaymentInitError" xml:space="preserve">
+    <value>Makset ei saanud algatada.</value>
+  </data>
+  <data name="CancelReservationErrorText" xml:space="preserve">
+    <value>Broneeringu tühistamisel tekkis viga. Palun proovi uuesti.</value>
+  </data>
+  <data name="PaymentReturnFailedBannerTitle" xml:space="preserve">
+    <value>Makse pole lõpetatud</value>
+  </data>
+  <data name="CancelReservationButtonText" xml:space="preserve">
+    <value>Tühista oma broneering</value>
+  </data>
+</root>

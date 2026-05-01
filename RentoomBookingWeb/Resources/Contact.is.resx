@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ContactText" xml:space="preserve">
+    <value>Samband</value>
+  </data>
+  <data name="ContactDetails" xml:space="preserve">
+    <value>Tengiliðaupplýsingar</value>
+  </data>
+  <data name="BankAccountNumber" xml:space="preserve">
+    <value>Bankareikningsnúmer (ING)</value>
+  </data>
+  <data name="ContactForm" xml:space="preserve">
+    <value>Hafðu samband við birgja</value>
+  </data>
+  <data name="FillOutText" xml:space="preserve">
+    <value>Fylltu út eyðublaðið, við munum svara eins fljótt og auðið er.</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Netfang</value>
+  </data>
+  <data name="FirstAndLastName" xml:space="preserve">
+    <value>Nafn og eftirnafn</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Símanúmer</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Innihald skilaboða</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Ég samþykki vinnslu gagna minna í þeim tilgangi að vinna úr fyrirspurn minni</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Persónuverndarstefna</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Sendu skilaboð</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sendi...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Fylltu út alla reiti eyðublaðsins.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Vinsamlegast sláðu inn gilt netfang.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Samþykktu samþykki þitt fyrir gagnavinnslu.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Takk fyrir. Eyðublaðið hefur verið sent til Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Sendi ekki inn eyðublað. Vinsamlegast reyndu aftur eftir smá stund.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Sambandið gat verið bjargað, en samningurinn var ekki gerður. Skoðaðu Bitrix áður en þú sendir aftur.</value>
+  </data>
+</root>

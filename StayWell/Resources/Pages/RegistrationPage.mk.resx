@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Пред да добиете пристап до вашата апликација, ве молиме пополнете ја Регистрациската картичка!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Се појави грешка при зачувување на податоците. Ве молам обидете се повторно.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Изберете го времето за пријавување</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Пополнете ги деталите за гостите</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Здраво</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Пополнете ги деталите за гостите</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Регистрациска карта</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Внесете ја вашата е-пошта</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Зачувај и продолжи понатаму</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Пополнете ги потребните информации.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Поштенска адреса</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Промени го времето од {0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Со притискање на копчето подолу, ја потврдувам точноста на податоците.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Изберете го вашето проценето време за пријавување</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Промени ги податоците за гости</value>
+  </data>
+</root>

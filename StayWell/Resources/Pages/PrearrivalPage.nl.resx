@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Accepteer</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Goedkeuren</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Aantal volwassenen</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>We kunnen niet wachten!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Verander gastgegevens</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Inchecken</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Uitchecken</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Aantal kinderen</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Ik bevestig het</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Ga verder</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dagen</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Vul het incheckformulier in en accepteer de voorwaarden om toegang te krijgen tot het panel.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Gevuld</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Vul gastgegevens in</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Geef alstublieft de gegevens van alle personen die in de faciliteit zullen verblijven.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Gast</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Openingstijden</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Notulen</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Volgende</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefoonnummer</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Uw boekingspanel is nu beschikbaar!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Registratiekaart</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Gegevens succesvol opgeslagen!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Ik aanvaard de verplichting om eventuele schade en opmerkingen bij het inchecken te melden.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Ik accepteer het verbod op het roken van tabaksproducten en elektronische sigaretten in de faciliteit.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Het is verboden om evenementen te organiseren en derden te accepteren die niet bij de reservering zijn inbegrepen.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>De hoteldag duurt vanaf een uur </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>Bij aankomst tot een uur</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>op de dag van vertrek.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Achternaam</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>HUURREGELS  
+De Algemene Voorwaarden en de Overeenkomst definiëren de voorwaarden voor het boeken en huren van appartementen die door Rentoom worden verhuurd   
+Apartamenty Sp. z o.o. (Verhuurder), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 ten behoeve van de huurder.  
+1. Het boeken of huren van accommodatie staat gelijk aan het lezen en accepteren van de bepalingen van de Algemene Voorwaarden en   
+Overeenkomsten.  
+2. De bevoegde rechtbank om geschillen te beslechten is de rechtbank in Toruń.  
+3. De verhuurder behoudt zich het recht voor om een gast te weigeren die: geen geldig document heeft   
+identiteitskaart (dus identiteitskaart of paspoort) of geen document wil tonen, onder invloed is van alcohol of  
+andere verdovende middelen, overtrad hij tijdens zijn vorige verblijf de bepalingen van de Reglementen.  
+4. De verhuurder behoudt zich het recht voor om het contract met de gast die de verbreekt onmiddellijk te beëindigen  
+Verhuurregels, zonder het recht om de reserveringskosten terug te betalen. De gast zal onmiddellijk moeten doen   
+Verlaat het terrein.  
+5. De hoteldag duurt van 15:00 tot 11:00 uur de volgende dag.  
+6. Op de dag van vertrek is de huurder verplicht het appartement uiterlijk 11:00 uur over te dragen, anders   
+Er wordt een vergoeding toegevoegd voor het bedrag van de volgende startdag + 50%.  
+7. Roken in de appartementen is strikt verboden. Voor het overtreden van het rookverbod in het appartement   
+De huurder is verplicht een extra vergoeding van 500 PLN (vijfhonderd) te betalen.  
+8. Het is verboden elektrische apparatuur te gebruiken die niet tot het appartement behoort en dat wel is  
+Brandgevaar.  
+9. De huurder is verplicht om eventuele schade of storing aan de appartementapparatuur te verstrekken   
+Informeer de huisbaas onmiddellijk.  
+10. Huisdieren zijn alleen toegestaan met toestemming van de verhuurder. De kosten voor een huisdier bedragen PLN 50 voor het gehele verblijf.  
+11. De rustige uren in het gehuurde appartement zijn tussen 22:00 uur en 6:00 uur. Mensen   
+Als je niet geregistreerd bent in het appartement, kun je alleen tot 23:00 uur komen.  
+12. Het organiseren van sociale evenementen in het appartement is volledig verboden. Voor het organiseren van het evenement   
+De huurder betaalt een extra vergoeding van 5.000 PLN + extra verliezen aan de verhuurder   
+veroorzaakt door de landeigenaar. Alle schade aan het gehuurde appartement en gebouw is de verantwoordelijkheid van   
+de persoon van de huurder. De huurder is verantwoordelijk voor alle schade die voortvloeit uit het gedrag van derden die in de  
+met haar in het appartement – uitgenodigd in het appartement/gebouw door deze persoon. In het geval van een tussenkomst van de politie   
+of de gemeentelijke wacht, zal de verhuurder de huurder een extra vergoeding van 500 PLN (vijfhonderd zloty) in rekening brengen.  
+13. Het aantal mensen dat in het appartement verblijft mag het aantal dat tijdens de reservering is aangegeven niet overschrijden. Stelling   
+Onregelmatigheden in dit verband leiden tot de berekening van een extra vergoeding van PLN 200 voor elk van de   
+Personen die zich voor elke verblijfsnacht hebben geregistreerd.  
+14. Gasten zijn verplicht het appartement goed te beveiligen, dat wil zeggen alle deuren grondig te sluiten   
+ingang en ramen voordat ieder het appartement verlaat en voor opslag   
+sleutels/codes/afstandsbedieningen zonder mogelijkheid tot ongeautoriseerde toegang ertoe.  
+15. De verhuurder is niet verantwoordelijk voor beschadigde of verloren waardevolle spullen die in het appartement zijn achtergelaten.  
+16. In geval van verlies of vernietiging van de appartementsleutel of de afstandsbediening van de garage, wordt er een vergoeding in rekening gebracht in   
+PLN 200 per stuk.  
+17. Eindreiniging is inbegrepen in de prijs van het verblijf. De gast is echter verplicht om na afloop te vertrekken   
+Afwas en gebruikte apparatuur. Deze activiteiten vormen niet de essentie van de eindreiniging.  
+18. Eventuele extra schoonmaak op speciaal verzoek van de verhuurder wordt betaald volgens het bedrag van de vergoeding  
+Tankstation. Beddengoed en handdoeken worden vervangen.  
+19. Nutskosten die door de verhuurder worden verstrekt, zijn inbegrepen in de verblijfsprijs.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | Tel. +48 881 388 001  
+20. De huurder is financieel verantwoordelijk voor alle schade/diefstallen die tijdens het verblijf in het appartement zijn ontstaan.  
+21. Informeer ons alstublieft onmiddellijk als er sprake is van een misverstand of als u dat niet heeft  
+Tevreden met onze diensten. We zullen ons best doen om het probleem grondig te onderzoeken en op te lossen.  
+22. De verhuurder mag een borg tot PLN 1.000 van gasten vragen voor reserveringen, die tot vijf dagen kan worden teruggegeven   
+Werk na het uitchecken.  
+23. De verhuurder heeft recht op een vergoeding voor het bedrag van de kosten in elk geval  
+Extra.  
+24. De huurder heeft het recht om te klagen over de dienst. Klachten moeten per e-mail worden ingediend naar: reklamacje@rentoom.pl  
+of per aangetekende brief naar het postadres. Binnen 14 dagen na levering wordt er een reactie gegeven.  
+Huurregels in het Engels zijn beschikbaar op www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Er is nog veel te blijven</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Selecteer je ongeveer aankomsttijd</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Aankomsttijd</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Je hebt de tijd gekozen</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Selecteer alle toestemmingen</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laden...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Al geaccepteerd</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Verplicht</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Bekijk het document</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Zie volledige voorwaarden</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Algemene voorwaarden</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Ik weet het nog niet</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Alleen letters, spaties en koppeltekens en apostroffen</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Toestemming is niet geladen. Probeer het alsjeblieft opnieuw.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Opnieuw</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Je kunt je optionele toestemmingen op elk moment wijzigen op de pagina "Over Boeken".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Algemene voorwaarden</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Schrijffout in de data.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>U kunt deze pagina niet openen.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Algemene voorwaarden en toestemmingen</value>
+  </data>
+</root>

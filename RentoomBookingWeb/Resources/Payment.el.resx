@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Name" xml:space="preserve">
+    <value>Όνομα</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Επώνυμο</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Πόλη</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Διεύθυνση</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Ταχυδρομικός κώδικας</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΕΥΘΥΝΣΗ</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Αριθμός τηλεφώνου</value>
+  </data>
+  <data name="IsInvoiceText" xml:space="preserve">
+    <value>Θέλω να λάβω τιμολόγιο</value>
+  </data>
+  <data name="IsSaveInfoText" xml:space="preserve">
+    <value>Αποθήκευση των στοιχείων μου για μελλοντικές συναλλαγές</value>
+  </data>
+  <data name="ClickToDownloadInfo" xml:space="preserve">
+    <value>Κάντε κλικ για λήψη πληροφοριών από το NIP</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Επωνυμία εταιρείας</value>
+  </data>
+  <data name="ClientInfoButton" xml:space="preserve">
+    <value>Μετάβαση στη σύνοψη</value>
+  </data>
+  <data name="ClientInfoButtonLoading" xml:space="preserve">
+    <value>Οικονομία...</value>
+  </data>
+  <data name="ClientInfoTitle" xml:space="preserve">
+    <value>Βασικές πληροφορίες</value>
+  </data>
+  <data name="ClientInfoSubtitle" xml:space="preserve">
+    <value>Συμπληρώστε τα στοιχεία</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Η διαμονή σας</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Από</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Προς την</value>
+  </data>
+  <data name="SummaryText" xml:space="preserve">
+    <value>Συνοπτικά</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Νύχτες</value>
+  </data>
+  <data name="SummaryLoadingText" xml:space="preserve">
+    <value>Φόρτωση περίληψης</value>
+  </data>
+  <data name="ReservationSummary" xml:space="preserve">
+    <value>Σύνοψη κράτησης</value>
+  </data>
+  <data name="SummaryDetailsText" xml:space="preserve">
+    <value>Ελέγξτε τα στοιχεία της κράτησης</value>
+  </data>
+  <data name="ReservationPaid" xml:space="preserve">
+    <value>Η κράτηση πληρώθηκε</value>
+  </data>
+  <data name="ReservationPaidInfo" xml:space="preserve">
+    <value>Η κράτησή σας επιβεβαιώθηκε και πληρώθηκε.</value>
+  </data>
+  <data name="GoToStayWell" xml:space="preserve">
+    <value>Ελέγξτε το email σας και συνεχίστε στο StayWell</value>
+  </data>
+  <data name="ReservationPending" xml:space="preserve">
+    <value>Κατά την πληρωμή</value>
+  </data>
+  <data name="ReservationPendingInfo" xml:space="preserve">
+    <value>Η κράτησή σας έχει επιβεβαιωθεί αλλά δεν έχει πληρωθεί ακόμα</value>
+  </data>
+  <data name="ClickToPay" xml:space="preserve">
+    <value>Κάντε κλικ για να πληρώσετε για κρατήσεις</value>
+  </data>
+  <data name="ReservationDanger" xml:space="preserve">
+    <value>Καμία επιβεβαίωση</value>
+  </data>
+  <data name="ReservationDangerInfo" xml:space="preserve">
+    <value>Η κράτησή σας δεν έχει επιβεβαιωθεί ακόμα</value>
+  </data>
+  <data name="NameLastName" xml:space="preserve">
+    <value>Ονοματεπώνυμο</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Επεξεργασία</value>
+  </data>
+  <data name="ReservationDetails" xml:space="preserve">
+    <value>Λεπτομέρειες κράτησης</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Άφιξη</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Αναχώρηση</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Επισκέπτες</value>
+  </data>
+  <data name="ConfirmationNumber" xml:space="preserve">
+    <value>Αριθμός κράτησης</value>
+  </data>
+  <data name="PaymentSuccessful" xml:space="preserve">
+    <value>Επιτυχής πληρωμή!</value>
+  </data>
+  <data name="PaymentSuccessfulText" xml:space="preserve">
+    <value>Το διαμέρισμά σας έχει κρατηθεί με επιτυχία</value>
+  </data>
+  <data name="BackToSummary" xml:space="preserve">
+    <value>Επιστροφή στη σύνοψη</value>
+  </data>
+  <data name="ConfimationSendToMail" xml:space="preserve">
+    <value>Η επιβεβαίωση στάλθηκε στο email</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Ποσό</value>
+  </data>
+  <data name="PaymentFailed" xml:space="preserve">
+    <value>Η πληρωμή απέτυχε
+
+</value>
+  </data>
+  <data name="PaymentFailedText" xml:space="preserve">
+    <value>Δεν έχει γίνει κράτηση για το διαμέρισμά σας</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Παρακαλώ προσπαθήστε ξανά</value>
+  </data>
+  <data name="WaitingPayment" xml:space="preserve">
+    <value>Αναμονή για επιβεβαίωση πληρωμής...
+
+</value>
+  </data>
+  <data name="SomethingWrong" xml:space="preserve">
+    <value>Ουπς! Κάτι πήγε στραβά</value>
+  </data>
+  <data name="RedirectingToPayment" xml:space="preserve">
+    <value>Ανακατεύθυνση στην πληρωμή...</value>
+  </data>
+  <data name="RedirectToPaymentText" xml:space="preserve">
+    <value>Πρόκειται να μεταφερθείτε σε ένα ασφαλές σύστημα πληρωμών</value>
+  </data>
+  <data name="NotRefreshPage" xml:space="preserve">
+    <value>Παρακαλώ μην ανανεώσετε τη σελίδα</value>
+  </data>
+  <data name="CheckEmailText" xml:space="preserve">
+    <value>Έλεγχος email...</value>
+  </data>
+  <data name="SendMailText" xml:space="preserve">
+    <value>Το email στάλθηκε</value>
+  </data>
+  <data name="ConfirmationWill" xml:space="preserve">
+    <value>Θα σταλεί επιβεβαίωση στη διεύθυνση:</value>
+  </data>
+  <data name="ConfirmationHasBeenSent" xml:space="preserve">
+    <value>Η επιβεβαίωση στάλθηκε στη διεύθυνση:</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Φόρτωση...</value>
+  </data>
+  <data name="NoGusInfo" xml:space="preserve">
+    <value>Δεν βρέθηκαν στοιχεία για τον παρεχόμενο αριθμό φορολογικού μητρώου.</value>
+  </data>
+  <data name="GusError" xml:space="preserve">
+    <value>Σφάλμα κατά τη μεταφόρτωση δεδομένων από την Κεντρική Στατιστική Υπηρεσία</value>
+  </data>
+  <data name="NoNipError" xml:space="preserve">
+    <value>Εισαγάγετε τον αριθμό NIP σας</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Κωδικός περιοχής</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Απαιτείται</value>
+  </data>
+  <data name="FillAllDataError" xml:space="preserve">
+    <value>Συμπληρώστε τα στοιχεία</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Λανθασμένο email</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupText" xml:space="preserve">
+    <value>Σαρώστε τον κωδικό QR για να μεταβείτε στο Staywell </value>
+  </data>
+  <data name="StaywellPopupTitle" xml:space="preserve">
+    <value>Διαχειριστείτε την κράτησή σας στο StayWell</value>
+  </data>
+  <data name="StaywellPopupDescription" xml:space="preserve">
+    <value>Σαρώστε τον κωδικό QR για να ανοίξετε αμέσως τον πίνακα ελέγχου StayWell που έχει εκχωρηθεί σε αυτήν την κράτηση. Στον πίνακα ελέγχου, μπορείτε να ελέγξετε τις λεπτομέρειες της διαμονής σας, τις οργανωτικές πληροφορίες, την κατάσταση των πρόσθετων υπηρεσιών και τα πιο σημαντικά μηνύματα.</value>
+  </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Ανοίξτε τον πίνακα ελέγχου StayWell για αυτήν την κράτηση. Στον πίνακα ελέγχου, μπορείτε να ελέγξετε τις λεπτομέρειες της διαμονής σας, τις οργανωτικές πληροφορίες, την κατάσταση των πρόσθετων υπηρεσιών και τα πιο σημαντικά μηνύματα.</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
+    <value>Μεταβείτε απευθείας στο StayWell</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Επιλογή όλων των συναινέσεων</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Συμπληρώστε τα στοιχεία</value>
+  </data>
+  <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
+    <value>Τιμολόγιο</value>
+  </data>
+  <data name="InvoiceYes" xml:space="preserve">
+    <value>Ναι</value>
+  </data>
+  <data name="InvoiceNo" xml:space="preserve">
+    <value>Όχι</value>
+  </data>
+  <data name="FailPageTitle" xml:space="preserve">
+    <value>Rentoom - Επαλήθευση πληρωμής</value>
+  </data>
+  <data name="PaymentReturnCheckingTitle" xml:space="preserve">
+    <value>Ελέγχουμε την κατάσταση της πληρωμής σας</value>
+  </data>
+  <data name="PaymentReturnPendingBannerTitle" xml:space="preserve">
+    <value>Δεν έχουμε επιβεβαιώσει ακόμη την πληρωμή</value>
+  </data>
+  <data name="StaywellPopupAriaLabel" xml:space="preserve">
+    <value>Πληροφορίες StayWell</value>
+  </data>
+  <data name="PaymentReturnFailedBannerMessage" xml:space="preserve">
+    <value>Μπορείτε να δοκιμάσετε ξανά την πληρωμή από αυτήν τη σύνοψη. Εάν η τράπεζα έχει ήδη αποσύρει τα χρήματα, περιμένετε λίγο πριν προσπαθήσετε ξανά.</value>
+  </data>
+  <data name="SummaryPageTitle" xml:space="preserve">
+    <value>Rentoom - Σύνοψη κρατήσεων</value>
+  </data>
+  <data name="TpayMockCancelButton" xml:space="preserve">
+    <value>Ακύρωση</value>
+  </data>
+  <data name="CancelActionSeparatorText" xml:space="preserve">
+    <value>ή</value>
+  </data>
+  <data name="TpayMockReservationLabel" xml:space="preserve">
+    <value>Κράτηση</value>
+  </data>
+  <data name="PaymentReturnVerificationError" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η αυτόματη επαλήθευση της κατάστασης πληρωμής. Επιστρέψτε στη σύνοψη και δοκιμάστε ξανά από εκεί.</value>
+  </data>
+  <data name="SuccessPageTitle" xml:space="preserve">
+    <value>Rentoom - Επί πληρωμή</value>
+  </data>
+  <data name="PaymentPageTitle" xml:space="preserve">
+    <value>Rentoom - Πληρώστε για την κράτησή σας</value>
+  </data>
+  <data name="StaywellButtonText" xml:space="preserve">
+    <value>Κάντε κλικ για να διαχειριστείτε την κράτησή σας στο Rentoom StayWell</value>
+  </data>
+  <data name="MessageSentDescription" xml:space="preserve">
+    <value>Στείλαμε την επιβεβαίωση στο {0} και στο WhatsApp.</value>
+  </data>
+  <data name="PaymentReturnPendingMessage" xml:space="preserve">
+    <value>Δεν έχουμε ακόμη τελική επιβεβαίωση. Θα επιστρέψετε στη σύνοψη σε λίγο, όπου μπορείτε να δοκιμάσετε ξανά με ασφάλεια την πληρωμή σας, εάν είναι απαραίτητο.</value>
+  </data>
+  <data name="EmailDeliveryPendingTitle" xml:space="preserve">
+    <value>Στέλνουμε ένα μήνυμα</value>
+  </data>
+  <data name="SummaryBuildError" xml:space="preserve">
+    <value>Δεν ήταν δυνατό να δημιουργηθεί μια περίληψη.</value>
+  </data>
+  <data name="TpayMockMissingReservation" xml:space="preserve">
+    <value>Το αναγνωριστικό κράτησης λείπει από τη διεύθυνση URL.</value>
+  </data>
+  <data name="EmailStatusFetchError" xml:space="preserve">
+    <value>Δεν ήταν δυνατός ο έλεγχος της κατάστασης του email.</value>
+  </data>
+  <data name="FailIconAlt" xml:space="preserve">
+    <value>εικονίδιο ειδοποίησης</value>
+  </data>
+  <data name="TpayMockPaymentSessionLabel" xml:space="preserve">
+    <value>Συνεδρία πληρωμής</value>
+  </data>
+  <data name="PaymentReturnWaitingTitle" xml:space="preserve">
+    <value>Περιμένουμε επιβεβαίωση πληρωμής</value>
+  </data>
+  <data name="CancelReservationInProgressText" xml:space="preserve">
+    <value>Ακύρωση...</value>
+  </data>
+  <data name="PaymentStatusFetchError" xml:space="preserve">
+    <value>Η ανάκτηση της κατάστασης πληρωμής απέτυχε.</value>
+  </data>
+  <data name="SummarySaveTermsError" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα κατά την αποθήκευση των συναινέσεων. Παρακαλώ προσπαθήστε ξανά.</value>
+  </data>
+  <data name="TpayMockPayButton" xml:space="preserve">
+    <value>Πληρωμή</value>
+  </data>
+  <data name="EmailDeliveryPendingMessage" xml:space="preserve">
+    <value>Στέλνουμε επιβεβαίωση στο {0} και στο WhatsApp.</value>
+  </data>
+  <data name="ClientInfoNipLabel" xml:space="preserve">
+    <value>ΝΙΠ</value>
+  </data>
+  <data name="PaymentVerificationError" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η επιβεβαίωση της πληρωμής.</value>
+  </data>
+  <data name="StaywellPopupCloseAriaLabel" xml:space="preserve">
+    <value>Κλείστε το αναδυόμενο παράθυρο StayWell</value>
+  </data>
+  <data name="ClientInfoSaveError" xml:space="preserve">
+    <value>Αποτυχία αποθήκευσης δεδομένων πελατών.</value>
+  </data>
+  <data name="TpayMockPageTitle" xml:space="preserve">
+    <value>Mock TPAY</value>
+  </data>
+  <data name="ClientInfoPageTitle" xml:space="preserve">
+    <value>Rentoom Reservation - Στοιχεία πελάτη</value>
+  </data>
+  <data name="PaymentReturnWaitingMessage" xml:space="preserve">
+    <value>Η πληρωμή μπορεί ακόμα να διεκπεραιωθεί. Το επαληθεύουμε πριν σας στείλουμε πίσω στη σύνοψη κρατήσεων.</value>
+  </data>
+  <data name="TpayMockHeader" xml:space="preserve">
+    <value>Προσομοίωση πληρωμής</value>
+  </data>
+  <data name="MessageSentTitle" xml:space="preserve">
+    <value>Έχει σταλεί ένα μήνυμα</value>
+  </data>
+  <data name="PaymentReturnCheckingMessage" xml:space="preserve">
+    <value>Αυτό δεν σημαίνει πάντα αποτυχημένη πληρωμή. Αρχικά, ελέγχουμε την τελική κατάσταση της συναλλαγής.</value>
+  </data>
+  <data name="PaymentReturnPendingTitle" xml:space="preserve">
+    <value>Η κατάσταση πληρωμής εξακολουθεί να εκκρεμεί</value>
+  </data>
+  <data name="PaymentReturnPendingBannerMessage" xml:space="preserve">
+    <value>Εάν τα χρήματα έχουν χρεωθεί, μην κάνετε άλλη πληρωμή αμέσως. Ελέγξτε την κατάσταση της κράτησής σας παρακάτω και δοκιμάστε ξανά μόνο εάν η πληρωμή εξακολουθεί να μην έχει επιβεβαιωθεί.</value>
+  </data>
+  <data name="PaymentInitError" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η έναρξη της πληρωμής.</value>
+  </data>
+  <data name="CancelReservationErrorText" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα κατά την ακύρωση της κράτησής σας. Παρακαλώ προσπαθήστε ξανά.</value>
+  </data>
+  <data name="PaymentReturnFailedBannerTitle" xml:space="preserve">
+    <value>Η πληρωμή δεν έχει ολοκληρωθεί</value>
+  </data>
+  <data name="CancelReservationButtonText" xml:space="preserve">
+    <value>Ακυρώστε την κράτησή σας</value>
+  </data>
+</root>

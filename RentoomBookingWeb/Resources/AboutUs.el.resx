@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Σχετικά με εμάς
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Μέση βαθμολογία διαμερίσματος
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>διαμερίσματα προς διαχείριση
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Κρατήσεις που διεκπεραιώθηκαν
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Οι επισκέπτες εξυπηρετούνται
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Ιστορία</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Είμαστε μια ομάδα ανθρώπων που αγαπάμε τα ταξίδια και έχουμε αποκτήσει εμπειρία στον τουρισμό στις διεθνείς αγορές. Επιπλέον, ασχολούμαστε με τη διαχείριση, την ενοικίαση, την ανακαίνιση και την εμπορία στην αγορά ακινήτων για πάνω από 6 χρόνια. Θέλουμε να προσφέρουμε την εμπειρία που έχουμε αποκτήσει στους πελάτες και τους επισκέπτες μας, οι οποίοι είναι πάντα ικανοποιημένοι με τις υπηρεσίες μας.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Αποστολή</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Παρέχοντας την καλύτερη δυνατή εξυπηρέτηση στους πελάτες μας, τόσο στους επισκέπτες όσο και στους ιδιοκτήτες διαμερισμάτων. Είναι ιδιαίτερα σημαντικό για εμάς να διατηρήσουμε ένα υψηλό επίπεδο εξυπηρέτησης πελατών και να διασφαλίσουμε ότι οι επισκέπτες μας θα αισθάνονται σαν στο σπίτι τους στα διαμερίσματά μας και θα μπορούν να βασίζονται στη βοήθειά μας ανά πάσα στιγμή.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Η ομάδα μας
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Οραματιστής και στρατηγός με εμπειρία στον κλάδο των ακινήτων. Κατασκεύασε το Rentoom για να απλοποιήσει τις βραχυπρόθεσμες ενοικιάσεις και να αυτοματοποιήσει τα πάντα, από τις κρατήσεις μέχρι τη διαχείριση επισκεπτών.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Διασφαλίζει ότι η τεχνολογία Rentoom είναι γρήγορη, αξιόπιστη και ασφαλής. Παθιασμένος με τον αυτοματισμό και τις σύγχρονες λύσεις για την αγορά ενοικίασης.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Με προσοχή σε κάθε λεπτομέρεια, συντονίζει τις καθημερινές δραστηριότητες. Χάρη σε αυτό, οι πελάτες μας μπορούν να κοιμούνται ήσυχοι – όλα λειτουργούν στην ώρα τους και χωρίς προβλήματα.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Κλήση</value>
+  </data>
+</root>

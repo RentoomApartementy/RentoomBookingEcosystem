@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Acceptera</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Godkänn</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Antal vuxna</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Vi kan knappt vänta!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Ändra gästdata</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Incheckning</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Utcheckning</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Antal barn</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Jag bekräftar</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Fortsätt</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dagar</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Fyll i incheckningsformuläret och acceptera villkoren för att få tillgång till panelen.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Fylld</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Fyll i gästuppgifter</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Vänligen ange uppgifter om alla personer som kommer att bo på anläggningen.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Gäst</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Öppettider</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Protokoll</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Nästa</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefonnummer</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Din bokningspanel är nu tillgänglig!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Registreringskort</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Data sparad framgångsrikt!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Jag accepterar skyldigheten att rapportera eventuella skador och kommentarer vid incheckning.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Jag accepterar förbudet mot att röka tobaksprodukter och elektroniska cigaretter inne i anläggningen.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Det är förbjudet att organisera evenemang och ta emot tredje personer som inte ingår i reservationen.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Hotelldagen varar från en timme </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>Vid ankomst upp till en timme</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>på avresedagen.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Efternamn</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>HYRESREGLER  
+Villkoren och avtalet definierar villkoren för bokning och uthyrning av lägenheter som omfattas av hyra från Rentoom   
+Apartamenty Sp. z o.o. (Hyresvärd), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 till hyresgästens fördel.  
+1. Bokning eller uthyrning av boende är liktydigt med att läsa och acceptera bestämmelserna i villkoren och   
+Överenskommelser.  
+2. Den behöriga domstolen för att avgöra tvister är domstolen i Toruń.  
+3. Hyresvärden förbehåller sig rätten att vägra ta emot en gäst som: inte har ett giltigt dokument   
+identitetskort (dvs. identitetskort eller pass) eller inte vill visa ett dokument, är påverkad av alkohol eller  
+andra narkotika, under sin tidigare vistelse bröt han mot bestämmelserna i reglerna.  
+4. Hyresvärden förbehåller sig rätten att omedelbart säga upp avtalet med den gäst som bryter  
+Hyresregler, utan rätt att återbetala bokningsavgiften. Gästen kommer att behöva göra det omedelbart   
+lämnar området.  
+5. Hotelldagen varar från kl. 15.00 till 11.00 nästa dag.  
+6. På avresedagen är hyresgästen skyldig att lämna över lägenheten senast kl. 11:00, annars   
+En avgift läggs till på beloppet för nästa startdag + 50%.  
+7. Rökning i lägenheterna är strikt förbjuden. För att ha brutit mot rökförbudet inne i lägenheten   
+Hyresgästen är skyldig att betala en extra avgift på 500 PLN (femhundra).  
+8. Det är förbjudet att använda elektrisk utrustning som inte ingår i lägenheten och som är  
+Brandrisk.  
+9. Hyresgästen är skyldig att tillhandahålla eventuella skador eller fel på lägenhetsutrustningen   
+Informera hyresvärden omedelbart.  
+10. Husdjur är endast tillåtna med hyresvärdens tillstånd. Avgiften för ett husdjur är 50 PLN för hela vistelsen.  
+11. Tysta tider i den hyrda lägenheten är mellan 22.00 och 06.00. Personer   
+Om du inte är registrerad i lägenheten kan du bara besöka till kl. 23.00.  
+12. Att organisera sociala evenemang i lägenheten är helt förbjudet. För att organisera evenemanget   
+Hyresaren kommer att betala en extra avgift på 5 000 PLN + ytterligare förluster till hyresvärden   
+som ådragits av hyresvärden. Alla skador på den hyrda lägenheten och byggnaden är ansvaret för   
+hyresgästens person. Hyresgästen ansvarar för alla skador som uppstår till följd av tredje parts beteende som bor i  
+med henne i lägenheten – inbjuden till lägenheten/byggnaden av den här personen. Vid polisens ingripande   
+eller kommunala vakten, tar hyresvärden ut en extra avgift på 500 PLN (femhundra zloty).  
+13. Antalet personer som bor i lägenheten får inte överstiga det antal som anges vid bokningen. Uttalande   
+oegentligheter i detta avseende leder till att en extra avgift på 200 PLN beräknas för var och en av   
+personer registrerade för varje övernattning.  
+14. Gäster är skyldiga att säkra lägenheten ordentligt, det vill säga att stänga alla dörrar noggrant   
+Entré och fönster innan de lämnade lägenheten och för förvaring   
+nycklar/koder/kontroller utan möjlighet till obehörig åtkomst till dem.  
+15. Hyresvärden ansvarar inte för skador eller förlorade värdesaker som lämnats kvar i lägenheten.  
+16. Vid förlust eller förstörelse av lägenhetsnyckeln eller garagefjärrkontrollen tas en avgift ut   
+200 PLN för varje del.  
+17. Sluttvätt ingår i priset för vistelsen. Dock är gästen tvungen att lämna efteråt   
+diskade och använde utrustning. Dessa aktiviteter är inte själva kärnan i den slutliga rengöringen.  
+18. Eventuell extra städning på hyresvärdens särskilda begäran betalas enligt avgiftens belopp  
+Bensinstation. Sängkläder och handdukar byts ut.  
+19. Avgifter för elräkningar som tillhandahålls av hyresvärden ingår i boendekostnaden.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | tel. +48 881 388 001  
+20. Hyresgästen är ekonomiskt ansvarig för alla skador/stöld som uppstår i lägenheten under vistelsen.  
+21. Vänligen informera oss omedelbart om det finns något missförstånd eller om du inte har det  
+Nöjd med våra tjänster. Vi kommer att göra vårt bästa för att noggrant undersöka problemet och lösa det.  
+22. Hyresvärden kan ta ut en deposition på upp till 1 000 PLN från gäster för bokningar, vilket kan returneras inom fem dagar   
+Jobba efter utcheckningen.  
+23. Hyresvärden har rätt att kräva ersättning för avgiftsbeloppet i varje fall  
+Ytterligare.  
+24. Hyresgästen har rätt att klaga på tjänsten. Klagomål ska skickas via e-post till: reklamacje@rentoom.pl  
+eller med rekommenderat brev till postadressen. Ett svar kommer att ges inom 14 dagar efter leveransen.  
+Hyresregler på engelska finns tillgängliga på www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Det finns mycket kvar att stanna</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Välj din ungefärliga ankomsttid</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Ankomsttid</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Du har valt tiden</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Välj alla samtycken</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laddar...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Redan accepterat</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Obligatoriskt</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Visa dokumentet</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Se fullständiga villkor</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Villkor och villkor</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Jag vet inte än</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Endast bokstäver, mellanslag, bindestreck och apostrofer</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Misslyckades med att ladda consents. Försök igen, tack.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Göra om</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Du kan när som helst ändra dina valfria samtycken på sidan "Om bokning".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Villkor</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Skrivfel i data.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Du kan inte komma åt denna sida.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Villkor och samtycken</value>
+  </data>
+</root>

@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Om oss
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Genomsnittligt lägenhetsbetyg
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>Lägenheter att sköta
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Bokningar hanterade
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Gäster serverade
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Vi är en grupp människor som älskar att resa och har fått erfarenhet av turism på internationella marknader. Dessutom har vi arbetat med förvaltning, uthyrning, renovering och handel på fastighetsmarknaden i över 6 år. Vi vill erbjuda den erfarenhet vi har fått till våra kunder och gäster, som alltid är nöjda med våra tjänster.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Uppdrag</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Vi erbjuder bästa möjliga service till våra kunder, både gäster och lägenhetsägare. Det är särskilt viktigt för oss att upprätthålla en hög standard på kundservice och att säkerställa att våra gäster känner sig hemma i våra lägenheter och kan räkna med vår hjälp när som helst.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Vårt team
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Visionär och strateg med erfarenhet inom fastighetsbranschen. Han byggde Rentoom för att förenkla korttidsuthyrning och automatisera allt från bokningar till gästhantering.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Den säkerställer att Rentooms teknik är snabb, pålitlig och säker. Brinner för automation och moderna lösningar för hyresmarknaden.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Med noggrannhet på varje detalj koordinerar hon dagliga aktiviteter. Tack vare det kan våra kunder sova lugnt – allt fungerar i tid och utan några fel.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Ring</value>
+  </data>
+</root>

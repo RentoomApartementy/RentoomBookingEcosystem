@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Codul tău va fi disponibil din {0} în ziua check-in-ului.</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Verificarea disponibilitatii lacătelor...</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmă</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Uși deschise</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Eroare la oprire</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Deschiderea erorii</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Eroare de conexiune la server</value>
+  </data>
+  <data name="HowTo" xml:space="preserve">
+    <value>Cum să folosești lacătul</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Niciun cod pentru lacăt. Contactează suportul!</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>sau</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Apasă pentru deschidere</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Procesare</value>
+  </data>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Deschiderea de la distanță a ușii</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Deschiderea de la distanță nu este disponibilă în prezent.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Vă rugăm să încercați din nou</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Încearcă din nou în {0}</value>
+  </data>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Codul apartamentului tău</value>
+  </data>
+  <data name="InstructionCylinder" xml:space="preserve">
+    <value>## Cum să deschizi o ușă
+1. Introduceți codul sau deschideți de la distanță
+(Fiecare apăsare a butonului de pe tastatură va fi confirmat de un sunet)
+2. Dacă se aprinde în albastru, rotește butonul
+(Lacăt pe partea dreaptă a ușii, virează la stânga)
+(Încuietoare pe partea stângă a ușii, virează la dreapta)
+Până când auzi lacătul retragându-se.
+3. Deschide ușa
+
+## Cum să închizi ușa
+1. Introduceți codul
+(Fiecare apăsare a butonului de pe tastatură va fi confirmat de un sunet)
+2. Dacă se aprinde în albastru, rotește butonul în direcția opusă
+(Lacăt pe partea dreaptă a ușii, virează la dreapta)
+(Încuietoare pe partea stângă a ușii, virează la stânga)
+până când auzi încuietoarea închizându-se.
+3. Ușa este încuiată.</value>
+  </data>
+  <data name="InstructionPanel" xml:space="preserve">
+    <value>1. Iluminați tastatura apăsând orice buton de pe panou sau deschideți de la distanță.
+2. Introduceți codul
+3. Dacă se aprinde albastru, deschide ușa.</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="LockTypePanel" xml:space="preserve">
+    <value>Panel</value>
+  </data>
+  <data name="LockTypeSpinning" xml:space="preserve">
+    <value>Rotativ</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Deschiderea de la distanță va fi disponibilă din {0} în ziua check-in-ului.</value>
+  </data>
+  <data name="InstructionOpenTitle" xml:space="preserve">
+    <value>Cum să deschizi o ușă</value>
+  </data>
+  <data name="InstructionCloseTitle" xml:space="preserve">
+    <value>Cum să închizi ușa</value>
+  </data>
+  <data name="InstructionCylinderOpen" xml:space="preserve">
+    <value>## Cum să deschizi - Încuietoare rotativă
+1. Introduceți codul sau deschideți de la distanță
+(Fiecare apăsare a butonului de pe tastatură va fi confirmat de un sunet)
+2. Dacă se aprinde în albastru, rotește butonul
+(Lacăt pe partea dreaptă a ușii, virează la stânga)
+(Încuietoare pe partea stângă a ușii, virează la dreapta)
+Până când auzi lacătul retragându-se.
+3. Deschide ușa</value>
+  </data>
+  <data name="InstructionCylinderClose" xml:space="preserve">
+    <value>## Cum să se închidă - Încuietoare rotativă
+1. Introduceți codul
+(Fiecare apăsare a butonului de pe tastatură va fi confirmat de un sunet)
+2. Dacă se aprinde în albastru, rotește butonul în direcția opusă
+(Lacăt pe partea dreaptă a ușii, virează la dreapta)
+(Încuietoare pe partea stângă a ușii, virează la stânga)
+până când auzi încuietoarea închizându-se.
+3. Ușa este încuiată.</value>
+  </data>
+  <data name="InstructionPanelOpen" xml:space="preserve">
+    <value>## Cum să deschizi - Panouri de încuietoare
+1. Iluminați tastatura apăsând orice buton de pe panou sau deschideți de la distanță.
+2. Introduceți codul
+3. Dacă se aprinde albastru, deschide ușa.</value>
+  </data>
+  <data name="InstructionPanelClose" xml:space="preserve">
+    <value>## Cum să închizi - Blocarea panoului
+Tot ce trebuie să faci este să închizi ușa după tine.</value>
+  </data>
+  <data name="InstructionCylinderOpenLabel" xml:space="preserve">
+    <value>Cum să se deschidă - Încuietoare rotativă</value>
+  </data>
+  <data name="InstructionCylinderCloseLabel" xml:space="preserve">
+    <value>Cum să se închidă - Încuietoare rotativă</value>
+  </data>
+  <data name="InstructionPanelOpenLabel" xml:space="preserve">
+    <value>Cum să deschizi - Blocarea panourilor</value>
+  </data>
+  <data name="InstructionPanelCloseLabel" xml:space="preserve">
+    <value>Cum să închizi - Blocarea panourilor</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Coduri anterioare</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Codul original</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Generează cod nou</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Cod nou pentru {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Generând... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Important: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Valabil din: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Valabil până la: {0}</value>
+  </data>
+  <data name="CylinderTopView" xml:space="preserve">
+    <value>Vedere de sus</value>
+  </data>
+  <data name="GenerateAvailableFrom" xml:space="preserve">
+    <value>Generarea de cod nou va fi disponibilă din {0}.</value>
+  </data>
+  <data name="GenerateSameHourBlocked" xml:space="preserve">
+    <value>Codul a fost deja generat la această oră. Următoarea generație va fi posibilă din {0}.</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Un nou cod de acces a fost generat cu succes.</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Rezervarea ta s-a încheiat. Deschiderea de la distanță nu mai este disponibilă.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Rezervarea ta s-a încheiat. Codul de acces nu mai este disponibil.</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Apartament deschis</value>
+  </data>
+</root>

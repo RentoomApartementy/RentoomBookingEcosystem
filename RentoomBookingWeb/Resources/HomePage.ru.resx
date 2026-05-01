@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Апартаменты Rentoom — мы создаём уникальные впечатления от проживания в Торуне
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Ищете уютную квартиру в Торуни?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Апартаменты в Торуне — комфортное проживание</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Ищете уютную квартиру в Торуни?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenty — это современный бренд краткосрочной аренды, сочетающий высокий стандарт размещения с подлинным знанием Торуня. Мы создаём места, спроектированные с учётом комфорта, эстетики и функциональности — как для туристов, так и для деловых гостей.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Мы рады, что вы пришли к нам!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Наше предложение включает десятки тщательно подобранных квартир в самых привлекательных районах города. Каждое место выбрано для удобного доступа к ключевым достопримечательностям, ресторанам и деловым зонам.
+Каждая квартира — это пространство, созданное для настоящего отдыха и уединения после интенсивного дня осмотра достопримечательностей или работы.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Квартиры в лучших районах Торуни</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Довольные клиенты</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Апартаменты в Торуне
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Расположение в Торуне</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Почему именно Рентум?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Апартаменты Рентоом — это не просто ночёвка в Торуне. Мы предлагаем высокие стандарты квартир в лучших местах и реальные преимущества, которые повышают стоимость всего проживания.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>В рамках нашей партнёрской программы гости получают специальные скидки на выбранные рестораны, кафе и туристические достопримечательности. Текущие скидки и рекомендации доступны непосредственно в квартирах, так что вы можете использовать проверенные места и сэкономить деньги во время осмотра достопримечательностей.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Мы работаем только с надёжными, локальными партнёрами, заботясь о качестве каждой рекомендации. Выбирая Рентум, вы получаете комфорт, профессиональный сервис и дополнительные преимущества, которые делают ваше пребывание в Торуне более комфортным, изысканным и просто более прибыльным.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Познакомьтесь с мнениями людей, которые спали в наших квартирах в Торуни.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Оставьте свои контактные данные, и мы свяжемся с вами!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Связаться с поставщиком</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Я согласен на обработку моих личных данных, предоставленных в вышеуказанной форме</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Фамилия</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Что отличает наши квартиры от других?
+
+</value>
+  </data>
+</root>

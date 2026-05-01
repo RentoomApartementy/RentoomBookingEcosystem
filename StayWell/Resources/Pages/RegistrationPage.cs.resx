@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Než získáte přístup ke své žádosti, vyplňte prosím registrační kartu!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Při ukládání dat došlo k chybě. Zkuste to prosím znovu.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Vyberte si čas přihlášení</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Doplňte údaje o hostu</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Dobrý den,</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Doplňte údaje o hostu</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Registrační karta</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Zadejte svou e-mailovou adresu</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Ulož a jdi dál</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Doplňte potřebné informace.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>E-mailová adresa</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Změňte čas od {0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Stisknutím tlačítka níže potvrzuji správnost dat.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Vyberte si odhadovaný čas přihlášení</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Změňte data hostů</value>
+  </data>
+</root>

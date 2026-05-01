@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApartmentName" xml:space="preserve">
+    <value>Apartamentai</value>
+  </data>
+  <data name="SelectedDates" xml:space="preserve">
+    <value>Pasirinkta data</value>
+  </data>
+  <data name="NoDatesSelected" xml:space="preserve">
+    <value>Nėra pasirinktos datos</value>
+  </data>
+  <data name="NumberOfGuests" xml:space="preserve">
+    <value>Žmonių skaičius</value>
+  </data>
+  <data name="NoGuestsSelected" xml:space="preserve">
+    <value>Nėra pasirinkto žmonių skaičiaus</value>
+  </data>
+  <data name="NoOffersAvailable" xml:space="preserve">
+    <value>Pasiūlymo pasirinktą dieną nėra</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Rodyti daugiau</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>Sutraukti išsamią informaciją</value>
+  </data>
+  <data name="SummaryStepButtonLabel" xml:space="preserve">
+    <value>Įsipareigoti</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Užsakymo santrauka</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Papildomos parinktys</value>
+  </data>
+  <data name="Opłata serwisowa 139 x" xml:space="preserve">
+    <value>Aptarnavimo mokestis 139 x</value>
+  </data>
+  <data name="Zwierzę" xml:space="preserve">
+    <value>Gyvūnas</value>
+  </data>
+  <data name="Łóżeczko dla niemowlaka" xml:space="preserve">
+    <value>Vaikiška lovelė</value>
+  </data>
+  <data name="Łóżeczko turystyczne" xml:space="preserve">
+    <value>Kelioninė lovelė</value>
+  </data>
+  <data name="PÓŹNE WYMELDOWANIE" xml:space="preserve">
+    <value>VĖLYVAS IŠVYKIMAS</value>
+  </data>
+  <data name="WCZESNE ZAMELDOWANIE" xml:space="preserve">
+    <value>ANKSTYVAS ATVYKIMAS</value>
+  </data>
+  <data name="Kwiaty" xml:space="preserve">
+    <value>Gėlės</value>
+  </data>
+  <data name="Upgrade" xml:space="preserve">
+    <value>Atnaujinti</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Nuo</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Į</value>
+  </data>
+  <data name="Adults" xml:space="preserve">
+    <value>Suaugusieji</value>
+  </data>
+  <data name="Children" xml:space="preserve">
+    <value>Vaikai</value>
+  </data>
+  <data name="RefundableOffer" xml:space="preserve">
+    <value>Grąžinimo pasiūlymas</value>
+  </data>
+  <data name="Non-refundableOffer" xml:space="preserve">
+    <value>Negrąžinamas pasiūlymas</value>
+  </data>
+  <data name="BookNow" xml:space="preserve">
+    <value>Užsisakykite dabar</value>
+  </data>
+  <data name="BookNowStepButtonLabel" xml:space="preserve">
+    <value>Detalės</value>
+  </data>
+  <data name="SuggestedDate" xml:space="preserve">
+    <value>Siūloma data</value>
+  </data>
+  <data name="SuggestedDateLoading" xml:space="preserve">
+    <value>Patikrinkite prieinamumą...</value>
+  </data>
+  <data name="NonRefundableText" xml:space="preserve">
+    <value>Išankstinis apmokėjimas negrąžinamas.</value>
+  </data>
+  <data name="RefundableOfferText" xml:space="preserve">
+    <value>Atšaukiant rezervaciją grąžiname 100% sumokėtos sumos {0}</value>
+  </data>
+  <data name="RefundableOfferTextFallback" xml:space="preserve">
+    <value>Nemokamas apeliacinis skundas prieš</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Įkrovimas</value>
+  </data>
+  <data name="MandatoryOptions" xml:space="preserve">
+    <value>Privalomos parinktys</value>
+  </data>
+  <data name="ApartmentsMap" xml:space="preserve">
+    <value>Apartamentų žemėlapis</value>
+  </data>
+  <data name="CleaningIncluded" xml:space="preserve">
+    <value>Valymas įskaičiuotas į kainą</value>
+  </data>
+  <data name="SelectOffer" xml:space="preserve">
+    <value>Pasirinkite pasiūlymą</value>
+  </data>
+  <data name="SelectOfferStepButtonLabel" xml:space="preserve">
+    <value>Pasirinkite pasiūlymą</value>
+  </data>
+  <data name="SeeMore" xml:space="preserve">
+    <value>Žiūrėti visą žemėlapį</value>
+  </data>
+  <data name="ClickToCheckDetails" xml:space="preserve">
+    <value>Spustelėkite, jei norite patikrinti išsamią informaciją</value>
+  </data>
+  <data name="SelectDatesAndGuests" xml:space="preserve">
+    <value>Pasirinkite datą ir svečių skaičių</value>
+  </data>
+  <data name="SelectDatesAndGuestsButtonLabel" xml:space="preserve">
+    <value>Keisti</value>
+  </data>
+  <data name="CheckInTimeFormat" xml:space="preserve">
+    <value>Atvykimas: 15:00 – 22:00</value>
+  </data>
+  <data name="CheckOutTimeFormat" xml:space="preserve">
+    <value>Išvykimas: iki 11:00</value>
+  </data>
+  <data name="SelectedPackage" xml:space="preserve">
+    <value>Pasirinktas paketas</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Pakuotė</value>
+  </data>
+  <data name="ContinueReservation" xml:space="preserve">
+    <value>Užbaikite užsakymą</value>
+  </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Puslapis nerastas</value>
+  </data>
+  <data name="PageNotFoundDescription" xml:space="preserve">
+    <value>Atsiprašome, bet ieškomo puslapio nėra arba jis buvo perkeltas.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Atgal į pagrindinį puslapį</value>
+  </data>
+  <data name="NotFoundHeaderTitle" xml:space="preserve">
+    <value>404 klaida</value>
+  </data>
+  <data name="NotFoundMaybeLookingFor" xml:space="preserve">
+    <value>Galbūt ieškote:</value>
+  </data>
+  <data name="NotFoundApartmentsList" xml:space="preserve">
+    <value>Butų sąrašas</value>
+  </data>
+  <data name="NotFoundCooperation" xml:space="preserve">
+    <value>Bendradarbiavimas</value>
+  </data>
+  <data name="NotFoundContact" xml:space="preserve">
+    <value>Kontaktai</value>
+  </data>
+</root>

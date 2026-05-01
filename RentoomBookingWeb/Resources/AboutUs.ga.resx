@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Fúinn
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>meánrátáil árasán
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>árasáin le bainistiú
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Áirithintí Láimhseáilte
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Aíonna a sheirbheáil
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Stair</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Is grúpa daoine muid a bhfuil grá acu do thaisteal agus a bhfuil taithí faighte acu ar thurasóireacht i margaí idirnáisiúnta. Ina theannta sin, táimid ag déileáil le bainistíocht, cíos, athchóiriú agus trádáil ar an margadh eastáit réadaigh le breis agus 6 bliana. Ba mhaith linn an taithí atá faighte againn a thairiscint dár gcustaiméirí agus dár n-aíonna, atá sásta lenár seirbhísí i gcónaí.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Misean</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>An tseirbhís is fearr is féidir a sholáthar dár gcustaiméirí, aíonna agus úinéirí árasán araon. Tá sé thar a bheith tábhachtach dúinn ardchaighdeán seirbhíse do chustaiméirí a choinneáil agus a chinntiú go mbraitheann ár n-aíonna sa bhaile inár n-árasáin agus gur féidir leo brath ar ár gcabhair ag am ar bith.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Ár bhfoireann
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Visionary agus strategist le taithí sa tionscal eastáit réadaigh. Thóg sé Rentoom chun cíosanna gearrthéarmacha a shimpliú agus gach rud a uathoibriú ó áirithintí go bainistíocht aoi.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Cinntíonn sé go bhfuil teicneolaíocht Rentoom tapa, iontaofa agus sábháilte. Paiseanta faoi uathoibriú agus réitigh nua-aimseartha don mhargadh cíosa.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Le haird ar gach mionsonra, comhordaíonn sí gníomhaíochtaí laethúla. A bhuíochas leis, is féidir lenár gcustaiméirí codladh go síochánta - oibríonn gach rud in am agus gan aon glitches.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Glaoigh</value>
+  </data>
+</root>

@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Cognome</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Città</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Indirizzo</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Codice postale</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Numero di telefono</value>
+  </data>
+  <data name="IsInvoiceText" xml:space="preserve">
+    <value>Voglio ricevere una fattura</value>
+  </data>
+  <data name="IsSaveInfoText" xml:space="preserve">
+    <value>Salva le mie informazioni per le transazioni future</value>
+  </data>
+  <data name="ClickToDownloadInfo" xml:space="preserve">
+    <value>Clicca per scaricare le informazioni del NIP</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Nome dell'azienda</value>
+  </data>
+  <data name="ClientInfoButton" xml:space="preserve">
+    <value>Vai al riassunto</value>
+  </data>
+  <data name="ClientInfoButtonLoading" xml:space="preserve">
+    <value>Salvando...</value>
+  </data>
+  <data name="ClientInfoTitle" xml:space="preserve">
+    <value>Informazioni di base</value>
+  </data>
+  <data name="ClientInfoSubtitle" xml:space="preserve">
+    <value>Completa i dettagli</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Il tuo soggiorno</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Da</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>A</value>
+  </data>
+  <data name="SummaryText" xml:space="preserve">
+    <value>Sommario</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Notti</value>
+  </data>
+  <data name="SummaryLoadingText" xml:space="preserve">
+    <value>Riepilogo del carico</value>
+  </data>
+  <data name="ReservationSummary" xml:space="preserve">
+    <value>Riepilogo delle prenotazioni</value>
+  </data>
+  <data name="SummaryDetailsText" xml:space="preserve">
+    <value>Controlla i dettagli della prenotazione</value>
+  </data>
+  <data name="ReservationPaid" xml:space="preserve">
+    <value>Prenotazione pagata</value>
+  </data>
+  <data name="ReservationPaidInfo" xml:space="preserve">
+    <value>La tua prenotazione è stata confermata e pagata.</value>
+  </data>
+  <data name="GoToStayWell" xml:space="preserve">
+    <value>Controlla la tua email e continua su StayWell</value>
+  </data>
+  <data name="ReservationPending" xml:space="preserve">
+    <value>Durante il pagamento</value>
+  </data>
+  <data name="ReservationPendingInfo" xml:space="preserve">
+    <value>La tua prenotazione è stata confermata ma non ancora pagata</value>
+  </data>
+  <data name="ClickToPay" xml:space="preserve">
+    <value>Clicca per pagare le prenotazioni</value>
+  </data>
+  <data name="ReservationDanger" xml:space="preserve">
+    <value>Nessuna conferma</value>
+  </data>
+  <data name="ReservationDangerInfo" xml:space="preserve">
+    <value>La tua prenotazione non è ancora stata confermata</value>
+  </data>
+  <data name="NameLastName" xml:space="preserve">
+    <value>Nome e cognome</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Modifica</value>
+  </data>
+  <data name="ReservationDetails" xml:space="preserve">
+    <value>Dettagli della prenotazione</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Check-out</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Ospiti</value>
+  </data>
+  <data name="ConfirmationNumber" xml:space="preserve">
+    <value>Numero di prenotazione</value>
+  </data>
+  <data name="PaymentSuccessful" xml:space="preserve">
+    <value>Pagamento riuscito!</value>
+  </data>
+  <data name="PaymentSuccessfulText" xml:space="preserve">
+    <value>Il tuo appartamento è stato prenotato con successo</value>
+  </data>
+  <data name="BackToSummary" xml:space="preserve">
+    <value>Torna al riassunto</value>
+  </data>
+  <data name="ConfimationSendToMail" xml:space="preserve">
+    <value>Conferma inviata via email</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Importo</value>
+  </data>
+  <data name="PaymentFailed" xml:space="preserve">
+    <value>Pagamento fallito
+
+</value>
+  </data>
+  <data name="PaymentFailedText" xml:space="preserve">
+    <value>Il tuo appartamento non è stato prenotato</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Per favore riprova</value>
+  </data>
+  <data name="WaitingPayment" xml:space="preserve">
+    <value>In attesa della conferma del pagamento...
+
+</value>
+  </data>
+  <data name="SomethingWrong" xml:space="preserve">
+    <value>Ops! Qualcosa è andato storto</value>
+  </data>
+  <data name="RedirectingToPayment" xml:space="preserve">
+    <value>Dirottamento verso il pagamento...</value>
+  </data>
+  <data name="RedirectToPaymentText" xml:space="preserve">
+    <value>Stai per essere portato a un sistema di pagamento sicuro</value>
+  </data>
+  <data name="NotRefreshPage" xml:space="preserve">
+    <value>Per favore, non aggiornare la pagina</value>
+  </data>
+  <data name="CheckEmailText" xml:space="preserve">
+    <value>Controllo le email...</value>
+  </data>
+  <data name="SendMailText" xml:space="preserve">
+    <value>Email inviata</value>
+  </data>
+  <data name="ConfirmationWill" xml:space="preserve">
+    <value>Una conferma sarà inviata a:</value>
+  </data>
+  <data name="ConfirmationHasBeenSent" xml:space="preserve">
+    <value>La conferma è stata inviata a:</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Caricamento...</value>
+  </data>
+  <data name="NoGusInfo" xml:space="preserve">
+    <value>Non sono stati trovati dati per il numero di identificazione fiscale fornito.</value>
+  </data>
+  <data name="GusError" xml:space="preserve">
+    <value>Errore durante il download dei dati dall'Ufficio Centrale di Statistica</value>
+  </data>
+  <data name="NoNipError" xml:space="preserve">
+    <value>Per favore, inserisci il tuo numero NIP</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Prefisso</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Richiesto</value>
+  </data>
+  <data name="FillAllDataError" xml:space="preserve">
+    <value>Completa i dettagli</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Email errata</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupText" xml:space="preserve">
+    <value>Scansiona il codice QR per andare a Staywell </value>
+  </data>
+  <data name="StaywellPopupTitle" xml:space="preserve">
+    <value>Gestisci la tua prenotazione su StayWell</value>
+  </data>
+  <data name="StaywellPopupDescription" xml:space="preserve">
+    <value>Scansiona il codice QR per aprire istantaneamente la dashboard StayWell assegnata a quella prenotazione. Nella dashboard puoi controllare i dettagli del tuo soggiorno, le informazioni organizzative, lo stato dei servizi aggiuntivi e i messaggi più importanti.</value>
+  </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Apri la dashboard di StayWell per questa prenotazione. Nella dashboard puoi controllare i dettagli del tuo soggiorno, le informazioni organizzative, lo stato dei servizi aggiuntivi e i messaggi più importanti.</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
+    <value>Vai direttamente su StayWell</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Seleziona tutti i consensi</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Completa i dettagli</value>
+  </data>
+  <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
+    <value>Fattura</value>
+  </data>
+  <data name="InvoiceYes" xml:space="preserve">
+    <value>Sì</value>
+  </data>
+  <data name="InvoiceNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="FailPageTitle" xml:space="preserve">
+    <value>Rentoom - Verifica dei pagamenti</value>
+  </data>
+  <data name="PaymentReturnCheckingTitle" xml:space="preserve">
+    <value>Controlliamo lo stato del tuo pagamento</value>
+  </data>
+  <data name="PaymentReturnPendingBannerTitle" xml:space="preserve">
+    <value>Non abbiamo ancora confermato il pagamento</value>
+  </data>
+  <data name="StaywellPopupAriaLabel" xml:space="preserve">
+    <value>Informazioni su StayWell</value>
+  </data>
+  <data name="PaymentReturnFailedBannerMessage" xml:space="preserve">
+    <value>Puoi riprovare il pagamento da questo riassunto. Se la banca ha già ritirato i fondi, aspetta un momento prima di riprovare.</value>
+  </data>
+  <data name="SummaryPageTitle" xml:space="preserve">
+    <value>Rentoom - Riepilogo delle prenotazioni</value>
+  </data>
+  <data name="TpayMockCancelButton" xml:space="preserve">
+    <value>Cancella</value>
+  </data>
+  <data name="CancelActionSeparatorText" xml:space="preserve">
+    <value>oppure</value>
+  </data>
+  <data name="TpayMockReservationLabel" xml:space="preserve">
+    <value>Riserva</value>
+  </data>
+  <data name="PaymentReturnVerificationError" xml:space="preserve">
+    <value>Lo stato del pagamento non poteva essere verificato automaticamente. Torna al riassunto e riprova da lì.</value>
+  </data>
+  <data name="SuccessPageTitle" xml:space="preserve">
+    <value>Rentoom - Retribuito</value>
+  </data>
+  <data name="PaymentPageTitle" xml:space="preserve">
+    <value>Rentoom - Paga la tua prenotazione</value>
+  </data>
+  <data name="StaywellButtonText" xml:space="preserve">
+    <value>Clicca per gestire la tua prenotazione su Rentoom StayWell</value>
+  </data>
+  <data name="MessageSentDescription" xml:space="preserve">
+    <value>Abbiamo inviato la conferma a {0} e WhatsApp.</value>
+  </data>
+  <data name="PaymentReturnPendingMessage" xml:space="preserve">
+    <value>Non abbiamo ancora una conferma definitiva. Tra poco verrai riportato al riepilogo, dove potrai riprovare il pagamento in sicurezza se necessario.</value>
+  </data>
+  <data name="EmailDeliveryPendingTitle" xml:space="preserve">
+    <value>Mandiamo un messaggio</value>
+  </data>
+  <data name="SummaryBuildError" xml:space="preserve">
+    <value>Non fu possibile costruire un riassunto.</value>
+  </data>
+  <data name="TpayMockMissingReservation" xml:space="preserve">
+    <value>L'ID della prenotazione manca nell'URL.</value>
+  </data>
+  <data name="EmailStatusFetchError" xml:space="preserve">
+    <value>Lo stato delle email non è stato controllato.</value>
+  </data>
+  <data name="FailIconAlt" xml:space="preserve">
+    <value>Icona di allarme</value>
+  </data>
+  <data name="TpayMockPaymentSessionLabel" xml:space="preserve">
+    <value>Sessione di pagamento</value>
+  </data>
+  <data name="PaymentReturnWaitingTitle" xml:space="preserve">
+    <value>Stiamo aspettando la conferma del pagamento</value>
+  </data>
+  <data name="CancelReservationInProgressText" xml:space="preserve">
+    <value>Cancellazione...</value>
+  </data>
+  <data name="PaymentStatusFetchError" xml:space="preserve">
+    <value>Non sono riuscito a recuperare lo stato del pagamento.</value>
+  </data>
+  <data name="SummarySaveTermsError" xml:space="preserve">
+    <value>Si è verificato un errore durante il salvataggio dei consensi. Per favore, riprova.</value>
+  </data>
+  <data name="TpayMockPayButton" xml:space="preserve">
+    <value>Retribuzione</value>
+  </data>
+  <data name="EmailDeliveryPendingMessage" xml:space="preserve">
+    <value>Inviamo una conferma su {0} e su WhatsApp.</value>
+  </data>
+  <data name="ClientInfoNipLabel" xml:space="preserve">
+    <value>NIP</value>
+  </data>
+  <data name="PaymentVerificationError" xml:space="preserve">
+    <value>Il pagamento non è stato confermato.</value>
+  </data>
+  <data name="StaywellPopupCloseAriaLabel" xml:space="preserve">
+    <value>Chiudi il popup StayWell</value>
+  </data>
+  <data name="ClientInfoSaveError" xml:space="preserve">
+    <value>Non sono riuscito a salvare i dati dei clienti.</value>
+  </data>
+  <data name="TpayMockPageTitle" xml:space="preserve">
+    <value>Mock TPAY</value>
+  </data>
+  <data name="ClientInfoPageTitle" xml:space="preserve">
+    <value>Prenotazione Rentoom - Dettagli clienti</value>
+  </data>
+  <data name="PaymentReturnWaitingMessage" xml:space="preserve">
+    <value>Il pagamento può ancora essere elaborato. Lo verifichiamo prima di rimandarti al riepilogo della prenotazione.</value>
+  </data>
+  <data name="TpayMockHeader" xml:space="preserve">
+    <value>Simulazione di pagamento</value>
+  </data>
+  <data name="MessageSentTitle" xml:space="preserve">
+    <value>È stato inviato un messaggio</value>
+  </data>
+  <data name="PaymentReturnCheckingMessage" xml:space="preserve">
+    <value>Questo non significa sempre un pagamento mancato. Per prima cosa, controlliamo lo stato finale della transazione.</value>
+  </data>
+  <data name="PaymentReturnPendingTitle" xml:space="preserve">
+    <value>Stato del pagamento ancora in sospeso</value>
+  </data>
+  <data name="PaymentReturnPendingBannerMessage" xml:space="preserve">
+    <value>Se i fondi sono stati addebitati, non effettuare subito un altro pagamento. Controlla lo stato della tua prenotazione qui sotto e riprova solo se il pagamento non è ancora confermato.</value>
+  </data>
+  <data name="PaymentInitError" xml:space="preserve">
+    <value>Il pagamento non poteva essere avviato.</value>
+  </data>
+  <data name="CancelReservationErrorText" xml:space="preserve">
+    <value>Si è verificato un errore durante la cancellazione della tua prenotazione. Per favore, riprova.</value>
+  </data>
+  <data name="PaymentReturnFailedBannerTitle" xml:space="preserve">
+    <value>Il pagamento non è stato completato</value>
+  </data>
+  <data name="CancelReservationButtonText" xml:space="preserve">
+    <value>Annulla la tua prenotazione</value>
+  </data>
+</root>

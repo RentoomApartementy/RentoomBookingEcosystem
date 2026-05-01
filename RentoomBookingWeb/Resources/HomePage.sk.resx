@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – vytvárame jedinečné zážitky z pobytu v Toruni
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Hľadáte pohodlný byt v Toruni?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Byty v Toruni – pohodlné ubytovanie</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Hľadáte pohodlný byt v Toruni?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenty je moderná značka krátkodobého prenájmu, ktorá spája vysoký štandard ubytovania s autentickou znalosťou Toruń. Vytvárame miesta navrhnuté s ohľadom na pohodlie, estetiku a funkčnosť – pre turistov aj obchodných hostí.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Sme radi, že ste k nám prišli!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Naša ponuka zahŕňa desiatky starostlivo vybraných bytov v najatraktívnejších častiach mesta. Každé miesto bolo vybrané tak, aby poskytovalo jednoduchý prístup k hlavným atrakciám, reštauráciám a obchodným zónam.
+Každý byt je priestor navrhnutý tak, aby poskytoval skutočný odpočinok a súkromie po náročnom dni plnom prehliadky alebo práce.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Byty na najlepších lokalitách v Toruni</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Spokojní zákazníci</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Byty v Toruni
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Poloha v Toruni</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Prečo Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Rentoom Apartments je viac než len prenocovanie v Toruni. Ponúkame vysoký štandard apartmánov na najlepších lokalitách a skutočné výhody, ktoré zvyšujú hodnotu celého pobytu.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>V rámci nášho partnerského programu majú hostia prístup k špeciálnym zľavám na vybrané reštaurácie, kaviarne a turistické atrakcie. Aktuálne zľavy a odporúčania sú priamo v bytoch, takže môžete využiť overené miesta a ušetriť peniaze pri prehliadke.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Spolupracujeme len s dôveryhodnými miestnymi partnermi a dbáme na kvalitu každého odporúčania. Výberom Rentoomu získavate pohodlie, profesionálne služby a ďalšie výhody, ktoré robia váš pobyt v Toruni pohodlnejším, kultivovanejším a jednoducho ziskovejším.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Spoznajte názory ľudí, ktorí spali v našich bytoch v Toruni.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Zanechajte svoje kontaktné údaje a my sa vám ozveme!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Kontaktujte dodávateľa</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Súhlasím so spracovaním mojich osobných údajov uvedených vo formulári vyššie uvedenom</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Názov</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Priezvisko</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefón</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Odoslať</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Čo odlišuje naše byty od ostatných?
+
+</value>
+  </data>
+</root>

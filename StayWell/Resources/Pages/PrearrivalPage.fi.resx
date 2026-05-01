@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Hyväksy</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Hyväksy</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Aikuisten määrä</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Emme malta odottaa!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Vaihda vierastietoja</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Sisäänkirjautuminen</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Uloskirjautuminen</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Lasten määrä</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Vahvistan</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Jatka</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Päivää</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Täytä sisäänkirjautumislomake ja hyväksy ehdot saadaksesi pääsyn paneeliin.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Täytetty</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Täytä vierastiedot</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Ole hyvä ja anna tiedot kaikista, jotka aikovat asua laitoksessa.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Vieras</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Aukioloajat</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Minuutit</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nimi</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Seuraavaksi</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Puhelinnumero</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Varauspaneelisi on nyt saatavilla!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Rekisteröintikortti</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Data tallennettu onnistuneesti!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Hyväksyn velvollisuuden ilmoittaa vahingoista ja kommenteista lähtöselvityksessä.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Hyväksyn tupakkatuotteiden ja sähkösavukkeiden polttamisen kiellon laitoksessa.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>On kiellettyä järjestää tapahtumia ja ottaa vastaan kolmansia osapuolia, jotka eivät kuulu varaukseen.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Hotellipäivä kestää tunnin </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>saapuessaan jopa tunnin</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>lähtöpäivänä.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Sukunimi</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>VUOKRASÄÄDÖKSET  
+Ehdot ja sopimus määrittelevät Rentoomin vuokraamien asuntojen varauksen ja vuokrauksen ehdot   
+Apartamenty Sp. z o.o. (Vuokranantaja), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 vuokralaisen hyväksi.  
+1. Asunnon varaaminen tai vuokraaminen tarkoittaa käyttöehtojen lukemista ja hyväksymistä,   
+Sopimukset.  
+2. Toimivaltainen tuomioistuin riitojen ratkaisemiseksi on Toruńin tuomioistuin.  
+3. Vuokranantaja pidättää oikeuden kieltäytyä ottamasta vierasta vastaan, joka: ei ole voimassa olevaa asiakirjaa   
+henkilökortti (esim. henkilökortti tai passi) tai ei halua esittää asiakirjaa, on alkoholin vaikutuksen alaisena tai  
+muiden huumausaineiden osalta, aiemman oleskelunsa aikana hän rikkoi säädösten määräyksiä.  
+4. Vuokranantaja pidättää oikeuden irtisanoa välittömästi sopimus vieraan kanssa, joka rikkoo  
+Vuokrausmääräykset ilman oikeutta palauttaa varausmaksua. Vieraan tulee välittömästi   
+poistuen tiloista.  
+5. Hotellipäivä kestää klo 15.00–11.00 seuraavana päivänä.  
+6. Lähtöpäivänä vuokralaisen on luovutettava asunto klo 11:00 mennessä, muuten   
+Maksu lisätään seuraavan aloituspäivän mukaan + 50 %.  
+7. Tupakointi asunnoissa on ehdottomasti kielletty. Rikkomisesta tupakointikiellon rikkomisesta asunnossa   
+Vuokralaisen on maksettava lisämaksu 500 PLN (viisisataa).  
+8. On kiellettyä käyttää sähkölaitteita, jotka eivät kuulu asuntoon ja jotka ovat  
+tulipaloriski.  
+9. Vuokralainen on velvollinen raportoimaan kaikista asunnon laitteiden vaurioista tai toimintahäiriöistä   
+ilmoita vuokranantajalle välittömästi.  
+10. Lemmikit ovat sallittuja vain vuokranantajan luvalla. Lemmikin maksu on 50 PLN koko oleskelun ajan.  
+11. Vuokra-asunnon hiljaiset tunnit ovat klo 22.00–6.00. Ihmiset   
+Jos et ole rekisteröitynyt asuntoon, voit vierailla vain klo 23.00 asti.  
+12. Sosiaalisten tapahtumien järjestäminen asunnossa on täysin kiellettyä. Tapahtuman järjestämisestä   
+Vuokralainen maksaa vuokranantajalle lisämaksun, 5 000 PLN, + lisätappiot   
+vuokranantajan aiheuttama. Kaikki vahingot vuokratulle asunnolle ja rakennukselle ovat vastuussa   
+vuokralaisen henkilö. Vuokralainen on vastuussa kaikista vahingoista, jotka johtuvat kolmansien osapuolten toiminnasta, jotka jäävät asumaan  
+Hänen ollessaan asunnossa – kutsuttu asuntoon/rakennukseen tämän henkilön toimesta. Poliisin väliintulon sattuessa   
+tai kunnallisvartio, vuokranantaja veloittaa vuokralaiselta lisämaksun 500 PLN (viisisataa zlotya).  
+13. Asunnossa asuvien henkilöiden määrä ei saa ylittää varauksessa ilmoitettua määrää. Lausunto   
+epäselvyyksien vuoksi lasketaan lisämaksu, PLN 200, kutakin   
+henkilöt rekisteröityivät jokaiselle yöksi.  
+14. Vieraiden on varmistettava asunto asianmukaisesti, eli sulkemaan kaikki ovet huolellisesti   
+sisäänkäynti ja ikkunat ennen kuin kumpikin poistuu asunnosta ja varastointiin   
+avaimet/koodit/kaukosäätimet ilman mahdollisuutta luvattomaan pääsyyn.  
+15. Vuokranantaja ei ole vastuussa vahingoittuneista tai kadonneista arvoesineistä, jotka ovat jääneet asuntoon.  
+16. Jos asunnon avain tai autotallin kaukosäädin katoaa/tuhoutuu, peritään maksu   
+PLN 200 jokaisesta kappaleesta.  
+17. Viimeinen siivous sisältyy majoituksen hintaan. Kuitenkin Vieras joutuu lähtemään sen jälkeen   
+tiskasin astiat ja käytin varusteita. Nämä toimet eivät ole lopullisen siivouksen ydin.  
+18. Kaikki lisäsiivous vuokranantajan erityispyynnöstä maksetaan maksun määrän mukaan  
+huoltoasema. Vuodevaatteet ja pyyhkeet vaihdetaan.  
+19. Vuokranantajan maksamat käyttömaksut sisältyvät oleskelun hintaan.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | tel. +48 881 388 001  
+20. Vuokralainen on taloudellisesti vastuussa kaikista asunnossa tapahtuneista vahingoista ja varkauksista oleskelun aikana.  
+21. Ilmoita meille välittömästi, jos ilmenee väärinkäsitystä tai jos et tule  
+Olemme tyytyväisiä palveluihimme. Teemme parhaamme tutkiaksemme ongelman perusteellisesti ja ratkaistaksemme sen.  
+22. Vuokranantaja voi periä vierailta varauksista enintään 1 000 PLN takuuvuokran, joka voidaan palauttaa enintään viiden päivän kuluessa   
+Työ uloskirjautumisen jälkeen.  
+23. Vuokranantajalla on oikeus vaatia korvausta kunkin tapauksen maksujen määrästä  
+Lisä.  
+24. Vuokraajalla on oikeus valittaa palvelusta. Valitukset tulee lähettää sähköpostitse osoitteeseen reklamacje@rentoom.pl  
+tai rekisteröidyllä kirjeellä postiosoitteeseen. Vastaus annetaan 14 päivän kuluessa toimituksesta.  
+Englanninkieliset vuokraussäännöt ovat saatavilla osoitteessa www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Paljon on vielä jäljellä</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Valitse likimääräinen saapumisaikasi</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Saapumisaika</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Olet valinnut ajan</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Valitse kaikki suostumukset</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Ladataan...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Hyväksytty jo</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Vaaditaan</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Katso dokumentti</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Katso koko käyttöehdot</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Käyttöehdot</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>En tiedä vielä</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Vain kirjaimet, välilyönnit, yhdysviivat ja apostrofit</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Suostumusten lataaminen epäonnistui. Ole hyvä ja yritä uudelleen.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Uusinta</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Voit muuttaa vapaaehtoisia suostumuksiasi milloin tahansa "Varauksesta" -sivulla.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Sähköposti</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Käyttöehdot</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Datan kirjoitusvirhe.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Et pääse tälle sivulle.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Ehdot ja suostumukset</value>
+  </data>
+</root>

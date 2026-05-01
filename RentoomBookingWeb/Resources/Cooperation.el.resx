@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Συνεργασία</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>Σχετικά με εμάς και γιατί εμάς;</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Εμπειρία
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Η Rentoom Apartamenty είναι μια σύγχρονη μάρκα που διαχειρίζεται βραχυπρόθεσμες ενοικιάσεις στο Τορούν. Μας έχουν ήδη εμπιστευτεί πάνω από 100 επενδυτές. Διαχειριζόμαστε πάνω από 150 διαμερίσματα και διαχειριζόμαστε πάνω από 7000 κρατήσεις ετησίως.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Ποιότητα</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Αναλαμβάνουμε όλη τη διαδικασία – από την επαγγελματική προετοιμασία του διαμερίσματος και την αποτελεσματική προώθηση, μέσω της δυναμικής διαχείρισης τιμών, μέχρι την εξυπηρέτηση επισκεπτών όλο το εικοσιτετράωρο, τον καθαρισμό και την τεχνική εξυπηρέτηση. Διασφαλίζουμε διαφανείς διακανονισμούς και πλήρη οικονομική διαφάνεια.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Επαγγελματισμός</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Χάρη στην εμπειρία και ένα αποδεδειγμένο μοντέλο λειτουργίας, είναι δυνατή η δημιουργία εσόδων έως και 30% της αξίας του ακινήτου ετησίως*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Καινοτομία</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Επιπλέον, το Πρόγραμμα Συνεργατών μας, το οποίο προσφέρει εκπτώσεις σε εστιατόρια και αξιοθέατα στο Τορούν, αυξάνει την ελκυστικότητα των διαμερισμάτων και επηρεάζει την πληρότητά τους.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Πλεονεκτήματα συνεργασίας
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Επένδυση χωρίς συντήρηση</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Η υπηρεσία που προσφέρουμε είναι πλήρης. Μπορείτε να κοιμηθείτε ήσυχοι, δουλεύουμε για εσάς.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Βελτιστοποίηση εισοδήματος</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Έτοιμοι να βοηθήσουν 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Παρακολουθούμε την αγορά σε συνεχή βάση και προσαρμόζουμε τις τιμές για την ενοικίαση ενός διαμερίσματος στο κέρδος σας.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Εγγυόμαστε την εξυπηρέτηση των αμοιβαίων πελατών μας όλο το εικοσιτετράωρο, επτά ημέρες την εβδομάδα.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Εάν θέλετε να δημιουργήσετε συνεργασία, συμπληρώστε τη φόρμα
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Επώνυμο</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Όνομα</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Αριθμός τηλεφώνου</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Αριθμός διαμερισμάτων</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Περιφέρεια Τορούν</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Αποστολή</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Συνεργασία</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Ηλεκτρονικό ταχυδρομείο</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Περιεχόμενο μηνύματος</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Συμφωνώ με την επεξεργασία των προσωπικών μου δεδομένων με σκοπό την επικοινωνία και τη διεκπεραίωση του ερωτήματος</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Πολιτική Απορρήτου</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Αποστολή...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Συμπληρώστε όλα τα πεδία της φόρμας.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Εισαγάγετε μια έγκυρη διεύθυνση email.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Εισαγάγετε τον σωστό αριθμό διαμερισμάτων.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Αποδεχτείτε τη συγκατάθεσή σας για την επεξεργασία δεδομένων.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Ευχαριστώ. Η φόρμα έχει σταλεί στο Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Αποτυχία αποστολής φόρμας. Δοκιμάστε ξανά σε λίγο.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Η επαφή μπορούσε να αποθηκευτεί, αλλά η συμφωνία δεν μπορούσε να δημιουργηθεί. Ελέγξτε το Bitrix πριν από την εκ νέου αποστολή.</value>
+  </data>
+</root>

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – δημιουργούμε μοναδικές εμπειρίες διαμονής στο Τορούν
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Ψάχνετε για ένα άνετο διαμέρισμα στο Τορούν;</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Διαμερίσματα στο Τορούν – άνετη διαμονή</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Ψάχνετε για ένα άνετο διαμέρισμα στο Τορούν;
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Η Rentoom Apartamenty είναι μια σύγχρονη μάρκα βραχυπρόθεσμης ενοικίασης που συνδυάζει ένα υψηλό επίπεδο διαμονής με την αυθεντική γνώση του Τορούν. Δημιουργούμε χώρους σχεδιασμένους με γνώμονα την άνεση, την αισθητική και τη λειτουργικότητα - τόσο για τουρίστες όσο και για επαγγελματίες επισκέπτες.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Χαιρόμαστε που ήρθατε σε εμάς!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Η προσφορά μας περιλαμβάνει δεκάδες προσεκτικά επιλεγμένα διαμερίσματα στα πιο ελκυστικά σημεία της πόλης. Κάθε τοποθεσία έχει επιλεγεί για να παρέχει εύκολη πρόσβαση σε βασικά αξιοθέατα, εστιατόρια και επιχειρηματικές ζώνες.
+Κάθε διαμέρισμα είναι ένας χώρος σχεδιασμένος για να προσφέρει πραγματική ξεκούραση και ιδιωτικότητα μετά από μια έντονη μέρα περιήγησης στα αξιοθέατα ή εργασίας.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Διαμερίσματα στις καλύτερες τοποθεσίες στο Τορούν</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Ικανοποιημένοι πελάτες</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Διαμερίσματα σε Τορούν
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Τοποθεσία στο Τορούν</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Γιατί Rentoom;
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Το Rentoom Apartments είναι κάτι περισσότερο από μια απλή διανυκτέρευση στο Τορούν. Προσφέρουμε διαμερίσματα υψηλών προδιαγραφών στις καλύτερες τοποθεσίες και πραγματικά οφέλη που αυξάνουν την αξία ολόκληρης της διαμονής.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Στο πλαίσιο του Προγράμματος Συνεργατών μας, οι επισκέπτες έχουν πρόσβαση σε ειδικές εκπτώσεις σε επιλεγμένα εστιατόρια, καφέ και τουριστικά αξιοθέατα. Οι τρέχουσες εκπτώσεις και προτάσεις βρίσκονται απευθείας στα διαμερίσματα, ώστε να μπορείτε να χρησιμοποιήσετε αποδεδειγμένα μέρη και να εξοικονομήσετε χρήματα κατά την περιήγηση στα αξιοθέατα.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Συνεργαζόμαστε μόνο με έμπιστους, τοπικούς συνεργάτες, φροντίζοντας για την ποιότητα κάθε σύστασης. Επιλέγοντας το Rentoom, κερδίζετε άνεση, επαγγελματική εξυπηρέτηση και πρόσθετα προνόμια που κάνουν τη διαμονή σας στο Τορούν πιο άνετη, πιο εκλεπτυσμένη και απλά πιο κερδοφόρα.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Γνωρίστε τις απόψεις των ανθρώπων που έχουν κοιμηθεί στα διαμερίσματά μας στο Τορούν.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Αφήστε τα στοιχεία επικοινωνίας σας και θα επικοινωνήσουμε μαζί σας!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Επικοινωνήστε με τον προμηθευτή</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Συμφωνώ με την επεξεργασία των προσωπικών μου δεδομένων που παρέχονται στην παραπάνω φόρμα</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Όνομα</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Επώνυμο</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Τηλέφωνο</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Αποστολή</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Τι διακρίνει τα διαμερίσματά μας από άλλα;
+
+</value>
+  </data>
+</root>

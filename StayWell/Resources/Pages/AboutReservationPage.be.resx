@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AcceptanceDate" xml:space="preserve">
+    <value>Дата прынята</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Адрас</value>
+  </data>
+  <data name="Apartment" xml:space="preserve">
+    <value>Кватэра</value>
+  </data>
+  <data name="ApartmentAmenities" xml:space="preserve">
+    <value>Абсталяванне для кватэр</value>
+  </data>
+  <data name="ApartmentAndStayTitle" xml:space="preserve">
+    <value>Пражыванне і кватэра</value>
+  </data>
+  <data name="BookingDetailsTitle" xml:space="preserve">
+    <value>Дэталі браніравання</value>
+  </data>
+  <data name="BookingPerson" xml:space="preserve">
+    <value>Букер</value>
+  </data>
+  <data name="CheckinCheckOutTime" xml:space="preserve">
+    <value>Рэгістрацыя і выезд</value>
+  </data>
+  <data name="CheckInDate" xml:space="preserve">
+    <value>Дата рэгістрацыі</value>
+  </data>
+  <data name="CheckInTime" xml:space="preserve">
+    <value>Час рэгістрацыі</value>
+  </data>
+  <data name="CheckOutDate" xml:space="preserve">
+    <value>Дата выезду</value>
+  </data>
+  <data name="CheckOutTime" xml:space="preserve">
+    <value>Час выезду</value>
+  </data>
+  <data name="Consents" xml:space="preserve">
+    <value>Згоды</value>
+  </data>
+  <data name="ContactMail" xml:space="preserve">
+    <value>Кантактная электронная пошта</value>
+  </data>
+  <data name="GDPRConsent" xml:space="preserve">
+    <value>Згода GDPR</value>
+  </data>
+  <data name="GDPRDescription" xml:space="preserve">
+    <value>Ён дазваляе апрацоўку дадзеных у адпаведнасці з GDPR і палітыкай прыватнасці.</value>
+  </data>
+  <data name="HideAmenitiesButton" xml:space="preserve">
+    <value>Абсталяванне для схованкі</value>
+  </data>
+  <data name="HideTOSButton" xml:space="preserve">
+    <value>Схаваць умовы і правілы</value>
+  </data>
+  <data name="MarketingConsent" xml:space="preserve">
+    <value>Маркетынгавая згода</value>
+  </data>
+  <data name="MarketingDescription" xml:space="preserve">
+    <value>Я згодны на кантакт са мной для маркетынгавых мэтаў (электронная пошта/SMS/WhatsApp) у адпаведнасці з палітыкай прыватнасці.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="OfficeAddress" xml:space="preserve">
+    <value>Адрас офіса</value>
+  </data>
+  <data name="RegisteredGuests" xml:space="preserve">
+    <value>Зарэгістраваныя госці</value>
+  </data>
+  <data name="ShowAmenitiesButton" xml:space="preserve">
+    <value>Абсталяванне для паказу кватэр</value>
+  </data>
+  <data name="ShowFullTOSButton" xml:space="preserve">
+    <value>Пакажыце поўныя ўмовы і ўмовы</value>
+  </data>
+  <data name="StayDates" xml:space="preserve">
+    <value>Даты знаходжання</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Прозвішча</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Умовы і правілы</value>
+  </data>
+  <data name="TOSConsents" xml:space="preserve">
+    <value>Правілы і Умовы і Згоды</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Рэнтум адказвае за тваё знаходжанне</value>
+  </data>
+  <data name="WithdrawConsentModalTitle" xml:space="preserve">
+    <value>Адкліканне згоды</value>
+  </data>
+  <data name="TaxIdValue" xml:space="preserve">
+    <value>8792727407 / 387605281</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Пра браніраванне</value>
+  </data>
+  <data name="OfficeAddressValue" xml:space="preserve">
+    <value>Станіслава Шыманьскі 1B, 87-100 Торунь, Польшча</value>
+  </data>
+  <data name="WithdrawConsentModalConfirm" xml:space="preserve">
+    <value>Адмяніць</value>
+  </data>
+  <data name="TaxIdLabel" xml:space="preserve">
+    <value>NIP / REGON:</value>
+  </data>
+  <data name="WithdrawConsentModalCancel" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="WithdrawConsentModalQuestion" xml:space="preserve">
+    <value>Ты ўпэўнены, што хочаш адклікаць гэтую згоду?</value>
+  </data>
+</root>

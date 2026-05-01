@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Samarbejde</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>Om os og hvorfor os?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Erfaring
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty er et moderne mærke, der administrerer korttidsudlejning i Toruń. Vi har allerede haft tillid til over 100 investorer. Vi administrerer over 150 lejligheder og håndterer over 7000 reservationer om året.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Kvalitet</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Vi tager os af hele processen – fra professionel forberedelse af lejligheden og effektiv markedsføring, gennem dynamisk prisstyring, til døgnkontinuerlig gæsteservice, rengøring og teknisk service. Vi sikrer gennemsigtige forlig og fuld økonomisk gennemsigtighed.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Professionalisme</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Takket være erfaring og en gennemprøvet driftsmodel er det muligt at generere indtægter på op til 30 % af ejendommens værdi om året*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Innovation</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Derudover øger vores Partnerprogram, som tilbyder rabatter på restauranter og attraktioner i Toruń, lejlighedernes attraktivitet og påvirker deres belægningsniveau.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Fordele ved samarbejde
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Vedligeholdelsesfri investering</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Den service, vi tilbyder, er fuldendt. Du kan sove fredeligt, vi arbejder for dig.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Indkomstoptimering</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Klar til at hjælpe 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Vi overvåger markedet løbende og justerer priserne for udlejning af en lejlighed til din fortjeneste.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Vi garanterer vores fælles kunders service døgnet rundt, syv dage om ugen.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Hvis du vil etablere samarbejde, så udfyld formularen
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Efternavn</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Navn</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefonnummer</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Antal lejligheder</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Toruń-distriktet</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Samarbejde</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Beskedindhold</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Jeg accepterer behandlingen af mine personlige oplysninger med henblik på at kontakte og håndtere forespørgslen</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Privatlivspolitik</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sender...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Udfyld alle felterne i formularen.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Indtast venligst en gyldig e-mailadresse.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Indtast det korrekte antal lejligheder.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Accepter dit samtykke til databehandling.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Tak. Formularen er sendt til Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Undladt at sende formularen. Prøv igen om et øjeblik.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Kontakten kunne reddes, men aftalen kunne ikke indgås. Tjek Bitrix før genforsendelse.</value>
+  </data>
+</root>

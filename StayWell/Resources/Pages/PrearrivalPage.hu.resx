@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Elfogadom</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Jóváhagyás</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Felnőttek száma</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Alig várjuk!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Vendégadatok módosítása</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Bejelentkezés</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Kijelentkezés</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Gyermekek száma</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Megerősítem</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Folytatás</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Napok</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Töltse ki a bejelentkezési űrlapot, és fogadja el a feltételeket, hogy hozzáférjen a panelhez.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Kitöltött</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Töltse ki a vendégadatokat</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Kérjük, adja meg az összes megszállt személy adatait.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Vendég</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Nyitvatartások</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Jegyzőkönyv</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Név</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Következő</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefonszám</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>A foglalási paneled most elérhető!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Regisztrációs kártya</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Adatok sikeresen mentve!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Vállalom a kötelezettséget, hogy minden kárt és megjegyzést bejelentsek a bejelentkezéskor.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Elfogadom a dohánytermékek és elektronikus cigaretták tilalmát a létesítményben.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Tilos események szervezése és harmadik felek fogadása, amelyek nem tartoznak a rezervátumba.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>A hotel nap egy órától tart </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>Érkezéskor akár egy óráig</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>az indulás napján.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Vezetéknév</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>BÉRLETI SZABÁLYOK  
+A feltételek és a megállapodás meghatározzák a Rentoom által bérelt lakások foglalásának és bérlésének feltételeit   
+Apartamenty Sp. z o.o. (Földbérlő), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 a bérlő javára.  
+1. A szállás foglalása vagy bérlése egyenértékű azzal, hogy elolvassuk és elfogadjuk a Feltételek és Feltételek előírásait, valamint   
+Megállapodások.  
+2. A viták rendezésére illetékes bíróság a toruńi bíróság lesz.  
+3. A bérbeadó fenntartja a jogot, hogy megtagadja a vendég elfogadását, aki: nincs érvényes dokumentuma   
+személyi igazolvány (azaz személyi igazolvány vagy útlevél), vagy nem akar dokumentumot bemutatni, alkohol hatása alatt áll vagy  
+más kábítószerekkel kapcsolatos ügyek miatt, korábbi tartózkodása során megsértette a szabályzat rendelkezéseit.  
+4. A Bérbeadó fenntartja a jogot, hogy azonnal felmondja a szerződést azzal a Vendéggel, aki megszegi a  
+A bérleti szabályzat nem jogosult a foglalási díj visszatérítésére. A vendégnek azonnal kell   
+elhagyja a helyszínt.  
+5. A hotel nap 15:00-tól másnap 11:00-ig tart.  
+6. Az indulás napján a bérlőnek köteles átadnia a lakást 11:00-ig, különben   
+A következő kezdőnap összege + 50%-os díjat adnak hozzá.  
+7. A lakásokban való dohányzás szigorúan tilos. A lakásban való dohányzási tilalom megsértése miatt   
+A bérlőnek további 500 PLN (ötszáz) díjat kell fizetnie.  
+8. Tilos olyan elektromos berendezések használata az apartmanhoz, amely nem része és  
+Tűzveszély.  
+9. A bérlő köteles minden kárt vagy meghibásodást biztosítani a lakás berendezésének minden károsodásáért vagy meghibásodásáért   
+azonnal értesítse a főbérlőt.  
+10. Háziállatok csak a bérbeadó engedélyével engedélyezhetők. A háziállat díja 50 PLN az egész tartózkodás alatt.  
+11. A bérelt lakásban a csendes idő 22:00 és 6:00 között van. Emberek   
+Ha nem vagy bejegyezve a lakásban, csak 23:00-ig látogathatod meg.  
+12. Társas események szervezése a lakásban teljesen tilos. Az esemény megszervezéséért   
+A bérlő további 5 000 PLN + további veszteségek díjat fizet a bérbeadónak   
+amit a főbérlő okozott. A bérelt lakás és az épület minden kára a következők felelőssége   
+a bérlő személyét. A bérlő felelős minden kárért, amely a harmadik felek viselkedéséből fakad, akik a  
+Ő a lakásban – ez a személy hívta meg a lakásba/épületbe. Rendőrség beavatkozása esetén   
+vagy az önkormányzati őrségnél a bérlő további 500 PLN (ötszázzloty) díjat számít fel a bérlőtől.  
+13. A lakásban lakók száma nem haladhatja meg a foglalás során megadott számot. Nyilatkozat   
+ebben a tekintetben a szabálytalanságok miatt minden egyes területre további 200 PLN díjat számítanak ki   
+Személyek regisztráltak minden éjszakára.  
+14. A vendégeknek kötelesek megfelelően rögzíteni a lakást, azaz minden ajtót alaposan bezárni   
+bejárat és ablakok mindkettő elhagyása előtt és tárolásra   
+kulcsok/kódok/távirányítók anélkül, hogy jogosulatlan hozzáférés lenne hozzájuk.  
+15. A bérbeadó nem felelős a lakásban maradt sérült vagy elveszett értéktárgyakért.  
+16. A lakáskulcs vagy a garázs távirányítójának elvesztése vagy megsemmisülése esetén díjat számítanak fel:   
+200 PLN minden darabért.  
+17. A végső takarítás beletartozik a tartózkodás áraba. Azonban a Vendégnek kénytelen távoznia   
+mosogatta és használt felszerelést. Ezek a tevékenységek nem a végső takarítás lényege.  
+18. A bérbeadó különleges kérésére minden további takarítást a díj összege szerint fizetik  
+Szervizállomás. Az ágyneműt és törölközőket cserélik.  
+19. A bérbeadó által fizetett közüzemi díjak beletartoznak a tartózkodás árába.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | tel. +48 881 388 001  
+20. A bérlő anyagilag felelős minden kárért/lopásért, amely a lakásban a tartózkodás alatt keletkezik.  
+21. Kérjük, azonnal értesítsen minket, ha félreértés történik, vagy ha nem.  
+Elégedettek vagyunk szolgáltatásainkkal együtt. Mindent megteszünk, hogy alaposan kivizsgáljuk a problémát és megoldjuk.  
+22. A bérbeadó legfeljebb 1 000 PLN ólagot kérhet a vendégektől foglalásokért, amelyet legfeljebb öt napig visszaküldhetnek   
+Dolgozni a fizetés után.  
+23. A bérbeadónak joga van kártérítést követelni az egyes esetekben a díjak összegéért  
+Kiegészítve.  
+24. A bérlőnek joga van panaszt tenni a szolgáltatás miatt. A panaszokat e-mailben kell benyújtani a következő címre: reklamacje@rentoom.pl  
+vagy regisztrált levéllel a postázási címre. A válasz a kézbesítését követő 14 napon belül érkezik.  
+Az angol nyelvű bérleti szabályok elérhetők a www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Sok minden maradhat még</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Válaszd ki a közelítő érkezési idődet</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Érkezési idő</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Te választottad ki az időt</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Válassz ki minden beleegyezést</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Betöltés...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Már elfogadva</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Kötelező</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Tekintse meg a dokumentumot</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Lásd a teljes feltételeket</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Feltételek</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Még nem tudom</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Csak betűk, szóközek, kötőjelek és apostrofok</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Nem sikerült betölteni a beleegyezéseket. Kérlek, próbáld meg újra.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Újracsinálás</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Bármikor megváltoztathatod az opcionális beleegyezésedet a "Foglalásról" oldalon.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Felhasználási feltételek</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Adatírási hiba.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Ezt az oldalt nem lehet elérni.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Feltételek és beleegyezések</value>
+  </data>
+</root>

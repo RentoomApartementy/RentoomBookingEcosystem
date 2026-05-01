@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ListTitle" xml:space="preserve">
+    <value>Naj bo vaš bivanje prijetnejše</value>
+  </data>
+  <data name="ListSubtitle" xml:space="preserve">
+    <value>Ekskluzivne ponudbe za vašo rezervacijo</value>
+  </data>
+  <data name="TermsDescription" xml:space="preserve">
+    <value>Velja za celotno bivanje. Ob unovčenju je treba pokazati kodo.</value>
+  </data>
+  <data name="TermsTitle" xml:space="preserve">
+    <value>Pogoji uporabe</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Noči</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Gostje</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Opis</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Izbriši</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Oglejte si podrobnosti</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Cena</value>
+  </data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve">
+    <value>Oseba/dan</value>
+  </data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve">
+    <value>Stanovanje/dan</value>
+  </data>
+  <data name="PricingPerStay" xml:space="preserve">
+    <value>Ostani</value>
+  </data>
+  <data name="PricingOneTime" xml:space="preserve">
+    <value>enkratno</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Povezava</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Podrobnosti</value>
+  </data>
+  <data name="ShowVoucherCode" xml:space="preserve">
+    <value>Pokaži kodo za vavor</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>Tvoja koda</value>
+  </data>
+  <data name="ManualCodeLabel" xml:space="preserve">
+    <value>Kodo je treba vnesti ročno</value>
+  </data>
+  <data name="VoucherQrAlt" xml:space="preserve">
+    <value>QR koda za bone</value>
+  </data>
+  <data name="QrUnavailable" xml:space="preserve">
+    <value>QR ni na voljo</value>
+  </data>
+  <data name="Enlarge" xml:space="preserve">
+    <value>Povečaj</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Nagovor</value>
+  </data>
+  <data name="VoucherUsageTitle" xml:space="preserve">
+    <value>Unovčevanje bonov</value>
+  </data>
+  <data name="VoucherStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="VoucherUsedCount" xml:space="preserve">
+    <value>Uporabljeno</value>
+  </data>
+  <data name="VoucherRemaining" xml:space="preserve">
+    <value>Drugo</value>
+  </data>
+  <data name="VoucherValidFrom" xml:space="preserve">
+    <value>Velja iz</value>
+  </data>
+  <data name="VoucherValidTo" xml:space="preserve">
+    <value>Velja za</value>
+  </data>
+  <data name="VoucherNoLimit" xml:space="preserve">
+    <value>Brez omejitev</value>
+  </data>
+  <data name="ShowInRestaurant" xml:space="preserve">
+    <value>Predstava v restavraciji</value>
+  </data>
+  <data name="VoucherCode" xml:space="preserve">
+    <value>Koda</value>
+  </data>
+  <data name="VoucherOverlayHint" xml:space="preserve">
+    <value>Pokažite to kodo zaposlenim, da unovčijo svoj bon.</value>
+  </data>
+</root>

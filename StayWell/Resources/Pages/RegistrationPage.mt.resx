@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Qabel ma tikseb aċċess għall-applikazzjoni tiegħek, jekk jogħġbok imla l-Karta tar-Reġistrazzjoni!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Żball seħħ waqt li kien qed issalva d-data. Jekk jogħġbok ipprova mill-ġdid.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Agħżel il-ħin tal-check-in tiegħek</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Imla d-dettalji tal-mistednin</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Ħello</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Imla d-dettalji tal-mistednin</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Karta tar-reġistrazzjoni</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Daħħal l-indirizz tal-email tiegħek</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Salva u kompli</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Imla l-informazzjoni meħtieġa.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Indirizz tal-posta</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Biddel il-ħin mill-{0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Billi nagħfas il-buttuna hawn taħt, nikkonferma l-korrettezza tad-data.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Agħżel il-ħin stmat tal-check-in tiegħek</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Biddel id-data tal-mistednin</value>
+  </data>
+</root>

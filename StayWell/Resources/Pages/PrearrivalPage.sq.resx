@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Prano</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Miratoni</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Numri i të rriturve</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Mezi presim!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Ndryshoni të dhënat e mysafirëve</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Arka</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Numri i fëmijëve</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Unë konfirmoj</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Vazhdo</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Ditët</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Plotësoni formularin e check-in dhe pranoni termat dhe kushtet për të hyrë në panel.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>E mbushur</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Plotësoni të dhënat e mysafirëve</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Ju lutemi jepni detajet e të gjithë njerëzve që do të qëndrojnë në objekt.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>I ftuar</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Orët</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Procesverbali</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Emri</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Tjetër</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numri i telefonit</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Paneli juaj i rezervimit tani është i disponueshëm!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Karta e regjistrimit</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Të dhënat e ruajtura me sukses!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Unë pranoj detyrimin për të raportuar çdo dëmtim dhe koment gjatë check-in.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Unë pranoj ndalimin e pirjes së duhanit dhe cigareve elektronike brenda objektit.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Ndalohet organizimi i eventeve dhe pranimi i palëve të treta që nuk përfshihen në rezervim.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Dita e hotelit zgjat nga një orë </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>në mbërritje deri në një orë</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>në ditën e nisjes.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Mbiemri</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>RREGULLORET E QIRASË  
+Termat dhe Kushtet dhe Marrëveshja përcaktojnë termat dhe kushtet e rezervimit dhe marrjes me qira të apartamenteve që janë objekt i qirasë nga Rentoom   
+Apartamenty Sp. z o.o. (Pronar), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 për të mirën e qiramarrësit.  
+1. Rezervimi ose marrja me qira e akomodimit është e barabartë me leximin dhe pranimin e dispozitave të Termave dhe Kushteve dhe   
+Marrëveshjet.  
+2. Gjykata kompetente për zgjidhjen e mosmarrëveshjeve do të jetë Gjykata në Toruń.  
+3. Qiradhënësi rezervon të drejtën të refuzojë të pranojë një mysafir që: nuk ka një dokument të vlefshëm   
+kartë identiteti (d.m.th. kartë identiteti ose pasaportë) ose nuk dëshiron të paraqesë një dokument, është nën ndikimin e alkoolit ose  
+lëndë të tjera narkotike, gjatë qëndrimit të tij të mëparshëm ka shkelur dispozitat e Rregullores.  
+4. Qiradhënësi rezervon të drejtën të ndërpresë menjëherë kontratën me mysafirin që prish  
+Rregulloret e Qirasë, pa të drejtë për të rimbursuar tarifën e rezervimit. Mysafirit do t'i kërkohet menjëherë   
+largimi nga ambientet.  
+5. Dita e hotelit zgjat nga ora 3:00 deri në 11:00 të nesërmen.  
+6. Në ditën e nisjes, qiramarrësi është i detyruar të dorëzojë apartamentin deri në orën 11:00, përndryshe   
+Një tarifë do të shtohet në shumën e ditës tjetër të filluar + 50%.  
+7. Pirja e duhanit në apartamente është rreptësisht e ndaluar. Për shkelje të ndalimit të pirjes së duhanit brenda banesës   
+Qiramarrësi është i detyruar të paguajë një tarifë shtesë prej 500 PLN (pesëqind).  
+8. Ndalohet përdorimi i pajisjeve elektrike që nuk janë pjesë e apartamentit dhe janë  
+rreziku i zjarrit.  
+9. Qiramarrësi është i detyruar të sigurojë çdo dëmtim ose mosfunksionim të pajisjeve të apartamentit   
+informoni menjëherë qiradhënësin.  
+10. Kafshët shtëpiake lejohen vetëm me lejen e qiradhënësit. Tarifa për një kafshë shtëpiake është 50 PLN për të gjithë qëndrimin.  
+11. Orari i qetë në apartamentin me qira është midis orës 10:00 dhe 6:00 të mëngjesit. Njerëzit   
+Nëse nuk jeni të regjistruar në apartament, mund ta vizitoni vetëm deri në orën 23:00.  
+12. Organizimi i ngjarjeve shoqërore në apartament është plotësisht i ndaluar. Për organizimin e ngjarjes   
+Qiramarrësi do të paguajë një tarifë shtesë prej 5,000 PLN + humbje shtesë për qiradhënësin   
+të shkaktuara nga qiradhënësi. Të gjitha dëmet në apartamentin dhe ndërtesën e marrë me qira janë përgjegjësi e   
+personi i qiramarrësit. Qiramarrësi është përgjegjës për të gjitha dëmet që rezultojnë nga sjellja e palëve të treta që qëndrojnë në  
+me të në apartament – i ftuar në apartament/ndërtesë nga ky person. Në rast të ndërhyrjes së Policisë   
+ose Roja Komunale, qiradhënësi do t'i ngarkojë qiramarrësit një tarifë shtesë prej 500 PLN (pesëqind zloty).  
+13. Numri i personave që qëndrojnë në apartament nuk duhet të kalojë numrin e specifikuar gjatë rezervimit. Deklaratë   
+parregullsitë në këtë drejtim rezultojnë në llogaritjen e një tarife shtesë prej 200 PLN për secilin prej   
+personat e regjistruar për çdo natë qëndrimi.  
+14. Mysafirët janë të detyruar të sigurojnë siç duhet apartamentin, pra të mbyllin plotësisht të gjitha dyert   
+hyrje dhe dritare para se të dalë nga apartamenti dhe për ruajtje   
+çelësat/kodet/telekomandat pa mundësinë e aksesit të paautorizuar në to.  
+15. Qiradhënësi nuk është përgjegjës për sendet me vlerë të dëmtuara ose të humbura të lëna në apartament.  
+16. Në rast të humbjes/shkatërrimit të çelësit të apartamentit ose telekomandës së garazhit, do të paguhet një tarifë në   
+200 PLN për çdo copë.  
+17. Pastrimi përfundimtar përfshihet në çmimin e qëndrimit. Megjithatë, mysafiri është i detyruar të largohet pas   
+enët e lara dhe pajisjet e përdorura. Këto aktivitete nuk janë thelbi i pastrimit përfundimtar.  
+18. Çdo pastrim shtesë me kërkesë të veçantë të qiradhënësit paguhet sipas shumës së tarifës  
+stacion shërbimi. Çarçafët dhe peshqirët zëvendësohen.  
+19. Tarifat e shërbimeve të ofruara nga qiradhënësi përfshihen në çmimin e qëndrimit.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | Tel. +48 881 388 001  
+20. Qiramarrësi është financiarisht përgjegjës për të gjitha dëmet/vjedhjet e shkaktuara në apartament gjatë qëndrimit.  
+21. Ju lutemi na informoni menjëherë nëse ka ndonjë keqkuptim ose nëse nuk e bëni  
+Të kënaqur me shërbimet tona. Ne do të bëjmë çmos për të hetuar plotësisht problemin dhe për ta zgjidhur atë.  
+22. Qiradhënësi mund të paguajë një depozitë deri në 1,000 PLN nga mysafirët për rezervime, e cila mund të kthehet deri në pesë ditë   
+Punoni pas check-out.  
+23. Qiradhënësi ka të drejtë të kërkojë kompensim për shumën e tarifave në çdo rast  
+shtesë.  
+24. Qiramarrësi ka të drejtë të ankohet për shërbimin. Ankesat duhet të dorëzohen me e-mail në: reklamacje@rentoom.pl  
+ose me letër të regjistruar në adresën postare. Një përgjigje do të jepet brenda 14 ditëve nga dorëzimi i saj.  
+Rregulloret e qirasë në anglisht janë të disponueshme në www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Ka shumë për të qëndruar</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Zgjidhni kohën tuaj të përafërt të mbërritjes</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Koha e mbërritjes</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Ju keni zgjedhur kohën</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Zgjidhni të gjitha pëlqimet</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Duke ngarkuar...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Tashmë i pranuar</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Kërkohet</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Shiko dokumentin</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Shihni termat dhe kushtet e plota</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Termat dhe Kushtet</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Akoma nuk e di</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Vetëm shkronjat, hapësirat, vizat dhe apostrofat</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Dështoi ngarkimin e pëlqimeve. Ju lutemi provoni përsëri.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Ribërje</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Ju mund të ndryshoni pëlqimet tuaja opsionale në çdo kohë në faqen "Rreth rezervimit".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Termat dhe Kushtet</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Gabim i shkrimit të të dhënave.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Ju nuk mund të hyni në këtë faqe.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Termat dhe Kushtet dhe Pëlqimet</value>
+  </data>
+</root>

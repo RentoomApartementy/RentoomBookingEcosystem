@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Para se të keni akses në aplikimin tuaj, ju lutemi plotësoni kartën e regjistrimit!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Një gabim ndodhi gjatë ruajtjes së të dhënave. Ju lutemi provoni përsëri.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Zgjidhni kohën tuaj të check-in</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Plotësoni të dhënat e mysafirëve</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Përshëndetje</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Plotësoni të dhënat e mysafirëve</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Karta e regjistrimit</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Futni adresën tuaj të emailit</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Kurseni dhe vazhdoni</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Plotësoni informacionin e nevojshëm.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Adresa e postës</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Ndryshoni orën nga {0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Duke shtypur butonin më poshtë, konfirmoj korrektësinë e të dhënave.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Zgjidhni kohën tuaj të parashikuar të check-in</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Ndryshoni të dhënat e mysafirëve</value>
+  </data>
+</root>

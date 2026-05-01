@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Прымаю</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Зацвярджайце</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Колькасць дарослых асобін</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Мы не можам дачакацца!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Змяніць дадзеныя гасцей</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Рэгістрацыя</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Выезд</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Колькасць дзяцей</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Я пацвярджаю</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Працягвайце</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Дні</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Запоўніце форму рэгістрацыі і прыміце ўмовы для доступу да панэлі.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Запоўнена</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Запоўніце інфармацыю пра гасцей</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Калі ласка, паведаміце дадзеныя ўсіх людзей, якія будуць жыць у ўстанове.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Госць</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Гадзіны працы</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Пратаколы</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Наступны</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Нумар тэлефона</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Ваша панэль браніравання ўжо даступная!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Рэгістрацыйная карта</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Дадзеныя паспяхова захаваныя!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Я прымаю абавязак паведамляць пра ўсе пашкоджанні і каментары пры рэгістрацыі.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Я прымаю забарону на курэнне тытунёвых вырабаў і электронных цыгарэт унутры ўстановы.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Забаронена арганізоўваць мерапрыемствы і прымаць трэціх асоб, якія не ўваходзяць у рэзервацыю.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Дзень у гатэлі доўжыцца адну гадзіну </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>пры прыбыцці да адной гадзіны</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>у дзень ад'езду.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Прозвішча</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>ПРАВІЛЫ АРЭНДЫ  
+Умовы і Пагадненне вызначаюць умовы браніравання і арэнды кватэр, якія з'яўляюцца прадметам арэнды ад Rentoom   
+Apartamenty Sp. z o.o. (Гаспадар), Станіслава Шыманьскі 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 на карысць арандатара.  
+1. Браніраванне або арэнда жылля роўна прачытанню і прыняццю палажэнняў Умоў і Правілаў і Умоваў і   
+Пагадненні.  
+2. Кампетэнтным судом для вырашэння спрэчак будзе Суд у Торуні.  
+3. Арэндадаўца пакідае за сабой права адмовіцца прыняць госця, які: не мае сапраўдных дакументаў   
+Пасведчанне асобы (г.зн. пасведчанне асобы або пашпарт) або не жадае прадстаўляць дакумент, знаходзіцца пад уздзеяннем алкаголю або  
+іншыя наркотыкі, падчас папярэдняга знаходжання ён парушыў палажэнні Рэгламентаў.  
+4. Арэндадаўца пакідае за сабой права неадкладна скасаваць кантракт з госцем, які парушае  
+Правілы арэнды, без права вяртання платы за браніраванне. Госць павінен неадкладна   
+пакідаючы памяшканне.  
+5. Дзень у гатэлі доўжыцца з 3:00 дня дня да 11:00 раніцы наступнага дня.  
+6. У дзень выезду арандатар абавязаны здаць кватэру да 11:00 раніцы, у адваротным выпадку   
+Плата будзе дададзена ў памеры наступнага пачатковага дня + 50%.  
+7. Курэнне ў кватэрах строга забаронена. За парушэнне забароны курыць у кватэры   
+Арандатар абавязаны заплаціць дадатковую плату ў памеры 500 PLN (пяцьсот).  
+8. Забаронена выкарыстоўваць электраабсталяванне, якое не ўваходзіць у склад кватэры і з'яўляецца  
+рызыка пажару.  
+9. Арандатар абавязаны забяспечыць любыя пашкоджанні або няспраўнасць абсталявання кватэры   
+неадкладна паведаміце гаспадару.  
+10. Хатнія жывёлы дазволены толькі з дазволу ўладальніка. Плата за хатнюю жывёлу складае 50 злотых за ўвесь час знаходжання.  
+11. Цішыня ў арандаванай кватэры — паміж 10:00 вечара і 6:00 раніцы. Людзі   
+Калі вы не зарэгістраваныя ў кватэры, вы можаце наведаць яе толькі да 11:00 вечара.  
+12. Арганізацыя сацыяльных мерапрыемстваў у кватэры цалкам забаронена. За арганізацыю мерапрыемства   
+Арандатар заплаціць дадатковую плату ў памеры 5 000 злотых + дадатковыя страты арэндадаўцу   
+панесены Землеўладальнікам. Усе пашкоджанні арандаванай кватэры і будынка нясуць адказнасць   
+асоба Арандатара. Арандатар нясе адказнасць за ўсе шкоды, якія ўзніклі ў выніку дзеянняў трэціх асоб, якія знаходзіліся ў  
+з ёй у кватэры — запрошаная ў кватэру/будынак гэтым чалавекам. У выпадку ўмяшання паліцыі   
+або муніцыпальнай варты, арэндадаўца спаганяе з арандатара дадатковую плату ў памеры 500 злотых (пяцьсот злотых).  
+13. Колькасць людзей, якія пражываюць у кватэры, не павінна перавышаць колькасць, вызначаную падчас браніравання. Сцвярджэнне   
+Парушэнні ў гэтым пытанні прыводзяць да разліку дадатковай платы ў памеры 200 злотых за кожны з   
+Асобы, зарэгістраваныя на кожную ноч пражывання.  
+14. Госці абавязаны належным чынам забяспечыць бяспеку кватэры, г.зн. цалкам зачыніць усе дзверы   
+уваход і вокны перад кожным выхадам з кватэры і для захоўвання   
+ключы/коды/пульты дыстанцыйнага кіравання без магчымасці несанкцыянаванага доступу.  
+15. Уладальнік не нясе адказнасці за пашкоджаныя або страчаныя каштоўнасці, пакінутыя ў кватэры.  
+16. У выпадку страты або знішчэння ключа ад кватэры або пульта дыстанцыйнага кіравання гаража спаганяецца плата   
+200 злотых за кожны выраб.  
+17. Канчатковая чыстка ўключана ў кошт пражывання. Аднак Госць вымушаны пакінуць яго пасля   
+мылі посуд і выкарыстоўвалі абсталяванне. Гэтыя дзеянні не з'яўляюцца сутнасцю фінальнай чысткі.  
+18. Любое дадатковае ўборка па спецыяльным запыце арэндадаўца аплачваецца ў адпаведнасці з памерам збору  
+Аўтазаправачная станцыя. Пасцельная бялізна і ручнікі замяняюцца.  
+19. Камунальныя зборы, прадастаўленыя Арэндадаўцам, уключаюцца ў кошт пражывання.
+Rentoom Apartamenty Sp. z o.o.  
+Ул. Шыманскі 1B, 87-100 Торунь  
+www.rentoom.pl | тэл. +48 881 388 001  
+20. Арандатар нясе фінансавую адказнасць за ўсе пашкоджанні/крадзяжы, нанесеныя ў кватэры падчас пражывання.  
+21. Калі ўзнікне непаразуменне, калі вы гэтага не робіце — неадкладна паведаміце нам  
+задаволены нашымі паслугамі. Мы зробім усё магчымае, каб дэталёва расследаваць праблему і вырашыць яе.  
+22. Уладальнік можа спаганяць дэпазіт да 1 000 злотых за браніраванне, які можна вярнуць на працягу пяці дзён   
+Праца пасля выезду.  
+23. Арэндадаўца мае права патрабаваць кампенсацыю за суму збораў у кожным выпадку  
+Дадаткова.  
+24. Арандатар мае права скардзіцца на паслугу. Скаргі трэба дасылаць па электроннай пошце: reklamacje@rentoom.pl  
+або заказным лістом на паштовы адрас. Адказ будзе прадастаўлены на працягу 14 дзён пасля дастаўкі.  
+Правілы арэнды на англійскай мове даступныя па адрасе www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Засталося шмат чаго застацца</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Выберыце прыблізны час прыбыцця</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Час прыбыцця</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Ты выбраў час</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Выбраць усе згоды</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Ужо прынята</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Абавязкова</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Паглядзець дакумент</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Глядзіце поўныя ўмовы</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Умовы і правілы</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Я яшчэ не ведаю</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Толькі літары, прабелы, дэфісы і апострафы</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Не загрузіў згоды. Калі ласка, паспрабуйце яшчэ раз.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Пераробка</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Вы можаце змяніць свае неабавязковыя згоды ў любы час на старонцы «Аб браніраванні».</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Электронная пошта</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Умовы і правілы</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Памылка запісу дадзеных.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Вы не можаце атрымаць доступ да гэтай старонкі.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Умовы і згоду</value>
+  </data>
+</root>

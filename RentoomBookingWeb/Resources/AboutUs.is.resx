@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Um okkur
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Meðaleinkunn íbúðar
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>íbúðir til að stjórna
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Afgreiddar bókanir
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Gestir sem eru bornir fram
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Saga</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Við erum hópur fólks sem elskar að ferðast og höfum öðlast reynslu af ferðaþjónustu á alþjóðlegum mörkuðum. Auk þess höfum við unnið með stjórnun, leigu, endurbætur og viðskipti á fasteignamarkaði í yfir 6 ár. Við viljum bjóða upp á þá reynslu sem við höfum öðlast viðskiptavinum okkar og gestum, sem eru alltaf ánægðir með þjónustu okkar.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Hlutverk</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Við veitum bestu mögulegu þjónustu fyrir viðskiptavini okkar, bæði gesti og íbúðareigendur. Það er sérstaklega mikilvægt fyrir okkur að viðhalda háu þjónustustigi og tryggja að gestir okkar finni sig heima í íbúðunum okkar og geti treyst á hjálp okkar hvenær sem er.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Liðið okkar
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Framsýnn og stefnumótandi með reynslu í fasteignageiranum. Hann byggði Rentoom til að einfalda skammtímaleigu og sjálfvirknivæða allt frá bókunum til gestastjórnunar.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Það tryggir að Rentoom tækni sé hröð, áreiðanleg og örugg. Ástríðufullur fyrir sjálfvirkni og nútímalegum lausnum fyrir leigumarkaðinn.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Með athygli á hverju smáatriði samhæfir hún daglegar athafnir. Þökk sé þessu geta viðskiptavinir okkar sofið rólega – allt virkar á réttum tíma og án galla.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Kallaðu</value>
+  </data>
+</root>

@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Acceptă</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Aprobă</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Numărul adulților</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Abia așteptăm!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Schimbă datele invitaților</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Check-out</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Numărul de copii</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continuă</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Zile</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Completați formularul de check-in și acceptați termenii și condițiile pentru a avea acces la panel.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Umplut</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Completează detaliile invitaților</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Vă rugăm să furnizați detaliile tuturor persoanelor care vor sta în această unitate.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Invitat</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Program</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Procesul-verbal</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nume</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Următorul</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Număr de telefon</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Panoul dumneavoastră de Rezervări este acum disponibil!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Cardul de înregistrare</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Date salvate cu succes!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Îmi asum obligația de a raporta orice daune și comentarii la check-in.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Accept interdicția de a futa produse din tutun și țigări electronice în interiorul facilității.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Este interzis organizarea de evenimente și acceptarea terților care nu sunt incluse în rezervare.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Ziua de hotel durează de o oră </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>la sosire până la o oră</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>în ziua plecării.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Nume de familie</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>REGLEMENTĂRI PRIVIND ÎNCHIRIEREA  
+Termenii și Condițiile și Acordul definesc termenii și condițiile de rezervare și închiriere a apartamentelor care sunt subiectul închirierii de către Rentoom   
+Apartamenty Sp. z o.o. (Proprietar), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 pentru beneficiul chiriașului.  
+1. Rezervarea sau închirierea cazării este echivalentă cu citirea și acceptarea prevederilor din Termenii și Condițiile și   
+Acorduri.  
+2. Curtea competentă pentru soluționarea disputelor va fi Curtea din Toruń.  
+3. Proprietarul își rezervă dreptul de a refuza acceptarea unui Oaspete care: nu are un document valabil   
+Carte de identitate (adică carte de identitate sau pașaport) sau nu dorește să prezinte un document, este sub influența alcoolului sau  
+alte narcotice, în timpul șederii sale anterioare a încălcat prevederile Regulamentelor.  
+4. Proprietarul își rezervă dreptul de a rezilia imediat contractul cu Oaspetele care încalcă  
+Regulamente privind închirierea, fără dreptul de rambursare a taxei de rezervare. Oaspetele va trebui să o facă imediat   
+părăsind incinta.  
+5. Ziua de hotel durează de la 15:00 la 11:00 a doua zi.  
+6. În ziua plecării, chiriașul este obligat să predea apartamentul până la ora 11:00, altfel   
+Se va adăuga o taxă în suma următoarei zile de start + 50%.  
+7. Fumatul în apartamente este strict interzis. Pentru încălcarea interdicției de fumat în apartament   
+Chiriașul este obligat să plătească o taxă suplimentară de 500 PLN (cinci sute).  
+8. Este interzis utilizarea echipamentelor electrice care nu fac parte din apartament și sunt  
+Risc de incendiu.  
+9. Chiriașul este obligat să asigure orice daune sau defecțiune a echipamentelor apartamentului   
+informați imediat proprietarul.  
+10. Animalele de companie sunt permise doar cu permisiunea proprietarului. Taxa pentru un animal de companie este PLN 50 pentru întreaga ședere.  
+11. Orele de liniște în apartamentul închiriat sunt între 22:00 și 6:00. Persoane   
+Dacă nu sunteți înregistrat în apartament, puteți vizita doar până la ora 23:00.  
+12. Organizarea de evenimente sociale în apartament este complet interzisă. Pentru organizarea evenimentului   
+Chiriașul va plăti o taxă suplimentară de 5.000 PLN + pierderi suplimentare proprietarului   
+a fost suferită de proprietar. Toate daunele aduse apartamentului și clădirii închiriate sunt responsabilitatea   
+persoana chiriașului. Chiriașul este responsabil pentru toate daunele rezultate din comportamentul terților care rămân în  
+cu ea în apartament – invitată în apartament/clădire de această persoană. În cazul unei intervenții a Poliției   
+sau Garda Municipală, proprietarul va percepe chiriașului o taxă suplimentară de 500 PLN (cinci sute zloty).  
+13. Numărul persoanelor cazate în apartament nu trebuie să depășească numărul specificat în timpul rezervării. Enunț   
+neregulile în acest sens duc la calculul unei taxe suplimentare de 200 PLN pentru fiecare dintre   
+persoane înregistrate pentru fiecare noapte de ședere.  
+14. Oaspeții sunt obligați să securizeze corespunzător apartamentul, adică să închidă complet toate ușile   
+Intrarea și ferestrele înainte de fiecare a părăsit apartamentul și pentru depozitare   
+chei/coduri/telecomenzi fără posibilitatea accesului neautorizat la ele.  
+15. Proprietarul nu este responsabil pentru obiectele de valoare deteriorate sau pierdute lăsate în apartament.  
+16. În caz de pierdere/distrugere a cheii apartamentului sau a telecomenzii garajului, se va percepe o taxă în   
+PLN 200 pentru fiecare piesă.  
+17. Curățenia finală este inclusă în prețul șederii. Totuși, Oaspetele este obligat să plece după   
+Spăla vasele și folosim echipamente. Aceste activități nu sunt esența curățeniei finale.  
+18. Orice curățenie suplimentară la cererea specială a proprietarului se plătește în funcție de suma taxei  
+Stația de service. Lenjeria de pat și prosoapele sunt înlocuite.  
+19. Taxele de utilități plătite de proprietar sunt incluse în prețul șederii.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | tel. +48 881 388 001  
+20. Chiriașul este responsabil financiar pentru toate daunele/furturile suferite în apartament pe durata șederii.  
+21. Vă rugăm să ne informați imediat dacă există vreo neînțelegere sau dacă nu  
+Mulțumit de serviciile noastre. Vom face tot posibilul să investigăm temeinic problema și să o rezolvăm.  
+22. Proprietarul poate percepe un avans de până la 1.000 PLN de la oaspeți pentru rezervări, care poate fi returnat până la cinci zile   
+Lucrează după check-out.  
+23. Proprietarul are dreptul să solicite despăgubiri pentru suma taxelor din fiecare caz  
+suplimentar.  
+24. Chiriașul are dreptul să se plângă de serviciu. Plângerile trebuie trimise prin e-mail la: reklamacje@rentoom.pl  
+sau prin scrisoare recomandată către adresa poștală. Un răspuns va fi oferit în termen de 14 zile de la livrare.  
+Reglementările de închiriere în limba engleză sunt disponibile la www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Mai sunt multe de rămas</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Selectează ora aproximativă de sosire</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Ora sosirii</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Ai ales ora</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Selectează toate consimțământurile</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Se încarcă...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Deja acceptat</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Obligatoriu</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Vizualizați documentul</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Vezi termenii și condițiile complete</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Termeni și condiții</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Încă nu știu</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Doar litere, spații, cratime și apostrofe</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Nu am încărcat consimțământul. Vă rog să încercați din nou.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Refac</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Poți schimba consimțământul opțional oricând pe pagina "Despre rezervare".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Termeni și condiții</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Eroare de scriere a datelor.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Nu poți accesa această pagină.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Termeni și Condiții și Consimțământuri</value>
+  </data>
+</root>

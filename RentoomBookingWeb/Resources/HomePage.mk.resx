@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Рентум Апартмани – создаваме уникатни искуства за престој во Торуњ
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Дали барате удобен стан во Торуњ?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Станови во Торуњ – удобен сместувачки капацитет</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Дали барате удобен стан во Торуњ?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenty е модерен бренд за краткорочно изнајмување кој комбинира висок стандард на сместување со автентично познавање на Торун. Создаваме места дизајнирани со удобност, естетика и функционалност на ум – и за туристи и за деловни гости.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Среќни сме што дојдовте кај нас!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Нашата понуда вклучува десетици внимателно избрани станови во најатрактивните делови на градот. Секоја локација е избрана за да обезбеди лесен пристап до клучните атракции, ресторани и деловни зони.
+Секој стан е простор дизајниран да обезбеди вистински одмор и приватност по интензивен ден на разгледување или работа.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Станови на најдобрите локации во Торуњ</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Задоволни клиенти</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Станови во Торуњ
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Локација во Торуњ</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Зошто Рентум?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Рентум Апартманите се повеќе од само ноќевање во Торун. Нудиме висок стандард на станови на најдобрите локации и вистински придобивки кои ја зголемуваат вредноста на целиот престој.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Како дел од нашата партнерска програма, гостите добиваат пристап до специјални попусти на избрани ресторани, кафулиња и туристички атракции. Тековните попусти и препораки се наоѓаат директно во становите, па можете да користите проверени места и да заштедите пари додека разгледувате.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Работиме само со доверливи, локални партнери, грижејќи се за квалитетот на секоја препорака. Со изборот на Рентум, добивате удобност, професионална услуга и дополнителни придобивки кои го прават вашиот престој во Торуњ поудобен, порафиниран и едноставно попрофитабилен.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Запознајте ги мислењата на луѓето кои спиеле во нашите станови во Торун.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Оставете ги вашите контакт информации и ќе ви се јавиме!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Контактирајте го добавувачот</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Се согласувам со обработката на моите лични податоци обезбедени во горниот формулар</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Име</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Презиме</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Испрати</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Што ги разликува нашите станови од другите?
+
+</value>
+  </data>
+</root>

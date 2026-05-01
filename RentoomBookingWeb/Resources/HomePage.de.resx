@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – wir schaffen einzigartige Erlebnisse beim Aufenthalt in Toruń
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Suchen Sie eine komfortable Wohnung in Toruń?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Wohnungen in Toruń – komfortable Unterkünfte</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Suchen Sie eine komfortable Wohnung in Toruń?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenty ist eine moderne Kurzzeitvermietungsmarke, die einen hohen Unterkunftsstandard mit authentischem Wissen über Toruń verbindet. Wir schaffen Orte, die mit Blick auf Komfort, Ästhetik und Funktionalität gestaltet sind – sowohl für Touristen als auch für Geschäftskunden.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Wir freuen uns, dass Sie zu uns gekommen sind!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Unser Angebot umfasst Dutzende sorgfältig ausgewählter Wohnungen in den attraktivsten Teilen der Stadt. Jeder Standort wurde ausgewählt, um einen einfachen Zugang zu wichtigen Attraktionen, Restaurants und Geschäftsbereichen zu ermöglichen.
+Jede Wohnung ist ein Raum, der nach einem intensiven Tag voller Sightseeing oder Arbeit echte Ruhe und Privatsphäre bietet.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Wohnungen an den besten Standorten in Toruń</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Zufriedene Kunden</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Wohnungen in Toruń
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Lage in Toruń</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Warum Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Die Renttoom Apartments sind mehr als nur eine Übernachtung in Toruń. Wir bieten einen hohen Standard an Wohnungen an den besten Standorten und echte Vorteile, die den Wert des gesamten Aufenthalts steigern.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Im Rahmen unseres Partnerprogramms erhalten Gäste Zugang zu Sonderrabatten auf ausgewählte Restaurants, Cafés und Touristenattraktionen. Aktuelle Rabatte und Empfehlungen befinden sich direkt in den Wohnungen, sodass Sie bewährte Orte nutzen und beim Sightseeing Geld sparen können.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Wir arbeiten ausschließlich mit vertrauenswürdigen, lokalen Partnern zusammen und achten auf die Qualität jeder Empfehlung. Mit der Wahl von Rentoom erhalten Sie Komfort, professionellen Service und zusätzliche Vorteile, die Ihren Aufenthalt in Toruń komfortabler, anspruchsvoller und einfach profitabler machen.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Informieren Sie sich über die Meinungen von Menschen, die in unseren Wohnungen in Toruń geschlafen haben.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Hinterlassen Sie Ihre Kontaktdaten und wir melden uns bei Ihnen!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Lieferanten kontaktieren</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Ich stimme der Verarbeitung meiner personenbezogenen Daten im obigen Formular zu</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Nachname</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Senden</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Was unterscheidet unsere Wohnungen von anderen?
+
+</value>
+  </data>
+</root>

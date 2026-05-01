@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Samenwerking</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>Over ons en waarom ons?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Ervaring
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty is een modern merk dat kortetermijnverhuur in Toruń beheert. We zijn al vertrouwd door meer dan 100 investeerders. We beheren meer dan 150 appartementen en nemen meer dan 7000 reserveringen per jaar af.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Kwaliteit</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Wij verzorgen het hele proces – van professionele voorbereiding van het appartement en effectieve promotie, via dynamisch prijsbeheer tot 24-uurs gastservice, schoonmaak en technische service. Wij zorgen voor transparante schikkingen en volledige financiële transparantie.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Professionaliteit</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Dankzij ervaring en een bewezen bedrijfsmodel is het mogelijk om een omzet te genereren tot 30% van de waarde van het pand per jaar*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Innovatie</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Daarnaast verhoogt ons Partnerprogramma, dat kortingen biedt op restaurants en attracties in Toruń, de aantrekkelijkheid van appartementen en beïnvloedt het de bezetting.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Voordelen van samenwerking
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Onderhoudsvrije investering</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>De service die wij aanbieden is compleet. Je kunt rustig slapen, wij werken voor je.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Inkomensoptimalisatie</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Klaar om 24/7 te helpen
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>We houden de markt continu in de gaten en passen de prijzen voor het huren van een appartement aan naar uw winst.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Wij garanderen onze gezamenlijke klanten service dag en nacht, zeven dagen per week.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Als je samenwerking wilt aangaan, vul dan het formulier in
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Achternaam</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefoonnummer</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Aantal appartementen</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Toruń-district</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Verzenden</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Samenwerking</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Inhoud van het bericht</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Ik ga akkoord met de verwerking van mijn persoonsgegevens met het oog op contact opnemen en afhandelen van de aanvraag</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Privacybeleid</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Zend...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Vul alle velden van het formulier in.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Voer een geldig e-mailadres in.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Voer het juiste aantal appartementen in.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Accepteer uw toestemming voor gegevensverwerking.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Dank je. Het formulier is naar Bitrix gestuurd.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Formulier niet verstuurd. Probeer het zo nog eens.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Het contact kon worden gered, maar de deal kon niet worden gesloten. Controleer Bitrix voordat je opnieuw verzendt.</value>
+  </data>
+</root>

@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Samþykktu</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Samþykkja</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Fjöldi fullorðinna</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Við getum ekki beðið!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Breyta gestagögnum</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Innritun</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Útritun</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Fjöldi barna</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Ég staðfesti</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Haltu áfram</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dagar</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Fylltu út innritunarformið og samþykktu skilmála og skilyrði til að fá aðgang að panelinu.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Fyllt</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Fylltu út gestaupplýsingar</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Vinsamlegast gefðu upplýsingar um alla sem munu dvelja á stofnuninni.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Gestur</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Opnunartímar</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Fundargerðir</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nafn</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Næst</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Símanúmer</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Bókunarpanelið þitt er nú tiltækt!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Skráningarkort</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Gögn vistuð með góðum árangri!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Ég tek ábyrgð á að tilkynna allar skemmdir og athugasemdir við innritun.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Ég samþykki bann við reykingum á tóbaksvörum og rafrettum inni í aðstöðunni.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Það er bannað að skipuleggja viðburði og taka við þriðja aðila sem ekki eru hluti af bókuninni.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Hóteldagurinn varir í eina klukkustund </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>við komu allt að klukkutíma</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>á brottfarardeginum.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Eftirnafn</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>LEIGUREGLUR  
+Skilmálar og samningur skilgreina skilmála og skilyrði fyrir bókun og leigu á íbúðum sem eru hluti af leigu hjá Rentoom   
+Apartamenty Sp. z o.o. (leigusali), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 til hagsbóta fyrir leigjandann.  
+1. Bókun eða leiga gistingu jafngildir því að lesa og samþykkja ákvæði skilmála og skilyrða og   
+Samningar.  
+2. Hæfur dómstóll til að leysa ágreining verður dómstóllinn í Toruń.  
+3. Leigusali áskilur sér rétt til að neita að taka við gesti sem: hefur ekki gilt skjal   
+Auðkenni (þ.e. auðkenni eða vegabréf) eða vill ekki sýna fram á skjöl, er undir áhrifum áfengis eða  
+önnur fíkniefni, braut hann á fyrri dvöl sinni reglur reglugerðanna.  
+4. Leigusali áskilur sér rétt til að segja upp samningnum tafarlaust við þann gest sem brýtur samninginn  
+Leigureglur, án réttar til að endurgreiða bókunargjaldið. Gesturinn verður beðinn um að gera það strax   
+að yfirgefa svæðið.  
+5. Hóteldagurinn stendur frá klukkan 3:00 að kvöldi til 11:00 næsta dag.  
+6. Á brottfarardegi er leigjandi skyldugur til að afhenda íbúðina fyrir klukkan 11:00, annars   
+Gjald verður bætt við í upphæðinni á næsta upphafsdegi + 50%.  
+7. Reykingar í íbúðunum eru stranglega bannaðar. Fyrir að brjóta reykingabann inni í íbúðinni   
+Leigjandinn er skyldugur til að greiða aukagjald að upphæð 500 PLN (fimm hundruð).  
+8. Það er bannað að nota rafmagnstæki sem eru ekki hluti af íbúðinni og eru það  
+Eldhætta.  
+9. Leigjendur er skyldugur til að veita skemmdir eða bilun á búnaði íbúðarinnar   
+Láttu leigusala vita strax.  
+10. Gæludýr eru aðeins leyfð með leyfi leigusala. Gjaldið fyrir gæludýr er 50 PLN fyrir alla dvölina.  
+11. Rólegir tímar í leiguíbúðinni eru á milli klukkan 10:00 og 6:00 að morgni. Fólk   
+Ef þú ert ekki skráður í íbúðinni geturðu aðeins heimsótt hann til klukkan 11:00.  
+12. Það er algjörlega bannað að skipuleggja félagslega viðburði í íbúðinni. Til að skipuleggja viðburðinn   
+Leigutaki greiðir aukagjald að upphæð 5.000 PLN + aukatap til leigusala   
+sem leigusali hefur orðið fyrir. Allar skemmdir á leiguíbúðinni og byggingunni eru á ábyrgð   
+einstaklingur leigjandans. Leigjandinn ber ábyrgð á öllum skemmdum sem stafa af hegðun þriðja aðila sem dvelja í húsinu  
+með henni í íbúðinni – boðið í íbúðina/bygginguna af þessum einstaklingi. Ef lögreglan grípur inn í   
+eða sveitarfélagsvörðurinn, mun leigusali rukka leigjanda aukagjald að upphæð 500 PLN (fimm hundruð zloty).  
+13. Fjöldi þeirra sem dvelja í íbúðinni má ekki fara yfir þann fjölda sem tilgreint var í bókuninni. Yfirlýsing   
+Óreglur í þessu samhengi leiða til þess að aukagjald að upphæð PLN 200 er reiknað fyrir hvern af þessum   
+Einstaklingar skráðir fyrir hverja nótt.  
+14. Gestir eru skyldugir til að tryggja íbúðina rétt, þ.e. loka öllum hurðum vandlega   
+inngangur og gluggar áður en hver og einn yfirgefur íbúðina og til geymslu   
+lyklar/kóðar/fjarstýringar án möguleika á óheimilum aðgangi að þeim.  
+15. Leigusali ber ekki ábyrgð á skemmdum eða týndum verðmætum sem skilin eru eftir í íbúðinni.  
+16. Ef lykillinn eða fjarstýringin úr bílskúrnum glatast eða eyðileggst, verður innheimt gjald   
+200 PLN fyrir hvern bita.  
+17. Lokahreinsun er innifalin í verði dvalarinnar. Hins vegar er gesturinn skyldugur til að fara eftir   
+þvoði upp og notaði búnað. Þessar athafnir eru ekki kjarni lokahreinsunarinnar.  
+18. Allar aukahreinsanir að beiðni leigusala eru greiddar samkvæmt upphæð gjaldsins  
+Bensínstöð. Rúmföt og handklæði eru skipt út.  
+19. Rafmagnsgjöld sem leigusali leggur fram eru innifalin í verði dvalarinnar.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | Sími +48 881 388 001  
+20. Leigjandinn ber fjárhagslega ábyrgð á öllum skemmdum/þjófnaði sem verða í íbúðinni á meðan dvölinni stendur.  
+21. Vinsamlegast láttu okkur vita strax ef einhver misskilningur er eða ef þú gerir það ekki  
+Ánægð með þjónustu okkar. Við munum gera okkar besta til að rannsaka vandamálið vandlega og leysa það.  
+22. Leigusali getur rukkað allt að 1.000 PLN innborgun frá gestum fyrir bókanir, sem hægt er að skila í allt að fimm daga   
+Vinna eftir útskráningu.  
+23. Leigusali á rétt á að krefjast bóta fyrir upphæð gjaldanna í hverju máli  
+Aukalega.  
+24. Leigjendur hefur rétt til að kvarta yfir þjónustunni. Kvartanir skulu sendar með tölvupósti á: reklamacje@rentoom.pl  
+eða með skráðu bréfi á póstfangið. Svar verður veitt innan 14 daga frá afhendingu.  
+Leigureglur á ensku eru aðgengilegar á www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Það er margt eftir að vera</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Veldu áætlaðan komutíma</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Komutími</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Þú hefur valið tímann</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Veldu öll samþykki</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Hleður...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Þegar samþykkt</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Krafist</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Skoðaðu skjalið</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Sjá fulla skilmála og skilyrði</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Skilmálar og skilyrði</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Ég veit það ekki enn</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Aðeins stafir, bil, bandstrik og kommumerki</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Tókst ekki að hlaða inn samþykkjum. Vinsamlegast reyndu aftur.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Endurtaka</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Þú getur breytt valfrjálsum samþykkjum hvenær sem er á "Um bókun" síðunni.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Tölvupóstur</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Skilmálar og skilyrði</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Skrifvilla í gögnum.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Þú getur ekki nálgast þessa síðu.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Skilmálar og samþykki</value>
+  </data>
+</root>

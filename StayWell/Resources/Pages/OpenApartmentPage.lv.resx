@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Jūsu kods būs pieejams no {0} reģistrēšanās dienā.</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Tiek pārbaudīta slēdzenes pieejamība...</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Apstiprināt</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Atvērtas durvis</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Kļūda, izslēdzot</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Kļūda atvēršanā</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Servera savienojuma kļūda</value>
+  </data>
+  <data name="HowTo" xml:space="preserve">
+    <value>Kā lietot slēdzeni</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Slēdzenes koda nav. Sazinieties ar atbalsta dienestu!</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>vai</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Nospiediet, lai atvērtu</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Apstrāde</value>
+  </data>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Attālināta durvju atvēršana</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Attālināta atvēršana pašlaik nav pieejama.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Lūdzu, mēģiniet vēlreiz</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Mēģiniet vēlreiz {0}</value>
+  </data>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Jūsu dzīvokļa kods</value>
+  </data>
+  <data name="InstructionCylinder" xml:space="preserve">
+    <value>## Kā atvērt durvis
+1. Ievadiet kodu vai atveriet attālināti
+(Katrs klikšķis uz tastatūras pogas tiks apstiprināts ar skaņu)
+2. Ja tas iedegas zilā krāsā, pagrieziet pogu
+(Slēdziet durvju labajā pusē, pagriezieties pa kreisi)
+(Slēdziet durvju kreisajā pusē, pagriezieties pa labi)
+līdz brīdim, kad dzirdat slēdzenes ievilkšanu.
+3. Atveriet durvis
+
+## Kā aizvērt durvis
+1. Ievadiet kodu
+(Katrs klikšķis uz tastatūras pogas tiks apstiprināts ar skaņu)
+2. Ja tas iedegas zilā krāsā, pagrieziet pogu pretējā virzienā
+(Slēdziet durvju labajā pusē, pagriezieties pa labi)
+(Slēdzene durvju kreisajā pusē, pagriezieties pa kreisi)
+līdz brīdim, kad dzirdat slēdzenes aizvēršanos.
+3. Durvis ir aizslēgtas.</value>
+  </data>
+  <data name="InstructionPanel" xml:space="preserve">
+    <value>1. Izgaismojiet tastatūru, nospiežot jebkuru paneļa pogu, vai atveriet attālināti.
+2. Ievadiet savu kodu
+3. Ja tas iedegas zilā krāsā, atveriet durvis.</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Svarīgi</value>
+  </data>
+  <data name="LockTypePanel" xml:space="preserve">
+    <value>panelis</value>
+  </data>
+  <data name="LockTypeSpinning" xml:space="preserve">
+    <value>rotējošs</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Attālināta atvēršana būs pieejama no {0} reģistrēšanās dienā.</value>
+  </data>
+  <data name="InstructionOpenTitle" xml:space="preserve">
+    <value>Kā atvērt durvis</value>
+  </data>
+  <data name="InstructionCloseTitle" xml:space="preserve">
+    <value>Kā aizvērt durvis</value>
+  </data>
+  <data name="InstructionCylinderOpen" xml:space="preserve">
+    <value>## Kā atvērt - rotējošā slēdzene
+1. Ievadiet kodu vai atveriet attālināti
+(Katrs klikšķis uz tastatūras pogas tiks apstiprināts ar skaņu)
+2. Ja tas iedegas zilā krāsā, pagrieziet pogu
+(Slēdziet durvju labajā pusē, pagriezieties pa kreisi)
+(Slēdziet durvju kreisajā pusē, pagriezieties pa labi)
+līdz brīdim, kad dzirdat slēdzenes ievilkšanu.
+3. Atveriet durvis</value>
+  </data>
+  <data name="InstructionCylinderClose" xml:space="preserve">
+    <value>## Kā aizvērt - rotējošā slēdzene
+1. Ievadiet kodu
+(Katrs klikšķis uz tastatūras pogas tiks apstiprināts ar skaņu)
+2. Ja tas iedegas zilā krāsā, pagrieziet pogu pretējā virzienā
+(Slēdziet durvju labajā pusē, pagriezieties pa labi)
+(Slēdzene durvju kreisajā pusē, pagriezieties pa kreisi)
+līdz brīdim, kad dzirdat slēdzenes aizvēršanos.
+3. Durvis ir aizslēgtas.</value>
+  </data>
+  <data name="InstructionPanelOpen" xml:space="preserve">
+    <value>## Kā atvērt - paneļa bloķēšana
+1. Izgaismojiet tastatūru, nospiežot jebkuru paneļa pogu, vai atveriet attālināti.
+2. Ievadiet savu kodu
+3. Ja tas iedegas zilā krāsā, atveriet durvis.</value>
+  </data>
+  <data name="InstructionPanelClose" xml:space="preserve">
+    <value>## Kā aizvērt - paneļa bloķēšana
+Viss, kas jums jādara, ir aizvērt durvis aiz sevis.</value>
+  </data>
+  <data name="InstructionCylinderOpenLabel" xml:space="preserve">
+    <value>Kā atvērt - rotējošā slēdzene</value>
+  </data>
+  <data name="InstructionCylinderCloseLabel" xml:space="preserve">
+    <value>Kā aizvērt - rotējošā slēdzene</value>
+  </data>
+  <data name="InstructionPanelOpenLabel" xml:space="preserve">
+    <value>Kā atvērt - paneļa bloķēšana</value>
+  </data>
+  <data name="InstructionPanelCloseLabel" xml:space="preserve">
+    <value>Kā aizvērt - paneļa bloķēšana</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Iepriekšējie kodi</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Oriģinālais kods</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Ģenerēt jaunu kodu</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Jauns kods {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Ģenerēšana... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Svarīgi: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Derīgs no: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Derīgs līdz: {0}</value>
+  </data>
+  <data name="CylinderTopView" xml:space="preserve">
+    <value>Skats no augšas</value>
+  </data>
+  <data name="GenerateAvailableFrom" xml:space="preserve">
+    <value>Jauna koda ģenerēšana būs pieejama no {0}.</value>
+  </data>
+  <data name="GenerateSameHourBlocked" xml:space="preserve">
+    <value>Kods jau ir ģenerēts šajā stundā. Nākamā paaudze būs iespējama no {0}.</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Jauns piekļuves kods ir veiksmīgi ģenerēts.</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Jūsu rezervācija ir beigusies. Attālināta atvēršana vairs nav pieejama.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Jūsu rezervācija ir beigusies. Piekļuves kods vairs nav pieejams.</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Atvērts dzīvoklis</value>
+  </data>
+</root>

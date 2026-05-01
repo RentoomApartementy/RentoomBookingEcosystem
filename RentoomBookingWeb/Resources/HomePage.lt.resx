@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – kuriame unikalią viešnagės Torunėje patirtį
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Ieškote patogaus buto Torunėje?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Apartamentai Torunėje – patogus apgyvendinimas</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Ieškote patogaus buto Torunėje?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>"Rentoom Apartamenty" yra modernus trumpalaikės nuomos prekės ženklas, kuriame aukštas apgyvendinimo lygis derinamas su autentiškomis Torunės žiniomis. Kuriame erdves, sukurtas atsižvelgiant į komfortą, estetiką ir funkcionalumą - tiek turistams, tiek verslo svečiams.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Džiaugiamės, kad atėjote pas mus!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Mūsų pasiūlyme yra dešimtys kruopščiai atrinktų butų patraukliausiose miesto vietose. Kiekviena vieta buvo pasirinkta taip, kad būtų lengva pasiekti pagrindines lankytinas vietas, restoranus ir verslo zonas.
+Kiekvienas butas yra erdvė, skirta suteikti tikrą poilsį ir privatumą po intensyvios ekskursijų ar darbo dienos.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Butai geriausiose Torunės vietose</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Patenkinti klientai</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Apartamentai Torunėje
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Vieta Torunėje</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Kodėl verta rinktis "Rentoom"?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>"Rentoom Apartments" yra daugiau nei tik nakvynė Torunėje. Mes siūlome aukšto lygio apartamentus geriausiose vietose ir realius privalumus, kurie padidina visos viešnagės vertę.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Pagal mūsų partnerių programą svečiai gali naudotis specialiomis nuolaidomis pasirinktiems restoranams, kavinėms ir turistų lankomoms vietoms. Dabartinės nuolaidos ir rekomendacijos yra tiesiai apartamentuose, todėl galite naudotis patikrintomis vietomis ir sutaupyti pinigų lankydamiesi.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Dirbame tik su patikimais, vietiniais partneriais, rūpinamės kiekvienos rekomendacijos kokybe. Pasirinkę "Rentoom", įgyjate komfortą, profesionalų aptarnavimą ir papildomų privalumų, dėl kurių jūsų viešnagė Torunėje tampa patogesnė, rafinuotesnė ir tiesiog pelningesnė.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Susipažinkite su žmonių, kurie miegojo mūsų apartamentuose Torunėje, nuomone.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Palikite savo kontaktinę informaciją ir mes su jumis susisieksime!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Susisiekite su tiekėju</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Sutinku, kad būtų tvarkomi aukščiau pateiktoje formoje pateikti mano asmens duomenys</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Vardas, pavadinimas</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Pavardė</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefonas</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Siųsti</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Kuo mūsų butai skiriasi nuo kitų?
+
+</value>
+  </data>
+</root>

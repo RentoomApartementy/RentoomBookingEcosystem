@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Bashkëpunimi</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>Rreth nesh dhe pse ne?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Eksperiencë
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty është një markë moderne që menaxhon qiratë afatshkurtra në Toruń. Tashmë na kanë besuar mbi 100 investitorë. Ne menaxhojmë mbi 150 apartamente dhe trajtojmë mbi 7000 rezervime në vit.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Cilësi</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Ne kujdesemi për të gjithë procesin – nga përgatitja profesionale e apartamentit dhe promovimi efektiv, përmes menaxhimit dinamik të çmimeve, deri te shërbimi i mysafirëve gjatë gjithë kohës, pastrimi dhe shërbimi teknik. Ne sigurojmë zgjidhje transparente dhe transparencë të plotë financiare.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Profesionalizmi</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Falë përvojës dhe një modeli të provuar operativ, është e mundur të gjenerohen të ardhura deri në 30% të vlerës së pronës në vit*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Inovacioni</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Përveç kësaj, Programi ynë i Partnerëve, i cili ofron zbritje në restorantet dhe atraksionet në Toruń, rrit atraktivitetin e apartamenteve dhe ndikon në zënien e tyre.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Avantazhet e bashkëpunimit
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Investim pa mirëmbajtje</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Shërbimi që ne ofrojmë është i plotë. Ju mund të flini të qetë, ne punojmë për ju.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Optimizimi i të ardhurave</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Gati për të ndihmuar 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Ne monitorojmë tregun në mënyrë të vazhdueshme dhe rregullojmë çmimet për marrjen me qira të një apartamenti me fitimin tuaj.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Ne garantojmë shërbimin e klientëve tanë të përbashkët gjatë gjithë kohës, shtatë ditë në javë.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Nëse dëshironi të krijoni bashkëpunim, plotësoni formularin
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Mbiemri</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Emri</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numri i telefonit</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Numri i apartamenteve</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Distrikti Toruń</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Dërgo</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Bashkëpunimi</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Përmbajtja e mesazhit</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Jam dakord me përpunimin e të dhënave të mia personale me qëllim të kontaktimit dhe trajtimit të kërkesës</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Politika e privatësisë</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Dërgimi...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Plotësoni të gjitha fushat e formularit.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Ju lutemi shkruani një adresë emaili të vlefshme.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Futni numrin e saktë të apartamenteve.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Pranoni pëlqimin tuaj për përpunimin e të dhënave.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Faleminderit. Formulari i është dërguar Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Dështoi dërgimin e formularit. Ju lutemi provoni përsëri në një moment.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Kontakti mund të ruhej, por marrëveshja nuk mund të krijohej. Kontrolloni Bitrix përpara se të ridërgoni.</value>
+  </data>
+</root>
