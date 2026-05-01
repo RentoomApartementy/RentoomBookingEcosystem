@@ -8,6 +8,7 @@
 @using RentoomBooking.StayWell.Services
 @using RentoomBooking.StayWell.States
 @inject AvailableUpsellsState AvailableUpsellsState
+@inject UpsellTextsState UpsellTextsState
 @inject NavigationManager Navigation
 @inject IStringLocalizer<AvailableUpsellsPage> Localizer
 @inject UpsellCartState UpsellCartState
@@ -61,11 +62,7 @@ else
         if (string.IsNullOrWhiteSpace(Token))
             return;
 
-        _texts = new UpsellTextConfig
-        {
-            Title = Localizer["UpsellsListTitle"],
-            SubTitle = Localizer["UpsellsListSubtitle"]
-        };
+        _texts = UpsellTextsState.Build(Localizer);
 
         _reservationContext = BuildReservationPricingContext();
         _cartSelected = UpsellCartState.PendingUpsells.ToList();
@@ -82,6 +79,7 @@ else
     private void OnLanguageChanged() =>
         InvokeAsync(async () =>
         {
+            _texts = UpsellTextsState.Build(Localizer);
             AvailableUpsellsState.BeginReload();
             await LoadUpsellsAsync(force: true);
             _upsellListKey++;

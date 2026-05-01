@@ -1,8 +1,11 @@
 @page "/reservation/{Token}/MyVouchersPage"
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
 @using RentoomBooking.SharedFrontend.Components.StayWell.UpsellComponents
+@using RentoomBooking.StayWell.States
 @inject RentoomBooking.StayWell.Services.BackendApi BackendApi
+@inject UpsellTextsState UpsellTextsState
 @inject IStringLocalizer<PurchasedUpsellsPage> Localizer
 
 @inherits Models.PageBase
@@ -22,6 +25,7 @@ else
     <PurchasedUpsellList PurchasedUpsells="_purchasedVouchers"
                          ReservationContext="_context"
                          Theme="staywell-theme"
+                         Texts="_texts"
                          OnEnlargeImage="HandleEnlargeImage" />
 }
 
@@ -30,6 +34,12 @@ else
     private ReservationPricingContext _context = new();
     private bool _isLoading = true;
     private string? _errorMessage;
+
+    private UpsellTextConfig _texts = new()
+    {
+        Title = string.Empty,
+        SubTitle = string.Empty
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,6 +51,9 @@ else
             _isLoading = false;
             return;
         }
+
+        _texts = UpsellTextsState.Build(Localizer);
+
 
         var purchasedSummary = await BackendApi.GetPurchasedUpsellsByReservationTokenAsync(Token);
         _purchasedVouchers = purchasedSummary?.PurchasedUpsellsWithVouchers ?? new();

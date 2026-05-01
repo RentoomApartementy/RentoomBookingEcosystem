@@ -32,4 +32,109 @@
     
     
   <value>Brak dostępnych dodatków</value></data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>jednorazowo</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>os./dzień</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Zobacz szczegóły</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Ważny od</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Szczegóły</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Kod</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Pozostało</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Ważne przez cały pobyt. Wymagane okazanie kodu przy realizacji.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Ważny do</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Opis</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>pobyt</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>nocy</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR niedostępny</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Wykorzystanie vouchera</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Powiększ</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>apt./dzień</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Regulamin</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>Kod QR vouchera</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Dostępne dodatki do kupienia</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Wykorzystano</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Pokaż ten kod obsłudze, aby zrealizować voucher.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Twój kod</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Cena</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Pokaż w restauracji</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Vouchery</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Kod do podania ręcznie</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>gości</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Pokaż kod voucher</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>Bez limitu</value>
+  </data>
 </root>
