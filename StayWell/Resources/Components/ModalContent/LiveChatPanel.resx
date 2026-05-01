@@ -261,4 +261,10 @@
   <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
     <value>Show translated message</value>
   </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Target translation language</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Auto-detect from messages</value>
+  </data>
 </root>

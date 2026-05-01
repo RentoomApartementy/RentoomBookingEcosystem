@@ -44,4 +44,5 @@ public sealed record LiveChatSessionSettingsUpdateRequest(
     string? PreferredLanguage = null);
 
 public sealed record LiveChatSessionSettingsDto(
-    bool GuestAutoTranslateEnabled = true);
+    bool GuestAutoTranslateEnabled = true,
+    string? PreferredLanguage = null);

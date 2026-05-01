@@ -193,15 +193,17 @@ public sealed class BitrixLiveChatService
         var session = await _sessionRepo.GetActiveByIdAsync(sessionId, ct)
                       ?? throw new InvalidOperationException("Session not found.");
 
-        // Translate guest message to Polish for Bitrix
+        // Translate guest message to Polish for Bitrix.
+        // Content stays as the original (guest sees their own language);
+        // OriginalContent holds the Polish translation forwarded to Bitrix.
         var translationResult = await _translationService.TranslateAsync(content, "pl", ct);
-        
+
         var message = new LiveChatMessageEntity
         {
             SessionId = sessionId,
             Sender = LiveChatSenders.Guest,
-            Content = translationResult.TranslatedText,
-            OriginalContent = translationResult.WasTranslated ? content : null,
+            Content = content,
+            OriginalContent = translationResult.WasTranslated ? translationResult.TranslatedText : null,
             DetectedLanguage = translationResult.DetectedLanguage,
             IsTranslated = translationResult.WasTranslated,
             SenderName = session.GuestName
@@ -315,7 +317,7 @@ public sealed class BitrixLiveChatService
                 .OrderByDescending(m => m.CreatedAt)
                 .FirstOrDefaultAsync(ct);
 
-            var guestLanguage = guestLastMessage?.DetectedLanguage ?? "en";
+            var guestLanguage = session.PreferredLanguage ?? guestLastMessage?.DetectedLanguage ?? "en";
             
             // Translate PL to guest's language
             var translationResult = await _translationService.TranslateAsync(cleanText, guestLanguage, ct);

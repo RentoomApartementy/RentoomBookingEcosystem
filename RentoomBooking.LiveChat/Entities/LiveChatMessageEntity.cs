@@ -16,7 +16,7 @@ public sealed class LiveChatMessageEntity
 
     [Column("original_content")] public string? OriginalContent { get; set; }
 
-    [Column("detected_language")] public string? DetectedLanguage { get; set; }
+    [Column("detected_language")] [MaxLength(10)] public string? DetectedLanguage { get; set; }
 
     [Column("is_translated")] public bool IsTranslated { get; set; } = false;
 

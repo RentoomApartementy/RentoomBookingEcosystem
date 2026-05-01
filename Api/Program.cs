@@ -305,6 +305,7 @@ builder.Services.AddOptions<RentoomBooking.LiveChat.Services.AzureTranslatorOpti
     {
         options.Key = configuration["AzureTranslator:Key"] ?? throw new InvalidOperationException("AzureTranslator:Key is missing");
         options.Endpoint = configuration["AzureTranslator:Endpoint"] ?? throw new InvalidOperationException("AzureTranslator:Endpoint is missing");
+        options.Region = configuration["AzureTranslator:Region"] ?? throw new InvalidOperationException("AzureTranslator:Region is missing");
         options.DefaultSourceLanguage = configuration["AzureTranslator:DefaultSourceLanguage"] ?? "auto";
         options.DefaultTargetLanguage = configuration["AzureTranslator:DefaultTargetLanguage"] ?? "pl";
     })
@@ -316,10 +317,11 @@ builder.Services.AddSingleton(sp =>
     var options = sp.GetRequiredService<IOptions<RentoomBooking.LiveChat.Services.AzureTranslatorOptions>>().Value;
     return new Azure.AI.Translation.Text.TextTranslationClient(
         new Azure.AzureKeyCredential(options.Key),
-        options.Endpoint);
+        new Uri(options.Endpoint),
+        options.Region);
 });
 
-builder.Services.AddScoped<RentoomBooking.LiveChat.Services.ITranslationService, RentoomBooking.LiveChat.Services.AzureTranslatorService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Services.ITranslationService, RentoomBooking.LiveChat.Services.AzureTranslatorService>();
 
 builder.Services.AddScoped<IEventReadRepository, EventReadRepository>();
 

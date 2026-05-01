@@ -133,9 +133,9 @@ public sealed class LiveChatClientService
         return await response.Content.ReadFromJsonAsync<LiveChatSessionSettingsDto>(_jsonOptions, ct);
     }
 
-    public async Task<bool> UpdateSettingsAsync(string reservationToken, bool? guestAutoTranslateEnabled = null, CancellationToken ct = default)
+    public async Task<bool> UpdateSettingsAsync(string reservationToken, bool? guestAutoTranslateEnabled = null, string? preferredLanguage = null, CancellationToken ct = default)
     {
-        var request = new LiveChatSessionSettingsUpdateRequest(reservationToken, guestAutoTranslateEnabled);
+        var request = new LiveChatSessionSettingsUpdateRequest(reservationToken, guestAutoTranslateEnabled, preferredLanguage);
         var response = await _http.PostAsJsonAsync("staywell/livechat/settings", request, _jsonOptions, ct);
         return response.IsSuccessStatusCode;
     }

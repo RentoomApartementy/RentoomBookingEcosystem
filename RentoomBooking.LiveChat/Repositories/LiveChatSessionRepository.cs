@@ -61,6 +61,8 @@ public sealed class LiveChatSessionRepository : ILiveChatSessionRepository
         tracked.ClientBitrixId = updated.ClientBitrixId;
         tracked.DealBitrixId = updated.DealBitrixId;
         tracked.Status = updated.Status;
+        tracked.GuestAutoTranslateEnabled = updated.GuestAutoTranslateEnabled;
+        tracked.PreferredLanguage = updated.PreferredLanguage;
         tracked.UpdatedAt = updated.UpdatedAt;
         await db.SaveChangesAsync(ct);
     }

@@ -107,9 +107,16 @@
     justify-content: flex-end;
 }
 
-.livechat-message-row--operator {
-    justify-content: flex-start;
+.livechat-message-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
+
+.livechat-message-row--guest .livechat-message-col {
+    align-items: flex-end;
+}
+
 
 .livechat-retry-btn {
     flex-shrink: 0;
@@ -908,119 +915,23 @@
 
 /* === Translation Features === */
 
-.livechat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    border-bottom: 1px solid #e9eaec;
-    background: #f8f9fa;
-}
-
-.livechat-header-title {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1a202c;
-}
-
-.livechat-header-settings {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: none;
-    border-radius: 6px;
-    background: transparent;
-    color: #666;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.livechat-header-settings:hover {
-    background: #e9eaec;
-    color: #1a202c;
-}
-
-.livechat-header-settings svg {
-    width: 18px;
-    height: 18px;
-    stroke-width: 2;
-}
-
-/* Modal Overlay */
-.livechat-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.livechat-modal {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    max-width: 400px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
+/* Settings Overlay (in-panel, like form-overlay) */
+.settings-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
     display: flex;
     flex-direction: column;
+    background: #fff;
 }
 
-.livechat-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    border-bottom: 1px solid #e9eaec;
-    flex-shrink: 0;
-}
-
-.livechat-modal-title {
-    margin: 0;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1a202c;
-}
-
-.livechat-modal-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: none;
-    border-radius: 6px;
-    background: transparent;
-    color: #666;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.livechat-modal-close:hover {
-    background: #e9eaec;
-    color: #1a202c;
-}
-
-.livechat-modal-close svg {
-    width: 20px;
-    height: 20px;
-}
-
-.livechat-modal-content {
-    padding: 16px;
+.settings-overlay-content {
     flex: 1;
     overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .livechat-settings-group {
@@ -1032,11 +943,11 @@
 .livechat-settings-label {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
     font-size: 0.95rem;
-    font-weight: 500;
-    color: #1a202c;
+    font-weight: 600;
+    color: #1a1a1a;
     user-select: none;
 }
 
@@ -1044,23 +955,58 @@
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: #3b82f6;
+    accent-color: var(--rentoom-green-dark, #21573e);
 }
 
 .livechat-settings-hint {
     margin: 0;
     font-size: 0.85rem;
-    color: #666;
+    color: #777;
     line-height: 1.4;
 }
 
-.livechat-settings-error {
-    padding: 8px 12px;
-    border-radius: 6px;
-    background: #fee;
-    color: #c33;
+.livechat-settings-group--lang {
+    gap: 8px;
+}
+
+.livechat-settings-select-label {
     font-size: 0.9rem;
-    margin-bottom: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.livechat-settings-select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #d1c9bb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #1a1a1a;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.livechat-settings-select:focus {
+    outline: none;
+    border-color: var(--rentoom-green-dark, #21573e);
+    box-shadow: 0 0 0 2px rgba(33, 87, 62, 0.15);
+}
+
+.livechat-settings-select:disabled {
+    background: #f3f4f6;
+    color: #aaa;
+    cursor: not-allowed;
+    border-color: #e0d8ce;
+}
+
+.livechat-settings-error {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #b33;
+    font-size: 0.9rem;
     border: 1px solid #fcc;
 }
 
@@ -1085,16 +1031,16 @@
 }
 
 .livechat-btn--primary {
-    background: #3b82f6;
+    background: var(--rentoom-green-dark, #21573e);
     color: #fff;
 }
 
 .livechat-btn--primary:hover:not(:disabled) {
-    background: #2563eb;
+    background: #1a4530;
 }
 
 .livechat-btn--primary:disabled {
-    background: #9ca3af;
+    background: #aaa;
     cursor: not-allowed;
     opacity: 0.6;
 }
@@ -1117,22 +1063,23 @@
 /* Translation Toggle Button */
 .livechat-message-translate-toggle {
     display: inline-block;
-    margin-top: 6px;
-    padding: 4px 10px;
+    margin-top: 4px;
+    padding: 0;
     border: none;
-    border-radius: 4px;
-    background: rgba(59, 130, 246, 0.1);
-    color: #3b82f6;
-    font-size: 0.8rem;
-    font-weight: 500;
+    background: none;
+    color: #888;
+    font-size: 0.75rem;
+    font-weight: 400;
     cursor: pointer;
-    transition: all 0.2s ease;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.15s;
 }
 
 .livechat-message-translate-toggle:hover {
-    background: rgba(59, 130, 246, 0.2);
+    color: #555;
 }
 
 .livechat-message-translate-toggle:active {
-    transform: scale(0.98);
+    color: #333;
 }

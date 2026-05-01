@@ -255,7 +255,7 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
             ["message"] = new Dictionary<string, object?>
             {
                 ["id"] = message.Id.ToString(),
-                ["text"] = message.Content
+                ["text"] = BuildBitrixMessageText(message)
             },
             ["chat"] = chat
         };
@@ -280,5 +280,14 @@ public sealed class BitrixMessageSender : IBitrixMessageSender
     private sealed record BitrixSessionIdentifiers(string? ChatId, string? SessionId)
     {
         public static readonly BitrixSessionIdentifiers Empty = new(null, null);
+    }
+
+    private static string BuildBitrixMessageText(LiveChatMessageEntity message)
+    {
+        // OriginalContent holds the Polish translation for guest-originated messages.
+        if (!message.IsTranslated || string.IsNullOrWhiteSpace(message.OriginalContent))
+            return message.Content;
+
+        return $"{message.OriginalContent}\n\n>>[b] Oryginalna wiadomość[/b]\n>> {message.Content}";
     }
 }

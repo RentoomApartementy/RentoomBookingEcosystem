@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.LiveChat.Data;
@@ -11,9 +12,11 @@ using RentoomBooking.LiveChat.Data;
 namespace RentoomBooking.LiveChat.Migrations
 {
     [DbContext(typeof(LiveChatDbContext))]
-    partial class LiveChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260501041443_AddPreferredLanguageColumn")]
+    partial class AddPreferredLanguageColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,7 +105,7 @@ namespace RentoomBooking.LiveChat.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_bitrix_livechat_portals_member_id");
 
-                    b.ToTable("bitrix_livechat_portals", (string)null);
+                    b.ToTable("bitrix_livechat_portals");
                 });
 
             modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatMessageEntity", b =>
@@ -175,7 +178,7 @@ namespace RentoomBooking.LiveChat.Migrations
                     b.HasIndex("SessionId", "CreatedAt")
                         .HasDatabaseName("idx_livechat_messages_session_created_at");
 
-                    b.ToTable("livechat_messages", (string)null);
+                    b.ToTable("livechat_messages");
                 });
 
             modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatSessionEntity", b =>
@@ -252,7 +255,7 @@ namespace RentoomBooking.LiveChat.Migrations
                     b.HasIndex("ReservationToken", "Status")
                         .HasDatabaseName("idx_livechat_sessions_token_status");
 
-                    b.ToTable("livechat_sessions", (string)null);
+                    b.ToTable("livechat_sessions");
                 });
 
             modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatMessageEntity", b =>
