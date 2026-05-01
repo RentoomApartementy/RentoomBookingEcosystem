@@ -54,6 +54,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public int ScaleMaxPrice { get; private set; }
         public Guid SliderResetKey { get; private set; } = Guid.NewGuid();
         private int _suggestionsRunId = 0;
+        private DateTime _lastNotifyTime = DateTime.MinValue;
+        private readonly object _notifyLock = new();
+        private readonly SemaphoreSlim _loadLock = new(1, 1);
 
         public event Action? OnChange;
 
@@ -83,7 +86,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId) =>
             AvailableTerms.TryGetValue(objectId, out var terms) ? terms : null;
 
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(CancellationToken ct = default)
         {
             CancelSuggestionsFetch();
             var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
@@ -340,10 +343,15 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public async Task LoadMoreAsync()
         {
             if (ApartmentsIsLoading || !HasMore) return;
-            ApartmentsIsLoading = true; Error = null; NotifyStateChanged();
+            
+            if (!await _loadLock.WaitAsync(0)) return;
 
             try
             {
+                ApartmentsIsLoading = true; 
+                Error = null; 
+                NotifyStateChanged();
+
                 var page = await _apartmentsService.GetApartmentsByPageAsync(_token, top: PageSize);
                 if (page?.Items is { Count: > 0 })
                 {
@@ -356,7 +364,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 else { HasMore = false; }
             }
             catch (Exception ex) { Error = ex.Message; HasMore = false; }
-            finally { ApartmentsIsLoading = false; NotifyStateChanged(); }
+            finally 
+            { 
+                ApartmentsIsLoading = false; 
+                NotifyStateChanged(); 
+                _loadLock.Release();
+            }
         }
 
         private async Task FetchOffersForVisibleItems(IEnumerable<ApartmentObject> items)
@@ -573,6 +586,23 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         
         private void ResetPriceScales() { ScaleMinPrice = 0; ScaleMaxPrice = 0; FilterMinPrice = 0; FilterMaxPrice = 0; }
         public void ToggleView(bool isMap) { IsMapView = isMap; NotifyStateChanged(); }
-        private void NotifyStateChanged() => OnChange?.Invoke();
+        private void NotifyStateChanged()
+        {
+            lock (_notifyLock)
+            {
+                var now = DateTime.UtcNow;
+                if ((now - _lastNotifyTime).TotalMilliseconds < 100) return;
+                _lastNotifyTime = now;
+            }
+            
+            try 
+            {
+                OnChange?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in NotifyStateChanged: {ex.Message}");
+            }
+        }
     }
 }

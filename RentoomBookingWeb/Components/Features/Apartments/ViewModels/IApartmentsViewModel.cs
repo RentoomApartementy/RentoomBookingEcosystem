@@ -35,8 +35,9 @@ public interface IApartmentsViewModel
     public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId);
     public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId);
 
-    Task InitializeAsync();
+    Task InitializeAsync(CancellationToken ct = default);
     Task LoadMoreAsync();
+
     void ToggleView(bool isMap);
     Task HandleSearchAsync(Dictionary<string, string> query);
     Task HandleFiltersChangedAsync((ApartmentFilters Filters, int MinPrice, int MaxPrice) data);

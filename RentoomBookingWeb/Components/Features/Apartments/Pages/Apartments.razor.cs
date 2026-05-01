@@ -19,6 +19,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         private IJSObjectReference? _jsModule;
         private bool _isDisposed;
         private bool _isInteractive;
+        private readonly CancellationTokenSource _initCts = new();
 
         private void HandleViewModelChange()
         {
@@ -30,7 +31,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         {
             ViewModel.OnChange += HandleViewModelChange;
             _offerLength = CalculateOfferLength();
-            await ViewModel.InitializeAsync();
+            await ViewModel.InitializeAsync(_initCts.Token);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -56,6 +57,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         public async ValueTask DisposeAsync()
         {
             _isDisposed = true;
+            _initCts.Cancel();
+            _initCts.Dispose();
             ViewModel.OnChange -= HandleViewModelChange;
 
             if (_jsModule is not null && _objRef is not null)
