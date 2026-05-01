@@ -59,7 +59,7 @@
     }
 
     .vouchers {
-        background-color: var(--rentoom-green-dark);
+       /* background-color: var(--rentoom-green-dark);- wyłaczam inny kolor tile vouchers, zeby byl taki sam jak wszedzie.*/
     }
 
 .tile-icon {
@@ -79,6 +79,7 @@
 }
 
 .tile-icon-vouchers {
+    position: relative;
     font-size: 1.5rem;
     color: #333;
     flex-shrink: 0;
@@ -87,7 +88,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7456%) hue-rotate(204deg) brightness(112%) contrast(100%);
+    /*filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7456%) hue-rotate(204deg) brightness(112%) contrast(100%);*/
+}
+
+.vouchers-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background-color: #1fa855;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+    box-shadow: 0 0 0 2px #ffffff;
 }
 
 .tile-text {
@@ -103,7 +121,7 @@
     font-size: clamp(0.78rem, 3vw, 0.95rem);
     font-weight: 600;
     line-height: 1.25;
-    color: white;
+    color: #1a1a1a; /*MS: było: white - gdy tło tile było zielone*/
     overflow-wrap: break-word;
     hyphens: auto;
 }
