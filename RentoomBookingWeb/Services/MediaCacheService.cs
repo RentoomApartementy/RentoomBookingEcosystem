@@ -10,15 +10,15 @@ namespace RentoomBookingWeb.Services
 
         public async Task<List<ObjectMedium>> GetOrFetchMediaAsync(int apartmentId, Func<Task<List<ObjectMedium>>> fetchFactory)
         {
-            if (_cache.TryGetValue(apartmentId, out var cachedMedia))
+            if (_cache.TryGetValue(apartmentId, out var cachedMedia) && cachedMedia != null && cachedMedia.Any())
             {
                 return cachedMedia;
             }
 
             var fetchedMedia = await fetchFactory();
-            if (fetchedMedia != null)
+            if (fetchedMedia != null && fetchedMedia.Any())
             {
-                _cache.TryAdd(apartmentId, fetchedMedia);
+                _cache.AddOrUpdate(apartmentId, fetchedMedia, (key, old) => fetchedMedia);
             }
             return fetchedMedia ?? new List<ObjectMedium>();
         }

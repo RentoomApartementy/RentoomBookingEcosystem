@@ -17,10 +17,18 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
 
         private DotNetObjectReference<Apartments>? _objRef;
         private IJSObjectReference? _jsModule;
+        private bool _isDisposed;
+        private bool _isInteractive;
+
+        private void HandleViewModelChange()
+        {
+            if (_isDisposed || !_isInteractive) return;
+            InvokeAsync(StateHasChanged);
+        }
 
         protected override async Task OnInitializedAsync()
         {
-            ViewModel.OnChange += () => InvokeAsync(StateHasChanged);
+            ViewModel.OnChange += HandleViewModelChange;
             _offerLength = CalculateOfferLength();
             await ViewModel.InitializeAsync();
         }
@@ -29,6 +37,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         {
             if (firstRender)
             {
+                _isInteractive = true;
                 _objRef = DotNetObjectReference.Create(this);
                 _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/infiniteScroll.js");
                 await _jsModule.InvokeVoidAsync("init", _objRef);
@@ -46,7 +55,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
 
         public async ValueTask DisposeAsync()
         {
-            ViewModel.OnChange -= StateHasChanged;
+            _isDisposed = true;
+            ViewModel.OnChange -= HandleViewModelChange;
 
             if (_jsModule is not null && _objRef is not null)
             {

@@ -79,7 +79,7 @@
 
                 @if (!ViewModel.IsMapView)
                 {
-                    <div class="apartments-items-container">
+                    <div class="apartments-items-container" @key="@("apartments-list-view")">
                         @if (!string.IsNullOrEmpty(ViewModel.Error))
                         {
                             <p class="text-red-600">@ViewModel.Error</p>
@@ -90,7 +90,7 @@
                             @foreach (var item in ViewModel.Items)
                             {
                                 <Apartment 
-                                    @key="item.Id"
+                                    @key="@($"apartment-{item.Id}")"
                                     Item="@item" 
                                     Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)" 
                                     OfferLength="@_offerLength"
@@ -108,15 +108,10 @@
                         
                         @if (ViewModel.ApartmentsIsLoading)
                         {
-                            <Apartment />
-                            <Apartment />
-                            <Apartment />
-                            <Apartment />
-                            <Apartment />
-                            <Apartment />
-                            <Apartment />
-                            <Apartment />
-                            <Apartment />
+                            @for (int i = 0; i < 9; i++)
+                            {
+                                <Apartment @key="@($"skeleton-loader-{i}")" />
+                            }
                         }
                     </div>   
                 }

@@ -305,6 +305,7 @@
     private ElementReference _sliderRef;
     private bool _isMediaLoaded = false;
     private bool _isSliderInitialized = false;
+    private bool _isDisposed = false;
 
     protected override void OnInitialized()
     {
@@ -369,13 +370,16 @@
     [JSInvokable("LoadMedia")]
     public async Task LoadMedia()
     {
-        if (_isMediaLoaded) return;
+        if (_isMediaLoaded || _isDisposed) return;
         _isMediaLoaded = true;
 
         try
         {
             await GetObjectMedia();
-            await InvokeAsync(StateHasChanged);
+            if (!_isDisposed)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
         }
         catch (Exception ex)
         {
@@ -384,13 +388,13 @@
     }
 
     [JSInvokable("OnImageSwiped")]
-    public void OnImageSwiped(int index)
+    public async Task OnImageSwiped(int index)
     {
-        if (_objectMediums == null || index < 0 || index >= _objectMediums.Count) return;
+        if (_objectMediums == null || index < 0 || index >= _objectMediums.Count || _isDisposed) return;
         
         _currentMediumIndex = index;
         _currentObjectMedium = _objectMediums[index];
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task GetObjectMedia()
@@ -572,6 +576,7 @@
 
     public async ValueTask DisposeAsync()
     {
+        _isDisposed = true;
         try 
         {
             if (_jsModule != null) 
