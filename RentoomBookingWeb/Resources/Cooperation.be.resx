@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Супрацоўніцтва</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>Пра нас і чаму менавіта нас?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Вопыт
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty — гэта сучасны брэнд, які кіруе кароткатэрміновай арэндай у Торуні. Нам ужо давяраюць больш за 100 інвестараў. Мы кіруем больш чым 150 кватэрамі і апрацоўваем больш за 7000 браніраванняў у год.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Якасць</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Мы клапоцімся пра ўвесь працэс — ад прафесійнай падрыхтоўкі кватэры і эфектыўнага прасоўвання, праз дынамічнае кіраванне цэнамі, да кругласутачнага абслугоўвання гасцей, уборкі і тэхнічнага абслугоўвання. Мы забяспечваем празрыстыя разлікі і поўную фінансавую празрыстасць.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Прафесіяналізм</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Дзякуючы вопыту і праверанай мадэлі аперацыі, можна атрымліваць даход да 30% ад кошту маёмасці ў год*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Інавацыі</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Акрамя таго, наша партнёрская праграма, якая прапануе скідкі на рэстараны і славутасці ў Торуні, павялічвае прывабнасць кватэр і ўплывае на іх занятасць.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Перавагі супрацоўніцтва
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Інвестыцыі без тэхнічнага абслугоўвання</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Паслуга, якую мы прапануем, поўная. Можаш спаць спакойна, мы працуем на цябе.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Аптымізацыя даходаў</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Гатовы дапамагчы 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Мы пастаянна кантралюем рынак і карэктуем цэны на арэнду кватэры ў адпаведнасці з вашым прыбыткам.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Мы гарантуем абслугоўванне нашых агульных кліентаў кругласутачна, сем дзён на тыдзень.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Калі вы хочаце наладзіць супрацоўніцтва, запоўніце форму
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Прозвішча</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Назва</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Нумар тэлефона</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Колькасць кватэр</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Торунскі раён</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Адправіць</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Супрацоўніцтва</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Электронная пошта</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Змест паведамленняў</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Я згаджаюся на апрацоўку маіх асабістых дадзеных з мэтай кантакту і апрацоўкі запыту</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Палітыка прыватнасці</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Адпраўляю...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Запоўніце ўсе палі формы.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Калі ласка, увядзіце сапраўдны адрас электроннай пошты.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Увядзіце патрэбную колькасць кватэр.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Прымаем вашу згоду на апрацоўку дадзеных.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Дзякуй. Форма была адпраўлена ў Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Не даслалі форму. Калі ласка, паспрабуйце яшчэ раз праз хвіліну.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Кантакт можна было выратаваць, але здзелку не ўдалося заключыць. Праверце Bitrix перад паўторнай адпраўкай.</value>
+  </data>
+</root>

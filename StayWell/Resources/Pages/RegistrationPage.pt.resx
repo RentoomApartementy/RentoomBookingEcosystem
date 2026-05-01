@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Antes de ter acesso à sua inscrição, por favor, preencha o Cartão de Registro!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Um erro ocorreu ao salvar os dados. Por favor, tente novamente.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Selecione seu horário de check-in</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Preencha os dados dos convidados</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Olá,</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Preencha os dados dos convidados</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Cartão de registro</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Digite seu endereço de e-mail</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Salve e siga em frente</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Preencha as informações necessárias.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Endereço postal</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Mude o horário de {0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Ao pressionar o botão abaixo, confirmo a correção dos dados.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Selecione o horário estimado do check-in</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Alterar dados de convidados</value>
+  </data>
+</root>

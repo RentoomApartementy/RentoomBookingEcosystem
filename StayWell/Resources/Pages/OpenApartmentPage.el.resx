@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Ο κωδικός σας θα είναι διαθέσιμος από {0} την ημέρα του check-in.</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Έλεγχος διαθεσιμότητας κλειδαριάς...</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Επιβεβαιώνω</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Ανοιχτές πόρτες</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Σφάλμα κατά τον τερματισμό λειτουργίας</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Σφάλμα κατά το άνοιγμα</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Σφάλμα σύνδεσης διακομιστή</value>
+  </data>
+  <data name="HowTo" xml:space="preserve">
+    <value>Πώς να χρησιμοποιήσετε την κλειδαριά</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Δεν υπάρχει κωδικός για την κλειδαριά. Επικοινωνήστε με την υποστήριξη!</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>ή</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Πατήστε για άνοιγμα</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Επεξεργασία</value>
+  </data>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Απομακρυσμένο άνοιγμα πόρτας</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Το απομακρυσμένο άνοιγμα δεν είναι διαθέσιμο αυτήν τη στιγμή.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Παρακαλώ προσπαθήστε ξανά</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Δοκιμάστε ξανά σε {0}</value>
+  </data>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Ο κωδικός του διαμερίσματός σας</value>
+  </data>
+  <data name="InstructionCylinder" xml:space="preserve">
+    <value>## Πώς να ανοίξετε μια πόρτα
+1. Εισαγάγετε τον κωδικό ή ανοίξτε από απόσταση
+(Κάθε κλικ του κουμπιού στο πληκτρολόγιο θα επιβεβαιώνεται από έναν ήχο)
+2. Εάν ανάβει μπλε, γυρίστε το κουμπί
+(Κλειδώστε στη δεξιά πλευρά της πόρτας, στρίψτε αριστερά)
+(Κλειδώστε στην αριστερή πλευρά της πόρτας, στρίψτε δεξιά)
+μέχρι να ακούσετε την κλειδαριά να ανασύρεται.
+3. Ανοίξτε την πόρτα
+
+## Πώς να κλείσετε την πόρτα
+1. Εισάγετε τον κωδικό
+(Κάθε κλικ του κουμπιού στο πληκτρολόγιο θα επιβεβαιώνεται από έναν ήχο)
+2. Εάν ανάβει μπλε, γυρίστε το κουμπί προς την αντίθετη κατεύθυνση
+(Κλειδώστε στη δεξιά πλευρά της πόρτας, στρίψτε δεξιά)
+(Κλειδαριά στην αριστερή πλευρά της πόρτας, στρίψτε αριστερά)
+μέχρι να ακούσετε την κλειδαριά να κλείνει.
+3. Η πόρτα είναι κλειδωμένη.</value>
+  </data>
+  <data name="InstructionPanel" xml:space="preserve">
+    <value>1. Φωτίστε το πληκτρολόγιο πατώντας οποιοδήποτε κουμπί στον πίνακα ή ανοίξτε το από απόσταση.
+2. Εισάγετε τον κωδικό σας
+3. Εάν ανάβει μπλε, ανοίξτε την πόρτα.</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Σημαντικό</value>
+  </data>
+  <data name="LockTypePanel" xml:space="preserve">
+    <value>πάνελ</value>
+  </data>
+  <data name="LockTypeSpinning" xml:space="preserve">
+    <value>Περιστρεφόμενος</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Το απομακρυσμένο άνοιγμα θα είναι διαθέσιμο από τις {0} την ημέρα του check-in.</value>
+  </data>
+  <data name="InstructionOpenTitle" xml:space="preserve">
+    <value>Πώς να ανοίξετε μια πόρτα</value>
+  </data>
+  <data name="InstructionCloseTitle" xml:space="preserve">
+    <value>Πώς να κλείσετε την πόρτα</value>
+  </data>
+  <data name="InstructionCylinderOpen" xml:space="preserve">
+    <value>## Πώς να ανοίξετε - Περιστροφική κλειδαριά
+1. Εισαγάγετε τον κωδικό ή ανοίξτε από απόσταση
+(Κάθε κλικ του κουμπιού στο πληκτρολόγιο θα επιβεβαιώνεται από έναν ήχο)
+2. Εάν ανάβει μπλε, γυρίστε το κουμπί
+(Κλειδώστε στη δεξιά πλευρά της πόρτας, στρίψτε αριστερά)
+(Κλειδώστε στην αριστερή πλευρά της πόρτας, στρίψτε δεξιά)
+μέχρι να ακούσετε την κλειδαριά να ανασύρεται.
+3. Ανοίξτε την πόρτα</value>
+  </data>
+  <data name="InstructionCylinderClose" xml:space="preserve">
+    <value>## Πώς να κλείσετε - Περιστροφική κλειδαριά
+1. Εισάγετε τον κωδικό
+(Κάθε κλικ του κουμπιού στο πληκτρολόγιο θα επιβεβαιώνεται από έναν ήχο)
+2. Εάν ανάβει μπλε, γυρίστε το κουμπί προς την αντίθετη κατεύθυνση
+(Κλειδώστε στη δεξιά πλευρά της πόρτας, στρίψτε δεξιά)
+(Κλειδαριά στην αριστερή πλευρά της πόρτας, στρίψτε αριστερά)
+μέχρι να ακούσετε την κλειδαριά να κλείνει.
+3. Η πόρτα είναι κλειδωμένη.</value>
+  </data>
+  <data name="InstructionPanelOpen" xml:space="preserve">
+    <value>## Πώς να ανοίξετε - Κλείδωμα πίνακα
+1. Φωτίστε το πληκτρολόγιο πατώντας οποιοδήποτε κουμπί στον πίνακα ή ανοίξτε το από απόσταση.
+2. Εισάγετε τον κωδικό σας
+3. Εάν ανάβει μπλε, ανοίξτε την πόρτα.</value>
+  </data>
+  <data name="InstructionPanelClose" xml:space="preserve">
+    <value>## Πώς να κλείσετε - Κλείδωμα πίνακα
+Το μόνο που έχετε να κάνετε είναι να κλείσετε την πόρτα πίσω σας.</value>
+  </data>
+  <data name="InstructionCylinderOpenLabel" xml:space="preserve">
+    <value>Πώς να ανοίξετε - Περιστροφική κλειδαριά</value>
+  </data>
+  <data name="InstructionCylinderCloseLabel" xml:space="preserve">
+    <value>Πώς να κλείσετε - Περιστροφική κλειδαριά</value>
+  </data>
+  <data name="InstructionPanelOpenLabel" xml:space="preserve">
+    <value>Πώς να ανοίξετε - Κλείδωμα πίνακα</value>
+  </data>
+  <data name="InstructionPanelCloseLabel" xml:space="preserve">
+    <value>Πώς να κλείσετε - Κλείδωμα πίνακα</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Προηγούμενοι κωδικοί</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Αρχικός κώδικας</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Δημιουργία νέου κώδικα</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Νέος κωδικός για {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Δημιουργώντας... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Σημαντικό: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Ισχύει από: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Ισχύει μέχρι: {0}</value>
+  </data>
+  <data name="CylinderTopView" xml:space="preserve">
+    <value>Κάτοψη</value>
+  </data>
+  <data name="GenerateAvailableFrom" xml:space="preserve">
+    <value>Η δημιουργία νέου κώδικα θα είναι διαθέσιμη από {0}.</value>
+  </data>
+  <data name="GenerateSameHourBlocked" xml:space="preserve">
+    <value>Ο κωδικός έχει ήδη δημιουργηθεί αυτή την ώρα. Η επόμενη γενιά θα είναι δυνατή από {0}.</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Ένας νέος κωδικός πρόσβασης δημιουργήθηκε με επιτυχία.</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Η κράτησή σας έληξε. Το απομακρυσμένο άνοιγμα δεν είναι πλέον διαθέσιμο.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Η κράτησή σας έληξε. Το συνθηματικό δεν είναι πλέον διαθέσιμο.</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Ανοιχτό διαμέρισμα</value>
+  </data>
+</root>

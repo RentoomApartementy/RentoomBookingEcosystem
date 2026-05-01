@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceite</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Aprovar</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Número de adultos</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Mal podemos esperar!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Alterar dados de convidados</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Check-out</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Número de filhos</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmo</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dias</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Preencha o Formulário de Check-in e aceite os termos e condições para acessar o painel.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Preenchido</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Preencha os dados dos convidados</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Por favor, forneça os detalhes de todas as pessoas que ficarão hospedadas na instituição.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Convidado</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Horário</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Próximo</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Número de telefone</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Seu Painel de Reservas já está disponível!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Cartão de registro</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Dados salvos com sucesso!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Aceito a obrigação de relatar quaisquer danos e comentários no check-in.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Aceito a proibição de fumar produtos de tabaco e cigarros eletrônicos dentro da instalação.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>É proibido organizar eventos e aceitar terceiros que não estejam incluídos na reserva.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>O dia do hotel dura uma hora </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>na chegada até uma hora</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>no dia da partida.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Sobrenome</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>REGULAMENTOS DE ALUGUEL  
+Os Termos e Condições e o Acordo definem os termos e condições para reservar e alugar apartamentos que estão sujeitos ao aluguel pela Rentoom   
+Apartamenty Sp. z o.o. (Proprietário), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 para benefício do Inquilino.  
+1. Reservar ou alugar acomodação equivale a ler e aceitar as disposições dos Termos e Condições e   
+Acordos.  
+2. O tribunal competente para resolver disputas será o Tribunal de Toruń.  
+3. O Proprietário reserva-se o direito de recusar a aceitação de um Hóspede que: não possua um documento válido   
+documento de identidade (ou seja, carteira de identidade ou passaporte) ou não deseja apresentar um documento, está sob influência de álcool ou  
+outros narcóticos, durante sua estadia anterior violou as disposições do Regulamento.  
+4. O Proprietário reserva-se o direito de rescindir imediatamente o contrato com o Hóspede que quebrar o  
+Regulamentos de Aluguel, sem direito de reembolso da taxa de reserva. O convidado será obrigado a fazer isso imediatamente   
+saindo do local.  
+5. O dia do hotel dura das 15h às 11h do dia seguinte.  
+6. No dia da partida, o Inquilino é obrigado a entregar o apartamento até as 11h, caso contrário   
+Uma taxa será adicionada no valor do próximo dia de início + 50%.  
+7. Fumar nos apartamentos é estritamente proibido. Por violar a proibição de fumar dentro do apartamento   
+O inquilino é obrigado a pagar uma taxa adicional de PLN 500 (quinhentos).  
+8. É proibido usar equipamentos elétricos que não façam parte do apartamento e que sejam  
+Risco de incêndio.  
+9. O inquilino é obrigado a fornecer qualquer dano ou mau funcionamento dos equipamentos do apartamento   
+informe o senhorio imediatamente.  
+10. Animais de estimação são permitidos apenas com permissão do proprietário. A taxa de um pet é de PLN 50 para toda a estadia.  
+11. O horário de silêncio no apartamento alugado é entre 22h e 6h. Pessoas   
+Se você não estiver registrado no apartamento, só poderá visitar até as 23h.  
+12. Organizar eventos sociais no apartamento é totalmente proibido. Para organizar o evento   
+O Locatário pagará uma taxa adicional de PLN 5.000 + prejuízos adicionais ao Proprietário   
+Incorrido pelo Proprietário. Todos os danos ao apartamento e prédio alugados são responsabilidade de   
+a pessoa do Inquilino. O inquilino é responsável por todos os danos resultantes da conduta de terceiros que permanecem no  
+com ela no apartamento – convidada para o apartamento/prédio por essa pessoa. Em caso de intervenção da Polícia   
+ou a Guarda Municipal, o Proprietário cobrará do Inquilino uma taxa adicional de PLN 500 (quinhentos zlotys).  
+13. O número de pessoas que ficam no apartamento não deve exceder o número especificado durante a reserva. Enunciado   
+irregularidades nesse aspecto resultam no cálculo de uma taxa adicional de PLN 200 para cada um dos   
+pessoas inscritas para cada noite de estadia.  
+14. Os hóspedes são obrigados a garantir a segurança adequada do apartamento, ou seja, fechar todas as portas completamente   
+entrada e janelas antes de cada uma sair do apartamento e para armazenamento   
+chaves/códigos/controles remotos sem possibilidade de acesso não autorizado a eles.  
+15. O proprietário não se responsabiliza pelos objetos de valor danificados ou perdidos deixados no apartamento.  
+16. Em caso de perda ou destruição da chave do apartamento ou controle remoto da garagem, uma taxa será cobrada em   
+PLN 200 para cada peça.  
+17. A limpeza final está incluída no preço da estadia. No entanto, o Convidado é obrigado a sair depois   
+lavei louça e usava os equipamentos. Essas atividades não são a essência da limpeza final.  
+18. Qualquer limpeza adicional a pedido especial do Proprietário é paga de acordo com o valor da taxa  
+posto de gasolina. Roupas de cama e toalhas são substituídas.  
+19. As taxas de utilidades pagadas pelo proprietário estão incluídas no preço da estadia.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | tel. +48 881 388 001  
+20. O Inquilino é financeiramente responsável por todos os danos/furtos ocorridos no apartamento durante a estadia.  
+21. Por favor, nos informe imediatamente se houver qualquer mal-entendido ou se não houver  
+Satisfeito com nossos serviços. Faremos o possível para investigar o problema a fundo e resolvê-lo.  
+22. O proprietário pode cobrar um depósito de até PLN 1.000 dos hóspedes para reservas, que pode ser devolvido até cinco dias   
+Trabalhe depois do check-out.  
+23. O proprietário tem direito a reivindicar indenização pelo valor das taxas em cada caso  
+adicional.  
+24. O Locatário tem o direito de reclamar do serviço. As reclamações devem ser enviadas por e-mail para: reklamacje@rentoom.pl  
+ou por carta registrada para o endereço de correspondência. Uma resposta será fornecida em até 14 dias após sua entrega.  
+Regulamentos de aluguel em inglês estão disponíveis em www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Ainda há muito para ficar</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Selecione seu horário aproximado de chegada</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Horário de chegada</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Você escolheu o horário</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Selecione todos os consentimentos</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Carregando...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Já aceito</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Obrigatório</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Veja o documento</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Veja os termos e condições completos</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Termos e Condições</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Ainda não sei</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Apenas letras, espaços, hífens e apóstrofos</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Não carreguei os consentimentos. Por favor, tente novamente.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Refazer</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Você pode alterar seus consentimentos opcionais a qualquer momento na página "Sobre a Reserva".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Termos e Condições</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Erro de escrita de dados.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Você não pode acessar esta página.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Termos e Condições e Consentimentos</value>
+  </data>
+</root>

@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Cooperación</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>¿Sobre nosotros y por qué nosotros?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Experiencia
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty es una marca moderna que gestiona alquileres de corta duración en Toruń. Ya hemos sido confiados en nosotros por más de 100 inversores. Gestionamos más de 150 apartamentos y gestionamos más de 7000 reservas al año.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Calidad</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Nos encargamos de todo el proceso: desde la preparación profesional del apartamento y la promoción efectiva, pasando por la gestión dinámica de precios, hasta el servicio al cliente las 24 horas, la limpieza y el servicio técnico. Garantizamos liquidaciones transparentes y total transparencia financiera.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Profesionalidad</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Gracias a la experiencia y a un modelo operativo probado, es posible generar ingresos de hasta el 30% del valor de la propiedad al año*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Innovación</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Además, nuestro Programa de Socios, que ofrece descuentos en restaurantes y atracciones en Toruń, aumenta la atractividad de los apartamentos y afecta su ocupación.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Ventajas de la cooperación
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Inversión sin mantenimiento</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>El servicio que ofrecemos es completo. Puedes dormir tranquilo, trabajamos para ti.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Optimización de ingresos</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Listo para ayudar 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Monitorizamos el mercado de forma continua y ajustamos los precios del alquiler de un piso según tu beneficio.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Garantizamos un servicio a nuestros clientes comunes las 24 horas del día, los siete días de la semana.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Si quieres establecer cooperación, rellena el formulario
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Apellido</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Número de teléfono</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Número de apartamentos</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Distrito de Toruń</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Envía</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Cooperación</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Correo electrónico</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Contenido del mensaje</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Acepto el tratamiento de mis datos personales con el fin de contactar y gestionar la consulta</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Política de privacidad</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Enviando...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Rellena todos los campos del formulario.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Por favor, introduzca una dirección de correo electrónico válida.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Introduce el número correcto de apartamentos.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Acepta tu consentimiento para el tratamiento de datos.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Gracias. El formulario ha sido enviado a Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>No envié el formulario. Por favor, inténtalo de nuevo en un momento.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>El contacto podía salvarse, pero el acuerdo no podía concretarse. Comprueba a Bitrix antes de reenviar.</value>
+  </data>
+</root>

@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Glac leis</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Faomhadh</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Líon na ndaoine fásta</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Ní féidir linn fanacht!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Athraigh sonraí aoi</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Seiceáil isteach</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Seiceáil amach</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Líon na leanaí</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Dearbhaím</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Lean ar aghaidh</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Laethanta</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Comhlánaigh an Fhoirm Seiceála Isteach agus glac leis na téarmaí agus na coinníollacha chun rochtain a fháil ar an bpainéal.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Líonta</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Líon isteach sonraí aoi</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Tabhair sonraí na ndaoine go léir a bheidh ag fanacht san áis le do thoil.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Aoi</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Uaireanta</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Miontuairiscí</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Ainm</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Ar Aghaidh</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Uimhir theileafóin</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Tá do Phainéal Áirithinte ar fáil anois!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Cárta clárúcháin</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Sonraí a shábháil go rathúil!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Glacaim leis an oibleagáid aon damáistí agus tuairimí a thuairisciú ag an tseiceáil isteach.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Glacaim leis an toirmeasc ar tháirgí tobac agus toitíní leictreonacha a chaitheamh taobh istigh den áis.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Tá sé toirmiscthe imeachtaí a eagrú agus glacadh le tríú páirtithe nach bhfuil san áireamh san áirithint.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Maireann lá an óstáin ó uair an chloig </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>ar theacht suas le uair an chloig</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>ar lá imeachta.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Sloinne</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>RIALACHÁIN CÍOSA  
+Sainmhíníonn na Téarmaí agus Coinníollacha agus an Comhaontú na téarmaí agus na coinníollacha maidir le hárasáin a chur in áirithe agus a ligean ar cíos atá faoi réir cíosa ag Rentoom   
+Apartamenty Sp. z o.o. (Tiarna Talún), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 chun tairbhe an Tionónta.  
+1. Is ionann cóiríocht a chur in áirithe nó a ligean ar cíos agus forálacha na dTéarmaí agus Coinníollacha a léamh agus a ghlacadh.   
+Comhaontuithe.  
+2. Is í an Chúirt i Toruń an chúirt inniúil chun díospóidí a réiteach.  
+3. Forchoimeádann an Tiarna Talún an ceart chun diúltú glacadh le hAoi nach bhfuil doiciméad bailí aige:   
+cárta aitheantais (i.e. cárta aitheantais nó pas) nó nach dteastaíonn uait doiciméad a chur i láthair, go bhfuil sé faoi thionchar alcóil nó  
+támhshuanaigh eile, sháraigh sé forálacha na Rialachán.  
+4. Forchoimeádann an Tiarna Talún an ceart chun an conradh leis an Aoi a bhriseann an conradh a fhoirceannadh láithreach  
+Rialacháin Cíosa, gan an ceart chun an táille áirithinte a aisíoc. Beidh ar an aoi láithreach   
+an t-áitreabh a fhágáil.  
+5. Maireann an lá óstáin ó 3:00 p.m. go 11:00 a.m. an lá dár gcionn.  
+6. Ar lá imeachta, tá sé de dhualgas ar an Tionónta an t-árasán a thabhairt ar láimh faoi 11:00 a.m., ar shlí eile   
+Cuirfear táille leis i méid an chéad lá tosaithe eile + 50%.  
+7. Tá cosc dian ar chaitheamh tobac sna hárasáin. As an toirmeasc ar chaitheamh tobac taobh istigh den árasán a shárú   
+Tá sé de dhualgas ar an tionónta táille bhreise de PLN 500 (cúig chéad a íoc).  
+8. Tá sé toirmiscthe trealamh leictreach nach cuid den árasán é a úsáid agus atá  
+Baol dóiteáin.  
+9. Tá sé de dhualgas ar an Tionónta aon damáiste nó mífheidhmiú a dhéanamh ar threalamh an árasáin   
+an Tiarna Talún a chur ar an eolas láithreach.  
+10. Ní cheadaítear peataí ach amháin le cead an tiarna talún. Is é an táille do pheata ná PLN 50 don fanacht iomlán.  
+11. Tá uaireanta ciúin san árasán ar cíos idir 10:00 p.m. agus 6:00 a.m. Daoine   
+Mura bhfuil tú cláraithe san árasán, ní féidir leat cuairt a thabhairt ach go dtí 11:00 p.m.  
+12. Tá cosc iomlán ar imeachtaí sóisialta a eagrú san árasán. Chun an ócáid a eagrú   
+Íocfaidh an Léasaí táille bhreise de PLN 5,000 + caillteanais bhreise leis an Tiarna Talún   
+a thabhóidh an Tiarna Talún. Tá gach damáiste don árasán agus don fhoirgneamh ar cíos freagrach as   
+duine an Tionónta. Tá an tionónta freagrach as gach damáiste a eascraíonn as iompar tríú páirtithe atá ag fanacht sa  
+léi san árasán – thug an duine seo cuireadh isteach san árasán/foirgneamh. Sa chás go ndéanann na Póilíní idirghabháil   
+nó an Garda Bardasach, gearrfaidh an Tiarna Talún táille bhreise PLN 500 (cúig chéad zlotys) ar an Tionónta.  
+13. Níor chóir go mbeadh líon na ndaoine atá ag fanacht san árasán níos mó ná an líon a shonraítear le linn an áirithinte. Ráiteas   
+mar thoradh ar neamhrialtachtaí ina leith sin ríomhtar táille bhreise PLN 200 do gach ceann de na   
+daoine atá cláraithe le haghaidh gach oíche fanachta.  
+14. Tá sé de dhualgas ar aíonna an t-árasán a dhaingniú i gceart, i.e. gach doras a dhúnadh go maith   
+bealach isteach agus fuinneoga sula bhfágann gach duine an t-árasán agus le haghaidh stórála   
+eochracha / cóid / cianrialtáin gan an fhéidearthacht rochtain neamhúdaraithe orthu.  
+15. Níl an tiarna talún freagrach as earraí luachmhara a ndearnadh damáiste dóibh nó a cailleadh atá fágtha san árasán.  
+16. I gcás eochair an árasáin nó cianrialtán an gharáiste a chailleadh/a scriosadh, gearrfar táille i   
+PLN 200 do gach píosa.  
+17. Tá glanadh deiridh san áireamh i bpraghas an fhanachta. Mar sin féin, tá sé de dhualgas ar an Aoi imeacht tar éis   
+miasa nite agus trealamh úsáidte. Ní hiad na gníomhaíochtaí seo croílár an ghlanadh deiridh.  
+18. Íoctar aon ghlanadh breise ar iarratas speisialta an Tiarna Talún de réir mhéid na táille  
+stáisiún seirbhíse. Cuirtear línéadach leapa agus tuáillí in ionad.  
+19. Tá táillí fóntais a sholáthraíonn an Tiarna Talún san áireamh i bpraghas an fhanachta.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | Guthán: +48 881 388 001  
+20. Tá an Tionónta freagrach ó thaobh airgeadais de as gach damáiste / gadaíocht a thabhaítear san árasán le linn an fhanachta.  
+21. Cuir in iúl dúinn láithreach má tharlaíonn aon mhíthuiscint nó mura ndéanann tú  
+sásta lenár seirbhísí. Déanfaimid ár ndícheall an fhadhb a fhiosrú go críochnúil agus í a réiteach.  
+22. Féadfaidh an tiarna talún éarlais suas le PLN 1,000 a ghearradh ó aíonna le haghaidh áirithintí, ar féidir iad a thabhairt ar ais suas le cúig lá   
+obair tar éis seiceáil amach.  
+23. Tá an tiarna talún i dteideal cúiteamh a éileamh i leith méid na dtáillí i ngach cás  
+breise.  
+24. Tá sé de cheart ag an Léasaí gearán a dhéanamh faoin tseirbhís. Ba chóir gearáin a sheoladh trí ríomhphost chuig: reklamacje@rentoom.pl  
+nó trí litir chláraithe chuig an seoladh poist. Cuirfear freagra ar fáil laistigh de 14 lá tar éis é a sheachadadh.  
+Tá rialacháin cíosa i mBéarla ar fáil ag www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Tá go leor fágtha le fanacht</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Roghnaigh d'am teachta thart</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Am sroichte</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Tá an t-am roghnaithe agat</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Roghnaigh gach toiliú</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Á Luchtú...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Glactha cheana féin</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Riachtanach</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Féach ar an gcáipéis</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Féach téarmaí agus coinníollacha iomlána</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Téarmaí agus Coinníollacha</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Níl a fhios agam go fóill</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Litreacha, spásanna, fleiscíní, agus apostrophes amháin</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Theip ar thoilithe a luchtú. Bain triail as arís le do thoil.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Athdhéanamh</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Is féidir leat do thoilithe roghnacha a athrú ag am ar bith ar an leathanach "Maidir le hÁirithint".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Ríomhphost</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Téarmaí &amp; Coinníollacha</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Earráid scríbhneoireachta sonraí.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Ní féidir leat rochtain a fháil ar an leathanach seo.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Téarmaí agus Coinníollacha agus Toilithe</value>
+  </data>
+</root>

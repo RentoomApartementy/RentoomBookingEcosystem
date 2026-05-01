@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Rreth nesh
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Vlerësimi mesatar i apartamentit
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>apartamente për t'u menaxhuar
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Rezervimet e trajtuara
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Të ftuarit e shërbyer
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Histori</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Ne jemi një grup njerëzish që duan të udhëtojnë dhe kanë fituar përvojë në turizëm në tregjet ndërkombëtare. Përveç kësaj, ne kemi të bëjmë me menaxhimin, qiranë, rinovimin dhe tregtimin në tregun e pasurive të paluajtshme për më shumë se 6 vjet. Ne duam t'u ofrojmë përvojën që kemi fituar klientëve dhe mysafirëve tanë, të cilët janë gjithmonë të kënaqur me shërbimet tona.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Misioni</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Ofrimi i shërbimit më të mirë të mundshëm për klientët tanë, si mysafirët ashtu edhe pronarët e apartamenteve. Është veçanërisht e rëndësishme për ne të ruajmë një standard të lartë të shërbimit ndaj klientit dhe të sigurohemi që mysafirët tanë të ndihen si në shtëpinë tonë në apartamentet tona dhe të mund të mbështeten në ndihmën tonë në çdo kohë.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Ekipi ynë
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Vizionar dhe strateg me përvojë në industrinë e pasurive të paluajtshme. Ai ndërtoi Rentoom për të thjeshtuar qiratë afatshkurtra dhe për të automatizuar gjithçka, nga rezervimet deri te menaxhimi i mysafirëve.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Sigurohet që teknologjia Rentoom të jetë e shpejtë, e besueshme dhe e sigurt. Të apasionuar pas automatizimit dhe zgjidhjeve moderne për tregun e qirasë.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Me vëmendje ndaj çdo detaji, ajo koordinon aktivitetet e përditshme. Falë tij, klientët tanë mund të flenë të qetë – gjithçka funksionon në kohë dhe pa asnjë defekt.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Thirrje</value>
+  </data>
+</root>

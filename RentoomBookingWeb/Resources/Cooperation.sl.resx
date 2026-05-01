@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Sodelovanje</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>O nas in zakaj prav mi?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Izkušnje
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty je sodobna blagovna znamka, ki upravlja kratkoročne najeme v Torunju. Zaupalo nam je že več kot 100 vlagateljev. Upravljamo več kot 150 stanovanj in letno obravnavamo več kot 7000 rezervacij.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Kakovost</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Poskrbimo za celoten proces – od profesionalne priprave stanovanja in učinkovite promocije, preko dinamičnega upravljanja cen, do 24-urne storitve za goste, čiščenja in tehnične storitve. Zagotavljamo pregledne poravnave in popolno finančno preglednost.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Profesionalnost</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Zahvaljujoč izkušnjam in preverjenemu poslovnemu modelu je mogoče ustvariti prihodke do 30 % vrednosti nepremičnine na leto*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Inovacije</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Poleg tega naš partnerski program, ki ponuja popuste na restavracije in znamenitosti v Torunju, povečuje privlačnost stanovanj in vpliva na njihovo zasedenost.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Prednosti sodelovanja
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Naložba brez vzdrževanja</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Storitev, ki jo ponujamo, je popolna. Lahko mirno spiš, delamo zate.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Optimizacija dohodka</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Pripravljen pomagati 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Trg spremljamo na tekoči osnovi in prilagajamo cene najema stanovanja vašemu dobičku.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Našim skupnim strankam zagotavljamo storitev 24 ur na dan, sedem dni v tednu.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Če želite vzpostaviti sodelovanje, izpolnite obrazec
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Priimek</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Ime</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefonska številka</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Število stanovanj</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Okrožje Toruń</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Pošlji</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Sodelovanje</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-pošta</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Vsebina sporočila</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Strinjam se z obdelavo svojih osebnih podatkov za namen stika in obravnave povpraševanja</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Politika zasebnosti</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Pošiljam...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Izpolnite vsa polja obrazca.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Prosimo, vnesite veljaven e-poštni naslov.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Vnesite pravilno število stanovanj.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Sprejmite vaše soglasje za obdelavo podatkov.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Hvala. Obrazec je bil poslan Bitrixu.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Obrazec ni uspel poslati. Prosim, poskusite znova čez trenutek.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Stik je bilo mogoče rešiti, a dogovora ni bilo mogoče skleniti. Pred ponovnim pošiljanjem preverite Bitrix.</value>
+  </data>
+</root>

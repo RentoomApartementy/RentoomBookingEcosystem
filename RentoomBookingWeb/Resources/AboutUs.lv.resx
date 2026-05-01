@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Par mums
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Vidējais dzīvokļa vērtējums
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>Dzīvokļi, ko pārvaldīt
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Apstrādātās rezervācijas
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Apkalpotie viesi
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Vēsture</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Mēs esam cilvēku grupa, kas mīl ceļot un ir guvuši pieredzi tūrismā starptautiskajos tirgos. Turklāt vairāk nekā 6 gadus nodarbojamies ar apsaimniekošanu, nomu, renovāciju un tirdzniecību nekustamā īpašuma tirgū. Mēs vēlamies piedāvāt iegūto pieredzi saviem klientiem un viesiem, kuri vienmēr ir apmierināti ar mūsu pakalpojumiem.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Misija</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Nodrošinot vislabāko iespējamo apkalpošanu mūsu klientiem - gan viesiem, gan dzīvokļu īpašniekiem. Mums ir īpaši svarīgi uzturēt augstu klientu apkalpošanas standartu un nodrošināt, lai mūsu viesi mūsu apartamentos justos kā mājās un jebkurā brīdī varētu paļauties uz mūsu palīdzību.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Mūsu komanda
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Vizionārs un stratēģis ar pieredzi nekustamā īpašuma nozarē. Viņš izveidoja Rentoom, lai vienkāršotu īstermiņa nomu un automatizētu visu, sākot no rezervācijām līdz viesu pārvaldībai.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Tas nodrošina, ka Rentoom tehnoloģija ir ātra, uzticama un droša. Aizraušanās ar automatizāciju un mūsdienīgiem risinājumiem nomas tirgum.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Pievēršot uzmanību katrai detaļai, viņa koordinē ikdienas aktivitātes. Pateicoties tam, mūsu klienti var mierīgi gulēt – viss darbojas laikā un bez traucējumiem.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Zvanīt</value>
+  </data>
+</root>

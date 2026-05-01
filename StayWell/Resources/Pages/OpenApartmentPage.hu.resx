@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>A kódod a bejelentkezés napján elérhető lesz {0}-től.</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Ellenőrizem a zár elérhetőségét...</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Megerősítse</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Nyisd meg az ajtókat</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Hiba a leállításkor</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Hibanyitás</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Szerverkapcsolati hiba</value>
+  </data>
+  <data name="HowTo" xml:space="preserve">
+    <value>Hogyan használjuk a zárat</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Nincs kód a zárhoz. Lépj kapcsolatba a támogatással!</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>vagy</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Nyomd meg a nyitáshoz</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Feldolgozás</value>
+  </data>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Távoli ajtónyitás</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Jelenleg a távoli nyitás nem elérhető.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Kérlek, próbáld meg újra</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Próbáld meg újra {0}</value>
+  </data>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>A lakáskódod</value>
+  </data>
+  <data name="InstructionCylinder" xml:space="preserve">
+    <value>## Hogyan nyissunk ajtót
+1. Írja be a kódot vagy nyisd meg távolról
+(Minden gombnyomást a billentyűzeten egy hang erősít meg)
+2. Ha kékben világít, fordítsd el a gombot
+(Zár az ajtó jobb oldalán, fordulj balra)
+(Zár az ajtó bal oldalán, fordulj jobbra)
+Amíg nem hallod, hogy a zár visszahúzódik.
+3. Nyisd ki az ajtót
+
+## Hogyan csukjuk be az ajtót
+1. Írd be a kódot
+(Minden gombnyomást a billentyűzeten egy hang erősít meg)
+2. Ha kéken világít, fordítsd a gombot az ellenkező irányba
+(Zár az ajtó jobb oldalán, fordulj jobbra)
+(Zár az ajtó bal oldalán, fordulj balra)
+Amíg nem hallod a zár bezárulását.
+3. Az ajtó zárva van.</value>
+  </data>
+  <data name="InstructionPanel" xml:space="preserve">
+    <value>1. Világítsd meg a billentyűzetet bármelyik gomb megnyomásával vagy távolról nyitva.
+2. Írd be a kódodat
+3. Ha kékben világít, nyisd ki az ajtót.</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Fontos</value>
+  </data>
+  <data name="LockTypePanel" xml:space="preserve">
+    <value>Panel</value>
+  </data>
+  <data name="LockTypeSpinning" xml:space="preserve">
+    <value>Forgó</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>A távoli nyitás {0}-tól elérhető lesz a bejelentkezés napján.</value>
+  </data>
+  <data name="InstructionOpenTitle" xml:space="preserve">
+    <value>Hogyan nyitunk ajtót</value>
+  </data>
+  <data name="InstructionCloseTitle" xml:space="preserve">
+    <value>Hogyan csukjuk be az ajtót</value>
+  </data>
+  <data name="InstructionCylinderOpen" xml:space="preserve">
+    <value>## Hogyan nyitjuk ki - Forgó zár
+1. Írja be a kódot vagy nyisd meg távolról
+(Minden gombnyomást a billentyűzeten egy hang erősít meg)
+2. Ha kékben világít, fordítsd el a gombot
+(Zár az ajtó jobb oldalán, fordulj balra)
+(Zár az ajtó bal oldalán, fordulj jobbra)
+Amíg nem hallod, hogy a zár visszahúzódik.
+3. Nyisd ki az ajtót</value>
+  </data>
+  <data name="InstructionCylinderClose" xml:space="preserve">
+    <value>## Hogyan zárjuk be - Forgó zár
+1. Írd be a kódot
+(Minden gombnyomást a billentyűzeten egy hang erősít meg)
+2. Ha kéken világít, fordítsd a gombot az ellenkező irányba
+(Zár az ajtó jobb oldalán, fordulj jobbra)
+(Zár az ajtó bal oldalán, fordulj balra)
+Amíg nem hallod a zár bezárulását.
+3. Az ajtó zárva van.</value>
+  </data>
+  <data name="InstructionPanelOpen" xml:space="preserve">
+    <value>## Hogyan nyitjuk ki - Panel zár
+1. Világítsd meg a billentyűzetet bármelyik gomb megnyomásával vagy távolról nyitva.
+2. Írd be a kódodat
+3. Ha kékben világít, nyisd ki az ajtót.</value>
+  </data>
+  <data name="InstructionPanelClose" xml:space="preserve">
+    <value>## Hogyan zárjuk be - Panel zár
+Csak annyit kell tenned, hogy becsukd magad mögött az ajtót.</value>
+  </data>
+  <data name="InstructionCylinderOpenLabel" xml:space="preserve">
+    <value>Hogyan nyitjuk ki – Rotary Lock</value>
+  </data>
+  <data name="InstructionCylinderCloseLabel" xml:space="preserve">
+    <value>Hogyan zárjuk be - Forgó zár</value>
+  </data>
+  <data name="InstructionPanelOpenLabel" xml:space="preserve">
+    <value>Hogyan nyitjuk ki - Panel zár</value>
+  </data>
+  <data name="InstructionPanelCloseLabel" xml:space="preserve">
+    <value>Hogyan zárjuk be - Panel zár</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Korábbi kódok</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Eredeti kód</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Új kód generálása</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Új kód {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Generálni... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Fontos: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Érvényes: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Érvényes: {0}</value>
+  </data>
+  <data name="CylinderTopView" xml:space="preserve">
+    <value>Felülnézet</value>
+  </data>
+  <data name="GenerateAvailableFrom" xml:space="preserve">
+    <value>Az új kód generálása {0}-től lesz elérhető.</value>
+  </data>
+  <data name="GenerateSameHourBlocked" xml:space="preserve">
+    <value>A kódot már ebben az órában generálták. A következő generáció {0}-től lesz lehetséges.</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Sikeresen generáltak egy új jelszót.</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>A foglalásod véget ért. A távoli megnyitás már nem elérhető.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>A foglalásod véget ért. A jelszó már nem elérhető.</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Nyitott lakás</value>
+  </data>
+</root>

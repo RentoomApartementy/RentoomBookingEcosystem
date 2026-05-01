@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Áður en þú færð aðgang að umsókninni þinni, vinsamlegast fylltu út skráningarkortið!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Villa kom upp við vistun gagna. Vinsamlegast reyndu aftur.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Veldu innritunartíma þinn</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Fylltu út gestaupplýsingar</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Halló,</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Fylltu út gestaupplýsingar</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Skráningarkort</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Sláðu inn netfangið þitt</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Vista og halda áfram</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Fylltu út nauðsynlegar upplýsingar.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Netfang</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Breyttu tímanum frá {0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Með því að ýta á hnappinn hér að neðan staðfesti ég réttmæti gagna.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Veldu áætlaðan innritunartíma</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Breyta gestagögnum</value>
+  </data>
+</root>

@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Соработка</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>За нас и зошто ние?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Искуство
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty е модерен бренд кој управува со краткорочни изнајмувања во Торун. Веќе ни веруваат повеќе од 100 инвеститори. Управуваме со над 150 станови и обработуваме над 7000 резервации годишно.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Квалитет</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Ние се грижиме за целиот процес – од професионална подготовка на станот и ефективна промоција, преку динамично управување со цени, до целочасовна услуга за гости, чистење и техничка услуга. Обезбедуваме транспарентни порамнувања и целосна финансиска транспарентност.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Професионализам</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Благодарение на искуството и докажан оперативен модел, можно е да се остварат приходи до 30% од вредноста на имотот годишно*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Иновации</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Дополнително, нашата партнерска програма, која нуди попусти за ресторани и атракции во Торуњ, ја зголемува привлечноста на становите и влијае на нивната пополненост.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Предности на соработката
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Инвестирање без одржување</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Услугата што ја нудиме е комплетна. Можеш мирно да спиеш, ние работиме за тебе.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Оптимизација на приходот</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Подготвен сум да помогнам 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Го следиме пазарот постојано и ги прилагодуваме цените за изнајмување стан според вашата добивка.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Гарантираме услуга на нашите заеднички клиенти во текот на денот, седум дена во неделата.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Ако сакате да воспоставите соработка, пополнете го формуларот
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Презиме</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Име</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Телефонски број</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Број на станови</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Округ Торуњ</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Испрати</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Соработка</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Е-пошта</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Содржина на пораки</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Се согласувам со обработка на моите лични податоци со цел да контактирам и да ја обработам истрагата</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Политика за приватност</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Испраќам...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Пополнете ги сите полиња во формуларот.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Ве молиме внесете валидна е-пошта.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Внесете го точниот број на станови.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Прифатете ја вашата согласност за обработка на податоци.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Благодарам. Формуларот е испратен до Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Не испрати формулар. Ве молам, обидете се повторно за момент.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Контактот можеше да се спаси, но договорот не можеше да се создаде. Проверете го Bitrix пред да го испратите повторно.</value>
+  </data>
+</root>

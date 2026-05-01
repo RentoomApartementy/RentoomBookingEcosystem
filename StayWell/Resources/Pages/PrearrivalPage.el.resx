@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Αποδοχή</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Εγκρίνω</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Αριθμός ενηλίκων</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Ανυπομονούμε!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Αλλαγή δεδομένων επισκέπτη</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Άφιξη</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Αναχώρηση</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Αριθμός παιδιών</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Επιβεβαιώνω</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Συνέχεια</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Ημέρες</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Συμπληρώστε τη Φόρμα Check-in και αποδεχτείτε τους όρους και τις προϋποθέσεις για να αποκτήσετε πρόσβαση στον πίνακα.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Γεμάτο</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Συμπληρώστε τα στοιχεία του επισκέπτη</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Δώστε τα στοιχεία όλων των ατόμων που θα μείνουν στην εγκατάσταση.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Επισκέπτης</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Ωράριο</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Πρακτικά</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Όνομα</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Επόμενο</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Αριθμός τηλεφώνου</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Ο πίνακας κρατήσεών σας είναι πλέον διαθέσιμος!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Κάρτα εγγραφής</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Τα δεδομένα αποθηκεύτηκαν με επιτυχία!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Αποδέχομαι την υποχρέωση να αναφέρω τυχόν ζημιές και σχόλια κατά το check-in.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Αποδέχομαι την απαγόρευση του καπνίσματος προϊόντων καπνού και ηλεκτρονικών τσιγάρων εντός της εγκατάστασης.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Απαγορεύεται η διοργάνωση εκδηλώσεων και η αποδοχή τρίτων που δεν περιλαμβάνονται στην κράτηση.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Η ημέρα του ξενοδοχείου διαρκεί από μία ώρα </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>κατά την άφιξη έως μία ώρα</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>την ημέρα της αναχώρησης.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Επώνυμο</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>ΚΑΝΟΝΙΣΜΟΙ ΕΝΟΙΚΙΑΣΗΣ  
+Οι Όροι και Προϋποθέσεις και η Συμφωνία καθορίζουν τους όρους και τις προϋποθέσεις κράτησης και ενοικίασης διαμερισμάτων που αποτελούν αντικείμενο ενοικίασης από τη Rentoom   
+Apartamenty Sp. z o.o. (Ιδιοκτήτης), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 προς όφελος του Ενοικιαστή.  
+1. Η κράτηση ή η ενοικίαση καταλύματος ισοδυναμεί με ανάγνωση και αποδοχή των διατάξεων των Όρων και Προϋποθέσεων και   
+Συμφωνίες.  
+2. Αρμόδιο δικαστήριο για την επίλυση διαφορών είναι το δικαστήριο του Τορούν.  
+3. Ο Ιδιοκτήτης διατηρεί το δικαίωμα να αρνηθεί να δεχτεί έναν Επισκέπτη που: δεν έχει έγκυρο έγγραφο   
+ταυτότητα (π.χ. ταυτότητα ή διαβατήριο) ή δεν επιθυμεί να προσκομίσει κάποιο έγγραφο, είναι υπό την επήρεια αλκοόλ ή  
+άλλα ναρκωτικά, κατά την προηγούμενη παραμονή του παραβίασε τις διατάξεις των Κανονισμών.  
+4. Ο Ιδιοκτήτης διατηρεί το δικαίωμα να καταγγείλει αμέσως τη σύμβαση με τον Επισκέπτη που παραβιάζει το  
+Κανονισμοί Ενοικίασης, χωρίς δικαίωμα επιστροφής του τέλους κράτησης. Ο επισκέπτης θα πρέπει να   
+εξόδου από τις εγκαταστάσεις.  
+5. Η ημέρα του ξενοδοχείου διαρκεί από τις 3:00 μ.μ. έως τις 11:00 π.μ. της επόμενης ημέρας.  
+6. Την ημέρα της αναχώρησης, ο Ενοικιαστής υποχρεούται να παραδώσει το διαμέρισμα μέχρι τις 11:00 π.μ., διαφορετικά   
+Θα προστεθεί χρέωση στο ποσό της επόμενης ημέρας έναρξης + 50%.  
+7. Το κάπνισμα στα διαμερίσματα απαγορεύεται αυστηρά. Για παραβίαση της απαγόρευσης καπνίσματος εντός του διαμερίσματος   
+Ο ενοικιαστής υποχρεούται να πληρώσει επιπλέον τέλος 500 PLN (πεντακόσια).  
+8. Απαγορεύεται η χρήση ηλεκτρικού εξοπλισμού που δεν αποτελεί μέρος του διαμερίσματος και είναι  
+κίνδυνος πυρκαγιάς.  
+9. Ο Ενοικιαστής υποχρεούται να παρέχει οποιαδήποτε βλάβη ή δυσλειτουργία του εξοπλισμού του διαμερίσματος   
+ενημερώστε αμέσως τον ιδιοκτήτη.  
+10. Τα κατοικίδια επιτρέπονται μόνο με την άδεια του ιδιοκτήτη. Η χρέωση για ένα κατοικίδιο είναι 50 PLN για ολόκληρη τη διαμονή.  
+11. Οι ώρες ησυχίας στο ενοικιαζόμενο διαμέρισμα είναι μεταξύ 10:00 μ.μ. και 6:00 π.μ. Άνθρωποι   
+Εάν δεν είστε εγγεγραμμένοι στο διαμέρισμα, μπορείτε να το επισκεφτείτε μόνο μέχρι τις 11:00 μ.μ.  
+12. Απαγορεύεται εντελώς η διοργάνωση κοινωνικών εκδηλώσεων στο διαμέρισμα. Για τη διοργάνωση της εκδήλωσης   
+Ο Μισθωτής θα καταβάλει επιπλέον τέλος 5.000 PLN + πρόσθετες ζημίες στον Ιδιοκτήτη   
+που επιβαρύνει τον ιδιοκτήτη. Όλες οι ζημιές στο ενοικιαζόμενο διαμέρισμα και το κτίριο βαρύνουν   
+το πρόσωπο του Ενοικιαστή. Ο ενοικιαστής είναι υπεύθυνος για όλες τις ζημιές που προκύπτουν από τη συμπεριφορά τρίτων που διαμένουν στο  
+μαζί της στο διαμέρισμα – προσκεκλημένος στο διαμέρισμα/κτίριο από αυτό το άτομο. Σε περίπτωση επέμβασης της Αστυνομίας   
+ή τη Δημοτική Φρουρά, ο Ιδιοκτήτης θα χρεώσει στον Ενοικιαστή επιπλέον χρέωση 500 PLN (πεντακόσια ζλότι).  
+13. Ο αριθμός των ατόμων που διαμένουν στο διαμέρισμα δεν πρέπει να υπερβαίνει τον αριθμό που καθορίζεται κατά την κράτηση. Δήλωση   
+παρατυπιών στο πλαίσιο αυτό έχει ως αποτέλεσμα τον υπολογισμό πρόσθετου τέλους 200 PLN για καθένα από τα   
+άτομα που έχουν εγγραφεί για κάθε διανυκτέρευση.  
+14. Οι επισκέπτες είναι υποχρεωμένοι να ασφαλίσουν σωστά το διαμέρισμα, δηλαδή να κλείσουν καλά όλες τις πόρτες   
+είσοδο και παράθυρα πριν από την έξοδο του καθενός από το διαμέρισμα και για αποθήκευση   
+κλειδιά/κωδικούς/τηλεχειριστήρια χωρίς δυνατότητα μη εξουσιοδοτημένης πρόσβασης σε αυτά.  
+15. Ο ιδιοκτήτης δεν ευθύνεται για κατεστραμμένα ή χαμένα τιμαλφή που έχουν μείνει στο διαμέρισμα.  
+16. Σε περίπτωση απώλειας/καταστροφής του κλειδιού του διαμερίσματος ή του τηλεχειριστηρίου του γκαράζ, θα χρεωθεί ένα τέλος   
+200 PLN για κάθε κομμάτι.  
+17. Ο τελικός καθαρισμός περιλαμβάνεται στην τιμή της διαμονής. Ωστόσο, ο Επισκέπτης είναι υποχρεωμένος να αποχωρήσει μετά   
+πλυμένα πιάτα και χρησιμοποιημένος εξοπλισμός. Αυτές οι δραστηριότητες δεν είναι η ουσία του τελικού καθαρισμού.  
+18. Οποιοσδήποτε επιπλέον καθαρισμός κατόπιν ειδικού αιτήματος του Ιδιοκτήτη πληρώνεται σύμφωνα με το ποσό του τέλους  
+πρατήριο καυσίμων. Τα κλινοσκεπάσματα και οι πετσέτες αντικαθίστανται.  
+19. Τα τέλη κοινής ωφέλειας που παρέχονται από τον ιδιοκτήτη περιλαμβάνονται στην τιμή της διαμονής.
+Rentoom Apartamenty Sp. z o.o.  
+Ουλ. Szymańskiego 1B, 87-100 Τορούν  
+www.rentoom.pl | τηλ. +48 881 388 001  
+20. Ο ενοικιαστής είναι οικονομικά υπεύθυνος για όλες τις ζημιές/κλοπές που προκλήθηκαν στο διαμέρισμα κατά τη διάρκεια της διαμονής.  
+21. Ενημερώστε μας αμέσως εάν υπάρχει οποιαδήποτε παρεξήγηση ή εάν δεν  
+ικανοποιημένοι από τις υπηρεσίες μας. Θα κάνουμε ό,τι καλύτερο μπορούμε για να διερευνήσουμε διεξοδικά το πρόβλημα και να το επιλύσουμε.  
+22. Ο ιδιοκτήτης μπορεί να χρεώσει προκαταβολή έως και 1.000 PLN από τους επισκέπτες για κρατήσεις, η οποία μπορεί να επιστραφεί έως και πέντε ημέρες   
+εργασία μετά το check-out.  
+23. Ο εκμισθωτής δικαιούται να ζητήσει αποζημίωση για το ποσό των τελών σε κάθε περίπτωση  
+πρόσθετος.  
+24. Ο Μισθωτής έχει το δικαίωμα να παραπονεθεί για την υπηρεσία. Τα παράπονα πρέπει να υποβάλλονται μέσω ηλεκτρονικού ταχυδρομείου στη διεύθυνση: reklamacje@rentoom.pl  
+ή με συστημένη επιστολή στην ταχυδρομική διεύθυνση. Η απάντηση θα δοθεί εντός 14 ημερών από την παράδοσή της.  
+Οι κανονισμοί ενοικίασης στα αγγλικά είναι διαθέσιμοι στη διεύθυνση www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Απομένουν πολλά για να μείνουν</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Επιλέξτε την κατά προσέγγιση ώρα άφιξής σας</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Ώρα άφιξης</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Έχετε επιλέξει την ώρα</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Επιλογή όλων των συναινέσεων</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Φόρτωση...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Έχει ήδη γίνει αποδεκτό</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Απαιτείται</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Προβολή του εγγράφου</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Δείτε τους πλήρεις όρους και προϋποθέσεις</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Όροι και Προϋποθέσεις</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Δεν ξέρω ακόμα</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Μόνο γράμματα, κενά, παύλες και απόστροφοι</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Αποτυχία φόρτωσης συναινέσεων. Παρακαλώ προσπαθήστε ξανά.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Επανάληψη</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Μπορείτε να αλλάξετε τις προαιρετικές συναινέσεις σας ανά πάσα στιγμή στη σελίδα «Σχετικά με την κράτηση».</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>ΗΛΕΚΤΡΟΝΙΚΗ ΔΙΕΥΘΥΝΣΗ</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Όροι &amp; Προϋποθέσεις</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Σφάλμα εγγραφής δεδομένων.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Δεν μπορείτε να αποκτήσετε πρόσβαση σε αυτήν τη σελίδα.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Όροι και Προϋποθέσεις και Συναινέσεις</value>
+  </data>
+</root>

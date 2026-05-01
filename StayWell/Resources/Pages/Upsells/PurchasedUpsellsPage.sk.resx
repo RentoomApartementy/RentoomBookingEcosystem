@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PurchasedUpsellsPageTitle" xml:space="preserve">
+    <value>Moje poukazy</value>
+  </data>
+  <data name="WaitingForPaymentConfirmation" xml:space="preserve">
+    <value>Čakám na potvrdenie platby...</value>
+  </data>
+  <data name="TokenMissingError" xml:space="preserve">
+    <value>Žiadny žetón.</value>
+  </data>
+  <data name="UpsellPaymentRedirectTitle" xml:space="preserve">
+    <value>Doplnkové presmerovanie platieb</value>
+  </data>
+  <data name="SelectedUpsellsSummaryTitle" xml:space="preserve">
+    <value>Zhrnutie vybraných doplnkov</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Načítavam...</value>
+  </data>
+  <data name="PaymentErrorTitle" xml:space="preserve">
+    <value>Chyba pri platbe</value>
+  </data>
+</root>

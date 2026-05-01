@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Il-kodiċi tiegħek se jkun disponibbli mill-{0} fil-jum tal-check-in.</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Qed niċċekkja d-disponibbiltà tal-għeluq...</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Ikkonferma</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Bibien miftuħa</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Żball meta tintefa'</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Ftuħ ta' żball</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Żball ta' konnessjoni tas-server</value>
+  </data>
+  <data name="HowTo" xml:space="preserve">
+    <value>Kif tuża l-lock</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>L-ebda kodiċi għall-lock. Ikkuntattja l-appoġġ!</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>jew</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Press biex tiftaħ</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Ipproċessar</value>
+  </data>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Ftuħ ta' bieb remot</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Il-ftuħ mill-bogħod bħalissa mhuwiex disponibbli.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Jekk jogħġbok ipprova mill-ġdid</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Ipprova mill-ġdid f'{0}</value>
+  </data>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Il-kodiċi tal-appartament tiegħek</value>
+  </data>
+  <data name="InstructionCylinder" xml:space="preserve">
+    <value>## Kif tiftaħ bieb
+1. Daħħal il-kodiċi jew iftaħ remotament
+(Kull klikk tal-buttuna fuq it-tastiera jiġi kkonfermat b'ħoss)
+2. Jekk jixgħel blu, iddawwar il-knob
+(Serratura fuq in-naħa tal-lemin tal-bieb, idur ix-xellug)
+(Serratura fuq in-naħa tax-xellug tal-bieb, idur lejn il-lemin)
+Sakemm tisma' l-lock jirtira.
+3. Iftaħ il-bieb
+
+## Kif tagħlaq il-bieb
+1. Daħħal il-kodiċi
+(Kull klikk tal-buttuna fuq it-tastiera jiġi kkonfermat b'ħoss)
+2. Jekk tixgħel blu, iddawwar il-knob fid-direzzjoni opposta
+(Serratura fuq in-naħa tal-lemin tal-bieb, idur lemin)
+(Serratura fuq in-naħa tax-xellug tal-bieb, idur ix-xellug)
+sakemm tisma' l-lock jingħalaq.
+3. Il-bieb huwa magħluq.</value>
+  </data>
+  <data name="InstructionPanel" xml:space="preserve">
+    <value>1. Iddawwal it-tastiera billi tagħfas kwalunkwe buttuna fuq il-pannell jew tiftaħ remotament.
+2. Daħħal il-kodiċi tiegħek
+3. Jekk tixgħel blu, iftaħ il-bieb.</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Importanti</value>
+  </data>
+  <data name="LockTypePanel" xml:space="preserve">
+    <value>Pannell</value>
+  </data>
+  <data name="LockTypeSpinning" xml:space="preserve">
+    <value>Rotazzjoni</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Il-ftuħ mill-bogħod se jkun disponibbli mill-{0} fil-jum tal-check-in.</value>
+  </data>
+  <data name="InstructionOpenTitle" xml:space="preserve">
+    <value>Kif tiftaħ bieb</value>
+  </data>
+  <data name="InstructionCloseTitle" xml:space="preserve">
+    <value>Kif tagħlaq il-bieb</value>
+  </data>
+  <data name="InstructionCylinderOpen" xml:space="preserve">
+    <value>## Kif tiftaħ - Serratura Rotatorja
+1. Daħħal il-kodiċi jew iftaħ remotament
+(Kull klikk tal-buttuna fuq it-tastiera jiġi kkonfermat b'ħoss)
+2. Jekk jixgħel blu, iddawwar il-knob
+(Serratura fuq in-naħa tal-lemin tal-bieb, idur ix-xellug)
+(Serratura fuq in-naħa tax-xellug tal-bieb, idur lejn il-lemin)
+Sakemm tisma' l-lock jirtira.
+3. Iftaħ il-bieb</value>
+  </data>
+  <data name="InstructionCylinderClose" xml:space="preserve">
+    <value>## Kif tagħlaq - Serratura rotatorja
+1. Daħħal il-kodiċi
+(Kull klikk tal-buttuna fuq it-tastiera jiġi kkonfermat b'ħoss)
+2. Jekk tixgħel blu, iddawwar il-knob fid-direzzjoni opposta
+(Serratura fuq in-naħa tal-lemin tal-bieb, idur lemin)
+(Serratura fuq in-naħa tax-xellug tal-bieb, idur ix-xellug)
+sakemm tisma' l-lock jingħalaq.
+3. Il-bieb huwa magħluq.</value>
+  </data>
+  <data name="InstructionPanelOpen" xml:space="preserve">
+    <value>## Kif tiftaħ - Lock tal-panel
+1. Iddawwal it-tastiera billi tagħfas kwalunkwe buttuna fuq il-pannell jew tiftaħ remotament.
+2. Daħħal il-kodiċi tiegħek
+3. Jekk tixgħel blu, iftaħ il-bieb.</value>
+  </data>
+  <data name="InstructionPanelClose" xml:space="preserve">
+    <value>## Kif tagħlaq - Lock tal-panel
+Dak kollu li trid tagħmel hu li tagħlaq il-bieb warajk.</value>
+  </data>
+  <data name="InstructionCylinderOpenLabel" xml:space="preserve">
+    <value>Kif tiftaħ - Serratura Rotatorja</value>
+  </data>
+  <data name="InstructionCylinderCloseLabel" xml:space="preserve">
+    <value>Kif tagħlaq - Lock rotatorju</value>
+  </data>
+  <data name="InstructionPanelOpenLabel" xml:space="preserve">
+    <value>Kif tiftaħ - Lock tal-panel</value>
+  </data>
+  <data name="InstructionPanelCloseLabel" xml:space="preserve">
+    <value>Kif tagħlaq - Lock tal-Pannell</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Kodiċijiet preċedenti</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Kodiċi oriġinali</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Ġenera Kodiċi Ġdid</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Kodiċi ġdid għall-{0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Jiġġenera... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Importanti: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Validu minn: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Validu sakemm: {0}</value>
+  </data>
+  <data name="CylinderTopView" xml:space="preserve">
+    <value>Veduta ta' fuq</value>
+  </data>
+  <data name="GenerateAvailableFrom" xml:space="preserve">
+    <value>Il-ġenerazzjoni ta' kodiċi ġdid se tkun disponibbli minn {0}.</value>
+  </data>
+  <data name="GenerateSameHourBlocked" xml:space="preserve">
+    <value>Il-kodiċi diġà ġie ġġenerat f'dan il-ħin. Il-ġenerazzjoni li jmiss se tkun possibbli minn {0}.</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Kodiċi ġdid ġie ġġenerat b'suċċess.</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Il-booking tiegħek spiċċa. Il-ftuħ mill-bogħod m'għadux disponibbli.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Il-booking tiegħek spiċċa. Il-kodiċi ta' aċċess m'għadux disponibbli.</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Appartament miftuħ</value>
+  </data>
+</root>

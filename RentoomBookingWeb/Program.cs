@@ -24,6 +24,7 @@ using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
+using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb
@@ -198,9 +199,9 @@ namespace RentoomBookingWeb
 
             var app = builder.Build();
             
-            var supportedCultures = new[] { "en-US", "pl-PL" };
+            var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames.ToArray();
             var localizationOptions = new RequestLocalizationOptions()
-                .SetDefaultCulture(supportedCultures[0])
+                .SetDefaultCulture(SupportedLanguagesProvider.DefaultCultureName)
                 .AddSupportedCultures(supportedCultures)
                 .AddSupportedUICultures(supportedCultures);
 

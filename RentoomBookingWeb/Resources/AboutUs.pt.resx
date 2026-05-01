@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Sobre nós
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Avaliação média de apartamentos
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>Apartamentos para administrar
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Reservas Resolvidas
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Convidados atendidos
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>História</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Somos um grupo de pessoas que amam viajar e adquiriram experiência em turismo em mercados internacionais. Além disso, estamos lidando com gestão, aluguel, reforma e negociação no mercado imobiliário há mais de 6 anos. Queremos oferecer a experiência que adquirimos aos nossos clientes e hóspedes, que estão sempre satisfeitos com nossos serviços.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Missão</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Oferecendo o melhor serviço possível aos nossos clientes, tanto hóspedes quanto proprietários de apartamentos. É especialmente importante manter um alto padrão de atendimento ao cliente e garantir que nossos hóspedes se sintam em casa em nossos apartamentos e possam contar com nossa ajuda a qualquer momento.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Nossa equipe
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Visionário e estrategista com experiência no setor imobiliário. Ele construiu a Rentoom para simplificar aluguéis de curto prazo e automatizar tudo, desde reservas até gestão de hóspedes.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Ele garante que a tecnologia Rentoom seja rápida, confiável e segura. Apaixonado por automação e soluções modernas para o mercado de aluguel.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Com atenção a cada detalhe, ela coordena as atividades diárias. Graças a ele, nossos clientes podem dormir tranquilos – tudo funciona no horário e sem falhas.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Chamada</value>
+  </data>
+</root>

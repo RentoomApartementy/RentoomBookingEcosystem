@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Name" xml:space="preserve">
+    <value>Vārds</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Uzvārds</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Pilsēta</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adrese</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Pasta indekss</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-pasts</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Tālruņa numurs</value>
+  </data>
+  <data name="IsInvoiceText" xml:space="preserve">
+    <value>Es vēlos saņemt rēķinu</value>
+  </data>
+  <data name="IsSaveInfoText" xml:space="preserve">
+    <value>Saglabāt manu informāciju turpmākiem darījumiem</value>
+  </data>
+  <data name="ClickToDownloadInfo" xml:space="preserve">
+    <value>Noklikšķiniet, lai lejupielādētu informāciju pēc NIP</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Uzņēmuma nosaukums</value>
+  </data>
+  <data name="ClientInfoButton" xml:space="preserve">
+    <value>Doties uz kopsavilkumu</value>
+  </data>
+  <data name="ClientInfoButtonLoading" xml:space="preserve">
+    <value>Ietaupījums...</value>
+  </data>
+  <data name="ClientInfoTitle" xml:space="preserve">
+    <value>Pamatinformācija</value>
+  </data>
+  <data name="ClientInfoSubtitle" xml:space="preserve">
+    <value>Aizpildiet informāciju</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Jūsu uzturēšanās</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Uz</value>
+  </data>
+  <data name="SummaryText" xml:space="preserve">
+    <value>Kopsavilkums</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Naktis</value>
+  </data>
+  <data name="SummaryLoadingText" xml:space="preserve">
+    <value>Ielādes kopsavilkums</value>
+  </data>
+  <data name="ReservationSummary" xml:space="preserve">
+    <value>Rezervācijas kopsavilkums</value>
+  </data>
+  <data name="SummaryDetailsText" xml:space="preserve">
+    <value>Pārbaudiet rezervācijas informāciju</value>
+  </data>
+  <data name="ReservationPaid" xml:space="preserve">
+    <value>Rezervācija apmaksāta</value>
+  </data>
+  <data name="ReservationPaidInfo" xml:space="preserve">
+    <value>Jūsu rezervācija ir apstiprināta un apmaksāta.</value>
+  </data>
+  <data name="GoToStayWell" xml:space="preserve">
+    <value>Pārbaudiet savu e-pastu un turpiniet vietnē StayWell</value>
+  </data>
+  <data name="ReservationPending" xml:space="preserve">
+    <value>Maksājuma laikā</value>
+  </data>
+  <data name="ReservationPendingInfo" xml:space="preserve">
+    <value>Jūsu rezervācija ir apstiprināta, bet vēl nav apmaksāta</value>
+  </data>
+  <data name="ClickToPay" xml:space="preserve">
+    <value>Noklikšķiniet, lai samaksātu par rezervācijām</value>
+  </data>
+  <data name="ReservationDanger" xml:space="preserve">
+    <value>Nav apstiprinājuma</value>
+  </data>
+  <data name="ReservationDangerInfo" xml:space="preserve">
+    <value>Jūsu rezervācija vēl nav apstiprināta</value>
+  </data>
+  <data name="NameLastName" xml:space="preserve">
+    <value>Vārds un uzvārds</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Rediģēt</value>
+  </data>
+  <data name="ReservationDetails" xml:space="preserve">
+    <value>Rezervācijas informācija</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Reģistrēšanās</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Izrakstīšanās</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Viesi</value>
+  </data>
+  <data name="ConfirmationNumber" xml:space="preserve">
+    <value>Rezervācijas numurs</value>
+  </data>
+  <data name="PaymentSuccessful" xml:space="preserve">
+    <value>Maksājums veiksmīgs!</value>
+  </data>
+  <data name="PaymentSuccessfulText" xml:space="preserve">
+    <value>Jūsu dzīvoklis ir veiksmīgi rezervēts</value>
+  </data>
+  <data name="BackToSummary" xml:space="preserve">
+    <value>Atpakaļ uz kopsavilkumu</value>
+  </data>
+  <data name="ConfimationSendToMail" xml:space="preserve">
+    <value>Apstiprinājums nosūtīts uz e-pastu</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Summa</value>
+  </data>
+  <data name="PaymentFailed" xml:space="preserve">
+    <value>Maksājums neizdevās
+
+</value>
+  </data>
+  <data name="PaymentFailedText" xml:space="preserve">
+    <value>Jūsu dzīvoklis nav rezervēts</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Lūdzu, mēģiniet vēlreiz</value>
+  </data>
+  <data name="WaitingPayment" xml:space="preserve">
+    <value>Gaida maksājuma apstiprinājumu...
+
+</value>
+  </data>
+  <data name="SomethingWrong" xml:space="preserve">
+    <value>Ups! Kaut kas nogāja greizi</value>
+  </data>
+  <data name="RedirectingToPayment" xml:space="preserve">
+    <value>Novirzīšana uz maksājumu...</value>
+  </data>
+  <data name="RedirectToPaymentText" xml:space="preserve">
+    <value>Jūs gatavojaties nogādāt drošā maksājumu sistēmā</value>
+  </data>
+  <data name="NotRefreshPage" xml:space="preserve">
+    <value>Lūdzu, neatsvaidziniet lapu</value>
+  </data>
+  <data name="CheckEmailText" xml:space="preserve">
+    <value>Tiek pārbaudīts e-pasts...</value>
+  </data>
+  <data name="SendMailText" xml:space="preserve">
+    <value>E-pasts nosūtīts</value>
+  </data>
+  <data name="ConfirmationWill" xml:space="preserve">
+    <value>Apstiprinājums tiks nosūtīts uz:</value>
+  </data>
+  <data name="ConfirmationHasBeenSent" xml:space="preserve">
+    <value>Apstiprinājums tika nosūtīts uz:</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Ielāde ...</value>
+  </data>
+  <data name="NoGusInfo" xml:space="preserve">
+    <value>Dati par norādīto nodokļu identifikācijas numuru netika atrasti.</value>
+  </data>
+  <data name="GusError" xml:space="preserve">
+    <value>Kļūda, lejupielādējot datus no Centrālā statistikas biroja</value>
+  </data>
+  <data name="NoNipError" xml:space="preserve">
+    <value>Lūdzu, ievadiet savu NIP numuru</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Apgabala kods</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Obligāti</value>
+  </data>
+  <data name="FillAllDataError" xml:space="preserve">
+    <value>Aizpildiet informāciju</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Nepareizs e-pasts</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupText" xml:space="preserve">
+    <value>Skenējiet QR kodu, lai dotos uz Staywell </value>
+  </data>
+  <data name="StaywellPopupTitle" xml:space="preserve">
+    <value>Pārvaldiet savu rezervāciju vietnē StayWell</value>
+  </data>
+  <data name="StaywellPopupDescription" xml:space="preserve">
+    <value>Skenējiet QR kodu, lai uzreiz atvērtu StayWell informācijas paneli, kas piešķirts šai rezervācijai. Informācijas panelī varat pārbaudīt informāciju par uzturēšanos, organizatorisko informāciju, papildu pakalpojumu statusu un svarīgākos ziņojumus.</value>
+  </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Atveriet šīs rezervācijas StayWell informācijas paneli. Informācijas panelī varat pārbaudīt informāciju par uzturēšanos, organizatorisko informāciju, papildu pakalpojumu statusu un svarīgākos ziņojumus.</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
+    <value>Dodieties uz StayWell tieši</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Atlasīt visas piekrišanas</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Aizpildiet informāciju</value>
+  </data>
+  <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
+    <value>Rēķins</value>
+  </data>
+  <data name="InvoiceYes" xml:space="preserve">
+    <value>Jā</value>
+  </data>
+  <data name="InvoiceNo" xml:space="preserve">
+    <value>Nē</value>
+  </data>
+  <data name="FailPageTitle" xml:space="preserve">
+    <value>Rentoom - Maksājuma verifikācija</value>
+  </data>
+  <data name="PaymentReturnCheckingTitle" xml:space="preserve">
+    <value>Mēs pārbaudām jūsu maksājuma statusu</value>
+  </data>
+  <data name="PaymentReturnPendingBannerTitle" xml:space="preserve">
+    <value>Mēs vēl neesam apstiprinājuši maksājumu</value>
+  </data>
+  <data name="StaywellPopupAriaLabel" xml:space="preserve">
+    <value>Informācija par StayWell</value>
+  </data>
+  <data name="PaymentReturnFailedBannerMessage" xml:space="preserve">
+    <value>Varat atkārtoti mēģināt veikt maksājumu, izmantojot šo kopsavilkumu. Ja banka jau ir izņemusi līdzekļus, uzgaidiet brīdi, pirms mēģiniet vēlreiz.</value>
+  </data>
+  <data name="SummaryPageTitle" xml:space="preserve">
+    <value>Rentoom - rezervācijas kopsavilkums</value>
+  </data>
+  <data name="TpayMockCancelButton" xml:space="preserve">
+    <value>Atcelt</value>
+  </data>
+  <data name="CancelActionSeparatorText" xml:space="preserve">
+    <value>vai</value>
+  </data>
+  <data name="TpayMockReservationLabel" xml:space="preserve">
+    <value>Rezervācija</value>
+  </data>
+  <data name="PaymentReturnVerificationError" xml:space="preserve">
+    <value>Maksājuma statusu nevarēja automātiski pārbaudīt. Atgriezieties kopsavilkumā un mēģiniet vēlreiz.</value>
+  </data>
+  <data name="SuccessPageTitle" xml:space="preserve">
+    <value>Rentoom - apmaksāts</value>
+  </data>
+  <data name="PaymentPageTitle" xml:space="preserve">
+    <value>Rentoom - Apmaksājiet rezervāciju</value>
+  </data>
+  <data name="StaywellButtonText" xml:space="preserve">
+    <value>Noklikšķiniet, lai pārvaldītu savu rezervāciju vietnē Rentoom StayWell</value>
+  </data>
+  <data name="MessageSentDescription" xml:space="preserve">
+    <value>Mēs nosūtījām apstiprinājumu {0} un WhatsApp.</value>
+  </data>
+  <data name="PaymentReturnPendingMessage" xml:space="preserve">
+    <value>Mums joprojām nav galīgā apstiprinājuma. Pēc brīža tiksiet novirzīts atpakaļ uz kopsavilkumu, kurā, ja nepieciešams, varēsiet droši atkārtoti mēģināt veikt maksājumu.</value>
+  </data>
+  <data name="EmailDeliveryPendingTitle" xml:space="preserve">
+    <value>Mēs nosūtām ziņu</value>
+  </data>
+  <data name="SummaryBuildError" xml:space="preserve">
+    <value>Nebija iespējams izveidot kopsavilkumu.</value>
+  </data>
+  <data name="TpayMockMissingReservation" xml:space="preserve">
+    <value>URL trūkst rezervācijas ID.</value>
+  </data>
+  <data name="EmailStatusFetchError" xml:space="preserve">
+    <value>E-pasta statusu nevarēja pārbaudīt.</value>
+  </data>
+  <data name="FailIconAlt" xml:space="preserve">
+    <value>brīdinājuma ikona</value>
+  </data>
+  <data name="TpayMockPaymentSessionLabel" xml:space="preserve">
+    <value>Maksājumu sesija</value>
+  </data>
+  <data name="PaymentReturnWaitingTitle" xml:space="preserve">
+    <value>Mēs gaidām maksājuma apstiprinājumu</value>
+  </data>
+  <data name="CancelReservationInProgressText" xml:space="preserve">
+    <value>Atcelšana...</value>
+  </data>
+  <data name="PaymentStatusFetchError" xml:space="preserve">
+    <value>Neizdevās izgūt maksājuma statusu.</value>
+  </data>
+  <data name="SummarySaveTermsError" xml:space="preserve">
+    <value>Saglabājot piekrišanas, radās kļūda. Lūdzu, mēģiniet vēlreiz.</value>
+  </data>
+  <data name="TpayMockPayButton" xml:space="preserve">
+    <value>Maksāt</value>
+  </data>
+  <data name="EmailDeliveryPendingMessage" xml:space="preserve">
+    <value>Mēs nosūtām apstiprinājumu {0} un WhatsApp.</value>
+  </data>
+  <data name="ClientInfoNipLabel" xml:space="preserve">
+    <value>NIP</value>
+  </data>
+  <data name="PaymentVerificationError" xml:space="preserve">
+    <value>Maksājumu nevarēja apstiprināt.</value>
+  </data>
+  <data name="StaywellPopupCloseAriaLabel" xml:space="preserve">
+    <value>Aizvērt uznirstošo logu StayWell</value>
+  </data>
+  <data name="ClientInfoSaveError" xml:space="preserve">
+    <value>Neizdevās saglabāt klientu datus.</value>
+  </data>
+  <data name="TpayMockPageTitle" xml:space="preserve">
+    <value>Izdomāt TPAY</value>
+  </data>
+  <data name="ClientInfoPageTitle" xml:space="preserve">
+    <value>Rentoom rezervācija - Klienta informācija</value>
+  </data>
+  <data name="PaymentReturnWaitingMessage" xml:space="preserve">
+    <value>Maksājumu joprojām var apstrādāt. Mēs to pārbaudām, pirms nosūtām jūs atpakaļ uz rezervācijas kopsavilkumu.</value>
+  </data>
+  <data name="TpayMockHeader" xml:space="preserve">
+    <value>Maksājumu simulācija</value>
+  </data>
+  <data name="MessageSentTitle" xml:space="preserve">
+    <value>Ziņojums ir nosūtīts</value>
+  </data>
+  <data name="PaymentReturnCheckingMessage" xml:space="preserve">
+    <value>Tas ne vienmēr nozīmē neveiksmīgu maksājumu. Pirmkārt, mēs pārbaudām darījuma galīgo statusu.</value>
+  </data>
+  <data name="PaymentReturnPendingTitle" xml:space="preserve">
+    <value>Maksājuma statuss joprojām nav izpildīts</value>
+  </data>
+  <data name="PaymentReturnPendingBannerMessage" xml:space="preserve">
+    <value>Ja līdzekļi ir iekasēti, neveiciet citu maksājumu uzreiz. Lūdzu, pārbaudiet rezervācijas statusu zemāk un mēģiniet vēlreiz tikai tad, ja maksājums joprojām nav apstiprināts.</value>
+  </data>
+  <data name="PaymentInitError" xml:space="preserve">
+    <value>Maksājumu nevarēja uzsākt.</value>
+  </data>
+  <data name="CancelReservationErrorText" xml:space="preserve">
+    <value>Atceļot rezervāciju, radās kļūda. Lūdzu, mēģiniet vēlreiz.</value>
+  </data>
+  <data name="PaymentReturnFailedBannerTitle" xml:space="preserve">
+    <value>Maksājums nav pabeigts</value>
+  </data>
+  <data name="CancelReservationButtonText" xml:space="preserve">
+    <value>Atcelt rezervāciju</value>
+  </data>
+</root>

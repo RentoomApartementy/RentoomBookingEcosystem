@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Name" xml:space="preserve">
+    <value>Isem</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Kunjom</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Belt</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Indirizz</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Kodiċi Postali</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Numru tat-telefon</value>
+  </data>
+  <data name="IsInvoiceText" xml:space="preserve">
+    <value>Nixtieq nirċievi fattura</value>
+  </data>
+  <data name="IsSaveInfoText" xml:space="preserve">
+    <value>Żżel l-informazzjoni tiegħi għal transazzjonijiet futuri</value>
+  </data>
+  <data name="ClickToDownloadInfo" xml:space="preserve">
+    <value>Ikklikkja biex tniżżel informazzjoni minn NIP</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Isem tal-Kumpanija</value>
+  </data>
+  <data name="ClientInfoButton" xml:space="preserve">
+    <value>Mur għas-sommarju</value>
+  </data>
+  <data name="ClientInfoButtonLoading" xml:space="preserve">
+    <value>Issalva...</value>
+  </data>
+  <data name="ClientInfoTitle" xml:space="preserve">
+    <value>Informazzjoni bażika</value>
+  </data>
+  <data name="ClientInfoSubtitle" xml:space="preserve">
+    <value>Imla d-dettalji</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Il-waqfa tiegħek</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Minn</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Għal</value>
+  </data>
+  <data name="SummaryText" xml:space="preserve">
+    <value>Sommarju</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Il-lejl</value>
+  </data>
+  <data name="SummaryLoadingText" xml:space="preserve">
+    <value>Sommarju tat-tagħbija</value>
+  </data>
+  <data name="ReservationSummary" xml:space="preserve">
+    <value>Sommarju tal-Booking</value>
+  </data>
+  <data name="SummaryDetailsText" xml:space="preserve">
+    <value>Iċċekkja d-dettalji tal-booking</value>
+  </data>
+  <data name="ReservationPaid" xml:space="preserve">
+    <value>Riservazzjoni mħallsa</value>
+  </data>
+  <data name="ReservationPaidInfo" xml:space="preserve">
+    <value>Il-booking tiegħek ġie kkonfermat u mħallas.</value>
+  </data>
+  <data name="GoToStayWell" xml:space="preserve">
+    <value>Iċċekkja l-email tiegħek u kompli fuq StayWell</value>
+  </data>
+  <data name="ReservationPending" xml:space="preserve">
+    <value>Matul il-ħlas</value>
+  </data>
+  <data name="ReservationPendingInfo" xml:space="preserve">
+    <value>Ir-riżervazzjoni tiegħek ġiet ikkonfermata iżda għadha ma ġietx imħallsa</value>
+  </data>
+  <data name="ClickToPay" xml:space="preserve">
+    <value>Ikklikkja biex tħallas għar-riżervazzjonijiet</value>
+  </data>
+  <data name="ReservationDanger" xml:space="preserve">
+    <value>L-ebda konferma</value>
+  </data>
+  <data name="ReservationDangerInfo" xml:space="preserve">
+    <value>Ir-riżervazzjoni tiegħek għadha ma ġietx ikkonfermata</value>
+  </data>
+  <data name="NameLastName" xml:space="preserve">
+    <value>Isem u kunjom</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ReservationDetails" xml:space="preserve">
+    <value>Dettalji tal-Booking</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Check-out</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Mistednin</value>
+  </data>
+  <data name="ConfirmationNumber" xml:space="preserve">
+    <value>Numru tar-Riżerva</value>
+  </data>
+  <data name="PaymentSuccessful" xml:space="preserve">
+    <value>Ħlas b'suċċess!</value>
+  </data>
+  <data name="PaymentSuccessfulText" xml:space="preserve">
+    <value>L-appartament tiegħek ġie riżervjat b'suċċess</value>
+  </data>
+  <data name="BackToSummary" xml:space="preserve">
+    <value>Lura għas-sommarju</value>
+  </data>
+  <data name="ConfimationSendToMail" xml:space="preserve">
+    <value>Konferma mibgħuta bl-email</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Ammont</value>
+  </data>
+  <data name="PaymentFailed" xml:space="preserve">
+    <value>Ħlas fallut
+
+</value>
+  </data>
+  <data name="PaymentFailedText" xml:space="preserve">
+    <value>L-appartament tiegħek għadu ma ġiex ipreservat</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Jekk jogħġbok ipprova mill-ġdid</value>
+  </data>
+  <data name="WaitingPayment" xml:space="preserve">
+    <value>Qed nistenna l-konferma tal-ħlas...
+
+</value>
+  </data>
+  <data name="SomethingWrong" xml:space="preserve">
+    <value>Oops! Xi ħaġa marret ħażin</value>
+  </data>
+  <data name="RedirectingToPayment" xml:space="preserve">
+    <value>Direzzjoni għall-ħlas...</value>
+  </data>
+  <data name="RedirectToPaymentText" xml:space="preserve">
+    <value>Inti dalwaqt li se tittieħed għal sistema ta' ħlas sigura</value>
+  </data>
+  <data name="NotRefreshPage" xml:space="preserve">
+    <value>Jekk jogħġbok, tħallix il-paġna taġġorna</value>
+  </data>
+  <data name="CheckEmailText" xml:space="preserve">
+    <value>Qed niċċekkja l-email...</value>
+  </data>
+  <data name="SendMailText" xml:space="preserve">
+    <value>Email mibgħuta</value>
+  </data>
+  <data name="ConfirmationWill" xml:space="preserve">
+    <value>Konferma se tintbagħat lil:</value>
+  </data>
+  <data name="ConfirmationHasBeenSent" xml:space="preserve">
+    <value>Il-konferma ntbagħtet lil:</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Qed jitħaddem...</value>
+  </data>
+  <data name="NoGusInfo" xml:space="preserve">
+    <value>Ma nstab l-ebda data għan-numru ta' identifikazzjoni tat-taxxa mogħti.</value>
+  </data>
+  <data name="GusError" xml:space="preserve">
+    <value>Żball meta tniżżel data mill-Uffiċċju Statistiku Ċentrali</value>
+  </data>
+  <data name="NoNipError" xml:space="preserve">
+    <value>Jekk jogħġbok daħħal in-numru NIP tiegħek</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Kodiċi taż-żona</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Meħtieġ</value>
+  </data>
+  <data name="FillAllDataError" xml:space="preserve">
+    <value>Imla d-dettalji</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Email żbaljata</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupText" xml:space="preserve">
+    <value>Skannja l-Kodiċi QR biex tmur għal Staywell </value>
+  </data>
+  <data name="StaywellPopupTitle" xml:space="preserve">
+    <value>Immaniġġja r-Riservazzjoni Tiegħek f'StayWell</value>
+  </data>
+  <data name="StaywellPopupDescription" xml:space="preserve">
+    <value>Iskennja l-kodiċi QR biex tiftaħ immedjatament id-dashboard ta' StayWell assenjat għal dik il-booking. Fil-dashboard, tista' tiċċekkja d-dettalji tal-waqfa tiegħek, l-informazzjoni organizzattiva, l-istatus tas-servizzi addizzjonali u l-messaġġi l-iktar importanti.</value>
+  </data>
+  <data name="StaywellPopupDescriptionMobile" xml:space="preserve">
+    <value>Iftaħ id-dashboard ta' StayWell għal din il-prenotazzjoni. Fil-dashboard, tista' tiċċekkja d-dettalji tal-waqfa tiegħek, l-informazzjoni organizzattiva, l-istatus tas-servizzi addizzjonali u l-messaġġi l-iktar importanti.</value>
+  </data>
+  <data name="GoToStayWellQRCodePopupMobileText" xml:space="preserve">
+    <value>Mur direttament għand StayWell</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Agħżel il-kunsens kollha</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Imla d-dettalji</value>
+  </data>
+  <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
+    <value>Fattura</value>
+  </data>
+  <data name="InvoiceYes" xml:space="preserve">
+    <value>Iva</value>
+  </data>
+  <data name="InvoiceNo" xml:space="preserve">
+    <value>Le</value>
+  </data>
+  <data name="FailPageTitle" xml:space="preserve">
+    <value>Rentoom - Verifika tal-ħlas</value>
+  </data>
+  <data name="PaymentReturnCheckingTitle" xml:space="preserve">
+    <value>Nivverifikaw l-istatus tal-ħlas tiegħek</value>
+  </data>
+  <data name="PaymentReturnPendingBannerTitle" xml:space="preserve">
+    <value>Għadna ma kkonfermajniex il-ħlas</value>
+  </data>
+  <data name="StaywellPopupAriaLabel" xml:space="preserve">
+    <value>Informazzjoni dwar StayWell</value>
+  </data>
+  <data name="PaymentReturnFailedBannerMessage" xml:space="preserve">
+    <value>Tista' terġa' tipprova l-ħlas minn dan is-sommarju. Jekk il-bank diġà rtira l-fondi, stenna ftit qabel tipprova mill-ġdid.</value>
+  </data>
+  <data name="SummaryPageTitle" xml:space="preserve">
+    <value>Rentoom - Sommarju tal-Booking</value>
+  </data>
+  <data name="TpayMockCancelButton" xml:space="preserve">
+    <value>Ikkanċellazzjoni</value>
+  </data>
+  <data name="CancelActionSeparatorText" xml:space="preserve">
+    <value>jew</value>
+  </data>
+  <data name="TpayMockReservationLabel" xml:space="preserve">
+    <value>Riserva</value>
+  </data>
+  <data name="PaymentReturnVerificationError" xml:space="preserve">
+    <value>L-istatus tal-ħlas ma setax jiġi vverifikat awtomatikament. Erġa' lura għas-sommarju u erġa' pprova minn hemm.</value>
+  </data>
+  <data name="SuccessPageTitle" xml:space="preserve">
+    <value>Rentoom - Imħallas</value>
+  </data>
+  <data name="PaymentPageTitle" xml:space="preserve">
+    <value>Rentoom - Ħallas għar-riżervazzjoni tiegħek</value>
+  </data>
+  <data name="StaywellButtonText" xml:space="preserve">
+    <value>Ikklikkja biex timmaniġġja l-booking tiegħek fuq Rentoom StayWell</value>
+  </data>
+  <data name="MessageSentDescription" xml:space="preserve">
+    <value>Ibgħatna l-konferma lil {0} u WhatsApp.</value>
+  </data>
+  <data name="PaymentReturnPendingMessage" xml:space="preserve">
+    <value>Għadna m'għandniex konferma finali. Se terġa' tittieħed lura għas-sommarju f'ħin qasir, fejn tista' terġa' tipprova l-ħlas tiegħek b'mod sigur jekk ikun meħtieġ.</value>
+  </data>
+  <data name="EmailDeliveryPendingTitle" xml:space="preserve">
+    <value>Nibgħatu messaġġ</value>
+  </data>
+  <data name="SummaryBuildError" xml:space="preserve">
+    <value>Ma kienx possibbli li jinbena sommarju.</value>
+  </data>
+  <data name="TpayMockMissingReservation" xml:space="preserve">
+    <value>L-ID tar-Riserva nieqsa mill-URL.</value>
+  </data>
+  <data name="EmailStatusFetchError" xml:space="preserve">
+    <value>L-istatus tal-email ma setax jiġi ċċekkjat.</value>
+  </data>
+  <data name="FailIconAlt" xml:space="preserve">
+    <value>Ikona ta' twissija</value>
+  </data>
+  <data name="TpayMockPaymentSessionLabel" xml:space="preserve">
+    <value>Sessjoni ta' Ħlas</value>
+  </data>
+  <data name="PaymentReturnWaitingTitle" xml:space="preserve">
+    <value>Qegħdin nistennew konferma tal-ħlas</value>
+  </data>
+  <data name="CancelReservationInProgressText" xml:space="preserve">
+    <value>Kanċellazzjoni...</value>
+  </data>
+  <data name="PaymentStatusFetchError" xml:space="preserve">
+    <value>Ma rnexxilhomx jerġgħu jirkupraw l-istatus tal-ħlas.</value>
+  </data>
+  <data name="SummarySaveTermsError" xml:space="preserve">
+    <value>Żball seħħ waqt li kien qed issalva l-kunsensijiet. Jekk jogħġbok ipprova mill-ġdid.</value>
+  </data>
+  <data name="TpayMockPayButton" xml:space="preserve">
+    <value>Paga</value>
+  </data>
+  <data name="EmailDeliveryPendingMessage" xml:space="preserve">
+    <value>Nibgħatu konferma fuq {0} u fuq WhatsApp.</value>
+  </data>
+  <data name="ClientInfoNipLabel" xml:space="preserve">
+    <value>NIP</value>
+  </data>
+  <data name="PaymentVerificationError" xml:space="preserve">
+    <value>Il-ħlas ma setax jiġi kkonfermat.</value>
+  </data>
+  <data name="StaywellPopupCloseAriaLabel" xml:space="preserve">
+    <value>Għalaq il-popup ta' StayWell</value>
+  </data>
+  <data name="ClientInfoSaveError" xml:space="preserve">
+    <value>Ma rnexxilniex isalva d-dejta tal-klijent.</value>
+  </data>
+  <data name="TpayMockPageTitle" xml:space="preserve">
+    <value>Mock TPAY</value>
+  </data>
+  <data name="ClientInfoPageTitle" xml:space="preserve">
+    <value>Riservazzjoni ta' Rentoom - Dettalji tal-Klijent</value>
+  </data>
+  <data name="PaymentReturnWaitingMessage" xml:space="preserve">
+    <value>Il-ħlas għadu jista' jiġi pproċessat. Aħna nivverifikawha qabel ma nibgħatulek lura għas-sommarju tal-booking.</value>
+  </data>
+  <data name="TpayMockHeader" xml:space="preserve">
+    <value>Simulazzjoni ta' ħlas</value>
+  </data>
+  <data name="MessageSentTitle" xml:space="preserve">
+    <value>Messaġġ ġie mibgħut</value>
+  </data>
+  <data name="PaymentReturnCheckingMessage" xml:space="preserve">
+    <value>Dan mhux dejjem ifisser ħlas fallut. L-ewwel, niċċekkjaw l-istatus finali tat-transazzjoni.</value>
+  </data>
+  <data name="PaymentReturnPendingTitle" xml:space="preserve">
+    <value>L-istatus tal-ħlas għadu pendenti</value>
+  </data>
+  <data name="PaymentReturnPendingBannerMessage" xml:space="preserve">
+    <value>Jekk il-fondi jkunu ġew imħallsa, tħallix ħlas ieħor immedjatament. Jekk jogħġbok iċċekkja l-istatus tar-riżervazzjoni tiegħek hawn taħt u ipprova mill-ġdid biss jekk il-ħlas għadu mhux ikkonfermat.</value>
+  </data>
+  <data name="PaymentInitError" xml:space="preserve">
+    <value>Ma setgħetx tibda l-ħlas.</value>
+  </data>
+  <data name="CancelReservationErrorText" xml:space="preserve">
+    <value>Seħħ żball waqt li kont qed tikkanċella r-riservazzjoni tiegħek. Jekk jogħġbok ipprova mill-ġdid.</value>
+  </data>
+  <data name="PaymentReturnFailedBannerTitle" xml:space="preserve">
+    <value>Il-ħlas ma ġiex komplut</value>
+  </data>
+  <data name="CancelReservationButtonText" xml:space="preserve">
+    <value>Ikkanċella r-riżervazzjoni tiegħek</value>
+  </data>
+</root>

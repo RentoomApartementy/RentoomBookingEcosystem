@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Tietoja meistä
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Keskimääräinen asuntoarvio
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>Asuntoja hallittavaksi
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Varaukset hoidettu
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Vieraat tarjoilivat
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Historia</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Olemme joukko ihmisiä, jotka rakastavat matkustamista ja ovat saaneet kokemusta matkailusta kansainvälisillä markkinoilla. Lisäksi olemme hoitaneet kiinteistömarkkinoiden hallinnointia, vuokrausta, remonttia ja kaupankäyntiä yli kuuden vuoden ajan. Haluamme tarjota saamamme kokemuksen asiakkaillemme ja vieraillemme, jotka ovat aina tyytyväisiä palveluihimme.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Tehtävä</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Tarjoamme parasta mahdollista palvelua asiakkaillemme, sekä vieraille että asunnon omistajille. On erityisen tärkeää ylläpitää korkeaa asiakaspalvelutasoa ja varmistaa, että vieraamme tuntevat olonsa kotoisaksi asunnoissamme ja voivat luottaa apuihimme milloin tahansa.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Meidän tiimimme
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Visionääri ja strategi, jolla on kokemusta kiinteistöalalta. Hän rakensi Rentoomin yksinkertaistamaan lyhytaikaisia vuokrauksia ja automatisoimaan kaiken varauksista vieraiden hallintaan.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Se varmistaa, että Rentoom-teknologia on nopeaa, luotettavaa ja turvallista. Olen intohimoinen automaatiosta ja nykyaikaisista ratkaisuista vuokrausmarkkinoilla.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Hän huolehtii jokaisesta yksityiskohdasta ja koordinoi päivittäisiä toimintoja. Sen ansiosta asiakkaamme voivat nukkua rauhallisesti – kaikki toimii ajallaan ja ilman häiriöitä.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Kutsu</value>
+  </data>
+</root>

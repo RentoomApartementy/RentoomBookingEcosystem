@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – loome ainulaadseid elamusi Toruńis peatumiseks
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Kas otsid mugavat korterit Toruńis?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Korterid Toruńis – mugav majutus</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Kas otsid mugavat korterit Toruńis?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenty on kaasaegne lühiajaline üüribränd, mis ühendab kõrgetasemelise majutuse ja autentse Toruńi tundmise. Loome kohti, mis on loodud mugavuse, esteetika ja funktsionaalsuse silmas pidades – nii turistidele kui ka ärikülalistele.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Meil on hea meel, et tulite meie juurde!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Meie pakkumine hõlmab kümneid hoolikalt valitud kortereid linna kõige atraktiivsemates piirkondades. Iga asukoht on valitud nii, et tagada lihtne ligipääs olulistele vaatamisväärsustele, restoranidele ja äripiirkondadele.
+Iga korter on ruum, mis on loodud pakkuma tõelist puhkust ja privaatsust pärast intensiivset vaatamisväärsuste või töö päeva.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Korterid parimates asukohtades Toruńis</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Rahulolevad kliendid</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Korterid Toruńis
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Asukoht Toruńis</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Miks just Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Rentoom Apartments on rohkem kui lihtsalt ööbimine Toruńis. Pakume kõrgetasemelist korterit parimates asukohtades ning reaalseid eeliseid, mis suurendavad kogu peatumise väärtust.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Meie partnerprogrammi raames saavad külalised valitud restoranide, kohvikute ja turismiobjektide erisoodustusi. Praegused allahindlused ja soovitused asuvad otse korterites, nii et saad kasutada tõestatud kohti ja säästa raha vaatamisväärsusi külastades.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Teeme koostööd ainult usaldusväärsete kohalike partneritega, hoolitsedes iga soovituse kvaliteedi eest. Rentoomi valimisega saad mugavust, professionaalset teenindust ja lisahüvesid, mis muudavad sinu viibimise Toruńis mugavamaks, peenemaks ja lihtsalt kasumlikumaks.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Tutvu nende inimeste arvamustega, kes on maganud meie korterites Toruńis.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Jäta oma kontaktandmed ja me võtame sinuga ühendust!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Võta ühendust tarnijaga</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Nõustun minu ülaltoodud vormis esitatud isikuandmete töötlemisega</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Nimi</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Perekonnanimi</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Saada</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Mis eristab meie kortereid teistest?
+
+</value>
+  </data>
+</root>

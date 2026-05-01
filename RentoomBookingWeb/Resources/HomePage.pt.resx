@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Apartamentos Rentoom – criamos experiências únicas de hospedagem em Toruń
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Você está procurando um apartamento confortável em Toruń?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Apartamentos em Toruń – acomodação confortável</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Você está procurando um apartamento confortável em Toruń?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartmenty é uma marca moderna de aluguel de curta duração que combina alto padrão de acomodação com conhecimento autêntico de Toruń. Criamos locais projetados com conforto, estética e funcionalidade em mente – tanto para turistas quanto para hóspedes de negócios.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Estamos felizes que você veio até nós!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Nossa oferta inclui dezenas de apartamentos cuidadosamente selecionados nas partes mais atraentes da cidade. Cada local foi escolhido para proporcionar fácil acesso a atrações-chave, restaurantes e zonas comerciais.
+Cada apartamento é um espaço projetado para proporcionar descanso real e privacidade após um dia intenso de turismo ou trabalho.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Apartamentos nas melhores localizações de Toruń</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Clientes satisfeitos</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Apartamentos em Toruń
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Localização em Toruń</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Por que Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Os Apartamentos Rentoom são mais do que apenas uma estadia para pernoitar em Toruń. Oferecemos um alto padrão de apartamentos nas melhores localizações e benefícios reais que aumentam o valor de toda a estadia.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Como parte do nosso Programa de Parceiros, os hóspedes têm acesso a descontos especiais em restaurantes, cafés e atrações turísticas selecionados. Os descontos e recomendações atuais estão localizados diretamente nos apartamentos, então você pode usar locais comprovados e economizar dinheiro durante as visitas turísticas.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Trabalhamos apenas com parceiros locais de confiança, cuidando da qualidade de cada recomendação. Ao escolher a Rentoom, você ganha conforto, serviço profissional e benefícios adicionais que tornam sua estadia em Toruń mais confortável, refinada e simplesmente mais lucrativa.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Conheça as opiniões das pessoas que dormiram em nossos apartamentos em Toruń.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Deixe suas informações de contato e nós retornaremos em contato!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Contate o Fornecedor</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Concordo com o processamento dos meus dados pessoais fornecidos no formulário acima</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Sobrenome</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefone</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>O que diferencia nossos apartamentos dos outros?
+
+</value>
+  </data>
+</root>
