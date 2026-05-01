@@ -3,7 +3,7 @@
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 
 <div class="ai-description-container">
-    @* GÓRA: Zawsze widoczna (Hook) *@
+    @* TOP: Always visible intro (Hook) *@
     <article class="ai-intro-content">
         @if (!string.IsNullOrEmpty(Data?.H1))
         {
@@ -18,12 +18,12 @@
         }
     </article>
 
-    @* ŚRODEK: Highlights (Zawsze widoczne) *@
+    @* MIDDLE: Highlights (Always visible) *@
     <div class="ai-highlights-section">
         <AiHighlightsGrid Highlights="Data?.Highlights" />
     </div>
 
-    @* DÓŁ: Rozwijany (Szczegóły) *@
+    @* BOTTOM: Collapsible details *@
     <div class="ai-details-wrapper @(IsExpanded ? "expanded" : "collapsed")">
         
         <div class="ai-main-description">
@@ -41,8 +41,10 @@
                     @foreach (var amenity in Amenities)
                     {
                         <div class="amenity-item">
-                            <span class="amenity-dot"></span>
-                            @amenity.Name
+                            <div class="amenity-check">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </div>
+                            <span class="amenity-name">@amenity.Name</span>
                         </div>
                     }
                 </div>
