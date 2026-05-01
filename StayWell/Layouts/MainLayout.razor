@@ -14,8 +14,7 @@
 @inject LocksState LocksState
 @inject LayoutState LayoutState
 @inject IJSRuntime JSRuntime
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
-@inject Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment HostEnvironment
+@inject FeatureFlagsService FeatureFlagsService
 
 <div class="layout-page @(HasEnvironmentBanner ? "layout-page--has-environment-banner" : string.Empty)">
     <EnvironmentBanner EnvironmentName="@BannerEnvironmentName" />
@@ -55,10 +54,7 @@
     private string _modalTitle = string.Empty;
     private RenderFragment? _modalContent;
     private Toast? _toastComponent;
-    private string BannerEnvironmentName =>
-        string.IsNullOrWhiteSpace(Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"])
-            ? HostEnvironment.Environment
-            : Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"]!;
+    private string BannerEnvironmentName => FeatureFlagsService.CurrentEnvironmentName;
     private bool HasEnvironmentBanner => EnvironmentBannerState.ShouldDisplay(BannerEnvironmentName);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

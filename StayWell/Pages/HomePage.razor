@@ -10,8 +10,7 @@
 @using RentoomBooking.StayWell.Services
 @inject NavigationManager Navigation
 @inject IStringLocalizer<HomePage> Localizer
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
-@inject Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment HostEnvironment
+@inject FeatureFlagsService FeatureFlagsService
 @inject UpsellCartState UpsellCartState
 @inject AvailableUpsellsState AvailableUpsellsState
 @inherits Models.PageBase
@@ -65,7 +64,7 @@ else
             <div class="tile-text">@Localizer["OpenApartment"]</div>
         </div>
 
-        @if (IsAiAssistantVisible)
+        @if (FeatureFlagsService.FeatureAllowed("ai-assistant"))
         {
             <div class="tile" @onclick="OpenAiChat">
                 <div class="tile-icon">
@@ -83,7 +82,7 @@ else
         
     </div>
 
-    @if (IsUpsellsFeatureVisible)
+    @if (FeatureFlagsService.FeatureAllowed("upsells"))
     {
         //MS 17.03: Sekcja narazie jest ukryta - flow biznesowy jest jeszcze do obgadania.
         <RentoomBooking.StayWell.Components.Upsells.AvailableUpsells
@@ -112,17 +111,6 @@ else
     private DateTime checkIn;
     private DateTime checkOut;
     private DateTime now;
-    private string CurrentEnvironmentName =>
-        string.IsNullOrWhiteSpace(Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"])
-            ? HostEnvironment.Environment
-            : Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"]!;
-    private bool IsAiAssistantVisible =>
-        string.Equals(CurrentEnvironmentName, "Development", StringComparison.OrdinalIgnoreCase) ||
-        string.Equals(CurrentEnvironmentName, "DEV", StringComparison.OrdinalIgnoreCase);
-
-    private bool IsUpsellsFeatureVisible =>
-       string.Equals(CurrentEnvironmentName, "Development", StringComparison.OrdinalIgnoreCase) ||
-       string.Equals(CurrentEnvironmentName, "DEV", StringComparison.OrdinalIgnoreCase);
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
 
