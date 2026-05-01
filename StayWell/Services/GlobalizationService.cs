@@ -1,5 +1,6 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Microsoft.JSInterop;
+using RentoomBooking.SharedFrontend.Localization;
 
 namespace RentoomBooking.StayWell.Services
 {
@@ -80,11 +81,7 @@ namespace RentoomBooking.StayWell.Services
 
         public static List<CultureInfo> GetSupportedCultures()
         {
-            return
-            [
-                new("en-US"),
-                new("pl-PL"),
-            ];
+            return [.. SupportedLanguagesProvider.SupportedCultures];
         }
     }
 }

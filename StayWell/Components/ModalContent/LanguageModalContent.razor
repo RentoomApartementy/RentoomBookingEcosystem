@@ -1,5 +1,6 @@
-﻿@using System.Globalization
+@using System.Globalization
 @using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedFrontend.Localization
 @using RentoomBooking.StayWell.Pages
 
 @inject GlobalizationService GlobalizationService
@@ -10,25 +11,24 @@
 
 <div class="language-modal">
     <p class="language-modal__current">
-        @Localizer["CurrentLanguage"]: <strong>@CultureInfo.CurrentCulture.NativeName</strong>
+        @Localizer["CurrentLanguage"]: <strong>@SupportedLanguagesProvider.GetLanguageLabel(CultureInfo.CurrentCulture)</strong>
     </p>
 
     <div class="language-modal__options">
-        <button class="language-option @ActiveClass("pl-PL")" @onclick='() => ChangeLang("pl", "Polski")'>
-            <span class="language-option__label">Polski</span>
-        </button>
-
-        <button class="language-option @ActiveClass("en-US")" @onclick='() => ChangeLang("en", "English")'>
-            <span class="language-option__label">English</span>
-        </button>
+        @foreach (var culture in _supportedCultures)
+        {
+            <button class="language-option @ActiveClass(culture.Name)" @onclick='() => ChangeLang(culture.Name)'>
+                <span class="language-option__label">@SupportedLanguagesProvider.GetLanguageLabel(culture)</span>
+            </button>
+        }
     </div>
 </div>
 
 @code {
-    private async Task ChangeLang(string lang, string displayName)
-    {
-        var cultureName = lang == "pl" ? "pl-PL" : "en-US";
+    private readonly IReadOnlyList<CultureInfo> _supportedCultures = SupportedLanguagesProvider.SupportedCultures;
 
+    private async Task ChangeLang(string cultureName)
+    {
         if (CultureInfo.CurrentCulture.Name == cultureName)
             return;
 
