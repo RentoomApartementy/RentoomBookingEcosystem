@@ -167,6 +167,9 @@
     
     
   <value>Payment not required / already paid</value></data>
+  <data name="ClearCart" xml:space="preserve">
+    <value>Clear cart</value>
+  </data>
   <data name="CreateOrderError" xml:space="preserve">
     
     

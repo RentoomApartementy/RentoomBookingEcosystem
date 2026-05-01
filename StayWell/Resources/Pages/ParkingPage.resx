@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -84,19 +84,18 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
               <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
               <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
@@ -117,95 +116,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutReservation" xml:space="preserve">
-    <value>Your Reservation</value>
+  <data name="ParkingPage" xml:space="preserve">
+    <value>Municipal Parking</value>
   </data>
-  <data name="BookOnBtn" xml:space="preserve">
-    <value>Book on Rentoom.pl</value>
+  <data name="MunicipalParking" xml:space="preserve">
+    <value>Municipal Parking</value>
   </data>
-  <data name="BookOnDesc" xml:space="preserve">
-    <value>Book your perfect stay in Toruń and enjoy a unique apartment.</value>
+  <data name="ParkingInformation" xml:space="preserve">
+    <value>Parking Information</value>
   </data>
-  <data name="ChangeLanguage" xml:space="preserve">
-    <value>Change language</value>
+  <data name="ParkingDescription" xml:space="preserve">
+    <value>Information about municipal parking zones and available parking spots near your accommodation.</value>
   </data>
-  <data name="CheckIn" xml:space="preserve">
-    <value>Check-in</value>
+  <data name="NearbyParkingLocations" xml:space="preserve">
+    <value>Nearby Parking Locations</value>
   </data>
-  <data name="CheckOut" xml:space="preserve">
-    <value>Check-out</value>
-  </data>
-  <data name="ClubBenefits" xml:space="preserve">
-    <value>Rentoom Benefits Club</value>
-  </data>
-  <data name="CurrentLanguage" xml:space="preserve">
-    <value>Current Language</value>
-  </data>
-  <data name="Enhance" xml:space="preserve">
-    <value>Enhance your stay</value>
-    <comment>&#x8;</comment>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="Instructions" xml:space="preserve">
-    <value>Check-in Instructions</value>
-  </data>
-  <data name="InstructionsFooter" xml:space="preserve">
-    <value>Guide</value>
-  </data>
-  <data name="LanguageChanged" xml:space="preserve">
-    <value>Language changed to:</value>
-  </data>
-  <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
-  </data>
-  <data name="ManageStay" xml:space="preserve">
-    <value>Manage Your Stay</value>
-  </data>
-  <data name="More" xml:space="preserve">
-    <value>more...</value>
-  </data>
-  <data name="MyVouchers" xml:space="preserve">
-    <value>My Vouchers</value>
-  </data>
-  <data name="NoSuchPage" xml:space="preserve">
-    <value>Oops, this page doesn't exist!</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="OpenApartment" xml:space="preserve">
-    <value>Open Apartment</value>
-  </data>
-  <data name="PageTitle" xml:space="preserve">
-    <value>Staywell - Manage Your Stay </value>
-  </data>
-  <data name="ReservationID" xml:space="preserve">
-    <value>reservation id</value>
-  </data>
-  <data name="ReservationCanceledTitle" xml:space="preserve">
-    <value>This reservation has been canceled</value>
-  </data>
-  <data name="ReservationCanceledDesc" xml:space="preserve">
-    <value>This reservation is no longer active. Please contact Rentoom if you need help.</value>
-  </data>
-  <data name="AiChatTitle" xml:space="preserve">
-    <value>StayWell AI</value>
-  </data>
-  <data name="AiAssistant" xml:space="preserve">
-    <value>AI Assistant</value>
+  <data name="ParkingRates" xml:space="preserve">
+    <value>Parking Rates</value>
   </data>
   <data name="ParkingFooter" xml:space="preserve">
+    <value>Parking</value>
+  </data>
+  <data name="CityParking" xml:space="preserve">
     <value>City Parking</value>
   </data>
-  <data name="AboutReservationFooter" xml:space="preserve">
-    <value>Reservation Info</value>
+  <data name="FreePark" xml:space="preserve">
+    <value>Now you can park for free</value>
   </data>
-  <data name="AddonsLabel" xml:space="preserve">
-    <value>Add-ons</value>
+  <data name="PaidPark" xml:space="preserve">
+    <value>Parking is now paid</value>
   </data>
-  <data name="CartButtonAlt" xml:space="preserve">
-    <value>Shopping Cart</value>
+  <data name="MoreInfo" xml:space="preserve">
+    <value>More information</value>
+  </data>
+  <data name="PaidDays" xml:space="preserve">
+    <value>Paid days</value>
+  </data>
+  <data name="FreeDays" xml:space="preserve">
+    <value>Free days</value>
+  </data>
+  <data name="ZoneA" xml:space="preserve">
+    <value>Zone A</value>
+  </data>
+  <data name="ZoneB" xml:space="preserve">
+    <value>Zone B</value>
+  </data>
+  <data name="ZoneDowntownPaidParking" xml:space="preserve">
+    <value>Downtown Paid Parking Zone</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Mon</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tue</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wed</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thu</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Fri</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sat</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sun</value>
   </data>
 </root>

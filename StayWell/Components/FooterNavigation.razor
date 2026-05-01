@@ -6,49 +6,72 @@
 @inject Services.GlobalizationService GlobalizationService
 @implements IDisposable
 
-<div class="footer-navigation-row">
-    <NavigationButton href="@($"/reservation/{TokenFromUrl}/InstructionsPage")"
-                      active="@IsActive($"/reservation/{TokenFromUrl}/InstructionsPage")"
-                      Text="@Localizer["InstructionsFooter"]">
-        <Icon>
-            <img src="/icons/book.svg" alt="Instrukcja" />
-        </Icon>
-    </NavigationButton>
+<div class="footer-nav-wrapper">
 
-    <NavigationButton href="@($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
-                      active="@IsActive($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
-                      Text="@Localizer["Open"]">
-        <Icon>
-            <img src="/icons/lock.svg" alt="Otwórz" />
-        </Icon>
-    </NavigationButton>
+    <div class="footer-menu-backdrop @(_menuOpen ? "open" : "")" @onclick="CloseMenu"></div>
 
-    <NavigationButton href="@($"/reservation/{TokenFromUrl}/HomePage")"
-                      active="@IsActive([$"/reservation/{TokenFromUrl}/HomePage", $"/reservation/{TokenFromUrl}/",$"/reservation/{TokenFromUrl}"])"
-                      Text="@Localizer["Home"]">
-        <Icon>
-            <img src="/icons/house.svg" alt="Główna" />
-        </Icon>
-    </NavigationButton>
+    <div class="footer-menu-panel @(_menuOpen ? "open" : "")">
+        <button class="footer-menu-item @(IsActive($"/reservation/{TokenFromUrl}/AboutReservationPage") ? "active" : "")" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/AboutReservationPage"))">
+            <img src="/icons/info.svg" alt="@Localizer["AboutReservationFooter"]" />
+            <span>@Localizer["AboutReservationFooter"]</span>
+        </button>
+        <button class="footer-menu-item @(IsActive($"/reservation/{TokenFromUrl}/ParkingPage") ? "active" : "")" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/ParkingPage"))">
+            <img src="/icons/square-parking.svg" alt="@Localizer["ParkingFooter"]" />
+            <span>@Localizer["ParkingFooter"]</span>
+        </button>
+    </div>
 
-    <NavigationButton href="@($"/reservation/{TokenFromUrl}/ManageStayPage")"
-                      active="@IsActive($"/reservation/{TokenFromUrl}/ManageStayPage")"
-                      Text="@Localizer["Manage"]">
-        <Icon>
-            <img src="/icons/lamp.svg" alt="Zarządzaj" />
-        </Icon>
-    </NavigationButton>
+    <div class="footer-navigation-row">
+        <NavigationButton href="@($"/reservation/{TokenFromUrl}/InstructionsPage")"
+                          active="@IsActive($"/reservation/{TokenFromUrl}/InstructionsPage")"
+                          Text="@Localizer["InstructionsFooter"]">
+            <Icon>
+                <img src="/icons/book.svg" alt="Instrukcja" />
+            </Icon>
+        </NavigationButton>
 
-    <NavigationButton href="@($"/reservation/{TokenFromUrl}/AboutReservationPage")"
-                      active="@IsActive($"/reservation/{TokenFromUrl}/AboutReservationPage")"
-                      Text="Info">
-        <Icon>
-            <img src="/icons/info.svg" alt="Info" />
-        </Icon>
-    </NavigationButton>
+        <NavigationButton href="@($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
+                          active="@IsActive($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
+                          Text="@Localizer["Open"]">
+            <Icon>
+                <img src="/icons/lock.svg" alt="Otwórz" />
+            </Icon>
+        </NavigationButton>
+
+        <NavigationButton href="@($"/reservation/{TokenFromUrl}/HomePage")"
+                          active="@IsActive([$"/reservation/{TokenFromUrl}/HomePage", $"/reservation/{TokenFromUrl}/",$"/reservation/{TokenFromUrl}"])"
+                          Text="@Localizer["Home"]">
+            <Icon>
+                <img src="/icons/house.svg" alt="Główna" />
+            </Icon>
+        </NavigationButton>
+
+        <NavigationButton href="@($"/reservation/{TokenFromUrl}/ManageStayPage")"
+                          active="@IsActive($"/reservation/{TokenFromUrl}/ManageStayPage")"
+                          Text="@Localizer["Manage"]">
+            <Icon>
+                <img src="/icons/lamp.svg" alt="Zarządzaj" />
+            </Icon>
+        </NavigationButton>
+
+        <div class="footer-nav-btn-wrapper">
+            <button class="footer-nav-btn @(_menuOpen ? "active" : "")" @onclick="ToggleMenu">
+                <div class="footer-nav-icon">
+                    <span class="burger-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </div>
+                <span class="footer-nav-text">Menu</span>
+            </button>
+        </div>
+    </div>
 </div>
 
 @code {
+    private bool _menuOpen = false;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -68,11 +91,22 @@
         }
     }
 
+    private void ToggleMenu() => _menuOpen = !_menuOpen;
+
+    private void CloseMenu() => _menuOpen = false;
+
+    private void NavigateTo(string href)
+    {
+        _menuOpen = false;
+        Navigation.NavigateTo(href);
+    }
+
     private void OnLocationChanged(
         object? sender,
         Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e
     )
     {
+        _menuOpen = false;
         StateHasChanged();
     }
 

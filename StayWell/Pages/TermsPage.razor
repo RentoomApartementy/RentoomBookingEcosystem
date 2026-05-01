@@ -228,10 +228,14 @@
 
         LayoutState.ShowFooter = false;
 
-        int adults = ReservationState?.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.numberOfAdults ?? 1;
+        var firstItem = ReservationState?.CurrentReservation?.Reservation?.Items?.FirstOrDefault();
+        int adults = firstItem?.numberOfAdults ?? 1;
+        int children = int.TryParse(firstItem?.numberOfSmallChildren, out var parsedChildren) ? parsedChildren : 0;
+        int totalGuests = adults + children;
+
         _guests = RegistrationCardState.CurrentCard?.GuestsData?.Any() == true
             ? RegistrationCardState.CurrentCard.GuestsData
-            : Enumerable.Range(0, adults).Select(_ => new RegistrationCardGuestModel()).ToList();
+            : Enumerable.Range(0, totalGuests).Select(_ => new RegistrationCardGuestModel()).ToList();
 
         TryInitializeMail();
     }
