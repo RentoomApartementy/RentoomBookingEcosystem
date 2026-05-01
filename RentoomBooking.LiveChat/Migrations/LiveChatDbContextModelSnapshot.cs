@@ -102,7 +102,7 @@ namespace RentoomBooking.LiveChat.Migrations
                         .IsUnique()
                         .HasDatabaseName("idx_bitrix_livechat_portals_member_id");
 
-                    b.ToTable("bitrix_livechat_portals", (string)null);
+                    b.ToTable("bitrix_livechat_portals");
                 });
 
             modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatMessageEntity", b =>
@@ -175,7 +175,7 @@ namespace RentoomBooking.LiveChat.Migrations
                     b.HasIndex("SessionId", "CreatedAt")
                         .HasDatabaseName("idx_livechat_messages_session_created_at");
 
-                    b.ToTable("livechat_messages", (string)null);
+                    b.ToTable("livechat_messages");
                 });
 
             modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatSessionEntity", b =>
@@ -252,7 +252,7 @@ namespace RentoomBooking.LiveChat.Migrations
                     b.HasIndex("ReservationToken", "Status")
                         .HasDatabaseName("idx_livechat_sessions_token_status");
 
-                    b.ToTable("livechat_sessions", (string)null);
+                    b.ToTable("livechat_sessions");
                 });
 
             modelBuilder.Entity("RentoomBooking.LiveChat.Entities.LiveChatMessageEntity", b =>
