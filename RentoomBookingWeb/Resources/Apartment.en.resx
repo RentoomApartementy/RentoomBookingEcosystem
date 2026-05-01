@@ -407,4 +407,16 @@
     <value />
     <value>Error 404</value>
   </data>
-</root>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Frequently Asked Questions (FAQ)</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Amenities and Equipment</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Show full description and amenities</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>Hide details</value>
+  </data>
+  </root>

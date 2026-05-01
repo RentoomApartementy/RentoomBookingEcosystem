@@ -1,0 +1,60 @@
+.ai-highlights-container {
+    margin: 1.5rem 0;
+    width: 100%;
+}
+
+.highlights-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #f0f7f4;
+    padding: 0.5rem 0.85rem;
+    border-radius: 50px;
+    border: 1px solid #d1e7dd;
+    transition: all 0.2s ease;
+}
+
+.highlight-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(31, 90, 65, 0.1);
+}
+
+.highlight-icon {
+    display: flex;
+    align-items: center;
+    color: #1f5a41;
+    flex-shrink: 0;
+}
+
+.highlight-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.highlight-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1f5a41;
+    line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+    .highlights-grid {
+        gap: 0.5rem;
+    }
+    
+    .highlight-item {
+        padding: 0.4rem 0.75rem;
+    }
+    
+    .highlight-text {
+        font-size: 0.8rem;
+    }
+}

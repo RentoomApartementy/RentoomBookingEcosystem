@@ -55,9 +55,9 @@
     }
     
     [JSInvokable]
-    public async Task<string> OnMarkerClicked(string idStr)
+    public Task<string?> OnMarkerClicked(string idStr)
     {
-        return null;
+        return Task.FromResult<string?>(null);
     }
 
     public void Dispose()

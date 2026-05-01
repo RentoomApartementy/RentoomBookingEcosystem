@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Configuration;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Descriptions.Database;
+using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
@@ -83,6 +85,11 @@ namespace RentoomBookingWeb
 
             builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
+
+            builder.Services.AddDbContextFactory<RappDescriptionsDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
+            builder.Services.AddScoped<IApartmentAiDescriptionService, ApartmentAiDescriptionService>();
 
             var footerEnvironmentInfo = FooterEnvironmentInfo.Create(
                builder.Environment,
