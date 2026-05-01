@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RentoomBooking.LiveChat.Bitrix;
 using RentoomBooking.LiveChat.Data;
 using RentoomBooking.LiveChat.Entities;
 using RentoomBooking.LiveChat.Repositories;
+using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.LiveChat;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
@@ -28,9 +30,11 @@ public sealed class BitrixLiveChatService
 
     private readonly IHostApplicationLifetime _appLifetime;
     private readonly IBitrixRestClient _bitrixRestClient;
+    private readonly string _connectorId;
     private readonly IDbContextFactory<LiveChatDbContext> _dbContextFactory;
     private readonly ILogger<BitrixLiveChatService> _logger;
     private readonly ILiveChatMessageRepository _messageRepo;
+    private readonly int _openLineId;
     private readonly IBitrixPortalRepository _portalRepo;
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILiveChatSessionRepository _sessionRepo;
@@ -45,6 +49,7 @@ public sealed class BitrixLiveChatService
         IDbContextFactory<LiveChatDbContext> dbContextFactory,
         IServiceScopeFactory scopeFactory,
         IHostApplicationLifetime appLifetime,
+        IOptions<BitrixLiveChatOptions> options,
         ILogger<BitrixLiveChatService> logger)
     {
         _bitrixRestClient = bitrixRestClient;
@@ -56,6 +61,8 @@ public sealed class BitrixLiveChatService
         _scopeFactory = scopeFactory;
         _appLifetime = appLifetime;
         _logger = logger;
+        _connectorId = options.Value.ConnectorId;
+        _openLineId = options.Value.OpenLineId;
     }
 
     public async Task<BitrixLiveChatPortalEntity> InstallPortalAsync(
@@ -105,6 +112,15 @@ public sealed class BitrixLiveChatService
         portal.EventHandlerUrl = webhookUrl.ToString();
         portal.UpdatedAt = DateTime.UtcNow;
         await db.SaveChangesAsync(ct);
+
+        _logger.LogInformation("Installing with connectorId='{ConnectorId}'", _connectorId);
+        var placementHandlerUrl = new Uri(
+            new Uri($"{webhookUrl.Scheme}://{webhookUrl.Authority}"),
+            "/api/staywell/livechat/bitrix-install");
+        await _bitrixRestClient.RegisterConnectorAsync(portal, _connectorId, _openLineId, webhookUrl, placementHandlerUrl, ct);
+        _logger.LogInformation(
+            "Bitrix imconnector registered for domain={Domain}, connectorId={ConnectorId}, openLineId={OpenLineId}",
+            portal.Domain, _connectorId, _openLineId);
 
         return portal;
     }

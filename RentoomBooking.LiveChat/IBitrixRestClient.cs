@@ -13,5 +13,6 @@ public interface IBitrixRestClient
     Task SendDeliveryStatusAsync(string messageId, string connectorChatId, CancellationToken ct);
     Task<(string? FirstName, string? AvatarUrl)> FetchOperatorInfoAsync(string bitrixUserId, CancellationToken ct);
     Task<long?> BindWebhookEventAsync(BitrixLiveChatPortalEntity portal, Uri webhookUrl, CancellationToken ct);
+    Task RegisterConnectorAsync(BitrixLiveChatPortalEntity portal, string connectorId, int openLineId, Uri webhookUrl, Uri placementHandlerUrl, CancellationToken ct);
     Task<string?> GetLandingPreviewUrlAsync(string url, CancellationToken ct);
 }
