@@ -125,4 +125,18 @@ public sealed class LiveChatClientService
         if (!response.IsSuccessStatusCode) return null;
         return await response.Content.ReadFromJsonAsync<LinkPreviewDto>(_jsonOptions, ct);
     }
+
+    public async Task<LiveChatSessionSettingsDto?> GetSettingsAsync(string reservationToken, CancellationToken ct = default)
+    {
+        var response = await _http.GetAsync($"staywell/livechat/settings?reservationToken={Uri.EscapeDataString(reservationToken)}", ct);
+        if (!response.IsSuccessStatusCode) return null;
+        return await response.Content.ReadFromJsonAsync<LiveChatSessionSettingsDto>(_jsonOptions, ct);
+    }
+
+    public async Task<bool> UpdateSettingsAsync(string reservationToken, bool? guestAutoTranslateEnabled = null, CancellationToken ct = default)
+    {
+        var request = new LiveChatSessionSettingsUpdateRequest(reservationToken, guestAutoTranslateEnabled);
+        var response = await _http.PostAsJsonAsync("staywell/livechat/settings", request, _jsonOptions, ct);
+        return response.IsSuccessStatusCode;
+    }
 }

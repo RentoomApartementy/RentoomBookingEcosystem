@@ -41,8 +41,17 @@ public sealed class LiveChatHistoryFunction
 
         var messages = await _liveChatService.GetMessagesAsync(session.Id, ct: ct);
         var dtos = messages.Select(m => new LiveChatMessageDto(
-            m.Id, m.Sender, m.Content, m.CreatedAt, m.SenderName, m.OperatorAvatarUrl,
-            _liveChatService.DeserializeAttachments(m), m.OperatorBitrixUserId)).ToList();
+            m.Id, 
+            m.Sender, 
+            m.Content, 
+            m.CreatedAt, 
+            m.SenderName, 
+            m.OperatorAvatarUrl,
+            _liveChatService.DeserializeAttachments(m), 
+            m.OperatorBitrixUserId,
+            m.OriginalContent,
+            m.DetectedLanguage,
+            m.IsTranslated)).ToList();
 
         return await CreateJsonResponse(req, HttpStatusCode.OK,
             new LiveChatSessionDto(session.Id, session.Status, dtos));

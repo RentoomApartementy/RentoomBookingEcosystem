@@ -10,6 +10,7 @@ using RentoomBooking.LiveChat.Data;
 using RentoomBooking.LiveChat.Entities;
 using RentoomBooking.LiveChat.Repositories;
 using RentoomBooking.SharedClasses.Configuration;
+using RentoomBooking.LiveChat.Services;
 using RentoomBooking.SharedClasses.LiveChat;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
@@ -30,7 +31,6 @@ public sealed class BitrixLiveChatService
 
     private readonly IHostApplicationLifetime _appLifetime;
     private readonly IBitrixRestClient _bitrixRestClient;
-    private readonly string _connectorId;
     private readonly IDbContextFactory<LiveChatDbContext> _dbContextFactory;
     private readonly ILogger<BitrixLiveChatService> _logger;
     private readonly ILiveChatMessageRepository _messageRepo;
@@ -48,7 +48,6 @@ public sealed class BitrixLiveChatService
         IDbContextFactory<LiveChatDbContext> dbContextFactory,
         IServiceScopeFactory scopeFactory,
         IHostApplicationLifetime appLifetime,
-        IOptions<BitrixLiveChatOptions> options,
         ILogger<BitrixLiveChatService> logger)
     {
         _bitrixRestClient = bitrixRestClient;
@@ -59,6 +58,7 @@ public sealed class BitrixLiveChatService
         _dbContextFactory = dbContextFactory;
         _scopeFactory = scopeFactory;
         _appLifetime = appLifetime;
+        _translationService = translationService;
         _logger = logger;
         _connectorId = options.Value.ConnectorId;
     }
@@ -193,11 +193,17 @@ public sealed class BitrixLiveChatService
         var session = await _sessionRepo.GetActiveByIdAsync(sessionId, ct)
                       ?? throw new InvalidOperationException("Session not found.");
 
+        // Translate guest message to Polish for Bitrix
+        var translationResult = await _translationService.TranslateAsync(content, "pl", ct);
+        
         var message = new LiveChatMessageEntity
         {
             SessionId = sessionId,
             Sender = LiveChatSenders.Guest,
-            Content = content,
+            Content = translationResult.TranslatedText,
+            OriginalContent = translationResult.WasTranslated ? content : null,
+            DetectedLanguage = translationResult.DetectedLanguage,
+            IsTranslated = translationResult.WasTranslated,
             SenderName = session.GuestName
         };
 
@@ -294,11 +300,42 @@ public sealed class BitrixLiveChatService
 
         var safeAttachments = FilterAttachments(incoming.Attachments);
 
+        // Translate operator message for guest if auto-translate is enabled
+        var translatedContent = cleanText;
+        var originalContent = (string?)null;
+        var isTranslated = false;
+        var detectedLanguage = (string?)null;
+
+        if (session.GuestAutoTranslateEnabled)
+        {
+            // Get guest's language from their last message
+            using var dbLocal = await _dbContextFactory.CreateDbContextAsync(ct);
+            var guestLastMessage = await dbLocal.LiveChatMessages
+                .Where(m => m.SessionId == session.Id && m.Sender == LiveChatSenders.Guest)
+                .OrderByDescending(m => m.CreatedAt)
+                .FirstOrDefaultAsync(ct);
+
+            var guestLanguage = guestLastMessage?.DetectedLanguage ?? "en";
+            
+            // Translate PL to guest's language
+            var translationResult = await _translationService.TranslateAsync(cleanText, guestLanguage, ct);
+            if (translationResult.WasTranslated)
+            {
+                translatedContent = translationResult.TranslatedText;
+                originalContent = cleanText;
+                isTranslated = true;
+                detectedLanguage = "pl";
+            }
+        }
+
         var message = new LiveChatMessageEntity
         {
             SessionId = session.Id,
             Sender = LiveChatSenders.Operator,
-            Content = cleanText,
+            Content = translatedContent,
+            OriginalContent = originalContent,
+            IsTranslated = isTranslated,
+            DetectedLanguage = detectedLanguage,
             BitrixMessageId = incoming.BitrixMessageId,
             SenderName = parsedName,
             OperatorBitrixUserId = incoming.AuthorId,
@@ -565,5 +602,10 @@ public sealed class BitrixLiveChatService
         if (string.IsNullOrWhiteSpace(url)) return false;
         return Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
                string.Equals(uri.Scheme, "https", StringComparison.OrdinalIgnoreCase);
+    }
+
+    public async Task UpdateSessionAsync(LiveChatSessionEntity session, CancellationToken ct = default)
+    {
+        await _sessionRepo.UpdateAsync(session, ct);
     }
 }

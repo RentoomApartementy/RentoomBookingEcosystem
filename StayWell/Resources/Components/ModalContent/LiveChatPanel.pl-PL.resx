@@ -216,4 +216,49 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Pracownik dołączył do rozmowy</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Ustawienia tłumaczenia</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Włącz automatyczne tłumaczenie wiadomości od pracownika</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Po włączeniu wiadomości od pracownika będą automatycznie tłumaczone na Twój język. Możesz wyświetlić oryginalną wiadomość klikając przycisk poniżej każdej wiadomości.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Zapisywanie...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Nie udało się zapisać ustawień. Spróbuj ponownie.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Chat wsparcia</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Ustawienia tłumaczenia</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Pokaż oryginał</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Pokaż tłumaczenie</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Wyświetl oryginalną wiadomość</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Wyświetl przetłumaczoną wiadomość</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Pokaż oryginalną wiadomość</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Pokaż przetłumaczoną wiadomość</value>
+  </data>
 </root>

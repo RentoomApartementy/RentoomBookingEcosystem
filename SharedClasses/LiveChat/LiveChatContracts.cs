@@ -11,7 +11,19 @@ public sealed record LiveChatAttachmentDto(
     string? UrlPreview,
     string? UrlDownload);
 
-public sealed record LiveChatMessageDto(Guid Id, string Sender, string Content, DateTime CreatedAt, string? SenderName = null, string? OperatorAvatarUrl = null, IReadOnlyList<LiveChatAttachmentDto>? Attachments = null, string? OperatorBitrixUserId = null);
+public sealed record LiveChatMessageDto(
+    Guid Id,
+    string Sender,
+    string Content,
+    DateTime CreatedAt,
+    string? SenderName = null,
+    string? OperatorAvatarUrl = null,
+    IReadOnlyList<LiveChatAttachmentDto>? Attachments = null,
+    string? OperatorBitrixUserId = null,
+    string? OriginalContent = null,
+    string? DetectedLanguage = null,
+    bool IsTranslated = false);
+
 public sealed record LiveChatSessionDto(Guid SessionId, string Status, List<LiveChatMessageDto> Messages);
 public sealed record LinkPreviewDto(string Url, string? Title, string? Description, string? ImageUrl, string? Host);
 
@@ -25,3 +37,11 @@ public sealed record IncomingOperatorMessage(
     string? BitrixMessageId,
     string? AuthorId,
     IReadOnlyList<LiveChatAttachmentDto>? Attachments = null);
+
+public sealed record LiveChatSessionSettingsUpdateRequest(
+    string ReservationToken,
+    bool? GuestAutoTranslateEnabled = null,
+    string? PreferredLanguage = null);
+
+public sealed record LiveChatSessionSettingsDto(
+    bool GuestAutoTranslateEnabled = true);
