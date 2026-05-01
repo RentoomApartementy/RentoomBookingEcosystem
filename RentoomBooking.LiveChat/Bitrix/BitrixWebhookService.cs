@@ -48,9 +48,10 @@ public sealed class BitrixWebhookService : IBitrixWebhookService
         if (IsAlreadyBoundResponse(document.RootElement))
         {
             _logger.LogInformation(
-                "Bitrix event handler already bound for domain={Domain}, reusing existing handler metadata.",
+                "Bitrix event handler already bound for domain={Domain}, unbinding and rebinding with new URL.",
                 portal.Domain);
-            return portal.EventHandlerId;
+            await UnbindWebhookEventAsync(connection, portal, webhookUrl, ct);
+            return await BindAfterUnbindAsync(connection, portal, webhookUrl, ct);
         }
 
         if (!response.IsSuccessStatusCode)
@@ -62,6 +63,74 @@ public sealed class BitrixWebhookService : IBitrixWebhookService
                 ? descriptionProp.ToString()
                 : "Unknown Bitrix error.";
             throw new InvalidOperationException($"Bitrix event.bind failed: {errorProp} - {description}");
+        }
+
+        if (!document.RootElement.TryGetProperty("result", out var resultProp)) return null;
+
+        if (resultProp.ValueKind == JsonValueKind.Number && resultProp.TryGetInt64(out var numericResult))
+            return numericResult;
+
+        if (resultProp.ValueKind == JsonValueKind.String && long.TryParse(resultProp.GetString(), out numericResult))
+            return numericResult;
+
+        return null;
+    }
+
+    private async Task UnbindWebhookEventAsync(BitrixRestConnection connection, BitrixLiveChatPortalEntity portal,
+        Uri webhookUrl, CancellationToken ct)
+    {
+        using var requestContent = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["event"] = "ONIMCONNECTORMESSAGEADD",
+            ["handler"] = webhookUrl.ToString()
+        });
+
+        var response = await _httpClient.PostAsync(
+            BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "event.unbind", connection.AccessToken),
+            requestContent,
+            ct);
+
+        var body = await response.Content.ReadAsStringAsync(ct);
+        _logger.LogInformation(
+            "Bitrix event.unbind response for domain={Domain} (HTTP {StatusCode}): {Body}",
+            portal.Domain,
+            (int)response.StatusCode,
+            body);
+    }
+
+    private async Task<long?> BindAfterUnbindAsync(BitrixRestConnection connection, BitrixLiveChatPortalEntity portal,
+        Uri webhookUrl, CancellationToken ct)
+    {
+        using var requestContent = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["event"] = "ONIMCONNECTORMESSAGEADD",
+            ["handler"] = webhookUrl.ToString()
+        });
+
+        var response = await _httpClient.PostAsync(
+            BitrixRestHelpers.BuildRestMethodUrl(connection.ClientEndpoint, "event.bind", connection.AccessToken),
+            requestContent,
+            ct);
+
+        var body = await response.Content.ReadAsStringAsync(ct);
+        _logger.LogInformation(
+            "Bitrix event.bind (after unbind) response for domain={Domain} (HTTP {StatusCode}): {Body}",
+            portal.Domain,
+            (int)response.StatusCode,
+            body);
+
+        if (!response.IsSuccessStatusCode)
+            throw new InvalidOperationException(
+                $"Bitrix event.bind (after unbind) failed (HTTP {(int)response.StatusCode}): {body}");
+
+        using var document = JsonDocument.Parse(body);
+
+        if (document.RootElement.TryGetProperty("error", out var errorProp))
+        {
+            var description = document.RootElement.TryGetProperty("error_description", out var descriptionProp)
+                ? descriptionProp.ToString()
+                : "Unknown Bitrix error.";
+            throw new InvalidOperationException($"Bitrix event.bind (after unbind) failed: {errorProp} - {description}");
         }
 
         if (!document.RootElement.TryGetProperty("result", out var resultProp)) return null;
