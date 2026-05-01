@@ -164,12 +164,14 @@
         margin: 0;
         position: static;
         top: auto;
+        height: auto;
+        gap: 0;
     }
 }
 
 @media (max-width: 768px) {
     .apartment-container {
-        padding: 0 0 120px 0;
+        padding: 0 0 0px 0;
     }
 
     .main-wrapper {
