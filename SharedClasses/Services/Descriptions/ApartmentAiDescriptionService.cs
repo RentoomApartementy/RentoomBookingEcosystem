@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Descriptions.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Descriptions.Models;
 using System;
@@ -59,10 +59,26 @@ namespace RentoomBooking.SharedClasses.Services.Descriptions
                             v.LanguageCode == langCode)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            // Jesli nie ma tlumaczenia w tym jezyku, probujemy pobrac source (zazwyczaj pl)
+            // Jesli nie ma tlumaczenia w tym jezyku, probujemy pobrac wersję eng.
             if (targetVariant == null)
             {
-                targetVariant = activeVariantMapping;
+                langCode = "en"; //fallback do angielskiego - w rentoomapp source zawsze jest pl wiec to nam nic nie daje
+
+                // targetVariant = activeVariantMapping;
+                //proba pobrania w en
+                targetVariant = await dbContext.Variants
+                .AsNoTracking()
+                .Where(v => v.DescriptionSetId == activeSet.Id &&
+                            v.VariantType == variantType &&
+                            v.LanguageCode == langCode)
+                .FirstOrDefaultAsync(cancellationToken);
+
+
+                //jesli fallback do angielskiego nic nie zwróci - to zwracamy null i pobieramy z idobooking osobno.
+                if (targetVariant == null)
+                    return null;
+
+
             }
 
             // Pobieramy dodatki (FAQ, Highlights, SEO) dla tego samego jezyka

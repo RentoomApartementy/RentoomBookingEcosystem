@@ -437,6 +437,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                     else
                     {
                         Console.WriteLine($"[AI-Description] INFO: No AI description found for ApartmentId: {_apartment.Id}, Language: {CultureInfo.CurrentUICulture.Name}. Using IdoBooking fallback.");
+                       
                     }
                 }
                 catch (Exception ex)
