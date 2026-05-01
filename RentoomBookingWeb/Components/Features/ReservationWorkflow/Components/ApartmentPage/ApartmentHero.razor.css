@@ -40,6 +40,10 @@
     height: 30px;
 }
 
+.hero-images-spacer {
+    margin-top: 2.5rem;
+}
+
 @media (max-width: 768px) {
     .apartment-text-wrapper {
         align-items: flex-start;

@@ -3,54 +3,62 @@
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 
 <div class="ai-description-container">
-    <div class="ai-description-wrapper @(IsExpanded ? "expanded" : "collapsed")">
+    @* GÓRA: Zawsze widoczna (Hook) *@
+    <article class="ai-intro-content">
+        @if (!string.IsNullOrEmpty(Data?.H1))
+        {
+            <h1 class="ai-h1">@Data.H1</h1>
+        }
+
+        @if (!string.IsNullOrEmpty(Data?.ShortDescription))
+        {
+            <div class="ai-short-description">
+                @Data.ShortDescription
+            </div>
+        }
+    </article>
+
+    @* ŚRODEK: Highlights (Zawsze widoczne) *@
+    <div class="ai-highlights-section">
         <AiHighlightsGrid Highlights="Data?.Highlights" />
+    </div>
 
-        <article class="ai-text-content">
-            @if (!string.IsNullOrEmpty(Data?.H1))
-            {
-                <h1 class="ai-h1">@Data.H1</h1>
-            }
-
-            @if (!string.IsNullOrEmpty(Data?.ShortDescription))
-            {
-                <div class="ai-short-description">
-                    @Data.ShortDescription
-                </div>
-            }
-
+    @* DÓŁ: Rozwijany (Szczegóły) *@
+    <div class="ai-details-wrapper @(IsExpanded ? "expanded" : "collapsed")">
+        
+        <div class="ai-main-description">
             @if (!string.IsNullOrEmpty(Data?.MainDescription))
             {
-                <div class="ai-main-description">
-                    @((MarkupString)Data.MainDescription)
-                </div>
-            }
-        </article>
-
-        <div class="amenities-wrapper">
-            @if (Amenities != null)
-            {
-                @foreach (var amenity in Amenities)
-                {
-                    <div class="amenity">
-                        @amenity.Name
-                    </div>
-                }
+                @((MarkupString)Data.MainDescription)
             }
         </div>
 
-        <AiFaqSection Faqs="Data?.Faqs" Localizer="Localizer" />
-
-        @if (!IsExpanded)
+        @if (Amenities != null && Amenities.Any())
         {
-            <div class="wrapper-shadow"></div>
+            <div class="amenities-section">
+                <h3 class="section-title">@Localizer["Amenities_Title"]</h3>
+                <div class="amenities-grid">
+                    @foreach (var amenity in Amenities)
+                    {
+                        <div class="amenity-item">
+                            <span class="amenity-dot"></span>
+                            @amenity.Name
+                        </div>
+                    }
+                </div>
+            </div>
         }
+
+        <div class="faq-section">
+            <AiFaqSection Faqs="Data?.Faqs" Localizer="Localizer" />
+        </div>
     </div>
 
     <div class="ai-expand-btn-wrapper">
-        <span class="read-more-btn" @onclick="OnToggleExpand">
-            @(IsExpanded ? Localizer["HideDetails"] : Localizer["ShowAll"])
-        </span>
+        <button class="read-more-btn" @onclick="OnToggleExpand">
+            <span class="btn-text">@(IsExpanded ? Localizer["HideDetails"] : Localizer["ShowAllDetails"])</span>
+            <i class="chevron @(IsExpanded ? "up" : "down")"></i>
+        </button>
     </div>
 </div>
 
