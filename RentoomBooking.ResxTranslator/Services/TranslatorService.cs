@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -12,8 +13,16 @@ namespace ResxTranslator.Services;
 public sealed class TranslatorService : IDisposable
 {
     private const string Endpoint = "https://api.cognitive.microsofttranslator.com";
-    private const int MaxBatchSize = 100;
-    private const int MaxCharsPerRequest = 49_000; // leave margin from 50k limit
+    private const int MaxBatchSize = 1;
+    private const int MaxCharsPerRequest = 25_000; // conservative: accounts for JSON escaping overhead
+    private const int MaxTargetLanguagesPerRequest = 10; // avoid request-size overflows with many targets
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        // Preserve non-ASCII characters (e.g. Polish ą, ę) as-is instead of escaping to \uXXXX,
+        // which would multiply byte size 3-6× and trigger the 50k limit.
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
 
     private readonly HttpClient _http;
     private readonly string _subscriptionKey;
@@ -43,67 +52,87 @@ public sealed class TranslatorService : IDisposable
         if (texts.Count == 0)
             return result;
 
-        var chunks = ChunkTexts(texts);
+        var textChunks = ChunkTexts(texts);
+        var langChunks = ChunkLanguages(targetLanguages);
 
-        var targetParams = string.Join("&", targetLanguages.Select(l => $"to={l}"));
-        var url = $"{Endpoint}/translate?api-version=3.0&from={sourceLanguage}&{targetParams}";
+        var totalRequests = textChunks.Count * langChunks.Count;
+        var requestsDone = 0;
 
-        foreach (var chunk in chunks)
+        foreach (var langChunk in langChunks)
         {
-            var body = chunk.Select(t => new { Text = t }).ToArray();
-            var json = JsonSerializer.Serialize(body);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var targetParams = string.Join("&", langChunk.Select(l => $"to={l}"));
+            var url = $"{Endpoint}/translate?api-version=3.0&from={sourceLanguage}&{targetParams}";
 
-            var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
-            request.Headers.Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
-            request.Headers.Add("Ocp-Apim-Subscription-Region", _region);
-
-            var response = await _http.SendAsync(request);
-
-            if (!response.IsSuccessStatusCode)
+            foreach (var chunk in textChunks)
             {
-                var error = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException(
-                    $"Azure Translator API error ({response.StatusCode}): {error}");
-            }
+                requestsDone++;
+                Console.Write($"\r  Translating... {requestsDone}/{totalRequests} requests");
 
-            var translations = await response.Content.ReadFromJsonAsync<TranslationResponse[]>();
+                var body = chunk.Select(t => new { Text = t }).ToArray();
+                var json = JsonSerializer.Serialize(body, JsonOptions);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            if (translations == null)
-                continue;
+                var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+                request.Headers.Add("Ocp-Apim-Subscription-Key", _subscriptionKey);
+                request.Headers.Add("Ocp-Apim-Subscription-Region", _region);
 
-            for (var i = 0; i < translations.Length && i < chunk.Count; i++)
-            {
-                var originalText = chunk[i];
-                foreach (var translation in translations[i].Translations)
+                var response = await _http.SendAsync(request);
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    if (result.TryGetValue(translation.To, out var langDict))
-                        langDict[originalText] = translation.Text;
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new HttpRequestException(
+                        $"Azure Translator API error ({response.StatusCode}): {error}");
+                }
+
+                var translations = await response.Content.ReadFromJsonAsync<TranslationResponse[]>();
+
+                if (translations == null)
+                    continue;
+
+                for (var i = 0; i < translations.Length && i < chunk.Count; i++)
+                {
+                    var originalText = chunk[i];
+                    foreach (var translation in translations[i].Translations)
+                    {
+                        if (result.TryGetValue(translation.To, out var langDict))
+                            langDict[originalText] = translation.Text;
+                    }
                 }
             }
         }
 
+        Console.WriteLine($"\r  Translating... {totalRequests}/{totalRequests} requests — done.");
+
         return result;
     }
+
+    private static List<string[]> ChunkLanguages(string[] languages) =>
+        languages
+            .Select((lang, i) => (lang, i))
+            .GroupBy(x => x.i / MaxTargetLanguagesPerRequest)
+            .Select(g => g.Select(x => x.lang).ToArray())
+            .ToList();
 
     private static List<List<string>> ChunkTexts(List<string> texts)
     {
         var chunks = new List<List<string>>();
         var currentChunk = new List<string>();
-        var currentChars = 0;
+        var currentBytes = 0;
 
         foreach (var text in texts)
         {
+            var textBytes = Encoding.UTF8.GetByteCount(text);
             if (currentChunk.Count >= MaxBatchSize ||
-                (currentChars + text.Length > MaxCharsPerRequest && currentChunk.Count > 0))
+                (currentBytes + textBytes > MaxCharsPerRequest && currentChunk.Count > 0))
             {
                 chunks.Add(currentChunk);
                 currentChunk = new List<string>();
-                currentChars = 0;
+                currentBytes = 0;
             }
 
             currentChunk.Add(text);
-            currentChars += text.Length;
+            currentBytes += textBytes;
         }
 
         if (currentChunk.Count > 0)
