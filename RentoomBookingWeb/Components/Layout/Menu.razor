@@ -1,5 +1,6 @@
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@implements IAsyncDisposable
 @using RentoomBookingWeb.Components.Enums;
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<SharedResources> Localizer;
@@ -88,6 +89,7 @@
 
 @code {
     private DotNetObjectReference<Menu>? objRef;
+    private IJSObjectReference? menuScrollModule;
     private MenuVisualState NavState { get; set; } = new();
     private bool ShowMenu = false;
     private bool IsScrolling = false;
@@ -97,8 +99,8 @@
         if (firstRender)
         {
             objRef = DotNetObjectReference.Create(this);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
-            await module.InvokeVoidAsync("init", objRef);
+            menuScrollModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
+            await menuScrollModule.InvokeVoidAsync("init", objRef);
 
             Navigation.LocationChanged += OnLocationChanged;
         }
@@ -159,8 +161,21 @@
         }
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
+        if (menuScrollModule is not null)
+        {
+            try
+            {
+                await menuScrollModule.InvokeVoidAsync("dispose");
+                await menuScrollModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // Ignore: user navigated away or circuit disconnected.
+            }
+        }
+
         objRef?.Dispose();
         Navigation.LocationChanged -= OnLocationChanged;
     }
