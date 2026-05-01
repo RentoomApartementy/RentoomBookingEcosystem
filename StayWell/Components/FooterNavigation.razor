@@ -19,6 +19,10 @@
             <img src="/icons/square-parking.svg" alt="@Localizer["ParkingFooter"]" />
             <span>@Localizer["ParkingFooter"]</span>
         </button>
+        <button class="footer-menu-item @(IsActive($"/reservation/{TokenFromUrl}/loyalty-programme") ? "active" : "")" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/loyalty-programme"))">
+            <img src="/icons/coins.svg" alt="@Localizer["LoyaltyFooter"]" />
+            <span>@Localizer["LoyaltyFooter"]</span>
+        </button>
     </div>
 
     <div class="footer-navigation-row">
