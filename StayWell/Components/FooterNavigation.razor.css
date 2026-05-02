@@ -173,6 +173,7 @@
 .footer-menu-backdrop.open {
     background: rgba(0, 0, 0, 0.18);
     pointer-events: auto;
+    touch-action: none;
 }
 
 /* ── Slide-up panel ───────────────────────────── */

@@ -5,6 +5,7 @@
 @inject IStringLocalizer<HomePage> Localizer
 @inject Services.GlobalizationService GlobalizationService
 @inject FeatureFlagsService FeatureFlagsService
+@inject IJSRuntime JS
 @implements IDisposable
 
 <div class="footer-nav-wrapper">
@@ -101,29 +102,44 @@
         }
     }
 
-    private void ToggleMenu() => _menuOpen = !_menuOpen;
+    private async Task ToggleMenu()
+    {
+        _menuOpen = !_menuOpen;
+        await SetBodyScroll(!_menuOpen);
+    }
 
-    private void CloseMenu() => _menuOpen = false;
-
-    private void NavigateTo(string href)
+    private async Task CloseMenu()
     {
         _menuOpen = false;
+        await SetBodyScroll(true);
+    }
+
+    private async Task NavigateTo(string href)
+    {
+        _menuOpen = false;
+        await SetBodyScroll(true);
         Navigation.NavigateTo(href);
     }
 
-    private void OnLocationChanged(
+    private async void OnLocationChanged(
         object? sender,
         Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e
     )
     {
         _menuOpen = false;
+        await SetBodyScroll(true);
         StateHasChanged();
     }
+
+    private ValueTask SetBodyScroll(bool enabled) =>
+        JS.InvokeVoidAsync("eval", $"document.body.style.overflow='{(enabled ? "" : "hidden")}'");
 
     public void Dispose()
     {
         Navigation.LocationChanged -= OnLocationChanged;
         GlobalizationService.OnChange -= StateHasChanged;
+        if (_menuOpen)
+            JS.InvokeVoidAsync("eval", "document.body.style.overflow=''");
     }
 
     private bool IsActive(string href)
