@@ -226,6 +226,11 @@
             return;
         }
 
+        if (string.IsNullOrEmpty(_scrollRef.Id))
+        {
+            return;
+        }
+
         _jsInitialized = true;
         _activeId = upsells.First().PartnerServiceId;
         _selfRef ??= DotNetObjectReference.Create(this);
