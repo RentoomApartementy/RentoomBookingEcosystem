@@ -12,4 +12,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Før du får tilgang til søknaden din, vennligst fyll ut registreringskortet!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>En feil oppsto under lagring av dataene. Vennligst prøv igjen.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Velg innsjekkingstidspunktet ditt</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Fyll ut gjesteopplysninger</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Hei,</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Fyll ut gjesteopplysninger</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Registreringskort</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Skriv inn e-postadressen din</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Lagre og gå videre</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Fyll ut nødvendig informasjon.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Postadresse</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Endre tiden fra {0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Ved å trykke på knappen nedenfor bekrefter jeg at dataene er korrekte.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Velg estimert innsjekkingstidspunkt</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Endre gjestedata</value>
+  </data>
 </root>

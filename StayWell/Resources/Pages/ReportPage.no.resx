@@ -12,4 +12,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ReportOnPage" xml:space="preserve">
+    <value>For at vi raskt skal kunne hjelpe, vennligst gi en detaljert beskrivelse av feilen. Pek ut nøyaktig hva som ikke fungerer, og legg om mulig til bilder – dette vil betydelig øke oppløsningen av problemet.</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Rapporter en feil</value>
+  </data>
 </root>

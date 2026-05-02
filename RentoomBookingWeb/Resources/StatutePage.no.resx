@@ -12,4 +12,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="NoStatuteContent" xml:space="preserve">
+    <value>Ingen innhold i vilkårene og betingelsene på det valgte språket.</value>
+  </data>
+  <data name="OtherStatutes" xml:space="preserve">
+    <value>Andre reguleringer</value>
+  </data>
+  <data name="StatuteNotFound" xml:space="preserve">
+    <value>Ingen vilkår og betingelser funnet</value>
+  </data>
+  <data name="LoadingStatutes" xml:space="preserve">
+    <value>Lasteregler...</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Vilkår og betingelser - Rentoom | Utleie- og forvaltningskontor Toruń</value>
+  </data>
+  <data name="StatuteHeader" xml:space="preserve">
+    <value>Vilkår og betingelser</value>
+  </data>
 </root>

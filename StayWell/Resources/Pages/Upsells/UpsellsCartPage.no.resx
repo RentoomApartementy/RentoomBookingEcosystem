@@ -117,4 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Tilbake</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>Handlekurven din er tom</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Netter</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Mengde</value>
+  </data>
+  <data name="Redirecting" xml:space="preserve">
+    <value>Omdirigering</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Ta ut av handlekurven</value>
+  </data>
+  <data name="Savings" xml:space="preserve">
+    <value>Med oss vil du redde</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Sammendrag</value>
+  </data>
+  <data name="title" xml:space="preserve">
+    <value>Kuponger og tjenester</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Beløp som skal betales</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>enhet.</value>
+  </data>
+  <data name="YourCart" xml:space="preserve">
+    <value>Din vogn</value>
+  </data>
+  <data name="Addons" xml:space="preserve">
+    <value>Booking av ekstramateriale</value>
+  </data>
+  <data name="Pay" xml:space="preserve">
+    <value>Lønn</value>
+  </data>
+  <data name="CartPageTitle" xml:space="preserve">
+    <value>Vogn - sammendrag</value>
+  </data>
+  <data name="PaymentNotRequiredMessage" xml:space="preserve">
+    <value>Betaling ikke påkrevd / allerede betalt</value>
+  </data>
+  <data name="ClearCart" xml:space="preserve">
+    <value>Klar vogn</value>
+  </data>
+  <data name="CreateOrderError" xml:space="preserve">
+    <value>Klarte ikke å opprette en tilleggsbestilling.</value>
+  </data>
 </root>

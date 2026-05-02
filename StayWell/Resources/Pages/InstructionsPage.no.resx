@@ -117,4 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Address" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="ApartmentNumber" xml:space="preserve">
+    <value>Enhetsnummer</value>
+  </data>
+  <data name="ApartmentMap" xml:space="preserve">
+    <value>Leilighetskart</value>
+  </data>
+  <data name="BuildingCode" xml:space="preserve">
+    <value>Byggeforskrifter</value>
+  </data>
+  <data name="CodesTitle" xml:space="preserve">
+    <value>Tilgangskoder og adresse</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Kopiert</value>
+  </data>
+  <data name="GateCode" xml:space="preserve">
+    <value>Portkode</value>
+  </data>
+  <data name="GoogleMaps" xml:space="preserve">
+    <value>Google Maps</value>
+  </data>
+  <data name="GoOpen" xml:space="preserve">
+    <value>Åpne leiligheten din</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Innsjekkingsinstruksjoner</value>
+  </data>
+  <data name="InstructionsUnavailable" xml:space="preserve">
+    <value>Innsjekkingsinstruksjoner er ikke tilgjengelige. Hvis du har noen problemer, vennligst kontakt support.</value>
+  </data>
+  <data name="KeySafeCode" xml:space="preserve">
+    <value>Nøkkellåsbokskode</value>
+  </data>
+  <data name="NoWifi" xml:space="preserve">
+    <value>Ingen Wi-Fi-data</value>
+  </data>
+  <data name="NoMap" xml:space="preserve">
+    <value>Ingen kart</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Åpent</value>
+  </data>
+  <data name="OpenMap" xml:space="preserve">
+    <value>Åpent kart</value>
+  </data>
+  <data name="MapUnavailable" xml:space="preserve">
+    <value>Kartlenke er ikke tilgjengelig</value>
+  </data>
+  <data name="ParkingMap" xml:space="preserve">
+    <value>Parkeringskart</value>
+  </data>
+  <data name="ParkingNumber" xml:space="preserve">
+    <value>Parkeringsplass nr.</value>
+  </data>
+  <data name="ReportOnPage" xml:space="preserve">
+    <value>For at vi raskt skal kunne hjelpe, vennligst gi en detaljert beskrivelse av feilen. Pek ut nøyaktig hva som ikke fungerer, og legg om mulig til bilder – dette vil betydelig øke oppløsningen av problemet.</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Sikkerhet</value>
+  </data>
+  <data name="SharedDoorsCode" xml:space="preserve">
+    <value>Kode for felles dører</value>
+  </data>
+  <data name="Wifi" xml:space="preserve">
+    <value>WI-Fi-innlogging og passord</value>
+  </data>
+  <data name="WifiSsid" xml:space="preserve">
+    <value>Nettverksnavn (SSID)</value>
+  </data>
+  <data name="WifiPassword" xml:space="preserve">
+    <value>WI-FI-passord</value>
+  </data>
 </root>

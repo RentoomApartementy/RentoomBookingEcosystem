@@ -116,4 +116,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ParkingPage" xml:space="preserve">
+    <value>Byparkering</value>
+  </data>
+  <data name="MunicipalParking" xml:space="preserve">
+    <value>Byparkering</value>
+  </data>
+  <data name="ParkingInformation" xml:space="preserve">
+    <value>Parkeringsinformasjon</value>
+  </data>
+  <data name="ParkingDescription" xml:space="preserve">
+    <value>Informasjon om byens parkeringssoner og tilgjengelige parkeringsplasser nær overnattingsstedet ditt.</value>
+  </data>
+  <data name="NearbyParkingLocations" xml:space="preserve">
+    <value>Nærliggende parkeringsplasser</value>
+  </data>
+  <data name="ParkingRates" xml:space="preserve">
+    <value>Parkeringsprisliste</value>
+  </data>
+  <data name="ParkingFooter" xml:space="preserve">
+    <value>Parkering</value>
+  </data>
+  <data name="CityParking" xml:space="preserve">
+    <value>Byparkering</value>
+  </data>
+  <data name="FreePark" xml:space="preserve">
+    <value>Nå kan du parkere gratis</value>
+  </data>
+  <data name="PaidPark" xml:space="preserve">
+    <value>Nå kan du parkere mot betaling</value>
+  </data>
+  <data name="MoreInfo" xml:space="preserve">
+    <value>Mer informasjon</value>
+  </data>
+  <data name="PaidDays" xml:space="preserve">
+    <value>Betalte dager</value>
+  </data>
+  <data name="FreeDays" xml:space="preserve">
+    <value>Fridager</value>
+  </data>
+  <data name="ZoneA" xml:space="preserve">
+    <value>Sone A</value>
+  </data>
+  <data name="ZoneB" xml:space="preserve">
+    <value>Sone B</value>
+  </data>
+  <data name="ZoneDowntownPaidParking" xml:space="preserve">
+    <value>Betalt parkeringssone i sentrum</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Mon.</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tirsdag.</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>AVG.</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thu.</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Pt.</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Lør.</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Ndz.</value>
+  </data>
 </root>

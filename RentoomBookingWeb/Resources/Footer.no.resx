@@ -117,4 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="footerText1" xml:space="preserve">
+    <value>Vårt oppdrag er å tilby best mulig service til våre kunder, både gjester og leilighetseiere. Det er spesielt viktig for oss å opprettholde en høy standard på kundeservice og sørge for at våre gjester føler seg hjemme i leilighetene våre og kan stole på vår hjelp når som helst.
+
+</value>
+  </data>
+  <data name="contactText" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="CallUs" xml:space="preserve">
+    <value>Ring oss:
+</value>
+  </data>
+  <data name="WriteUs" xml:space="preserve">
+    <value>Skriv til oss:
+</value>
+  </data>
+  <data name="Regulations1" xml:space="preserve">
+    <value>Vilkår og betingelser</value>
+  </data>
+  <data name="Regulations2" xml:space="preserve">
+    <value>Gå til regelverket</value>
+  </data>
+  <data name="AllApartmentsText" xml:space="preserve">
+    <value>Alle leiligheter
+</value>
+  </data>
+  <data name="DesignedText" xml:space="preserve">
+    <value>Designet av Bartosz Frankowski og Szymon Balicki</value>
+  </data>
+  <data name="AboutCity" xml:space="preserve">
+    <value>Om Toruń</value>
+  </data>
 </root>

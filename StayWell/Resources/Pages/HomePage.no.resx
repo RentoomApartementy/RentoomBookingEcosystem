@@ -118,4 +118,97 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AboutReservation" xml:space="preserve">
+    <value>Om reservatet</value>
+  </data>
+  <data name="BookOnBtn" xml:space="preserve">
+    <value> Bok for Rentoom.pl</value>
+  </data>
+  <data name="BookOnDesc" xml:space="preserve">
+    <value>Bestill ditt perfekte opphold i Toruń og nyt en unik leilighet.</value>
+  </data>
+  <data name="ChangeLanguage" xml:space="preserve">
+    <value>Endre språk</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Innsjekk</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Utsjekk</value>
+  </data>
+  <data name="ClubBenefits" xml:space="preserve">
+    <value>Rentoom Fordelsklubb</value>
+  </data>
+  <data name="CurrentLanguage" xml:space="preserve">
+    <value>Nåværende språk</value>
+  </data>
+  <data name="Enhance" xml:space="preserve">
+    <value>Oppgrader oppholdet ditt</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Hjem</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Innsjekkingsinstruksjoner</value>
+  </data>
+  <data name="InstructionsFooter" xml:space="preserve">
+    <value>Instruksjoner</value>
+  </data>
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>Språket endret til:</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Håndter</value>
+  </data>
+  <data name="ManageStay" xml:space="preserve">
+    <value>Administrer oppholdet ditt</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>mer...</value>
+  </data>
+  <data name="MyVouchers" xml:space="preserve">
+    <value>Mine verdikuponger</value>
+  </data>
+  <data name="NoSuchPage" xml:space="preserve">
+    <value>Oi, dette nettstedet finnes ikke!</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Åpent</value>
+  </data>
+  <data name="OpenApartment" xml:space="preserve">
+    <value>Åpen leilighet</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Staywell - Din bestilling</value>
+  </data>
+  <data name="ReservationID" xml:space="preserve">
+    <value>Reservasjonsnummer</value>
+  </data>
+  <data name="ReservationCanceledTitle" xml:space="preserve">
+    <value>Reservasjon kansellert</value>
+  </data>
+  <data name="ReservationCanceledDesc" xml:space="preserve">
+    <value>Denne reservasjonen er ikke lenger aktiv. Kontakt Rentoom hvis du trenger hjelp.</value>
+  </data>
+  <data name="AiChatTitle" xml:space="preserve">
+    <value>StayWell AI</value>
+  </data>
+  <data name="AiAssistant" xml:space="preserve">
+    <value>AI-assistent</value>
+  </data>
+  <data name="ParkingFooter" xml:space="preserve">
+    <value>Byparkering</value>
+  </data>
+  <data name="AboutReservationFooter" xml:space="preserve">
+    <value>Bestillingsinformasjon</value>
+  </data>
+  <data name="LoyaltyFooter" xml:space="preserve">
+    <value>Dine poeng</value>
+  </data>
+  <data name="AddonsLabel" xml:space="preserve">
+    <value>Tilbehør</value>
+  </data>
+  <data name="CartButtonAlt" xml:space="preserve">
+    <value>Vogn</value>
+  </data>
 </root>

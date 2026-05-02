@@ -117,4 +117,118 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AcceptanceDate" xml:space="preserve">
+    <value>Dato akseptert</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="Apartment" xml:space="preserve">
+    <value>Leilighet</value>
+  </data>
+  <data name="ApartmentAmenities" xml:space="preserve">
+    <value>Leilighetsutstyr</value>
+  </data>
+  <data name="ApartmentAndStayTitle" xml:space="preserve">
+    <value>Opphold og leilighet</value>
+  </data>
+  <data name="BookingDetailsTitle" xml:space="preserve">
+    <value>Bestillingsdetaljer</value>
+  </data>
+  <data name="BookingPerson" xml:space="preserve">
+    <value>Booker</value>
+  </data>
+  <data name="CheckinCheckOutTime" xml:space="preserve">
+    <value>Innsjekking og utsjekk</value>
+  </data>
+  <data name="CheckInDate" xml:space="preserve">
+    <value>Innsjekkingsdato</value>
+  </data>
+  <data name="CheckInTime" xml:space="preserve">
+    <value>Innsjekkingstid</value>
+  </data>
+  <data name="CheckOutDate" xml:space="preserve">
+    <value>Utsjekkingsdato</value>
+  </data>
+  <data name="CheckOutTime" xml:space="preserve">
+    <value>Utsjekkingstid</value>
+  </data>
+  <data name="Consents" xml:space="preserve">
+    <value>Samtykker</value>
+  </data>
+  <data name="ContactMail" xml:space="preserve">
+    <value>Kontakt-e-post</value>
+  </data>
+  <data name="GDPRConsent" xml:space="preserve">
+    <value>GDPR-samtykke</value>
+  </data>
+  <data name="GDPRDescription" xml:space="preserve">
+    <value>Den tillater databehandling i samsvar med GDPR og personvernerklæringen.</value>
+  </data>
+  <data name="HideAmenitiesButton" xml:space="preserve">
+    <value>Skjul utstyr</value>
+  </data>
+  <data name="HideTOSButton" xml:space="preserve">
+    <value>Skjul vilkår og betingelser</value>
+  </data>
+  <data name="MarketingConsent" xml:space="preserve">
+    <value>Markedsføringssamtykke</value>
+  </data>
+  <data name="MarketingDescription" xml:space="preserve">
+    <value>Jeg samtykker i å bli kontaktet for markedsføringsformål (e-post/SMS/WhatsApp) i samsvar med personvernerklæringen.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Navn</value>
+  </data>
+  <data name="OfficeAddress" xml:space="preserve">
+    <value>Kontoradresse</value>
+  </data>
+  <data name="RegisteredGuests" xml:space="preserve">
+    <value>Registrerte gjester</value>
+  </data>
+  <data name="ShowAmenitiesButton" xml:space="preserve">
+    <value>Visning leilighetsutstyr</value>
+  </data>
+  <data name="ShowFullTOSButton" xml:space="preserve">
+    <value>Vis fullstendige vilkår og betingelser</value>
+  </data>
+  <data name="StayDates" xml:space="preserve">
+    <value>Oppholdsdatoer</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Etternavn</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Vilkår og betingelser</value>
+  </data>
+  <data name="TOSConsents" xml:space="preserve">
+    <value>Vilkår og betingelser og samtykker</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Rentoom er ansvarlig for oppholdet ditt</value>
+  </data>
+  <data name="WithdrawConsentModalTitle" xml:space="preserve">
+    <value>Tilbaketrekning av samtykke</value>
+  </data>
+  <data name="TaxIdValue" xml:space="preserve">
+    <value>8792727407 / 387605281</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Om bookingen</value>
+  </data>
+  <data name="OfficeAddressValue" xml:space="preserve">
+    <value>Stanisława Szymańskiego 1B, 87-100 Toruń, Polen</value>
+  </data>
+  <data name="WithdrawConsentModalConfirm" xml:space="preserve">
+    <value>Angre</value>
+  </data>
+  <data name="TaxIdLabel" xml:space="preserve">
+    <value>NIP / REGON:</value>
+  </data>
+  <data name="WithdrawConsentModalCancel" xml:space="preserve">
+    <value>Tilbake</value>
+  </data>
+  <data name="WithdrawConsentModalQuestion" xml:space="preserve">
+    <value>Er du sikker på at du vil trekke tilbake dette samtykket?</value>
+  </data>
 </root>
