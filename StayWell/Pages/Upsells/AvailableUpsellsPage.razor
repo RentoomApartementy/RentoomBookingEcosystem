@@ -19,7 +19,22 @@
 
 @if (AvailableUpsellsState.IsLoading)
 {
-    <p>@Localizer["Loading"]</p>
+    <div class="upsell-outer-wrapper staywell-theme">
+        <div class="upsell-section-container">
+            <div class="upsell-list-scroll-wrapper">
+                <div class="skeleton-tile">
+                    <div class="skeleton skeleton--tile-image"></div>
+                    <div class="skeleton-tile__body">
+                        <div class="skeleton skeleton--tile-title"></div>
+                        <div class="skeleton skeleton--tile-desc"></div>
+                        <div class="skeleton skeleton--tile-desc skeleton--tile-desc--short"></div>
+                        <div class="skeleton skeleton--tile-price"></div>
+                        <div class="skeleton skeleton--tile-btn"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 else if (!string.IsNullOrWhiteSpace(AvailableUpsellsState.Error))
 {

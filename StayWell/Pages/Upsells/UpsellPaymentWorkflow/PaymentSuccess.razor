@@ -17,7 +17,10 @@ to do so: 1. split the api calls into two (1. create order in db , return order 
 @inherits Models.PageBase
 
 
-    <h3>@UpsellLocalizer["WaitingForPaymentConfirmation"]</h3>
+<div class="payment-success-wrapper">
+    <span class="loader"></span>
+    <span class="payment-success-wrapper__label">@UpsellLocalizer["WaitingForPaymentConfirmation"]</span>
+</div>
 
 
 @code {
@@ -36,14 +39,15 @@ to do so: 1. split the api calls into two (1. create order in db , return order 
     }
 
     private async Task RefreshPurchasedUpsellsAsync()
-    {        if (string.IsNullOrWhiteSpace(resToken))
+    {
+        if (string.IsNullOrWhiteSpace(resToken) || !Guid.TryParse(UpsellOrderGuid, out var upsellOrderGuid))
         {
             return;
         }
 
         while (true)
         {
-            var r = await backendApi.GetUpsellOrderStatusAsync(new Guid(UpsellOrderGuid));
+            var r = await backendApi.GetUpsellOrderStatusAsync(upsellOrderGuid);
             Console.WriteLine($"Upsell order status: {r.PaymentStatus}");
             if (r.PaymentStatus == PaymentStatuses.Paid)
             {
