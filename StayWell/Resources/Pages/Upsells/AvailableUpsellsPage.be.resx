@@ -27,4 +27,109 @@
   <data name="NoAvailableUpsells" xml:space="preserve">
     <value>Дапаўненняў няма.</value>
   </data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>адзін раз</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Адрас</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>перс./дзень</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Падрабязнасці прагляду</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Выдаліць</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Сапраўднае з</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Падрабязнасці</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Код</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Іншае</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Дзейнічае на ўвесь час знаходжання. Патрабуецца паказаць код пры выкарыстанні.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Спасылка</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Сапраўднае для</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Апісанне</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>Заставайся</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Ночы</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Дадаць</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR недаступны</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Выкарыстанне ваўчара</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Павялічыць</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>ап./дзень</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Умовы і правілы</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>QR-код ваўчара</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Даступныя дапаўненні для пакупкі</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Выкарыстанне</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Пакажы гэты код персаналу для выкарыстання ваўчара.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Твой код</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Цана</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Шоу ў рэстаране</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Ваўчары</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Код трэба ўводзіць уручную</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>Госці</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Паказаць код ваўчара</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>Без абмежаванняў</value>
+  </data>
 </root>
