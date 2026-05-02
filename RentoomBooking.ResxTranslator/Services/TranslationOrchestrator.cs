@@ -135,12 +135,12 @@ public sealed class TranslationOrchestrator
 
         Console.WriteLine($"Sending {allTextsToTranslate.Count} unique texts to Azure Translator...");
 
-        // Extract source language code (pl-PL → pl)
-        var sourceLanguageCode = _sourceCulture.Split('-')[0];
+        // Extract source language code (pl-PL → pl), mapped to Azure Translator code
+        var sourceLanguageCode = ToAzureLangCode(_sourceCulture);
 
         // Translate to all target languages in one batch call
         var targetLangCodes = targetCultures
-            .Select(c => c.Split('-')[0])
+            .Select(ToAzureLangCode)
             .Distinct()
             .ToArray();
 
@@ -158,7 +158,7 @@ public sealed class TranslationOrchestrator
             if (task.KeysToTranslate.Count == 0 && task.KeysToRemove.Count == 0)
                 continue;
 
-            var targetLangCode = task.TargetCulture.Split('-')[0];
+            var targetLangCode = ToAzureLangCode(task.TargetCulture);
             if (!translations.TryGetValue(targetLangCode, out var langTranslations))
                 continue;
 
@@ -298,4 +298,23 @@ public sealed class TranslationOrchestrator
 
     private static string Truncate(string s, int maxLen)
         => s.Length <= maxLen ? s : s[..maxLen] + "…";
+
+    /// <summary>
+    /// Maps a .NET culture code (e.g. "no-NO", "no") to the Azure Translator language code.
+    /// Azure Translator does not support "no" — it uses "nb" (Norwegian Bokmål).
+    /// </summary>
+    private static string ToAzureLangCode(string cultureCode)
+    {
+        var langCode = cultureCode.Split('-')[0];
+        return AzureLangCodeOverrides.TryGetValue(langCode, out var mapped) ? mapped : langCode;
+    }
+
+    /// <summary>
+    /// Maps .NET language codes that differ from Azure Translator language codes.
+    /// </summary>
+    private static readonly Dictionary<string, string> AzureLangCodeOverrides =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["no"] = "nb", // Norwegian → Norwegian Bokmål (Azure uses "nb", not "no")
+        };
 }
