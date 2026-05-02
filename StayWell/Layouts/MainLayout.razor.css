@@ -46,6 +46,7 @@
 
 .layout-header.hide {
     transform: translateY(-100%);
+    pointer-events: none;
 }
 
 
