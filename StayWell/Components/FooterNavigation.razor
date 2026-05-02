@@ -132,14 +132,14 @@
     }
 
     private ValueTask SetBodyScroll(bool enabled) =>
-        JS.InvokeVoidAsync("eval", $"document.body.style.overflow='{(enabled ? "" : "hidden")}'");
+        JS.InvokeVoidAsync("eval", $"var b=document.getElementById('main-body');if(b)b.style.overflowY='{(enabled ? "auto" : "hidden")}'");
 
     public void Dispose()
     {
         Navigation.LocationChanged -= OnLocationChanged;
         GlobalizationService.OnChange -= StateHasChanged;
         if (_menuOpen)
-            JS.InvokeVoidAsync("eval", "document.body.style.overflow=''");
+            JS.InvokeVoidAsync("eval", "var b=document.getElementById('main-body');if(b)b.style.overflowY=''");
     }
 
     private bool IsActive(string href)

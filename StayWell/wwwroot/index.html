@@ -142,6 +142,7 @@
                 scrollContainer.removeEventListener('scroll', scrollContainer._headerScrollHandler);
             }
 
+            let upwardDelta = 0;
             scrollContainer._headerScrollHandler = () => {
                 if (rafPending) return;
                 rafPending = true;
@@ -149,10 +150,15 @@
                     rafPending = false;
                     const scrollTop = scrollContainer.scrollTop;
                     if (scrollTop < 0) return;
-                    if (scrollTop > lastScrollTop && scrollTop > 30) {
+                    const delta = scrollTop - lastScrollTop;
+                    if (delta > 0 && scrollTop > 30) {
+                        upwardDelta = 0;
                         header.classList.add('hide');
-                    } else {
-                        header.classList.remove('hide');
+                    } else if (delta < 0) {
+                        upwardDelta -= delta;
+                        if (upwardDelta > 10) {
+                            header.classList.remove('hide');
+                        }
                     }
                     lastScrollTop = scrollTop;
                 });
