@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Är du säker på att du vill dra tillbaka detta samtycke?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Visa dokumentet</value>
+  </data>
 </root>

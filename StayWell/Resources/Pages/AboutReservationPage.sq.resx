@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Jeni i sigurt që dëshironi ta tërhiqni këtë pëlqim?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Shiko dokumentin</value>
+  </data>
 </root>

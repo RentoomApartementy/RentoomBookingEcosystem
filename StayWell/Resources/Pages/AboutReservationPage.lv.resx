@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Vai esat pārliecināts, ka vēlaties atsaukt šo piekrišanu?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Skatīt dokumentu</value>
+  </data>
 </root>

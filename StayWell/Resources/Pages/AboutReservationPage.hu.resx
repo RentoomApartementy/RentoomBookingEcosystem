@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Biztos vagy benne, hogy vissza akarod vonni ezt a beleegyezést?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Tekintse meg a dokumentumot</value>
+  </data>
 </root>

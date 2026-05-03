@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>An bhfuil tú cinnte gur mhaith leat an toiliú seo a tharraingt siar?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Féach ar an gcáipéis</value>
+  </data>
 </root>
