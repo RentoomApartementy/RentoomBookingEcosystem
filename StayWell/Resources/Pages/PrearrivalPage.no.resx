@@ -117,4 +117,224 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Godta</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Godkjenn</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Antall voksne</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Vi gleder oss!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Endre gjestedata</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Innsjekk</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Utsjekk</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Antall barn</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Jeg bekrefter</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Fortsett</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dager</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Fyll ut innsjekkingsskjemaet og aksepter vilkårene for å få tilgang til panelet.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Fylt</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Fyll ut gjesteopplysninger</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Vennligst oppgi opplysninger om alle som skal bo på anlegget.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Gjest</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Åpningstider</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Referat</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Navn</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Neste</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefonnummer</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Din bookingpanel er nå tilgjengelig!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Registreringskort</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Data lagret med suksess!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Jeg aksepterer forpliktelsen til å rapportere eventuelle skader og kommentarer ved innsjekking.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Jeg aksepterer forbudet mot røyking av tobakksprodukter og elektroniske sigaretter inne i anlegget.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Det er forbudt å arrangere arrangementer og ta imot tredjeparter som ikke er inkludert i reservasjonen.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Hotelldagen varer fra én time </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>Ved ankomst opptil én time</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>på avreisedagen.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Etternavn</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>LEIEREGLER  
+Vilkårene og avtalen definerer vilkårene for booking og utleie av leiligheter som er gjenstand for leie hos Rentoom   
+Apartamenty Sp. z o.o. (Utleier), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 til fordel for leietakeren.  
+1. Bestilling eller leie av overnatting tilsvarer å lese og akseptere bestemmelsene i vilkårene og betingelsene og   
+Avtaler.  
+2. Den kompetente domstolen til å avgjøre tvister vil være domstolen i Toruń.  
+3. Utleier forbeholder seg retten til å nekte å ta imot en gjest som: ikke har gyldig dokumentasjon   
+identitetskort (dvs. identitetskort eller pass) eller ikke ønsker å fremvise dokument, er påvirket av alkohol eller  
+andre narkotika, brøt han under sitt forrige opphold bestemmelsene i forskriftene.  
+4. Utleier forbeholder seg retten til umiddelbart å avslutte kontrakten med gjesten som bryter kontrakten  
+Leieregler, uten rett til å refundere reservasjonsgebyret. Gjesten må gjøre det umiddelbart   
+forlot stedet.  
+5. Hotelldagen varer fra kl. 15:00 til 11:00 neste dag.  
+6. På avreisedagen er leietakeren forpliktet til å overlevere leiligheten innen kl. 11:00, ellers   
+Et gebyr vil bli lagt til i beløpet på neste startdag + 50 %.  
+7. Røyking i leilighetene er strengt forbudt. For å ha brutt røykeforbudet inne i leiligheten   
+Leietakeren er forpliktet til å betale en ekstra avgift på 500 PLN (fem hundre).  
+8. Det er forbudt å bruke elektrisk utstyr som ikke er en del av leiligheten og som er  
+Brannfare.  
+9. Leietakeren er forpliktet til å gi eventuelle skader eller feil på leilighetens utstyr   
+Informer utleieren umiddelbart.  
+10. Kjæledyr er kun tillatt med utleiers tillatelse. Prisen for kjæledyr er 50 PLN for hele oppholdet.  
+11. Stille timer i den leide leiligheten er mellom kl. 22.00 og 06.00. Folk   
+Hvis du ikke er registrert i leiligheten, kan du bare besøke til kl. 23:00.  
+12. Det er helt forbudt å organisere sosiale arrangementer i leiligheten. For å organisere arrangementet   
+Leietakeren vil betale et ekstra gebyr på 5 000 PLN + ekstra tap til utleier   
+påført av godseieren. Alle skader på den leide leiligheten og bygningen er ansvaret til   
+leietakerens person. Leietakeren er ansvarlig for alle skader som følge av atferden til tredjepart som bor i  
+med henne i leiligheten – invitert til leiligheten/bygningen av denne personen. I tilfelle politiets inngripen   
+eller kommunevakten, vil utleier kreve en ekstra avgift på 500 PLN (fem hundre zloty).  
+13. Antallet personer som bor i leiligheten må ikke overstige det som ble oppgitt under reservasjonen. Utsagn   
+Uregelmessigheter i denne sammenhengen fører til beregning av et tilleggsgebyr på 200 PLN for hver av de   
+personer registrert for hver oppholdsnatt.  
+14. Gjester er forpliktet til å sikre leiligheten ordentlig, det vil si å lukke alle dører grundig   
+inngang og vinduer før hver av dem forlater leiligheten og for lagring   
+nøkler/koder/fjernkontroller uten mulighet for uautorisert tilgang til dem.  
+15. Utleier er ikke ansvarlig for skadede eller tapte verdisaker som blir liggende igjen i leiligheten.  
+16. Ved tap eller ødeleggelse av leilighetsnøkkelen eller garasjefjernkontrollen, vil det bli krevd et gebyr i   
+200 PLN for hvert stykke.  
+17. Sluttrengjøring er inkludert i prisen for oppholdet. Gjesten er imidlertid forpliktet til å gå etterpå   
+vasket opp og brukt utstyr. Disse aktivitetene er ikke essensen i den siste rengjøringen.  
+18. Eventuell ekstra rengjøring på utleiers spesielle forespørsel betales i henhold til gebyrets beløp  
+Bensinstasjon. Sengetøy og håndklær blir byttet ut.  
+19. Strømregninger gitt av utleier er inkludert i oppholdsprisen.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | tlf. +48 881 388 001  
+20. Leietakeren er økonomisk ansvarlig for alle skader/tyverier som oppstår i leiligheten under oppholdet.  
+21. Vennligst informer oss umiddelbart hvis det er noen misforståelser, eller hvis du ikke har det  
+Fornøyd med tjenestene våre. Vi vil gjøre vårt beste for å grundig undersøke problemet og løse det.  
+22. Utleier kan kreve et depositum på opptil 1 000 PLN fra gjester for reservasjoner, som kan returneres innen fem dager   
+Jobb etter utsjekk.  
+23. Utleier har rett til å kreve erstatning for beløpet av gebyrene i hver sak  
+Ekstra.  
+24. Leietakeren har rett til å klage på tjenesten. Klager skal sendes via e-post til: reklamacje@rentoom.pl  
+eller med rekommandert brev til postadressen. Svar vil bli gitt innen 14 dager etter levering.  
+Leieregler på engelsk er tilgjengelige på www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Det er mye igjen å beholde</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Velg din omtrentlige ankomsttid</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Ankomsttid</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Du har valgt tidspunktet</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Velg alle samtykker</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laster...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Allerede akseptert</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Påkrevd</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Se dokumentet</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Se fullstendige vilkår og betingelser</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Vilkår og betingelser</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Jeg vet ikke ennå</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Bare bokstaver, mellomrom, bindestreker og apostrofer</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Klarte ikke å laste inn samtykker. Vennligst prøv igjen.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Gjør om</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Du kan endre dine valgfrie samtykker når som helst på siden «Om booking».</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Vilkår og betingelser</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Skrivefeil for data.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Du kan ikke få tilgang til denne siden.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Vilkår og betingelser og samtykker</value>
+  </data>
 </root>

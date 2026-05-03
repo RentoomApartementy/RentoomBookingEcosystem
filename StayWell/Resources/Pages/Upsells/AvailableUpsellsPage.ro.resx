@@ -27,4 +27,109 @@
   <data name="NoAvailableUpsells" xml:space="preserve">
     <value>Nu sunt disponibile add-on-uri</value>
   </data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>O singură dată</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Adresă</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>pers./zi</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Vezi detalii</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Valabil de la</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Detalii</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Cod</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Altele</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Valabil pe toată durata șederii. Trebuie să arate codul la răscumpărare.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Valabil pentru</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Descriere</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>Rămâi</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Nopți</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Adaugă</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR nu este disponibil</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Răscumpărare de vouchere</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Mărește</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>apt./zi</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Termeni și condiții</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>Cod voucher QR</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Accesorii disponibile pentru achiziție</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Folosită</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Arată acest cod personalului pentru a răscumpăra voucherul.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Codul tău</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Preț</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Spectacol în restaurant</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Vouchere</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Cod ce trebuie introdus manual</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>Invitați</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Afișează codul voucherului</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>Fără limită</value>
+  </data>
 </root>

@@ -33,4 +33,109 @@
   <data name="PaymentErrorTitle" xml:space="preserve">
     <value>Fizetési hiba</value>
   </data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>egyszeri</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Cím</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>Pers./nap</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Részletek megtekintése</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Törlés</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Érvényes</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Részletek</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Kód</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Egyéb</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Érvényes az egész tartózkodás alatt. A váltáskor kódot kell mutatni.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Érvényes</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Leírás</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>Maradj</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Éjszakák</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR nem elérhető</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Utalvány Váltás</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Nagyítás</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>Lakás/nap</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Feltételek</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>QR utalványkód</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>A megvásárolt kiegészítők</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Használt</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Mutasd meg ezt a kódot a személyzetnek, hogy beválthasd a voucheredet.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>A kódod</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Ár</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Előadás az étteremben</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>A vouchereim</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Státusz</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>A kódot kézzel kell bevinni</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>vendégek</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Utalványkód megjelenítése</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>Nincs korlát</value>
+  </data>
 </root>

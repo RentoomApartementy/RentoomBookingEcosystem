@@ -12,4 +12,60 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Om oss
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Gjennomsnittlig leilighetsvurdering
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>leiligheter å administrere
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Håndterte reservasjoner
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Gjester servert
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Historie</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Vi er en gruppe mennesker som elsker å reise og har fått erfaring med turisme i internasjonale markeder. I tillegg har vi jobbet med forvaltning, utleie, renovering og handel på eiendomsmarkedet i over 6 år. Vi ønsker å tilby opplevelsen vi har oppnådd til våre kunder og gjester, som alltid er fornøyde med tjenestene våre.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Oppdrag</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Vi tilbyr best mulig service til våre kunder, både gjester og leilighetseiere. Det er spesielt viktig for oss å opprettholde en høy standard på kundeservice og sørge for at våre gjester føler seg hjemme i leilighetene våre og kan stole på vår hjelp når som helst.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Vårt team
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Visjonær og strateg med erfaring fra eiendomsbransjen. Han bygde Rentoom for å forenkle korttidsutleie og automatisere alt fra bestillinger til gjestehåndtering.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Det sørger for at Rentoom-teknologien er rask, pålitelig og trygg. Lidenskapelig opptatt av automatisering og moderne løsninger for leiemarkedet.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Med oppmerksomhet på hver minste detalj koordinerer hun daglige aktiviteter. Takket være dette kan kundene våre sove fredelig – alt fungerer i tide og uten problemer.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Ring</value>
+  </data>
 </root>

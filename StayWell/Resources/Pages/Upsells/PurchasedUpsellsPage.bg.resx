@@ -33,4 +33,109 @@
   <data name="PaymentErrorTitle" xml:space="preserve">
     <value>Грешка при плащане</value>
   </data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>Еднократно</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>перс./ден</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Вижте подробности</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Изтрий</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Валидно от</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Код</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Други</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Валидно за целия престой. Изисква се да се покаже код при осребряване.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Връзка</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Валидно за</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>Остани</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Нощи</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Добави</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR не е наличен</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Ваучер Осребряване</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Уголемете</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>ап./ден</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Условия и правила</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>QR ваучер код</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Закупените ти добавки</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Използвани</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Покажете този код на персонала, за да осребрите ваучера си.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Твоят код</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Цена</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Шоу в ресторанта</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Моите ваучери</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Кодът може да се въвежда ръчно</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>Гости</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Покажи код на ваучера</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>Без лимит</value>
+  </data>
 </root>

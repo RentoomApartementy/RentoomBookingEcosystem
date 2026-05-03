@@ -117,4 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Apartments" xml:space="preserve">
+    <value>Leiligheter</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Om oss</value>
+  </data>
+  <data name="Cooperation" xml:space="preserve">
+    <value>Samarbeid</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="RentoomDesigner" xml:space="preserve">
+    <value>Rentoom Designer</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Annet</value>
+  </data>
+  <data name="CallUs" xml:space="preserve">
+    <value>Ring</value>
+  </data>
+  <data name="HomeHeroText" xml:space="preserve">
+    <value>Finn drømmeleiligheten din i Toruń!</value>
+  </data>
+  <data name="NumberOfPeople" xml:space="preserve">
+    <value>Antall personer</value>
+  </data>
+  <data name="NumberOfRooms" xml:space="preserve">
+    <value>Antall rom</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Søk</value>
+  </data>
+  <data name="SelectNumberOfGuests" xml:space="preserve">
+    <value>Velg antall personer</value>
+  </data>
+  <data name="NumberOfGuests" xml:space="preserve">
+    <value>OS.</value>
+  </data>
+  <data name="ChildrenUnder2" xml:space="preserve">
+    <value>Barn</value>
+  </data>
+  <data name="Adults" xml:space="preserve">
+    <value>Gjester (over 2 år)</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Gjester</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Datoer</value>
+  </data>
+  <data name="AdultSingle" xml:space="preserve">
+    <value>Voksen</value>
+  </data>
+  <data name="AdultPlural" xml:space="preserve">
+    <value>Voksne</value>
+  </data>
+  <data name="ChildSingle" xml:space="preserve">
+    <value>Barn</value>
+  </data>
+  <data name="ChildPlural" xml:space="preserve">
+    <value>Barn</value>
+  </data>
+  <data name="ClickToSelectDate" xml:space="preserve">
+    <value>Klikk for å velge en dato</value>
+  </data>
+  <data name="CheckApartmentsWithOffer" xml:space="preserve">
+    <value>Sjekk ut leiligheter med denne pakken</value>
+  </data>
+  <data name="ForInvestors" xml:space="preserve">
+    <value>For investorer</value>
+  </data>
+  <data name="AboutCity" xml:space="preserve">
+    <value>Om Toruń</value>
+  </data>
 </root>

@@ -12,4 +12,125 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Samarbeid</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>Om oss og hvorfor oss?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Erfaring
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty er et moderne merke som administrerer korttidsutleie i Toruń. Vi har allerede blitt betrodd av over 100 investorer. Vi forvalter over 150 leiligheter og håndterer over 7000 reservasjoner per år.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Kvalitet</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Vi tar oss av hele prosessen – fra profesjonell forberedelse av leiligheten og effektiv promotering, gjennom dynamisk prisstyring, til døgnkontinuerlig gjesteservice, rengjøring og teknisk service. Vi sikrer transparente oppgjør og full økonomisk åpenhet.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Profesjonalitet</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Takket være erfaring og en dokumentert driftsmodell er det mulig å generere inntekter på opptil 30 % av eiendommens verdi per år*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Innovasjon</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>I tillegg øker vårt Partnerprogram, som tilbyr rabatter på restauranter og attraksjoner i Toruń, attraktiviteten til leiligheter og påvirker beleggsprosenten.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Fordeler med samarbeid
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Vedlikeholdsfri investering</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Tjenesten vi tilbyr er komplett. Du kan sove fredelig, vi jobber for deg.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Inntektsoptimalisering</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Klar til å hjelpe 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Vi overvåker markedet kontinuerlig og justerer prisene for utleie av en leilighet til din fortjeneste.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Vi garanterer våre felles kunder service døgnet rundt, syv dager i uken.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Hvis du ønsker å etablere samarbeid, fyll ut skjemaet
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Etternavn</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Navn</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefonnummer</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Antall leiligheter</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Toruń-distriktet</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Samarbeid</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Meldingsinnhold</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Jeg samtykker i behandlingen av mine personopplysninger for å kunne kontakte og håndtere henvendelsen</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Personvernerklæring</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sender...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Fyll ut alle feltene i skjemaet.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Vennligst oppgi en gyldig e-postadresse.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Skriv inn riktig antall leiligheter.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Godkjenn ditt samtykke til databehandling.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Takk. Skjemaet er sendt til Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Glemte å sende skjema. Vennligst prøv igjen om et øyeblikk.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Kontakten kunne reddes, men avtalen kunne ikke inngås. Sjekk Bitrix før du sender den på nytt.</value>
+  </data>
 </root>

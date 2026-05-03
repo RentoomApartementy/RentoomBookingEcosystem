@@ -117,4 +117,169 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApartmentName" xml:space="preserve">
+    <value>Leilighet</value>
+  </data>
+  <data name="SelectedDates" xml:space="preserve">
+    <value>Valgt dato</value>
+  </data>
+  <data name="NoDatesSelected" xml:space="preserve">
+    <value>ingen valgt dato</value>
+  </data>
+  <data name="NumberOfGuests" xml:space="preserve">
+    <value>Antall personer</value>
+  </data>
+  <data name="NoGuestsSelected" xml:space="preserve">
+    <value>Ikke et bestemt antall personer</value>
+  </data>
+  <data name="NoOffersAvailable" xml:space="preserve">
+    <value>Ingen tilbud på den valgte datoen</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Vis mer</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>Detaljer om kollaps</value>
+  </data>
+  <data name="SummaryStepButtonLabel" xml:space="preserve">
+    <value>Forplikt seg</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Oppsummering av bookinger</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Ytterligere alternativer</value>
+  </data>
+  <data name="Opłata serwisowa 139 x" xml:space="preserve">
+    <value>Serviceavgift 139 x</value>
+  </data>
+  <data name="Zwierzę" xml:space="preserve">
+    <value>Dyr</value>
+  </data>
+  <data name="Łóżeczko dla niemowlaka" xml:space="preserve">
+    <value>Barneseng</value>
+  </data>
+  <data name="Łóżeczko turystyczne" xml:space="preserve">
+    <value>Reiseseng</value>
+  </data>
+  <data name="PÓŹNE WYMELDOWANIE" xml:space="preserve">
+    <value>SEN UTSJEKK</value>
+  </data>
+  <data name="WCZESNE ZAMELDOWANIE" xml:space="preserve">
+    <value>TIDLIG INNSJEKK</value>
+  </data>
+  <data name="Kwiaty" xml:space="preserve">
+    <value>Blomster</value>
+  </data>
+  <data name="Upgrade" xml:space="preserve">
+    <value>Oppgradering</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Fra</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Til</value>
+  </data>
+  <data name="Adults" xml:space="preserve">
+    <value>Voksne</value>
+  </data>
+  <data name="Children" xml:space="preserve">
+    <value>Barn</value>
+  </data>
+  <data name="RefundableOffer" xml:space="preserve">
+    <value>Tilbud om retur</value>
+  </data>
+  <data name="Non-refundableOffer" xml:space="preserve">
+    <value>Ikke-refunderbart tilbud</value>
+  </data>
+  <data name="BookNow" xml:space="preserve">
+    <value>Bestill nå</value>
+  </data>
+  <data name="BookNowStepButtonLabel" xml:space="preserve">
+    <value>Detaljer</value>
+  </data>
+  <data name="SuggestedDate" xml:space="preserve">
+    <value>Anslått dato</value>
+  </data>
+  <data name="SuggestedDateLoading" xml:space="preserve">
+    <value>Sjekk tilgjengelighet...</value>
+  </data>
+  <data name="NonRefundableText" xml:space="preserve">
+    <value>Forskuddsbetaling er ikke refunderbar.</value>
+  </data>
+  <data name="RefundableOfferText" xml:space="preserve">
+    <value>Vi refunderer 100 % av beløpet som ble betalt ved avbestilling av en reservasjon til {0}</value>
+  </data>
+  <data name="RefundableOfferTextFallback" xml:space="preserve">
+    <value>Gratis anke før</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Lading</value>
+  </data>
+  <data name="MandatoryOptions" xml:space="preserve">
+    <value>Obligatoriske alternativer</value>
+  </data>
+  <data name="ApartmentsMap" xml:space="preserve">
+    <value>Kart over leiligheter</value>
+  </data>
+  <data name="CleaningIncluded" xml:space="preserve">
+    <value>Rengjøring er inkludert i prisen</value>
+  </data>
+  <data name="SelectOffer" xml:space="preserve">
+    <value>Velg et tilbud</value>
+  </data>
+  <data name="SelectOfferStepButtonLabel" xml:space="preserve">
+    <value>Velg et tilbud</value>
+  </data>
+  <data name="SeeMore" xml:space="preserve">
+    <value>Se hele kartet</value>
+  </data>
+  <data name="ClickToCheckDetails" xml:space="preserve">
+    <value>Klikk for å sjekke detaljer</value>
+  </data>
+  <data name="SelectDatesAndGuests" xml:space="preserve">
+    <value>Velg dato og antall gjester</value>
+  </data>
+  <data name="SelectDatesAndGuestsButtonLabel" xml:space="preserve">
+    <value>Endring</value>
+  </data>
+  <data name="CheckInTimeFormat" xml:space="preserve">
+    <value>Innsjekking: 15:00–22:00</value>
+  </data>
+  <data name="CheckOutTimeFormat" xml:space="preserve">
+    <value>Utsjekk: til kl. 11:00</value>
+  </data>
+  <data name="SelectedPackage" xml:space="preserve">
+    <value>Utvalgt pakke</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Pakke</value>
+  </data>
+  <data name="ContinueReservation" xml:space="preserve">
+    <value>Fullfør bestillingen din</value>
+  </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Side ikke funnet</value>
+  </data>
+  <data name="PageNotFoundDescription" xml:space="preserve">
+    <value>Vi beklager, men siden du leter etter eksisterer ikke eller har blitt flyttet.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Tilbake til forsiden</value>
+  </data>
+  <data name="NotFoundHeaderTitle" xml:space="preserve">
+    <value>Feil 404</value>
+  </data>
+  <data name="NotFoundMaybeLookingFor" xml:space="preserve">
+    <value>Kanskje du leter etter:</value>
+  </data>
+  <data name="NotFoundApartmentsList" xml:space="preserve">
+    <value>Liste over leiligheter</value>
+  </data>
+  <data name="NotFoundCooperation" xml:space="preserve">
+    <value>Samarbeid</value>
+  </data>
+  <data name="NotFoundContact" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
 </root>
