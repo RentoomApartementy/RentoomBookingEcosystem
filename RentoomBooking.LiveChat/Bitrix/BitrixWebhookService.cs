@@ -47,10 +47,15 @@ public sealed class BitrixWebhookService : IBitrixWebhookService
 
         if (IsAlreadyBoundResponse(document.RootElement))
         {
+            var oldHandlerUrl = !string.IsNullOrWhiteSpace(portal.EventHandlerUrl)
+                ? new Uri(portal.EventHandlerUrl)
+                : webhookUrl;
+
             _logger.LogInformation(
-                "Bitrix event handler already bound for domain={Domain}, unbinding and rebinding with new URL.",
-                portal.Domain);
-            await UnbindWebhookEventAsync(connection, portal, webhookUrl, ct);
+                "Bitrix event handler already bound for domain={Domain}, unbinding old handler={OldHandler} and rebinding with new URL={NewHandler}.",
+                portal.Domain, oldHandlerUrl, webhookUrl);
+
+            await UnbindWebhookEventAsync(connection, portal, oldHandlerUrl, ct);
             return await BindAfterUnbindAsync(connection, portal, webhookUrl, ct);
         }
 
