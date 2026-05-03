@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Ertu viss um að þú viljir draga þetta samþykki til baka?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Skoðaðu skjalið</value>
+  </data>
 </root>

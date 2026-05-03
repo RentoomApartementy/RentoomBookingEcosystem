@@ -117,4 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Povratak</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>Vaša korpa je prazna</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Noći</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Količina</value>
+  </data>
+  <data name="Redirecting" xml:space="preserve">
+    <value>Preusmeravanje</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Ukloni iz korpe</value>
+  </data>
+  <data name="Savings" xml:space="preserve">
+    <value>Sa nama ćete uštedeti</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Rezime</value>
+  </data>
+  <data name="title" xml:space="preserve">
+    <value>Vaučeri i usluge</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Iznos koji treba platiti</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>jedinica.</value>
+  </data>
+  <data name="YourCart" xml:space="preserve">
+    <value>Vaša korpa</value>
+  </data>
+  <data name="Addons" xml:space="preserve">
+    <value>Rezervacija dodataka</value>
+  </data>
+  <data name="Pay" xml:space="preserve">
+    <value>Plati</value>
+  </data>
+  <data name="CartPageTitle" xml:space="preserve">
+    <value>Korpa - rezime</value>
+  </data>
+  <data name="PaymentNotRequiredMessage" xml:space="preserve">
+    <value>Plaćanje nije potrebno / već plaćeno</value>
+  </data>
+  <data name="ClearCart" xml:space="preserve">
+    <value>Obriši korpu</value>
+  </data>
+  <data name="CreateOrderError" xml:space="preserve">
+    <value>Failed to create add-on order.</value>
+  </data>
 </root>

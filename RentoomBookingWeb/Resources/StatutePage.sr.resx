@@ -12,4 +12,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="NoStatuteContent" xml:space="preserve">
+    <value>Nema sadržaja uslova i odredbi na izabranom jeziku.</value>
+  </data>
+  <data name="OtherStatutes" xml:space="preserve">
+    <value>Ostali propisi</value>
+  </data>
+  <data name="StatuteNotFound" xml:space="preserve">
+    <value>Nisu pronađeni uslovi i odredbe</value>
+  </data>
+  <data name="LoadingStatutes" xml:space="preserve">
+    <value>Propisi o učitavanju ...</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Uslovi korišćenja - Rentoom | Kancelarija za iznajmljivanje i upravljanje Toruń</value>
+  </data>
+  <data name="StatuteHeader" xml:space="preserve">
+    <value>Uslovi korišćenja</value>
+  </data>
 </root>

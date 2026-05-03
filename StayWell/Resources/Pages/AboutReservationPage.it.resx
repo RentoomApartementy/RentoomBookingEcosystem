@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Sei sicuro di voler ritirare questo consenso?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Visualizza il documento</value>
+  </data>
 </root>

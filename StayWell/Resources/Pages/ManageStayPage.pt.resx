@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdditionalCleaning" xml:space="preserve">
+    <value>Limpeza adicional</value>
+  </data>
+  <data name="Addon" xml:space="preserve">
+    <value>Apêndice</value>
+  </data>
+  <data name="BabyCrib" xml:space="preserve">
+    <value>Berço de bebê</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Confira</value>
+  </data>
+  <data name="EarlyCheckIn" xml:space="preserve">
+    <value>Check-in antecipado</value>
+  </data>
+  <data name="ExtendStay" xml:space="preserve">
+    <value>Estenda sua estadia</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="LateCheckOut" xml:space="preserve">
+    <value>Saída tardia</value>
+  </data>
+  <data name="ManageStay" xml:space="preserve">
+    <value>Gerencie sua estadia</value>
+  </data>
+  <data name="Purchased" xml:space="preserve">
+    <value>Comprado</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Reporte uma falha</value>
+  </data>
+  <data name="ReportDescription" xml:space="preserve">
+    <value>Uma falha, pergunta ou pedido ao serviço.</value>
+  </data>
+</root>

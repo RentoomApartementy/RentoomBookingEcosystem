@@ -117,4 +117,121 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AcceptanceDate" xml:space="preserve">
+    <value>Datum prihvatanja</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Korisničko ime</value>
+  </data>
+  <data name="Apartment" xml:space="preserve">
+    <value>Kuća</value>
+  </data>
+  <data name="ApartmentAmenities" xml:space="preserve">
+    <value>Oprema za apartmane</value>
+  </data>
+  <data name="ApartmentAndStayTitle" xml:space="preserve">
+    <value>Ostanite i apartman</value>
+  </data>
+  <data name="BookingDetailsTitle" xml:space="preserve">
+    <value>Detalji rezervacije</value>
+  </data>
+  <data name="BookingPerson" xml:space="preserve">
+    <value>Buker</value>
+  </data>
+  <data name="CheckinCheckOutTime" xml:space="preserve">
+    <value>Prijava i odjava</value>
+  </data>
+  <data name="CheckInDate" xml:space="preserve">
+    <value>Datum dolaska</value>
+  </data>
+  <data name="CheckInTime" xml:space="preserve">
+    <value>Vreme prijavljivanja</value>
+  </data>
+  <data name="CheckOutDate" xml:space="preserve">
+    <value>Datum odjavljivanja</value>
+  </data>
+  <data name="CheckOutTime" xml:space="preserve">
+    <value>Vreme odjavljivanja</value>
+  </data>
+  <data name="Consents" xml:space="preserve">
+    <value>Saglasnosti</value>
+  </data>
+  <data name="ContactMail" xml:space="preserve">
+    <value>Kontakt adresa e-pošte</value>
+  </data>
+  <data name="GDPRConsent" xml:space="preserve">
+    <value>GDPR saglasnost</value>
+  </data>
+  <data name="GDPRDescription" xml:space="preserve">
+    <value>Omogućava obradu podataka u skladu sa GDPR-om i politikom privatnosti.</value>
+  </data>
+  <data name="HideAmenitiesButton" xml:space="preserve">
+    <value>Sakrij opremu</value>
+  </data>
+  <data name="HideTOSButton" xml:space="preserve">
+    <value>Sakrij uslove i odredbe</value>
+  </data>
+  <data name="MarketingConsent" xml:space="preserve">
+    <value>Saglasnost za marketing</value>
+  </data>
+  <data name="MarketingDescription" xml:space="preserve">
+    <value>Slažem se da me kontaktiraju u marketinške svrhe (e-pošta / SMS / VhatsApp Messenger) u skladu sa politikom privatnosti.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Ime i prezime</value>
+  </data>
+  <data name="OfficeAddress" xml:space="preserve">
+    <value>Adresa kancelarije</value>
+  </data>
+  <data name="RegisteredGuests" xml:space="preserve">
+    <value>Registrovani gosti</value>
+  </data>
+  <data name="ShowAmenitiesButton" xml:space="preserve">
+    <value>Pokaži opremu apartmana</value>
+  </data>
+  <data name="ShowFullTOSButton" xml:space="preserve">
+    <value>Pokaži kompletne uslove i odredbe</value>
+  </data>
+  <data name="StayDates" xml:space="preserve">
+    <value>Datumi boravka</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Prezime</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Uslovi korišćenja</value>
+  </data>
+  <data name="TOSConsents" xml:space="preserve">
+    <value>Uslovi korišćenja i saglasnosti</value>
+  </data>
+  <data name="YourStay" xml:space="preserve">
+    <value>Rentoom je odgovoran za vaš boravak</value>
+  </data>
+  <data name="WithdrawConsentModalTitle" xml:space="preserve">
+    <value>Povlačenje saglasnosti</value>
+  </data>
+  <data name="TaxIdValue" xml:space="preserve">
+    <value>8792727407 / 387605281</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>O rezervaciji</value>
+  </data>
+  <data name="OfficeAddressValue" xml:space="preserve">
+    <value>Stanisława Szymańskiego 1B, 87-100 Toruń, Poljska</value>
+  </data>
+  <data name="WithdrawConsentModalConfirm" xml:space="preserve">
+    <value>Poništi</value>
+  </data>
+  <data name="TaxIdLabel" xml:space="preserve">
+    <value>NIP / REGON:</value>
+  </data>
+  <data name="WithdrawConsentModalCancel" xml:space="preserve">
+    <value>Povratak</value>
+  </data>
+  <data name="WithdrawConsentModalQuestion" xml:space="preserve">
+    <value>Da li ste sigurni da želite da povučete ovu saglasnost?</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Pogledaj dokument</value>
+  </data>
 </root>

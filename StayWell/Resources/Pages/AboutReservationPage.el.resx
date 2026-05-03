@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Είστε βέβαιοι ότι θέλετε να ανακαλέσετε αυτήν τη συγκατάθεση;</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Προβολή του εγγράφου</value>
+  </data>
 </root>

@@ -12,4 +12,60 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Više o nama
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Prosečan stan oцena
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>Apartmani za upravljanje
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Obrađene rezervacije
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Gosti služili
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Istorija</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Mi smo grupa ljudi koji vole da putuju i stekli su iskustvo u turizmu na međunarodnim tržištima. Pored toga, već više od 6 godina bavimo se upravljanjem, iznajmljivanjem, renoviranjem i trgovinom na tržištu nekretnina. Iskustvo koje smo stekli želimo da ponudimo našim klijentima i gostima, koji su uvek zadovoljni našim uslugama.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Pretraga</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Pružanje najbolje moguće usluge našim klijentima, kako gostima tako i vlasnicima apartmana. Posebno nam je važno da održimo visok standard korisničkog servisa i da osiguramo da se naši gosti osećaju kao kod kuće u našim apartmanima i da mogu računati na našu pomoć u bilo kom trenutku.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Naš tim
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Vizionar i strateg sa iskustvom u industriji nekretnina. Izgradio je Rentoom kako bi pojednostavio kratkoročno iznajmljivanje i automatizovao sve, od rezervacija do upravljanja gostima.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Osigurava da je Rentoom tehnologija brza, pouzdana i sigurna. Strastveni o automatizaciji i modernim rešenjima za tržište iznajmljivanja.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Sa pažnjom na svaki detalj, ona koordinira svakodnevne aktivnosti. Zahvaljujući njemu, naši kupci mogu mirno da spavaju – sve radi na vreme i bez ikakvih grešaka.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Poziv</value>
+  </data>
 </root>

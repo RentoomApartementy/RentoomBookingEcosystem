@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Weet je zeker dat je deze toestemming wilt intrekken?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Bekijk het document</value>
+  </data>
 </root>

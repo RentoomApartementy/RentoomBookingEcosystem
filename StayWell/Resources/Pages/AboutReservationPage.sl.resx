@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Si prepričan, da želiš umakniti to soglasje?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Oglejte si dokument</value>
+  </data>
 </root>

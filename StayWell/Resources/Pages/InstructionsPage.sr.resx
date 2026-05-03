@@ -117,4 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Address" xml:space="preserve">
+    <value>Korisničko ime</value>
+  </data>
+  <data name="ApartmentNumber" xml:space="preserve">
+    <value>Broj jedinice</value>
+  </data>
+  <data name="ApartmentMap" xml:space="preserve">
+    <value>Apartman na mapi</value>
+  </data>
+  <data name="BuildingCode" xml:space="preserve">
+    <value>Građevinski kod</value>
+  </data>
+  <data name="CodesTitle" xml:space="preserve">
+    <value>Pristupni kodovi i adresa</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Kopirano</value>
+  </data>
+  <data name="GateCode" xml:space="preserve">
+    <value>Kod kapije</value>
+  </data>
+  <data name="GoogleMaps" xml:space="preserve">
+    <value>Gugl mape</value>
+  </data>
+  <data name="GoOpen" xml:space="preserve">
+    <value>Otvorite svoj stan</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Instrukcije za prijavu</value>
+  </data>
+  <data name="InstructionsUnavailable" xml:space="preserve">
+    <value>Uputstva za prijavu nisu dostupna. Ako imate bilo kakvih problema, obratite se podršci.</value>
+  </data>
+  <data name="KeySafeCode" xml:space="preserve">
+    <value>Ključ Lockbok kod</value>
+  </data>
+  <data name="NoWifi" xml:space="preserve">
+    <value>Nema Vi-Fi podataka</value>
+  </data>
+  <data name="NoMap" xml:space="preserve">
+    <value>Nema mape</value>
+  </data>
+  <data name="OpenButton" xml:space="preserve">
+    <value>Otvoreno</value>
+  </data>
+  <data name="OpenMap" xml:space="preserve">
+    <value>Otvori mapu</value>
+  </data>
+  <data name="MapUnavailable" xml:space="preserve">
+    <value>Veza sa mapom nije dostupna</value>
+  </data>
+  <data name="ParkingMap" xml:space="preserve">
+    <value>Parking mapa</value>
+  </data>
+  <data name="ParkingNumber" xml:space="preserve">
+    <value>Parkirno mesto br.</value>
+  </data>
+  <data name="ReportOnPage" xml:space="preserve">
+    <value>Da bismo mogli brzo da pomognemo, molimo vas da navedete detaljan opis greške. Istaknite šta tačno ne radi i, ako je moguće, dodajte fotografije – to će značajno ubrzati rešavanje problema.</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Bezbednost</value>
+  </data>
+  <data name="SharedDoorsCode" xml:space="preserve">
+    <value>Kod za zajednička vrata</value>
+  </data>
+  <data name="Wifi" xml:space="preserve">
+    <value>Vi-Fi korisničko ime i lozinka</value>
+  </data>
+  <data name="WifiSsid" xml:space="preserve">
+    <value>Naziv mreže (SSID)</value>
+  </data>
+  <data name="WifiPassword" xml:space="preserve">
+    <value>Vi-Fi lozinka</value>
+  </data>
 </root>

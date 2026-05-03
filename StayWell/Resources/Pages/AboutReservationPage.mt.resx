@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Żgur li trid tirtira dan il-kunsens?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Ara d-dokument</value>
+  </data>
 </root>

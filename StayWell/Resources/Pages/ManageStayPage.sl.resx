@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdditionalCleaning" xml:space="preserve">
+    <value>Dodatno čiščenje</value>
+  </data>
+  <data name="Addon" xml:space="preserve">
+    <value>Priloga</value>
+  </data>
+  <data name="BabyCrib" xml:space="preserve">
+    <value>Otroška posteljica</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Poglej</value>
+  </data>
+  <data name="EarlyCheckIn" xml:space="preserve">
+    <value>Zgodnja prijava</value>
+  </data>
+  <data name="ExtendStay" xml:space="preserve">
+    <value>Podaljšaj svoj obisk</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Pomoč</value>
+  </data>
+  <data name="LateCheckOut" xml:space="preserve">
+    <value>Pozna odjava</value>
+  </data>
+  <data name="ManageStay" xml:space="preserve">
+    <value>Upravljajte svoje bivanje</value>
+  </data>
+  <data name="Purchased" xml:space="preserve">
+    <value>Kupljeno</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Prijavi napako</value>
+  </data>
+  <data name="ReportDescription" xml:space="preserve">
+    <value>Napaka, vprašanje ali prošnja storitvi.</value>
+  </data>
+</root>

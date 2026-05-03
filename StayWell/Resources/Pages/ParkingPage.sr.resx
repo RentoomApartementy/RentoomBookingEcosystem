@@ -116,4 +116,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ParkingPage" xml:space="preserve">
+    <value>Gradski parking</value>
+  </data>
+  <data name="MunicipalParking" xml:space="preserve">
+    <value>Gradski parking</value>
+  </data>
+  <data name="ParkingInformation" xml:space="preserve">
+    <value>Informacije o parkiranju</value>
+  </data>
+  <data name="ParkingDescription" xml:space="preserve">
+    <value>Informacije o gradskim parking zonama i dostupnim parking mestima u blizini vašeg smeštaja.</value>
+  </data>
+  <data name="NearbyParkingLocations" xml:space="preserve">
+    <value>Parking mesta u blizini</value>
+  </data>
+  <data name="ParkingRates" xml:space="preserve">
+    <value>Cenovnik parkinga</value>
+  </data>
+  <data name="ParkingFooter" xml:space="preserve">
+    <value>Smeštaj</value>
+  </data>
+  <data name="CityParking" xml:space="preserve">
+    <value>Gradski parking</value>
+  </data>
+  <data name="FreePark" xml:space="preserve">
+    <value>Sada možete parkirati besplatno</value>
+  </data>
+  <data name="PaidPark" xml:space="preserve">
+    <value>Sada možete parkirati uz naknadu</value>
+  </data>
+  <data name="MoreInfo" xml:space="preserve">
+    <value>Više informacija</value>
+  </data>
+  <data name="PaidDays" xml:space="preserve">
+    <value>Plaćeni dani</value>
+  </data>
+  <data name="FreeDays" xml:space="preserve">
+    <value>Slobodni dani</value>
+  </data>
+  <data name="ZoneA" xml:space="preserve">
+    <value>Zona A</value>
+  </data>
+  <data name="ZoneB" xml:space="preserve">
+    <value>Zona B</value>
+  </data>
+  <data name="ZoneDowntownPaidParking" xml:space="preserve">
+    <value>Zona plaćenog parkiranja u centru grada</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Pon.</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Uto.</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Avg.</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Čet.</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>pt.</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sat.</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Ndz.</value>
+  </data>
 </root>

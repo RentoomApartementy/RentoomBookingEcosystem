@@ -231,4 +231,7 @@
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
     <value>Ste si istý, že chcete tento súhlas odvolať?</value>
   </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Zobraziť dokument</value>
+  </data>
 </root>

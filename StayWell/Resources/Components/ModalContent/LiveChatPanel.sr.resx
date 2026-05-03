@@ -117,4 +117,103 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Loading" xml:space="preserve">
+    <value>Učitavanje...</value>
+  </data>
+  <data name="StartConversation" xml:space="preserve">
+    <value>Napišite poruku da biste započeli razgovor sa podrškom.</value>
+  </data>
+  <data name="AutomatedMessage" xml:space="preserve">
+    <value>Automatska poruka</value>
+  </data>
+  <data name="Support" xml:space="preserve">
+    <value>Operacija</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>Ti</value>
+  </data>
+  <data name="RetryTooltip" xml:space="preserve">
+    <value>Ponovo pošalji</value>
+  </data>
+  <data name="OperatorTyping" xml:space="preserve">
+    <value>Osoblje piše ...</value>
+  </data>
+  <data name="MessageInputPlaceholder" xml:space="preserve">
+    <value>Napišite poruku...</value>
+  </data>
+  <data name="SendButtonAlt" xml:space="preserve">
+    <value>Pošalji</value>
+  </data>
+  <data name="ChatTitle" xml:space="preserve">
+    <value>Ćaskanje sa podrškom</value>
+  </data>
+  <data name="HistoryLoadError" xml:space="preserve">
+    <value>Nije uspelo da učita istoriju.</value>
+  </data>
+  <data name="MissingTokenError" xml:space="preserve">
+    <value>Nema tokena za rezervaciju.</value>
+  </data>
+  <data name="SendError" xml:space="preserve">
+    <value>Nije uspelo da pošaljete poruku. Pokušajte ponovo.</value>
+  </data>
+  <data name="SendingStatus" xml:space="preserve">
+    <value>Slanje ...</value>
+  </data>
+  <data name="SentStatus" xml:space="preserve">
+    <value>Poslato</value>
+  </data>
+  <data name="FailedStatus" xml:space="preserve">
+    <value>Greška u slanju</value>
+  </data>
+  <data name="CloseButtonAriaLabel" xml:space="preserve">
+    <value>Događaji</value>
+  </data>
+  <data name="PreviousButtonAriaLabel" xml:space="preserve">
+    <value>Prethodna</value>
+  </data>
+  <data name="NextButtonAriaLabel" xml:space="preserve">
+    <value>Sledeće</value>
+  </data>
+  <data name="FormTitle" xml:space="preserve">
+    <value>Kategorije</value>
+  </data>
+  <data name="FormLabel" xml:space="preserve">
+    <value>Obrazac za popunjavanje</value>
+  </data>
+  <data name="FormAction" xml:space="preserve">
+    <value>Popunite →</value>
+  </data>
+  <data name="OpenInBrowser" xml:space="preserve">
+    <value>Otvorite u vašem pretraživaču</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>danas</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>juče</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Ponedeljak</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Utorak</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Sreda</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Četvrtak</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Petak</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Subota</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Nedelja</value>
+  </data>
+  <data name="SystemMessageAgentJoined" xml:space="preserve">
+    <value>Zaposleni se pridružio razgovoru</value>
+  </data>
 </root>
