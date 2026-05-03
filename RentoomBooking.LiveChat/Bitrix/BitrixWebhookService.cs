@@ -84,11 +84,8 @@ public sealed class BitrixWebhookService : IBitrixWebhookService
             if (!string.Equals(eventName, "ONIMCONNECTORMESSAGEADD", StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            if (string.Equals(handler, newHandler, StringComparison.OrdinalIgnoreCase))
-                continue;
-
             _logger.LogInformation(
-                "Unbinding stale ONIMCONNECTORMESSAGEADD handler for domain={Domain}: {Handler}",
+                "Unbinding ONIMCONNECTORMESSAGEADD handler for domain={Domain}: {Handler}",
                 portal.Domain, handler);
 
             using var unbindContent = new FormUrlEncodedContent(new Dictionary<string, string>
