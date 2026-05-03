@@ -63,10 +63,16 @@ public sealed class BitrixRestClient : IBitrixRestClient
         return _webhookService.BindWebhookEventAsync(portal, webhookUrl, ct);
     }
 
-    public Task RegisterConnectorAsync(BitrixLiveChatPortalEntity portal, string connectorId, int openLineId,
-        Uri webhookUrl, Uri placementHandlerUrl, CancellationToken ct)
+    public Task RegisterConnectorAsync(BitrixLiveChatPortalEntity portal, string connectorId,
+        Uri placementHandlerUrl, CancellationToken ct)
     {
-        return _webhookService.RegisterConnectorAsync(portal, connectorId, openLineId, webhookUrl, placementHandlerUrl, ct);
+        return _webhookService.RegisterConnectorAsync(portal, connectorId, placementHandlerUrl, ct);
+    }
+
+    public Task SetConnectorDataAsync(BitrixLiveChatPortalEntity portal, string connectorId, int lineId,
+        Uri channelBaseUrl, CancellationToken ct)
+    {
+        return _webhookService.SetConnectorDataAsync(portal, connectorId, lineId, channelBaseUrl, ct);
     }
 
     public Task<string?> GetLandingPreviewUrlAsync(string url, CancellationToken ct)

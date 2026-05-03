@@ -34,7 +34,6 @@ public sealed class BitrixLiveChatService
     private readonly IDbContextFactory<LiveChatDbContext> _dbContextFactory;
     private readonly ILogger<BitrixLiveChatService> _logger;
     private readonly ILiveChatMessageRepository _messageRepo;
-    private readonly int _openLineId;
     private readonly IBitrixPortalRepository _portalRepo;
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILiveChatSessionRepository _sessionRepo;
@@ -62,7 +61,6 @@ public sealed class BitrixLiveChatService
         _appLifetime = appLifetime;
         _logger = logger;
         _connectorId = options.Value.ConnectorId;
-        _openLineId = options.Value.OpenLineId;
     }
 
     public async Task<BitrixLiveChatPortalEntity> InstallPortalAsync(
@@ -116,13 +114,25 @@ public sealed class BitrixLiveChatService
         _logger.LogInformation("Installing with connectorId='{ConnectorId}'", _connectorId);
         var placementHandlerUrl = new Uri(
             new Uri($"{webhookUrl.Scheme}://{webhookUrl.Authority}"),
-            "/api/staywell/livechat/bitrix-install");
-        await _bitrixRestClient.RegisterConnectorAsync(portal, _connectorId, _openLineId, webhookUrl, placementHandlerUrl, ct);
+            "/api/staywell/livechat/bitrix-connector-settings");
+        await _bitrixRestClient.RegisterConnectorAsync(portal, _connectorId, placementHandlerUrl, ct);
         _logger.LogInformation(
-            "Bitrix imconnector registered for domain={Domain}, connectorId={ConnectorId}, openLineId={OpenLineId}",
-            portal.Domain, _connectorId, _openLineId);
+            "Bitrix imconnector registered for domain={Domain}, connectorId={ConnectorId}",
+            portal.Domain, _connectorId);
 
         return portal;
+    }
+
+    public async Task ActivateConnectorForLineAsync(string memberId, int lineId, Uri baseUrl, CancellationToken ct = default)
+    {
+        var portal = await _portalRepo.GetByMemberIdAsync(memberId, ct: ct)
+                     ?? throw new InvalidOperationException($"Portal not found for member_id={memberId}");
+
+        await _bitrixRestClient.SetConnectorDataAsync(portal, _connectorId, lineId, baseUrl, ct);
+
+        _logger.LogInformation(
+            "Connector {ConnectorId} activated for line={LineId} on domain={Domain}",
+            _connectorId, lineId, portal.Domain);
     }
 
     public async Task<LiveChatSessionEntity> GetOrCreateSessionAsync(string reservationToken, string? guestName,
