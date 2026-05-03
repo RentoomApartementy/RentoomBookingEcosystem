@@ -46,7 +46,16 @@ public static class ResxParser
 
         if (File.Exists(targetPath))
         {
-            doc = XDocument.Load(targetPath);
+            try
+            {
+                doc = XDocument.Load(targetPath);
+            }
+            catch (System.Xml.XmlException)
+            {
+                // File exists but is empty or corrupt — recreate from template
+                doc = XDocument.Load(templatePath);
+                doc.Root!.Elements("data").Remove();
+            }
         }
         else
         {

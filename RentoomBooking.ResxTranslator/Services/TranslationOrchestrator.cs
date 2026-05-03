@@ -300,21 +300,37 @@ public sealed class TranslationOrchestrator
         => s.Length <= maxLen ? s : s[..maxLen] + "…";
 
     /// <summary>
-    /// Maps a .NET culture code (e.g. "no-NO", "no") to the Azure Translator language code.
-    /// Azure Translator does not support "no" — it uses "nb" (Norwegian Bokmål).
+    /// Maps a .NET culture code to the Azure Translator language code.
+    /// Handles three cases:
+    ///   - Simple override: "no" → "nb"
+    ///   - Script subtag preserved: "sr-Latn-RS" → "sr-Latn", "sr-Cyrl-RS" → "sr-Cyrl"
+    ///   - Plain language code: "pl-PL" → "pl"
     /// </summary>
     private static string ToAzureLangCode(string cultureCode)
     {
-        var langCode = cultureCode.Split('-')[0];
+        var parts = cultureCode.Split('-');
+        var langCode = parts[0];
+
+        // If the second part is a 4-character script subtag (e.g. "Latn", "Cyrl"),
+        // preserve it — Azure Translator requires it for some languages (e.g. Serbian).
+        if (parts.Length >= 2 && parts[1].Length == 4 && char.IsUpper(parts[1][0]))
+        {
+            var langWithScript = $"{langCode}-{parts[1]}";
+            return AzureLangCodeOverrides.TryGetValue(langWithScript, out var scriptMapped)
+                ? scriptMapped
+                : langWithScript;
+        }
+
         return AzureLangCodeOverrides.TryGetValue(langCode, out var mapped) ? mapped : langCode;
     }
 
     /// <summary>
-    /// Maps .NET language codes that differ from Azure Translator language codes.
+    /// Maps .NET language/culture codes that differ from Azure Translator language codes.
     /// </summary>
     private static readonly Dictionary<string, string> AzureLangCodeOverrides =
         new(StringComparer.OrdinalIgnoreCase)
         {
-            ["no"] = "nb", // Norwegian → Norwegian Bokmål (Azure uses "nb", not "no")
+            ["no"]      = "nb",      // Norwegian → Norwegian Bokmål (Azure uses "nb", not "no")
+            ["sr"]      = "sr-Latn", // Serbian without script → default to Latin
         };
 }
