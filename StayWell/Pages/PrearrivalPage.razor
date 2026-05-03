@@ -127,7 +127,7 @@
         if (RegistrationCardState.IsFilled)
         {
             NavigationManager.NavigateTo($"/reservation/{Token}");
-            ToastService.ShowToast(Localizer["NoAccessToPage"]);
+            //ToastService.ShowToast(Localizer["NoAccessToPage"]);
             LayoutState.ShowFooter = true;
         }
         else

@@ -189,21 +189,13 @@
                                     Localizer["GeneratingCode"],
                                     LocksState.PasscodeLoadingElapsedSeconds)</span>
                             }
-                            else if (LocksState.GenerationBlockReason == "same_hour" && !_debugMode)
+                            else if (LocksState.LiveCooldownSecondsRemaining > 0 && !_debugMode)
                             {
                                 <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" />
                                 @string.Format(
                                     CultureInfo.CurrentCulture,
                                     Localizer["NewCodeIn"],
                                     FormatCooldown(LocksState.LiveCooldownSecondsRemaining))
-                            }
-                            else if (LocksState.GenerationBlockReason == "before_checkin" && !_debugMode)
-                            {
-                                <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" />
-                                @string.Format(
-                                    CultureInfo.CurrentCulture,
-                                    Localizer["GenerateAvailableFrom"],
-                                    ReservationState.CheckInTime.ToString("HH:mm"))
                             }
                             else
                             {
@@ -450,45 +442,14 @@
     {
         if (string.IsNullOrWhiteSpace(Token)) return;
 
-        if (!LocksState.IsPasscodeGenerationAllowed && !_debugMode)
-        {
-            if (LocksState.GenerationBlockReason == "before_checkin")
-            {
-                ToastService.ShowToast(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Localizer["GenerateAvailableFrom"],
-                        ReservationState.CheckInTime.ToString("HH:mm")));
-            }
-            else if (LocksState.GenerationBlockReason == "same_hour")
-            {
-                ToastService.ShowToast(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Localizer["NewCodeIn"],
-                        FormatCooldown(LocksState.LiveCooldownSecondsRemaining)));
-            }
-            return;
-        }
-
         var previousPwdId = LocksState.CurrentCode?.KeyboardPwdId;
 
         await LocksState.GeneratePasscodeAsync(Token);
 
-        if (LocksState.CurrentCode is not null && !LocksState.IsPasscodeLoading)
+        if (LocksState.CurrentCode is not null && !LocksState.IsPasscodeLoading
+            && LocksState.CurrentCode.KeyboardPwdId != previousPwdId)
         {
-            if (LocksState.CurrentCode.KeyboardPwdId != previousPwdId)
-            {
-                ToastService.ShowToast(Localizer["PasscodeGeneratedSuccess"]);
-            }
-            else if (LocksState.LiveCooldownSecondsRemaining > 0)
-            {
-                ToastService.ShowToast(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Localizer["NewCodeIn"],
-                        FormatCooldown(LocksState.LiveCooldownSecondsRemaining)));
-            }
+            ToastService.ShowToast(Localizer["PasscodeGeneratedSuccess"]);
         }
     }
 

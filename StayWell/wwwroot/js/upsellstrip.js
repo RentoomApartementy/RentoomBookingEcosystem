@@ -26,11 +26,11 @@
     },
 
     init(scrollEl, dotnet) {
-        if (!(scrollEl instanceof Element)) {
-            console.warn("upsellStrip.init: scrollEl must be a valid DOM Element");
+        
+        if(!scrollEl || !(scrollEl instanceof Element) || !scrollEl.isConnected){
             return;
         }
-
+        
         this.destroy(scrollEl);
 
         let ticking = false;

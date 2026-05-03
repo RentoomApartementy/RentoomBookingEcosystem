@@ -1,0 +1,29 @@
+.payment-success-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 60px 24px;
+}
+
+.payment-success-wrapper__label {
+    font-size: 1rem;
+    color: var(--color-text-secondary, #6b7280);
+    text-align: center;
+}
+
+.loader {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-top: 3px solid var(--rentoom-green-dark, #ef4444);
+    border-right: 3px solid transparent;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

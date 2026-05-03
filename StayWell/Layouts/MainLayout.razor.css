@@ -41,11 +41,13 @@
     box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
     border-radius: 0 0 15px 15px;
     transition: transform 0.3s ease-in-out;
+    will-change: transform;
 }
 
 
 .layout-header.hide {
     transform: translateY(-100%);
+    pointer-events: none;
 }
 
 
@@ -55,6 +57,7 @@
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
+    overscroll-behavior-y: contain;
     padding-top: calc(116px + var(--environment-banner-offset));
     padding-bottom: 116px;
     padding-left: 16px;

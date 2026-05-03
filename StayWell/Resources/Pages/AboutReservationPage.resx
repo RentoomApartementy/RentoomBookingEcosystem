@@ -236,7 +236,10 @@
     
   <value>Back</value></data>
   <data name="WithdrawConsentModalQuestion" xml:space="preserve">
-    
-    
+
+
   <value>Are you sure you want to withdraw this consent?</value></data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>View document</value>
+  </data>
 </root>
