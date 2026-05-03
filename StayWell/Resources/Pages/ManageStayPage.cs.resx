@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -13,39 +13,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdditionalCleaning" xml:space="preserve">
-    <value>Dodatno čišćenje</value>
+    <value>Další čištění</value>
   </data>
   <data name="Addon" xml:space="preserve">
-    <value>Dodatak</value>
+    <value>Příloha</value>
   </data>
   <data name="BabyCrib" xml:space="preserve">
-    <value>Dječji krevetac</value>
+    <value>Dětská postýlka</value>
   </data>
   <data name="CheckOut" xml:space="preserve">
-    <value>Pretraživanje</value>
+    <value>Podívejte se</value>
   </data>
   <data name="EarlyCheckIn" xml:space="preserve">
-    <value>Rana prijava</value>
+    <value>Předčasné přihlášení</value>
   </data>
   <data name="ExtendStay" xml:space="preserve">
-    <value>Produžite svoj boravak</value>
+    <value>Prodloužte svůj pobyt</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Pomoć</value>
+    <value>Pomoc</value>
   </data>
   <data name="LateCheckOut" xml:space="preserve">
-    <value>Kasno odjavljivanje</value>
+    <value>Pozdní odhlášení</value>
   </data>
   <data name="ManageStay" xml:space="preserve">
-    <value>Upravljajte svojim boravkom</value>
+    <value>Zvládněte svůj pobyt</value>
   </data>
   <data name="Purchased" xml:space="preserve">
-    <value>Kupljeno</value>
+    <value>Zakoupeno</value>
   </data>
   <data name="Report" xml:space="preserve">
-    <value>Prijavi grešku</value>
+    <value>Nahlásit závadu</value>
   </data>
   <data name="ReportDescription" xml:space="preserve">
-    <value>Greška, pitanje ili zahtev za uslugu.</value>
+    <value>Chyba, otázka nebo žádost na službu.</value>
   </data>
 </root>

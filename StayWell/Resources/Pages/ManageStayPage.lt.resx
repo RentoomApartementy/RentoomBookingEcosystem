@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -13,39 +13,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdditionalCleaning" xml:space="preserve">
-    <value>Dodatno čišćenje</value>
+    <value>Papildomas valymas</value>
   </data>
   <data name="Addon" xml:space="preserve">
-    <value>Dodatak</value>
+    <value>Priedėlis</value>
   </data>
   <data name="BabyCrib" xml:space="preserve">
-    <value>Dječji krevetac</value>
+    <value>Vaikiška lovelė</value>
   </data>
   <data name="CheckOut" xml:space="preserve">
-    <value>Pretraživanje</value>
+    <value>Patikrinti, patikrink</value>
   </data>
   <data name="EarlyCheckIn" xml:space="preserve">
-    <value>Rana prijava</value>
+    <value>Ankstyvas atvykimas</value>
   </data>
   <data name="ExtendStay" xml:space="preserve">
-    <value>Produžite svoj boravak</value>
+    <value>Pratęskite viešnagę</value>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Pomoć</value>
+    <value>Pagalba</value>
   </data>
   <data name="LateCheckOut" xml:space="preserve">
-    <value>Kasno odjavljivanje</value>
+    <value>Vėlyvas išvykimas</value>
   </data>
   <data name="ManageStay" xml:space="preserve">
-    <value>Upravljajte svojim boravkom</value>
+    <value>Viešnagės tvarkymas</value>
   </data>
   <data name="Purchased" xml:space="preserve">
-    <value>Kupljeno</value>
+    <value>Įsigyta</value>
   </data>
   <data name="Report" xml:space="preserve">
-    <value>Prijavi grešku</value>
+    <value>Pranešti apie gedimą</value>
   </data>
   <data name="ReportDescription" xml:space="preserve">
-    <value>Greška, pitanje ili zahtev za uslugu.</value>
+    <value>Gedimas, klausimas ar užklausa tarnybai.</value>
   </data>
 </root>
