@@ -21,20 +21,25 @@ public sealed class LiveChatBitrixInstallFunction
             <script src="https://api.bitrix24.com/api/v1/"></script>
         </head>
         <body>
+            <p id="status">Installing…</p>
             <script>
-                function finishInstall() {
-                    if (window.BX24 && typeof window.BX24.installFinish === "function") {
-                        window.BX24.installFinish();
+                var statusEl = document.getElementById("status");
+                function log(msg) { statusEl.innerHTML += "<br>" + msg; }
+                try {
+                    log("BX24 object: " + (typeof window.BX24));
+                    if (window.BX24 && typeof window.BX24.init === "function") {
+                        BX24.init(function() {
+                            log("BX24 initialized, calling installFinish...");
+                            BX24.installFinish();
+                            log('<span style="color:green;">Install finished!</span>');
+                        });
+                    } else {
+                        log('<span style="color:red;">BX24 not available</span>');
                     }
-                }
-
-                if (window.BX24 && typeof window.BX24.init === "function") {
-                    window.BX24.init(finishInstall);
-                } else {
-                    finishInstall();
+                } catch(e) {
+                    log('<span style="color:red;">JS error: ' + e.message + '</span>');
                 }
             </script>
-            Bitrix livechat installation complete.
         </body>
         </html>
         """;
@@ -72,6 +77,8 @@ public sealed class LiveChatBitrixInstallFunction
         var scheme = req.Headers.TryGetValues("X-Forwarded-Proto", out var forwardedProtos)
             ? forwardedProtos.First()
             : req.Url.Scheme;
+        if (host.Contains("ngrok", StringComparison.OrdinalIgnoreCase))
+            scheme = "https";
         var webhookUrl = new Uri($"{scheme}://{host}/api/staywell/livechat/bitrix-webhook");
         _logger.LogInformation("Bitrix install: registering webhook URL={WebhookUrl}", webhookUrl);
 
