@@ -117,4 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Apartments" xml:space="preserve">
+    <value>Apartmani Novi-Vino</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Više o nama</value>
+  </data>
+  <data name="Cooperation" xml:space="preserve">
+    <value>Saradnja</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Napomena:</value>
+  </data>
+  <data name="RentoomDesigner" xml:space="preserve">
+    <value>Iznajmljivanje Dizajner</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>O nama</value>
+  </data>
+  <data name="CallUs" xml:space="preserve">
+    <value>Poziv</value>
+  </data>
+  <data name="HomeHeroText" xml:space="preserve">
+    <value>Pronađite svoj stan iz snova u Torunu!</value>
+  </data>
+  <data name="NumberOfPeople" xml:space="preserve">
+    <value>Broj ljudi</value>
+  </data>
+  <data name="NumberOfRooms" xml:space="preserve">
+    <value>Broj soba</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Pretraživanje</value>
+  </data>
+  <data name="SelectNumberOfGuests" xml:space="preserve">
+    <value>Izaberite broj ljudi</value>
+  </data>
+  <data name="NumberOfGuests" xml:space="preserve">
+    <value>OS.</value>
+  </data>
+  <data name="ChildrenUnder2" xml:space="preserve">
+    <value>Deca</value>
+  </data>
+  <data name="Adults" xml:space="preserve">
+    <value>Gosti (preko 2 godine)</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Kategorije</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Datumi</value>
+  </data>
+  <data name="AdultSingle" xml:space="preserve">
+    <value>Odrasla osoba</value>
+  </data>
+  <data name="AdultPlural" xml:space="preserve">
+    <value>odrasli</value>
+  </data>
+  <data name="ChildSingle" xml:space="preserve">
+    <value>Dete</value>
+  </data>
+  <data name="ChildPlural" xml:space="preserve">
+    <value>Deca</value>
+  </data>
+  <data name="ClickToSelectDate" xml:space="preserve">
+    <value>Kliknite da biste izabrali datum</value>
+  </data>
+  <data name="CheckApartmentsWithOffer" xml:space="preserve">
+    <value>Pogledajte apartmane sa ovim paketom</value>
+  </data>
+  <data name="ForInvestors" xml:space="preserve">
+    <value>Za investitore</value>
+  </data>
+  <data name="AboutCity" xml:space="preserve">
+    <value>O Torunu</value>
+  </data>
 </root>

@@ -117,4 +117,169 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApartmentName" xml:space="preserve">
+    <value>Kuća</value>
+  </data>
+  <data name="SelectedDates" xml:space="preserve">
+    <value>Izabrani datum</value>
+  </data>
+  <data name="NoDatesSelected" xml:space="preserve">
+    <value>Nije izabran datum</value>
+  </data>
+  <data name="NumberOfGuests" xml:space="preserve">
+    <value>Broj ljudi</value>
+  </data>
+  <data name="NoGuestsSelected" xml:space="preserve">
+    <value>Nema izabranog broja ljudi</value>
+  </data>
+  <data name="NoOffersAvailable" xml:space="preserve">
+    <value>Nema ponude na izabrani datum</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Prikaži više</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>Sruši detalje</value>
+  </data>
+  <data name="SummaryStepButtonLabel" xml:space="preserve">
+    <value>sadržina</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Rezime rezervacije</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Dodatne opcije</value>
+  </data>
+  <data name="Opłata serwisowa 139 x" xml:space="preserve">
+    <value>Naknada za uslugu 139 x</value>
+  </data>
+  <data name="Zwierzę" xml:space="preserve">
+    <value>Životinja</value>
+  </data>
+  <data name="Łóżeczko dla niemowlaka" xml:space="preserve">
+    <value>Dječji krevetac</value>
+  </data>
+  <data name="Łóżeczko turystyczne" xml:space="preserve">
+    <value>Putni krevetac</value>
+  </data>
+  <data name="PÓŹNE WYMELDOWANIE" xml:space="preserve">
+    <value>KASNO ODJAVLJIVANJE</value>
+  </data>
+  <data name="WCZESNE ZAMELDOWANIE" xml:space="preserve">
+    <value>RANI CHECK-IN</value>
+  </data>
+  <data name="Kwiaty" xml:space="preserve">
+    <value>Cveće</value>
+  </data>
+  <data name="Upgrade" xml:space="preserve">
+    <value>Nadogradnja</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Od</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>U</value>
+  </data>
+  <data name="Adults" xml:space="preserve">
+    <value>Odrasli</value>
+  </data>
+  <data name="Children" xml:space="preserve">
+    <value>Deca</value>
+  </data>
+  <data name="RefundableOffer" xml:space="preserve">
+    <value>Povratna ponuda</value>
+  </data>
+  <data name="Non-refundableOffer" xml:space="preserve">
+    <value>Nepovratna ponuda</value>
+  </data>
+  <data name="BookNow" xml:space="preserve">
+    <value>Rezervišite sada</value>
+  </data>
+  <data name="BookNowStepButtonLabel" xml:space="preserve">
+    <value>Detaljnije</value>
+  </data>
+  <data name="SuggestedDate" xml:space="preserve">
+    <value>Predloženi datum</value>
+  </data>
+  <data name="SuggestedDateLoading" xml:space="preserve">
+    <value>Proveri dostupnost...</value>
+  </data>
+  <data name="NonRefundableText" xml:space="preserve">
+    <value>Plaćanje unapred je nepovratno.</value>
+  </data>
+  <data name="RefundableOfferText" xml:space="preserve">
+    <value>Vraćamo 100% uplaćenog iznosa prilikom otkazivanja rezervacije na {0}</value>
+  </data>
+  <data name="RefundableOfferTextFallback" xml:space="preserve">
+    <value>Slobodna žalba pre</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Punjenje</value>
+  </data>
+  <data name="MandatoryOptions" xml:space="preserve">
+    <value>Obavezne opcije</value>
+  </data>
+  <data name="ApartmentsMap" xml:space="preserve">
+    <value>Mapa stanova</value>
+  </data>
+  <data name="CleaningIncluded" xml:space="preserve">
+    <value>Čišćenje je uključeno u cenu</value>
+  </data>
+  <data name="SelectOffer" xml:space="preserve">
+    <value>Izaberite ponudu</value>
+  </data>
+  <data name="SelectOfferStepButtonLabel" xml:space="preserve">
+    <value>Izaberite ponudu</value>
+  </data>
+  <data name="SeeMore" xml:space="preserve">
+    <value>Pogledajte celu mapu</value>
+  </data>
+  <data name="ClickToCheckDetails" xml:space="preserve">
+    <value>Kliknite da biste proverili detalje</value>
+  </data>
+  <data name="SelectDatesAndGuests" xml:space="preserve">
+    <value>Izaberite datum i broj gostiju</value>
+  </data>
+  <data name="SelectDatesAndGuestsButtonLabel" xml:space="preserve">
+    <value>Promena</value>
+  </data>
+  <data name="CheckInTimeFormat" xml:space="preserve">
+    <value>Prijava: 15:00 – 22:00</value>
+  </data>
+  <data name="CheckOutTimeFormat" xml:space="preserve">
+    <value>Prijava: do 11:00</value>
+  </data>
+  <data name="SelectedPackage" xml:space="preserve">
+    <value>Izabrani paket</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Pretraga</value>
+  </data>
+  <data name="ContinueReservation" xml:space="preserve">
+    <value>Završite rezervaciju</value>
+  </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Stranica nije pronađena</value>
+  </data>
+  <data name="PageNotFoundDescription" xml:space="preserve">
+    <value>Žao nam je, ali stranica koju tražite ne postoji ili je premeštena.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Povratak na početnu stranicu</value>
+  </data>
+  <data name="NotFoundHeaderTitle" xml:space="preserve">
+    <value>Greška 404</value>
+  </data>
+  <data name="NotFoundMaybeLookingFor" xml:space="preserve">
+    <value>Možda tražite:</value>
+  </data>
+  <data name="NotFoundApartmentsList" xml:space="preserve">
+    <value>Lista apartmana</value>
+  </data>
+  <data name="NotFoundCooperation" xml:space="preserve">
+    <value>Saradnja</value>
+  </data>
+  <data name="NotFoundContact" xml:space="preserve">
+    <value>Napomena:</value>
+  </data>
 </root>

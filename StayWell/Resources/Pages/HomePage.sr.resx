@@ -118,4 +118,97 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AboutReservation" xml:space="preserve">
+    <value>O rezervaciji</value>
+  </data>
+  <data name="BookOnBtn" xml:space="preserve">
+    <value> Knjiga za Rentoom.pl</value>
+  </data>
+  <data name="BookOnDesc" xml:space="preserve">
+    <value>Rezervišite svoj savršen boravak u Torunu i uživajte u jedinstvenom apartmanu.</value>
+  </data>
+  <data name="ChangeLanguage" xml:space="preserve">
+    <value>Promeni jezik</value>
+  </data>
+  <data name="CheckIn" xml:space="preserve">
+    <value>Smeštaj</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Pretraživanje</value>
+  </data>
+  <data name="ClubBenefits" xml:space="preserve">
+    <value>Rentoom Prednosti klub</value>
+  </data>
+  <data name="CurrentLanguage" xml:space="preserve">
+    <value>Trenutni jezik</value>
+  </data>
+  <data name="Enhance" xml:space="preserve">
+    <value>Nadogradite svoj boravak</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>O NAMA</value>
+  </data>
+  <data name="Instructions" xml:space="preserve">
+    <value>Instrukcije za prijavu</value>
+  </data>
+  <data name="InstructionsFooter" xml:space="preserve">
+    <value>Instrukcije</value>
+  </data>
+  <data name="LanguageChanged" xml:space="preserve">
+    <value>Jezik promenjen u:</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Upravljanje</value>
+  </data>
+  <data name="ManageStay" xml:space="preserve">
+    <value>Upravljajte svojim boravkom</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Više...</value>
+  </data>
+  <data name="MyVouchers" xml:space="preserve">
+    <value>Moji vaučeri</value>
+  </data>
+  <data name="NoSuchPage" xml:space="preserve">
+    <value>Ups, ovaj sajt nije tamo!</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Otvoreno</value>
+  </data>
+  <data name="OpenApartment" xml:space="preserve">
+    <value>Otvoreni stan</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Stayvell - Vaša rezervacija</value>
+  </data>
+  <data name="ReservationID" xml:space="preserve">
+    <value>Broj rezervacije</value>
+  </data>
+  <data name="ReservationCanceledTitle" xml:space="preserve">
+    <value>Rezervacija otkazana</value>
+  </data>
+  <data name="ReservationCanceledDesc" xml:space="preserve">
+    <value>Ova rezervacija više nije aktivna. Kontaktirajte Rentoom ako vam je potrebna pomoć.</value>
+  </data>
+  <data name="AiChatTitle" xml:space="preserve">
+    <value>StaiWell AI</value>
+  </data>
+  <data name="AiAssistant" xml:space="preserve">
+    <value>AI asistent</value>
+  </data>
+  <data name="ParkingFooter" xml:space="preserve">
+    <value>Gradski parking</value>
+  </data>
+  <data name="AboutReservationFooter" xml:space="preserve">
+    <value>Informacije o rezervaciji</value>
+  </data>
+  <data name="LoyaltyFooter" xml:space="preserve">
+    <value>Vaše tačke</value>
+  </data>
+  <data name="AddonsLabel" xml:space="preserve">
+    <value>Dodatna oprema</value>
+  </data>
+  <data name="CartButtonAlt" xml:space="preserve">
+    <value>Bilten</value>
+  </data>
 </root>
