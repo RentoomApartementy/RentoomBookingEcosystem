@@ -317,11 +317,11 @@
                     <div class="instruction-content">
                         @if (ActiveInstructionMode == InstructionMode.Open)
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderOpen)
+                            @FormatInstructionText(Localizer["InstructionCylinderOpen"])
                         }
                         else
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderClose)
+                            @FormatInstructionText(Localizer["InstructionCylinderClose"])
                         }
                     </div>
                 </div>
@@ -335,11 +335,11 @@
                     <div class="instruction-content">
                         @if (ActiveInstructionMode == InstructionMode.Open)
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelOpen)
+                            @FormatInstructionText(Localizer["InstructionPanelOpen"])
                         }
                         else
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelClose)
+                            @FormatInstructionText(Localizer["InstructionPanelClose"])
                         }
                     </div>
                 </div>
