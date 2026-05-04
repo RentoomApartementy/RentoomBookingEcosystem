@@ -260,6 +260,37 @@ namespace RentoomBooking.StayWell.States
             NotifyStateChanged();
         }
 
+        public async Task EnsureInitialDevMockCodeAsync(string? token = null)
+        {
+            if (AccessCodes?.CurrentCode is not null) return;
+
+            var now = DateTimeOffset.Now;
+            var mock = new BackendApi.AccessCodeDto
+            {
+                Code = Random.Shared.Next(1000000, 10000000).ToString(System.Globalization.CultureInfo.InvariantCulture),
+                KeyboardPwdId = Random.Shared.Next(1, int.MaxValue),
+                GeneratedAt = now,
+                ValidFrom = now,
+                ValidTo = now.AddHours(1),
+                Source = "TTLock"
+            };
+
+            AccessCodes = new BackendApi.AccessCodesResponse
+            {
+                CurrentCode = mock,
+                History = [mock],
+                CanGenerate = true,
+                GenerationBlockReason = null,
+                CooldownSecondsRemaining = 0,
+                NextGenerationAvailableAt = null
+            };
+
+            if (!string.IsNullOrWhiteSpace(token))
+                await _localStorage.SetItemAsync(DevMockCodesKeyPrefix + token, AccessCodes);
+
+            NotifyStateChanged();
+        }
+
         public async Task ClearDevMockCodesAsync(string token)
         {
             if (string.IsNullOrWhiteSpace(token)) return;

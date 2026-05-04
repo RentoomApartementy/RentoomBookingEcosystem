@@ -15,14 +15,14 @@
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <div class="buttons-wrapper">
-    @if (LocksState.IsLoading)
+    @if (LocksState.IsLoading && !IsDevMockLock)
     {
         <div class="tile tile--center">
             <div class="skeleton skeleton--button"></div>
             <div class="skeleton skeleton--text" style="margin-top: 15px;"></div>
         </div>
     }
-    else if (LocksState.IsTTLockLoading)
+    else if (LocksState.IsTTLockLoading && !IsDevMockLock)
     {
         <div class="tile tile--center">
             <div class="tile__title" style="margin-bottom: 10px;">
@@ -34,7 +34,7 @@
             </div>
         </div>
     }
-    else if (!ReservationState.IsActiveReservation && !_debugMode)
+    else if (!ReservationState.IsActiveReservation && !_debugMode && !IsDevMockLock)
     {
         <div class="tile tile--center">
             <div class="tile__title" style="margin-bottom: 10px;">
@@ -53,7 +53,7 @@
             </div>
         </div>
     }
-    else if (LocksState.IsTTLockAvailable)
+    else if (LocksState.IsTTLockAvailable || IsDevMockLock)
     {
         <div class="tile tile--center">
             <div class="tile__title" style="margin-bottom: 10px;">
@@ -165,16 +165,6 @@
                     <span class="bold">#</span>
                     <span>@Localizer["Or"]</span>
                     <img src="/icons/key-round.svg" class="icon-key" />
-                }
-                else if (IsDevMockLock)
-                {
-                    <div class="passcode-main">
-                        <span class="bold">@_devMockCode</span>
-                        <span>@Localizer["Confirm"]</span>
-                        <span class="bold">#</span>
-                        <span>@Localizer["Or"]</span>
-                        <img src="/icons/key-round.svg" class="icon-key" />
-                    </div>
                 }
                 else
                 {
@@ -363,7 +353,6 @@
     private DotNetObjectReference<OpenApartmentPage>? _dotNetRef;
 
     private bool IsDevMockLock => FeatureFlagsService.FeatureAllowed("dev-mock-lock");
-    private readonly string _devMockCode = Random.Shared.Next(1000000, 10000000).ToString(CultureInfo.InvariantCulture);
 
     private bool IsGenerateButtonEnabled =>
         LocksState.IsPasscodeGenerationAllowed || IsDevMockLock;
@@ -508,6 +497,7 @@
                 {
                     await LocksState.LoadAccessCodesAsync(Token);
                     await LocksState.RestoreDevMockCodesAsync(Token);
+                    await LocksState.EnsureInitialDevMockCodeAsync(Token);
                 });
             }
             else
