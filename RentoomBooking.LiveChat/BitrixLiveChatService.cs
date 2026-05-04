@@ -38,6 +38,8 @@ public sealed class BitrixLiveChatService
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILiveChatSessionRepository _sessionRepo;
     private readonly ILiveChatSseSubscriptions _sseSubscriptions;
+    private readonly ITranslationService _translationService;
+    private readonly string _connectorId;
 
     public BitrixLiveChatService(
         IBitrixRestClient bitrixRestClient,
@@ -48,6 +50,8 @@ public sealed class BitrixLiveChatService
         IDbContextFactory<LiveChatDbContext> dbContextFactory,
         IServiceScopeFactory scopeFactory,
         IHostApplicationLifetime appLifetime,
+        ITranslationService translationService,
+        IOptions<BitrixLiveChatOptions> options,
         ILogger<BitrixLiveChatService> logger)
     {
         _bitrixRestClient = bitrixRestClient;

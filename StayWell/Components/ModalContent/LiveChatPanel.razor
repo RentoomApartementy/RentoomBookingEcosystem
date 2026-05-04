@@ -76,11 +76,9 @@
                     <div class="livechat-settings-error">@_settingsError</div>
                 }
                 <div class="livechat-settings-group">
-                    <label class="livechat-settings-label">
-                        <input type="checkbox" class="livechat-settings-checkbox" @bind="_guestAutoTranslateEnabled" />
-                        <span>@Localizer["AutoTranslateEnable"]</span>
-                    </label>
-                    <p class="livechat-settings-hint">@Localizer["AutoTranslateHint"]</p>
+                    <ToggleSwitch @bind-Value="_guestAutoTranslateEnabled"
+                                  Text="@Localizer["AutoTranslateEnable"]"
+                                  Description="@Localizer["AutoTranslateHint"]" />
                 </div>
                 <div class="livechat-settings-group livechat-settings-group--lang">
                     <label class="livechat-settings-select-label" for="translation-lang">@Localizer["TranslationLanguageLabel"]</label>
@@ -539,7 +537,7 @@
     private void OpenTranslationSettings()
     {
         _showTranslationSettings = true;
-        StateHasChanged();
+        InvokeAsync(StateHasChanged);
     }
 
     private void CloseTranslationSettings()

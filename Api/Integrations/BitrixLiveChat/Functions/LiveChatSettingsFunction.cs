@@ -4,6 +4,7 @@ using System.Web;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 using RentoomBooking.LiveChat;
 using RentoomBooking.SharedClasses.LiveChat;
 
@@ -90,9 +91,30 @@ public sealed class LiveChatSettingsFunction
                 session.GuestAutoTranslateEnabled = request.GuestAutoTranslateEnabled.Value;
 
             if (request.PreferredLanguage is not null)
-                session.PreferredLanguage = string.IsNullOrWhiteSpace(request.PreferredLanguage)
-                    ? null
-                    : request.PreferredLanguage;
+            {
+                if (string.IsNullOrWhiteSpace(request.PreferredLanguage))
+                {
+                    session.PreferredLanguage = null;
+                }
+                else
+                {
+                    var lang = request.PreferredLanguage.Trim();
+                    if (lang.Length > 10)
+                        return await CreateJsonResponse(req, HttpStatusCode.BadRequest,
+                            new { message = "PreferredLanguage is too long." });
+                    try
+                    {
+                        CultureInfo.GetCultureInfo(lang);
+                    }
+                    catch (CultureNotFoundException)
+                    {
+                        return await CreateJsonResponse(req, HttpStatusCode.BadRequest,
+                            new { message = "PreferredLanguage is not a valid language code." });
+                    }
+
+                    session.PreferredLanguage = lang;
+                }
+            }
 
             session.UpdatedAt = DateTime.UtcNow;
             await _liveChatService.UpdateSessionAsync(session, ct);
