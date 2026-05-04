@@ -247,6 +247,37 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
+        public void GenerateDevMockPasscode()
+        {
+            var now = DateTimeOffset.Now;
+            var mock = new BackendApi.AccessCodeDto
+            {
+                Code = Random.Shared.Next(1000000, 10000000).ToString(System.Globalization.CultureInfo.InvariantCulture),
+                KeyboardPwdId = Random.Shared.Next(1, int.MaxValue),
+                GeneratedAt = now,
+                ValidFrom = now,
+                ValidTo = now.AddHours(1),
+                Source = "TTLock"
+            };
+
+            var history = new List<BackendApi.AccessCodeDto> { mock };
+            if (AccessCodes?.History is { Count: > 0 } prev)
+                history.AddRange(prev);
+            else if (AccessCodes?.CurrentCode is not null)
+                history.Add(AccessCodes.CurrentCode);
+
+            AccessCodes = new BackendApi.AccessCodesResponse
+            {
+                CurrentCode = mock,
+                History = history,
+                CanGenerate = true,
+                GenerationBlockReason = null,
+                CooldownSecondsRemaining = 0,
+                NextGenerationAvailableAt = null
+            };
+            NotifyStateChanged();
+        }
+
         public async Task GeneratePasscodeAsync(string token)
         {
             if (!IsPasscodeGenerationAllowed || string.IsNullOrWhiteSpace(token))

@@ -7,6 +7,7 @@
 
 @inject IStringLocalizer<OpenApartmentPage> Localizer
 @inject BackendApi BackendApi
+@inject FeatureFlagsService FeatureFlagsService
 @inherits Models.PageBase
 
 @inject IJSRuntime JS
@@ -164,6 +165,16 @@
                     <span class="bold">#</span>
                     <span>@Localizer["Or"]</span>
                     <img src="/icons/key-round.svg" class="icon-key" />
+                }
+                else if (IsDevMockLock)
+                {
+                    <div class="passcode-main">
+                        <span class="bold">@_devMockCode</span>
+                        <span>@Localizer["Confirm"]</span>
+                        <span class="bold">#</span>
+                        <span>@Localizer["Or"]</span>
+                        <img src="/icons/key-round.svg" class="icon-key" />
+                    </div>
                 }
                 else
                 {
@@ -351,8 +362,11 @@
 
     private DotNetObjectReference<OpenApartmentPage>? _dotNetRef;
 
+    private bool IsDevMockLock => FeatureFlagsService.FeatureAllowed("dev-mock-lock");
+    private readonly string _devMockCode = Random.Shared.Next(1000000, 10000000).ToString(CultureInfo.InvariantCulture);
+
     private bool IsGenerateButtonEnabled =>
-        LocksState.IsPasscodeGenerationAllowed;
+        LocksState.IsPasscodeGenerationAllowed || IsDevMockLock;
 
     private async Task SetSlide(int index)
     {
@@ -440,6 +454,13 @@
 
     private async Task HandleGeneratePasscode()
     {
+        if (IsDevMockLock)
+        {
+            LocksState.GenerateDevMockPasscode();
+            ToastService.ShowToast(Localizer["PasscodeGeneratedSuccess"]);
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(Token)) return;
 
         var previousPwdId = LocksState.CurrentCode?.KeyboardPwdId;
@@ -509,6 +530,13 @@
     private async Task ToggleDoor()
     {
         if (IsButtonDisabled || IsProcessing) return;
+
+        if (IsDevMockLock)
+        {
+            IsOpened = !IsOpened;
+            ErrorMessage = null;
+            return;
+        }
 
         IsProcessing = true;
         ErrorMessage = null;
