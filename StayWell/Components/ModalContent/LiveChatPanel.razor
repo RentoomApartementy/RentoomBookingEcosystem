@@ -205,9 +205,14 @@
                 }
                 @{
                     var displayContent = msg.Content;
-                    if (msg.Sender != "guest" && msg.IsTranslated && _messageViewStates.TryGetValue(msg.Id, out var showOriginal) && showOriginal)
+                    if (msg.Sender != "guest" && msg.IsTranslated)
                     {
-                        displayContent = msg.OriginalContent ?? msg.Content;
+                        var showOriginal = !_guestAutoTranslateEnabled
+                            || (_messageViewStates.TryGetValue(msg.Id, out var s) && s);
+                        if (showOriginal)
+                        {
+                            displayContent = msg.OriginalContent ?? msg.Content;
+                        }
                     }
                 }
                 <div class="livechat-message-content @(string.IsNullOrWhiteSpace(displayContent) ? "livechat-message-content--hidden" : "")">@((MarkupString)BbCodeParser.ToHtml(displayContent, _formEmbedUrls))</div>
