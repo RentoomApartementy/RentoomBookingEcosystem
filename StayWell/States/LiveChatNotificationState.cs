@@ -14,6 +14,7 @@ public sealed class LiveChatNotificationState : IDisposable
     private int _unreadCount;
     private bool _isChatOpen;
     private readonly HashSet<Guid> _countedMessageIds = new();
+    private DateTimeOffset? _lastReadAt;
 
     public int UnreadCount => _unreadCount;
 
@@ -87,17 +88,47 @@ public sealed class LiveChatNotificationState : IDisposable
 
     public async Task LoadUnreadAsync(string token)
     {
-        var (exists, count) = await _localStorage.TryGetItemAsync<int>($"livechat:unread:{token}");
-        if (exists && count > 0)
+        var (hasLastRead, lastRead) = await _localStorage.TryGetItemAsync<DateTimeOffset>(LastReadKey(token));
+        _lastReadAt = hasLastRead ? lastRead : null;
+
+        try
         {
-            _unreadCount = count;
-            OnChange?.Invoke();
+            await _liveChatClient.InvalidateHistory(token);
+            var session = await _liveChatClient.GetHistoryAsync(token);
+            if (session?.Messages is { Count: > 0 })
+            {
+                var unread = 0;
+                foreach (var msg in session.Messages)
+                {
+                    if (msg.Sender == "guest" || msg.Sender == "system") continue;
+                    if (_lastReadAt.HasValue && msg.CreatedAt <= _lastReadAt.Value) continue;
+                    if (_countedMessageIds.Add(msg.Id))
+                        unread++;
+                }
+
+                if (unread > 0)
+                {
+                    _unreadCount = unread;
+                    await PersistUnreadAsync();
+                    OnChange?.Invoke();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to compute unread count from history for token {Token}", token);
+            var (exists, count) = await _localStorage.TryGetItemAsync<int>(UnreadKey(token));
+            if (exists && count > 0)
+            {
+                _unreadCount = count;
+                OnChange?.Invoke();
+            }
         }
     }
 
     private Task PersistUnreadAsync()
         => _currentToken is not null
-            ? _localStorage.SetItemAsync($"livechat:unread:{_currentToken}", _unreadCount)
+            ? _localStorage.SetItemAsync(UnreadKey(_currentToken), _unreadCount)
             : Task.CompletedTask;
 
     public void SetChatOpen(bool isOpen)
@@ -108,11 +139,21 @@ public sealed class LiveChatNotificationState : IDisposable
 
     public void ClearUnread()
     {
-        if (_unreadCount == 0) return;
         _unreadCount = 0;
-        _ = PersistUnreadAsync();
+        _countedMessageIds.Clear();
+        _lastReadAt = DateTimeOffset.UtcNow;
+
+        if (_currentToken is not null)
+        {
+            _ = _localStorage.SetItemAsync(LastReadKey(_currentToken), _lastReadAt.Value);
+            _ = _localStorage.SetItemAsync(UnreadKey(_currentToken), 0);
+        }
+
         OnChange?.Invoke();
     }
+
+    private static string UnreadKey(string token) => $"livechat:unread:{token}";
+    private static string LastReadKey(string token) => $"livechat:lastread:{token}";
 
     public void Dispose() => StopListening();
 }
