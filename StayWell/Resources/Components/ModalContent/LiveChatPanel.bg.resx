@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Служител се включи в разговора</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Преводни настройки</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Активирайте автоматичния превод на съобщенията на служителите</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Когато включите съобщенията от служител, те автоматично ще бъдат преведени на вашия език. Можете да видите оригиналното съобщение, като натиснете бутона под всяко съобщение.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Запази</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Отмени</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Спасявам...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Не успях да запазя настройките. Моля, опитайте отново.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Чат за поддръжка</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Преводни настройки</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Оригинално шоу</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Превод на шоуто</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Вижте оригиналното съобщение</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Вижте преведеното съобщение</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Оригинално послание на шоуто</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Покажи преведено съобщение</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Целеви език за превод</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Автоматично откриване от съобщения</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Преводът е затруднен</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Преводът е активиран за {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Превод (автоматично разпознаване) активиран</value>
+  </data>
 </root>

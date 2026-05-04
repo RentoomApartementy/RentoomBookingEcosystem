@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Un empleado se unió a la conversación</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Ajustes de traducción</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Habilitar la traducción automática de mensajes de empleados</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Cuando activas los mensajes de un empleado, se traducen automáticamente a tu idioma. Puedes ver el mensaje original haciendo clic en el botón debajo de cada mensaje.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Guardando...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>No se ha podido guardar la configuración. Por favor, inténtalo de nuevo.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Chat de soporte</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Ajustes de traducción</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Original del programa</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Traducción del programa</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Ver mensaje original</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Ver mensaje traducido</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Mostrar mensaje original</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Mostrar mensaje traducido</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Idioma objetivo de la traducción</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Detección automática a partir de mensajes</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Traducción deshabilitada</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Traducción habilitada para {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Traducción (auto-detección) habilitada</value>
+  </data>
 </root>

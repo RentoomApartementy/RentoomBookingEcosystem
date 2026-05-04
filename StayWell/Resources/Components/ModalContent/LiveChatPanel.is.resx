@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Starfsmaður tók þátt í samtalinu</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Þýðingarstillingar</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Virkjaðu sjálfvirka þýðingu starfsmannaskilaboða</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Þegar þú kveikir á skilaboðum frá starfsmanni verða þau sjálfkrafa þýdd á þitt tungumál. Þú getur skoðað upprunalegu skilaboðin með því að smella á hnappinn fyrir neðan hvert skilaboð.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Vista</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Hætta við</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Bjarga...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Tókst ekki að vista stillingar. Vinsamlegast reyndu aftur.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Stuðningspjall</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Þýðingarstillingar</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Upprunalega þátturinn</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Þýðing sýningarinnar</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Skoða upprunalegu skilaboðin</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Skoða þýdda skilaboð</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Sýndu upprunalegu skilaboðin</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Sýndu þýdd skilaboð</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Markmál þýðingar</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Greina sjálfkrafa úr skilaboðum</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Þýðing óvirk</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Þýðing virk fyrir {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Þýðing (sjálfvirk greining) virk</value>
+  </data>
 </root>

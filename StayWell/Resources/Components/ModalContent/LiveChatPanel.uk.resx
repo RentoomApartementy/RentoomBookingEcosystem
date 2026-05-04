@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>До розмови приєднався співробітник</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Налаштування перекладу</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Увімкніть автоматичний переклад повідомлень працівників</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Коли ви вмикаєте повідомлення від працівника, вони автоматично перекладаються вашою мовою. Ви можете переглянути оригінальне повідомлення, натиснувши кнопку під кожним повідомленням.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Збереження</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Рятуючи...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Не вдалося зберегти налаштування. Будь ласка, спробуйте ще раз.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Чат підтримки</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Налаштування перекладу</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Оригінальний серіал</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Переклад шоу</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Переглянути оригінальне повідомлення</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Переглянути перекладене повідомлення</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Показати оригінальне повідомлення</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Показати перекладене повідомлення</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Цільова мова перекладу</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Автоматичне виявлення з повідомлень</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Відключення перекладу</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Переклад увімкнено для {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Увімкнено трансляцію (автоматичне виявлення)</value>
+  </data>
 </root>

@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Sarunai pievienojās darbinieks</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Tulkošanas iestatījumi</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Darbinieku ziņojumu automātiskās tulkošanas iespējošana</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Ieslēdzot darbinieka ziņojumus, tie tiks automātiski tulkoti jūsu valodā. Oriģinālo ziņojumu var apskatīt, noklikšķinot uz pogas zem katra ziņojuma.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Saglabāt</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Atcelt</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Ietaupījums...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Neizdevās saglabāt iestatījumus. Lūdzu, mēģiniet vēlreiz.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Atbalsta tērzēšana</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Tulkošanas iestatījumi</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Rādīt oriģinālu</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Rādīt tulkojumu</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Skatīt sākotnējo ziņojumu</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Skatīt tulkoto ziņojumu</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Rādīt sākotnējo ziņojumu</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Rādīt tulkoto ziņojumu</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Tulkošanas mērķa valoda</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Automātiska ziņojumu noteikšana</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Tulkošana atspējota</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Tulkošana iespējota {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Iespējota tulkošana (automātiskā noteikšana)</value>
+  </data>
 </root>
