@@ -113,6 +113,7 @@
     private bool _isStreaming;
     private bool _isSpeechSupported = true;
     private bool _isDictating;
+    private bool _acceptSpeechInput;
     private string _speechInputPrefix = string.Empty;
     private bool _pendingScrollToBottom;
     private CancellationTokenSource? _streamCts;
@@ -148,6 +149,7 @@
 
         if (_isDictating)
         {
+            _acceptSpeechInput = false;
             await StopDictationAsync();
         }
 
@@ -310,6 +312,7 @@
         }
 
         _speechInputPrefix = _input;
+        _acceptSpeechInput = true;
         await JS.InvokeVoidAsync("staywellAiChat.startDictation", _dotNetRef, GetSpeechLanguage());
     }
 
@@ -317,12 +320,18 @@
     public Task OnSpeechStateChanged(bool isListening)
     {
         _isDictating = isListening;
+        _acceptSpeechInput = isListening;
         return InvokeAsync(StateHasChanged);
     }
 
     [JSInvokable]
     public Task OnSpeechTranscriptChanged(string transcript)
     {
+        if (!_acceptSpeechInput)
+        {
+            return Task.CompletedTask;
+        }
+
         _input = MergeSpeechWithInput(_speechInputPrefix, transcript);
         return InvokeAsync(StateHasChanged);
     }
@@ -332,6 +341,7 @@
     {
         _error = string.IsNullOrWhiteSpace(message) ? "Nie udało się uruchomić rozpoznawania mowy." : message;
         _isDictating = false;
+        _acceptSpeechInput = false;
         return InvokeAsync(StateHasChanged);
     }
 
@@ -342,6 +352,7 @@
         if (!isSupported)
         {
             _isDictating = false;
+            _acceptSpeechInput = false;
         }
 
         return InvokeAsync(StateHasChanged);
@@ -349,6 +360,7 @@
 
     private async Task StopDictationAsync()
     {
+        _acceptSpeechInput = false;
         if (_isDictating)
         {
             await JS.InvokeVoidAsync("staywellAiChat.stopDictation");

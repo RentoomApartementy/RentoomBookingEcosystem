@@ -12,7 +12,7 @@ public sealed class SafeMarkdownService
     private static readonly Regex MarkdownLinkRegex = new("\\[(?<label>[^\\]\\r\\n]+?)\\]\\((?<url>https?://[^\\s\\)]+)\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex BareUrlRegex = new("(?<![\"'=])(https?://[^\\s<]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex DuplicateInlineLinkRegex = new("(?<url>https?://[^\\s\\)]+)\\(\\[(?<label>[^\\]]+)\\]\\(\\k<url>\\)\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static readonly Regex BrokenUrlLineBreakRegex = new("(?<left>https?://[^\\s\\)\\]>]+)\\s*\\n+\\s*(?<right>[A-Za-z0-9/?#&=%,][^\\s\\)\\]>]*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex GluedPolishWordAfterUrlRegex = new("(?<url>https?://[^\\s<]*?)(?<suffix>[A-Z][A-Za-z]*[^\\u0000-\\u007F][^\\s<]*)", RegexOptions.Compiled);
     private static readonly Regex OrderedListRegex = new("^\\d+\\.\\s+", RegexOptions.Compiled);
     private static readonly Regex InlineOrderedMarkerRegex = new("(?<!\\n)(\\d+\\.\\s*)", RegexOptions.Compiled);
 
@@ -148,13 +148,11 @@ public sealed class SafeMarkdownService
             text,
             match => $"[{match.Groups["label"].Value}]({match.Groups["url"].Value})");
 
-        // Some model outputs break long URLs with line breaks; merge wrapped URL segments.
-        while (BrokenUrlLineBreakRegex.IsMatch(normalized))
-        {
-            normalized = BrokenUrlLineBreakRegex.Replace(
-                normalized,
-                match => $"{match.Groups["left"].Value}{match.Groups["right"].Value}");
-        }
+        // Some responses glue the next sentence word to URL, e.g. ".../restauracjeJeśli".
+        // Split only when the glued suffix contains non-ASCII characters (common Polish words).
+        normalized = GluedPolishWordAfterUrlRegex.Replace(
+            normalized,
+            match => $"{match.Groups["url"].Value} {match.Groups["suffix"].Value}");
 
         return normalized;
     }
@@ -173,7 +171,7 @@ public sealed class SafeMarkdownService
         transformed = BareUrlRegex.Replace(transformed, match =>
         {
             var raw = match.Groups[1].Value;
-            var trimmed = raw.TrimEnd('.', ',', ';');
+            var trimmed = raw.TrimEnd('.', ',', ';', ':', '!', '?', ')', ']', '}');
             if (string.IsNullOrWhiteSpace(trimmed))
             {
                 return raw;
