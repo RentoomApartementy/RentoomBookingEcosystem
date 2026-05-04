@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Супрацоўнік далучыўся да размовы</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Наладкі перакладу</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Уключыць аўтаматычны пераклад паведамленняў супрацоўнікаў</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Калі вы ўключаеце паведамленні ад супрацоўніка, яны аўтаматычна перакладаюцца на вашу мову. Вы можаце паглядзець арыгінальнае паведамленне, націснуўшы кнопку пад кожным паведамленнем.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Захаваць</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Адмена</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Захоўваю...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Не ўдалося захаваць налады. Калі ласка, паспрабуйце яшчэ раз.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Чаты падтрымкі</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Наладкі перакладу</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Арыгінал шоу</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Пераклад шоу</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Праглядзець арыгінальнае паведамленне</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Праглядзець перакладзенае паведамленне</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Арыгінальнае паведамленне шоу</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Паказаць перакладзенае паведамленне</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Мэтавая мова перакладу</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Аўтаматычнае выяўленне з паведамленняў</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Адключэнне перакладу</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Пераклад уключаны для {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Уключана трансляцыя (аўтавызначэнне)</value>
+  </data>
 </root>

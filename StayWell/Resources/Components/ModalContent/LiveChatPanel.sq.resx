@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Një punonjës iu bashkua bisedës</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Cilësimet e përkthimit</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Aktivizo përkthimin automatik të mesazheve të punonjësve</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Kur aktivizoni mesazhet nga një punonjës, ato do të përkthehen automatikisht në gjuhën tuaj. Mund ta shikoni mesazhin origjinal duke klikuar butonin poshtë çdo mesazhi.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Ruaj</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Anulo</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Kursimi...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Dështoi të ruani cilësimet. Ju lutemi provoni përsëri.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Biseda mbështetëse</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Cilësimet e përkthimit</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Shfaq origjinalin</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Shfaq përkthimin</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Shiko mesazhin origjinal</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Shiko mesazhin e përkthyer</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Trego mesazhin origjinal</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Trego mesazhin e përkthyer</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Gjuha e synuar e përkthimit</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Zbulimi automatik nga mesazhet</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Përkthimi i çaktivizuar</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Përkthimi i aktivizuar për {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Përkthimi (zbulimi automatik) i aktivizuar</value>
+  </data>
 </root>

@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Töötaja liitus vestlusega</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Tõlkeseaded</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Luba töötajate sõnumite automaatne tõlge</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Kui lülitad sisse töötaja sõnumid, tõlgitakse need automaatselt sinu keelde. Originaalsõnumit saab vaadata, klõpsates iga sõnumi all oleval nupul.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Salvesta</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Tühista</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Päästmine...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Ebaõnnestus seadete salvestamine. Palun proovi uuesti.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Tugivestlus</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Tõlkeseaded</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Saate originaal</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Saate tõlge</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Vaata originaalsõnumit</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Vaata tõlgitud sõnumit</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Näita originaalsõnumit</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Näita tõlgitud sõnumit</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Tõlke sihtkeel</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Tuvasta automaatselt sõnumitest</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Tõlkimise keelatud</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Tõlkimine lubatud {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Tõlkimine (automaatne tuvastus) lubatud</value>
+  </data>
 </root>

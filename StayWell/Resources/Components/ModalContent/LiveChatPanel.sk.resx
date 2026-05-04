@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Do rozhovoru sa zapojil zamestnanec</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Nastavenia prekladu</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Povoliť automatický preklad správ zamestnancov</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Keď zapnete správy od zamestnanca, automaticky sa preložia do vášho jazyka. Pôvodnú správu si môžete pozrieť kliknutím na tlačidlo pod každou správou.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Uložiť</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Zrušiť</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Ukladanie...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Nepodarilo sa mi uložiť nastavenia. Prosím, skúste to znova.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Podporný chat</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Nastavenia prekladu</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Pôvodný seriál</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Preklad relácie</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Zobraziť pôvodnú správu</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Zobraziť preloženú správu</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Zobraziť pôvodné posolstvo</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Zobraziť preloženú správu</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Cieľový jazyk prekladu</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Automatická detekcia zo správ</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Preklad vypnutý</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Preklad povolený pre {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Preklad (automatická detekcia) povolený</value>
+  </data>
 </root>

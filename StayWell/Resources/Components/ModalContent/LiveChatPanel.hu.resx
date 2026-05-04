@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Egy alkalmazott is csatlakozott a beszélgetéshez</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Fordítási beállítások</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Automatikus fordítás engedélyezése az alkalmazotti üzenetek</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Amikor bekapcsolod az alkalmazott üzeneteit, azok automatikusan lefordítódnak a nyelvedre. Az eredeti üzenetet az üzenetek alatt lévő gombra kattintva tekintheted meg.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Mentés</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Törlés</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Megmentem...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Nem sikerült a beállítások mentése. Kérlek, próbáld meg újra.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Támogató csevegés</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Fordítási beállítások</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Eredeti sorozat</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Műsor fordítása</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Eredeti üzenet megtekintése</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Fordított üzenet megtekintése</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Eredeti üzenet megjelenítése</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Fordított üzenet megjelenítése</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>A fordítás célnyelve</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Automatikus észlelés üzenetekből</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Fordítás letiltott</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Fordítás engedélyezve {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Fordítás (automatikus észlelés) engedélyezve</value>
+  </data>
 </root>

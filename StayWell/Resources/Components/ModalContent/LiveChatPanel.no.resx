@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>En ansatt sluttet seg til samtalen</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Oversettelsesinnstillinger</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Aktiver automatisk oversettelse av ansattmeldinger</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Når du slår på meldinger fra en ansatt, vil de automatisk bli oversatt til ditt språk. Du kan se den opprinnelige meldingen ved å klikke på knappen under hver melding.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Lagre</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Redde...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Klarte ikke å lagre innstillinger. Vennligst prøv igjen.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Supportchat</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Oversettelsesinnstillinger</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Seriens original</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Showoversettelse</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Se originalmelding</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Se oversatt melding</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Vis originalmelding</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Vis oversatt melding</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Målspråk for oversettelse</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Automatisk oppdage fra meldinger</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Oversettelse deaktivert</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Oversettelse aktivert for {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Oversettelse (auto-deteksjon) aktivert</value>
+  </data>
 </root>

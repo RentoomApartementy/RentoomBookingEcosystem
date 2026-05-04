@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Työntekijä liittyi keskusteluun</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Käännösympäristöt</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Ota työntekijöiden viestien automaattinen käännös käyttöön</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Kun otat käyttöön työntekijän viestit, ne käännetään automaattisesti kielellesi. Voit nähdä alkuperäisen viestin klikkaamalla jokaisen viestin alla olevaa painiketta.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Tallenna</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Peruuta</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Säästäminen...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Asetusten tallentaminen epäonnistui. Ole hyvä ja yritä uudelleen.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Tukikeskustelu</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Käännösympäristöt</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Sarjan alkuperäinen</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Ohjelman käännös</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Katso alkuperäinen viesti</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Katso käännetty viesti</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Näytä alkuperäinen viesti</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Näytä käännetty viesti</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Käännöksen kohdekieli</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Automaattinen tunnistus viesteistä</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Käännös estetty</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Käännös käytössä {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Automaattinen tunnistus (käännös) käytössä</value>
+  </data>
 </root>

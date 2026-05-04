@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Zaposlenik se pridružio razgovoru</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Postavke prijevoda</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Omogućite automatski prijevod poruka zaposlenika</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Kada uključite poruke od zaposlenika, one će se automatski prevesti na vaš jezik. Izvornu poruku možete pogledati klikom na gumb ispod svake poruke.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Spasi</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Otkaži</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Spašavanje...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Nisam uspio spremiti postavke. Molim te, pokušaj ponovno.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Chat za podršku</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Postavke prijevoda</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Originalna serija</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Prijevod emisije</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Pogledajte izvornu poruku</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Pogledajte prevedenu poruku</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Prikaži izvornu poruku</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Prikaži prevedenu poruku</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Ciljani jezik prevođenja</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Automatsko otkrivanje iz poruka</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Prijevod onemogućen</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Prijevod omogućen za {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Prijevod (automatska detekcija) omogućen</value>
+  </data>
 </root>

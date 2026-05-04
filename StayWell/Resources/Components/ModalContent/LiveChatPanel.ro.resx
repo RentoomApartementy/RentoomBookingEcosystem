@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Un angajat s-a alăturat conversației</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Setări de traducere</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Activează traducerea automată a mesajelor angajaților</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Când activezi mesajele unui angajat, acestea vor fi traduse automat în limba ta. Puteți vizualiza mesajul original făcând clic pe butonul de sub fiecare mesaj.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Salvează</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Anulează</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Salvând...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Nu am reușit să salveze setările. Vă rog să încercați din nou.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Chat de suport</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Setări de traducere</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Originalul serialului</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Traducerea spectacolului</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Vezi mesajul original</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Vezi mesajul tradus</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Afișează mesajul original</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Afișează mesajul tradus</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Limba țintă a traducerii</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Detectare automată din mesaje</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Traducere dezactivată</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Traducere activată pentru {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Traducerea (auto-detectare) activată</value>
+  </data>
 </root>

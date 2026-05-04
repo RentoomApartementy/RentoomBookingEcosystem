@@ -216,4 +216,64 @@
   <data name="SystemMessageAgentJoined" xml:space="preserve">
     <value>Een medewerker mengde zich bij het gesprek</value>
   </data>
+  <data name="TranslationSettingsTitle" xml:space="preserve">
+    <value>Vertaalinstellingen</value>
+  </data>
+  <data name="AutoTranslateEnable" xml:space="preserve">
+    <value>Schakel automatische vertaling van medewerkersberichten in</value>
+  </data>
+  <data name="AutoTranslateHint" xml:space="preserve">
+    <value>Wanneer je berichten van een medewerker aanzet, worden ze automatisch vertaald naar jouw taal. Je kunt het originele bericht bekijken door op de knop onder elk bericht te klikken.</value>
+  </data>
+  <data name="SaveButton" xml:space="preserve">
+    <value>Sla op</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Redden...</value>
+  </data>
+  <data name="SettingsSaveError" xml:space="preserve">
+    <value>Instellingen niet kunnen opslaan. Probeer het alsjeblieft opnieuw.</value>
+  </data>
+  <data name="ChatHeaderTitle" xml:space="preserve">
+    <value>Support Chat</value>
+  </data>
+  <data name="SettingsButtonAriaLabel" xml:space="preserve">
+    <value>Vertaalinstellingen</value>
+  </data>
+  <data name="ShowOriginalButton" xml:space="preserve">
+    <value>Originele show</value>
+  </data>
+  <data name="ShowTranslationButton" xml:space="preserve">
+    <value>Vertaling van de show</value>
+  </data>
+  <data name="ShowOriginalButtonTitle" xml:space="preserve">
+    <value>Bekijk het originele bericht</value>
+  </data>
+  <data name="ShowTranslationButtonTitle" xml:space="preserve">
+    <value>Bekijk vertaald bericht</value>
+  </data>
+  <data name="ShowOriginalButtonAriaLabel" xml:space="preserve">
+    <value>Toon originele boodschap</value>
+  </data>
+  <data name="ShowTranslationButtonAriaLabel" xml:space="preserve">
+    <value>Toon vertaalde boodschap</value>
+  </data>
+  <data name="TranslationLanguageLabel" xml:space="preserve">
+    <value>Doeltaal van vertaling</value>
+  </data>
+  <data name="TranslationLanguageAuto" xml:space="preserve">
+    <value>Automatisch detecteren van berichten</value>
+  </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Vertaling uitgeschakeld</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Vertaling ingeschakeld voor {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Vertaling (autodetectie) ingeschakeld</value>
+  </data>
 </root>
