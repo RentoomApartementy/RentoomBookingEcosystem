@@ -14,6 +14,7 @@ public sealed class LiveChatNotificationState : IDisposable
     private int _unreadCount;
     private bool _isChatOpen;
     private readonly HashSet<Guid> _countedMessageIds = new();
+    private readonly HashSet<Guid> _knownMessageIds = new();
     private DateTimeOffset? _lastReadAt;
 
     public int UnreadCount => _unreadCount;
@@ -39,15 +40,20 @@ public sealed class LiveChatNotificationState : IDisposable
 
         _ = Task.Run(async () =>
         {
+            var isFirstConnect = true;
             while (!ct.IsCancellationRequested)
             {
                 try
                 {
+                    if (!isFirstConnect)
+                        await SyncMissedMessagesAsync(token);
+
                     await _liveChatClient.StreamMessagesAsync(
                         token,
                         async msg =>
                         {
-                            _liveChatClient.InvalidateHistory(token);
+                            await _liveChatClient.InvalidateHistory(token);
+                            _knownMessageIds.Add(msg.Id);
 
                             if (msg.Sender != "guest" && msg.Sender != "system" && !_isChatOpen
                                 && _countedMessageIds.Add(msg.Id))
@@ -72,9 +78,40 @@ public sealed class LiveChatNotificationState : IDisposable
                     _logger.LogWarning(ex, "LiveChat SSE stream error for token {Token}; reconnecting in 5 s", _currentToken);
                 }
 
-                await Task.Delay(5000, ct);
+                isFirstConnect = false;
+                await Task.Delay(3000, ct);
             }
         }, ct);
+    }
+
+    private async Task SyncMissedMessagesAsync(string token)
+    {
+        try
+        {
+            await _liveChatClient.InvalidateHistory(token);
+            var session = await _liveChatClient.GetHistoryAsync(token);
+            if (session?.Messages is not { Count: > 0 }) return;
+
+            foreach (var msg in session.Messages)
+            {
+                if (!_knownMessageIds.Add(msg.Id)) continue;
+
+                if (msg.Sender != "guest" && msg.Sender != "system" && !_isChatOpen
+                    && _countedMessageIds.Add(msg.Id))
+                {
+                    _unreadCount++;
+                    _ = PersistUnreadAsync();
+                    OnChange?.Invoke();
+                }
+
+                if (OnNewMessage is not null)
+                    await OnNewMessage(msg);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to sync missed messages for token {Token}", token);
+        }
     }
 
     public void StopListening()
@@ -84,6 +121,7 @@ public sealed class LiveChatNotificationState : IDisposable
         _streamCts = null;
         _currentToken = null;
         _countedMessageIds.Clear();
+        _knownMessageIds.Clear();
     }
 
     public async Task LoadUnreadAsync(string token)
@@ -97,6 +135,9 @@ public sealed class LiveChatNotificationState : IDisposable
             var session = await _liveChatClient.GetHistoryAsync(token);
             if (session?.Messages is { Count: > 0 })
             {
+                foreach (var msg in session.Messages)
+                    _knownMessageIds.Add(msg.Id);
+
                 var unread = 0;
                 foreach (var msg in session.Messages)
                 {
