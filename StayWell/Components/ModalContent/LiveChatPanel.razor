@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Logging
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.LiveChat
+@using RentoomBooking.SharedFrontend.Localization
 @using RentoomBooking.StayWell.States
 @using RentoomBooking.StayWell.Utils
 @implements IDisposable
@@ -12,6 +13,7 @@
 @inject ILogger<LiveChatPanel> Logger
 @inject IStringLocalizer<LiveChatPanel> Localizer
 @inject LiveChatSettingsService LiveChatSettingsService
+@inject ToastService ToastService
 
 <div class="livechat-panel">
 
@@ -84,16 +86,10 @@
                     <label class="livechat-settings-select-label" for="translation-lang">@Localizer["TranslationLanguageLabel"]</label>
                     <select id="translation-lang" class="livechat-settings-select" @bind="_translationTargetLanguage" disabled="@(!_guestAutoTranslateEnabled)">
                         <option value="">@Localizer["TranslationLanguageAuto"]</option>
-                        <option value="pl">Polski</option>
-                        <option value="en">English</option>
-                        <option value="de">Deutsch</option>
-                        <option value="fr">Français</option>
-                        <option value="es">Español</option>
-                        <option value="it">Italiano</option>
-                        <option value="cs">Čeština</option>
-                        <option value="uk">Українська</option>
-                        <option value="ru">Русский</option>
-                        <option value="nl">Nederlands</option>
+                        @foreach (var culture in SupportedLanguagesProvider.SupportedCultures)
+                        {
+                            <option value="@culture.TwoLetterISOLanguageName">@SupportedLanguagesProvider.GetLanguageLabel(culture)</option>
+                        }
                     </select>
                 </div>
             </div>
@@ -210,9 +206,14 @@
                 }
                 @{
                     var displayContent = msg.Content;
-                    if (msg.Sender != "guest" && msg.IsTranslated && _messageViewStates.TryGetValue(msg.Id, out var showOriginal) && showOriginal)
+                    if (msg.Sender != "guest" && msg.IsTranslated)
                     {
-                        displayContent = msg.OriginalContent ?? msg.Content;
+                        var showOriginal = !_guestAutoTranslateEnabled
+                            || (_messageViewStates.TryGetValue(msg.Id, out var s) && s);
+                        if (showOriginal)
+                        {
+                            displayContent = msg.OriginalContent ?? msg.Content;
+                        }
                     }
                 }
                 <div class="livechat-message-content @(string.IsNullOrWhiteSpace(displayContent) ? "livechat-message-content--hidden" : "")">@((MarkupString)BbCodeParser.ToHtml(displayContent, _formEmbedUrls))</div>
@@ -561,6 +562,7 @@
             var success = await LiveChatClient.UpdateSettingsAsync(token, _guestAutoTranslateEnabled, lang);
             if (success)
             {
+                ShowTranslationSettingsToast(_guestAutoTranslateEnabled, lang);
                 CloseTranslationSettings();
                 await ReloadMessagesAsync(token);
             }
@@ -578,6 +580,34 @@
         {
             _isSendingSettings = false;
             StateHasChanged();
+        }
+    }
+
+    private void ShowTranslationSettingsToast(bool enabled, string? lang)
+    {
+        if (!enabled)
+        {
+            ToastService.ShowToast(Localizer["TranslationDisabledToast"]);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(lang))
+        {
+            ToastService.ShowToast(Localizer["TranslationEnabledAutoToast"]);
+            return;
+        }
+
+        try
+        {
+            var culture = SupportedLanguagesProvider.SupportedCultures
+                .FirstOrDefault(c => string.Equals(c.TwoLetterISOLanguageName, lang, StringComparison.OrdinalIgnoreCase))
+                ?? System.Globalization.CultureInfo.GetCultureInfo(lang);
+            var label = SupportedLanguagesProvider.GetLanguageLabel(culture);
+            ToastService.ShowToast(string.Format(Localizer["TranslationEnabledToast"], label));
+        }
+        catch
+        {
+            ToastService.ShowToast(string.Format(Localizer["TranslationEnabledToast"], lang));
         }
     }
 

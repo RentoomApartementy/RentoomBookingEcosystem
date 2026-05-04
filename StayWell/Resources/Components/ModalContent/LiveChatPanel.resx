@@ -267,4 +267,13 @@
   <data name="TranslationLanguageAuto" xml:space="preserve">
     <value>Auto-detect from messages</value>
   </data>
+  <data name="TranslationDisabledToast" xml:space="preserve">
+    <value>Translation disabled</value>
+  </data>
+  <data name="TranslationEnabledToast" xml:space="preserve">
+    <value>Translation enabled for {0}</value>
+  </data>
+  <data name="TranslationEnabledAutoToast" xml:space="preserve">
+    <value>Translation enabled (auto-detect)</value>
+  </data>
 </root>
