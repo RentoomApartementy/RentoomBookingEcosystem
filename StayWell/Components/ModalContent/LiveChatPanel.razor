@@ -14,6 +14,7 @@
 @inject IStringLocalizer<LiveChatPanel> Localizer
 @inject LiveChatSettingsService LiveChatSettingsService
 @inject ToastService ToastService
+@inject RentoomBooking.StayWell.Services.LocalStorageService LocalStorage
 
 <div class="livechat-panel">
 
@@ -412,6 +413,7 @@
     private bool _showTranslationSettings;
     private string? _settingsError;
     private bool _isSendingSettings;
+    private bool _hasPendingSettings;
 
     private void OpenForm(string url) => _activeFormUrl = url;
     private void CloseForm() => _activeFormUrl = null;
@@ -464,6 +466,7 @@
 
             // Load translation settings
             await LoadTranslationSettingsAsync(token);
+            await RestorePendingSettingsAsync(token);
         }
         catch (Exception ex)
         {
@@ -559,9 +562,22 @@
         try
         {
             var lang = string.IsNullOrWhiteSpace(_translationTargetLanguage) ? null : _translationTargetLanguage;
+
+            if (_messages.Count == 0)
+            {
+                _hasPendingSettings = true;
+                await LocalStorage.SetItemAsync(
+                    PendingSettingsKey(token),
+                    new PendingSettings(_guestAutoTranslateEnabled, lang));
+                ShowTranslationSettingsToast(_guestAutoTranslateEnabled, lang);
+                CloseTranslationSettings();
+                return;
+            }
+
             var success = await LiveChatClient.UpdateSettingsAsync(token, _guestAutoTranslateEnabled, lang);
             if (success)
             {
+                _hasPendingSettings = false;
                 ShowTranslationSettingsToast(_guestAutoTranslateEnabled, lang);
                 CloseTranslationSettings();
                 await ReloadMessagesAsync(token);
@@ -582,6 +598,49 @@
             StateHasChanged();
         }
     }
+
+    private async Task FlushPendingSettingsAsync(string token)
+    {
+        if (!_hasPendingSettings) return;
+        try
+        {
+            var lang = string.IsNullOrWhiteSpace(_translationTargetLanguage) ? null : _translationTargetLanguage;
+            var success = await LiveChatClient.UpdateSettingsAsync(token, _guestAutoTranslateEnabled, lang);
+            if (success)
+            {
+                _hasPendingSettings = false;
+                await LocalStorage.RemoveItemAsync(PendingSettingsKey(token));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "[LiveChat] Flushing pending translation settings failed");
+        }
+    }
+
+    private async Task RestorePendingSettingsAsync(string token)
+    {
+        var (exists, value) = await LocalStorage.TryGetItemAsync<PendingSettings>(PendingSettingsKey(token));
+        if (!exists || value is null) return;
+
+        if (_messages.Count == 0)
+        {
+            _guestAutoTranslateEnabled = value.Enabled;
+            _translationTargetLanguage = value.Language ?? string.Empty;
+            _hasPendingSettings = true;
+        }
+        else
+        {
+            _guestAutoTranslateEnabled = value.Enabled;
+            _translationTargetLanguage = value.Language ?? string.Empty;
+            _hasPendingSettings = true;
+            await FlushPendingSettingsAsync(token);
+        }
+    }
+
+    private static string PendingSettingsKey(string token) => $"livechat-pending-settings:{token}";
+
+    private sealed record PendingSettings(bool Enabled, string? Language);
 
     private void ShowTranslationSettingsToast(bool enabled, string? lang)
     {
@@ -668,6 +727,9 @@
                     QueueScroll();
                 }
                 _sendStatus[msg.Id] = MessageSendStatus.Sent;
+
+                if (_hasPendingSettings)
+                    _ = FlushPendingSettingsAsync(token);
             }
         }
         catch (Exception ex)
