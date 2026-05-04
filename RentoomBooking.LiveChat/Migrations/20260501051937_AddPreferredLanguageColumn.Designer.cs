@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.LiveChat.Data;
@@ -11,9 +12,11 @@ using RentoomBooking.LiveChat.Data;
 namespace RentoomBooking.LiveChat.Migrations
 {
     [DbContext(typeof(LiveChatDbContext))]
-    partial class LiveChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260501051937_AddPreferredLanguageColumn")]
+    partial class AddPreferredLanguageColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,15 +135,6 @@ namespace RentoomBooking.LiveChat.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<string>("DetectedLanguage")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("detected_language");
-
-                    b.Property<bool>("IsTranslated")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_translated");
-
                     b.Property<string>("OperatorAvatarUrl")
                         .HasColumnType("text")
                         .HasColumnName("operator_avatar_url");
@@ -148,10 +142,6 @@ namespace RentoomBooking.LiveChat.Migrations
                     b.Property<string>("OperatorBitrixUserId")
                         .HasColumnType("text")
                         .HasColumnName("operator_bitrix_user_id");
-
-                    b.Property<string>("OriginalContent")
-                        .HasColumnType("text")
-                        .HasColumnName("original_content");
 
                     b.Property<string>("Sender")
                         .IsRequired()
@@ -206,10 +196,6 @@ namespace RentoomBooking.LiveChat.Migrations
                     b.Property<int?>("DealBitrixId")
                         .HasColumnType("integer")
                         .HasColumnName("deal_bitrix_id");
-
-                    b.Property<bool>("GuestAutoTranslateEnabled")
-                        .HasColumnType("boolean")
-                        .HasColumnName("guest_auto_translate_enabled");
 
                     b.Property<string>("GuestEmail")
                         .HasColumnType("text")

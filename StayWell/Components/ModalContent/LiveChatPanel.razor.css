@@ -107,9 +107,16 @@
     justify-content: flex-end;
 }
 
-.livechat-message-row--operator {
-    justify-content: flex-start;
+.livechat-message-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
+
+.livechat-message-row--guest .livechat-message-col {
+    align-items: flex-end;
+}
+
 
 .livechat-retry-btn {
     flex-shrink: 0;
@@ -904,4 +911,175 @@
     opacity: 0.5;
     font-size: 0.75rem;
     flex-shrink: 0;
+}
+
+/* === Translation Features === */
+
+/* Settings Overlay (in-panel, like form-overlay) */
+.settings-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+.settings-overlay-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.livechat-settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.livechat-settings-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    user-select: none;
+}
+
+.livechat-settings-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--rentoom-green-dark, #21573e);
+}
+
+.livechat-settings-hint {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #777;
+    line-height: 1.4;
+}
+
+.livechat-settings-group--lang {
+    gap: 8px;
+}
+
+.livechat-settings-select-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.livechat-settings-select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #d1c9bb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #1a1a1a;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.livechat-settings-select:focus {
+    outline: none;
+    border-color: var(--rentoom-green-dark, #21573e);
+    box-shadow: 0 0 0 2px rgba(33, 87, 62, 0.15);
+}
+
+.livechat-settings-select:disabled {
+    background: #f3f4f6;
+    color: #aaa;
+    cursor: not-allowed;
+    border-color: #e0d8ce;
+}
+
+.livechat-settings-error {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #b33;
+    font-size: 0.9rem;
+    border: 1px solid #fcc;
+}
+
+.livechat-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px;
+    border-top: 1px solid #e9eaec;
+    flex-shrink: 0;
+}
+
+.livechat-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.livechat-btn--primary {
+    background: var(--rentoom-green-dark, #21573e);
+    color: #fff;
+}
+
+.livechat-btn--primary:hover:not(:disabled) {
+    background: #1a4530;
+}
+
+.livechat-btn--primary:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.livechat-btn--secondary {
+    background: #e9eaec;
+    color: #1a202c;
+}
+
+.livechat-btn--secondary:hover:not(:disabled) {
+    background: #d1d5db;
+}
+
+.livechat-btn--secondary:disabled {
+    background: #e9eaec;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Translation Toggle Button */
+.livechat-message-translate-toggle {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #888;
+    font-size: 0.75rem;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.15s;
+}
+
+.livechat-message-translate-toggle:hover {
+    color: #555;
+}
+
+.livechat-message-translate-toggle:active {
+    color: #333;
 }

@@ -11,6 +11,7 @@
 @inject IJSRuntime JS
 @inject ILogger<LiveChatPanel> Logger
 @inject IStringLocalizer<LiveChatPanel> Localizer
+@inject LiveChatSettingsService LiveChatSettingsService
 
 <div class="livechat-panel">
 
@@ -57,6 +58,64 @@
         </div>
     }
 
+    <!-- Settings Overlay (inside panel, like form overlay) -->
+    @if (_showTranslationSettings)
+    {
+        <div class="settings-overlay">
+            <div class="form-overlay-header">
+                <span class="form-overlay-title">@Localizer["TranslationSettingsTitle"]</span>
+                <button class="form-overlay-close" type="button" @onclick="CloseTranslationSettings" aria-label="@Localizer["CloseButtonAriaLabel"]">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="settings-overlay-content">
+                @if (!string.IsNullOrWhiteSpace(_settingsError))
+                {
+                    <div class="livechat-settings-error">@_settingsError</div>
+                }
+                <div class="livechat-settings-group">
+                    <ToggleSwitch @bind-Value="_guestAutoTranslateEnabled"
+                                  Text="@Localizer["AutoTranslateEnable"]"
+                                  Description="@Localizer["AutoTranslateHint"]" />
+                </div>
+                <div class="livechat-settings-group livechat-settings-group--lang">
+                    <label class="livechat-settings-select-label" for="translation-lang">@Localizer["TranslationLanguageLabel"]</label>
+                    <select id="translation-lang" class="livechat-settings-select" @bind="_translationTargetLanguage" disabled="@(!_guestAutoTranslateEnabled)">
+                        <option value="">@Localizer["TranslationLanguageAuto"]</option>
+                        <option value="pl">Polski</option>
+                        <option value="en">English</option>
+                        <option value="de">Deutsch</option>
+                        <option value="fr">Français</option>
+                        <option value="es">Español</option>
+                        <option value="it">Italiano</option>
+                        <option value="cs">Čeština</option>
+                        <option value="uk">Українська</option>
+                        <option value="ru">Русский</option>
+                        <option value="nl">Nederlands</option>
+                    </select>
+                </div>
+            </div>
+            <div class="livechat-modal-footer">
+                <button type="button" class="livechat-btn livechat-btn--secondary" @onclick="CloseTranslationSettings">
+                    @Localizer["CancelButton"]
+                </button>
+                <button type="button" class="livechat-btn livechat-btn--primary" @onclick="SaveTranslationSettingsAsync" disabled="@_isSendingSettings">
+                    @if (_isSendingSettings)
+                    {
+                        <span>@Localizer["Saving"]</span>
+                    }
+                    else
+                    {
+                        <span>@Localizer["SaveButton"]</span>
+                    }
+                </button>
+            </div>
+        </div>
+    }
+
+    <!-- Chat is now rendered directly below overlays, header is in modal title -->
     <div class="livechat-messages" @ref="_messagesRef">
         @if (_isLoading)
         {
@@ -143,12 +202,20 @@
                         }
                     </div>
                 }
+            <div class="livechat-message-col">
             <div class="livechat-message @(msg.Sender == "guest" ? "livechat-message--guest" : "livechat-message--operator") @(isAutomated ? "livechat-message--automated" : "") @(!isFirstInGroup && !isLastInGroup ? "livechat-message--middle" : "") @(isLastInGroup && !isFirstInGroup ? "livechat-message--last" : "")">
                 @if (msg.Sender == "guest")
                 {
                     <div class="livechat-message-sender">@Localizer["You"]</div>
                 }
-                <div class="livechat-message-content @(string.IsNullOrWhiteSpace(msg.Content) ? "livechat-message-content--hidden" : "")">@((MarkupString)BbCodeParser.ToHtml(msg.Content, _formEmbedUrls))</div>
+                @{
+                    var displayContent = msg.Content;
+                    if (msg.Sender != "guest" && msg.IsTranslated && _messageViewStates.TryGetValue(msg.Id, out var showOriginal) && showOriginal)
+                    {
+                        displayContent = msg.OriginalContent ?? msg.Content;
+                    }
+                }
+                <div class="livechat-message-content @(string.IsNullOrWhiteSpace(displayContent) ? "livechat-message-content--hidden" : "")">@((MarkupString)BbCodeParser.ToHtml(displayContent, _formEmbedUrls))</div>
                 @if (msg.Attachments is { Count: > 0 })
                 {
                     <div class="livechat-attachments">
@@ -266,6 +333,19 @@
                     }
                 </div>
             </div>
+            <!-- Translation Toggle Button (outside bubble) -->
+            @if (msg.Sender != "guest" && msg.IsTranslated && _guestAutoTranslateEnabled)
+            {
+                var showingOriginal = _messageViewStates.TryGetValue(msg.Id, out var isShowingOrig) && isShowingOrig;
+                <button class="livechat-message-translate-toggle" 
+                        type="button" 
+                        @onclick="() => ToggleMessageTranslation(msg.Id)"
+                        title="@(showingOriginal ? Localizer["ShowTranslationButtonTitle"] : Localizer["ShowOriginalButtonTitle"])"
+                        aria-label="@(showingOriginal ? Localizer["ShowTranslationButtonAriaLabel"] : Localizer["ShowOriginalButtonAriaLabel"])">
+                    @(showingOriginal ? Localizer["ShowTranslationButton"] : Localizer["ShowOriginalButton"])
+                </button>
+            }
+            </div>
             </div>
             }
         }
@@ -324,6 +404,14 @@
     private string[] _lightboxUrls = Array.Empty<string>();
     private int _lightboxIndex;
 
+    // Translation state
+    private bool _guestAutoTranslateEnabled = true;
+    private string _translationTargetLanguage = string.Empty;
+    private readonly Dictionary<Guid, bool> _messageViewStates = new(); // true = show original, false = show translated
+    private bool _showTranslationSettings;
+    private string? _settingsError;
+    private bool _isSendingSettings;
+
     private void OpenForm(string url) => _activeFormUrl = url;
     private void CloseForm() => _activeFormUrl = null;
 
@@ -353,6 +441,7 @@
     {
         NotificationState.SetChatOpen(true);
         NotificationState.OnNewMessage += HandleIncomingMessage;
+        LiveChatSettingsService.OnOpenSettingsRequested += OpenTranslationSettings;
         await LoadHistoryAsync();
     }
 
@@ -371,6 +460,9 @@
                     IndexAndQueuePreview(m);
                 QueueScroll();
             }
+
+            // Load translation settings
+            await LoadTranslationSettingsAsync(token);
         }
         catch (Exception ex)
         {
@@ -384,7 +476,25 @@
         }
     }
 
-    private async Task HandleIncomingMessage(LiveChatMessageDto msg)
+    private async Task LoadTranslationSettingsAsync(string token)
+    {
+        try
+        {
+            var response = await LiveChatClient.GetSettingsAsync(token);
+            if (response != null)
+            {
+                _guestAutoTranslateEnabled = response.GuestAutoTranslateEnabled;
+                _translationTargetLanguage = response.PreferredLanguage ?? string.Empty;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "[LiveChat] Failed to load translation settings");
+            // Non-blocking: continue with default settings
+        }
+    }
+
+     private async Task HandleIncomingMessage(LiveChatMessageDto msg)
     {
         var existingIndex = _messages.FindIndex(m => m.Id == msg.Id);
         if (existingIndex >= 0)
@@ -398,6 +508,90 @@
             QueueScroll();
         }
         await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ReloadMessagesAsync(string token)
+    {
+        try
+        {
+            await LiveChatClient.InvalidateHistory(token);
+            var session = await LiveChatClient.GetHistoryAsync(token);
+            _messages.Clear();
+            _msgUrlMap.Clear();
+            _messageViewStates.Clear();
+            if (session is not null && session.Messages.Count > 0)
+            {
+                _messages.AddRange(session.Messages);
+                foreach (var m in session.Messages)
+                    IndexAndQueuePreview(m);
+                QueueScroll();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "[LiveChat] ReloadMessages failed");
+        }
+        StateHasChanged();
+    }
+
+    private void OpenTranslationSettings()
+    {
+        _showTranslationSettings = true;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void CloseTranslationSettings()
+    {
+        _showTranslationSettings = false;
+        _settingsError = null;
+    }
+
+    private async Task SaveTranslationSettingsAsync()
+    {
+        var token = ResolveToken();
+        if (string.IsNullOrWhiteSpace(token)) return;
+
+        _isSendingSettings = true;
+        _settingsError = null;
+        StateHasChanged();
+
+        try
+        {
+            var lang = string.IsNullOrWhiteSpace(_translationTargetLanguage) ? null : _translationTargetLanguage;
+            var success = await LiveChatClient.UpdateSettingsAsync(token, _guestAutoTranslateEnabled, lang);
+            if (success)
+            {
+                CloseTranslationSettings();
+                await ReloadMessagesAsync(token);
+            }
+            else
+            {
+                _settingsError = Localizer["SettingsSaveError"];
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "[LiveChat] Failed to save translation settings");
+            _settingsError = Localizer["SettingsSaveError"];
+        }
+        finally
+        {
+            _isSendingSettings = false;
+            StateHasChanged();
+        }
+    }
+
+    private void ToggleMessageTranslation(Guid messageId)
+    {
+        if (_messageViewStates.TryGetValue(messageId, out var showingOriginal))
+        {
+            _messageViewStates[messageId] = !showingOriginal;
+        }
+        else
+        {
+            _messageViewStates[messageId] = true;
+        }
+        StateHasChanged();
     }
 
     private async Task SendAsync()
@@ -656,5 +850,6 @@
     {
         NotificationState.OnNewMessage -= HandleIncomingMessage;
         NotificationState.SetChatOpen(false);
+        LiveChatSettingsService.OnOpenSettingsRequested -= OpenTranslationSettings;
     }
 }

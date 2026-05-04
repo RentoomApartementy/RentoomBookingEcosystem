@@ -14,6 +14,12 @@ public sealed class LiveChatMessageEntity
 
     [Column("content")] public string Content { get; set; } = string.Empty;
 
+    [Column("original_content")] public string? OriginalContent { get; set; }
+
+    [Column("detected_language")] [MaxLength(10)] public string? DetectedLanguage { get; set; }
+
+    [Column("is_translated")] public bool IsTranslated { get; set; } = false;
+
     [Column("bitrix_message_id")] public string? BitrixMessageId { get; set; }
 
     [Column("sender_name")] public string? SenderName { get; set; }

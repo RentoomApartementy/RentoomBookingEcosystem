@@ -26,6 +26,10 @@ public sealed class LiveChatSessionEntity
 
     [Column("status")] public string Status { get; set; } = LiveChatSessionStatuses.Active;
 
+    [Column("guest_auto_translate_enabled")] public bool GuestAutoTranslateEnabled { get; set; } = true;
+
+    [Column("preferred_language")] public string? PreferredLanguage { get; set; }
+
     [Column("created_at")] public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

@@ -75,7 +75,7 @@ public sealed class LiveChatStreamFunction
                     await WriteSseAsync(writer, "message",
                         new LiveChatMessageDto(msg.Id, msg.Sender, msg.Content, msg.CreatedAt, msg.SenderName,
                             msg.OperatorAvatarUrl, _liveChatService.DeserializeAttachments(msg),
-                            msg.OperatorBitrixUserId), ct);
+                            msg.OperatorBitrixUserId, msg.OriginalContent, msg.DetectedLanguage, msg.IsTranslated), ct);
                 else
                     await WriteSseAsync(writer, "heartbeat", new { ts = DateTime.UtcNow }, ct);
             }

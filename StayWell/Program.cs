@@ -41,6 +41,7 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<FeatureFlagsService>();
 
             builder.Services.AddScoped<LiveChatNotificationState>();
+            builder.Services.AddScoped<LiveChatSettingsService>();
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
             builder.Services.AddScoped<AmenitiesState>();
