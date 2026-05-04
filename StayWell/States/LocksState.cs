@@ -12,6 +12,7 @@ namespace RentoomBooking.StayWell.States
         private readonly BackendApi _backendApi = backendApi;
         private readonly LocalStorageService _localStorage = localStorage;
         private const string TtLockCacheKeyPrefix = "staywell_ttlock_status_";
+        private const string DevMockCodesKeyPrefix = "staywell_devmock_codes_";
         private static readonly TimeSpan TtLockCacheTtl = TimeSpan.FromHours(1);
         private static readonly TimeSpan RetryCooldown = TimeSpan.FromSeconds(30);
 
@@ -247,8 +248,43 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
-        public void GenerateDevMockPasscode()
+        public async Task RestoreDevMockCodesAsync(string token)
         {
+            if (string.IsNullOrWhiteSpace(token)) return;
+
+            var (exists, cached) = await _localStorage
+                .TryGetItemAsync<BackendApi.AccessCodesResponse>(DevMockCodesKeyPrefix + token);
+            if (!exists || cached is null) return;
+
+            AccessCodes = cached;
+            NotifyStateChanged();
+        }
+
+        public async Task ClearDevMockCodesAsync(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token)) return;
+            await _localStorage.RemoveItemAsync(DevMockCodesKeyPrefix + token);
+        }
+
+        public async Task GenerateDevMockPasscodeAsync(string? token = null)
+        {
+            if (IsPasscodeLoading) return;
+
+            IsPasscodeLoading = true;
+            PasscodeLoadingElapsedSeconds = 0;
+            NotifyStateChanged();
+            StartPasscodeLoadingTimer();
+
+            try
+            {
+                await Task.Delay(1000);
+            }
+            finally
+            {
+                StopPasscodeLoadingTimer();
+                IsPasscodeLoading = false;
+            }
+
             var now = DateTimeOffset.Now;
             var mock = new BackendApi.AccessCodeDto
             {
@@ -275,6 +311,10 @@ namespace RentoomBooking.StayWell.States
                 CooldownSecondsRemaining = 0,
                 NextGenerationAvailableAt = null
             };
+
+            if (!string.IsNullOrWhiteSpace(token))
+                await _localStorage.SetItemAsync(DevMockCodesKeyPrefix + token, AccessCodes);
+
             NotifyStateChanged();
         }
 

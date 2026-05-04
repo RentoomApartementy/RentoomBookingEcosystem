@@ -456,7 +456,7 @@
     {
         if (IsDevMockLock)
         {
-            LocksState.GenerateDevMockPasscode();
+            await LocksState.GenerateDevMockPasscodeAsync(Token);
             ToastService.ShowToast(Localizer["PasscodeGeneratedSuccess"]);
             return;
         }
@@ -502,7 +502,18 @@
                 _ = LocksState.CheckTTLockStatusAsync(Token);
             }
 
-            _ = LocksState.LoadAccessCodesAsync(Token);
+            if (IsDevMockLock)
+            {
+                _ = Task.Run(async () =>
+                {
+                    await LocksState.LoadAccessCodesAsync(Token);
+                    await LocksState.RestoreDevMockCodesAsync(Token);
+                });
+            }
+            else
+            {
+                _ = LocksState.LoadAccessCodesAsync(Token);
+            }
         }
 
         LoadLockInstructions();
@@ -533,8 +544,17 @@
 
         if (IsDevMockLock)
         {
-            IsOpened = !IsOpened;
+            IsProcessing = true;
             ErrorMessage = null;
+            try
+            {
+                await Task.Delay(1000);
+                IsOpened = !IsOpened;
+            }
+            finally
+            {
+                IsProcessing = false;
+            }
             return;
         }
 
