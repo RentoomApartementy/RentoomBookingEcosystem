@@ -60,13 +60,13 @@ public sealed class LiveChatStreamFunction
 
         await using var writer = new StreamWriter(response.Body, new UTF8Encoding(false), leaveOpen: true);
 
-        await WriteSseAsync(writer, "connected", new { sessionId = session.Id }, ct);
-
         var subscriptionId = _sseSubscriptions.Subscribe(session.Id);
         var deadline = DateTime.UtcNow + StreamMaxDuration;
 
         try
         {
+            await WriteSseAsync(writer, "connected", new { sessionId = session.Id }, ct);
+
             while (!ct.IsCancellationRequested && DateTime.UtcNow < deadline)
             {
                 var msg = await _sseSubscriptions.WaitForOperatorMessageAsync(session.Id, subscriptionId, PollTimeout,

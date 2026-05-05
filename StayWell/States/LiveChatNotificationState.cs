@@ -40,14 +40,10 @@ public sealed class LiveChatNotificationState : IDisposable
 
         _ = Task.Run(async () =>
         {
-            var isFirstConnect = true;
             while (!ct.IsCancellationRequested)
             {
                 try
                 {
-                    if (!isFirstConnect)
-                        await SyncMissedMessagesAsync(token);
-
                     await _liveChatClient.StreamMessagesAsync(
                         token,
                         async msg =>
@@ -55,18 +51,26 @@ public sealed class LiveChatNotificationState : IDisposable
                             await _liveChatClient.InvalidateHistory(token);
                             _knownMessageIds.Add(msg.Id);
 
-                            if (msg.Sender != "guest" && msg.Sender != "system" && !_isChatOpen
-                                && _countedMessageIds.Add(msg.Id))
+                            if (msg.Sender != "guest" && msg.Sender != "system")
                             {
-                                _unreadCount++;
-                                _ = PersistUnreadAsync();
-                                OnChange?.Invoke();
+                                if (_isChatOpen)
+                                {
+                                    _lastReadAt = DateTimeOffset.UtcNow;
+                                    if (_currentToken is not null)
+                                        _ = _localStorage.SetItemAsync(LastReadKey(_currentToken), _lastReadAt.Value);
+                                }
+                                else if (_countedMessageIds.Add(msg.Id))
+                                {
+                                    _unreadCount++;
+                                    _ = PersistUnreadAsync();
+                                    OnChange?.Invoke();
+                                }
                             }
 
                             if (OnNewMessage is not null)
                                 await OnNewMessage(msg);
                         },
-                        () => Task.CompletedTask,
+                        () => SyncMissedMessagesAsync(token),
                         ct);
                 }
                 catch (OperationCanceledException)
@@ -78,7 +82,6 @@ public sealed class LiveChatNotificationState : IDisposable
                     _logger.LogWarning(ex, "LiveChat SSE stream error for token {Token}; reconnecting in 5 s", _currentToken);
                 }
 
-                isFirstConnect = false;
                 await Task.Delay(3000, ct);
             }
         }, ct);
@@ -142,7 +145,9 @@ public sealed class LiveChatNotificationState : IDisposable
                 foreach (var msg in session.Messages)
                 {
                     if (msg.Sender == "guest" || msg.Sender == "system") continue;
-                    if (_lastReadAt.HasValue && msg.CreatedAt <= _lastReadAt.Value) continue;
+                    if (_lastReadAt.HasValue &&
+                        DateTime.SpecifyKind(msg.CreatedAt, DateTimeKind.Utc) <= _lastReadAt.Value.UtcDateTime)
+                        continue;
                     if (_countedMessageIds.Add(msg.Id))
                         unread++;
                 }

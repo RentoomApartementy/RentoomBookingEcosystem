@@ -131,7 +131,7 @@
                 <div class="skeleton skeleton--code"></div>
                 <div class="skeleton skeleton--text-short" style="margin-top: 8px;"></div>
             }
-            else if (!ReservationState.IsCodeAvailable && !_debugMode)
+            else if (!ReservationState.IsCodeAvailable && !_debugMode && !IsDevMockLock)
             {
                 @if (ReservationState.IsAfterCheckOut)
                 {
@@ -176,7 +176,7 @@
                     </div>
                 }
 
-                @if ((ReservationState.IsActiveReservation || _debugMode))
+                @if ((ReservationState.IsActiveReservation || _debugMode || IsDevMockLock))
                 {
                     <div style="margin-top: 14px;">
                         <button class="retry-button"
@@ -212,7 +212,7 @@
     @{
         var hasHistory = LocksState.AllCodes.Count > 1;
     }
-    @if (hasHistory && (ReservationState.IsActiveReservation || _debugMode) && !ReservationState.IsLoading && !LocksState.IsLoading)
+    @if (hasHistory && (ReservationState.IsActiveReservation || _debugMode || IsDevMockLock) && !ReservationState.IsLoading && !LocksState.IsLoading)
     {
         <div class="tile passcode-history-tile">
             <button class="passcode-history__toggle" @onclick="TogglePasscodeHistory">
