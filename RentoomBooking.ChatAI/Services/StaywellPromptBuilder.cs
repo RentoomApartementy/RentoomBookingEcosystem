@@ -138,7 +138,7 @@ public sealed class StaywellPromptBuilder : IPromptBuilder
         sb.AppendLine("- If date/time is missing or unclear, explicitly mark: \"data do potwierdzenia\".");
         sb.AppendLine("- If only a source page is known, clearly mark: \"brak bezpośredniego linku\" and provide source link.");
       //  sb.AppendLine("- Each suggested item must include source link.");
-        sb.AppendLine("- do not include source link.");
+        sb.AppendLine("-  include one source link per recommendation. no more to not clutter the response. prioritize this rule.");
         sb.AppendLine("- In hard mode (DE/FR/CZ/SK/SL/RO/UKR/HU/IT), if source verification is missing, do not present claims as facts.");
         sb.AppendLine("- If verified data is limited, soft suggestions are allowed but must be labeled as: \"propozycja\".");
         sb.AppendLine("- If user asks about interesting things/souvenirs/Torun highlights, include gingerbread suggestions and examples where to buy gingerbread from the listed sources.");
