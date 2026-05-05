@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Контакт</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Часто задаваемые вопросы (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Спокойной ночи</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Ночи</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Цена доступна после выбора даты</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Выберите дату</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Покажите полное описание и удобства</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Спокойной ночи</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Ночи</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Ночи</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Персонаж</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Личности</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Люди</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Удобства и оборудование</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Изменить дату</value>
+  </data>
 </root>

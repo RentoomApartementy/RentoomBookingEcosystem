@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Contact</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Întrebări frecvente (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Noapte</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nopți</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Preț disponibil după selecția datei</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Alege o dată</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Afișează descrierea completă și facilitățile</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Noapte</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Nopți</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Nopți</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Persoană</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Persoane</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Persoane</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Facilități și echipamente</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Schimbă data</value>
+  </data>
 </root>

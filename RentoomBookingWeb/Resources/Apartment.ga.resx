@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Teagmháil</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Ceisteanna Coitianta (Ceisteanna Coitianta)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Oíche</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Oícheanta</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Praghas ar fáil tar éis roghnú dáta</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Roghnaigh dáta</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Taispeáin cur síos iomlán agus taitneamhachtaí</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Oíche</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Oícheanta</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Oícheanta</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Duine</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Daoine</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>daoine</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Taitneamhachtaí agus trealamh</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Athraigh an dáta</value>
+  </data>
 </root>

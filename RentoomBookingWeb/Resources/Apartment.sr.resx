@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Napomena:</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Često postavljana pitanja (FAK)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Noć</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Noći</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Cena dostupna nakon izbora datuma</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Izaberite datum</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Prikaži kompletan opis i pogodnosti</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Noć</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Noći</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Noći</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Osoba</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Osobe</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>ljudi</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Pogodnosti i oprema</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Promenite datum</value>
+  </data>
 </root>

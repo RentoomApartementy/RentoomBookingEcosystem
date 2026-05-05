@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Vanliga frågor (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Natt</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nätter</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Pris tillgängligt efter datumval</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Välj ett datum</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Visa fullständig beskrivning och faciliteter</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Natt</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Nätter</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Nätter</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Person</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Personer</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Personer</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Faciliteter och utrustning</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Ändra datumet</value>
+  </data>
 </root>
