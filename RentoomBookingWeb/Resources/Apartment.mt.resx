@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kuntatt</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Mistoqsijiet Frekwenti (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Lejl</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Il-lejl</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Prezz disponibbli wara l-għażla tad-data</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Agħżel data</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Uri d-deskrizzjoni sħiħa u l-faċilitajiet</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Lejl</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Il-lejl</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Il-lejl</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Persuna</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Persuni</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Nies</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Faċilitajiet u tagħmir</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Biddel id-data</value>
+  </data>
 </root>

@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Yhteystiedot</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Usein kysytyt kysymykset (UKK)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Yö</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Yöt</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Hinta saatavilla päivämäärän valinnan jälkeen</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Valitse päivämäärä</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Näytä täydellinen kuvaus ja palvelut</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Yö</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Yöt</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Yöt</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Henkilö</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Henkilöt</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Henkilöt</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Palvelut ja varusteet</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Vaihda päivämäärä</value>
+  </data>
 </root>

@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Samband</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Algengar spurningar (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Nótt</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nætur</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Verð laust eftir val á dagsetningu</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Veldu dagsetningu</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Sýndu fulla lýsingu og þægindi</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Nótt</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Nætur</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Nætur</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Persóna</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Persónur</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Fólk</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Þjónusta og búnaður</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Breyttu dagsetningunni</value>
+  </data>
 </root>

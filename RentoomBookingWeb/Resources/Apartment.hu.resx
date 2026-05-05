@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kapcsolat</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Gyakran Ismételt Kérdések (GYIK)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Éjszakát</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Éjszakák</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Az ár elérhető dátum kiválasztása után</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Válassz egy dátumot</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Teljes leírás és szolgáltatások megjelenítése</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Éjszakát</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Éjszakák</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Éjszakák</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Személy</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Személyek</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Emberek</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Szolgáltatások és felszerelés</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Dátum módosítása</value>
+  </data>
 </root>

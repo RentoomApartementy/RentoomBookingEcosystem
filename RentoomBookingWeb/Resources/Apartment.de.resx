@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Häufig gestellte Fragen (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Nacht</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nächte</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Preis nach der Terminwahl verfügbar</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Wählen Sie ein Datum</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Vollständige Beschreibung und Ausstattung anzeigen</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Nacht</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Nächte</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Nächte</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Person</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Personen</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Menschen</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Ausstattung und Ausstattung</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Ändere das Datum</value>
+  </data>
 </root>

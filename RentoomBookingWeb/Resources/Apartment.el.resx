@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Επικοινωνία</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Συχνές Ερωτήσεις (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Νύχτα</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Νύχτες</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Τιμή διαθέσιμη μετά την επιλογή ημερομηνίας</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Επιλέξτε μια ημερομηνία</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Εμφάνιση πλήρους περιγραφής &amp; παροχών</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Νύχτα</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Νύχτες</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Νύχτες</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Πρόσωπο</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>πρόσωπα</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Άνθρωποι</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Ανέσεις και εξοπλισμός</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Αλλάξτε την ημερομηνία</value>
+  </data>
 </root>

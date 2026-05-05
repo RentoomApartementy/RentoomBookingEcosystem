@@ -282,4 +282,46 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Кантакт</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Часта задаваныя пытанні (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Ноч</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Ночы</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Цана даступная пасля выбару</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Выберыце дату</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Пакажыце поўнае апісанне і зручнасці</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Ноч</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Ночы</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Ночы</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Асоба</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Асобы</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Людзі</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Інфраструктура і абсталяванне</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Змяніце дату</value>
+  </data>
 </root>
