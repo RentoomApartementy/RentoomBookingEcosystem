@@ -37,4 +37,5 @@ public sealed class ReservationPromptContext
     public bool? RemoteOpenSupported { get; set; }
     public string? AccessMethodSummary { get; set; }
     public string? NearbyAnswerGuidance { get; set; }
+    public string? AvailableUpsellsSummary { get; set; }
 }

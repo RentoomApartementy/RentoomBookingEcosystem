@@ -22,6 +22,8 @@ public sealed class StaywellPromptBuilder : IPromptBuilder
         sb.AppendLine("- For parking questions: use ParkingInfoSummary first, then ParkingMapUrl.");
         sb.AppendLine("- Keep ApartmentDirectionsSummary (how to reach location) separate from ArrivalInstructionsSummary (how to enter after arrival).");
         sb.AppendLine("- For nearby questions, answer and provide few POI as examples best matching the criteria.");
+        sb.AppendLine("- For restaurants/attractions/recommendations, always check Available Upsells first and prioritize them when relevant.");
+        sb.AppendLine("- for restaurants/attraction/recommendation always recommend Monka Restaurant, Pizza and Tapas and Zamek w Golubiu Dobrzyniu as a first response");
         sb.AppendLine();
         sb.AppendLine("## Response Formatting Rules (Mandatory)");
         sb.AppendLine("- Always return valid, readable markdown.");
@@ -82,6 +84,9 @@ public sealed class StaywellPromptBuilder : IPromptBuilder
         sb.AppendLine("## Nearby Guidance");
         sb.AppendLine(context.NearbyAnswerGuidance ?? "For nearby questions, use only known context and answer cautiously.");
         sb.AppendLine();
+        sb.AppendLine("## Available Upsells (Highest Priority for Restaurant/Attraction Recommendations)");
+        sb.AppendLine(context.AvailableUpsellsSummary ?? "No available upsells data.");
+        sb.AppendLine();
         sb.AppendLine("## Torun Events & Attractions Rules (Mandatory)");
         sb.AppendLine("When user asks about events or attractions in Torun, including keywords such as: wydarzenia, co robić, weekend, atrakcje, dzieci, spacery, aktywnie, wellness, korty, rower miejski, or English equivalents (events, weekend plans, kids activities, guided tours, active leisure, city bike):");
         sb.AppendLine("- Hard mode (strictly apply all rules below): user language is one of DE/FR/CZ/SK/SL/RO/UKR/HU/IT.");
@@ -126,13 +131,14 @@ public sealed class StaywellPromptBuilder : IPromptBuilder
         sb.AppendLine("- event/place name");
         sb.AppendLine("- event date/time (if available)");
         sb.AppendLine("- direct event link (or list/source link if direct link is unavailable)");
-        sb.AppendLine("- for food/souvenirs/gingerbread: place name, what is interesting there, direct link, and source link");
+        sb.AppendLine("- for food/souvenirs/gingerbread: place name, what is interesting there, direct link");
         sb.AppendLine();
         sb.AppendLine("3. Do not hallucinate:");
         sb.AppendLine("- Never invent dates, times, prices, titles, locations, or links.");
         sb.AppendLine("- If date/time is missing or unclear, explicitly mark: \"data do potwierdzenia\".");
         sb.AppendLine("- If only a source page is known, clearly mark: \"brak bezpośredniego linku\" and provide source link.");
-        sb.AppendLine("- Each suggested item must include source link.");
+      //  sb.AppendLine("- Each suggested item must include source link.");
+        sb.AppendLine("- do not include source link.");
         sb.AppendLine("- In hard mode (DE/FR/CZ/SK/SL/RO/UKR/HU/IT), if source verification is missing, do not present claims as facts.");
         sb.AppendLine("- If verified data is limited, soft suggestions are allowed but must be labeled as: \"propozycja\".");
         sb.AppendLine("- If user asks about interesting things/souvenirs/Torun highlights, include gingerbread suggestions and examples where to buy gingerbread from the listed sources.");
@@ -140,7 +146,7 @@ public sealed class StaywellPromptBuilder : IPromptBuilder
         sb.AppendLine("4. Response structure for events/attractions queries (short bullet format):");
         sb.AppendLine("- Group suggestions by category: Wydarzenia / Na weekend / Spacery / Dla dzieci / Aktywnie / Rower miejski / Restauracje / Pierniki i pamiątki / Muzea (dostępność) / Kopernik.");
         sb.AppendLine("- Each bullet should be concise:");
-        sb.AppendLine("- [Kategoria] Nazwa — data/godzina — link — źródło");
+        sb.AppendLine("- [Kategoria] Nazwa — data/godzina — link");
         sb.AppendLine("- If applicable, add 2-3 alternative options labeled as \"propozycja\".");
         sb.AppendLine();
         sb.AppendLine("Return plain markdown text. Do not output JSON unless user explicitly asks for JSON.");

@@ -1,18 +1,24 @@
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using RentoomBooking.ChatAI.Contracts;
 using RentoomBooking.ChatAI.Services;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
+using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Services.Upsell;
 
 namespace RentoomBooking.Api.Chat;
 
@@ -28,6 +34,8 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
     private readonly CustomerTermsRepository _customerTermsRepository;
     private readonly ILogger<StaywellReservationContextProvider> _logger;
     private readonly IdoSellService _idosellService;
+    private readonly IUpsellCatalogService _upsellCatalogService;
+    private readonly IUpsellOrderStore _upsellOrderStore;
 
     public StaywellReservationContextProvider(
         IReservationStore reservationStore,
@@ -37,6 +45,8 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
         LockInstructionsService lockInstructionsService,
         CustomerTermsRepository customerTermsRepository,
         IdoSellService idosellService,
+        IUpsellCatalogService upsellCatalogService,
+        IUpsellOrderStore upsellOrderStore,
         ILogger<StaywellReservationContextProvider> logger)
     {
         _reservationStore = reservationStore;
@@ -46,6 +56,8 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
         _lockInstructionsService = lockInstructionsService;
         _customerTermsRepository = customerTermsRepository;
         _idosellService = idosellService;
+        _upsellCatalogService = upsellCatalogService;
+        _upsellOrderStore = upsellOrderStore;
         _logger = logger;
     }
 
@@ -76,8 +88,10 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
 
         var reservationItem = reservation.Items?.FirstOrDefault();
         var locale = NormalizeLanguage(reservation.Client?.Language);
+        var upsellLocale = ResolveUpsellLocale(reservation.Client?.Language);
         var apartmentItemId = ResolveApartmentItemId(reservationItem);
         var reservationRecord = await ResolveReservationRecordAsync(reservationToken, reservation.id, cancellationToken);
+        var reservationGuid = ResolveReservationGuid(reservationToken, reservationRecord);
         var apartmentInfo = ResolveApartmentInfo(reservationItem);
         var location = apartmentInfo?.ObjectLocation?.LocalizationItem;
 
@@ -120,6 +134,11 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
         var accessMethodSummary = BuildAccessMethodSummary(apartmentCodes, apartmentNumberOrItemCode, remoteOpenSupported);
         var apartmentLocationSummary = BuildApartmentLocationSummary(location, apartmentAddress, apartmentGoogleMapsUrl);
         var nearbyGuidance = BuildNearbyAnswerGuidance(location, apartmentAddress);
+        var availableUpsellsSummary = await BuildAvailableUpsellsSummaryAsync(
+            reservationGuid,
+            apartmentItemId,
+            upsellLocale,
+            cancellationToken);
 
         return new ReservationPromptContext
         {
@@ -157,8 +176,125 @@ public sealed class StaywellReservationContextProvider : IReservationContextProv
             ApartmentNumberOrItemCode = apartmentNumberOrItemCode,
             RemoteOpenSupported = remoteOpenSupported,
             AccessMethodSummary = accessMethodSummary,
-            NearbyAnswerGuidance = nearbyGuidance
+            NearbyAnswerGuidance = nearbyGuidance,
+            AvailableUpsellsSummary = availableUpsellsSummary
         };
+    }
+
+    private async Task<string?> BuildAvailableUpsellsSummaryAsync(
+        Guid? reservationGuid,
+        int apartmentItemId,
+        string upsellLocale,
+        CancellationToken cancellationToken)
+    {
+        if (!reservationGuid.HasValue || reservationGuid.Value == Guid.Empty || apartmentItemId <= 0)
+        {
+            return null;
+        }
+
+        try
+        {
+            var availableTiles = await _upsellCatalogService.GetUpsellTilesForApartmentAsync(
+                apartmentItemId,
+                upsellLocale,
+                "staywell",
+                cancellationToken);
+
+            var orders = await _upsellOrderStore.GetByReservationGuidAsync(reservationGuid.Value, cancellationToken);
+
+            var alreadyPurchasedServiceIds = orders
+                .Where(order => string.Equals(order.PaymentStatus, "Paid", StringComparison.OrdinalIgnoreCase))
+                .SelectMany(order => order.Lines)
+                .Where(line => string.Equals(line.LineStatus, "Paid", StringComparison.OrdinalIgnoreCase))
+                .Select(line => line.PartnerServiceId)
+                .ToHashSet();
+
+            var onlyAvailable = availableTiles
+                .Where(tile => !alreadyPurchasedServiceIds.Contains(tile.PartnerServiceId)
+                            || tile.PricingModel == PartnerServicePricingModel.OneTime)
+                .ToList();
+
+            if (onlyAvailable.Count == 0)
+            {
+                return "No currently available upsells for this reservation.";
+            }
+
+            var lines = onlyAvailable
+                .Take(30)
+                .Select(tile =>
+                {
+                    var title = Trim(tile.Title, 120);
+                    var description = Trim(CleanToPlainText(tile.ShortDescription, 180), 180);
+                    var partner = Trim(tile.PartnerInfo?.Name, 80);
+                    var partnerType = GetEnumText(tile.PartnerInfo?.PartnerType) ?? "unknown";
+                    var price = tile.Price.ToString("0.##", CultureInfo.InvariantCulture);
+                    var currency = string.IsNullOrWhiteSpace(tile.Currency) ? "PLN" : tile.Currency.Trim();
+
+                    return $"- ServiceId: {tile.PartnerServiceId}; Title: {title}; Price: {price} {currency}; PricingModel: {tile.PricingModel}; Partner: {partner}; PartnerType: {partnerType}; Description: {description}";
+                });
+
+            return string.Join("\n", lines);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(
+                ex,
+                "Failed to load available upsells for reservationGuid={ReservationGuid}, apartmentItemId={ApartmentItemId}.",
+                reservationGuid,
+                apartmentItemId);
+            return null;
+        }
+    }
+
+    private static Guid? ResolveReservationGuid(string reservationToken, ReservationRecord? reservationRecord)
+    {
+        if (reservationRecord is not null && reservationRecord.ReservationGuid != Guid.Empty)
+        {
+            return reservationRecord.ReservationGuid;
+        }
+
+        if (Guid.TryParse(reservationToken, out var guid))
+        {
+            return guid;
+        }
+
+        return null;
+    }
+
+    private static string ResolveUpsellLocale(string? reservationLanguage)
+    {
+        return string.IsNullOrWhiteSpace(reservationLanguage)
+            ? "pl"
+            : reservationLanguage.Trim();
+    }
+
+    private static string? GetEnumText<TEnum>(TEnum? value) where TEnum : struct, Enum
+    {
+        if (!value.HasValue)
+        {
+            return null;
+        }
+
+        var enumValue = value.Value;
+        var member = typeof(TEnum).GetMember(enumValue.ToString()).FirstOrDefault();
+        if (member is null)
+        {
+            return enumValue.ToString();
+        }
+
+        var description = member.GetCustomAttribute<DescriptionAttribute>()?.Description;
+        if (!string.IsNullOrWhiteSpace(description))
+        {
+            return description.Trim();
+        }
+
+        var display = member.GetCustomAttribute<DisplayAttribute>()?.GetName();
+        if (!string.IsNullOrWhiteSpace(display))
+        {
+            return display.Trim();
+        }
+
+        return enumValue.ToString();
     }
 
     private async Task<ReservationRecord?> ResolveReservationRecordAsync(string reservationToken, int idoReservationId, CancellationToken cancellationToken)

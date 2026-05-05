@@ -15,6 +15,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models
         public Guid PublicId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Slug { get; set; } = string.Empty;
+        public PartnerType? PartnerType { get; set; }
         public string? ContactEmail { get; set; }
         public string? ContactPhone { get; set; }
         public string? AddressLine { get; set; }
