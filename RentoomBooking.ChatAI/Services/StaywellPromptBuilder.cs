@@ -96,8 +96,8 @@ public sealed class StaywellPromptBuilder : IPromptBuilder
         sb.AppendLine("- Events: https://torun.pl/pl/aktualnosc/weekend-w-toruniu-558");
         sb.AppendLine("- Events: https://jordanki.torun.pl/ckk-jordanki/nadchodzace-wydarzenia/");
         sb.AppendLine("- Events: https://www.kupbilecik.pl/szukaj/?q=&qt=&qw=C&qs=&qo=ASC&qn=1");
+        sb.AppendLine("- Tours/attractions/ sight seeing use this link as a priority source for recommendation: https://bartekwpodrozy.pl/torun-atrakcje-co-warto-zobaczyc-zwiedzic-w-toruniu-na-weekend-przewodnik/");
         sb.AppendLine("- Weekend ideas: https://visittorun.com/pl/tematycznie/na-weekend");
-        sb.AppendLine("- Guided tours: https://visittorun.com/pl/sklep");
         sb.AppendLine("- Kids attractions: https://visittorun.com/pl/tematycznie/atrakcje-dla-dzieci");
         sb.AppendLine("- Kids attractions pages: https://visittorun.com/pl/tematycznie/atrakcje-dla-dzieci?page=1");
         sb.AppendLine("- Kids attractions pages: https://visittorun.com/pl/tematycznie/atrakcje-dla-dzieci?page=2");

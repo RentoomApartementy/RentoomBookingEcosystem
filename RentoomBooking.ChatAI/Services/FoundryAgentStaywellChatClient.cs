@@ -161,10 +161,13 @@ public sealed class FoundryAgentStaywellChatClient : IStaywellAgentChatClient
         if (root.TryGetProperty("type", out var type)
             && string.Equals(type.GetString(), "response.output_text.delta", StringComparison.OrdinalIgnoreCase)
             && root.TryGetProperty("delta", out var delta)
-            && delta.ValueKind == JsonValueKind.String
-            && !string.IsNullOrWhiteSpace(delta.GetString()))
+            && delta.ValueKind == JsonValueKind.String)
         {
-            yield return delta.GetString()!;
+            var deltaText = delta.GetString();
+            if (deltaText is not null)
+            {
+                yield return deltaText;
+            }
         }
         else if (root.TryGetProperty("error", out var error))
         {
