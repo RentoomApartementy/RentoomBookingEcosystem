@@ -445,6 +445,13 @@
         NotificationState.SetChatOpen(true);
         NotificationState.OnNewMessage += HandleIncomingMessage;
         LiveChatSettingsService.OnOpenSettingsRequested += OpenTranslationSettings;
+
+        var token = ResolveToken();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            NotificationState.StartListening(token);
+        }
+
         await LoadHistoryAsync();
     }
 
@@ -455,14 +462,9 @@
 
         try
         {
+            await LiveChatClient.InvalidateHistory(token);
             var session = await LiveChatClient.GetHistoryAsync(token);
-            if (session is not null && session.Messages.Count > 0)
-            {
-                _messages.AddRange(session.Messages);
-                foreach (var m in session.Messages)
-                    IndexAndQueuePreview(m);
-                QueueScroll();
-            }
+            ReplaceMessages(session);
 
             // Load translation settings
             await LoadTranslationSettingsAsync(token);
@@ -504,11 +506,13 @@
         if (existingIndex >= 0)
         {
             _messages[existingIndex] = msg;
+            SortMessages();
         }
         else
         {
             _messages.Add(msg);
             IndexAndQueuePreview(msg);
+            SortMessages();
             QueueScroll();
         }
         await InvokeAsync(StateHasChanged);
@@ -520,16 +524,7 @@
         {
             await LiveChatClient.InvalidateHistory(token);
             var session = await LiveChatClient.GetHistoryAsync(token);
-            _messages.Clear();
-            _msgUrlMap.Clear();
-            _messageViewStates.Clear();
-            if (session is not null && session.Messages.Count > 0)
-            {
-                _messages.AddRange(session.Messages);
-                foreach (var m in session.Messages)
-                    IndexAndQueuePreview(m);
-                QueueScroll();
-            }
+            ReplaceMessages(session);
         }
         catch (Exception ex)
         {
@@ -537,6 +532,29 @@
         }
         StateHasChanged();
     }
+
+    private void ReplaceMessages(LiveChatSessionDto? session)
+    {
+        _messages.Clear();
+        _msgUrlMap.Clear();
+        _messageViewStates.Clear();
+        _formEmbedUrls.Clear();
+
+        if (session?.Messages is not { Count: > 0 }) return;
+
+        foreach (var message in session.Messages
+                     .GroupBy(m => m.Id)
+                     .Select(group => group.Last())
+                     .OrderBy(m => m.CreatedAt))
+        {
+            _messages.Add(message);
+            IndexAndQueuePreview(message);
+        }
+
+        QueueScroll();
+    }
+
+    private void SortMessages() => _messages.Sort((left, right) => left.CreatedAt.CompareTo(right.CreatedAt));
 
     private void OpenTranslationSettings()
     {
@@ -724,6 +742,7 @@
                 if (!_messages.Any(m => m.Id == msg.Id))
                 {
                     _messages.Add(msg);
+                    SortMessages();
                     QueueScroll();
                 }
                 _sendStatus[msg.Id] = MessageSendStatus.Sent;
@@ -773,6 +792,7 @@
                 if (!_messages.Any(m => m.Id == result.Id))
                 {
                     _messages.Add(result);
+                    SortMessages();
                     QueueScroll();
                 }
                 _sendStatus[result.Id] = MessageSendStatus.Sent;
