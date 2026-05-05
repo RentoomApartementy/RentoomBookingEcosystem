@@ -375,14 +375,18 @@
     private string? ErrorMessage;
 
     private bool IsButtonDisabled =>
-        ReservationState?.CurrentReservation?.Reservation?.ReservationDetails
-            == null
-        || DateTime.Now
-            < ReservationState
-                .CurrentReservation
-                .Reservation
-                .ReservationDetails
-                .getDateFrom();
+        !_debugMode
+        && !IsDevMockLock
+        && (
+            ReservationState?.CurrentReservation?.Reservation?.ReservationDetails
+                == null
+            || DateTime.Now
+                < ReservationState
+                    .CurrentReservation
+                    .Reservation
+                    .ReservationDetails
+                    .getDateFrom()
+        );
 
     private string RetryButtonText =>
         LocksState.IsRetryCountdownActive
