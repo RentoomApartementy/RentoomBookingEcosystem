@@ -312,7 +312,7 @@ public sealed class BitrixLiveChatService
         var isTranslated = false;
         var detectedLanguage = (string?)null;
 
-        if (session.GuestAutoTranslateEnabled)
+        if (session.GuestAutoTranslateEnabled && !string.IsNullOrWhiteSpace(cleanText))
         {
             // Get guest's language from their last message
             using var dbLocal = await _dbContextFactory.CreateDbContextAsync(ct);
