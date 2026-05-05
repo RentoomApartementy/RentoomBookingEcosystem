@@ -100,6 +100,7 @@ public sealed class LiveChatNotificationState : IDisposable
                 if (!_knownMessageIds.Add(msg.Id)) continue;
 
                 if (msg.Sender != "guest" && msg.Sender != "system" && !_isChatOpen
+                    && !IsBeforeLastRead(msg.CreatedAt)
                     && _countedMessageIds.Add(msg.Id))
                 {
                     _unreadCount++;
@@ -145,9 +146,7 @@ public sealed class LiveChatNotificationState : IDisposable
                 foreach (var msg in session.Messages)
                 {
                     if (msg.Sender == "guest" || msg.Sender == "system") continue;
-                    if (_lastReadAt.HasValue &&
-                        DateTime.SpecifyKind(msg.CreatedAt, DateTimeKind.Utc) <= _lastReadAt.Value.UtcDateTime)
-                        continue;
+                    if (IsBeforeLastRead(msg.CreatedAt)) continue;
                     if (_countedMessageIds.Add(msg.Id))
                         unread++;
                 }
@@ -171,6 +170,10 @@ public sealed class LiveChatNotificationState : IDisposable
             }
         }
     }
+
+    private bool IsBeforeLastRead(DateTime createdAt)
+        => _lastReadAt.HasValue
+            && DateTime.SpecifyKind(createdAt, DateTimeKind.Utc) <= _lastReadAt.Value.UtcDateTime;
 
     private Task PersistUnreadAsync()
         => _currentToken is not null
