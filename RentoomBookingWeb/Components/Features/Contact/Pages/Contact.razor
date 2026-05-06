@@ -5,8 +5,11 @@
 @using Microsoft.Extensions.Localization;
 @using RentoomBookingWeb.Services;
 @using System.Net.Mail;
+@using RentoomBookingWeb.Components.Shared
+@using RentoomBookingWeb.Services.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Contact> Localizer;
 @inject BitrixLeadCaptureService LeadCaptureService
+@inject IRouteLocalizationService RouteService;
 
 <PageTitle>@Localizer["Contact_PageTitle"]</PageTitle>
 
@@ -15,14 +18,15 @@
     <meta name="description" content="@Localizer["Contact_MetaDescription"]" />
     <meta name="keywords" content="@Localizer["Contact_MetaKeywords"]" />
     <link rel="canonical" href="@NavManager.Uri" />
+    <HreflangTags PageKey="Contact" />
 
     <meta property="og:title" content="@Localizer["Contact_OgTitle"]" />
     <meta property="og:description" content="@Localizer["Contact_OgDescription"]" />
     <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg")" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
-    <meta property="og:locale" content="pl_PL" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["ContactText"]" CurrentPagePath="/kontakt" />
+    <meta property="og:locale" content="@System.Globalization.CultureInfo.CurrentUICulture.Name" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["ContactText"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Contact")" />
 </HeadContent>
 
 <main class="contact-container">
@@ -88,7 +92,7 @@
                     <div class="checkbox-wrapper">
                         <input type="checkbox" id="rodo" @bind="_consent" />
                         <label for="rodo">
-                            @Localizer["ConsentText"] (<a href="/polityka-prywatnosci" target="_blank">@Localizer["Privacypolicy"]</a>).
+                            @Localizer["ConsentText"] (<a href="@RouteService.GetUrlWithCulture("/polityka-prywatnosci", System.Globalization.CultureInfo.CurrentUICulture.Name)" target="_blank">@Localizer["Privacypolicy"]</a>).
                         </label>
                     </div>
 

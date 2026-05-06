@@ -1,0 +1,38 @@
+@using System.Globalization
+@using Microsoft.AspNetCore.Components
+@using RentoomBooking.SharedFrontend.Localization
+@using RentoomBookingWeb.Services.Localization
+@inject IRouteLocalizationService RouteService
+@inject NavigationManager NavigationManager
+
+@foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
+{
+    <link rel="alternate" hreflang="@culture" href="@GetAbsoluteUrl(culture)" />
+}
+<link rel="alternate" hreflang="x-default" href="@GetAbsoluteUrl(SupportedLanguagesProvider.DefaultCultureName)" />
+
+@code {
+    [Parameter] public string? PageKey { get; set; }
+    [Parameter] public string? CustomUrl { get; set; }
+
+    private string GetAbsoluteUrl(string culture)
+    {
+        string path;
+        if (!string.IsNullOrEmpty(CustomUrl))
+        {
+            path = RouteService.GetUrlWithCulture(CustomUrl, culture);
+        }
+        else if (!string.IsNullOrEmpty(PageKey))
+        {
+            path = RouteService.GetLocalizedUrl(PageKey, culture);
+        }
+        else
+        {
+            // Fallback to current relative path if no PageKey provided
+            var relativePath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+            path = RouteService.GetUrlWithCulture("/" + relativePath, culture);
+        }
+
+        return NavigationManager.ToAbsoluteUri(path).ToString();
+    }
+}

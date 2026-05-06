@@ -1,11 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBooking.SharedFrontend.Localization;
+using RentoomBookingWeb.Services.Localization;
 
 namespace RentoomBookingWeb.Controllers
 {
@@ -13,11 +19,13 @@ namespace RentoomBookingWeb.Controllers
     {
         private readonly IApartmentsService _apartmentsService;
         private readonly IIdoApartmentService _idoApartmentService;
+        private readonly IRouteLocalizationService _routeService;
 
-        public SitemapController(IApartmentsService apartmentsService, IIdoApartmentService idoApartmentService)
+        public SitemapController(IApartmentsService apartmentsService, IIdoApartmentService idoApartmentService, IRouteLocalizationService routeService)
         {
             _apartmentsService = apartmentsService;
             _idoApartmentService = idoApartmentService;
+            _routeService = routeService;
         }
 
         [Route("sitemap.xml")]
@@ -26,46 +34,88 @@ namespace RentoomBookingWeb.Controllers
             var result = await _apartmentsService.GetAllApartmentsList();
             var apartments = result?.Items ?? new List<ApartmentObject>();
 
-            var staticPages = new List<string>
+            var staticPageKeys = new List<string>
             {
-                "/regulaminy",
-                "/wspolpraca",
-                "/kontakt",
-                "/apartamenty",
-                "/o-nas"
+                "Statute",
+                "Cooperation",
+                "Contact",
+                "Apartments",
+                "Home"
             };
 
             var baseUrl = $"{Request.Scheme}://{Request.Host}";
             XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
+            XNamespace xhtml = "http://www.w3.org/1999/xhtml";
 
-            var sitemap = new XElement(ns + "urlset",
-                
-                new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}/"),
-                    new XElement(ns + "changefreq", "daily"),
-                    new XElement(ns + "priority", "1.0")
-                ),
+            var urlElements = new List<XElement>();
 
-                new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}/apartamenty-torun"),
-                    new XElement(ns + "changefreq", "daily"),
-                    new XElement(ns + "priority", "0.9")
-                ),
+            // Static pages with hreflangs
+            foreach (var pageKey in staticPageKeys)
+            {
+                foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
+                {
+                    var loc = $"{baseUrl}{_routeService.GetLocalizedUrl(pageKey, culture)}";
+                    var urlEl = new XElement(ns + "url",
+                        new XElement(ns + "loc", loc),
+                        new XElement(ns + "changefreq", "monthly"),
+                        new XElement(ns + "priority", pageKey == "Home" ? "1.0" : "0.5")
+                    );
 
-                from page in staticPages
-                select new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}{page}"),
-                    new XElement(ns + "changefreq", "monthly"),
-                    new XElement(ns + "priority", "0.5")
-                ),
+                    // Add hreflang alternates
+                    foreach (var altCulture in SupportedLanguagesProvider.SupportedCultureNames)
+                    {
+                        urlEl.Add(new XElement(xhtml + "link",
+                            new XAttribute("rel", "alternate"),
+                            new XAttribute("hreflang", altCulture),
+                            new XAttribute("href", $"{baseUrl}{_routeService.GetLocalizedUrl(pageKey, altCulture)}")
+                        ));
+                    }
+                    
+                    urlEl.Add(new XElement(xhtml + "link",
+                        new XAttribute("rel", "alternate"),
+                        new XAttribute("hreflang", "x-default"),
+                        new XAttribute("href", $"{baseUrl}{_routeService.GetLocalizedUrl(pageKey, SupportedLanguagesProvider.DefaultCultureName)}")
+                    ));
 
-                from apt in apartments
-                select new XElement(ns + "url",
-                    new XElement(ns + "loc", GetApartmentUrl(baseUrl, apt)),
-                    new XElement(ns + "changefreq", "weekly"),
-                    new XElement(ns + "priority", "0.8")
-                )
-            );
+                    urlElements.Add(urlEl);
+                }
+            }
+
+            // Apartments with hreflangs
+            foreach (var apt in apartments)
+            {
+                foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
+                {
+                    var loc = GetApartmentUrl(baseUrl, apt, culture);
+                    var urlEl = new XElement(ns + "url",
+                        new XElement(ns + "loc", loc),
+                        new XElement(ns + "changefreq", "weekly"),
+                        new XElement(ns + "priority", "0.8")
+                    );
+
+                    // Add hreflang alternates
+                    foreach (var altCulture in SupportedLanguagesProvider.SupportedCultureNames)
+                    {
+                        urlEl.Add(new XElement(xhtml + "link",
+                            new XAttribute("rel", "alternate"),
+                            new XAttribute("hreflang", altCulture),
+                            new XAttribute("href", GetApartmentUrl(baseUrl, apt, altCulture))
+                        ));
+                    }
+                    
+                    urlEl.Add(new XElement(xhtml + "link",
+                        new XAttribute("rel", "alternate"),
+                        new XAttribute("hreflang", "x-default"),
+                        new XAttribute("href", GetApartmentUrl(baseUrl, apt, SupportedLanguagesProvider.DefaultCultureName))
+                    ));
+
+                    urlElements.Add(urlEl);
+                }
+            }
+
+            var sitemap = new XElement(ns + "urlset", 
+                new XAttribute(XNamespace.Xmlns + "xhtml", xhtml),
+                urlElements);
 
             return Content(new XDeclaration("1.0", "utf-8", "yes") + Environment.NewLine + sitemap.ToString(), "application/xml", Encoding.UTF8);
         }
@@ -127,11 +177,17 @@ namespace RentoomBookingWeb.Controllers
             return Content(sb.ToString(), "text/plain", Encoding.UTF8);
         }
 
-        private string GetApartmentUrl(string baseUrl, ApartmentObject item)
+        private string GetApartmentUrl(string baseUrl, ApartmentObject item, string? culture = null)
         {
             string slug = RentoomBookingWeb.Helpers.StringExtensions.ToSlug(item.Name ?? "details");
+            var path = $"/apartamenty/{item.Id}/{slug}";
             
-            return $"{baseUrl}/apartamenty/{item.Id}/{slug}";
+            if (culture != null)
+            {
+                path = _routeService.GetUrlWithCulture(path, culture);
+            }
+            
+            return $"{baseUrl}{path}";
         }
     }
 }

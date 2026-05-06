@@ -2,19 +2,23 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Services
+@using RentoomBookingWeb.Components.Shared
+@using RentoomBookingWeb.Services.Localization
 
 @using RentoomBookingWeb.Components.Features.AllApartments.Components
 @inject IApartmentsService ApartmentsService
 @inject NavigationManager Navigation
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
+@inject IRouteLocalizationService RouteService
 
 <PageTitle>@Localizer["AllApartments_PageTitle"]</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@Localizer["AllApartments_MetaDescription"]" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["AllApartments_BreadcrumbName"]" CurrentPagePath="/apartamenty-torun" />
+    <HreflangTags CustomUrl="/apartamenty-torun" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["AllApartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetUrlWithCulture("/apartamenty-torun", System.Globalization.CultureInfo.CurrentUICulture.Name)" />
 </HeadContent>
 
 <HeaderSection Title="@Localizer["AllApartments_HeaderTitle"]" 
@@ -112,7 +116,8 @@
         if (item == null) return "#";
 
         string slug = item.Name?.ToSlug() ?? "szczegoly";
+        var path = $"/apartamenty/{item.Id}/{slug}";
         
-        return $"/apartamenty/{item.Id}/{slug}";
+        return RouteService.GetUrlWithCulture(path, System.Globalization.CultureInfo.CurrentUICulture.Name);
     }
 }

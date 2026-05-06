@@ -4,11 +4,13 @@
 @using RentoomBookingWeb.Components.Enums
 @using RentoomBookingWeb.Components.Shared
 @using RentoomBookingWeb.Services
+@using RentoomBookingWeb.Services.Localization
 @using Microsoft.AspNetCore.WebUtilities
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer
 @inject NavigationManager Navigation
 @inject GoogleAnalyticsService GoogleAnalytics
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
+@inject IRouteLocalizationService RouteService
 
 <PageTitle>@Localizer["PageNotFoundTitle"] - Rentoom</PageTitle>
 
@@ -32,7 +34,7 @@
                     <p class="description">@Localizer["PageNotFoundDescription"]</p>
 
                     <div class="button-group">
-                        <Button Type="ButtonType.Primary" @onclick='(() => Navigation.NavigateTo("/"))'>
+                        <Button Type="ButtonType.Primary" @onclick='(() => Navigation.NavigateTo(RouteService.GetLocalizedUrl("Home")))'>
                             @Localizer["BackToHome"]
                         </Button>
                     </div>
@@ -40,9 +42,9 @@
                     <div class="links-shortcut">
                         <span>@Localizer["NotFoundMaybeLookingFor"]</span>
                         <ul>
-                            <li><a href="/apartamenty">@Localizer["NotFoundApartmentsList"]</a></li>
-                            <li><a href="/wspolpraca">@Localizer["NotFoundCooperation"]</a></li>
-                            <li><a href="/kontakt">@Localizer["NotFoundContact"]</a></li>
+                            <li><a href="@RouteService.GetLocalizedUrl("Apartments")">@Localizer["NotFoundApartmentsList"]</a></li>
+                            <li><a href="@RouteService.GetLocalizedUrl("Cooperation")">@Localizer["NotFoundCooperation"]</a></li>
+                            <li><a href="@RouteService.GetLocalizedUrl("Contact")">@Localizer["NotFoundContact"]</a></li>
                         </ul>
                     </div>
                 </div>
@@ -193,7 +195,7 @@
 
     private string GetRedirectTargetPath()
     {
-        return "/apartamenty";
+        return RouteService.GetLocalizedUrl("Apartments");
     }
 
     private string GetPopupTitle()

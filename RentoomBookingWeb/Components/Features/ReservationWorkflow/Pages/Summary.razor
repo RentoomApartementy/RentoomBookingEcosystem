@@ -14,11 +14,13 @@
 @using RentoomBooking.SharedClasses.Models
 @using Microsoft.Extensions.Configuration
 @using RentoomBookingWeb.Services
+@using RentoomBookingWeb.Services.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject CustomerTermsService TermsService
 @inject IConfiguration Configuration
 @inject IJSRuntime JSRuntime
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
+@inject IRouteLocalizationService RouteService
 @implements IDisposable
 
 <PageTitle>@Localizer["SummaryPageTitle"]</PageTitle>
@@ -249,7 +251,7 @@
 
                                             @if (!string.IsNullOrEmpty(term.HtmlContent))
                                             {
-                                                <a href="/regulaminy/@term.Id/@GenerateSlug(term.Title ?? term.Description)" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
+                                                <a href="@RouteService.GetUrlWithCulture($"/regulaminy/{term.Id}/{GenerateSlug(term.Title ?? term.Description)}", CultureInfo.CurrentUICulture.Name)" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
                                                     <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
                                                 </a>
                                             }

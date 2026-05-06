@@ -2,8 +2,10 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 @using RentoomBooking.SharedClasses.Services.IdoBooking;
+@using RentoomBookingWeb.Services.Localization
 @inject IIdoApartmentService IdoApartmentService;
 @inject NavigationManager Navigation;
+@inject IRouteLocalizationService RouteService;
 @using RentoomBookingWeb.Services
 @inject IJSRuntime JS
 @using RentoomBookingWeb.Helpers
@@ -455,7 +457,7 @@
         {
             _detailsUrl = baseUrl;
         }
-        _detailsUrl = _detailsUrl.Replace("//", "/");
+        _detailsUrl = RouteService.GetUrlWithCulture(_detailsUrl.Replace("//", "/"), CultureInfo.CurrentUICulture.Name);
     }
 
     private void ResolveOfferLength()
@@ -529,7 +531,8 @@
         var adults = !string.IsNullOrWhiteSpace(Adults) ? Adults : "2";
         var children = !string.IsNullOrWhiteSpace(Children) ? Children : "0";
 
-        return $"/apartamenty/{Item.Id}/{slug}/{term.StartDate}/{term.EndDate}/{adults}/{children}".Replace("//", "/");
+        var path = $"/apartamenty/{Item.Id}/{slug}/{term.StartDate}/{term.EndDate}/{adults}/{children}".Replace("//", "/");
+        return RouteService.GetUrlWithCulture(path, CultureInfo.CurrentUICulture.Name);
     }
 
     private async Task TrackApartmentClickAsync(string target)

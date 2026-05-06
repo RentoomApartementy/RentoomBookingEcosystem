@@ -1,0 +1,125 @@
+@page "/{Culture}"
+@page "/{Culture}/{Slug}"
+@page "/{Culture}/{Slug}/{Param1}"
+@page "/{Culture}/{Slug}/{Param1}/{Param2}"
+@page "/{Culture}/{Slug}/{Param1}/{Param2}/{Param3}"
+@page "/{Culture}/{Slug}/{Param1}/{Param2}/{Param3}/{Param4}"
+@page "/{Culture}/{Slug}/{Param1}/{Param2}/{Param3}/{Param4}/{Param5}"
+@page "/{Culture}/{Slug}/{Param1}/{Param2}/{Param3}/{Param4}/{Param5}/{Param6}"
+
+@using RentoomBookingWeb.Services.Localization
+@inject IRouteLocalizationService RouteService
+@inject NavigationManager Navigation
+
+@if (_componentType != null)
+{
+    <DynamicComponent Type="_componentType" Parameters="_parameters" />
+}
+else
+{
+    <RentoomBookingWeb.Components.Pages.NotFoundPage />
+}
+
+@code {
+    [Parameter] public string? Culture { get; set; }
+    [Parameter] public string? Slug { get; set; }
+    [Parameter] public string? Param1 { get; set; }
+    [Parameter] public string? Param2 { get; set; }
+    [Parameter] public string? Param3 { get; set; }
+    [Parameter] public string? Param4 { get; set; }
+    [Parameter] public string? Param5 { get; set; }
+    [Parameter] public string? Param6 { get; set; }
+
+    private Type? _componentType;
+    private Dictionary<string, object> _parameters = new();
+
+    protected override void OnParametersSet()
+    {
+        _parameters.Clear();
+        
+        if (Culture == null)
+        {
+            _componentType = null;
+            return;
+        }
+
+        // Home page for culture: /{Culture}
+        if (string.IsNullOrEmpty(Slug))
+        {
+            _componentType = typeof(RentoomBookingWeb.Components.Features.Home.Pages.Home);
+            return;
+        }
+
+        if (RouteService.TryGetPageKeyFromSlug(Slug, Culture, out var pageKey))
+        {
+            _componentType = GetTypeForPageKey(pageKey);
+            
+            // Handle parameters for specific pages
+            if (pageKey == "Apartments" && Param1 != null)
+            {
+                // This would be /pl/apartamenty/123/slug/...
+                // Slug = "apartamenty", Param1 = "123", Param2 = "slug", Param3 = "token/date", ...
+                
+                _componentType = typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage);
+                if (int.TryParse(Param1, out var id))
+                {
+                    _parameters["Id"] = id;
+                }
+                _parameters["Slug"] = Param2;
+                
+                // Map remaining params based on ApartmentPage.razor definition:
+                // {id:int}/{slug}/{reservationTokenGuid:guid}/{startDate?}/{endDate?}/{adults?}/{children?}
+                // or {id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}
+                
+                if (Guid.TryParse(Param3, out var token))
+                {
+                    _parameters["ReservationTokenGuid"] = token;
+                    _parameters["StartDate"] = Param4;
+                    _parameters["EndDate"] = Param5;
+                    _parameters["Adults"] = Param6;
+                }
+                else
+                {
+                    _parameters["StartDate"] = Param3;
+                    _parameters["EndDate"] = Param4;
+                    _parameters["Adults"] = Param5;
+                    _parameters["Children"] = Param6;
+                }
+            }
+        }
+        else
+        {
+            // If Slug is not in registry, try canonical names
+            _componentType = GetTypeForCanonicalSlug(Slug);
+            
+            if (_componentType == typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage))
+            {
+                 if (int.TryParse(Param1, out var id))
+                 {
+                     _parameters["Id"] = id;
+                 }
+                 _parameters["Slug"] = Param2;
+                 _parameters["StartDate"] = Param3;
+                 _parameters["EndDate"] = Param4;
+            }
+        }
+    }
+
+    private Type? GetTypeForPageKey(string pageKey) => pageKey switch
+    {
+        "Apartments" => typeof(RentoomBookingWeb.Components.Features.Apartments.Pages.Apartments),
+        "Contact" => typeof(RentoomBookingWeb.Components.Features.Contact.Pages.Contact),
+        "Cooperation" => typeof(RentoomBookingWeb.Components.Features.Cooperation.Pages.Cooperation),
+        "Statute" => typeof(RentoomBookingWeb.Components.Features.Statute.Pages.Statute),
+        _ => null
+    };
+
+    private Type? GetTypeForCanonicalSlug(string slug) => slug.ToLower() switch
+    {
+        "apartamenty" => typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage),
+        "kontakt" => typeof(RentoomBookingWeb.Components.Features.Contact.Pages.Contact),
+        "wspolpraca" => typeof(RentoomBookingWeb.Components.Features.Cooperation.Pages.Cooperation),
+        "regulaminy" => typeof(RentoomBookingWeb.Components.Features.Statute.Pages.Statute),
+        _ => null
+    };
+}

@@ -2,7 +2,10 @@
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @using Microsoft.Extensions.Localization
 @using System.Globalization
+@using RentoomBookingWeb.Components.Shared
+@using RentoomBookingWeb.Services.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
+@inject IRouteLocalizationService RouteService;
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -11,14 +14,15 @@
     <meta name="description" content="@GetSeoDescription()" />
     <meta name="keywords" content="@Localizer["Apartments_SeoKeywords"]" />
     <link rel="canonical" href="@NavManager.Uri" />
+    <HreflangTags PageKey="Apartments" />
 
     <meta property="og:title" content="@GetSeoTitle()" />
     <meta property="og:description" content="@GetSeoDescription()" />
     <meta property="og:image" content="@GetSeoImage()" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
-    <meta property="og:locale" content="pl_PL" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["Apartments_BreadcrumbName"]" CurrentPagePath="/apartamenty" />
+    <meta property="og:locale" content="@CultureInfo.CurrentUICulture.Name" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["Apartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Apartments")" />
 </HeadContent>
 
 <div class="apartments-container">

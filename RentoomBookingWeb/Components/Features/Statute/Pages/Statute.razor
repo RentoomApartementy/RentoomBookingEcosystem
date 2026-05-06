@@ -7,15 +7,19 @@
 @using RentoomBookingWeb.Components.Features.Statute.Components
 @using System.Globalization
 @using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Components.Shared
+@using RentoomBookingWeb.Services.Localization
 @inject CustomerTermsService TermsService
 @inject NavigationManager NavManager
 @inject IStringLocalizer<Statute> Localizer
+@inject IRouteLocalizationService RouteService;
 
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
-    <BreadcrumbJsonLd CurrentPageName="@CurrentBreadcrumbName" CurrentPagePath="@CurrentBreadcrumbPath" />
+    <HreflangTags CustomUrl="@(Id.HasValue ? $"/regulaminy/{Id}/{Slug}" : "/regulaminy")" />
+    <BreadcrumbJsonLd CurrentPageName="@CurrentBreadcrumbName" CurrentPagePath="@RouteService.GetUrlWithCulture(CurrentBreadcrumbPath, CultureInfo.CurrentUICulture.Name)" />
 </HeadContent>
 
 <main class="statute-container">

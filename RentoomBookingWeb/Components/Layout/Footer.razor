@@ -1,7 +1,9 @@
 @inject NavigationManager Navigation;
 @using Microsoft.Extensions.Localization;
+@using RentoomBookingWeb.Services.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Footer> Localizer;
 @inject RentoomBookingWeb.Services.FooterEnvironmentInfo FooterEnvironmentInfo;
+@inject IRouteLocalizationService RouteService;
 <div class="footer">
     <div class="footer-section-logo">
         <div class="footer-logo">
@@ -25,8 +27,8 @@
         <div class="footer-section">
             <h3 class="footer-title">@Localizer["Regulations1"]</h3>
             <ul class="footer-list">
-                <li><a href="/regulaminy" class="footer-link" >@Localizer["Regulations2"]</a></li>
-                <li><a href="/polozenie-torunia" class="footer-link">@Localizer["AboutCity"]</a></li>
+                <li><a href="@RouteService.GetLocalizedUrl("Statute")" class="footer-link" >@Localizer["Regulations2"]</a></li>
+                <li><a href="@RouteService.GetUrlWithCulture("/polozenie-torunia", System.Globalization.CultureInfo.CurrentUICulture.Name)" class="footer-link">@Localizer["AboutCity"]</a></li>
             </ul>
         </div>
     </div>
@@ -41,7 +43,7 @@
 </div>
 
 <div class="footer-bottom">
-    <a href="/apartamenty-torun" class="all-apartments-link">@Localizer["AllApartmentsText"]</a>
+    <a href="@RouteService.GetUrlWithCulture("/apartamenty-torun", System.Globalization.CultureInfo.CurrentUICulture.Name)" class="all-apartments-link">@Localizer["AllApartmentsText"]</a>
     @* @Localizer["DesignedText"] *@
 @*    <div class="footer-env">
         <span class="footer-env-label">Env</span>

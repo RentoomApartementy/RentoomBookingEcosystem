@@ -19,6 +19,7 @@ using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBookingWeb.Components.Enums;
 using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Services.Localization;
 using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents;
 
 namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
@@ -50,6 +51,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
+        [Inject] public IRouteLocalizationService RouteService { get; set; } = default!;
 
         protected ApartmentObject? _apartment;
         protected ApartmentAiDescriptionDto? _aiDescription;
@@ -315,7 +317,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected string GetCanonicalUrl()
         {
-            return $"{NavManager.BaseUri}apartamenty/{Id}/{Slug}";
+            var path = $"/apartamenty/{Id}/{Slug}";
+            return $"{NavManager.BaseUri}{RouteService.GetUrlWithCulture(path, CultureInfo.CurrentUICulture.Name).TrimStart('/')}";
         }
 
         protected MarkupString GetJsonLd()

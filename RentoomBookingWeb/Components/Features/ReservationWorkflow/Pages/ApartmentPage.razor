@@ -3,6 +3,7 @@
 @page "/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+@using RentoomBookingWeb.Components.Shared
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -11,6 +12,7 @@
     <meta name="description" content="@GetSeoDescription()" />
     <meta name="keywords" content="@GetSeoKeywords()" />
     <link rel="canonical" href="@GetCanonicalUrl()" />
+    <HreflangTags CustomUrl="@($"/apartamenty/{Id}/{Slug}")" />
 
     <meta property="og:title" content="@GetSeoTitle()" />
     <meta property="og:description" content="@GetSeoDescription()" />

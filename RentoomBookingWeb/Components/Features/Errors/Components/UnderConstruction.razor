@@ -1,4 +1,7 @@
 
+@using RentoomBookingWeb.Services.Localization
+@inject IRouteLocalizationService RouteService
+
 <div class="under-construction-container" style="
     height: 80vh; 
     width: 100%;
@@ -25,7 +28,7 @@
         Zapraszamy wkrótce!
     </p>
 
-    <a href="/" style="
+    <a href="@RouteService.GetLocalizedUrl("Home")" style="
         margin-top: 2rem; 
     ">
         <Button>Wróć na stronę główną</Button>

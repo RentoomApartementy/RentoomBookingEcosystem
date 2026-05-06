@@ -3,6 +3,7 @@
 @using System.Text.Encodings.Web
 @using System.Text.Json
 @using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Components.Shared
 @inject NavigationManager Navigation
 @inject IStringLocalizer<RentoomBookingWeb.HomePage> Localizer
 
@@ -13,7 +14,8 @@
 
     <meta name="keywords" content="@Localizer["Home_MetaKeywords"]" />
 
-    <link rel="canonical" href="@Navigation.BaseUri" />
+    <link rel="canonical" href="@Navigation.Uri" />
+    <HreflangTags PageKey="Home" />
 
     <meta property="og:title" content="@Localizer["Home_OgTitle"]" />
     <meta property="og:description" content="@Localizer["Home_OgDescription"]" />

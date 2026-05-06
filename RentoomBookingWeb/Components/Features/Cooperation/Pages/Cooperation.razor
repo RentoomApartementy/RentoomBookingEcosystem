@@ -2,7 +2,10 @@
 @using RentoomBookingWeb.Components.Features.Cooperation.Components;
 @inject NavigationManager NavManager
 @using Microsoft.Extensions.Localization;
+@using RentoomBookingWeb.Components.Shared
+@using RentoomBookingWeb.Services.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
+@inject IRouteLocalizationService RouteService;
 
 <PageTitle>@Localizer["Cooperation_PageTitle"]</PageTitle>
 
@@ -11,14 +14,15 @@
     <meta name="description" content="@Localizer["Cooperation_MetaDescription"]" />
     <meta name="keywords" content="@Localizer["Cooperation_MetaKeywords"]" />
     <link rel="canonical" href="@NavManager.Uri" />
+    <HreflangTags PageKey="Cooperation" />
 
     <meta property="og:title" content="@Localizer["Cooperation_OgTitle"]" />
     <meta property="og:description" content="@Localizer["Cooperation_OgDescription"]" />
     <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-coop.jpeg")" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
-    <meta property="og:locale" content="pl_PL" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="/wspolpraca" />
+    <meta property="og:locale" content="@System.Globalization.CultureInfo.CurrentUICulture.Name" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Cooperation")" />
 </HeadContent>
 
 <div class="cooperation-container">

@@ -1,9 +1,11 @@
 @using Microsoft.AspNetCore.Components.Web;
 @using Microsoft.Extensions.Localization;
 @using RentoomBookingWeb.Services;
+@using RentoomBookingWeb.Services.Localization
 @using System.Net.Mail;
 @inject IStringLocalizer<Cooperation> Localizer;
 @inject BitrixLeadCaptureService LeadCaptureService
+@inject IRouteLocalizationService RouteService;
 
 <div class="form-container">
     <h3 class="form-title">@Localizer["FillOutForm"]</h3>
@@ -29,7 +31,7 @@
             <div class="checkbox-wrapper">
                 <input type="checkbox" id="rodo" @bind="_consent" />
                 <label for="rodo">
-                    @Localizer["ConsentText"] (<a href="/regulaminy" target="_blank">@Localizer["Privacypolicy"]</a>).
+                    @Localizer["ConsentText"] (<a href="@RouteService.GetLocalizedUrl("Statute")" target="_blank">@Localizer["Privacypolicy"]</a>).
                 </label>
             </div>
 

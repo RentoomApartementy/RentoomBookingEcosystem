@@ -1,6 +1,8 @@
 @using System.Globalization
 @using RentoomBooking.SharedFrontend.Localization
+@using RentoomBookingWeb.Services.Localization
 @inject NavigationManager Navigation
+@inject IRouteLocalizationService RouteService;
 
 <div class="language-switcher-container">
     @* Dodano warunkową klasę 'scrolled' *@
@@ -43,25 +45,11 @@
             return;
         }
         
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var queryParameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        var newParameters = new Dictionary<string, string?>();
-        
-        foreach (var param in queryParameters)
-        {
-            if (param.Key != "culture" && param.Key != "ui-culture")
-                newParameters.Add(param.Key, param.Value.FirstOrDefault());
-        }
-
-        newParameters.Add("culture", selectedCulture);
-        newParameters.Add("ui-culture", selectedCulture);
-
-        var newUri = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(
-            uri.GetLeftPart(UriPartial.Path),
-            newParameters!); 
+        var relativeUrl = Navigation.ToBaseRelativePath(Navigation.Uri);
+        var newUrl = RouteService.GetUrlWithCulture("/" + relativeUrl, selectedCulture);
 
         _isDropdownOpen = false; 
-        Navigation.NavigateTo(newUri, forceLoad: true);
+        Navigation.NavigateTo(newUrl, forceLoad: true);
     }
 }
 

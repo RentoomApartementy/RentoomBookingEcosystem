@@ -26,6 +26,7 @@ using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
 using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Services.Localization;
 
 namespace RentoomBookingWeb
 {
@@ -33,7 +34,11 @@ namespace RentoomBookingWeb
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+            {
+                Args = args,
+                WebRootPath = "wwwroot"
+            });
 
             builder.Services.AddLocalization(options =>
             {
@@ -46,10 +51,6 @@ namespace RentoomBookingWeb
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddHttpClient();
-            /* builder.Services.AddHttpClient("Api", client =>
-             {
-                 client.BaseAddress = new Uri("https://localhost:7241/");
-             });*/
 
             using var tempLoggerFactory = LoggerFactory.Create(lb =>
             {
@@ -60,7 +61,6 @@ namespace RentoomBookingWeb
             var tempLogger = tempLoggerFactory.CreateLogger("PostgresInit");
 
             //POSTGRESS:
-
             var postgresConnectionString = PostgresConnectionStringProvider.GetPostgresConnectionString(builder.Configuration, "POSTGRES_RENTOOM_BOOKING_DB_LOCAL", builder.Environment.IsDevelopment(), tempLogger);
             if (string.IsNullOrWhiteSpace(postgresConnectionString))
             {
@@ -79,7 +79,6 @@ namespace RentoomBookingWeb
             {
                 throw new InvalidOperationException("RentoomAppDb connection string is missing.");
             }
-
 
             builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
@@ -122,66 +121,45 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<MediaCacheService>();
             builder.Services.AddScoped<ReservationWorkflowTelemetry>();
             builder.Services.AddScoped<GoogleAnalyticsService>();
-
+            builder.Services.AddScoped<IRouteLocalizationService, RouteLocalizationService>();
 
             builder.Services.AddScoped<IPaymentFlowHandler, ReservationPaymentFlowHandler>();
             builder.Services.AddScoped<IPaymentFlowHandler, UpsellPaymentFlowHandler>();
             builder.Services.AddScoped<IPaymentOrchestrator, PaymentOrchestrator>();
-            //Customer Terms
             builder.Services.AddScoped<CustomerTermsRepository>();
             builder.Services.AddScoped<CustomerTermsService>();
             builder.Services.AddScoped<CookieConsentRepository>();
             builder.Services.AddScoped<CookieConsentService>();
             builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
-
-            //upselle
             builder.Services.AddScoped<IUpsellOrderStore, UpsellOrderStore>();
             builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
-
-            //upselle vouchery
             builder.Services.AddScoped<IUpsellVoucherProvisioningService, UpsellVoucherProvisioningService>();
             builder.Services.AddScoped<IUpsellVoucherCodeGenerator, UpsellVoucherCodeGenerator>();
 
             builder.Services.AddMemoryCache();
-            //GUS
             builder.Services.Configure<GusApiSettings>(builder.Configuration.GetSection("GusApi"));
             builder.Services.AddScoped<IGusService, GusService>();
 
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
             builder.Services.AddScoped<IAvailabilityFinderService2, AvailabilityFinderService2>();
 
-            //http context provider for absoulte urls - for tpay.
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<ISiteBaseProvider, SiteBaseProvider>();
 
-
-            //view scoped
             builder.Services.AddScoped<IApartmentsViewModel, ApartmentsViewModel>();
-            
             builder.Services.AddDateRangePicker(config => { });
 
-            //config
-          
-
-            // TPAY
             var TpaySection = builder.Configuration.GetSection("Tpay");
-
-            var DummyIdoBookingApiKey = builder.Configuration.GetValue<string>("IdoBooking:UseDummy");
-            tempLogger.LogInformation("Using Dummy IdoBooking Service (No Idobooking writes via API): {DummyIdoBookingApiKey}", DummyIdoBookingApiKey);
-
             builder.Services.Configure<TpaySettings>(TpaySection);
 
             builder.Services.AddHttpClient("Tpay", (sp, http) =>
             {
                 var settings = sp.GetRequiredService<IOptions<TpaySettings>>().Value;
-
                 if (string.IsNullOrWhiteSpace(settings.ApiBaseUrl))
                     throw new InvalidOperationException("Tpay:ApiBaseUrl is missing.");
-
                 http.BaseAddress = new Uri(settings.ApiBaseUrl, UriKind.Absolute);
                 http.DefaultRequestHeaders.Accept.Clear();
-                http.DefaultRequestHeaders.Accept.Add(
-                    new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             });
 
             builder.Services.AddScoped<ITpayClient>(sp =>
@@ -191,27 +169,30 @@ namespace RentoomBookingWeb
                 var logger = sp.GetRequiredService<ILogger<TpayClient>>();
                 return new TpayClient(http, opt, logger);
             });
-            //TPAY END
 
-
-            //storage options:
             builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
 
             var app = builder.Build();
             
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            
+            // Serve static files with explicit logging if they fail
+            app.UseStaticFiles();
+
             var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames.ToArray();
             var localizationOptions = new RequestLocalizationOptions()
                 .SetDefaultCulture(SupportedLanguagesProvider.DefaultCultureName)
                 .AddSupportedCultures(supportedCultures)
                 .AddSupportedUICultures(supportedCultures);
 
+            app.UseMiddleware<RentoomBookingWeb.Services.Localization.CultureMappingMiddleware>();
             app.UseRequestLocalization(localizationOptions);
-
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
 
             if (!app.Environment.IsProduction())
             {
@@ -222,19 +203,13 @@ namespace RentoomBookingWeb
                         context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
                         return Task.CompletedTask;
                     });
-
                     await next();
                 });
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            
-            // error 404
             app.UseStatusCodePagesWithReExecute("/404");
 
             app.UseAntiforgery();
-            
             app.MapControllers();
 
             app.MapGet("/robots.txt", () =>
@@ -242,15 +217,11 @@ namespace RentoomBookingWeb
                 var content = app.Environment.IsProduction()
                     ? "User-agent: *\nAllow: /"
                     : "User-agent: *\nDisallow: /";
-
                 return Results.Text(content, "text/plain");
             });
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
-
-         
-
 
             app.Run();
         }

@@ -1,7 +1,9 @@
 @using RentoomBooking.SharedClasses.Models
 @using Microsoft.Extensions.Localization
 @using RentoomBookingWeb.Components.Features.Statute.Pages
+@using RentoomBookingWeb.Services.Localization
 @inject IStringLocalizer<Statute> Localizer
+@inject IRouteLocalizationService RouteService
 
 <div class="other-statutes">
     <h3>@Localizer["OtherStatutes"]</h3>
@@ -9,7 +11,7 @@
         @foreach (var term in Regulations)
         {
             <div class="statute-item">
-                <a href="/regulaminy/@term.Id/@GenerateSlug(term.Title ?? term.Description)">
+                <a href="@RouteService.GetUrlWithCulture($"/regulaminy/{term.Id}/{GenerateSlug(term.Title ?? term.Description)}", System.Globalization.CultureInfo.CurrentUICulture.Name)">
                     @(term.Title ?? term.Description)
                 </a>
             </div>
