@@ -26,6 +26,9 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.Bonuses;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 {
@@ -1266,8 +1269,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 Price = (float)start.getFullReservationPrizeWithoutUpsells(),//(float)start.OfferPrice.Value + (float)start.SelectedAddonsTotalPrice,  //19.03.26 - nie brało pod uwagę, zmieniłem. TODO: 10.03.26 - sprawdzić czy ta cena powinna iść do IDB i czy powinna zawierać ceny za Addony
                 Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,
-                InternalNote = start.SelectedOfferType,
-                ApiNote = start.SelectedOfferType,
+                InternalNote = BuildInternalNoteForReservation(start),
+                ApiNote = BuildInternalNoteForReservation(start),
                 ExternalNote = record.State.StayWellLink,
                 
                 Items =
@@ -1301,6 +1304,14 @@ private static TimeZoneInfo GetWarsawTimeZone()
                  }
              };*/
             return reservation;
+        }
+
+        private static string BuildInternalNoteForReservation(StartReservationRequest start)
+        {
+            return $"Typ_Oferty: {start.SelectedOfferType};\n" +
+                   $"Kod_Rabatowy: {(start.AppliedBonusId.HasValue ? $"{start.AppliedBonusName} ({start.AppliedBonusValue}{(start.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})" : "None")};\n" +
+                   $"Bonus_Base_PLN: {start.BonusBasePln};\n" +
+                   $"Discount_Amount_PLN: {start.DiscountAmountPln};\n";
         }
 
         private string? BuildStayWellLink(string? resToken)
@@ -1590,6 +1601,12 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["UF_CRM_1768836818927"] = startRequest?.EndDate.DayNumber - startRequest?.StartDate.DayNumber,
                     ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, bitrixServerUTCOffset, differenceInHours),
                     ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, bitrixServerUTCOffset, differenceInHours),
+                    
+                    //RB_Godzina_Zameldowania
+                    ["UF_CRM_1778170129465"] = startRequest?.CheckInTime.ToString("HH:mm"),
+                    //RB_Godzina_Wymeldowania
+                    ["UF_CRM_1778170154231"] = startRequest?.CheckOutTime.ToString("HH:mm"),
+
                     ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15, 0),
                     ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11, 0),
                     [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
@@ -1697,8 +1714,13 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 //RB_ID_Rezrerwacji
                 [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                 //RB_Link_StayWell
-                [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString())
-                
+                [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
+
+                //RB_Godzina_Zameldowania
+                ["UF_CRM_1778170129465"] = record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
+                //RB_Godzina_Wymeldowania
+                ["UF_CRM_1778170154231"] = record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
+
             };
             AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
 
