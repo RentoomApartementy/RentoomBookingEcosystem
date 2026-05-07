@@ -111,13 +111,15 @@
             }
         </div>
 
-        <button class="search-btn" @onclick="Search">
-            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M21 21L16.65 16.65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="search-btn-text">@Localizer["Search", "Szukaj"]</span>
-        </button>
+        <Button Class="search-btn" IsBusy="@_isSearching" OnClick="Search">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 3px;">
+                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 21L16.65 16.65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="search-btn-text">@Localizer["Search", "Szukaj"]</span>
+            </span>
+        </Button>
 
     </div>
 </div>
@@ -178,6 +180,7 @@
     private bool _isGuestModalOpen = false;
     private bool _dateError = false;
     private bool _guestError = false;
+    private bool _isSearching = false;
 
     protected override void OnInitialized()
     {
@@ -276,6 +279,8 @@
 
     private async Task Search()
     {
+        if (_isSearching) return;
+
         _dateError = _pickerStartDate == null || _pickerEndDate == null;
         _guestError = CountPersons <= 0;
 
@@ -285,52 +290,60 @@
             return;
         }
 
-        CloseGuestModal();
+        try
+        {
+            _isSearching = true;
+            CloseGuestModal();
 
-        WorkflowTelemetry.TrackEvent(
-            "ApartmentSearchSubmitted",
-            new Dictionary<string, string?>
+            WorkflowTelemetry.TrackEvent(
+                "ApartmentSearchSubmitted",
+                new Dictionary<string, string?>
+                {
+                    ["Path"] = NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath,
+                    ["StartDate"] = _startDate,
+                    ["EndDate"] = _endDate,
+                    ["Adults"] = _adults,
+                    ["Children"] = _children,
+                    ["Rooms"] = _rooms
+                },
+                new Dictionary<string, double>
+                {
+                    ["Guests"] = CountPersons
+                });
+
+            await GoogleAnalytics.TrackEventAsync("apartment_search", new Dictionary<string, object?>
             {
-                ["Path"] = NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath,
-                ["StartDate"] = _startDate,
-                ["EndDate"] = _endDate,
-                ["Adults"] = _adults,
-                ["Children"] = _children,
-                ["Rooms"] = _rooms
-            },
-            new Dictionary<string, double>
-            {
-                ["Guests"] = CountPersons
+                ["page_path"] = NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath,
+                ["start_date"] = _startDate,
+                ["end_date"] = _endDate,
+                ["adults"] = GetAdultsCount(),
+                ["children"] = GetChildrenCount(),
+                ["rooms"] = _rooms,
+                ["guests"] = CountPersons
             });
 
-        await GoogleAnalytics.TrackEventAsync("apartment_search", new Dictionary<string, object?>
-        {
-            ["page_path"] = NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath,
-            ["start_date"] = _startDate,
-            ["end_date"] = _endDate,
-            ["adults"] = GetAdultsCount(),
-            ["children"] = GetChildrenCount(),
-            ["rooms"] = _rooms,
-            ["guests"] = CountPersons
-        });
+            var query = new Dictionary<string, string>
+            {
+                { "startDate", _startDate },
+                { "endDate", _endDate },
+                { "rooms", _rooms },
+                { "adults", _adults },
+                { "children", _children }
+            };
 
-        var query = new Dictionary<string, string>
-        {
-            { "startDate", _startDate },
-            { "endDate", _endDate },
-            { "rooms", _rooms },
-            { "adults", _adults },
-            { "children", _children }
-        };
-        
-        if (OnSearch.HasDelegate)
-        {
-            await OnSearch.InvokeAsync(query);
+            if (OnSearch.HasDelegate)
+            {
+                await OnSearch.InvokeAsync(query);
+            }
+            else
+            {
+                var url = QueryHelpers.AddQueryString("/apartamenty", query as IDictionary<string, string?>);
+                NavManager.NavigateTo(url);
+            }
         }
-        else
+        finally
         {
-            var url = QueryHelpers.AddQueryString("/apartamenty", query as IDictionary<string, string?>);
-            NavManager.NavigateTo(url);
+            _isSearching = false;
         }
     }
 

@@ -20,8 +20,8 @@
         <p>@Localizer["TpayMockReservationLabel"]: @_reservationGuid</p>
         <p>@Localizer["TpayMockPaymentSessionLabel"]: @PaymentGuid</p>
         <div class="summary-offer-price-wrapper">
-            <Button @onclick='() => SendWebhookAsync("PAID")'>@Localizer["TpayMockPayButton"]</Button>
-            <Button @onclick='() => SendWebhookAsync("FAILED")'>@Localizer["TpayMockCancelButton"]</Button>
+            <Button OnClick='() => SendWebhookAsync("PAID")'>@Localizer["TpayMockPayButton"]</Button>
+            <Button OnClick='() => SendWebhookAsync("FAILED")'>@Localizer["TpayMockCancelButton"]</Button>
         </div>
 
     }

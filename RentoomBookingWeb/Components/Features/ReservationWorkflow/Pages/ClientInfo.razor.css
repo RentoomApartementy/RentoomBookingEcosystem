@@ -117,15 +117,6 @@
     gap: 1rem;
 }
 
-.button {
-    width: 100%;
-    background-color: #1F5A41;
-    color: white;
-    padding: .5rem;
-    border: none;
-    border-radius: .6rem;
-}
-
 .summary-box {
     display: flex;
     flex-direction: column;
