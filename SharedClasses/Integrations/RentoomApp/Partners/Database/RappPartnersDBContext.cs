@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.Bonuses;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Models;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database
         public DbSet<MediaAsset> MediaAssets { get; set; }
         public DbSet<PartnerServiceBanner> PartnerServiceBanners { get; set; }
         public DbSet<PartnerServiceTarget> PartnerServiceTargets { get; set; }
+        public DbSet<BonusDiscount> BonusDiscounts { get; set; }
+        public DbSet<BonusDiscountTarget> BonusDiscountTargets { get; set; }
 
 
     }

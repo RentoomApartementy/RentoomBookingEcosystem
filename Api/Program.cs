@@ -36,6 +36,7 @@ using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.BookingCom;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
@@ -150,6 +151,7 @@ builder.Services.AddScoped<CustomerTermsRepository>();
 builder.Services.AddScoped<CustomerTermsService>();
 builder.Services.AddScoped<CookieConsentRepository>();
 builder.Services.AddScoped<CookieConsentService>();
+builder.Services.AddScoped<IBonusesService, BonusesService>();
 
 //arrival instructions
 builder.Services.AddScoped<ArrivalInstructionsService>();

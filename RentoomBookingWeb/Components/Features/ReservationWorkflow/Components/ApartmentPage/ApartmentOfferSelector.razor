@@ -35,12 +35,18 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
         
         @if (nonRefundableOffer != null)
         {
+            var nonRefundableStandardPrice = nonRefundableOffer.Price + TotalAdditionalPriceBeforeDiscount;
+            var nonRefundableDiscountedPrice = Math.Max(0m, nonRefundableStandardPrice - BonusDiscountAmount);
             <div class="summary-offer-price @(IsSelectedOffer("nonrefundable") ? "selected-offer" : "")">
                 <b>@Localizer["Non-refundableOffer"]</b>
                 <small>@Localizer["NonRefundableText"]</small>
                 <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                     <span class="summary-offer-price-button-price">
-                        <b>@((nonRefundableOffer.Price + TotalAdditionalPrice).ToString("N2")) @CurrencySymbol</b>
+                        <b>@nonRefundableDiscountedPrice.ToString("N2") @CurrencySymbol</b>
+                        @if (BonusDiscountAmount > 0m)
+                        {
+                            <span class="summary-offer-price-old">@nonRefundableStandardPrice.ToString("N2") @CurrencySymbol</span>
+                        }
                         <span class="stay-summary-text">@StaySummaryText</span>
                     </span>
                     <div class="offer-action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
@@ -57,12 +63,18 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
         
         @if (refundableOffer != null)
         {
+            var refundableStandardPrice = refundableOffer.Price + TotalAdditionalPriceBeforeDiscount;
+            var refundableDiscountedPrice = Math.Max(0m, refundableStandardPrice - BonusDiscountAmount);
             <div class="summary-offer-price refundable @(IsSelectedOffer("refundable") ? "selected-offer" : "")">
                 <b>@Localizer["RefundableOffer"]</b>
                 <small>@RefundableOfferText</small>
                 <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                     <span class="summary-offer-price-button-price">
-                        <b>@((refundableOffer.Price + TotalAdditionalPrice).ToString("N2")) @CurrencySymbol</b>
+                        <b>@refundableDiscountedPrice.ToString("N2") @CurrencySymbol</b>
+                        @if (BonusDiscountAmount > 0m)
+                        {
+                            <span class="summary-offer-price-old">@refundableStandardPrice.ToString("N2") @CurrencySymbol</span>
+                        }
                         <span class="stay-summary-text">@StaySummaryText</span>
                     </span>
                     <div class="offer-action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
@@ -124,7 +136,8 @@ else
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public bool IsOfferLoading { get; set; }
     [Parameter] public PricingOffersResponse? OffersResponse { get; set; }
-    [Parameter] public decimal TotalAdditionalPrice { get; set; }
+    [Parameter] public decimal TotalAdditionalPriceBeforeDiscount { get; set; }
+    [Parameter] public decimal BonusDiscountAmount { get; set; }
     [Parameter] public string CurrencySymbol { get; set; } = "PLN";
     [Parameter] public string StaySummaryText { get; set; } = "";
     [Parameter] public string RefundableOfferText { get; set; } = "";

@@ -419,4 +419,52 @@
   <data name="HideDetails" xml:space="preserve">
     <value>Hide details</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonus was removed.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus applied: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>The entered bonus does not exist.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>This bonus is currently disabled.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>This bonus is not valid for the selected apartment.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>This bonus is not available for this reservation start date.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>This bonus works only for reservations from RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>This bonus does not reduce the current reservation price.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Fill in dates and select an offer to apply the bonus.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Could not read offer price for bonus calculation.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Could not apply bonus.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Enter bonus code</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Apply bonus</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Checking...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Remove bonus</value>
+  </data>
   </root>

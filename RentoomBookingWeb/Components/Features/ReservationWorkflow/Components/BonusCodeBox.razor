@@ -1,0 +1,75 @@
+@using Microsoft.AspNetCore.Components
+@using Microsoft.Extensions.Localization
+
+<div class="bonus-code-box" style="margin: 1rem 0; padding: 1rem; border: 1px solid #1d4ed8; border-radius: 12px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); box-shadow: 0 8px 18px rgba(29, 78, 216, 0.18);">
+    <div style="display: flex; flex-wrap: wrap; gap: .75rem; align-items: center;">
+        <input value="@BonusCode"
+               @oninput="OnBonusCodeInput"
+               placeholder="@Localizer["BonusInputPlaceholder"]"
+               style="flex: 1; min-width: 220px; height: 42px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 .75rem;" />
+
+        <button type="button"
+                @onclick="OnApply"
+                disabled="@IsApplying"
+                style="height: 42px; padding: 0 1rem; border: none; border-radius: 8px; background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%); color: #fff; font-weight: 700; box-shadow: 0 8px 14px rgba(30, 58, 138, 0.35);">
+            @(IsApplying ? Localizer["BonusApplyingButton"] : Localizer["BonusApplyButton"])
+        </button>
+
+        @if (!string.IsNullOrWhiteSpace(BonusCode) || (!string.IsNullOrWhiteSpace(AppliedBonusName) && DiscountAmount > 0))
+        {
+            <button type="button"
+                    @onclick="ClearBonusAsync"
+                    disabled="@IsApplying"
+                    title="@Localizer["BonusClearButtonTitle"]"
+                    aria-label="@Localizer["BonusClearButtonTitle"]"
+                    style="width: 42px; height: 42px; border: none; border-radius: 8px; background: #dc2626; color: #fff; font-size: 1.1rem; font-weight: 800; line-height: 1; box-shadow: 0 8px 14px rgba(127, 29, 29, 0.25);">
+                ×
+            </button>
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(StatusMessage))
+    {
+        <div style="margin-top: .75rem; font-size: .84rem; color: @(IsError ? "#b91c1c" : "#94a3b8"); font-weight: @(IsError ? "600" : "500");">
+            @StatusMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(AppliedBonusName) && DiscountAmount > 0)
+    {
+        <div style="margin-top: .5rem; color: #0f766e; font-weight: 700;">
+            @Localizer["BonusAppliedInline", AppliedBonusName, DiscountAmount.ToString("N2")]
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string BonusCode { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> BonusCodeChanged { get; set; }
+    [Parameter] public EventCallback OnApply { get; set; }
+
+    [Parameter] public bool IsApplying { get; set; }
+    [Parameter] public string? StatusMessage { get; set; }
+    [Parameter] public bool IsError { get; set; }
+
+    [Parameter] public string? AppliedBonusName { get; set; }
+    [Parameter] public decimal DiscountAmount { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+
+    private async Task OnBonusCodeInput(ChangeEventArgs args)
+    {
+        var value = args.Value?.ToString() ?? string.Empty;
+        await BonusCodeChanged.InvokeAsync(value);
+    }
+
+    private async Task ClearBonusAsync()
+    {
+        if (IsApplying)
+        {
+            return;
+        }
+
+        await BonusCodeChanged.InvokeAsync(string.Empty);
+        await OnApply.InvokeAsync();
+    }
+}

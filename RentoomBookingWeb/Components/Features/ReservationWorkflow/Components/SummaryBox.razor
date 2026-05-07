@@ -87,14 +87,29 @@
                
             }
 
+            @if ((Summary?.DiscountAmountPln ?? 0m) > 0m)
+            {
+                <div class="summary-box-prices-text">
+                    <span style="color: #0f766e; font-weight: 700;">@Localizer["BonusDiscountLabel"]</span>
+                    <b style="color: #0f766e;">-@Summary!.DiscountAmountPln.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                </div>
+            }
+
 
         </div>
         <hr style="margin: 0;">
                 
         <div class="summary-box-prices-text">
             <b style="font-size: 1.2rem;">@Localizer["SummaryText"]</b>
-            @* <b style="font-size: 1.2rem;">@Summary?.GrandTotal.ToString("N2") @Summary?.Currency</b> *@
-            <b style="font-size: 1.2rem;">@Summary?.GrandTotal.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+            <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;">
+                @if ((Summary?.DiscountAmountPln ?? 0m) > 0m)
+                {
+                    <small style="color: #94a3b8; text-decoration: line-through;">
+                        @Summary!.GrandTotalBeforeDiscount.ToString("N2") @CurrencyLocalizer["PLN"]
+                    </small>
+                }
+                <b style="font-size: 1.2rem; color: #0f766e;">@Summary?.GrandTotal.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+            </span>
         </div>
     </div>
 </div>

@@ -496,6 +496,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 Children = items.Sum(item => ParseInt(item.numberOfSmallChildren)),
                 OfferPrice = Convert.ToDecimal((decimal)details.price - selectedTotal), //cena pełnej rezerwacji - suma dodatków opcjonalnych
                 Currency = string.IsNullOrWhiteSpace(details.currency) ? "PLN" : details.currency,
+                BookingChannel = BookingChannel.ExternalImport,
                 SelectedAddons = selectedAddons,
                 MandatoryAddons = mandatoryAddons,
                 MandatoryAddonsTotalPrice = mandatoryTotal,

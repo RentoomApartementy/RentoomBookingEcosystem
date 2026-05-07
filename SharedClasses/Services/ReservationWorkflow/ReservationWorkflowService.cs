@@ -16,6 +16,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
         private readonly IUpsellCatalogService _upsellCatalogService;
         private readonly IUpsellOrderWorkflowService _upsellOrderWorkflowService;
+        private readonly IBonusesService _bonusesService;
 
 
         private readonly CustomerTermsRepository _termsRepository;
@@ -83,6 +85,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             ApartmentRepository apartmentStore,
              IUpsellCatalogService upsellCatalogService,
              IUpsellOrderWorkflowService upsellOrderWorkflowService,
+             IBonusesService bonusesService,
             CustomerTermsRepository termsRepository,
         ILogger<ReservationWorkflowService> logger)
         {
@@ -97,6 +100,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _apartmentStore = apartmentStore ?? throw new ArgumentNullException(nameof(apartmentStore));
             _upsellCatalogService = upsellCatalogService ?? throw new ArgumentNullException(nameof(upsellCatalogService));
             _upsellOrderWorkflowService = upsellOrderWorkflowService ?? throw new ArgumentNullException(nameof(upsellOrderWorkflowService));
+            _bonusesService = bonusesService ?? throw new ArgumentNullException(nameof(bonusesService));
             _termsRepository = termsRepository;
             _bitrixAssignedByUserId = BitrixConfiguration.GetAssignedByUserId(configuration);
         }
@@ -439,11 +443,25 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             var offerPrice = startRequest?.OfferPrice ?? 0m;
-            
-            decimal grandTotal = offerPrice + addonsTotal + upsellsTotal;
-            
-           // record.State.PaymentGrandTotal = grandTotal;
-           // record.State.PaymentUpsellsTotal = upsellsTotal;
+            var bonusResult = await EvaluateBonusAsync(startRequest, offerPrice);
+
+            if (startRequest is not null)
+            {
+                startRequest.BonusInputName = bonusResult.NormalizedBonusInputName;
+                startRequest.AppliedBonusId = bonusResult.AppliedBonusId;
+                startRequest.AppliedBonusName = bonusResult.AppliedBonusName;
+                startRequest.AppliedBonusValueType = bonusResult.AppliedBonusValueType;
+                startRequest.AppliedBonusValue = bonusResult.AppliedBonusValue;
+                startRequest.BonusBasePln = bonusResult.BonusBasePln;
+                startRequest.DiscountAmountPln = bonusResult.DiscountAmountPln;
+                startRequest.BonusRejectReason = string.Equals(bonusResult.RejectReason, "empty", StringComparison.OrdinalIgnoreCase)
+                    ? null
+                    : bonusResult.RejectReason;
+            }
+
+            decimal grandTotalBeforeDiscount = offerPrice + addonsTotal + upsellsTotal;
+            decimal discountAmount = Math.Min(bonusResult.DiscountAmountPln, grandTotalBeforeDiscount);
+            decimal grandTotal = Math.Max(0m, grandTotalBeforeDiscount - discountAmount);
 
             return new ReservationSummaryDto
             {
@@ -460,14 +478,63 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 Addons = addonsLines,
                 AddonsTotal = addonsTotal,
                 UpsellsTotal = upsellsTotal,
+                GrandTotalBeforeDiscount = grandTotalBeforeDiscount,
+                DiscountAmountPln = discountAmount,
+                AppliedBonusName = bonusResult.AppliedBonusName,
+                BonusRejectReason = string.Equals(bonusResult.RejectReason, "empty", StringComparison.OrdinalIgnoreCase)
+                    ? null
+                    : bonusResult.RejectReason,
                 GrandTotal = grandTotal
             };
+        }
+
+        private async Task<BonusCalculationResult> EvaluateBonusAsync(StartReservationRequest? startRequest, decimal offerPrice)
+        {
+            if (startRequest is null)
+            {
+                return new BonusCalculationResult();
+            }
+
+            return await _bonusesService.EvaluateAsync(new BonusCalculationRequest
+            {
+                BonusInputName = startRequest.BonusInputName,
+                BookingChannel = startRequest.BookingChannel,
+                ReservationStartDate = startRequest.StartDate,
+                ApartmentItemId = startRequest.ObjectItemId,
+                OfferPrice = offerPrice,
+                MandatoryAddonsTotalPrice = startRequest.MandatoryAddonsTotalPrice
+            });
         }
 
         public async Task EnsurePaymentTotalsAsync(Guid reservationGuid, ReservationRecord record)
         {
             var summary = await BuildSummaryFromRecordAsync(reservationGuid, record);
             var updated = false;
+            var startRequest = record.State.StartRequest;
+            var summaryStartRequest = summary.StartRequest;
+
+            if (startRequest is not null && summaryStartRequest is not null)
+            {
+                if (startRequest.AppliedBonusId != summaryStartRequest.AppliedBonusId
+                    || !string.Equals(startRequest.AppliedBonusName, summaryStartRequest.AppliedBonusName, StringComparison.Ordinal)
+                    || startRequest.AppliedBonusValueType != summaryStartRequest.AppliedBonusValueType
+                    || startRequest.AppliedBonusValue != summaryStartRequest.AppliedBonusValue
+                    || startRequest.BonusBasePln != summaryStartRequest.BonusBasePln
+                    || startRequest.DiscountAmountPln != summaryStartRequest.DiscountAmountPln
+                    || !string.Equals(startRequest.BonusRejectReason, summaryStartRequest.BonusRejectReason, StringComparison.Ordinal)
+                    || !string.Equals(startRequest.BonusInputName, summaryStartRequest.BonusInputName, StringComparison.Ordinal))
+                {
+                    startRequest.BonusInputName = summaryStartRequest.BonusInputName;
+                    startRequest.AppliedBonusId = summaryStartRequest.AppliedBonusId;
+                    startRequest.AppliedBonusName = summaryStartRequest.AppliedBonusName;
+                    startRequest.AppliedBonusValueType = summaryStartRequest.AppliedBonusValueType;
+                    startRequest.AppliedBonusValue = summaryStartRequest.AppliedBonusValue;
+                    startRequest.BonusBasePln = summaryStartRequest.BonusBasePln;
+                    startRequest.DiscountAmountPln = summaryStartRequest.DiscountAmountPln;
+                    startRequest.BonusRejectReason = summaryStartRequest.BonusRejectReason;
+                    updated = true;
+                }
+            }
 
             if (record.State.PaymentUpsellsTotal != summary.UpsellsTotal)
             {

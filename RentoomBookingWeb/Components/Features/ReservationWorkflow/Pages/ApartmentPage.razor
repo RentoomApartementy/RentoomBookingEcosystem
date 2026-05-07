@@ -3,6 +3,7 @@
 @page "/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -118,12 +119,24 @@
                         }
                     }
 
+                    <BonusCodeBox
+                        BonusCode="@_bonusInputName"
+                        BonusCodeChanged="OnBonusCodeChanged"
+                        OnApply="ApplyBonusOnApartmentPageAsync"
+                        IsApplying="@_isApplyingBonus"
+                        StatusMessage="@_bonusStatusMessage"
+                        IsError="@_bonusStatusIsError"
+                        AppliedBonusName="@_bonusAppliedName"
+                        DiscountAmount="@_bonusDiscountAmount"
+                        Localizer="Localizer" />
+
                     <ApartmentOfferSelector 
                         StartDate="@StartDate" 
                         EndDate="@EndDate" 
                         IsOfferLoading="_isOfferLoading" 
                         OffersResponse="_offersResponse" 
-                        TotalAdditionalPrice="@(TotalAddonsPrice + TotalUpsellsPrice)" 
+                        TotalAdditionalPriceBeforeDiscount="@(TotalAddonsPrice + TotalUpsellsPrice)" 
+                        BonusDiscountAmount="@_bonusDiscountAmount" 
                         CurrencySymbol="@CurrencyLocalizer["PLN"]" 
                         StaySummaryText="@GetStaySummaryText()" 
                         RefundableOfferText="@GetRefundableOfferText()" 
@@ -144,7 +157,7 @@
                 <ApartmentStickySummary 
                     IsMobileExpanded="_isMobileExpanded" 
                     HasOffers="localHasOffers" 
-                    TotalMinPrice="@(localMinPrice + TotalAddonsPrice + TotalUpsellsPrice ?? 0m)" 
+                    TotalMinPrice="@(localMinPrice + TotalPriceAdjustment ?? 0m)" 
                     CurrencySymbol="@CurrencyLocalizer["PLN"]" 
                     StartDate="@StartDate" 
                     EndDate="@EndDate" 

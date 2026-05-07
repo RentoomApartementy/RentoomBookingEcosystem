@@ -51,6 +51,15 @@
     color: #1F5A41;
 }
 
+.summary-offer-price-old {
+    display: block;
+    margin-top: 0.1rem;
+    font-size: 0.85rem;
+    color: #888;
+    text-decoration: line-through;
+    line-height: 1.1;
+}
+
 .stay-summary-text {
     font-size: 0.75rem;
     color: #888;

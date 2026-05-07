@@ -11,9 +11,11 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.Bonuses;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBookingWeb.Components.Enums;
@@ -46,6 +48,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] public IReservationWorkflowService ReservationWorkflowService { get; set; } = default!;
         [Inject] public IApartmentAiDescriptionService AiDescriptionService { get; set; } = default!;
         [Inject] public IUpsellCatalogService UpsellCatalogService { get; set; } = default!;
+        [Inject] public IBonusesService BonusesService { get; set; } = default!;
         [Inject] public MediaCacheService MediaCache { get; set; } = default!;
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
@@ -75,6 +78,18 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected ReservationPricingContext? _reservationPricingContext;
         protected List<SelectedUpsellDto> _selectedUpsells = new();
         protected StartReservationRequest? _draftStartReservationRequest;
+        protected string _bonusInputName = string.Empty;
+        protected string _appliedBonusInputName = string.Empty;
+        protected string? _bonusStatusMessage;
+        protected bool _bonusStatusIsError;
+        protected bool _isApplyingBonus;
+        protected decimal _bonusDiscountAmount;
+        protected decimal _bonusBaseAmount;
+        protected string? _bonusAppliedName;
+        protected int? _bonusAppliedId;
+        protected BonusDiscountValueType? _bonusAppliedValueType;
+        protected decimal _bonusAppliedValue;
+        protected string? _bonusRejectReason;
 
         public UpsellTextConfig UpsellTexts { get; set; } = new();
 
@@ -206,6 +221,151 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 return total;
             }
         }
+
+        protected decimal TotalPriceAdjustment => TotalAddonsPrice + TotalUpsellsPrice - _bonusDiscountAmount;
+
+        protected Task OnBonusCodeChanged(string value)
+        {
+            _bonusInputName = value ?? string.Empty;
+            _bonusStatusMessage = null;
+            _bonusStatusIsError = false;
+            return Task.CompletedTask;
+        }
+
+        protected async Task ApplyBonusOnApartmentPageAsync()
+        {
+            if (_isApplyingBonus)
+            {
+                return;
+            }
+
+            var normalized = _bonusInputName?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(normalized))
+            {
+                ClearActiveBonus();
+                _bonusStatusIsError = false;
+                _bonusStatusMessage = Localizer["BonusRemovedMessage"];
+                return;
+            }
+
+            _isApplyingBonus = true;
+            try
+            {
+                var result = await EvaluateBonusForCodeAsync(normalized);
+                if (result.IsApplied)
+                {
+                    ApplyActiveBonus(result, normalized);
+                    _bonusStatusIsError = false;
+                    _bonusStatusMessage = Localizer["BonusAppliedMessage", _bonusDiscountAmount.ToString("N2", CultureInfo.CurrentCulture)];
+                }
+                else
+                {
+                    _bonusStatusIsError = true;
+                    _bonusStatusMessage = GetBonusMessageFromReason(result.RejectReason);
+                    await RecalculateActiveBonusPreviewAsync();
+                }
+            }
+            finally
+            {
+                _isApplyingBonus = false;
+            }
+        }
+
+        private async Task RecalculateActiveBonusPreviewAsync()
+        {
+            if (string.IsNullOrWhiteSpace(_appliedBonusInputName))
+            {
+                ClearActiveBonus();
+                return;
+            }
+
+            var result = await EvaluateBonusForCodeAsync(_appliedBonusInputName);
+            if (result.IsApplied)
+            {
+                ApplyActiveBonus(result, _appliedBonusInputName);
+                return;
+            }
+
+            ClearActiveBonus();
+            _bonusRejectReason = result.RejectReason;
+        }
+
+        private async Task<BonusCalculationResult> EvaluateBonusForCodeAsync(string bonusCode)
+        {
+            if (_apartment is null
+                || string.IsNullOrWhiteSpace(StartDate)
+                || string.IsNullOrWhiteSpace(EndDate)
+                || !TryParseDate(StartDate, out var reservationStartDate))
+            {
+                return new BonusCalculationResult
+                {
+                    IsApplied = false,
+                    NormalizedBonusInputName = bonusCode,
+                    RejectReason = "missing_reservation_data"
+                };
+            }
+
+            EnsureSelectedOffer();
+            var selectedOffer = GetOfferByType(_selectedOfferType);
+            var offerPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice;
+            if (!offerPrice.HasValue)
+            {
+                return new BonusCalculationResult
+                {
+                    IsApplied = false,
+                    NormalizedBonusInputName = bonusCode,
+                    RejectReason = "missing_offer_price"
+                };
+            }
+
+            return await BonusesService.EvaluateAsync(new BonusCalculationRequest
+            {
+                BonusInputName = bonusCode,
+                BookingChannel = BookingChannel.WebDirect,
+                ReservationStartDate = reservationStartDate,
+                ApartmentItemId = _apartment.Items?.FirstOrDefault()?.Id ?? 0,
+                OfferPrice = offerPrice.Value,
+                MandatoryAddonsTotalPrice = TotalMandatoryAddonsPrice
+            });
+        }
+
+        private void ApplyActiveBonus(BonusCalculationResult result, string sourceBonusCode)
+        {
+            _appliedBonusInputName = sourceBonusCode.Trim();
+            _bonusInputName = _appliedBonusInputName;
+            _bonusDiscountAmount = result.DiscountAmountPln;
+            _bonusBaseAmount = result.BonusBasePln;
+            _bonusAppliedName = result.AppliedBonusName;
+            _bonusAppliedId = result.AppliedBonusId;
+            _bonusAppliedValueType = result.AppliedBonusValueType;
+            _bonusAppliedValue = result.AppliedBonusValue;
+            _bonusRejectReason = null;
+        }
+
+        private void ClearActiveBonus()
+        {
+            _appliedBonusInputName = string.Empty;
+            _bonusDiscountAmount = 0m;
+            _bonusBaseAmount = 0m;
+            _bonusAppliedName = null;
+            _bonusAppliedId = null;
+            _bonusAppliedValueType = null;
+            _bonusAppliedValue = 0m;
+            _bonusRejectReason = null;
+        }
+
+        private string GetBonusMessageFromReason(string? reason) => reason switch
+        {
+            "not_found" => Localizer["BonusReasonNotFound"],
+            "disabled" => Localizer["BonusReasonDisabled"],
+            "invalid_target" => Localizer["BonusReasonInvalidTarget"],
+            "outside_reservation_dates" => Localizer["BonusReasonOutsideReservationDates"],
+            "channel_not_supported" => Localizer["BonusReasonChannelNotSupported"],
+            "no_discount" => Localizer["BonusReasonNoDiscount"],
+            "missing_reservation_data" => Localizer["BonusReasonMissingReservationData"],
+            "missing_offer_price" => Localizer["BonusReasonMissingOfferPrice"],
+            _ => Localizer["BonusReasonUnknown"]
+        };
 
         protected const string OfferTypeRefundable = "refundable";
         protected const string OfferTypeNonrefundable = "nonrefundable";
@@ -457,6 +617,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             }
 
             await GetOffer();
+            await RecalculateActiveBonusPreviewAsync();
 
             UpsellTexts = new UpsellTextConfig()
             {
@@ -513,6 +674,15 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             _selectedAddons = start.SelectedAddons ?? new List<SelectedAddonDto>();
             _mandatoryAddons = start.MandatoryAddons ?? new List<SelectedAddonDto>();
             _selectedUpsells = start.SelectedUpsells ?? new List<SelectedUpsellDto>();
+            _bonusInputName = start.BonusInputName ?? string.Empty;
+            _appliedBonusInputName = _bonusInputName;
+            _bonusDiscountAmount = start.DiscountAmountPln;
+            _bonusBaseAmount = start.BonusBasePln;
+            _bonusAppliedName = start.AppliedBonusName;
+            _bonusAppliedId = start.AppliedBonusId;
+            _bonusAppliedValueType = start.AppliedBonusValueType;
+            _bonusAppliedValue = start.AppliedBonusValue;
+            _bonusRejectReason = start.BonusRejectReason;
         }
 
         private bool _observerInitialized = false;
@@ -564,6 +734,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             }
 
             EnsureSelectedOffer();
+            await RecalculateActiveBonusPreviewAsync();
 
             bool hasOffers = _offersResponse?.Result?.PricingOffers != null &&
                              _offersResponse.Result.PricingOffers.Any();
@@ -743,6 +914,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                     }
                 }
                 StateHasChanged();
+                _ = RecalculateActiveBonusPreviewAsync();
             }
         }
 
@@ -776,6 +948,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                     _selectedAddons.Remove(item);
                 }
             }
+
+            _ = RecalculateActiveBonusPreviewAsync();
         }
 
         protected void ToggleExpand()
@@ -967,12 +1141,21 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 SelectedOfferType = selectedOffer?.OfferType ?? resolvedOfferType ?? string.Empty,
                 OfferPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice,
                 Currency = "PLN",
+                BookingChannel = BookingChannel.WebDirect,
                 SelectedAddons = _selectedAddons,
                 MandatoryAddons = _mandatoryAddons,
                 SelectedUpsells = _selectedUpsells,
                 SelectedAddonsTotalPrice = TotalAddonsPrice,
                 MandatoryAddonsTotalPrice = TotalMandatoryAddonsPrice,
-                SelectedUpsellsTotalPrice = TotalUpsellsPrice
+                SelectedUpsellsTotalPrice = TotalUpsellsPrice,
+                BonusInputName = _appliedBonusInputName,
+                AppliedBonusId = _bonusAppliedId,
+                AppliedBonusName = _bonusAppliedName,
+                AppliedBonusValueType = _bonusAppliedValueType,
+                AppliedBonusValue = _bonusAppliedValue,
+                BonusBasePln = _bonusBaseAmount,
+                DiscountAmountPln = _bonusDiscountAmount,
+                BonusRejectReason = _bonusRejectReason
             };
 
             WorkflowTelemetry.TrackEvent(
