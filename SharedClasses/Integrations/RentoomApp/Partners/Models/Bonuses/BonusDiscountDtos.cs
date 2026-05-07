@@ -6,6 +6,8 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.B
         public string Name { get; set; } = string.Empty;
         public BonusDiscountValueType ValueType { get; set; }
         public decimal Value { get; set; }
+        public decimal? MinimumOrderGrossAmount { get; set; }
+        public int? MinimumReservationDays { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidTo { get; set; }
         public BonusDiscountManualStatus ManualStatus { get; set; }

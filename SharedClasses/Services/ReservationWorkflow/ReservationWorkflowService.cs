@@ -1601,7 +1601,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["UF_CRM_1768836818927"] = startRequest?.EndDate.DayNumber - startRequest?.StartDate.DayNumber,
                     ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, bitrixServerUTCOffset, differenceInHours),
                     ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, bitrixServerUTCOffset, differenceInHours),
-                    
+
                     //RB_Godzina_Zameldowania
                     ["UF_CRM_1778170129465"] = startRequest?.CheckInTime.ToString("HH:mm"),
                     //RB_Godzina_Wymeldowania
@@ -1614,10 +1614,14 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                     [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
                     //RB_Link_Anuluj_Rezerwacje
-                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue,cancelaction: true),
+                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true),
                     //RB_Link_Do_Platnosci
-                    ["UF_CRM_1775071642554"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: false)
+                    ["UF_CRM_1775071642554"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: false),
 
+                    //RB_Zastosowany_Bonus
+                    ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
+                    ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
+                    : "None"
 
 
                 };
@@ -1720,6 +1724,10 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 ["UF_CRM_1778170129465"] = record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
                 //RB_Godzina_Wymeldowania
                 ["UF_CRM_1778170154231"] = record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
+                //RB_Zastosowany_Bonus
+                ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
+                    ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
+                    : "None"
 
             };
             AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);

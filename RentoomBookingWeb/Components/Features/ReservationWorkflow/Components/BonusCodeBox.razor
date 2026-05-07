@@ -2,6 +2,10 @@
 @using Microsoft.Extensions.Localization
 
 <div class="bonus-code-box" style="margin: 1rem 0; padding: 1rem; border: 1px solid #1d4ed8; border-radius: 12px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); box-shadow: 0 8px 18px rgba(29, 78, 216, 0.18);">
+    <div style="font-size: 1rem; font-weight: 700; color: #1e3a8a; margin-bottom: .65rem;">
+        @Localizer["BonusCodeBoxTitle"]
+    </div>
+
     <div style="display: flex; flex-wrap: wrap; gap: .75rem; align-items: center;">
         <input value="@BonusCode"
                @oninput="OnBonusCodeInput"

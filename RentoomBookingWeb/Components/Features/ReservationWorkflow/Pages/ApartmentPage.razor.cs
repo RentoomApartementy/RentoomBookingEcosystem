@@ -256,7 +256,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 {
                     ApplyActiveBonus(result, normalized);
                     _bonusStatusIsError = false;
-                    _bonusStatusMessage = Localizer["BonusAppliedMessage", _bonusDiscountAmount.ToString("N2", CultureInfo.CurrentCulture)];
+                    _bonusStatusMessage = Localizer["BonusAppliedMessage", _bonusDiscountAmount.ToString("N2", CultureInfo.CurrentCulture)] + (_bonusAppliedValueType == BonusDiscountValueType.Percent ?$" ({_bonusAppliedValue} %)":"");
                 }
                 else
                 {

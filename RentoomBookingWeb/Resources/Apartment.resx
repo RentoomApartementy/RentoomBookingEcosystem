@@ -315,11 +315,14 @@
   <data name="BonusReasonUnknown" xml:space="preserve">
     <value>Could not apply bonus.</value>
   </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Do you have a discount code?</value>
+  </data>
   <data name="BonusInputPlaceholder" xml:space="preserve">
-    <value>Enter bonus code</value>
+    <value>Enter discount code</value>
   </data>
   <data name="BonusApplyButton" xml:space="preserve">
-    <value>Apply bonus</value>
+    <value>Apply Code</value>
   </data>
   <data name="BonusApplyingButton" xml:space="preserve">
     <value>Checking...</value>
@@ -328,6 +331,6 @@
     <value>Bonus: {0} (-{1} PLN)</value>
   </data>
   <data name="BonusClearButtonTitle" xml:space="preserve">
-    <value>Remove bonus</value>
+    <value>Remove</value>
   </data>
 </root>
