@@ -1,115 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>1.3</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="title2" xml:space="preserve">
-        <value>Rentoom Apartments – we create exceptional stay experiences in Toruń.</value>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="title2" xml:space="preserve">
+        <value>Rentoom Apartments – creating unique stay experiences in Toruń</value>
     </data>
-  <data name="title2subtitle" xml:space="preserve">
-        <value>Are you looking for a comfortable apartment in Toruń?</value>
+    <data name="title2subtitle" xml:space="preserve">
+        <value>Looking for a comfortable apartment in Toruń?</value>
     </data>
-  <data name="title3" xml:space="preserve">
+    <data name="title3" xml:space="preserve">
         <value>Apartments in Toruń – comfortable accommodation</value>
     </data>
-  <data name="title3subtitle" xml:space="preserve">
-        <value>Are you looking for a comfortable apartment in Toruń?</value>
+    <data name="title3subtitle" xml:space="preserve">
+        <value>Looking for a comfortable apartment in Toruń?</value>
     </data>
-  <data name="text1title2" xml:space="preserve">
-        <value>Apartments in the best locations in Toruń.</value>
+    <data name="text1title" xml:space="preserve">
+        <value>We're glad you've found us!</value>
     </data>
-  <data name="text1title" xml:space="preserve">
-        <value>We are glad you found us!</value>
+    <data name="text1description" xml:space="preserve">
+        <value>Rentoom Apartments is a modern short-term rental brand that combines a high standard of accommodation with authentic knowledge of Toruń.</value>
     </data>
-  <data name="text1description2" xml:space="preserve">
-        <value>Our offer includes dozens of carefully selected apartments in the most attractive parts of the city. Each location has been chosen to ensure easy access to the most important attractions, restaurants, and business zones.
-Each apartment is a space designed to provide genuine rest and privacy after an intensive day of sightseeing or work.</value>
+    <data name="text1title2" xml:space="preserve">
+        <value>Apartments in the best locations in Toruń</value>
     </data>
-  <data name="text1description" xml:space="preserve">
-        <value>Rentoom Apartments is a modern short-term rental brand that combines a high standard of accommodation with authentic local knowledge of Toruń. We create spaces designed with comfort, aesthetics, and functionality in mind—for both leisure and business guests.</value>
+    <data name="text1description2" xml:space="preserve">
+        <value>Our offer includes dozens of carefully selected apartments in the most attractive parts of the city.</value>
     </data>
-  <data name="clientsstat" xml:space="preserve">
-        <value>Satisfied customers</value>
+    <data name="clientsstat" xml:space="preserve">
+        <value>Satisfied clients</value>
     </data>
-  <data name="apartmentsstats" xml:space="preserve">
+    <data name="apartmentsstats" xml:space="preserve">
         <value>Apartments in Toruń</value>
     </data>
-  <data name="locationsstats" xml:space="preserve">
+    <data name="locationsstats" xml:space="preserve">
         <value>Locations in Toruń</value>
     </data>
-  <data name="whyRentoom" xml:space="preserve">
+    <data name="whyRentoom" xml:space="preserve">
         <value>Why Rentoom?</value>
     </data>
-  <data name="whyRentoomText1" xml:space="preserve">
-        <value>As part of our Partnership Program, guests receive access to special discounts at selected restaurants, cafes, and tourist attractions. Current discounts and recommendations can be found directly in the apartments, allowing you to enjoy verified spots and save money while exploring.</value>
+    <data name="whyRentoomTitle" xml:space="preserve">
+        <value>Rentoom Apartments is more than just accommodation in Toruń.</value>
     </data>
-  <data name="whyRentoomText2" xml:space="preserve">
-        <value>We cooperate exclusively with trusted local partners, ensuring the quality of every recommendation. By choosing Rentoom, you gain comfort, professional service, and additional benefits that make your stay in Toruń more convenient, refined, and simply more cost-effective.</value>
+    <data name="whyRentoomText1" xml:space="preserve">
+        <value>As part of our Partnership Program, guests receive access to special discounts.</value>
     </data>
-  <data name="whyRentoomTitle" xml:space="preserve">
-        <value>Rentoom Apartments is more than just a place to stay in Toruń; we offer high-standard apartments in prime locations and tangible benefits that enhance the value of your entire stay</value>
+    <data name="whyRentoomText2" xml:space="preserve">
+        <value>We only cooperate with trusted local partners.</value>
     </data>
-  <data name="opinionText" xml:space="preserve">
-        <value>Read reviews from people who have stayed in our apartments in Toruń.</value>
+    <data name="opinionText" xml:space="preserve">
+        <value>Meet the opinions of people who slept in our apartments in Toruń.</value>
     </data>
-  <data name="formtext" xml:space="preserve">
-        <value>Leave your contact information, and we will get in touch with you!</value>
+    <data name="formtext" xml:space="preserve">
+        <value>Leave your contact information and we will get back to you!</value>
     </data>
-  <data name="formContactText" xml:space="preserve">
+    <data name="formContactText" xml:space="preserve">
         <value>Contact form</value>
     </data>
-  <data name="formConfirm" xml:space="preserve">
-        <value>I consent to the processing of my personal data provided in the form above.</value>
+    <data name="formConfirm" xml:space="preserve">
+        <value>I consent to the processing of my personal data</value>
     </data>
-  <data name="name" xml:space="preserve">
-        <value>Name</value>
+    <data name="name" xml:space="preserve">
+        <value>First Name</value>
     </data>
-  <data name="lastName" xml:space="preserve">
-        <value>Last name</value>
+    <data name="lastName" xml:space="preserve">
+        <value>Last Name</value>
     </data>
-  <data name="phone" xml:space="preserve">
+    <data name="phone" xml:space="preserve">
         <value>Phone</value>
     </data>
-  <data name="send" xml:space="preserve">
+    <data name="send" xml:space="preserve">
         <value>Send</value>
     </data>
-  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <data name="whyRentoomSubtitle" xml:space="preserve">
         <value>What distinguishes our apartments from others?</value>
     </data>
-  <data name="Home_PageTitle" xml:space="preserve">
-    <value />
-    <value>Apartments Torun - Short-Term Rental | Rentoom</value>
-  </data>
-  <data name="Home_OgDescription" xml:space="preserve">
-    <value />
-    <value>Check our apartments in the heart of Torun. Perfect for weekend trips and longer stays.</value>
-  </data>
-  <data name="Home_OgTitle" xml:space="preserve">
-    <value />
-    <value>Apartments Torun - Your comfortable stay</value>
-  </data>
-  <data name="Home_MetaKeywords" xml:space="preserve">
-    <value />
-    <value>apartments torun, accommodation torun, short-term rental, old town apartments, rentoom</value>
-  </data>
-  <data name="Home_BreadcrumbName" xml:space="preserve">
-    <value />
-    <value>Home</value>
-  </data>
-  <data name="Home_MetaDescription" xml:space="preserve">
-    <value />
-    <value>Looking for accommodation in Torun? We offer comfortable apartments in the city center and Old Town. Book directly online at the best rates.</value>
-  </data>
-  <data name="Home_OrganizationDescription" xml:space="preserve">
-    <value />
-    <value>Looking for accommodation in Torun? Rentoom offers short-term apartment rentals in Torun in top city locations.</value>
-  </data>
+    <data name="Home_PageTitle" xml:space="preserve">
+        <value>Apartments Toruń - Short Term Rental | Rentoom</value>
+    </data>
+    <data name="Home_OgDescription" xml:space="preserve">
+        <value>Check our apartments in the heart of Toruń. Ideal for a weekend or longer stay.</value>
+    </data>
+    <data name="Home_OgTitle" xml:space="preserve">
+        <value>Apartments Toruń - Your comfortable accommodation</value>
+    </data>
+    <data name="Home_MetaKeywords" xml:space="preserve">
+        <value>apartments torun, accommodation torun, short term rental, old town apartments, rentoom</value>
+    </data>
+    <data name="Home_BreadcrumbName" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="Home_MetaDescription" xml:space="preserve">
+        <value>Looking for accommodation in Toruń? We offer comfortable apartments in the center and Old Town.</value>
+    </data>
+    <data name="Home_OrganizationDescription" xml:space="preserve">
+        <value>Looking for accommodation in Toruń? Rentoom offers short-term rental apartments in Toruń.</value>
+    </data>
 </root>
