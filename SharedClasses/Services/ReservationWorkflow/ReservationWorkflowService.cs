@@ -446,7 +446,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             var offerPrice = startRequest?.OfferPrice ?? 0m;
-            var bonusResult = await EvaluateBonusAsync(startRequest, offerPrice);
+            var totalCostGrossAmount = offerPrice + addonsTotal + upsellsTotal;
+            var bonusResult = await EvaluateBonusAsync(startRequest, offerPrice, totalCostGrossAmount);
 
             if (startRequest is not null)
             {
@@ -462,7 +463,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     : bonusResult.RejectReason;
             }
 
-            decimal grandTotalBeforeDiscount = offerPrice + addonsTotal + upsellsTotal;
+            decimal grandTotalBeforeDiscount = totalCostGrossAmount;
             decimal discountAmount = Math.Min(bonusResult.DiscountAmountPln, grandTotalBeforeDiscount);
             decimal grandTotal = Math.Max(0m, grandTotalBeforeDiscount - discountAmount);
 
@@ -491,21 +492,25 @@ private static TimeZoneInfo GetWarsawTimeZone()
             };
         }
 
-        private async Task<BonusCalculationResult> EvaluateBonusAsync(StartReservationRequest? startRequest, decimal offerPrice)
+        private async Task<BonusCalculationResult> EvaluateBonusAsync(StartReservationRequest? startRequest, decimal offerPrice, decimal totalCostGrossAmount)
         {
             if (startRequest is null)
             {
                 return new BonusCalculationResult();
             }
 
+            var reservationDays = Math.Max(0, (startRequest.EndDate.ToDateTime(TimeOnly.MinValue) - startRequest.StartDate.ToDateTime(TimeOnly.MinValue)).Days);
+
             return await _bonusesService.EvaluateAsync(new BonusCalculationRequest
             {
                 BonusInputName = startRequest.BonusInputName,
                 BookingChannel = startRequest.BookingChannel,
                 ReservationStartDate = startRequest.StartDate,
+                ReservationDays = reservationDays,
                 ApartmentItemId = startRequest.ObjectItemId,
                 OfferPrice = offerPrice,
-                MandatoryAddonsTotalPrice = startRequest.MandatoryAddonsTotalPrice
+                MandatoryAddonsTotalPrice = startRequest.MandatoryAddonsTotalPrice,
+                TotalCostGrossAmount = totalCostGrossAmount
             });
         }
 

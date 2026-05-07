@@ -297,6 +297,12 @@
   <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
     <value>Bonus nie jest dostępny dla daty rozpoczęcia tej rezerwacji.</value>
   </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Ten bonus wymaga dłuższego pobytu.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Ten bonus wymaga wyższej łącznej kwoty zamówienia.</value>
+  </data>
   <data name="BonusReasonChannelNotSupported" xml:space="preserve">
     <value>Bonus działa tylko dla rezerwacji z RentoomBookingWeb.</value>
   </data>

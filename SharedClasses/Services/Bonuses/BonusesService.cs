@@ -10,9 +10,11 @@ namespace RentoomBooking.SharedClasses.Services.Bonuses
         public string? BonusInputName { get; set; }
         public BookingChannel BookingChannel { get; set; } = BookingChannel.WebDirect;
         public DateOnly ReservationStartDate { get; set; }
+        public int ReservationDays { get; set; }
         public int ApartmentItemId { get; set; }
         public decimal OfferPrice { get; set; }
         public decimal MandatoryAddonsTotalPrice { get; set; }
+        public decimal TotalCostGrossAmount { get; set; }
     }
 
     public sealed class BonusCalculationResult
@@ -106,6 +108,18 @@ namespace RentoomBooking.SharedClasses.Services.Bonuses
             if (request.ReservationStartDate < validFrom || (validTo.HasValue && request.ReservationStartDate > validTo.Value))
             {
                 result.RejectReason = "outside_reservation_dates";
+                return result;
+            }
+
+            if (bonus.MinimumReservationDays.HasValue && request.ReservationDays < bonus.MinimumReservationDays.Value)
+            {
+                result.RejectReason = "below_minimum_reservation_days";
+                return result;
+            }
+
+            if (bonus.MinimumOrderGrossAmount.HasValue && request.TotalCostGrossAmount < bonus.MinimumOrderGrossAmount.Value)
+            {
+                result.RejectReason = "below_minimum_order_gross_amount";
                 return result;
             }
 

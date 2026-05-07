@@ -295,7 +295,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             if (_apartment is null
                 || string.IsNullOrWhiteSpace(StartDate)
                 || string.IsNullOrWhiteSpace(EndDate)
-                || !TryParseDate(StartDate, out var reservationStartDate))
+                || !TryParseDate(StartDate, out var reservationStartDate)
+                || !TryParseDate(EndDate, out var reservationEndDate))
             {
                 return new BonusCalculationResult
                 {
@@ -318,14 +319,19 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 };
             }
 
+            var reservationDays = Math.Max(0, (reservationEndDate.ToDateTime(TimeOnly.MinValue) - reservationStartDate.ToDateTime(TimeOnly.MinValue)).Days);
+            var totalCostGrossAmount = offerPrice.Value + TotalAddonsPrice + TotalUpsellsPrice;
+
             return await BonusesService.EvaluateAsync(new BonusCalculationRequest
             {
                 BonusInputName = bonusCode,
                 BookingChannel = BookingChannel.WebDirect,
                 ReservationStartDate = reservationStartDate,
+                ReservationDays = reservationDays,
                 ApartmentItemId = _apartment.Items?.FirstOrDefault()?.Id ?? 0,
                 OfferPrice = offerPrice.Value,
-                MandatoryAddonsTotalPrice = TotalMandatoryAddonsPrice
+                MandatoryAddonsTotalPrice = TotalMandatoryAddonsPrice,
+                TotalCostGrossAmount = totalCostGrossAmount
             });
         }
 
@@ -360,6 +366,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             "disabled" => Localizer["BonusReasonDisabled"],
             "invalid_target" => Localizer["BonusReasonInvalidTarget"],
             "outside_reservation_dates" => Localizer["BonusReasonOutsideReservationDates"],
+            "below_minimum_reservation_days" => Localizer["BonusReasonBelowMinimumReservationDays"],
+            "below_minimum_order_gross_amount" => Localizer["BonusReasonBelowMinimumOrderGrossAmount"],
             "channel_not_supported" => Localizer["BonusReasonChannelNotSupported"],
             "no_discount" => Localizer["BonusReasonNoDiscount"],
             "missing_reservation_data" => Localizer["BonusReasonMissingReservationData"],
