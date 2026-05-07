@@ -26,7 +26,7 @@ public class GetDealFunction
     }
 
     [Function("GetDealFunction")]
-    public async Task<IActionResult> BX_GetDeal([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "bitrix/deals/{id}")] HttpRequest req, int id)
+    public async Task<IActionResult> BX_GetDeal([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "bitrix/deals/{id:int}")] HttpRequest req, int id)
     {
 
         try
