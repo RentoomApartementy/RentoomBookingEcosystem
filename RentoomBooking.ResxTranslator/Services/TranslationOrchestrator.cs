@@ -198,14 +198,66 @@ public sealed class TranslationOrchestrator
 
     private List<string> FindSourceFiles()
     {
-        var sourceSuffix = $".{_sourceCulture}.resx";
-        return Directory.GetFiles(_repoRoot, "*.resx", SearchOption.AllDirectories)
-            .Where(f => f.EndsWith(sourceSuffix, StringComparison.OrdinalIgnoreCase))
+        var allResx = Directory.GetFiles(_repoRoot, "*.resx", SearchOption.AllDirectories)
             .Where(f => !f.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}") &&
                         !f.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}"))
-            .Where(f => MatchesProjectFilter(f))
-            .OrderBy(f => f)
+            .Where(MatchesProjectFilter)
             .ToList();
+
+        var primarySuffix = $".{_sourceCulture}.resx";
+        var primaryFiles = allResx
+            .Where(f => f.EndsWith(primarySuffix, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        var fallbackCulture = GetFallbackSourceCulture();
+        if (fallbackCulture is null)
+            return primaryFiles.OrderBy(f => f).ToList();
+
+        var fallbackSuffix = $".{fallbackCulture}.resx";
+        var primaryBases = new HashSet<string>(
+            primaryFiles.Select(f => f[..^primarySuffix.Length]),
+            StringComparer.OrdinalIgnoreCase);
+
+        var fallbackFiles = allResx
+            .Where(f => f.EndsWith(fallbackSuffix, StringComparison.OrdinalIgnoreCase))
+            .Where(f => !primaryBases.Contains(f[..^fallbackSuffix.Length]))
+            .ToList();
+
+        if (fallbackFiles.Count > 0)
+            Console.WriteLine($"  Fallback source culture '{fallbackCulture}' used for {fallbackFiles.Count} file(s) where '{_sourceCulture}' not found");
+
+        return primaryFiles.Concat(fallbackFiles).OrderBy(f => f).ToList();
+    }
+
+    /// <summary>
+    /// Returns the neutral-language fallback for a region-specific culture
+    /// (e.g. "pl-PL" → "pl"), or null if the source culture has no region part.
+    /// </summary>
+    private string? GetFallbackSourceCulture()
+    {
+        var dashIdx = _sourceCulture.IndexOf('-');
+        return dashIdx > 0 ? _sourceCulture[..dashIdx] : null;
+    }
+
+    /// <summary>
+    /// Returns the actual source-file suffix for a given file, honoring the
+    /// pl-PL → pl fallback so target paths are computed against the right base name.
+    /// </summary>
+    private string GetSourceSuffixForFile(string sourceFile)
+    {
+        var primary = $".{_sourceCulture}.resx";
+        if (sourceFile.EndsWith(primary, StringComparison.OrdinalIgnoreCase))
+            return primary;
+
+        var fallback = GetFallbackSourceCulture();
+        if (fallback is not null)
+        {
+            var fallbackSuffix = $".{fallback}.resx";
+            if (sourceFile.EndsWith(fallbackSuffix, StringComparison.OrdinalIgnoreCase))
+                return fallbackSuffix;
+        }
+
+        return primary;
     }
 
     /// <summary>
@@ -256,7 +308,9 @@ public sealed class TranslationOrchestrator
                 if (parts.Length >= 3 && parts[^1].Equals("resx", StringComparison.OrdinalIgnoreCase))
                 {
                     var culture = parts[^2]; // e.g. "en-us", "pl-PL"
+                    var fallback = GetFallbackSourceCulture();
                     if (!culture.Equals(_sourceCulture, StringComparison.OrdinalIgnoreCase) &&
+                        (fallback is null || !culture.Equals(fallback, StringComparison.OrdinalIgnoreCase)) &&
                         culture.Contains('-'))
                     {
                         cultures.Add(culture);
@@ -270,7 +324,7 @@ public sealed class TranslationOrchestrator
 
     private string GetTargetPath(string sourceFile, string targetCulture)
     {
-        var sourceSuffix = $".{_sourceCulture}.resx";
+        var sourceSuffix = GetSourceSuffixForFile(sourceFile);
         var basePath = sourceFile[..^sourceSuffix.Length];
         return $"{basePath}.{targetCulture}.resx";
     }
