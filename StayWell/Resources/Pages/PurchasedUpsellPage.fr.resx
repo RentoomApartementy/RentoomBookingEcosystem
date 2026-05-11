@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ListTitle" xml:space="preserve">
+    <value>Rendez votre séjour plus agréable</value>
+  </data>
+  <data name="ListSubtitle" xml:space="preserve">
+    <value>Offres exclusives pour votre réservation</value>
+  </data>
+  <data name="TermsDescription" xml:space="preserve">
+    <value>Valable pour tout le séjour. Il faut montrer le code lors du rachet.</value>
+  </data>
+  <data name="TermsTitle" xml:space="preserve">
+    <value>Conditions Générales</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nuits</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Invités</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Voir les détails</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Prix</value>
+  </data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve">
+    <value>pers./jour</value>
+  </data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve">
+    <value>ap./jour</value>
+  </data>
+  <data name="PricingPerStay" xml:space="preserve">
+    <value>Reste</value>
+  </data>
+  <data name="PricingOneTime" xml:space="preserve">
+    <value>Une fois</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Lien</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="ShowVoucherCode" xml:space="preserve">
+    <value>Afficher le code de la bonne</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>Votre code</value>
+  </data>
+  <data name="ManualCodeLabel" xml:space="preserve">
+    <value>Code à saisir manuellement</value>
+  </data>
+  <data name="VoucherQrAlt" xml:space="preserve">
+    <value>Code de bon QR</value>
+  </data>
+  <data name="QrUnavailable" xml:space="preserve">
+    <value>QR non disponible</value>
+  </data>
+  <data name="Enlarge" xml:space="preserve">
+    <value>Agrandir</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="VoucherUsageTitle" xml:space="preserve">
+    <value>Remboursement de bons d’achat</value>
+  </data>
+  <data name="VoucherStatus" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="VoucherUsedCount" xml:space="preserve">
+    <value>Utilisés</value>
+  </data>
+  <data name="VoucherRemaining" xml:space="preserve">
+    <value>Autres</value>
+  </data>
+  <data name="VoucherValidFrom" xml:space="preserve">
+    <value>Valide à partir de</value>
+  </data>
+  <data name="VoucherValidTo" xml:space="preserve">
+    <value>Valable pour</value>
+  </data>
+  <data name="VoucherNoLimit" xml:space="preserve">
+    <value>Aucune limite</value>
+  </data>
+  <data name="ShowInRestaurant" xml:space="preserve">
+    <value>Spectacle au restaurant</value>
+  </data>
+  <data name="VoucherCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="VoucherOverlayHint" xml:space="preserve">
+    <value>Montrez ce code au personnel pour échanger votre bon.</value>
+  </data>
+  <data name="PurchasedUpsellsPageTitle" xml:space="preserve">
+    <value>Mes bons d’achat</value>
+  </data>
+  <data name="WaitingForPaymentConfirmation" xml:space="preserve">
+    <value>En attente de confirmation de paiement...</value>
+  </data>
+  <data name="TokenMissingError" xml:space="preserve">
+    <value>Le jeton a disparu.</value>
+  </data>
+  <data name="UpsellPaymentRedirectTitle" xml:space="preserve">
+    <value>Redirection du paiement de la vente additionnelle</value>
+  </data>
+  <data name="SelectedUpsellsSummaryTitle" xml:space="preserve">
+    <value>Résumé des ventes supplémentaires sélectionnées</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Chargement...</value>
+  </data>
+  <data name="PaymentErrorTitle" xml:space="preserve">
+    <value>Erreur de paiement</value>
+  </data>
+</root>
