@@ -159,7 +159,7 @@ rootCommand.AddCommand(translateCommand);
 // ── Rollback command ──
 var rollbackCommand = new Command("rollback", """
     Remove one or more target languages from the repository.
-    Deletes culture-specific .resx files and updates SharedClasses/supported-languages.json.
+    Deletes culture-specific .resx files and updates SharedFrontend/Localization/supported-languages.json.
 
     Examples:
       rollback --culture en-US
