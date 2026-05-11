@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ListTitle" xml:space="preserve">
+    <value>Muuda oma viibimine nauditavamaks</value>
+  </data>
+  <data name="ListSubtitle" xml:space="preserve">
+    <value>Eksklusiivsed pakkumised sinu broneerimiseks</value>
+  </data>
+  <data name="TermsDescription" xml:space="preserve">
+    <value>Kehtib kogu viibimise ajal. Lunastusel tuleb koodi näidata.</value>
+  </data>
+  <data name="TermsTitle" xml:space="preserve">
+    <value>Tingimused ja tingimused</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Ööd</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Külalised</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Kirjeldus</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Kustuta</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Vaata üksikasju</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Hind</value>
+  </data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve">
+    <value>pers./päev</value>
+  </data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve">
+    <value>korter/päev</value>
+  </data>
+  <data name="PricingPerStay" xml:space="preserve">
+    <value>Jää</value>
+  </data>
+  <data name="PricingOneTime" xml:space="preserve">
+    <value>ühekordne</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Üksikasjad</value>
+  </data>
+  <data name="ShowVoucherCode" xml:space="preserve">
+    <value>Etenduse vautšerikood</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>Sinu kood</value>
+  </data>
+  <data name="ManualCodeLabel" xml:space="preserve">
+    <value>Kood tuleb sisestada käsitsi</value>
+  </data>
+  <data name="VoucherQrAlt" xml:space="preserve">
+    <value>QR-vautšeri kood</value>
+  </data>
+  <data name="QrUnavailable" xml:space="preserve">
+    <value>QR pole saadaval</value>
+  </data>
+  <data name="Enlarge" xml:space="preserve">
+    <value>Suurenda</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Aadress</value>
+  </data>
+  <data name="VoucherUsageTitle" xml:space="preserve">
+    <value>Vautšerite lunastamine</value>
+  </data>
+  <data name="VoucherStatus" xml:space="preserve">
+    <value>Staatus</value>
+  </data>
+  <data name="VoucherUsedCount" xml:space="preserve">
+    <value>Kasutatud</value>
+  </data>
+  <data name="VoucherRemaining" xml:space="preserve">
+    <value>Muu</value>
+  </data>
+  <data name="VoucherValidFrom" xml:space="preserve">
+    <value>Kehtiv alates</value>
+  </data>
+  <data name="VoucherValidTo" xml:space="preserve">
+    <value>Kehtib</value>
+  </data>
+  <data name="VoucherNoLimit" xml:space="preserve">
+    <value>Piirangut pole</value>
+  </data>
+  <data name="ShowInRestaurant" xml:space="preserve">
+    <value>Etendus restoranis</value>
+  </data>
+  <data name="VoucherCode" xml:space="preserve">
+    <value>Kood</value>
+  </data>
+  <data name="VoucherOverlayHint" xml:space="preserve">
+    <value>Näita seda koodi töötajatele, et lunastada oma vautšer.</value>
+  </data>
+  <data name="PurchasedUpsellsPageTitle" xml:space="preserve">
+    <value>Minu vautšerid</value>
+  </data>
+  <data name="WaitingForPaymentConfirmation" xml:space="preserve">
+    <value>Ootan makse kinnitust...</value>
+  </data>
+  <data name="TokenMissingError" xml:space="preserve">
+    <value>Token on kadunud.</value>
+  </data>
+  <data name="UpsellPaymentRedirectTitle" xml:space="preserve">
+    <value>Lisamüügi maksete suunamine</value>
+  </data>
+  <data name="SelectedUpsellsSummaryTitle" xml:space="preserve">
+    <value>Valitud lisamüügi kokkuvõte</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laadin...</value>
+  </data>
+  <data name="PaymentErrorTitle" xml:space="preserve">
+    <value>Makseviga</value>
+  </data>
+</root>

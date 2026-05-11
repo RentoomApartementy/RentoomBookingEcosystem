@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ListTitle" xml:space="preserve">
+    <value>Urobte si pobyt príjemnejším</value>
+  </data>
+  <data name="ListSubtitle" xml:space="preserve">
+    <value>Exkluzívne ponuky pre vašu rezerváciu</value>
+  </data>
+  <data name="TermsDescription" xml:space="preserve">
+    <value>Platí počas celého pobytu. Pri uplatnení je potrebné ukázať kód.</value>
+  </data>
+  <data name="TermsTitle" xml:space="preserve">
+    <value>Obchodné podmienky</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Noci</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Hostia</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Popis</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Vymazať</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Zobraziť podrobnosti</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Pridať</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Cena</value>
+  </data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve">
+    <value>osobnosť/deň</value>
+  </data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve">
+    <value>byt/deň</value>
+  </data>
+  <data name="PricingPerStay" xml:space="preserve">
+    <value>Zostaň</value>
+  </data>
+  <data name="PricingOneTime" xml:space="preserve">
+    <value>jednorazový</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Odkaz</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Podrobnosti</value>
+  </data>
+  <data name="ShowVoucherCode" xml:space="preserve">
+    <value>Zobraziť kód poukazu</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>Tvoj kód</value>
+  </data>
+  <data name="ManualCodeLabel" xml:space="preserve">
+    <value>Kód na manuálne zadanie</value>
+  </data>
+  <data name="VoucherQrAlt" xml:space="preserve">
+    <value>QR voucherový kód</value>
+  </data>
+  <data name="QrUnavailable" xml:space="preserve">
+    <value>QR nie je dostupný</value>
+  </data>
+  <data name="Enlarge" xml:space="preserve">
+    <value>Zväčšiť</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresa</value>
+  </data>
+  <data name="VoucherUsageTitle" xml:space="preserve">
+    <value>Uplatnenie poukážok</value>
+  </data>
+  <data name="VoucherStatus" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="VoucherUsedCount" xml:space="preserve">
+    <value>Použité</value>
+  </data>
+  <data name="VoucherRemaining" xml:space="preserve">
+    <value>Iné</value>
+  </data>
+  <data name="VoucherValidFrom" xml:space="preserve">
+    <value>Platí z</value>
+  </data>
+  <data name="VoucherValidTo" xml:space="preserve">
+    <value>Platí pre</value>
+  </data>
+  <data name="VoucherNoLimit" xml:space="preserve">
+    <value>Bez limitu</value>
+  </data>
+  <data name="ShowInRestaurant" xml:space="preserve">
+    <value>Predstavenie v reštaurácii</value>
+  </data>
+  <data name="VoucherCode" xml:space="preserve">
+    <value>Kód</value>
+  </data>
+  <data name="VoucherOverlayHint" xml:space="preserve">
+    <value>Ukážte tento kód personálu, aby ste mohli uplatniť svoj voucher.</value>
+  </data>
+  <data name="PurchasedUpsellsPageTitle" xml:space="preserve">
+    <value>Moje poukazy</value>
+  </data>
+  <data name="WaitingForPaymentConfirmation" xml:space="preserve">
+    <value>Čakám na potvrdenie platby...</value>
+  </data>
+  <data name="TokenMissingError" xml:space="preserve">
+    <value>Chýba žetón.</value>
+  </data>
+  <data name="UpsellPaymentRedirectTitle" xml:space="preserve">
+    <value>Presmerovanie platieb za dodatočný predaj</value>
+  </data>
+  <data name="SelectedUpsellsSummaryTitle" xml:space="preserve">
+    <value>Súhrn vybraných ponúk</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Načítavam...</value>
+  </data>
+  <data name="PaymentErrorTitle" xml:space="preserve">
+    <value>Chyba pri platbe</value>
+  </data>
+</root>
