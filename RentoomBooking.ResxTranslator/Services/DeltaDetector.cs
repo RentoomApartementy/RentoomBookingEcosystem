@@ -7,7 +7,8 @@ namespace ResxTranslator.Services;
 
 /// <summary>
 /// Tracks SHA256 hashes of source .resx values to detect changes between runs.
-/// Stores hashes in a .resx-hashes.json file in the tool directory.
+/// Stores hashes in a .resx-hashes.json file inside the translator project so the
+/// cache travels with the project and can be committed alongside the .resx files.
 /// </summary>
 public sealed class DeltaDetector
 {
@@ -16,7 +17,7 @@ public sealed class DeltaDetector
 
     public DeltaDetector(string repoRoot)
     {
-        _hashFilePath = Path.Combine(repoRoot, "Tools", "ResxTranslator", ".resx-hashes.json");
+        _hashFilePath = Path.Combine(repoRoot, "RentoomBooking.ResxTranslator", ".resx-hashes.json");
         _hashes = LoadHashes();
     }
 

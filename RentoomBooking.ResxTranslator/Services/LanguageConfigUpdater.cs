@@ -1,39 +1,38 @@
+using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ResxTranslator.Services;
 
 /// <summary>
-/// Updates the supported-languages.json in the repo root after successful translation.
+/// Updates SharedFrontend/Localization/supported-languages.json after successful translation.
+/// The file uses the object schema { culture, nativeName } consumed by
+/// RentoomBooking.SharedFrontend.Localization.SupportedLanguagesConfig.
+/// Native names are derived from CultureInfo.NativeName — verify after first run,
+/// some locales need a manual touch-up (capitalization, region suffix).
 /// </summary>
 public static class LanguageConfigUpdater
 {
+    private static string ConfigPath(string repoRoot) =>
+        Path.Combine(repoRoot, "SharedFrontend", "Localization", "supported-languages.json");
+
     public static void EnsureCultureExists(string repoRoot, string culture)
     {
-        var configPath = Path.Combine(repoRoot, "SharedClasses", "supported-languages.json");
+        var configPath = ConfigPath(repoRoot);
+        var config = Load(configPath) ?? new LanguageConfig();
 
-        LanguageConfig config;
-        if (File.Exists(configPath))
-        {
-            var json = File.ReadAllText(configPath);
-            config = JsonSerializer.Deserialize<LanguageConfig>(json, JsonOptions) ?? new();
-        }
-        else
-        {
-            config = new();
-        }
-
-        if (config.Cultures.Contains(culture, StringComparer.OrdinalIgnoreCase))
+        if (config.Cultures.Any(c => string.Equals(c.Culture, culture, StringComparison.OrdinalIgnoreCase)))
             return;
 
-        config.Cultures.Add(culture);
-        config.Cultures.Sort(StringComparer.OrdinalIgnoreCase);
-
-        var updatedJson = JsonSerializer.Serialize(config, new JsonSerializerOptions
+        config.Cultures.Add(new LanguageItem
         {
-            WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            Culture = culture,
+            NativeName = BuildNativeName(culture)
         });
-        File.WriteAllText(configPath, updatedJson + Environment.NewLine);
+        config.Cultures.Sort((a, b) =>
+            string.Compare(a.Culture, b.Culture, StringComparison.OrdinalIgnoreCase));
+
+        Save(configPath, config);
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"  ✓ Added '{culture}' to supported-languages.json");
@@ -47,8 +46,9 @@ public static class LanguageConfigUpdater
     /// </summary>
     public static void RemoveCulture(string repoRoot, string culture)
     {
-        var configPath = Path.Combine(repoRoot, "SharedClasses", "supported-languages.json");
-        if (!File.Exists(configPath))
+        var configPath = ConfigPath(repoRoot);
+        var config = Load(configPath);
+        if (config is null)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("  ⚠ supported-languages.json not found — skipping config update.");
@@ -56,53 +56,95 @@ public static class LanguageConfigUpdater
             return;
         }
 
-        var json = File.ReadAllText(configPath);
-        LanguageConfig config;
-        try
-        {
-            config = JsonSerializer.Deserialize<LanguageConfig>(json, JsonOptions) ?? new();
-        }
-        catch (JsonException ex)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Error.WriteLine($"  ERROR reading supported-languages.json: {ex.Message}");
-            Console.ResetColor();
-            return;
-        }
-
         var before = config.Cultures.Count;
-        config.Cultures.RemoveAll(c => c.Equals(culture, StringComparison.OrdinalIgnoreCase));
+        config.Cultures.RemoveAll(c =>
+            string.Equals(c.Culture, culture, StringComparison.OrdinalIgnoreCase));
 
         if (config.Cultures.Count == before)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"  ⚠ '{culture}' was not found in supported-languages.json.");
             Console.ResetColor();
+            return;
         }
-        else
-        {
-            var updatedJson = JsonSerializer.Serialize(config, new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
-            File.WriteAllText(configPath, updatedJson + Environment.NewLine);
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"  ✓ Removed '{culture}' from supported-languages.json");
+        Save(configPath, config);
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"  ✓ Removed '{culture}' from supported-languages.json");
+        Console.ResetColor();
+    }
+
+    private static LanguageConfig? Load(string configPath)
+    {
+        if (!File.Exists(configPath)) return null;
+
+        try
+        {
+            var json = File.ReadAllText(configPath);
+            return JsonSerializer.Deserialize<LanguageConfig>(json, JsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine($"  ERROR reading supported-languages.json: {ex.Message}");
             Console.ResetColor();
+            return null;
+        }
+    }
+
+    private static void Save(string configPath, LanguageConfig config)
+    {
+        var dir = Path.GetDirectoryName(configPath);
+        if (dir != null) Directory.CreateDirectory(dir);
+
+        var updatedJson = JsonSerializer.Serialize(config, JsonOptions);
+        File.WriteAllText(configPath, updatedJson + Environment.NewLine);
+    }
+
+    // CultureInfo.NativeName returns e.g. "polski (Polska)" or "беларуская".
+    // Strip region suffix and uppercase first letter so the result matches the
+    // existing convention ("Polski", "Беларуская").
+    private static string BuildNativeName(string culture)
+    {
+        try
+        {
+            var raw = CultureInfo.GetCultureInfo(culture).NativeName;
+            var parenIdx = raw.IndexOf(" (", StringComparison.Ordinal);
+            var name = parenIdx > 0 ? raw[..parenIdx] : raw;
+            return name.Length == 0
+                ? culture
+                : char.ToUpper(name[0], CultureInfo.InvariantCulture) + name[1..];
+        }
+        catch (CultureNotFoundException)
+        {
+            return culture;
         }
     }
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
+        WriteIndented = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
     private sealed class LanguageConfig
     {
+        [JsonPropertyName("defaultCulture")]
         public string DefaultCulture { get; set; } = "en-US";
-        public List<string> Cultures { get; set; } = ["en-US", "pl-PL"];
+
+        [JsonPropertyName("cultures")]
+        public List<LanguageItem> Cultures { get; set; } = [];
+    }
+
+    private sealed class LanguageItem
+    {
+        [JsonPropertyName("culture")]
+        public string Culture { get; set; } = "";
+
+        [JsonPropertyName("nativeName")]
+        public string NativeName { get; set; } = "";
     }
 }
