@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Over ons
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Gemiddelde appartementbeoordeling
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>Appartementen om te beheren
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Reserveringen afgehandeld
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Gasten geserveerd
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Geschiedenis</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Wij zijn een groep mensen die graag reizen en ervaring hebben opgedaan in toerisme op internationale markten. Daarnaast houden we ons al meer dan 6 jaar bezig met beheer, verhuur, renovatie en handel op de vastgoedmarkt. We willen de ervaring die we hebben opgedaan aan onze klanten en gasten aanbieden, die altijd tevreden zijn met onze diensten.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Missie</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>We bieden de best mogelijke service aan onze klanten, zowel gasten als appartementeigenaren. Het is voor ons vooral belangrijk om een hoge klantenservice te handhaven en ervoor te zorgen dat onze gasten zich thuis voelen in onze appartementen en op elk moment op onze hulp kunnen rekenen.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Ons team
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Visionair en strateeg met ervaring in de vastgoedsector. Hij bouwde Rentoom om kortetermijnverhuur te vereenvoudigen en alles te automatiseren, van boekingen tot gastbeheer.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Het zorgt ervoor dat Rentoom-technologie snel, betrouwbaar en veilig is. Gepassioneerd over automatisering en moderne oplossingen voor de huurmarkt.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>Met aandacht voor elk detail coördineert ze de dagelijkse activiteiten. Dankzij deze oplossing kunnen onze klanten rustig slapen – alles werkt op tijd en zonder storingen.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Roep</value>
+  </data>
+</root>

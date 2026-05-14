@@ -1,0 +1,34 @@
+@using RentoomBooking.SharedClasses.Services.Descriptions
+@using Microsoft.Extensions.Localization
+
+@if (Faqs != null && Faqs.Any())
+{
+    <div class="ai-faq-container">
+        <h3 class="faq-title">@Localizer["FAQ_Title"]</h3>
+        <div class="faq-list">
+            @foreach (var faq in Faqs)
+            {
+                var id = Guid.NewGuid().ToString("N");
+                <div class="faq-item">
+                    <input type="checkbox" id="@id" class="faq-toggle" />
+                    <label for="@id" class="faq-question">
+                        <span>@faq.Question</span>
+                        <div class="faq-chevron">
+                            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+                        </div>
+                    </label>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            @faq.Answer
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public List<AiFaqItemDto>? Faqs { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+}

@@ -8,6 +8,7 @@
 @using RentoomBooking.StayWell.Services
 @using RentoomBooking.StayWell.States
 @inject AvailableUpsellsState AvailableUpsellsState
+@inject UpsellTextsState UpsellTextsState
 @inject NavigationManager Navigation
 @inject IStringLocalizer<AvailableUpsellsPage> Localizer
 @inject UpsellCartState UpsellCartState
@@ -18,7 +19,22 @@
 
 @if (AvailableUpsellsState.IsLoading)
 {
-    <p>@Localizer["Loading"]</p>
+    <div class="upsell-outer-wrapper staywell-theme">
+        <div class="upsell-section-container">
+            <div class="upsell-list-scroll-wrapper">
+                <div class="skeleton-tile">
+                    <div class="skeleton skeleton--tile-image"></div>
+                    <div class="skeleton-tile__body">
+                        <div class="skeleton skeleton--tile-title"></div>
+                        <div class="skeleton skeleton--tile-desc"></div>
+                        <div class="skeleton skeleton--tile-desc skeleton--tile-desc--short"></div>
+                        <div class="skeleton skeleton--tile-price"></div>
+                        <div class="skeleton skeleton--tile-btn"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 else if (!string.IsNullOrWhiteSpace(AvailableUpsellsState.Error))
 {
@@ -61,11 +77,7 @@ else
         if (string.IsNullOrWhiteSpace(Token))
             return;
 
-        _texts = new UpsellTextConfig
-        {
-            Title = Localizer["UpsellsListTitle"],
-            SubTitle = Localizer["UpsellsListSubtitle"]
-        };
+        _texts = UpsellTextsState.Build(Localizer);
 
         _reservationContext = BuildReservationPricingContext();
         _cartSelected = UpsellCartState.PendingUpsells.ToList();
@@ -82,6 +94,7 @@ else
     private void OnLanguageChanged() =>
         InvokeAsync(async () =>
         {
+            _texts = UpsellTextsState.Build(Localizer);
             AvailableUpsellsState.BeginReload();
             await LoadUpsellsAsync(force: true);
             _upsellListKey++;

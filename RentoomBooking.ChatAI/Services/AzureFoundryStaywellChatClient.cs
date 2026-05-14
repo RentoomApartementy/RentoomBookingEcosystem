@@ -57,7 +57,7 @@ public sealed class AzureFoundryStaywellChatClient : IStaywellChatClient
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (string.IsNullOrWhiteSpace(part.Text))
+                if (part.Text is null)
                 {
                     continue;
                 }

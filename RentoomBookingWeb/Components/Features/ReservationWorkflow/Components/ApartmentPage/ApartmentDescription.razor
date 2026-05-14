@@ -1,0 +1,48 @@
+@using RentoomBooking.SharedClasses.Models.IdoBooking.Public
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using Microsoft.Extensions.Localization
+
+<div class="apartment-wrapper @(IsExpanded ? "expanded" : "collapsed")">
+    <article class="description-wrapper">
+        @if (!string.IsNullOrEmpty(Description?.ShortDescription))
+        {
+            <h4>@Description.ShortDescription</h4>
+        }
+
+        @if (!string.IsNullOrEmpty(Description?.LongDescription))
+        {
+            <div class="long-description">
+                @((MarkupString)Description.LongDescription)
+            </div>
+        }
+    </article>
+
+    <div class="amenities-wrapper">
+        @if (Amenities != null)
+        {
+            @foreach (var amenity in Amenities)
+            {
+                <div class="amenity">
+                    @amenity.Name
+                </div>
+            }
+        }
+    </div>
+
+    @if (!IsExpanded)
+    {
+        <div class="wrapper-shadow"></div>
+    }
+</div>
+
+<span class="read-more-btn" @onclick="OnToggleExpand" @onclick:stopPropagation="true">
+    @(IsExpanded ? Localizer["HideDetails"] : Localizer["ShowAll"])
+</span>
+
+@code {
+    [Parameter] public ObjectDescription? Description { get; set; }
+    [Parameter] public List<ObjectAmenity>? Amenities { get; set; }
+    [Parameter] public bool IsExpanded { get; set; }
+    [Parameter] public EventCallback OnToggleExpand { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+}

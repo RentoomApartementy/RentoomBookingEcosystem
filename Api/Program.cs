@@ -19,6 +19,7 @@ using RentoomBooking.ChatAI.Services;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
@@ -27,10 +28,15 @@ using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Integrations.TTLock;
 using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
+using RentoomBooking.SharedClasses.Integrations.TTLock.Services;
+using RentoomBooking.SharedClasses.Integrations.Tpay;
+using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.BookingCom;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
@@ -48,6 +54,12 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("LinkPreview")
+    .ConfigureHttpClient(c =>
+    {
+        c.Timeout = TimeSpan.FromSeconds(15);
+        c.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; RentoomBot/1.0)");
+    });
 builder.Services.AddMemoryCache();
 
 using var tempLoggerFactory = LoggerFactory.Create(lb =>
@@ -78,6 +90,9 @@ builder.Services.AddDbContextFactory<PostgresBookingDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContextFactory<ChatAIDbContext>(options =>
+    options.UseNpgsql(postgresConnectionString));
+
+builder.Services.AddDbContextFactory<RentoomBooking.LiveChat.Data.LiveChatDbContext>(options =>
     options.UseNpgsql(postgresConnectionString));
 
 builder.Services.AddDbContext<QrMaintRappDbContext>(options =>
@@ -116,6 +131,7 @@ var ttlockSection = builder.Configuration.GetSection("TTLOCK");
 builder.Services.Configure<TTLockSettings>(ttlockSection);
 
 builder.Services.AddHttpClient<TTLockService>();
+builder.Services.AddScoped<ITTLockPasscodeAppService, TTLockPasscodeAppService>();
 
 //Upselle
 builder.Services.AddScoped<IUpsellOrderWorkflowService, UpsellOrderWorkflowService>();
@@ -135,6 +151,7 @@ builder.Services.AddScoped<CustomerTermsRepository>();
 builder.Services.AddScoped<CustomerTermsService>();
 builder.Services.AddScoped<CookieConsentRepository>();
 builder.Services.AddScoped<CookieConsentService>();
+builder.Services.AddScoped<IBonusesService, BonusesService>();
 
 //arrival instructions
 builder.Services.AddScoped<ArrivalInstructionsService>();
@@ -212,15 +229,102 @@ builder.Services.AddOptions<StaywellChatOptions>()
         }
     });
 
+builder.Services.AddOptions<StaywellAgentChatOptions>()
+    .Configure<IConfiguration>((options, configuration) =>
+    {
+        configuration.GetSection(StaywellAgentChatOptions.SectionName).Bind(options);
+
+        if (string.IsNullOrWhiteSpace(options.AgentName))
+        {
+            options.AgentName = "staywell-events-mvp";
+        }
+
+        if (string.IsNullOrWhiteSpace(options.TokenScope))
+        {
+            options.TokenScope = "https://ai.azure.com/.default";
+        }
+
+        if (options.MaxMessageLength < 100)
+        {
+            options.MaxMessageLength = 2000;
+        }
+
+        if (options.MaxHistoryMessages < 1)
+        {
+            options.MaxHistoryMessages = 15;
+        }
+
+        if (options.MaxRequestsPerMinute < 1)
+        {
+            options.MaxRequestsPerMinute = 12;
+        }
+
+        if (options.StreamingTimeoutSeconds < 10)
+        {
+            options.StreamingTimeoutSeconds = 90;
+        }
+    });
+
 builder.Services.AddScoped<IChatConversationRepository, ChatConversationRepository>();
 builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 builder.Services.AddScoped<IStaywellChatClient, AzureFoundryStaywellChatClient>();
+builder.Services.AddScoped<IStaywellAgentChatClient, FoundryAgentStaywellChatClient>();
 builder.Services.AddScoped<IPromptBuilder, StaywellPromptBuilder>();
 builder.Services.AddScoped<IReservationContextProvider, StaywellReservationContextProvider>();
 builder.Services.AddScoped<IStaywellChatService, StaywellChatService>();
+builder.Services.AddScoped<IStaywellAgentChatService, StaywellAgentChatService>();
 builder.Services.AddSingleton<IChatRateLimiter, MemoryChatRateLimiter>();
 
-builder.Services.AddScoped<RappEventsDbContextFactory>();
+// LiveChat
+builder.Services.AddOptions<RentoomBooking.SharedClasses.Configuration.BitrixLiveChatOptions>()
+    .Configure<IConfiguration>((options, configuration) =>
+    {
+        options.Domain = RentoomBooking.SharedClasses.Configuration.BitrixConfiguration.GetDomain(configuration);
+        options.ConnectorId = RentoomBooking.SharedClasses.Configuration.BitrixLiveChatConfiguration.GetConnectorId(configuration);
+        options.OpenLineId = RentoomBooking.SharedClasses.Configuration.BitrixLiveChatConfiguration.GetOpenLineId(configuration);
+        options.OAuthClientId = configuration["BitrixLiveChat:OAuthClientId"] ?? string.Empty;
+        options.OAuthClientSecret = configuration["BitrixLiveChat:OAuthClientSecret"] ?? string.Empty;
+        options.OAuthRefreshToken = configuration["BitrixLiveChat:OAuthRefreshToken"];
+    })
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.ILiveChatRateLimiter, RentoomBooking.LiveChat.MemoryLiveChatRateLimiter>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.ILiveChatSseSubscriptions, RentoomBooking.LiveChat.LiveChatSseSubscriptions>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixOAuthService, RentoomBooking.LiveChat.Bitrix.BitrixOAuthService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixMessageSender, RentoomBooking.LiveChat.Bitrix.BitrixMessageSender>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixUserService, RentoomBooking.LiveChat.Bitrix.BitrixUserService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixWebhookService, RentoomBooking.LiveChat.Bitrix.BitrixWebhookService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Bitrix.IBitrixLandingService, RentoomBooking.LiveChat.Bitrix.BitrixLandingService>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.IBitrixRestClient, RentoomBooking.LiveChat.Bitrix.BitrixRestClient>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.ILiveChatSessionRepository, RentoomBooking.LiveChat.Repositories.LiveChatSessionRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.ILiveChatMessageRepository, RentoomBooking.LiveChat.Repositories.LiveChatMessageRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Repositories.IBitrixPortalRepository, RentoomBooking.LiveChat.Repositories.BitrixPortalRepository>();
+builder.Services.AddSingleton<RentoomBooking.LiveChat.BitrixLiveChatService>();
+
+// Azure Translator for LiveChat
+builder.Services.AddOptions<RentoomBooking.LiveChat.Services.AzureTranslatorOptions>()
+    .Configure<IConfiguration>((options, configuration) =>
+    {
+        options.Key = configuration["AzureTranslator:Key"] ?? throw new InvalidOperationException("AzureTranslator:Key is missing");
+        options.Endpoint = configuration["AzureTranslator:Endpoint"] ?? throw new InvalidOperationException("AzureTranslator:Endpoint is missing");
+        options.Region = configuration["AzureTranslator:Region"] ?? throw new InvalidOperationException("AzureTranslator:Region is missing");
+        options.DefaultSourceLanguage = configuration["AzureTranslator:DefaultSourceLanguage"] ?? "auto";
+        options.DefaultTargetLanguage = configuration["AzureTranslator:DefaultTargetLanguage"] ?? "pl";
+    })
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services.AddSingleton(sp =>
+{
+    var options = sp.GetRequiredService<IOptions<RentoomBooking.LiveChat.Services.AzureTranslatorOptions>>().Value;
+    return new Azure.AI.Translation.Text.TextTranslationClient(
+        new Azure.AzureKeyCredential(options.Key),
+        new Uri(options.Endpoint),
+        options.Region);
+});
+
+builder.Services.AddSingleton<RentoomBooking.LiveChat.Services.ITranslationService, RentoomBooking.LiveChat.Services.AzureTranslatorService>();
+
 builder.Services.AddScoped<IEventReadRepository, EventReadRepository>();
 
 /*builder.Services.AddSingleton<TpayClient>();
@@ -266,5 +370,6 @@ JsonConvert.DefaultSettings = () => new JsonSerializerSettings
     ContractResolver = new CamelCasePropertyNamesContractResolver()
 };
 
+var host = builder.Build();
 
-builder.Build().Run();
+host.Run();

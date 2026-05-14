@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="UpsellsListSubtitle" xml:space="preserve">
+    <value>Saatavilla olevat lisäosat ostettavaksi</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Kupongit</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Ladataan...</value>
+  </data>
+  <data name="UpsellsListTitle" xml:space="preserve">
+    <value>Kupongit</value>
+  </data>
+  <data name="NoAvailableUpsells" xml:space="preserve">
+    <value>Lisäosia ei saatavilla</value>
+  </data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>Kerta</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Osoite</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>pers./päivä</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Katso tiedot</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Poista</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Voimassa</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Yksityiskohdat</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Koodi</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Muut</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Voimassa koko oleskelun ajan. Koodi pitää näyttää lunastuksessa.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Linkki</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Voimassa</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Kuvaus</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>Jää</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Yöt</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR ei ole saatavilla</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Kuponkien lunastus</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Suurenna</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>asunto/päivä</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Käyttöehdot</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>QR-kuponkikoodi</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Saatavilla olevat lisäosat ostettavaksi</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Käytetty</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Näytä tämä koodi henkilökunnalle lunastaaksesi kuponkisi.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Koodisi</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Hinta</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Näyttely ravintolassa</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Kupongit</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Tila</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Koodi syötetään manuaalisesti</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>Vieraana</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Näytä kuponkikoodi</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>Ei rajaa</value>
+  </data>
+</root>

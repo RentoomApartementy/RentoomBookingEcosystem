@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Prijať</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Schváliť</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Počet dospelých</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Nemôžeme sa dočkať!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Zmeňte údaje o hosťoch</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Pokladňa</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Počet detí</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Potvrdzujem</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Pokračovať</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dni</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Vyplňte Check-in formulár a prijmite podmienky, aby ste získali prístup k panelu.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Naplnené</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Doplňte údaje o hosťoch</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Prosím, poskytnite údaje o všetkých osobách, ktoré budú v zariadení bývať.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Hosť</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Otváracie hodiny</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Zápisnice</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Názov</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Ďalej</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefónne číslo</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Váš rezervačný panel je teraz dostupný!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Registračná karta</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Dáta úspešne uložené!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Prijímam povinnosť nahlásiť akékoľvek škody a pripomienky pri registrácii.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Prijímam zákaz fajčenia tabakových výrobkov a elektronických cigariet v areáli.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Je zakázané organizovať podujatia a prijímať tretie osoby, ktoré nie sú zahrnuté v rezervácii.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Hotelový deň trvá od jednej hodiny </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>po príchode do jednej hodiny</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>V deň odchodu.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Priezvisko</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>PREDPISY PRENÁJMU  
+Podmienky a Zmluva definujú podmienky rezervácie a prenájmu bytov, ktoré sú predmetom prenájmu spoločnosťou Rentoom   
+Byty Sp. z o.o. (prenajímateľ), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 v prospech nájomcu.  
+1. Rezervácia alebo prenájom ubytovania je v podstate prečítaním a prijatím ustanovení Obchodných podmienok a   
+Dohody.  
+2. Príslušným súdom na riešenie sporov bude súd v Toruni.  
+3. Prenajímateľ si vyhradzuje právo odmietnuť prijať hosťa, ktorý: nemá platný dokument   
+Občiansky preukaz (napr. občiansky preukaz alebo pas) alebo nechce predložiť doklad, je pod vplyvom alkoholu alebo  
+iné omamné látky, počas svojho predchádzajúceho pobytu porušil ustanovenia Predpisov.  
+4. Prenajímateľ si vyhradzuje právo okamžite ukončiť zmluvu s hosťom, ktorý poruší  
+Predpisy o prenájme, bez práva na vrátenie poplatku za rezerváciu. Hosť bude musieť okamžite   
+opúšťajú priestory.  
+5. Hotelový deň trvá od 15:00 do 11:00 nasledujúceho dňa.  
+6. V deň odchodu je nájomca povinný odovzdať byt do 11:00, inak   
+Poplatok bude pridaný vo výške nasledujúceho začiatku dňa + 50%.  
+7. Fajčenie v bytoch je prísne zakázané. Za porušenie zákazu fajčenia v byte   
+Nájomca je povinný zaplatiť dodatočný poplatok vo výške 500 PLN (päťsto).  
+8. Je zakázané používať elektrické zariadenia, ktoré nie sú súčasťou bytu a sú  
+Riziko požiaru.  
+9. Nájomca je povinný zabezpečiť akékoľvek poškodenie alebo poruchu vybavenia bytu   
+okamžite informujte prenajímateľa.  
+10. Domáce zvieratá sú povolené len so súhlasom prenajímateľa. Poplatok za domáce zviera je 50 PLN za celý pobyt.  
+11. Tiché hodiny v prenajatom byte sú medzi 22:00 a 6:00 ráno. Ľudia   
+Ak nie ste registrovaný v byte, môžete ho navštíviť len do 23:00.  
+12. Organizovanie spoločenských podujatí v byte je úplne zakázané. Za organizáciu podujatia   
+Nájomca zaplatí dodatočný poplatok vo výške 5 000 PLN + dodatočné straty prenajímateľovi   
+ktorú spôsobil prenajímateľ. Všetky škody na prenajatom byte a budove sú zodpovednosťou   
+osobu nájomcu. Nájomca je zodpovedný za všetky škody vzniknuté správaním tretích strán pobývajúcich v  
+S ňou v byte – pozvaná touto osobou do bytu/budovy. V prípade zásahu polície   
+alebo mestskej stráži, prenajímateľ účtuje nájomcovi dodatočný poplatok 500 PLN (päťsto zlotých).  
+13. Počet osôb ubytovaných v apartmáne nesmie prekročiť počet uvedený pri rezervácii. Vyjadrenie   
+nezrovnalosti v tomto smere vedú k výpočtu dodatočného poplatku 200 PLN pre každý z   
+osoby registrované na každú noc pobytu.  
+14. Hostia sú povinní riadne zabezpečiť byt, teda dôkladne zatvoriť všetky dvere   
+vchod a okná pred každým opustením bytu a na skladovanie   
+kľúče/kódy/diaľkové ovládače bez možnosti neoprávneného prístupu.  
+15. Prenajímateľ nezodpovedá za poškodené alebo stratené cennosti ponechané v byte.  
+16. V prípade straty/zničenia kľúča od bytu alebo diaľkového ovládača garáže sa účtuje poplatok v   
+200 PLN za každý kus.  
+17. Záverečné čistenie je zahrnuté v cene pobytu. Hosť je však povinný odísť po odchode   
+umýval riad a používal použité vybavenie. Tieto činnosti nie sú podstatou konečného upratovania.  
+18. Akékoľvek ďalšie čistenie na špeciálnu žiadosť prenajímateľa sa platí podľa výšky poplatku  
+čerpacia stanica. Posteľná bielizeň a uteráky sú vymenené.  
+19. Poplatky za energie poskytované prenajímateľom sú zahrnuté v cene pobytu.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | tel. +48 881 388 001  
+20. Nájomca je finančne zodpovedný za všetky škody/krádeže, ktoré vznikli v byte počas pobytu.  
+21. Prosím, informujte nás okamžite, ak dôjde k nedorozumeniu alebo ak nie  
+Spokojný s našimi službami. Urobíme všetko pre dôkladné preskúmanie problému a jeho vyriešenie.  
+22. Prenajímateľ môže od hostí účtovať zálohu až do výšky 1 000 PLN za rezervácie, ktorú je možné vrátiť až do piatich dní   
+Práca po odhlásení.  
+23. Prenajímateľ má nárok žiadať náhradu za výšku poplatkov v každom prípade  
+Navyše.  
+24. Nájomca má právo sťažovať sa na službu. Sťažnosti by mali byť podávané e-mailom na: reklamacje@rentoom.pl  
+alebo doporučeným listom na poštovú adresu. Odpoveď bude poskytnutá do 14 dní od doručenia.  
+Predpisy o prenájme v angličtine sú dostupné na www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Zostáva ešte veľa vecí</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Vyberte si približný čas príchodu</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Čas príchodu</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Vybrali ste si čas</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Vyberte všetky súhlasy</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Načítavam...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Už prijaté</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Povinné</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Zobraziť dokument</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Pozrite si plné podmienky</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Obchodné podmienky</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Ešte neviem</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Iba písmená, medzery, pomlčky a apostrofy</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Nenačítal som súhlasy. Prosím, skúste to znova.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Opakuj</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Svoje voliteľné súhlasy môžete kedykoľvek zmeniť na stránke "O rezervácii".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Podmienky a ustanovenia</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Chyba pri zápise dát.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Na túto stránku sa nemôžete dostať.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Obchodné podmienky a súhlasy</value>
+  </data>
+</root>

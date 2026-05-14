@@ -95,7 +95,7 @@
             }
 
             body._cartScrollHandler = onScroll;
-            body.addEventListener("scroll", onScroll);
+            body.addEventListener("scroll", onScroll, { passive: true });
         };
 
         window.removeCartScrollListener = function () {
@@ -105,6 +105,7 @@
             delete body._cartScrollHandler;
         };
     </script>
+    <script src="js/bitrixchat2.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oooh+Baby&display=swap');
@@ -113,21 +114,18 @@
 
     <script>
         window.stayWellBitrixEnableLoader = function (loaderUrl) {
-            if (!loaderUrl || document.getElementById("staywell-bitrix-loader")) {
-                return;
-            }
+            // Legacy: kept as no-op for backward compat during transition
+        };
 
-            var script = document.createElement("script");
-            script.id = "staywell-bitrix-loader";
-            script.async = true;
-            script.src = loaderUrl + "?" + ((Date.now() / 60000) | 0);
-            document.head.appendChild(script);
+        window.staywellLiveChat = {
+            scrollToBottom: function (el) {
+                if (el) { el.scrollTop = el.scrollHeight; }
+            }
         };
     </script>
-    <script src="js/bitrixchat2.js"></script>
     <script src="js/wheelPicker.js"></script>
     <!--wyłączenie do czasu wdrożenia upselli, naprawić-->
-    <!--<script src="js/upsellstrip.js"></script>--> 
+    <script src="js/upsellstrip.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 
     <!--ukrywanie header'a-->
@@ -136,21 +134,44 @@
             const scrollContainer = document.getElementById(bodyId);
             const header = document.getElementById(headerId);
             let lastScrollTop = 0;
+            let rafPending = false;
 
             if (!scrollContainer || !header) return;
 
-            scrollContainer.addEventListener('scroll', () => {
-                const scrollTop = scrollContainer.scrollTop;
+            if (scrollContainer._headerScrollHandler) {
+                scrollContainer.removeEventListener('scroll', scrollContainer._headerScrollHandler);
+            }
 
-                if (scrollTop < 0) return;
+            let upwardDelta = 0;
+            scrollContainer._headerScrollHandler = () => {
+                if (rafPending) return;
+                rafPending = true;
+                requestAnimationFrame(() => {
+                    rafPending = false;
+                    const scrollTop = scrollContainer.scrollTop;
+                    if (scrollTop < 0) return;
+                    const delta = scrollTop - lastScrollTop;
+                    if (delta > 0 && scrollTop > 30) {
+                        upwardDelta = 0;
+                        header.classList.add('hide');
+                    } else if (delta < 0) {
+                        upwardDelta -= delta;
+                        if (upwardDelta > 10) {
+                            header.classList.remove('hide');
+                        }
+                    }
+                    lastScrollTop = scrollTop;
+                });
+            };
 
-                if (scrollTop > lastScrollTop && scrollTop > 30) {
-                    header.classList.add('hide');
-                } else {
-                    header.classList.remove('hide');
-                }
-                lastScrollTop = scrollTop;
-            });
+            scrollContainer.addEventListener('scroll', scrollContainer._headerScrollHandler, { passive: true });
+        };
+
+        window.removeHeaderScroll = (bodyId) => {
+            const scrollContainer = document.getElementById(bodyId);
+            if (!scrollContainer || !scrollContainer._headerScrollHandler) return;
+            scrollContainer.removeEventListener('scroll', scrollContainer._headerScrollHandler);
+            delete scrollContainer._headerScrollHandler;
         };
     </script>
     <script>

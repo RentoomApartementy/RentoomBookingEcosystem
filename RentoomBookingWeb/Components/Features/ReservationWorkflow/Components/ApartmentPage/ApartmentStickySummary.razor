@@ -1,0 +1,202 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.AvailableTerms
+
+<div class="info-box @(IsMobileExpanded ? "mobile-expanded" : "")">
+    
+    <div class="mobile-sticky-header" @onclick="OnToggleMobileExpand" style="@(!HasOffers ? "width: 100%; justify-content: center;" : "")">
+        <div class="mobile-price-group">
+            @if (HasOffers)
+            {
+                <span class="label">@Localizer["From"]</span>
+                <span class="price">@TotalMinPrice.ToString("N2") @CurrencySymbol</span>
+            }
+        </div>
+
+        <div class="mobile-action-btn">
+            @if (StartDate == null && EndDate == null)
+            {
+                <div @onclick="OnSearchModalOpen" @onclick:stopPropagation="true" style="flex: 1;"> 
+                    <Button Type="ButtonType.Secondary" style="width: 100%;" Class="small">
+                        @Localizer["SelectDatesAndGuestsButtonLabel"]
+                    </Button>
+                </div>
+                
+                <div class="chevron @(IsMobileExpanded ? "rotated" : "")">
+                    <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+                </div>
+            }
+            
+            @if (HasOffers)
+            {
+                <div style="flex: 1;">
+                    <Button Type="ButtonType.Tertiary"
+                            Class="small"
+                            style="width: 100%;"
+                            @onclick="OnSmartAction">
+                          @(IsAtOffers ? Localizer["BookNowStepButtonLabel"] : (IsAtSummary ? Localizer["SelectOfferStepButtonLabel"] : Localizer["SummaryStepButtonLabel"])) 
+                    </Button>
+                </div>
+            }
+
+            @if (HasOffers)
+            {
+                <div class="chevron @(IsMobileExpanded ? "rotated" : "")">
+                    <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+                </div>
+            }
+            
+            @if (!HasOffers && StartDate != null && EndDate != null)
+            {
+                <span @onclick="OnToggleMobileExpand" @onclick:stopPropagation="true">@Localizer["ClickToCheckDetails"]</span>
+            }
+        </div>
+    </div>
+
+    <div class="info-box-content">
+        <div class="reservation-info">
+            @if (HasOffers && !IsOfferLoading)
+            {
+                <div class="reservation-header desktop-only">
+                    <div class="header-price">
+                        <span class="price-value">@Localizer["From"] @TotalMinPrice.ToString("N2") @CurrencySymbol</span>
+                    </div>
+                </div>
+            }
+
+            <div class="reservation-body">
+                 <div class="info-row">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 002 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-title">@Localizer["SelectedDates"]</span>
+                        @if (StartDate != null && EndDate != null)
+                        {
+                            <span class="info-text">@StartDate – @EndDate @(!string.IsNullOrEmpty(NightsSummaryText) ? $"({NightsSummaryText})" : "")</span>
+                        }
+                        else
+                        {
+                            <span class="info-text">@Localizer["NoDatesSelected"]</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-title">@Localizer["NumberOfGuests"]</span>
+                        @if (StartDate != null && EndDate != null)
+                        {
+                            <span class="info-text">@PersonsSummaryText</span>
+                        }
+                        else
+                        {
+                            <span class="info-text">@Localizer["NoGuestsSelected"]</span>
+                        }
+                    </div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-icon">
+                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+                    </div>
+                    <div class="info-content">
+                        <small style="font-weight: bold">@Localizer["CheckInTimeFormat"]</small>
+                        <small style="font-weight: bold">@Localizer["CheckOutTimeFormat"]</small>
+                    </div>
+                </div>
+
+                <div class="@((StartDate == null && EndDate == null) ? "desktop-only" : "")" style="margin-top: 0.5rem; width: 100%;" @onclick="OnSearchModalOpen">
+                    <Button Type="ButtonType.Secondary" style="width: 100%;">
+                        @Localizer["SelectDatesAndGuestsButtonLabel"]
+                    </Button>
+                </div>
+                
+                @if (IsOfferLoading)
+                {
+                    <div style="width: 100%; text-align: center; padding: 1rem; color: #666;">
+                        <b>@Localizer["Loading"]...</b>
+                    </div>
+                }
+                else if (HasOffers)
+                {
+                    <div class="desktop-only" style="width: 100%;" @onclick="OnSmartAction"> 
+                        <Button style="width: 100%;">
+                            @(IsAtOffers ? Localizer["BookNowStepButtonLabel"] : (IsAtSummary ? Localizer["SelectOfferStepButtonLabel"] : Localizer["SummaryStepButtonLabel"])) 
+                        </Button>
+                    </div>
+                }
+                else if (StartDate != null && EndDate != null)
+                {
+                   <div class="no-offers-wrapper">
+                        <div class="alert-box warning">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            <span>@Localizer["NoOffersAvailable"]</span>
+                        </div>
+                        
+                        @if (SuggestionDates.Count > 0)
+                        {
+                            <div class="suggest-offers-list">
+                                @foreach (var suggestion in SuggestionDates)
+                                {
+                                    <div @onclick="@(() => OnGoToSuggestion.InvokeAsync(suggestion))" @onclick:stopPropagation="true"  class="suggest-offer-card">
+                                        <div class="suggest-icon">
+                                            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 002 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+                                        </div>
+                                        <div class="suggest-content">
+                                            <span class="suggest-title">@Localizer["SuggestedDate"]</span>
+                                            <span class="suggest-dates">@Localizer["From"] @suggestion.StartDate @Localizer["To"] @suggestion.EndDate</span>
+                                        </div>
+                                        <div class="suggest-action">
+                                            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else if (IsSuggestionLoading)
+                        {
+                            <div class="suggest-offer-card loading">
+                                <div class="summary-suggestion-loading">
+                                    <span class="mini-spinner"></span>
+                                    <span>@Localizer["SuggestedDateLoading"]</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div class="mobile-only-map-container">
+            <CascadingValue Value="true" Name="IsMobile">
+                @ChildContent
+            </CascadingValue>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool IsMobileExpanded { get; set; }
+    [Parameter] public bool HasOffers { get; set; }
+    [Parameter] public decimal TotalMinPrice { get; set; }
+    [Parameter] public string CurrencySymbol { get; set; } = "PLN";
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
+    [Parameter] public string NightsSummaryText { get; set; } = "";
+    [Parameter] public string PersonsSummaryText { get; set; } = "";
+    [Parameter] public bool IsOfferLoading { get; set; }
+    [Parameter] public bool IsAtOffers { get; set; }
+    [Parameter] public bool IsAtSummary { get; set; }
+    [Parameter] public List<AvailableTerm> SuggestionDates { get; set; } = new();
+    [Parameter] public bool IsSuggestionLoading { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public EventCallback OnToggleMobileExpand { get; set; }
+    [Parameter] public EventCallback OnSearchModalOpen { get; set; }
+    [Parameter] public EventCallback OnSmartAction { get; set; }
+    [Parameter] public EventCallback<AvailableTerm> OnGoToSuggestion { get; set; }
+}

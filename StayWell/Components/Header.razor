@@ -5,11 +5,12 @@
 @inject ModalService ModalService
 @inject GlobalizationService GlobalizationService
 @implements IDisposable
-@inject Services.BitrixService BitrixService
 @inject Services.ToastService ToastService
 @inject States.ReservationState ReservationState
+@inject States.LiveChatNotificationState LiveChatNotificationState
 
 @inject IStringLocalizer<HomePage> Localizer
+@inject IStringLocalizer<RentoomBooking.StayWell.Components.ModalContent.LiveChatPanel> LiveChatLocalizer
 
 <div class="header">
     <div class="left">
@@ -29,11 +30,15 @@
             </button>
         </div>
 
-        @if (ReservationState.IsValidReservation && BitrixService.IsLoaderEnabled)
+        @if (ReservationState.IsValidReservation)
         {   
         <div class="Contact">
-            <button @onclick="@OpenChat" style="background: none; border: none">
+            <button class="chat-btn" @onclick="@OpenLiveChat">
                 <img src="/icons/message-circle.svg" />
+                @if (LiveChatNotificationState.UnreadCount > 0)
+                {
+                    <span class="chat-badge">@(LiveChatNotificationState.UnreadCount > 99 ? "99+" : LiveChatNotificationState.UnreadCount.ToString())</span>
+                }
             </button>
         </div>
         }
@@ -49,7 +54,7 @@
     protected override async Task OnInitializedAsync()
     {
         GlobalizationService.OnChange += StateHasChanged;
-        BitrixService.OnLoaderEnabled += OnBitrixLoaderEnabled;
+        LiveChatNotificationState.OnChange += StateHasChanged;
         var savedPreference = await GlobalizationService.LoadPreferenceAsync();
         if (!string.IsNullOrWhiteSpace(savedPreference))
         {
@@ -57,9 +62,13 @@
         }
     }
 
-    private void OnBitrixLoaderEnabled()
+    protected override async Task OnParametersSetAsync()
     {
-        InvokeAsync(StateHasChanged);
+        if (ReservationState.IsValidReservation && !string.IsNullOrWhiteSpace(Token))
+        {
+            await LiveChatNotificationState.LoadUnreadAsync(Token);
+            LiveChatNotificationState.StartListening(Token);
+        }
     }
 
     private void ChangeLangButton()
@@ -70,31 +79,18 @@
         );
     }
 
-    private async Task OpenChat()
+    private void OpenLiveChat()
     {
-        var client = ReservationState.CurrentReservation.Reservation.Client;
-        var guestData = new Services.BitrixGuestData
-        {
-            FirstName = client.FirstName,
-            LastName = client.LastName,
-            Phone = client.Phone,
-            Email = client.Email,
-            ExternalId = client.Id.ToString()
-        };
-
-        guestData.ExtraInfo.Add("Numer Rezerwacji", ReservationState.CurrentReservation.Reservation.id.ToString());
-        guestData.ExtraInfo.Add("Apartament", ReservationState.CurrentReservation.Reservation.Items.FirstOrDefault()?.objectName ?? "");
-        guestData.ExtraInfo.Add("Cena", ReservationState.CurrentReservation.Reservation.Items.FirstOrDefault()?.price.ToString() ?? "");
-        string staywellLink = $"[url=https://staywell.rentoom.pl/reservation/{Token}/HomePage]Otwórz StayWell rezerwacji[/url]";
-        guestData.ExtraInfo.Add("Link do StayWell", staywellLink);
-
-        await BitrixService.OpenChatAsync(guestData);
+        ModalService.ShowLiveChatModal(
+            LiveChatLocalizer["ChatTitle"],
+            @<RentoomBooking.StayWell.Components.ModalContent.LiveChatPanel Token="@Token" />
+        );
     }
 
     public void Dispose()
     {
         GlobalizationService.OnChange -= StateHasChanged;
-        BitrixService.OnLoaderEnabled -= OnBitrixLoaderEnabled;
+        LiveChatNotificationState.OnChange -= StateHasChanged;
     }
 
 }

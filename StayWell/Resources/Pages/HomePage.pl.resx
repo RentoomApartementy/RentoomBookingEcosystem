@@ -121,7 +121,7 @@
     <value>O Rezerwacji</value>
   </data>
   <data name="BookOnBtn" xml:space="preserve">
-    <value>Book on Rentoom.pl</value>
+    <value>Zarezerwuj na Rentoom.pl</value>
   </data>
   <data name="BookOnDesc" xml:space="preserve">
     <value>Zarezerwuj swój idealny pobyt w Toruniu i ciesz się wyjątkowym apartamentem.</value>
@@ -190,11 +190,24 @@
     <value>Ta rezerwacja nie jest już aktywna. Skontaktuj się z Rentoom, jeśli potrzebujesz pomocy.</value>
   </data>
   <data name="AiChatTitle" xml:space="preserve">
-    
-    
-  <value>StayWell AI</value></data>
+    <value>StayWell AI</value>
+  </data>
   <data name="AiAssistant" xml:space="preserve">
-    
-    
-  <value>Asystent AI</value></data>
+    <value>Asystent AI</value>
+  </data>
+  <data name="ParkingFooter" xml:space="preserve">
+    <value>Parking miejski</value>
+  </data>
+  <data name="AboutReservationFooter" xml:space="preserve">
+    <value>Informacje o rezerwacji</value>
+  </data>
+  <data name="LoyaltyFooter" xml:space="preserve">
+    <value>Twoje punkty</value>
+  </data>
+  <data name="AddonsLabel" xml:space="preserve">
+    <value>Dodatki</value>
+  </data>
+  <data name="CartButtonAlt" xml:space="preserve">
+    <value>Koszyk</value>
+  </data>
 </root>

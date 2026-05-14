@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Configuration;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Descriptions.Database;
+using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
@@ -13,6 +15,7 @@ using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
@@ -22,6 +25,7 @@ using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
+using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb
@@ -84,6 +88,11 @@ namespace RentoomBookingWeb
             builder.Services.AddDbContextFactory<RappPartnersDBContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
 
+            builder.Services.AddDbContextFactory<RappDescriptionsDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
+            builder.Services.AddScoped<IApartmentAiDescriptionService, ApartmentAiDescriptionService>();
+
             var footerEnvironmentInfo = FooterEnvironmentInfo.Create(
                builder.Environment,
                ("BookingDb", postgresConnectionString),
@@ -124,6 +133,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<CustomerTermsService>();
             builder.Services.AddScoped<CookieConsentRepository>();
             builder.Services.AddScoped<CookieConsentService>();
+            builder.Services.AddScoped<IBonusesService, BonusesService>();
             builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
 
             //upselle
@@ -191,9 +201,9 @@ namespace RentoomBookingWeb
 
             var app = builder.Build();
             
-            var supportedCultures = new[] { "en-US", "pl-PL" };
+            var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames.ToArray();
             var localizationOptions = new RequestLocalizationOptions()
-                .SetDefaultCulture(supportedCultures[0])
+                .SetDefaultCulture(SupportedLanguagesProvider.DefaultCultureName)
                 .AddSupportedCultures(supportedCultures)
                 .AddSupportedUICultures(supportedCultures);
 

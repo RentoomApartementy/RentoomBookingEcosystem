@@ -14,6 +14,7 @@ public sealed class ReservationPromptContext
     public string? WifiSsid { get; set; }
     public string? WifiPassword { get; set; }
     public string? ArrivalInstructionsSummary { get; set; }
+    public string? LockInstructionsSummary { get; set; }
     public string? RulesSummary { get; set; }
     public string? Locale { get; set; }
     public string? ApartmentCity { get; set; }
@@ -36,4 +37,5 @@ public sealed class ReservationPromptContext
     public bool? RemoteOpenSupported { get; set; }
     public string? AccessMethodSummary { get; set; }
     public string? NearbyAnswerGuidance { get; set; }
+    public string? AvailableUpsellsSummary { get; set; }
 }

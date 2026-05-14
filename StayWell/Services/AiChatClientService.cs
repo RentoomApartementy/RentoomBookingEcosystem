@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using RentoomBooking.ChatAI.Contracts;
+using RentoomBooking.StayWell.Models.Chat;
 
 namespace RentoomBooking.StayWell.Services;
 
@@ -19,14 +20,38 @@ public sealed class AiChatClientService
         _http = httpClientFactory.CreateClient("FunctionsApi");
     }
 
+    public async Task<StaywellChatHistoryDto?> GetHistoryAsync(
+        string reservationToken,
+        string conversationId,
+        AiChatTransportMode transportMode,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(reservationToken) || string.IsNullOrWhiteSpace(conversationId))
+        {
+            return null;
+        }
+
+        var mode = transportMode == AiChatTransportMode.Agent ? "agent" : "classic";
+        var path = $"staywell/chatai/history?reservationToken={Uri.EscapeDataString(reservationToken)}&conversationId={Uri.EscapeDataString(conversationId)}&mode={Uri.EscapeDataString(mode)}";
+
+        using var response = await _http.GetAsync(path, cancellationToken);
+        if (!response.IsSuccessStatusCode)
+        {
+            return null;
+        }
+
+        return await response.Content.ReadFromJsonAsync<StaywellChatHistoryDto>(_jsonOptions, cancellationToken);
+    }
+
     public async Task StreamAsync(
         ChatRequestDto request,
+        AiChatTransportMode transportMode,
         Func<ChatChunkDto, Task> onChunk,
         Func<string?, Task> onDone,
         Func<string, Task> onError,
         CancellationToken cancellationToken = default)
     {
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, "staywell/chat/stream")
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, ResolveStreamPath(transportMode))
         {
             Content = JsonContent.Create(request, options: _jsonOptions)
         };
@@ -105,6 +130,13 @@ public sealed class AiChatClientService
                 }
             }
         }
+    }
+
+    private static string ResolveStreamPath(AiChatTransportMode transportMode)
+    {
+        return transportMode == AiChatTransportMode.Agent
+            ? "staywell/chatai/agent/stream"
+            : "staywell/chatai/stream";
     }
 
     private static async Task<string> ReadErrorMessageAsync(HttpResponseMessage response, CancellationToken cancellationToken)

@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Beidh do chód ar fáil ó {0} ar lá na seiceála isteach.</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Infhaighteacht an ghlais á sheiceáil...</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Deimhnigh</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Doirse oscailte</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Earráid agus tú ag múchadh síos</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Earráid ag oscailt</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Earráid ceangail freastalaí</value>
+  </data>
+  <data name="HowTo" xml:space="preserve">
+    <value>Conas an glas a úsáid</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Níl aon chód don ghlas. Déan teagmháil leis an tacaíocht!</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>nó</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Brúigh chun é a oscailt</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Próiseáil</value>
+  </data>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Oscailt dorais iargúlta</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Níl cianoscailt ar fáil faoi láthair.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Bain triail as arís le do thoil</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Bain triail as arís i {0}</value>
+  </data>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Cód d'árasán</value>
+  </data>
+  <data name="InstructionCylinder" xml:space="preserve">
+    <value>## Conas doras a oscailt
+1. Cuir isteach an cód nó oscail go cianda
+(Deimhneofar gach cliceáil ar an gcnaipe ar an méarchlár le fuaim)
+2. Má shoilsíonn sé gorm, cas an knob
+(Glasáil ar thaobh na láimhe deise den doras, cas ar chlé)
+(Glasáil ar thaobh na láimhe clé den doras, cas ar dheis)
+go dtí go gcloiseann tú an glas ag tarraingt siar.
+3. Oscail an doras
+
+## Conas an doras a dhúnadh
+1. Cuir isteach an cód
+(Deimhneofar gach cliceáil ar an gcnaipe ar an méarchlár le fuaim)
+2. Má shoilsíonn sé gorm, cas an knob sa treo eile
+(Glasáil ar thaobh na láimhe deise den doras, cas ar dheis)
+(Glas ar thaobh na láimhe clé den doras, cas ar chlé)
+go dtí go gcloiseann tú an glas dúnta.
+3. Tá an doras faoi ghlas.</value>
+  </data>
+  <data name="InstructionPanel" xml:space="preserve">
+    <value>1. Soilsigh an méarchlár trí aon chnaipe ar an bpainéal a bhrú nó a oscailt go cianda.
+2. Cuir isteach do chód
+3. Má lasann sé gorm, oscail an doras.</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Tábhachtach</value>
+  </data>
+  <data name="LockTypePanel" xml:space="preserve">
+    <value>painéal</value>
+  </data>
+  <data name="LockTypeSpinning" xml:space="preserve">
+    <value>ag rothlú</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Beidh cianoscailt ar fáil ó {0} ar lá na seiceála isteach.</value>
+  </data>
+  <data name="InstructionOpenTitle" xml:space="preserve">
+    <value>Conas doras a oscailt</value>
+  </data>
+  <data name="InstructionCloseTitle" xml:space="preserve">
+    <value>Conas an doras a dhúnadh</value>
+  </data>
+  <data name="InstructionCylinderOpen" xml:space="preserve">
+    <value>## Conas a oscailt - Glas Rothlach
+1. Cuir isteach an cód nó oscail go cianda
+(Deimhneofar gach cliceáil ar an gcnaipe ar an méarchlár le fuaim)
+2. Má shoilsíonn sé gorm, cas an knob
+(Glasáil ar thaobh na láimhe deise den doras, cas ar chlé)
+(Glasáil ar thaobh na láimhe clé den doras, cas ar dheis)
+go dtí go gcloiseann tú an glas ag tarraingt siar.
+3. Oscail an doras</value>
+  </data>
+  <data name="InstructionCylinderClose" xml:space="preserve">
+    <value>## Conas a dhúnadh - Glas rothlach
+1. Cuir isteach an cód
+(Deimhneofar gach cliceáil ar an gcnaipe ar an méarchlár le fuaim)
+2. Má shoilsíonn sé gorm, cas an knob sa treo eile
+(Glasáil ar thaobh na láimhe deise den doras, cas ar dheis)
+(Glas ar thaobh na láimhe clé den doras, cas ar chlé)
+go dtí go gcloiseann tú an glas dúnta.
+3. Tá an doras faoi ghlas.</value>
+  </data>
+  <data name="InstructionPanelOpen" xml:space="preserve">
+    <value>## Conas a oscailt - Glas painéil
+1. Soilsigh an méarchlár trí aon chnaipe ar an bpainéal a bhrú nó a oscailt go cianda.
+2. Cuir isteach do chód
+3. Má lasann sé gorm, oscail an doras.</value>
+  </data>
+  <data name="InstructionPanelClose" xml:space="preserve">
+    <value>## Conas a dhúnadh - Glas painéil
+Níl le déanamh agat ach an doras a dhúnadh taobh thiar díot.</value>
+  </data>
+  <data name="InstructionCylinderOpenLabel" xml:space="preserve">
+    <value>Conas a oscailt - Glas Rothlach</value>
+  </data>
+  <data name="InstructionCylinderCloseLabel" xml:space="preserve">
+    <value>Conas a dhúnadh - Glas rothlach</value>
+  </data>
+  <data name="InstructionPanelOpenLabel" xml:space="preserve">
+    <value>Conas a oscailt - Glas painéil</value>
+  </data>
+  <data name="InstructionPanelCloseLabel" xml:space="preserve">
+    <value>Conas a dhúnadh - Glas painéil</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Cóid roimhe seo</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Cód bunaidh</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Cruthaigh Cód Nua</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Cód nua le haghaidh {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Á ghiniúint... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Tábhachtach: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Bailí ó: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Bailí go dtí: {0}</value>
+  </data>
+  <data name="CylinderTopView" xml:space="preserve">
+    <value>Amharc barr</value>
+  </data>
+  <data name="GenerateAvailableFrom" xml:space="preserve">
+    <value>Beidh cód nua a ghiniúint ar fáil ó {0}.</value>
+  </data>
+  <data name="GenerateSameHourBlocked" xml:space="preserve">
+    <value>Tá an cód ginte cheana féin ag an am seo. Beidh an chéad ghlúin eile indéanta ó {0}.</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Gineadh paschód nua go rathúil.</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Tá d'áirithint críochnaithe. Níl cianoscailt ar fáil a thuilleadh.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Tá d'áirithint críochnaithe. Níl an paschód ar fáil a thuilleadh.</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Árasán oscailte</value>
+  </data>
+</root>

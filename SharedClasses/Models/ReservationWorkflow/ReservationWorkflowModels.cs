@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.Bonuses;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.PartnersAndServices.Enums;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
@@ -32,10 +33,27 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public List<SelectedAddonDto> MandatoryAddons { get; set; } = new();
         public List<SelectedUpsellDto> SelectedUpsells { get; set; } = new(); //tylko ID upsellu.
         public decimal SelectedUpsellsTotalPrice { get; set; } = new();
+        public BookingChannel BookingChannel { get; set; } = BookingChannel.WebDirect;
+        public string? BonusInputName { get; set; }
+        public int? AppliedBonusId { get; set; }
+        public string? AppliedBonusName { get; set; }
+        public BonusDiscountValueType? AppliedBonusValueType { get; set; }
+        public decimal AppliedBonusValue { get; set; }
+        public decimal BonusBasePln { get; set; }
+        public decimal DiscountAmountPln { get; set; }
+        public string? BonusRejectReason { get; set; }
+
         public decimal getFullReservationPrizeWithoutUpsells()
         {
-            return (OfferPrice - MandatoryAddonsTotalPrice ?? 0) + SelectedAddonsTotalPrice + MandatoryAddonsTotalPrice;
+            var grossWithoutUpsells = (OfferPrice ?? 0m) + SelectedAddonsTotalPrice;
+            return Math.Max(0m, grossWithoutUpsells - DiscountAmountPln);
         }
+    }
+
+    public enum BookingChannel
+    {
+        WebDirect = 0,
+        ExternalImport = 1
     }
 
     public class ClientInfoDto
@@ -75,6 +93,10 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string PaymentStatus { get; set; } = PaymentStatuses.None;
         public List<UpsellSummaryLineDto> Upsells { get; set; } = new();
         public decimal UpsellsTotal { get; set; }
+        public decimal GrandTotalBeforeDiscount { get; set; }
+        public decimal DiscountAmountPln { get; set; }
+        public string? AppliedBonusName { get; set; }
+        public string? BonusRejectReason { get; set; }
         public decimal GrandTotal { get; set; }
         public List<AddonSummaryLineDto> Addons { get; internal set; }
         public decimal AddonsTotal { get; internal set; }
@@ -270,9 +292,9 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
             {
 
 
-           //       if (type.Contains("za cały pobyt")) total += selected.Price;
-           // else if (type.Contains("za osobę za każdą dobę") || type.Contains("za osobę za dobę")) total += selected.Price * selected.Persons * selected.Nights;
-           // else if (type.Contains("za dobę")) total += selected.Price * selected.Nights;
+           //       if (type.Contains("za caly pobyt")) total += selected.Price;
+           // else if (type.Contains("za osobe za kazda dobe") || type.Contains("za osobe za dobe")) total += selected.Price * selected.Persons * selected.Nights;
+           // else if (type.Contains("za dobe")) total += selected.Price * selected.Nights;
            // else total += selected.Price * selected.Quantity;
 
                 AddonPaymentType.PayPerPersonPerNight => unitPriceGross * nights * totalGuests*quantity,
@@ -287,3 +309,4 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
 
 
 }
+

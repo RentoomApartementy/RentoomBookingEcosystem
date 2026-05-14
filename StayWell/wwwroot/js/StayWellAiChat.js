@@ -35,6 +35,7 @@ window.staywellAiChat.startDictation = function (dotNetRef, language) {
 
     window.staywellAiChat._dotNetRef = dotNetRef;
     window.staywellAiChat._recognition = recognition;
+    window.staywellAiChat._finalTranscript = '';
 
     recognition.onstart = function () {
         if (window.staywellAiChat._dotNetRef) {
@@ -43,11 +44,26 @@ window.staywellAiChat.startDictation = function (dotNetRef, language) {
     };
 
     recognition.onresult = function (event) {
-        var transcript = '';
-        for (var i = 0; i < event.results.length; i++) {
-            transcript += event.results[i][0].transcript + ' ';
+        var finalTranscript = window.staywellAiChat._finalTranscript || '';
+        var interimTranscript = '';
+
+        for (var i = event.resultIndex; i < event.results.length; i++) {
+            var segment = event.results[i][0] && event.results[i][0].transcript
+                ? event.results[i][0].transcript
+                : '';
+            if (!segment) {
+                continue;
+            }
+
+            if (event.results[i].isFinal) {
+                finalTranscript += segment + ' ';
+            } else {
+                interimTranscript += segment + ' ';
+            }
         }
-        transcript = transcript.trim();
+
+        window.staywellAiChat._finalTranscript = finalTranscript;
+        var transcript = (finalTranscript + interimTranscript).trim();
 
         if (window.staywellAiChat._dotNetRef) {
             window.staywellAiChat._dotNetRef.invokeMethodAsync('OnSpeechTranscriptChanged', transcript);
@@ -63,6 +79,7 @@ window.staywellAiChat.startDictation = function (dotNetRef, language) {
 
     recognition.onend = function () {
         window.staywellAiChat._recognition = null;
+        window.staywellAiChat._finalTranscript = '';
         if (window.staywellAiChat._dotNetRef) {
             window.staywellAiChat._dotNetRef.invokeMethodAsync('OnSpeechStateChanged', false);
         }
@@ -82,6 +99,7 @@ window.staywellAiChat.stopDictation = function () {
 
     var recognition = window.staywellAiChat._recognition;
     window.staywellAiChat._recognition = null;
+    window.staywellAiChat._finalTranscript = '';
 
     try {
         recognition.stop();

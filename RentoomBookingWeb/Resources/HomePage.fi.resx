@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – luomme ainutlaatuisia kokemuksia majoitusta Toruńissa
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Etsitkö mukavaa asuntoa Toruńista?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Asunnot Toruńissa – mukava majoitus</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Etsitkö mukavaa asuntoa Toruńista?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenty on moderni lyhytaikaisen vuokrauksen brändi, joka yhdistää korkean majoitustason aitoon Toruńin tuntemukseen. Luomme paikkoja, jotka on suunniteltu mukavuuden, estetiikan ja toiminnallisuuden huomioiden – sekä turisteille että liikeasiakkaille.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Olemme iloisia, että tulitte luoksemme!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Tarjontamme sisältää kymmeniä huolellisesti valittuja asuntoja kaupungin houkuttelevimmilla alueilla. Jokainen sijainti on valittu tarjoamaan helppo pääsy tärkeisiin nähtävyyksiin, ravintoloihin ja liiketoiminta-alueisiin.
+Jokainen asunto on tila, joka on suunniteltu tarjoamaan todellista lepoa ja yksityisyyttä intensiivisen nähtävyyksien katselun tai työpäivän jälkeen.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Asunnot parhaissa paikoissa Toruńissa</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Tyytyväiset asiakkaat</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Asunnot Toruńissa
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Sijainti Toruńissa</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Miksi Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Rentoom Apartments on enemmän kuin pelkkä yöpyminen Toruńissa. Tarjoamme korkeatasoisia asuntoja parhaissa paikoissa ja todellisia etuja, jotka nostavat koko majoituksen arvoa.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Osana kumppaniohjelmaamme vieraat saavat erityisalennuksia valituista ravintoloista, kahviloista ja nähtävyyksistä. Nykyiset alennukset ja suositukset löytyvät suoraan asunnoista, joten voit käyttää todistettuja paikkoja ja säästää rahaa nähtävyyksiä katsellessasi.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Teemme yhteistyötä vain luotettujen paikallisten kumppaneiden kanssa ja huolehdimme jokaisen suosituksen laadusta. Valitsemalla Rentoomin saat mukavuutta, ammattitaitoista palvelua ja lisäetuja, jotka tekevät oleskelustasi Toruńissa mukavamman, hienostuneemman ja yksinkertaisesti kannattavamman.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Tutustu niiden mielipiteisiin, jotka ovat nukkuneet asunnoissamme Toruńissa.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Jätä yhteystietosi, niin palaamme asiaan!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Ota yhteyttä toimittajaan</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Suostun siihen, että yllä olevassa lomakkeessa annettujen henkilötietojeni käsittely</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Nimi</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Sukunimi</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Puhelin</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Lähetä</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Mikä erottaa asuntomme muista?
+
+</value>
+  </data>
+</root>

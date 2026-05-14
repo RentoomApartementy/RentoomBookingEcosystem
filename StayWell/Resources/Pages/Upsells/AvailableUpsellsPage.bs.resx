@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="UpsellsListSubtitle" xml:space="preserve">
+    <value>Dostupni dodaci za kupovinu</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Vaučeri</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Učitavanje...</value>
+  </data>
+  <data name="UpsellsListTitle" xml:space="preserve">
+    <value>Vaučeri</value>
+  </data>
+  <data name="NoAvailableUpsells" xml:space="preserve">
+    <value>Nema dostupnih dodataka</value>
+  </data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>Jednokratno</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Adresa</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>Osobe po danu</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Pogledajte detalje</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Obriši</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Važi od</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Detalji</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Kod</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Ostalo</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Važi za cijeli boravak. Potrebno je pokazati kod prilikom otkupa.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Važi za</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Opis</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>Ostani</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Noći</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR nije dostupan</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Iskorištavanje vaučera</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Uvećaj</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>Stan po danu</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Uslovi i odredbe</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>QR vaučer kod</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Dostupni dodaci za kupovinu</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Korišteno</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Pokažite ovaj kod osoblju da biste mogli iskoristiti vaučer.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Tvoj kod</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Cijena</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Predstava u restoranu</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Vaučeri</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Kod koji se unosi ručno</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>Gosti</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Prikaži kod vaučera</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>Bez ograničenja</value>
+  </data>
+</root>

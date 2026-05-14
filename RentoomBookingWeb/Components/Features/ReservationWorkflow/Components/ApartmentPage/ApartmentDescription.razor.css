@@ -1,0 +1,69 @@
+.apartment-wrapper {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+}
+
+.apartment-wrapper.collapsed {
+    max-height: 900px;
+}
+
+.apartment-wrapper.expanded {
+    max-height: none;
+    overflow: visible;
+}
+
+.description-wrapper h4 {
+    font-size: 1.1rem;
+    color: #1F5A41;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.long-description {
+    line-height: 1.6;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.amenities-wrapper {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 2rem 0;
+}
+
+.amenity {
+    padding: .5rem 1rem;
+    border: 1px solid #1F5A41;
+    border-radius: 10px;
+    color: #333;
+}
+
+.wrapper-shadow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(to bottom, rgba(247,247,247,0), rgba(247,247,247,1));
+    pointer-events: none;
+    z-index: 10;
+}
+
+.read-more-btn {
+    align-self: center;
+    background: none;
+    color: #1F5A41;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.read-more-btn:hover {
+    background-color: #e6f0eb;
+}

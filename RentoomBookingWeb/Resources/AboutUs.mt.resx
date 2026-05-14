@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>Dwarna
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Klassifikazzjoni medja tal-appartamenti
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>appartamenti biex jiġu mmaniġġjati
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Prenotazzjonijiet Immaniġġjati
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Mistednin servuti
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Storja</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Aħna grupp ta' nies li jħobbu jivvjaġġaw u kisbu esperjenza fit-turiżmu fis-swieq internazzjonali. Barra minn hekk, ilna nittrattaw ma' ġestjoni, kiri, rinnovazzjoni u kummerċ fis-suq tal-propjetà għal aktar minn 6 snin. Nixtiequ noffru l-esperjenza li kisbna lill-klijenti u l-mistednin tagħna, li dejjem ikunu sodisfatti bis-servizzi tagħna.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Missjoni</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Nipprovdu l-aħjar servizz possibbli lill-klijenti tagħna, kemm mistiedna kif ukoll sidien ta' appartamenti. Huwa partikolarment importanti għalina li nżommu standard għoli ta' servizz lill-klijent u niżguraw li l-mistednin tagħna jħossuhom komdu fl-appartamenti tagħna u jistgħu jiddependu fuq l-għajnuna tagħna fi kwalunkwe ħin.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>It-tim tagħna
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Viżjonarju u strateġista b'esperjenza fl-industrija tal-propjetà. Huwa bena Rentoom biex jissimplifika l-kiri ta' żmien qasir u awtomatizza kollox mill-bookings sal-ġestjoni tal-mistednin.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Jiżgura li t-teknoloġija ta' Rentoom tkun mgħaġġla, affidabbli u sigura. Passjonat dwar l-awtomazzjoni u soluzzjonijiet moderni għas-suq tal-kiri.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>B'attenzjoni għal kull dettall, tikkoordina l-attivitajiet ta' kuljum. Grazzi għal dan, il-klijenti tagħna jistgħu jorqdu fil-paċi – kollox jaħdem fil-ħin u mingħajr ebda problema.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Call</value>
+  </data>
+</root>

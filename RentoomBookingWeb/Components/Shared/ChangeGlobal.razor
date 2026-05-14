@@ -1,4 +1,5 @@
 @using System.Globalization
+@using RentoomBooking.SharedFrontend.Localization
 @inject NavigationManager Navigation
 
 <div class="language-switcher-container">
@@ -17,7 +18,7 @@
             {
                 <button @onclick="(() => ApplySelectedCultureAsync(culture.Name))"
                         class="@(CultureInfo.CurrentUICulture.Name == culture.Name ? "active" : "")">
-                    @culture.TwoLetterISOLanguageName.ToUpper()
+                    @SupportedLanguagesProvider.GetLanguageLabel(culture)
                 </button>
             }
         </div>
@@ -30,11 +31,7 @@
     
     private bool _isDropdownOpen = false;
     
-    private readonly CultureInfo[] _supportedCultures = new[]
-    {
-        new CultureInfo("en-US"),
-        new CultureInfo("pl-PL"),
-    };
+    private readonly IReadOnlyList<CultureInfo> _supportedCultures = SupportedLanguagesProvider.SupportedCultures;
 
     private void ToggleDropdown() => _isDropdownOpen = !_isDropdownOpen;
 
@@ -67,3 +64,4 @@
         Navigation.NavigateTo(newUri, forceLoad: true);
     }
 }
+

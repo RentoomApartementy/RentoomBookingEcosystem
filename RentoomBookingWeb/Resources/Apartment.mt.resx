@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApartmentName" xml:space="preserve">
+    <value>Appartament</value>
+  </data>
+  <data name="SelectedDates" xml:space="preserve">
+    <value>Data magħżula</value>
+  </data>
+  <data name="NoDatesSelected" xml:space="preserve">
+    <value>L-ebda data magħżula</value>
+  </data>
+  <data name="NumberOfGuests" xml:space="preserve">
+    <value>Numru ta' nies</value>
+  </data>
+  <data name="NoGuestsSelected" xml:space="preserve">
+    <value>L-ebda numru magħżul ta' nies</value>
+  </data>
+  <data name="NoOffersAvailable" xml:space="preserve">
+    <value>L-ebda offerta fid-data magħżula</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Uri aktar</value>
+  </data>
+  <data name="HideDetails" xml:space="preserve">
+    <value>Dettalji tal-kollass</value>
+  </data>
+  <data name="SummaryStepButtonLabel" xml:space="preserve">
+    <value>Impenjat</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Sommarju tal-Booking</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Għażliet addizzjonali</value>
+  </data>
+  <data name="Opłata serwisowa 139 x" xml:space="preserve">
+    <value>Ħlas tas-servizz 139 x</value>
+  </data>
+  <data name="Zwierzę" xml:space="preserve">
+    <value>Annimal</value>
+  </data>
+  <data name="Łóżeczko dla niemowlaka" xml:space="preserve">
+    <value>Siegħa tat-tarbija</value>
+  </data>
+  <data name="Łóżeczko turystyczne" xml:space="preserve">
+    <value>Ċott tal-ivvjaġġar</value>
+  </data>
+  <data name="PÓŹNE WYMELDOWANIE" xml:space="preserve">
+    <value>CHECK-OUT TARD</value>
+  </data>
+  <data name="WCZESNE ZAMELDOWANIE" xml:space="preserve">
+    <value>CHECK-IN BIKRIJA</value>
+  </data>
+  <data name="Kwiaty" xml:space="preserve">
+    <value>Fjuri</value>
+  </data>
+  <data name="Upgrade" xml:space="preserve">
+    <value>Aġġornament</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Minn</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Għal</value>
+  </data>
+  <data name="Adults" xml:space="preserve">
+    <value>Adulti</value>
+  </data>
+  <data name="Children" xml:space="preserve">
+    <value>Ulied</value>
+  </data>
+  <data name="RefundableOffer" xml:space="preserve">
+    <value>Offerta ta' Ritorn</value>
+  </data>
+  <data name="Non-refundableOffer" xml:space="preserve">
+    <value>Offerta mhux rimborsabbli</value>
+  </data>
+  <data name="BookNow" xml:space="preserve">
+    <value>Ibtbu issa</value>
+  </data>
+  <data name="BookNowStepButtonLabel" xml:space="preserve">
+    <value>Dettalji</value>
+  </data>
+  <data name="SuggestedDate" xml:space="preserve">
+    <value>Data Proposta</value>
+  </data>
+  <data name="SuggestedDateLoading" xml:space="preserve">
+    <value>Iċċekkja d-disponibbiltà...</value>
+  </data>
+  <data name="NonRefundableText" xml:space="preserve">
+    <value>Il-ħlas minn qabel ma jistax jiġi rimborsat.</value>
+  </data>
+  <data name="RefundableOfferText" xml:space="preserve">
+    <value>Aħna nirritornaw 100% mill-ammont imħallas meta nħassru riservazzjoni lil {0}</value>
+  </data>
+  <data name="RefundableOfferTextFallback" xml:space="preserve">
+    <value>Appell ħieles quddiem</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Iċċarġjar</value>
+  </data>
+  <data name="MandatoryOptions" xml:space="preserve">
+    <value>Għażliet obbligatorji</value>
+  </data>
+  <data name="ApartmentsMap" xml:space="preserve">
+    <value>Mappa tal-appartamenti</value>
+  </data>
+  <data name="CleaningIncluded" xml:space="preserve">
+    <value>It-tindif huwa inkluż fil-prezz</value>
+  </data>
+  <data name="SelectOffer" xml:space="preserve">
+    <value>Agħżel offerta</value>
+  </data>
+  <data name="SelectOfferStepButtonLabel" xml:space="preserve">
+    <value>Agħżel offerta</value>
+  </data>
+  <data name="SeeMore" xml:space="preserve">
+    <value>Ara l-mappa sħiħa</value>
+  </data>
+  <data name="ClickToCheckDetails" xml:space="preserve">
+    <value>Ikklikkja biex tiċċekkja d-dettalji</value>
+  </data>
+  <data name="SelectDatesAndGuests" xml:space="preserve">
+    <value>Agħżel id-data u n-numru tal-mistednin</value>
+  </data>
+  <data name="SelectDatesAndGuestsButtonLabel" xml:space="preserve">
+    <value>Bidla</value>
+  </data>
+  <data name="CheckInTimeFormat" xml:space="preserve">
+    <value>Check-in: 15:00 – 22:00</value>
+  </data>
+  <data name="CheckOutTimeFormat" xml:space="preserve">
+    <value>Check-out: sa l-11:00</value>
+  </data>
+  <data name="SelectedPackage" xml:space="preserve">
+    <value>Pakkett magħżul</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Pakkett</value>
+  </data>
+  <data name="ContinueReservation" xml:space="preserve">
+    <value>Kompli l-booking tiegħek</value>
+  </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Paġna mhux misjuba</value>
+  </data>
+  <data name="PageNotFoundDescription" xml:space="preserve">
+    <value>Skużani, imma l-paġna li qed tfittex mhix teżisti jew ġiet imċaqalqa.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Lura għall-paġna ewlenija</value>
+  </data>
+  <data name="NotFoundHeaderTitle" xml:space="preserve">
+    <value>Żball 404</value>
+  </data>
+  <data name="NotFoundMaybeLookingFor" xml:space="preserve">
+    <value>Forse qed tfittex:</value>
+  </data>
+  <data name="NotFoundApartmentsList" xml:space="preserve">
+    <value>Lista ta' appartamenti</value>
+  </data>
+  <data name="NotFoundCooperation" xml:space="preserve">
+    <value>Kooperazzjoni</value>
+  </data>
+  <data name="NotFoundContact" xml:space="preserve">
+    <value>Kuntatt</value>
+  </data>
+</root>

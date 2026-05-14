@@ -9,6 +9,10 @@ public sealed class SafeMarkdownService
     private static readonly Regex BoldRegex = new("\\*\\*(.+?)\\*\\*", RegexOptions.Compiled);
     private static readonly Regex ItalicRegex = new("(?<!\\*)\\*(?!\\*)(.+?)(?<!\\*)\\*(?!\\*)", RegexOptions.Compiled);
     private static readonly Regex CodeRegex = new("`(.+?)`", RegexOptions.Compiled);
+    private static readonly Regex MarkdownLinkRegex = new("\\[(?<label>[^\\]\\r\\n]+?)\\]\\((?<url>https?://[^\\s\\)]+)\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex BareUrlRegex = new("(?<![\"'=])(https?://[^\\s<]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex DuplicateInlineLinkRegex = new("(?<url>https?://[^\\s\\)]+)\\(\\[(?<label>[^\\]]+)\\]\\(\\k<url>\\)\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex GluedPolishWordAfterUrlRegex = new("(?<url>https?://[^\\s<]*?)(?<suffix>[A-Z][A-Za-z]*[^\\u0000-\\u007F][^\\s<]*)", RegexOptions.Compiled);
     private static readonly Regex OrderedListRegex = new("^\\d+\\.\\s+", RegexOptions.Compiled);
     private static readonly Regex InlineOrderedMarkerRegex = new("(?<!\\n)(\\d+\\.\\s*)", RegexOptions.Compiled);
 
@@ -113,6 +117,7 @@ public sealed class SafeMarkdownService
     private static string NormalizeLayout(string markdown)
     {
         var normalized = markdown;
+        normalized = NormalizeLinks(normalized);
         var markerMatches = InlineOrderedMarkerRegex.Matches(normalized);
         if (markerMatches.Count >= 2)
         {
@@ -132,12 +137,55 @@ public sealed class SafeMarkdownService
         return normalized;
     }
 
+    private static string NormalizeLinks(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return string.Empty;
+        }
+
+        var normalized = DuplicateInlineLinkRegex.Replace(
+            text,
+            match => $"[{match.Groups["label"].Value}]({match.Groups["url"].Value})");
+
+        // Some responses glue the next sentence word to URL, e.g. ".../restauracjeJeśli".
+        // Split only when the glued suffix contains non-ASCII characters (common Polish words).
+        normalized = GluedPolishWordAfterUrlRegex.Replace(
+            normalized,
+            match => $"{match.Groups["url"].Value} {match.Groups["suffix"].Value}");
+
+        return normalized;
+    }
+
     private static string ApplyInlineMarkdown(string text)
     {
         var transformed = CodeRegex.Replace(text, "<code>$1</code>");
         transformed = BoldRegex.Replace(transformed, "<strong>$1</strong>");
         transformed = ItalicRegex.Replace(transformed, "<em>$1</em>");
+        transformed = MarkdownLinkRegex.Replace(transformed, match =>
+        {
+            var label = match.Groups["label"].Value;
+            var url = match.Groups["url"].Value;
+            return BuildAnchor(url, label);
+        });
+        transformed = BareUrlRegex.Replace(transformed, match =>
+        {
+            var raw = match.Groups[1].Value;
+            var trimmed = raw.TrimEnd('.', ',', ';', ':', '!', '?', ')', ']', '}');
+            if (string.IsNullOrWhiteSpace(trimmed))
+            {
+                return raw;
+            }
+
+            var suffix = raw[trimmed.Length..];
+            return BuildAnchor(trimmed, trimmed) + suffix;
+        });
 
         return transformed;
+    }
+
+    private static string BuildAnchor(string url, string label)
+    {
+        return $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">{label}</a>";
     }
 }

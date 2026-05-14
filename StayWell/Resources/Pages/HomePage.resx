@@ -196,4 +196,19 @@
   <data name="AiAssistant" xml:space="preserve">
     <value>AI Assistant</value>
   </data>
+  <data name="ParkingFooter" xml:space="preserve">
+    <value>City Parking</value>
+  </data>
+  <data name="AboutReservationFooter" xml:space="preserve">
+    <value>Reservation Info</value>
+  </data>
+  <data name="LoyaltyFooter" xml:space="preserve">
+    <value>Twoje punkty</value>
+  </data>
+  <data name="AddonsLabel" xml:space="preserve">
+    <value>Add-ons</value>
+  </data>
+  <data name="CartButtonAlt" xml:space="preserve">
+    <value>Shopping Cart</value>
+  </data>
 </root>

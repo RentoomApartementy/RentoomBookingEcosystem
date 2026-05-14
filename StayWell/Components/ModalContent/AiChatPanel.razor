@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.ChatAI.Contracts
 @using RentoomBooking.StayWell.Models.Chat
 @using RentoomBooking.StayWell.States
@@ -9,13 +10,14 @@
 @inject ReservationState ReservationState
 @inject GlobalizationService GlobalizationService
 @inject IJSRuntime JS
+@inject IStringLocalizer<AiChatPanel> Localizer
 
 <div class="ai-chat-panel @(IsFullscreen ? "ai-chat-panel--fullscreen" : string.Empty)">
     <div class="ai-chat-messages" id="ai-chat-messages" @ref="_messagesContainerRef">
         @foreach (var message in _messages)
         {
             <div class="ai-chat-message @(message.Role == ChatRoles.User ? "ai-chat-message--user" : "ai-chat-message--assistant")">
-                <div class="ai-chat-message-role">@(message.Role == ChatRoles.User ? "Ty" : "Asystent")</div>
+                <div class="ai-chat-message-role">@(message.Role == ChatRoles.User ? Localizer["You"] : Localizer["Assistant"])</div>
                 @if (message.Role == ChatRoles.User)
                 {
                     <div class="ai-chat-message-content">@message.Markdown</div>
@@ -34,13 +36,32 @@
     }
     else if (_isStreaming)
     {
-        <div class="ai-chat-loader">Asystent pisze...</div>
+        <div class="ai-chat-loader">@Localizer["AssistantTyping"]</div>
     }
 
     <div class="ai-chat-actions">
+        <div class="ai-chat-mode-toggle" role="group" aria-label="@Localizer["AiChatModeAriaLabel"]">
+            <button type="button"
+                    class="ai-chat-mode-option @GetTransportModeClass(AiChatTransportMode.Classic)"
+                    @onclick="async () => await SetTransportModeAsync(AiChatTransportMode.Classic)"
+                    disabled="@_isStreaming"
+                    aria-pressed="@(_transportMode == AiChatTransportMode.Classic)"
+                    title="@Localizer["ClassicModeTitle"]">
+                @Localizer["ClassicMode"]
+            </button>
+            <button type="button"
+                    class="ai-chat-mode-option @GetTransportModeClass(AiChatTransportMode.Agent)"
+                    @onclick="async () => await SetTransportModeAsync(AiChatTransportMode.Agent)"
+                    disabled="@_isStreaming"
+                    aria-pressed="@(_transportMode == AiChatTransportMode.Agent)"
+                    title="@Localizer["AgentModeTitle"]">
+                @Localizer["AgentMode"]
+            </button>
+        </div>
+
         <div class="ai-chat-composer">
             <textarea class="ai-chat-input"
-                      placeholder="Napisz wiadomość..."
+                      placeholder="@Localizer["MessageInputPlaceholder"]"
                       @bind="_input"
                       @bind:event="oninput"
                       @onkeydown="HandleInputKeyDown"
@@ -50,8 +71,8 @@
                 <button class="ai-chat-icon-btn ai-chat-icon-btn--mic @(_isDictating ? "ai-chat-icon-btn--mic-active" : string.Empty)"
                         @onclick="ToggleDictationAsync"
                         disabled="@(_isStreaming || !_isSpeechSupported)"
-                        aria-label="@(_isDictating ? "Zatrzymaj nasłuch mikrofonu" : "Uruchom mikrofon")"
-                        title="@(_isDictating ? "Nasłuch..." : "Mikrofon")">
+                        aria-label="@(_isDictating ? Localizer["StopMicrophoneAriaLabel"] : Localizer["StartMicrophoneAriaLabel"])"
+                        title="@(_isDictating ? Localizer["ListeningTitle"] : Localizer["MicrophoneTitle"])">
                     <img src="/icons/microphone-svgrepo-com.svg" alt="" />
                 </button>
 
@@ -59,8 +80,8 @@
                 {
                     <button class="ai-chat-icon-btn ai-chat-icon-btn--stop"
                             @onclick="StopAsync"
-                            aria-label="Zatrzymaj generowanie"
-                            title="Stop">
+                            aria-label="@Localizer["StopGeneratingAriaLabel"]"
+                            title="@Localizer["StopTitle"]">
                         <img src="/icons/x.svg" alt="" />
                     </button>
                 }
@@ -69,8 +90,8 @@
                     <button class="ai-chat-icon-btn ai-chat-icon-btn--send"
                             @onclick="SendAsync"
                             disabled="@(!_canSend)"
-                            aria-label="Wyślij wiadomość"
-                            title="Wyślij">
+                            aria-label="@Localizer["SendMessageAriaLabel"]"
+                            title="@Localizer["SendTitle"]">
                         <img src="/icons/circle-arrow-right.svg" alt="" />
                     </button>
                 }
@@ -82,34 +103,29 @@
 @code {
     [Parameter] public string? Token { get; set; }
     [Parameter] public bool IsFullscreen { get; set; }
-
     private readonly List<ChatUiMessage> _messages = new();
     private ElementReference _messagesContainerRef;
     private string? _conversationId;
     private string? _conversationStorageKey;
+    private string? _loadedConversationContextKey;
     private string _input = string.Empty;
     private string? _error;
     private bool _isStreaming;
     private bool _isSpeechSupported = true;
     private bool _isDictating;
+    private bool _acceptSpeechInput;
     private string _speechInputPrefix = string.Empty;
     private bool _pendingScrollToBottom;
     private CancellationTokenSource? _streamCts;
     private DotNetObjectReference<AiChatPanel>? _dotNetRef;
+    private AiChatTransportMode _transportMode = AiChatTransportMode.Classic;
 
     private bool _canSend => !_isStreaming && !string.IsNullOrWhiteSpace(_input);
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        if (_messages.Count == 0)
-        {
-            _messages.Add(new ChatUiMessage
-            {
-                Role = ChatRoles.Assistant,
-                Markdown = "Cześć! Jestem asystentem StayWell. Jak mogę pomóc podczas Twojego pobytu?"
-            });
-        }
-
+        await SetTransportModeAsync(AiChatTransportMode.Agent);
+        EnsureWelcomeMessage();
         QueueScrollToBottom();
     }
 
@@ -120,15 +136,8 @@
         {
             return;
         }
-
-        var key = BuildConversationStorageKey(token);
-        if (string.Equals(_conversationStorageKey, key, StringComparison.Ordinal))
-        {
-            return;
-        }
-
-        _conversationStorageKey = key;
-        _conversationId = await LocalStorageService.GetItemAsync(key);
+        await SetTransportModeAsync(AiChatTransportMode.Agent);
+        await LoadConversationContextAsync(token);
     }
 
     private async Task SendAsync()
@@ -140,13 +149,14 @@
 
         if (_isDictating)
         {
+            _acceptSpeechInput = false;
             await StopDictationAsync();
         }
 
         var token = ResolveToken();
         if (string.IsNullOrWhiteSpace(token))
         {
-            _error = "Brak tokenu rezerwacji. Odśwież stronę i spróbuj ponownie.";
+            _error = Localizer["MissingReservationTokenError"];
             StateHasChanged();
             return;
         }
@@ -154,7 +164,7 @@
         var reservationId = ReservationState.CurrentReservation?.Id;
         if (reservationId is null || reservationId <= 0)
         {
-            _error = "Brak danych rezerwacji. Odśwież stronę i spróbuj ponownie.";
+            _error = Localizer["MissingReservationDataError"];
             StateHasChanged();
             return;
         }
@@ -188,6 +198,7 @@
         {
             await AiChatClientService.StreamAsync(
                 new ChatRequestDto(userMessage, token, reservationId.Value, _conversationId),
+                _transportMode,
                 async chunk =>
                 {
                     assistantMessage.Markdown += chunk.Text;
@@ -218,7 +229,7 @@
 
             if (string.IsNullOrWhiteSpace(assistantMessage.Markdown))
             {
-                assistantMessage.Markdown = "Brak odpowiedzi z modelu.";
+                assistantMessage.Markdown = Localizer["NoModelResponse"];
                 QueueScrollToBottom();
             }
         }
@@ -301,6 +312,7 @@
         }
 
         _speechInputPrefix = _input;
+        _acceptSpeechInput = true;
         await JS.InvokeVoidAsync("staywellAiChat.startDictation", _dotNetRef, GetSpeechLanguage());
     }
 
@@ -308,12 +320,18 @@
     public Task OnSpeechStateChanged(bool isListening)
     {
         _isDictating = isListening;
+        _acceptSpeechInput = isListening;
         return InvokeAsync(StateHasChanged);
     }
 
     [JSInvokable]
     public Task OnSpeechTranscriptChanged(string transcript)
     {
+        if (!_acceptSpeechInput)
+        {
+            return Task.CompletedTask;
+        }
+
         _input = MergeSpeechWithInput(_speechInputPrefix, transcript);
         return InvokeAsync(StateHasChanged);
     }
@@ -321,8 +339,9 @@
     [JSInvokable]
     public Task OnSpeechError(string message)
     {
-        _error = string.IsNullOrWhiteSpace(message) ? "Nie udało się uruchomić rozpoznawania mowy." : message;
+        _error = string.IsNullOrWhiteSpace(message) ? Localizer["SpeechRecognitionStartError"] : message;
         _isDictating = false;
+        _acceptSpeechInput = false;
         return InvokeAsync(StateHasChanged);
     }
 
@@ -333,6 +352,7 @@
         if (!isSupported)
         {
             _isDictating = false;
+            _acceptSpeechInput = false;
         }
 
         return InvokeAsync(StateHasChanged);
@@ -340,6 +360,7 @@
 
     private async Task StopDictationAsync()
     {
+        _acceptSpeechInput = false;
         if (_isDictating)
         {
             await JS.InvokeVoidAsync("staywellAiChat.stopDictation");
@@ -354,6 +375,31 @@
         return Task.CompletedTask;
     }
 
+    private async Task SetTransportModeAsync(AiChatTransportMode transportMode)
+    {
+        if (_isStreaming || _transportMode == transportMode)
+        {
+            return;
+        }
+
+        _transportMode = transportMode;
+        _conversationStorageKey = null;
+        _loadedConversationContextKey = null;
+
+        var token = ResolveToken();
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            await LoadConversationContextAsync(token);
+        }
+
+        StateHasChanged();
+    }
+
+    private string GetTransportModeClass(AiChatTransportMode transportMode)
+    {
+        return _transportMode == transportMode ? "ai-chat-mode-option--active" : string.Empty;
+    }
+
     private string? ResolveToken()
     {
         if (!string.IsNullOrWhiteSpace(Token))
@@ -364,7 +410,75 @@
         return ReservationState.CurrentToken;
     }
 
-    private static string BuildConversationStorageKey(string token) => $"staywell:ai-chat:conversation:{token}";
+    private async Task LoadConversationContextAsync(string token)
+    {
+        var key = BuildConversationStorageKey(token, _transportMode);
+        if (string.Equals(_loadedConversationContextKey, key, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        _conversationStorageKey = key;
+        _conversationId = await LocalStorageService.GetItemAsync(key);
+
+        await LoadMessagesFromHistoryAsync(token, _conversationId);
+        _loadedConversationContextKey = key;
+    }
+
+    private static string BuildConversationStorageKey(string token, AiChatTransportMode transportMode)
+    {
+        return transportMode == AiChatTransportMode.Agent
+            ? $"staywell:ai-chat:agent-conversation:{token}"
+            : $"staywell:ai-chat:conversation:{token}";
+    }
+
+    private async Task LoadMessagesFromHistoryAsync(string token, string? conversationId)
+    {
+        _messages.Clear();
+
+        if (!string.IsNullOrWhiteSpace(conversationId))
+        {
+            try
+            {
+                var history = await AiChatClientService.GetHistoryAsync(token, conversationId, _transportMode);
+                if (history?.Messages is not null)
+                {
+                    foreach (var message in history.Messages)
+                    {
+                        if (!string.IsNullOrWhiteSpace(message.Role))
+                        {
+                            _messages.Add(new ChatUiMessage
+                            {
+                                Role = message.Role,
+                                Markdown = message.Content ?? string.Empty
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore history-load failures and fall back to welcome message.
+            }
+        }
+
+        EnsureWelcomeMessage();
+        QueueScrollToBottom();
+    }
+
+    private void EnsureWelcomeMessage()
+    {
+        if (_messages.Count > 0)
+        {
+            return;
+        }
+
+        _messages.Add(new ChatUiMessage
+        {
+            Role = ChatRoles.Assistant,
+            Markdown = Localizer["WelcomeMessage"]
+        });
+    }
 
     private static string MergeSpeechWithInput(string prefix, string transcript)
     {

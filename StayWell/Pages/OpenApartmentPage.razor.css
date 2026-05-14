@@ -199,7 +199,10 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    white-space: nowrap;
+    white-space: normal;
+    font-variant-numeric: tabular-nums;
+    word-break: break-word;
+    text-align: center;
 }
 
     .retry-button:disabled {

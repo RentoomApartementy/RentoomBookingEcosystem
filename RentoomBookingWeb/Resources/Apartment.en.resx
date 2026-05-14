@@ -243,15 +243,6 @@
   <data name="SelectDatesAndGuestsButtonLabel" xml:space="preserve">
     <value>Change dates and guests</value>
   </data>
-  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
-    <value>Price available after selecting dates</value>
-  </data>
-  <data name="SelectDatesButtonLabel" xml:space="preserve">
-    <value>Select dates</value>
-  </data>
-  <data name="ChangeDatesButtonLabel" xml:space="preserve">
-    <value>Change dates</value>
-  </data>
   <data name="CheckInTimeFormat" xml:space="preserve">
     <value>Check-in: 15:00 – 22:00</value>
   </data>
@@ -269,9 +260,6 @@
   </data>
   <data name="Nights" xml:space="preserve">
     <value>nights</value>
-  </data>
-  <data name="Night" xml:space="preserve">
-    <value>night</value>
   </data>
   <data name="StayNight_1" xml:space="preserve">
     <value>night</value>
@@ -291,120 +279,169 @@
   <data name="StayPerson_Many" xml:space="preserve">
     <value>people</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonus was removed.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus applied: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>The entered bonus does not exist.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>This bonus is currently disabled.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>This bonus is not valid for the selected apartment.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>This bonus is not available for this reservation start date.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>This bonus requires a longer reservation.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>This bonus requires a higher total order amount.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>This bonus works only for reservations from RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>This bonus does not reduce the current reservation price.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Fill in dates and select an offer to apply the bonus.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Could not read offer price for bonus calculation.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Could not apply bonus.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Do you have a discount code?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Enter discount code</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Apply code</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Checking...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Price available after selecting dates</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Select dates</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Change dates</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>night</value>
+  </data>
   <data name="Reservation_Preview" xml:space="preserve">
-    <value />
     <value>Preview</value>
   </data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
-    <value />
     <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value>
   </data>
   <data name="Reservation_AltBeds" xml:space="preserve">
-    <value />
     <value>Number of beds</value>
   </data>
   <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
-    <value />
     <value>Book {0} at Rentoom. Great location, {1} rooms, high standard.</value>
   </data>
   <data name="Reservation_NightsCount" xml:space="preserve">
-    <value />
     <value>Number of nights</value>
   </data>
   <data name="Reservation_NoAddons" xml:space="preserve">
-    <value />
     <value>No add-ons</value>
   </data>
   <data name="Apartment_NoAddonDescription" xml:space="preserve">
-    <value />
     <value>No add-on description</value>
   </data>
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
-    <value />
     <value>Reservation canceled</value>
   </data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
-    <value />
     <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value>
   </data>
   <data name="Reservation_NextButton" xml:space="preserve">
-    <value />
     <value>Continue</value>
   </data>
   <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
-    <value />
     <value>To book this apartment, select dates and number of guests</value>
   </data>
   <data name="Reservation_AltOccupancy" xml:space="preserve">
-    <value />
     <value>Number of guests</value>
   </data>
   <data name="Reservation_Cost" xml:space="preserve">
-    <value />
     <value>Cost</value>
   </data>
   <data name="Reservation_AltBathrooms" xml:space="preserve">
-    <value />
     <value>Number of bathrooms</value>
   </data>
   <data name="Reservation_NoOffersForDate" xml:space="preserve">
-    <value />
     <value>Unfortunately, there are no offers for this apartment for the selected dates</value>
   </data>
   <data name="Apartment_SeoTitleFallback" xml:space="preserve">
-    <value />
     <value>Apartment details - Rentoom</value>
   </data>
   <data name="Reservation_PageTitlePrefix" xml:space="preserve">
-    <value />
     <value>Reservation</value>
   </data>
   <data name="NotFoundPopupButton" xml:space="preserve">
-    <value />
     <value>Book an apartment</value>
   </data>
   <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
-    <value />
     <value>Apartments</value>
   </data>
   <data name="Apartment_SeoKeywords" xml:space="preserve">
-    <value />
     <value>apartment torun, accommodation torun, rentoom, short-term rental, {0}</value>
   </data>
   <data name="Reservation_AltArea" xml:space="preserve">
-    <value />
     <value>Apartment area</value>
   </data>
   <data name="Apartment_CountryName" xml:space="preserve">
-    <value />
     <value>Poland</value>
   </data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
-    <value />
     <value>This is our new portal</value>
   </data>
   <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
-    <value />
     <value>Select your stay dates to check availability and prices of our offers.</value>
   </data>
   <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
-    <value />
     <value>Apartment</value>
   </data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
-    <value />
     <value>Book an apartment ({0}s)</value>
   </data>
   <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
-    <value />
     <value>I want to receive a VAT invoice</value>
   </data>
   <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
-    <value />
     <value>Check apartment details and book your stay at Rentoom.</value>
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
-    <value />
     <value>Error 404</value>
+  </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Frequently Asked Questions (FAQ)</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Amenities and Equipment</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Show full description and amenities</value>
   </data>
 </root>

@@ -1,0 +1,44 @@
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using RentoomBookingWeb.Components.Features.Apartments.Components
+@using Microsoft.Extensions.Localization
+
+<div class="map-card-wrapper @(IsMobile ? "mobile-only-map" : "desktop-only-map")">
+    @if (!IsMobile)
+    {
+        <div class="map-top-section">
+            <ApartmentMap
+                Id="@MapId"
+                Latitude="@Location?.LocalizationItem?.GeoLocationLat"
+                Longitude="@Location?.LocalizationItem?.GeoLocationLng"
+                ApartmentAddress="@Location?.Address"
+            />   
+        </div>
+    }
+    
+    <div class="map-bottom-section">
+         <div class="map-address-row">
+            <div class="map-pin-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="map-address-details">
+                <span class="map-street-name">@Location?.LocalizationItem?.Street</span>
+                <span class="map-city-name">@Location?.LocalizationItem?.ZipCode @Location?.LocalizationItem?.City, @Localizer["Apartment_CountryName"]</span>
+            </div>
+        </div>
+
+        <div class="map-action-row">
+            <button class="map-secondary-btn" @onclick="OnSeeMore">
+                <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+                @Localizer["SeeMore"]
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public ObjectLocation? Location { get; set; }
+    [Parameter] public bool IsMobile { get; set; }
+    [Parameter] public string MapId { get; set; } = "apartmentMap";
+    [Parameter] public EventCallback OnSeeMore { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+}

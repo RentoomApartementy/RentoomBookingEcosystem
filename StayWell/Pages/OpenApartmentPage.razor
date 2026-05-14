@@ -7,6 +7,7 @@
 
 @inject IStringLocalizer<OpenApartmentPage> Localizer
 @inject BackendApi BackendApi
+@inject FeatureFlagsService FeatureFlagsService
 @inherits Models.PageBase
 
 @inject IJSRuntime JS
@@ -14,14 +15,14 @@
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <div class="buttons-wrapper">
-    @if (LocksState.IsLoading)
+    @if (LocksState.IsLoading && !IsDevMockLock)
     {
         <div class="tile tile--center">
             <div class="skeleton skeleton--button"></div>
             <div class="skeleton skeleton--text" style="margin-top: 15px;"></div>
         </div>
     }
-    else if (LocksState.IsTTLockLoading)
+    else if (LocksState.IsTTLockLoading && !IsDevMockLock)
     {
         <div class="tile tile--center">
             <div class="tile__title" style="margin-bottom: 10px;">
@@ -33,7 +34,7 @@
             </div>
         </div>
     }
-    else if (!ReservationState.IsActiveReservation && !_debugMode)
+    else if (!ReservationState.IsActiveReservation && !_debugMode && !IsDevMockLock)
     {
         <div class="tile tile--center">
             <div class="tile__title" style="margin-bottom: 10px;">
@@ -52,7 +53,7 @@
             </div>
         </div>
     }
-    else if (LocksState.IsTTLockAvailable)
+    else if (LocksState.IsTTLockAvailable || IsDevMockLock)
     {
         <div class="tile tile--center">
             <div class="tile__title" style="margin-bottom: 10px;">
@@ -130,7 +131,7 @@
                 <div class="skeleton skeleton--code"></div>
                 <div class="skeleton skeleton--text-short" style="margin-top: 8px;"></div>
             }
-            else if (!ReservationState.IsCodeAvailable && !_debugMode)
+            else if (!ReservationState.IsCodeAvailable && !_debugMode && !IsDevMockLock)
             {
                 @if (ReservationState.IsAfterCheckOut)
                 {
@@ -175,7 +176,7 @@
                     </div>
                 }
 
-                @if ((ReservationState.IsActiveReservation || _debugMode))
+                @if ((ReservationState.IsActiveReservation || _debugMode || IsDevMockLock))
                 {
                     <div style="margin-top: 14px;">
                         <button class="retry-button"
@@ -189,21 +190,13 @@
                                     Localizer["GeneratingCode"],
                                     LocksState.PasscodeLoadingElapsedSeconds)</span>
                             }
-                            else if (LocksState.GenerationBlockReason == "same_hour" && !_debugMode)
+                            else if (LocksState.LiveCooldownSecondsRemaining > 0 && !_debugMode)
                             {
                                 <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" />
                                 @string.Format(
                                     CultureInfo.CurrentCulture,
                                     Localizer["NewCodeIn"],
                                     FormatCooldown(LocksState.LiveCooldownSecondsRemaining))
-                            }
-                            else if (LocksState.GenerationBlockReason == "before_checkin" && !_debugMode)
-                            {
-                                <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" />
-                                @string.Format(
-                                    CultureInfo.CurrentCulture,
-                                    Localizer["GenerateAvailableFrom"],
-                                    ReservationState.CheckInTime.ToString("HH:mm"))
                             }
                             else
                             {
@@ -219,7 +212,7 @@
     @{
         var hasHistory = LocksState.AllCodes.Count > 1;
     }
-    @if (hasHistory && (ReservationState.IsActiveReservation || _debugMode) && !ReservationState.IsLoading && !LocksState.IsLoading)
+    @if (hasHistory && (ReservationState.IsActiveReservation || _debugMode || IsDevMockLock) && !ReservationState.IsLoading && !LocksState.IsLoading)
     {
         <div class="tile passcode-history-tile">
             <button class="passcode-history__toggle" @onclick="TogglePasscodeHistory">
@@ -314,11 +307,11 @@
                     <div class="instruction-content">
                         @if (ActiveInstructionMode == InstructionMode.Open)
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderOpen)
+                            @FormatInstructionText(Localizer["InstructionCylinderOpen"])
                         }
                         else
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.CylinderClose)
+                            @FormatInstructionText(Localizer["InstructionCylinderClose"])
                         }
                     </div>
                 </div>
@@ -332,11 +325,11 @@
                     <div class="instruction-content">
                         @if (ActiveInstructionMode == InstructionMode.Open)
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelOpen)
+                            @FormatInstructionText(Localizer["InstructionPanelOpen"])
                         }
                         else
                         {
-                            @FormatInstructionText(ApartmentState.LockInstructions?.PanelClose)
+                            @FormatInstructionText(Localizer["InstructionPanelClose"])
                         }
                     </div>
                 </div>
@@ -359,8 +352,10 @@
 
     private DotNetObjectReference<OpenApartmentPage>? _dotNetRef;
 
+    private bool IsDevMockLock => FeatureFlagsService.FeatureAllowed("dev-mock-lock");
+
     private bool IsGenerateButtonEnabled =>
-        LocksState.IsPasscodeGenerationAllowed;
+        LocksState.IsPasscodeGenerationAllowed || IsDevMockLock;
 
     private async Task SetSlide(int index)
     {
@@ -380,14 +375,18 @@
     private string? ErrorMessage;
 
     private bool IsButtonDisabled =>
-        ReservationState?.CurrentReservation?.Reservation?.ReservationDetails
-            == null
-        || DateTime.Now
-            < ReservationState
-                .CurrentReservation
-                .Reservation
-                .ReservationDetails
-                .getDateFrom();
+        !_debugMode
+        && !IsDevMockLock
+        && (
+            ReservationState?.CurrentReservation?.Reservation?.ReservationDetails
+                == null
+            || DateTime.Now
+                < ReservationState
+                    .CurrentReservation
+                    .Reservation
+                    .ReservationDetails
+                    .getDateFrom()
+        );
 
     private string RetryButtonText =>
         LocksState.IsRetryCountdownActive
@@ -448,47 +447,23 @@
 
     private async Task HandleGeneratePasscode()
     {
-        if (string.IsNullOrWhiteSpace(Token)) return;
-
-        if (!LocksState.IsPasscodeGenerationAllowed && !_debugMode)
+        if (IsDevMockLock)
         {
-            if (LocksState.GenerationBlockReason == "before_checkin")
-            {
-                ToastService.ShowToast(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Localizer["GenerateAvailableFrom"],
-                        ReservationState.CheckInTime.ToString("HH:mm")));
-            }
-            else if (LocksState.GenerationBlockReason == "same_hour")
-            {
-                ToastService.ShowToast(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Localizer["NewCodeIn"],
-                        FormatCooldown(LocksState.LiveCooldownSecondsRemaining)));
-            }
+            await LocksState.GenerateDevMockPasscodeAsync(Token);
+            ToastService.ShowToast(Localizer["PasscodeGeneratedSuccess"]);
             return;
         }
+
+        if (string.IsNullOrWhiteSpace(Token)) return;
 
         var previousPwdId = LocksState.CurrentCode?.KeyboardPwdId;
 
         await LocksState.GeneratePasscodeAsync(Token);
 
-        if (LocksState.CurrentCode is not null && !LocksState.IsPasscodeLoading)
+        if (LocksState.CurrentCode is not null && !LocksState.IsPasscodeLoading
+            && LocksState.CurrentCode.KeyboardPwdId != previousPwdId)
         {
-            if (LocksState.CurrentCode.KeyboardPwdId != previousPwdId)
-            {
-                ToastService.ShowToast(Localizer["PasscodeGeneratedSuccess"]);
-            }
-            else if (LocksState.LiveCooldownSecondsRemaining > 0)
-            {
-                ToastService.ShowToast(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Localizer["NewCodeIn"],
-                        FormatCooldown(LocksState.LiveCooldownSecondsRemaining)));
-            }
+            ToastService.ShowToast(Localizer["PasscodeGeneratedSuccess"]);
         }
     }
 
@@ -520,7 +495,19 @@
                 _ = LocksState.CheckTTLockStatusAsync(Token);
             }
 
-            _ = LocksState.LoadAccessCodesAsync(Token);
+            if (IsDevMockLock)
+            {
+                _ = Task.Run(async () =>
+                {
+                    await LocksState.LoadAccessCodesAsync(Token);
+                    await LocksState.RestoreDevMockCodesAsync(Token);
+                    await LocksState.EnsureInitialDevMockCodeAsync(Token);
+                });
+            }
+            else
+            {
+                _ = LocksState.LoadAccessCodesAsync(Token);
+            }
         }
 
         LoadLockInstructions();
@@ -548,6 +535,22 @@
     private async Task ToggleDoor()
     {
         if (IsButtonDisabled || IsProcessing) return;
+
+        if (IsDevMockLock)
+        {
+            IsProcessing = true;
+            ErrorMessage = null;
+            try
+            {
+                await Task.Delay(1000);
+                IsOpened = !IsOpened;
+            }
+            finally
+            {
+                IsProcessing = false;
+            }
+            return;
+        }
 
         IsProcessing = true;
         ErrorMessage = null;

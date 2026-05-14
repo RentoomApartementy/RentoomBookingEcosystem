@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – egyedi élményeket teremtünk a Toruńban való tartózkodás során
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Kényelmes lakást keresel Toruńban?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Lakások Toruńban – kényelmes szállás</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Kényelmes lakást keresel Toruńban?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>A Rentoom Apartamenty egy modern, rövid távú bérbeadási márka, amely a magas színvonalú szállást ötvözi a Toruń hiteles ismeretével. Olyan helyeket hozunk létre, amelyek a kényelem, az esztétika és a funkcionalizmus szem előtt tartva terveztek – mind turisták, mind üzleti vendégek számára.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Örülünk, hogy hozzánk jöttél!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Kínálatunk során tucatnyi gondosan kiválasztott lakást foglal magában a város legvonzóbb részein. Minden helyszínt úgy választottak, hogy könnyű hozzáférést biztosítsanak a kulcsfontosságú látnivalókhoz, éttermekhez és üzleti zónákhoz.
+Minden lakás egy olyan hely, amely valódi pihenést és magánszférát biztosít egy intenzív városnézés vagy munkanap után.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Lakások a legjobb helyeken Toruńban</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Elégedett ügyfelek</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Lakások Toruńban
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Elhelyezkedés Toruńban</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Miért Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>A Rentoom Apartments több, mint egy éjszakás tartózkodás Toruńban. Magas színvonalú lakásokat kínálunk a legjobb helyszíneken, és valódi előnyöket kínálunk, amelyek növelik az egész tartózkodás értékét.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Partnerprogramunk részeként a vendégek különleges kedvezményekhez férnek hozzá kiválasztott éttermekhez, kávézókhoz és turisztikai látványosságokhoz. A jelenlegi kedvezmények és ajánlások közvetlenül a lakásokban találhatók, így bevált helyeket használhatsz és pénzt takaríthatsz meg a városnézés során.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Csak megbízható, helyi partnerekkel dolgozunk együtt, és minden ajánlás minőségére törekedünk. A Rentoom választásával kényelmet, professzionális szolgáltatást és további előnyöket kapsz, amelyek kényelmesebbé, kifinomultabbá és egyszerűen jövedelmezőbbé teszik tartózkodásodat Toruńban.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Ismerd meg azok véleményét, akik aludtak a toruńi lakásainkban.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Adja meg elérhetőségét, és visszahívunk!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Kapcsolatfelvétel a beszállítóval</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Elfogadom a fenti űrlapon megadott személyes adataimat feldolgozni</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Név</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Vezetéknév</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Elküldöm</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Mi különbözteti meg a lakásainkat másoktól?
+
+</value>
+  </data>
+</root>

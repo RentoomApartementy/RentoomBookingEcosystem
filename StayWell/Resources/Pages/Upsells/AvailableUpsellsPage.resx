@@ -32,4 +32,109 @@
     
     
   <value>No add-ons available</value></data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>one-time</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>person/day</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Tap for details</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Valid from</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Remaining</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Valid for the duration of your stay. Must present coupon code at time of service.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Valid to</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>stay</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>nights</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR unavailable</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Voucher usage</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Enlarge</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>apartment/day</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Terms &amp; Conditions</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>Voucher QR code</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Available add-ons to buy</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Used</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Show this code to staff to redeem the voucher.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Your code</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Show at restaurant</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Vouchers</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Code to enter manually</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>guests</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Show voucher code</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>No limit</value>
+  </data>
 </root>

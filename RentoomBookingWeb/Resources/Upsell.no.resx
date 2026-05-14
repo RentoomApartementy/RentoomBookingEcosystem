@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ListTitle" xml:space="preserve">
+    <value>Gjør oppholdet ditt mer hyggelig</value>
+  </data>
+  <data name="ListSubtitle" xml:space="preserve">
+    <value>Eksklusive tilbud for din bestilling</value>
+  </data>
+  <data name="TermsDescription" xml:space="preserve">
+    <value>Gyldig for hele oppholdet. Påkrevd å vise kode ved innløsning.</value>
+  </data>
+  <data name="TermsTitle" xml:space="preserve">
+    <value>Vilkår og betingelser</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Netter</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Gjester</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beskrivelse</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Slett</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Se detaljer</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Legg til</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Pris</value>
+  </data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve">
+    <value>pers./dag</value>
+  </data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve">
+    <value>leilighet/dag</value>
+  </data>
+  <data name="PricingPerStay" xml:space="preserve">
+    <value>Bli</value>
+  </data>
+  <data name="PricingOneTime" xml:space="preserve">
+    <value>Engangs</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Lenke</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detaljer</value>
+  </data>
+  <data name="ShowVoucherCode" xml:space="preserve">
+    <value>Vis kupongkode</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>Koden din</value>
+  </data>
+  <data name="ManualCodeLabel" xml:space="preserve">
+    <value>Kode som skal tastes inn manuelt</value>
+  </data>
+  <data name="VoucherQrAlt" xml:space="preserve">
+    <value>QR-kupongkode</value>
+  </data>
+  <data name="QrUnavailable" xml:space="preserve">
+    <value>QR er ikke tilgjengelig</value>
+  </data>
+  <data name="Enlarge" xml:space="preserve">
+    <value>Forstør</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="VoucherUsageTitle" xml:space="preserve">
+    <value>Innløsning av kuponger</value>
+  </data>
+  <data name="VoucherStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="VoucherUsedCount" xml:space="preserve">
+    <value>Brukt</value>
+  </data>
+  <data name="VoucherRemaining" xml:space="preserve">
+    <value>Annet</value>
+  </data>
+  <data name="VoucherValidFrom" xml:space="preserve">
+    <value>Gyldig fra</value>
+  </data>
+  <data name="VoucherValidTo" xml:space="preserve">
+    <value>Gyldig for</value>
+  </data>
+  <data name="VoucherNoLimit" xml:space="preserve">
+    <value>Ingen grense</value>
+  </data>
+  <data name="ShowInRestaurant" xml:space="preserve">
+    <value>Show i restaurant</value>
+  </data>
+  <data name="VoucherCode" xml:space="preserve">
+    <value>Kode</value>
+  </data>
+  <data name="VoucherOverlayHint" xml:space="preserve">
+    <value>Vis denne koden til personalet for å løse inn kupongen din.</value>
+  </data>
+</root>

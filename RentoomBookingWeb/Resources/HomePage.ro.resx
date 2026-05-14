@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – creăm experiențe unice de ședere în Toruń
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Cauți un apartament confortabil în Toruń?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Apartamente în Toruń – cazare confortabilă</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Cauți un apartament confortabil în Toruń?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenty este un brand modern de închiriere pe termen scurt care combină un standard ridicat de cazare cu cunoștințe autentice despre Toruń. Creăm spații concepute având în vedere confortul, estetica și funcționalitatea – atât pentru turiști, cât și pentru oaspeți de afaceri.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Ne bucurăm că ați venit la noi!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Oferta noastră include zeci de apartamente atent selectate în cele mai atractive zone ale orașului. Fiecare locație a fost aleasă pentru a oferi acces facil la principalele atracții, restaurante și zone de afaceri.
+Fiecare apartament este un spațiu conceput pentru a oferi odihnă reală și intimitate după o zi intensă de vizitare turistică sau muncă.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Apartamente în cele mai bune locații din Toruń</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Clienți mulțumiți</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Apartamente în Toruń
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Locație în Toruń</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>De ce Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Apartamentele Rentoom sunt mai mult decât o simplă cazare peste noapte în Toruń. Oferim un standard ridicat de apartamente în cele mai bune locații și beneficii reale care cresc valoarea întregii șederi.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Ca parte a Programului nostru de Parteneri, oaspeții au acces la reduceri speciale la restaurante, cafenele și atracții turistice selectate. Reducerile și recomandările actuale se află direct în apartamente, astfel încât să poți folosi locuri consacrate și să economisești bani în timpul turismului.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Lucrăm doar cu parteneri locali de încredere, având grijă de calitatea fiecărei recomandări. Alegând Rentoom, câștigi confort, servicii profesionale și beneficii suplimentare care fac șederea ta în Toruń mai confortabilă, mai rafinată și pur și simplu mai profitabilă.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Află părerile celor care au dormit în apartamentele noastre din Toruń.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Lăsați-vă datele de contact și vă vom contacta!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Contactează furnizorul</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Sunt de acord cu prelucrarea datelor mele personale furnizate în formularul de mai sus</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Nume</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Nume de familie</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Trimite</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Ce diferențiază apartamentele noastre de altele?
+
+</value>
+  </data>
+</root>

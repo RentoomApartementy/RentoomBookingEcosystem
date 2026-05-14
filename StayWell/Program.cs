@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using RentoomBooking.SharedClasses;
+using RentoomBooking.SharedFrontend.Localization;
 using RentoomBooking.StayWell.Services;
 using RentoomBooking.StayWell.States;
 using System.Text.Json;
@@ -33,9 +34,14 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<ModalService>();
             builder.Services.AddScoped<BitrixService>();
             builder.Services.AddScoped<AiChatClientService>();
+            builder.Services.AddScoped<LiveChatClientService>();
             builder.Services.AddScoped<SafeMarkdownService>();
             builder.Services.AddScoped<UpsellCartState>();
+            builder.Services.AddScoped<UpsellTextsState>();
+            builder.Services.AddScoped<FeatureFlagsService>();
 
+            builder.Services.AddScoped<LiveChatNotificationState>();
+            builder.Services.AddScoped<LiveChatSettingsService>();
             builder.Services.AddScoped<ReservationState>();
             builder.Services.AddScoped<MediaState>();
             builder.Services.AddScoped<AmenitiesState>();
@@ -90,7 +96,11 @@ namespace RentoomBooking.StayWell
             // culture on the very first render and Safari/iOS never recovers.
             var js = host.Services.GetRequiredService<Microsoft.JSInterop.IJSRuntime>();
             var savedCulture = await js.InvokeAsync<string>("blazorCulture.get", System.Array.Empty<object>());
-            var cultureName = string.IsNullOrWhiteSpace(savedCulture) ? "en-US" : savedCulture;
+            var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames;
+            var cultureName = !string.IsNullOrWhiteSpace(savedCulture) &&
+                              supportedCultures.Contains(savedCulture, StringComparer.OrdinalIgnoreCase)
+                ? savedCulture
+                : SupportedLanguagesProvider.DefaultCultureName;
             var startupCulture = new System.Globalization.CultureInfo(cultureName);
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture = startupCulture;
             System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = startupCulture;

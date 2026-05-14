@@ -239,4 +239,7 @@
     
     
   <value>Czy na pewno chcesz cofnąć tę zgodę?</value></data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Zobacz dokument</value>
+  </data>
 </root>

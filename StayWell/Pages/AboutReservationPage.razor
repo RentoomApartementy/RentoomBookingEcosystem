@@ -5,9 +5,12 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @using RentoomBooking.SharedClasses.Models
 @using RentoomBooking.StayWell.States
+@using RentoomBooking.StayWell.Services
 @inject IStringLocalizer<AboutReservationPage> Localizer
 @inject NavigationManager Navigation
 @inject CustomerAgreedTermsState CustomerAgreedTermsState
+@inject BackendApi BackendApi
+@inject IJSRuntime JSRuntime
 @inherits Models.PageBase
 
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
@@ -227,22 +230,46 @@
                         @foreach (var term in CustomerAgreedTermsState.Terms.Where(t => t.IsRequired))
                         {
                             var capturedTerm = term;
-                            <div class="consent-toggle consent-toggle--disabled">
-                                <ToggleSwitch Value="capturedTerm.IsAccepted"
-                                              ValueChanged="EventCallback<bool>.Empty"
-                                              Text="@capturedTerm.Description"
-                                              Description="@capturedTerm.AgreedAt.ToString("dd.MM.yyyy HH:mm")" />
+                            var displayTerm = _termDisplayDict.GetValueOrDefault(capturedTerm.TermsSourceId);
+                            var hasContent = displayTerm is not null && (!string.IsNullOrEmpty(displayTerm.HtmlContent) || !string.IsNullOrEmpty(displayTerm.Link));
+                            <div class="consent-row">
+                                <div class="consent-toggle consent-toggle--disabled">
+                                    <ToggleSwitch Value="capturedTerm.IsAccepted"
+                                                  ValueChanged="EventCallback<bool>.Empty"
+                                                  Text="@capturedTerm.Description"
+                                                  Description="@capturedTerm.AgreedAt.ToString("dd.MM.yyyy HH:mm")" />
+                                </div>
+                                @if (hasContent)
+                                {
+                                    <button class="view-terms-btn"
+                                            @onclick="() => ShowTermContent(displayTerm!)"
+                                            title="@Localizer["ViewDocument"]">
+                                        <img src="/icons/external-link.svg" alt="" />
+                                    </button>
+                                }
                             </div>
                         }
                         @foreach (var term in CustomerAgreedTermsState.Terms.Where(t => !t.IsRequired))
                         {
                             var capturedTerm = term;
                             var displayValue = GetDisplayValue(capturedTerm);
-                            <div class="consent-toggle">
-                                <ToggleSwitch Value="displayValue"
-                                              ValueChanged="(val) => OnTermToggled(capturedTerm, val)"
-                                              Text="@capturedTerm.Description"
-                                              Description="@capturedTerm.AgreedAt.ToString("dd.MM.yyyy HH:mm")" />
+                            var displayTerm = _termDisplayDict.GetValueOrDefault(capturedTerm.TermsSourceId);
+                            var hasContent = displayTerm is not null && (!string.IsNullOrEmpty(displayTerm.HtmlContent) || !string.IsNullOrEmpty(displayTerm.Link));
+                            <div class="consent-row">
+                                <div class="consent-toggle">
+                                    <ToggleSwitch Value="displayValue"
+                                                  ValueChanged="(val) => OnTermToggled(capturedTerm, val)"
+                                                  Text="@capturedTerm.Description"
+                                                  Description="@capturedTerm.AgreedAt.ToString("dd.MM.yyyy HH:mm")" />
+                                </div>
+                                @if (hasContent)
+                                {
+                                    <button class="view-terms-btn"
+                                            @onclick="() => ShowTermContent(displayTerm!)"
+                                            title="@Localizer["ViewDocument"]">
+                                        <img src="/icons/external-link.svg" alt="" />
+                                    </button>
+                                }
                             </div>
                         }
                     </div>
@@ -283,6 +310,7 @@
 
     private Dictionary<int, bool> _overrides = [];
     private CustomerAgreedTermDto? _pendingCancelTerm;
+    private Dictionary<int, CustomerTermDisplayDto> _termDisplayDict = [];
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
     private ApartmentObject? Apartment => ApartmentState?.CurrentApartment;
@@ -299,6 +327,7 @@
             CustomerAgreedTermsState.OnChange += OnTermsChanged;
             ModalService.OnClose += OnModalClosed;
             await CustomerAgreedTermsState.LoadAsync(Token, CultureInfo.CurrentUICulture.Name);
+            await LoadTermDisplayAsync();
         }
     }
 
@@ -324,6 +353,36 @@
         base.Dispose();
         CustomerAgreedTermsState.OnChange -= OnTermsChanged;
         ModalService.OnClose -= OnModalClosed;
+    }
+
+    private async Task LoadTermDisplayAsync()
+    {
+        try
+        {
+            var language = CultureInfo.CurrentUICulture.Name;
+            var terms = await BackendApi.GetTermsForDisplayAsync(language);
+            _termDisplayDict = terms.ToDictionary(t => t.Id);
+        }
+        catch
+        {
+            // Display terms unavailable; buttons simply won't show
+        }
+    }
+
+    private void ShowTermContent(CustomerTermDisplayDto term)
+    {
+        if (!string.IsNullOrEmpty(term.Link) && string.IsNullOrEmpty(term.HtmlContent))
+        {
+            _ = JSRuntime.InvokeVoidAsync("open", term.Link, "_blank");
+            return;
+        }
+
+        var title = term.Title ?? term.Description ?? Localizer["TOS"];
+        ModalService.ShowModal(title,
+            @<div class="terms-modal-content">
+                @((MarkupString)(term.HtmlContent ?? ""))
+            </div>
+        );
     }
 
     private void ShowAmenities()

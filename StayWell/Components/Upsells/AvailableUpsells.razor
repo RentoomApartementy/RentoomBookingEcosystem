@@ -220,8 +220,14 @@
             return;
         }
 
+        if (AvailableUpsellsState.IsLoading) return;
         var upsells = AvailableUpsellsState.AvailableUpsells;
         if (!upsells.Any())
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(_scrollRef.Id))
         {
             return;
         }
@@ -298,6 +304,7 @@
     private void OnAvailableUpsellsStateChanged()
     {
         _jsInitialized = false;
+        _scrollRef = default;
         InvokeAsync(StateHasChanged);
     }
 

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Πριν αποκτήσετε πρόσβαση στην αίτησή σας, συμπληρώστε την Κάρτα Εγγραφής!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα κατά την αποθήκευση των δεδομένων. Παρακαλώ προσπαθήστε ξανά.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Επιλέξτε την ώρα check-in</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Συμπληρώστε τα στοιχεία του επισκέπτη</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Γεια σας,</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Συμπληρώστε τα στοιχεία του επισκέπτη</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Κάρτα εγγραφής</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Εισάγετε τη διεύθυνση email σας</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Αποθηκεύστε και προχωρήστε</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Συμπληρώστε τις απαραίτητες πληροφορίες.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Διεύθυνση αλληλογραφίας</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Αλλάξτε την ώρα από {0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Πατώντας το παρακάτω κουμπί, επιβεβαιώνω την ορθότητα των δεδομένων.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Επιλέξτε την εκτιμώμενη ώρα άφιξης</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Αλλαγή δεδομένων επισκέπτη</value>
+  </data>
+</root>

@@ -1,30 +1,27 @@
 ﻿@using RentoomBooking.SharedClasses.Models.Upsell
 @using RentoomBooking.StayWell.States
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.StayWell.Pages
 @inject UpsellCartState UpsellCartState
 @inject NavigationManager Navigation
+@inject IStringLocalizer<HomePage> Localizer
 @implements IDisposable
 
 @if (!UpsellCartState.IsEmpty && IsOnAllowedPage)
 {
     <div class="upsell-cart-bar-container">
         <div class="upsell-cart-bar">
-            <div class="upsell-cart-bar-top">
-                <button class="upsell-cart-bar-dismiss" @onclick="DismissCart" title="Wyczyść koszyk">
-                    <img style="filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(317deg) brightness(107%) contrast(102%);"
-                         src="/icons/x.svg" />
-                </button>
-                <div class="upsell-cart-bar-info">
-                    <span class="upsell-cart-bar-count">dodatki: @UpsellCartState.TotalQuantity</span>
-                    @if (UpsellCartState.TotalCombinedPrice > 0)
-                    {
-                        <span class="upsell-cart-bar-total">
-                            @UpsellCartState.TotalCombinedPrice.ToString("F2") @UpsellCartState.Currency
-                        </span>
-                    }
-                </div>
+            <div class="upsell-cart-bar-info">
+                <span class="upsell-cart-bar-count">@Localizer["AddonsLabel"]: @UpsellCartState.TotalQuantity</span>
+                @if (UpsellCartState.TotalCombinedPrice > 0)
+                {
+                    <span class="upsell-cart-bar-total">
+                        @UpsellCartState.TotalCombinedPrice.ToString("F2") @UpsellCartState.Currency
+                    </span>
+                }
             </div>
             <button class="upsell-cart-bar-btn" @onclick="GoToCart">
-                Przejdź do koszyka
+                <img src="/icons/shopping-cart.svg" alt="@Localizer["CartButtonAlt"]" class="upsell-cart-btn-icon" />
             </button>
         </div>
     </div>
@@ -66,8 +63,5 @@
     private void GoToCart() =>
         Navigation.NavigateTo($"/reservation/{Token}/UpsellsCartPage");
 
-    private void DismissCart()
-    {
-        UpsellCartState.Clear();
-    }
+
 }

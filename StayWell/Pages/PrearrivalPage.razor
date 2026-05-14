@@ -95,7 +95,7 @@
             <div class="ct">@Localizer["AdultsNumber"] </div>
             <div class="cd">@ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfAdults</div>
         </div>
-        @if (ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren != "0")
+        @if (int.TryParse(ReservationState?.CurrentReservation?.Reservation.Items.FirstOrDefault()?.numberOfSmallChildren, out var _childrenCount) && _childrenCount > 0)
         {
             <div class="row">
                 <div class="ct">@Localizer["ChildrenNumber"] </div>
@@ -127,7 +127,7 @@
         if (RegistrationCardState.IsFilled)
         {
             NavigationManager.NavigateTo($"/reservation/{Token}");
-            ToastService.ShowToast(Localizer["NoAccessToPage"]);
+            //ToastService.ShowToast(Localizer["NoAccessToPage"]);
             LayoutState.ShowFooter = true;
         }
         else

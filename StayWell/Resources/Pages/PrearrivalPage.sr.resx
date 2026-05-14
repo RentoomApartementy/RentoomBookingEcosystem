@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Prihvatiti</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Odobri</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Broj odraslih</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Jedva čekamo!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Promenite podatke o gostima</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Smeštaj</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Pretraživanje</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Broj dece</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Potvrđujem</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Nastavi</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dana</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Popunite obrazac za prijavu i prihvatite uslove i odredbe da biste dobili pristup panelu.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Popunjen</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Popunite detalje o gostima</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Molimo vas da navedete detalje o svim ljudima koji će boraviti u objektu.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Gost</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Radno vreme</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Zapisnik</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Ime i prezime</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Sledeće</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Broj telefona</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Vaš panel za rezervacije je sada dostupan!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Registraciona kartica</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Podaci sačuvani uspešno!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Prihvatam obavezu da prijavim bilo kakvu štetu i komentare prilikom prijave.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Prihvatam zabranu pušenja duvanskih proizvoda i elektronskih cigareta unutar objekta.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Zabranjeno je organizovanje događaja i prihvatanje trećih lica koja nisu uključena u rezervaciju.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Hotelski dan traje od jednog sata </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>po dolasku do jednog sata</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>na dan odlaska.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Prezime</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>PROPISI IZNAJMLJIVANJA  
+Uslovi i Ugovor definišu uslove rezervacije i iznajmljivanja stanova koji su predmet iznajmljivanja od strane Rentoom-a   
+Apartamenty Sp. z o.o. (Stanodavac), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 u korist stanara.  
+1. Rezervacija ili iznajmljivanje smeštaja je jednako čitanju i prihvatanju odredaba Uslova i odredbi i   
+Sporazumi.  
+2. Nadležni sud za rešavanje sporova biće Sud u Torunu.  
+KSNUMKS. Stanodavac zadržava pravo da odbije da prihvati gosta koji: nema važeći dokument   
+ličnu kartu (tj. ličnu kartu ili pasoš) ili ne želi da predoči dokument, je pod uticajem alkohola ili  
+druge narkotike, tokom prethodnog boravka prekršio je odredbe Pravilnika.  
+4. Stanodavac zadržava pravo da odmah raskine ugovor sa gostom koji prekine  
+Propisi o iznajmljivanju, bez prava na povraćaj naknade za rezervaciju. Gost će biti u obavezi da odmah   
+napuštanje prostorija.  
+5. Hotelski dan traje od 15:00 do 11:00 sledećeg dana.  
+6. Na dan odlaska, stanar je dužan da preda stan do 11:00 časova, u suprotnom   
+Naknada će biti dodana u iznosu od sledećeg započetog dana + 50%.  
+7. Pušenje u apartmanima je strogo zabranjeno. Za kršenje zabrane pušenja u stanu   
+Stanar je dužan da plati dodatnu naknadu od 500 PLN (pet stotina).  
+8. Zabranjeno je koristiti električnu opremu koja nije deo stana i koja je  
+opasnost od požara.  
+9. Stanar je dužan da obezbedi bilo kakvo oštećenje ili neispravnost opreme stana   
+odmah obavestite stanodavca.  
+10. Kućni ljubimci su dozvoljeni samo uz dozvolu stanodavca. Naknada za kućnog ljubimca iznosi 50 PLN za ceo boravak.  
+11. Mirno vreme u iznajmljenom stanu je između 22:00 i 6:00 časova. Ljudi   
+Ako niste registrovani u apartmanu, možete posetiti samo do 23:00 časova.  
+12. Organizovanje društvenih događaja u stanu je potpuno zabranjeno. Za organizaciju događaja   
+Zakupac će platiti dodatnu naknadu od PLN KSNUMKS + dodatne gubitke stanodavcu   
+nastala od strane stanodavca. Sva oštećenja na iznajmljenom stanu i zgradi su odgovornost   
+osoba stanara. Stanar je odgovoran za svu štetu nastalu usled ponašanja trećih lica koja borave u  
+sa njom u stanu – pozvana u stan/zgradu od strane ove osobe. U slučaju intervencije policije   
+ili opštinskoj gardi, stanodavac će stanaru naplatiti dodatnu naknadu od 500 PLN (pet stotina zlota).  
+13. Broj osoba koje borave u apartmanu ne sme biti veći od broja navedenog prilikom rezervacije. Izjava   
+nepravilnosti u tom pogledu rezultiraju obračunom dodatne naknade od PLN KSNUMKS za svaku od   
+osobe registrovane za svaku noć boravka.  
+14. Gosti su dužni da pravilno obezbede apartman, odnosno da temeljno zatvore sva vrata   
+ulaz i prozori pre svakog napuštanja stana i za skladištenje   
+ključevi / kodovi / daljinski upravljači bez mogućnosti neovlašćenog pristupa njima.  
+KSNUMKS. Stanodavac nije odgovoran za oštećene ili izgubljene dragocenosti ostavljene u stanu.  
+16. U slučaju gubitka / uništenja ključa stana ili daljinskog upravljača garaže, naknada će se naplaćivati u   
+200 PLN za svaki komad.  
+17. Završno čišćenje je uključeno u cenu boravka. Međutim, Gost je dužan da napusti nakon   
+oprao posuđe i polovnu opremu. Ove aktivnosti nisu suština završnog čišćenja.  
+18. Svako dodatno čišćenje na poseban zahtev stanodavca plaća se u skladu sa iznosom naknade  
+benzinska pumpa. Posteljina i peškiri su zamenjeni.  
+19. Komunalne takse koje obezbeđuje stanodavac su uključene u cenu boravka.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruń  
+www.rentoom.pl | tel. +48 881 388 001  
+KSNUMKS. Stanar je finansijski odgovoran za svu štetu / krađe nastale u stanu tokom boravka.  
+21. Molimo Vas da nas odmah obavestite ako postoji bilo kakav nesporazum ili ako ne  
+zadovoljni našim uslugama. Mi ćemo se potruditi da temeljno istražimo problem i rešimo ga.  
+22. Stanodavac može naplatiti depozit do 1.000 PLN od gostiju za rezervacije, koji se mogu vratiti do pet dana   
+rad nakon odjavljivanja.  
+23. Stanodavac ima pravo da traži naknadu za iznos naknada u svakom slučaju  
+dodatni.  
+24. Zakupac ima pravo da se žali na uslugu. Žalbe se podnose elektronskom poštom na adresu: reklamacje@rentoom.pl  
+ili preporučenim pismom na poštansku adresu. Odgovor će biti dostavljen u roku od 14 dana od dostavljanja.  
+Propisi o iznajmljivanju na engleskom jeziku dostupni su na www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Ostalo je još mnogo toga da ostane</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Izaberite svoje približno vreme dolaska</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Vreme dolaska</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Izabrali ste vreme</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Izaberite sve saglasnosti</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Učitavanje...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Već prihvaćeno</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Obavezno</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Pogledaj dokument</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Pogledajte kompletne uslove i odredbe</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Uslovi korišćenja</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Ne znam još</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Samo slova, razmaci, crtice i apostrofi</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Nije uspelo da učita saglasnosti. Pokušajte ponovo.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Ponovi</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Svoje opcione saglasnosti možete promeniti u bilo kom trenutku na stranici "O rezervaciji".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Uslovi korišćenja</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Greška pisanja podataka.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Ne možete pristupiti ovoj stranici.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Uslovi korišćenja i saglasnosti</value>
+  </data>
+</root>

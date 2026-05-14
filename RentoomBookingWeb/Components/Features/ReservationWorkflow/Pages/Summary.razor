@@ -297,6 +297,20 @@
                         </div>
                     }
                 </div>
+
+                @if (!IsPaid && !IsPaymentInitiated)
+                {
+                    <BonusCodeBox
+                        BonusCode="@_bonusInputName"
+                        BonusCodeChanged="OnBonusCodeChanged"
+                        OnApply="ApplyBonusAsync"
+                        IsApplying="@_isApplyingBonus"
+                        StatusMessage="@_bonusStatusMessage"
+                        IsError="@_bonusStatusIsError"
+                        AppliedBonusName="@_summary?.AppliedBonusName"
+                        DiscountAmount="@(_summary?.DiscountAmountPln ?? 0m)"
+                        Localizer="Localizer" />
+                }
                 
                 <div class="guest-info">
                     <div class="box-text">
@@ -387,6 +401,10 @@
 
     private const int RetryPaymentDelaySeconds = 30;
     private bool _summaryViewedTracked;
+    private string _bonusInputName = string.Empty;
+    private string? _bonusStatusMessage;
+    private bool _bonusStatusIsError;
+    private bool _isApplyingBonus;
 
     private bool IsPaid => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
@@ -476,6 +494,83 @@
         }
     }
 
+    private Task OnBonusCodeChanged(string value)
+    {
+        _bonusInputName = value ?? string.Empty;
+        _bonusStatusMessage = null;
+        _bonusStatusIsError = false;
+        return Task.CompletedTask;
+    }
+
+    private async Task ApplyBonusAsync()
+    {
+        if (_isApplyingBonus || _summary?.StartRequest is null)
+        {
+            return;
+        }
+
+        _isApplyingBonus = true;
+        _bonusStatusMessage = null;
+        _bonusStatusIsError = false;
+
+        try
+        {
+            var startRequest = _summary.StartRequest;
+            var normalized = _bonusInputName.Trim();
+            var previousBonusCode = startRequest.BonusInputName ?? string.Empty;
+            var hadPreviousAppliedBonus = ((_summary?.DiscountAmountPln ?? 0m) > 0m) && !string.IsNullOrWhiteSpace(previousBonusCode);
+            startRequest.BonusInputName = normalized;
+
+            if (string.IsNullOrWhiteSpace(normalized))
+            {
+                startRequest.AppliedBonusId = null;
+                startRequest.AppliedBonusName = null;
+                startRequest.AppliedBonusValueType = null;
+                startRequest.AppliedBonusValue = 0m;
+                startRequest.BonusBasePln = 0m;
+                startRequest.DiscountAmountPln = 0m;
+                startRequest.BonusRejectReason = null;
+            }
+
+            await ReservationWorkflowService.UpdateStartRequestAsync(ReservationTokenGuid, startRequest);
+            await RefreshSummaryAsync();
+            await EnsureWorkflowChecksAsync();
+
+            if (string.IsNullOrWhiteSpace(normalized))
+            {
+                _bonusStatusIsError = false;
+                _bonusStatusMessage = Localizer["BonusRemovedMessage"];
+            }
+            else if ((_summary?.DiscountAmountPln ?? 0m) > 0m && !string.IsNullOrWhiteSpace(_summary?.AppliedBonusName))
+            {
+                _bonusStatusIsError = false;
+                _bonusStatusMessage = Localizer["BonusAppliedMessage", _summary!.DiscountAmountPln.ToString("N2", CultureInfo.CurrentCulture)];
+            }
+            else
+            {
+                if (hadPreviousAppliedBonus)
+                {
+                    startRequest.BonusInputName = previousBonusCode;
+                    await ReservationWorkflowService.UpdateStartRequestAsync(ReservationTokenGuid, startRequest);
+                    await RefreshSummaryAsync();
+                    _bonusInputName = previousBonusCode;
+                }
+
+                _bonusStatusIsError = true;
+                _bonusStatusMessage = GetBonusMessageFromReason(_summary?.BonusRejectReason);
+            }
+        }
+        catch (Exception ex)
+        {
+            _bonusStatusIsError = true;
+            _bonusStatusMessage = $"{Localizer["BonusReasonUnknown"]} {ex.Message}";
+        }
+        finally
+        {
+            _isApplyingBonus = false;
+        }
+    }
+
     private async Task CancelReservation()
     {
         if (_isCancellingReservation)
@@ -536,6 +631,7 @@
     private async Task RefreshSummaryAsync()
     {
         _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+        _bonusInputName = _summary?.StartRequest?.BonusInputName ?? string.Empty;
 
         if (string.Equals(_summary?.IdoStatus, "canceled", StringComparison.OrdinalIgnoreCase))
         {
@@ -865,6 +961,21 @@
         IsRetryPaymentDisabled
             ? $"{Localizer["TryAgain"]} ({_retryCountdownSeconds}s)"
             : Localizer["TryAgain"];
+
+    private string GetBonusMessageFromReason(string? reason) => reason switch
+    {
+        "not_found" => Localizer["BonusReasonNotFound"],
+        "disabled" => Localizer["BonusReasonDisabled"],
+        "invalid_target" => Localizer["BonusReasonInvalidTarget"],
+        "outside_reservation_dates" => Localizer["BonusReasonOutsideReservationDates"],
+        "below_minimum_reservation_days" => Localizer["BonusReasonBelowMinimumReservationDays"],
+        "below_minimum_order_gross_amount" => Localizer["BonusReasonBelowMinimumOrderGrossAmount"],
+        "channel_not_supported" => Localizer["BonusReasonChannelNotSupported"],
+        "no_discount" => Localizer["BonusReasonNoDiscount"],
+        "missing_reservation_data" => Localizer["BonusReasonMissingReservationData"],
+        "missing_offer_price" => Localizer["BonusReasonMissingOfferPrice"],
+        _ => Localizer["BonusReasonUnknown"]
+    };
     
     private List<CustomerTermDisplayDto>? _termsSources;
     private Dictionary<int, bool> _userSelections = new();

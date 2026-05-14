@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accept" xml:space="preserve">
+    <value>Piekrītu</value>
+  </data>
+  <data name="Accept2" xml:space="preserve">
+    <value>Apstiprināt</value>
+  </data>
+  <data name="AdultsNumber" xml:space="preserve">
+    <value>Pieaugušo skaits</value>
+  </data>
+  <data name="CantWait" xml:space="preserve">
+    <value>Mēs nevaram gaidīt!</value>
+  </data>
+  <data name="ChangeGuest" xml:space="preserve">
+    <value>Viesu datu maiņa</value>
+  </data>
+  <data name="Checkin" xml:space="preserve">
+    <value>Reģistrēšanās</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>Izrakstīšanās</value>
+  </data>
+  <data name="ChildrenNumber" xml:space="preserve">
+    <value>Bērnu skaits</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Es apstiprinu</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Turpināt</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dienas</value>
+  </data>
+  <data name="Fill" xml:space="preserve">
+    <value>Aizpildiet reģistrēšanās veidlapu un piekrītiet noteikumiem un nosacījumiem, lai piekļūtu panelim.
+</value>
+  </data>
+  <data name="Filled" xml:space="preserve">
+    <value>Aizpildīts</value>
+  </data>
+  <data name="FillGuest" xml:space="preserve">
+    <value>Viesu informācijas aizpildīšana</value>
+  </data>
+  <data name="gcText" xml:space="preserve">
+    <value>Lūdzu, sniedziet informāciju par visiem cilvēkiem, kuri uzturēsies objektā.</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>Viesis</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Darba laiks</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Protokols</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Vārds</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Nākamais</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Tālruņa numurs</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Jūsu rezervācijas panelis tagad ir pieejams!</value>
+  </data>
+  <data name="RegisterCard" xml:space="preserve">
+    <value>Reģistrācijas karte</value>
+  </data>
+  <data name="SavedSuccesfully" xml:space="preserve">
+    <value>Dati veiksmīgi saglabāti!</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Es uzņemos pienākumu ziņot par jebkādiem bojājumiem un komentāriem reģistrēšanās laikā.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Es piekrītu aizliegumam smēķēt tabakas izstrādājumus un elektroniskās cigaretes objektā.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Aizliegts organizēt pasākumus un pieņemt trešās personas, kas nav iekļautas rezervācijā.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Viesnīcas dienas ilgums ir no vienas stundas </value>
+  </data>
+  <data name="Step12" xml:space="preserve">
+    <value>ierodoties līdz vienai stundai</value>
+  </data>
+  <data name="Step13" xml:space="preserve">
+    <value>izbraukšanas dienā.</value>
+  </data>
+  <data name="Surname" xml:space="preserve">
+    <value>Uzvārds</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>NOMAS NOTEIKUMI  
+Noteikumi un nosacījumi un Līgums nosaka noteikumus un nosacījumus dzīvokļu rezervēšanai un īrei, kas ir Rentoom īres priekšmets   
+Apartamenty Sp. z o.o. (Saimnieks), Stanisława Szymańskiego 1B, 87-100 Toruń, NIP: 879-27-27-407, KRS:   
+0000871532 īrnieka labā.  
+1. Mājokļa rezervēšana vai īre ir līdzvērtīga Noteikumu un nosacījumu noteikumu lasīšanai un pieņemšanai un   
+Līgumi.  
+2. Kompetentā tiesa strīdu izšķiršanai ir Toruņas tiesa.  
+3. Izīrētājs patur tiesības atteikties pieņemt viesi, kuram: nav derīga dokumenta   
+personas apliecību (t.i., personas apliecību vai pasi) vai nevēlas uzrādīt dokumentu, ir alkohola reibumā vai  
+citas narkotiskās vielas, iepriekšējās uzturēšanās laikā viņš pārkāpa noteikumu noteikumus.  
+4. Izīrētājs patur tiesības nekavējoties izbeigt līgumu ar Viesi, kurš pārkāpj  
+Nomas noteikumi, bez tiesībām atmaksāt rezervācijas maksu. Viesim būs nekavējoties jā   
+atstājot telpas.  
+5. Viesnīcas diena ilgst no 15:00 līdz nākamās dienas 11:00.  
+6. Izbraukšanas dienā Īrniekam ir pienākums nodot dzīvokli līdz pulksten 11:00, pretējā gadījumā   
+Maksa tiks pieskaitīta nākamās starta dienas apmērā + 50%.  
+7. Smēķēt dzīvokļos ir stingri aizliegts. Par smēķēšanas aizlieguma pārkāpšanu dzīvoklī   
+Īrniekam ir pienākums maksāt papildu maksu 500 PLN (pieci simti).  
+8. Aizliegts lietot elektroiekārtas, kas nav dzīvokļa sastāvdaļa un ir  
+ugunsgrēka risks.  
+9. Īrniekam ir pienākums nodrošināt dzīvokļa aprīkojuma bojājumus vai darbības traucējumus   
+nekavējoties informējiet Izīrētāju.  
+10. Mājdzīvnieki ir atļauti tikai ar saimnieka atļauju. Maksa par mājdzīvnieku ir 50 PLN par visu uzturēšanos.  
+11. Klusais laiks īrētajā dzīvoklī ir no pulksten 22:00 līdz 6:00. Cilvēki   
+Ja neesat reģistrējies dzīvoklī, jūs varat apmeklēt tikai līdz 23:00.  
+12. Sabiedrisko pasākumu organizēšana dzīvoklī ir pilnīgi aizliegta. Pasākuma organizēšanai   
+Nomnieks maksās papildu maksu 5,000 PLN + papildu zaudējumi saimniekam   
+Izīrētājs. Par visiem īrētā dzīvokļa un ēkas bojājumiem ir atbildīga   
+Īrnieka persona. Īrnieks ir atbildīgs par visiem zaudējumiem, kas radušies trešo personu rīcības rezultātā, kas uzturas  
+ar viņu dzīvoklī – šī persona uzaicinājusi uz dzīvokli/ēku. Policijas iejaukšanās gadījumā   
+vai pašvaldības apsardze, saimnieks iekasēs no īrnieka papildu maksu 500 PLN (pieci simti zlotu).  
+13. Dzīvoklī uzturēto cilvēku skaits nedrīkst pārsniegt rezervācijā norādīto skaitu. Paziņojums   
+pārkāpumu dēļ šajā sakarā tiek aprēķināta papildu maksa PLN 200 apmērā par katru no   
+personas, kas reģistrētas uz katru uzturēšanās nakti.  
+14. Viesiem ir pienākums pienācīgi nostiprināt dzīvokli, t.i., rūpīgi aizvērt visas durvis   
+ieeja un logi pirms katras iziešanas no dzīvokļa un glabāšanai   
+atslēgas/kodi/tālvadības pults bez nesankcionētas piekļuves iespējas.  
+15. Saimnieks nav atbildīgs par dzīvoklī atstātām bojātām vai nozaudētām vērtslietām.  
+16. Dzīvokļa atslēgas vai garāžas tālvadības pults nozaudēšanas/iznīcināšanas gadījumā tiks iekasēta maksa   
+200 PLN par katru gabalu.  
+17. Galīgā uzkopšana ir iekļauta uzturēšanās cenā. Tomēr Viesim ir pienākums doties prom pēc   
+mazgāti trauki un lietots aprīkojums. Šīs darbības nav galīgās tīrīšanas būtība.  
+18. Jebkura papildu uzkopšana pēc saimnieka īpaša pieprasījuma tiek apmaksāta atbilstoši maksas apmēram  
+degvielas uzpildes stacija. Gultas veļa un dvieļi tiek nomainīti.  
+19. Izīrētāja nodrošinātie komunālie maksājumi ir iekļauti uzturēšanās cenā.
+Rentoom Apartamenty Sp. z o.o.  
+Ul. Szymańskiego 1B, 87-100 Toruņa  
+www.rentoom.pl | Tālr. +48 881 388 001  
+20. Īrnieks ir finansiāli atbildīgs par visiem bojājumiem/zādzībām, kas radušās dzīvoklī uzturēšanās laikā.  
+21. Lūdzu, nekavējoties informējiet mūs, ja rodas kādi pārpratumi vai ja jūs to nedarāt  
+apmierināts ar mūsu pakalpojumiem. Mēs darīsim visu iespējamo, lai rūpīgi izpētītu problēmu un to atrisinātu.  
+22. Saimnieks var iekasēt depozītu līdz 1,000 PLN no viesiem par rezervācijām, ko var atgriezt līdz piecām dienām   
+Darbs pēc izrakstīšanās.  
+23. Izīrētājs ir tiesīgs pieprasīt atlīdzību par nodevu summu katrā gadījumā  
+papildus.  
+24. Nomniekam ir tiesības sūdzēties par pakalpojumu. Sūdzības jāiesniedz pa e-pastu: reklamacje@rentoom.pl  
+vai ierakstītā vēstulē uz pasta adresi. Atbilde tiks sniegta 14 dienu laikā pēc tās piegādes.  
+Nomas noteikumi angļu valodā ir pieejami www.rentoom.pl</value>
+  </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Ir daudz kas palicis</value>
+  </data>
+  <data name="TimeSelect" xml:space="preserve">
+    <value>Izvēlieties aptuveno ierašanās laiku</value>
+  </data>
+  <data name="TimeSelected" xml:space="preserve">
+    <value>Ierašanās laiks</value>
+  </data>
+  <data name="YouChoseTime" xml:space="preserve">
+    <value>Jūs esat izvēlējies laiku</value>
+  </data>
+  <data name="SelectAllConsents" xml:space="preserve">
+    <value>Atlasīt visas piekrišanas</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Ielāde ...</value>
+  </data>
+  <data name="AlreadyAccepted" xml:space="preserve">
+    <value>Jau pieņemts</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Obligāti</value>
+  </data>
+  <data name="ViewDocument" xml:space="preserve">
+    <value>Skatīt dokumentu</value>
+  </data>
+  <data name="ShowFullTerms" xml:space="preserve">
+    <value>Skatīt visus noteikumus un nosacījumus</value>
+  </data>
+  <data name="FullTermsTitle" xml:space="preserve">
+    <value>Noteikumi un nosacījumi</value>
+  </data>
+  <data name="DontKnowYet" xml:space="preserve">
+    <value>Es vēl nezinu</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Tikai burti, atstarpes, defises un apostrofi</value>
+  </data>
+  <data name="TermsLoadError" xml:space="preserve">
+    <value>Neizdevās ielādēt piekrišanas. Lūdzu, mēģiniet vēlreiz.</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Pārtaisīt</value>
+  </data>
+  <data name="OptionalConsentsHint" xml:space="preserve">
+    <value>Jūs jebkurā laikā varat mainīt savas izvēles piekrišanu lapā "Par rezervāciju".</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>twój@email.pl</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-pasts</value>
+  </data>
+  <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
+    <value>Noteikumi un nosacījumi</value>
+  </data>
+  <data name="RegistrationSaveError" xml:space="preserve">
+    <value>Datu rakstīšanas kļūda.</value>
+  </data>
+  <data name="NoAccessToPage" xml:space="preserve">
+    <value>Jūs nevarat piekļūt šai lapai.</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Noteikumi un nosacījumi un piekrišana</value>
+  </data>
+</root>

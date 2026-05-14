@@ -187,13 +187,15 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         public async Task<List<ObjectDescription>?> GetObjectDescriptionsAsync(int objectId, string? language = null, CancellationToken ct = default)
         {
+            var lang = language != "pol" && language != "eng" ? "eng" : language;
             var request = new ObjectDescriptionsRequestType
+
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
                 ParamsSearch = new ObjectDescriptionParamsSearch
                 {
                     ObjectId = objectId,
-                    Language = language,
+                    Language = lang,
                 }
             };
 

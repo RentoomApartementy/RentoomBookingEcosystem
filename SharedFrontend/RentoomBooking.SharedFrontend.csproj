@@ -20,4 +20,8 @@
     <ProjectReference Include="..\SharedClasses\RentoomBooking.SharedClasses.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\supported-languages.json" />
+  </ItemGroup>
+
 </Project>

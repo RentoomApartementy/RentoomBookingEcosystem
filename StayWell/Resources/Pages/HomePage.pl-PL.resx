@@ -142,8 +142,8 @@
     <value>Aktualny Język</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Enhance" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Enhance" xml:space="preserve">
+    <value>Ulepsz swój pobyt</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Główna</value>
@@ -163,11 +163,11 @@
   <data name="ManageStay" xml:space="preserve">
     <value>Zarządzaj Pobytem</value>
   </data>
-  <data name="More" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="More" xml:space="preserve">
+    <value>więcej...</value>
   </data>
-  <data name="MyVouchers" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="MyVouchers" xml:space="preserve">
+    <value>Moje Vouchery</value>
   </data>
   <data name="NoSuchPage" xml:space="preserve">
     <value>Ups, tej strony nie ma!</value>
@@ -191,11 +191,24 @@
     <value>Ta rezerwacja nie jest już aktywna. Skontaktuj się z Rentoom, jeśli potrzebujesz pomocy.</value>
   </data>
   <data name="AiChatTitle" xml:space="preserve">
-    
-    
-  <value>StayWell AI</value></data>
+    <value>StayWell AI</value>
+  </data>
   <data name="AiAssistant" xml:space="preserve">
-    
-    
-  <value>Asystent AI</value></data>
+    <value>Asystent AI</value>
+  </data>
+  <data name="ParkingFooter" xml:space="preserve">
+    <value>Parking miejski</value>
+  </data>
+  <data name="AboutReservationFooter" xml:space="preserve">
+    <value>Informacje o rezerwacji</value>
+  </data>
+  <data name="LoyaltyFooter" xml:space="preserve">
+    <value>Twoje punkty</value>
+  </data>
+  <data name="AddonsLabel" xml:space="preserve">
+    <value>Dodatki</value>
+  </data>
+  <data name="CartButtonAlt" xml:space="preserve">
+    <value>Koszyk</value>
+  </data>
 </root>

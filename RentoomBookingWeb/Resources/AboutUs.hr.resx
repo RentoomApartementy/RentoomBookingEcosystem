@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutUsText" xml:space="preserve">
+    <value>O nama
+</value>
+  </data>
+  <data name="AverageRating" xml:space="preserve">
+    <value>Prosječna ocjena stana
+</value>
+  </data>
+  <data name="ApartmentsManagement" xml:space="preserve">
+    <value>Stanovi za upravljanje
+</value>
+  </data>
+  <data name="CompletedBookings" xml:space="preserve">
+    <value>Obrađene rezervacije
+</value>
+  </data>
+  <data name="QuestsServed" xml:space="preserve">
+    <value>Posluženi gosti
+</value>
+  </data>
+  <data name="HistoryText1" xml:space="preserve">
+    <value>Povijest</value>
+  </data>
+  <data name="HistoryText2" xml:space="preserve">
+    <value>Mi smo skupina ljudi koji vole putovati i stekli su iskustvo u turizmu na međunarodnim tržištima. Osim toga, već više od 6 godina bavimo se upravljanjem, najmom, renoviranjem i trgovanjem na tržištu nekretnina. Želimo ponuditi iskustvo koje smo stekli našim kupcima i gostima, koji su uvijek zadovoljni našim uslugama.
+
+</value>
+  </data>
+  <data name="MissionText1" xml:space="preserve">
+    <value>Misija</value>
+  </data>
+  <data name="MissionText2" xml:space="preserve">
+    <value>Pružamo najbolju moguću uslugu našim klijentima, kako gostima tako i vlasnicima stanova. Posebno nam je važno održavati visoku razinu korisničke usluge i osigurati da se naši gosti osjećaju kao kod kuće u našim stanovima i da se mogu osloniti na našu pomoć u svakom trenutku.
+
+</value>
+  </data>
+  <data name="OurTeamText" xml:space="preserve">
+    <value>Naš tim
+</value>
+  </data>
+  <data name="TomaszText1" xml:space="preserve">
+    <value>Vizionar i strateg s iskustvom u industriji nekretnina. Izgradio je Rentoom kako bi pojednostavio kratkoročne najmove i automatizirao sve, od rezervacija do upravljanja gostima.
+
+</value>
+  </data>
+  <data name="KamilText" xml:space="preserve">
+    <value>Osigurava da je Rentoom tehnologija brza, pouzdana i sigurna. Strastveni smo u automatizaciji i modernim rješenjima za tržište najma.</value>
+  </data>
+  <data name="MartaText1" xml:space="preserve">
+    <value>S pažnjom na svaki detalj, koordinira dnevne aktivnosti. Zahvaljujući tome, naši kupci mogu mirno spavati – sve radi na vrijeme i bez ikakvih problema.
+
+</value>
+  </data>
+  <data name="CallText" xml:space="preserve">
+    <value>Poziv</value>
+  </data>
+</root>

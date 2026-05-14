@@ -2,15 +2,16 @@
 @using RentoomBooking.StayWell.Components
 @inject GlobalizationService GlobalizationService
 @inject ModalService ModalService
+@inject LiveChatSettingsService LiveChatSettingsService
 
 @if (IsVisible)
 {
-    <div class="modal-backdrop @(IsAiChatFullscreenVariant ? "modal-backdrop-aichat-fullscreen-mode" : string.Empty)"
+    <div class="modal-backdrop @(IsFullscreenVariant ? "modal-backdrop-aichat-fullscreen-mode" : string.Empty)"
          @onclick="Close"
          tabindex="-1"
          @ref="backdropRef">
 
-        <div class="modal @(IsImageVariant ? "modal-image-mode" : "") @(IsAiChatFullscreenVariant ? "modal-aichat-fullscreen-mode" : "")"
+        <div class="modal @(IsImageVariant ? "modal-image-mode" : "") @(IsFullscreenVariant ? "modal-aichat-fullscreen-mode" : "")"
              @onclick:stopPropagation="@(!IsImageVariant)"
              role="dialog"
              aria-labelledby="modal-title"
@@ -23,6 +24,19 @@
                         ×
                     </button>
                     <p class="modal-title">@Title</p>
+                    @if (IsLiveChatFullscreenVariant)
+                    {
+                        <button class="modal-header-action" type="button" @onclick="() => LiveChatSettingsService.RequestOpenSettings()" aria-label="Ustawienia tłumaczenia">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                        </button>
+                    }
+                    else
+                    {
+                        <span class="modal-header-spacer"></span>
+                    }
                 </div>
             }
 
@@ -41,7 +55,7 @@
             }
             else
             {
-                <div class="modal-content @(IsAiChatFullscreenVariant ? "modal-content-aichat-fullscreen-mode" : string.Empty)">
+                <div class="modal-content @(IsFullscreenVariant ? "modal-content-aichat-fullscreen-mode" : string.Empty)">
                     @Content
                 </div>
             }
@@ -62,6 +76,8 @@
     private bool IsRotatedPerpendicular => _rotation == 90 || _rotation == 270;
     private bool IsImageVariant => Variant == ModalVariant.Image;
     private bool IsAiChatFullscreenVariant => Variant == ModalVariant.AiChatFullscreen;
+    private bool IsLiveChatFullscreenVariant => Variant == ModalVariant.LiveChatFullscreen;
+    private bool IsFullscreenVariant => IsAiChatFullscreenVariant || IsLiveChatFullscreenVariant;
 
     protected override Task OnInitializedAsync()
     {

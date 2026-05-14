@@ -196,6 +196,37 @@
     color: #d00;
 }
 
+.modal-header-spacer {
+    width: 32px;
+    flex-shrink: 0;
+}
+
+.modal-header-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+
+.modal-header-action:hover {
+    background: #f0ebe4;
+    color: var(--rentoom-brown-dark, #965f28);
+}
+
+.modal-header-action svg {
+    width: 18px;
+    height: 18px;
+}
+
 @media (max-width: 500px) {
     .modal:not(.modal-image-mode):not(.modal-aichat-fullscreen-mode) {
         width: 95vw;

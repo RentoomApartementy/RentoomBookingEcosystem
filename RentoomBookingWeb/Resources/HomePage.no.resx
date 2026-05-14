@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Rentoom Apartments – vi skaper unike opplevelser av å bo i Toruń
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Leter du etter en komfortabel leilighet i Toruń?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Leiligheter i Toruń – komfortabel overnatting</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Leter du etter en komfortabel leilighet i Toruń?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenty er et moderne korttidsutleiemerke som kombinerer høy standard på overnatting med autentisk kunnskap om Toruń. Vi skaper steder designet med komfort, estetikk og funksjonalitet i tankene – både for turister og forretningsgjester.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Vi er glade for at du kom til oss!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Vårt tilbud inkluderer dusinvis av nøye utvalgte leiligheter i de mest attraktive delene av byen. Hver lokasjon er valgt for å gi enkel tilgang til viktige attraksjoner, restauranter og forretningsområder.
+Hver leilighet er et rom designet for å gi ekte hvile og privatliv etter en intens dag med sightseeing eller jobb.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Leiligheter på de beste stedene i Toruń</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Fornøyde kunder</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Leiligheter i Toruń
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Beliggenhet i Toruń</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Hvorfor Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Rentoom Apartments er mer enn bare et overnattingsopphold i Toruń. Vi tilbyr leiligheter av høy standard på de beste stedene og reelle fordeler som øker verdien av hele oppholdet.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>Som en del av vårt Partnerprogram får gjestene tilgang til spesialrabatter på utvalgte restauranter, kafeer og turistattraksjoner. Nåværende rabatter og anbefalinger finnes direkte i leilighetene, slik at du kan bruke velkjente steder og spare penger mens du ser deg rundt.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Vi samarbeider kun med pålitelige, lokale partnere og tar vare på kvaliteten på hver anbefaling. Ved å velge Rentoom får du komfort, profesjonell service og ekstra fordeler som gjør oppholdet ditt i Toruń mer komfortabelt, mer raffinert og rett og slett mer lønnsomt.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Bli kjent med meningene til folk som har sovet i leilighetene våre i Toruń.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Legg igjen kontaktinformasjonen din, så tar vi kontakt med deg!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Kontakt leverandør</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Jeg godtar behandlingen av mine personopplysninger som er gitt i skjemaet ovenfor</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Navn</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Etternavn</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Hva skiller leilighetene våre fra andre?
+
+</value>
+  </data>
+</root>

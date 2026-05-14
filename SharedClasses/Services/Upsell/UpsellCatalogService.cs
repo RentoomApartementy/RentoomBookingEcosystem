@@ -125,6 +125,7 @@ namespace RentoomBooking.SharedClasses.Services.Upsell
                         Country = service.Partner.Country,
                         Id = service.Partner.Id,
                         LogoBannerUrl = service.Partner.LogoBannerMediaAsset?.StorageKey,
+                        PartnerType = service.Partner.PartnerType,
                         PostalCode = service.Partner.PostalCode,
                         PublicId = service.Partner.PublicId,
                         Slug = service.Partner.Slug,

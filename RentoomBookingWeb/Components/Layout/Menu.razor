@@ -1,5 +1,6 @@
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@implements IAsyncDisposable
 @using RentoomBookingWeb.Components.Enums;
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<SharedResources> Localizer;
@@ -76,9 +77,13 @@
             <div>
                 <NavLink href="https://designer.rentoom.pl/" target="_blank" class="nav-link" ActiveClass="nav-link">@Localizer["RentoomDesigner"]</NavLink>
             </div>
+            <li>
+                <NavLink href="/polozenie-torunia" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["AboutCity"]</NavLink>
+            </li>
             <div>
                 <NavLink href="https://app.rentoom.pl/" target="_blank" class="nav-link" ActiveClass="nav-link">@Localizer["ForInvestors"]</NavLink>
             </div>
+
             @* <div> *@
             @*     <NavLink href="/inne" class="nav-link" ActiveClass="nav-link">@Localizer["Others"]</NavLink> *@
             @* </div> *@
@@ -88,6 +93,7 @@
 
 @code {
     private DotNetObjectReference<Menu>? objRef;
+    private IJSObjectReference? menuScrollModule;
     private MenuVisualState NavState { get; set; } = new();
     private bool ShowMenu = false;
     private bool IsScrolling = false;
@@ -97,8 +103,8 @@
         if (firstRender)
         {
             objRef = DotNetObjectReference.Create(this);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
-            await module.InvokeVoidAsync("init", objRef);
+            menuScrollModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
+            await menuScrollModule.InvokeVoidAsync("init", objRef);
 
             Navigation.LocationChanged += OnLocationChanged;
         }
@@ -159,8 +165,21 @@
         }
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
+        if (menuScrollModule is not null)
+        {
+            try
+            {
+                await menuScrollModule.InvokeVoidAsync("dispose");
+                await menuScrollModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // Ignore: user navigated away or circuit disconnected.
+            }
+        }
+
         objRef?.Dispose();
         Navigation.LocationChanged -= OnLocationChanged;
     }

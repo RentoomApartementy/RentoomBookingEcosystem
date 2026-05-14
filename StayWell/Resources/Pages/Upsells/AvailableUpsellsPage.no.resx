@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="UpsellsListSubtitle" xml:space="preserve">
+    <value>Tilgjengelige tillegg for kjøp</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Verdikuponger</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laster...</value>
+  </data>
+  <data name="UpsellsListTitle" xml:space="preserve">
+    <value>Verdikuponger</value>
+  </data>
+  <data name="NoAvailableUpsells" xml:space="preserve">
+    <value>Ingen tillegg tilgjengelig</value>
+  </data>
+  <data name="PricingOneTimeText" xml:space="preserve">
+    <value>Engangs</value>
+  </data>
+  <data name="AddressText" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="PricingPerPersonPerDayText" xml:space="preserve">
+    <value>pers./dag</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Se detaljer</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Slett</value>
+  </data>
+  <data name="VoucherValidFromText" xml:space="preserve">
+    <value>Gyldig fra</value>
+  </data>
+  <data name="DetailsText" xml:space="preserve">
+    <value>Detaljer</value>
+  </data>
+  <data name="VoucherCodeText" xml:space="preserve">
+    <value>Kode</value>
+  </data>
+  <data name="VoucherRemainingText" xml:space="preserve">
+    <value>Annet</value>
+  </data>
+  <data name="TermsDescriptionText" xml:space="preserve">
+    <value>Gyldig for hele oppholdet. Påkrevd å vise kode ved innløsning.</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Lenke</value>
+  </data>
+  <data name="VoucherValidToText" xml:space="preserve">
+    <value>Gyldig for</value>
+  </data>
+  <data name="DescriptionText" xml:space="preserve">
+    <value>Beskrivelse</value>
+  </data>
+  <data name="PricingPerStayText" xml:space="preserve">
+    <value>Bli</value>
+  </data>
+  <data name="NightsText" xml:space="preserve">
+    <value>Netter</value>
+  </data>
+  <data name="AddText" xml:space="preserve">
+    <value>Legg til</value>
+  </data>
+  <data name="QrUnavailableText" xml:space="preserve">
+    <value>QR er ikke tilgjengelig</value>
+  </data>
+  <data name="VoucherUsageTitleText" xml:space="preserve">
+    <value>Innløsning av kuponger</value>
+  </data>
+  <data name="EnlargeText" xml:space="preserve">
+    <value>Forstør</value>
+  </data>
+  <data name="PricingPerApartmentPerDayText" xml:space="preserve">
+    <value>leilighet/dag</value>
+  </data>
+  <data name="TermsTitleText" xml:space="preserve">
+    <value>Vilkår og betingelser</value>
+  </data>
+  <data name="VoucherQrAltText" xml:space="preserve">
+    <value>QR-kupongkode</value>
+  </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>Tilgjengelige tillegg for kjøp</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="VoucherUsedCountText" xml:space="preserve">
+    <value>Brukt</value>
+  </data>
+  <data name="VoucherOverlayHintText" xml:space="preserve">
+    <value>Vis denne koden til personalet for å løse inn kupongen din.</value>
+  </data>
+  <data name="YourCodeText" xml:space="preserve">
+    <value>Koden din</value>
+  </data>
+  <data name="PriceLabel" xml:space="preserve">
+    <value>Pris</value>
+  </data>
+  <data name="ShowInRestaurantText" xml:space="preserve">
+    <value>Show i restaurant</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Verdikuponger</value>
+  </data>
+  <data name="VoucherStatusText" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ManualCodeLabelText" xml:space="preserve">
+    <value>Kode som skal tastes inn manuelt</value>
+  </data>
+  <data name="GuestsText" xml:space="preserve">
+    <value>Gjester</value>
+  </data>
+  <data name="ShowVoucherCodeText" xml:space="preserve">
+    <value>Vis kupongkode</value>
+  </data>
+  <data name="VoucherNoLimitText" xml:space="preserve">
+    <value>Ingen grense</value>
+  </data>
+</root>

@@ -1,0 +1,125 @@
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using RentoomBooking.SharedClasses.Models.Database.EFEntitites
+@using RentoomBooking.SharedClasses.Services
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+
+<div id="confirm-reservation" class="addon-list-container">
+    <div class="addon-list-wrapper">
+        <div class="upsell-title-group">
+            <div class="upsell-icon">
+                <img src="assets/svgs/kid_star.svg" alt="icon" style="width: 20px; height: 20px;" />
+            </div>
+            <div class="upsell-text">
+                <h2 class="upsell-main-title">@Localizer["AdditionalOptions"]</h2>
+            </div>
+        </div>
+
+        <div class="addons-wrapper">
+            @if (Addons != null)
+            {
+                @foreach (var addon in Addons.Where(x => x.Optional != false))
+                {
+                    if (DefinedAddons != null)
+                    {
+                        var fa = DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
+                        @if (fa != null)
+                        {
+                            var fadesc = fa.AddonDefinition.Details.FirstOrDefault(a => a.Lang == CurrentAddonLanguage);
+                            var paymentType = fa.PaymentType;
+                            <div class="addon-item">
+                                <div class="addon-label" @onclick="@(() => OnToggleAddon.InvokeAsync(addon.Id))" @onclick:stopPropagation="true">
+                                    <div class="addon-info-col">
+                                        <span class="addon-name">@fadesc?.Name</span>
+                                    </div>
+
+                                    <div class="addon-quantity-col @((IsAddonSelected(addon.Id) && paymentType == AddonPaymentType.PayPerAmount ) ? "" : "empty")"
+                                         @onclick:stopPropagation="true"
+                                         @onclick:preventDefault="true">
+
+                                        @if (IsAddonSelected(addon.Id) && paymentType == AddonPaymentType.PayPerAmount)
+                                        {
+                                            var currentQty = GetSelectedAddonQuantity(addon.Id);
+                                            <div class="quantity-selector">
+                                                <button class="quantity-btn" @onclick="@(() => OnQuantityUpdate.InvokeAsync(new AddonQuantityUpdateArgs { AddonId = addon.Id!.Value, Quantity = currentQty - 1 }))">
+                                                    <span>−</span>
+                                                </button>
+                                                <span class="quantity-value">@currentQty</span>
+                                                <button class="quantity-btn" @onclick="@(() => OnQuantityUpdate.InvokeAsync(new AddonQuantityUpdateArgs { AddonId = addon.Id!.Value, Quantity = currentQty + 1 }))">
+                                                    <span>+</span>
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <div class="price-box">
+                                        <b class="addon-price">+@AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, ReservationContext.Nights, ReservationContext.TotalGuests, GetSelectedAddonQuantity(addon.Id)).ToString("N2") @CurrencySymbol</b>
+                                        <input type="checkbox"
+                                               class="addon-checkbox"
+                                               checked="@(IsAddonSelected(addon.Id))"
+                                               disabled="@(addon.Optional == false)"
+                                               readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="addon-item">
+                                <div class="addon-label">
+                                    <span class="addon-name-empty">@Localizer["Apartment_NoAddonDescription"]</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="skeleton-row">
+                            <div style="flex: 1;">
+                                <span class="skeleton-box" style="width: 50%; height: 16px; margin-bottom: 6px;"></span>
+                                <span class="skeleton-box" style="width: 30%; height: 12px;"></span>
+                            </div>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <span class="skeleton-box" style="width: 60px; height: 16px;"></span>
+                                <span class="skeleton-box" style="width: 20px; height: 20px; border-radius: 4px;"></span>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<AddonType>? Addons { get; set; }
+    [Parameter] public List<DefinedAddonEntity>? DefinedAddons { get; set; }
+    [Parameter] public List<SelectedAddonDto> SelectedAddons { get; set; } = new();
+    [Parameter] public ReservationPricingContext ReservationContext { get; set; } = new();
+    [Parameter] public string CurrentAddonLanguage { get; set; } = "PL";
+    [Parameter] public string CurrencySymbol { get; set; } = "PLN";
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+
+    [Parameter] public EventCallback<int?> OnToggleAddon { get; set; }
+    [Parameter] public EventCallback<AddonQuantityUpdateArgs> OnQuantityUpdate { get; set; }
+
+    private bool IsAddonSelected(int? addonId)
+    {
+        if (!addonId.HasValue) return false;
+        return SelectedAddons.Any(a => a.AddonId == addonId.Value);
+    }
+
+    private int GetSelectedAddonQuantity(int? addonId)
+    {
+        if (!addonId.HasValue) return 1;
+        var item = SelectedAddons.FirstOrDefault(x => x.AddonId == addonId.Value);
+        return item?.Quantity ?? 1;
+    }
+
+    public class AddonQuantityUpdateArgs
+    {
+        public int AddonId { get; set; }
+        public int Quantity { get; set; }
+    }
+}

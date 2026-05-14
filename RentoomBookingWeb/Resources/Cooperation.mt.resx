@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CooperationText" xml:space="preserve">
+    <value>Kooperazzjoni</value>
+  </data>
+  <data name="WhyUsText" xml:space="preserve">
+    <value>Dwarna u għaliex aħna?</value>
+  </data>
+  <data name="ExperienceText1" xml:space="preserve">
+    <value>Esperjenza
+</value>
+  </data>
+  <data name="Experience2Text" xml:space="preserve">
+    <value>Rentoom Apartamenty hija marka moderna li timmaniġġja kera ta' żmien qasir f'Toruń. Diġà ġejna fdati minn aktar minn 100 investitur. Aħna nimmaniġġjaw aktar minn 150 appartament u nimmaniġġjaw aktar minn 7000 riserva fis-sena.
+</value>
+  </data>
+  <data name="QualityText1" xml:space="preserve">
+    <value>Kwalità</value>
+  </data>
+  <data name="QualityText2" xml:space="preserve">
+    <value>Aħna nieħdu ħsieb il-proċess kollu – mill-preparazzjoni professjonali tal-appartament u promozzjoni effettiva, permezz ta' ġestjoni dinamika tal-prezzijiet, sa servizz kontinwu għall-mistednin, tindif u servizz tekniku. Niżguraw ftehimiet trasparenti u trasparenza finanzjarja sħiħa.</value>
+  </data>
+  <data name="ProfessionalismText1" xml:space="preserve">
+    <value>Professjonalità</value>
+  </data>
+  <data name="Professionalism2" xml:space="preserve">
+    <value>Grazzi għall-esperjenza u mudell operattiv provat, huwa possibbli li jiġu ġġenerati dħul sa 30% tal-valur tal-proprjetà kull sena*.</value>
+  </data>
+  <data name="InnovationText1" xml:space="preserve">
+    <value>Innovazzjoni</value>
+  </data>
+  <data name="InnovationText2" xml:space="preserve">
+    <value>Barra minn hekk, il-Programm Partner tagħna, li joffri skontijiet fuq ristoranti u attrazzjonijiet f'Toruń, iżid l-attrattività tal-appartamenti u jaffettwa l-okkupazzjoni tagħhom.
+</value>
+  </data>
+  <data name="AdvantagesOfCooperation" xml:space="preserve">
+    <value>Vantaġġi tal-kooperazzjoni
+</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText1" xml:space="preserve">
+    <value>Investiment mingħajr manutenzjoni</value>
+  </data>
+  <data name="Maintenance-freeInvestmentText2" xml:space="preserve">
+    <value>Is-servizz li noffru huwa komplut. Tista' torqod fil-paċi, aħna naħdmu għalik.</value>
+  </data>
+  <data name="IncomeOptimizationText1" xml:space="preserve">
+    <value>Ottimizzazzjoni tad-dħul</value>
+  </data>
+  <data name="ReadyToHelpText1" xml:space="preserve">
+    <value>Lest biex ngħin 24/7
+</value>
+  </data>
+  <data name="IncomeOptimizationText2" xml:space="preserve">
+    <value>Aħna nissorveljaw is-suq kontinwament u naġġustaw il-prezzijiet għall-kiri ta' appartament skont il-profitt tiegħek.
+
+</value>
+  </data>
+  <data name="ReadyToHelpText2" xml:space="preserve">
+    <value>Aħna niggarantixxu servizz lill-klijenti komuni tagħna kuljum, sebat ijiem fil-ġimgħa.
+
+</value>
+  </data>
+  <data name="FillOutForm" xml:space="preserve">
+    <value>Jekk trid tistabbilixxi kooperazzjoni, imla l-formola
+</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Kunjom</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Isem</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numru tat-telefon</value>
+  </data>
+  <data name="NumberOfApartments" xml:space="preserve">
+    <value>Numru ta' appartamenti</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Distrett ta' Toruń</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Ibgħat</value>
+  </data>
+  <data name="CooperationText1" xml:space="preserve">
+    <value>Kooperazzjoni</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="MessageContent" xml:space="preserve">
+    <value>Kontenut tal-messaġġ</value>
+  </data>
+  <data name="ConsentText" xml:space="preserve">
+    <value>Naqbel li nipproċessa d-dejta personali tiegħi għall-iskop li nikkuntattja u nħaddem l-inkjesta</value>
+  </data>
+  <data name="Privacypolicy" xml:space="preserve">
+    <value>Politika dwar il-Privatezza</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Nibgħat...</value>
+  </data>
+  <data name="RequiredFieldsError" xml:space="preserve">
+    <value>Imla l-kampijiet kollha tal-formola.</value>
+  </data>
+  <data name="InvalidEmailError" xml:space="preserve">
+    <value>Jekk jogħġbok daħħal indirizz elettroniku validu.</value>
+  </data>
+  <data name="InvalidApartmentsCountError" xml:space="preserve">
+    <value>Daħħal in-numru korrett ta' appartamenti.</value>
+  </data>
+  <data name="ConsentRequiredError" xml:space="preserve">
+    <value>Aċċetta l-kunsens tiegħek għall-ipproċessar tad-dejta.</value>
+  </data>
+  <data name="SubmitSuccess" xml:space="preserve">
+    <value>Grazzi. Il-formola ġiet mibgħuta lil Bitrix.</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Ma bagħtix il-formularju. Jekk jogħġbok ipprova mill-ġdid f'ħin qasir.</value>
+  </data>
+  <data name="SubmitPartialError" xml:space="preserve">
+    <value>Il-kuntatt seta' jiġi salvat, iżda l-ftehim ma setax jinħoloq. Iċċekkja lil Bitrix qabel terġa' tibgħat.</value>
+  </data>
+</root>

@@ -26,17 +26,17 @@
 
 .tile--row {
     margin-top: 20px;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
     width: 100%;
-    justify-content: center;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .tile {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 180px;
+    width: 100%;
     height: 120px;
     padding: 14px 10px;
     border-radius: 18px;
@@ -59,7 +59,7 @@
     }
 
     .vouchers {
-        background-color: var(--rentoom-green-dark);
+       /* background-color: var(--rentoom-green-dark);- wyłaczam inny kolor tile vouchers, zeby byl taki sam jak wszedzie.*/
     }
 
 .tile-icon {
@@ -79,6 +79,7 @@
 }
 
 .tile-icon-vouchers {
+    position: relative;
     font-size: 1.5rem;
     color: #333;
     flex-shrink: 0;
@@ -87,7 +88,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7456%) hue-rotate(204deg) brightness(112%) contrast(100%);
+    /*filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7456%) hue-rotate(204deg) brightness(112%) contrast(100%);*/
+}
+
+.vouchers-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background-color: #1fa855;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+    box-shadow: 0 0 0 2px #ffffff;
 }
 
 .tile-text {
@@ -96,16 +114,16 @@
     line-height: 1.25;
     color: #1a1a1a;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: none;
 }
 
 .tile-text-vouchers {
     font-size: clamp(0.78rem, 3vw, 0.95rem);
     font-weight: 600;
     line-height: 1.25;
-    color: white;
+    color: #1a1a1a; /*MS: było: white - gdy tło tile było zielone*/
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: none;
 }
 
 .upsells-available-wrap {
@@ -126,10 +144,10 @@
 @media (min-width: 400px) {
     .tile--row {
         gap: 15px;
+        max-width: 420px;
     }
 
     .tile {
-        max-width: 200px;
         height: 130px;
     }
 
@@ -154,11 +172,10 @@
 
     .tile--row {
         gap: 20px;
-        justify-content: center;
+        max-width: 480px;
     }
 
     .tile {
-        max-width: 220px;
         height: 140px;
         padding: 18px 14px;
     }

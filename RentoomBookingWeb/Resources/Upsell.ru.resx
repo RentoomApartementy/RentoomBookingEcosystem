@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ListTitle" xml:space="preserve">
+    <value>Сделайте ваше пребывание приятнее</value>
+  </data>
+  <data name="ListSubtitle" xml:space="preserve">
+    <value>Эксклюзивные предложения для вашего бронирования</value>
+  </data>
+  <data name="TermsDescription" xml:space="preserve">
+    <value>Действует на весь срок пребывания. Требуется показать код при выкупе.</value>
+  </data>
+  <data name="TermsTitle" xml:space="preserve">
+    <value>Условия и положения</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Ночи</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>Гости</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Подробнее</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Цена</value>
+  </data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve">
+    <value>перс./день</value>
+  </data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve">
+    <value>Пункт./день</value>
+  </data>
+  <data name="PricingPerStay" xml:space="preserve">
+    <value>Останься</value>
+  </data>
+  <data name="PricingOneTime" xml:space="preserve">
+    <value>одноразовый</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Ссылка</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="ShowVoucherCode" xml:space="preserve">
+    <value>Покажите код ваучера</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>Твой код</value>
+  </data>
+  <data name="ManualCodeLabel" xml:space="preserve">
+    <value>Код нужно ввести вручную</value>
+  </data>
+  <data name="VoucherQrAlt" xml:space="preserve">
+    <value>QR-код ваучера</value>
+  </data>
+  <data name="QrUnavailable" xml:space="preserve">
+    <value>QR недоступен</value>
+  </data>
+  <data name="Enlarge" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="VoucherUsageTitle" xml:space="preserve">
+    <value>Погашение ваучера</value>
+  </data>
+  <data name="VoucherStatus" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="VoucherUsedCount" xml:space="preserve">
+    <value>Использовались</value>
+  </data>
+  <data name="VoucherRemaining" xml:space="preserve">
+    <value>Прочее</value>
+  </data>
+  <data name="VoucherValidFrom" xml:space="preserve">
+    <value>Валидно из</value>
+  </data>
+  <data name="VoucherValidTo" xml:space="preserve">
+    <value>Валидно для</value>
+  </data>
+  <data name="VoucherNoLimit" xml:space="preserve">
+    <value>Без ограничений</value>
+  </data>
+  <data name="ShowInRestaurant" xml:space="preserve">
+    <value>Шоу в ресторане</value>
+  </data>
+  <data name="VoucherCode" xml:space="preserve">
+    <value>Код</value>
+  </data>
+  <data name="VoucherOverlayHint" xml:space="preserve">
+    <value>Покажите этот код сотрудникам, чтобы активировать ваучер.</value>
+  </data>
+</root>

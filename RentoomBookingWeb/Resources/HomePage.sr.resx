@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="title2" xml:space="preserve">
+    <value>Apartmani Rentoom – stvaramo jedinstvena iskustva boravka u Torunu
+</value>
+  </data>
+  <data name="title2subtitle" xml:space="preserve">
+    <value>
+Da li ste u potrazi za udobnim stanom u Torunu?</value>
+  </data>
+  <data name="title3" xml:space="preserve">
+    <value>Apartmani u Torunu – udoban smeštaj</value>
+  </data>
+  <data name="title3subtitle" xml:space="preserve">
+    <value>Da li ste u potrazi za udobnim stanom u Torunu?
+
+</value>
+  </data>
+  <data name="text1description" xml:space="preserve">
+    <value>Rentoom Apartamenti je moderan brend za kratkoročno iznajmljivanje koji kombinuje visok standard smeštaja sa autentičnim poznavanjem Torunja. Kreiramo mesta dizajnirana sa komforom, estetikom i funkcionalnošću na umu - kako za turiste, tako i za poslovne goste.</value>
+  </data>
+  <data name="text1title" xml:space="preserve">
+    <value>Drago nam je što ste došli kod nas!
+</value>
+  </data>
+  <data name="text1description2" xml:space="preserve">
+    <value>Naša ponuda obuhvata desetine pažljivo odabranih stanova u najatraktivnijim delovima grada. Svaka lokacija je izabrana da obezbedi lak pristup ključnim atrakcijama, restoranima i poslovnim zonama.
+Svaki stan je prostor dizajniran da pruži pravi odmor i privatnost nakon intenzivnog dana razgledanja ili rada.
+</value>
+  </data>
+  <data name="text1title2" xml:space="preserve">
+    <value>Apartmani na najboljim lokacijama u Torunu</value>
+  </data>
+  <data name="clientsstat" xml:space="preserve">
+    <value>Zadovoljni kupci</value>
+  </data>
+  <data name="apartmentsstats" xml:space="preserve">
+    <value>Apartmani u Torunu
+
+</value>
+  </data>
+  <data name="locationsstats" xml:space="preserve">
+    <value>Lokacija u Torunu</value>
+  </data>
+  <data name="whyRentoom" xml:space="preserve">
+    <value>Zašto Rentoom?
+</value>
+  </data>
+  <data name="whyRentoomTitle" xml:space="preserve">
+    <value>Apartmani Rentoom su više od noćenja u Torunu. Nudimo visok standard apartmana na najboljim lokacijama i stvarne pogodnosti koje povećavaju vrednost celokupnog boravka.
+</value>
+  </data>
+  <data name="whyRentoomText1" xml:space="preserve">
+    <value>U okviru našeg partnerskog programa, gosti dobijaju pristup posebnim popustima na odabrane restorane, kafiće i turističke atrakcije. Trenutni popusti i preporuke nalaze se direktno u apartmanima, tako da možete koristiti provjerena mjesta i uštedjeti novac tijekom razgledanja.
+</value>
+  </data>
+  <data name="whyRentoomText2" xml:space="preserve">
+    <value>Radimo samo sa pouzdanim, lokalnim partnerima, vodeći računa o kvalitetu svake preporuke. Odabirom Rentoom-a dobijate udobnost, profesionalnu uslugu i dodatne pogodnosti koje vaš boravak u Torunu čine udobnijim, prefinjenijim i jednostavno profitabilnijim.
+</value>
+  </data>
+  <data name="opinionText" xml:space="preserve">
+    <value>Upoznajte mišljenja ljudi koji su spavali u našim apartmanima u Torunu.
+
+</value>
+  </data>
+  <data name="formtext" xml:space="preserve">
+    <value>Ostavite svoje kontakt informacije i mi ćemo vam se javiti!
+</value>
+  </data>
+  <data name="formContactText" xml:space="preserve">
+    <value>Kontakt dobavljača</value>
+  </data>
+  <data name="formConfirm" xml:space="preserve">
+    <value>Slažem se sa obradom mojih ličnih podataka navedenih u gore navedenom obrascu</value>
+  </data>
+  <data name="name" xml:space="preserve">
+    <value>Ime i prezime</value>
+  </data>
+  <data name="lastName" xml:space="preserve">
+    <value>Prezime</value>
+  </data>
+  <data name="phone" xml:space="preserve">
+    <value>Broj telefona</value>
+  </data>
+  <data name="send" xml:space="preserve">
+    <value>Pošalji</value>
+  </data>
+  <data name="whyRentoomSubtitle" xml:space="preserve">
+    <value>Šta razlikuje naše stanove od drugih?
+
+</value>
+  </data>
+</root>

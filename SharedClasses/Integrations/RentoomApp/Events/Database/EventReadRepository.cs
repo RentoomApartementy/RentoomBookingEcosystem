@@ -14,9 +14,9 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Database
 
     public class EventReadRepository : IEventReadRepository
     {
-        private readonly RappEventsDbContextFactory _dbContextFactory;
+        private readonly IDbContextFactory<RappEventsDbContext> _dbContextFactory;
 
-        public EventReadRepository(RappEventsDbContextFactory dbContextFactory)
+        public EventReadRepository(IDbContextFactory<RappEventsDbContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
         }

@@ -26,8 +26,11 @@
     },
 
     init(scrollEl, dotnet) {
-        if (!scrollEl) return;
-
+        
+        if(!scrollEl || !(scrollEl instanceof Element) || !scrollEl.isConnected){
+            return;
+        }
+        
         this.destroy(scrollEl);
 
         let ticking = false;

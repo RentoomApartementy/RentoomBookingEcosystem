@@ -10,8 +10,8 @@
 @using RentoomBooking.StayWell.Services
 @inject NavigationManager Navigation
 @inject IStringLocalizer<HomePage> Localizer
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
-@inject Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment HostEnvironment
+@inject FeatureFlagsService FeatureFlagsService
+@inject BackendApi BackendApi
 @inject UpsellCartState UpsellCartState
 @inject AvailableUpsellsState AvailableUpsellsState
 @inherits Models.PageBase
@@ -65,7 +65,7 @@ else
             <div class="tile-text">@Localizer["OpenApartment"]</div>
         </div>
 
-        @if (IsAiAssistantVisible)
+        @if (FeatureFlagsService.FeatureAllowed("ai-assistant"))
         {
             <div class="tile" @onclick="OpenAiChat">
                 <div class="tile-icon">
@@ -76,14 +76,18 @@ else
         }
         <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
             <div class="tile-icon-vouchers">
-                <img class="fas" src="/icons/wallet-cards.svg" />
+                <img class="fas" src="/icons/ticket-percent.svg" />
+                @if (PurchasedVouchersCount > 0)
+                {
+                    <span class="vouchers-badge">@PurchasedVouchersCount</span>
+                }
             </div>
             <div class="tile-text-vouchers">@Localizer["MyVouchers"]</div>
         </div>
         
     </div>
 
-    @if (IsUpsellsFeatureVisible)
+    @if (FeatureFlagsService.FeatureAllowed("upsells"))
     {
         //MS 17.03: Sekcja narazie jest ukryta - flow biznesowy jest jeszcze do obgadania.
         <RentoomBooking.StayWell.Components.Upsells.AvailableUpsells
@@ -112,17 +116,7 @@ else
     private DateTime checkIn;
     private DateTime checkOut;
     private DateTime now;
-    private string CurrentEnvironmentName =>
-        string.IsNullOrWhiteSpace(Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"])
-            ? HostEnvironment.Environment
-            : Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"]!;
-    private bool IsAiAssistantVisible =>
-        string.Equals(CurrentEnvironmentName, "Development", StringComparison.OrdinalIgnoreCase) ||
-        string.Equals(CurrentEnvironmentName, "DEV", StringComparison.OrdinalIgnoreCase);
-
-    private bool IsUpsellsFeatureVisible =>
-       string.Equals(CurrentEnvironmentName, "Development", StringComparison.OrdinalIgnoreCase) ||
-       string.Equals(CurrentEnvironmentName, "DEV", StringComparison.OrdinalIgnoreCase);
+    private int PurchasedVouchersCount;
 
     private Reservation? Reservation => ReservationState?.CurrentReservation?.Reservation;
 
@@ -201,12 +195,29 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        await LoadPurchasedVouchersCountAsync();
         LoadData();
         DateTime.TryParseExact(Reservation?.ReservationDetails?.dateFrom, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var ci);
         DateTime.TryParseExact(Reservation?.ReservationDetails?.dateTo, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var co);
         checkIn = ci;
         checkOut = co;
         now = DateTime.Now;
+    }
+
+    private async Task LoadPurchasedVouchersCountAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Token))
+        {
+            PurchasedVouchersCount = 0;
+            return;
+        }
+
+        var purchasedSummary = await BackendApi.GetPurchasedUpsellsByReservationTokenAsync(Token);
+        var purchasedVoucherLines = purchasedSummary?.PurchasedUpsellsWithVouchers ?? [];
+
+        PurchasedVouchersCount = purchasedVoucherLines
+            .Where(line => line.Voucher is not null)
+            .Sum(line => line.Quantity > 0 ? line.Quantity : 0);
     }
 
     private void LoadData()

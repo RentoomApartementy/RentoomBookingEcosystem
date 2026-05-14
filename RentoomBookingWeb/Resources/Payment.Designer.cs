@@ -376,6 +376,24 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Potwierdzenie wysłaliśmy na {0} oraz na WhatsApp..
+        /// </summary>
+        internal static string MessageSentDescription {
+            get {
+                return ResourceManager.GetString("MessageSentDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wysłano wiadomość.
+        /// </summary>
+        internal static string MessageSentTitle {
+            get {
+                return ResourceManager.GetString("MessageSentTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Name {
@@ -448,6 +466,132 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentInitError {
+            get {
+                return ResourceManager.GetString("PaymentInitError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentPageTitle {
+            get {
+                return ResourceManager.GetString("PaymentPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnCheckingMessage {
+            get {
+                return ResourceManager.GetString("PaymentReturnCheckingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnCheckingTitle {
+            get {
+                return ResourceManager.GetString("PaymentReturnCheckingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnFailedBannerMessage {
+            get {
+                return ResourceManager.GetString("PaymentReturnFailedBannerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnFailedBannerTitle {
+            get {
+                return ResourceManager.GetString("PaymentReturnFailedBannerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnPendingBannerMessage {
+            get {
+                return ResourceManager.GetString("PaymentReturnPendingBannerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnPendingBannerTitle {
+            get {
+                return ResourceManager.GetString("PaymentReturnPendingBannerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnPendingMessage {
+            get {
+                return ResourceManager.GetString("PaymentReturnPendingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnPendingTitle {
+            get {
+                return ResourceManager.GetString("PaymentReturnPendingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnVerificationError {
+            get {
+                return ResourceManager.GetString("PaymentReturnVerificationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnWaitingMessage {
+            get {
+                return ResourceManager.GetString("PaymentReturnWaitingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentReturnWaitingTitle {
+            get {
+                return ResourceManager.GetString("PaymentReturnWaitingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentStatusFetchError {
+            get {
+                return ResourceManager.GetString("PaymentStatusFetchError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string PaymentSuccessful {
@@ -462,6 +606,15 @@ namespace RentoomBookingWeb {
         internal static string PaymentSuccessfulText {
             get {
                 return ResourceManager.GetString("PaymentSuccessfulText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  .
+        /// </summary>
+        internal static string PaymentVerificationError {
+            get {
+                return ResourceManager.GetString("PaymentVerificationError", resourceCulture);
             }
         }
         
@@ -588,6 +741,15 @@ namespace RentoomBookingWeb {
         internal static string ReservationSummary {
             get {
                 return ResourceManager.GetString("ReservationSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string SelectAllConsents {
+            get {
+                return ResourceManager.GetString("SelectAllConsents", resourceCulture);
             }
         }
         

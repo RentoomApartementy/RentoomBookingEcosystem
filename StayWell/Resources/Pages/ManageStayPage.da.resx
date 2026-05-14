@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdditionalCleaning" xml:space="preserve">
+    <value>Yderligere rengøring</value>
+  </data>
+  <data name="Addon" xml:space="preserve">
+    <value>Bilag</value>
+  </data>
+  <data name="BabyCrib" xml:space="preserve">
+    <value>Barneseng</value>
+  </data>
+  <data name="CheckOut" xml:space="preserve">
+    <value>Tjek ud</value>
+  </data>
+  <data name="EarlyCheckIn" xml:space="preserve">
+    <value>Tidlig indtjekning</value>
+  </data>
+  <data name="ExtendStay" xml:space="preserve">
+    <value>Forlænge dit ophold</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Hjælp</value>
+  </data>
+  <data name="LateCheckOut" xml:space="preserve">
+    <value>Sen udtjekning</value>
+  </data>
+  <data name="ManageStay" xml:space="preserve">
+    <value>Håndter dit ophold</value>
+  </data>
+  <data name="Purchased" xml:space="preserve">
+    <value>Købt</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Rapportér en fejl</value>
+  </data>
+  <data name="ReportDescription" xml:space="preserve">
+    <value>En fejl, et spørgsmål eller en anmodning til servicen.</value>
+  </data>
+</root>

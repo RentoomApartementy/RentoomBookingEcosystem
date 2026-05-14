@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeSuffix" xml:space="preserve">
+    <value>Ennen kuin saat pääsyn hakemukseesi, täytä rekisteröintikortti!</value>
+  </data>
+  <data name="SaveError" xml:space="preserve">
+    <value>Tietojen tallentamisen yhteydessä tapahtui virhe. Ole hyvä ja yritä uudelleen.</value>
+  </data>
+  <data name="SelectCheckInTime" xml:space="preserve">
+    <value>Valitse sisäänkirjautumisaikasi</value>
+  </data>
+  <data name="FillGuestData" xml:space="preserve">
+    <value>Täytä vierastiedot</value>
+  </data>
+  <data name="WelcomePrefix" xml:space="preserve">
+    <value>Hei</value>
+  </data>
+  <data name="FillGuestDataTitle" xml:space="preserve">
+    <value>Täytä vierastiedot</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Rekisteröintikortti</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Syötä sähköpostiosoitteesi</value>
+  </data>
+  <data name="SaveAndContinue" xml:space="preserve">
+    <value>Tallenna ja jatka eteenpäin</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Täytä tarvittavat tiedot.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Postiosoite</value>
+  </data>
+  <data name="ChangeCheckInTime" xml:space="preserve">
+    <value>Vaihda aika {0}</value>
+  </data>
+  <data name="ConfirmDataInfo" xml:space="preserve">
+    <value>Painamalla alla olevaa nappia varmistan datan oikeellisuuden.</value>
+  </data>
+  <data name="SelectEstimatedCheckInTimeTitle" xml:space="preserve">
+    <value>Valitse arvioitu sisäänkirjautumisaikasi</value>
+  </data>
+  <data name="ChangeGuestData" xml:space="preserve">
+    <value>Vaihda vierastietoja</value>
+  </data>
+</root>

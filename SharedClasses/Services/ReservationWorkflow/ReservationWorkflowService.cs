@@ -16,6 +16,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.ReservationManagement;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
+using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,9 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.Bonuses;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 {
@@ -61,6 +65,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
         private readonly IUpsellCatalogService _upsellCatalogService;
         private readonly IUpsellOrderWorkflowService _upsellOrderWorkflowService;
+        private readonly IBonusesService _bonusesService;
 
 
         private readonly CustomerTermsRepository _termsRepository;
@@ -83,6 +88,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             ApartmentRepository apartmentStore,
              IUpsellCatalogService upsellCatalogService,
              IUpsellOrderWorkflowService upsellOrderWorkflowService,
+             IBonusesService bonusesService,
             CustomerTermsRepository termsRepository,
         ILogger<ReservationWorkflowService> logger)
         {
@@ -97,6 +103,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _apartmentStore = apartmentStore ?? throw new ArgumentNullException(nameof(apartmentStore));
             _upsellCatalogService = upsellCatalogService ?? throw new ArgumentNullException(nameof(upsellCatalogService));
             _upsellOrderWorkflowService = upsellOrderWorkflowService ?? throw new ArgumentNullException(nameof(upsellOrderWorkflowService));
+            _bonusesService = bonusesService ?? throw new ArgumentNullException(nameof(bonusesService));
             _termsRepository = termsRepository;
             _bitrixAssignedByUserId = BitrixConfiguration.GetAssignedByUserId(configuration);
         }
@@ -439,11 +446,26 @@ private static TimeZoneInfo GetWarsawTimeZone()
             }
 
             var offerPrice = startRequest?.OfferPrice ?? 0m;
-            
-            decimal grandTotal = offerPrice + addonsTotal + upsellsTotal;
-            
-           // record.State.PaymentGrandTotal = grandTotal;
-           // record.State.PaymentUpsellsTotal = upsellsTotal;
+            var totalCostGrossAmount = offerPrice + addonsTotal + upsellsTotal;
+            var bonusResult = await EvaluateBonusAsync(startRequest, offerPrice, totalCostGrossAmount);
+
+            if (startRequest is not null)
+            {
+                startRequest.BonusInputName = bonusResult.NormalizedBonusInputName;
+                startRequest.AppliedBonusId = bonusResult.AppliedBonusId;
+                startRequest.AppliedBonusName = bonusResult.AppliedBonusName;
+                startRequest.AppliedBonusValueType = bonusResult.AppliedBonusValueType;
+                startRequest.AppliedBonusValue = bonusResult.AppliedBonusValue;
+                startRequest.BonusBasePln = bonusResult.BonusBasePln;
+                startRequest.DiscountAmountPln = bonusResult.DiscountAmountPln;
+                startRequest.BonusRejectReason = string.Equals(bonusResult.RejectReason, "empty", StringComparison.OrdinalIgnoreCase)
+                    ? null
+                    : bonusResult.RejectReason;
+            }
+
+            decimal grandTotalBeforeDiscount = totalCostGrossAmount;
+            decimal discountAmount = Math.Min(bonusResult.DiscountAmountPln, grandTotalBeforeDiscount);
+            decimal grandTotal = Math.Max(0m, grandTotalBeforeDiscount - discountAmount);
 
             return new ReservationSummaryDto
             {
@@ -460,14 +482,67 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 Addons = addonsLines,
                 AddonsTotal = addonsTotal,
                 UpsellsTotal = upsellsTotal,
+                GrandTotalBeforeDiscount = grandTotalBeforeDiscount,
+                DiscountAmountPln = discountAmount,
+                AppliedBonusName = bonusResult.AppliedBonusName,
+                BonusRejectReason = string.Equals(bonusResult.RejectReason, "empty", StringComparison.OrdinalIgnoreCase)
+                    ? null
+                    : bonusResult.RejectReason,
                 GrandTotal = grandTotal
             };
+        }
+
+        private async Task<BonusCalculationResult> EvaluateBonusAsync(StartReservationRequest? startRequest, decimal offerPrice, decimal totalCostGrossAmount)
+        {
+            if (startRequest is null)
+            {
+                return new BonusCalculationResult();
+            }
+
+            var reservationDays = Math.Max(0, (startRequest.EndDate.ToDateTime(TimeOnly.MinValue) - startRequest.StartDate.ToDateTime(TimeOnly.MinValue)).Days);
+
+            return await _bonusesService.EvaluateAsync(new BonusCalculationRequest
+            {
+                BonusInputName = startRequest.BonusInputName,
+                BookingChannel = startRequest.BookingChannel,
+                ReservationStartDate = startRequest.StartDate,
+                ReservationDays = reservationDays,
+                ApartmentItemId = startRequest.ObjectItemId,
+                OfferPrice = offerPrice,
+                MandatoryAddonsTotalPrice = startRequest.MandatoryAddonsTotalPrice,
+                TotalCostGrossAmount = totalCostGrossAmount
+            });
         }
 
         public async Task EnsurePaymentTotalsAsync(Guid reservationGuid, ReservationRecord record)
         {
             var summary = await BuildSummaryFromRecordAsync(reservationGuid, record);
             var updated = false;
+            var startRequest = record.State.StartRequest;
+            var summaryStartRequest = summary.StartRequest;
+
+            if (startRequest is not null && summaryStartRequest is not null)
+            {
+                if (startRequest.AppliedBonusId != summaryStartRequest.AppliedBonusId
+                    || !string.Equals(startRequest.AppliedBonusName, summaryStartRequest.AppliedBonusName, StringComparison.Ordinal)
+                    || startRequest.AppliedBonusValueType != summaryStartRequest.AppliedBonusValueType
+                    || startRequest.AppliedBonusValue != summaryStartRequest.AppliedBonusValue
+                    || startRequest.BonusBasePln != summaryStartRequest.BonusBasePln
+                    || startRequest.DiscountAmountPln != summaryStartRequest.DiscountAmountPln
+                    || !string.Equals(startRequest.BonusRejectReason, summaryStartRequest.BonusRejectReason, StringComparison.Ordinal)
+                    || !string.Equals(startRequest.BonusInputName, summaryStartRequest.BonusInputName, StringComparison.Ordinal))
+                {
+                    startRequest.BonusInputName = summaryStartRequest.BonusInputName;
+                    startRequest.AppliedBonusId = summaryStartRequest.AppliedBonusId;
+                    startRequest.AppliedBonusName = summaryStartRequest.AppliedBonusName;
+                    startRequest.AppliedBonusValueType = summaryStartRequest.AppliedBonusValueType;
+                    startRequest.AppliedBonusValue = summaryStartRequest.AppliedBonusValue;
+                    startRequest.BonusBasePln = summaryStartRequest.BonusBasePln;
+                    startRequest.DiscountAmountPln = summaryStartRequest.DiscountAmountPln;
+                    startRequest.BonusRejectReason = summaryStartRequest.BonusRejectReason;
+                    updated = true;
+                }
+            }
 
             if (record.State.PaymentUpsellsTotal != summary.UpsellsTotal)
             {
@@ -1199,8 +1274,8 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 Price = (float)start.getFullReservationPrizeWithoutUpsells(),//(float)start.OfferPrice.Value + (float)start.SelectedAddonsTotalPrice,  //19.03.26 - nie brało pod uwagę, zmieniłem. TODO: 10.03.26 - sprawdzić czy ta cena powinna iść do IDB i czy powinna zawierać ceny za Addony
                 Status = initialStatus,
                 InternalSource = ReservationInternalSourceType.Other,
-                InternalNote = start.SelectedOfferType,
-                ApiNote = start.SelectedOfferType,
+                InternalNote = BuildInternalNoteForReservation(start),
+                ApiNote = BuildInternalNoteForReservation(start),
                 ExternalNote = record.State.StayWellLink,
                 
                 Items =
@@ -1234,6 +1309,14 @@ private static TimeZoneInfo GetWarsawTimeZone()
                  }
              };*/
             return reservation;
+        }
+
+        private static string BuildInternalNoteForReservation(StartReservationRequest start)
+        {
+            return $"Typ_Oferty: {start.SelectedOfferType};\n" +
+                   $"Kod_Rabatowy: {(start.AppliedBonusId.HasValue ? $"{start.AppliedBonusName} ({start.AppliedBonusValue}{(start.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})" : "None")};\n" +
+                   $"Bonus_Base_PLN: {start.BonusBasePln};\n" +
+                   $"Discount_Amount_PLN: {start.DiscountAmountPln};\n";
         }
 
         private string? BuildStayWellLink(string? resToken)
@@ -1523,6 +1606,12 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["UF_CRM_1768836818927"] = startRequest?.EndDate.DayNumber - startRequest?.StartDate.DayNumber,
                     ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, bitrixServerUTCOffset, differenceInHours),
                     ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, bitrixServerUTCOffset, differenceInHours),
+
+                    //RB_Godzina_Zameldowania
+                    ["UF_CRM_1778170129465"] = startRequest?.CheckInTime.ToString("HH:mm"),
+                    //RB_Godzina_Wymeldowania
+                    ["UF_CRM_1778170154231"] = startRequest?.CheckOutTime.ToString("HH:mm"),
+
                     ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15, 0),
                     ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11, 0),
                     [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
@@ -1530,10 +1619,14 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                     [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
                     //RB_Link_Anuluj_Rezerwacje
-                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue,cancelaction: true),
+                    ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true),
                     //RB_Link_Do_Platnosci
-                    ["UF_CRM_1775071642554"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: false)
+                    ["UF_CRM_1775071642554"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: false),
 
+                    //RB_Zastosowany_Bonus
+                    ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
+                    ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
+                    : "None"
 
 
                 };
@@ -1630,8 +1723,17 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 //RB_ID_Rezrerwacji
                 [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
                 //RB_Link_StayWell
-                [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString())
-                
+                [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
+
+                //RB_Godzina_Zameldowania
+                ["UF_CRM_1778170129465"] = record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
+                //RB_Godzina_Wymeldowania
+                ["UF_CRM_1778170154231"] = record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
+                //RB_Zastosowany_Bonus
+                ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
+                    ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
+                    : "None"
+
             };
             AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
 

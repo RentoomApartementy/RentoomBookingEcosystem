@@ -336,4 +336,106 @@
   <data name="InvoiceNo" xml:space="preserve">
     <value />
   </data>
+  <data name="PaymentReturnCheckingTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnPendingBannerTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnFailedBannerMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnVerificationError" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentPageTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="MessageSentDescription" xml:space="preserve">
+    <value>Potwierdzenie wysłaliśmy na {0} oraz na WhatsApp.</value>
+  </data>
+  <data name="PaymentReturnPendingMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnWaitingTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentStatusFetchError" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentVerificationError" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnWaitingMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="MessageSentTitle" xml:space="preserve">
+    <value>Wysłano wiadomość</value>
+  </data>
+  <data name="PaymentReturnCheckingMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnPendingTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnPendingBannerMessage" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentInitError" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="PaymentReturnFailedBannerTitle" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonus was removed.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus applied: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>The entered bonus does not exist.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>This bonus is currently disabled.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>This bonus is not valid for the selected apartment.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>This bonus is not available for this reservation start date.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>This bonus works only for reservations from RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>This bonus does not reduce the current reservation price.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Fill in dates and select an offer to apply the bonus.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Could not read offer price for bonus calculation.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Could not apply bonus.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Enter bonus code</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Apply bonus</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Checking...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Remove bonus</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Bonus discount</value>
+  </data>
 </root>
