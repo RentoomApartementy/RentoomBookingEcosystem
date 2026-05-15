@@ -426,7 +426,7 @@
         InitializeCountryPrefixes();
         if (Environment.IsDevelopment())
         {
-          //  InitializeDummyClientData();
+            InitializeDummyClientData();
         }
         _editContext = new EditContext(_form);
         _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
