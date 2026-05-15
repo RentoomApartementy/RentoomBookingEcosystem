@@ -50,6 +50,8 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<DealEmailStatusDto> GetDealEmailStatusAsync(Guid reservationGuid);
         Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections);
         Task CancelReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
+
+       // Task UpdateIdoStatusAsync(ReservationRecord record, string targetStatus)
     }
 
     public class ReservationWorkflowService : IReservationWorkflowService, IReservationWorkflowSyncOperations
@@ -324,13 +326,13 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
             if (record.IdoStatus != ReservationStatusType.Accepted && record.PaymentStatus != PaymentStatuses.Paid)
             {
-                record = await EnsureIdoReservationAsync(record, ReservationStatusType.Accepted);
+                record = await EnsureIdoReservationAsync(record, ReservationStatusType.WaitingForPayment);
                 record = await EnsureBitrixContactAndDealAsync(record);
                 //record.IdoStatus = ReservationStatusType.WaitingForPayment; <<usuniete bo link do retry platnosci wchodzil za pozno
 
                 await _store.UpdateAsync(record);
-                //await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment); <<usuniete bo link do retry platnosci wchodzil za pozno
-                //await UpdateBitrixDealAsync(record, "BuildSummaryAsync Update"); <<usuniete bo link do retry platnosci wchodzil za pozno
+                await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);// <<usuniete bo link do retry platnosci wchodzil za pozno
+                await UpdateBitrixDealAsync(record, "BuildSummaryAsync Update");// <<usuniete bo link do retry platnosci wchodzil za pozno
 
                 record = await RequireReservationAsync(reservationGuid);
             }
@@ -570,7 +572,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             while (true)
             {
                 var record = await RequireReservationAsync(reservationGuid);
-                record = await EnsureIdoReservationAsync(record, ReservationStatusType.Accepted); //<< jako accepted bo waitingForPayment jest za szybko.
+                record = await EnsureIdoReservationAsync(record, ReservationStatusType.WaitingForPayment); //<< jako accepted bo waitingForPayment jest za szybko.
                 record = await EnsureBitrixContactAndDealAsync(record); //<< jako accepted bo waitingForPayment jest za szybko i nie pojdzie link retry platnosci
 
                 if (record.PaymentStatus == PaymentStatuses.Paid && record.PaymentSessionGuid.HasValue)
@@ -1230,7 +1232,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
 
 
-        private async Task UpdateIdoStatusAsync(ReservationRecord record, string targetStatus)
+        public async Task UpdateIdoStatusAsync(ReservationRecord record, string targetStatus)
         {
             if (record.IdoReservationId is null)
             {
@@ -1674,7 +1676,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ContactId: record.ClientBitrixId,
                     CustomFields: customFields
                 ), dealUpdateFields);
-
+              //  await UpdateBitrixDealAsync(record, "Upsert from EnsureBitrixContactAndDealAsync",);
                 updated = true;
                 _logger.LogInformation("Upserted Bitrix deal {DealId} for reservation {ReservationGuid}.", record.DealBitrixId, record.ReservationGuid);
             }

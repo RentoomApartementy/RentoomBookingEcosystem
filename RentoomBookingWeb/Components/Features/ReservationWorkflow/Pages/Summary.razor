@@ -377,7 +377,7 @@
 
 @code {
     [Parameter] public Guid ReservationTokenGuid { get; set; }
-    
+
     private ReservationSummaryDto? _summary;
     private bool _loading = true;
     private string? _error;
@@ -414,7 +414,7 @@
     private bool ShouldShowPaymentReturnBanner => !IsPaid && !string.IsNullOrWhiteSpace(_paymentReturn);
     private bool ShouldShowRetryPaymentButton => IsPaymentInitiated || IsPaymentFailed;
     private bool IsRetryPaymentDisabled => _retryCountdownSeconds > 0;
-    private bool ShouldShowCancelAction => _enableCancelAction && ShouldShowTermsAndPayment && !IsPaid;
+    private bool ShouldShowCancelAction => true;// _enableCancelAction && ShouldShowTermsAndPayment && !IsPaid;
     private bool ShouldShowTermsAndPayment => 
                                                  (  ( (
                                                       string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
@@ -631,6 +631,9 @@
     private async Task RefreshSummaryAsync()
     {
         _summary = await ReservationWorkflowService.BuildSummaryAsync(ReservationTokenGuid);
+       
+        
+        
         _bonusInputName = _summary?.StartRequest?.BonusInputName ?? string.Empty;
 
         if (string.Equals(_summary?.IdoStatus, "canceled", StringComparison.OrdinalIgnoreCase))
