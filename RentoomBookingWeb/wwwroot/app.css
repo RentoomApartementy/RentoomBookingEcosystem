@@ -119,6 +119,98 @@ code {
     text-decoration: underline;
 }
 
+/* ========================================================
+   GLOBAL BUTTON STYLES (for Button.razor component)
+   ======================================================== */
+
+/* SearchBar Button */
+.search-btn {
+    background-color: #945F28 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    height: 100% !important;
+    padding: 0 28px !important;
+    margin-left: 8px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-items: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease, transform 0.1s ease !important;
+    outline: none !important;
+}
+
+.search-btn:hover {
+    background-color: #7E5022 !important;
+}
+
+.search-btn:active {
+    transform: scale(0.97) !important;
+}
+
+.search-icon path {
+    stroke: #FFFFFF !important;
+}
+
+.search-btn-text {
+    color: #FFFFFF !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+}
+
+/* Reservation Workflow Buttons */
+.button-pending {
+    width: 100% !important;
+    background-color: #166534 !important;
+    color: #fff !important;
+    padding: 1rem !important;
+    border: #002b67 solid 1px !important;
+    border-radius: .6rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+}
+
+.button-pending:disabled {
+    opacity: 0.65 !important;
+    cursor: not-allowed !important;
+    filter: saturate(0.85) !important;
+}
+
+.button-cancel-reservation {
+    background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
+    border: 1px solid #c2410c !important;
+    box-shadow: 0 10px 24px rgba(234, 88, 12, 0.18) !important;
+}
+
+.button-cancel-reservation:hover:not(:disabled) {
+    filter: brightness(1.03) !important;
+}
+
+.button {
+    width: 100% !important;
+    background-color: #1F5A41 !important;
+    color: white !important;
+    padding: .5rem !important;
+    border: none !important;
+    border-radius: .6rem !important;
+    text-align: center !important;
+}
+
+@media (max-width: 910px) {
+    .search-btn {
+        margin-left: 0 !important;
+        margin-top: 4px !important;
+        justify-content: center !important;
+        padding: 16px !important;
+        height: 54px !important;
+        border-radius: 16px !important;
+    }
+}
+
 .scrolled-nav-link {
     color: #1F5A41;
     text-decoration: none;

@@ -151,51 +151,12 @@
     display: block;
 }
 
-.button-pending {
-    width: 100%;
-    background-color: #166534;
-    color: #fff;
-    padding: 1rem;
-    border: #002b67 solid 1px;
-    border-radius: .6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.button-pending:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-    filter: saturate(0.85);
-}
-
 .payment-secondary-action-label {
     text-align: center;
     font-size: 0.95rem;
     font-weight: 600;
     color: #6B7280;
     margin: -0.75rem 0 -1rem;
-}
-
-.button-cancel-reservation {
-    background: linear-gradient(135deg, #f59e0b, #ea580c);
-    border: 1px solid #c2410c;
-    box-shadow: 0 10px 24px rgba(234, 88, 12, 0.18);
-}
-
-.button-cancel-reservation:hover:not(:disabled) {
-    filter: brightness(1.03);
-}
-
-.button {
-    width: 100%;
-    background-color: #1F5A41;
-    color: white;
-    padding: .5rem;
-    border: none;
-    border-radius: .6rem;
-    text-align: center;
 }
 
 .staywell-trigger-button {

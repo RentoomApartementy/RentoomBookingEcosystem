@@ -9,6 +9,53 @@
     border: 0;
     color: white !important;
     padding: 0 2rem;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-button:not(.secondary):not(.tertiary):hover {
+    background-color: #A66E38 !important;
+}
+
+.secondary:hover {
+    background-color: #f8f9fa !important;
+}
+
+.tertiary:hover {
+    background-color: #277051 !important;
+}
+
+.custom-button.ripple-active::after {
+    content: "";
+    position: absolute;
+    top: var(--ripple-y, 50%);
+    left: var(--ripple-x, 50%);
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.4);
+    opacity: 0;
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    transform-origin: 50% 50%;
+    animation: ripple 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    0% {
+        transform: translate(-50%, -50%) scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(100, 100);
+        opacity: 0;
+    }
+}
+
+.secondary.ripple-active::after {
+    background: rgba(31, 90, 65, 0.2);
 }
 
 .secondary {
@@ -29,8 +76,37 @@
     font-size: 0.85rem;
 }
 
-.disabled {
+.disabled, .custom-button:disabled {
     background-color: #7a7a7a !important;
     border: 1px solid #8B9B8C;
     color: white !important;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.custom-button.busy {
+    cursor: wait;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.spinner {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.secondary .spinner {
+    border: 2px solid rgba(31, 90, 65, 0.2);
+    border-top: 2px solid #1F5A41;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

@@ -218,9 +218,9 @@
                           Title="@Localizer["SomethingWrong"]"
                           Dismissible="false" />
 
-                <button type="submit" disabled="@_isSaving" class="button">
-                    @(_isSaving ? Localizer["ClientInfoButtonLoading"] : Localizer["ClientInfoButton"])
-                </button>
+                <Button IsBusy="@_isSaving">
+                    @Localizer["ClientInfoButton"]
+                </Button>
             </div>
         </EditForm>
         </div>
@@ -236,7 +236,7 @@
             <Button Type="ButtonType.Tertiary" 
                     Class="small" 
                     style="width: 100%;" 
-                    @onclick="SmartScrollAction">
+                    OnClick="SmartScrollAction">
                 @Localizer["FillGuestData"]
             </Button>
         </div>

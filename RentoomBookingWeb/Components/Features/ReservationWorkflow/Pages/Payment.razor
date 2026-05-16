@@ -18,7 +18,7 @@
             <AppError Message=@_error
                       Title="@Localizer["SomethingWrong"]"
                       Dismissible="false" />
-            <button class="btn-primary" @onclick="GoToSummary">@Localizer["BackToSummary"]</button>
+            <Button OnClick="GoToSummary">@Localizer["BackToSummary"]</Button>
         }
         else
         {

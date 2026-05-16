@@ -172,9 +172,9 @@
                             </div>
                         </div>
 
-                        <button @onclick="RetryPayment" class="button-pending" disabled="@IsRetryPaymentDisabled">
+                        <Button OnClick="RetryPayment" Disabled="@IsRetryPaymentDisabled">
                             @RetryPaymentButtonText
-                        </button>
+                        </Button>
                     }
                     else if (IsPaymentFailed)
                     {
@@ -189,9 +189,9 @@
                             </div>
                         </div>
 
-                        <button @onclick="RetryPayment" class="button-pending" disabled="@IsRetryPaymentDisabled">
+                        <Button OnClick="RetryPayment" Disabled="@IsRetryPaymentDisabled">
                             @RetryPaymentButtonText
-                        </button>
+                        </Button>
                     }
                     else if (ShouldShowTermsAndPayment)
                     {
@@ -265,22 +265,21 @@
                             }
                         </div>
                         
-                        <button @onclick="GoToPayment" 
-                                class="button-pending" 
-                                disabled="@(!CanProceedToPayment())"
+                        <Button OnClick="GoToPayment" 
+                                Disabled="@(!CanProceedToPayment())"
+                                IsBusy="@_isSavingTerms"
                                 style="@(!CanProceedToPayment() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
                             <img src="assets/svgs/tpay.svg" alt="Tpay icon"/>
                             @Localizer["ClickToPay"]
-                        </button>
+                        </Button>
 
                         @if (ShouldShowCancelAction)
                         {
                             <div class="payment-secondary-action-label">@CancelActionSeparatorText</div>
-                            <button @onclick="CancelReservation"
-                                    class="button-pending button-cancel-reservation"
-                                    disabled="@_isCancellingReservation">
-                                @(_isCancellingReservation ? CancelReservationInProgressText : CancelReservationButtonText)
-                            </button>
+                            <Button OnClick="CancelReservation"
+                                    IsBusy="@_isCancellingReservation">
+                                @CancelReservationButtonText
+                            </Button>
                         }
                     }
                     else if (@_summary.IdoStatus != "accepted")
@@ -339,7 +338,7 @@
                     
                     @if (ShouldShowTermsAndPayment)
                     {
-                        <button class="button" @onclick="GoToClientInfo">@Localizer["Edit"]</button>   
+                        <Button OnClick="GoToClientInfo">@Localizer["Edit"]</Button>   
                     }
                 </div>
                 
@@ -396,6 +395,7 @@
     private Guid? _resumePaymentSessionGuid;
     private bool _enableCancelAction;
     private bool _isCancellingReservation;
+    private bool _isSavingTerms;
     private CancellationTokenSource? _retryCountdownCts;
     private int _retryCountdownSeconds = RetryPaymentDelaySeconds;
 
@@ -465,8 +465,11 @@
     
     private async Task GoToPayment()
     {
+        if (_isSavingTerms) return;
+
         try
         {
+            _isSavingTerms = true;
             await ReservationWorkflowService.SaveCustomerTermsAsync(ReservationTokenGuid, _userSelections);
             WorkflowTelemetry.TrackEvent(
                 "ReservationStepCompleted_Summary",
@@ -491,6 +494,7 @@
                 {
                     ["ReservationTokenGuid"] = ReservationTokenGuid.ToString()
                 });
+            _isSavingTerms = false;
         }
     }
 

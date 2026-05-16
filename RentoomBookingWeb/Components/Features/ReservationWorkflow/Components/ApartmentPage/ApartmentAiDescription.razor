@@ -13,7 +13,7 @@
         @if (!string.IsNullOrEmpty(Data?.ShortDescription))
         {
             <div class="ai-short-description">
-                @Data.ShortDescription
+                @((MarkupString)Data.ShortDescription)
             </div>
         }
     </article>
