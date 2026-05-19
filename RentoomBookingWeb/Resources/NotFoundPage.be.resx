@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Ð¡Ñ‚Ð°Ñ€Ð¾Ð½ÐºÐ° Ð½Ðµ Ð·Ð½Ð¾Ð¹Ð´Ð·ÐµÐ½Ð°</value>
+  </data>
+  <data name="NotFoundHeaderTitle" xml:space="preserve">
+    <value>ÐŸÐ°Ð¼Ñ‹Ð»ÐºÐ° 404</value>
+  </data>
+  <data name="PageNotFoundDescription" xml:space="preserve">
+    <value>ÐŸÑ€Ð°Ð±Ð°Ñ‡Ñ†Ðµ, Ð°Ð»Ðµ ÑÑ‚Ð°Ñ€Ð¾Ð½ÐºÐ°, ÑÐºÑƒÑŽ Ð²Ñ‹ ÑˆÑƒÐºÐ°ÐµÑ†Ðµ, Ð½Ðµ Ñ–ÑÐ½ÑƒÐµ Ð°Ð±Ð¾ Ð±Ñ‹Ð»Ð° Ð¿ÐµÑ€Ð°Ð¼ÐµÑˆÑ‡Ð°Ð½Ð°.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Ð’ÑÑ€Ð½ÑƒÑ†Ñ†Ð° Ð½Ð° Ð³Ð°Ð»Ð¾ÑžÐ½ÑƒÑŽ ÑÑ‚Ð°Ñ€Ð¾Ð½ÐºÑƒ</value>
+  </data>
+  <data name="NotFoundMaybeLookingFor" xml:space="preserve">
+    <value>ÐœÐ°Ð³Ñ‡Ñ‹Ð¼Ð°, Ð²Ñ‹ ÑˆÑƒÐºÐ°ÐµÑ†Ðµ:</value>
+  </data>
+  <data name="NotFoundApartmentsList" xml:space="preserve">
+    <value>Ð¡Ð¿Ñ–Ñ ÐºÐ²Ð°Ñ‚ÑÑ€</value>
+  </data>
+  <data name="NotFoundCooperation" xml:space="preserve">
+    <value>Ð¡ÑƒÐ¿Ñ€Ð°Ñ†Ð¾ÑžÐ½Ñ–Ñ†Ñ‚Ð²Ð°</value>
+  </data>
+  <data name="NotFoundContact" xml:space="preserve">
+    <value>ÐšÐ°Ð½Ñ‚Ð°ÐºÑ‚</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    
+    
+  <value>Reservation canceled</value></data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    
+    
+  <value>This is our new portal</value></data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    
+    
+  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    
+    
+  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    
+    
+  <value>Error 404</value></data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    
+    
+  <value>Book an apartment</value></data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    
+    
+  <value>Book an apartment ({0}s)</value></data>
+</root>
