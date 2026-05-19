@@ -327,11 +327,14 @@ private static TimeZoneInfo GetWarsawTimeZone()
             if (record.IdoStatus != ReservationStatusType.Accepted && record.PaymentStatus != PaymentStatuses.Paid)
             {
                 record = await EnsureIdoReservationAsync(record, ReservationStatusType.Accepted);
+                
+                record.IdoStatus = ReservationStatusType.WaitingForPayment;
+                await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
+                
                 record = await EnsureBitrixContactAndDealAsync(record);
-                //record.IdoStatus = ReservationStatusType.WaitingForPayment; <<usuniete bo link do retry platnosci wchodzil za pozno
-
+                
                 await _store.UpdateAsync(record);
-                await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);// <<usuniete bo link do retry platnosci wchodzil za pozno
+                //await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);// <<usuniete bo link do retry platnosci wchodzil za pozno
                 await UpdateBitrixDealAsync(record, "BuildSummaryAsync Update");// <<usuniete bo link do retry platnosci wchodzil za pozno
 
                 record = await RequireReservationAsync(reservationGuid);
