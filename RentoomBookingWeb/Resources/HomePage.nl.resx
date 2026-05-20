@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – wij creëren unieke ervaringen van verblijven in Toruń
-</value>
+    <value>Rentoom Apartments – wij creëren unieke ervaringen van verblijven in Toruń</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Bent u op zoek naar een comfortabel appartement in Toruń?</value>
+    <value>Bent u op zoek naar een comfortabel appartement in Toruń?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Appartementen in Toruń – comfortabele accommodatie</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Bent u op zoek naar een comfortabel appartement in Toruń?
-
-</value>
+    <value>Bent u op zoek naar een comfortabel appartement in Toruń?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty is een modern merk voor kortetermijnverhuur dat een hoge accommodatiestandaard combineert met authentieke kennis van Toruń. We creëren plekken die zijn ontworpen met comfort, esthetiek en functionaliteit in gedachten – zowel voor toeristen als zaken.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>We zijn blij dat je bij ons bent gekomen!
-</value>
+    <value>We zijn blij dat je bij ons bent gekomen!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Ons aanbod omvat tientallen zorgvuldig geselecteerde appartementen in de meest aantrekkelijke delen van de stad. Elke locatie is gekozen om gemakkelijke toegang te bieden tot belangrijke attracties, restaurants en zakenzones.
-Elk appartement is een ruimte die is ontworpen om echte rust en privacy te bieden na een intensieve dag sightseeing of werk.
-</value>
+    <value>Ons aanbod omvat tientallen zorgvuldig geselecteerde appartementen in de meest aantrekkelijke delen van de stad. Elke locatie is gekozen om gemakkelijke toegang te bieden tot belangrijke attracties, restaurants en zakenzones.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Appartementen op de beste locaties in Toruń</value>
@@ -47,37 +40,28 @@ Elk appartement is een ruimte die is ontworpen om echte rust en privacy te biede
     <value>Tevreden klanten</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Appartementen in Toruń
-
-</value>
+    <value>Appartementen in Toruń</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Locatie in Toruń</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Waarom Rentoom?
-</value>
+    <value>Waarom Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments is meer dan alleen een overnachting in Toruń. Wij bieden een hoge standaard aan appartementen op de beste locaties en echte voordelen die de waarde van het hele verblijf verhogen.
-</value>
+    <value>Rentoom Apartments is meer dan alleen een overnachting in Toruń. Wij bieden een hoge standaard aan appartementen op de beste locaties en echte voordelen die de waarde van het hele verblijf verhogen.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Als onderdeel van ons Partnerprogramma krijgen gasten speciale kortingen op geselecteerde restaurants, cafés en toeristische attracties. Huidige kortingen en aanbevelingen bevinden zich direct in de appartementen, zodat je bewezen plekken kunt gebruiken en geld kunt besparen tijdens het sightseeing.
-</value>
+    <value>Als onderdeel van ons Partnerprogramma krijgen gasten speciale kortingen op geselecteerde restaurants, cafés en toeristische attracties.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>We werken uitsluitend samen met vertrouwde, lokale partners en zorgen voor de kwaliteit van elke aanbeveling. Door voor Rentoom te kiezen, krijg je comfort, professionele service en extra voordelen die je verblijf in Toruń comfortabeler, verfijnder en simpelweg winstgevender maken.
-</value>
+    <value>We werken uitsluitend samen met vertrouwde, lokale partners en zorgen voor de kwaliteit van elke aanbeveling.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Leer de meningen kennen van mensen die in onze appartementen in Toruń hebben geslapen.
-
-</value>
+    <value>Leer de meningen kennen van mensen die in onze appartementen in Toruń hebben geslapen.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Laat uw contactgegevens achter en wij nemen contact met u op!
-</value>
+    <value>Laat uw contactgegevens achter en wij nemen contact met u op!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Neem contact op met leverancier</value>
@@ -98,8 +82,27 @@ Elk appartement is een ruimte die is ontworpen om echte rust en privacy te biede
     <value>Verzenden</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Wat onderscheidt onze appartementen van andere?
-
-</value>
+    <value>Wat onderscheidt onze appartementen van andere?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Appartementen Toruń - Kortetermijnverhuur | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Bekijk onze appartementen in het hart van Toruń. Perfect voor een weekend en een langer verblijf.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Appartementen Toruń - uw comfortabele accommodatie</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Appartementen Toruń, accommodatie Toruń, kortetermijnverhuur, appartementen in de oude stad, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Bent u op zoek naar accommodatie in Toruń? We bieden comfortabele appartementen in het centrum en in de oude stad. Boek direct online - laagste prijzen, geen intermediair-commissies.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Bent u op zoek naar accommodatie in Toruń? Rentoom biedt appartementen voor kortetermijnverhuur in Toruń en verblijft op de beste locaties van de stad.</value>
   </data>
 </root>

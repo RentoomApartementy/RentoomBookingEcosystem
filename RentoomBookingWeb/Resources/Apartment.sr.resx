@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Promenite datum</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonus je uklonjen.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Primenjuje se bonus: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Obezbeđeni bonus ne postoji.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Ovaj bonus je trenutno onemogućen.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Ovaj bonus se ne odnosi na izabrani stan.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonus nije dostupan za datum početka ove rezervacije.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Ovaj bonus zahteva duži boravak.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Ovaj bonus zahteva veći ukupan iznos naloga.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonus radi samo za rezervacije sa RentoomBookingVeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonus ne smanjuje trenutnu cenu ove rezervacije.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Popunite datume i izaberite ponudu za primenu bonusa.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Cena ponude koja se obračunava od bonusa nije mogla da se pročita.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Nije uspeo da primeni bonus.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Imate popust kod?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Unesite popust kod</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Primeni kod</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Provera...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Ukloni bonus</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Pretraga</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Ova rezervacija više nije aktivna. Ako vam i dalje treba boravak, vratite se na listu apartmana i kreirajte novu rezervaciju.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Broj ležaja</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Rezervišite {0} u Rentoom-u. Odlična lokacija, {1} soba, visok standard.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Broj noći</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Nema dodataka</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Nema opisa dodatka</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Rezervacija otkazana</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Najverovatnije ste nam došli iz starog preusmeravanja koje više ne postoji. Mi ćemo vas odvesti na stranicu apartmana za trenutak.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Nastavi</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Da biste rezervisali apartman, izaberite datum i broj ljudi</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Broj ljudi</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Troškovi</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Broj kupatila</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Nažalost, nema ponuda za ovaj stan na ovaj datum</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Detalji apartmana - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Pretraga</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Rezervišite apartman</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Apartmani Novi-Vino</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Apartman Toruń, Smeštaj Toruń, iznajmljivanje, kratkoročno iznajmljivanje, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Ramer apartmana</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Poljska</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Ovo je naš novi portal</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Izaberite datume boravka da biste proverili dostupnost i cene za naše oglase.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Kuća</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Rezervišite apartman ({0})</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Želim da dobijem fakturu sa PDV-om</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Proverite detalje apartmana i rezervišite svoj boravak u Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Greška 404</value>
+  </data>
 </root>

@@ -132,4 +132,10 @@
   <data name="VoucherNoLimitText" xml:space="preserve">
     <value>Bez ierobežojumiem</value>
   </data>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Pievienot</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Dzēst</value>
+  </data>
 </root>

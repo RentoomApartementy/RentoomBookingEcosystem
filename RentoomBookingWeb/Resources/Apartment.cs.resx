@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Změňte datum</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonus byl odstraněn.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Poskytnutý bonus neexistuje.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Tento bonus je momentálně deaktivován.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Tento bonus se na vybraný byt nevztahuje.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonus není k dispozici v den začátku této rezervace.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Tento bonus vyžaduje delší pobyt.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Tento bonus vyžaduje vyšší celkovou částku objednávky.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonus platí pouze pro rezervace přes RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonus nesnižuje aktuální cenu této rezervace.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Vyplňte data a vyberte nabídku pro uplatnění bonusu.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Cena nabídky, která měla být vypočítána z bonusu, nebyla přečtena.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Neuplatnil jsem bonus.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Máte slevový kód?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Zadejte slevový kód</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Aplikovat kód</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Kontroluji...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Odebrat bonus</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Náhled</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Tato rezervace již není aktivní. Pokud stále potřebujete pobyt, vraťte se do seznamu bytů a vytvořte novou rezervaci.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Počet lůžek</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Rezervujte {0} v Rentoomu. Skvělá lokalita, {1} pokojů, vysoká úroveň.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Počet nocí</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Žádné doplňky</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Žádný popis doplňku</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Rezervace zrušena</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Nejspíš jste k nám přišel ze starého přesměrování, které už neexistuje. Za chvíli vás přeneseme na stránku o bytech.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Pokračovat</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Pro rezervaci bytu vyberte datum a počet osob</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Počet osob</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Cena</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Počet toalet</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Bohužel v tento den nejsou žádné nabídky na tento byt</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Detaily bytu - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Rezervace</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Zarezervujte si byt</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Byty</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Apartmán Toruń, ubytování Toruń, Rentoom, krátkodobý pronájem, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Velikost bytu</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Polsko</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Tohle je náš nový portál</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Vyberte si termíny pobytu a zkontrolujte dostupnost a ceny našich nabídek.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Byt</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Rezervujte byt(y) {0}</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Chci dostat fakturu DPH</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Zkontrolujte si informace o bytu a rezervujte si pobyt v Rentoomu.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Chyba 404</value>
+  </data>
 </root>

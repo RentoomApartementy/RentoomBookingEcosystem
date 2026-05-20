@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Промени го датумот</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Бонусот е отстранет.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Применет бонус: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Бонусот што се дава не постои.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Овој бонус моментално е оневозможен.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Овој бонус не важи за избраниот стан.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Бонусот не е достапен за датумот на почетокот на оваа резервација.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Овој бонус бара подолг престој.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Овој бонус бара поголема вкупна нарачка.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Бонусот важи само за резервации преку RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Бонусот не ја намалува тековната цена на оваа резервација.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Пополни ги датумите и избери ја понудата за да го примениш бонусот.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Цената на понудата што требаше да се пресмета за бонусот не можеше да се прочита.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Не успеав да го применам бонусот.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Дали имате код за попуст?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Внесете код за попуст</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Примени код</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Проверувам...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Бонус: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Бонус за отстранување</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Преглед</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Оваа резервација повеќе не е активна. Ако сè уште ви треба престој, вратете се на листата на станови и направете нова резервација.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Број на кревети</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Резервирајте {0} на Rentoom. Одлична локација, {1} соби, висок стандард.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Број на ноќи</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Нема додатоци</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Без додаток опис</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Резервацијата е откажана</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Најверојатно, дојдовте кај нас од стара пренасока што веќе не постои. Ќе ве однесеме на страницата за станови за момент.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Продолжи</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>За да резервирате стан, изберете датум и број на луѓе</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Број на луѓе</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Цена</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Број на тоалети</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>За жал, нема понуди за овој стан на овој датум</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Детали за станот - Рентум</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Резервација</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Резервирај стан</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Станови</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Апартман Торун, сместување во Торуњ, Рентум, краткорочен изнајмување, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Големина на станот</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Полска</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Ова е нашиот нов портал</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Изберете ги датумите на престој за да проверите достапност и цени за нашите огласи.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Стан</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Резервирајте стан({0}и)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Сакам да добијам фактура за ДДВ</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Проверете ги деталите за станот и резервирајте го вашиот престој во Рентум.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Грешка 404</value>
+  </data>
 </root>

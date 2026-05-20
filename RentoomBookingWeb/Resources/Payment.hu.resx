@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Töröld a foglalásodat</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>A bónuszt eltávolították.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bónusz alkalmazás: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>A biztosított bónusz nem létezik.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Ez a bónusz jelenleg le van tiltva.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Ez a bónusz nem vonatkozik a kiválasztott lakásra.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>A bónusz nem elérhető a foglalás kezdeti dátumánál.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>A bónusz csak a RentoomBookingWeb-en történő foglalásokra érvényes.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>A bónusz nem csökkenti a foglalás aktuális árát.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Töltsd ki a dátumokat, és válaszd ki az ajánlatot, hogy alkalmazd a bónuszt.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>A bónusz kiszámítandó ajánlatára nem lehetett olvasni.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Nem alkalmaztam a bónuszt.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Adja be a bónuszkódot</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Alkalmazd a bónuszt</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Ellenőrizem...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bónusz: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Eltávolítani a bónuszt</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Bónusz kedvezmény</value>
+  </data>
 </root>

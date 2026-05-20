@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – stvaramo jedinstvena iskustva boravka u Toruńu
-</value>
+    <value>Rentoom Apartments – stvaramo jedinstvena iskustva boravka u Toruńu</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Tražite li udoban stan u Toruńu?</value>
+    <value>Tražite li udoban stan u Toruńu?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Stanovi u Torunju – udoban smještaj</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Tražite li udoban stan u Toruńu?
-
-</value>
+    <value>Tražite li udoban stan u Toruńu?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty je moderan brend za kratkoročni najam koji kombinuje visok standard smještaja sa autentičnim poznavanjem Torunja. Kreiramo mjesta dizajnirana s komforom, estetikom i funkcionalnošću na umu – kako za turiste, tako i za poslovne goste.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Drago nam je što ste došli kod nas!
-</value>
+    <value>Drago nam je što ste došli kod nas!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Naša ponuda uključuje desetine pažljivo odabranih stanova u najatraktivnijim dijelovima grada. Svaka lokacija je odabrana kako bi omogućila lak pristup ključnim atrakcijama, restoranima i poslovnim zonama.
-Svaki stan je prostor dizajniran da pruži pravi odmor i privatnost nakon napornog dana razgledanja ili rada.
-</value>
+    <value>Naša ponuda uključuje desetine pažljivo odabranih stanova u najatraktivnijim dijelovima grada. Svaka lokacija je odabrana kako bi omogućila lak pristup ključnim atrakcijama, restoranima i poslovnim zonama.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Stanovi na najboljim lokacijama u Torunju</value>
@@ -47,37 +40,28 @@ Svaki stan je prostor dizajniran da pruži pravi odmor i privatnost nakon naporn
     <value>Zadovoljni kupci</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Stanovi u Torunju
-
-</value>
+    <value>Stanovi u Torunju</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Lokacija u Torunu</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Zašto Rentoom?
-</value>
+    <value>Zašto Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments je više od običnog noćenja u Toruńu. Nudimo visok standard stanova na najboljim lokacijama i stvarne pogodnosti koje povećavaju vrijednost cijelog boravka.
-</value>
+    <value>Rentoom Apartments je više od običnog noćenja u Toruńu. Nudimo visok standard stanova na najboljim lokacijama i stvarne pogodnosti koje povećavaju vrijednost cijelog boravka.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Kao dio našeg Partner programa, gosti dobijaju pristup posebnim popustima na odabrane restorane, kafiće i turističke atrakcije. Trenutni popusti i preporuke nalaze se direktno u stanovima, tako da možete koristiti provjerena mjesta i uštedjeti novac dok razgledate.
-</value>
+    <value>Kao dio našeg Partner programa, gosti dobijaju pristup posebnim popustima na odabrane restorane, kafiće i turističke atrakcije.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Radimo isključivo sa pouzdanim, lokalnim partnerima, vodeći računa o kvalitetu svake preporuke. Odabirom Rentooma dobijate udobnost, profesionalnu uslugu i dodatne pogodnosti koje vaš boravak u Torunju čine udobnijim, profinjenijim i jednostavno profitabilnijim.
-</value>
+    <value>Radimo isključivo sa pouzdanim, lokalnim partnerima, vodeći računa o kvalitetu svake preporuke.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Upoznajte mišljenja ljudi koji su spavali u našim stanovima u Toruńu.
-
-</value>
+    <value>Upoznajte mišljenja ljudi koji su spavali u našim stanovima u Toruńu.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Ostavite svoje kontakt informacije i javit ćemo vam se!
-</value>
+    <value>Ostavite svoje kontakt informacije i javit ćemo vam se!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Kontaktirajte dobavljača</value>
@@ -98,8 +82,27 @@ Svaki stan je prostor dizajniran da pruži pravi odmor i privatnost nakon naporn
     <value>Pošalji</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Šta razlikuje naše stanove od drugih?
-
-</value>
+    <value>Šta razlikuje naše stanove od drugih?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Stanovi Toruń - kratkoročni najam | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Pogledajte naše stanove u srcu Torunja. Savršeno za vikend i duži boravak.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Apartmani Toruń - vaš udoban smještaj</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Apartmani Toruń, Smještaj Toruń, kratkoročni najam, Apartmani u Starom gradu, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Početna</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Tražite li smještaj u Toruńu? Nudimo udobne stanove u centru i u Starom gradu. Rezervišite direktno online - najniže cijene, bez posredničkih provizija.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Tražite li smještaj u Toruńu? Rentoom nudi stanove za kratkoročni najam u Torunju i boravi na najboljim lokacijama u gradu.</value>
   </data>
 </root>

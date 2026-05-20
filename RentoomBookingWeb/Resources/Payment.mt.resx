@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Ikkanċella r-riżervazzjoni tiegħek</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Il-bonus ġie mneħħi.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus applikat: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Il-bonus provdut ma jeżistix.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Dan il-bonus bħalissa huwa diżattivat.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Dan il-bonus ma japplikax għall-appartament magħżul.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Il-bonus mhuwiex disponibbli għad-data tal-bidu ta' din il-prenotazzjoni.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Il-bonus jaħdem biss għal bookings ma' RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Il-bonus ma jnaqqasx il-prezz attwali ta' din il-booking.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Imla d-dati u agħżel l-offerta biex tapplika l-bonus.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Il-prezz tal-offerta li kellu jiġi kkalkulat mill-bonus ma setax jinqara.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Ma applikax il-bonus.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Daħħal il-kodiċi tal-bonus</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Applika l-bonus</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Qed niċċekkja...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Bonus ta' tneħħija</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Bonus ta' skont</value>
+  </data>
 </root>

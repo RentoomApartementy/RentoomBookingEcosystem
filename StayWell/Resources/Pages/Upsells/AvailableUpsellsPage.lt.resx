@@ -132,4 +132,10 @@
   <data name="VoucherNoLimitText" xml:space="preserve">
     <value>Be apribojimų</value>
   </data>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Pridėti</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Ištrinti</value>
+  </data>
 </root>

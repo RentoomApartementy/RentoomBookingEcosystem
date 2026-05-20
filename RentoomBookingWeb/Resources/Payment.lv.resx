@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Atcelt rezervāciju</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonuss ir noņemts.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Piemērotā prēmija: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Piešķirtā prēmija nepastāv.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Šis bonuss pašlaik ir atspējots.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Šis bonuss neattiecas uz izvēlēto dzīvokli.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonuss nav pieejams šīs rezervācijas sākuma datumā.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonuss darbojas tikai rezervācijām ar RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonuss nesamazina pašreizējo rezervācijas cenu.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Aizpildiet datumus un izvēlieties piedāvājumu, lai piemērotu bonusu.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Bonusa aprēķināmā piedāvājuma cenu nevarēja nolasīt.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Neizdevās piemērot bonusu.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Ievadiet bonusa kodu</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Piesakies bonusam</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Pārbauda...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonuss: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Noņemt bonusu</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Bonusa atlaide</value>
+  </data>
 </root>

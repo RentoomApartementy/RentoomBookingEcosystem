@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,55 +59,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>Ð¡Ñ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°Ñ‚Ð° Ð½Ðµ Ðµ Ð¿Ñ€Ð¾Ð½Ð°Ñ˜Ð´ÐµÐ½Ð°</value>
+    <value>Страницата не е пронајдена</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Ð“Ñ€ÐµÑˆÐºÐ° 404</value>
+    <value>Бå'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>Ð–Ð°Ð» Ð½Ð¸ Ðµ, Ð½Ð¾ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°Ñ‚Ð° ÑˆÑ‚Ð¾ Ñ˜Ð° Ð±Ð°Ñ€Ð°Ñ‚Ðµ Ð½Ðµ Ð¿Ð¾ÑÑ‚Ð¾Ð¸ Ð¸Ð»Ð¸ Ðµ Ð¿Ñ€ÐµÐ¼ÐµÑÑ‚ÐµÐ½Ð°.</value>
+    <value>Жал ни е, но страницата што ја барате не постои или е преместена.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>ÐÐ°Ð·Ð°Ð´ Ð½Ð° Ð¿Ð¾Ñ‡ÐµÑ‚Ð½Ð°Ñ‚Ð° ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°</value>
+    <value>Врати се на главната страница</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>ÐœÐ¾Ð¶ÐµÐ±Ð¸ Ð±Ð°Ñ€Ð°Ñ‚Ðµ:</value>
+    <value>Можеби барате:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
-    <value>Ð›Ð¸ÑÑ‚Ð° Ð½Ð° ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸</value>
+    <value>Листа на станови</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>Ð¡Ð¾Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ°</value>
+    <value>Соработка</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
-    <value>ÐšÐ¾Ð½Ñ‚Ð°ÐºÑ‚</value>
+    <value>Контакт</value>
   </data>
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Резервацијата е откажана</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Ова е нашиот нов портал</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Оваа резервација повеќе не е активна. Ако сè уште ви треба престој, додадете ги на листата на станови и креирајте нов. Резервација. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Најверојатно, тоа ни дојде од стар пренасочување што веќе не постои. Ќе ве™ однесеме на страницата™ за станови за момент™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>Бå'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Резервирај стан</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Резервирајте стан({0}и)</value></data>
 </root>

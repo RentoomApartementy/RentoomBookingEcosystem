@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Endre datoen</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonusen er fjernet.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus anvendt: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Bonusen som gis eksisterer ikke.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Denne bonusen er for øyeblikket deaktivert.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Denne bonusen gjelder ikke for den valgte leiligheten.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonusen er ikke tilgjengelig på startdatoen for denne bestillingen.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Denne bonusen krever lengre opphold.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Denne bonusen krever et høyere totalt bestillingsbeløp.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonusen gjelder kun for bestillinger med RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonusen reduserer ikke den nåværende prisen på denne bestillingen.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Fyll ut datoene og velg tilbudet for å bruke bonusen.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Prisen på tilbudet som skulle beregnes av bonusen kunne ikke leses.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Unnlot å bruke bonusen.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Har du en rabattkode?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Skriv inn rabattkode</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Bruk kode</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Sjekker...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Fjern bonusen</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Forhåndsvisning</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Denne reservasjonen er ikke lenger aktiv. Hvis du fortsatt trenger et opphold, gå tilbake til listen over leiligheter og lag en ny reservasjon.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Antall senger</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Bestill {0} hos Rentoom. Flott beliggenhet, {1} rom, høy standard.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Antall netter</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Ingen tillegg</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Ingen tilleggsbeskrivelse</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Reservasjon kansellert</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Mest sannsynlig kom du til oss fra en gammel omdirigering som ikke lenger eksisterer. Vi tar deg med til leilighetssiden om et øyeblikk.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Fortsett</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>For å bestille en leilighet, velg dato og antall personer</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Antall personer</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Kostnad</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Antall bad</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Dessverre finnes det ingen tilbud på denne leiligheten på denne datoen</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Leilighetsdetaljer - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Reservasjon</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Bestill en leilighet</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Leiligheter</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Leilighet Toruń, overnatting Toruń, Rentoom, korttidsutleie, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Leilighetsstørrelse</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Polen</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Dette er vår nye portal</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Velg oppholdsdatoer for å sjekke tilgjengelighet og priser for våre oppføringer.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Leilighet</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Book leilighet({0}er)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Jeg ønsker å motta en MVA-faktura</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Sjekk leilighetsdetaljene og bestill oppholdet ditt på Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Feil 404</value>
+  </data>
 </root>

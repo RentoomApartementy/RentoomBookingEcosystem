@@ -132,4 +132,10 @@
   <data name="VoucherNoLimitText" xml:space="preserve">
     <value>Gan teorainn</value>
   </data>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Cuir Leis</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Scrios</value>
+  </data>
 </root>

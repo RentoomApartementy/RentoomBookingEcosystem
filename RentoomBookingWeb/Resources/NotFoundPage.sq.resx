@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -62,22 +62,22 @@
     <value>Faqja nuk u gjet</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Gabimi 404</value>
+    <value>BÅ'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>Na vjen keq, por faqja qÃ« po kÃ«rkoni nuk ekziston ose Ã«shtÃ« zhvendosur.</value>
+    <value>Na vjen keq, por faqja që po kërkoni nuk ekziston ose është zhvendosur.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>Kthehu nÃ« faqen kryesore</value>
+    <value>Kthehu në faqen kryesore</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>Ndoshta jeni duke kÃ«rkuar:</value>
+    <value>Ju mund të jeni duke kërkuar:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
     <value>Lista e apartamenteve</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>BashkÃ«punimi</value>
+    <value>Bashkëpunimi</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontaktoni</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Rezervimi u anulua</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Ky është portali ynë i ri</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Ky rezervim nuk është më aktiv. Nëse keni ende nevojë për një qëndrim, shtoni listën e apartamenteve dhe krijoni një të re. rezervim. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Me shumë mundësi, na erdhi nga një ridrejtim i vjetër që nuk ekziston më. Ne do t'ju™ çojmë në faqen™ e apartamenteve në një moment™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BÅ'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Rezervoni një apartament</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Rezervoni apartament({0})</value></data>
 </root>

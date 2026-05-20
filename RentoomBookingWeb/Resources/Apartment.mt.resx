@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Biddel id-data</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Il-bonus ġie mneħħi.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus applikat: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Il-bonus provdut ma jeżistix.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Dan il-bonus bħalissa huwa diżattivat.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Dan il-bonus ma japplikax għall-appartament magħżul.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Il-bonus mhuwiex disponibbli għad-data tal-bidu ta' din il-prenotazzjoni.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Dan il-bonus jeħtieġ waqfa itwal.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Dan il-bonus jeħtieġ ammont totali ta' ordni ogħla.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Il-bonus jaħdem biss għal bookings ma' RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Il-bonus ma jnaqqasx il-prezz attwali ta' din il-booking.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Imla d-dati u agħżel l-offerta biex tapplika l-bonus.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Il-prezz tal-offerta li kellu jiġi kkalkulat mill-bonus ma setax jinqara.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Ma applikax il-bonus.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Għandek kodiċi ta' skont?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Daħħal kodiċi ta' skont</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Applikazzjoni tal-Kodiċi</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Qed niċċekkja...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Bonus ta' tneħħija</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Din ir-riżerva m'għadhiex attiva. Jekk għadek bżonn waqfa, erġa' lura għall-lista tal-appartamenti u oħloq riservazzjoni ġdida.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Numru ta' sodod</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Ikteb {0} fuq Rentoom. Post tajjeb ħafna, {1} kmamar, standard għoli.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Numru ta' lejl</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>L-ebda add-ons</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>L-ebda deskrizzjoni addizzjonali</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Ir-riżervazzjoni ġiet ikkanċellata</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Probabbilment, ġejt għandna minn redirezzjoni antika li m'għadhiex teżisti. Se nieħdukom għall-paġna tal-appartamenti f'ħin qasir.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Kompli</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Biex tibbukkja appartament, agħżel id-data u n-numru ta' nies</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Numru ta' nies</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Spiża</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Numru ta' banjijiet</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Sfortunatament, m'hemm l-ebda offerta għal dan l-appartament f'din id-data</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Dettalji tal-appartament - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Riserva</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Ibbukkja appartament</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Appartamenti</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>appartament Toruń, akkomodazzjoni Toruń, Rentoom, kiri ta' żmien qasir, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Daqs tal-appartament</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Il-Polonja</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Dan huwa l-portal il-ġdid tagħna</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Agħżel id-dati tal-waqfa tiegħek biex tiċċekkja d-disponibbiltà u l-prezzijiet għall-listi tagħna.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Appartament</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Ibbukkja appartament({0}s)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Nixtieq nirċievi fattura tal-VAT</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Iċċekkja d-dettalji tal-appartament u ibbukkja l-waqfa tiegħek f'Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Żball 404</value>
+  </data>
 </root>

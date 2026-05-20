@@ -132,4 +132,10 @@
   <data name="VoucherNoLimitText" xml:space="preserve">
     <value>Engin takmörk</value>
   </data>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Bæta við</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Eyða</value>
+  </data>
 </root>

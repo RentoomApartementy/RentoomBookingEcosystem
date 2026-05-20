@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – mēs radām unikālu uzturēšanās pieredzi Toruņā
-</value>
+    <value>Rentoom Apartments – mēs radām unikālu uzturēšanās pieredzi Toruņā</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Vai meklējat ērtu dzīvokli Toruņā?</value>
+    <value>Vai meklējat ērtu dzīvokli Toruņā?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Dzīvokļi Toruņā – ērtas naktsmītnes</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Vai meklējat ērtu dzīvokli Toruņā?
-
-</value>
+    <value>Vai meklējat ērtu dzīvokli Toruņā?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty ir mūsdienīgs īstermiņa nomas zīmols, kas apvieno augstu izmitināšanas standartu ar autentiskām zināšanām par Toruņu. Mēs veidojam telpas, kas veidotas, domājot par komfortu, estētiku un funkcionalitāti - gan tūristiem, gan biznesa viesiem.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Mēs priecājamies, ka jūs atnācāt pie mums!
-</value>
+    <value>Mēs priecājamies, ka jūs atnācāt pie mums!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Mūsu piedāvājumā ir desmitiem rūpīgi atlasītu dzīvokļu pievilcīgākajās pilsētas vietās. Katra atrašanās vieta ir izvēlēta, lai nodrošinātu ērtu piekļuvi galvenajām apskates vietām, restorāniem un biznesa zonām.
-Katrs dzīvoklis ir telpa, kas paredzēta, lai nodrošinātu īstu atpūtu un privātumu pēc intensīvas ekskursiju vai darba dienas.
-</value>
+    <value>Mūsu piedāvājumā ir desmitiem rūpīgi atlasītu dzīvokļu pievilcīgākajās pilsētas vietās. Katra atrašanās vieta ir izvēlēta, lai nodrošinātu ērtu piekļuvi galvenajām apskates vietām, restorāniem un biznesa zonām.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Dzīvokļi labākajās vietās Toruņā</value>
@@ -47,37 +40,28 @@ Katrs dzīvoklis ir telpa, kas paredzēta, lai nodrošinātu īstu atpūtu un pr
     <value>Apmierināti klienti</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Dzīvokļi pilsētā Toruņa
-
-</value>
+    <value>Dzīvokļi pilsētā Toruņa</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Atrašanās vieta Toruņā</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Kāpēc Rentoom?
-</value>
+    <value>Kāpēc Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments ir vairāk nekā tikai nakšņošana Toruņā. Mēs piedāvājam augsta līmeņa dzīvokļus labākajās vietās un reālas priekšrocības, kas palielina visas uzturēšanās vērtību.
-</value>
+    <value>Rentoom Apartments ir vairāk nekā tikai nakšņošana Toruņā. Mēs piedāvājam augsta līmeņa dzīvokļus labākajās vietās un reālas priekšrocības, kas palielina visas uzturēšanās vērtību.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Mūsu partneru programmas ietvaros viesi saņem īpašas atlaides atsevišķiem restorāniem, kafejnīcām un tūrisma objektiem. Pašreizējās atlaides un ieteikumi atrodas tieši dzīvokļos, lai jūs varētu izmantot pārbaudītas vietas un ietaupīt naudu apskates laikā.
-</value>
+    <value>Mūsu partneru programmas ietvaros viesi saņem īpašas atlaides atsevišķiem restorāniem, kafejnīcām un tūrisma objektiem.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Mēs strādājam tikai ar uzticamiem, vietējiem partneriem, rūpējoties par katra ieteikuma kvalitāti. Izvēloties Rentoom, jūs iegūstat komfortu, profesionālu apkalpošanu un papildu priekšrocības, kas padara jūsu uzturēšanos Toruņā ērtāku, izsmalcinātāku un vienkārši izdevīgāku.
-</value>
+    <value>Mēs strādājam tikai ar uzticamiem, vietējiem partneriem, rūpējoties par katra ieteikuma kvalitāti.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Iepazīstieties ar to cilvēku viedokļiem, kuri ir gulējuši mūsu dzīvokļos Toruņā.
-
-</value>
+    <value>Iepazīstieties ar to cilvēku viedokļiem, kuri ir gulējuši mūsu dzīvokļos Toruņā.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Atstājiet savu kontaktinformāciju un mēs ar jums sazināsimies!
-</value>
+    <value>Atstājiet savu kontaktinformāciju un mēs ar jums sazināsimies!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Sazināties ar piegādātāju</value>
@@ -98,8 +82,27 @@ Katrs dzīvoklis ir telpa, kas paredzēta, lai nodrošinātu īstu atpūtu un pr
     <value>Nosūtīt</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Ar ko mūsu dzīvokļi atšķiras no citiem?
-
-</value>
+    <value>Ar ko mūsu dzīvokļi atšķiras no citiem?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Dzīvokļi Toruņa - īstermiņa īre | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Apskatiet mūsu dzīvokļus pilsētas Toruņa centrā. Ideāli piemērots nedēļas nogalei un ilgākai uzturēšanās.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Dzīvokļi Toruņa - Jūsu ērta naktsmītne</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Dzīvokļi Toruņa, Naktsmītnes Toruņa, Īstermiņa īre, Vecpilsētas dzīvokļi, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Sākums</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Vai meklējat naktsmītni Toruņa? Mēs piedāvājam ērtus dzīvokļus centrā un vecpilsētā. Rezervējiet tieši tiešsaistē - zemākās cenas, bez starpniecības komisijas maksas.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Vai meklējat naktsmītni Toruņa? Rentoom piedāvā dzīvokļus īstermiņa īrei Toruņā un nakšņo labākajās pilsētas vietās.</value>
   </data>
 </root>
