@@ -92,8 +92,11 @@ public sealed class TranslationOrchestrator
             foreach (var targetCulture in targetCultures)
             {
                 var targetPath = GetTargetPath(sourceFile, targetCulture);
-                // If the target file doesn't exist yet (new language), translate all entries
-                var entriesToTranslate = !File.Exists(targetPath) ? entries : changedEntries;
+                var existingTargetKeys = ResxParser.GetKeys(targetPath);
+                var missingEntries = entries.Where(e => !existingTargetKeys.Contains(e.Name)).ToList();
+                var entriesToTranslate = !File.Exists(targetPath)
+                    ? entries
+                    : changedEntries.Concat(missingEntries).DistinctBy(e => e.Name).ToList();
                 tasks.Add(new TranslationTask(
                     sourceFile, targetPath, targetCulture, entriesToTranslate, removedKeys));
             }
