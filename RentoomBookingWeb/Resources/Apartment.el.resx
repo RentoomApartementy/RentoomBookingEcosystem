@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Αλλάξτε την ημερομηνία</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Το μπόνους αφαιρέθηκε.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Εφαρμόστηκε μπόνους: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Το παρεχόμενο μπόνους δεν υπάρχει.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Αυτό το μπόνους είναι προς το παρόν απενεργοποιημένο.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Αυτό το μπόνους δεν ισχύει για το επιλεγμένο διαμέρισμα.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Το μπόνους δεν είναι διαθέσιμο για την ημερομηνία έναρξης αυτής της κράτησης.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Αυτό το μπόνους απαιτεί μεγαλύτερη διαμονή.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Αυτό το μπόνους απαιτεί υψηλότερο συνολικό ποσό παραγγελίας.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Το μπόνους λειτουργεί μόνο για κρατήσεις με το RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Το μπόνους δεν μειώνει την τρέχουσα τιμή αυτής της κράτησης.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Συμπληρώστε τις ημερομηνίες και επιλέξτε την προσφορά για να εφαρμόσετε το μπόνους.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Η τιμή της προσφοράς που έπρεπε να υπολογιστεί για το μπόνους δεν μπορούσε να διαβαστεί.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Αποτυχία εφαρμογής του μπόνους.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Έχετε εκπτωτικό κωδικό;</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Εισάγετε τον κωδικό έκπτωσης</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Εφαρμογή κώδικα</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Έλεγχος...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Μπόνους: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Αφαίρεση μπόνους</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Προεπισκόπηση</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Αυτή η κράτηση δεν είναι πλέον ενεργή. Εάν εξακολουθείτε να χρειάζεστε διαμονή, επιστρέψτε στη λίστα διαμερισμάτων και δημιουργήστε μια νέα κράτηση.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Αριθμός κρεβατιών</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Κάντε κράτηση {0} στο Rentoom. Εξαιρετική τοποθεσία, {1} δωμάτια, υψηλών προδιαγραφών.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Αριθμός διανυκτερεύσεων</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Χωρίς πρόσθετα</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Δεν υπάρχει πρόσθετη περιγραφή</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Η κράτηση ακυρώθηκε</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Πιθανότατα, ήρθες σε εμάς από μια παλιά ανακατεύθυνση που δεν υπάρχει πια. Θα σας μεταφέρουμε στη σελίδα διαμερισμάτων σε λίγο.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Συνέχεια</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Για να κάνετε κράτηση διαμερίσματος, επιλέξτε την ημερομηνία και τον αριθμό των ατόμων</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Αριθμός ατόμων</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Κόστος</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Αριθμός λουτρών</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Δυστυχώς, δεν υπάρχουν προσφορές για αυτό το διαμέρισμα αυτήν την ημερομηνία</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Λεπτομέρειες διαμερίσματος - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Κράτηση</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Κάντε κράτηση διαμερίσματος</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Διαμερίσματα</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Διαμέρισμα Τορούν, Διαμονή Τορούν, Rentoom, Βραχυχρόνια μίσθωση, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Μέγεθος διαμερίσματος</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Πολωνία</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Αυτή είναι η νέα μας πύλη</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Επιλέξτε τις ημερομηνίες διαμονής σας για να ελέγξετε τη διαθεσιμότητα και τις τιμές για τις καταχωρήσεις μας.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Διαμέρισμα</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Κράτηση διαμερίσματος({0}ων)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Θέλω να λάβω τιμολόγιο ΦΠΑ</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Ελέγξτε τις λεπτομέρειες του διαμερίσματος και κλείστε τη διαμονή σας στο Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Σφάλμα 404</value>
+  </data>
 </root>

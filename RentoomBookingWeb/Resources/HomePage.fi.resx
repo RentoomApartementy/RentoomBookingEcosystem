@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – luomme ainutlaatuisia kokemuksia majoitusta Toruńissa
-</value>
+    <value>Rentoom Apartments – luomme ainutlaatuisia kokemuksia majoitusta Toruńissa</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Etsitkö mukavaa asuntoa Toruńista?</value>
+    <value>Etsitkö mukavaa asuntoa Toruńista?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Asunnot Toruńissa – mukava majoitus</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Etsitkö mukavaa asuntoa Toruńista?
-
-</value>
+    <value>Etsitkö mukavaa asuntoa Toruńista?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty on moderni lyhytaikaisen vuokrauksen brändi, joka yhdistää korkean majoitustason aitoon Toruńin tuntemukseen. Luomme paikkoja, jotka on suunniteltu mukavuuden, estetiikan ja toiminnallisuuden huomioiden – sekä turisteille että liikeasiakkaille.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Olemme iloisia, että tulitte luoksemme!
-</value>
+    <value>Olemme iloisia, että tulitte luoksemme!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Tarjontamme sisältää kymmeniä huolellisesti valittuja asuntoja kaupungin houkuttelevimmilla alueilla. Jokainen sijainti on valittu tarjoamaan helppo pääsy tärkeisiin nähtävyyksiin, ravintoloihin ja liiketoiminta-alueisiin.
-Jokainen asunto on tila, joka on suunniteltu tarjoamaan todellista lepoa ja yksityisyyttä intensiivisen nähtävyyksien katselun tai työpäivän jälkeen.
-</value>
+    <value>Tarjontamme sisältää kymmeniä huolellisesti valittuja asuntoja kaupungin houkuttelevimmilla alueilla. Jokainen sijainti on valittu tarjoamaan helppo pääsy tärkeisiin nähtävyyksiin, ravintoloihin ja liiketoiminta-alueisiin.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Asunnot parhaissa paikoissa Toruńissa</value>
@@ -47,37 +40,28 @@ Jokainen asunto on tila, joka on suunniteltu tarjoamaan todellista lepoa ja yksi
     <value>Tyytyväiset asiakkaat</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Asunnot Toruńissa
-
-</value>
+    <value>Asunnot Toruńissa</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Sijainti Toruńissa</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Miksi Rentoom?
-</value>
+    <value>Miksi Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments on enemmän kuin pelkkä yöpyminen Toruńissa. Tarjoamme korkeatasoisia asuntoja parhaissa paikoissa ja todellisia etuja, jotka nostavat koko majoituksen arvoa.
-</value>
+    <value>Rentoom Apartments on enemmän kuin pelkkä yöpyminen Toruńissa. Tarjoamme korkeatasoisia asuntoja parhaissa paikoissa ja todellisia etuja, jotka nostavat koko majoituksen arvoa.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Osana kumppaniohjelmaamme vieraat saavat erityisalennuksia valituista ravintoloista, kahviloista ja nähtävyyksistä. Nykyiset alennukset ja suositukset löytyvät suoraan asunnoista, joten voit käyttää todistettuja paikkoja ja säästää rahaa nähtävyyksiä katsellessasi.
-</value>
+    <value>Osana kumppaniohjelmaamme vieraat saavat erityisalennuksia valituista ravintoloista, kahviloista ja nähtävyyksistä.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Teemme yhteistyötä vain luotettujen paikallisten kumppaneiden kanssa ja huolehdimme jokaisen suosituksen laadusta. Valitsemalla Rentoomin saat mukavuutta, ammattitaitoista palvelua ja lisäetuja, jotka tekevät oleskelustasi Toruńissa mukavamman, hienostuneemman ja yksinkertaisesti kannattavamman.
-</value>
+    <value>Teemme yhteistyötä vain luotettujen paikallisten kumppaneiden kanssa ja huolehdimme jokaisen suosituksen laadusta.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Tutustu niiden mielipiteisiin, jotka ovat nukkuneet asunnoissamme Toruńissa.
-
-</value>
+    <value>Tutustu niiden mielipiteisiin, jotka ovat nukkuneet asunnoissamme Toruńissa.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Jätä yhteystietosi, niin palaamme asiaan!
-</value>
+    <value>Jätä yhteystietosi, niin palaamme asiaan!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Ota yhteyttä toimittajaan</value>
@@ -98,8 +82,27 @@ Jokainen asunto on tila, joka on suunniteltu tarjoamaan todellista lepoa ja yksi
     <value>Lähetä</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Mikä erottaa asuntomme muista?
-
-</value>
+    <value>Mikä erottaa asuntomme muista?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Asunnot Toruń - Lyhytaikaiset vuokraukset | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Tutustu asuntoihimme Toruńin sydämessä. Täydellinen viikonlopuksi ja pidemmäksi oleskeluksi.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Asunnot Toruńissa – mukava majoituksesi</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Asunnot Toruń, Majoitus Toruń, Lyhytaikaiset vuokra-asunnot, Vanhan kaupungin asunnot, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Koti</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Etsitkö majoitusta Toruńista? Tarjoamme mukavia asuntoja keskustassa ja vanhassakaupungissa. Varaa suoraan verkossa – alhaisimmat hinnat, ei välityspalkkioita.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Etsitkö majoitusta Toruńista? Rentoom tarjoaa lyhytaikaisia vuokra-asuntoja Toruńissa ja majoittuu kaupungin parhaissa paikoissa.</value>
   </data>
 </root>

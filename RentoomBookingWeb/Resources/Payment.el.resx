@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Ακυρώστε την κράτησή σας</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Το μπόνους αφαιρέθηκε.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Εφαρμόστηκε μπόνους: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Το παρεχόμενο μπόνους δεν υπάρχει.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Αυτό το μπόνους είναι προς το παρόν απενεργοποιημένο.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Αυτό το μπόνους δεν ισχύει για το επιλεγμένο διαμέρισμα.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Το μπόνους δεν είναι διαθέσιμο για την ημερομηνία έναρξης αυτής της κράτησης.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Το μπόνους λειτουργεί μόνο για κρατήσεις με το RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Το μπόνους δεν μειώνει την τρέχουσα τιμή αυτής της κράτησης.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Συμπληρώστε τις ημερομηνίες και επιλέξτε την προσφορά για να εφαρμόσετε το μπόνους.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Η τιμή της προσφοράς που έπρεπε να υπολογιστεί για το μπόνους δεν μπορούσε να διαβαστεί.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Αποτυχία εφαρμογής του μπόνους.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Εισάγετε τον κωδικό μπόνους</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Εφαρμόστε το μπόνους</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Έλεγχος...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Μπόνους: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Αφαίρεση μπόνους</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Έκπτωση μπόνους</value>
+  </data>
 </root>

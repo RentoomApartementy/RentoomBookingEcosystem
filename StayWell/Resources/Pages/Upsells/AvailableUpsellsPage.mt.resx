@@ -132,4 +132,10 @@
   <data name="VoucherNoLimitText" xml:space="preserve">
     <value>L-ebda limitu</value>
   </data>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Żid</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Ħassar</value>
+  </data>
 </root>

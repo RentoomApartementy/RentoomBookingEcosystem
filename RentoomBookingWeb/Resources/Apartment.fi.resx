@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Vaihda päivämäärä</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonus on poistettu.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Lisäbonus: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Tarjottua bonusta ei ole olemassa.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Tämä bonus on tällä hetkellä pois käytöstä.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Tämä bonus ei koske valittua asuntoa.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonus ei ole käytettävissä tämän varauksen aloituspäivänä.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Tämä bonus vaatii pidemmän oleskelun.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Tämä bonus vaatii suuremman kokonaismäärän.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonus toimii vain RentoomBookingWebin varauksissa.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonus ei alenna tämän varauksen nykyistä hintaa.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Täytä päivämäärät ja valitse tarjous bonuksen soveltamiseksi.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Tarjouksen hintaa, joka lasketaan bonuksen osalta, ei voitu lukea.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Ei käyttänyt bonusta.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Onko sinulla alennuskoodia?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Syötä alennuskoodi</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Sovelluskoodi</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Tarkistan...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Poista bonus</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Esikatselu</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Tämä varaus ei ole enää käytössä. Jos tarvitset vielä majoitusta, palaa asuntolistaan ja tee uusi varaus.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Vuodemäärä</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Varaa {0} Rentoomista. Loistava sijainti, {1} huoneita, korkea taso.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Yövuorojen määrä</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Ei lisäosia</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Ei lisäosakuvausta</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Varaus peruttu</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Todennäköisesti tulit meille vanhasta uudelleenohjauksesta, jota ei enää ole olemassa. Viemme sinut hetken kuluttua asuntosivulle.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Jatka</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Asunnon varaamiseksi valitse päivämäärä ja henkilömäärä</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Henkilöiden määrä</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Kustannukset</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Vessojen määrä</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Valitettavasti tälle asunnolle ei ole tarjouksia tällä päivämäärällä</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Asunnon tiedot - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Varaus</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Varaa asunto</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Asunnot</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>asunto toruń, majoitus toruń, rentoom, lyhytaikainen vuokraus, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Asunnon koko</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Puola</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Tämä on uusi portaalimme</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Valitse majoituspäiväsi tarkistaaksesi saatavuuden ja hinnat listauksillemme.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Asunto</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Kirjaa asunto({0})</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Haluan saada ALV-laskun</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Tarkista asunnon tiedot ja varaa majoituksesi Rentoomiin.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Virhe 404</value>
+  </data>
 </root>

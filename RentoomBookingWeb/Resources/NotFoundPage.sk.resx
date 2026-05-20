@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,25 +59,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>StrÃ¡nka nenÃ¡jdenÃ¡</value>
+    <value>Stránka nenájdená</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Chyba 404</value>
+    <value>Bå'Ä... D 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>OspravedlÅˆujeme sa, ale strÃ¡nka, ktorÃº hÄ¾adÃ¡te, neexistuje alebo bola presunutÃ¡.</value>
+    <value>Ospravedlňujeme sa, ale stránka, ktorú hľadáte, neexistuje alebo bola presunutá.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>SpÃ¤Å¥ na domovskÃº strÃ¡nku</value>
+    <value>Návrat na hlavnú stránku</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>MoÅ¾no hÄ¾adÃ¡te:</value>
+    <value>Možno hľadáte:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
     <value>Zoznam bytov</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>SpoluprÃ¡ca</value>
+    <value>Spolupráca</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontakt</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Rezervácia zrušená</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Toto je náš nový portál</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Táto rezervácia už nie je aktívna. Ak stále potrebujete pobyt, pridajte do zoznamu bytov a vytvorte nový. rezervácia. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Najpravdepodobnejšie k nám prišla zo starého presmerovania, ktoré už neexistuje. O chvíľu™ vás™ presmerujeme na stránku™ o bytoch.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>Bå'Ä... D 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Rezervujte si byt</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Rezervácia bytu ({0})</value></data>
 </root>

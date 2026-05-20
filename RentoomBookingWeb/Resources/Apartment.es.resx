@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Cambiar la fecha</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>El bono ha sido eliminado.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonificación aplicada: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>El bono proporcionado no existe.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Este bono está actualmente deshabilitado.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Este bono no se aplica al apartamento seleccionado.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>El bono no está disponible para la fecha de inicio de esta reserva.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Este bono requiere una estancia más larga.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Este bono requiere un importe total de pedido mayor.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>El bono solo funciona para reservas con RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>El bono no reduce el precio actual de esta reserva.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Rellena las fechas y selecciona la oferta para aplicar el bono.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>No se podía leer el precio de la oferta a calcular a partir del bono.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>No se aplicó la bonificación.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>¿Tienes un código de descuento?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Introduce el código de descuento</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Código de aplicación</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Comprobando...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Extra: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Bono de eliminación</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Avance</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Esta reserva ya no está activa. Si aún necesitas alojarte, vuelve a la lista de apartamentos y crea una nueva reserva.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Número de camas</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Reserva {0} en Rentoom. Ubicación genial, {1} habitaciones, alto nivel.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Número de noches</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>No hay complementos</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>No hay descripción adicional</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Reserva cancelada</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Lo más probable es que hayas venido de una antigua redirección que ya no existe. En un momento os llevaremos a la página de apartamentos.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Continúa</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Para reservar un piso, selecciona la fecha y el número de personas</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Número de personas</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Coste</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Número de baños</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Desafortunadamente, no hay ofertas para este piso en esta fecha</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Detalles del apartamento - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Reserva</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Reserva un piso</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Apartamentos</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Apartamento Toruń, alojamiento Toruń, Rentoom, alquiler a corto plazo, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Tamaño del piso</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Polonia</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Este es nuestro nuevo portal</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Selecciona tus fechas de estancia para comprobar la disponibilidad y los precios de nuestros listados.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Apartamento</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Reserva un piso {0}</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Quiero recibir una factura de IVA</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Consulta los detalles del apartamento y reserva tu estancia en Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Error 404</value>
+  </data>
 </root>

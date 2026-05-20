@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Apartamentos Rentoom – creamos experiencias únicas de alojado en Toruń
-</value>
+    <value>Apartamentos Rentoom – creamos experiencias únicas de alojado en Toruń</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-¿Buscas un piso cómodo en Toruń?</value>
+    <value>¿Buscas un piso cómodo en Toruń?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Apartamentos en Toruń – alojamiento cómodo</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>¿Buscas un piso cómodo en Toruń?
-
-</value>
+    <value>¿Buscas un piso cómodo en Toruń?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty es una marca moderna de alquiler a corto plazo que combina un alto nivel de alojamiento con un conocimiento auténtico de Toruń. Creamos lugares diseñados pensando en la comodidad, la estética y la funcionalidad, tanto para turistas como para huéspedes de negocios.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>¡Nos alegra que hayas venido a nosotros!
-</value>
+    <value>¡Nos alegra que hayas venido a nosotros!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Nuestra oferta incluye decenas de apartamentos cuidadosamente seleccionados en las zonas más atractivas de la ciudad. Cada ubicación ha sido elegida para facilitar el acceso a atracciones clave, restaurantes y zonas de negocios.
-Cada apartamento es un espacio diseñado para ofrecer verdadero descanso y privacidad tras un día intenso de turismo o trabajo.
-</value>
+    <value>Nuestra oferta incluye decenas de apartamentos cuidadosamente seleccionados en las zonas más atractivas de la ciudad. Cada ubicación ha sido elegida para facilitar el acceso a atracciones clave, restaurantes y zonas de negocios.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Apartamentos en las mejores ubicaciones de Toruń</value>
@@ -47,37 +40,28 @@ Cada apartamento es un espacio diseñado para ofrecer verdadero descanso y priva
     <value>Clientes satisfechos</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Apartamentos en Toruń
-
-</value>
+    <value>Apartamentos en Toruń</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Ubicación en Toruń</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>¿Por qué Rentoom?
-</value>
+    <value>¿Por qué Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Los apartamentos Rentoom son mucho más que una simple pernoctación en Toruń. Ofrecemos un alto nivel de apartamentos en las mejores ubicaciones y beneficios reales que aumentan el valor de toda la estancia.
-</value>
+    <value>Los apartamentos Rentoom son mucho más que una simple pernoctación en Toruń. Ofrecemos un alto nivel de apartamentos en las mejores ubicaciones y beneficios reales que aumentan el valor de toda la estancia.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Como parte de nuestro Programa de Socios, los huéspedes tienen acceso a descuentos especiales en restaurantes, cafeterías y atracciones turísticas seleccionadas. Los descuentos y recomendaciones actuales están directamente en los apartamentos, así que puedes usar lugares probados y ahorrar dinero mientras haces turismo.
-</value>
+    <value>Como parte de nuestro Programa de Socios, los huéspedes tienen acceso a descuentos especiales en restaurantes, cafeterías y atracciones turísticas seleccionadas.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Trabajamos únicamente con socios locales de confianza, cuidando la calidad de cada recomendación. Al elegir Rentoom, obtienes comodidad, servicio profesional y beneficios adicionales que hacen que tu estancia en Toruń sea más cómoda, refinada y, sencillamente, más rentable.
-</value>
+    <value>Trabajamos únicamente con socios locales de confianza, cuidando la calidad de cada recomendación.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Conoce las opiniones de quienes han dormido en nuestros pisos en Toruń.
-
-</value>
+    <value>Conoce las opiniones de quienes han dormido en nuestros pisos en Toruń.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>¡Deja tu información de contacto y te responderemos!
-</value>
+    <value>¡Deja tu información de contacto y te responderemos!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Contacta con el proveedor</value>
@@ -98,8 +82,27 @@ Cada apartamento es un espacio diseñado para ofrecer verdadero descanso y priva
     <value>Envía</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>¿Qué distingue a nuestros apartamentos de los demás?
-
-</value>
+    <value>¿Qué distingue a nuestros apartamentos de los demás?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Apartamentos Toruń - Alquileres a corto plazo | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Echa un vistazo a nuestros apartamentos en el corazón de Toruń. Perfecto para un fin de semana y una estancia más larga.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Apartamentos Toruń: tu alojamiento cómodo</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Apartamentos Toruń, Alojamiento Toruń, alquileres a corto plazo, apartamentos casco antiguo, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>¿Buscas alojamiento en Toruń? Ofrecemos apartamentos cómodos en el centro y en el casco antiguo. Reserva directamente online: precios más bajos, sin comisiones intermedias.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>¿Buscas alojamiento en Toruń? Rentoom ofrece apartamentos a corto plazo en Toruń y se aloja en las mejores ubicaciones de la ciudad.</value>
   </data>
 </root>

@@ -324,4 +324,148 @@
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Datuma maiņa</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonuss ir noņemts.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Piemērotā prēmija: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Piešķirtā prēmija nepastāv.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Šis bonuss pašlaik ir atspējots.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Šis bonuss neattiecas uz izvēlēto dzīvokli.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonuss nav pieejams šīs rezervācijas sākuma datumā.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Šis bonuss prasa ilgāku uzturēšanos.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Šim bonusam ir nepieciešama lielāka kopējā pasūtījuma summa.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonuss darbojas tikai rezervācijām ar RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonuss nesamazina pašreizējo rezervācijas cenu.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Aizpildiet datumus un izvēlieties piedāvājumu, lai piemērotu bonusu.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Bonusa aprēķināmā piedāvājuma cenu nevarēja nolasīt.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Neizdevās piemērot bonusu.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Vai jums ir atlaižu kods?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Ievadiet atlaides kodu</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Lietot kodu</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Pārbauda...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonuss: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Noņemt bonusu</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Priekšskatījums</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Šī rezervācija vairs nav aktīva. Ja jums joprojām ir nepieciešama uzturēšanās, atgriezieties dzīvokļu sarakstā un izveidojiet jaunu rezervāciju.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Gultasvietu skaits</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Rezervējiet {0} vietnē Rentoom. Lieliska atrašanās vieta, {1} numuri, augsts standarts.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Nakšu skaits</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Nav pievienojumprogrammu</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Nav pievienojumprogrammas apraksta</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Rezervācija atcelta</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Visticamāk, jūs atnācāt pie mums no vecas novirzīšanas, kas vairs nepastāv. Mēs jūs aizvedīsim uz dzīvokļu lapu.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Turpināt</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Lai rezervētu dzīvokli, izvēlieties datumu un cilvēku skaitu</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Cilvēku skaits</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Izmaksas</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Vannas istabu skaits</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Diemžēl šajā datumā šim dzīvoklim nav piedāvājumu</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Informācija par dzīvokli - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Rezervācija</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Rezervēt dzīvokli</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Dzīvokļi</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Dzīvoklis Toruń, Naktsmītnes Toruń, Rentoom, īstermiņa noma, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Dzīvokļa izmērs</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Polija</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Šis ir mūsu jaunais portāls</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Izvēlieties savus uzturēšanās datumus, lai pārbaudītu mūsu sludinājumu pieejamību un cenas.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Dzīvoklis</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Rezervēt dzīvokli ({0}-us)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Vēlos saņemt PVN rēķinu</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Pārbaudiet dzīvokļa informāciju un rezervējiet savu uzturēšanos naktsmītnē Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Kļūda 404</value>
+  </data>
 </root>

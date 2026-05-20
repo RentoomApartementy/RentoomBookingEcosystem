@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Zrušte svou rezervaci</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonus byl odstraněn.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Poskytnutý bonus neexistuje.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Tento bonus je momentálně deaktivován.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Tento bonus se na vybraný byt nevztahuje.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonus není k dispozici v den začátku této rezervace.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonus platí pouze pro rezervace přes RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonus nesnižuje aktuální cenu této rezervace.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Vyplňte data a vyberte nabídku pro uplatnění bonusu.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Cena nabídky, která měla být vypočítána z bonusu, nebyla přečtena.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Neuplatnil jsem bonus.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Zadejte bonusový kód</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Aplikujte bonus</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Kontroluji...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Odebrat bonus</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Bonusová sleva</value>
+  </data>
 </root>

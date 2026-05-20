@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Скасуйте своє бронювання</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Бонус було скасовано.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Бонус: -{0} злотих</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Наданий бонус не існує.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Цей бонус наразі вимкнено.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Цей бонус не застосовується до обраної квартири.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Бонус недоступний на дату початку цього бронювання.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Бонус працює лише для бронювання через RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Бонус не знижує поточну ціну цього бронювання.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Заповніть дати та виберіть пропозицію для застосування бонусу.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Ціну пропозиції, яку потрібно було розрахувати від бонусу, не можна було прочитати.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Не застосував бонус.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Введіть бонусний код</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Застосуйте бонус</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Перевіряю...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Бонус: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Бонус видалення</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Бонусна знижка</value>
+  </data>
 </root>

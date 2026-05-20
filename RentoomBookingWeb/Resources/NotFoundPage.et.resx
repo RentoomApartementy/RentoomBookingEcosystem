@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,25 +59,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>LehekÃ¼lge ei leitud</value>
+    <value>Lehekülge ei leitud</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Viga 404</value>
+    <value>BŤ'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>Vabandame, aga leht, mida otsid, ei eksisteeri vÃµi on Ã¼mber paigutatud.</value>
+    <value>Vabandame, aga leht, mida otsid, ei eksisteeri või on ümber paigutatud.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
     <value>Tagasi avalehele</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>VÃµib-olla otsid:</value>
+    <value>Võid otsida:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
     <value>Korterite nimekiri</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>KoostÃ¶Ã¶</value>
+    <value>Koostöö</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontakt</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Broneering tühistatud</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>See on meie uus portaal</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>See broneering ei ole enam aktiivne. Kui vajad endiselt peatumist, lisa see korterite nimekirja ja loo uus. Broneering. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Tõenäoliselt tuli see meile vanast ümbersuunamisest, mis enam ei eksisteeri. Viime teid™ kohe™ korterite lehele™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BŤ'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Broneeri korter</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Broneeri korter({0})</value></data>
 </root>

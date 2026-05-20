@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Hættu við bókunina þína</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bónusinn hefur verið fjarlægður.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bónus beitt: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Bónusinn sem veittur er ekki til.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Þessi bónus er nú óvirkur.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Þessi bónus gildir ekki fyrir valna íbúð.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bónusinn er ekki í boði á upphafsdegi þessarar bókunar.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bónusinn gildir aðeins fyrir bókanir hjá RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bónusinn lækkar ekki núverandi verð þessarar bókunar.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Fylltu út dagsetningarnar og veldu tilboðið til að beita bónusnum.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Ekki var hægt að lesa verð tilboðsins sem átti að reikna út af bónusnum.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Tókst ekki að beita bónusnum.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Sláðu inn bónuskóðann</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Beittu bónusnum</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Athuga...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bónus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Fjarlægja bónus</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Bónusafsláttur</value>
+  </data>
 </root>

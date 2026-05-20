@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Atšaukti rezervaciją</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Premija buvo pašalinta.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Taikoma premija: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Teikiama premija neegzistuoja.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Ši premija šiuo metu išjungta.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Ši premija netaikoma pasirinktam butui.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Premija netaikoma šio užsakymo pradžios datai.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Premija veikia tik užsakymams naudojant RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Premija nesumažina dabartinės šio užsakymo kainos.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Užpildykite datas ir pasirinkite pasiūlymą, kad pritaikytumėte premiją.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Nepavyko perskaityti pasiūlymo kainos, kuri turi būti apskaičiuota kaip premija.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Nepavyko pritaikyti premijos.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Įveskite premijos kodą</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Taikykite premiją</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Tikrinama...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Premija: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Pašalinti premiją</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Premijos nuolaida</value>
+  </data>
 </root>

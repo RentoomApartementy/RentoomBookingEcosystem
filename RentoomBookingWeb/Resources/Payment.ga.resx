@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Cealaigh d'áirithint</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Tá an bónas bainte.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bónas a chuirtear i bhfeidhm: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Níl an bónas a chuirtear ar fáil ann.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Tá an bónas seo díchumasaithe faoi láthair.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Ní bhaineann an bónas seo leis an árasán roghnaithe.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Níl an bónas ar fáil do dháta tosaigh an áirithinte seo.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Ní oibríonn an bónas ach le haghaidh áirithintí le RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Ní laghdaíonn an bónas praghas reatha na háirithinte seo.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Líon isteach na dátaí agus roghnaigh an tairiscint chun an bónas a chur i bhfeidhm.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Níorbh fhéidir praghas na tairisceana a bhí le ríomh ar an mbónas a léamh.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Theip ar an mbónas a chur i bhfeidhm.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Cuir isteach an cód bónais</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Cuir an bónas i bhfeidhm</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Á sheiceáil...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bónas: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Bain bónas</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Lascaine bónas</value>
+  </data>
 </root>

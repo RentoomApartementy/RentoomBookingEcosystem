@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – vi skaber unikke oplevelser med at bo i Toruń
-</value>
+    <value>Rentoom Apartments – vi skaber unikke oplevelser med at bo i Toruń</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Leder du efter en komfortabel lejlighed i Toruń?</value>
+    <value>Leder du efter en komfortabel lejlighed i Toruń?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Lejligheder i Toruń – komfortabel indkvartering</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Leder du efter en komfortabel lejlighed i Toruń?
-
-</value>
+    <value>Leder du efter en komfortabel lejlighed i Toruń?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty er et moderne korttidsudlejningsmærke, der kombinerer en høj standard for indkvartering med autentisk kendskab til Toruń. Vi skaber steder designet med komfort, æstetik og funktionalitet for øje – både for turister og forretningsgæster.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Vi er glade for, at du kom til os!
-</value>
+    <value>Vi er glade for, at du kom til os!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Vores tilbud omfatter dusinvis af nøje udvalgte lejligheder i de mest attraktive dele af byen. Hver lokation er valgt for at give nem adgang til vigtige attraktioner, restauranter og erhvervszoner.
-Hver lejlighed er et rum designet til at give ægte hvile og privatliv efter en intens dag med sightseeing eller arbejde.
-</value>
+    <value>Vores tilbud omfatter dusinvis af nøje udvalgte lejligheder i de mest attraktive dele af byen. Hver lokation er valgt for at give nem adgang til vigtige attraktioner, restauranter og erhvervszoner.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Lejligheder i de bedste beliggenheder i Toruń</value>
@@ -47,37 +40,28 @@ Hver lejlighed er et rum designet til at give ægte hvile og privatliv efter en 
     <value>Tilfredse kunder</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Lejligheder i Toruń
-
-</value>
+    <value>Lejligheder i Toruń</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Beliggenhed i Toruń</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Hvorfor Rentoom?
-</value>
+    <value>Hvorfor Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments er mere end blot et overnatningsophold i Toruń. Vi tilbyder en høj standard af lejligheder i de bedste beliggenheder og reelle fordele, der øger værdien af hele opholdet.
-</value>
+    <value>Rentoom Apartments er mere end blot et overnatningsophold i Toruń. Vi tilbyder en høj standard af lejligheder i de bedste beliggenheder og reelle fordele, der øger værdien af hele opholdet.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Som en del af vores Partnerprogram får gæster adgang til særlige rabatter på udvalgte restauranter, caféer og turistattraktioner. Nuværende rabatter og anbefalinger findes direkte i lejlighederne, så du kan bruge velkendte steder og spare penge, mens du ser dig på sightseeing.
-</value>
+    <value>Som en del af vores Partnerprogram får gæster adgang til særlige rabatter på udvalgte restauranter, caféer og turistattraktioner.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Vi arbejder kun med pålidelige, lokale partnere og sørger for kvaliteten af hver anbefaling. Ved at vælge Rentoom får du komfort, professionel service og ekstra fordele, der gør dit ophold i Toruń mere behageligt, mere raffineret og ganske enkelt mere rentabelt.
-</value>
+    <value>Vi arbejder kun med pålidelige, lokale partnere og sørger for kvaliteten af hver anbefaling.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Lær folk, der har sovet i vores lejligheder i Toruń, at kende meningerne.
-
-</value>
+    <value>Lær folk, der har sovet i vores lejligheder i Toruń, at kende meningerne.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Efterlad dine kontaktoplysninger, så vender vi tilbage til dig!
-</value>
+    <value>Efterlad dine kontaktoplysninger, så vender vi tilbage til dig!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Kontakt leverandør</value>
@@ -98,8 +82,27 @@ Hver lejlighed er et rum designet til at give ægte hvile og privatliv efter en 
     <value>Send</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Hvad adskiller vores lejligheder fra andre?
-
-</value>
+    <value>Hvad adskiller vores lejligheder fra andre?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Lejligheder Toruń - Korttidsudlejning | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Se vores lejligheder i hjertet af Toruń. Perfekt til en weekend og et længere ophold.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Lejligheder Toruń - din komfortable bolig</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Lejligheder Toruń, Indkvartering Toruń, Korttidsudlejning, Gamle Bylejligheder, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Hjem</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Leder du efter bolig i Toruń? Vi tilbyder komfortable lejligheder i centrum og i den gamle bydel. Book direkte online – laveste priser, ingen mellemmandsprovisioner.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Leder du efter bolig i Toruń? Rentoom tilbyder lejligheder til korttidsudlejning i Toruń og bor på byens bedste beliggenheder.</value>
   </data>
 </root>

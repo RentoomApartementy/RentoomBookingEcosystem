@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Апартаменти Rentoom – създаваме уникални преживявания за престой в Торун
-</value>
+    <value>Апартаменти Rentoom – създаваме уникални преживявания за престой в Торун</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Търсите удобен апартамент в Торун?</value>
+    <value>Търсите удобен апартамент в Торун?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Апартаменти в Торун – удобно настаняване</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Търсите удобен апартамент в Торун?
-
-</value>
+    <value>Търсите удобен апартамент в Торун?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty е модерна марка за краткосрочни наеми, която съчетава висок стандарт на настаняване с автентично познаване на Торун. Създаваме места, проектирани с мисъл за комфорт, естетика и функционалност – както за туристи, така и за бизнес гости.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Радваме се, че дойдохте при нас!
-</value>
+    <value>Радваме се, че дойдохте при нас!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Нашата оферта включва десетки внимателно подбрани апартаменти в най-привлекателните части на града. Всяко място е избрано, за да осигури лесен достъп до ключови атракции, ресторанти и бизнес зони.
-Всеки апартамент е пространство, създадено да осигури истинска почивка и уединение след интензивен ден на разглеждане на забележителности или работа.
-</value>
+    <value>Нашата оферта включва десетки внимателно подбрани апартаменти в най-привлекателните части на града. Всяко място е избрано, за да осигури лесен достъп до ключови атракции, ресторанти и бизнес зони.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Апартаменти на най-добрите места в Торунь</value>
@@ -47,37 +40,28 @@
     <value>Доволни клиенти</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Апартаменти в Торун
-
-</value>
+    <value>Апартаменти в Торун</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Местоположение в Торун</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Защо Рентум?
-</value>
+    <value>Защо Рентум?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Апартаментите Rentoom са повече от просто нощувка в Торун. Предлагаме апартаменти с висок стандарт на най-добрите места и реални предимства, които увеличават стойността на целия престой.
-</value>
+    <value>Апартаментите Rentoom са повече от просто нощувка в Торун. Предлагаме апартаменти с висок стандарт на най-добрите места и реални предимства, които увеличават стойността на целия престой.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Като част от нашата партньорска програма, гостите получават достъп до специални отстъпки за избрани ресторанти, кафенета и туристически атракции. Настоящите отстъпки и препоръки са директно в апартаментите, така че можете да използвате доказани места и да спестите пари по време на разглеждане на забележителности.
-</value>
+    <value>Като част от нашата партньорска програма, гостите получават достъп до специални отстъпки за избрани ресторанти, кафенета и туристически атракции.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Работим само с доверени, местни партньори, като се грижим за качеството на всяка препоръка. Избирайки Rentoom, получавате комфорт, професионално обслужване и допълнителни предимства, които правят престоя ви в Торун по-комфортен, по-изискан и просто по-печеливш.
-</value>
+    <value>Работим само с доверени, местни партньори, като се грижим за качеството на всяка препоръка.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Запознайте се с мненията на хора, които са спали в нашите апартаменти в Торун.
-
-</value>
+    <value>Запознайте се с мненията на хора, които са спали в нашите апартаменти в Торун.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Оставете вашата контактна информация и ще ви се обадим обратно!
-</value>
+    <value>Оставете вашата контактна информация и ще ви се обадим обратно!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Свържете се с доставчика</value>
@@ -98,8 +82,27 @@
     <value>Изпрати</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Какво отличава нашите апартаменти от другите?
-
-</value>
+    <value>Какво отличава нашите апартаменти от другите?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Апартаменти Торунь - Краткосрочни наеми | Рентум</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Разгледайте нашите апартаменти в сърцето на Торун. Перфектно за уикенд и по-дълъг престой.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Apartments Toruń – вашето удобно настаняване</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Апартаменти Торун, Настаняване Торун, Краткосрочни наеми, Апартаменти в Стария град, Рентум</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Търсите ли настаняване в Торун? Предлагаме удобни апартаменти в центъра и в Стария град. Резервирайте директно онлайн – най-ниски цени, без посреднически комисионни.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Търсите ли настаняване в Торун? Rentoom предлага апартаменти за краткосрочен наем в Торунь и се настанява на най-добрите локации на града.</value>
   </data>
 </root>
