@@ -346,10 +346,45 @@ public sealed class TranslationOrchestrator
         foreach (var task in tasks.Where(t => t.KeysToTranslate.Count > 0 || t.KeysToRemove.Count > 0))
         {
             Console.WriteLine($"  {RelativePath(task.TargetFilePath)}:");
+
+            var targetEntries = File.Exists(task.TargetFilePath)
+                ? ResxParser.Parse(task.TargetFilePath, includeEmpty: true)
+                    .ToDictionary(e => e.Name, e => e.Value)
+                : new Dictionary<string, string>();
+
             foreach (var entry in task.KeysToTranslate)
-                Console.WriteLine($"    + [{entry.Name}] = \"{Truncate(entry.Value, 60)}\"");
+            {
+                if (targetEntries.TryGetValue(entry.Name, out var currentValue))
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write($"    ~ [CHANGED] [{entry.Name}]");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine($"        src: \"{Truncate(entry.Value, 80)}\"");
+                    Console.WriteLine($"        cur: \"{Truncate(currentValue, 80)}\"");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"    + [NEW]     [{entry.Name}]");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine($"        src: \"{Truncate(entry.Value, 80)}\"");
+                }
+            }
+
             foreach (var key in task.KeysToRemove)
-                Console.WriteLine($"    - [{key}]");
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"    - [REMOVE]  [{key}]");
+                Console.ResetColor();
+                if (targetEntries.TryGetValue(key, out var removedValue))
+                    Console.WriteLine($"\n        cur: \"{Truncate(removedValue, 80)}\"");
+                else
+                    Console.WriteLine();
+            }
+
+            Console.WriteLine();
         }
     }
 
