@@ -6,7 +6,7 @@ using ResxTranslator.Services;
 
 var config = new ConfigurationBuilder()
     .SetBasePath(AppContext.BaseDirectory)
-    .AddJsonFile("appsettings.Local.json", optional: true)
+    .AddJsonFile("appsettings.local.json", optional: true)
     .Build();
 
 var rootCommand = new RootCommand("""
