@@ -82,7 +82,7 @@ public sealed class TranslationOrchestrator
 
         foreach (var sourceFile in sourceFiles)
         {
-            var entries = ResxParser.Parse(sourceFile);
+            var entries = ParseSourceWithFallback(sourceFile);
             if (entries.Count == 0) continue;
 
             var changedEntries = delta.GetChangedEntries(
@@ -197,6 +197,44 @@ public sealed class TranslationOrchestrator
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"Done! {filesWritten} file(s) updated. Changes are local — commit when ready.");
         Console.ResetColor();
+    }
+
+    /// <summary>
+    /// Parse a source .resx file, supplementing any empty/missing entries from the
+    /// neutral-culture fallback (e.g. "pl.resx" fills gaps left by "pl-PL.resx").
+    /// </summary>
+    private List<ResxEntry> ParseSourceWithFallback(string sourceFile)
+    {
+        var entries = ResxParser.Parse(sourceFile);
+        var entryMap = entries.ToDictionary(e => e.Name, e => e);
+
+        var fallbackCulture = GetFallbackSourceCulture();
+        if (fallbackCulture is null)
+            return entries;
+
+        var primarySuffix = $".{_sourceCulture}.resx";
+        if (!sourceFile.EndsWith(primarySuffix, StringComparison.OrdinalIgnoreCase))
+            return entries; // already using the fallback file as source
+
+        var fallbackPath = sourceFile[..^primarySuffix.Length] + $".{fallbackCulture}.resx";
+        if (!File.Exists(fallbackPath))
+            return entries;
+
+        var fallbackEntries = ResxParser.Parse(fallbackPath);
+        var added = 0;
+        foreach (var fe in fallbackEntries)
+        {
+            if (!entryMap.ContainsKey(fe.Name))
+            {
+                entries.Add(fe);
+                added++;
+            }
+        }
+
+        if (added > 0)
+            Console.WriteLine($"  Supplemented {added} missing entry(ies) for {Path.GetFileName(sourceFile)} from {Path.GetFileName(fallbackPath)}");
+
+        return entries;
     }
 
     private List<string> FindSourceFiles()
