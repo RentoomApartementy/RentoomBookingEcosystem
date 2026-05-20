@@ -14,7 +14,6 @@
     <meta name="description" content="@DescriptionText" />
     <meta name="keywords" content="@KeywordsText" />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="@OgLocale" />
     <meta property="og:title" content="@PageTitleText" />
     <meta property="og:description" content="@DescriptionText" />
     <meta property="og:url" content="@CanonicalUrl" />
@@ -44,8 +43,6 @@ else
     private string DescriptionText => Localizer["TorunLocation_Description"];
 
     private string KeywordsText => Localizer["TorunLocation_Keywords"];
-
-    private string OgLocale => IsPolish ? "pl_PL" : "en_US";
 
     private string BreadcrumbName => Localizer["TorunLocation_Breadcrumb"];
 }
