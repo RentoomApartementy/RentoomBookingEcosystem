@@ -13,6 +13,7 @@
 @inject IJSRuntime JS
 @inject MediaCacheService MediaCache
 @inject NavigationManager NavManager
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 
@@ -157,7 +158,8 @@
             imageContent = $"<span>{loadingText}...</span>";
         }
 
-        var detailsUrl = $"/apartamenty/{apt.Id}/{apt.Name?.ToSlug()}";
+        var localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
+        var detailsUrl = $"{localizedBase}/{apt.Id}/{apt.Name?.ToSlug()}";
 
         if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
         {

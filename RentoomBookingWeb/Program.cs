@@ -220,6 +220,22 @@ namespace RentoomBookingWeb
                 SupportedUICultures = supportedCultureInfos,
                 RequestCultureProviders = new List<IRequestCultureProvider>
                 {
+                    new CustomRequestCultureProvider(context =>
+                    {
+                        var path = context.Request.Path.Value;
+                        if (string.IsNullOrEmpty(path) || path == "/") return Task.FromResult<ProviderCultureResult?>(null);
+
+                        var parts = path.TrimStart('/').Split('/');
+                        var potentialCulture = parts[0];
+                        
+                        var matchedCulture = supportedCultures.FirstOrDefault(c => 
+                            string.Equals(c, potentialCulture, StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(c.Split('-')[0], potentialCulture, StringComparison.OrdinalIgnoreCase));
+
+                        return Task.FromResult<ProviderCultureResult?>(matchedCulture != null 
+                            ? new ProviderCultureResult(matchedCulture) 
+                            : null);
+                    }),
                     new CookieRequestCultureProvider
                     {
                         CookieName = CookieRequestCultureProvider.DefaultCookieName

@@ -52,6 +52,12 @@ PAGE_MAPPINGS = {
         'res_key': 'ApartmentsText',
         'file_path': '../../Components/Features/ReservationWorkflow/Pages/ApartmentPage.razor',
         'params': '/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}'
+    },
+    'AllApartments': {
+        'file_prefix': 'Apartments', 
+        'res_key': 'AllApartments_BreadcrumbName',
+        'file_path': '../../Components/Features/AllApartments/Pages/AllApartments.razor',
+        'params': ''
     }
 }
 
@@ -68,11 +74,8 @@ def extract_translations():
     mapping = {}
     files = [f for f in os.listdir(RES_DIR) if f.endswith('.resx')]
     
-    # Collect all unique cultures first
     all_cultures = set()
     for f in files:
-        # Match pattern: Prefix(.Culture)?.resx
-        # We need a generic way to find all cultures used in the project
         match = re.match(r'^.*\.([a-z-]+)\.resx$', f, re.IGNORECASE)
         if match:
             all_cultures.add(match.group(1).lower())
@@ -83,7 +86,6 @@ def extract_translations():
         prefix = config['file_prefix']
         res_key = config['res_key']
         
-        # Initialize with empty for all cultures
         for cult in all_cultures:
             mapping[key][cult] = ""
 
@@ -105,14 +107,16 @@ def extract_translations():
                     
                     for data in root.findall('data'):
                         if data.get('name') == res_key:
-                            val_node = data.find('value')
-                            if val_node is not None and val_node.text:
-                                mapping[key][culture] = to_slug(val_node.text)
+                            # IMPORTANT: Some resx files have multiple <value> tags (one empty).
+                            # We need the first non-empty one.
+                            for val_node in data.findall('value'):
+                                if val_node is not None and val_node.text and val_node.text.strip():
+                                    mapping[key][culture] = to_slug(val_node.text)
+                                    break
                             break
                 except Exception as e:
                     print(f"Error parsing {f}: {e}")
                     
-        # Special case for ApartmentDetail
         if key == 'ApartmentDetail':
             for cult in all_cultures:
                 if not mapping[key].get(cult) and mapping.get('Apartments', {}).get(cult):
@@ -145,6 +149,33 @@ def generate_csharp(mapping):
     lines.append("}")
     return "\n".join(lines)
 
+def apply_fallbacks(mapping):
+    print("Applying fallbacks...")
+    all_cultures = set()
+    for k in mapping:
+        all_cultures.update(mapping[k].keys())
+
+    for key, config in PAGE_MAPPINGS.items():
+        cultures = mapping.get(key, {})
+        is_home = config.get('is_home', False)
+        if is_home:
+            continue
+            
+        polish_slug = cultures.get('pl', cultures.get('pl-pl', ''))
+        
+        for culture in all_cultures:
+            slug = cultures.get(culture, "")
+            
+            # FALLBACK LOGIC
+            if not slug:
+                slug = polish_slug
+            
+            # LAST RESORT FALLBACK: If still empty, use the key as slug
+            if not slug:
+                slug = to_slug(key)
+                
+            mapping[key][culture] = slug
+
 def patch_razor_files(mapping):
     print("Patching Razor files...")
     start_marker = "@* [SEO_ROUTES] *@"
@@ -167,10 +198,6 @@ def patch_razor_files(mapping):
             
         route_lines = set()
         cultures = mapping.get(key, {})
-        
-        # Polish fallback is critical to avoid ambiguous routes
-        polish_slug = cultures.get('pl', cultures.get('pl-pl', ''))
-        
         is_home = config.get('is_home', False)
         params = config.get('params', '')
 
@@ -178,11 +205,7 @@ def patch_razor_files(mapping):
             short_culture = culture.split('-')[0].lower()
             slug = cultures.get(culture, "")
             
-            # If slug is empty and it's NOT home page, use Polish slug
-            if not is_home and not slug:
-                slug = polish_slug
-            
-            if not slug:
+            if not slug or is_home:
                 route_lines.add(f'@page "/{short_culture}{params}"')
             else:
                 route_lines.add(f'@page "/{short_culture}/{slug}{params}"')
@@ -198,6 +221,7 @@ def patch_razor_files(mapping):
 
 if __name__ == "__main__":
     mapping = extract_translations()
+    apply_fallbacks(mapping) # NEW STEP
     csharp_code = generate_csharp(mapping)
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         f.write(csharp_code)

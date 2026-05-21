@@ -38,6 +38,7 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -52,7 +53,7 @@
     <meta property="og:image" content="@GetSeoImage()" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["Apartments_BreadcrumbName"]" CurrentPagePath="/apartamenty" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["Apartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Apartments")" />
 </HeadContent>
 
 <div class="apartments-container">

@@ -5,6 +5,7 @@
 @using BlazorDateRangePicker
 @using RentoomBookingWeb.Services
 @inject IStringLocalizer<SharedResources> Localizer;
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @inject GoogleAnalyticsService GoogleAnalytics
 
@@ -337,7 +338,8 @@
             }
             else
             {
-                var url = QueryHelpers.AddQueryString("/apartamenty", query as IDictionary<string, string?>);
+                var localizedUrl = RouteService.GetLocalizedUrl("Apartments");
+                var url = QueryHelpers.AddQueryString(localizedUrl, query as IDictionary<string, string?>);
                 NavManager.NavigateTo(url);
             }
         }

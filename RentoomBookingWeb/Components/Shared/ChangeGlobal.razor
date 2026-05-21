@@ -50,42 +50,50 @@
         
         // Remove existing culture prefix if any
         var parts = relativePath.Split('/');
-        string? currentSlug = null;
         string? currentCultureInUrl = null;
+        string? firstSlug = null;
+        string remainingPath = "";
 
         if (parts.Length > 0 && SupportedLanguagesProvider.SupportedCultureNames.Any(c => string.Equals(c.Split('-')[0], parts[0], StringComparison.OrdinalIgnoreCase) || string.Equals(c, parts[0], StringComparison.OrdinalIgnoreCase)))
         {
             currentCultureInUrl = parts[0];
-            currentSlug = parts.Length > 1 ? parts[1].Split('?')[0] : null;
+            firstSlug = parts.Length > 1 ? parts[1].Split('?')[0] : null;
+            if (parts.Length > 2)
+            {
+                remainingPath = "/" + string.Join("/", parts.Skip(2));
+            }
         }
         else
         {
-            currentSlug = parts[0].Split('?')[0];
+            firstSlug = parts[0].Split('?')[0];
+            if (parts.Length > 1)
+            {
+                remainingPath = "/" + string.Join("/", parts.Skip(1));
+            }
         }
         
         string newUri;
-        if (!string.IsNullOrEmpty(currentSlug) && RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
+        if (!string.IsNullOrEmpty(firstSlug) && RouteService.TryGetPageKeyFromSlug(firstSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
         {
-            newUri = RouteService.GetLocalizedUrl(pageKey!, selectedCulture);
+            newUri = RouteService.GetLocalizedUrl(pageKey!, selectedCulture) + remainingPath;
             if (uri.Query.Length > 0) newUri += uri.Query;
         }
-        else if (string.IsNullOrEmpty(currentSlug) || currentSlug == "/")
+        else if (string.IsNullOrEmpty(firstSlug) || firstSlug == "/")
         {
             newUri = $"/{GetShortCode(selectedCulture)}";
         }
         else
         {
             // Fallback for special pages or if current slug wasn't in registry
-            // Try to see if it's a canonical slug first
-            var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(currentSlug);
+            var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(firstSlug);
             if (pageKeyFromCanonical != null)
             {
-                newUri = RouteService.GetLocalizedUrl(pageKeyFromCanonical, selectedCulture);
+                newUri = RouteService.GetLocalizedUrl(pageKeyFromCanonical, selectedCulture) + remainingPath;
             }
             else
             {
                 // Last resort: keep the slug as is but change the culture prefix
-                newUri = $"/{GetShortCode(selectedCulture)}/{currentSlug}";
+                newUri = $"/{GetShortCode(selectedCulture)}/{firstSlug}{remainingPath}";
             }
             
             if (uri.Query.Length > 0) newUri += uri.Query;

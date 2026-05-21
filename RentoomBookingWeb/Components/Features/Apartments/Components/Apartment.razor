@@ -12,6 +12,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> ApartmentLocalizer;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 @inject MediaCacheService MediaCache 
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @inject GoogleAnalyticsService GoogleAnalytics
 @implements IAsyncDisposable
@@ -442,7 +443,8 @@
         string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : GetQ("adults");
         string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : GetQ("children");
 
-        string baseUrl = $"/apartamenty/{Item.Id}/{Item.Name?.ToSlug()}";
+        string localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
+        string baseUrl = $"{localizedBase}/{Item.Id}/{Item.Name?.ToSlug()}";
 
         if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd))
         {
@@ -525,11 +527,12 @@
             return "#";
         }
 
+        var localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
         var slug = Item.Name?.ToSlug() ?? "szczegoly";
         var adults = !string.IsNullOrWhiteSpace(Adults) ? Adults : "2";
         var children = !string.IsNullOrWhiteSpace(Children) ? Children : "0";
 
-        return $"/apartamenty/{Item.Id}/{slug}/{term.StartDate}/{term.EndDate}/{adults}/{children}".Replace("//", "/");
+        return $"{localizedBase}/{Item.Id}/{slug}/{term.StartDate}/{term.EndDate}/{adults}/{children}".Replace("//", "/");
     }
 
     private async Task TrackApartmentClickAsync(string target)

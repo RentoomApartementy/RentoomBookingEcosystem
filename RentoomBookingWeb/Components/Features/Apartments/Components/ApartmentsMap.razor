@@ -4,6 +4,7 @@
 @inject IApartmentsService ApartmentsApiService
 @inject IIdoApartmentService IdoApartmentService
 @inject IJSRuntime JSRuntime
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @using RentoomBookingWeb.Helpers
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
@@ -92,7 +93,8 @@
             .Where(i => i?.ObjectLocation?.LocalizationItem != null)
             .Select(i =>
             {
-                var detailsUrl = $"/apartamenty/{i.Id}/{i.Name?.ToSlug()}";
+                var localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
+                var detailsUrl = $"{localizedBase}/{i.Id}/{i.Name?.ToSlug()}";
 
                 if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
                 {

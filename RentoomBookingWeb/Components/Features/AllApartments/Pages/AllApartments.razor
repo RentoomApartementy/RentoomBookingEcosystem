@@ -1,4 +1,39 @@
 @page "/apartamenty-torun"
+@* [SEO_ROUTES] *@
+@page "/be/apartamenty-torun"
+@page "/bg/apartamenty-torun"
+@page "/bs/apartamenty-torun"
+@page "/cs/apartamenty-torun"
+@page "/da/apartamenty-torun"
+@page "/de/apartamenty-torun"
+@page "/el/apartamenty-torun"
+@page "/en/apartments-in-torun"
+@page "/es/apartamenty-torun"
+@page "/et/apartamenty-torun"
+@page "/fi/apartamenty-torun"
+@page "/fr/apartamenty-torun"
+@page "/ga/apartamenty-torun"
+@page "/hr/apartamenty-torun"
+@page "/hu/apartamenty-torun"
+@page "/is/apartamenty-torun"
+@page "/it/apartamenty-torun"
+@page "/lt/apartamenty-torun"
+@page "/lv/apartamenty-torun"
+@page "/mk/apartamenty-torun"
+@page "/mt/apartamenty-torun"
+@page "/nl/apartamenty-torun"
+@page "/no/apartamenty-torun"
+@page "/pl/apartamenty-torun"
+@page "/pt/apartamenty-torun"
+@page "/ro/apartamenty-torun"
+@page "/ru/apartamenty-torun"
+@page "/sk/apartamenty-torun"
+@page "/sl/apartamenty-torun"
+@page "/sq/apartamenty-torun"
+@page "/sr/apartamenty-torun"
+@page "/sv/apartamenty-torun"
+@page "/uk/apartamenty-torun"
+@* [SEO_ROUTES_END] *@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Services
@@ -6,6 +41,7 @@
 @using RentoomBookingWeb.Components.Features.AllApartments.Components
 @inject IApartmentsService ApartmentsService
 @inject NavigationManager Navigation
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 
@@ -14,7 +50,7 @@
 <HeadContent>
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@Localizer["AllApartments_MetaDescription"]" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["AllApartments_BreadcrumbName"]" CurrentPagePath="/apartamenty-torun" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["AllApartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("AllApartments")" />
 </HeadContent>
 
 <HeaderSection Title="@Localizer["AllApartments_HeaderTitle"]" 
@@ -112,7 +148,8 @@
         if (item == null) return "#";
 
         string slug = item.Name?.ToSlug() ?? "szczegoly";
+        string localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
         
-        return $"/apartamenty/{item.Id}/{slug}";
+        return $"{localizedBase}/{item.Id}/{slug}";
     }
 }

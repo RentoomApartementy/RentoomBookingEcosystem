@@ -53,6 +53,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
+        [Inject] public RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService { get; set; } = default!;
 
         protected ApartmentObject? _apartment;
         protected ApartmentAiDescriptionDto? _aiDescription;
@@ -483,7 +484,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected string GetCanonicalUrl()
         {
-            return $"{NavManager.BaseUri}apartamenty/{Id}/{Slug}";
+            var localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
+            return $"{NavManager.BaseUri.TrimEnd('/')}{localizedBase}/{Id}/{Slug}";
         }
 
         protected MarkupString GetJsonLd()
@@ -1064,7 +1066,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         {
             var apartmentId = _apartment?.Id ?? Id;
             var slug = _apartment?.Name?.ToSlug() ?? Slug ?? string.Empty;
-            var url = $"/apartamenty/{apartmentId}/{slug}";
+            var localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
+            var url = $"{localizedBase}/{apartmentId}/{slug}";
 
             if (reservationGuid.HasValue)
             {
