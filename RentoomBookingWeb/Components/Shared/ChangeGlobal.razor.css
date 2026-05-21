@@ -24,11 +24,13 @@
     transition: color 0.3s ease;
 }
 
-.language-icon img {
-    width: 20px;
-    height: 20px;
+.language-icon ::deep .language-gicon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
     margin-right: 8px;
     display: block;
+    color: white;
 }
 
 .language-switcher-button.scrolled {
@@ -37,6 +39,10 @@
 
 .language-switcher-button.scrolled .language-code {
     color: #0c4128; 
+}
+
+.language-switcher-button.scrolled .language-icon ::deep .language-gicon {
+    color: white;
 }
 
 .language-switcher-button:hover {

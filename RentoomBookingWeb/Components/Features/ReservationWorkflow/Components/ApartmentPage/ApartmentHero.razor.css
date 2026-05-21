@@ -35,9 +35,12 @@
     font-size: 1rem;
 }
 
-.apartment-details .icon {
+.apartment-details ::deep .icon {
     width: 30px;
     height: 30px;
+    font-size: 30px;
+    color: #c9cfd8;
+    font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' -25, 'opsz' 24;
 }
 
 .hero-images-spacer {

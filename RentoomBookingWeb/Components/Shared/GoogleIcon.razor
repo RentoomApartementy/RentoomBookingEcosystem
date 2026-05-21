@@ -1,0 +1,48 @@
+@if (!string.IsNullOrWhiteSpace(Name))
+{
+    var label = string.IsNullOrWhiteSpace(AriaLabel) ? Name.Replace('_', ' ') : AriaLabel;
+    var className = BuildClassName();
+    var style = BuildStyle();
+
+    <span class="@className"
+          title="@Title"
+          aria-label="@label"
+          role="img"
+          style="@style"
+          @attributes="AdditionalAttributes">@Name</span>
+}
+
+@code {
+    [Parameter, EditorRequired] public string Name { get; set; } = string.Empty;
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string? AriaLabel { get; set; }
+    [Parameter] public int? SizePx { get; set; }
+    [Parameter] public bool Filled { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string BuildClassName()
+    {
+        var classes = string.IsNullOrWhiteSpace(Class) ? "gicon" : $"gicon {Class}";
+        if (Filled)
+        {
+            classes += " gicon-filled";
+        }
+
+        return classes;
+    }
+
+    private string? BuildStyle()
+    {
+        var styleParts = new List<string>();
+
+        if (SizePx.HasValue)
+        {
+            styleParts.Add($"font-size:{SizePx.Value}px");
+            styleParts.Add($"width:{SizePx.Value}px");
+            styleParts.Add($"height:{SizePx.Value}px");
+        }
+
+        return styleParts.Count == 0 ? null : string.Join(';', styleParts);
+    }
+}

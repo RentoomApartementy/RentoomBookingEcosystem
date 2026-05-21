@@ -53,7 +53,7 @@
                 <div class="status-section">
                     <div class="form-wrapper-title">
                         <div class="form-wrapper-title-icon-wrapper">
-                            <img src="assets/svgs/file.svg" alt="ikona uzytkownika">
+                            <GoogleIcon Name="description" Class="form-wrapper-title-icon" AriaLabel="ikona uzytkownika" />
                         </div> 
                         <div class="form-wrapper-title-text">
                             <h3 class="summary-box-title">@Localizer["ReservationSummary"] (@_summary?.IdoReservationId)</h3>
@@ -67,7 +67,10 @@
                     {
                         <div class="status-box @(IsPaymentReturnFailed ? "danger-bg" : "info-bg")">
                             <div class="form-wrapper-title-icon-wrapper @(IsPaymentReturnFailed ? "danger-icon-color" : "info-icon-color") rounded-full">
-                                <img src="assets/svgs/@(IsPaymentReturnFailed ? "danger.svg" : "time.svg")" alt="ikona statusu płatności">
+                                <GoogleIcon Name="@(IsPaymentReturnFailed ? "error" : "schedule")"
+                                            Class="status-icon"
+                                            AriaLabel="ikona statusu płatności"
+                                            Filled="@IsPaymentReturnFailed" />
                             </div>
 
                             <div class="status-box-text">
@@ -81,7 +84,7 @@
                     {
                         <div class="status-box success-bg paid-status-box">
                             <div class="form-wrapper-title-icon-wrapper success-icon-color rounded-full">
-                                <img src="assets/svgs/success.svg" alt="ikona uzytkownika">
+                                <GoogleIcon Name="check_circle" Class="status-icon" AriaLabel="ikona uzytkownika" Filled="true" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -91,7 +94,7 @@
                         </div>
                         <div class="status-box info-bg email-status-box">
                             <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
-                                <img src="assets/svgs/mail.svg" alt="ikona maila">
+                                <GoogleIcon Name="mail" Class="status-icon" AriaLabel="ikona maila" />
                             </div>
 
                             <div class="status-box-text">
@@ -114,7 +117,7 @@
                         </div>
                         <div class="staywell-popup-wrapper">
                             <button type="button" class="button staywell-trigger-button" @onclick="ToggleStaywellPopup">
-                                <img src="assets/svgs/qrcode.svg" alt="" class="staywell-trigger-icon" />
+                                <GoogleIcon Name="qr_code_2" Class="staywell-trigger-icon" AriaLabel="QR code" />
                                 <span>@StaywellButtonText</span>
                             </button>
                             <a href="@staywellLink"
@@ -163,7 +166,7 @@
                     {
                         <div class="status-box info-bg">
                             <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
-                                <img src="assets/svgs/time.svg" alt="ikona oczekiwania">
+                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="ikona oczekiwania" />
                             </div>
 
                             <div class="status-box-text">
@@ -180,7 +183,7 @@
                     {
                         <div class="status-box danger-bg">
                             <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
-                                <img src="assets/svgs/danger.svg" alt="ikona bledu">
+                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="ikona bledu" Filled="true" />
                             </div>
 
                             <div class="status-box-text">
@@ -197,7 +200,7 @@
                     {
                         <div class="status-box pending-bg">
                             <div class="form-wrapper-title-icon-wrapper pending-icon-color rounded-full">
-                                <img src="assets/svgs/time.svg" alt="ikona uzytkownika">
+                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="ikona uzytkownika" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -250,13 +253,13 @@
                                             @if (!string.IsNullOrEmpty(term.HtmlContent))
                                             {
                                                 <a href="/regulaminy/@term.Id/@GenerateSlug(term.Title ?? term.Description)" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
-                                                    <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
+                                                    <GoogleIcon Name="open_in_new" SizePx="18" AriaLabel="link" />
                                                 </a>
                                             }
                                             else if (!string.IsNullOrEmpty(term.Link))
                                             {
                                                 <a href="@term.Link" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
-                                                    <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
+                                                    <GoogleIcon Name="open_in_new" SizePx="18" AriaLabel="link" />
                                                 </a>
                                             }
                                         </div>
@@ -287,7 +290,7 @@
                     {
                         <div class="status-box danger-bg">
                             <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
-                                <img src="assets/svgs/danger.svg" alt="ikona uzytkownika">
+                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="ikona uzytkownika" Filled="true" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -314,7 +317,7 @@
                 
                 <div class="guest-info">
                     <div class="box-text">
-                        <img src="assets/svgs/user.svg" alt="ikona uzytkownika" class="box-text-icon">
+                        <GoogleIcon Name="person" Class="box-text-icon" AriaLabel="ikona uzytkownika" />
                         <b class="box-text-title">@Localizer["ClientInfoTitle"]</b>
                     </div>
 
@@ -345,7 +348,7 @@
                 
                 <div class="guest-info">
                     <div class="box-text">
-                        <img src="assets/svgs/calendar-2.svg" alt="ikona uzytkownika" class="box-text-icon">
+                        <GoogleIcon Name="calendar_month" Class="box-text-icon" AriaLabel="ikona uzytkownika" />
                         <b class="box-text-title">@Localizer["ReservationDetails"]</b>
                     </div>
 

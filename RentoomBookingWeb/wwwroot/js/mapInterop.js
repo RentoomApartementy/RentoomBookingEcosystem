@@ -66,7 +66,7 @@ window.leafletMap = {
             const lng = parseFloat(m.lng);
             if (isNaN(lat) || isNaN(lng)) return;
 
-            const defaultIcon = `<div class="marker"><img src="/assets/svgs/marker.svg" alt="marker" style="width: 35px; height: 35px;" /></div>`;
+            const defaultIcon = `<div class="marker"><span class="gicon map-marker-icon" aria-label="marker">location_on</span></div>`;
             const priceIcon = `<div class="marker-offer"><span class="marker-price">${Math.round(m.price)} PLN</span></div>`;
             const htmlContent = m.hasOffer ? priceIcon : defaultIcon;
 
@@ -228,7 +228,7 @@ window.leafletPopupMap = {
 
             const zIndexVal = m.isSelected ? 10000 : 0;
 
-            const defaultIcon = `<div class="marker${extraClass}"><img src="/assets/svgs/marker.svg" alt="marker" style="width: 35px; height: 35px;" /></div>`;
+            const defaultIcon = `<div class="marker${extraClass}"><span class="gicon map-marker-icon" aria-label="marker">location_on</span></div>`;
 
             const priceIcon = `<div class="marker-offer${extraClass}"><span class="marker-price">${Math.round(m.price)} PLN</span></div>`;
 

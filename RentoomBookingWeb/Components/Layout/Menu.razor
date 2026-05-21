@@ -50,11 +50,17 @@
             <ChangeGlobal IsScrolling="IsScrolling"/>
             @if (ShowMenu)
             {
-                <img @onclick="OnBurgerClick" src="@NavState.XIcon" class="menu-icon burger" alt="Ikona X">
+                <GoogleIcon @onclick="OnBurgerClick"
+                            Name="close"
+                            Class="@($"menu-icon burger menu-gicon {(IsScrolling ? "menu-gicon-scrolled" : "menu-gicon-top")}")"
+                            AriaLabel="Ikona X" />
             }
             else
             {
-                <img @onclick="OnBurgerClick" src="@NavState.Burger" class="menu-icon burger" alt="Ikona Burger">
+                <GoogleIcon @onclick="OnBurgerClick"
+                            Name="menu"
+                            Class="@($"menu-icon burger menu-gicon {(IsScrolling ? "menu-gicon-scrolled" : "menu-gicon-top")}")"
+                            AriaLabel="Ikona Burger" />
             }
         </div>
     </nav>
@@ -119,11 +125,8 @@
                 NavClass = "scrolled-nav",
                 NavLinkClass = "scrolled-nav-link nav-link",
                 Logo = "/assets/svgs/logo-color.svg",
-                Search = "/assets/svgs/search-green.svg",
                 Facebook = "/assets/svgs/fb-green.svg",
                 Instagram = "/assets/svgs/ig-green.svg",
-                Burger = "/assets/svgs/burger-green.svg",
-                XIcon = "/assets/svgs/x-green.svg",
                 ButtonTypeClass = ButtonType.Secondary,
             }
             : new MenuVisualState
@@ -131,11 +134,8 @@
                 NavClass = "top-nav",
                 NavLinkClass = "nav-link",
                 Logo = "/assets/svgs/logo-white.svg",
-                Search = "/assets/svgs/search-white.svg",
                 Facebook = "/assets/svgs/fb-white.svg",
                 Instagram = "/assets/svgs/ig-white.svg",
-                Burger = "/assets/svgs/burger-white.svg",
-                XIcon = "/assets/svgs/x-white.svg",
                 ButtonTypeClass = ButtonType.Primary,
             };
 
@@ -189,11 +189,8 @@
         public string NavClass { get; set; } = "top-nav";
         public string NavLinkClass { get; set; } = "nav-link";
         public string Logo { get; set; } = "/assets/svgs/logo-white.svg";
-        public string Search { get; set; } = "/assets/svgs/search-white.svg";
         public string Facebook { get; set; } = "/assets/svgs/fb-white.svg";
         public string Instagram { get; set; } = "/assets/svgs/ig-white.svg";
-        public string Burger { get; set; } = "/assets/svgs/burger-white.svg";
-        public string XIcon { get; set; } = "/assets/svgs/x-white.svg";
         public ButtonType ButtonTypeClass { get; set; } = ButtonType.Primary;
     }
 }

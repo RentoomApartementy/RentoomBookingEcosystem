@@ -23,10 +23,11 @@
     margin-bottom: 0.5rem;
 }
 
-.stat img.icon {
+.stat ::deep .icon {
     display: block;
     width: 32px;
     height: 32px;
+    font-size: 32px;
 }
 
 .stat p {

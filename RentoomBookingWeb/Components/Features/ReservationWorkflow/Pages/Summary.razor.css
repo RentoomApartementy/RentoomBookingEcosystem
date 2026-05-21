@@ -60,8 +60,10 @@
     flex-shrink: 0;
 }
 
-.form-wrapper-title-icon-wrapper > img {
+.form-wrapper-title-icon-wrapper ::deep .form-wrapper-title-icon {
     width: 70%;
+    height: 70%;
+    font-size: 42px;
 }
 
 .form-wrapper-title-text {
@@ -169,10 +171,17 @@
     animation: staywellPulse 2.4s ease-in-out infinite, staywellNudge 5.5s ease-in-out infinite;
 }
 
-.staywell-trigger-icon {
+::deep .staywell-trigger-icon {
     width: 20px;
     height: 20px;
+    font-size: 20px;
     flex-shrink: 0;
+}
+
+::deep .status-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 28px;
 }
 
 @keyframes staywellPulse {
@@ -348,9 +357,10 @@
     flex-shrink: 0;
 }
 
-.box-text-icon {
+::deep .box-text-icon {
     width: 40px;
     height: 40px;
+    font-size: 40px;
     flex-shrink: 0;
 }
 
@@ -534,9 +544,10 @@
         font-size: 0.9rem;
     }
 
-    .box-text-icon {
+    ::deep .box-text-icon {
         width: 32px;
         height: 32px;
+        font-size: 32px;
     }
 
     .box-text-title {
