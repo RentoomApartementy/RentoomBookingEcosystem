@@ -112,4 +112,16 @@ Each apartment is a space designed to provide genuine rest and privacy after an 
     <value />
     <value>Looking for accommodation in Torun? Rentoom offers short-term apartment rentals in Torun in top city locations.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Apartments in Torun - interior</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Apartments in Torun - city panorama</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Learn more</value>
+  </data>
 </root>

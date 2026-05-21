@@ -154,4 +154,13 @@
     <value />
     <value>Współpraca - Rentoom | Zarządzanie Najmem Toruń</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Zdjęcie</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Współpraca</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
 </root>

@@ -1,4 +1,7 @@
 
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> Localizer
+
 <div class="under-construction-container" style="
     height: 80vh; 
     width: 100%;
@@ -16,19 +19,17 @@
         🚧
     </div>
 
-    <h1 style="color: #333; margin: 0; font-size: 2.5rem;">
-        Strona w budowie
-    </h1>
+    <h1 style="color: #333; margin: 0; font-size: 2.5rem;">@Localizer["UnderConstruction_Title"]</h1>
 
     <p style="color: #666; font-size: 1.2rem; margin-top: 1rem; max-width: 600px;">
-        Pracujemy nad przygotowaniem tej sekcji. <br/>
-        Zapraszamy wkrótce!
+        @Localizer["UnderConstruction_DescriptionLine1"] <br/>
+        @Localizer["UnderConstruction_DescriptionLine2"]
     </p>
 
     <a href="/" style="
         margin-top: 2rem; 
     ">
-        <Button>Wróć na stronę główną</Button>
+        <Button>@Localizer["UnderConstruction_BackHome"]</Button>
     </a>
 
 </div>

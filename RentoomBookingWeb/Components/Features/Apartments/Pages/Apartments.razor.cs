@@ -78,21 +78,25 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
             if (ViewModel.IsSearch)
             {
                 if (ViewModel.Offers.Count > 0)
-                    return $"Wyniki wyszukiwania: {ViewModel.Offers.Count} ofert - Rentoom";
+                    return Localizer["Apartments_SeoTitleSearchWithOffers", ViewModel.Offers.Count];
                 
-                return "Brak dostępnych apartamentów w tym terminie - Rentoom";
+                return Localizer["Apartments_SeoTitleNoOffers"];
             }
-            return "Luksusowe Apartamenty na Wynajem - Rentoom";
+            return Localizer["Apartments_SeoTitleDefault"];
         }
 
         private string GetSeoDescription()
         {
             if (ViewModel.IsSearch && !string.IsNullOrEmpty(ViewModel.StartDate))
             {
-                return $"Sprawdź dostępne apartamenty w terminie {ViewModel.StartDate} - {ViewModel.EndDate}. " +
-                       $"Znaleziono {ViewModel.Offers.Count} ofert idealnych dla Ciebie. Rezerwuj bezpiecznie online.";
+                return Localizer[
+                    "Apartments_SeoDescriptionSearch",
+                    ViewModel.StartDate ?? string.Empty,
+                    ViewModel.EndDate ?? string.Empty,
+                    ViewModel.Offers.Count];
             }
-            return "Odkryj szeroką ofertę apartamentów Rentoom. Komfort, świetne lokalizacje i wysoki standard. Idealne na wakacje i podróże służbowe.";
+
+            return Localizer["Apartments_SeoDescriptionDefault"];
         }
 
         private string GetSeoImage()

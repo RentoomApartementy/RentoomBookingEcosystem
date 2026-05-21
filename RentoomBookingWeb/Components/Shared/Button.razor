@@ -1,5 +1,6 @@
 @inherits ComponentBase;
 @using RentoomBookingWeb.Components.Enums;
+@implements IAsyncDisposable
 
 @using Microsoft.JSInterop
 @inject IJSRuntime JS
@@ -27,6 +28,7 @@ else
 
 @code {
     private ElementReference elementRef;
+    private IJSObjectReference? _buttonModule;
     [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
     [Parameter] public bool Disabled { get; set; } = false;
@@ -36,11 +38,23 @@ else
     [Parameter] public string? Class { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _buttonModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/buttonHelper.js");
+        }
+    }
+
     private async Task HandleClick(MouseEventArgs e)
     {
         if (!Disabled && !IsBusy)
         {
-            await JS.InvokeVoidAsync("buttonHelper.createRipple", e, elementRef);
+            if (_buttonModule is not null)
+            {
+                await _buttonModule.InvokeVoidAsync("createRipple", e, elementRef);
+            }
+
             if (OnClick.HasDelegate)
             {
                 await OnClick.InvokeAsync(e);
@@ -64,4 +78,19 @@ else
         ButtonType.Tertiary => "custom-button tertiary",
         _ => "custom-button"
     };
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_buttonModule is not null)
+        {
+            try
+            {
+                await _buttonModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // Ignore: user navigated away or circuit disconnected.
+            }
+        }
+    }
 }

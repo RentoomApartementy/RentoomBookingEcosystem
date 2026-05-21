@@ -6,6 +6,7 @@
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using RentoomBookingWeb.Services 
 @using RentoomBookingWeb.Helpers
+@using Microsoft.JSInterop
 @using Microsoft.Extensions.Localization
 @inject IApartmentsService ApartmentsApiService
 @inject IIdoApartmentService IdoApartmentService
@@ -52,6 +53,7 @@
         if (!_mapRendered && Latitude.HasValue && Longitude.HasValue)
         {
             _mapRendered = true;
+            await JS.InvokeAsync<IJSObjectReference>("import", "./js/mapInterop.js");
             _objRef = DotNetObjectReference.Create(this);
 
             double lat = (double)Latitude.Value;
@@ -134,7 +136,7 @@
                 });
             }
 
-            await JS.InvokeVoidAsync($"{ClassName}.addMarkers", markersList, false);
+            await JS.InvokeVoidAsync($"{ClassName}.addMarkers", markersList, false, BuildMapLabels());
         }
         catch (Exception ex)
         {
@@ -147,11 +149,15 @@
         string imageContent;
         var loadingText = Localizer["Loading"];
         var bookNowText = Localizer["BookNow"];
+        var mapAltGuests = Localizer["Map_AltGuests"];
+        var mapAltBeds = Localizer["Map_AltBeds"];
+        var mapAltBathrooms = Localizer["Map_AltBathrooms"];
+        var mapAltArea = Localizer["Map_AltArea"];
         
         if (MediaCache.TryGetCachedMedia(apt.Id, out var cachedMedia) && cachedMedia != null && cachedMedia.Any())
         {
             var imgUrl = cachedMedia.First().Url;
-            imageContent = $"<img src='{imgUrl}' style='width: 100%; height: 100%; object-fit: cover; border-radius: .5rem .5rem 0 0;' alt='Apartment' />";
+            imageContent = $"<img src='{imgUrl}' style='width: 100%; height: 100%; object-fit: cover; border-radius: .5rem .5rem 0 0;' alt='{Localizer["Map_ApartmentImageAlt"]}' />";
         }
         else
         {
@@ -174,7 +180,7 @@
             }
         }
 
-        string priceHtml = offer != null ? $"Cena za pobyt: {offer.MinimalPrice}" + " " + @CurrencyLocalizer["PLN"] : "";
+        string priceHtml = offer != null ? $"{Localizer["OfferPriceMapLabel"]}: {offer.MinimalPrice}" + " " + @CurrencyLocalizer["PLN"] : "";
 
         return $@"
         <div id='popup-{apt.Id}' style='position: relative; background-color: white; border-radius: .5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.3);'>
@@ -191,19 +197,19 @@
                     </div>
                     <div style=""display: flex; gap: .5rem;"">
                          <div>
-                            <img src=""assets/svgs/users.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <span class=""gicon map-popup-icon"" aria-label=""{mapAltGuests}"">groups</span>
                             <span>{apt.MinCapacity} - {apt.Capacity}</span>
                         </div>
                         <div>
-                            <img src=""assets/svgs/bed.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <span class=""gicon map-popup-icon"" aria-label=""{mapAltBeds}"">bed</span>
                             <span>{SumBedByItem(apt)}</span>
                         </div>
                         <div>
-                            <img src=""assets/svgs/bath.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <span class=""gicon map-popup-icon"" aria-label=""{mapAltBathrooms}"">bathtub</span>
                             <span>1</span>
                         </div>
                         <div>
-                            <img src=""assets/svgs/m2.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                            <span class=""gicon map-popup-icon"" aria-label=""{mapAltArea}"">square_foot</span>
                             <span>{apt.Area}</span>
                         </div>
                     </div>
@@ -225,6 +231,14 @@
     {
         return (int)(apartment?.BedsConfiguration?.Sum(item => item.Count) ?? 0);
     }
+
+    private object BuildMapLabels() => new
+    {
+        apartmentsPrefix = Localizer["Map_ClusterApartmentsPrefix"].Value,
+        offersPrefix = Localizer["Map_ClusterOffersPrefix"].Value,
+        noOffers = Localizer["Map_ClusterNoOffers"].Value,
+        currency = CurrencyLocalizer["PLN"].Value
+    };
 
     [JSInvokable]
     public async Task<string> OnMarkerClicked(string idStr)

@@ -153,4 +153,19 @@
   <data name="AboutCity" xml:space="preserve">
     <value />
   </data>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Apartments</value>
+  </data>
+  <data name="Footer_FacebookAriaLabel" xml:space="preserve">
+    <value>Rentoom on Facebook</value>
+  </data>
+  <data name="Footer_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram</value>
+  </data>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom on Instagram</value>
+  </data>
 </root>

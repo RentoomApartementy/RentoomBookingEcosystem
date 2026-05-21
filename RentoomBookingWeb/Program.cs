@@ -31,6 +31,7 @@ using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
 using RentoomBookingWeb.Services.Localization;
 using System.Globalization;
+using System.Linq;
 
 namespace RentoomBookingWeb
 {
@@ -51,6 +52,14 @@ namespace RentoomBookingWeb
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddHttpClient();
+            builder.Services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
+                {
+                    "image/svg+xml"
+                });
+            });
             /* builder.Services.AddHttpClient("Api", client =>
              {
                  client.BaseAddress = new Uri("https://localhost:7241/");
@@ -259,7 +268,6 @@ namespace RentoomBookingWeb
                 }
             };
 
-            app.UseMiddleware<LocalizedRoutingMiddleware>();
             app.UseRequestLocalization(localizationOptions);
 
             if (!app.Environment.IsDevelopment())
@@ -283,7 +291,28 @@ namespace RentoomBookingWeb
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseResponseCompression();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    var path = ctx.Context.Request.Path.Value ?? string.Empty;
+                    var headers = ctx.Context.Response.Headers;
+
+                    if (path.StartsWith("/_framework/", StringComparison.OrdinalIgnoreCase) ||
+                        path.StartsWith("/_content/", StringComparison.OrdinalIgnoreCase) ||
+                        path.Contains(".bundle.scp.", StringComparison.OrdinalIgnoreCase))
+                    {
+                        headers[HeaderNames.CacheControl] = "public,max-age=31536000,immutable";
+                    }
+                    else if (path.EndsWith(".css", StringComparison.OrdinalIgnoreCase) ||
+                             path.EndsWith(".js", StringComparison.OrdinalIgnoreCase) ||
+                             path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+                    {
+                        headers[HeaderNames.CacheControl] = "public,max-age=3600";
+                    }
+                }
+            });
 
             // DIAGNOSTIC LOGGING
             var logger = app.Services.GetRequiredService<ILogger<Program>>();
@@ -300,7 +329,6 @@ namespace RentoomBookingWeb
                     return;
                 }
             });
-
             // error 404
             app.UseStatusCodePagesWithReExecute("/404");
 

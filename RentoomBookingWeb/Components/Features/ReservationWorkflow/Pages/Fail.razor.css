@@ -53,9 +53,10 @@
     border: 1px solid #fed7aa;
 }
 
-.status-icon {
+::deep .status-icon {
     width: 28px;
     height: 28px;
+    font-size: 28px;
 }
 
 .spinner-container {

@@ -1,4 +1,4 @@
-window.registerScrollObserver = (elementId, dotnetHelper, options) => {
+export function registerScrollObserver(elementId, dotnetHelper, options) {
     const target = document.getElementById(elementId);
     
     const observerOptions = options || {
@@ -22,7 +22,7 @@ window.registerScrollObserver = (elementId, dotnetHelper, options) => {
             subtree: true
         });
     }
-};
+}
 
 function startIntersectionObserver(target, elementId, dotnetHelper, options) {
     const observer = new IntersectionObserver((entries) => {
@@ -40,7 +40,7 @@ function startIntersectionObserver(target, elementId, dotnetHelper, options) {
     observer.observe(target);
 }
 
-window.scrollToElement = (elementId, offsetPx = 0) => {
+export function scrollToElement(elementId, offsetPx = 0) {
     const element = document.getElementById(elementId);
     if (element) {
         const offset = Number(offsetPx) || 0;
@@ -49,10 +49,15 @@ window.scrollToElement = (elementId, offsetPx = 0) => {
     } else {
         console.warn(`[Scroll] Nie można przewinąć - brak elementu: ${elementId}`);
     }
-};
+}
 
-window.scrollToTop = (behavior = 'auto') => {
+export function scrollToTop(behavior = 'auto') {
     window.scrollTo({ top: 0, left: 0, behavior });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-};
+}
+
+// Backward compatibility for any remaining global JS interop call sites.
+window.registerScrollObserver = registerScrollObserver;
+window.scrollToElement = scrollToElement;
+window.scrollToTop = scrollToTop;

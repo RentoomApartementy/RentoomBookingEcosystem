@@ -11,64 +11,24 @@
         <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     }
     <base href="/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="app.css" as="style" />
+    <link rel="preload" href="RentoomBookingWeb.styles.css" as="style" />
     <link rel="stylesheet" href="/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="/app.css" />
     <link rel="stylesheet" href="/RentoomBookingWeb.styles.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,300,0..1,-25&display=block" />
     <link rel="icon" type="image/svg" href="/assets/svgs/logo-sygnet.svg" />
-    
-    @if (Environment.IsProduction())
-    {
-        <!-- Google Tag Manager -->
-        <script>
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-KQ34PTLN');</script>
-        <!-- End Google Tag Manager -->
 
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KWEKWNRM9H"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', 'G-KWEKWNRM9H');
-        </script>
-        <script src="https://t.contentsquare.net/uxa/07445cfba2a7a.js"></script>
-    } else{//dev
-
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJD8GQWLCY"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-GJD8GQWLCY');
-        </script>
-
-
-    }
-
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <meta property="og:locale" content="@SeoCultureHelper.GetOgLocale()" />
-    <RentoomBookingWeb.Components.Shared.SeoHreflangs />
     
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
 <body>
-    @if (Environment.IsProduction())
-    {
-        <!-- Google Tag Manager (noscript) -->
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ34PTLN"
-                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-        </noscript>
-        <!-- End Google Tag Manager (noscript) -->
-    }
 <Routes @rendermode="InteractiveServer" />
+    <script src="_framework/blazor.web.js"></script>
 
 <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

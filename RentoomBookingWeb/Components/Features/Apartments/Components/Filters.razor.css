@@ -73,7 +73,7 @@
 }
 
 .selected::before {
-    content: "";
+    content: "close";
     position: absolute;
     right: 10px;
     pointer-events: none;
@@ -81,24 +81,32 @@
     height: 20px;
     border-radius: 50%;
     background-color: #e8d3c1;
-    background-image: url('assets/svgs/filter/x-icon.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 10px;
+    font-family: 'Material Symbols Rounded';
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-feature-settings: 'liga';
 }
 
 .filter-option:active, .filter-option:focus {
     outline: none;
 }
 
-.filter-icon {
+::deep .filter-icon {
     width: 35px;
     height: 35px;
+    font-size: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.filter-icon.small-icon {
+::deep .filter-icon.small-icon {
     width: 20px;
     height: 20px;
+    font-size: 20px;
     margin-left: 5px;
 }
 
@@ -219,9 +227,10 @@
     gap: 0.75rem;
 }
 
-.trigger-icon {
+::deep .trigger-icon {
     width: 20px;
     height: 20px;
+    font-size: 20px;
     opacity: 0.7;
 }
 

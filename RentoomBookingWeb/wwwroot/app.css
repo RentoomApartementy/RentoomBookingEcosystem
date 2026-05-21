@@ -5,6 +5,49 @@ html, body {
     padding: 0;
 }
 
+.gicon {
+    font-family: 'Material Symbols Rounded';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'liga';
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' -25, 'opsz' 24;
+    vertical-align: middle;
+}
+
+.gicon-filled {
+    font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' -25, 'opsz' 24;
+}
+
+.map-popup-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #c9cfd8;
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' -25, 'opsz' 20;
+}
+
+.map-marker-icon {
+    font-size: 35px;
+    width: 35px;
+    height: 35px;
+    color: #1f5a41;
+    font-variation-settings: 'FILL' 1, 'wght' 100, 'GRAD' -25, 'opsz' 24;
+}
+
 h1:focus {
     outline: none;
 }
@@ -217,6 +260,15 @@ code {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* Fallback for language icon state colors (independent of scoped CSS isolation). */
+.language-switcher-button .language-gicon {
+    color: #ffffff !important;
+}
+
+.language-switcher-button.scrolled .language-gicon {
+    color: #1f5a41 !important;
 }
 
 .scrolled-nav-link:hover {

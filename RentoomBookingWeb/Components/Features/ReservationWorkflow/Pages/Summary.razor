@@ -13,6 +13,7 @@
 @using System.Globalization;
 @using RentoomBooking.SharedClasses.Models
 @using Microsoft.Extensions.Configuration
+@using Microsoft.JSInterop
 @using RentoomBookingWeb.Services
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject CustomerTermsService TermsService
@@ -53,7 +54,7 @@
                 <div class="status-section">
                     <div class="form-wrapper-title">
                         <div class="form-wrapper-title-icon-wrapper">
-                            <img src="assets/svgs/file.svg" alt="ikona uzytkownika">
+                            <GoogleIcon Name="description" Class="form-wrapper-title-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
                         </div> 
                         <div class="form-wrapper-title-text">
                             <h3 class="summary-box-title">@Localizer["ReservationSummary"] (@_summary?.IdoReservationId)</h3>
@@ -67,7 +68,10 @@
                     {
                         <div class="status-box @(IsPaymentReturnFailed ? "danger-bg" : "info-bg")">
                             <div class="form-wrapper-title-icon-wrapper @(IsPaymentReturnFailed ? "danger-icon-color" : "info-icon-color") rounded-full">
-                                <img src="assets/svgs/@(IsPaymentReturnFailed ? "danger.svg" : "time.svg")" alt="ikona statusu płatności">
+                                <GoogleIcon Name="@(IsPaymentReturnFailed ? "error" : "schedule")"
+                                            Class="status-icon"
+                                            AriaLabel="@Localizer["Summary_PaymentStatusIconAriaLabel"]"
+                                            Filled="@IsPaymentReturnFailed" />
                             </div>
 
                             <div class="status-box-text">
@@ -81,7 +85,7 @@
                     {
                         <div class="status-box success-bg paid-status-box">
                             <div class="form-wrapper-title-icon-wrapper success-icon-color rounded-full">
-                                <img src="assets/svgs/success.svg" alt="ikona uzytkownika">
+                                <GoogleIcon Name="check_circle" Class="status-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" Filled="true" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -91,7 +95,7 @@
                         </div>
                         <div class="status-box info-bg email-status-box">
                             <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
-                                <img src="assets/svgs/mail.svg" alt="ikona maila">
+                                <GoogleIcon Name="mail" Class="status-icon" AriaLabel="@Localizer["Summary_EmailIconAriaLabel"]" />
                             </div>
 
                             <div class="status-box-text">
@@ -114,7 +118,7 @@
                         </div>
                         <div class="staywell-popup-wrapper">
                             <button type="button" class="button staywell-trigger-button" @onclick="ToggleStaywellPopup">
-                                <img src="assets/svgs/qrcode.svg" alt="" class="staywell-trigger-icon" />
+                                <GoogleIcon Name="qr_code_2" Class="staywell-trigger-icon" AriaLabel="@Localizer["Summary_QrButtonAriaLabel"]" />
                                 <span>@StaywellButtonText</span>
                             </button>
                             <a href="@staywellLink"
@@ -136,7 +140,7 @@
                                         <div class="staywell-popup-col staywell-qr-col">
                                             @if (!string.IsNullOrWhiteSpace(_staywellQrDataUri))
                                             {
-                                                <img src="@_staywellQrDataUri" alt="Kod QR StayWell" class="staywell-qr" />
+                                                <img src="@_staywellQrDataUri" alt="@Localizer["Summary_StaywellQrAlt"]" class="staywell-qr" />
                                             }
                                         </div>
 
@@ -163,7 +167,7 @@
                     {
                         <div class="status-box info-bg">
                             <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
-                                <img src="assets/svgs/time.svg" alt="ikona oczekiwania">
+                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="@Localizer["Summary_WaitingIconAriaLabel"]" />
                             </div>
 
                             <div class="status-box-text">
@@ -180,7 +184,7 @@
                     {
                         <div class="status-box danger-bg">
                             <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
-                                <img src="assets/svgs/danger.svg" alt="ikona bledu">
+                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="@Localizer["Summary_ErrorIconAriaLabel"]" Filled="true" />
                             </div>
 
                             <div class="status-box-text">
@@ -197,7 +201,7 @@
                     {
                         <div class="status-box pending-bg">
                             <div class="form-wrapper-title-icon-wrapper pending-icon-color rounded-full">
-                                <img src="assets/svgs/time.svg" alt="ikona uzytkownika">
+                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -250,13 +254,13 @@
                                             @if (!string.IsNullOrEmpty(term.HtmlContent))
                                             {
                                                 <a href="/regulaminy/@term.Id/@GenerateSlug(term.Title ?? term.Description)" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
-                                                    <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
+                                                    <GoogleIcon Name="open_in_new" SizePx="18" AriaLabel="@Localizer["Summary_DocumentLinkAriaLabel"]" />
                                                 </a>
                                             }
                                             else if (!string.IsNullOrEmpty(term.Link))
                                             {
                                                 <a href="@term.Link" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
-                                                    <img src="assets/svgs/external-link.svg" alt="link" style="width: 18px; height: 18px;" />
+                                                    <GoogleIcon Name="open_in_new" SizePx="18" AriaLabel="@Localizer["Summary_DocumentLinkAriaLabel"]" />
                                                 </a>
                                             }
                                         </div>
@@ -270,7 +274,7 @@
                                 IsBusy="@_isSavingTerms"
                                 Type="ButtonType.Tertiary"
                                 style="@(!CanProceedToPayment() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
-                            <img src="assets/svgs/tpay.svg" alt="Tpay icon"/>
+                            <img src="assets/svgs/tpay.svg" alt="@Localizer["Summary_TpayIconAlt"]"/>
                             @Localizer["ClickToPay"]
                         </Button>
 
@@ -287,7 +291,7 @@
                     {
                         <div class="status-box danger-bg">
                             <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
-                                <img src="assets/svgs/danger.svg" alt="ikona uzytkownika">
+                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="@Localizer["Summary_ErrorIconAriaLabel"]" Filled="true" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -314,7 +318,7 @@
                 
                 <div class="guest-info">
                     <div class="box-text">
-                        <img src="assets/svgs/user.svg" alt="ikona uzytkownika" class="box-text-icon">
+                        <GoogleIcon Name="person" Class="box-text-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
                         <b class="box-text-title">@Localizer["ClientInfoTitle"]</b>
                     </div>
 
@@ -345,7 +349,7 @@
                 
                 <div class="guest-info">
                     <div class="box-text">
-                        <img src="assets/svgs/calendar-2.svg" alt="ikona uzytkownika" class="box-text-icon">
+                        <GoogleIcon Name="calendar_month" Class="box-text-icon" AriaLabel="ikona uzytkownika" />
                         <b class="box-text-title">@Localizer["ReservationDetails"]</b>
                     </div>
 
@@ -461,7 +465,8 @@
         }
 
         _scrollToTopPending = false;
-        await JSRuntime.InvokeVoidAsync("scrollToTop");
+        var scrollModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+        await scrollModule.InvokeVoidAsync("scrollToTop");
     }
     
     private async Task GoToPayment()

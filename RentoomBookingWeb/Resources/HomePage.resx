@@ -105,4 +105,16 @@
     <data name="Home_OrganizationDescription" xml:space="preserve">
         <value>Looking for accommodation in Toruń? Rentoom offers short-term rental apartments in Toruń.</value>
     </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Apartments in Torun - interior</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Apartments in Torun - city panorama</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Learn more</value>
+  </data>
 </root>

@@ -101,6 +101,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected bool _isAtSummary = false;
         protected bool _isAtOffers = false;
         private IDisposable? _scrollObjRef;
+        private IJSObjectReference? _scrollModule;
 
         protected bool _isMobileExpanded = false;
 
@@ -702,11 +703,12 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             if (!_observerInitialized)
             {
                 _observerInitialized = true;
+                _scrollModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
 
                 _scrollObjRef = DotNetObjectReference.Create(this);
                 await Task.Delay(100);
-                await JSRuntime.InvokeVoidAsync("registerScrollObserver", "confirm-reservation", _scrollObjRef);
-                await JSRuntime.InvokeVoidAsync("registerScrollObserver", "offers-section", _scrollObjRef);
+                await _scrollModule.InvokeVoidAsync("registerScrollObserver", "confirm-reservation", _scrollObjRef);
+                await _scrollModule.InvokeVoidAsync("registerScrollObserver", "offers-section", _scrollObjRef);
             }
 
             if (firstRender && !_googlePageViewTracked && _apartment != null)
@@ -1198,6 +1200,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected async Task SmartScrollAction()
         {
             await Task.Yield();
+            _scrollModule ??= await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
 
             if (_isAtOffers)
             {
@@ -1207,11 +1210,11 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             if (_isAtSummary)
             {
-                await JSRuntime.InvokeVoidAsync("scrollToElement", "offers-section", SmartScrollOffsetPx);
+                await _scrollModule.InvokeVoidAsync("scrollToElement", "offers-section", SmartScrollOffsetPx);
             }
             else
             {
-                await JSRuntime.InvokeVoidAsync("scrollToElement", "confirm-reservation", SmartScrollOffsetPx);
+                await _scrollModule.InvokeVoidAsync("scrollToElement", "confirm-reservation", SmartScrollOffsetPx);
             }
 
             if (_isMobileExpanded)
