@@ -262,6 +262,15 @@ code {
     align-items: center;
 }
 
+/* Fallback for language icon state colors (independent of scoped CSS isolation). */
+.language-switcher-button .language-gicon {
+    color: #ffffff !important;
+}
+
+.language-switcher-button.scrolled .language-gicon {
+    color: #1f5a41 !important;
+}
+
 .scrolled-nav-link:hover {
     color: #1F5A41;
     text-decoration-color: #1F5A41;

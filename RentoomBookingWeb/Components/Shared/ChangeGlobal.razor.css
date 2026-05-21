@@ -30,7 +30,14 @@
     font-size: 18px;
     margin-right: 8px;
     display: block;
-    color: white;
+}
+
+.language-icon ::deep .language-gicon-top {
+    color: #ffffff;
+}
+
+.language-icon ::deep .language-gicon-scrolled {
+    color: #1f5a41;
 }
 
 .language-switcher-button.scrolled {
@@ -39,10 +46,6 @@
 
 .language-switcher-button.scrolled .language-code {
     color: #0c4128; 
-}
-
-.language-switcher-button.scrolled .language-icon ::deep .language-gicon {
-    color: white;
 }
 
 .language-switcher-button:hover {
