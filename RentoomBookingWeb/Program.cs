@@ -1,5 +1,6 @@
 using BlazorDateRangePicker;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -268,6 +269,7 @@ namespace RentoomBookingWeb
                 }
             };
 
+            app.UseMiddleware<LocalizedRoutingMiddleware>();
             app.UseRequestLocalization(localizationOptions);
 
             if (!app.Environment.IsDevelopment())
