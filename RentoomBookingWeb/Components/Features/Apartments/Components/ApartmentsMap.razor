@@ -198,6 +198,6 @@
 
     private string getMinimalPrice(int id)
     {
-        return GetPricingOfferByObjectId(id) != null ? $"Cena za pobyt: {GetPricingOfferByObjectId(id)?.MinimalPrice}" + " " +  @CurrencyLocalizer["PLN"] : "";
+        return GetPricingOfferByObjectId(id) != null ? $"{Localizer["OfferPriceMapLabel"]}: {GetPricingOfferByObjectId(id)?.MinimalPrice}" + " " +  @CurrencyLocalizer["PLN"] : "";
     }
 }

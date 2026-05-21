@@ -216,4 +216,7 @@
   <data name="SuggestedDateNotFoundText" xml:space="preserve">
     <value />
   </data>
+  <data name="OfferPriceMapLabel" xml:space="preserve">
+    <value>Price for stay</value>
+  </data>
 </root>
