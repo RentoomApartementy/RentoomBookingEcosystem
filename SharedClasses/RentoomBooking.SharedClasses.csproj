@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="supported-languages.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Integrations\Bitrix\Database\" />
     <Folder Include="Integrations\RentoomApp\Partners\Services\" />
     <Folder Include="Models\IdoBooking\Client\Get\" />
