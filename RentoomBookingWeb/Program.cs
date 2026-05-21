@@ -29,6 +29,7 @@ using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
 using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Services.Localization;
 using System.Globalization;
 
 namespace RentoomBookingWeb
@@ -123,6 +124,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixService>();
             builder.Services.AddScoped<BitrixLeadCaptureService>();
             builder.Services.AddScoped<IGusService, GusService>();
+            builder.Services.AddScoped<IRouteLocalizationService, RouteLocalizationService>();
             builder.Services.AddScoped<MediaCacheService>();
             builder.Services.AddScoped<ReservationWorkflowTelemetry>();
             builder.Services.AddScoped<GoogleAnalyticsService>();
@@ -241,6 +243,7 @@ namespace RentoomBookingWeb
                 }
             };
 
+            app.UseMiddleware<LocalizedRoutingMiddleware>();
             app.UseRequestLocalization(localizationOptions);
 
             if (!app.Environment.IsDevelopment())
@@ -265,7 +268,23 @@ namespace RentoomBookingWeb
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
+
+            // DIAGNOSTIC LOGGING
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("WebRootPath: {Path}", app.Environment.WebRootPath);
+            logger.LogInformation("ContentRootPath: {Path}", app.Environment.ContentRootPath);
+
+            // 404 TRAP PROTECTION: Don't show HTML 404 for files
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404 && context.Request.Path.Value!.Contains('.'))
+                {
+                    // If it's a file and it's a 404, stop here. Don't let UseStatusCodePages re-execute to /404 HTML.
+                    return;
+                }
+            });
+
             // error 404
             app.UseStatusCodePagesWithReExecute("/404");
 

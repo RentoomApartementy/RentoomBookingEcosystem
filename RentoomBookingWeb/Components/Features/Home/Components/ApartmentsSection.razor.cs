@@ -13,6 +13,7 @@ public partial class ApartmentsSection : ComponentBase
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private ReservationWorkflowTelemetry WorkflowTelemetry { get; set; } = default!;
     [Inject] private GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
+    [Inject] private RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService { get; set; } = default!;
     
     public List<ApartmentObject> Apartments { get; private set; } = new();
     public List<PricingOffer> Offers { get; private set; } = new();
@@ -122,6 +123,7 @@ public partial class ApartmentsSection : ComponentBase
             ["adults"] = 2,
             ["children"] = 0
         });
-        Navigation.NavigateTo($"/apartamenty/{apartmentId}/{apartmentName.ToSlug()}/{_dateFrom:yyyy-MM-dd}/{_dateTo:yyyy-MM-dd}/2/0");
+        var localizedBase = RouteService.GetLocalizedUrl("Apartments");
+        Navigation.NavigateTo($"{localizedBase}/{apartmentId}/{apartmentName.ToSlug()}/{_dateFrom:yyyy-MM-dd}/{_dateTo:yyyy-MM-dd}/2/0");
     }
 }

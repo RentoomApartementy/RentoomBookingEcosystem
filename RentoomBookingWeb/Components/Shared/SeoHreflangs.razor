@@ -1,0 +1,67 @@
+@using System.Globalization
+@using RentoomBooking.SharedFrontend.Localization
+@using RentoomBookingWeb.Services.Localization
+@inject IRouteLocalizationService RouteService
+@inject NavigationManager NavManager
+
+@foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
+{
+    <link rel="alternate" hreflang="@GetShortCode(culture)" href="@GetFullUrlForCulture(culture)" />
+}
+<link rel="alternate" hreflang="x-default" href="@GetFullUrlForCulture(SupportedLanguagesProvider.DefaultCultureName)" />
+
+@code {
+    private string GetFullUrlForCulture(string culture)
+    {
+        var baseUri = NavManager.BaseUri.TrimEnd('/');
+        var relativePath = NavManager.ToBaseRelativePath(NavManager.Uri);
+        
+        var parts = relativePath.Split('/');
+        string? currentSlug = null;
+        string? currentCultureInUrl = null;
+
+        // Correctly identify culture prefix and slug
+        if (parts.Length > 0 && SupportedLanguagesProvider.SupportedCultureNames.Any(c => string.Equals(c.Split('-')[0], parts[0], StringComparison.OrdinalIgnoreCase) || string.Equals(c, parts[0], StringComparison.OrdinalIgnoreCase)))
+        {
+            currentCultureInUrl = parts[0];
+            currentSlug = parts.Length > 1 ? parts[1].Split('?')[0] : null;
+        }
+        else
+        {
+            currentSlug = parts[0].Split('?')[0];
+        }
+
+        if (!string.IsNullOrEmpty(currentSlug) && RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
+        {
+            return $"{baseUri}{RouteService.GetLocalizedUrl(pageKey!, culture)}";
+        }
+
+        // Fallback for home
+        if (string.IsNullOrEmpty(currentSlug) || currentSlug == "/")
+        {
+            return $"{baseUri}/{GetShortCode(culture)}";
+        }
+
+        // Fallback for untranslated pages or canonicals
+        var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(currentSlug);
+        if (pageKeyFromCanonical != null)
+        {
+            return $"{baseUri}{RouteService.GetLocalizedUrl(pageKeyFromCanonical, culture)}";
+        }
+
+        return $"{baseUri}/{GetShortCode(culture)}/{currentSlug}";
+    }
+
+    private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
+
+    private string? GetPageKeyFromCanonicalSlug(string slug) => slug.ToLower() switch
+    {
+        "apartamenty" => "Apartments",
+        "kontakt" => "Contact",
+        "wspolpraca" => "Cooperation",
+        "regulaminy" => "Statute",
+        "polozenie-torunia" => "AboutCity",
+        "torun" => "AboutCity",
+        _ => null
+    };
+}

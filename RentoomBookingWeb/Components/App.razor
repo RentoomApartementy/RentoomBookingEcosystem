@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 @using RentoomBookingWeb.Helpers
 <html lang="@SeoCultureHelper.GetHtmlLang()">
@@ -11,10 +11,10 @@
         <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     }
     <base href="/" />
-    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="app.css" />
-    <link rel="stylesheet" href="RentoomBookingWeb.styles.css" />
-    <link rel="icon" type="image/svg" href="assets/svgs/logo-sygnet.svg" />
+    <link rel="stylesheet" href="/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="/app.css" />
+    <link rel="stylesheet" href="/RentoomBookingWeb.styles.css" />
+    <link rel="icon" type="image/svg" href="/assets/svgs/logo-sygnet.svg" />
     
     @if (Environment.IsProduction())
     {
@@ -53,6 +53,7 @@
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <meta property="og:locale" content="@SeoCultureHelper.GetOgLocale()" />
+    <RentoomBookingWeb.Components.Shared.SeoHreflangs />
     
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
@@ -75,13 +76,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
     
-    <script src="js/mapInterop.js"></script>
-    <script src="js/cookieConsentInterop.js"></script>
+    <script src="/js/mapInterop.js"></script>
+    <script src="/js/cookieConsentInterop.js"></script>
     
-    <script src="js/scrollObserver.js"></script>
-    <script src="js/buttonHelper.js"></script>
+    <script src="/js/scrollObserver.js"></script>
+    <script src="/js/buttonHelper.js"></script>
     
-    <script src="_framework/blazor.web.js"></script>
+    <script src="/_framework/blazor.web.js"></script>
     
     <script>
     window.clickListeners = {};
