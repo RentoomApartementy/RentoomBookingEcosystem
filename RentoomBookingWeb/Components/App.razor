@@ -1,6 +1,7 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
-<html lang="en">
+@using RentoomBookingWeb.Helpers
+<html lang="@SeoCultureHelper.GetHtmlLang()">
 
 <head>
     <meta charset="utf-8" />
@@ -52,6 +53,7 @@
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <meta property="og:locale" content="@SeoCultureHelper.GetOgLocale()" />
     
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
@@ -81,11 +83,6 @@
     <script src="js/buttonHelper.js"></script>
     
     <script src="_framework/blazor.web.js"></script>
-    
-    <script type="module">
-        import { setCultureCookieAndReload } from './js/cultureManager.js';
-        setCultureCookieAndReload(".AspNetCore.Culture");
-    </script>
     
     <script>
     window.clickListeners = {};

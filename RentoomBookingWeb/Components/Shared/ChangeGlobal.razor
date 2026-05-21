@@ -42,23 +42,12 @@
             _isDropdownOpen = false;
             return;
         }
-        
+
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var queryParameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        var newParameters = new Dictionary<string, string?>();
-        
-        foreach (var param in queryParameters)
-        {
-            if (param.Key != "culture" && param.Key != "ui-culture")
-                newParameters.Add(param.Key, param.Value.FirstOrDefault());
-        }
-
-        newParameters.Add("culture", selectedCulture);
-        newParameters.Add("ui-culture", selectedCulture);
-
-        var newUri = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(
-            uri.GetLeftPart(UriPartial.Path),
-            newParameters!); 
+        var returnUrl = $"{uri.AbsolutePath}{uri.Query}{uri.Fragment}";
+        var cultureQuery = Uri.EscapeDataString(selectedCulture);
+        var returnUrlQuery = Uri.EscapeDataString(returnUrl);
+        var newUri = $"/culture/set?culture={cultureQuery}&returnUrl={returnUrlQuery}";
 
         _isDropdownOpen = false; 
         Navigation.NavigateTo(newUri, forceLoad: true);

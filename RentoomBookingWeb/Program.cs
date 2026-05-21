@@ -1,8 +1,10 @@
 using BlazorDateRangePicker;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Descriptions.Database;
 using RentoomBooking.SharedClasses.Services.Descriptions;
@@ -27,6 +29,7 @@ using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
 using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
+using System.Globalization;
 
 namespace RentoomBookingWeb
 {
@@ -202,10 +205,41 @@ namespace RentoomBookingWeb
             var app = builder.Build();
             
             var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames.ToArray();
-            var localizationOptions = new RequestLocalizationOptions()
-                .SetDefaultCulture(SupportedLanguagesProvider.DefaultCultureName)
-                .AddSupportedCultures(supportedCultures)
-                .AddSupportedUICultures(supportedCultures);
+            const string defaultCulture = "pl-PL";
+            var supportedCultureSet = new HashSet<string>(supportedCultures, StringComparer.OrdinalIgnoreCase);
+            var supportedCultureInfos = supportedCultures
+                .Select(CultureInfo.GetCultureInfo)
+                .ToList();
+
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(defaultCulture),
+                SupportedCultures = supportedCultureInfos,
+                SupportedUICultures = supportedCultureInfos,
+                RequestCultureProviders = new List<IRequestCultureProvider>
+                {
+                    new CookieRequestCultureProvider
+                    {
+                        CookieName = CookieRequestCultureProvider.DefaultCookieName
+                    },
+                    new CustomRequestCultureProvider(context =>
+                    {
+                        var ua = context.Request.Headers[HeaderNames.UserAgent].ToString();
+                        var isBot = !string.IsNullOrWhiteSpace(ua) &&
+                                    (ua.Contains("bot", StringComparison.OrdinalIgnoreCase) ||
+                                     ua.Contains("crawler", StringComparison.OrdinalIgnoreCase) ||
+                                     ua.Contains("google", StringComparison.OrdinalIgnoreCase));
+
+                        return Task.FromResult<ProviderCultureResult?>(isBot
+                            ? new ProviderCultureResult(defaultCulture, defaultCulture)
+                            : null);
+                    }),
+                    new AcceptLanguageHeaderRequestCultureProvider
+                    {
+                        MaximumAcceptLanguageHeaderValuesToTry = 3
+                    }
+                }
+            };
 
             app.UseRequestLocalization(localizationOptions);
 
@@ -248,6 +282,32 @@ namespace RentoomBookingWeb
                 return Results.Text(content, "text/plain");
             });
 
+            app.MapGet("/culture/set", (HttpContext context, string? culture, string? returnUrl) =>
+            {
+                var resolvedCulture = defaultCulture;
+                if (!string.IsNullOrWhiteSpace(culture) && supportedCultureSet.Contains(culture))
+                {
+                    resolvedCulture = supportedCultures.First(c => string.Equals(c, culture, StringComparison.OrdinalIgnoreCase));
+                }
+
+                var safeReturnUrl = IsSafeLocalReturnUrl(returnUrl) ? returnUrl! : "/";
+
+                var cookieValue = CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(resolvedCulture));
+                context.Response.Cookies.Append(
+                    CookieRequestCultureProvider.DefaultCookieName,
+                    cookieValue,
+                    new CookieOptions
+                    {
+                        Path = "/",
+                        Expires = DateTimeOffset.UtcNow.AddYears(1),
+                        IsEssential = true,
+                        SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax,
+                        Secure = context.Request.IsHttps
+                    });
+
+                return Results.LocalRedirect(safeReturnUrl);
+            });
+
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
 
@@ -255,6 +315,27 @@ namespace RentoomBookingWeb
 
 
             app.Run();
+        }
+
+        private static bool IsSafeLocalReturnUrl(string? returnUrl)
+        {
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                return false;
+            }
+
+            if (!returnUrl.StartsWith('/'))
+            {
+                return false;
+            }
+
+            if (returnUrl.StartsWith("//", StringComparison.Ordinal) ||
+                returnUrl.StartsWith("/\\", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
