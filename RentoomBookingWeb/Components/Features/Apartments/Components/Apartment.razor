@@ -118,7 +118,7 @@
 
         <ul class="apartment-details">
             <li>
-                <img src="assets/svgs/users.svg" alt="Liczba osób" class="icon" />
+                <GoogleIcon Name="groups" Class="icon" AriaLabel="@ApartmentLocalizer["Reservation_AltOccupancy"]" />
                 @if (Item == null)
                 {
                     <span class="skeleton skeleton-text mini"></span>
@@ -135,7 +135,7 @@
             </li>
             
             <li>
-                <img src="assets/svgs/bed.svg" alt="Liczba łóżek" class="icon" />
+                <GoogleIcon Name="bed" Class="icon" AriaLabel="@ApartmentLocalizer["Reservation_AltBeds"]" />
                 @if (Item == null)
                 {
                     <span class="skeleton skeleton-text mini"></span>
@@ -147,7 +147,7 @@
             </li>
             
             <li>
-                <img src="assets/svgs/bath.svg" alt="Liczba łazienek" class="icon" />
+                <GoogleIcon Name="bathtub" Class="icon" AriaLabel="@ApartmentLocalizer["Reservation_AltBathrooms"]" />
                 @if (Item == null)
                 {
                     <span class="skeleton skeleton-text mini" style="width: 20px;"></span>
@@ -159,7 +159,7 @@
             </li>
             
             <li>
-                <img src="assets/svgs/m2.svg" alt="Powierzchnia apartamentu" class="icon" />
+                <GoogleIcon Name="square_foot" Class="icon" AriaLabel="Powierzchnia apartamentu" />
                 @if (Item == null)
                 {
                     <span class="skeleton skeleton-text mini"></span>

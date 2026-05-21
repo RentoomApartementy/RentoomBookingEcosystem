@@ -35,19 +35,19 @@
         
         <ul class="apartment-details">
             <li>
-                <img src="assets/svgs/users.svg" alt="@Localizer["Reservation_AltOccupancy"]" class="icon" />
+                <GoogleIcon Name="groups" Class="icon" AriaLabel="@Localizer["Reservation_AltOccupancy"]" />
                 <span itemprop="occupancy">@_apartment?.MinCapacity - @_apartment?.Capacity</span>
             </li>
             <li>
-                <img src="assets/svgs/bed.svg" alt="@Localizer["Reservation_AltBeds"]" class="icon" />
+                <GoogleIcon Name="bed" Class="icon" AriaLabel="@Localizer["Reservation_AltBeds"]" />
                 @_bedsCount
             </li>
             <li>
-                <img src="assets/svgs/bath.svg" alt="@Localizer["Reservation_AltBathrooms"]" class="icon" />
+                <GoogleIcon Name="bathtub" Class="icon" AriaLabel="@Localizer["Reservation_AltBathrooms"]" />
                 1
             </li>
             <li>
-                <img src="assets/svgs/m2.svg" alt="@Localizer["Reservation_AltArea"]" class="icon" />
+                <GoogleIcon Name="square_foot" Class="icon" AriaLabel="@Localizer["Reservation_AltArea"]" />
                 <span itemprop="floorSize">@_apartment?.Area m²</span>
             </li>
         </ul>

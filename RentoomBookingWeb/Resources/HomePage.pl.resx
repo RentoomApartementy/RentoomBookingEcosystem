@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Szukasz noclegu w Toruniu? Rentoom oferuje apartamenty na wynajem krótkoterminowy w Toruniu.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Apartamenty w Toruniu - wnętrze</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Apartamenty w Toruniu - panorama miasta</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Dowiedz się więcej</value>
+  </data>
 </root>

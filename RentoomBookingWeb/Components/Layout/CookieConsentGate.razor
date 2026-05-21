@@ -2,8 +2,10 @@
 @using System.Net
 @using System.Net.Sockets
 @using System.Text.Json
+@using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.Cookies
 @using RentoomBooking.SharedClasses.Services.Cookies
 @inject CookieConsentService CookieConsentService
@@ -11,6 +13,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResources> Localizer
 
 <CookieConsentBanner Notice="@_notice"
                      ThemeClass="cookie-banner--rentoom"
@@ -24,6 +27,7 @@
     private const string StorageKey = "rentoombookingweb:cookie-consent";
     private const string GoogleTagManagerId = "GTM-KQ34PTLN";
     private const string GoogleAnalyticsId = "G-KWEKWNRM9H";
+    private const string ContentSquareProjectId = "07445cfba2a7a";
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -44,7 +48,14 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender || _notice is null)
+        if (!firstRender)
+        {
+            return;
+        }
+
+        await JS.InvokeAsync<IJSObjectReference>("import", "./js/cookieConsentInterop.js");
+        
+        if (_notice is null)
         {
             return;
         }
@@ -154,9 +165,7 @@
 
     private string GetSaveErrorMessage()
     {
-        return CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("pl", StringComparison.OrdinalIgnoreCase)
-            ? "Nie udało się zapisać zgody. Spróbuj ponownie."
-            : "Could not save consent. Please try again.";
+        return Localizer["CookieConsent_SaveError"];
     }
 
     private ValueTask EnableTrackingAsync()
@@ -165,8 +174,9 @@
         {
             return ValueTask.CompletedTask;
         }
-
-        return JS.InvokeVoidAsync("rentoomCookieInterop.enableTracking", GoogleTagManagerId, GoogleAnalyticsId);
+        
+        JS.InvokeVoidAsync("rentoomCookieInterop.enableTracking", GoogleTagManagerId, GoogleAnalyticsId);
+        return JS.InvokeVoidAsync("rentoomCookieInterop.enableSessionRecording", ContentSquareProjectId);
     }
 
     private CookieConsentRequestMetadata BuildRequestMetadata()

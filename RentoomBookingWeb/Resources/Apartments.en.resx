@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -214,55 +214,87 @@
     <value>Not Available</value>
   </data>
   <data name="AllApartments_PageTitle" xml:space="preserve">
-    <value />
     <value>Apartments Torun - Full List of Accommodations</value>
   </data>
   <data name="AllApartments_NoApartments" xml:space="preserve">
-    <value />
     <value>No apartments available at the moment.</value>
   </data>
   <data name="AllApartments_Loading" xml:space="preserve">
-    <value />
     <value>Loading...</value>
   </data>
   <data name="AllApartments_HeaderTitle" xml:space="preserve">
-    <value />
     <value>Apartments Toruń</value>
   </data>
   <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
-    <value />
     <value>Clear search</value>
   </data>
   <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
-    <value />
     <value>Search apartments by name...</value>
   </data>
   <data name="Apartments_BreadcrumbName" xml:space="preserve">
-    <value />
     <value>Apartments</value>
   </data>
   <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
-    <value />
     <value>Search apartment by name</value>
   </data>
   <data name="AllApartments_MetaDescription" xml:space="preserve">
-    <value />
     <value>See the full list of our apartments in Torun. Comfortable stays, great location near the Old Town. Check details of each apartment.</value>
   </data>
   <data name="AllApartments_BreadcrumbName" xml:space="preserve">
-    <value />
     <value>Apartments in Torun</value>
   </data>
   <data name="AllApartments_IntroText" xml:space="preserve">
-    <value />
     <value>Discover our full range of comfortable apartments in the heart of Torun.</value>
   </data>
   <data name="Apartments_SeoKeywords" xml:space="preserve">
-    <value />
     <value>apartments for rent, accommodation, booking, apartment reservation, rentoom</value>
   </data>
   <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
-    <value />
     <value>No apartments found for the entered name.</value>
+  </data>
+  <data name="OfferPriceMapLabel" xml:space="preserve">
+    <value>Price for stay</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Apartment</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>no offers</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Number of guests</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartments</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Number of beds</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Number of bathrooms</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Offers</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Apartment area</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Search results: {0} offers - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Check available apartments for {0} - {1}. We found {2} offers tailored for you. Book securely online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Discover Rentoom apartments. Comfort, great locations, and high standards for holidays and business stays.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luxury apartments for rent - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>No apartments available for these dates - Rentoom</value>
   </data>
 </root>

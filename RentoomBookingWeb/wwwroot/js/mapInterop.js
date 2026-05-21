@@ -1,9 +1,81 @@
+const LEAFLET_CSS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+const LEAFLET_JS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+const MARKER_CLUSTER_CSS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css";
+const MARKER_CLUSTER_DEFAULT_CSS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css";
+const MARKER_CLUSTER_JS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js";
+
+let leafletAssetsPromise = null;
+const DEFAULT_MAP_LABELS = {
+    apartmentsPrefix: "Apartments",
+    offersPrefix: "Offers",
+    noOffers: "no offers",
+    currency: "PLN"
+};
+
+function getMapLabels(rawLabels) {
+    return { ...DEFAULT_MAP_LABELS, ...(rawLabels || {}) };
+}
+
+function hasLink(href) {
+    return Array.from(document.querySelectorAll("link[rel='stylesheet']")).some(link => link.href === href);
+}
+
+function hasScript(src) {
+    return Array.from(document.querySelectorAll("script")).some(script => script.src === src);
+}
+
+function loadStylesheet(href) {
+    if (hasLink(href)) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        link.onload = () => resolve();
+        link.onerror = () => reject(new Error(`Failed to load stylesheet: ${href}`));
+        document.head.appendChild(link);
+    });
+}
+
+function loadScript(src) {
+    if (hasScript(src)) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+        document.head.appendChild(script);
+    });
+}
+
+window.ensureLeafletLoaded = async function () {
+    if (!leafletAssetsPromise) {
+        leafletAssetsPromise = (async () => {
+            await loadStylesheet(LEAFLET_CSS_URL);
+            await loadStylesheet(MARKER_CLUSTER_CSS_URL);
+            await loadStylesheet(MARKER_CLUSTER_DEFAULT_CSS_URL);
+            await loadScript(LEAFLET_JS_URL);
+            await loadScript(MARKER_CLUSTER_JS_URL);
+        })();
+    }
+
+    return leafletAssetsPromise;
+};
+
 window.leafletMap = {
     map: null,
     markerCluster: null,
     mediaCache: new Map(),
 
-    createMap: function (id, lat, lng, zoom) {
+    createMap: async function (id, lat, lng, zoom) {
+        await window.ensureLeafletLoaded();
+
         if (this.map) {
             this.map.remove();
             this.map = null;
@@ -30,8 +102,9 @@ window.leafletMap = {
         }
     },
 
-    addMarkers: function (markers, isSearch) {
+    addMarkers: function (markers, isSearch, labels) {
         if (!this.map || !Array.isArray(markers)) return;
+        const mapLabels = getMapLabels(labels);
 
         if (this.markerCluster) {
             this.map.removeLayer(this.markerCluster);
@@ -46,13 +119,13 @@ window.leafletMap = {
                 const hasOffer = offersCount > 0;
 
                 const apartments = L.divIcon({
-                    html: `<small style="font-size: 10px;">Apartamenty: ${totalCount}</small>`,
+                    html: `<small style="font-size: 10px;">${mapLabels.apartmentsPrefix}: ${totalCount}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
                     iconSize: L.point(90, 21)
                 });
 
                 const offers = L.divIcon({
-                    html: `<small style="font-size: 10px;">${offersCount ? "Oferty: " + offersCount : "brak ofert"}</small>`,
+                    html: `<small style="font-size: 10px;">${offersCount ? `${mapLabels.offersPrefix}: ${offersCount}` : mapLabels.noOffers}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
                     iconSize: L.point(70, 21)
                 });
@@ -66,8 +139,8 @@ window.leafletMap = {
             const lng = parseFloat(m.lng);
             if (isNaN(lat) || isNaN(lng)) return;
 
-            const defaultIcon = `<div class="marker"><img src="/assets/svgs/marker.svg" alt="marker" style="width: 35px; height: 35px;" /></div>`;
-            const priceIcon = `<div class="marker-offer"><span class="marker-price">${Math.round(m.price)} PLN</span></div>`;
+            const defaultIcon = `<div class="marker"><span class="gicon map-marker-icon" aria-label="marker">location_on</span></div>`;
+            const priceIcon = `<div class="marker-offer"><span class="marker-price">${Math.round(m.price)} ${mapLabels.currency}</span></div>`;
             const htmlContent = m.hasOffer ? priceIcon : defaultIcon;
 
             let iconSettings;
@@ -155,7 +228,9 @@ window.leafletPopupMap = {
     selectedLayer: null, 
     mediaCache: new Map(),
 
-    createMap: function (id, lat, lng, zoom) {
+    createMap: async function (id, lat, lng, zoom) {
+        await window.ensureLeafletLoaded();
+
         if (this.map) {
             this.map.remove();
             this.map = null;
@@ -183,8 +258,9 @@ window.leafletPopupMap = {
         }
     },
 
-    addMarkers: function (markers, isSearch) {
+    addMarkers: function (markers, isSearch, labels) {
         if (!this.map || !Array.isArray(markers)) return;
+        const mapLabels = getMapLabels(labels);
 
         if (this.markerCluster) {
             this.map.removeLayer(this.markerCluster);
@@ -204,13 +280,13 @@ window.leafletPopupMap = {
                 const hasOffer = offersCount > 0;
 
                 const apartments = L.divIcon({
-                    html: `<small style="font-size: 10px;">Apartamenty: ${totalCount}</small>`,
+                    html: `<small style="font-size: 10px;">${mapLabels.apartmentsPrefix}: ${totalCount}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
                     iconSize: L.point(90, 21)
                 });
 
                 const offers = L.divIcon({
-                    html: `<small style="font-size: 10px;">${offersCount ? "Oferty: " + offersCount : "brak ofert"}</small>`,
+                    html: `<small style="font-size: 10px;">${offersCount ? `${mapLabels.offersPrefix}: ${offersCount}` : mapLabels.noOffers}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
                     iconSize: L.point(70, 21)
                 });
@@ -228,9 +304,9 @@ window.leafletPopupMap = {
 
             const zIndexVal = m.isSelected ? 10000 : 0;
 
-            const defaultIcon = `<div class="marker${extraClass}"><img src="/assets/svgs/marker.svg" alt="marker" style="width: 35px; height: 35px;" /></div>`;
+            const defaultIcon = `<div class="marker${extraClass}"><span class="gicon map-marker-icon" aria-label="marker">location_on</span></div>`;
 
-            const priceIcon = `<div class="marker-offer${extraClass}"><span class="marker-price">${Math.round(m.price)} PLN</span></div>`;
+            const priceIcon = `<div class="marker-offer${extraClass}"><span class="marker-price">${Math.round(m.price)} ${mapLabels.currency}</span></div>`;
 
             const htmlContent = m.hasOffer ? priceIcon : defaultIcon;
 

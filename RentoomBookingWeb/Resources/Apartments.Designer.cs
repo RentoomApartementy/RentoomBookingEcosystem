@@ -232,6 +232,15 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Price for stay.
+        /// </summary>
+        internal static string OfferPriceMapLabel {
+            get {
+                return ResourceManager.GetString("OfferPriceMapLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Package {

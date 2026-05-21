@@ -1,7 +1,10 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> Localizer
+
 <div class="date-range-container">
     @if (!string.IsNullOrEmpty(IconPath))
     {
-        <img src="@IconPath" alt="Calendar Icon" class="date-range-icon" />
+        <img src="@IconPath" alt="@Localizer["DatePicker_CalendarIconAlt"]" class="date-range-icon" />
     }
     <div class="date-range-input-wrapper">
         <input type="date" value="@StartDateValue" @onchange="OnStartDateChanged" class="date-input" />

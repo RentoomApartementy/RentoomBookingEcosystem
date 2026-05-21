@@ -1,6 +1,7 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Services.IdoBooking
+@using Microsoft.JSInterop
 @inject IApartmentsService ApartmentsApiService
 @inject IIdoApartmentService IdoApartmentService
 @inject IJSRuntime JSRuntime
@@ -36,6 +37,7 @@
     {
         if (firstRender)
         {
+            await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/mapInterop.js");
             _objRef = DotNetObjectReference.Create(this);
 
             await JSRuntime.InvokeVoidAsync("leafletMap.createMap", "map", 53.012217, 18.607378, 14);
@@ -86,6 +88,11 @@
         
         var loadingText = Localizer["Loading"];
         var bookNowText = Localizer["BookNow"];
+        var mapLabels = BuildMapLabels();
+        var mapAltGuests = Localizer["Map_AltGuests"];
+        var mapAltBeds = Localizer["Map_AltBeds"];
+        var mapAltBathrooms = Localizer["Map_AltBathrooms"];
+        var mapAltArea = Localizer["Map_AltArea"];
 
         var markers = Items
             .Where(i => !IsSearch || GetPricingOfferByObjectId(i.Id) != null)
@@ -129,19 +136,19 @@
             </div>
             <div style=""display: flex; gap: .5rem;"">
                  <div>
-                    <img src=""assets/svgs/users.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span class=""gicon map-popup-icon"" aria-label=""{mapAltGuests}"">groups</span>
                     <span>{i.MinCapacity} - {i.Capacity}</span>
                 </div>
                 <div>
-                    <img src=""assets/svgs/bed.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span class=""gicon map-popup-icon"" aria-label=""{mapAltBeds}"">bed</span>
                     <span>{SumBedByItem(i)}</span>
                 </div>
                 <div>
-                    <img src=""assets/svgs/bath.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span class=""gicon map-popup-icon"" aria-label=""{mapAltBathrooms}"">bathtub</span>
                     <span>1</span>
                 </div>
                 <div>
-                    <img src=""assets/svgs/m2.svg"" alt=""Liczba osób"" class=""icon"" style=""width: 20px; height: 20px;"" />
+                    <span class=""gicon map-popup-icon"" aria-label=""{mapAltArea}"">square_foot</span>
                     <span>{i.Area}</span>
                 </div>
             </div>
@@ -165,7 +172,7 @@
             })
             .ToList();
 
-        await JSRuntime.InvokeVoidAsync("leafletMap.addMarkers", markers, IsSearch);
+        await JSRuntime.InvokeVoidAsync("leafletMap.addMarkers", markers, IsSearch, mapLabels);
     }
 
     [JSInvokable]
@@ -196,6 +203,14 @@
 
     private string getMinimalPrice(int id)
     {
-        return GetPricingOfferByObjectId(id) != null ? $"Cena za pobyt: {GetPricingOfferByObjectId(id)?.MinimalPrice}" + " " +  @CurrencyLocalizer["PLN"] : "";
+        return GetPricingOfferByObjectId(id) != null ? $"{Localizer["OfferPriceMapLabel"]}: {GetPricingOfferByObjectId(id)?.MinimalPrice}" + " " +  @CurrencyLocalizer["PLN"] : "";
     }
+
+    private object BuildMapLabels() => new
+    {
+        apartmentsPrefix = Localizer["Map_ClusterApartmentsPrefix"].Value,
+        offersPrefix = Localizer["Map_ClusterOffersPrefix"].Value,
+        noOffers = Localizer["Map_ClusterNoOffers"].Value,
+        currency = CurrencyLocalizer["PLN"].Value
+    };
 }

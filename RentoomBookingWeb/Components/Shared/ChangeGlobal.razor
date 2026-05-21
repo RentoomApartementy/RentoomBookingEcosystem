@@ -6,7 +6,7 @@
     @* Dodano warunkową klasę 'scrolled' *@
     <div class="language-switcher-button @(IsScrolling ? "scrolled" : "")" @onclick="ToggleDropdown">
         <span class="language-icon">
-            <img src="@(IsScrolling ? "assets/svgs/globe-green.svg" : "assets/svgs/globe.svg")" alt="Globe icon"/>
+            <GoogleIcon Name="language" Class="@($"language-gicon {(IsScrolling ? "language-gicon-scrolled" : "language-gicon-top")}")" AriaLabel="Globe icon" />
         </span>
         <span class="language-code">@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpper()</span>
     </div>

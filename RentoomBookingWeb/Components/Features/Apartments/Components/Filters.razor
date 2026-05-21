@@ -14,7 +14,7 @@
 <div class="mobile-filter-wrapper">
     <button class="mobile-filter-trigger" @onclick="ToggleMobileFilters">
         <div class="trigger-content">
-            <img src="assets/svgs/mobile-filters.svg" alt="" class="trigger-icon">
+            <GoogleIcon Name="tune" Class="trigger-icon" AriaLabel="Filters" />
             <span class="trigger-text">@Localizer["Filters"]</span>
             @if (GetSelectedCount() > 0)
             {
@@ -84,7 +84,7 @@
             <div class="selected-upsell-sidebar">
                 <p class="filters-title">@Localizer["SelectedPackage"]</p>
                 <div class="filter-option selected" @onclick="ResetUpsellOnly" style="cursor: pointer;">
-                    <img class="filter-icon small-icon" src="assets/svgs/kid_star.svg" alt="">
+                    <GoogleIcon Name="kid_star" Class="filter-icon small-icon" AriaLabel="Selected package" />
                     <span>@_selectedUpsell.Title</span>
                 </div>
                 <hr/>
@@ -104,7 +104,7 @@
             @foreach (var option in _locations.Where(loc => loc.Name == "Stare Miasto" || loc.Name == "Centrum"))
             {
                 <label class="@(option.IsSelected ? "filter-option selected" : "filter-option")" for="@option.Id">
-                    <img class="filter-icon" src="@($"/assets/svgs/filter/{option.Icon}.svg")" alt="@option.Name">
+                    <GoogleIcon Name="@option.Icon" Class="filter-icon" AriaLabel="@option.Name" />
                     <input type="checkbox"
                            id="@option.Id"
                            checked="@option.IsSelected"
@@ -137,7 +137,7 @@
             @foreach (var filter in _filterOptions)
             {
                 <label class="@(filter.IsSelected ? "filter-option selected" : "filter-option")" for="@filter.Id">
-                    <img class="filter-icon" src="@($"/assets/svgs/filter/{filter.Icon}.svg")" alt="@filter.Name">
+                    <GoogleIcon Name="@filter.Icon" Class="filter-icon" AriaLabel="@filter.Name" />
                     <input type="checkbox"
                            id="@filter.Id"
                            checked="@filter.IsSelected"

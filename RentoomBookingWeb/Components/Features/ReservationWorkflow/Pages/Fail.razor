@@ -18,7 +18,7 @@
             @if (string.IsNullOrWhiteSpace(_error))
             {
                 <div class="info-icon-wrapper alert-icon-wrapper">
-                    <img src="assets/svgs/danger.svg" alt="@Localizer["FailIconAlt"]" class="status-icon" />
+                    <GoogleIcon Name="error" Class="status-icon" AriaLabel="@Localizer["FailIconAlt"]" Filled="true" />
                 </div>
                 <div class="spinner-container">
                     <div class="loading-spinner"></div>
@@ -31,7 +31,7 @@
             {
                 <div class="error-box">
                     <div class="info-icon-wrapper alert-icon-wrapper">
-                        <img src="assets/svgs/danger.svg" alt="@Localizer["FailIconAlt"]" class="status-icon" />
+                        <GoogleIcon Name="error" Class="status-icon" AriaLabel="@Localizer["FailIconAlt"]" Filled="true" />
                     </div>
 
                     <AppError Message="@_error"

@@ -70,9 +70,10 @@
     letter-spacing: 0.05em;
 }
 
-.icon-small {
+::deep .icon-small {
     width: 11px;
     height: 11px;
+    font-size: 11px;
     opacity: 0.6;
 }
 

@@ -75,8 +75,10 @@
     flex-shrink: 0;
 }
 
-.form-wrapper-title-icon-wrapper > img {
+.form-wrapper-title-icon-wrapper ::deep .form-wrapper-title-icon {
     width: 70%;
+    height: 70%;
+    font-size: 42px;
 }
 
 .form-wrapper-title-text {

@@ -1,5 +1,6 @@
 window.rentoomCookieInterop = {
     trackingEnabled: false,
+    sessionRecordingEnabled: false,
 
     enableTracking: function (gtmId, gaId) {
         if (window.rentoomCookieInterop.trackingEnabled) {
@@ -37,6 +38,26 @@ window.rentoomCookieInterop = {
             window.gtag("js", new Date());
             window.gtag("config", gaId);
         }
+    },
+
+    enableSessionRecording: function (projectId) {
+        if (window.rentoomCookieInterop.sessionRecordingEnabled) {
+            return;
+        }
+
+        const normalizedProjectId = projectId || "07445cfba2a7a";
+        if (document.getElementById("rentoom-contentsquare-script")) {
+            window.rentoomCookieInterop.sessionRecordingEnabled = true;
+            return;
+        }
+
+        const csScript = document.createElement("script");
+        csScript.id = "rentoom-contentsquare-script";
+        csScript.async = true;
+        csScript.src = "https://t.contentsquare.net/uxa/" + encodeURIComponent(normalizedProjectId) + ".js";
+        document.head.appendChild(csScript);
+
+        window.rentoomCookieInterop.sessionRecordingEnabled = true;
     }
 };
 

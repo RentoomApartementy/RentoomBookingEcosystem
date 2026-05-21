@@ -216,4 +216,49 @@
   <data name="SuggestedDateNotFoundText" xml:space="preserve">
     <value />
   </data>
+  <data name="OfferPriceMapLabel" xml:space="preserve">
+    <value>Price for stay</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Apartment</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>no offers</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Number of guests</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartments</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Number of beds</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Number of bathrooms</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Offers</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Apartment area</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Search results: {0} offers - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Check available apartments for {0} - {1}. We found {2} offers tailored for you. Book securely online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Discover Rentoom apartments. Comfort, great locations, and high standards for holidays and business stays.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luxury apartments for rent - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>No apartments available for these dates - Rentoom</value>
+  </data>
 </root>
