@@ -1,87 +1,99 @@
-# Techniczna Dokumentacja Systemu Lokalizacji i SEO (Localized Routing)
-
-Ten dokument opisuje architekturę, mechanizmy automatyzacji oraz logikę biznesową systemu lokalizacji opartego na prefiksach URL (np. `/en/apartments`) w projekcie RentoomBookingWeb.
-
----
+# System Zlokalizowanego Routingu - Pełna Dokumentacja Techniczna
 
 ## 1. Architektura Systemu
-
-System opiera się na trzech filarach:
-1.  **Native Routing (Blazor)**: Każda strona posiada fizycznie zdefiniowane trasy `@page` dla wszystkich 33 obsługiwanych języków.
-2.  **Automatyzacja (Python)**: Skrypt generujący trasy na podstawie plików `.resx`, eliminujący ryzyko ludzkiego błędu.
-3.  **Middleware (ASP.NET Core)**: Odpowiada za detekcję języka z adresu URL, ustawienie kultury wątku oraz synchronizację z ciasteczkiem `.AspNetCore.Culture`.
+System opiera się na natywnym routingu Blazor, wspieranym przez zewnętrzny generator tras oraz niestandardowy potok detekcji kultury w ASP.NET Core. Obsługuje 33 języki z unikalnymi prefiksami URL (np. `/en/`, `/it/`) oraz zlokalizowanymi slugami.
 
 ---
 
-## 2. Analiza Komponentów (Plik po Pliku)
+## 2. Detekcja Kultury (Culture Pipeline)
+Logika detekcji znajduje się w `Program.cs` i działa jako zestaw dostawców (`RequestCultureProviders`) o określonym priorytecie:
 
-### 2.1. Skrypt Generujący: `route_generator.py`
-**Lokalizacja:** `RentoomBookingWeb/Services/Localization/route_generator.py`
+### A. URL Prefix Provider (Priorytet najwyższy)
+Jest to `CustomRequestCultureProvider`, który analizuje pierwszy segment ścieżki (np. `parts[0]`).
+- Jeśli segment pasuje do wspieranego języka (np. `it` lub `it-IT`), wymusza tę kulturę dla całego żądania.
+- Dzięki temu wejście na `/it/apartamenty-torun` zawsze ustawi język włoski, ignorując ciasteczka czy ustawienia przeglądarki.
 
-Jest to "mózg" systemu. Skrypt wykonuje następujące zadania:
-*   **Skanowanie Zasobów**: Przeszukuje katalog `Resources` i mapuje klucze (np. `ApartmentsText`) na przetłumaczone wartości we wszystkich 33 językach.
-*   **Slugyfikacja**: Przekształca nazwy (np. "O Toruniu") na bezpieczne URL-e (`o-toruniu`) przy użyciu normalizacji NFKD (usuwanie polskich znaków, diakrytyków, zamiana spacji na myślniki).
-*   **Obsługa Ambiguity (Niejednoznaczności)**: Jeśli dla danego języka brakuje tłumaczenia nazwy strony, skrypt automatycznie używa polskiego odpowiednika (np. `/be/apartamenty`). Zapobiega to sytuacji, w której wiele stron miałoby tę samą trasę (np. samo `/be`), co powodowałoby błąd Blazora.
-*   **Patchowanie Razor**: Wyszukuje markery `@* [SEO_ROUTES] *@` w plikach `.razor` i wstrzykuje tam aktualną listę tras.
-*   **Generowanie Rejestru**: Tworzy plik `LocalizedRouteRegistry.cs`.
+### B. Cookie Provider
+Standardowy `CookieRequestCultureProvider`. Przechowuje preferencje użytkownika w ciasteczku `.AspNetCore.Culture`.
 
-### 2.2. Rejestr Tras: `LocalizedRouteRegistry.cs`
-**Lokalizacja:** `RentoomBookingWeb/Services/Localization/LocalizedRouteRegistry.cs`
+### C. Bot Detection
+Dostawca wykrywający roboty (Googlebot itp.). Jeśli robot wejdzie na stronę bez prefiksu, system wymusza kulturę polską (`pl-PL`), aby uniknąć indeksowania wersji "pustych" lub mieszanych.
 
-Statyczna klasa C# zawierająca słownik `PageSlugs`. Jest to "mapa drogowa" aplikacji, która pozwala systemowi dowiedzieć się, że np. strona o kluczu `"Apartments"` w języku angielskim to `"apartments"`, a w niemieckim `"wohnungen"`.
-
-### 2.3. Middleware: `LocalizedRoutingMiddleware.cs`
-**Lokalizacja:** `RentoomBookingWeb/Services/Localization/LocalizedRoutingMiddleware.cs`
-
-Middleware uruchamiany na samym początku potoku (pipeline) w `Program.cs`.
-*   **Priorytet URL**: Sprawdza pierwszy segment ścieżki. Jeśli znajdzie kod języka (np. `en`, `pl`, `de`), natychmiast ustawia `CultureInfo.CurrentCulture`.
-*   **Synchronizacja Ciasteczka**: Po wykryciu języka z URL, aktualizuje ciasteczko `.AspNetCore.Culture`. Dzięki temu, jeśli użytkownik przejdzie na stronę bez prefiksu, system zapamięta jego ostatni wybór.
-*   **Ochrona Plików**: Posiada logikę pomijania ścieżek zawierających kropki (pliki statyczne) oraz ścieżek technicznych (`_blazor`, `api`), co zapobiega błędom 404/405 dla zasobów.
-
-### 2.4. Serwis: `RouteLocalizationService.cs`
-**Lokalizacja:** `RentoomBookingWeb/Services/Localization/RouteLocalizationService.cs`
-
-Serwis wstrzykiwany do komponentów (`@inject IRouteLocalizationService`).
-*   **`GetLocalizedUrl(pageKey, culture)`**: Zwraca pełny URL dla danej strony w wybranym języku. Używany do budowania linków w menu i tagów hreflang.
-*   **`TryGetPageKeyFromSlug(slug, culture)`**: Odwraca proces – na podstawie sluga z paska adresu mówi systemowi, na której stronie (kluczu) aktualnie znajduje się użytkownik. Kluczowe dla poprawnego działania przełącznika języków.
+### D. Accept-Language Header
+Ostatni etap – dopasowanie języka do ustawień przeglądarki użytkownika.
 
 ---
 
-## 3. Komponenty UI
+## 3. Automatyzacja Tras (route_generator.py)
+Blazor wymaga statycznych dyrektyw `@page` w plikach `.razor`. Aby nie wpisywać ręcznie 33 tras dla każdej strony, używamy skryptu w Pythonie.
 
-### 3.1. Przełącznik Języków: `ChangeGlobal.razor`
-Logika przełączania:
-1. Pobiera aktualny slug z adresu URL.
-2. Pyta `RouteLocalizationService`, jakiej stronie odpowiada ten slug.
-3. Jeśli znajdzie stronę (np. "Apartments"), generuje nowy URL w docelowym języku (np. `/de/wohnungen`).
-4. Wykonuje `Navigation.NavigateTo(..., forceLoad: true)`, aby całkowicie przeładować stan aplikacji pod nową kulturę.
-
-### 3.2. Tagi SEO: `SeoHreflangs.razor`
-Komponent umieszczony w sekcji `<head>`. Dla każdej podstrony generuje 33 tagi `<link rel="alternate" hreflang="..." />`. Jest to krytyczne dla Google, aby poprawnie indeksować każdą wersję językową osobno.
+### Proces generowania:
+1.  **Ekstrakcja:** Skrypt czyta pliki `.resx` z folderu `/Resources`. Szuka kluczy zdefiniowanych w `PAGE_MAPPINGS` (np. `Home_PageTitle`).
+2.  **Slugyfikacja:** Tekst z zasobów jest czyszczony z polskich znaków, zamieniany na małe litery i łączony myślnikami (np. "Wszystkie Apartamenty" -> "wszystkie-apartamenty").
+3.  **Hierarchia Fallbacków (Kluczowe dla SEO):**
+    - Próba pobrania przetłumaczonego sluga.
+    - Jeśli brak -> pobranie polskiego sluga.
+    - Jeśli brak -> użycie klucza strony (np. `AllApartments`).
+    *To zapobiega konfliktom tras (każda strona musi mieć unikalny adres).*
+4.  **Registry:** Tworzony jest plik `LocalizedRouteRegistry.cs`, który zawiera mapę `Język -> Slug`. Służy on do generowania linków wewnątrz aplikacji.
+5.  **Patching:** Skrypt wstrzykuje dyrektywy `@page` do plików `.razor` pomiędzy znaczniki `@* [SEO_ROUTES] *@`.
 
 ---
 
-## 4. Utrzymanie (How-to)
+## 4. Nawigacja Wewnętrzna (IRouteLocalizationService)
+Nigdy nie używamy twardych linków typu `<a href="/kontakt">`. Zamiast tego wstrzykujemy usługę:
 
-### Jak dodać nową stronę do systemu lokalizacji?
-1.  Stwórz komponent w katalogu `Pages`.
-2.  Dodaj na górze pliku markery:
+```csharp
+@inject IRouteLocalizationService RouteService
+<a href="@RouteService.GetLocalizedUrl("Contact")">Kontakt</a>
+```
+
+### Metody:
+- `GetLocalizedUrl(pageKey, culture)`: Zwraca pełny zlokalizowany URL (np. `/en/contact-us`).
+- `TryGetPageKeyFromSlug(slug, culture)`: Odwraca proces – na podstawie sluga znajduje klucz strony (używane przy przełączaniu języka).
+
+---
+
+## 5. Przełącznik Języków (ChangeGlobal.razor)
+Logika przełączania jest "inteligentna" – nie tylko zmienia prefix, ale też zachowuje parametry:
+1.  Rozpoznaje, na jakiej stronie jest użytkownik (używając `TryGetPageKeyFromSlug`).
+2.  Znajduje odpowiedni slug w nowym języku.
+3.  Dokleja pozostałą część ścieżki (np. ID apartamentu, daty rezerwacji) oraz QueryString.
+4.  Wykonuje `NavigateTo` z `forceLoad: true`, aby odświeżyć stan serwera.
+
+---
+
+## 6. Rozwiązywanie Problemów i Rozbudowa
+
+### Jak dodać nową stronę do systemu?
+1.  W pliku `.razor` dodaj blok:
     ```razor
-    @page "/twoja-domyslna-trasa"
+    @page "/twoja-trasa-bazowa"
     @* [SEO_ROUTES] *@
     @* [SEO_ROUTES_END] *@
     ```
-3.  Otwórz `route_generator.py` i dodaj nową stronę do słownika `PAGE_MAPPINGS`. Musisz podać `file_prefix` (nazwa zasobu .resx) oraz `res_key` (klucz z zasobu, który ma służyć jako nazwa w URL).
-4.  Uruchom skrypt: `python3 route_generator.py`.
+2.  W `route_generator.py` dodaj wpis do `PAGE_MAPPINGS`:
+    ```python
+    'NowaStrona': {
+        'file_prefix': 'NazwaPlikuResx', 
+        'res_key': 'KluczTytulu',
+        'file_path': '../../Droga/Do/Pliku.razor',
+        'params': '' # opcjonalnie parametry typu /{Id:int}
+    }
+    ```
+3.  Uruchom skrypt: `python3 route_generator.py`.
+4.  Zbuduj projekt: `dotnet build`.
 
-### Jak dodać nowy język?
-1.  Dodaj nowy plik `.resx` w katalogu `Resources` (np. `HomePage.fr.resx`).
-2.  Uruchom skrypt `route_generator.py`. System automatycznie wykryje nowy kod języka (`fr`) i doda trasy do wszystkich komponentów.
+### Middleware (LocalizedRoutingMiddleware.cs)
+Pełni rolę strażnika:
+- **Ignoruje pliki:** Jeśli ścieżka zawiera kropkę (`.js`, `.css`, `.png`), middleware natychmiast przepuszcza żądanie dalej, omijając logikę lokalizacji.
+- **Trasy techniczne:** Blokuje próby lokalizowania tras `/api`, `/_blazor` czy `/swagger`.
 
 ---
 
-## 5. Rozwiązywanie problemów
-
-*   **Błąd "Ambiguous routes"**: Oznacza, że dwie różne strony mają tę samą trasę. Skrypt `route_generator.py` zapobiega temu poprzez fallback do polskich nazw, jeśli tłumaczenie jest puste.
-*   **Strona zwraca 404 po przełączeniu języka**: Sprawdź, czy w `LocalizedRouteRegistry.cs` znajduje się poprawny slug dla tego języka i czy plik `.razor` został poprawnie spatchowany przez skrypt.
-*   **Zasoby (obrazy/CSS) nie ładują się**: Upewnij się, że w `LocalizedRoutingMiddleware.cs` ścieżka do zasobu nie jest błędnie interpretowana jako kod języka. Logika `path.Contains('.')` powinna to chronić.
+## 7. SEO i Indeksacja
+System jest zoptymalizowany pod kątem wytycznych Google dla witryn wielojęzycznych:
+- **Hreflang-ready:** Każda wersja ma swój unikalny adres URL.
+- **Zlokalizowane Slugi:** Zwiększają trafność w lokalnych wynikach wyszukiwania.
+- **Canonical Tags:** Skrypt generuje unikalne ścieżki, co zapobiega problemom z *duplicate content*.
+- **SSR (Server-Side Rendering):** Roboty indeksujące otrzymują w pełni wyrenderowany kod HTML z tekstem w odpowiednim języku.

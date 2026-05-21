@@ -64,6 +64,15 @@ PAGE_MAPPINGS = {
 def to_slug(phrase):
     if not phrase:
         return ""
+    
+    # Map Polish characters explicitly before normalization
+    polish_map = {
+        'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z',
+        'Ą': 'a', 'Ć': 'c', 'Ę': 'e', 'Ł': 'l', 'Ń': 'n', 'Ó': 'o', 'Ś': 's', 'Ź': 'z', 'Ż': 'z'
+    }
+    for pol, lat in polish_map.items():
+        phrase = phrase.replace(pol, lat)
+
     nks = unicodedata.normalize('NFKD', phrase)
     res = "".join([c for c in nks if not unicodedata.combining(c)])
     res = res.lower()

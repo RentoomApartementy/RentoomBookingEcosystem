@@ -308,11 +308,12 @@ namespace RentoomBookingWeb
             
             app.MapControllers();
 
-            app.MapGet("/robots.txt", () =>
+            app.MapGet("/robots.txt", (HttpContext context) =>
             {
+                var baseUrl = $"{context.Request.Scheme}://{context.Request.Host}";
                 var content = app.Environment.IsProduction()
-                    ? "User-agent: *\nAllow: /"
-                    : "User-agent: *\nDisallow: /";
+                    ? $"User-agent: *\nAllow: /\nSitemap: {baseUrl}/sitemap.xml"
+                    : $"User-agent: *\nDisallow: /\nSitemap: {baseUrl}/sitemap.xml";
 
                 return Results.Text(content, "text/plain");
             });
