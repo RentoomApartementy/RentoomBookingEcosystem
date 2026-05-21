@@ -26,7 +26,7 @@
             <div class="info">
                 <h2 class="apartment-name">@Name</h2>
                 <span class="apartment-city">
-                    <GoogleIcon Name="location_on" Class="icon-small" AriaLabel="Location" />
+                    <GoogleIcon Name="location_on" Class="icon-small" AriaLabel="@Localizer["Location"]" />
                     @Location
                 </span>
             </div>
@@ -42,7 +42,7 @@
     [Parameter] public int Id { get; set; }
     [Parameter] public string Name { get; set; } = string.Empty;
     [Parameter] public string Url { get; set; } = "#";
-    [Parameter] public string Location { get; set; } = "Toruń";
+    [Parameter] public string Location { get; set; } = string.Empty;
 
     private string? _imageUrl;
     private ElementReference _elementRef;

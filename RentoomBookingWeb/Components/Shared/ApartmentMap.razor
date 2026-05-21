@@ -1,4 +1,6 @@
 @using Microsoft.JSInterop
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> Localizer
 
 <div id="@Id" style="width: 100%; height: 100%;"></div>
 
@@ -42,14 +44,14 @@
             {
                 Lat = Latitude,
                 Lng = Longitude,
-                Popup = $@"<div class='marker-offer' style='padding: 0.2rem 0.5rem;'>{ApartmentAddress ?? "Adres"}</div>",
+                Popup = $@"<div class='marker-offer' style='padding: 0.2rem 0.5rem;'>{ApartmentAddress ?? Localizer["Map_AddressFallback"]}</div>",
                 Id = "1",
                 ObjRef = _objRef,
                 HasOffer = false,
                 IsSelected = true,
             };
 
-            await JS.InvokeVoidAsync($"{@ClassName}.addMarkers", new[] { marker }, false);
+            await JS.InvokeVoidAsync($"{@ClassName}.addMarkers", new[] { marker }, false, BuildMapLabels());
         }
         else
         {
@@ -67,4 +69,12 @@
     {
         _objRef?.Dispose();
     }
+
+    private object BuildMapLabels() => new
+    {
+        apartmentsPrefix = Localizer["Map_ClusterApartmentsPrefix"].Value,
+        offersPrefix = Localizer["Map_ClusterOffersPrefix"].Value,
+        noOffers = Localizer["Map_ClusterNoOffers"].Value,
+        currency = Localizer["Map_DefaultCurrency"].Value
+    };
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -254,5 +254,47 @@
   </data>
   <data name="OfferPriceMapLabel" xml:space="preserve">
     <value>Cena za pobyt</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Apartament</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>brak ofert</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Liczba osób</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartamenty</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Liczba łóżek</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Liczba łazienek</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Oferty</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Powierzchnia apartamentu</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Lokalizacja</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Wyniki wyszukiwania: {0} ofert - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Sprawdź dostępne apartamenty w terminie {0} - {1}. Znaleziono {2} ofert idealnych dla Ciebie. Rezerwuj bezpiecznie online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Odkryj szeroką ofertę apartamentów Rentoom. Komfort, świetne lokalizacje i wysoki standard. Idealne na wakacje i podróże służbowe.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luksusowe Apartamenty na Wynajem - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Brak dostępnych apartamentów w tym terminie - Rentoom</value>
   </data>
 </root>

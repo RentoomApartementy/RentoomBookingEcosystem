@@ -102,4 +102,13 @@
     <data name="CooperationText1" xml:space="preserve">
         <value />
     </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Cooperation</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Contact</value>
+  </data>
 </root>

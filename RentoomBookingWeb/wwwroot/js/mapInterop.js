@@ -5,6 +5,16 @@ const MARKER_CLUSTER_DEFAULT_CSS_URL = "https://unpkg.com/leaflet.markercluster@
 const MARKER_CLUSTER_JS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js";
 
 let leafletAssetsPromise = null;
+const DEFAULT_MAP_LABELS = {
+    apartmentsPrefix: "Apartments",
+    offersPrefix: "Offers",
+    noOffers: "no offers",
+    currency: "PLN"
+};
+
+function getMapLabels(rawLabels) {
+    return { ...DEFAULT_MAP_LABELS, ...(rawLabels || {}) };
+}
 
 function hasLink(href) {
     return Array.from(document.querySelectorAll("link[rel='stylesheet']")).some(link => link.href === href);
@@ -92,8 +102,9 @@ window.leafletMap = {
         }
     },
 
-    addMarkers: function (markers, isSearch) {
+    addMarkers: function (markers, isSearch, labels) {
         if (!this.map || !Array.isArray(markers)) return;
+        const mapLabels = getMapLabels(labels);
 
         if (this.markerCluster) {
             this.map.removeLayer(this.markerCluster);
@@ -108,13 +119,13 @@ window.leafletMap = {
                 const hasOffer = offersCount > 0;
 
                 const apartments = L.divIcon({
-                    html: `<small style="font-size: 10px;">Apartamenty: ${totalCount}</small>`,
+                    html: `<small style="font-size: 10px;">${mapLabels.apartmentsPrefix}: ${totalCount}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
                     iconSize: L.point(90, 21)
                 });
 
                 const offers = L.divIcon({
-                    html: `<small style="font-size: 10px;">${offersCount ? "Oferty: " + offersCount : "brak ofert"}</small>`,
+                    html: `<small style="font-size: 10px;">${offersCount ? `${mapLabels.offersPrefix}: ${offersCount}` : mapLabels.noOffers}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
                     iconSize: L.point(70, 21)
                 });
@@ -129,7 +140,7 @@ window.leafletMap = {
             if (isNaN(lat) || isNaN(lng)) return;
 
             const defaultIcon = `<div class="marker"><span class="gicon map-marker-icon" aria-label="marker">location_on</span></div>`;
-            const priceIcon = `<div class="marker-offer"><span class="marker-price">${Math.round(m.price)} PLN</span></div>`;
+            const priceIcon = `<div class="marker-offer"><span class="marker-price">${Math.round(m.price)} ${mapLabels.currency}</span></div>`;
             const htmlContent = m.hasOffer ? priceIcon : defaultIcon;
 
             let iconSettings;
@@ -247,8 +258,9 @@ window.leafletPopupMap = {
         }
     },
 
-    addMarkers: function (markers, isSearch) {
+    addMarkers: function (markers, isSearch, labels) {
         if (!this.map || !Array.isArray(markers)) return;
+        const mapLabels = getMapLabels(labels);
 
         if (this.markerCluster) {
             this.map.removeLayer(this.markerCluster);
@@ -268,13 +280,13 @@ window.leafletPopupMap = {
                 const hasOffer = offersCount > 0;
 
                 const apartments = L.divIcon({
-                    html: `<small style="font-size: 10px;">Apartamenty: ${totalCount}</small>`,
+                    html: `<small style="font-size: 10px;">${mapLabels.apartmentsPrefix}: ${totalCount}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
                     iconSize: L.point(90, 21)
                 });
 
                 const offers = L.divIcon({
-                    html: `<small style="font-size: 10px;">${offersCount ? "Oferty: " + offersCount : "brak ofert"}</small>`,
+                    html: `<small style="font-size: 10px;">${offersCount ? `${mapLabels.offersPrefix}: ${offersCount}` : mapLabels.noOffers}</small>`,
                     className: !hasOffer ? 'custom-cluster' : 'custom-cluster with-offers',
                     iconSize: L.point(70, 21)
                 });
@@ -294,7 +306,7 @@ window.leafletPopupMap = {
 
             const defaultIcon = `<div class="marker${extraClass}"><span class="gicon map-marker-icon" aria-label="marker">location_on</span></div>`;
 
-            const priceIcon = `<div class="marker-offer${extraClass}"><span class="marker-price">${Math.round(m.price)} PLN</span></div>`;
+            const priceIcon = `<div class="marker-offer${extraClass}"><span class="marker-price">${Math.round(m.price)} ${mapLabels.currency}</span></div>`;
 
             const htmlContent = m.hasOffer ? priceIcon : defaultIcon;
 

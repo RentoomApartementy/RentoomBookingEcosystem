@@ -1,3 +1,6 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> Localizer
+
 @if (ShouldShow)
 {
     <div class="app-error @(Floating ? "app-error--floating" : "app-error--inline")"
@@ -25,7 +28,7 @@
             <button type="button"
                     class="app-error__close"
                     @onclick="Dismiss"
-                    aria-label="@CloseAriaLabel">
+                    aria-label="@(CloseAriaLabel ?? Localizer["AppError_CloseAriaLabel"])">
                 ×
             </button>
         }
@@ -34,10 +37,10 @@
 
 @code {
     [Parameter] public string? Message { get; set; }
-    [Parameter] public string? Title { get; set; } = "Wystąpił błąd";
+    [Parameter] public string? Title { get; set; }
     [Parameter] public bool Floating { get; set; }
     [Parameter] public bool Dismissible { get; set; }
-    [Parameter] public string CloseAriaLabel { get; set; } = "Zamknij komunikat";
+    [Parameter] public string? CloseAriaLabel { get; set; }
 
     private string? _lastMessage;
     private bool _dismissed;
@@ -46,6 +49,9 @@
 
     protected override void OnParametersSet()
     {
+        Title ??= Localizer["AppError_DefaultTitle"];
+        CloseAriaLabel ??= Localizer["AppError_CloseAriaLabel"];
+
         if (!string.Equals(_lastMessage, Message, StringComparison.Ordinal))
         {
             _lastMessage = Message;

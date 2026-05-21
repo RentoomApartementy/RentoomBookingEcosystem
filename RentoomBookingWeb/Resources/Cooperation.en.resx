@@ -146,4 +146,16 @@
     <value />
     <value>Cooperation - Rentoom | Rental Management Torun</value>
   </data>
+    <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+    <data name="ContactImageAlt" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+    <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Cooperation</value>
+  </data>
 </root>
+
+
+

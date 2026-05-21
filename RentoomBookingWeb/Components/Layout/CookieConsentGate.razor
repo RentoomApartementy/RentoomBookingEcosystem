@@ -5,6 +5,7 @@
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.Cookies
 @using RentoomBooking.SharedClasses.Services.Cookies
 @inject CookieConsentService CookieConsentService
@@ -12,6 +13,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResources> Localizer
 
 <CookieConsentBanner Notice="@_notice"
                      ThemeClass="cookie-banner--rentoom"
@@ -163,9 +165,7 @@
 
     private string GetSaveErrorMessage()
     {
-        return CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("pl", StringComparison.OrdinalIgnoreCase)
-            ? "Nie udało się zapisać zgody. Spróbuj ponownie."
-            : "Could not save consent. Please try again.";
+        return Localizer["CookieConsent_SaveError"];
     }
 
     private ValueTask EnableTrackingAsync()

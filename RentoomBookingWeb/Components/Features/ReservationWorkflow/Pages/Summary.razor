@@ -54,7 +54,7 @@
                 <div class="status-section">
                     <div class="form-wrapper-title">
                         <div class="form-wrapper-title-icon-wrapper">
-                            <GoogleIcon Name="description" Class="form-wrapper-title-icon" AriaLabel="ikona uzytkownika" />
+                            <GoogleIcon Name="description" Class="form-wrapper-title-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
                         </div> 
                         <div class="form-wrapper-title-text">
                             <h3 class="summary-box-title">@Localizer["ReservationSummary"] (@_summary?.IdoReservationId)</h3>
@@ -70,7 +70,7 @@
                             <div class="form-wrapper-title-icon-wrapper @(IsPaymentReturnFailed ? "danger-icon-color" : "info-icon-color") rounded-full">
                                 <GoogleIcon Name="@(IsPaymentReturnFailed ? "error" : "schedule")"
                                             Class="status-icon"
-                                            AriaLabel="ikona statusu płatności"
+                                            AriaLabel="@Localizer["Summary_PaymentStatusIconAriaLabel"]"
                                             Filled="@IsPaymentReturnFailed" />
                             </div>
 
@@ -85,7 +85,7 @@
                     {
                         <div class="status-box success-bg paid-status-box">
                             <div class="form-wrapper-title-icon-wrapper success-icon-color rounded-full">
-                                <GoogleIcon Name="check_circle" Class="status-icon" AriaLabel="ikona uzytkownika" Filled="true" />
+                                <GoogleIcon Name="check_circle" Class="status-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" Filled="true" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -95,7 +95,7 @@
                         </div>
                         <div class="status-box info-bg email-status-box">
                             <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
-                                <GoogleIcon Name="mail" Class="status-icon" AriaLabel="ikona maila" />
+                                <GoogleIcon Name="mail" Class="status-icon" AriaLabel="@Localizer["Summary_EmailIconAriaLabel"]" />
                             </div>
 
                             <div class="status-box-text">
@@ -118,7 +118,7 @@
                         </div>
                         <div class="staywell-popup-wrapper">
                             <button type="button" class="button staywell-trigger-button" @onclick="ToggleStaywellPopup">
-                                <GoogleIcon Name="qr_code_2" Class="staywell-trigger-icon" AriaLabel="QR code" />
+                                <GoogleIcon Name="qr_code_2" Class="staywell-trigger-icon" AriaLabel="@Localizer["Summary_QrButtonAriaLabel"]" />
                                 <span>@StaywellButtonText</span>
                             </button>
                             <a href="@staywellLink"
@@ -140,7 +140,7 @@
                                         <div class="staywell-popup-col staywell-qr-col">
                                             @if (!string.IsNullOrWhiteSpace(_staywellQrDataUri))
                                             {
-                                                <img src="@_staywellQrDataUri" alt="Kod QR StayWell" class="staywell-qr" />
+                                                <img src="@_staywellQrDataUri" alt="@Localizer["Summary_StaywellQrAlt"]" class="staywell-qr" />
                                             }
                                         </div>
 
@@ -167,7 +167,7 @@
                     {
                         <div class="status-box info-bg">
                             <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
-                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="ikona oczekiwania" />
+                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="@Localizer["Summary_WaitingIconAriaLabel"]" />
                             </div>
 
                             <div class="status-box-text">
@@ -184,7 +184,7 @@
                     {
                         <div class="status-box danger-bg">
                             <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
-                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="ikona bledu" Filled="true" />
+                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="@Localizer["Summary_ErrorIconAriaLabel"]" Filled="true" />
                             </div>
 
                             <div class="status-box-text">
@@ -201,7 +201,7 @@
                     {
                         <div class="status-box pending-bg">
                             <div class="form-wrapper-title-icon-wrapper pending-icon-color rounded-full">
-                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="ikona uzytkownika" />
+                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -254,13 +254,13 @@
                                             @if (!string.IsNullOrEmpty(term.HtmlContent))
                                             {
                                                 <a href="/regulaminy/@term.Id/@GenerateSlug(term.Title ?? term.Description)" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
-                                                    <GoogleIcon Name="open_in_new" SizePx="18" AriaLabel="link" />
+                                                    <GoogleIcon Name="open_in_new" SizePx="18" AriaLabel="@Localizer["Summary_DocumentLinkAriaLabel"]" />
                                                 </a>
                                             }
                                             else if (!string.IsNullOrEmpty(term.Link))
                                             {
                                                 <a href="@term.Link" target="_blank" class="term-link-icon" title="@Localizer["ViewDocument"]">
-                                                    <GoogleIcon Name="open_in_new" SizePx="18" AriaLabel="link" />
+                                                    <GoogleIcon Name="open_in_new" SizePx="18" AriaLabel="@Localizer["Summary_DocumentLinkAriaLabel"]" />
                                                 </a>
                                             }
                                         </div>
@@ -274,7 +274,7 @@
                                 IsBusy="@_isSavingTerms"
                                 Type="ButtonType.Tertiary"
                                 style="@(!CanProceedToPayment() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
-                            <img src="assets/svgs/tpay.svg" alt="Tpay icon"/>
+                            <img src="assets/svgs/tpay.svg" alt="@Localizer["Summary_TpayIconAlt"]"/>
                             @Localizer["ClickToPay"]
                         </Button>
 
@@ -291,7 +291,7 @@
                     {
                         <div class="status-box danger-bg">
                             <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
-                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="ikona uzytkownika" Filled="true" />
+                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="@Localizer["Summary_ErrorIconAriaLabel"]" Filled="true" />
                             </div> 
                         
                             <div class="status-box-text">
@@ -318,7 +318,7 @@
                 
                 <div class="guest-info">
                     <div class="box-text">
-                        <GoogleIcon Name="person" Class="box-text-icon" AriaLabel="ikona uzytkownika" />
+                        <GoogleIcon Name="person" Class="box-text-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
                         <b class="box-text-title">@Localizer["ClientInfoTitle"]</b>
                     </div>
 

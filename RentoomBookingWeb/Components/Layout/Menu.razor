@@ -6,9 +6,9 @@
 @inject IStringLocalizer<SharedResources> Localizer;
 
 <div>
-    <nav class="@NavState.NavClass" aria-label="Główne menu strony">
+    <nav class="@NavState.NavClass" aria-label="@Localizer["Menu_MainNavigationAriaLabel"]">
         <NavLink href="/">
-            <img src="@NavState.Logo" alt="Ikona Rentoom">
+            <img src="@NavState.Logo" alt="@Localizer["Menu_LogoAlt"]">
         </NavLink>
         <ul>
             <li>
@@ -41,11 +41,11 @@
             @* <div class="menu-button"> *@
             @*     <Button Type="@NavState.ButtonTypeClass">@Localizer["CallUs"]</Button> *@
             @* </div> *@
-            <a href="https://www.facebook.com/RentoomApartamenty" target="_blank" rel="noopener noreferrer" aria-label="Facebook Rentoom Apartamenty">
-                <img src="@NavState.Facebook" class="menu-icon fb" alt="Ikona Facebook">
+            <a href="https://www.facebook.com/RentoomApartamenty" target="_blank" rel="noopener noreferrer" aria-label="@Localizer["Menu_FacebookAriaLabel"]">
+                <img src="@NavState.Facebook" class="menu-icon fb" alt="@Localizer["Menu_FacebookIconAlt"]">
             </a>
-            <a href="https://www.instagram.com/rentoomapartamenty/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Rentoom Apartamenty">
-                <img src="@NavState.Instagram" class="menu-icon ig" alt="Ikona Instagram">
+            <a href="https://www.instagram.com/rentoomapartamenty/" target="_blank" rel="noopener noreferrer" aria-label="@Localizer["Menu_InstagramAriaLabel"]">
+                <img src="@NavState.Instagram" class="menu-icon ig" alt="@Localizer["Menu_InstagramIconAlt"]">
             </a>
             <ChangeGlobal IsScrolling="IsScrolling"/>
             @if (ShowMenu)
@@ -53,14 +53,14 @@
                 <GoogleIcon @onclick="OnBurgerClick"
                             Name="close"
                             Class="@($"menu-icon burger menu-gicon {(IsScrolling ? "menu-gicon-scrolled" : "menu-gicon-top")}")"
-                            AriaLabel="Ikona X" />
+                            AriaLabel="@Localizer["Menu_CloseIconAriaLabel"]" />
             }
             else
             {
                 <GoogleIcon @onclick="OnBurgerClick"
                             Name="menu"
                             Class="@($"menu-icon burger menu-gicon {(IsScrolling ? "menu-gicon-scrolled" : "menu-gicon-top")}")"
-                            AriaLabel="Ikona Burger" />
+                            AriaLabel="@Localizer["Menu_BurgerIconAriaLabel"]" />
             }
         </div>
     </nav>

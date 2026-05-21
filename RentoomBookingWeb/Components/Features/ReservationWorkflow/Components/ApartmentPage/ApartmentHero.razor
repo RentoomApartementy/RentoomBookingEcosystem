@@ -1,5 +1,7 @@
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBookingWeb.Components.Features.Apartments.Components
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Apartment> Localizer
 
 <div class="apartment-text-wrapper">
     <div class="apartment-title-address">
@@ -11,19 +13,19 @@
 
     <ul class="apartment-details">
         <li>
-            <GoogleIcon Name="groups" Class="icon" AriaLabel="Liczba osób" />
+            <GoogleIcon Name="groups" Class="icon" AriaLabel="@Localizer["Reservation_AltOccupancy"]" />
             <span>@Apartment?.MinCapacity - @Apartment?.Capacity</span>
         </li>
         <li>
-            <GoogleIcon Name="bed" Class="icon" AriaLabel="Liczba łóżek" />
+            <GoogleIcon Name="bed" Class="icon" AriaLabel="@Localizer["Reservation_AltBeds"]" />
             @BedsCount
         </li>
         <li>
-            <GoogleIcon Name="bathtub" Class="icon" AriaLabel="Liczba łazienek" />
+            <GoogleIcon Name="bathtub" Class="icon" AriaLabel="@Localizer["Reservation_AltBathrooms"]" />
             1
         </li>
         <li>
-            <GoogleIcon Name="square_foot" Class="icon" AriaLabel="Powierzchnia apartamentu" />
+            <GoogleIcon Name="square_foot" Class="icon" AriaLabel="@Localizer["Reservation_AltArea"]" />
             <span>@Apartment?.Area m²</span>
         </li>
     </ul>

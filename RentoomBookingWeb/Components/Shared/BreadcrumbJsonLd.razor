@@ -1,7 +1,9 @@
 @using System.Globalization
 @using System.Text.Encodings.Web
 @using System.Text.Json
+@using Microsoft.Extensions.Localization
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResources> Localizer
 
 @if (!string.IsNullOrWhiteSpace(JsonLd))
 {
@@ -70,9 +72,7 @@
         }
     }
 
-    private string HomeLabel => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase)
-        ? "Strona główna"
-        : "Home";
+    private string HomeLabel => Localizer["Breadcrumb_Home"];
 
     private static bool IsHome(string path)
     {
