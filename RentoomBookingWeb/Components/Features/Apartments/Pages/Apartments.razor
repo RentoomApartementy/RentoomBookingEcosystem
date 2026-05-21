@@ -117,15 +117,18 @@
                 
                 <div id="scroll-anchor" style="height: 10px; width: 100%; visibility: @(ViewModel.IsMapView ? "hidden" : "visible"); pointer-events: none;"></div>
 
-                <div class="apartments-items-map" style="display: @(ViewModel.IsMapView ? "block" : "none")">
-                    <ApartmentsMap 
-                        Offers="@ViewModel.Offers" 
-                        IsSearch="@ViewModel.IsSearch" 
-                        StartDate="@ViewModel.StartDate" 
-                        EndDate="@ViewModel.EndDate" 
-                        Adults="@ViewModel.Adults" 
-                        Children="@ViewModel.Children"></ApartmentsMap>
-                </div>      
+                @if (ViewModel.IsMapView)
+                {
+                    <div class="apartments-items-map">
+                        <ApartmentsMap 
+                            Offers="@ViewModel.Offers" 
+                            IsSearch="@ViewModel.IsSearch" 
+                            StartDate="@ViewModel.StartDate" 
+                            EndDate="@ViewModel.EndDate" 
+                            Adults="@ViewModel.Adults" 
+                            Children="@ViewModel.Children"></ApartmentsMap>
+                    </div>
+                }     
                 
             </div>
     </div>

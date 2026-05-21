@@ -6,6 +6,7 @@
 @using RentoomBooking.SharedClasses.Services.IdoBooking
 @using RentoomBookingWeb.Services 
 @using RentoomBookingWeb.Helpers
+@using Microsoft.JSInterop
 @using Microsoft.Extensions.Localization
 @inject IApartmentsService ApartmentsApiService
 @inject IIdoApartmentService IdoApartmentService
@@ -51,6 +52,7 @@
         if (!_mapRendered && Latitude.HasValue && Longitude.HasValue)
         {
             _mapRendered = true;
+            await JS.InvokeAsync<IJSObjectReference>("import", "./js/mapInterop.js");
             _objRef = DotNetObjectReference.Create(this);
 
             double lat = (double)Latitude.Value;

@@ -1,5 +1,6 @@
 using BlazorDateRangePicker;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ using RentoomBooking.SharedClasses.Models.Gus;
 using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
 using System.Globalization;
+using System.Linq;
 
 namespace RentoomBookingWeb
 {
@@ -50,6 +52,14 @@ namespace RentoomBookingWeb
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddHttpClient();
+            builder.Services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
+                {
+                    "image/svg+xml"
+                });
+            });
             /* builder.Services.AddHttpClient("Api", client =>
              {
                  client.BaseAddress = new Uri("https://localhost:7241/");
@@ -264,7 +274,28 @@ namespace RentoomBookingWeb
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseResponseCompression();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    var path = ctx.Context.Request.Path.Value ?? string.Empty;
+                    var headers = ctx.Context.Response.Headers;
+
+                    if (path.StartsWith("/_framework/", StringComparison.OrdinalIgnoreCase) ||
+                        path.StartsWith("/_content/", StringComparison.OrdinalIgnoreCase) ||
+                        path.Contains(".bundle.scp.", StringComparison.OrdinalIgnoreCase))
+                    {
+                        headers[HeaderNames.CacheControl] = "public,max-age=31536000,immutable";
+                    }
+                    else if (path.EndsWith(".css", StringComparison.OrdinalIgnoreCase) ||
+                             path.EndsWith(".js", StringComparison.OrdinalIgnoreCase) ||
+                             path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+                    {
+                        headers[HeaderNames.CacheControl] = "public,max-age=3600";
+                    }
+                }
+            });
             
             // error 404
             app.UseStatusCodePagesWithReExecute("/404");

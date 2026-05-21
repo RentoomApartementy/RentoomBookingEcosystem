@@ -1,3 +1,5 @@
+@using Microsoft.JSInterop
+
 <div id="@Id" style="width: 100%; height: 100%;"></div>
 
 @code {
@@ -27,6 +29,7 @@
         if (!_mapRendered && Latitude.HasValue && Longitude.HasValue)
         {
             _mapRendered = true;
+            await JS.InvokeAsync<IJSObjectReference>("import", "./js/mapInterop.js");
 
             _objRef = DotNetObjectReference.Create(this);
 

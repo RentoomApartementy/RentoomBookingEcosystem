@@ -1,6 +1,7 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Services.IdoBooking
+@using Microsoft.JSInterop
 @inject IApartmentsService ApartmentsApiService
 @inject IIdoApartmentService IdoApartmentService
 @inject IJSRuntime JSRuntime
@@ -36,6 +37,7 @@
     {
         if (firstRender)
         {
+            await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/mapInterop.js");
             _objRef = DotNetObjectReference.Create(this);
 
             await JSRuntime.InvokeVoidAsync("leafletMap.createMap", "map", 53.012217, 18.607378, 14);

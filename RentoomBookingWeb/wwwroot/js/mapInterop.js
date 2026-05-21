@@ -1,9 +1,71 @@
+const LEAFLET_CSS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+const LEAFLET_JS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+const MARKER_CLUSTER_CSS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css";
+const MARKER_CLUSTER_DEFAULT_CSS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css";
+const MARKER_CLUSTER_JS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js";
+
+let leafletAssetsPromise = null;
+
+function hasLink(href) {
+    return Array.from(document.querySelectorAll("link[rel='stylesheet']")).some(link => link.href === href);
+}
+
+function hasScript(src) {
+    return Array.from(document.querySelectorAll("script")).some(script => script.src === src);
+}
+
+function loadStylesheet(href) {
+    if (hasLink(href)) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        link.onload = () => resolve();
+        link.onerror = () => reject(new Error(`Failed to load stylesheet: ${href}`));
+        document.head.appendChild(link);
+    });
+}
+
+function loadScript(src) {
+    if (hasScript(src)) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+        document.head.appendChild(script);
+    });
+}
+
+window.ensureLeafletLoaded = async function () {
+    if (!leafletAssetsPromise) {
+        leafletAssetsPromise = (async () => {
+            await loadStylesheet(LEAFLET_CSS_URL);
+            await loadStylesheet(MARKER_CLUSTER_CSS_URL);
+            await loadStylesheet(MARKER_CLUSTER_DEFAULT_CSS_URL);
+            await loadScript(LEAFLET_JS_URL);
+            await loadScript(MARKER_CLUSTER_JS_URL);
+        })();
+    }
+
+    return leafletAssetsPromise;
+};
+
 window.leafletMap = {
     map: null,
     markerCluster: null,
     mediaCache: new Map(),
 
-    createMap: function (id, lat, lng, zoom) {
+    createMap: async function (id, lat, lng, zoom) {
+        await window.ensureLeafletLoaded();
+
         if (this.map) {
             this.map.remove();
             this.map = null;
@@ -155,7 +217,9 @@ window.leafletPopupMap = {
     selectedLayer: null, 
     mediaCache: new Map(),
 
-    createMap: function (id, lat, lng, zoom) {
+    createMap: async function (id, lat, lng, zoom) {
+        await window.ensureLeafletLoaded();
+
         if (this.map) {
             this.map.remove();
             this.map = null;

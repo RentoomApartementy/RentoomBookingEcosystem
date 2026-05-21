@@ -13,6 +13,7 @@
 @using System.Globalization;
 @using RentoomBooking.SharedClasses.Models
 @using Microsoft.Extensions.Configuration
+@using Microsoft.JSInterop
 @using RentoomBookingWeb.Services
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer;
 @inject CustomerTermsService TermsService
@@ -464,7 +465,8 @@
         }
 
         _scrollToTopPending = false;
-        await JSRuntime.InvokeVoidAsync("scrollToTop");
+        var scrollModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+        await scrollModule.InvokeVoidAsync("scrollToTop");
     }
     
     private async Task GoToPayment()
