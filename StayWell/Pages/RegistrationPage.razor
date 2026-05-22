@@ -89,20 +89,33 @@
 
     private List<RegistrationCardGuestModel> _guests = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
         LayoutState.ShowFooter = false;
+
+        var card = RegistrationCardState.CurrentCard;
+
+        if (RegistrationCardState.IsFilled && card?.GuestsData?.Any(g => !string.IsNullOrWhiteSpace(g.FirstName) && !string.IsNullOrWhiteSpace(g.LastName)) == true)
+        {
+            NavigationManager.NavigateTo($"/reservation/{Token}/", replace: true);
+            return;
+        }
 
         int adults = ReservationState?.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.numberOfAdults ?? 1;
 
-        if (RegistrationCardState.CurrentCard?.GuestsData?.Any() == true)
+        if (card?.GuestsData?.Any() == true)
         {
-            _guests = RegistrationCardState.CurrentCard.GuestsData;
+            _guests = card.GuestsData;
         }
         else
         {
             _guests = Enumerable.Range(0, adults).Select(_ => new RegistrationCardGuestModel()).ToList();
+        }
+
+        if (card?.CheckInTime != null)
+        {
+            _checkInTime = card.CheckInTime.Value.TimeOfDay;
         }
 
         TryInitializeMail();
