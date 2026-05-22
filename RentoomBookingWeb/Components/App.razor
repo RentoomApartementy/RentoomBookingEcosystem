@@ -35,11 +35,14 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
     
+    @* UWAGA: Te skrypty NIE są modułami (nie używają export), więc ładujemy je standardowo *@
     <script src="/js/mapInterop.js"></script>
     <script src="/js/cookieConsentInterop.js"></script>
     
-    <script src="/js/scrollObserver.js"></script>
-    <script src="/js/buttonHelper.js"></script>
+    @* UWAGA: Te skrypty są importowane dynamicznie jako moduły w komponentach .razor (JS.InvokeAsync<IJSObjectReference>("import", ...)), 
+       więc NIE WOLNO ich tutaj ładować tagiem <script>, bo przeglądarka wyrzuci SyntaxError: Unexpected token 'export' *@
+    @* <script src="/js/scrollObserver.js"></script> *@
+    @* <script src="/js/buttonHelper.js"></script> *@
     
     <script src="/_framework/blazor.web.js"></script>
     
