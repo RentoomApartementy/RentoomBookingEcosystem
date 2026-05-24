@@ -21,7 +21,8 @@ PAGE_MAPPINGS = {
         'file_prefix': 'Apartments', 
         'res_key': 'ApartmentsText',
         'file_path': '../../Components/Features/Apartments/Pages/Apartments.razor',
-        'params': ''
+        'params': '',
+        'extra_params': '/{StartDate}/{EndDate}/{Adults?}/{Children?}'
     },
     'Contact': {
         'file_prefix': 'Contact', 
@@ -209,6 +210,7 @@ def patch_razor_files(mapping):
         cultures = mapping.get(key, {})
         is_home = config.get('is_home', False)
         params = config.get('params', '')
+        extra_params = config.get('extra_params', '')
 
         for culture in all_cultures:
             short_culture = culture.split('-')[0].lower()
@@ -216,8 +218,12 @@ def patch_razor_files(mapping):
             
             if not slug or is_home:
                 route_lines.add(f'@page "/{short_culture}{params}"')
+                if extra_params:
+                    route_lines.add(f'@page "/{short_culture}{extra_params}"')
             else:
                 route_lines.add(f'@page "/{short_culture}/{slug}{params}"')
+                if extra_params:
+                    route_lines.add(f'@page "/{short_culture}/{slug}{extra_params}"')
             
         sorted_routes = sorted(list(route_lines))
         replacement_block = start_marker + "\n" + "\n".join(sorted_routes) + "\n" + end_marker

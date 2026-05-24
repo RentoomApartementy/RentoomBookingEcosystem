@@ -1,38 +1,71 @@
 @page "/apartamenty"
 @* [SEO_ROUTES] *@
 @page "/be/apartamenty"
+@page "/be/apartamenty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/bg/apartamenty"
+@page "/bg/apartamenty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/bs/stanovi"
+@page "/bs/stanovi/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/cs/byty"
+@page "/cs/byty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/da/lejligheder"
+@page "/da/lejligheder/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/de/wohnungen"
+@page "/de/wohnungen/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/el/apartamenty"
+@page "/el/apartamenty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/en/apartments"
+@page "/en/apartments/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/es/apartamentos"
+@page "/es/apartamentos/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/et/korterid"
+@page "/et/korterid/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/fi/asunnot"
+@page "/fi/asunnot/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/fr/appartements"
+@page "/fr/appartements/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/ga/arasain"
+@page "/ga/arasain/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/hr/stanovi"
+@page "/hr/stanovi/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/hu/lakasok"
+@page "/hu/lakasok/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/is/ibu-ir"
+@page "/is/ibu-ir/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/it/appartamenti"
+@page "/it/appartamenti/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/lt/apartamentai"
+@page "/lt/apartamentai/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/lv/dzivokli"
+@page "/lv/dzivokli/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/mk/apartamenty"
+@page "/mk/apartamenty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/mt/appartamenti"
+@page "/mt/appartamenti/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/nl/appartementen"
+@page "/nl/appartementen/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/no/leiligheter"
+@page "/no/leiligheter/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/pl/apartamenty"
+@page "/pl/apartamenty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/pt/apartamentos"
+@page "/pt/apartamentos/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/ro/apartamente"
+@page "/ro/apartamente/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/ru/apartamenty"
+@page "/ru/apartamenty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/sk/byty"
+@page "/sk/byty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/sl/stanovanja"
+@page "/sl/stanovanja/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/sq/apartamente"
+@page "/sq/apartamente/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/sr/apartmani-novi-vino"
+@page "/sr/apartmani-novi-vino/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/sv/lagenheter"
+@page "/sv/lagenheter/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @page "/uk/apartamenty"
+@page "/uk/apartamenty/{StartDate}/{EndDate}/{Adults?}/{Children?}"
 @* [SEO_ROUTES_END] *@
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @using Microsoft.Extensions.Localization
@@ -171,10 +204,22 @@
 </div>
 
 @code {
-    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
+    [Parameter] public string? Adults { get; set; }
+    [Parameter] public string? Children { get; set; }
+
     private int? _offerLength;
 
-    
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrEmpty(StartDate)) ViewModel.StartDate = StartDate;
+        if (!string.IsNullOrEmpty(EndDate)) ViewModel.EndDate = EndDate;
+        if (!string.IsNullOrEmpty(Adults)) ViewModel.Adults = Adults;
+        if (!string.IsNullOrEmpty(Children)) ViewModel.Children = Children;
+
+        _offerLength = CalculateOfferLength();
+    }
 
     private int? CalculateOfferLength()
     {

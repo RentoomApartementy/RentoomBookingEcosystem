@@ -91,6 +91,15 @@ Przełącznik języków (`ChangeGlobal.razor`) został zaprogramowany tak, aby o
 2.  Podmienia główny slug na wersję w nowym języku.
 3.  **Zachowuje pozostałe segmenty URL** (takie jak ID apartamentu czy daty rezerwacji) oraz parametry QueryString.
 
+### Social Media Pretty URLs (New Feature)
+The system now supports clean, sharable URLs for the apartment listing page with pre-selected dates and guests. This is specifically designed for social media campaigns.
+
+- **Pattern:** `/{culture}/{slug}/{StartDate}/{EndDate}/{Adults?}/{Children?}`
+- **Example:** `/pl/apartamenty/2026-06-01/2026-06-15/2`
+- **Technical Logic:** 
+    - The `Apartments.razor` component detects these route parameters and automatically triggers a search.
+    - SEO metadata (Open Graph) dynamically updates its title and description to include the selected dates, providing a rich preview in Facebook, Messenger, and Instagram.
+
 ---
 
 ## 7. Rozwiązywanie Problemów
