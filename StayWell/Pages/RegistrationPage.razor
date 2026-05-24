@@ -113,9 +113,9 @@
             _guests = Enumerable.Range(0, adults).Select(_ => new RegistrationCardGuestModel()).ToList();
         }
 
-        if (card?.CheckInTime != null)
+        if (card != null && card.CheckInTime != default)
         {
-            _checkInTime = card.CheckInTime.Value.TimeOfDay;
+            _checkInTime = card.CheckInTime.TimeOfDay;
         }
 
         TryInitializeMail();
