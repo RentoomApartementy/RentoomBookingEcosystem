@@ -1,0 +1,20 @@
+@page "/reservation/{token}/CheckIn"
+@using RentoomBooking.StayWell.Components
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<CheckInPage> Localizer
+
+@inherits Models.PageBase
+
+<PageTitle>@Localizer["PageTitle"]</PageTitle>
+
+<div class="page-info-wrapper">
+    <PageInfo Title="@Localizer["PageTitle"]" Subtitle="@Localizer["PageSubtitle"]"></PageInfo>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+}
