@@ -104,7 +104,11 @@
                             </label>
                             <input class="reg-input @(IsEmailValid ? "is-valid" : "")"
                                    id="email" type="email" placeholder="@Localizer["EmailPlaceholder"]"
-                                   @bind="_mail" @bind:event="oninput" />
+                                   value="@_mail"
+                                   @oninput="OnEmailChanged"
+                                   @onchange="OnEmailChanged"
+                                   @onblur="OnEmailChanged"
+                                   inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off" />
                         </div>
 
                         <div class="reg-actions">
@@ -317,6 +321,12 @@
                 @((MarkupString)(term.HtmlContent ?? ""))
             </div>
         );
+    }
+
+    private void OnEmailChanged(ChangeEventArgs e)
+    {
+        _mail = e.Value?.ToString();
+        StateHasChanged();
     }
 
     private void TryInitializeMail()
