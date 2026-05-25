@@ -1,0 +1,82 @@
+.passcode-history-modal {
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.passcode-history-modal__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 4px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.passcode-history-modal__item:last-child {
+    border-bottom: none;
+}
+
+.passcode-history-modal__item--ido {
+    background: #f8fbf9;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.passcode-history-modal__left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.passcode-history-modal__code {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    color: #111;
+}
+
+.passcode-history-modal__bold {
+    font-weight: 700;
+}
+
+.passcode-history-modal__confirm-hint {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    color: #888;
+    white-space: nowrap;
+    margin-right: auto;
+}
+
+.passcode-history-modal__key-icon {
+    width: 12px;
+    height: 12px;
+    opacity: 0.5;
+    vertical-align: middle;
+}
+
+.passcode-history-modal__validity {
+    font-size: 0.72rem;
+    color: #6b9b7e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.passcode-history-modal__meta {
+    font-size: 0.78rem;
+    color: #888;
+    text-align: right;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 1px 5px;
+    border-radius: 5px;
+}
