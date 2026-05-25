@@ -21,7 +21,10 @@
   <data name="NoSteps" xml:space="preserve">
     <value>Check-in steps are not available for this reservation.</value>
   </data>
-  <data name="AccessCodesTitle" xml:space="preserve">
-    <value>Access codes</value>
+  <data name="BuildingCodesTitle" xml:space="preserve">
+    <value>Building codes</value>
+  </data>
+  <data name="ApartmentCodeTitle" xml:space="preserve">
+    <value>Apartment code</value>
   </data>
 </root>

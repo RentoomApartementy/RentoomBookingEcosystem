@@ -1,0 +1,190 @@
+@keyframes shimmer {
+    0% { background-position: -700px 0; }
+    100% { background-position: 700px 0; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 700px 100%;
+    animation: shimmer 1.4s infinite linear;
+    border-radius: 8px;
+}
+
+.skeleton--button {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.skeleton--text {
+    height: 1em;
+    width: 60%;
+    margin: 6px auto;
+}
+
+.tile {
+    width: 100%;
+    max-width: 350px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+
+.tile--center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tile__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+}
+
+.tile__content {
+    padding-top: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.status-text {
+    text-align: center;
+    font-weight: 600;
+    margin-top: 15px;
+    font-size: 1.1em;
+}
+
+.text-unlocked { color: var(--rentoom-brown-light); }
+.text-locked { color: var(--rentoom-green-dark); }
+
+.open-button {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background-color: white;
+    box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.open-button:active {
+    box-shadow: inset 10px 10px 20px #bebebe, inset -10px -10px 20px #ffffff;
+    transform: scale(0.98);
+}
+
+.open-button::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    transition: all 0.5s ease;
+    pointer-events: none;
+}
+
+.open-button.locked::after { border-color: var(--rentoom-green-dark); }
+.open-button.locked .lock {
+    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
+}
+.open-button.unlocked::after { border-color: var(--rentoom-brown-light); }
+.open-button.unlocked .lock {
+    filter: invert(53%) sepia(15%) saturate(1633%) hue-rotate(348deg) brightness(91%) contrast(86%);
+}
+.open-button .lock {
+    height: 60px;
+    width: 60px;
+    z-index: 2;
+    opacity: 0.8;
+}
+
+.spinner {
+    width: 45px;
+    height: 45px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: var(--rentoom-green-dark);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.spinner--small {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-left-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.retry-button {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: none;
+    background-color: var(--rentoom-green-dark);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    min-width: 200px;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: normal;
+    font-variant-numeric: tabular-nums;
+    word-break: break-word;
+    text-align: center;
+}
+
+.retry-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.inactive-reservation-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: black;
+}
+
+.inactive-reservation-icon {
+    height: 48px;
+    width: 48px;
+}
+
+.error-message {
+    color: #d32f2f;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: 500;
+    max-width: 350px;
+    margin: 8px auto 0;
+}

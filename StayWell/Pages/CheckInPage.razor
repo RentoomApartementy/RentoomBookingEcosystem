@@ -3,20 +3,28 @@
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions
 @using Microsoft.Extensions.Localization
 @using Microsoft.JSInterop
+@using RentoomBooking.StayWell.Services
 
 @inject IStringLocalizer<CheckInPage> Localizer
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject FeatureFlagsService FeatureFlagsService
 
 @inherits Models.PageBase
 @implements IAsyncDisposable
 
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
-<div class="checkin-access-codes">
-    <h3 class="checkin-access-codes__title">@Localizer["AccessCodesTitle"]</h3>
+<section class="checkin-section">
+    <h3 class="checkin-section__title">@Localizer["BuildingCodesTitle"]</h3>
     <AccessCodesList />
-</div>
+</section>
+
+<section class="checkin-section">
+    <h3 class="checkin-section__title">@Localizer["ApartmentCodeTitle"]</h3>
+    <RemoteOpenTile Token="@Token" />
+    <ApartmentAccessCode Token="@Token" />
+</section>
 
 <div class="checkin-roadmap">
     @if (ApartmentState.IsLoading)
@@ -74,6 +82,28 @@
         GlobalizationService.OnChange += OnLanguageChanged;
         ApartmentState.OnChange += OnStateChanged;
         OnLanguageChanged();
+
+        if (!string.IsNullOrWhiteSpace(Token))
+        {
+            if (!LocksState.IsStatusResolved)
+            {
+                _ = LocksState.CheckTTLockStatusAsync(Token);
+            }
+
+            if (FeatureFlagsService.FeatureAllowed("dev-mock-lock"))
+            {
+                _ = Task.Run(async () =>
+                {
+                    await LocksState.LoadAccessCodesAsync(Token);
+                    await LocksState.RestoreDevMockCodesAsync(Token);
+                    await LocksState.EnsureInitialDevMockCodeAsync(Token);
+                });
+            }
+            else
+            {
+                _ = LocksState.LoadAccessCodesAsync(Token);
+            }
+        }
     }
 
     private void OnLanguageChanged() =>
