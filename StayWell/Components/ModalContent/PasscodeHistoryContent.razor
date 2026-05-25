@@ -1,0 +1,62 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.StayWell.Services
+@using System.Globalization
+
+@inject IStringLocalizer<RentoomBooking.StayWell.Components.ApartmentAccessCode> Localizer
+
+<div class="passcode-history-modal">
+    @foreach (var c in Codes)
+    {
+        <div class="passcode-history-modal__item @(c.IsIdo ? "passcode-history-modal__item--ido" : "")">
+            <div class="passcode-history-modal__left">
+                <span class="passcode-history-modal__code">@c.Code</span>
+                <span class="passcode-history-modal__confirm-hint">
+                    @Localizer["Confirm"] <span class="passcode-history-modal__bold">#</span>
+                    @Localizer["Or"]
+                    <img src="/icons/key-round.svg" class="passcode-history-modal__key-icon" />
+                </span>
+                @if (!c.IsIdo && (c.ValidFrom is not null || c.ValidTo is not null))
+                {
+                    <span class="passcode-history-modal__validity">
+                        @FormatValidity(c.ValidFrom, c.ValidTo)
+                    </span>
+                }
+            </div>
+            @if (c.IsIdo)
+            {
+                <span class="passcode-history-modal__meta">@Localizer["CodeFromIdo"]</span>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<BackendApi.AccessCodeDto> Codes { get; set; } = Array.Empty<BackendApi.AccessCodeDto>();
+
+    private string FormatValidity(DateTimeOffset? startDate, DateTimeOffset? endDate)
+    {
+        var start = startDate?.ToLocalTime();
+        var end = endDate?.ToLocalTime();
+
+        if (start is not null && end is not null)
+        {
+            return string.Format(CultureInfo.CurrentCulture, Localizer["CodeValidFromTo"],
+                start.Value.ToString("HH:mm dd.MM", CultureInfo.CurrentCulture),
+                end.Value.ToString("HH:mm dd.MM", CultureInfo.CurrentCulture));
+        }
+
+        if (start is not null)
+        {
+            return string.Format(CultureInfo.CurrentCulture, Localizer["CodeValidFrom"],
+                start.Value.ToString("HH:mm dd.MM", CultureInfo.CurrentCulture));
+        }
+
+        if (end is not null)
+        {
+            return string.Format(CultureInfo.CurrentCulture, Localizer["CodeValidTo"],
+                end.Value.ToString("HH:mm dd.MM", CultureInfo.CurrentCulture));
+        }
+
+        return string.Empty;
+    }
+}

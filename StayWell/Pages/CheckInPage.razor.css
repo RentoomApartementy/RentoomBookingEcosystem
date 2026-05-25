@@ -12,10 +12,21 @@
     color: #111827;
 }
 
+.checkin-roadmap-tile {
+    width: 100%;
+    max-width: 350px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+
 .checkin-roadmap {
     display: flex;
     flex-direction: column;
-    padding: 8px 16px 32px;
     gap: 0;
 }
 
