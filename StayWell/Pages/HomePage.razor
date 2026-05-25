@@ -50,6 +50,16 @@ else
                       CheckOutTime="@ReservationState.CheckOutTime" />
     </div>
 
+    @if (checkIn != default) // && now >= checkIn.AddMinutes(-15))
+    {
+        <div class="checkin-button-wrapper">
+            <button type="button" class="checkin-button" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/CheckIn")'>
+                <span class="checkin-button-text">@Localizer["CheckInNow"]</span>
+                <img class="checkin-button-pointer" src="/icons/pointer.svg" alt="" />
+            </button>
+        </div>
+    }
+
     <div class="tile--row">
         <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage")'>
             <div class="tile-icon">
@@ -57,14 +67,12 @@ else
             </div>
             <div class="tile-text">@Localizer["Instructions"]</div>
         </div>
-
         <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
             <div class="tile-icon">
                 <img class="fas" src="/icons/lock.svg" />
             </div>
             <div class="tile-text">@Localizer["OpenApartment"]</div>
         </div>
-
         @if (FeatureFlagsService.FeatureAllowed("ai-assistant"))
         {
             <div class="tile" @onclick="OpenAiChat">
@@ -89,6 +97,7 @@ else
             </div>
             <div class="tile-text-vouchers">@Localizer["MyVouchers"]</div>
         </div>
+
      }
     </div>
 
