@@ -1,0 +1,134 @@
+.access-codes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.access-code-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    min-width: 0;
+}
+
+.access-code-card__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(7, 112, 78, 0.08), rgba(7, 112, 78, 0.03));
+    border: 1px solid rgba(7, 112, 78, 0.08);
+    flex-shrink: 0;
+}
+
+.access-code-card__icon {
+    width: 22px;
+    height: 22px;
+    opacity: 0.82;
+}
+
+.access-code-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+.access-code-card__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.access-code-card__value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #222;
+    min-width: 0;
+}
+
+.access-code-card__value ::deep .code-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    min-width: 0;
+}
+
+.access-code-card__value ::deep .code-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 34px;
+    padding: 0 6px;
+    background: #f5f5f5;
+    border: 1.5px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #222;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    user-select: all;
+}
+
+.access-code-card__value ::deep .code-tile--icon {
+    background: linear-gradient(180deg, rgba(7, 112, 78, 0.06), rgba(7, 112, 78, 0.02));
+    border-color: rgba(7, 112, 78, 0.12);
+    padding: 0 8px;
+}
+
+.access-code-card__value ::deep .code-tile__icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.75;
+}
+
+@keyframes access-code-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.access-code-card--skeleton {
+    background: #fff;
+}
+
+.access-code-card__icon-skeleton {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+    background-size: 200% 100%;
+    animation: access-code-shimmer 1.4s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.access-code-card__label-skeleton {
+    height: 12px;
+    width: 40%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+    background-size: 200% 100%;
+    animation: access-code-shimmer 1.4s ease-in-out infinite;
+}
+
+.access-code-card__value-skeleton {
+    height: 22px;
+    width: 60%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+    background-size: 200% 100%;
+    animation: access-code-shimmer 1.4s ease-in-out infinite;
+}
