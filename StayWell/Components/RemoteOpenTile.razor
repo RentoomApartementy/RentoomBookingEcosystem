@@ -83,31 +83,6 @@ else if (LocksState.IsTTLockAvailable || IsDevMockLock)
         </div>
     </div>
 }
-else
-{
-    <div class="tile">
-        <div class="tile__title">
-            @Localizer["RemoteOpen"]
-        </div>
-        <div class="tile__content">
-            @Localizer["RemoteUnavailable"]
-            <div style="margin-top: 12px;">
-                <button class="retry-button"
-                        disabled="@(LocksState.IsRetryDisabled || string.IsNullOrWhiteSpace(Token))"
-                        @onclick="RetryPing">
-                    @if (LocksState.IsTTLockLoading)
-                    {
-                        <div class="spinner spinner--small"></div>
-                    }
-                    else
-                    {
-                        @RetryButtonText
-                    }
-                </button>
-            </div>
-        </div>
-    </div>
-}
 
 @if (!string.IsNullOrEmpty(ErrorMessage))
 {

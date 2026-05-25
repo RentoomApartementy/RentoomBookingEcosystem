@@ -27,4 +27,7 @@
   <data name="ApartmentCodeTitle" xml:space="preserve">
     <value>Kod do apartamentu</value>
   </data>
+  <data name="InstructionsTitle" xml:space="preserve">
+    <value>Instrukcja zameldowania</value>
+  </data>
 </root>
