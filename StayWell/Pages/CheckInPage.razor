@@ -1,10 +1,15 @@
 @page "/reservation/{token}/CheckIn"
 @using RentoomBooking.StayWell.Components
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions
 @using Microsoft.Extensions.Localization
+@using Microsoft.JSInterop
 
 @inject IStringLocalizer<CheckInPage> Localizer
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
 
 @inherits Models.PageBase
+@implements IAsyncDisposable
 
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
@@ -12,9 +17,124 @@
     <PageInfo Title="@Localizer["PageTitle"]" Subtitle="@Localizer["PageSubtitle"]"></PageInfo>
 </div>
 
+<div class="checkin-roadmap">
+    @if (ApartmentState.IsLoading)
+    {
+        @for (int i = 0; i < 3; i++)
+        {
+            <div class="checkin-skeleton">
+                <div class="checkin-skeleton__badge"></div>
+                <div class="checkin-skeleton__body">
+                    <div class="checkin-skeleton__image"></div>
+                    <div class="checkin-skeleton__text">
+                        <div class="checkin-skeleton__title"></div>
+                        <div class="checkin-skeleton__line"></div>
+                        <div class="checkin-skeleton__line checkin-skeleton__line--short"></div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else if (Steps.Count == 0)
+    {
+        <div class="checkin-empty">
+            <img src="/icons/octagon-alert.svg" alt="" />
+            <p>@Localizer["NoSteps"]</p>
+        </div>
+    }
+    else
+    {
+        @for (int i = 0; i < Steps.Count; i++)
+        {
+            var step = Steps[i];
+            <CheckInStep Index="i"
+                         Title="@step.Name"
+                         Description="@step.Description"
+                         ImageUrl="@StepImageUrls[i]"
+                         IsLast="i == Steps.Count - 1"
+                         AllImageUrls="@StepImageUrls"
+                         AllDescriptions="@StepDescriptions" />
+        }
+    }
+</div>
+
 @code {
+    private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
+
+    private IReadOnlyList<ApartmentArrivalInstructionStepDTO> Steps =>
+        ApartmentState.ArrivalInstructionSteps ?? Array.Empty<ApartmentArrivalInstructionStepDTO>();
+
+    private string[] StepImageUrls => Steps.Select(s => NormalizeImageUrl(s.ImageUrl)).ToArray();
+    private string[] StepDescriptions => Steps.Select(s => s.Description ?? string.Empty).ToArray();
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        GlobalizationService.OnChange += OnLanguageChanged;
+        ApartmentState.OnChange += OnStateChanged;
+        OnLanguageChanged();
+    }
+
+    private void OnLanguageChanged() =>
+        InvokeAsync(async () =>
+        {
+            var apartmentItemId = ReservationState.CurrentReservation?.Reservation?.Items?.FirstOrDefault()?.objectItemId;
+            if (apartmentItemId is > 0)
+            {
+                await ApartmentState.GetArrivalInstructionStepsAsync(
+                    apartmentItemId.Value,
+                    GlobalizationService.CurrentCulture.Name);
+            }
+
+            StateHasChanged();
+        });
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("setupCheckInRoadmap");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void OnStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private string NormalizeImageUrl(string? imageUrl)
+    {
+        if (string.IsNullOrWhiteSpace(imageUrl))
+        {
+            return InstructionPlaceholderUrl;
+        }
+
+        var normalized = imageUrl.Trim().Replace("\\", "/");
+        if (Uri.TryCreate(normalized, UriKind.Absolute, out var absolute))
+        {
+            return absolute.ToString();
+        }
+
+        return Navigation.ToAbsoluteUri(normalized.TrimStart('/')).ToString();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("teardownCheckInRoadmap");
+        }
+        catch
+        {
+        }
+    }
+
+    public override void Dispose()
+    {
+        GlobalizationService.OnChange -= OnLanguageChanged;
+        ApartmentState.OnChange -= OnStateChanged;
+        base.Dispose();
     }
 }
