@@ -1,0 +1,52 @@
+@inject StayWell.Services.ModalService ModalService
+
+<div class="checkin-step" data-checkin-step="@Index">
+    <div class="checkin-step__rail">
+        <div class="checkin-step__badge">
+            <span class="checkin-step__badge-number">@(Index + 1)</span>
+            <img class="checkin-step__badge-check" src="/icons/circle-check.svg" alt="" aria-hidden="true" />
+        </div>
+        @if (!IsLast)
+        {
+            <div class="checkin-step__connector">
+                <div class="checkin-step__connector-fill"></div>
+            </div>
+        }
+    </div>
+
+    <div class="checkin-step__body">
+        <button type="button" class="checkin-step__image-wrap" @onclick="OpenFullscreen" aria-label="@Title">
+            <img class="checkin-step__image" src="@ImageUrl" alt="@Title" loading="lazy" />
+        </button>
+        <div class="checkin-step__text">
+            <h3 class="checkin-step__title">@Title</h3>
+            @if (!string.IsNullOrWhiteSpace(Description))
+            {
+                <p class="checkin-step__description">@Description</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public int Index { get; set; }
+    [Parameter, EditorRequired] public string Title { get; set; } = string.Empty;
+    [Parameter] public string? Description { get; set; }
+    [Parameter, EditorRequired] public string ImageUrl { get; set; } = string.Empty;
+    [Parameter] public bool IsLast { get; set; }
+    [Parameter] public string[] AllImageUrls { get; set; } = Array.Empty<string>();
+    [Parameter] public string[] AllDescriptions { get; set; } = Array.Empty<string>();
+
+    private void OpenFullscreen()
+    {
+        if (AllImageUrls.Length == 0) return;
+
+        ModalService.ShowModal("",
+            @<RentoomBooking.StayWell.Components.ModalContent.GalleryModalContent
+                ImageUrls="@AllImageUrls"
+                Descriptions="@AllDescriptions"
+                StartIndex="@Index"
+                ShowControls="@true" />,
+            true);
+    }
+}

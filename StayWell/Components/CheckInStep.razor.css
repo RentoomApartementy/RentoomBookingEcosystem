@@ -1,0 +1,149 @@
+.checkin-step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+    align-items: stretch;
+}
+
+.checkin-step__rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48px;
+}
+
+.checkin-step__badge {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #d1d5db;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: transform .25s ease, background-color .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease;
+    z-index: 1;
+}
+
+.checkin-step__badge-check {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    filter: brightness(0) invert(1);
+    transition: opacity .2s ease;
+}
+
+.checkin-step--active .checkin-step__badge {
+    transform: scale(1.12);
+    border-color: #16a34a;
+    color: #16a34a;
+    box-shadow: 0 0 0 6px rgba(22, 163, 74, 0.12);
+}
+
+.checkin-step--completed .checkin-step__badge {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #ffffff;
+}
+
+.checkin-step--completed .checkin-step__badge-number {
+    opacity: 0;
+}
+
+.checkin-step--completed .checkin-step__badge-check {
+    opacity: 1;
+}
+
+.checkin-step__connector {
+    flex: 1;
+    width: 3px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    min-height: 40px;
+}
+
+.checkin-step__connector-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--checkin-progress, 0%);
+    background: #16a34a;
+    transition: height .12s linear;
+}
+
+.checkin-step__body {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    padding: 0 0 24px 0;
+    align-items: flex-start;
+}
+
+.checkin-step__image-wrap {
+    flex: 0 0 45%;
+    max-width: 200px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.checkin-step__image-wrap:hover,
+.checkin-step__image-wrap:focus-visible {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    outline: none;
+}
+
+.checkin-step__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.checkin-step__text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.checkin-step__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    line-height: 1.3;
+}
+
+.checkin-step--active .checkin-step__title {
+    color: #16a34a;
+}
+
+.checkin-step__description {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #4b5563;
+    white-space: pre-line;
+}
