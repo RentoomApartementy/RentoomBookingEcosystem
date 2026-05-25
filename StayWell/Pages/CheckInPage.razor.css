@@ -1,5 +1,15 @@
-.page-info-wrapper {
-    padding: 0 16px;
+.checkin-access-codes {
+    padding: 16px 16px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.checkin-access-codes__title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111827;
 }
 
 .checkin-roadmap {

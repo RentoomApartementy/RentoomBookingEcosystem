@@ -12,16 +12,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PageTitle" xml:space="preserve">
-    <value>Check-in</value>
+  <data name="GateCode" xml:space="preserve">
+    <value>Kod do furtki</value>
   </data>
-  <data name="PageSubtitle" xml:space="preserve">
-    <value>Complete your check-in</value>
+  <data name="BuildingCode" xml:space="preserve">
+    <value>Kod do budynku</value>
   </data>
-  <data name="NoSteps" xml:space="preserve">
-    <value>Check-in steps are not available for this reservation.</value>
+  <data name="SharedDoorsCode" xml:space="preserve">
+    <value>Kod do drzwi wspólnych</value>
   </data>
-  <data name="AccessCodesTitle" xml:space="preserve">
-    <value>Access codes</value>
+  <data name="KeySafeCode" xml:space="preserve">
+    <value>Kod do schowka na klucz</value>
   </data>
 </root>
