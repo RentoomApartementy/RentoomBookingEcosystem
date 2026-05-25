@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="YourIndividualCode" xml:space="preserve"><value>Your apartment code</value></data>
+  <data name="Confirm" xml:space="preserve"><value>Confirm</value></data>
+  <data name="Or" xml:space="preserve"><value>or</value></data>
+  <data name="NoCode" xml:space="preserve"><value>No code for the lock. Contact staff!</value></data>
+  <data name="CodeNotAvailable" xml:space="preserve"><value>Your code will be available from {0} on the check-in day.</value></data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve"><value>Your reservation has ended. The access code is no longer available.</value></data>
+  <data name="GenerateNewCode" xml:space="preserve"><value>Generate new code</value></data>
+  <data name="NewCodeIn" xml:space="preserve"><value>New code in {0}</value></data>
+  <data name="GeneratingCode" xml:space="preserve"><value>Generating... {0}s</value></data>
+  <data name="CodeValidFromTo" xml:space="preserve"><value>Valid: {0} – {1}</value></data>
+  <data name="CodeValidFrom" xml:space="preserve"><value>Valid from: {0}</value></data>
+  <data name="CodeValidTo" xml:space="preserve"><value>Valid until: {0}</value></data>
+  <data name="PreviousCodes" xml:space="preserve"><value>Previous codes</value></data>
+  <data name="CodeFromIdo" xml:space="preserve"><value>Original code</value></data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve"><value>New access code generated successfully.</value></data>
+</root>

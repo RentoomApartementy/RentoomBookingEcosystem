@@ -21,7 +21,10 @@
   <data name="NoSteps" xml:space="preserve">
     <value>Kroki zameldowania nie są dostępne dla tej rezerwacji.</value>
   </data>
-  <data name="AccessCodesTitle" xml:space="preserve">
-    <value>Kody dostępu</value>
+  <data name="BuildingCodesTitle" xml:space="preserve">
+    <value>Kody do budynku</value>
+  </data>
+  <data name="ApartmentCodeTitle" xml:space="preserve">
+    <value>Kod do apartamentu</value>
   </data>
 </root>

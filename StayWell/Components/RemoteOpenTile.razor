@@ -1,0 +1,219 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.StayWell.States
+@using RentoomBooking.StayWell.Services
+@using System.Globalization
+
+@inject IStringLocalizer<RemoteOpenTile> Localizer
+@inject LocksState LocksState
+@inject ReservationState ReservationState
+@inject FeatureFlagsService FeatureFlagsService
+@inject BackendApi BackendApi
+
+@implements IDisposable
+
+@if (LocksState.IsLoading && !IsDevMockLock)
+{
+    <div class="tile tile--center">
+        <div class="skeleton skeleton--button"></div>
+        <div class="skeleton skeleton--text" style="margin-top: 15px;"></div>
+    </div>
+}
+else if (LocksState.IsTTLockLoading && !IsDevMockLock)
+{
+    <div class="tile tile--center">
+        <div class="tile__title" style="margin-bottom: 10px;">
+            @Localizer["RemoteOpen"]
+        </div>
+        <div class="spinner"></div>
+        <div class="status-text">
+            <span>@Localizer["CheckingLock"]</span>
+        </div>
+    </div>
+}
+else if (!ReservationState.IsActiveReservation && !IsDevMockLock)
+{
+    <div class="tile tile--center">
+        <div class="tile__title" style="margin-bottom: 10px;">
+            @Localizer["RemoteOpen"]
+        </div>
+        <div class="inactive-reservation-badge">
+            <img src="/icons/octagon-alert.svg" class="inactive-reservation-icon" />
+            @if (ReservationState.IsAfterCheckOut)
+            {
+                <span>@Localizer["ReservationEnded"]</span>
+            }
+            else
+            {
+                <span>@string.Format(CultureInfo.CurrentCulture, Localizer["ReservationNotActive"], ReservationState.CheckInTime.ToString("HH:mm"))</span>
+            }
+        </div>
+    </div>
+}
+else if (LocksState.IsTTLockAvailable || IsDevMockLock)
+{
+    <div class="tile tile--center">
+        <div class="tile__title" style="margin-bottom: 10px;">
+            @Localizer["RemoteOpen"]
+        </div>
+        <button class="open-button @(IsOpened ? "unlocked" : "locked") @(IsProcessing ? "loading" : "")"
+                @onclick="ToggleDoor"
+                disabled="@(IsButtonDisabled || IsProcessing)">
+            @if (IsProcessing)
+            {
+                <div class="spinner"></div>
+            }
+            else
+            {
+                <img class="lock" src="@(IsOpened ? "/icons/lock-open.svg" : "/icons/lock.svg")" />
+            }
+        </button>
+        <div class="status-text">
+            @if (IsProcessing)
+            {
+                <span>@Localizer["Processing"]...</span>
+            }
+            else if (IsOpened)
+            {
+                <span class="text-unlocked">@Localizer["DoorOpened"]</span>
+            }
+            else
+            {
+                <span class="text-locked">@Localizer["PressToOpen"]</span>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="tile">
+        <div class="tile__title">
+            @Localizer["RemoteOpen"]
+        </div>
+        <div class="tile__content">
+            @Localizer["RemoteUnavailable"]
+            <div style="margin-top: 12px;">
+                <button class="retry-button"
+                        disabled="@(LocksState.IsRetryDisabled || string.IsNullOrWhiteSpace(Token))"
+                        @onclick="RetryPing">
+                    @if (LocksState.IsTTLockLoading)
+                    {
+                        <div class="spinner spinner--small"></div>
+                    }
+                    else
+                    {
+                        @RetryButtonText
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="error-message">
+        @ErrorMessage
+    </div>
+}
+
+@code {
+    [Parameter] public string? Token { get; set; }
+
+    private bool IsOpened;
+    private bool IsProcessing;
+    private string? ErrorMessage;
+
+    private bool IsDevMockLock => FeatureFlagsService.FeatureAllowed("dev-mock-lock");
+
+    private bool IsButtonDisabled =>
+        !IsDevMockLock
+        && (
+            ReservationState?.CurrentReservation?.Reservation?.ReservationDetails == null
+            || DateTime.Now < ReservationState.CurrentReservation.Reservation.ReservationDetails.getDateFrom()
+        );
+
+    private string RetryButtonText =>
+        LocksState.IsRetryCountdownActive
+            ? string.Format(CultureInfo.CurrentCulture, Localizer["TryAgainIn"], LocksState.RetrySecondsRemaining)
+            : Localizer["TryAgain"];
+
+    protected override void OnInitialized()
+    {
+        LocksState.OnChange += OnStateChanged;
+        ReservationState.OnChange += OnStateChanged;
+    }
+
+    private void OnStateChanged() => InvokeAsync(StateHasChanged);
+
+    private async Task ToggleDoor()
+    {
+        if (IsButtonDisabled || IsProcessing) return;
+
+        if (IsDevMockLock)
+        {
+            IsProcessing = true;
+            ErrorMessage = null;
+            try
+            {
+                await Task.Delay(1000);
+                IsOpened = !IsOpened;
+            }
+            finally
+            {
+                IsProcessing = false;
+            }
+            return;
+        }
+
+        IsProcessing = true;
+        ErrorMessage = null;
+
+        try
+        {
+            if (!IsOpened)
+            {
+                var result = await BackendApi.OpenLockAsync(Token);
+                if (result is not null && result.IsSuccess)
+                {
+                    IsOpened = true;
+                }
+                else
+                {
+                    ErrorMessage = result?.Status ?? Localizer["ErrorOpening"];
+                }
+            }
+            else
+            {
+                var result = await BackendApi.CloseLockAsync(Token);
+                if (result is not null && result.IsSuccess)
+                {
+                    IsOpened = false;
+                }
+                else
+                {
+                    ErrorMessage = result?.Status ?? Localizer["ErrorClosing"];
+                }
+            }
+        }
+        catch
+        {
+            ErrorMessage = Localizer["ErrorServerConnection"];
+        }
+        finally
+        {
+            IsProcessing = false;
+        }
+    }
+
+    private async Task RetryPing()
+    {
+        if (string.IsNullOrWhiteSpace(Token)) return;
+        await LocksState.RetryCheckTTLockStatusAsync(Token);
+    }
+
+    public void Dispose()
+    {
+        LocksState.OnChange -= OnStateChanged;
+        ReservationState.OnChange -= OnStateChanged;
+    }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="YourIndividualCode" xml:space="preserve"><value>Twój kod do apartamentu</value></data>
+  <data name="Confirm" xml:space="preserve"><value>Potwierdź</value></data>
+  <data name="Or" xml:space="preserve"><value>lub</value></data>
+  <data name="NoCode" xml:space="preserve"><value>Brak kodu do zamka. Skontaktuj się z obsługą!</value></data>
+  <data name="CodeNotAvailable" xml:space="preserve"><value>Twój kod będzie dostępny od {0} w dniu zameldowania.</value></data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve"><value>Twoja rezerwacja się zakończyła. Kod dostępu nie jest już dostępny.</value></data>
+  <data name="GenerateNewCode" xml:space="preserve"><value>Wygeneruj nowy kod</value></data>
+  <data name="NewCodeIn" xml:space="preserve"><value>Nowy kod za {0}</value></data>
+  <data name="GeneratingCode" xml:space="preserve"><value>Generowanie... {0}s</value></data>
+  <data name="CodeValidFromTo" xml:space="preserve"><value>Ważny: {0} – {1}</value></data>
+  <data name="CodeValidFrom" xml:space="preserve"><value>Ważny od: {0}</value></data>
+  <data name="CodeValidTo" xml:space="preserve"><value>Ważny do: {0}</value></data>
+  <data name="PreviousCodes" xml:space="preserve"><value>Poprzednie kody</value></data>
+  <data name="CodeFromIdo" xml:space="preserve"><value>Pierwotny kod</value></data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve"><value>Nowy kod dostępu został wygenerowany pomyślnie.</value></data>
+</root>

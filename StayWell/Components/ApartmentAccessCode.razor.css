@@ -1,0 +1,251 @@
+@keyframes shimmer {
+    0% { background-position: -700px 0; }
+    100% { background-position: 700px 0; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 700px 100%;
+    animation: shimmer 1.4s infinite linear;
+    border-radius: 8px;
+}
+
+.skeleton--text-short {
+    height: 1em;
+    width: 35%;
+    margin: 6px auto;
+}
+
+.skeleton--code {
+    height: 1.5em;
+    width: 50%;
+    margin: 10px auto;
+}
+
+.tile {
+    width: 100%;
+    max-width: 350px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+
+.tile__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+}
+
+.tile__content {
+    padding-top: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.icon-key {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    opacity: 0.7;
+}
+
+.icon-inline {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    opacity: 0.7;
+}
+
+.passcode-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 1.2rem;
+}
+
+.passcode-validity {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: #6b9b7e;
+    font-weight: 500;
+}
+
+.passcode-validity--center {
+    justify-content: center;
+}
+
+.passcode-validity__icon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.7;
+    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
+    flex-shrink: 0;
+}
+
+.retry-button {
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: none;
+    background-color: var(--rentoom-green-dark);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    min-width: 200px;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: normal;
+    font-variant-numeric: tabular-nums;
+    word-break: break-word;
+    text-align: center;
+}
+
+.retry-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.retry-button__icon {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
+}
+
+.spinner--small {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-left-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.passcode-history-tile {
+    padding: 0;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.passcode-history__toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #333;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s ease;
+    border-radius: 15px;
+}
+
+.passcode-history__toggle:active { background: #f0f5f2; }
+
+.passcode-history__toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.passcode-history__left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.passcode-history__chevron {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.25s ease;
+    opacity: 1;
+    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
+    flex-shrink: 0;
+}
+
+.passcode-history__chevron--open { transform: rotate(180deg); }
+
+.passcode-history__list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #e8f0ec;
+}
+
+.passcode-history__validity {
+    font-size: 0.72rem;
+    color: #6b9b7e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.passcode-history__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.passcode-history__item:last-child { border-bottom: none; }
+.passcode-history__item--ido { background: #f8fbf9; }
+
+.passcode-history__code {
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    color: #111;
+}
+
+.passcode-history__meta {
+    font-size: 0.78rem;
+    color: #888;
+    text-align: right;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 1px 5px;
+    border-radius: 5px;
+}
+
+.passcode-history__confirm-hint {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    color: #888;
+    white-space: nowrap;
+    margin-right: auto;
+}
+
+.passcode-history__key-icon {
+    width: 12px;
+    height: 12px;
+    opacity: 0.5;
+    vertical-align: middle;
+}
