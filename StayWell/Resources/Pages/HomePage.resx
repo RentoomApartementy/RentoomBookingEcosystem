@@ -132,6 +132,9 @@
   <data name="CheckIn" xml:space="preserve">
     <value>Check-in</value>
   </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Check in</value>
+  </data>
   <data name="CheckOut" xml:space="preserve">
     <value>Check-out</value>
   </data>
