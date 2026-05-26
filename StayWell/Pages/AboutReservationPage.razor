@@ -185,18 +185,9 @@
                                 <img class="reservation-field__icon" src="/icons/bed-double.svg" />
                                 @Localizer["ApartmentAmenities"]:
                             </span>
-                            <button class="reservation-field__action" @onclick="ShowAmenities">
-                                @(showAmenities? Localizer["HideAmenitiesButton"] : Localizer["ShowAmenitiesButton"])
+                            <button class="reservation-field__action" @onclick="ShowAmenitiesModal">
+                                @Localizer["ShowAmenitiesButton"]
                             </button>
-                            @if (showAmenities)
-                            {
-                                <ul class="reservation-field__list">
-                                    @foreach (var amenity in AmenitiesState.CurrentAmenities)
-                                    {
-                                        <li class="reservation-field__list-item">@amenity.Name</li>
-                                    }
-                                </ul>
-                            }
                         </div>
                     }
                 }
@@ -306,7 +297,6 @@
 </div>
 
 @code {
-    private bool showAmenities = false;
 
     private Dictionary<int, bool> _overrides = [];
     private CustomerAgreedTermDto? _pendingCancelTerm;
@@ -385,9 +375,21 @@
         );
     }
 
-    private void ShowAmenities()
+    private void ShowAmenitiesModal()
     {
-        showAmenities = !showAmenities;
+        var amenities = AmenitiesState.CurrentAmenities!;
+        ModalService.ShowModal(
+            Localizer["ApartmentAmenities"],
+            @<div class="amenities-modal">
+                @foreach (var amenity in amenities)
+                {
+                    <div class="amenity-pill">
+                        <img src="/icons/check.svg" class="amenity-pill__icon" alt="" aria-hidden="true" />
+                        <span class="amenity-pill__name">@amenity.Name</span>
+                    </div>
+                }
+            </div>
+        );
     }
 
     private void OnTermToggled(CustomerAgreedTermDto term, bool newValue)
