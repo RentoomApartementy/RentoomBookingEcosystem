@@ -51,7 +51,7 @@
 }
 
 .right-wrapper {
-    width: 70px;
+    width: auto;
     height: 100%;
     display: flex;
     align-items: center;
@@ -91,10 +91,38 @@
 
 .Languages {
     display: flex;
-    width: 30px;
-    height: 30px;
     align-items: center;
-    justify-content: center
+    justify-content: center;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    padding: 4px 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.lang-btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.lang-btn img {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.lang-code {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #444;
+    letter-spacing: 0.04em;
+    line-height: 1;
 }
 
 .chat-badge {
