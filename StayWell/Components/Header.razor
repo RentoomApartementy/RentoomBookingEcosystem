@@ -25,8 +25,9 @@
     <div class="right-wrapper">
 
         <div class="Languages">
-            <button @onclick="@ChangeLangButton" style="background: none; border: none">
+            <button class="lang-btn" @onclick="@ChangeLangButton">
                 <img src="/icons/languages.svg" />
+                <span class="lang-code">@GlobalizationService.CurrentCulture.TwoLetterISOLanguageName.ToUpper()</span>
             </button>
         </div>
 
