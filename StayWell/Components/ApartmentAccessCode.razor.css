@@ -31,7 +31,7 @@
     max-width: 350px;
     box-sizing: border-box;
     border-radius: 15px;
-    padding: 20px;
+    padding: 24px 24px 20px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -46,17 +46,17 @@
 }
 
 .tile__content {
-    padding-top: 15px;
+    padding-top: 18px;
     text-align: center;
     font-size: 1.2rem;
     color: #333;
 }
 
 .icon-key {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     vertical-align: middle;
-    opacity: 0.7;
+    opacity: 0.55;
 }
 
 .icon-inline {
@@ -66,101 +66,191 @@
     opacity: 0.7;
 }
 
-.passcode-main {
+.passcode-display {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     gap: 6px;
-    flex-wrap: wrap;
-    font-size: 1.2rem;
 }
 
-.passcode-validity {
+.passcode-digits {
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: var(--rentoom-green-dark);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.passcode-confirm-row {
     display: flex;
     align-items: center;
-    gap: 5px;
-    margin-top: 8px;
-    font-size: 0.8rem;
-    color: #6b9b7e;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #9ca3af;
     font-weight: 500;
 }
 
-.passcode-validity--center {
-    justify-content: center;
+.passcode-hash {
+    font-weight: 800;
+    color: #374151;
+    font-size: 1rem;
 }
 
-.passcode-validity__icon {
-    width: 14px;
-    height: 14px;
-    opacity: 0.7;
-    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
+.passcode-separator {
+    color: #d1d5db;
+}
+
+/* Deadline pill — prominently styled under the code */
+.passcode-deadline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    padding: 5px 12px;
+    background: rgba(33, 87, 62, 0.08);
+    border: 1px solid rgba(33, 87, 62, 0.18);
+    border-radius: 20px;
+    font-size: 0.78rem;
+    color: var(--rentoom-green-dark);
+    font-weight: 600;
+}
+
+.passcode-deadline__icon {
+    width: 13px;
+    height: 13px;
+    opacity: 0.8;
+    filter: invert(23%) sepia(25%) saturate(1200%) hue-rotate(105deg) brightness(88%) contrast(90%);
     flex-shrink: 0;
 }
 
-.retry-button {
-    padding: 10px 16px;
-    border-radius: 12px;
-    border: none;
-    background-color: var(--rentoom-green-dark);
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-    min-width: 200px;
-    min-height: 42px;
-    display: inline-flex;
+.passcode-no-code {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    color: #6b7280;
+}
+
+.passcode-no-code img {
+    height: 44px;
+    width: 44px;
+    opacity: 0.6;
+}
+
+.passcode-no-code p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Footer row: refresh button + history link side by side */
+.passcode-footer {
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    white-space: normal;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.retry-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--rentoom-green-dark);
+    background: transparent;
+    color: var(--rentoom-green-dark);
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+    min-height: 36px;
     font-variant-numeric: tabular-nums;
-    word-break: break-word;
-    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.retry-button:not(:disabled):hover,
+.retry-button:not(:disabled):focus-visible {
+    background: var(--rentoom-green-dark);
+    color: #fff;
+    outline: none;
+}
+
+.retry-button:not(:disabled):hover .retry-button__icon,
+.retry-button:not(:disabled):focus-visible .retry-button__icon {
+    filter: brightness(0) invert(1);
 }
 
 .retry-button:disabled {
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
 }
 
 .retry-button__icon {
-    width: 16px;
-    height: 16px;
-    filter: brightness(0) invert(1);
+    width: 14px;
+    height: 14px;
     flex-shrink: 0;
+    filter: invert(23%) sepia(25%) saturate(1200%) hue-rotate(105deg) brightness(88%) contrast(90%);
+    transition: filter 0.18s ease;
+}
+
+.retry-button__label {
+    white-space: nowrap;
 }
 
 .spinner--small {
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-left-color: #fff;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(33, 87, 62, 0.25);
+    border-left-color: var(--rentoom-green-dark);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.9s linear infinite;
+    flex-shrink: 0;
+}
+
+.retry-button:not(:disabled):hover .spinner--small,
+.retry-button:not(:disabled):focus-visible .spinner--small {
+    border-color: rgba(255,255,255,0.3);
+    border-left-color: #fff;
 }
 
 .passcode-history__link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 10px;
-    padding: 4px 8px;
+    gap: 4px;
+    padding: 4px 2px;
     background: transparent;
     border: none;
+    border-bottom: 1px dashed #d1d5db;
+    border-radius: 0;
     cursor: pointer;
-    font-size: 0.8rem;
-    color: #6b9b7e;
-    text-decoration: underline;
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: #9ca3af;
+    text-decoration: none;
     -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.15s ease, color 0.15s ease;
 }
 
-.passcode-history__link:hover {
+.passcode-history__link:hover,
+.passcode-history__link:focus-visible {
+    border-bottom-color: var(--rentoom-green-dark);
     color: var(--rentoom-green-dark);
+    outline: none;
+}
+
+.passcode-history__link:hover .passcode-history__link-icon,
+.passcode-history__link:focus-visible .passcode-history__link-icon {
+    opacity: 0.9;
 }
 
 .passcode-history__link-icon {
-    width: 14px;
-    height: 14px;
-    opacity: 0.7;
-    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
+    width: 12px;
+    height: 12px;
+    opacity: 0.45;
+    filter: invert(43%) sepia(8%) saturate(600%) hue-rotate(179deg) brightness(95%) contrast(88%);
+    transition: opacity 0.15s ease;
 }

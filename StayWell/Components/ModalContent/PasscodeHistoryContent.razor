@@ -15,12 +15,12 @@
                     @Localizer["Or"]
                     <img src="/icons/key-round.svg" class="passcode-history-modal__key-icon" />
                 </span>
-                @if (!c.IsIdo && (c.ValidFrom is not null || c.ValidTo is not null))
+                @*@if (!c.IsIdo && (c.ValidFrom is not null || c.ValidTo is not null))
                 {
                     <span class="passcode-history-modal__validity">
                         @FormatValidity(c.ValidFrom, c.ValidTo)
                     </span>
-                }
+                }*@
             </div>
             @if (c.IsIdo)
             {

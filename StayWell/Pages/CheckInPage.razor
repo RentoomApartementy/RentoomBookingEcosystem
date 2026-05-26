@@ -16,59 +16,51 @@
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <section class="checkin-section">
-    <h3 class="checkin-section__title">@Localizer["BuildingCodesTitle"]</h3>
-    <AccessCodesList />
-</section>
-
-<section class="checkin-section">
     <h3 class="checkin-section__title">@Localizer["ApartmentCodeTitle"]</h3>
     <ApartmentAccessCode Token="@Token" />
     <RemoteOpenTile Token="@Token" />
 </section>
 
 <section class="checkin-section">
+    <h3 class="checkin-section__title">@Localizer["BuildingCodesTitle"]</h3>
+    <AccessCodesList />
+</section>
+
+<section class="checkin-section">
     <h3 class="checkin-section__title">@Localizer["InstructionsTitle"]</h3>
-    <div class="tile checkin-roadmap-tile">
-        <div class="checkin-roadmap">
-            @if (ApartmentState.IsLoading)
+    <div class="checkin-roadmap-scroll">
+        @if (ApartmentState.IsLoading)
+        {
+            @for (int i = 0; i < 3; i++)
             {
-                @for (int i = 0; i < 3; i++)
-                {
-                    <div class="checkin-skeleton">
-                        <div class="checkin-skeleton__badge"></div>
-                        <div class="checkin-skeleton__body">
-                            <div class="checkin-skeleton__image"></div>
-                            <div class="checkin-skeleton__text">
-                                <div class="checkin-skeleton__title"></div>
-                                <div class="checkin-skeleton__line"></div>
-                                <div class="checkin-skeleton__line checkin-skeleton__line--short"></div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            else if (Steps.Count == 0)
-            {
-                <div class="checkin-empty">
-                    <img src="/icons/octagon-alert.svg" alt="" />
-                    <p>@Localizer["NoSteps"]</p>
+                <div class="checkin-skeleton-card">
+                    <div class="checkin-skeleton-card__image"></div>
+                    <div class="checkin-skeleton-card__title"></div>
+                    <div class="checkin-skeleton-card__line"></div>
                 </div>
             }
-            else
+        }
+        else if (Steps.Count == 0)
+        {
+            <div class="checkin-empty">
+                <img src="/icons/octagon-alert.svg" alt="" aria-hidden="true" />
+                <p>@Localizer["NoSteps"]</p>
+            </div>
+        }
+        else
+        {
+            @for (int i = 0; i < Steps.Count; i++)
             {
-                @for (int i = 0; i < Steps.Count; i++)
-                {
-                    var step = Steps[i];
-                    <CheckInStep Index="i"
-                                 Title="@step.Name"
-                                 Description="@step.Description"
-                                 ImageUrl="@StepImageUrls[i]"
-                                 IsLast="i == Steps.Count - 1"
-                                 AllImageUrls="@StepImageUrls"
-                                 AllDescriptions="@StepDescriptions" />
-                }
+                var step = Steps[i];
+                <CheckInStep Index="i"
+                             Title="@step.Name"
+                             Description="@step.Description"
+                             ImageUrl="@StepImageUrls[i]"
+                             IsLast="i == Steps.Count - 1"
+                             AllImageUrls="@StepImageUrls"
+                             AllDescriptions="@StepDescriptions" />
             }
-        </div>
+        }
     </div>
 </section>
 

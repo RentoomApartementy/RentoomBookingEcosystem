@@ -14,7 +14,7 @@
 
 <div class="tile">
     <div class="tile__title">
-        <img src="/icons/binary.svg" class="icon-inline" />
+        <img src="/icons/binary.svg" class="icon-inline" alt="" aria-hidden="true" />
         @Localizer["YourIndividualCode"]:
     </div>
     <div class="tile__content">
@@ -38,66 +38,77 @@
         {
             @if (LocksState.CurrentCode is not null && LocksState.CurrentCode.IsTTLock)
             {
-                <div class="passcode-main">
-                    <span class="bold">@LocksState.CurrentCode.Code</span>
-                    <span>@Localizer["Confirm"]</span>
-                    <span class="bold">#</span>
-                    <span>@Localizer["Or"]</span>
-                    <img src="/icons/key-round.svg" class="icon-key" />
-                </div>
-                <div class="passcode-validity passcode-validity--center ">
-                    <img src="/icons/clock.svg" class="passcode-validity__icon" />
-                    <span>@FormatPasscodeValidity(LocksState.CurrentCode.ValidFrom, LocksState.CurrentCode.ValidTo)</span>
+                var validityText = FormatPasscodeValidity(LocksState.CurrentCode.ValidFrom, LocksState.CurrentCode.ValidTo);
+
+                <div class="passcode-display">
+                    <div class="passcode-digits">@LocksState.CurrentCode.Code</div>
+                    <div class="passcode-confirm-row">
+                        <span class="passcode-confirm-text">@Localizer["Confirm"]</span>
+                        <span class="passcode-hash">#</span>
+                        <span class="passcode-separator">·</span>
+                        <img src="/icons/key-round.svg" class="icon-key" alt="" aria-hidden="true" />
+                    </div>
+                    @*@if (!string.IsNullOrEmpty(validityText))
+                    {
+                        <div class="passcode-deadline">
+                            <img src="/icons/clock.svg" class="passcode-deadline__icon" alt="" aria-hidden="true" />
+                            <span>@validityText</span>
+                        </div>
+                    }*@
                 </div>
             }
             else if (LocksState.CurrentCode is not null && LocksState.CurrentCode.IsIdo)
             {
-                <span class="bold">@LocksState.CurrentCode.Code</span>
-                <span>@Localizer["Confirm"]</span>
-                <span class="bold">#</span>
-                <span>@Localizer["Or"]</span>
-                <img src="/icons/key-round.svg" class="icon-key" />
+                <div class="passcode-display">
+                    <div class="passcode-digits">@LocksState.CurrentCode.Code</div>
+                    <div class="passcode-confirm-row">
+                        <span class="passcode-confirm-text">@Localizer["Confirm"]</span>
+                        <span class="passcode-hash">#</span>
+                        <span class="passcode-separator">·</span>
+                        <img src="/icons/key-round.svg" class="icon-key" alt="" aria-hidden="true" />
+                    </div>
+                </div>
             }
             else
             {
-                <div>
-                    <img style="height: 50px; width: 50px;" src="/icons/octagon-alert.svg" />
-                    <p style="padding-top: 10px;">
-                        @Localizer["NoCode"]
-                    </p>
+                <div class="passcode-no-code">
+                    <img src="/icons/octagon-alert.svg" alt="" aria-hidden="true" />
+                    <p>@Localizer["NoCode"]</p>
                 </div>
             }
 
             @if (ReservationState.IsActiveReservation || IsDevMockLock)
             {
-                <div style="margin-top: 14px;">
+                <div class="passcode-footer">
                     <button class="retry-button"
                             disabled="@(!IsGenerateButtonEnabled)"
-                            @onclick="HandleGeneratePasscode">
+                            @onclick="HandleGeneratePasscode"
+                            title="@Localizer["GenerateNewCode"]">
                         @if (LocksState.IsPasscodeLoading)
                         {
                             <div class="spinner spinner--small"></div>
-                            <span>@string.Format(CultureInfo.CurrentCulture, Localizer["GeneratingCode"], LocksState.PasscodeLoadingElapsedSeconds)</span>
+                            <span class="retry-button__label">@string.Format(CultureInfo.CurrentCulture, Localizer["GeneratingCode"], LocksState.PasscodeLoadingElapsedSeconds)</span>
                         }
                         else if (LocksState.LiveCooldownSecondsRemaining > 0)
                         {
-                            <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" />
-                            @string.Format(CultureInfo.CurrentCulture, Localizer["NewCodeIn"], FormatCooldown(LocksState.LiveCooldownSecondsRemaining))
+                            <img src="/icons/alarm-clock-check.svg" class="retry-button__icon" alt="" aria-hidden="true" />
+                            <span class="retry-button__label">@FormatCooldown(LocksState.LiveCooldownSecondsRemaining)</span>
                         }
                         else
                         {
-                            @Localizer["GenerateNewCode"]
+                            <img src="/icons/refresh-ccw.svg" class="retry-button__icon" alt="" aria-hidden="true" />
+                            <span class="retry-button__label">@Localizer["GenerateNewCode"]</span>
                         }
                     </button>
-                </div>
 
-                @if (LocksState.AllCodes.Count > 1)
-                {
-                    <button type="button" class="passcode-history__link" @onclick="OpenPasscodeHistoryModal">
-                        <img src="/icons/clock.svg" class="passcode-history__link-icon" />
-                        <span>@Localizer["PreviousCodes"]</span>
-                    </button>
-                }
+                    @if (LocksState.AllCodes.Count > 1)
+                    {
+                        <button type="button" class="passcode-history__link" @onclick="OpenPasscodeHistoryModal">
+                            <img src="/icons/clock.svg" class="passcode-history__link-icon" alt="" aria-hidden="true" />
+                            <span>@Localizer["PreviousCodes"]</span>
+                        </button>
+                    }
+                </div>
             }
         }
     </div>
