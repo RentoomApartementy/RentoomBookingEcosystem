@@ -237,7 +237,21 @@
     <value>Błąd</value>
   </data>
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
-    <value />
     <value>Tryb deweloperski</value>
+  </data>
+  <data name="AiSearchPlaceholder" xml:space="preserve">
+    <value>Gdzie i kiedy chcesz odpocząć? Np. weekend w Toruniu dla 2 osób</value>
+  </data>
+  <data name="ToggleAiMode" xml:space="preserve">
+    <value>Przełącz na asystenta AI</value>
+  </data>
+  <data name="AskAi" xml:space="preserve">
+    <value>Zapytaj AI</value>
+  </data>
+  <data name="AiAssistant_Title" xml:space="preserve">
+    <value>Asystent Rentoom AI</value>
+  </data>
+  <data name="AiAssistant_ResultsFound" xml:space="preserve">
+    <value>Znalazłem dla Ciebie te propozycje:</value>
   </data>
 </root>

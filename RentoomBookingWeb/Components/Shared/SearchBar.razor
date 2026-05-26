@@ -10,119 +10,164 @@
 @inject GoogleAnalyticsService GoogleAnalytics
 
 <div class="@GetClass()">
-    <div class="modern-search-bar">
+    <div class="modern-search-bar @(_isAiMode ? "ai-mode-active" : "")">
         
-        <div class="search-item date-item @(_dateError ? "validation-error" : "")">
-            <DateRangePicker 
-                AutoApply="true"
-                Culture="@CultureInfo.CurrentCulture"
-                MinDate="DateTimeOffset.Now.Date" 
-                StartDate="_pickerStartDate"
-                EndDate="_pickerEndDate"
-                OnRangeSelect="OnRangeSelected"
-                class="full-width-picker">
-                <PickerTemplate>
-                    <div id="@context.Id" @onclick="context.Toggle" class="item-content full-trigger">
-                        <svg class="item-icon @(_dateError ? "error-icon" : "dark-icon")" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M16 2V6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8 2V6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M3 10H21" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        
-                        <div class="item-texts">
-                            <span class="item-label">@Localizer["Dates", "TERMIN"]</span>
-                            @if (context.TStartDate == null || context.TEndDate == null)
+        @if (!_isAiMode)
+        {
+            <div class="search-item date-item @(_dateError ? "validation-error" : "")">
+                <DateRangePicker 
+                    AutoApply="true"
+                    Culture="@CultureInfo.CurrentCulture"
+                    MinDate="DateTimeOffset.Now.Date" 
+                    StartDate="_pickerStartDate"
+                    EndDate="_pickerEndDate"
+                    OnRangeSelect="OnRangeSelected"
+                    class="full-width-picker">
+                    <PickerTemplate>
+                        <div id="@context.Id" @onclick="context.Toggle" class="item-content full-trigger">
+                            <svg class="item-icon @(_dateError ? "error-icon" : "dark-icon")" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 2V6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 2V6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 10H21" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            
+                            <div class="item-texts">
+                                <span class="item-label">@Localizer["Dates", "TERMIN"]</span>
+                                @if (context.TStartDate == null || context.TEndDate == null)
+                                {
+                                    <span class="empty-text @(_dateError ? "error-text" : "")">@Localizer["ClickToSelectDate", "Kliknij, aby wybrać datę"]</span>
+                                }
+                                else
+                                {
+                                    <span class="item-value">
+                                        @(context.TStartDate?.ToString("dd MMM")) — @(context.TEndDate?.ToString("dd MMM"))
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </PickerTemplate>
+                </DateRangePicker>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="search-item guest-item @(_guestError ? "validation-error" : "")" @onclick="ToggleGuestModal">
+                <div class="item-content full-trigger">
+                    <svg class="item-icon @(_guestError ? "error-icon" : "dark-icon")" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 20C17 18.3431 14.7614 17 12 17C9.23858 17 7 18.3431 7 20" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 13C14.2091 13 16 11.2091 16 9C16 6.79086 14.2091 5 12 5C9.79086 5 8 6.79086 8 9C8 11.2091 9.79086 13 12 13Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 21C21 19.8665 19.8396 18.8837 17.9542 18.2366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18.5 12.3524C19.9877 11.8344 21 10.5361 21 9C21 7.067 19.433 5.5 17.5 5.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+
+                    <div class="item-texts">
+                        <span class="item-label">@Localizer["Guests", "GOŚCIE"]</span>
+                        <span class="item-value">
+                            @if (CountPersons > 0)
                             {
-                                <span class="empty-text @(_dateError ? "error-text" : "")">@Localizer["ClickToSelectDate", "Kliknij, aby wybrać datę"]</span>
+                                <span>@GetGuestsText()</span>
                             }
                             else
                             {
-                                <span class="item-value">
-                                    @(context.TStartDate?.ToString("dd MMM")) — @(context.TEndDate?.ToString("dd MMM"))
-                                </span>
+                                <span class="empty-text @(_guestError ? "error-text" : "")">@Localizer["NumberOfPeople", "Liczba osób"]</span>
                             }
+                        </span>
+                    </div>
+                </div>
+
+                @if (_isGuestModalOpen)
+                {
+                    <div class="guest-modal" @onclick:stopPropagation="true">
+                        <div class="stepper-row">
+                            <div class="stepper-label">
+                                <span class="stepper-title">@Localizer["Adults", "Dorośli"]</span>
+                            </div>
+                            <div class="stepper-controls">
+                                <button type="button" class="stepper-btn" @onclick="DecrementAdults" disabled="@(GetAdultsCount() <= 1)">
+                                    <svg class="stepper-icon" width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1H12" stroke-width="1.5"/></svg>
+                                </button>
+                                <span class="stepper-value">@GetAdultsCount()</span>
+                                <button type="button" class="stepper-btn" @onclick="IncrementAdults">
+                                    <svg class="stepper-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0V12M0 6H12" stroke-width="1.5"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <hr class="stepper-divider" />
+
+                        <div class="stepper-row">
+                            <div class="stepper-label">
+                                <span class="stepper-title">@Localizer["ChildrenUnder2", "Dzieci (do lat 2)"]</span>
+                            </div>
+                            <div class="stepper-controls">
+                                <button type="button" class="stepper-btn" @onclick="DecrementChildren" disabled="@(GetChildrenCount() <= 0)">
+                                    <svg class="stepper-icon" width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1H12" stroke-width="1.5"/></svg>
+                                </button>
+                                <span class="stepper-value">@GetChildrenCount()</span>
+                                <button type="button" class="stepper-btn" @onclick="IncrementChildren">
+                                    <svg class="stepper-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0V12M0 6H12" stroke-width="1.5"/></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </PickerTemplate>
-            </DateRangePicker>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="search-item guest-item @(_guestError ? "validation-error" : "")" @onclick="ToggleGuestModal">
-            <div class="item-content full-trigger">
-                <svg class="item-icon @(_guestError ? "error-icon" : "dark-icon")" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17 20C17 18.3431 14.7614 17 12 17C9.23858 17 7 18.3431 7 20" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 13C14.2091 13 16 11.2091 16 9C16 6.79086 14.2091 5 12 5C9.79086 5 8 6.79086 8 9C8 11.2091 9.79086 13 12 13Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M21 21C21 19.8665 19.8396 18.8837 17.9542 18.2366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M18.5 12.3524C19.9877 11.8344 21 10.5361 21 9C21 7.067 19.433 5.5 17.5 5.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-
-                <div class="item-texts">
-                    <span class="item-label">@Localizer["Guests", "GOŚCIE"]</span>
-                    <span class="item-value">
-                        @if (CountPersons > 0)
-                        {
-                            <span>@GetGuestsText()</span>
-                        }
-                        else
-                        {
-                            <span class="empty-text @(_guestError ? "error-text" : "")">@Localizer["NumberOfPeople", "Liczba osób"]</span>
-                        }
-                    </span>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="search-item ai-input-item">
+                <div class="item-content">
+                    <svg class="item-icon ai-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 11.5C21 16.7467 16.7467 21 11.5 21C6.25329 21 2 16.7467 2 11.5C2 6.25329 6.25329 2 11.5 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 22L20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M15 7L13 9M13 9L11 11M13 9L15 11M13 9L11 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <input type="text" 
+                           class="ai-search-input" 
+                           placeholder="@Localizer["AiSearchPlaceholder"]"
+                           @bind="_aiQuery"
+                           @onkeyup="HandleAiKeyUp" />
                 </div>
             </div>
+        }
 
-            @if (_isGuestModalOpen)
-            {
-                <div class="guest-modal" @onclick:stopPropagation="true">
-                    <div class="stepper-row">
-                        <div class="stepper-label">
-                            <span class="stepper-title">@Localizer["Adults", "Dorośli"]</span>
-                        </div>
-                        <div class="stepper-controls">
-                            <button type="button" class="stepper-btn" @onclick="DecrementAdults" disabled="@(GetAdultsCount() <= 1)">
-                                <svg class="stepper-icon" width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1H12" stroke-width="1.5"/></svg>
-                            </button>
-                            <span class="stepper-value">@GetAdultsCount()</span>
-                            <button type="button" class="stepper-btn" @onclick="IncrementAdults">
-                                <svg class="stepper-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0V12M0 6H12" stroke-width="1.5"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <hr class="stepper-divider" />
-
-                    <div class="stepper-row">
-                        <div class="stepper-label">
-                            <span class="stepper-title">@Localizer["ChildrenUnder2", "Dzieci (do lat 2)"]</span>
-                        </div>
-                        <div class="stepper-controls">
-                            <button type="button" class="stepper-btn" @onclick="DecrementChildren" disabled="@(GetChildrenCount() <= 0)">
-                                <svg class="stepper-icon" width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1H12" stroke-width="1.5"/></svg>
-                            </button>
-                            <span class="stepper-value">@GetChildrenCount()</span>
-                            <button type="button" class="stepper-btn" @onclick="IncrementChildren">
-                                <svg class="stepper-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0V12M0 6H12" stroke-width="1.5"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-
-        <Button Class="search-btn" IsBusy="@_isSearching" OnClick="Search">
-            <span style="display: flex; align-items: center; justify-content: center; gap: 3px;">
-                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M21 21L16.65 16.65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        @if (IsAiEnabled)
+        {
+            <div class="ai-toggle-btn @(_isAiMode ? "active" : "")" @onclick="ToggleAiMode" title="@Localizer["ToggleAiMode"]">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span class="search-btn-text">@Localizer["Search", "Szukaj"]</span>
+            </div>
+        }
+
+        <Button Class="search-btn" IsBusy="@(_isSearching || _isAiSearching)" OnClick="HandleMainAction">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 3px;">
+                @if (!_isAiMode)
+                {
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 21L16.65 16.65" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="search-btn-text">@Localizer["Search", "Szukaj"]</span>
+                }
+                else
+                {
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="search-btn-text">@Localizer["AskAi"]</span>
+                }
             </span>
         </Button>
 
     </div>
+
+    <AiResponseBox 
+        IsVisible="_showAiResponse" 
+        IsLoading="_isAiSearching" 
+        ResponseText="_aiResponseText" 
+        OnClose="CloseAiResponse" />
 </div>
 
 @if (_isGuestModalOpen)
@@ -149,10 +194,57 @@
         transition: all 0.3s ease;
         border-bottom: 2px solid transparent;
     }
+
+    .ai-mode-active {
+        border: 1px solid #4A90E2 !important;
+        box-shadow: 0 0 15px rgba(74, 144, 226, 0.15);
+    }
+
+    .ai-input-item {
+        flex: 1;
+        border: none !important;
+    }
+
+    .ai-search-input {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 1rem;
+        padding: 8px 12px;
+        color: #333;
+    }
+
+    .ai-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        cursor: pointer;
+        color: #888;
+        transition: all 0.3s;
+        border-radius: 12px;
+        margin: 0 8px;
+    }
+
+    .ai-toggle-btn:hover {
+        background: #f0f7ff;
+        color: #4A90E2;
+    }
+
+    .ai-toggle-btn.active {
+        color: #4A90E2;
+        background: #f0f7ff;
+    }
+
+    .ai-icon {
+        color: #4A90E2;
+    }
 </style>
 
 @code {
     [Parameter] public bool IsSticky { get; set; } = false;
+    [Parameter] public bool IsAiEnabled { get; set; } = true;
     
     [Parameter] public string StartDate { get; set; } = "";
     [Parameter] public string EndDate { get; set; } = "";
@@ -182,6 +274,13 @@
     private bool _dateError = false;
     private bool _guestError = false;
     private bool _isSearching = false;
+
+    // AI Mode States
+    private bool _isAiMode = false;
+    private string _aiQuery = string.Empty;
+    private bool _isAiSearching = false;
+    private bool _showAiResponse = false;
+    private string _aiResponseText = string.Empty;
 
     protected override void OnInitialized()
     {
@@ -277,6 +376,68 @@
 
     private void ToggleGuestModal() { _guestError = false; _isGuestModalOpen = !_isGuestModalOpen; }
     private void CloseGuestModal() => _isGuestModalOpen = false;
+
+    private void ToggleAiMode()
+    {
+        _isAiMode = !_isAiMode;
+        if (!_isAiMode)
+        {
+            _showAiResponse = false;
+        }
+    }
+
+    private async Task HandleMainAction()
+    {
+        if (_isAiMode)
+        {
+            await SubmitAiQuery();
+        }
+        else
+        {
+            await Search();
+        }
+    }
+
+    private async Task HandleAiKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SubmitAiQuery();
+        }
+    }
+
+    private async Task SubmitAiQuery()
+    {
+        if (string.IsNullOrWhiteSpace(_aiQuery) || _isAiSearching) return;
+
+        _isAiSearching = true;
+        _showAiResponse = true;
+        _aiResponseText = string.Empty;
+        
+        StateHasChanged();
+
+        // MOCK AI RESPONSE for UI testing
+        await Task.Delay(1500); // Simulate API call
+        
+        var mockResponse = "Toruń to świetny wybór! Na ten weekend mam kilka wolnych miejsc. Dla ilu osób szukasz noclegu, żeby mógł podać Ci dokładną cenę?";
+        
+        // Simulate streaming
+        var words = mockResponse.Split(' ');
+        foreach (var word in words)
+        {
+            _aiResponseText += word + " ";
+            StateHasChanged();
+            await Task.Delay(50);
+        }
+
+        _isAiSearching = false;
+        StateHasChanged();
+    }
+
+    private void CloseAiResponse()
+    {
+        _showAiResponse = false;
+    }
 
     private async Task Search()
     {
