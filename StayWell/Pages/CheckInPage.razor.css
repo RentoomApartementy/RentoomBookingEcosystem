@@ -12,22 +12,26 @@
     color: #111827;
 }
 
-.checkin-roadmap-tile {
-    width: 100%;
-    max-width: 350px;
-    box-sizing: border-box;
-    border-radius: 15px;
-    padding: 20px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
+/* Horizontal scrolling steps strip */
+.checkin-roadmap-scroll {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 14px 16px 20px;
+    margin: 0 -16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
 
-.checkin-roadmap {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+.checkin-roadmap-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.checkin-roadmap-scroll > :deep(.checkin-step) {
+    scroll-snap-align: start;
+    flex-shrink: 0;
 }
 
 .checkin-empty {
@@ -35,71 +39,52 @@
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    padding: 48px 16px;
+    padding: 32px 16px;
     color: #6b7280;
     text-align: center;
+    flex: 1;
 }
 
 .checkin-empty img {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     opacity: 0.6;
 }
 
-.checkin-skeleton {
-    display: grid;
-    grid-template-columns: 48px 1fr;
-    gap: 16px;
-    padding-bottom: 24px;
-}
-
-.checkin-skeleton__badge {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
-    background-size: 200% 100%;
-    animation: checkin-shimmer 1.4s ease-in-out infinite;
-}
-
-.checkin-skeleton__body {
-    display: flex;
-    gap: 12px;
-}
-
-.checkin-skeleton__image {
-    flex: 0 0 45%;
-    max-width: 200px;
-    aspect-ratio: 3 / 4;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
-    background-size: 200% 100%;
-    animation: checkin-shimmer 1.4s ease-in-out infinite;
-}
-
-.checkin-skeleton__text {
-    flex: 1;
+/* Horizontal skeleton cards */
+.checkin-skeleton-card {
+    flex: 0 0 180px;
+    width: 180px;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.checkin-skeleton__title,
-.checkin-skeleton__line {
+.checkin-skeleton-card__image {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+    background-size: 200% 100%;
+    animation: checkin-shimmer 1.4s ease-in-out infinite;
+}
+
+.checkin-skeleton-card__title {
     height: 14px;
+    width: 70%;
     border-radius: 6px;
     background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
     background-size: 200% 100%;
     animation: checkin-shimmer 1.4s ease-in-out infinite;
 }
 
-.checkin-skeleton__title {
-    height: 18px;
-    width: 60%;
-}
-
-.checkin-skeleton__line--short {
-    width: 40%;
+.checkin-skeleton-card__line {
+    height: 11px;
+    width: 50%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+    background-size: 200% 100%;
+    animation: checkin-shimmer 1.4s ease-in-out infinite;
 }
 
 @keyframes checkin-shimmer {

@@ -1,30 +1,20 @@
 @inject StayWell.Services.ModalService ModalService
 
 <div class="checkin-step" data-checkin-step="@Index">
-    <div class="checkin-step__rail">
-        <div class="checkin-step__badge">
-            <span class="checkin-step__badge-number">@(Index + 1)</span>
-            <img class="checkin-step__badge-check" src="/icons/circle-check.svg" alt="" aria-hidden="true" />
-        </div>
+    <button type="button" class="checkin-step__image-wrap" @onclick="OpenFullscreen" aria-label="@Title">
+        <span class="checkin-step__badge">@(Index + 1)</span>
+        <img class="checkin-step__image" src="@ImageUrl" alt="@Title" loading="lazy" />
         @if (!IsLast)
         {
-            <div class="checkin-step__connector">
-                <div class="checkin-step__connector-fill"></div>
-            </div>
+            <span class="checkin-step__connector" aria-hidden="true"></span>
         }
-    </div>
-
-    <div class="checkin-step__body">
-        <button type="button" class="checkin-step__image-wrap" @onclick="OpenFullscreen" aria-label="@Title">
-            <img class="checkin-step__image" src="@ImageUrl" alt="@Title" loading="lazy" />
-        </button>
-        <div class="checkin-step__text">
-            <h3 class="checkin-step__title">@Title</h3>
-            @if (!string.IsNullOrWhiteSpace(Description))
-            {
-                <p class="checkin-step__description">@Description</p>
-            }
-        </div>
+    </button>
+    <div class="checkin-step__text">
+        <h3 class="checkin-step__title">@Title</h3>
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <p class="checkin-step__description">@Description</p>
+        }
     </div>
 </div>
 
