@@ -142,20 +142,18 @@
 
 .tile {
     width: 100%;
-    height: 120px;
-    padding: 14px 10px;
+    height: 170px;
+    padding: 12px 12px 12px 14px;
     border-radius: 18px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    align-items: stretch;
+    justify-content: space-between;
     cursor: pointer;
     transition: transform 0.1s ease, background-color 0.2s ease;
-    gap: 8px;
 }
 
     .tile:active {
@@ -167,20 +165,36 @@
        /* background-color: var(--rentoom-green-dark);- wyłaczam inny kolor tile vouchers, zeby byl taki sam jak wszedzie.*/
     }
 
+.tile-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 4px;
+    width: 100%;
+}
+
+.tile-chevron {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.35;
+    margin-top: 1px;
+}
+
 .tile-icon {
     font-size: 1.5rem;
     color: #333;
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 1;
 }
 
 .tile-icon img {
-    width: 28px;
-    height: 28px;
+    width: clamp(36px, 9vw, 52px);
+    height: clamp(36px, 9vw, 52px);
 }
 
 .tile-icon-vouchers {
@@ -188,12 +202,17 @@
     font-size: 1.5rem;
     color: #333;
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 1;
     /*filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7456%) hue-rotate(204deg) brightness(112%) contrast(100%);*/
+}
+
+.tile-icon-vouchers img {
+    width: clamp(36px, 9vw, 52px);
+    height: clamp(36px, 9vw, 52px);
 }
 
 .vouchers-badge {
@@ -214,21 +233,18 @@
 }
 
 .tile-text {
-    font-size: clamp(0.78rem, 3vw, 0.95rem);
+    font-size: clamp(0.72rem, 2.8vw, 0.9rem);
     font-weight: 600;
     line-height: 1.25;
     color: #1a1a1a;
     overflow-wrap: break-word;
     hyphens: none;
+    text-align: left;
+    flex: 1;
 }
 
 .tile-text-vouchers {
-    font-size: clamp(0.78rem, 3vw, 0.95rem);
-    font-weight: 600;
-    line-height: 1.25;
     color: #1a1a1a; /*MS: było: white - gdy tło tile było zielone*/
-    overflow-wrap: break-word;
-    hyphens: none;
 }
 
 .upsells-available-wrap {
@@ -253,7 +269,7 @@
     }
 
     .tile {
-        height: 130px;
+        height: 180px;
     }
 
     .tile-text {
@@ -281,14 +297,10 @@
     }
 
     .tile {
-        height: 140px;
-        padding: 18px 14px;
+        height: 190px;
+        padding: 14px 14px 14px 16px;
     }
 
-    .tile-icon img {
-        width: 34px;
-        height: 34px;
-    }
 
     .tile-text {
         font-size: 1rem;
