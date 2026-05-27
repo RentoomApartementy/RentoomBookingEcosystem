@@ -62,24 +62,33 @@ else
 
     <div class="tile--row">
         <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage")'>
+            <div class="tile-header">
+                <span class="tile-text">@Localizer["Instructions"]</span>
+                <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
+            </div>
             <div class="tile-icon">
                 <img class="fas" src="/icons/book.svg" />
             </div>
-            <div class="tile-text">@Localizer["Instructions"]</div>
         </div>
         <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
+            <div class="tile-header">
+                <span class="tile-text">@Localizer["OpenApartment"]</span>
+                <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
+            </div>
             <div class="tile-icon">
                 <img class="fas" src="/icons/lock.svg" />
             </div>
-            <div class="tile-text">@Localizer["OpenApartment"]</div>
         </div>
         @if (FeatureFlagsService.FeatureAllowed("ai-assistant"))
         {
             <div class="tile" @onclick="OpenAiChat">
+                <div class="tile-header">
+                    <span class="tile-text">@Localizer["AiAssistant"]</span>
+                    <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
+                </div>
                 <div class="tile-icon">
                     <img class="fas" src="/icons/chat-ai-staywell.jpg" />
                 </div>
-                <div class="tile-text">@Localizer["AiAssistant"]</div>
             </div>
         }
 
@@ -88,6 +97,10 @@ else
 
 
         <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
+            <div class="tile-header">
+                <span class="tile-text tile-text-vouchers">@Localizer["MyVouchers"]</span>
+                <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
+            </div>
             <div class="tile-icon-vouchers">
                 <img class="fas" src="/icons/ticket-percent.svg" />
                 @if (PurchasedVouchersCount > 0)
@@ -95,7 +108,6 @@ else
                     <span class="vouchers-badge">@PurchasedVouchersCount</span>
                 }
             </div>
-            <div class="tile-text-vouchers">@Localizer["MyVouchers"]</div>
         </div>
 
      }
