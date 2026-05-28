@@ -712,10 +712,17 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             if (firstRender && !_googlePageViewTracked && _apartment != null)
             {
                 _googlePageViewTracked = true;
-                await GoogleAnalytics.TrackEventAsync("apartment_detail_view", new Dictionary<string, object?>
+                var reservationNights = GetReservationNights();
+                var selectedOffer = GetOfferByType(_selectedOfferType);
+                var offerTotalPrice = selectedOffer?.Price ?? _offersResponse?.Result?.PricingOffers?.FirstOrDefault()?.MinimalPrice ?? 0m;
+                var reservationValue = Math.Max(0m, offerTotalPrice + TotalPriceAdjustment);
+                var apartmentItem = BuildGa4ApartmentItem(_apartment, offerTotalPrice, reservationNights);
+
+                await GoogleAnalytics.TrackEventAsync("view_item", new Dictionary<string, object?>
                 {
-                    ["apartment_id"] = _apartment.Id,
-                    ["apartment_name"] = _apartment.Name,
+                    ["currency"] = "PLN",
+                    ["value"] = reservationValue,
+                    ["items"] = new[] { apartmentItem },
                     ["start_date"] = StartDate,
                     ["end_date"] = EndDate,
                     ["adults"] = Adults,
@@ -1188,6 +1195,20 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                     ["SelectedUpsellsTotalPrice"] = (double)TotalUpsellsPrice
                 });
 
+            var reservationNights = GetReservationNights(start, end);
+            var reservationValue = Math.Max(0m, (request.OfferPrice ?? 0m) + request.SelectedAddonsTotalPrice + request.SelectedUpsellsTotalPrice - request.DiscountAmountPln);
+            var apartmentItem = BuildGa4ApartmentItem(apartment, request.OfferPrice ?? 0m, reservationNights);
+
+            await GoogleAnalytics.TrackEventAsync("begin_checkout", new Dictionary<string, object?>
+            {
+                ["currency"] = request.Currency,
+                ["value"] = reservationValue,
+                ["items"] = new[] { apartmentItem },
+                ["start_date"] = request.StartDate.ToString("yyyy-MM-dd"),
+                ["end_date"] = request.EndDate.ToString("yyyy-MM-dd"),
+                ["has_reservation_token"] = _reservationTokenGuid.HasValue ? 1 : 0
+            });
+
             var reservationGuid = await EnsureReservationAsync(request);
             var apartmentUrl = BuildApartmentUrl(reservationGuid);
             Navigation.NavigateTo(apartmentUrl, replace: true);
@@ -1236,6 +1257,43 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             date = default;
             return false;
+        }
+
+        private int GetReservationNights()
+        {
+            if (!TryParseDate(StartDate, out var start) || !TryParseDate(EndDate, out var end))
+            {
+                return 1;
+            }
+
+            return GetReservationNights(start, end);
+        }
+
+        private static int GetReservationNights(DateOnly start, DateOnly end)
+        {
+            return Math.Max(1, end.DayNumber - start.DayNumber);
+        }
+
+        private static decimal GetUnitPricePerNight(decimal totalOfferPrice, int nights)
+        {
+            if (nights <= 0)
+            {
+                return totalOfferPrice;
+            }
+
+            return Math.Round(totalOfferPrice / nights, 2, MidpointRounding.AwayFromZero);
+        }
+
+        private static Dictionary<string, object?> BuildGa4ApartmentItem(ApartmentObject apartment, decimal totalOfferPrice, int nights)
+        {
+            return new Dictionary<string, object?>
+            {
+                ["item_id"] = apartment.Id.ToString(),
+                ["item_name"] = apartment.Name,
+                ["item_category"] = apartment.ObjectLocation?.LocalizationItem?.City,
+                ["price"] = GetUnitPricePerNight(totalOfferPrice, nights),
+                ["quantity"] = nights
+            };
         }
 
         protected OfferItem? GetOfferByType(string? offerType)
