@@ -190,11 +190,46 @@
     align-items: center;
     justify-content: center;
     flex: 1;
+    padding-bottom: 0;
 }
 
 .tile-icon img {
     width: clamp(36px, 9vw, 52px);
     height: clamp(36px, 9vw, 52px);
+}
+
+.tile-access-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex: 1;
+    text-align: center;
+}
+
+.tile-access-code__number {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #1a1a1a;
+}
+
+.tile-access-code__hash {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1a1a1a;
+}
+
+.tile-access-code__sep {
+    font-size: 0.75rem;
+    color: #aaa;
+    line-height: 1;
+}
+
+.tile-access-code__key {
+    width: 16px;
+    height: 16px;
+    opacity: 0.75;
 }
 
 .tile-icon-vouchers {
