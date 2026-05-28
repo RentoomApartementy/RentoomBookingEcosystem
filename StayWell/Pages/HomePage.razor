@@ -78,6 +78,16 @@ else
             <div class="tile-icon">
                 <img class="fas" src="/icons/lock.svg" />
             </div>
+            @if (!LocksState.IsLoading && LocksState.CurrentCode is not null)
+            {
+                <div class="tile-access-code">
+                    <span class="tile-access-code__number">@LocksState.CurrentCode.Code</span>
+                    <span class="tile-access-code__sep">·</span>
+                    <span class="tile-access-code__hash">#</span>
+                    <span class="tile-access-code__sep">·</span>
+                    <img class="tile-access-code__key" src="/icons/key-round.svg" alt="" />
+                </div>
+            }
         </div>
         @if (FeatureFlagsService.FeatureAllowed("ai-assistant"))
         {
@@ -223,6 +233,29 @@ else
         await base.OnInitializedAsync();
         await LoadPurchasedVouchersCountAsync();
         LoadData();
+
+        if (!string.IsNullOrWhiteSpace(Token))
+        {
+            if (!LocksState.IsStatusResolved)
+            {
+                _ = LocksState.CheckTTLockStatusAsync(Token);
+            }
+
+            if (FeatureFlagsService.FeatureAllowed("dev-mock-lock"))
+            {
+                _ = Task.Run(async () =>
+                {
+                    await LocksState.LoadAccessCodesAsync(Token);
+                    await LocksState.RestoreDevMockCodesAsync(Token);
+                    await LocksState.EnsureInitialDevMockCodeAsync(Token);
+                });
+            }
+            else if (LocksState.CurrentCode is null)
+            {
+                _ = LocksState.LoadAccessCodesAsync(Token);
+            }
+        }
+
         DateTime.TryParseExact(Reservation?.ReservationDetails?.dateFrom, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var ci);
         DateTime.TryParseExact(Reservation?.ReservationDetails?.dateTo, "yyyy-MM-dd HH:mm", null, DateTimeStyles.None, out var co);
         checkIn = ci;

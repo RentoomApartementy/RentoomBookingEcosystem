@@ -217,27 +217,30 @@ namespace RentoomBooking.StayWell.Models
 
         private void Subscribe()
         {
-            ReservationState.OnChange += StateHasChanged;
-            MediaState.OnChange += StateHasChanged;
-            AmenitiesState.OnChange += StateHasChanged;
-            ApartmentState.OnChange += StateHasChanged;
-            LocksState.OnChange += StateHasChanged;
-            GlobalizationService.OnChange += StateHasChanged;
-            LayoutState.OnChange += StateHasChanged;
-            TermsState.OnChange += StateHasChanged;
-            RegistrationCardState.OnChange += StateHasChanged;
+            ReservationState.OnChange += HandleStateChange;
+            MediaState.OnChange += HandleStateChange;
+            AmenitiesState.OnChange += HandleStateChange;
+            ApartmentState.OnChange += HandleStateChange;
+            LocksState.OnChange += HandleStateChange;
+            GlobalizationService.OnChange += HandleStateChange;
+            LayoutState.OnChange += HandleStateChange;
+            TermsState.OnChange += HandleStateChange;
+            RegistrationCardState.OnChange += HandleStateChange;
         }
+
+        private void HandleStateChange() => _ = InvokeAsync(StateHasChanged);
+
         public virtual void Dispose()
         {
-            ReservationState.OnChange -= StateHasChanged;
-            MediaState.OnChange -= StateHasChanged;
-            AmenitiesState.OnChange -= StateHasChanged;
-            ApartmentState.OnChange -= StateHasChanged;
-            GlobalizationService.OnChange -= StateHasChanged;
-            LocksState.OnChange -= StateHasChanged;
-            LayoutState.OnChange -= StateHasChanged;
-            TermsState.OnChange -= StateHasChanged;
-            RegistrationCardState.OnChange -= StateHasChanged;
+            ReservationState.OnChange -= HandleStateChange;
+            MediaState.OnChange -= HandleStateChange;
+            AmenitiesState.OnChange -= HandleStateChange;
+            ApartmentState.OnChange -= HandleStateChange;
+            GlobalizationService.OnChange -= HandleStateChange;
+            LocksState.OnChange -= HandleStateChange;
+            LayoutState.OnChange -= HandleStateChange;
+            TermsState.OnChange -= HandleStateChange;
+            RegistrationCardState.OnChange -= HandleStateChange;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
