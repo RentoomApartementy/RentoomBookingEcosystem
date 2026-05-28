@@ -1616,6 +1616,11 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["UF_CRM_1778170129465"] = startRequest?.CheckInTime.ToString("HH:mm"),
                     //RB_Godzina_Wymeldowania
                     ["UF_CRM_1778170154231"] = startRequest?.CheckOutTime.ToString("HH:mm"),
+                    
+                    //rb_data_meldunek
+                    ["UF_CRM_1778790928572"] = startRequest?.StartDate.ToString("yyyy-MM-dd") + " " + startRequest?.CheckInTime.ToString("HH:mm"),
+                    //rb_data_wymeldunek
+                    ["UF_CRM_1778790948473"] = startRequest?.EndDate.ToString("yyyy-MM-dd") + " " + startRequest?.CheckOutTime.ToString("HH:mm"),
 
                     ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15, 0),
                     ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11, 0),
@@ -1734,6 +1739,12 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 ["UF_CRM_1778170129465"] = record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
                 //RB_Godzina_Wymeldowania
                 ["UF_CRM_1778170154231"] = record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
+
+                //rb_data_meldunek
+                ["UF_CRM_1778790928572"] = record.State.StartRequest?.StartDate.ToString("yyyy-MM-dd") + " " + record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
+                //rb_data_wymeldunek
+                ["UF_CRM_1778790948473"] = record.State.StartRequest?.EndDate.ToString("yyyy-MM-dd") + " " + record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
+
                 //RB_Zastosowany_Bonus
                 ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
                     ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"

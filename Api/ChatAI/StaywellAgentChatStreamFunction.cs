@@ -174,7 +174,7 @@ public sealed class StaywellAgentChatStreamFunction
                 return streamResponse;
             }
 
-            return await CreateErrorResponseAsync(req, HttpStatusCode.InternalServerError, "Internal server error.", cancellationToken);
+            return await CreateErrorResponseAsync(req, HttpStatusCode.InternalServerError, "Internal server error: " + ex.Message, cancellationToken);
         }
     }
 
