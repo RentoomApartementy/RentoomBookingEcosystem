@@ -15,6 +15,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 {
     public sealed record BitrixDealPipeline(int Id, string Name);
     public sealed record BitrixDealStage(string StageId, string Name);
+    public sealed record BitrixDealLookupResult(int DealId, int? ContactId, int MatchCount);
     public sealed record CreateDealRequest(
         string Title,
         int CategoryId,
@@ -535,7 +536,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             {
                 filter,
                 select = new[] { "ID" },
-                order = new { ID = "ASC" }
+                order = new { ID = "DESC" }
             });
 
             if (!doc.RootElement.TryGetProperty("result", out var resultElement)
@@ -555,6 +556,52 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
                 {
                     return id;
                 }
+            }
+
+            return null;
+        }
+
+        public async Task<BitrixDealLookupResult?> FindLatestDealByIdoReservationIdAsync(int idoReservationId)
+        {
+            if (idoReservationId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(idoReservationId), "Ido reservation id must be positive.");
+            }
+
+            using var doc = await PostAsync("crm.deal.list.json", new
+            {
+                filter = new Dictionary<string, object?>
+                {
+                    [IdoReservationIdFieldName] = idoReservationId
+                },
+                select = new[] { "ID", "CONTACT_ID" },
+                order = new { ID = "DESC" }
+            });
+
+            if (!doc.RootElement.TryGetProperty("result", out var resultElement)
+                || resultElement.ValueKind != JsonValueKind.Array)
+            {
+                throw BitrixError(doc.RootElement.GetRawText(), doc);
+            }
+
+            var matchCount = 0;
+
+            foreach (var item in resultElement.EnumerateArray())
+            {
+                if (!item.TryGetProperty("ID", out var idElement) || !TryGetInt32(idElement, out var dealId))
+                {
+                    continue;
+                }
+
+                matchCount++;
+                int? contactId = null;
+                if (item.TryGetProperty("CONTACT_ID", out var contactElement)
+                    && TryGetInt32(contactElement, out var parsedContactId))
+                {
+                    contactId = parsedContactId;
+                }
+
+                return new BitrixDealLookupResult(dealId, contactId, Math.Max(matchCount, resultElement.GetArrayLength()));
             }
 
             return null;
