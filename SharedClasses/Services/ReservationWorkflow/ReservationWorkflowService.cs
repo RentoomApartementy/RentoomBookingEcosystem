@@ -1602,6 +1602,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 var reservationStartOffset = GetWarsawOffset(startRequest.StartDate, startRequest.CheckInTime);
                 var bitrixServerUTCOffset = await _bitrixService.GetServerUtcOffsetAsync();
                 var differenceInHours = bitrixServerUTCOffset.TotalHours - reservationStartOffset.TotalHours;
+                var StayWellLink = BuildStayWellLink(record.ReservationGuid.ToString());
                 var customFields = new Dictionary<string, object?>
                 {
                     ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
@@ -1627,7 +1628,12 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
                     [BitrixReservationSourceFieldName] = reservationSourceValue,
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
-                    [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
+
+                    //rb_format_staywell
+                    [BitrixStayWellLinkFieldName] = StayWellLink,
+
+                    //b_rb_format_staywell
+                    ["UF_CRM_1780004115483"] = StayWellLink, //pole string only w bitrix dla wiadomosci.
                     //RB_Link_Anuluj_Rezerwacje
                     ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true),
                     //RB_Link_Do_Platnosci

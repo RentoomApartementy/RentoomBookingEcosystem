@@ -90,7 +90,8 @@ public class BulkUpdateDealStayTimesFunction
                     "UF_CRM_1778790948473", //wymeldunek
                     "UF_CRM_1778790928572", //meldunek
                     "UF_CRM_1773256016575", //start-date
-                    "UF_CRM_1773310028374"  //end-date
+                    "UF_CRM_1773310028374",  //end-date
+                    "UF_CRM_1768835603310" //link url do staywell
 
                     );
 
@@ -109,13 +110,16 @@ public class BulkUpdateDealStayTimesFunction
                 var updatedStartDateTimeToString =  currentStartDate?.Substring(0, 10) + " 15:00";
                 var updatedEndDateTimeToString = currentEndDate?.Substring(0, 10) + " 11:00";
 
+                var StaywellLink = rawFields.GetValueOrDefault("UF_CRM_1768835603310");
+
                 await _bitrixService.UpdateDealAsync(
                     dealId,
                     new Dictionary<string, object?>
                     {
                        
-                        ["UF_CRM_1778790928572"] = updatedStartDateTimeToString,
-                        ["UF_CRM_1778790948473"] = updatedEndDateTimeToString
+                       // ["UF_CRM_1778790928572"] = updatedStartDateTimeToString,
+                       // ["UF_CRM_1778790948473"] = updatedEndDateTimeToString,
+                        ["UF_CRM_1780004115483"] = StaywellLink,
                     });
 
                 results.Add(new DealStayTimeUpdateResult
