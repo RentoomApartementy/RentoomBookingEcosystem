@@ -30,6 +30,7 @@ using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
 using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Configuration;
 using System.Globalization;
 using System.Linq;
 
@@ -176,6 +177,7 @@ namespace RentoomBookingWeb
             builder.Services.AddDateRangePicker(config => { });
 
             //config
+            builder.Services.Configure<AnalyticsOptions>(builder.Configuration.GetSection("Analytics"));
           
 
             // TPAY

@@ -7,6 +7,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Payments;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using System.Globalization;
@@ -35,6 +36,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
         private readonly ApartmentRepository _apartmentRepository;
         private readonly PostgresBookingDatabase _bookingDatabase;
         private readonly IBookingComLogStore _logStore;
+        private readonly BitrixService _bitrixService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<BookingComReservationWorkflowService> _logger;
 
@@ -46,6 +48,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
             ApartmentRepository apartmentRepository,
             PostgresBookingDatabase bookingDatabase,
             IBookingComLogStore logStore,
+            BitrixService bitrixService,
             IConfiguration configuration,
             ILogger<BookingComReservationWorkflowService> logger)
         {
@@ -56,6 +59,7 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
             _apartmentRepository = apartmentRepository ?? throw new ArgumentNullException(nameof(apartmentRepository));
             _bookingDatabase = bookingDatabase ?? throw new ArgumentNullException(nameof(bookingDatabase));
             _logStore = logStore ?? throw new ArgumentNullException(nameof(logStore));
+            _bitrixService = bitrixService ?? throw new ArgumentNullException(nameof(bitrixService));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -214,17 +218,6 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                         overallStatus: BookingComLogStatuses.Duplicate,
                         reservationGuid: reservationGuid,
                         cancellationToken: cancellationToken);
-                    // tymczasowy fix - zeby nie przetwarzal zduplikowanych.
-
-                    result.ReservationGuid = reservationGuid;
-                    result.EmailConfirmed = existingRecord.DealBitrixSentConfirmationEmailId is not null;
-                    result.Status = isDuplicate ? BookingComLogStatuses.Duplicate : BookingComLogStatuses.Completed;
-                    result.Message = "Duplikat - przerywam aktualizowanie";
-                    result.Provider = existingRecord.Provider;
-                    result.ProviderTransactionId = existingRecord.ProviderTransactionId;
-                    return result;
-                 
-
                 }
 
                 result.ReservationGuid = reservationGuid;
@@ -276,6 +269,14 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 record.PaymentStatus = MapWorkflowPaymentStatus(payments);
 
                 await _reservationStore.UpdateAsync(record, cancellationToken);
+                if (isDuplicate)
+                {
+                    record = await ReconcileDuplicateBitrixLinksAsync(
+                        request.BookingComLogGuid,
+                        record,
+                        request.ReservationId,
+                        cancellationToken);
+                }
 
                 var processedAmount = payments
                     .Where(payment => string.Equals(payment.Status, PaymentStatus.Processed, StringComparison.OrdinalIgnoreCase))
@@ -371,6 +372,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 result.EmailConfirmed = emailConfirmed;
                 result.Status = isDuplicate ? BookingComLogStatuses.Duplicate : BookingComLogStatuses.Completed;
                 result.Message = finalMessage;
+                result.Provider = record.Provider;
+                result.ProviderTransactionId = record.ProviderTransactionId;
                 return result;
             }
             catch (Exception ex)
@@ -523,6 +526,98 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 CountryCode = string.IsNullOrWhiteSpace(client.CountryCode) ? "pl" : client.CountryCode,
                 Language = string.IsNullOrWhiteSpace(client.Language) ? "pol" : client.Language
             };
+        }
+
+        private async Task<ReservationRecord> ReconcileDuplicateBitrixLinksAsync(
+            Guid bookingComLogGuid,
+            ReservationRecord record,
+            int idoReservationId,
+            CancellationToken cancellationToken)
+        {
+            var lookup = await _bitrixService.FindLatestDealByIdoReservationIdAsync(idoReservationId);
+            if (lookup is null)
+            {
+                await LogInfoAsync(
+                    bookingComLogGuid,
+                    "duplicate_bitrix_lookup",
+                    "Skipped",
+                    $"No Bitrix deal found by {BitrixService.IdoReservationIdFieldName}={idoReservationId}.",
+                    payload: new
+                    {
+                        idoReservationId,
+                        record.DealBitrixId,
+                        record.ClientBitrixId
+                    },
+                    reservationGuid: record.ReservationGuid,
+                    cancellationToken: cancellationToken);
+                return record;
+            }
+
+            if (lookup.MatchCount > 1)
+            {
+                await LogWarningAsync(
+                    bookingComLogGuid,
+                    "duplicate_bitrix_multiple_deals",
+                    $"Found {lookup.MatchCount} Bitrix deals by {BitrixService.IdoReservationIdFieldName}={idoReservationId}. Using latest deal id {lookup.DealId}.",
+                    payload: new
+                    {
+                        idoReservationId,
+                        selectedDealId = lookup.DealId,
+                        selectedContactId = lookup.ContactId
+                    },
+                    overallStatus: BookingComLogStatuses.Duplicate,
+                    reservationGuid: record.ReservationGuid,
+                    cancellationToken: cancellationToken);
+            }
+
+            var changed = false;
+            if (!record.DealBitrixId.HasValue || record.DealBitrixId.Value != lookup.DealId)
+            {
+                record.DealBitrixId = lookup.DealId;
+                changed = true;
+            }
+
+            if ((!record.ClientBitrixId.HasValue || record.ClientBitrixId <= 0)
+                && lookup.ContactId.HasValue
+                && lookup.ContactId.Value > 0)
+            {
+                record.ClientBitrixId = lookup.ContactId.Value;
+                changed = true;
+            }
+
+            if (!changed)
+            {
+                await LogInfoAsync(
+                    bookingComLogGuid,
+                    "duplicate_bitrix_links_reconciled",
+                    "Skipped",
+                    "Bitrix link reconciliation found no missing ids to update.",
+                    payload: new
+                    {
+                        dealBitrixId = record.DealBitrixId,
+                        clientBitrixId = record.ClientBitrixId
+                    },
+                    reservationGuid: record.ReservationGuid,
+                    cancellationToken: cancellationToken);
+                return record;
+            }
+
+            await _reservationStore.UpdateAsync(record, cancellationToken);
+
+            await LogInfoAsync(
+                bookingComLogGuid,
+                "duplicate_bitrix_links_reconciled",
+                "Completed",
+                "Updated reservation_record Bitrix ids using existing Bitrix deal lookup.",
+                payload: new
+                {
+                    dealBitrixId = record.DealBitrixId,
+                    clientBitrixId = record.ClientBitrixId
+                },
+                reservationGuid: record.ReservationGuid,
+                cancellationToken: cancellationToken);
+
+            return await _reservationStore.GetAsync(record.ReservationGuid, cancellationToken) ?? record;
         }
 
         private async Task<bool> WaitForBitrixEmailConfirmationAsync(Guid bookingComLogGuid, Guid reservationGuid, CancellationToken cancellationToken)

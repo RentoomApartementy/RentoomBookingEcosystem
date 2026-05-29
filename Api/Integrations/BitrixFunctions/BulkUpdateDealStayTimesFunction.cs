@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -62,6 +62,23 @@ public class BulkUpdateDealStayTimesFunction
 
         var results = new List<DealStayTimeUpdateResult>();
 
+
+        /*
+         *   //rb_data_wymeldunek
+                ["UF_CRM_1778790948473"] = record.State.StartRequest?.EndDate.ToString("yyyy-MM-dd") + " " + record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
+
+                //RB_Zastosowany_Bonus
+                ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
+                    ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
+                    : "None"
+
+         ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, bitrixServerUTCOffset, differenceInHours),
+                    ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, bitrixServerUTCOffset, differenceInHours),
+
+
+        */
+
+
         foreach (var dealId in dealIds)
         {
             try
@@ -69,20 +86,36 @@ public class BulkUpdateDealStayTimesFunction
                 var rawFields = await _bitrixService.GetDealRawFieldsAsync(
                     dealId,
                     CheckInFieldName,
-                    CheckOutFieldName);
+                    CheckOutFieldName,
+                    "UF_CRM_1778790948473", //wymeldunek
+                    "UF_CRM_1778790928572", //meldunek
+                    "UF_CRM_1773256016575", //start-date
+                    "UF_CRM_1773310028374"  //end-date
+
+                    );
 
                 var currentCheckIn = rawFields.GetValueOrDefault(CheckInFieldName);
                 var currentCheckOut = rawFields.GetValueOrDefault(CheckOutFieldName);
 
+                var currentStartDate = rawFields.GetValueOrDefault(CheckInFieldName);
+                var currentEndDate = rawFields.GetValueOrDefault(CheckOutFieldName);
+
                 var updatedCheckIn = ReplaceTimeComponent(currentCheckIn, 15, 0);
                 var updatedCheckOut = ReplaceTimeComponent(currentCheckOut, 11, 0);
+
+                //var updatedCheckIn = ReplaceTimeComponent(currentCheckIn, 15, 0);
+                //var updatedCheckOut = ReplaceTimeComponent(currentCheckOut, 11, 0
+
+                var updatedStartDateTimeToString =  currentStartDate?.Substring(0, 10) + " 15:00";
+                var updatedEndDateTimeToString = currentEndDate?.Substring(0, 10) + " 11:00";
 
                 await _bitrixService.UpdateDealAsync(
                     dealId,
                     new Dictionary<string, object?>
                     {
-                        [CheckInFieldName] = updatedCheckIn,
-                        [CheckOutFieldName] = updatedCheckOut
+                       
+                        ["UF_CRM_1778790928572"] = updatedStartDateTimeToString,
+                        ["UF_CRM_1778790948473"] = updatedEndDateTimeToString
                     });
 
                 results.Add(new DealStayTimeUpdateResult
