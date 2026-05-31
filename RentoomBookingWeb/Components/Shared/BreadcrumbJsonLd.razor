@@ -82,11 +82,13 @@
 
     private string ToAbsoluteUrl(string path)
     {
-        if (Uri.TryCreate(path, UriKind.Absolute, out var absoluteUri))
+        try
         {
-            return absoluteUri.ToString();
+            return Navigation.ToAbsoluteUri(path).AbsoluteUri;
         }
-
-        return $"{Navigation.BaseUri.TrimEnd('/')}/{path.TrimStart('/')}";
+        catch
+        {
+            return $"{Navigation.BaseUri.TrimEnd('/')}/{path.TrimStart('/')}";
+        }
     }
 }

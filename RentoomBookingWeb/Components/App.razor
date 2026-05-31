@@ -18,11 +18,12 @@
     <link rel="stylesheet" href="/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="/app.css" />
     <link rel="stylesheet" href="/RentoomBookingWeb.styles.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,300,0..1,-25&display=block" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@@24,300,0..1,-25&display=block" />
     <link rel="icon" type="image/svg" href="/assets/svgs/logo-sygnet.svg" />
 
     <meta property="og:locale" content="@SeoCultureHelper.GetOgLocale()" />
     
+    <SeoHreflangs />
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
@@ -35,14 +36,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
     
-    @* UWAGA: Te skrypty NIE są modułami (nie używają export), więc ładujemy je standardowo *@
     <script src="/js/mapInterop.js"></script>
     <script src="/js/cookieConsentInterop.js"></script>
-    
-    @* UWAGA: Te skrypty są importowane dynamicznie jako moduły w komponentach .razor (JS.InvokeAsync<IJSObjectReference>("import", ...)), 
-       więc NIE WOLNO ich tutaj ładować tagiem <script>, bo przeglądarka wyrzuci SyntaxError: Unexpected token 'export' *@
-    @* <script src="/js/scrollObserver.js"></script> *@
-    @* <script src="/js/buttonHelper.js"></script> *@
     
     <script src="/_framework/blazor.web.js"></script>
     
