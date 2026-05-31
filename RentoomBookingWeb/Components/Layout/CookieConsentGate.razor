@@ -4,16 +4,17 @@
 @using System.Text.Json
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Hosting
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.Cookies
 @using RentoomBooking.SharedClasses.Services.Cookies
+@using Microsoft.Extensions.Options
+@using RentoomBookingWeb.Configuration
 @inject CookieConsentService CookieConsentService
-@inject IWebHostEnvironment Environment
 @inject IHttpContextAccessor HttpContextAccessor
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
 @inject IStringLocalizer<SharedResources> Localizer
+@inject IOptions<AnalyticsOptions> AnalyticsOptionsAccessor
 
 <CookieConsentBanner Notice="@_notice"
                      ThemeClass="cookie-banner--rentoom"
@@ -25,9 +26,6 @@
 @code {
     private const string AppCode = CookieConsentAppCodes.RentoomBookingWeb;
     private const string StorageKey = "rentoombookingweb:cookie-consent";
-    private const string GoogleTagManagerId = "GTM-KQ34PTLN";
-    private const string GoogleAnalyticsId = "G-KWEKWNRM9H";
-    private const string ContentSquareProjectId = "07445cfba2a7a";
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -39,11 +37,13 @@
     private bool _isSubmitting;
     private string? _errorMessage;
     private CookieConsentRequestMetadata _requestMetadata = new();
+    private AnalyticsOptions _analytics = new();
 
     protected override async Task OnInitializedAsync()
     {
         _notice = await CookieConsentService.GetActiveNoticeAsync(AppCode, CultureInfo.CurrentUICulture.Name);
         _requestMetadata = BuildRequestMetadata();
+        _analytics = AnalyticsOptionsAccessor.Value ?? new AnalyticsOptions();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -170,13 +170,19 @@
 
     private ValueTask EnableTrackingAsync()
     {
-        if (!Environment.IsProduction())
+        if (string.IsNullOrWhiteSpace(_analytics.GoogleTagManagerId) || string.IsNullOrWhiteSpace(_analytics.GoogleAnalyticsId))
         {
             return ValueTask.CompletedTask;
         }
-        
-        JS.InvokeVoidAsync("rentoomCookieInterop.enableTracking", GoogleTagManagerId, GoogleAnalyticsId);
-        return JS.InvokeVoidAsync("rentoomCookieInterop.enableSessionRecording", ContentSquareProjectId);
+
+        JS.InvokeVoidAsync("rentoomCookieInterop.enableTracking", _analytics.GoogleTagManagerId, _analytics.GoogleAnalyticsId);
+
+        if (string.IsNullOrWhiteSpace(_analytics.ContentSquareProjectId))
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        return JS.InvokeVoidAsync("rentoomCookieInterop.enableSessionRecording", _analytics.ContentSquareProjectId);
     }
 
     private CookieConsentRequestMetadata BuildRequestMetadata()

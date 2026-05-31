@@ -11,14 +11,16 @@ System został zaprojektowany, aby przekształcić Rentoom Booking w globalną p
 ---
 
 ## 2. Rozpoznawanie Języka (Culture Detection)
-Logika znajduje się w `Program.cs` i `LocalizedRoutingMiddleware.cs`. System używa 4 poziomów detekcji o następujących priorytetach:
+Logika znajduje się w `Program.cs` i `LocalizedRoutingMiddleware.cs`. System wykorzystuje natywny potok lokalizacji ASP.NET Core, oparty na wbudowanych mechanizmach `IRequestCultureProvider`, zachowując pełną zgodność z architekturą platformy .NET.
 
-1.  **URL Segment (Highest):** Specjalny `CustomRequestCultureProvider` sprawdza pierwszy segment ścieżki. Jeśli wykryje `/it/`, wymusza język włoski dla całego żądania, ignorując inne ustawienia.
-2.  **Cookie:** Standardowe ciasteczko `.AspNetCore.Culture` przechowuje ostatni wybór użytkownika.
-3.  **Bot Detection:** System automatycznie wykrywa roboty indeksujące (Google, Bing). Jeśli wejdą na domenę główną bez prefiksu, otrzymują wersję `pl-PL`, co zapewnia stabilną bazę do indeksacji.
-4.  **Browser Settings:** Fallback do ustawień przeglądarki użytkownika.
+Priorytety detekcji:
+1.  **URL Segment (Highest):** Autorski `CustomRequestCultureProvider` sprawdza pierwszy segment ścieżki. Jeśli wykryje `/it/`, wymusza język włoski dla całego żądania, gwarantując, że zawartość odpowiada adresowi URL (kluczowe dla SEO).
+2.  **Cookie:** Standardowy `CookieRequestCultureProvider` sprawdza ciasteczko `.AspNetCore.Culture`. Jest to mechanizm wymagany przez Blazor Server do utrzymania stanu wybranego języka w ramach aktywnego połączenia WebSocket (SignalR).
+3.  **Bot Detection:** Automatyczna detekcja robotów indeksujących (Google, Bing). Wejścia na domenę główną bez prefiksu serwują wersję `pl-PL`, zapewniając bazę do indeksacji.
+4.  **Browser Settings:** Fallback do nagłówka `Accept-Language` przeglądarki.
+5.  **Global Fallback:** Jeśli żaden z powyższych warunków nie jest spełniony lub brakuje tłumaczenia, aplikacja domyślnie korzysta z języka angielskiego (`en-US`), zdefiniowanego w `supported-languages.json`.
 
-**Synchronizacja Sesji:** `LocalizedRoutingMiddleware` dba o to, by przy każdym żądaniu z prefiksem językowym ciasteczko `.AspNetCore.Culture` zostało zaktualizowane. Jest to krytyczne dla Blazor Server, aby nawiązane połączenie WebSocket (Circuit) wiedziało, w jakim języku renderować komponenty.
+**Synchronizacja Sesji:** `LocalizedRoutingMiddleware` dba o to, by przy każdym żądaniu z prefiksem językowym ciasteczko `.AspNetCore.Culture` zostało zaktualizowane. Zapewnia to spójność między tym, co widzi przeglądarka (URL), a tym, co pamięta serwer (Cookie).
 
 ---
 
@@ -52,17 +54,23 @@ Usługa automatycznie wykryje bieżący język, pobierze odpowiedni slug z rejes
 
 ---
 
-## 5. Międzynarodowe SEO i System Sitemap
-System map witryny został przebudowany na strukturę **Sitemap Index**, co jest standardem dla dużych serwisów.
+## 5. Międzynarodowe SEO i System Hreflang
+System został zaprojektowany z myślą o globalnym pozycjonowaniu (International SEO), co wymaga precyzyjnego zarządzania mapami witryn oraz tagami w sekcji `<head>`.
 
-### Struktura:
+### Struktura Sitemap (Sitemap Index):
 1.  **`/sitemap.xml` (Indeks):** Główny plik wskazujący na 33 pod-mapy: `/pl/sitemap.xml`, `/en/sitemap.xml`, itd.
-2.  **`/{culture}/sitemap.xml` (Mapy Językowe):** Dynamicznie generowane pliki XML zawierające linki dla konkretnego kraju.
+2.  **`/{culture}/sitemap.xml` (Mapy Językowe):** Dynamicznie generowane pliki XML zawierające linki dla konkretnego kraju. Linki wewnątrz tych map zawierają wbudowane atrybuty `hreflang` do cross-linkowania.
 
-### Wsparcie Hreflang (Cross-Linking):
-Każdy link w sitemapie językowej (np. do apartamentu po włosku) posiada zestaw tagów `<xhtml:link rel="alternate" hreflang="..." href="..." />`. 
-Informują one Google: "Strona włoska to odpowiednik strony polskiej pod adresem X". 
-**Efekt:** Google Search Console poprawnie łączy wersje językowe, eliminuje duplikaty i wyświetla użytkownikom linki w ich ojczystym języku.
+### Dynamiczne tagi Hreflang w HTML (`SeoHreflangs.razor`):
+Aby zapobiec problemom z "Duplicate Content" i pomóc wyszukiwarkom w serwowaniu odpowiedniej wersji językowej, system implementuje tagi `<link rel="alternate" hreflang="..." />` w sekcji `<head>` każdej podstrony.
+
+- **Implementacja:** Za renderowanie odpowiada komponent `SeoHreflangs.razor`. Aby zagwarantować najwyższy priorytet i uniknąć nadpisywania przez bloki `<HeadContent>` na poszczególnych podstronach, komponent ten został zaimplementowany centralnie w pliku `App.razor`.
+- **Obsługa Deep Linków:** Komponent dynamicznie mapuje pełne adresy URL (włącznie z parametrami QueryString i identyfikatorami zasobów, np. `/pl/apartamenty/123/nazwa`), zapewniając, że tagi `hreflang` zawsze prowadzą do dokładnego odpowiednika strony w innym języku.
+
+### Logika podwójnego Fallbacku (x-default vs System Default):
+System obsługuje dwa niezależne mechanizmy "języka domyślnego", dostosowane do wymagań wyszukiwarek i użytkowników:
+1.  **System Fallback (`en-US`):** Zdefiniowany w `supported-languages.json`. Używany przez aplikację, gdy brakuje tłumaczenia w plikach `.resx`. Zapewnia to, że interfejs użytkownika pozostanie zrozumiały (po angielsku) zamiast wyświetlać puste klucze.
+2.  **SEO Fallback (`x-default`):** W komponencie `SeoHreflangs.razor` tag `x-default` jest na sztywno przypisany do wersji polskiej (`pl-PL`). Informuje to roboty indeksujące (np. Googlebot), że w przypadku braku dedykowanej wersji dla danego regionu, globalnym "oryginałem" serwisu jest strona polska. Rozdzielenie tych logik pozwala chronić pozycję macierzystego rynku w wynikach wyszukiwania, nie psując doświadczenia użytkowników z innych krajów.
 
 ---
 

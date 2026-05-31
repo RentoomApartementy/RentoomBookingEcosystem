@@ -20,6 +20,7 @@
 @inject IConfiguration Configuration
 @inject IJSRuntime JSRuntime
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
+@inject GoogleAnalyticsService GoogleAnalytics
 @implements IDisposable
 
 <PageTitle>@Localizer["SummaryPageTitle"]</PageTitle>
@@ -406,6 +407,7 @@
 
     private const int RetryPaymentDelaySeconds = 30;
     private bool _summaryViewedTracked;
+    private bool _purchaseTracked;
     private string _bonusInputName = string.Empty;
     private string? _bonusStatusMessage;
     private bool _bonusStatusIsError;
@@ -489,6 +491,20 @@
                 {
                     ["AcceptedTermsCount"] = _userSelections.Count(x => x.Value)
                 });
+
+            var startRequest = _summary?.StartRequest;
+            if (startRequest is not null)
+            {
+                var item = BuildGa4ApartmentItem(startRequest, _summary?.OfferPrice ?? startRequest.OfferPrice ?? 0m);
+                await GoogleAnalytics.TrackEventAsync("add_payment_info", new Dictionary<string, object?>
+                {
+                    ["currency"] = string.IsNullOrWhiteSpace(_summary?.Currency) ? "PLN" : _summary!.Currency,
+                    ["value"] = _summary?.GrandTotal ?? 0m,
+                    ["payment_type"] = "Tpay",
+                    ["items"] = new[] { item }
+                });
+            }
+
             Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
         }
         catch (Exception)
@@ -672,6 +688,8 @@
                 });
         }
 
+        await TrackPurchaseIfEligibleAsync();
+
         //aut pokazywanie QR kodu StayWell po płatności - na razie wyłączone
       /*  if (IsPaid && !string.IsNullOrWhiteSpace(staywellLink))
         {
@@ -679,6 +697,45 @@
         }
         */
         StartRetryCountdownIfNeeded();
+    }
+
+    private async Task TrackPurchaseIfEligibleAsync()
+    {
+        if (_purchaseTracked || !IsPaid || _summary?.StartRequest is null)
+        {
+            return;
+        }
+
+        var startRequest = _summary.StartRequest;
+        var transactionId = _summary.IdoReservationId?.ToString() ?? _summary.ReservationGuid.ToString("N");
+        var item = BuildGa4ApartmentItem(startRequest, _summary.OfferPrice ?? startRequest.OfferPrice ?? 0m);
+
+        await GoogleAnalytics.TrackEventAsync("purchase", new Dictionary<string, object?>
+        {
+            ["transaction_id"] = transactionId,
+            ["currency"] = string.IsNullOrWhiteSpace(_summary.Currency) ? "PLN" : _summary.Currency,
+            ["value"] = _summary.GrandTotal,
+            ["items"] = new[] { item },
+            ["start_date"] = startRequest.StartDate.ToString("yyyy-MM-dd"),
+            ["end_date"] = startRequest.EndDate.ToString("yyyy-MM-dd")
+        });
+
+        _purchaseTracked = true;
+    }
+
+    private Dictionary<string, object?> BuildGa4ApartmentItem(StartReservationRequest startRequest, decimal offerTotalPrice)
+    {
+        var nights = Math.Max(1, startRequest.EndDate.DayNumber - startRequest.StartDate.DayNumber);
+        var unitPrice = Math.Round(offerTotalPrice / nights, 2, MidpointRounding.AwayFromZero);
+
+        return new Dictionary<string, object?>
+        {
+            ["item_id"] = startRequest.ObjectId.ToString(),
+            ["item_name"] = _apartment?.Name ?? $"Apartment {startRequest.ObjectId}",
+            ["item_category"] = _apartment?.ObjectLocation?.LocalizationItem?.City,
+            ["price"] = unitPrice,
+            ["quantity"] = nights
+        };
     }
 
     private void StartRetryCountdownIfNeeded()

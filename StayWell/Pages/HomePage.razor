@@ -74,6 +74,11 @@ else
                 <div class="tile-text">@Localizer["AiAssistant"]</div>
             </div>
         }
+
+    @if (FeatureFlagsService.FeatureAllowed("my-vouchers"))
+    {
+
+
         <div class="tile vouchers" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/MyVouchersPage")'>
             <div class="tile-icon-vouchers">
                 <img class="fas" src="/icons/ticket-percent.svg" />
@@ -84,7 +89,7 @@ else
             </div>
             <div class="tile-text-vouchers">@Localizer["MyVouchers"]</div>
         </div>
-        
+     }
     </div>
 
     @if (FeatureFlagsService.FeatureAllowed("upsells"))

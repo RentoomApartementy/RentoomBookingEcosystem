@@ -3,13 +3,27 @@
     {
         <img src="@IconPath" alt="" class="input-icon"/>
     }
-    <input 
-        type="@Type" 
-        value="@Value" 
-        @oninput="OnValueChanged" 
-        placeholder="@Placeholder" 
-        min="0"
-    />
+
+    @if (UpdateOnInput)
+    {
+        <input
+            type="@Type"
+            value="@Value"
+            @oninput="OnValueChanged"
+            placeholder="@Placeholder"
+            min="0"
+        />
+    }
+    else
+    {
+        <input
+            type="@Type"
+            value="@Value"
+            @onchange="OnValueChanged"
+            placeholder="@Placeholder"
+            min="0"
+        />
+    }
 </div>
 
 @code {
@@ -20,6 +34,7 @@
     [Parameter] public string Type { get; set; } = "text";
     [Parameter] public bool IsFull { get; set; } = false;
     [Parameter] public bool IsMarginTop { get; set; } = false;
+    [Parameter] public bool UpdateOnInput { get; set; } = true;
 
     private async Task OnValueChanged(ChangeEventArgs e)
     {

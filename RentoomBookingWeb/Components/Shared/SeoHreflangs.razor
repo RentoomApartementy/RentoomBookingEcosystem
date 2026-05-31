@@ -6,50 +6,105 @@
 
 @foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
 {
-    <link rel="alternate" hreflang="@GetShortCode(culture)" href="@GetFullUrlForCulture(culture)" />
+    var url = GetFullUrlForCulture(culture);
+    if (!string.IsNullOrEmpty(url))
+    {
+        <link rel="alternate" hreflang="@GetShortCode(culture)" href="@url" />
+    }
 }
-<link rel="alternate" hreflang="x-default" href="@GetFullUrlForCulture(SupportedLanguagesProvider.DefaultCultureName)" />
+
+@{
+    var xDefaultUrl = GetFullUrlForCulture("pl-PL");
+    if (!string.IsNullOrEmpty(xDefaultUrl))
+    {
+        <link rel="alternate" hreflang="x-default" href="@xDefaultUrl" />
+    }
+}
 
 @code {
     private string GetFullUrlForCulture(string culture)
     {
-        var baseUri = NavManager.BaseUri.TrimEnd('/');
-        var relativePath = NavManager.ToBaseRelativePath(NavManager.Uri);
-        
-        var parts = relativePath.Split('/');
-        string? currentSlug = null;
-        string? currentCultureInUrl = null;
-
-        // Correctly identify culture prefix and slug
-        if (parts.Length > 0 && SupportedLanguagesProvider.SupportedCultureNames.Any(c => string.Equals(c.Split('-')[0], parts[0], StringComparison.OrdinalIgnoreCase) || string.Equals(c, parts[0], StringComparison.OrdinalIgnoreCase)))
+        try
         {
-            currentCultureInUrl = parts[0];
-            currentSlug = parts.Length > 1 ? parts[1].Split('?')[0] : null;
-        }
-        else
-        {
-            currentSlug = parts[0].Split('?')[0];
-        }
+            var baseUri = NavManager.BaseUri.TrimEnd('/');
+            
+            // Fix for the file:/// protocol issue
+            if (baseUri.StartsWith("file:", StringComparison.OrdinalIgnoreCase))
+            {
+                baseUri = "https://rentoom.pl"; 
+            }
 
-        if (!string.IsNullOrEmpty(currentSlug) && RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
-        {
-            return $"{baseUri}{RouteService.GetLocalizedUrl(pageKey!, culture)}";
-        }
+            var relativeUri = NavManager.ToBaseRelativePath(NavManager.Uri);
+            var uriParts = relativeUri.Split('?', 2);
+            var relativePath = uriParts[0];
+            var queryString = uriParts.Length > 1 ? "?" + uriParts[1] : "";
+            
+            var parts = relativePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            string? currentSlug = null;
+            string? currentCultureInUrl = null;
+            string remainingSegments = "";
 
-        // Fallback for home
-        if (string.IsNullOrEmpty(currentSlug) || currentSlug == "/")
-        {
-            return $"{baseUri}/{GetShortCode(culture)}";
-        }
+            // Identify culture prefix and main slug
+            if (parts.Length > 0 && SupportedLanguagesProvider.SupportedCultureNames.Any(c => 
+                string.Equals(c.Split('-')[0], parts[0], StringComparison.OrdinalIgnoreCase) || 
+                string.Equals(c, parts[0], StringComparison.OrdinalIgnoreCase)))
+            {
+                currentCultureInUrl = parts[0];
+                if (parts.Length > 1)
+                {
+                    currentSlug = parts[1];
+                    if (parts.Length > 2)
+                    {
+                        remainingSegments = "/" + string.Join("/", parts.Skip(2));
+                    }
+                }
+                else
+                {
+                    currentSlug = "";
+                }
+            }
+            else if (parts.Length > 0)
+            {
+                currentSlug = parts[0];
+                if (parts.Length > 1)
+                {
+                    remainingSegments = "/" + string.Join("/", parts.Skip(1));
+                }
+            }
+            else
+            {
+                currentSlug = "";
+            }
 
-        // Fallback for untranslated pages or canonicals
-        var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(currentSlug);
-        if (pageKeyFromCanonical != null)
-        {
-            return $"{baseUri}{RouteService.GetLocalizedUrl(pageKeyFromCanonical, culture)}";
+            string resultUrl;
+            if (!string.IsNullOrEmpty(currentSlug) && RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
+            {
+                resultUrl = $"{baseUri}{RouteService.GetLocalizedUrl(pageKey!, culture)}{remainingSegments}{queryString}";
+            }
+            else if (string.IsNullOrEmpty(currentSlug))
+            {
+                resultUrl = $"{baseUri}/{GetShortCode(culture)}{queryString}";
+            }
+            else
+            {
+                var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(currentSlug);
+                if (pageKeyFromCanonical != null)
+                {
+                    resultUrl = $"{baseUri}{RouteService.GetLocalizedUrl(pageKeyFromCanonical, culture)}{remainingSegments}{queryString}";
+                }
+                else
+                {
+                    resultUrl = $"{baseUri}/{GetShortCode(culture)}/{currentSlug}{remainingSegments}{queryString}";
+                }
+            }
+            
+            return resultUrl;
         }
-
-        return $"{baseUri}/{GetShortCode(culture)}/{currentSlug}";
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SeoHreflangs] Error generating URL for {culture}: {ex.Message}");
+            return string.Empty;
+        }
     }
 
     private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
