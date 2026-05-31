@@ -1602,6 +1602,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 var reservationStartOffset = GetWarsawOffset(startRequest.StartDate, startRequest.CheckInTime);
                 var bitrixServerUTCOffset = await _bitrixService.GetServerUtcOffsetAsync();
                 var differenceInHours = bitrixServerUTCOffset.TotalHours - reservationStartOffset.TotalHours;
+                var StayWellLink = BuildStayWellLink(record.ReservationGuid.ToString());
                 var customFields = new Dictionary<string, object?>
                 {
                     ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
@@ -1616,13 +1617,23 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["UF_CRM_1778170129465"] = startRequest?.CheckInTime.ToString("HH:mm"),
                     //RB_Godzina_Wymeldowania
                     ["UF_CRM_1778170154231"] = startRequest?.CheckOutTime.ToString("HH:mm"),
+                    
+                    //rb_data_meldunek
+                    ["UF_CRM_1778790928572"] = startRequest?.StartDate.ToString("yyyy-MM-dd") + " " + startRequest?.CheckInTime.ToString("HH:mm"),
+                    //rb_data_wymeldunek
+                    ["UF_CRM_1778790948473"] = startRequest?.EndDate.ToString("yyyy-MM-dd") + " " + startRequest?.CheckOutTime.ToString("HH:mm"),
 
                     ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15, 0),
                     ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11, 0),
                     [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
                     [BitrixReservationSourceFieldName] = reservationSourceValue,
                     [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
-                    [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
+
+                    //rb_format_staywell
+                    [BitrixStayWellLinkFieldName] = StayWellLink,
+
+                    //b_rb_format_staywell
+                    ["UF_CRM_1780004115483"] = StayWellLink, //pole string only w bitrix dla wiadomosci.
                     //RB_Link_Anuluj_Rezerwacje
                     ["UF_CRM_1775071948450"] = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true),
                     //RB_Link_Do_Platnosci
@@ -1734,6 +1745,12 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 ["UF_CRM_1778170129465"] = record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
                 //RB_Godzina_Wymeldowania
                 ["UF_CRM_1778170154231"] = record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
+
+                //rb_data_meldunek
+                ["UF_CRM_1778790928572"] = record.State.StartRequest?.StartDate.ToString("yyyy-MM-dd") + " " + record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
+                //rb_data_wymeldunek
+                ["UF_CRM_1778790948473"] = record.State.StartRequest?.EndDate.ToString("yyyy-MM-dd") + " " + record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
+
                 //RB_Zastosowany_Bonus
                 ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
                     ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
