@@ -114,3 +114,20 @@ The system now supports clean, sharable URLs for the apartment listing page with
 - **Błąd "Could not find createRipple":** Sprawdź, czy import w `Button.razor` używa ścieżki bezwzględnej `/js/buttonHelper.js`.
 - **Język nie zmienia się po kliknięciu:** Upewnij się, że `LocalizedRoutingMiddleware` jest zarejestrowany w `Program.cs` **przed** `app.UseRequestLocalization()`.
 - **Sitemapa nie pokazuje zmian:** Wyczyść cache serwera i upewnij się, że `route_generator.py` został uruchomiony poprawnie (sprawdź zawartość `LocalizedRouteRegistry.cs`).
+
+---
+
+## 8. Planowana Migracja: C# Route Generator (BuildTool)
+Zgodnie z decyzją architektoniczną, obecny skrypt Python zostanie zastąpiony natywnym narzędziem .NET, aby ujednolicić stos technologiczny i poprawić skalowalność.
+
+### Architektura Docelowa:
+1.  **Projekt:** `Tools/RouteGenerator` (Aplikacja konsolowa .NET 8).
+2.  **Konfiguracja:** `RentoomBookingWeb/routes-config.json` – zawiera mapowania stron i ścieżki do komponentów.
+3.  **Source of Truth:** Narzędzie będzie pobierać listę aktywnych języków bezpośrednio z `SharedFrontend/Localization/supported-languages.json`.
+4.  **Automatyzacja:** Wykorzystanie MSBuild `PreBuildEvent` w projekcie Web, co zapewni automatyczne generowanie tras przy każdej kompilacji (lokalnie oraz na CI/CD).
+
+### Korzyści:
+- Brak zależności od Pythona w środowisku deweloperskim i CI.
+- Pełna integracja z `$(MSBuildThisFileDirectory)`, eliminująca problemy ze ścieżkami relatywnymi.
+- Możliwość łatwego debugowania generatora w Visual Studio/Rider.
+- Walidacja poprawności routingu na etapie kompilacji (Build Fail przy błędach konfiguracji).
