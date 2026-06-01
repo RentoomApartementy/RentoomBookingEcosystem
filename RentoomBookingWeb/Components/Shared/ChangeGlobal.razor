@@ -100,7 +100,10 @@
         }
 
         _isDropdownOpen = false; 
-        Navigation.NavigateTo(newUri, forceLoad: true);
+        
+        // ENTERPRISE REDIRECT: Use the /culture/set endpoint to set the cookie securely and then redirect
+        var setCultureUrl = $"/culture/set?culture={selectedCulture}&returnUrl={Uri.EscapeDataString(newUri)}";
+        Navigation.NavigateTo(setCultureUrl, forceLoad: true);
     }
 
     private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
@@ -116,4 +119,3 @@
         _ => null
     };
 }
-

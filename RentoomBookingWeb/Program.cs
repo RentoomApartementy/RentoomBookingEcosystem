@@ -53,6 +53,7 @@ namespace RentoomBookingWeb
             
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
             builder.Services.AddHttpClient();
             builder.Services.AddResponseCompression(options =>
             {
@@ -148,6 +149,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<CustomerTermsRepository>();
             builder.Services.AddScoped<CustomerTermsService>();
             builder.Services.AddScoped<CookieConsentRepository>();
+            
             builder.Services.AddScoped<CookieConsentService>();
             builder.Services.AddScoped<IBonusesService, BonusesService>();
             builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
@@ -271,29 +273,6 @@ namespace RentoomBookingWeb
                 }
             };
 
-            app.UseMiddleware<LocalizedRoutingMiddleware>();
-            app.UseRequestLocalization(localizationOptions);
-
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
-
-            if (!app.Environment.IsProduction())
-            {
-                app.Use(async (context, next) =>
-                {
-                    context.Response.OnStarting(() =>
-                    {
-                        context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
-                        return Task.CompletedTask;
-                    });
-
-                    await next();
-                });
-            }
-
             app.UseHttpsRedirection();
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
@@ -317,6 +296,31 @@ namespace RentoomBookingWeb
                     }
                 }
             });
+
+            app.UseRouting();
+
+            app.UseMiddleware<LocalizedRoutingMiddleware>();
+            app.UseRequestLocalization(localizationOptions);
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            if (!app.Environment.IsProduction())
+            {
+                app.Use(async (context, next) =>
+                {
+                    context.Response.OnStarting(() =>
+                    {
+                        context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
+                        return Task.CompletedTask;
+                    });
+
+                    await next();
+                });
+            }
 
             // DIAGNOSTIC LOGGING
             var logger = app.Services.GetRequiredService<ILogger<Program>>();

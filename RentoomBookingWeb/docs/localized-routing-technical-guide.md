@@ -117,17 +117,23 @@ The system now supports clean, sharable URLs for the apartment listing page with
 
 ---
 
-## 8. Planowana Migracja: C# Route Generator (BuildTool)
-Zgodnie z decyzją architektoniczną, obecny skrypt Python zostanie zastąpiony natywnym narzędziem .NET, aby ujednolicić stos technologiczny i poprawić skalowalność.
+## 8. System Lokalizacji: Runtime .NET (Zgodnie ze sztuką)
+Obecna architektura opiera się w 100% na natywnych mechanizmach .NET, eliminując potrzebę używania zewnętrznych skryptów generujących kod.
 
-### Architektura Docelowa:
-1.  **Projekt:** `Tools/RouteGenerator` (Aplikacja konsolowa .NET 8).
-2.  **Konfiguracja:** `RentoomBookingWeb/routes-config.json` – zawiera mapowania stron i ścieżki do komponentów.
-3.  **Source of Truth:** Narzędzie będzie pobierać listę aktywnych języków bezpośrednio z `SharedFrontend/Localization/supported-languages.json`.
-4.  **Automatyzacja:** Wykorzystanie MSBuild `PreBuildEvent` w projekcie Web, co zapewni automatyczne generowanie tras przy każdej kompilacji (lokalnie oraz na CI/CD).
+### Kluczowe Komponenty:
+1.  **Źródło Prawdy (`PageRoutes.resx`):** Wszystkie slugi URL są definiowane w standardowych plikach zasobów .NET. Dodanie nowego języka odbywa się poprzez dodanie odpowiedniego pliku `.resx` (np. `PageRoutes.es.resx`).
+2.  **LocalizedUrlBuilder:** Klasa typu Fluent API służąca do bezpiecznego budowania zlokalizowanych adresów URL z parametrami.
+    ```csharp
+    var url = RouteService.CreateBuilder("Apartments")
+                         .WithParam(dateFrom)
+                         .WithParam(dateTo)
+                         .Build();
+    ```
+3.  **Dynamiczny Routing (`LocalizedRouter`):** System nie używa już wielu dyrektyw `@page` w plikach komponentów. Zamiast tego, główny router Blazora przekazuje nierozpoznane trasy do `LocalizedRouter.razor`, który na podstawie sluga i kultury dynamicznie renderuje odpowiedni komponent.
+4.  **Mapowanie Stron (`PageMapping`):** Statyczna mapa łącząca klucze (np. "Apartments") z konkretnymi typami komponentów Razor.
 
-### Korzyści:
-- Brak zależności od Pythona w środowisku deweloperskim i CI.
-- Pełna integracja z `$(MSBuildThisFileDirectory)`, eliminująca problemy ze ścieżkami relatywnymi.
-- Możliwość łatwego debugowania generatora w Visual Studio/Rider.
-- Walidacja poprawności routingu na etapie kompilacji (Build Fail przy błędach konfiguracji).
+### Zalety Rozwiązania:
+- **Brak długu technicznego:** Brak generowanego kodu, który trzeba by synchronizować.
+- **Czystość komponentów:** Pliki `.razor` zawierają tylko podstawowe dyrektywy routingu.
+- **Bevel-Proofing:** Builder gwarantuje poprawność formatowania URL-i.
+- **Pełny Runtime:** Zmiany w tłumaczeniach slugów nie wymagają rekompilacji całego rozwiązania (tylko przeładowania zasobów).

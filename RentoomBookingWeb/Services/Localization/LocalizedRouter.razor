@@ -1,0 +1,148 @@
+@page "/{cultureCode}"
+@page "/{cultureCode}/{*routeSegments}"
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Rendering
+@using System.Globalization
+@using RentoomBooking.SharedFrontend.Localization
+@inject IRouteLocalizationService RouteService
+
+@if (_resolvedComponentType != null)
+{
+    <DynamicComponent Type="_resolvedComponentType" @key="_renderKey" Parameters="_parameters" />
+}
+else if (!_isResolving)
+{
+    <RentoomBookingWeb.Components.Pages.NotFoundPage />
+}
+
+@code {
+    [Parameter] public string? cultureCode { get; set; }
+    [Parameter] public string? routeSegments { get; set; }
+
+    private Type? _resolvedComponentType;
+    private Dictionary<string, object> _parameters = new();
+    private Guid _renderKey = Guid.NewGuid();
+    private bool _isResolving = true;
+    private string? _lastResolvedPath;
+
+    protected override void OnParametersSet()
+    {
+        var currentPath = $"{cultureCode}/{routeSegments}";
+        if (currentPath != _lastResolvedPath)
+        {
+            _lastResolvedPath = currentPath;
+            _renderKey = Guid.NewGuid();
+            ResolveRoute();
+        }
+    }
+
+    private void ResolveRoute()
+    {
+        _isResolving = true;
+        _resolvedComponentType = null;
+        _parameters.Clear();
+
+        if (string.IsNullOrEmpty(cultureCode))
+        {
+            _isResolving = false;
+            return;
+        }
+
+        // 1. Skip technical Blazor/ASP.NET paths
+        if (cultureCode.StartsWith("_") || cultureCode.Equals("api", StringComparison.OrdinalIgnoreCase))
+        {
+            _isResolving = false;
+            return;
+        }
+
+        // 2. Validate against supported cultures
+        var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames;
+        if (supportedCultures == null)
+        {
+            _isResolving = false;
+            return;
+        }
+
+        var isSupported = supportedCultures.Any(c => 
+            string.Equals(c, cultureCode, StringComparison.OrdinalIgnoreCase) || 
+            string.Equals(c.Split('-')[0], cultureCode, StringComparison.OrdinalIgnoreCase));
+
+        if (!isSupported)
+        {
+            _isResolving = false;
+            return;
+        }
+
+        // If there are no segments, it's the home page for that culture
+        if (string.IsNullOrEmpty(routeSegments))
+        {
+            _resolvedComponentType = PageMapping.KeyToComponent["Home"];
+            _isResolving = false;
+            return;
+        }
+
+        var segments = routeSegments.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var slug = segments[0];
+
+        // Resolve page key from slug
+        if (RouteService.TryGetPageKeyFromSlug(slug, cultureCode, out var pageKey) && pageKey != null)
+        {
+            if (PageMapping.KeyToComponent.TryGetValue(pageKey, out var componentType))
+            {
+                _resolvedComponentType = componentType;
+                
+                // Map remaining segments to parameters
+                var remainingSegments = segments.Skip(1).ToArray();
+                MapParameters(pageKey, remainingSegments);
+            }
+        }
+        
+        _isResolving = false;
+    }
+
+    private void MapParameters(string pageKey, string[] segments)
+    {
+        switch (pageKey)
+        {
+            case "ApartmentDetail":
+                if (segments.Length >= 2)
+                {
+                    if (int.TryParse(segments[0], out var id))
+                    {
+                        _parameters["Id"] = id;
+                        _parameters["Slug"] = segments[1];
+
+                        if (segments.Length >= 4)
+                        {
+                            _parameters["StartDate"] = segments[2];
+                            _parameters["EndDate"] = segments[3];
+                        }
+                        if (segments.Length >= 5) _parameters["Adults"] = segments[4];
+                        if (segments.Length >= 6) _parameters["Children"] = segments[5];
+                    }
+                }
+                break;
+
+            case "Apartments":
+                if (segments.Length >= 2)
+                {
+                    _parameters["StartDate"] = segments[0];
+                    _parameters["EndDate"] = segments[1];
+                    if (segments.Length >= 3) _parameters["Adults"] = segments[2];
+                    if (segments.Length >= 4) _parameters["Children"] = segments[3];
+                }
+                break;
+
+            case "Statute":
+                if (segments.Length >= 1)
+                {
+                    if (int.TryParse(segments[0], out var id))
+                    {
+                        _parameters["Id"] = id;
+                        if (segments.Length >= 2) _parameters["Slug"] = segments[1];
+                    }
+                }
+                break;
+        }
+    }
+}

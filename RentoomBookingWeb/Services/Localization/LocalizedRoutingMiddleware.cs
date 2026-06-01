@@ -43,26 +43,34 @@ namespace RentoomBookingWeb.Services.Localization
             {
                 var cultureInfo = new CultureInfo(matchedCulture);
                 
-                // FORCE: Set the culture for the current request thread
+                // --- ENTERPRISE COOKIE SYNC ---
+                // We check if the current cookie matches the URL culture.
+                // If not, we append the cookie to the response so subsequent SignalR requests (which don't have the URL prefix) 
+                // will pick up the correct culture from the cookie.
+                var currentCookie = context.Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+                var expectedCookieValue = CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(cultureInfo));
+
+                if (currentCookie != expectedCookieValue)
+                {
+                    context.Response.Cookies.Append(
+                        CookieRequestCultureProvider.DefaultCookieName,
+                        expectedCookieValue,
+                        new CookieOptions 
+                        { 
+                            Expires = DateTimeOffset.UtcNow.AddYears(1), 
+                            HttpOnly = true, 
+                            SameSite = SameSiteMode.Lax,
+                            Path = "/" 
+                        }
+                    );
+                }
+
+                // FORCE: Set the culture for the current request thread (for SSR)
                 CultureInfo.CurrentCulture = cultureInfo;
                 CultureInfo.CurrentUICulture = cultureInfo;
                 
                 // SYNC: Set the feature so subsequent localization middleware (and Blazor) respects this
                 context.Features.Set<IRequestCultureFeature>(new RequestCultureFeature(new RequestCulture(cultureInfo), null));
-
-                // PERSIST: Update the cookie so Blazor Server circuit initialization picks it up
-                var cookieValue = CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(cultureInfo));
-                context.Response.Cookies.Append(
-                    CookieRequestCultureProvider.DefaultCookieName,
-                    cookieValue,
-                    new CookieOptions 
-                    { 
-                        Expires = DateTimeOffset.UtcNow.AddYears(1), 
-                        HttpOnly = true, 
-                        SameSite = SameSiteMode.Lax,
-                        Path = "/" 
-                    }
-                );
             }
 
             await _next(context);
