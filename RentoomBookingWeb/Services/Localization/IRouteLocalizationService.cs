@@ -7,5 +7,6 @@ namespace RentoomBookingWeb.Services.Localization
         string GetLocalizedUrl(string pageKey, string? culture = null);
         string GetUrlWithCulture(string path, string culture);
         bool TryGetPageKeyFromSlug(string slug, string culture, out string? pageKey);
+        LocalizedUrlBuilder CreateBuilder(string pageKey, string? culture = null);
     }
 }

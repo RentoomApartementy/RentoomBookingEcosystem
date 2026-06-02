@@ -158,7 +158,6 @@
     [Parameter] public string EndDate { get; set; } = "";
     [Parameter] public string Adults { get; set; } = "";
     [Parameter] public string Children { get; set; } = "";
-    [Parameter] public string Rooms { get; set; } = "";
     
     [Parameter] public EventCallback<Dictionary<string, string>> OnSearch { get; set; }
     [Parameter] public bool IsRoom { get; set; } = true;
@@ -167,7 +166,6 @@
     private string _endDate = "";
     private string _adults = "2";
     private string _children = "0";
-    private string _rooms = "";
 
     private DateTimeOffset? _pickerStartDate;
     private DateTimeOffset? _pickerEndDate;
@@ -176,7 +174,6 @@
     private string _lastEndDateParam = "";
     private string _lastAdultsParam = "";
     private string _lastChildrenParam = "";
-    private string _lastRoomsParam = "";
 
     private bool _isGuestModalOpen = false;
     private bool _dateError = false;
@@ -209,13 +206,6 @@
             _lastChildrenParam = Children; 
             guestsChanged = true;
         }
-        
-        if (Rooms != _lastRoomsParam)         
-        { 
-            _rooms = Rooms;         
-            _lastRoomsParam = Rooms; 
-            guestsChanged = true;
-        }
 
         if (dateChanged) ParseDatesForPicker();
     }
@@ -226,7 +216,6 @@
         _endDate = EndDate;     _lastEndDateParam = EndDate;
         _adults = string.IsNullOrEmpty(Adults) ? "2" : Adults; _lastAdultsParam = Adults;
         _children = string.IsNullOrEmpty(Children) ? "0" : Children; _lastChildrenParam = Children;
-        _rooms = Rooms;         _lastRoomsParam = Rooms;
         
         ParseDatesForPicker();
     }
@@ -304,8 +293,7 @@
                     ["StartDate"] = _startDate,
                     ["EndDate"] = _endDate,
                     ["Adults"] = _adults,
-                    ["Children"] = _children,
-                    ["Rooms"] = _rooms
+                    ["Children"] = _children
                 },
                 new Dictionary<string, double>
                 {
@@ -319,7 +307,6 @@
                 ["end_date"] = _endDate,
                 ["adults"] = GetAdultsCount(),
                 ["children"] = GetChildrenCount(),
-                ["rooms"] = _rooms,
                 ["guests"] = CountPersons
             });
 
@@ -327,7 +314,6 @@
             {
                 { "startDate", _startDate },
                 { "endDate", _endDate },
-                { "rooms", _rooms },
                 { "adults", _adults },
                 { "children", _children }
             };

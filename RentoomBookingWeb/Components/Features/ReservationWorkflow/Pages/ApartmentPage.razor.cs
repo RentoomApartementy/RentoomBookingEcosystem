@@ -435,10 +435,20 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             { "en-US", "EN" },
         };
 
-        protected string CurrentAddonLanguage => _addonslanguageMap?.GetValueOrDefault(
-            CultureInfo.CurrentUICulture.Name,
-            CultureInfo.CurrentUICulture.Name
-        ) ?? CultureInfo.CurrentUICulture.Name;
+        protected string CurrentAddonLanguage 
+        {
+            get
+            {
+                var culture = CultureInfo.CurrentUICulture.Name;
+                if (_addonslanguageMap != null && _addonslanguageMap.TryGetValue(culture, out var mapped))
+                {
+                    return mapped;
+                }
+                
+                // Extract 2-letter uppercase code (e.g., 'it-IT' -> 'IT')
+                return culture.Split('-')[0].ToUpperInvariant();
+            }
+        }
 
         protected string CurrentLanguage => _languageMap?.GetValueOrDefault(
             CultureInfo.CurrentUICulture.Name,
@@ -882,6 +892,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             int persons = (int.TryParse(Adults, out var a) ? a : 1) + (int.TryParse(Children, out var c) ? c : 0);
 
+            var details = definition?.AddonDefinition?.Details;
             var newDto = new SelectedAddonDto
             {
                 AddonId = addonId,
@@ -891,7 +902,10 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 Persons = persons,
                 Nights = nights,
                 PaymentType = definition?.PaymentType,
-                DisplayText = definition?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == CurrentAddonLanguage)?.Name ?? "Addon"
+                DisplayText = details?.FirstOrDefault(d => d.Lang == CurrentAddonLanguage)?.Name 
+                            ?? details?.FirstOrDefault(d => d.Lang == "EN")?.Name 
+                            ?? details?.FirstOrDefault(d => d.Lang == "PL")?.Name 
+                            ?? "Addon"
             };
 
             targetAddons.Add(newDto);

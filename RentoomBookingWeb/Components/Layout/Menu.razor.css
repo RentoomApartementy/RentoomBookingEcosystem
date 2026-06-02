@@ -62,7 +62,7 @@ ul {
 }
 
 @media (min-width: 1050px) {
-    .burger {
+    ::deep .burger {
         display: none !important;
     }
 }

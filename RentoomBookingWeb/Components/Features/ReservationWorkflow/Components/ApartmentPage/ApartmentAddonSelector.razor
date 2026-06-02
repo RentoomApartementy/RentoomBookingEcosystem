@@ -26,7 +26,11 @@
                         var fa = DefinedAddons.FirstOrDefault(a => a.IdoBookingId == addon.Id);
                         @if (fa != null)
                         {
-                            var fadesc = fa.AddonDefinition.Details.FirstOrDefault(a => a.Lang == CurrentAddonLanguage);
+                            var details = fa.AddonDefinition.Details;
+                            var fadesc = details.FirstOrDefault(a => a.Lang == CurrentAddonLanguage)
+                                       ?? details.FirstOrDefault(a => a.Lang == "EN")
+                                       ?? details.FirstOrDefault(a => a.Lang == "PL");
+                            
                             var paymentType = fa.PaymentType;
                             <div class="addon-item">
                                 <div class="addon-label" @onclick="@(() => OnToggleAddon.InvokeAsync(addon.Id))" @onclick:stopPropagation="true">

@@ -1,84 +1,122 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
+using System.Linq;
+using System.Resources;
 
 namespace RentoomBookingWeb.Services.Localization
 {
     public class RouteLocalizationService : IRouteLocalizationService
     {
         private readonly NavigationManager _navigationManager;
+        private readonly ResourceManager _resourceManager;
 
         public RouteLocalizationService(NavigationManager navigationManager)
         {
             _navigationManager = navigationManager;
+            _resourceManager = PageRoutes.ResourceManager;
         }
 
         public string GetLocalizedUrl(string pageKey, string? culture = null)
         {
             culture ??= CultureInfo.CurrentUICulture.Name;
-            
-            // Normalize to short code if it's one of our main ones, or use the provided one
             var displayCulture = GetShortCultureCode(culture);
-            var cultureKey = culture.ToLowerInvariant();
 
-            if (LocalizedRouteRegistry.PageSlugs.TryGetValue(pageKey, out var slugs))
+            // SPECIAL CASE: Home page is always the root of the culture
+            if (pageKey == "Home")
             {
-                if (slugs.TryGetValue(cultureKey, out var slug))
-                {
-                    return $"/{displayCulture}/{slug}";
-                }
-                
-                // Fallback to 2-letter code for lookup
-                var shortCulture = cultureKey.Split('-')[0];
-                if (slugs.TryGetValue(shortCulture, out var shortSlug))
-                {
-                    return $"/{displayCulture}/{shortSlug}";
-                }
-                
-                // Final fallback to Polish slug
-                if (slugs.TryGetValue("pl", out var plSlug))
-                {
-                    return $"/{displayCulture}/{plSlug}";
-                }
+                return $"/{displayCulture}";
             }
 
-            return $"/{displayCulture}";
+            var slug = GetSlugFromResources(pageKey, culture);
+            
+            if (string.IsNullOrEmpty(slug))
+            {
+                // Fallback to Polish
+                slug = GetSlugFromResources(pageKey, "pl-PL");
+            }
+
+            if (string.IsNullOrEmpty(slug))
+            {
+                // Final fallback to key
+                slug = pageKey.ToLowerInvariant();
+            }
+
+            return $"/{displayCulture}/{slug}";
+        }
+
+        public LocalizedUrlBuilder CreateBuilder(string pageKey, string? culture = null)
+        {
+            return new LocalizedUrlBuilder(GetLocalizedUrl(pageKey, culture));
         }
 
         public string GetUrlWithCulture(string path, string culture)
         {
             var displayCulture = GetShortCultureCode(culture);
             var trimmedPath = path.TrimStart('/');
+            
+            // If it's the root path
+            if (string.IsNullOrEmpty(trimmedPath))
+            {
+                return $"/{displayCulture}";
+            }
+
             return $"/{displayCulture}/{trimmedPath}";
+        }
+
+        public bool TryGetPageKeyFromSlug(string slug, string culture, out string? pageKey)
+        {
+            pageKey = null;
+            var cultureInfo = new CultureInfo(culture);
+
+            // We need to check all keys in the mapping
+            foreach (var key in PageMapping.KeyToComponent.Keys)
+            {
+                // Home has no slug in the URL (it's handled by segments.Length == 0 in the router)
+                if (key == "Home") continue;
+
+                var translatedSlug = _resourceManager.GetString(key, cultureInfo);
+                if (string.Equals(translatedSlug, slug, StringComparison.OrdinalIgnoreCase))
+                {
+                    pageKey = key;
+                    return true;
+                }
+            }
+
+            // Fallback to Polish
+            var plCulture = new CultureInfo("pl-PL");
+            foreach (var key in PageMapping.KeyToComponent.Keys)
+            {
+                if (key == "Home") continue;
+
+                var translatedSlug = _resourceManager.GetString(key, plCulture);
+                if (string.Equals(translatedSlug, slug, StringComparison.OrdinalIgnoreCase))
+                {
+                    pageKey = key;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private string? GetSlugFromResources(string key, string culture)
+        {
+            try
+            {
+                return _resourceManager.GetString(key, new CultureInfo(culture));
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private string GetShortCultureCode(string culture)
         {
             var parts = culture.Split('-');
             return parts[0].ToLowerInvariant();
-        }
-
-        public bool TryGetPageKeyFromSlug(string slug, string culture, out string? pageKey)
-        {
-            pageKey = null;
-            var cultureKey = culture.ToLowerInvariant();
-            var shortCulture = cultureKey.Split('-')[0];
-
-            foreach (var entry in LocalizedRouteRegistry.PageSlugs)
-            {
-                var slugs = entry.Value;
-                if (slugs.TryGetValue(cultureKey, out var s) && string.Equals(s, slug, StringComparison.OrdinalIgnoreCase))
-                {
-                    pageKey = entry.Key;
-                    return true;
-                }
-                if (slugs.TryGetValue(shortCulture, out var s2) && string.Equals(s2, slug, StringComparison.OrdinalIgnoreCase))
-                {
-                    pageKey = entry.Key;
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }
