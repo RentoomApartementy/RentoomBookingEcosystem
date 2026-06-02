@@ -503,7 +503,8 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 SelectedAddons = selectedAddons,
                 MandatoryAddons = mandatoryAddons,
                 MandatoryAddonsTotalPrice = mandatoryTotal,
-                SelectedAddonsTotalPrice = selectedTotal
+                SelectedAddonsTotalPrice = selectedTotal,
+                Vat = (decimal)reservation.Items[0].vat
             };
         }
 

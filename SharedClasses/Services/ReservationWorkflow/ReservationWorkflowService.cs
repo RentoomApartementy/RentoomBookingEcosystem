@@ -1291,6 +1291,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     NumberOfAdults = start.Adults,
                     //NumberOfBigChildren = start.Children,
                     NumberOfSmallChildren = start.Children,
+                    Vat = (float?)(start.Vat == 0 ? 8:start.Vat),
                     Addons = reservationAddons.Select(a => new NewReservationAddon
                     {
                         AddonId = a.AddonId,

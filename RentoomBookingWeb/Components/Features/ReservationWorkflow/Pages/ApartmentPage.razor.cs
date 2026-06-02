@@ -1188,7 +1188,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 AppliedBonusValue = _bonusAppliedValue,
                 BonusBasePln = _bonusBaseAmount,
                 DiscountAmountPln = _bonusDiscountAmount,
-                BonusRejectReason = _bonusRejectReason
+                BonusRejectReason = _bonusRejectReason,
+                Vat =8
             };
 
             WorkflowTelemetry.TrackEvent(
