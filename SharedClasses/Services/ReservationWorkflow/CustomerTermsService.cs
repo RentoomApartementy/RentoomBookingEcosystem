@@ -12,14 +12,14 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             _repository = repository;
         }
 
-        public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync(string? cultureName, bool onlyRequiredForWorkflow = false)
+        public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync(string? cultureName, bool onlyRequiredForWorkflow = false, CancellationToken ct = default)
         {
-            return await _repository.GetActiveTermsSourcesAsync(cultureName, onlyRequiredForWorkflow);
+            return await _repository.GetActiveTermsSourcesAsync(cultureName, onlyRequiredForWorkflow, ct);
         }
 
-        public async Task<CustomerTermDisplayDto?> GetTermByIdAsync(int id, string? cultureName)
+        public async Task<CustomerTermDisplayDto?> GetTermByIdAsync(int id, string? cultureName, CancellationToken ct = default)
         {
-            return await _repository.GetTermByIdAsync(id, cultureName);
+            return await _repository.GetTermByIdAsync(id, cultureName, ct);
         }
 
         public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(Guid reservationGuid, string? cultureName = null)

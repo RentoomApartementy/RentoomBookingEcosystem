@@ -54,7 +54,7 @@ Router zastępuje standardowy mechanizm `@page` i procesuje trasy `/{cultureCode
 ## 5. SEO i Internationalization
 
 ### SeoHreflangs.razor
-Komponent wstrzyknięty centralnie w `App.razor`. Dla każdego żądania generuje komplet 33 tagów `<link rel="alternate" hreflang="..." />`. Dzięki architekturze Runtime, potrafi wygenerować zlokalizowane linki (np. zamiana `apartamenty` na `apartments`) dla dowolnie głębokich adresów z parametrami.
+Komponent wstrzyknięty centralnie w `App.razor`. Dla każdego żądania generuje komplet 33 tagów `<link rel="alternate" hreflang="..." />`. Dzięki architekturze Runtime, system potrafi wygenerować zlokalizowane linki (np. zamiana `apartamenty` na `apartments`) dla dowolnie głębokich adresów z parametrami.
 
 ---
 
@@ -62,3 +62,21 @@ Komponent wstrzyknięty centralnie w `App.razor`. Dla każdego żądania generuj
 1. **PageMapping.cs:** Dodać wpis do `KeyToComponent` definiując klucz, typ klasy oraz opcjonalny szablon parametrów (np. `"{Id}/{Slug}"`).
 2. **PageRoutes.resx:** Dodać klucz i jego tłumaczenie (slug) w odpowiednich plikach językowych.
 3. **Komponent:** Upewnić się, że właściwości oznaczone jako `[Parameter]` odpowiadają nazwom użytym w szablonie trasy.
+
+---
+
+## 7. Przyszłe Rozszerzenia (Deep Nested Routing)
+Architektura została zaprojektowana z myślą o łatwym rozszerzaniu o głęboko zagnieżdżone trasy (np. system blogowy: `/blog/nazwa-posta/komentarze/strona/2`).
+
+### Strategia "Zlokalizowanych Stałych" (Localized Constants):
+Jeśli w przyszłości zajdzie potrzeba obsługi linków, w których środkowe segmenty również muszą być tłumaczone (np. słowo `komentarze` -> `comments`), należy:
+
+1.  **Słownik (.resx):** Dodać techniczne słowo kluczowe (np. `CommentsKey`) i jego tłumaczenia we wszystkich językach.
+2.  **Szablon (PageMapping.cs):** Zastosować specjalną notację dla stałych fragmentów, np. używając wykrzyknika:
+    `["BlogComments"] = new(typeof(BlogPage), "{Slug}/!CommentsKey/{PageNumber}")`
+3.  **Rozszerzenie Routera:** Zmodyfikować metodę `MapParametersFromTemplate` w `LocalizedRouter.razor`, aby rozpoznawała prefiks `!`. Zamiast przypisywać segment do parametru, router powinien:
+    *   Pobrać zlokalizowany slug dla klucza `CommentsKey`.
+    *   Porównać go z bieżącym segmentem w URL.
+    *   Zwrócić 404, jeśli segment w URL nie pasuje do tłumaczenia w aktualnym języku.
+
+Dzięki temu system pozostanie generyczny i umożliwi tworzenie nieskończenie złożonych, w pełni zlokalizowanych struktur URL bez zmiany podstawowej architektury.
