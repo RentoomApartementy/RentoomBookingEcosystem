@@ -72,6 +72,16 @@ else if (!_isResolving)
 
         if (!isSupported)
         {
+            // --- LEGACY SEO BRIDGE: Try to resolve as a prefix-less Polish link ---
+            if (RouteService.TryGetPageKeyFromSlug(cultureCode, "pl-PL", out var legacyPageKey) && legacyPageKey != null)
+            {
+                var newUrl = RouteService.GetLocalizedUrl(legacyPageKey, "pl-PL");
+                var remainingPath = !string.IsNullOrEmpty(routeSegments) ? $"/{routeSegments}" : "";
+                var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+                NavManager.NavigateTo($"{newUrl}{remainingPath}{uri.Query}", replace: true);
+                return;
+            }
+
             _isResolving = false;
             return;
         }
@@ -86,37 +96,104 @@ else if (!_isResolving)
 
         var segments = routeSegments.Split('/', StringSplitOptions.RemoveEmptyEntries);
         var slug = segments[0];
+        var remainingSegments = segments.Skip(1).ToArray();
 
-        // Resolve page key from slug
-        if (RouteService.TryGetPageKeyFromSlug(slug, cultureCode, out var pageKey) && pageKey != null)
+        // 3. Find potential page keys matching this slug
+        var potentialKeys = RouteService.GetPageKeysFromSlug(slug, cultureCode);
+        
+        // --- SENIOR AMBIGUITY RESOLUTION: Priority + Trial Mapping ---
+        string? bestPageKey = null;
+        RouteDefinition? bestDefinition = null;
+
+        var candidates = potentialKeys
+            .Select(k => new { Key = k, Definition = PageMapping.KeyToComponent[k] })
+            .OrderByDescending(c => c.Definition.Priority) // Try highest priority first
+            .ToList();
+
+        foreach (var candidate in candidates)
+        {
+            var template = candidate.Definition.RouteTemplate;
+            var templateParts = string.IsNullOrEmpty(template) 
+                ? Array.Empty<string>() 
+                : template.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+            bool isTrialMatch = true;
+
+            // Type validation for segments that ARE provided
+            for (int i = 0; i < templateParts.Length; i++)
+            {
+                if (i >= remainingSegments.Length) break; // Optional segments
+
+                var part = templateParts[i].Trim('{', '}');
+                var value = remainingSegments[i];
+
+                if (part.Equals("Id", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!int.TryParse(value, out _))
+                    {
+                        isTrialMatch = false;
+                        break;
+                    }
+                }
+            }
+
+            if (isTrialMatch)
+            {
+                // CHECK: Does this candidate satisfy the minimum required segments?
+                // e.g. ApartmentDetail requires at least 1 segment (ID)
+                if (remainingSegments.Length < candidate.Definition.MinRequiredSegments) continue;
+
+                bestPageKey = candidate.Key;
+                bestDefinition = candidate.Definition;
+                break;
+            }
+        }
+
+        // --- GLOBAL FALLBACK: If still no match, search across all languages ---
+        if (bestPageKey == null)
+        {
+            foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
+            {
+                var keys = RouteService.GetPageKeysFromSlug(slug, culture);
+                var key = keys.FirstOrDefault();
+                if (key != null)
+                {
+                    var canonicalUrl = RouteService.GetLocalizedUrl(key, cultureCode); // Use target culture
+                    var pathAfterSlug = !string.IsNullOrEmpty(routeSegments) && routeSegments.Length > slug.Length 
+                        ? routeSegments.Substring(slug.Length) 
+                        : "";
+                    var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+                    NavManager.NavigateTo($"{canonicalUrl}{pathAfterSlug}{uri.Query}", replace: true);
+                    return;
+                }
+            }
+        }
+
+        if (bestPageKey != null && bestDefinition != null)
         {
             // --- SEO ENFORCEMENT: Redirect to canonical slug if needed ---
             var fullCulture = RouteService.ResolveFullCulture(cultureCode);
-            var canonicalSlug = RouteService.GetSlug(pageKey, fullCulture);
+            var canonicalSlug = RouteService.GetSlug(bestPageKey, fullCulture);
             
             if (!string.IsNullOrEmpty(canonicalSlug) && !string.Equals(slug, canonicalSlug, StringComparison.OrdinalIgnoreCase))
             {
-                var canonicalUrl = RouteService.GetLocalizedUrl(pageKey, fullCulture);
-                var remainingPath = routeSegments.Substring(slug.Length);
+                var canonicalUrl = RouteService.GetLocalizedUrl(bestPageKey, fullCulture);
                 var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-                NavManager.NavigateTo($"{canonicalUrl}{remainingPath}{uri.Query}", replace: true);
+                var pathAfterSlug = routeSegments.Substring(slug.Length);
+                NavManager.NavigateTo($"{canonicalUrl}{pathAfterSlug}{uri.Query}", replace: true);
                 return;
             }
 
-            if (PageMapping.KeyToComponent.TryGetValue(pageKey, out var definition))
+            _resolvedComponentType = bestDefinition.ComponentType;
+            
+            // 1. Map parameters from URL segments using the template (e.g. {StartDate}/{EndDate})
+            if (!string.IsNullOrEmpty(bestDefinition.RouteTemplate))
             {
-                _resolvedComponentType = definition.ComponentType;
-                
-                // 1. Map parameters from URL segments using the template (e.g. {StartDate}/{EndDate})
-                var remainingSegments = segments.Skip(1).ToArray();
-                if (!string.IsNullOrEmpty(definition.RouteTemplate))
-                {
-                    MapParametersFromTemplate(definition.RouteTemplate, remainingSegments);
-                }
-                
-                // 2. Map parameters from QueryString (Additive Support & Fallback)
-                MapParametersFromQueryString();
+                MapParametersFromTemplate(bestDefinition.RouteTemplate, remainingSegments);
             }
+            
+            // 2. Map parameters from QueryString (Additive Support & Fallback)
+            MapParametersFromQueryString();
         }
         
         _isResolving = false;

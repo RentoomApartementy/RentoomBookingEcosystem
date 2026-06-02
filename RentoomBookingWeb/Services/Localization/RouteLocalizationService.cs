@@ -88,41 +88,39 @@ namespace RentoomBookingWeb.Services.Localization
             return $"/{displayCulture}/{trimmedPath}";
         }
 
-        public bool TryGetPageKeyFromSlug(string slug, string culture, out string? pageKey)
+        public IEnumerable<string> GetPageKeysFromSlug(string slug, string culture)
         {
-            pageKey = null;
+            var results = new HashSet<string>();
             var fullCulture = ResolveFullCulture(culture);
             var cultureInfo = new CultureInfo(fullCulture);
+            var plCulture = new CultureInfo("pl-PL");
 
-            // We need to check all keys in the mapping
+            // Check current culture and fallback to Polish
             foreach (var key in PageMapping.KeyToComponent.Keys)
             {
-                // Home has no slug in the URL (it's handled by segments.Length == 0 in the router)
                 if (key == "Home") continue;
 
                 var translatedSlug = _resourceManager.GetString(key, cultureInfo);
                 if (string.Equals(translatedSlug, slug, StringComparison.OrdinalIgnoreCase))
                 {
-                    pageKey = key;
-                    return true;
+                    results.Add(key);
                 }
-            }
 
-            // Fallback to Polish
-            var plCulture = new CultureInfo("pl-PL");
-            foreach (var key in PageMapping.KeyToComponent.Keys)
-            {
-                if (key == "Home") continue;
-
-                var translatedSlug = _resourceManager.GetString(key, plCulture);
-                if (string.Equals(translatedSlug, slug, StringComparison.OrdinalIgnoreCase))
+                var plSlug = _resourceManager.GetString(key, plCulture);
+                if (string.Equals(plSlug, slug, StringComparison.OrdinalIgnoreCase))
                 {
-                    pageKey = key;
-                    return true;
+                    results.Add(key);
                 }
             }
 
-            return false;
+            return results;
+        }
+
+        public bool TryGetPageKeyFromSlug(string slug, string culture, out string? pageKey)
+        {
+            var keys = GetPageKeysFromSlug(slug, culture);
+            pageKey = keys.FirstOrDefault();
+            return pageKey != null;
         }
 
         private string GetShortCultureCode(string culture)
