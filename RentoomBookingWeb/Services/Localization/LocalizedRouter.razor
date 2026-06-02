@@ -4,7 +4,9 @@
 @using Microsoft.AspNetCore.Components.Rendering
 @using System.Globalization
 @using RentoomBooking.SharedFrontend.Localization
+@using Microsoft.AspNetCore.WebUtilities
 @inject IRouteLocalizationService RouteService
+@inject NavigationManager NavManager
 
 @if (_resolvedComponentType != null)
 {
@@ -27,7 +29,8 @@ else if (!_isResolving)
 
     protected override void OnParametersSet()
     {
-        var currentPath = $"{cultureCode}/{routeSegments}";
+        // Track full URI to react to QueryString changes
+        var currentPath = NavManager.Uri;
         if (currentPath != _lastResolvedPath)
         {
             _lastResolvedPath = currentPath;
@@ -76,7 +79,7 @@ else if (!_isResolving)
         // If there are no segments, it's the home page for that culture
         if (string.IsNullOrEmpty(routeSegments))
         {
-            _resolvedComponentType = PageMapping.KeyToComponent["Home"];
+            _resolvedComponentType = PageMapping.KeyToComponent["Home"].ComponentType;
             _isResolving = false;
             return;
         }
@@ -87,62 +90,83 @@ else if (!_isResolving)
         // Resolve page key from slug
         if (RouteService.TryGetPageKeyFromSlug(slug, cultureCode, out var pageKey) && pageKey != null)
         {
-            if (PageMapping.KeyToComponent.TryGetValue(pageKey, out var componentType))
+            if (PageMapping.KeyToComponent.TryGetValue(pageKey, out var definition))
             {
-                _resolvedComponentType = componentType;
+                _resolvedComponentType = definition.ComponentType;
                 
-                // Map remaining segments to parameters
+                // 1. Map parameters from URL segments using the template (e.g. {StartDate}/{EndDate})
                 var remainingSegments = segments.Skip(1).ToArray();
-                MapParameters(pageKey, remainingSegments);
+                if (!string.IsNullOrEmpty(definition.RouteTemplate))
+                {
+                    MapParametersFromTemplate(definition.RouteTemplate, remainingSegments);
+                }
+                
+                // 2. Map parameters from QueryString (Additive Support & Fallback)
+                MapParametersFromQueryString();
             }
         }
         
         _isResolving = false;
     }
 
-    private void MapParameters(string pageKey, string[] segments)
+    private void MapParametersFromTemplate(string template, string[] segments)
     {
-        switch (pageKey)
+        var templateParts = template.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        
+        for (int i = 0; i < templateParts.Length; i++)
         {
-            case "ApartmentDetail":
-                if (segments.Length >= 1)
-                {
-                    if (int.TryParse(segments[0], out var id))
-                    {
-                        _parameters["Id"] = id;
-                        if (segments.Length >= 2) _parameters["Slug"] = segments[1];
+            if (i >= segments.Length) break;
 
-                        if (segments.Length >= 4)
-                        {
-                            _parameters["StartDate"] = segments[2];
-                            _parameters["EndDate"] = segments[3];
-                        }
-                        if (segments.Length >= 5) _parameters["Adults"] = segments[4];
-                        if (segments.Length >= 6) _parameters["Children"] = segments[5];
-                    }
-                }
-                break;
+            var part = templateParts[i].Trim('{', '}');
+            var value = segments[i];
 
-            case "Apartments":
-                if (segments.Length >= 2)
-                {
-                    _parameters["StartDate"] = segments[0];
-                    _parameters["EndDate"] = segments[1];
-                    if (segments.Length >= 3) _parameters["Adults"] = segments[2];
-                    if (segments.Length >= 4) _parameters["Children"] = segments[3];
-                }
-                break;
-
-            case "Statute":
-                if (segments.Length >= 1)
-                {
-                    if (int.TryParse(segments[0], out var id))
-                    {
-                        _parameters["Id"] = id;
-                        if (segments.Length >= 2) _parameters["Slug"] = segments[1];
-                    }
-                }
-                break;
+            if (part.Equals("Id", StringComparison.OrdinalIgnoreCase))
+            {
+                if (int.TryParse(value, out var id)) _parameters["Id"] = id;
+            }
+            else
+            {
+                _parameters[part] = value;
+            }
         }
+    }
+
+    private void MapParametersFromQueryString()
+    {
+        if (_resolvedComponentType == null) return;
+
+        var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+        
+        // Get all public properties of the target component to filter valid parameters
+        var validProperties = _resolvedComponentType.GetProperties()
+            .Select(p => p.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var param in query)
+        {
+            var key = NormalizeKey(param.Key);
+            
+            // SECURITY/SAFETY: Only inject if the component HAS this parameter
+            // and it wasn't already set by path segments (segments have priority)
+            if (validProperties.Contains(key) && !_parameters.ContainsKey(key))
+            {
+                _parameters[key] = param.Value.ToString();
+            }
+        }
+    }
+
+    private string NormalizeKey(string key)
+    {
+        return key.ToLowerInvariant() switch
+        {
+            "startdate" => "StartDate",
+            "enddate" => "EndDate",
+            "adults" => "Adults",
+            "children" => "Children",
+            "slug" => "Slug",
+            "id" => "Id",
+            _ => key
+        };
     }
 }
