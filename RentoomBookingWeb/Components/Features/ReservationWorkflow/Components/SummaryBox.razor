@@ -65,6 +65,18 @@
                 }
             }
 
+            @if (Summary?.StartRequest?.MandatoryAddons?.Count > 0)
+            {
+                @foreach (AddonSummaryLineDto addon in Summary.Addons)
+                {
+                    <div class="summary-box-prices-text">
+                        <span>@(!string.IsNullOrWhiteSpace(addon.DisplayText) ? addon.DisplayText : GetAddonName(addon.AddonId)) @(addon.PaymentType == AddonPaymentType.PayPerAmount ? "x " + @addon.Quantity : "")</span>
+                        <b>@addon.LineTotalGross.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                    </div>
+                }
+            }
+
+
             @if (Summary?.StartRequest?.SelectedUpsells?.Count > 0)
             {
                 @foreach (var upsell in Summary.Upsells)
