@@ -733,7 +733,8 @@
             var msg = await LiveChatClient.SendMessageAsync(token, text, guestName, guestEmail);
             await LiveChatClient.InvalidateHistory(token);
             NotificationState.StartListening(token);
-            
+            NotificationState.Poke();
+
             _messages.Remove(optimisticMsg);
             _sendStatus.Remove(tempId);
 
