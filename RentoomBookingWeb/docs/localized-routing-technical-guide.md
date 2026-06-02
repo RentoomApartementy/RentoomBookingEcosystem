@@ -1,71 +1,64 @@
-# System Wielojęzyczności i Zlokalizowanego Routingu - Pełna Dokumentacja Techniczna (Runtime)
+# Dokumentacja Techniczna Systemu Lokalizacji i Routingu (Runtime .NET 8)
 
-## 1. Wstęp i Architektura
-System został zaprojektowany, aby wspierać **33 języki** w sposób dynamiczny, bez potrzeby generowania kodu podczas budowania aplikacji (Zero Build-Time Generation). Architektura opiera się na standardowych mechanizmach .NET 8, zapewniając pełną wydajność i zgodność z SEO.
+## 1. Architektura Systemu
+System opiera się na architekturze **Pure Runtime**, co oznacza, że trasy nie są generowane podczas budowania aplikacji, lecz rozwiązywane dynamicznie w momencie żądania. Gwarantuje to wysoką elastyczność przy wsparciu 33 języków bez długu technicznego w postaci generowanego kodu.
 
-### Kluczowe cechy:
-- **Pure Runtime Architecture:** Wszystkie trasy są rozwiązywane dynamicznie w momencie żądania.
-- **Single Source of Truth:** Słownikiem adresów URL są wyłącznie pliki zasobów `PageRoutes.resx`.
-- **Zlokalizowane Slugi:** Pełne wsparcie dla tłumaczonych adresów (np. `/pl/apartamenty` vs `/en/apartments`).
-- **International SEO:** Natywne wsparcie dla tagów `hreflang` i sitemap.
-
----
-
-## 2. Rozpoznawanie Języka i Synchronizacja
-System wykorzystuje natywny potok lokalizacji ASP.NET Core z autorską synchronizacją dla Blazor Interactive Server.
-
-### Logika Detekcji:
-1.  **URL Prefix (Priorytet):** `CustomRequestCultureProvider` w `Program.cs` odczytuje pierwszy segment (np. `/it/`).
-2.  **Enterprise Cookie Sync:** `LocalizedRoutingMiddleware` dba o to, by przy każdym żądaniu URL ciasteczko `.AspNetCore.Culture` było zaktualizowane. Jest to **kluczowe dla SignalR**, który nie posiada prefiksu językowego w adresie WebSocket i musi polegać na ciasteczku, aby utrzymać poprawny język sesji.
+### Kluczowe komponenty:
+1. **Słowniki (.resx):** Pliki `PageRoutes.resx` stanowią jedyne źródło prawdy dla zlokalizowanych slugów (np. `Apartments` -> `apartamenty`).
+2. **Rejestr (PageMapping.cs):** Statyczna mapa wiążąca klucze logiczne stron z typami komponentów Blazor i ich szablonami parametrów.
+3. **Router (LocalizedRouter.razor):** Centralny punkt procesujący żądania UI, odpowiedzialny za dynamiczne renderowanie i ekstrakcję danych z URL.
 
 ---
 
-## 3. Dynamiczny Routing (LocalizedRouter)
-Zamiast setek dyrektyw `@page`, system używa centralnego punktu wejścia: `LocalizedRouter.razor`.
+## 2. Warstwa Middleware (Potok przetwarzania)
 
-### Jak to działa?
-1.  **Catch-All Route:** Router przechwytuje żądania pasujące do wzorca `/{cultureCode}/{*routeSegments}`.
-2.  **Rejestr Mapowania:** Plik `PageMapping.cs` zawiera listę technicznych kluczy stron i odpowiadających im komponentów Razor.
-3.  **Rezolucja Sluga:** Serwis `RouteLocalizationService` szuka w plikach `PageRoutes.resx` (dla danej kultury), do którego klucza należy dany slug z adresu URL.
-4.  **Dynamic Rendering:** Po dopasowaniu klucza (np. "Contact"), router renderuje odpowiedni komponent za pomocą `<DynamicComponent />`.
+### Program.cs
+Konfiguracja potoku żądań (Pipeline) wymusza ścisłą kolejność:
+- **UseStaticFiles:** Obsługa plików fizycznych.
+- **UseRouting:** Inicjalizacja silnika routingu (musi nastąpić po plikach statycznych, aby uniknąć przechwytywania assetów przez router Blazora).
+- **UseMiddleware<LocalizedRoutingMiddleware>:** Ustawienie kultury i synchronizacja stanu.
+- **UseRequestLocalization:** Standardowy mechanizm .NET ustawiający kulturę wątku.
 
----
-
-## 4. Nawigacja (IRouteLocalizationService)
-W aplikacji **nigdy** nie używamy "twardych" linków tekstowych.
-
-- **Źle:** `<a href="/pl/kontakt">`
-- **Dobrze:** `<NavLink href="@RouteService.GetLocalizedUrl("Contact")">`
-
-Serwis automatycznie pobierze aktualny język, znajdzie odpowiedni slug w pliku `.resx` i wygeneruje poprawny, zlokalizowany adres URL.
+### LocalizedRoutingMiddleware.cs
+Odpowiada za dwa krytyczne procesy:
+1. **Detekcja z URL:** Odczytuje prefiks językowy (np. `/pl/`) i ustawia `CultureInfo`.
+2. **Enterprise Cookie Sync:** Synchronizuje ciasteczko `.AspNetCore.Culture` z adresem URL. Jest to niezbędne dla stabilności połączeń SignalR (WebSocket), które nie posiadają prefiksu językowego w nagłówkach i polegają na ciasteczku w celu utrzymania poprawnej kultury po stronie serwera.
 
 ---
 
-## 5. Middleware Pipeline (Kolejność ma znaczenie)
-Aby system działał poprawnie i nie blokował plików statycznych (CSS/JS), potok w `Program.cs` musi zachować ścisłą kolejność:
+## 3. Warstwa Serwisowa
 
-1.  `app.UseStaticFiles()` - Najpierw serwujemy fizyczne pliki z dysku.
-2.  **`app.UseRouting()`** - Jawną deklarację routingu umieszczamy PO plikach, aby "głodny" router Blazora nie przechwytywał zapytań o assety.
-3.  `app.UseRequestLocalization()` - Ustawiamy kulturę żądania.
-4.  `app.MapRazorComponents()` - Renderujemy UI.
+### RouteLocalizationService.cs
+Implementuje logikę biznesową tłumaczenia adresów:
+- **TryGetPageKeyFromSlug:** Iteruje po zasobach `.resx` w celu dopasowania sluga (np. "apartamenty") do klucza technicznego ("Apartments"). Posiada wbudowany mechanizm fallbacku do języka polskiego.
+- **GetLocalizedUrl:** Generuje pełne adresy URL z prefiksami na podstawie klucza i opcjonalnej kultury.
 
----
-
-## 6. Wytyczne dla Programistów
-
-### Dodawanie nowej podstrony (Tylko 2 kroki!):
-1.  **Zarejestruj stronę w `PageMapping.cs`**:
-    Dodaj klucz i typ komponentu, np.: `["Career"] = typeof(CareerPage)`.
-2.  **Dodaj slugi do plików `.resx`**:
-    W `PageRoutes.resx` (domyślny/EN) dodaj klucz `Career` (np. `careers`).
-    W `PageRoutes.pl-PL.resx` dodaj klucz `Career` (np. `kariera`).
-
-### Ścieżki do zasobów (Bevel-Proofing):
-Ze względu na wielopoziomowe adresy URL, wszystkie zasoby statyczne **muszą** używać ścieżek bezwzględnych (zaczynających się od `/`).
-- **Poprawnie:** `<img src="/assets/logo.png" />`
-- **Błędnie:** `<img src="assets/logo.png" />` (spowoduje 404 na podstronach apartamentów).
+### LocalizedUrlBuilder.cs
+Narzędzie typu Fluent API zapewniające type-safe budowanie adresów URL z wieloma parametrami, gwarantując ich poprawną kolejność zgodnie z szablonem zdefiniowanym w `PageMapping`.
 
 ---
 
-## 7. SEO i Hreflang
-Komponent `SeoHreflangs.razor` (wstrzyknięty w `App.razor`) automatycznie generuje tagi `<link rel="alternate" hreflang="..." />` dla wszystkich 33 języków, odpytując `RouteLocalizationService` o slugi dla każdego wspieranego języka. Zapewnia to idealną indeksację w Google.
+## 4. Mechanizm Routingu (LocalizedRouter.razor)
+
+Router zastępuje standardowy mechanizm `@page` i procesuje trasy `/{cultureCode}/{*routeSegments}`.
+
+### Proces rozwiązywania trasy:
+1. **Dopasowanie klucza:** Wykorzystuje `RouteLocalizationService` do identyfikacji strony.
+2. **Parsowanie szablonu (MapParametersFromTemplate):** Pobiera definicję trasy z `PageMapping` (np. `{Id}/{Slug}`). Rozbija segmenty URL i przypisuje je do parametrów na podstawie nazwy. Obsługuje automatyczną konwersję typu `int` dla parametrów o nazwie `Id`.
+3. **Inteligentna Iniekcja (Refleksja):** Router za pomocą refleksji sprawdza publiczne właściwości (`[Parameter]`) docelowego komponentu. Wstrzykuje tylko te parametry, które istnieją w kodzie C#, co zapobiega błędom `InvalidOperationException` przy dodatkowych parametrach QueryString.
+4. **Obsługa Dual-Support:** System równolegle parsuje segmenty ścieżki (Pretty URLs) oraz QueryString. Parametry z URL mają priorytet, a dane z QueryString stanowią uzupełnienie (fallback).
+5. **Renderowanie:** Wykorzystuje `<DynamicComponent />` do załadowania właściwej strony z przekazanym słownikiem parametrów.
+
+---
+
+## 5. SEO i Internationalization
+
+### SeoHreflangs.razor
+Komponent wstrzyknięty centralnie w `App.razor`. Dla każdego żądania generuje komplet 33 tagów `<link rel="alternate" hreflang="..." />`. Dzięki architekturze Runtime, potrafi wygenerować zlokalizowane linki (np. zamiana `apartamenty` na `apartments`) dla dowolnie głębokich adresów z parametrami.
+
+---
+
+## 6. Procedura dodawania nowej podstrony
+1. **PageMapping.cs:** Dodać wpis do `KeyToComponent` definiując klucz, typ klasy oraz opcjonalny szablon parametrów (np. `"{Id}/{Slug}"`).
+2. **PageRoutes.resx:** Dodać klucz i jego tłumaczenie (slug) w odpowiednich plikach językowych.
+3. **Komponent:** Upewnić się, że właściwości oznaczone jako `[Parameter]` odpowiadają nazwom użytym w szablonie trasy.
