@@ -105,12 +105,12 @@ else if (!_isResolving)
         switch (pageKey)
         {
             case "ApartmentDetail":
-                if (segments.Length >= 2)
+                if (segments.Length >= 1)
                 {
                     if (int.TryParse(segments[0], out var id))
                     {
                         _parameters["Id"] = id;
-                        _parameters["Slug"] = segments[1];
+                        if (segments.Length >= 2) _parameters["Slug"] = segments[1];
 
                         if (segments.Length >= 4)
                         {
