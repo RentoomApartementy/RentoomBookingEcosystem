@@ -4,6 +4,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
+using RentoomBooking.SharedFrontend.Localization;
 
 namespace RentoomBookingWeb.Services.Localization
 {
@@ -29,12 +30,12 @@ namespace RentoomBookingWeb.Services.Localization
                 return $"/{displayCulture}";
             }
 
-            var slug = GetSlugFromResources(pageKey, culture);
+            var slug = GetSlug(pageKey, culture);
             
             if (string.IsNullOrEmpty(slug))
             {
                 // Fallback to Polish
-                slug = GetSlugFromResources(pageKey, "pl-PL");
+                slug = GetSlug(pageKey, "pl-PL");
             }
 
             if (string.IsNullOrEmpty(slug))
@@ -44,6 +45,28 @@ namespace RentoomBookingWeb.Services.Localization
             }
 
             return $"/{displayCulture}/{slug}";
+        }
+
+        public string? GetSlug(string pageKey, string culture)
+        {
+            try
+            {
+                var fullCulture = ResolveFullCulture(culture);
+                return _resourceManager.GetString(pageKey, new CultureInfo(fullCulture));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public string ResolveFullCulture(string cultureCode)
+        {
+            var matched = SupportedLanguagesProvider.SupportedCultureNames.FirstOrDefault(c => 
+                string.Equals(c, cultureCode, StringComparison.OrdinalIgnoreCase) || 
+                string.Equals(c.Split('-')[0], cultureCode, StringComparison.OrdinalIgnoreCase));
+            
+            return matched ?? "pl-PL";
         }
 
         public LocalizedUrlBuilder CreateBuilder(string pageKey, string? culture = null)
@@ -68,7 +91,8 @@ namespace RentoomBookingWeb.Services.Localization
         public bool TryGetPageKeyFromSlug(string slug, string culture, out string? pageKey)
         {
             pageKey = null;
-            var cultureInfo = new CultureInfo(culture);
+            var fullCulture = ResolveFullCulture(culture);
+            var cultureInfo = new CultureInfo(fullCulture);
 
             // We need to check all keys in the mapping
             foreach (var key in PageMapping.KeyToComponent.Keys)
@@ -99,18 +123,6 @@ namespace RentoomBookingWeb.Services.Localization
             }
 
             return false;
-        }
-
-        private string? GetSlugFromResources(string key, string culture)
-        {
-            try
-            {
-                return _resourceManager.GetString(key, new CultureInfo(culture));
-            }
-            catch
-            {
-                return null;
-            }
         }
 
         private string GetShortCultureCode(string culture)

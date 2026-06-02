@@ -90,6 +90,19 @@ else if (!_isResolving)
         // Resolve page key from slug
         if (RouteService.TryGetPageKeyFromSlug(slug, cultureCode, out var pageKey) && pageKey != null)
         {
+            // --- SEO ENFORCEMENT: Redirect to canonical slug if needed ---
+            var fullCulture = RouteService.ResolveFullCulture(cultureCode);
+            var canonicalSlug = RouteService.GetSlug(pageKey, fullCulture);
+            
+            if (!string.IsNullOrEmpty(canonicalSlug) && !string.Equals(slug, canonicalSlug, StringComparison.OrdinalIgnoreCase))
+            {
+                var canonicalUrl = RouteService.GetLocalizedUrl(pageKey, fullCulture);
+                var remainingPath = routeSegments.Substring(slug.Length);
+                var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+                NavManager.NavigateTo($"{canonicalUrl}{remainingPath}{uri.Query}", replace: true);
+                return;
+            }
+
             if (PageMapping.KeyToComponent.TryGetValue(pageKey, out var definition))
             {
                 _resolvedComponentType = definition.ComponentType;
