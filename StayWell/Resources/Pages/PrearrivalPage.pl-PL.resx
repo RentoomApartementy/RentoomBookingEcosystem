@@ -328,9 +328,11 @@ Rental regulations in English are available at www.rentoom.pl</value>
     
   <value>E-mail</value></data>
   <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
-    
-    
+
+
   <value>Regulamin i zameldowanie</value></data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Regulamin pobytu</value></data>
   <data name="RegistrationSaveError" xml:space="preserve">
     
     

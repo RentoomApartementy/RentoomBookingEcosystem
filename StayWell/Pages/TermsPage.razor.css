@@ -34,6 +34,12 @@
     will-change: height;
 }
 
+    .main-terms-card.is-rules-view {
+        height: auto;
+        max-height: calc(100dvh - 300px);
+        padding: 18px 16px 20px !important;
+    }
+
     .main-terms-card.is-tos-view {
         height: auto;
         max-height: calc(100dvh - 300px);
@@ -63,34 +69,68 @@
     transform: translateY(0);
 }
 
-.step-view {
+/* Rules view (house rules listed in a single card) */
+.rules-view {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    height: 100%;
-    gap: 0.5rem;
+    min-height: 0;
 }
 
-.image-container {
-    height: 120px;
+.rules-title {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-align: center;
+    color: #1a1a1a;
+}
+
+.rules-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.rule-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+}
+
+    .rule-row:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+.rule-icon {
+    flex-shrink: 0;
+    width: 54px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 14px;
+    background: rgba(33, 87, 62, 0.06);
 }
 
-.step-image {
-    max-height: 100%;
-    width: auto;
-    object-fit: contain;
-}
+    .rule-icon img {
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+    }
 
-.text-container p {
+.rule-text {
+    flex: 1;
     margin: 0;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #1a1a1a;
+    text-align: left;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #2a2a2a;
 }
 
 /* Terms view */
@@ -489,11 +529,21 @@
             height: 380px;
         }
 
-    .image-container {
-        height: 90px;
+        .main-terms-card.is-rules-view {
+            max-height: calc(100dvh - 260px);
+        }
+
+    .rule-icon {
+        width: 46px;
+        height: 46px;
     }
 
-    .text-container p {
-        font-size: 1rem;
+        .rule-icon img {
+            width: 30px;
+            height: 30px;
+        }
+
+    .rule-text {
+        font-size: 0.86rem;
     }
 }
