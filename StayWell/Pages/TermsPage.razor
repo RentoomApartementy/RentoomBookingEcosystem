@@ -164,6 +164,7 @@
     <FloatingButton Text="@(CurrentView == ViewState.Rules ? Localizer["Continue"] : CurrentView == ViewState.Terms ? Localizer["Accept"] : Localizer["Confirm"])"
         IconPath="@(CurrentView != ViewState.RegistrationCard ? "/icons/chevron-right.svg" : "/icons/handshake.svg")"
         IsDisabled="IsButtonDisabled"
+        IsLoading="_isAdvancing"
         OnClick="HandleNextClick" />
 
 @code {
@@ -179,6 +180,7 @@
 
     private int _currentStep = 0;
     private bool _isTransitioning = false;
+    private bool _isAdvancing = false;
 
     private string? _mail;
     private TimeSpan? _checkInTime;
@@ -394,20 +396,31 @@
 
     private async Task HandleNextClick()
     {
-        if (IsButtonDisabled) return;
+        if (IsButtonDisabled || _isAdvancing) return;
 
-        if (IsShowingTerms)
+        _isAdvancing = true;
+        StateHasChanged();
+
+        try
         {
-            await AcceptTermsAsync();
-            await MoveToNext();
+            if (IsShowingTerms)
+            {
+                await AcceptTermsAsync();
+                await MoveToNext();
+            }
+            else if (IsShowingRegistration)
+            {
+                await SaveRegistrationAndFinish();
+            }
+            else
+            {
+                await MoveToNext();
+            }
         }
-        else if (IsShowingRegistration)
+        finally
         {
-            await SaveRegistrationAndFinish();
-        }
-        else
-        {
-            await MoveToNext();
+            _isAdvancing = false;
+            StateHasChanged();
         }
     }
 
