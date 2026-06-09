@@ -21,8 +21,8 @@ function setupObserver() {
 
     const options = {
         root: null,         
-        rootMargin: '400px', 
-        threshold: 0.1       
+        rootMargin: '1200px 0px',
+        threshold: 0
     };
 
     observer = new IntersectionObserver((entries) => {
