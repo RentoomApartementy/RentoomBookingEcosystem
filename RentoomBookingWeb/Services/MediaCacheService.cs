@@ -27,5 +27,28 @@ namespace RentoomBookingWeb.Services
         {
             return _cache.TryGetValue(apartmentId, out media);
         }
+
+        public void PrimeMedia(int apartmentId, IReadOnlyCollection<ObjectMedium>? media)
+        {
+            if (apartmentId <= 0 || media == null || media.Count == 0)
+            {
+                return;
+            }
+
+            _cache.AddOrUpdate(apartmentId, media.ToList(), (_, _) => media.ToList());
+        }
+
+        public void PrimeMediaBatch(IReadOnlyDictionary<int, List<ObjectMedium>> mediaByApartmentId)
+        {
+            if (mediaByApartmentId == null || mediaByApartmentId.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var entry in mediaByApartmentId)
+            {
+                PrimeMedia(entry.Key, entry.Value);
+            }
+        }
     }
 }

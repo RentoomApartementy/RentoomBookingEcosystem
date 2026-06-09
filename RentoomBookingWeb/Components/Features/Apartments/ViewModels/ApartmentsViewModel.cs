@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBookingWeb.Services;
 
@@ -18,6 +20,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly IApartmentSearchFiltersService _filterService;
         private readonly ReservationWorkflowTelemetry _telemetry;
         private readonly GoogleAnalyticsService _googleAnalytics;
+        private readonly MediaCacheService _mediaCache;
+        private readonly IApartmentMediaCatalogService _apartmentMediaCatalogService;
+        private readonly ILogger<ApartmentsViewModel> _logger;
 
         private string? _token;
         private const int PageSize = 12;
@@ -66,7 +71,10 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             IAvailabilityFinderService2 availabilityFinder,
             IApartmentSearchFiltersService filterService,
             ReservationWorkflowTelemetry telemetry,
-            GoogleAnalyticsService googleAnalytics)
+            GoogleAnalyticsService googleAnalytics,
+            MediaCacheService mediaCache,
+            IApartmentMediaCatalogService apartmentMediaCatalogService,
+            ILogger<ApartmentsViewModel> logger)
         {
             _apartmentsService = apartmentsService;
             _rentoomOfferService = rentoomOfferService;
@@ -75,6 +83,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             _filterService = filterService;
             _telemetry = telemetry;
             _googleAnalytics = googleAnalytics;
+            _mediaCache = mediaCache;
+            _apartmentMediaCatalogService = apartmentMediaCatalogService;
+            _logger = logger;
         }
 
         public int MinOfferPrice => ScaleMinPrice;
@@ -353,6 +364,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     Items.AddRange(page.Items);
                     _token = page.ContinuationToken;
                     HasMore = !string.IsNullOrEmpty(_token);
+                    await WarmMediaCacheForItemsAsync(page.Items);
 
                     if (IsSearch)
                     {
@@ -393,6 +405,30 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 }
             }
             catch { }
+        }
+
+        private async Task WarmMediaCacheForItemsAsync(IEnumerable<ApartmentObject> items)
+        {
+            var apartmentIds = items
+                .Select(item => item.Id)
+                .Where(id => id > 0)
+                .Distinct()
+                .ToList();
+
+            if (apartmentIds.Count == 0)
+            {
+                return;
+            }
+
+            try
+            {
+                var mediaByApartmentId = await _apartmentMediaCatalogService.GetApartmentMediaBatchAsync(apartmentIds);
+                _mediaCache.PrimeMediaBatch(mediaByApartmentId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to warm apartment media cache for {ApartmentCount} apartments.", apartmentIds.Count);
+            }
         }
 
         private async Task FetchSuggestionsInBackground(IEnumerable<ApartmentObject> items, CancellationToken ct, int runId)
