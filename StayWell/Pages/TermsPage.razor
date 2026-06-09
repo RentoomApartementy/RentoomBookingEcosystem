@@ -262,24 +262,21 @@
             _termsLoadError = false;
             var language = CultureInfo.CurrentUICulture.Name;
 
-            _termsSources = await BackendApi.GetTermsForDisplayAsync(language);
+
+            var termsTask = BackendApi.GetTermsForDisplayAsync(language);
+            var agreedTask = SafeGetAgreedTermsAsync(language);
+            await Task.WhenAll(termsTask, agreedTask);
+
+            _termsSources = await termsTask;
             _userSelections = _termsSources.ToDictionary(t => t.Id, _ => false);
 
-            try
+            foreach (var agreedTerm in await agreedTask)
             {
-                var agreedTerms = await BackendApi.GetAgreedTermsByReservationAsync(Token!, language);
-                foreach (var agreedTerm in agreedTerms)
+                if (_userSelections.ContainsKey(agreedTerm.TermsSourceId) && agreedTerm.IsAccepted)
                 {
-                    if (_userSelections.ContainsKey(agreedTerm.TermsSourceId) && agreedTerm.IsAccepted)
-                    {
-                        _userSelections[agreedTerm.TermsSourceId] = true;
-                        _preAccepted.Add(agreedTerm.TermsSourceId);
-                    }
+                    _userSelections[agreedTerm.TermsSourceId] = true;
+                    _preAccepted.Add(agreedTerm.TermsSourceId);
                 }
-            }
-            catch
-            {
-                // No agreed terms yet
             }
         }
         catch
@@ -289,6 +286,18 @@
         finally
         {
             _isTermsLoading = false;
+        }
+    }
+
+    private async Task<List<CustomerAgreedTermDto>> SafeGetAgreedTermsAsync(string language)
+    {
+        try
+        {
+            return await BackendApi.GetAgreedTermsByReservationAsync(Token!, language);
+        }
+        catch
+        {
+            return new();
         }
     }
 
