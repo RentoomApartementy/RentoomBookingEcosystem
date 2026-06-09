@@ -55,6 +55,10 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient(IdoBookingConnectService.HttpClientName, client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(20);
+});
 builder.Services.AddHttpClient("LinkPreview")
     .ConfigureHttpClient(c =>
     {

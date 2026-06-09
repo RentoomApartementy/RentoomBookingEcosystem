@@ -23,6 +23,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly MediaCacheService _mediaCache;
         private readonly IApartmentMediaCatalogService _apartmentMediaCatalogService;
         private readonly ILogger<ApartmentsViewModel> _logger;
+        private static readonly TimeSpan SuggestionsFetchTimeout = TimeSpan.FromSeconds(30);
 
         private string? _token;
         private const int PageSize = 12;
@@ -36,6 +37,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public List<ApartmentObject> Items { get; private set; } = new();
         public List<PricingOffer> Offers { get; private set; } = new();
         public Dictionary<int, List<AvailableTerm>> AvailableTerms { get; private set; } = new();
+        private Dictionary<int, SuggestionStatus> SuggestionStatuses { get; } = new();
 
         public long? ApartmentsCount { get; private set; }
         public bool IsLoading { get; private set; } = true;
@@ -92,6 +94,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public int MaxOfferPrice => ScaleMaxPrice;
 
         public PricingOffer? GetPricingOfferByObjectId(int objectId) => Offers.Find(o => o.ObjectId == objectId);
+        public SuggestionStatus GetSuggestionStatusByObjectId(int objectId) =>
+            SuggestionStatuses.TryGetValue(objectId, out var status) ? status : SuggestionStatus.NotStarted;
         public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId) => GetSuggestionsByObjectId(objectId);
         public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId) =>
             AvailableTerms.TryGetValue(objectId, out var terms) ? terms : null;
@@ -141,7 +145,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 }
             }
 
-            Items.Clear(); Offers.Clear(); AvailableTerms.Clear(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
+            Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
             
             bool hasActiveFilters = IsSearch || (_currentFilters != null && (_currentFilters.ApartmentLocationsFilter?.Any() == true || _currentFilters.ApartmentAmenitiesFilter?.Any() == true || _currentFilters.ApartmentAddonFilter?.Any() == true));
 
@@ -180,7 +184,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             CancelSuggestionsFetch();
             UpdateUrlParams(query);
             
-            Items.Clear(); Offers.Clear(); AvailableTerms.Clear(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null; 
+            Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null; 
             HasMore = false; ApartmentsIsLoading = true; IsSearch = true;
             NotifyStateChanged();
 
@@ -209,6 +213,11 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             _currentFilters = data.Filters;
             FilterMinPrice = data.MinPrice;
             FilterMaxPrice = data.MaxPrice;
+
+            if (metaChanged)
+            {
+                ResetSuggestionState();
+            }
 
             ApartmentsIsLoading = true; HasMore = false; 
             
@@ -468,20 +477,53 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             }
         }
 
-        private async Task FetchSuggestionsInBackground(IEnumerable<ApartmentObject> items, CancellationToken ct, int runId)
+        private async Task FetchSuggestionsInBackground(IReadOnlyCollection<int> apartmentIds, CancellationToken ct, int runId)
         {
-            SetSuggestionsLoading(runId, true);
-            try { await Task.Delay(200, ct); await FetchSuggestionsForItemsWithoutOffers(items, ct); }
-            catch (OperationCanceledException) { }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-            finally { SetSuggestionsLoading(runId, false); }
+            if (apartmentIds.Count == 0)
+            {
+                SetSuggestionsLoading(runId, false);
+                return;
+            }
+
+            try
+            {
+                await Task.Delay(200, ct);
+
+                using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                timeoutCts.CancelAfter(SuggestionsFetchTimeout);
+
+                await FetchSuggestionsForApartmentIds(apartmentIds, timeoutCts.Token, runId);
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested)
+            {
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning(
+                    "Apartment suggestions timed out after {TimeoutSeconds}s for {ApartmentCount} apartments in run {RunId}.",
+                    SuggestionsFetchTimeout.TotalSeconds,
+                    apartmentIds.Count,
+                    runId);
+                MarkSuggestionsFailed(runId, apartmentIds);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex,
+                    "Apartment suggestions failed for {ApartmentCount} apartments in run {RunId}.",
+                    apartmentIds.Count,
+                    runId);
+                MarkSuggestionsFailed(runId, apartmentIds);
+            }
+            finally
+            {
+                SetSuggestionsLoading(runId, false);
+            }
         }
 
-        private async Task FetchSuggestionsForItemsWithoutOffers(IEnumerable<ApartmentObject> itemsToCheck, CancellationToken ct)
+        private async Task FetchSuggestionsForApartmentIds(IReadOnlyCollection<int> apartmentIds, CancellationToken ct, int runId)
         {
             if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate)) return;
-            var orderedIds = itemsToCheck.Where(item => !Offers.Any(o => o.ObjectId == item.Id)).Select(item => item.Id).ToList();
-            if (!orderedIds.Any()) return;
+            if (apartmentIds.Count == 0) return;
 
             if (ct.IsCancellationRequested) return;
 
@@ -489,31 +531,41 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             var children = int.TryParse(Children, out var parsedChildren) && parsedChildren > 0 ? parsedChildren : 0;
 
             var newSuggestions = await _availabilityFinder.FindAvailableTermsAsync(
-                orderedIds,
+                apartmentIds.ToList(),
                 StartDate,
                 EndDate,
                 adults,
-                children);
+                children,
+                ct);
 
             if (ct.IsCancellationRequested) return;
 
-            foreach (var apartmentId in orderedIds)
+            if (!IsCurrentSuggestionsRun(runId))
+            {
+                return;
+            }
+
+            var suggestionsByApartmentId = newSuggestions.ToDictionary(
+                result => result.ApartmentId,
+                result => (result.AvailableTerms ?? new List<AvailableTerm>())
+                    .Take(3)
+                    .ToList());
+
+            foreach (var apartmentId in apartmentIds)
             {
                 AvailableTerms.Remove(apartmentId);
-            }
 
-            foreach (var result in newSuggestions)
-            {
-                var topTerms = (result.AvailableTerms ?? new List<AvailableTerm>())
-                    .Take(3)
-                    .ToList();
-
-                if (topTerms.Count > 0)
+                if (suggestionsByApartmentId.TryGetValue(apartmentId, out var topTerms) && topTerms.Count > 0)
                 {
-                    AvailableTerms[result.ApartmentId] = topTerms;
+                    AvailableTerms[apartmentId] = topTerms;
+                    SuggestionStatuses[apartmentId] = SuggestionStatus.ResolvedWithTerms;
+                    continue;
                 }
+
+                SuggestionStatuses[apartmentId] = SuggestionStatus.ResolvedNoTerms;
             }
 
+            UpdateSuggestionsLoadingState();
             NotifyStateChanged();
         }
 
@@ -525,10 +577,23 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 return;
             }
 
+            var apartmentIds = items
+                .Where(item => !Offers.Any(o => o.ObjectId == item.Id))
+                .Select(item => item.Id)
+                .Distinct()
+                .ToList();
+
             CancelSuggestionsFetch();
+            if (apartmentIds.Count == 0)
+            {
+                UpdateSuggestionsLoadingState();
+                return;
+            }
+
             _suggestionsCts = new CancellationTokenSource();
             var runId = _suggestionsRunId;
-            _ = FetchSuggestionsInBackground(items, _suggestionsCts.Token, runId);
+            MarkSuggestionsLoading(runId, apartmentIds);
+            _ = FetchSuggestionsInBackground(apartmentIds, _suggestionsCts.Token, runId);
         }
 
         private void CancelSuggestionsFetch()
@@ -537,20 +602,83 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             _suggestionsCts?.Dispose();
             _suggestionsCts = null;
             _suggestionsRunId++;
-
-            if (IsSuggestionsLoading)
-            {
-                IsSuggestionsLoading = false;
-                NotifyStateChanged();
-            }
+            ResetLoadingSuggestionStatuses();
+            UpdateSuggestionsLoadingState();
         }
 
         private void SetSuggestionsLoading(int runId, bool isLoading)
         {
             if (runId != _suggestionsRunId) return;
-            if (IsSuggestionsLoading == isLoading) return;
-            IsSuggestionsLoading = isLoading;
+            UpdateSuggestionsLoadingState();
+
+            if (!isLoading)
+            {
+                NotifyStateChanged();
+            }
+        }
+
+        private void ResetSuggestionState()
+        {
+            AvailableTerms.Clear();
+            SuggestionStatuses.Clear();
+            IsSuggestionsLoading = false;
+        }
+
+        private void ResetLoadingSuggestionStatuses()
+        {
+            foreach (var apartmentId in SuggestionStatuses
+                         .Where(pair => pair.Value == SuggestionStatus.Loading)
+                         .Select(pair => pair.Key)
+                         .ToList())
+            {
+                SuggestionStatuses[apartmentId] = SuggestionStatus.NotStarted;
+                AvailableTerms.Remove(apartmentId);
+            }
+        }
+
+        private void MarkSuggestionsLoading(int runId, IReadOnlyCollection<int> apartmentIds)
+        {
+            if (!IsCurrentSuggestionsRun(runId))
+            {
+                return;
+            }
+
+            foreach (var apartmentId in apartmentIds)
+            {
+                AvailableTerms.Remove(apartmentId);
+                SuggestionStatuses[apartmentId] = SuggestionStatus.Loading;
+            }
+
+            UpdateSuggestionsLoadingState();
             NotifyStateChanged();
+        }
+
+        private void MarkSuggestionsFailed(int runId, IReadOnlyCollection<int> apartmentIds)
+        {
+            if (!IsCurrentSuggestionsRun(runId))
+            {
+                return;
+            }
+
+            foreach (var apartmentId in apartmentIds)
+            {
+                AvailableTerms.Remove(apartmentId);
+
+                if (SuggestionStatuses.TryGetValue(apartmentId, out var status) && status == SuggestionStatus.Loading)
+                {
+                    SuggestionStatuses[apartmentId] = SuggestionStatus.Failed;
+                }
+            }
+
+            UpdateSuggestionsLoadingState();
+            NotifyStateChanged();
+        }
+
+        private bool IsCurrentSuggestionsRun(int runId) => runId == _suggestionsRunId;
+
+        private void UpdateSuggestionsLoadingState()
+        {
+            IsSuggestionsLoading = SuggestionStatuses.Values.Any(status => status == SuggestionStatus.Loading);
         }
 
         private void UpdateUrlParams(Dictionary<string, string> query)

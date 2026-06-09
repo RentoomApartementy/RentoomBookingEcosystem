@@ -56,6 +56,10 @@ namespace RentoomBookingWeb
                 .AddInteractiveServerComponents();
 
             builder.Services.AddHttpClient();
+            builder.Services.AddHttpClient(IdoBookingConnectService.HttpClientName, client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(20);
+            });
             builder.Services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;

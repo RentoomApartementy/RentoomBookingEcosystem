@@ -12,14 +12,16 @@ namespace RentoomBooking.SharedClasses.Services
             string? startDateStr,
             string? endDateStr,
             int adults,
-            int children);
+            int children,
+            CancellationToken cancellationToken = default);
 
         Task<ApartmentAvailableTermsResult> FindAvailableTermsForApartmentAsync(
             int apartmentId,
             string? startDateStr,
             string? endDateStr,
             int adults,
-            int children);
+            int children,
+            CancellationToken cancellationToken = default);
     }
 
     public class AvailabilityFinderService2 : IAvailabilityFinderService2
@@ -27,7 +29,7 @@ namespace RentoomBooking.SharedClasses.Services
         private const int RestrictionDaysBeforeStart = 7; //od kiedy pokazywac restrykcje(-7 lub od dzis)
         private const int RestrictionDaysAfterEnd = 14; // do kiedy (do+ X dni)
         private const int MaxEarlierArrivalDays = 0; // ile max dni przed poczatkiem zeby przyjezdzac (w sumie to zaweza bardziej RestrictionDaysBeforeStart)
-        private const int TopTermsPerApartment = 3; //ile pokazywac dodatkowych terminów
+        private const int TopTermsPerApartment = 3; //ile pokazywac dodatkowych terminï¿½w
 
         private readonly IIdoOfferService _offerService;
         private readonly IdoSellService _idoSellService;
@@ -43,14 +45,16 @@ namespace RentoomBooking.SharedClasses.Services
             string? startDateStr,
             string? endDateStr,
             int adults,
-            int children)
+            int children,
+            CancellationToken cancellationToken = default)
         {
             var results = await FindAvailableTermsAsync(
                 new List<int> { apartmentId },
                 startDateStr,
                 endDateStr,
                 adults,
-                children);
+                children,
+                cancellationToken);
 
             return results.FirstOrDefault() ?? new ApartmentAvailableTermsResult
             {
@@ -63,7 +67,8 @@ namespace RentoomBooking.SharedClasses.Services
             string? startDateStr,
             string? endDateStr,
             int adults,
-            int children)
+            int children,
+            CancellationToken cancellationToken = default)
         {
             if (!TryParseRequestedRange(startDateStr, endDateStr, out var requestedStart, out var requestedEnd, out var requestedNights))
             {
@@ -77,7 +82,9 @@ namespace RentoomBooking.SharedClasses.Services
             var restrictionsFrom = (new[] { DateTime.Now, requestedStart.AddDays(-RestrictionDaysBeforeStart) }).Max();
             var restrictionsTo = requestedEnd.AddDays(RestrictionDaysAfterEnd);
 
-            var restrictions = await FetchRestrictionsAsync(uniqueApartmentIds, restrictionsFrom, restrictionsTo);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var restrictions = await FetchRestrictionsAsync(uniqueApartmentIds, restrictionsFrom, restrictionsTo, cancellationToken);
             var globalMaxLengthStay = restrictions
                 .Select(r => r.LengthSetting?.LengthStay ?? 0)
                 .Where(x => x > 0)
@@ -99,7 +106,9 @@ namespace RentoomBooking.SharedClasses.Services
             var availabilityFrom = restrictionsFrom;
             var availabilityTo = restrictionsTo.AddDays(Math.Max(requestedNights, globalMaxLengthStay));
 
-            var availabilityObjects = await FetchAvailabilityAsync(uniqueApartmentIds, availabilityFrom, availabilityTo, adults, children);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var availabilityObjects = await FetchAvailabilityAsync(uniqueApartmentIds, availabilityFrom, availabilityTo, adults, children, cancellationToken);
 
             var apartmentIdsToProcess = ResolveApartmentIdsToProcess(uniqueApartmentIds, availabilityObjects);
             if (!apartmentIdsToProcess.Any())
@@ -114,6 +123,7 @@ namespace RentoomBooking.SharedClasses.Services
 
             foreach (var apartmentId in apartmentIdsToProcess)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 restrictionsLookup.TryGetValue(apartmentId, out var apartmentRestrictions);
                 availabilityLookup.TryGetValue(apartmentId, out var availableNights);
 
@@ -130,7 +140,9 @@ namespace RentoomBooking.SharedClasses.Services
                 topCandidates[apartmentId] = candidates;
             }
 
-            var validated = await ValidateTopCandidatesWithPricingAsync(topCandidates, adults, children);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var validated = await ValidateTopCandidatesWithPricingAsync(topCandidates, adults, children, cancellationToken);
 
             return apartmentIdsToProcess
                 .OrderBy(id => id)
@@ -168,7 +180,8 @@ namespace RentoomBooking.SharedClasses.Services
         private async Task<List<RestrictionException>> FetchRestrictionsAsync(
             List<int>? apartmentIds,
             DateTime from,
-            DateTime to)
+            DateTime to,
+            CancellationToken cancellationToken)
         {
             var request = new GetRestrictionException
             {
@@ -178,7 +191,7 @@ namespace RentoomBooking.SharedClasses.Services
                 OfferType="nonrefundable" // - cxzy brac wszystkie czy tylk non-refund?
             };
 
-            var restrictions = await _idoSellService.FetchRestrictionsExceptionsAsync(request) ?? new List<RestrictionException>();
+            var restrictions = await _idoSellService.FetchRestrictionsExceptionsAsync(request, cancellationToken) ?? new List<RestrictionException>();
             if (apartmentIds == null || apartmentIds.Count == 0)
             {
                 return restrictions;
@@ -193,7 +206,8 @@ namespace RentoomBooking.SharedClasses.Services
             DateTime from,
             DateTime to,
             int adults,
-            int children)
+            int children,
+            CancellationToken cancellationToken)
         {
             var request = new OfferAvailabilityAndPricesParamsSearchInternal
             {
@@ -210,7 +224,7 @@ namespace RentoomBooking.SharedClasses.Services
                 }
             };
 
-            return await _offerService.GetAvailabilityAndPricesForDaysAsync(request) ?? new List<OfferAvailabilityObject>();
+            return await _offerService.GetAvailabilityAndPricesForDaysAsync(request, cancellationToken) ?? new List<OfferAvailabilityObject>();
         }
 
         private static List<int> ResolveApartmentIdsToProcess(
@@ -381,8 +395,14 @@ namespace RentoomBooking.SharedClasses.Services
         private async Task<Dictionary<int, List<AvailableTerm>>> ValidateTopCandidatesWithPricingAsync(
             Dictionary<int, List<AvailableTerm>> topCandidates,
             int adults,
-            int children)
+            int children,
+            CancellationToken cancellationToken)
         {
+            if (topCandidates.Count == 0)
+            {
+                return new Dictionary<int, List<AvailableTerm>>();
+            }
+
             var validatedTermKeys = new HashSet<TermKey>();
             var groupedByRange = topCandidates
                 .SelectMany(kvp => kvp.Value.Select(term => new { ApartmentId = kvp.Key, Term = term }))
@@ -390,6 +410,8 @@ namespace RentoomBooking.SharedClasses.Services
 
             foreach (var rangeGroup in groupedByRange)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var apartmentIds = rangeGroup
                     .Select(x => x.ApartmentId)
                     .Distinct()
@@ -406,7 +428,7 @@ namespace RentoomBooking.SharedClasses.Services
                     Language = "pol"
                 };
 
-                var response = await _offerService.GetPricingOffersAsync(pricingRequest);
+                var response = await _offerService.GetPricingOffersAsync(pricingRequest, cancellationToken);
                 var availableApartmentIds = response?.Result?.PricingOffers?
                     .Where(o => o.Offers != null && o.Offers.Any())
                     .Select(o => o.ObjectId)
@@ -432,3 +454,4 @@ namespace RentoomBooking.SharedClasses.Services
         private readonly record struct TermKey(int ApartmentId, string StartDate, string EndDate);
     }
 }
+
