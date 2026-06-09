@@ -20,7 +20,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly GoogleAnalyticsService _googleAnalytics;
 
         private string? _token;
-        private const int PageSize = 6;
+        private const int PageSize = 12;
         private bool _isInitialized = false;
         private ApartmentFilters? _currentFilters = null;
         private CancellationTokenSource? _suggestionsCts;
