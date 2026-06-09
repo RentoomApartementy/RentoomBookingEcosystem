@@ -206,20 +206,28 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync(string? language = null)
         {
-            var url = "db/terms/get-available";
-            if (!string.IsNullOrWhiteSpace(language))
-            {
-                url += $"?lang={Uri.EscapeDataString(language)}";
-            }
+            var cacheKey = BuildCacheKey("terms-display", language ?? "default");
 
-            var response = await _http.GetAsync(url);
-            if (!response.IsSuccessStatusCode)
-            {
-                return [];
-            }
+            var result = await GetOrSetCacheAsync(
+                cacheKey,
+                async () =>
+                {
+                    var url = "db/terms/get-available";
+                    if (!string.IsNullOrWhiteSpace(language))
+                    {
+                        url += $"?lang={Uri.EscapeDataString(language)}";
+                    }
 
-            return await response.Content.ReadFromJsonAsync<List<CustomerTermDisplayDto>>(_json)
-                   ?? [];
+                    var response = await _http.GetAsync(url);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+
+                    return await response.Content.ReadFromJsonAsync<List<CustomerTermDisplayDto>>(_json);
+                });
+
+            return result ?? [];
         }
 
         public async Task<bool> SaveTermsAsync(TermsEntity entity)

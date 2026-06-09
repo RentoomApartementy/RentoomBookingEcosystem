@@ -4,6 +4,7 @@
 @using RentoomBooking.StayWell.Components
 @inject NavigationManager Navigation
 @inject IStringLocalizer<PrearrivalPage> Localizer
+@inject RentoomBooking.StayWell.Services.BackendApi BackendApi
 @inherits Models.PageBase
 
 <div class="wrap">
@@ -138,6 +139,7 @@
             {
                 StartTimer();
             }
+            _ = BackendApi.GetTermsForDisplayAsync(CultureInfo.CurrentUICulture.Name);
         }
     }
 
