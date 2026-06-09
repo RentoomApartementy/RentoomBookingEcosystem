@@ -53,10 +53,11 @@
 }
 
 .icon-key {
-    width: 16px;
-    height: 16px;
+    width: 0.85em;
+    height: 0.85em;
     vertical-align: middle;
     opacity: 0.85;
+    filter: invert(23%) sepia(25%) saturate(1200%) hue-rotate(105deg) brightness(88%) contrast(90%);
 }
 
 .icon-inline {
@@ -68,37 +69,50 @@
 
 .passcode-display {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    gap: clamp(6px, 2vw, 12px);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .passcode-digits {
-    font-size: 2.6rem;
+    font-size: clamp(1.6rem, 9vw, 2.6rem);
     font-weight: 800;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.12em;
     color: var(--rentoom-green-dark);
     font-variant-numeric: tabular-nums;
     line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .passcode-confirm-row {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.82rem;
-    color: #374151;
-    font-weight: 600;
+    gap: clamp(4px, 1.5vw, 8px);
+    font-size: clamp(1.6rem, 9vw, 2.6rem);
+    line-height: 1;
+    color: var(--rentoom-green-dark);
+    font-weight: 800;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .passcode-hash {
     font-weight: 800;
-    color: #374151;
-    font-size: 1rem;
+    color: var(--rentoom-green-dark);
+    font-size: 1em;
+    line-height: 1;
 }
 
 .passcode-separator {
-    color: #d1d5db;
+    color: #9ca3af;
+    font-size: 1em;
+    line-height: 1;
 }
 
 /* Deadline pill — prominently styled under the code */
