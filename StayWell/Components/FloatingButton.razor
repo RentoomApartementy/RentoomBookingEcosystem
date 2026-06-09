@@ -1,11 +1,18 @@
 ﻿<div class="floating-nav-container">
-    <div class="button-wrapper @(IsDisabled ? "disabled-wrapper" : "")">
-        <button class="fab-button" @onclick="OnClick" disabled="@IsDisabled">
+    <div class="button-wrapper @(IsDisabled && !IsLoading ? "disabled-wrapper" : "")">
+        <button class="fab-button @(IsLoading ? "is-loading" : "")" @onclick="OnClick" disabled="@(IsDisabled || IsLoading)">
             <div class="button-content">
-                <span>@Text</span>
-                @if (IconPath != null)
+                @if (IsLoading)
                 {
-                    <img src="@IconPath" alt="icon" class="button-icon" />
+                    <div class="spinner--small"></div>
+                }
+                else
+                {
+                    <span>@Text</span>
+                    @if (IconPath != null)
+                    {
+                        <img src="@IconPath" alt="icon" class="button-icon" />
+                    }
                 }
             </div>
         </button>
@@ -16,5 +23,6 @@
     [Parameter] public string Text { get; set; } = "Dalej";
     [Parameter] public string? IconPath { get; set; }
     [Parameter] public bool IsDisabled { get; set; }
+    [Parameter] public bool IsLoading { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
 }
