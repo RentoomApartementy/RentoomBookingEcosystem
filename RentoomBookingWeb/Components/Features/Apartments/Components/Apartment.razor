@@ -34,17 +34,27 @@
                 <div class="image-slider" @ref="_sliderRef">
                     @if (_objectMediums != null)
                     {
-                        @foreach (var medium in _objectMediums)
+                        @for (var index = 0; index < _objectMediums.Count; index++)
                         {
+                            var medium = _objectMediums[index];
+
                             <div class="image-wrapper" title="@Item?.Name">
-                                <img 
-                                    src="@medium.Url"
-                                    alt="@Item?.Name"
-                                    itemprop="photo"
-                                    class="apartment-image" 
-                                    loading="lazy"
-                                    decoding="async"
-                                />
+                                @if (ShouldRenderImageSource(index))
+                                {
+                                    <img 
+                                        src="@medium.Url"
+                                        alt="@Item?.Name"
+                                        itemprop="photo"
+                                        class="apartment-image"
+                                        loading="@GetImageLoading(index)"
+                                        fetchpriority="@GetImageFetchPriority(index)"
+                                        decoding="async"
+                                    />
+                                }
+                                else
+                                {
+                                    <div class="apartment-image apartment-image-placeholder" aria-hidden="true"></div>
+                                }
                             </div>
                         }
                     }
@@ -56,7 +66,8 @@
                                 alt="@Item?.Name"
                                 itemprop="photo"
                                 class="apartment-image" 
-                                loading="lazy"
+                                loading="eager"
+                                fetchpriority="high"
                                 decoding="async"
                             />
                         </div>
@@ -291,6 +302,7 @@
 
     [Parameter] public string? Width { get; set; } = null;
     [Parameter] public string ListingSource { get; set; } = "apartments-list";
+    [Parameter] public bool DeferGalleryImages { get; set; } = false;
 
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
@@ -307,6 +319,7 @@
     private bool _isMediaLoaded = false;
     private bool _isSliderInitialized = false;
     private bool _isDisposed = false;
+    private readonly HashSet<int> _activatedImageIndexes = new();
 
     protected override void OnInitialized()
     {
@@ -321,6 +334,7 @@
                 _objectMediums = cachedMedia;
                 _currentMediumIndex = 0;
                 _currentObjectMedium = _objectMediums?.FirstOrDefault();
+                ResetActivatedImages();
                 _isMediaLoaded = true; 
             }
         }
@@ -395,6 +409,8 @@
         
         _currentMediumIndex = index;
         _currentObjectMedium = _objectMediums[index];
+        ActivateImageIndex(index);
+        PrefetchNextImage(index);
         await InvokeAsync(StateHasChanged);
     }
 
@@ -410,6 +426,7 @@
 
             _currentMediumIndex = 0;
             _currentObjectMedium = _objectMediums.FirstOrDefault();
+            ResetActivatedImages();
         }
     }
 
@@ -422,6 +439,10 @@
         else if (_currentMediumIndex >= _objectMediums.Count) _currentMediumIndex = 0;
 
         _currentObjectMedium = _objectMediums[_currentMediumIndex];
+        ActivateImageIndex(_currentMediumIndex);
+        PrefetchNextImage(_currentMediumIndex);
+
+        await InvokeAsync(StateHasChanged);
 
         if (_sliderModule != null)
         {
@@ -458,6 +479,57 @@
             _detailsUrl = baseUrl;
         }
         _detailsUrl = _detailsUrl.Replace("//", "/");
+    }
+
+    private bool ShouldRenderImageSource(int index)
+    {
+        return !DeferGalleryImages || _activatedImageIndexes.Contains(index);
+    }
+
+    private string GetImageLoading(int index)
+    {
+        return index == 0 ? "eager" : "lazy";
+    }
+
+    private string GetImageFetchPriority(int index)
+    {
+        return index == 0 ? "high" : "low";
+    }
+
+    private void ResetActivatedImages()
+    {
+        _activatedImageIndexes.Clear();
+
+        if (_objectMediums?.Count > 0)
+        {
+            _activatedImageIndexes.Add(0);
+        }
+    }
+
+    private void ActivateImageIndex(int index)
+    {
+        if (_objectMediums == null || index < 0 || index >= _objectMediums.Count)
+        {
+            return;
+        }
+
+        _activatedImageIndexes.Add(index);
+    }
+
+    private void PrefetchNextImage(int index)
+    {
+        if (!DeferGalleryImages || _objectMediums == null || _objectMediums.Count <= 1)
+        {
+            return;
+        }
+
+        var nextIndex = index + 1;
+        if (nextIndex >= _objectMediums.Count)
+        {
+            nextIndex = 0;
+        }
+
+        _activatedImageIndexes.Add(nextIndex);
     }
 
     private void ResolveOfferLength()
