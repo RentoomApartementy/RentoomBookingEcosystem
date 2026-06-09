@@ -82,6 +82,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StatutePage.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PageRoutes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PageRoutes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -169,6 +173,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>StatutePage.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\PageRoutes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PageRoutes.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 

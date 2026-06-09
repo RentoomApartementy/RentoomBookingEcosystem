@@ -53,6 +53,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
+        [Inject] public RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService { get; set; } = default!;
 
         protected ApartmentObject? _apartment;
         protected ApartmentAiDescriptionDto? _aiDescription;
@@ -434,10 +435,20 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             { "en-US", "EN" },
         };
 
-        protected string CurrentAddonLanguage => _addonslanguageMap?.GetValueOrDefault(
-            CultureInfo.CurrentUICulture.Name,
-            CultureInfo.CurrentUICulture.Name
-        ) ?? CultureInfo.CurrentUICulture.Name;
+        protected string CurrentAddonLanguage 
+        {
+            get
+            {
+                var culture = CultureInfo.CurrentUICulture.Name;
+                if (_addonslanguageMap != null && _addonslanguageMap.TryGetValue(culture, out var mapped))
+                {
+                    return mapped;
+                }
+                
+                // Extract 2-letter uppercase code (e.g., 'it-IT' -> 'IT')
+                return culture.Split('-')[0].ToUpperInvariant();
+            }
+        }
 
         protected string CurrentLanguage => _languageMap?.GetValueOrDefault(
             CultureInfo.CurrentUICulture.Name,
@@ -484,7 +495,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected string GetCanonicalUrl()
         {
-            return $"{NavManager.BaseUri}apartamenty/{Id}/{Slug}";
+            var localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
+            return $"{NavManager.BaseUri.TrimEnd('/')}{localizedBase}/{Id}/{Slug}";
         }
 
         protected MarkupString GetJsonLd()
@@ -894,6 +906,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             int persons = (int.TryParse(Adults, out var a) ? a : 1) + (int.TryParse(Children, out var c) ? c : 0);
 
+            var details = definition?.AddonDefinition?.Details;
             var newDto = new SelectedAddonDto
             {
                 AddonId = addon.Id!.Value,
@@ -1089,7 +1102,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         {
             var apartmentId = _apartment?.Id ?? Id;
             var slug = _apartment?.Name?.ToSlug() ?? Slug ?? string.Empty;
-            var url = $"/apartamenty/{apartmentId}/{slug}";
+            var localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
+            var url = $"{localizedBase}/{apartmentId}/{slug}";
 
             if (reservationGuid.HasValue)
             {

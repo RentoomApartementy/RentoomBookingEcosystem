@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -17,7 +18,7 @@
     <meta property="og:image" content="@GetSeoImage()" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@NavManager.Uri" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["Apartments_BreadcrumbName"]" CurrentPagePath="/apartamenty" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["Apartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Apartments")" />
 </HeadContent>
 
 <div class="apartments-container">
@@ -29,7 +30,6 @@
             EndDate="@ViewModel.EndDate"
             Adults="@ViewModel.Adults"
             Children="@ViewModel.Children"
-            Rooms="@ViewModel.Rooms"
             OnSearch="@(async query => await ViewModel.HandleSearchAsync(query))"
         />
     </div>
@@ -135,10 +135,22 @@
 </div>
 
 @code {
-    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
+    [Parameter] public string? Adults { get; set; }
+    [Parameter] public string? Children { get; set; }
+
     private int? _offerLength;
 
-    
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrEmpty(StartDate)) ViewModel.StartDate = StartDate;
+        if (!string.IsNullOrEmpty(EndDate)) ViewModel.EndDate = EndDate;
+        if (!string.IsNullOrEmpty(Adults)) ViewModel.Adults = Adults;
+        if (!string.IsNullOrEmpty(Children)) ViewModel.Children = Children;
+
+        _offerLength = CalculateOfferLength();
+    }
 
     private int? CalculateOfferLength()
     {

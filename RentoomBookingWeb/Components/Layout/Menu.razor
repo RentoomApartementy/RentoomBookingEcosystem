@@ -3,31 +3,33 @@
 @implements IAsyncDisposable
 @using RentoomBookingWeb.Components.Enums;
 @using Microsoft.Extensions.Localization;
+@using RentoomBookingWeb.Services.Localization;
 @inject IStringLocalizer<SharedResources> Localizer;
+@inject IRouteLocalizationService RouteService;
 
 <div>
     <nav class="@NavState.NavClass" aria-label="@Localizer["Menu_MainNavigationAriaLabel"]">
-        <NavLink href="/">
+        <NavLink href="@RouteService.GetLocalizedUrl("Home")">
             <img src="@NavState.Logo" alt="@Localizer["Menu_LogoAlt"]">
         </NavLink>
         <ul>
             <li>
-                <NavLink href="/apartamenty" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Apartments"]</NavLink>
+                <NavLink href="@RouteService.GetLocalizedUrl("Apartments")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Apartments"]</NavLink>
             </li>
             @* <li> *@
             @*     <NavLink href="/o-nas" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["About"]</NavLink> *@
             @* </li> *@
             <li>
-                <NavLink href="/wspolpraca" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
+                <NavLink href="@RouteService.GetLocalizedUrl("Cooperation")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
             </li>
             <li>
-                <NavLink href="/kontakt" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
+                <NavLink href="@RouteService.GetLocalizedUrl("Contact")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
             </li>
             <li>
                 <NavLink href="https://designer.rentoom.pl/" target="_blank" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["RentoomDesigner"]</NavLink>
             </li>
             <li>
-                <NavLink href="/polozenie-torunia" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["AboutCity"]</NavLink>
+                <NavLink href="@RouteService.GetLocalizedUrl("AboutCity")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["AboutCity"]</NavLink>
             </li>
              <li>
                  <NavLink href="https://app.rentoom.pl/" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["ForInvestors"]</NavLink>
@@ -69,22 +71,22 @@
     {
         <div class="mobile-nav">
             <div>
-                <NavLink href="/apartamenty" class="nav-link" ActiveClass="nav-link">@Localizer["Apartments"]</NavLink>
+                <NavLink href="@RouteService.GetLocalizedUrl("Apartments")" class="nav-link" ActiveClass="nav-link">@Localizer["Apartments"]</NavLink>
             </div>
             @* <div> *@
             @*     <NavLink href="/o-nas" class="nav-link" ActiveClass="nav-link">@Localizer["About"]</NavLink> *@
             @* </div> *@
             <div>
-                <NavLink href="/wspolpraca" class="nav-link" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
+                <NavLink href="@RouteService.GetLocalizedUrl("Cooperation")" class="nav-link" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
             </div>
             <div>
-                <NavLink href="/kontakt" class="nav-link" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
+                <NavLink href="@RouteService.GetLocalizedUrl("Contact")" class="nav-link" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
             </div>
             <div>
                 <NavLink href="https://designer.rentoom.pl/" target="_blank" class="nav-link" ActiveClass="nav-link">@Localizer["RentoomDesigner"]</NavLink>
             </div>
             <div>
-                <NavLink href="/polozenie-torunia" class="nav-link" ActiveClass="nav-link">@Localizer["AboutCity"]</NavLink>
+                <NavLink href="@RouteService.GetLocalizedUrl("AboutCity")" class="nav-link" ActiveClass="nav-link">@Localizer["AboutCity"]</NavLink>
             </div>
             <div>
                 <NavLink href="https://app.rentoom.pl/" target="_blank" class="nav-link" ActiveClass="nav-link">@Localizer["ForInvestors"]</NavLink>
@@ -109,7 +111,7 @@
         if (firstRender)
         {
             objRef = DotNetObjectReference.Create(this);
-            menuScrollModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/menuScroll.js");
+            menuScrollModule = await JS.InvokeAsync<IJSObjectReference>("import", "/js/menuScroll.js");
             await menuScrollModule.InvokeVoidAsync("init", objRef);
 
             Navigation.LocationChanged += OnLocationChanged;

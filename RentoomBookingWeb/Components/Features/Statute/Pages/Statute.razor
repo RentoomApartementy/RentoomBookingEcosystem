@@ -1,6 +1,5 @@
 @page "/regulaminy"
-@page "/regulaminy/{Id:int}"
-@page "/regulaminy/{Id:int}/{Slug}"
+@page "/regulaminy/{Id:int}/{Slug?}"
 
 @using RentoomBooking.SharedClasses.Models
 @using RentoomBooking.SharedClasses.Services.ReservationWorkflow
@@ -44,6 +43,8 @@
     </div>
 </main>
 
+@implements IDisposable
+
 @code {
     [Parameter] public int? Id { get; set; }
     [Parameter] public string? Slug { get; set; }
@@ -51,6 +52,8 @@
     private List<CustomerTermDisplayDto> _allTerms = new();
     private CustomerTermDisplayDto? _currentTerm;
     private bool _isLoading = true;
+    private CancellationTokenSource _cts = new();
+
     private string CurrentBreadcrumbName => _currentTerm?.Title ?? _currentTerm?.Description ?? Localizer["StatuteHeader"];
     private string CurrentBreadcrumbPath => Id.HasValue
         ? $"/regulaminy/{Id}{(string.IsNullOrWhiteSpace(Slug) ? string.Empty : $"/{Slug}")}"
@@ -58,20 +61,32 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        await LoadDataAsync();
+        // Cancel any pending operation before starting a new one
+        await _cts.CancelAsync();
+        _cts.Dispose();
+        _cts = new CancellationTokenSource();
+
+        try
+        {
+            await LoadDataAsync(_cts.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            // Expected when parameters change quickly
+        }
     }
 
-    private async Task LoadDataAsync()
+    private async Task LoadDataAsync(CancellationToken ct)
     {
         _isLoading = true;
         try
         {
             var culture = CultureInfo.CurrentUICulture.Name;
-            _allTerms = await TermsService.GetTermsForDisplayAsync(culture);
+            _allTerms = await TermsService.GetTermsForDisplayAsync(culture, ct: ct);
 
             if (Id.HasValue)
             {
-                _currentTerm = await TermsService.GetTermByIdAsync(Id.Value, culture);
+                _currentTerm = await TermsService.GetTermByIdAsync(Id.Value, culture, ct: ct);
             }
             else
             {
@@ -82,7 +97,16 @@
         }
         finally
         {
-            _isLoading = false;
+            if (!ct.IsCancellationRequested)
+            {
+                _isLoading = false;
+            }
         }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

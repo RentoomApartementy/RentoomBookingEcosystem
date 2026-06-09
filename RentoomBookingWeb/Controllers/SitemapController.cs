@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBookingWeb.Services.Localization;
+using RentoomBooking.SharedFrontend.Localization;
+using System.Globalization;
 
 namespace RentoomBookingWeb.Controllers
 {
@@ -13,61 +16,141 @@ namespace RentoomBookingWeb.Controllers
     {
         private readonly IApartmentsService _apartmentsService;
         private readonly IIdoApartmentService _idoApartmentService;
+        private readonly IRouteLocalizationService _routeService;
 
-        public SitemapController(IApartmentsService apartmentsService, IIdoApartmentService idoApartmentService)
+        public SitemapController(
+            IApartmentsService apartmentsService, 
+            IIdoApartmentService idoApartmentService,
+            IRouteLocalizationService routeService)
         {
             _apartmentsService = apartmentsService;
             _idoApartmentService = idoApartmentService;
+            _routeService = routeService;
         }
 
         [Route("sitemap.xml")]
-        public async Task<IActionResult> GetSitemap()
+        public IActionResult GetSitemapIndex()
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
+
+            var cultures = SupportedLanguagesProvider.SupportedCultureNames;
+            
+            var sitemapIndex = new XElement(ns + "sitemapindex",
+                from culture in cultures
+                let shortCode = culture.Split('-')[0].ToLowerInvariant()
+                select new XElement(ns + "sitemap",
+                    new XElement(ns + "loc", $"{baseUrl}/{shortCode}/sitemap.xml")
+                )
+            );
+
+            return Content(new XDeclaration("1.0", "utf-8", "yes") + Environment.NewLine + sitemapIndex.ToString(), "application/xml", Encoding.UTF8);
+        }
+
+        [Route("{culture}/sitemap.xml")]
+        public async Task<IActionResult> GetLanguageSitemap(string culture)
+        {
+            var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames;
+            var currentCulture = supportedCultures.FirstOrDefault(c => 
+                string.Equals(c.Split('-')[0], culture, StringComparison.OrdinalIgnoreCase) || 
+                string.Equals(c, culture, StringComparison.OrdinalIgnoreCase));
+
+            if (currentCulture == null) return NotFound();
+
             var result = await _apartmentsService.GetAllApartmentsList();
             var apartments = result?.Items ?? new List<ApartmentObject>();
 
-            var staticPages = new List<string>
+            var staticPageKeys = new List<string>
             {
-                "/regulaminy",
-                "/wspolpraca",
-                "/kontakt",
-                "/apartamenty",
-                "/o-nas"
+                "Statute",
+                "Cooperation",
+                "Contact",
+                "AboutCity",
+                "AllApartments"
             };
 
             var baseUrl = $"{Request.Scheme}://{Request.Host}";
             XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
+            XNamespace xhtml = "http://www.w3.org/1999/xhtml";
 
-            var sitemap = new XElement(ns + "urlset",
-                
-                new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}/"),
-                    new XElement(ns + "changefreq", "daily"),
-                    new XElement(ns + "priority", "1.0")
-                ),
+            var urlElements = new List<XElement>();
 
-                new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}/apartamenty-torun"),
-                    new XElement(ns + "changefreq", "daily"),
-                    new XElement(ns + "priority", "0.9")
-                ),
+            // 1. Home Page
+            urlElements.Add(CreateUrlElement(ns, xhtml, baseUrl, "Home", currentCulture, supportedCultures, "1.0", "daily"));
 
-                from page in staticPages
-                select new XElement(ns + "url",
-                    new XElement(ns + "loc", $"{baseUrl}{page}"),
-                    new XElement(ns + "changefreq", "monthly"),
-                    new XElement(ns + "priority", "0.5")
-                ),
+            // 2. Static Pages
+            foreach (var key in staticPageKeys)
+            {
+                urlElements.Add(CreateUrlElement(ns, xhtml, baseUrl, key, currentCulture, supportedCultures, "0.7", "monthly"));
+            }
 
-                from apt in apartments
-                select new XElement(ns + "url",
-                    new XElement(ns + "loc", GetApartmentUrl(baseUrl, apt)),
-                    new XElement(ns + "changefreq", "weekly"),
-                    new XElement(ns + "priority", "0.8")
-                )
+            // 3. Apartments
+            foreach (var apt in apartments)
+            {
+                urlElements.Add(CreateApartmentUrlElement(ns, xhtml, baseUrl, apt, currentCulture, supportedCultures, "0.8", "weekly"));
+            }
+
+            var sitemap = new XElement(ns + "urlset", 
+                new XAttribute(XNamespace.Xmlns + "xhtml", xhtml.NamespaceName),
+                urlElements
             );
 
             return Content(new XDeclaration("1.0", "utf-8", "yes") + Environment.NewLine + sitemap.ToString(), "application/xml", Encoding.UTF8);
+        }
+
+        private XElement CreateUrlElement(XNamespace ns, XNamespace xhtml, string baseUrl, string pageKey, string currentCulture, IEnumerable<string> allCultures, string priority, string freq)
+        {
+            var loc = pageKey == "Home" 
+                ? $"{baseUrl}/{currentCulture.Split('-')[0].ToLowerInvariant()}" 
+                : $"{baseUrl}{_routeService.GetLocalizedUrl(pageKey, currentCulture)}";
+
+            var urlElement = new XElement(ns + "url",
+                new XElement(ns + "loc", loc),
+                new XElement(ns + "changefreq", freq),
+                new XElement(ns + "priority", priority)
+            );
+
+            foreach (var cult in allCultures)
+            {
+                var altLoc = pageKey == "Home"
+                    ? $"{baseUrl}/{cult.Split('-')[0].ToLowerInvariant()}"
+                    : $"{baseUrl}{_routeService.GetLocalizedUrl(pageKey, cult)}";
+
+                urlElement.Add(new XElement(xhtml + "link",
+                    new XAttribute("rel", "alternate"),
+                    new XAttribute("hreflang", cult.ToLowerInvariant()),
+                    new XAttribute("href", altLoc)
+                ));
+            }
+
+            return urlElement;
+        }
+
+        private XElement CreateApartmentUrlElement(XNamespace ns, XNamespace xhtml, string baseUrl, ApartmentObject apt, string currentCulture, IEnumerable<string> allCultures, string priority, string freq)
+        {
+            var slug = RentoomBookingWeb.Helpers.StringExtensions.ToSlug(apt.Name ?? "details");
+            var localizedBase = _routeService.GetLocalizedUrl("ApartmentDetail", currentCulture);
+            var loc = $"{baseUrl}{localizedBase}/{apt.Id}/{slug}";
+
+            var urlElement = new XElement(ns + "url",
+                new XElement(ns + "loc", loc),
+                new XElement(ns + "changefreq", freq),
+                new XElement(ns + "priority", priority)
+            );
+
+            foreach (var cult in allCultures)
+            {
+                var cultLocalizedBase = _routeService.GetLocalizedUrl("ApartmentDetail", cult);
+                var altLoc = $"{baseUrl}{cultLocalizedBase}/{apt.Id}/{slug}";
+
+                urlElement.Add(new XElement(xhtml + "link",
+                    new XAttribute("rel", "alternate"),
+                    new XAttribute("hreflang", cult.ToLowerInvariant()),
+                    new XAttribute("href", altLoc)
+                ));
+            }
+
+            return urlElement;
         }
         
         [Route("llms.txt")]
@@ -109,7 +192,12 @@ namespace RentoomBookingWeb.Controllers
                 aptSb.AppendLine($"### {apt.Name}");
                 aptSb.AppendLine($"- **Opis:** {description}");
                 aptSb.AppendLine($"- **ID:** {apt.Id}");
-                aptSb.AppendLine($"- **Link:** {GetApartmentUrl(baseUrl, apt)}");
+                
+                var slug = RentoomBookingWeb.Helpers.StringExtensions.ToSlug(apt.Name ?? "details");
+                var localizedBase = _routeService.GetLocalizedUrl("ApartmentDetail", "pl-PL");
+                var aptUrl = $"{baseUrl}{localizedBase}/{apt.Id}/{slug}";
+
+                aptSb.AppendLine($"- **Link:** {aptUrl}");
                 aptSb.AppendLine();
         
                 return aptSb.ToString();
@@ -125,13 +213,6 @@ namespace RentoomBookingWeb.Controllers
             sb.AppendLine("## Dane kontaktowe");
 
             return Content(sb.ToString(), "text/plain", Encoding.UTF8);
-        }
-
-        private string GetApartmentUrl(string baseUrl, ApartmentObject item)
-        {
-            string slug = RentoomBookingWeb.Helpers.StringExtensions.ToSlug(item.Name ?? "details");
-            
-            return $"{baseUrl}/apartamenty/{item.Id}/{slug}";
         }
     }
 }

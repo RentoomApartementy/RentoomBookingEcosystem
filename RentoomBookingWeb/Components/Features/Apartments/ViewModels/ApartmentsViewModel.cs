@@ -45,7 +45,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public string EndDate { get; set; } = "";
         public string Adults { get; set; } = "";
         public string Children { get; set; } = "";
-        public string Rooms { get; set; } = "";
 
         public int? FilterMinPrice { get; private set; }
         public int? FilterMaxPrice { get; private set; }
@@ -93,11 +92,18 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             var query = QueryHelpers.ParseQuery(uri.Query);
             string GetVal(string key) => query.TryGetValue(key, out var val) ? val.ToString() : "";
 
+            // Use Query params if present, otherwise fallback to existing values (which might be set from Route Parameters)
             string s = GetVal("startDate");
+            if (string.IsNullOrEmpty(s)) s = StartDate;
+
             string e = GetVal("endDate");
+            if (string.IsNullOrEmpty(e)) e = EndDate;
+
             string a = GetVal("adults");
+            if (string.IsNullOrEmpty(a)) a = Adults;
+
             string c = GetVal("children");
-            string r = GetVal("rooms");
+            if (string.IsNullOrEmpty(c)) c = Children;
             
             int? urlMin = int.TryParse(GetVal("minPrice"), out int minV) ? minV : null;
             int? urlMax = int.TryParse(GetVal("maxPrice"), out int maxV) ? maxV : null;
@@ -106,18 +112,11 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             var urlLocs = GetVal("locations").Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
             var urlAmes = GetVal("filters").Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
 
-            bool filtersChanged = s != StartDate || e != EndDate || a != Adults || c != Children;
-
-            if (_isInitialized && !filtersChanged && Items.Any())
-            {
-                NotifyStateChanged();
-                return;
-            }
-
-            StartDate = s; EndDate = e; Adults = a; Children = c; Rooms = r;
+            // Check if search parameters actually provide a valid search context
+            StartDate = s; EndDate = e; Adults = a; Children = c;
             FilterMinPrice = urlMin;
             FilterMaxPrice = urlMax;
-            IsSearch = !string.IsNullOrEmpty(StartDate) || !string.IsNullOrEmpty(EndDate);
+            IsSearch = !string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate);
 
             await GetApartmentsCount();
 
@@ -482,7 +481,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             if (query.ContainsKey("endDate")) EndDate = query["endDate"];
             if (query.ContainsKey("adults")) Adults = query["adults"];
             if (query.ContainsKey("children")) Children = query["children"];
-            if (query.ContainsKey("rooms")) Rooms = query["rooms"];
 
             var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
             var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
@@ -490,7 +488,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             queryParams["endDate"] = EndDate;
             queryParams["adults"] = Adults;
             queryParams["children"] = Children;
-            queryParams["rooms"] = Rooms;
             queryParams.Remove("minPrice");
             queryParams.Remove("maxPrice");
 
@@ -550,7 +547,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     ["EndDate"] = EndDate,
                     ["Adults"] = Adults,
                     ["Children"] = Children,
-                    ["Rooms"] = Rooms,
                     ["SelectedLocations"] = string.Join(",", _currentFilters?.ApartmentLocationsFilter ?? new List<string>()),
                     ["SelectedAmenities"] = string.Join(",", _currentFilters?.ApartmentAmenitiesFilter ?? new List<int>()),
                     ["SelectedAddons"] = string.Join(",", _currentFilters?.ApartmentAddonFilter ?? new List<int>())
@@ -573,7 +569,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 ["end_date"] = EndDate,
                 ["adults"] = Adults,
                 ["children"] = Children,
-                ["rooms"] = Rooms,
                 ["selected_locations"] = string.Join(",", _currentFilters?.ApartmentLocationsFilter ?? new List<string>()),
                 ["selected_amenities"] = string.Join(",", _currentFilters?.ApartmentAmenitiesFilter ?? new List<int>()),
                 ["selected_addons"] = string.Join(",", _currentFilters?.ApartmentAddonFilter ?? new List<int>()),
