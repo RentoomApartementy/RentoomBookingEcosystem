@@ -126,6 +126,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
             builder.Services.AddScoped<IApartmentMediaCatalogService, ApartmentMediaCatalogService>();
             builder.Services.AddScoped<IApartmentPhotoBlobStorage, ApartmentPhotoBlobStorage>();
+            builder.Services.AddScoped<IApartmentMediaVariantGenerator, ApartmentMediaVariantGenerator>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
             builder.Services.AddScoped<IdoSellService>();
             builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();
@@ -225,6 +226,7 @@ namespace RentoomBookingWeb
             //storage options:
             builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
             builder.Services.Configure<StorageOptions>(ApartmentPhotoBlobStorage.StorageOptionsName, builder.Configuration.GetSection(ApartmentPhotoBlobStorage.StorageOptionsName));
+            builder.Services.Configure<ApartmentMediaVariantsOptions>(builder.Configuration.GetSection(ApartmentMediaVariantsOptions.SectionName));
 
             var app = builder.Build();
             

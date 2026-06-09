@@ -116,6 +116,35 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 if (!sourceMap.ContainsKey(asset.IdoSourceUrl))
                 {
                     await _blobStorage.DeleteIfExistsAsync(asset.StorageKey, cancellationToken);
+                    if (!string.IsNullOrWhiteSpace(asset.CardStorageKey))
+                    {
+                        await _blobStorage.DeleteIfExistsAsync(asset.CardStorageKey, cancellationToken);
+                        summary.Changes.Add(new ApartmentMediaSyncChange
+                        {
+                            ApartmentId = apartmentId,
+                            IdoSourceUrl = asset.IdoSourceUrl,
+                            StorageKey = asset.CardStorageKey,
+                            Action = "deleted",
+                            Variant = "card",
+                            Reason = "source_removed",
+                            OldSequence = asset.PictureDisplaySequence,
+                            ContentType = asset.CardContentType
+                        });
+
+                        _logger.LogInformation(
+                            "Apartment media sync item processed. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Variant={Variant}, Action={Action}, Reason={Reason}, OldSequence={OldSequence}, NewSequence={NewSequence}, ContentType={ContentType}",
+                            summary.RunId,
+                            apartmentId,
+                            asset.IdoSourceUrl,
+                            asset.CardStorageKey,
+                            "card",
+                            "deleted",
+                            "source_removed",
+                            asset.PictureDisplaySequence,
+                            null,
+                            asset.CardContentType);
+                    }
+
                     context.ApartmentMediaAssets.Remove(asset);
                     summary.DeletedCount++;
                     summary.Changes.Add(new ApartmentMediaSyncChange
@@ -124,8 +153,24 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                         IdoSourceUrl = asset.IdoSourceUrl,
                         StorageKey = asset.StorageKey,
                         Action = "deleted",
-                        OldSequence = asset.PictureDisplaySequence
+                        Variant = "original",
+                        Reason = "source_removed",
+                        OldSequence = asset.PictureDisplaySequence,
+                        ContentType = asset.ContentType
                     });
+
+                    _logger.LogInformation(
+                        "Apartment media sync item processed. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Variant={Variant}, Action={Action}, Reason={Reason}, OldSequence={OldSequence}, NewSequence={NewSequence}, ContentType={ContentType}",
+                        summary.RunId,
+                        apartmentId,
+                        asset.IdoSourceUrl,
+                        asset.StorageKey,
+                        "original",
+                        "deleted",
+                        "source_removed",
+                        asset.PictureDisplaySequence,
+                        null,
+                        asset.ContentType);
                 }
             }
 
@@ -149,6 +194,10 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                         ContentType = sourceState.ContentType,
                         Extension = sourceState.SourceMedium.Extension,
                         PictureDisplaySequence = sourceState.PictureDisplaySequence,
+                        CardStorageKey = sourceState.CardStorageKey,
+                        CardContentType = sourceState.CardContentType,
+                        CardWidth = sourceState.CardWidth,
+                        CardHeight = sourceState.CardHeight,
                         SourceEtag = sourceState.SourceEtag,
                         SourceLastModifiedUtc = sourceState.SourceLastModifiedUtc,
                         SourceContentLength = sourceState.SourceContentLength,
@@ -161,12 +210,16 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 }
 
                 existing.IdoObjectMediaId = sourceState.SourceMedium.Id;
-                existing.ContentType = sourceState.ContentType;
+                existing.ContentType = sourceState.ContentType ?? existing.ContentType;
                 existing.Extension = sourceState.SourceMedium.Extension;
-                existing.SourceEtag = sourceState.SourceEtag;
-                existing.SourceLastModifiedUtc = sourceState.SourceLastModifiedUtc;
-                existing.SourceContentLength = sourceState.SourceContentLength;
-                existing.ChecksumSha256 = sourceState.ChecksumSha256;
+                existing.CardStorageKey = sourceState.CardStorageKey ?? existing.CardStorageKey;
+                existing.CardContentType = sourceState.CardContentType ?? existing.CardContentType;
+                existing.CardWidth = sourceState.CardWidth ?? existing.CardWidth;
+                existing.CardHeight = sourceState.CardHeight ?? existing.CardHeight;
+                existing.SourceEtag = sourceState.SourceEtag ?? existing.SourceEtag;
+                existing.SourceLastModifiedUtc = sourceState.SourceLastModifiedUtc ?? existing.SourceLastModifiedUtc;
+                existing.SourceContentLength = sourceState.SourceContentLength ?? existing.SourceContentLength;
+                existing.ChecksumSha256 = sourceState.ChecksumSha256 ?? existing.ChecksumSha256;
 
                 if (existing.PictureDisplaySequence != sourceState.PictureDisplaySequence)
                 {
@@ -209,13 +262,15 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 existing.ReplacedCount = summary.ReplacedCount;
                 existing.DeletedCount = summary.DeletedCount;
                 existing.SequenceUpdatedCount = summary.SequenceUpdatedCount;
+                existing.CardGeneratedCount = summary.CardGeneratedCount;
+                existing.CardReplacedCount = summary.CardReplacedCount;
                 existing.FailedCount = summary.FailedCount;
                 existing.SummaryJson = JsonConvert.SerializeObject(summary.Changes);
             }
 
             await context.SaveChangesAsync(cancellationToken);
             _logger.LogInformation(
-                "Saved apartment media sync run {RunId}. Status={Status}, ApartmentsProcessed={ApartmentsProcessed}, Downloaded={Downloaded}, Replaced={Replaced}, Deleted={Deleted}, SequenceUpdated={SequenceUpdated}, Failed={Failed}.",
+                "Saved apartment media sync run {RunId}. Status={Status}, ApartmentsProcessed={ApartmentsProcessed}, Downloaded={Downloaded}, Replaced={Replaced}, Deleted={Deleted}, SequenceUpdated={SequenceUpdated}, CardGenerated={CardGenerated}, CardReplaced={CardReplaced}, Failed={Failed}.",
                 summary.RunId,
                 summary.Status,
                 summary.ApartmentsProcessed,
@@ -223,6 +278,8 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 summary.ReplacedCount,
                 summary.DeletedCount,
                 summary.SequenceUpdatedCount,
+                summary.CardGeneratedCount,
+                summary.CardReplacedCount,
                 summary.FailedCount);
         }
 
@@ -240,6 +297,8 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 ReplacedCount = summary.ReplacedCount,
                 DeletedCount = summary.DeletedCount,
                 SequenceUpdatedCount = summary.SequenceUpdatedCount,
+                CardGeneratedCount = summary.CardGeneratedCount,
+                CardReplacedCount = summary.CardReplacedCount,
                 FailedCount = summary.FailedCount,
                 SummaryJson = JsonConvert.SerializeObject(summary.Changes)
             };
@@ -252,6 +311,9 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 Id = asset.IdoObjectMediaId ?? asset.Id,
                 ObjectId = asset.ApartmentId,
                 Url = _blobStorage.BuildBlobUrl(asset.StorageKey),
+                CardUrl = string.IsNullOrWhiteSpace(asset.CardStorageKey)
+                    ? _blobStorage.BuildBlobUrl(asset.StorageKey)
+                    : _blobStorage.BuildBlobUrl(asset.CardStorageKey),
                 Extension = asset.Extension,
                 Position = asset.PictureDisplaySequence,
                 Type = asset.ContentType

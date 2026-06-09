@@ -13,6 +13,11 @@ namespace RentoomBooking.SharedClasses.Models.ApartmentMedia
         public string? ContentType { get; set; }
         public string? Extension { get; set; }
         public int PictureDisplaySequence { get; set; }
+        public string? CardStorageKey { get; set; }
+        public string? CardBlobUrl { get; set; }
+        public string? CardContentType { get; set; }
+        public int? CardWidth { get; set; }
+        public int? CardHeight { get; set; }
         public string? SourceEtag { get; set; }
         public DateTime? SourceLastModifiedUtc { get; set; }
         public long? SourceContentLength { get; set; }
@@ -27,6 +32,10 @@ namespace RentoomBooking.SharedClasses.Models.ApartmentMedia
         public string IdoSourceUrl { get; set; } = string.Empty;
         public string? StorageKey { get; set; }
         public string Action { get; set; } = string.Empty;
+        public string? Variant { get; set; }
+        public string? Reason { get; set; }
+        public string? ContentType { get; set; }
+        public long? SizeBytes { get; set; }
         public int? OldSequence { get; set; }
         public int? NewSequence { get; set; }
         public string? Error { get; set; }
@@ -44,6 +53,8 @@ namespace RentoomBooking.SharedClasses.Models.ApartmentMedia
         public int ReplacedCount { get; set; }
         public int DeletedCount { get; set; }
         public int SequenceUpdatedCount { get; set; }
+        public int CardGeneratedCount { get; set; }
+        public int CardReplacedCount { get; set; }
         public int FailedCount { get; set; }
         public List<ApartmentMediaSyncChange> Changes { get; set; } = new();
     }
@@ -57,5 +68,9 @@ namespace RentoomBooking.SharedClasses.Models.ApartmentMedia
         public DateTime? SourceLastModifiedUtc { get; set; }
         public long? SourceContentLength { get; set; }
         public string? ChecksumSha256 { get; set; }
+        public string? CardStorageKey { get; set; }
+        public string? CardContentType { get; set; }
+        public int? CardWidth { get; set; }
+        public int? CardHeight { get; set; }
     }
 }

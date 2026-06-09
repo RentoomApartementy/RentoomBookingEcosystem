@@ -181,7 +181,7 @@
     public async Task<string> OnMarkerClicked(string id)
     {
         var media = await GetObjectMedia(int.Parse(id));
-        return media?.Url ?? "";
+        return media?.CardUrl ?? media?.Url ?? "";
     }
 
     private async Task<ObjectMedium?> GetObjectMedia(int id)

@@ -91,6 +91,18 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("picture_display_sequence")]
         public int PictureDisplaySequence { get; set; }
 
+        [Column("card_storage_key")]
+        public string? CardStorageKey { get; set; }
+
+        [Column("card_content_type")]
+        public string? CardContentType { get; set; }
+
+        [Column("card_width")]
+        public int? CardWidth { get; set; }
+
+        [Column("card_height")]
+        public int? CardHeight { get; set; }
+
         [Column("source_etag")]
         public string? SourceEtag { get; set; }
 
@@ -143,6 +155,12 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
 
         [Column("sequence_updated_count")]
         public int SequenceUpdatedCount { get; set; }
+
+        [Column("card_generated_count")]
+        public int CardGeneratedCount { get; set; }
+
+        [Column("card_replaced_count")]
+        public int CardReplacedCount { get; set; }
 
         [Column("failed_count")]
         public int FailedCount { get; set; }

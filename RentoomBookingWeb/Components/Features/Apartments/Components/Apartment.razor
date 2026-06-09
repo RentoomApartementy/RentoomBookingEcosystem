@@ -43,7 +43,7 @@
                                 @if (ShouldRenderImageSource(index))
                                 {
                                     <img 
-                                        src="@medium.Url"
+                                        src="@GetListingImageUrl(medium)"
                                         alt="@Item?.Name"
                                         itemprop="photo"
                                         class="apartment-image"
@@ -63,7 +63,7 @@
                     {
                         <div class="image-wrapper" title="@Item?.Name">
                             <img 
-                                src="@_currentObjectMedium.Url"
+                                src="@GetListingImageUrl(_currentObjectMedium)"
                                 alt="@Item?.Name"
                                 itemprop="photo"
                                 class="apartment-image" 
@@ -515,6 +515,11 @@
     private bool ShouldRenderImageSource(int index)
     {
         return !DeferGalleryImages || _activatedImageIndexes.Contains(index);
+    }
+
+    private static string? GetListingImageUrl(ObjectMedium? medium)
+    {
+        return medium?.CardUrl ?? medium?.Url;
     }
 
     private bool IsSuggestionLoading()

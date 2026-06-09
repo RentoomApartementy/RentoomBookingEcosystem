@@ -78,7 +78,8 @@
         try
         {
             var media = await MediaCache.GetOrFetchMediaAsync(Id, () => ApartmentMediaCatalogService.GetApartmentMediaAsync(Id));
-            _imageUrl = media?.FirstOrDefault()?.Url;
+            var first = media?.FirstOrDefault();
+            _imageUrl = first?.CardUrl ?? first?.Url;
             
             await InvokeAsync(StateHasChanged);
         }

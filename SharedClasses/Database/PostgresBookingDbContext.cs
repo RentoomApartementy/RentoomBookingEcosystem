@@ -81,6 +81,8 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.Property(e => e.StorageKey).HasColumnType("varchar").IsRequired();
                 entity.Property(e => e.ContentType).HasColumnType("varchar");
                 entity.Property(e => e.Extension).HasColumnType("varchar");
+                entity.Property(e => e.CardStorageKey).HasColumnType("varchar");
+                entity.Property(e => e.CardContentType).HasColumnType("varchar");
                 entity.Property(e => e.SourceEtag).HasColumnType("varchar");
                 entity.Property(e => e.ChecksumSha256).HasColumnType("varchar");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
