@@ -158,10 +158,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 HasMore = true; ApartmentsIsLoading = false;
                 ResetPriceScales();
                 await LoadMoreAsync();
-                if (Items.Any()) 
-                {
-                    StartSuggestionsFetch(Items.Take(PageSize));
-                }
             }
             
             _isInitialized = true;
@@ -450,6 +446,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         private void StartSuggestionsFetch(IEnumerable<ApartmentObject> items)
         {
+            if (!IsSearch)
+            {
+                CancelSuggestionsFetch();
+                return;
+            }
+
             CancelSuggestionsFetch();
             _suggestionsCts = new CancellationTokenSource();
             var runId = _suggestionsRunId;
