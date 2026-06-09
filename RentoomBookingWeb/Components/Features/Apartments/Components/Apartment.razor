@@ -326,24 +326,19 @@
         _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
         CalculateDetailsUrl();
         ResolveOfferLength();
-        
-        if (Item?.Id != null)
-        {
-            if (MediaCache.TryGetCachedMedia(Item.Id, out var cachedMedia))
-            {
-                _objectMediums = cachedMedia;
-                _currentMediumIndex = 0;
-                _currentObjectMedium = _objectMediums?.FirstOrDefault();
-                ResetActivatedImages();
-                _isMediaLoaded = true; 
-            }
-        }
+        TryLoadMediaFromCache();
     }
 
     protected override void OnParametersSet()
     {
+        _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
         CalculateDetailsUrl();
         ResolveOfferLength();
+
+        if (!_isMediaLoaded)
+        {
+            TryLoadMediaFromCache();
+        }
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -386,6 +381,17 @@
     public async Task LoadMedia()
     {
         if (_isMediaLoaded || _isDisposed) return;
+
+        if (TryLoadMediaFromCache())
+        {
+            if (!_isDisposed)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+
+            return;
+        }
+
         _isMediaLoaded = true;
 
         try
@@ -419,15 +425,39 @@
         var id = Item?.Id;
         if (id != null)
         {
-            _objectMediums = await MediaCache.GetOrFetchMediaAsync(
+            var media = await MediaCache.GetOrFetchMediaAsync(
                 id.Value, 
                 async () => await ApartmentMediaCatalogService.GetApartmentMediaAsync(id.Value)
             );
 
-            _currentMediumIndex = 0;
-            _currentObjectMedium = _objectMediums.FirstOrDefault();
-            ResetActivatedImages();
+            ApplyLoadedMedia(media);
         }
+    }
+
+    private bool TryLoadMediaFromCache()
+    {
+        var id = Item?.Id;
+        if (id == null)
+        {
+            return false;
+        }
+
+        if (!MediaCache.TryGetCachedMedia(id.Value, out var cachedMedia) || cachedMedia == null || !cachedMedia.Any())
+        {
+            return false;
+        }
+
+        _isMediaLoaded = true;
+        ApplyLoadedMedia(cachedMedia);
+        return true;
+    }
+
+    private void ApplyLoadedMedia(List<ObjectMedium> media)
+    {
+        _objectMediums = media;
+        _currentMediumIndex = 0;
+        _currentObjectMedium = _objectMediums.FirstOrDefault();
+        ResetActivatedImages();
     }
 
     private async Task ChangeCurrentObjectMedium(int step)
