@@ -324,9 +324,11 @@ or by registered letter to the correspondence address. A response will be provid
     
   <value>E-mail</value></data>
   <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
-    
-    
+
+
   <value>Terms and registration</value></data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>House rules</value></data>
   <data name="RegistrationSaveError" xml:space="preserve">
     
     

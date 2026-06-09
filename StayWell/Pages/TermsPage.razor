@@ -17,22 +17,27 @@
 
 <div class="terms-container">
     <div class="content-section">
-        <div class="reservation-section main-terms-card @(IsShowingTerms ? "is-tos-view" : "") @(IsShowingRegistration ? "is-registration-view" : "")">
+        <div class="reservation-section main-terms-card @(IsShowingRules ? "is-rules-view" : "") @(IsShowingTerms ? "is-tos-view" : "") @(IsShowingRegistration ? "is-registration-view" : "")">
 
             <div class="transition-container @(_isTransitioning ? "fade-out" : "fade-in")">
-                @if (CurrentView == ViewState.Steps)
+                @if (CurrentView == ViewState.Rules)
                 {
-                    var step = steps[_currentStep];
-                    <div class="step-view">
-                        <div class="image-container">
-                            @if (!string.IsNullOrEmpty(step.Image))
+                    <div class="rules-view">
+                        <h3 class="rules-title">@Localizer["HouseRulesTitle"]</h3>
+                        <ul class="rules-list">
+                            @foreach (var rule in rules)
                             {
-                                <img src="@step.Image" class="step-image" alt="step" />
+                                <li class="rule-row">
+                                    <div class="rule-icon">
+                                        @if (!string.IsNullOrEmpty(rule.Image))
+                                        {
+                                            <img src="@rule.Image" alt="" />
+                                        }
+                                    </div>
+                                    <p class="rule-text">@rule.Text</p>
+                                </li>
                             }
-                        </div>
-                        <div class="text-container">
-                            <p>@step.Text</p>
-                        </div>
+                        </ul>
                     </div>
                 }
                 else if (CurrentView == ViewState.Terms)
@@ -156,15 +161,15 @@
     </div>
 </div>
 
-    <FloatingButton Text="@(CurrentView == ViewState.Steps ? Localizer["Continue"] : CurrentView == ViewState.Terms ? Localizer["Accept"] : Localizer["Confirm"])"
+    <FloatingButton Text="@(CurrentView == ViewState.Rules ? Localizer["Continue"] : CurrentView == ViewState.Terms ? Localizer["Accept"] : Localizer["Confirm"])"
         IconPath="@(CurrentView != ViewState.RegistrationCard ? "/icons/chevron-right.svg" : "/icons/handshake.svg")"
         IsDisabled="IsButtonDisabled"
         OnClick="HandleNextClick" />
 
 @code {
-    private enum ViewState { Steps, Terms, RegistrationCard }
+    private enum ViewState { Rules, Terms, RegistrationCard }
 
-    private (string Image, string Text)[] steps => new[]
+    private (string Image, string Text)[] rules => new[]
     {
         ("/images/clock.png", $"{Localizer["Step11"]} {ReservationState.CheckInTime:HH\\:mm} {Localizer["Step12"]} {ReservationState.CheckOutTime:HH\\:mm} {Localizer["Step13"]}"),
         ("/images/broken-window.png", $"{Localizer["Step2"]}"),
@@ -185,13 +190,17 @@
     private bool _isTermsLoading = true;
     private bool _termsLoadError = false;
 
-    private int TotalStatesCount => steps.Length + 2;
+    private const int RulesStep = 0;
+    private const int TermsStep = 1;
+
+    private int TotalStatesCount => 3;
 
     private ViewState CurrentView =>
-        _currentStep < steps.Length ? ViewState.Steps :
-        _currentStep == steps.Length ? ViewState.Terms :
+        _currentStep == RulesStep ? ViewState.Rules :
+        _currentStep == TermsStep ? ViewState.Terms :
         ViewState.RegistrationCard;
 
+    private bool IsShowingRules => CurrentView == ViewState.Rules;
     private bool IsShowingTerms => CurrentView == ViewState.Terms;
     private bool IsShowingRegistration => CurrentView == ViewState.RegistrationCard;
     private bool IsEmailValid => !string.IsNullOrWhiteSpace(_mail) && _mail.Contains("@") && _mail.Contains(".");
