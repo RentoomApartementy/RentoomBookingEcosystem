@@ -13,6 +13,7 @@ using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.Bonuses;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Bonuses;
@@ -50,6 +51,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] public IUpsellCatalogService UpsellCatalogService { get; set; } = default!;
         [Inject] public IBonusesService BonusesService { get; set; } = default!;
         [Inject] public MediaCacheService MediaCache { get; set; } = default!;
+        [Inject] public IApartmentMediaCatalogService ApartmentMediaCatalogService { get; set; } = default!;
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
@@ -1009,7 +1011,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             {
                 _objectMediums = await MediaCache.GetOrFetchMediaAsync(
                     _apartment.Id,
-                    async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>()
+                    async () => await ApartmentMediaCatalogService.GetApartmentMediaAsync(_apartment.Id)
                 );
             }
         }

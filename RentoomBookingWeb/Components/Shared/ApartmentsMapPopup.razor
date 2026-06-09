@@ -3,13 +3,13 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Services
-@using RentoomBooking.SharedClasses.Services.IdoBooking
+@using RentoomBooking.SharedClasses.Services.ApartmentMedia
 @using RentoomBookingWeb.Services 
 @using RentoomBookingWeb.Helpers
 @using Microsoft.JSInterop
 @using Microsoft.Extensions.Localization
 @inject IApartmentsService ApartmentsApiService
-@inject IIdoApartmentService IdoApartmentService
+@inject IApartmentMediaCatalogService ApartmentMediaCatalogService
 @inject IRentoomOfferService RentoomOfferService
 @inject IJSRuntime JS
 @inject MediaCacheService MediaCache
@@ -247,7 +247,7 @@
         {
             var media = await MediaCache.GetOrFetchMediaAsync(
                 id, 
-                async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>()
+                async () => await ApartmentMediaCatalogService.GetApartmentMediaAsync(id)
             );
             
             return media?.FirstOrDefault()?.Url ?? "";

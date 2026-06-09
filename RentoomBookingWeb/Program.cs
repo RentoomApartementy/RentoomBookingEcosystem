@@ -22,6 +22,7 @@ using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
+using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBookingWeb.Components;
@@ -119,6 +120,8 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<FiltersRepository>();
             builder.Services.AddScoped<RappQrMaintService>();
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
+            builder.Services.AddScoped<IApartmentMediaCatalogService, ApartmentMediaCatalogService>();
+            builder.Services.AddScoped<IApartmentPhotoBlobStorage, ApartmentPhotoBlobStorage>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
             builder.Services.AddScoped<IdoSellService>();
             builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();
@@ -217,6 +220,7 @@ namespace RentoomBookingWeb
 
             //storage options:
             builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
+            builder.Services.Configure<StorageOptions>(ApartmentPhotoBlobStorage.StorageOptionsName, builder.Configuration.GetSection(ApartmentPhotoBlobStorage.StorageOptionsName));
 
             var app = builder.Build();
             

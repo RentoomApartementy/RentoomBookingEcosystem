@@ -63,6 +63,94 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
             = DateTime.UtcNow;
     }
 
+    [Table("apartment_media_assets")]
+    public class ApartmentMediaAssetEntity
+    {
+        [Key]
+        [Column("id")]
+        public int Id { get; set; }
+
+        [Column("apartment_id")]
+        public int ApartmentId { get; set; }
+
+        [Column("ido_object_media_id")]
+        public int? IdoObjectMediaId { get; set; }
+
+        [Column("ido_source_url")]
+        public string IdoSourceUrl { get; set; } = string.Empty;
+
+        [Column("storage_key")]
+        public string StorageKey { get; set; } = string.Empty;
+
+        [Column("content_type")]
+        public string? ContentType { get; set; }
+
+        [Column("extension")]
+        public string? Extension { get; set; }
+
+        [Column("picture_display_sequence")]
+        public int PictureDisplaySequence { get; set; }
+
+        [Column("source_etag")]
+        public string? SourceEtag { get; set; }
+
+        [Column("source_last_modified_utc")]
+        public DateTime? SourceLastModifiedUtc { get; set; }
+
+        [Column("source_content_length")]
+        public long? SourceContentLength { get; set; }
+
+        [Column("checksum_sha256")]
+        public string? ChecksumSha256 { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
+
+    [Table("apartment_media_sync_runs")]
+    public class ApartmentMediaSyncRunEntity
+    {
+        [Key]
+        [Column("run_id")]
+        public Guid RunId { get; set; }
+
+        [Column("started_at")]
+        public DateTime StartedAt { get; set; } = DateTime.UtcNow;
+
+        [Column("finished_at")]
+        public DateTime? FinishedAt { get; set; }
+
+        [Column("status")]
+        public string Status { get; set; } = string.Empty;
+
+        [Column("apartments_processed")]
+        public int ApartmentsProcessed { get; set; }
+
+        [Column("media_items_seen")]
+        public int MediaItemsSeen { get; set; }
+
+        [Column("downloaded_count")]
+        public int DownloadedCount { get; set; }
+
+        [Column("replaced_count")]
+        public int ReplacedCount { get; set; }
+
+        [Column("deleted_count")]
+        public int DeletedCount { get; set; }
+
+        [Column("sequence_updated_count")]
+        public int SequenceUpdatedCount { get; set; }
+
+        [Column("failed_count")]
+        public int FailedCount { get; set; }
+
+        [Column("summary_json", TypeName = "jsonb")]
+        public string SummaryJson { get; set; } = "[]";
+    }
+
     public class ReservationEntity
     {
         [Key]

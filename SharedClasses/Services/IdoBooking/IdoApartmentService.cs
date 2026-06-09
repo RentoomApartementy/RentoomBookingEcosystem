@@ -4,16 +4,20 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
+using RentoomBooking.SharedClasses.Models.ApartmentMedia;
+using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.ObjectLocationDTO;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
+using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,17 +48,29 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         // private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<IIdoApartmentService> _logger;
         private readonly IIdoBookingConnectService _idoConnect;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         private readonly ApartmentRepository _apartmentRepository;
         private readonly PostgresBookingDatabase _postgresBookingDatabase;
+        private readonly IApartmentMediaCatalogService _apartmentMediaCatalogService;
+        private readonly IApartmentPhotoBlobStorage _apartmentPhotoBlobStorage;
 
-        public IdoApartmentService(IIdoBookingConnectService idoConnect, ILogger<IdoApartmentService> logger, ApartmentRepository apartmentRepository, PostgresBookingDatabase postgresBookingDatabase)
+        public IdoApartmentService(
+            IIdoBookingConnectService idoConnect,
+            IHttpClientFactory httpClientFactory,
+            ILogger<IdoApartmentService> logger,
+            ApartmentRepository apartmentRepository,
+            PostgresBookingDatabase postgresBookingDatabase,
+            IApartmentMediaCatalogService apartmentMediaCatalogService,
+            IApartmentPhotoBlobStorage apartmentPhotoBlobStorage)
         {
-            // _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _idoConnect = idoConnect;
             _apartmentRepository = apartmentRepository;
             _postgresBookingDatabase = postgresBookingDatabase ?? throw new ArgumentNullException(nameof(postgresBookingDatabase));
+            _apartmentMediaCatalogService = apartmentMediaCatalogService ?? throw new ArgumentNullException(nameof(apartmentMediaCatalogService));
+            _apartmentPhotoBlobStorage = apartmentPhotoBlobStorage ?? throw new ArgumentNullException(nameof(apartmentPhotoBlobStorage));
         }
 
 
@@ -254,8 +270,214 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             _logger.LogInformation("Retrieved amenities for {Count} apartments.", amenitiesDocuments.Count);
 
             await _apartmentRepository.SaveApartmentAmenitiesAsync(amenitiesDocuments, _logger, ct);
+            await SyncApartmentMediaAssetsAsync(apartments, ct);
 
             return apartments;// amenitiesDocuments;
+        }
+
+        private async Task SyncApartmentMediaAssetsAsync(List<ApartmentObject> apartments, CancellationToken ct)
+        {
+            var summary = new ApartmentMediaSyncRunSummary
+            {
+                StartedAt = DateTime.UtcNow,
+                Status = "running"
+            };
+
+            try
+            {
+                foreach (var apartment in apartments)
+                {
+                    ct.ThrowIfCancellationRequested();
+                    summary.ApartmentsProcessed++;
+
+                    var sourceMedia = (await GetObjectMediaFromIdoSellAsync(apartment.Id, ct) ?? new List<ObjectMedium>())
+                        .Where(IsImageMedia)
+                        .ToList();
+
+                    summary.MediaItemsSeen += sourceMedia.Count;
+
+                    var existingAssets = await _apartmentMediaCatalogService.GetAssetEntitiesAsync(apartment.Id, ct);
+                    var syncStates = new List<ApartmentMediaSyncSourceState>(sourceMedia.Count);
+
+                    for (var index = 0; index < sourceMedia.Count; index++)
+                    {
+                        var medium = sourceMedia[index];
+                        var sourceUrl = medium.Url?.Trim();
+
+                        if (string.IsNullOrWhiteSpace(sourceUrl))
+                        {
+                            continue;
+                        }
+
+                        var sequence = index + 1;
+                        var existingAsset = existingAssets.FirstOrDefault(asset => asset.IdoSourceUrl == sourceUrl);
+                        var remoteMetadata = await FetchRemoteMetadataAsync(sourceUrl, ct);
+                        var shouldDownload = existingAsset is null || HasRemoteContentChanged(existingAsset, remoteMetadata);
+
+                        if (!shouldDownload)
+                        {
+                            _logger.LogInformation(
+                                "Apartment media sync item unchanged. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Action={Action}, NewSequence={NewSequence}, SourceEtag={SourceEtag}, SizeBytes={SizeBytes}",
+                                summary.RunId,
+                                apartment.Id,
+                                sourceUrl,
+                                existingAsset!.StorageKey,
+                                "unchanged",
+                                sequence,
+                                remoteMetadata.SourceEtag,
+                                remoteMetadata.SourceContentLength);
+                        }
+                        else
+                        {
+                            var downloadResult = await DownloadRemoteMediaAsync(sourceUrl, ct);
+                            var storageKey = existingAsset?.StorageKey ?? _apartmentPhotoBlobStorage.BuildStorageKey(apartment.Id, sourceUrl, medium.Extension);
+
+                            await using (downloadResult.Content)
+                            {
+                                await _apartmentPhotoBlobStorage.UploadAsync(storageKey, downloadResult.Content, downloadResult.ContentType, ct);
+                            }
+
+                            remoteMetadata.ContentType = downloadResult.ContentType ?? remoteMetadata.ContentType;
+                            remoteMetadata.ChecksumSha256 = downloadResult.ChecksumSha256;
+
+                            var action = existingAsset is null ? "downloaded" : "replaced";
+                            if (existingAsset is null)
+                            {
+                                summary.DownloadedCount++;
+                            }
+                            else
+                            {
+                                summary.ReplacedCount++;
+                            }
+
+                            summary.Changes.Add(new ApartmentMediaSyncChange
+                            {
+                                ApartmentId = apartment.Id,
+                                IdoSourceUrl = sourceUrl,
+                                StorageKey = storageKey,
+                                Action = action,
+                                OldSequence = existingAsset?.PictureDisplaySequence,
+                                NewSequence = sequence
+                            });
+
+                            _logger.LogInformation(
+                                "Apartment media sync item processed. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Action={Action}, Reason={Reason}, OldSequence={OldSequence}, NewSequence={NewSequence}, OldEtag={OldEtag}, NewEtag={NewEtag}, SizeBytes={SizeBytes}",
+                                summary.RunId,
+                                apartment.Id,
+                                sourceUrl,
+                                storageKey,
+                                action,
+                                existingAsset is null ? "new_source_url" : "source_metadata_changed",
+                                existingAsset?.PictureDisplaySequence,
+                                sequence,
+                                existingAsset?.SourceEtag,
+                                remoteMetadata.SourceEtag,
+                                remoteMetadata.SourceContentLength);
+                        }
+
+                        syncStates.Add(new ApartmentMediaSyncSourceState
+                        {
+                            SourceMedium = medium,
+                            PictureDisplaySequence = sequence,
+                            ContentType = remoteMetadata.ContentType,
+                            SourceEtag = remoteMetadata.SourceEtag,
+                            SourceLastModifiedUtc = remoteMetadata.SourceLastModifiedUtc,
+                            SourceContentLength = remoteMetadata.SourceContentLength,
+                            ChecksumSha256 = remoteMetadata.ChecksumSha256
+                        });
+                    }
+
+                    await _apartmentMediaCatalogService.UpsertAssetsAsync(apartment.Id, syncStates, summary, ct);
+                }
+
+                summary.Status = "completed";
+            }
+            catch (Exception ex)
+            {
+                summary.Status = "failed";
+                summary.FailedCount++;
+                _logger.LogError(ex, "Apartment media sync failed. RunId={MediaSyncRunId}", summary.RunId);
+                throw;
+            }
+            finally
+            {
+                summary.FinishedAt = DateTime.UtcNow;
+                await _apartmentMediaCatalogService.SaveRunSummaryAsync(summary, ct);
+            }
+        }
+
+        private async Task<ApartmentMediaSyncSourceState> FetchRemoteMetadataAsync(string sourceUrl, CancellationToken ct)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Head, sourceUrl);
+            var client = _httpClientFactory.CreateClient();
+
+            try
+            {
+                using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new ApartmentMediaSyncSourceState();
+                }
+
+                return new ApartmentMediaSyncSourceState
+                {
+                    ContentType = response.Content.Headers.ContentType?.MediaType,
+                    SourceEtag = response.Headers.ETag?.Tag,
+                    SourceLastModifiedUtc = response.Content.Headers.LastModified?.UtcDateTime,
+                    SourceContentLength = response.Content.Headers.ContentLength
+                };
+            }
+            catch
+            {
+                return new ApartmentMediaSyncSourceState();
+            }
+        }
+
+        private async Task<(Stream Content, string? ContentType, string? ChecksumSha256)> DownloadRemoteMediaAsync(string sourceUrl, CancellationToken ct)
+        {
+            var client = _httpClientFactory.CreateClient();
+            using var response = await client.GetAsync(sourceUrl, HttpCompletionOption.ResponseHeadersRead, ct);
+            response.EnsureSuccessStatusCode();
+
+            await using var sourceStream = await response.Content.ReadAsStreamAsync(ct);
+            var memoryStream = new MemoryStream();
+            await sourceStream.CopyToAsync(memoryStream, ct);
+            memoryStream.Position = 0;
+
+            using var sha256 = SHA256.Create();
+            var checksum = Convert.ToHexString(sha256.ComputeHash(memoryStream)).ToLowerInvariant();
+            memoryStream.Position = 0;
+
+            return (memoryStream, response.Content.Headers.ContentType?.MediaType, checksum);
+        }
+
+        private static bool HasRemoteContentChanged(ApartmentMediaAssetEntity existingAsset, ApartmentMediaSyncSourceState remoteMetadata)
+        {
+            if (!string.IsNullOrWhiteSpace(remoteMetadata.SourceEtag) &&
+                !string.Equals(existingAsset.SourceEtag, remoteMetadata.SourceEtag, StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            if (remoteMetadata.SourceLastModifiedUtc.HasValue &&
+                existingAsset.SourceLastModifiedUtc != remoteMetadata.SourceLastModifiedUtc)
+            {
+                return true;
+            }
+
+            if (remoteMetadata.SourceContentLength.HasValue &&
+                existingAsset.SourceContentLength != remoteMetadata.SourceContentLength)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsImageMedia(ObjectMedium medium)
+        {
+            var extension = medium.Extension?.Trim().TrimStart('.').ToLowerInvariant();
+            return extension is "jpg" or "jpeg" or "png" or "webp" or "gif";
         }
 
     }

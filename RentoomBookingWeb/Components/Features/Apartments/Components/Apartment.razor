@@ -1,8 +1,7 @@
 @using RentoomBooking.SharedClasses.Models.AvailableTerms
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
-@using RentoomBooking.SharedClasses.Services.IdoBooking;
-@inject IIdoApartmentService IdoApartmentService;
+@using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 @inject NavigationManager Navigation;
 @using RentoomBookingWeb.Services
 @inject IJSRuntime JS
@@ -12,6 +11,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> ApartmentLocalizer;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 @inject MediaCacheService MediaCache 
+@inject IApartmentMediaCatalogService ApartmentMediaCatalogService
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @inject GoogleAnalyticsService GoogleAnalytics
@@ -405,7 +405,7 @@
         {
             _objectMediums = await MediaCache.GetOrFetchMediaAsync(
                 id.Value, 
-                async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>()
+                async () => await ApartmentMediaCatalogService.GetApartmentMediaAsync(id.Value)
             );
 
             _currentMediumIndex = 0;
