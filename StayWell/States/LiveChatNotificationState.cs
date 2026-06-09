@@ -10,7 +10,11 @@ public sealed class LiveChatNotificationState : IDisposable
     private readonly LocalStorageService _localStorage;
     private readonly ILogger<LiveChatNotificationState> _logger;
     private CancellationTokenSource? _streamCts;
+    private CancellationTokenSource? _backoffCts;
     private string? _currentToken;
+
+    private static readonly TimeSpan ReconnectDelay = TimeSpan.FromSeconds(3);
+    private static readonly TimeSpan NoSessionDelay = TimeSpan.FromSeconds(30);
     private int _unreadCount;
     private bool _isChatOpen;
     private readonly HashSet<Guid> _countedMessageIds = new();
@@ -42,9 +46,10 @@ public sealed class LiveChatNotificationState : IDisposable
         {
             while (!ct.IsCancellationRequested)
             {
+                var sessionExists = false;
                 try
                 {
-                    await _liveChatClient.StreamMessagesAsync(
+                    sessionExists = await _liveChatClient.StreamMessagesAsync(
                         token,
                         async msg =>
                         {
@@ -79,13 +84,31 @@ public sealed class LiveChatNotificationState : IDisposable
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning(ex, "LiveChat SSE stream error for token {Token}; reconnecting in 5 s", _currentToken);
+                    _logger.LogWarning(ex, "LiveChat SSE stream error for token {Token}; reconnecting", _currentToken);
                 }
 
-                await Task.Delay(3000, ct);
+                // When no session exists yet (server returns 404), back off much longer to avoid
+                // hammering the endpoint. Poke() shortcuts the wait once the guest sends a message.
+                var delay = sessionExists ? ReconnectDelay : NoSessionDelay;
+                _backoffCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                try
+                {
+                    await Task.Delay(delay, _backoffCts.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    // Either poked (session just created -> reconnect now) or stopped (loop exits).
+                }
+                finally
+                {
+                    _backoffCts.Dispose();
+                    _backoffCts = null;
+                }
             }
         }, ct);
     }
+
+    public void Poke() => _backoffCts?.Cancel();
 
     private async Task SyncMissedMessagesAsync(string token)
     {

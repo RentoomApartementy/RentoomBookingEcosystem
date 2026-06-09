@@ -51,7 +51,7 @@ public sealed class LiveChatClientService
 
     private static string BuildCacheKey(string reservationToken) => $"staywell:livechat:history:{reservationToken}";
 
-    public async Task StreamMessagesAsync(
+    public async Task<bool> StreamMessagesAsync(
         string reservationToken,
         Func<LiveChatMessageDto, Task> onMessage,
         Func<Task> onConnected,
@@ -65,7 +65,7 @@ public sealed class LiveChatClientService
 
         if (!response.IsSuccessStatusCode)
         {
-            return;
+            return false;
         }
 
         await using var stream = await response.Content.ReadAsStreamAsync(ct);
@@ -78,7 +78,7 @@ public sealed class LiveChatClientService
             var line = await reader.ReadLineAsync(ct);
             if (line is null)
             {
-                break;
+                return true;
             }
 
             if (string.IsNullOrWhiteSpace(line))
@@ -113,9 +113,11 @@ public sealed class LiveChatClientService
                     }
                     break;
                 case "done":
-                    return;
+                    return true;
             }
         }
+
+        return true;
     }
 
     public async Task<LinkPreviewDto?> GetLinkPreviewAsync(string url, CancellationToken ct = default)
