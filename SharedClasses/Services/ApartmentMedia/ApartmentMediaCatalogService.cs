@@ -11,6 +11,9 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
     public interface IApartmentMediaCatalogService
     {
         Task<List<ObjectMedium>> GetApartmentMediaAsync(int apartmentId, CancellationToken cancellationToken = default);
+        Task<IReadOnlyDictionary<int, List<ObjectMedium>>> GetApartmentMediaBatchAsync(
+            IReadOnlyCollection<int> apartmentIds,
+            CancellationToken cancellationToken = default);
         Task<List<ApartmentMediaAssetEntity>> GetAssetEntitiesAsync(int apartmentId, CancellationToken cancellationToken = default);
         Task UpsertAssetsAsync(
             int apartmentId,
@@ -46,15 +49,42 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 .ThenBy(asset => asset.Id)
                 .ToListAsync(cancellationToken);
 
-            return entities.Select(asset => new ObjectMedium
+            return entities.Select(MapAssetToObjectMedium).ToList();
+        }
+
+        public async Task<IReadOnlyDictionary<int, List<ObjectMedium>>> GetApartmentMediaBatchAsync(
+            IReadOnlyCollection<int> apartmentIds,
+            CancellationToken cancellationToken = default)
+        {
+            var requestedApartmentIds = apartmentIds?
+                .Where(id => id > 0)
+                .Distinct()
+                .ToList() ?? new List<int>();
+
+            if (requestedApartmentIds.Count == 0)
             {
-                Id = asset.IdoObjectMediaId ?? asset.Id,
-                ObjectId = asset.ApartmentId,
-                Url = _blobStorage.BuildBlobUrl(asset.StorageKey),
-                Extension = asset.Extension,
-                Position = asset.PictureDisplaySequence,
-                Type = asset.ContentType
-            }).ToList();
+                return new Dictionary<int, List<ObjectMedium>>();
+            }
+
+            await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+            var entities = await context.ApartmentMediaAssets
+                .AsNoTracking()
+                .Where(asset => requestedApartmentIds.Contains(asset.ApartmentId))
+                .OrderBy(asset => asset.ApartmentId)
+                .ThenBy(asset => asset.PictureDisplaySequence)
+                .ThenBy(asset => asset.Id)
+                .ToListAsync(cancellationToken);
+
+            var mediaByApartmentId = requestedApartmentIds.ToDictionary(
+                apartmentId => apartmentId,
+                _ => new List<ObjectMedium>());
+
+            foreach (var entity in entities)
+            {
+                mediaByApartmentId[entity.ApartmentId].Add(MapAssetToObjectMedium(entity));
+            }
+
+            return mediaByApartmentId;
         }
 
         public async Task<List<ApartmentMediaAssetEntity>> GetAssetEntitiesAsync(int apartmentId, CancellationToken cancellationToken = default)
@@ -212,6 +242,19 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 SequenceUpdatedCount = summary.SequenceUpdatedCount,
                 FailedCount = summary.FailedCount,
                 SummaryJson = JsonConvert.SerializeObject(summary.Changes)
+            };
+        }
+
+        private ObjectMedium MapAssetToObjectMedium(ApartmentMediaAssetEntity asset)
+        {
+            return new ObjectMedium
+            {
+                Id = asset.IdoObjectMediaId ?? asset.Id,
+                ObjectId = asset.ApartmentId,
+                Url = _blobStorage.BuildBlobUrl(asset.StorageKey),
+                Extension = asset.Extension,
+                Position = asset.PictureDisplaySequence,
+                Type = asset.ContentType
             };
         }
     }
