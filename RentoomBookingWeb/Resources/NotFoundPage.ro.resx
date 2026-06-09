@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,19 +59,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>PaginÄƒ negÄƒsitÄƒ</value>
+    <value>Pagină negăsită</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Eroare 404</value>
+    <value>BÅ'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>Ne pare rÄƒu, dar pagina pe care o cauÈ›i nu existÄƒ sau a fost mutatÄƒ.</value>
+    <value>Ne pare rău, dar pagina pe care o cauți nu există sau a fost mutată.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>ÃŽnapoi la pagina principalÄƒ</value>
+    <value>Întoarceți la pagina principală</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>Poate cauÈ›i:</value>
+    <value>Poate cauți:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
     <value>Lista apartamentelor</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Rezervare anulată</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Acesta este noul nostru portal</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Această rezervare nu mai este activă. Dacă tot ai nevoie de o ședere, adaugă-te pe lista de apartamente și creează-ți unul nou. Rezervare. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Cel mai probabil, ne-a venit dintr-o redirecționare veche care nu mai există. Vă™ vom duce imediat la pagina™™ de apartamente.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BÅ'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Rezervă un apartament</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Rezervă apartamentul({0}uri)</value></data>
 </root>

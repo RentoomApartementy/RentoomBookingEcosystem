@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – cruthaímid eispéiris uathúla fanacht i Toruń
-</value>
+    <value>Rentoom Apartments – cruthaímid eispéiris uathúla fanacht i Toruń</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-An bhfuil tú ag lorg árasán compordach i Toruń?</value>
+    <value>An bhfuil tú ag lorg árasán compordach i Toruń?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Árasáin i Toruń - cóiríocht chompordach</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>An bhfuil tú ag lorg árasán compordach i Toruń?
-
-</value>
+    <value>An bhfuil tú ag lorg árasán compordach i Toruń?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Is branda nua-aimseartha ar cíos gearrthéarmach é Rentoom Apartamenty a chomhcheanglaíonn ardchaighdeán cóiríochta le heolas barántúil ar Toruń. Cruthaímid áiteanna atá deartha le compord, aeistéitic agus feidhmiúlacht i gcuimhne - d'aíonna turasóireachta agus d'aíonna gnó araon.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Tá áthas orainn gur tháinig tú chugainn!
-</value>
+    <value>Tá áthas orainn gur tháinig tú chugainn!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Cuimsíonn ár dtairiscint mórán árasán roghnaithe go cúramach sna codanna is tarraingtí den chathair. Roghnaíodh gach suíomh chun rochtain éasca a sholáthar ar phríomhnithe is díol spéise, bialanna agus criosanna gnó.
-Is spás é gach árasán atá deartha chun fíor-scíth agus príobháideacht a sholáthar tar éis lá dian fámaireachta nó oibre.
-</value>
+    <value>Cuimsíonn ár dtairiscint mórán árasán roghnaithe go cúramach sna codanna is tarraingtí den chathair. Roghnaíodh gach suíomh chun rochtain éasca a sholáthar ar phríomhnithe is díol spéise, bialanna agus criosanna gnó.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Árasáin sna háiteanna is fearr i Toruń</value>
@@ -47,37 +40,28 @@ Is spás é gach árasán atá deartha chun fíor-scíth agus príobháideacht a
     <value>Custaiméirí sásta</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Árasáin i Toruń
-
-</value>
+    <value>Árasáin i Toruń</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Suíomh i Toruń</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Cén fáth Rentoom?
-</value>
+    <value>Cén fáth Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Tá níos mó i gceist le Rentoom Apartments ná fanacht thar oíche i Toruń. Cuirimid árasán ar ardchaighdeán ar fáil sna suíomhanna is fearr agus fíorbhuntáistí a mhéadaíonn luach an fhanachta ar fad.
-</value>
+    <value>Tá níos mó i gceist le Rentoom Apartments ná fanacht thar oíche i Toruń. Cuirimid árasán ar ardchaighdeán ar fáil sna suíomhanna is fearr agus fíorbhuntáistí a mhéadaíonn luach an fhanachta ar fad.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Mar chuid dár gClár Comhpháirtíochta, faigheann aíonna rochtain ar lascainí speisialta ar bhialanna, caiféanna agus nithe is díol spéise do thurasóirí roghnaithe. Tá lascainí agus moltaí reatha suite go díreach sna hárasáin, ionas gur féidir leat áiteanna cruthaithe a úsáid agus airgead a shábháil agus tú ag fámaireacht.
-</value>
+    <value>Mar chuid dár gClár Comhpháirtíochta, faigheann aíonna rochtain ar lascainí speisialta ar bhialanna, caiféanna agus nithe is díol spéise do thurasóirí roghnaithe.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Ní oibrímid ach le comhpháirtithe áitiúla iontaofa, ag tabhairt aire do cháilíocht gach molta. Trí Rentoom a roghnú, gheobhaidh tú compord, seirbhís ghairmiúil agus buntáistí breise a fhágann go bhfuil do fanacht i Toruń níos compordaí, níos scagtha agus níos brabúsaí.
-</value>
+    <value>Ní oibrímid ach le comhpháirtithe áitiúla iontaofa, ag tabhairt aire do cháilíocht gach molta.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Cuir aithne ar thuairimí na ndaoine a chodail inár n-árasáin i Toruń.
-
-</value>
+    <value>Cuir aithne ar thuairimí na ndaoine a chodail inár n-árasáin i Toruń.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Fág do chuid faisnéise teagmhála agus rachaimid ar ais chugat!
-</value>
+    <value>Fág do chuid faisnéise teagmhála agus rachaimid ar ais chugat!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Déan teagmháil leis an soláthraí</value>
@@ -98,8 +82,27 @@ Is spás é gach árasán atá deartha chun fíor-scíth agus príobháideacht a
     <value>Seol</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Cad a dhéanann idirdhealú idir ár n-árasáin agus daoine eile?
-
-</value>
+    <value>Cad a dhéanann idirdhealú idir ár n-árasáin agus daoine eile?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Árasáin Toruń - Cíosanna Gearrthéarmacha | An tSinn</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Amharc ar ár n-árasáin i gcroílár Toruń. Foirfe do dheireadh seachtaine agus fanacht níos faide.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Árasáin Toruń - do chóiríocht chompordach</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Árasáin Toruń, Cóiríocht Toruń, Cíosanna gearrthéarmacha, Árasáin Seanbhaile, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Baile</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>An bhfuil tú ag lorg lóistín i Toruń? Cuirimid árasáin chompordacha ar fáil sa lár agus sa Seanbhaile. Cuir in áirithe go díreach ar líne - praghsanna is ísle, gan aon choimisiúin idirghabhála.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>An bhfuil tú ag lorg lóistín i Toruń? Cuireann Rentoom árasáin ar cíos gearrthéarmach ar fáil i Toruń agus fanann sé sna háiteanna is fearr sa chathair.</value>
   </data>
 </root>

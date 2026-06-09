@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -62,13 +62,13 @@
     <value>Seite nicht gefunden</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Fehler 404</value>
+    <value>BÅ'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
     <value>Es tut uns leid, aber die von Ihnen gesuchte Seite existiert nicht oder wurde verschoben.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>ZurÃ¼ck zur Startseite</value>
+    <value>Zurück zur Hauptseite</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
     <value>Vielleicht suchen Sie nach:</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Reservierung storniert</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Das ist unser neues Portal</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Diese Buchung ist nicht mehr aktiv. Wenn du trotzdem einen Aufenthalt brauchst, erfülle die Liste der Wohnungen und erstelle eine neue. Reservierung. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Höchstwahrscheinlich stammt er von einer alten Umleitung, die nicht mehr existiert. Wir bringen Sie™ gleich™ zur Wohnungsseite™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BÅ'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Buchen Sie eine Wohnung</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Buche Wohnung({0}s)</value></data>
 </root>

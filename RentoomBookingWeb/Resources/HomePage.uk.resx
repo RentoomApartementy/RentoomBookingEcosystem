@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Апартаменти Rentoom – ми створюємо унікальні враження від проживання в Торуні
-</value>
+    <value>Апартаменти Rentoom – ми створюємо унікальні враження від проживання в Торуні</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Ви шукаєте затишну квартиру в Торуні?</value>
+    <value>Ви шукаєте затишну квартиру в Торуні?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Апартаменти в Торуні – комфортне проживання</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Ви шукаєте затишну квартиру в Торуні?
-
-</value>
+    <value>Ви шукаєте затишну квартиру в Торуні?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty — це сучасний бренд короткострокової оренди, який поєднує високий рівень житла з автентичним знанням про Торунь. Ми створюємо місця, спроєктовані з урахуванням комфорту, естетики та функціональності — як для туристів, так і для ділових гостей.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Ми раді, що ви прийшли до нас!
-</value>
+    <value>Ми раді, що ви прийшли до нас!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Наша пропозиція включає десятки ретельно відібраних апартаментів у найпривабливіших районах міста. Кожне місце обрано для зручного доступу до ключових визначних місць, ресторанів і бізнес-зон.
-Кожна квартира — це простір, створений для справжнього відпочинку та приватності після напруженого дня огляду визначних пам'яток або роботи.
-</value>
+    <value>Наша пропозиція включає десятки ретельно відібраних апартаментів у найпривабливіших районах міста. Кожне місце обрано для зручного доступу до ключових визначних місць, ресторанів і бізнес-зон.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Квартири в найкращих локаціях Торуні</value>
@@ -47,37 +40,28 @@
     <value>Задоволені клієнти</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Квартири в Торуні
-
-</value>
+    <value>Квартири в Торуні</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Розташування в Торуні</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Чому саме Рентум?
-</value>
+    <value>Чому саме Рентум?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments — це більше, ніж просто ночівля в Торуні. Ми пропонуємо високі стандарти квартир у найкращих локаціях і реальні переваги, які підвищують вартість усього перебування.
-</value>
+    <value>Rentoom Apartments — це більше, ніж просто ночівля в Торуні. Ми пропонуємо високі стандарти квартир у найкращих локаціях і реальні переваги, які підвищують вартість усього перебування.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>У рамках нашої партнерської програми гості отримують спеціальні знижки на вибрані ресторани, кафе та туристичні атракціони. Поточні знижки та рекомендації розміщені безпосередньо в квартирах, тож ви можете скористатися перевіреними місцями та заощадити гроші під час огляду визначних пам'яток.
-</value>
+    <value>У рамках нашої партнерської програми гості отримують спеціальні знижки на вибрані ресторани, кафе та туристичні атракціони.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Ми працюємо лише з надійними, місцевими партнерами, дбаючи про якість кожної рекомендації. Обираючи Rentoom, ви отримуєте комфорт, професійне обслуговування та додаткові переваги, які роблять ваше перебування в Торуні більш комфортним, вишуканим і просто більш прибутковим.
-</value>
+    <value>Ми працюємо лише з надійними, місцевими партнерами, дбаючи про якість кожної рекомендації.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Дізнайтеся думки людей, які ночували в наших квартирах у Торуні.
-
-</value>
+    <value>Дізнайтеся думки людей, які ночували в наших квартирах у Торуні.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Залиште свої контактні дані, і ми зв'яжемося з вами!
-</value>
+    <value>Залиште свої контактні дані, і ми зв'яжемося з вами!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Зв'язатися з постачальником</value>
@@ -98,8 +82,27 @@
     <value>Відправити</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Чим наші квартири відрізняються від інших?
-
-</value>
+    <value>Чим наші квартири відрізняються від інших?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Апартаменти Торунь — короткострокова оренда | Рентум</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Ознайомтеся з нашими квартирами в самому серці Торуні. Ідеально підходить для вихідних і довшого перебування.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Апартаменти Торунь — ваше комфортне житло</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Апартаменти Торунь, житло Торунь, короткострокова оренда, апартаменти Старого міста, Рентоом</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Дім</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Ви шукаєте житло в Торуні? Ми пропонуємо комфортні апартаменти в центрі та в Старому місті. Бронюйте напряму онлайн — найнижчі ціни, без посередницьких комісій.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Ви шукаєте житло в Торуні? Rentoom пропонує квартири для короткострокової оренди в Торуні та зупиняється у найкращих локаціях міста.</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Microsoft.JSInterop;
 using RentoomBooking.SharedFrontend.Localization;
 

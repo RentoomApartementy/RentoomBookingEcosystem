@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,55 +59,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>Î— ÏƒÎµÎ»Î¯Î´Î± Î´ÎµÎ½ Î²ÏÎ­Î¸Î·ÎºÎµ</value>
+    <value>Η σελίδα δεν βρέθηκε</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Î£Ï†Î¬Î»Î¼Î± 404</value>
+    <value>BÅ'Ä... Δ 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>Î›Ï…Ï€Î¿ÏÎ¼Î±ÏƒÏ„Îµ, Î±Î»Î»Î¬ Î· ÏƒÎµÎ»Î¯Î´Î± Ï€Î¿Ï… Î±Î½Î±Î¶Î·Ï„Î¬Ï„Îµ Î´ÎµÎ½ Ï…Ï€Î¬ÏÏ‡ÎµÎ¹ Î® Î­Ï‡ÎµÎ¹ Î¼ÎµÏ„Î±ÎºÎ¹Î½Î·Î¸ÎµÎ¯.</value>
+    <value>Λυπούμαστε, αλλά η σελίδα που αναζητάτε δεν υπάρχει ή έχει μετακινηθεί.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>Î•Ï€Î¹ÏƒÏ„ÏÎ¿Ï†Î® ÏƒÏ„Î·Î½ Î±ÏÏ‡Î¹ÎºÎ® ÏƒÎµÎ»Î¯Î´Î±</value>
+    <value>Επιστροφή στην κεντρική σελίδα</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>ÎŠÏƒÏ‰Ï‚ ÏˆÎ¬Ï‡Î½ÎµÏ„Îµ Î³Î¹Î±:</value>
+    <value>Μπορεί να ψάχνετε για:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
-    <value>Î›Î¯ÏƒÏ„Î± Î´Î¹Î±Î¼ÎµÏÎ¹ÏƒÎ¼Î¬Ï„Ï‰Î½</value>
+    <value>Λίστα διαμερισμάτων</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>Î£Ï…Î½ÎµÏÎ³Î±ÏƒÎ¯Î±</value>
+    <value>Συνεργασία</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
-    <value>Î•Ï€Î¹ÎºÎ¿Î¹Î½Ï‰Î½Î¯Î±</value>
+    <value>Επικοινωνία</value>
   </data>
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Η κράτηση ακυρώθηκε</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Αυτή είναι η νέα μας πύλη</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Αυτή η κράτηση δεν είναι πλέον ενεργή. Εάν εξακολουθείτε να χρειάζεστε διαμονή, προσθέστε στη λίστα των διαμερισμάτων και δημιουργήστε ένα νέο. κράτηση. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Πιθανότατα, μας ήρθε από μια παλιά ανακατεύθυνση που δεν υπάρχει πια. Θα σας™ μεταφέρουμε στη σελίδα™ διαμερισμάτων σε λίγο™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BÅ'Ä... Δ 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Κάντε κράτηση διαμερίσματος</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Κράτηση διαμερίσματος({0}ων)</value></data>
 </root>

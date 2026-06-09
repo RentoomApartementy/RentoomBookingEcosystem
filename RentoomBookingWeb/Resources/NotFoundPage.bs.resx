@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,19 +59,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>Stranica nije pronaÄ‘ena</value>
+    <value>Stranica nije pronađena</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>GreÅ¡ka 404</value>
+    <value>Bå'Ä... D 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>Å½ao nam je, ali stranica koju traÅ¾ite ne postoji ili je premjeÅ¡tena.</value>
+    <value>Žao nam je, ali stranica koju tražite ne postoji ili je premještena.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>Povratak na poÄetnu stranicu</value>
+    <value>Povratak na glavnu stranicu</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>MoÅ¾da traÅ¾ite:</value>
+    <value>Možda tražite:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
     <value>Spisak stanova</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Rezervacija otkazana</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Ovo je naš novi portal</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Ova rezervacija više nije aktivna. Ako ti i dalje treba boravak, dodaj na listu stanova i napravi novi. rezervacija. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Najvjerovatnije nam je došao iz stare preusmjeravanja koja više ne postoji. Uskoro ćemo vas™ odvesti na stranicu™™ o stanovima.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>Bå'Ä... D 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Rezervišite stan</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Rezervacija stana ({0})</value></data>
 </root>

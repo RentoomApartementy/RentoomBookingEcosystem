@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Cancela tu reserva</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>El bono ha sido eliminado.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonificación aplicada: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>El bono proporcionado no existe.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Este bono está actualmente deshabilitado.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Este bono no se aplica al apartamento seleccionado.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>El bono no está disponible para la fecha de inicio de esta reserva.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>El bono solo funciona para reservas con RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>El bono no reduce el precio actual de esta reserva.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Rellena las fechas y selecciona la oferta para aplicar el bono.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>No se podía leer el precio de la oferta a calcular a partir del bono.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>No se aplicó la bonificación.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Introduce el código de bonificación</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Aplica el bono</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Comprobando...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Extra: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Bono de eliminación</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Descuento extra</value>
+  </data>
 </root>

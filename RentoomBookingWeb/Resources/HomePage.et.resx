@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – loome ainulaadseid elamusi Toruńis peatumiseks
-</value>
+    <value>Rentoom Apartments – loome ainulaadseid elamusi Toruńis peatumiseks</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Kas otsid mugavat korterit Toruńis?</value>
+    <value>Kas otsid mugavat korterit Toruńis?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Korterid Toruńis – mugav majutus</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Kas otsid mugavat korterit Toruńis?
-
-</value>
+    <value>Kas otsid mugavat korterit Toruńis?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty on kaasaegne lühiajaline üüribränd, mis ühendab kõrgetasemelise majutuse ja autentse Toruńi tundmise. Loome kohti, mis on loodud mugavuse, esteetika ja funktsionaalsuse silmas pidades – nii turistidele kui ka ärikülalistele.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Meil on hea meel, et tulite meie juurde!
-</value>
+    <value>Meil on hea meel, et tulite meie juurde!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Meie pakkumine hõlmab kümneid hoolikalt valitud kortereid linna kõige atraktiivsemates piirkondades. Iga asukoht on valitud nii, et tagada lihtne ligipääs olulistele vaatamisväärsustele, restoranidele ja äripiirkondadele.
-Iga korter on ruum, mis on loodud pakkuma tõelist puhkust ja privaatsust pärast intensiivset vaatamisväärsuste või töö päeva.
-</value>
+    <value>Meie pakkumine hõlmab kümneid hoolikalt valitud kortereid linna kõige atraktiivsemates piirkondades. Iga asukoht on valitud nii, et tagada lihtne ligipääs olulistele vaatamisväärsustele, restoranidele ja äripiirkondadele.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Korterid parimates asukohtades Toruńis</value>
@@ -47,37 +40,28 @@ Iga korter on ruum, mis on loodud pakkuma tõelist puhkust ja privaatsust päras
     <value>Rahulolevad kliendid</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Korterid Toruńis
-
-</value>
+    <value>Korterid Toruńis</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Asukoht Toruńis</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Miks just Rentoom?
-</value>
+    <value>Miks just Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments on rohkem kui lihtsalt ööbimine Toruńis. Pakume kõrgetasemelist korterit parimates asukohtades ning reaalseid eeliseid, mis suurendavad kogu peatumise väärtust.
-</value>
+    <value>Rentoom Apartments on rohkem kui lihtsalt ööbimine Toruńis. Pakume kõrgetasemelist korterit parimates asukohtades ning reaalseid eeliseid, mis suurendavad kogu peatumise väärtust.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Meie partnerprogrammi raames saavad külalised valitud restoranide, kohvikute ja turismiobjektide erisoodustusi. Praegused allahindlused ja soovitused asuvad otse korterites, nii et saad kasutada tõestatud kohti ja säästa raha vaatamisväärsusi külastades.
-</value>
+    <value>Meie partnerprogrammi raames saavad külalised valitud restoranide, kohvikute ja turismiobjektide erisoodustusi.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Teeme koostööd ainult usaldusväärsete kohalike partneritega, hoolitsedes iga soovituse kvaliteedi eest. Rentoomi valimisega saad mugavust, professionaalset teenindust ja lisahüvesid, mis muudavad sinu viibimise Toruńis mugavamaks, peenemaks ja lihtsalt kasumlikumaks.
-</value>
+    <value>Teeme koostööd ainult usaldusväärsete kohalike partneritega, hoolitsedes iga soovituse kvaliteedi eest.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Tutvu nende inimeste arvamustega, kes on maganud meie korterites Toruńis.
-
-</value>
+    <value>Tutvu nende inimeste arvamustega, kes on maganud meie korterites Toruńis.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Jäta oma kontaktandmed ja me võtame sinuga ühendust!
-</value>
+    <value>Jäta oma kontaktandmed ja me võtame sinuga ühendust!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Võta ühendust tarnijaga</value>
@@ -98,8 +82,27 @@ Iga korter on ruum, mis on loodud pakkuma tõelist puhkust ja privaatsust päras
     <value>Saada</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Mis eristab meie kortereid teistest?
-
-</value>
+    <value>Mis eristab meie kortereid teistest?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Korterid Toruń - Lühiajalised üürid | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Vaata meie kortereid Toruńi südames. Täiuslik nädalavahetuseks ja pikemaks viibimiseks.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Korterid Toruńis – teie mugav majutus</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Korterid Toruńis, majutus Toruńis, lühiajalised üürid, vanalinna korterid, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Kodu</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Kas otsite majutust Toruńis? Pakume mugavaid kortereid nii keskuses kui ka vanalinnas. Broneeri otse veebis – madalaimad hinnad, ilma vahenduskomisjonideta.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Kas otsite majutust Toruńis? Rentoom pakub Toruńis lühiajalisi kortereid ning peatub linna parimates asukohtades.</value>
   </data>
 </root>

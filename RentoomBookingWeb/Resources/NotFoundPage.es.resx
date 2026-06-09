@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,25 +59,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>PÃ¡gina no encontrada</value>
+    <value>Página no encontrada</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Error 404</value>
+    <value>BÅ'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>Lo sentimos, pero la pÃ¡gina que buscas no existe o ha sido movida.</value>
+    <value>Lo sentimos, pero la página que buscas no existe o ha sido movida.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>Volver a la pÃ¡gina principal</value>
+    <value>Volver a la página principal</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>QuizÃ¡ estÃ©s buscando:</value>
+    <value>Puede que estés buscando:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
     <value>Lista de apartamentos</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>CooperaciÃ³n</value>
+    <value>Cooperación</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
     <value>Contacto</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Reserva cancelada</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Este es nuestro nuevo portal</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Esta reserva ya no está activa. Si aún necesitas una estancia, añade a la lista de apartamentos y crea uno nuevo. Reserva. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Lo más probable es que nos haya llegado de una antigua redirección que ya no existe. En un momento os™ llevaremos a la página™™ de apartamentos.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BÅ'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Reserva un piso</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Reserva un piso {0}</value></data>
 </root>

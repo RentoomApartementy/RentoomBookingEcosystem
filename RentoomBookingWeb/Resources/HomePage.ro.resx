@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – creăm experiențe unice de ședere în Toruń
-</value>
+    <value>Rentoom Apartments – creăm experiențe unice de ședere în Toruń</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Cauți un apartament confortabil în Toruń?</value>
+    <value>Cauți un apartament confortabil în Toruń?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Apartamente în Toruń – cazare confortabilă</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Cauți un apartament confortabil în Toruń?
-
-</value>
+    <value>Cauți un apartament confortabil în Toruń?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty este un brand modern de închiriere pe termen scurt care combină un standard ridicat de cazare cu cunoștințe autentice despre Toruń. Creăm spații concepute având în vedere confortul, estetica și funcționalitatea – atât pentru turiști, cât și pentru oaspeți de afaceri.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Ne bucurăm că ați venit la noi!
-</value>
+    <value>Ne bucurăm că ați venit la noi!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Oferta noastră include zeci de apartamente atent selectate în cele mai atractive zone ale orașului. Fiecare locație a fost aleasă pentru a oferi acces facil la principalele atracții, restaurante și zone de afaceri.
-Fiecare apartament este un spațiu conceput pentru a oferi odihnă reală și intimitate după o zi intensă de vizitare turistică sau muncă.
-</value>
+    <value>Oferta noastră include zeci de apartamente atent selectate în cele mai atractive zone ale orașului. Fiecare locație a fost aleasă pentru a oferi acces facil la principalele atracții, restaurante și zone de afaceri.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Apartamente în cele mai bune locații din Toruń</value>
@@ -47,37 +40,28 @@ Fiecare apartament este un spațiu conceput pentru a oferi odihnă reală și in
     <value>Clienți mulțumiți</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Apartamente în Toruń
-
-</value>
+    <value>Apartamente în Toruń</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Locație în Toruń</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>De ce Rentoom?
-</value>
+    <value>De ce Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Apartamentele Rentoom sunt mai mult decât o simplă cazare peste noapte în Toruń. Oferim un standard ridicat de apartamente în cele mai bune locații și beneficii reale care cresc valoarea întregii șederi.
-</value>
+    <value>Apartamentele Rentoom sunt mai mult decât o simplă cazare peste noapte în Toruń. Oferim un standard ridicat de apartamente în cele mai bune locații și beneficii reale care cresc valoarea întregii șederi.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Ca parte a Programului nostru de Parteneri, oaspeții au acces la reduceri speciale la restaurante, cafenele și atracții turistice selectate. Reducerile și recomandările actuale se află direct în apartamente, astfel încât să poți folosi locuri consacrate și să economisești bani în timpul turismului.
-</value>
+    <value>Ca parte a Programului nostru de Parteneri, oaspeții au acces la reduceri speciale la restaurante, cafenele și atracții turistice selectate.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Lucrăm doar cu parteneri locali de încredere, având grijă de calitatea fiecărei recomandări. Alegând Rentoom, câștigi confort, servicii profesionale și beneficii suplimentare care fac șederea ta în Toruń mai confortabilă, mai rafinată și pur și simplu mai profitabilă.
-</value>
+    <value>Lucrăm doar cu parteneri locali de încredere, având grijă de calitatea fiecărei recomandări.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Află părerile celor care au dormit în apartamentele noastre din Toruń.
-
-</value>
+    <value>Află părerile celor care au dormit în apartamentele noastre din Toruń.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Lăsați-vă datele de contact și vă vom contacta!
-</value>
+    <value>Lăsați-vă datele de contact și vă vom contacta!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Contactează furnizorul</value>
@@ -98,8 +82,27 @@ Fiecare apartament este un spațiu conceput pentru a oferi odihnă reală și in
     <value>Trimite</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Ce diferențiază apartamentele noastre de altele?
-
-</value>
+    <value>Ce diferențiază apartamentele noastre de altele?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Apartamente Toruń - Închirieri pe termen scurt | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Vizitează apartamentele noastre din inima orașului Toruń. Perfect pentru un weekend și o ședere mai lungă.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Apartamentele Toruń - cazarea ta confortabilă</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Apartamente Toruń, Cazare Toruń, Închirieri pe termen scurt, apartamente Old Town, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Acasă</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Cauți cazare în Toruń? Oferim apartamente confortabile atât în centru, cât și în Centrul Vechi. Rezervă direct online - prețuri minime, fără comisioane intermediare.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Cauți cazare în Toruń? Rentoom oferă apartamente cu chirie pe termen scurt în Toruń și locuiește în cele mai bune locații ale orașului.</value>
   </data>
 </root>

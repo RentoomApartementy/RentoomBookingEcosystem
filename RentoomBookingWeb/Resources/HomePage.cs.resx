@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – vytváříme jedinečné zážitky z pobytu v Toruni
-</value>
+    <value>Rentoom Apartments – vytváříme jedinečné zážitky z pobytu v Toruni</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Hledáte pohodlný byt v Toruni?</value>
+    <value>Hledáte pohodlný byt v Toruni?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Byty v Toruni – pohodlné ubytování</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Hledáte pohodlný byt v Toruni?
-
-</value>
+    <value>Hledáte pohodlný byt v Toruni?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty je moderní značka krátkodobých pronájmů, která kombinuje vysokou úroveň ubytování s autentickou znalostí Toruně. Vytváříme místa navržená s ohledem na pohodlí, estetiku a funkčnost – jak pro turisty, tak pro obchodní hosty.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Jsme rádi, že jste k nám přišli!
-</value>
+    <value>Jsme rádi, že jste k nám přišli!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Naše nabídka zahrnuje desítky pečlivě vybraných bytů v nejatraktivnějších částech města. Každé místo bylo vybráno tak, aby umožnilo snadný přístup k hlavním atrakcím, restauracím a podnikatelským zónám.
-Každý byt je prostor navržený tak, aby poskytoval skutečný odpočinek a soukromí po náročném dni plném prohlídky nebo práce.
-</value>
+    <value>Naše nabídka zahrnuje desítky pečlivě vybraných bytů v nejatraktivnějších částech města. Každé místo bylo vybráno tak, aby umožnilo snadný přístup k hlavním atrakcím, restauracím a podnikatelským zónám.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Byty na nejlepších místech v Toruni</value>
@@ -47,37 +40,28 @@ Každý byt je prostor navržený tak, aby poskytoval skutečný odpočinek a so
     <value>Spokojení zákazníci</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Byty v Toruni
-
-</value>
+    <value>Byty v Toruni</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Poloha v Toruni</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Proč Rentoom?
-</value>
+    <value>Proč Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments není jen přenocování v Toruni. Nabízíme vysokou kvalitu bytů na nejlepších lokalitách a skutečné výhody, které zvyšují hodnotu celého pobytu.
-</value>
+    <value>Rentoom Apartments není jen přenocování v Toruni. Nabízíme vysokou kvalitu bytů na nejlepších lokalitách a skutečné výhody, které zvyšují hodnotu celého pobytu.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>V rámci našeho partnerského programu mají hosté přístup ke speciálním slevám na vybrané restaurace, kavárny a turistické atrakce. Aktuální slevy a doporučení najdete přímo v bytech, takže můžete využít ověřená místa a ušetřit peníze při prohlídce.
-</value>
+    <value>V rámci našeho partnerského programu mají hosté přístup ke speciálním slevám na vybrané restaurace, kavárny a turistické atrakce.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Spolupracujeme pouze s důvěryhodnými místními partnery a dbáme na kvalitu každého doporučení. Volbou Rentoomu získáte pohodlí, profesionální služby a další výhody, které činí váš pobyt v Toruni pohodlnějším, sofistikovanějším a jednoduše ziskovějším.
-</value>
+    <value>Spolupracujeme pouze s důvěryhodnými místními partnery a dbáme na kvalitu každého doporučení.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Seznamte se s názory lidí, kteří spali v našich bytech v Toruni.
-
-</value>
+    <value>Seznamte se s názory lidí, kteří spali v našich bytech v Toruni.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Zanechte své kontaktní údaje a my se vám ozveme!
-</value>
+    <value>Zanechte své kontaktní údaje a my se vám ozveme!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Kontaktujte dodavatele</value>
@@ -98,8 +82,27 @@ Každý byt je prostor navržený tak, aby poskytoval skutečný odpočinek a so
     <value>Odesílat</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Čím se naše byty liší od ostatních?
-
-</value>
+    <value>Čím se naše byty liší od ostatních?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Byty Toruń - krátkodobé pronájmy | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Podívejte se na naše byty v srdci Toruně. Ideální na víkend a delší pobyt.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Apartmány Toruń – vaše pohodlné ubytování</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Byty Toruń, ubytování Toruń, krátkodobé pronájmy, staroměstské byty, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Domov</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Hledáte ubytování v Toruni? Nabízíme pohodlné apartmány v centru i ve Starém Městě. Rezervujte přímo online – co nejnižší ceny, žádné provize od zprostředkovatelů.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Hledáte ubytování v Toruni? Rentoom nabízí krátkodobý pronájem v Toruni a ubytuje se na nejlepších místech ve městě.</value>
   </data>
 </root>

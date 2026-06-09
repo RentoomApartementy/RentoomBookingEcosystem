@@ -282,4 +282,190 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Контакт</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Поширені запитання (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Ніч</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Вечори</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Ціна доступна після вибору дати</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Виберіть дату</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Показати повний опис і зручності</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Ніч</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Вечори</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Вечори</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Особа</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Особи</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Люди</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Зручності та обладнання</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Зміни дату</value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Бонус було скасовано.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Бонус: -{0} злотих</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Наданий бонус не існує.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Цей бонус наразі вимкнено.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Цей бонус не застосовується до обраної квартири.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Бонус недоступний на дату початку цього бронювання.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Цей бонус вимагає тривалішого перебування.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Цей бонус вимагає більшої суми загального замовлення.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Бонус працює лише для бронювання через RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Бонус не знижує поточну ціну цього бронювання.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Заповніть дати та виберіть пропозицію для застосування бонусу.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Ціну пропозиції, яку потрібно було розрахувати від бонусу, не можна було прочитати.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Не застосував бонус.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>У вас є код знижки?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Введіть код знижки</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Код застосування</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Перевіряю...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Бонус: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Бонус видалення</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Анонс</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Ця резервація більше не активна. Якщо вам все ще потрібне проживання, поверніться до списку квартир і створіть нове бронювання.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Кількість ліжок</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Бронюйте {0} на Rentoom. Чудове розташування, {1} номери, високий стандарт.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Кількість ночей</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Без додатків</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Без додаткового опису</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Бронювання скасовано</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Найімовірніше, ви прийшли до нас зі старого перенаправлення, якого більше не існує. Зараз ми переведемо вас на сторінку квартир.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Продовжуй</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Щоб забронювати квартиру, оберіть дату та кількість людей</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Кількість осіб</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Вартість</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Кількість ванних кімнат</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>На жаль, на цю дату немає жодних пропозицій щодо цієї квартири</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Деталі квартири - Рентум</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Резервація</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Забронюйте квартиру</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Квартири</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Квартира Торунь, житло в Торуні, Рентум, короткострокова оренда, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Розмір квартири</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Польща</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Це наш новий портал</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Виберіть дати перебування, щоб перевірити доступність і ціни на наші оголошення.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Квартира</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Забронюйте квартиру({0})</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Я хочу отримати рахунок ПДВ</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Перевірте деталі квартири та забронюйте проживання в Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Помилка 404</value>
+  </data>
 </root>

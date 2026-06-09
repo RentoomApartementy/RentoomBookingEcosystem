@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Отмените бронирование</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Бонус был снят.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Бонус: -{0} злотых</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Предоставленный бонус не существует.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Этот бонус в настоящее время отключён.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Этот бонус не распространяется на выбранную квартиру.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Бонус недоступен к дате начала бронирования.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Бонус действует только для бронирования через RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Бонус не снижает текущую цену бронирования.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Заполните даты и выберите предложение для применения бонуса.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Стоимость предложения, которую нужно было рассчитать, не могла быть прочитана.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Не смог применить бонус.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Введите бонусный код</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Примените бонус</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Проверяю...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Бонус: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Бонус удаления</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Бонусная скидка</value>
+  </data>
 </root>

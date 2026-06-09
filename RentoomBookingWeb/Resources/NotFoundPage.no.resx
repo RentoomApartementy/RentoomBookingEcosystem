@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -62,16 +62,16 @@
     <value>Side ikke funnet</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Feil 404</value>
+    <value>BÅ'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
     <value>Vi beklager, men siden du leter etter eksisterer ikke eller har blitt flyttet.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>Tilbake til forsiden</value>
+    <value>Tilbake til hovedsiden</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>Kanskje du leter etter:</value>
+    <value>Du kan være på utkikk etter:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
     <value>Liste over leiligheter</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Reservasjon kansellert</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Dette er vår nye portal</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Denne bestillingen er ikke lenger aktiv. Hvis du fortsatt trenger et opphold, legg til på listen over leiligheter og lag en ny. Reservasjon. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Mest sannsynlig kom den til oss fra en gammel omdirigering som ikke lenger eksisterer. Vi tar deg™ med til leilighetssiden™ om et øyeblikk™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BÅ'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Bestill en leilighet</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Book leilighet({0}er)</value></data>
 </root>

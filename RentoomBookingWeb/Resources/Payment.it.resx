@@ -469,4 +469,55 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Annulla la tua prenotazione</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Il bonus è stato rimosso.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus applicato: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Il bonus fornito non esiste.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Questo bonus è attualmente disabilitato.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Questo bonus non si applica all'appartamento selezionato.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Il bonus non è disponibile per la data di inizio di questa prenotazione.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Il bonus vale solo per le prenotazioni con RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Il bonus non riduce il prezzo attuale di questa prenotazione.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Compila le date e seleziona l'offerta per applicare il bonus.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Il prezzo dell'offerta da calcolare del bonus non poteva essere letto.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Non è stato applicato il bonus.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Inserisci il codice bonus</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Applica il bonus</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Controlla...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Bonus rimozione</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Sconto bonus</value>
+  </data>
 </root>
