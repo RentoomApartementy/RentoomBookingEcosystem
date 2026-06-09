@@ -38,7 +38,7 @@
                             <input class="guest-input @(GetValidationClass(guest.FirstName))"
                                    placeholder="@Localizer["Name"]"
                                    value="@guest.FirstName"
-                                   @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), true))" />
+                                   @oninput="@(e => UpdateGuest(index, e.Value?.ToString(), true))" />
                             @if (IsInvalidName(guest.FirstName))
                             {
                                 <span class="guest-input-error">@Localizer["InvalidName"]</span>
@@ -50,7 +50,7 @@
                             <input class="guest-input @(GetValidationClass(guest.LastName))"
                                    placeholder="@Localizer["Surname"]"
                                    value="@guest.LastName"
-                                   @onchange="@(e => UpdateGuest(index, e.Value?.ToString(), false))" />
+                                   @oninput="@(e => UpdateGuest(index, e.Value?.ToString(), false))" />
                             @if (IsInvalidName(guest.LastName))
                             {
                                 <span class="guest-input-error">@Localizer["InvalidName"]</span>
