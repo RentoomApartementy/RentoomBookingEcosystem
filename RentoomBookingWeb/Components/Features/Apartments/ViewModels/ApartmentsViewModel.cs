@@ -354,16 +354,37 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             try
             {
+                var remainingCount = GetRemainingApartmentCount();
+                if (remainingCount.HasValue)
+                {
+                    if (remainingCount.Value <= 0)
+                    {
+                        HasMore = false;
+                        return;
+                    }
+                }
+
                 ApartmentsIsLoading = true; 
                 Error = null; 
                 NotifyStateChanged();
 
-                var page = await _apartmentsService.GetApartmentsByPageAsync(_token, top: PageSize);
+                var requestedPageSize = remainingCount.HasValue
+                    ? Math.Min(PageSize, remainingCount.Value)
+                    : PageSize;
+
+                var page = await _apartmentsService.GetApartmentsByPageAsync(_token, top: requestedPageSize);
                 if (page?.Items is { Count: > 0 })
                 {
                     Items.AddRange(page.Items);
                     _token = page.ContinuationToken;
                     HasMore = !string.IsNullOrEmpty(_token);
+
+                    var remainingAfterLoad = GetRemainingApartmentCount();
+                    if (remainingAfterLoad.HasValue && remainingAfterLoad.Value <= 0)
+                    {
+                        HasMore = false;
+                    }
+
                     await WarmMediaCacheForItemsAsync(page.Items);
 
                     if (IsSearch)
@@ -380,6 +401,22 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 NotifyStateChanged(); 
                 _loadLock.Release();
             }
+        }
+
+        private int? GetRemainingApartmentCount()
+        {
+            if (!ApartmentsCount.HasValue)
+            {
+                return null;
+            }
+
+            var remaining = ApartmentsCount.Value - Items.Count;
+            if (remaining <= 0)
+            {
+                return 0;
+            }
+
+            return remaining > int.MaxValue ? int.MaxValue : (int)remaining;
         }
 
         private async Task FetchOffersForVisibleItems(IEnumerable<ApartmentObject> items)
