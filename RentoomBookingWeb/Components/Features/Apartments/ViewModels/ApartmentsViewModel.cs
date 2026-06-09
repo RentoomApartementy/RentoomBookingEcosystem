@@ -357,8 +357,11 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     Items.AddRange(page.Items);
                     _token = page.ContinuationToken;
                     HasMore = !string.IsNullOrEmpty(_token);
-                    
-                    await FetchOffersForVisibleItems(page.Items); 
+
+                    if (IsSearch)
+                    {
+                        await FetchOffersForVisibleItems(page.Items);
+                    }
                 }
                 else { HasMore = false; }
             }
