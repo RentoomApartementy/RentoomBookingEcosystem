@@ -868,20 +868,34 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 .Distinct()
                 .ToHashSet();
 
+            var mandatoryAddonsForApartment = _apartment.Addons
+                .Where(addon => addon.Id.HasValue && addon.Optional == false)
+                .Distinct()
+                .ToList();
+
             _mandatoryAddons.RemoveAll(addon => !mandatoryAddonIds.Contains(addon.AddonId));
 
-            foreach (var addonId in mandatoryAddonIds)
+            /*   foreach (var addonId in mandatoryAddonIds)
+               {
+                   if (!_mandatoryAddons.Any(x => x.AddonId == addonId))
+                   {
+                       AddAddonToList(_mandatoryAddons, addonId);
+                   }
+               }*/
+
+            foreach (var addon in mandatoryAddonsForApartment)
             {
-                if (!_mandatoryAddons.Any(x => x.AddonId == addonId))
+                if (!_mandatoryAddons.Any(x => x.AddonId == addon.Id))
                 {
-                    AddAddonToList(_mandatoryAddons, addonId);
+                    AddAddonToList(_mandatoryAddons, addon);
                 }
+
             }
         }
 
-        protected void AddAddonToList(List<SelectedAddonDto> targetAddons, int addonId)
+        protected void AddAddonToList(List<SelectedAddonDto> targetAddons, AddonType addon)
         {
-            var definition = _definedAddons?.FirstOrDefault(d => d.IdoBookingId == addonId);
+            var definition = _definedAddons?.FirstOrDefault(d => d.IdoBookingId == addon.Id);
 
             int nights = 1;
             if (TryParseDate(StartDate, out var s) && TryParseDate(EndDate, out var e))
@@ -895,17 +909,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             var details = definition?.AddonDefinition?.Details;
             var newDto = new SelectedAddonDto
             {
-                AddonId = addonId,
+                AddonId = addon.Id!.Value,
                 Quantity = 1,
                 Price = definition != null ? (float)definition.PriceGross : 0f,
                 Vat = 8f,
                 Persons = persons,
                 Nights = nights,
                 PaymentType = definition?.PaymentType,
-                DisplayText = details?.FirstOrDefault(d => d.Lang == CurrentAddonLanguage)?.Name 
-                            ?? details?.FirstOrDefault(d => d.Lang == "EN")?.Name 
-                            ?? details?.FirstOrDefault(d => d.Lang == "PL")?.Name 
-                            ?? "Addon"
+                DisplayText = definition?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == CurrentAddonLanguage)?.Name ?? addon.Name ?? $"Addon {addon.Id}"
             };
 
             targetAddons.Add(newDto);
@@ -966,11 +977,13 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         {
             if (!addonId.HasValue) return;
 
+            var addon = _apartment?.Addons?.FirstOrDefault(a => a.Id == addonId.Value);
+
             if (isChecked)
             {
                 if (!_selectedAddons.Any(x => x.AddonId == addonId.Value))
                 {
-                    AddAddonToList(_selectedAddons, addonId.Value);
+                    AddAddonToList(_selectedAddons, addon!);
                 }
             }
             else
@@ -1189,7 +1202,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 AppliedBonusValue = _bonusAppliedValue,
                 BonusBasePln = _bonusBaseAmount,
                 DiscountAmountPln = _bonusDiscountAmount,
-                BonusRejectReason = _bonusRejectReason
+                BonusRejectReason = _bonusRejectReason,
+                Vat =8
             };
 
             WorkflowTelemetry.TrackEvent(

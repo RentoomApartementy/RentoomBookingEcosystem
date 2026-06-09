@@ -42,6 +42,7 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public decimal BonusBasePln { get; set; }
         public decimal DiscountAmountPln { get; set; }
         public string? BonusRejectReason { get; set; }
+        public decimal Vat { get; set; }
 
         public decimal getFullReservationPrizeWithoutUpsells()
         {
