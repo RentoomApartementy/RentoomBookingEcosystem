@@ -3,13 +3,13 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Services
-@using RentoomBooking.SharedClasses.Services.IdoBooking
+@using RentoomBooking.SharedClasses.Services.ApartmentMedia
 @using RentoomBookingWeb.Services 
 @using RentoomBookingWeb.Helpers
 @using Microsoft.JSInterop
 @using Microsoft.Extensions.Localization
 @inject IApartmentsService ApartmentsApiService
-@inject IIdoApartmentService IdoApartmentService
+@inject IApartmentMediaCatalogService ApartmentMediaCatalogService
 @inject IRentoomOfferService RentoomOfferService
 @inject IJSRuntime JS
 @inject MediaCacheService MediaCache
@@ -156,7 +156,8 @@
         
         if (MediaCache.TryGetCachedMedia(apt.Id, out var cachedMedia) && cachedMedia != null && cachedMedia.Any())
         {
-            var imgUrl = cachedMedia.First().Url;
+            var first = cachedMedia.First();
+            var imgUrl = first.CardUrl ?? first.Url;
             imageContent = $"<img src='{imgUrl}' style='width: 100%; height: 100%; object-fit: cover; border-radius: .5rem .5rem 0 0;' alt='{Localizer["Map_ApartmentImageAlt"]}' />";
         }
         else
@@ -247,10 +248,11 @@
         {
             var media = await MediaCache.GetOrFetchMediaAsync(
                 id, 
-                async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>()
+                async () => await ApartmentMediaCatalogService.GetApartmentMediaAsync(id)
             );
             
-            return media?.FirstOrDefault()?.Url ?? "";
+            var first = media?.FirstOrDefault();
+            return first?.CardUrl ?? first?.Url ?? "";
         }
         return "";
     }

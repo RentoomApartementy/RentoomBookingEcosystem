@@ -1,8 +1,8 @@
 @using RentoomBooking.SharedClasses.Models.AvailableTerms
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
-@using RentoomBooking.SharedClasses.Services.IdoBooking;
-@inject IIdoApartmentService IdoApartmentService;
+@using RentoomBooking.SharedClasses.Services.ApartmentMedia;
+@using RentoomBookingWeb.Components.Features.Apartments.ViewModels
 @inject NavigationManager Navigation;
 @using RentoomBookingWeb.Services
 @inject IJSRuntime JS
@@ -12,6 +12,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> ApartmentLocalizer;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
 @inject MediaCacheService MediaCache 
+@inject IApartmentMediaCatalogService ApartmentMediaCatalogService
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @inject GoogleAnalyticsService GoogleAnalytics
@@ -34,17 +35,27 @@
                 <div class="image-slider" @ref="_sliderRef">
                     @if (_objectMediums != null)
                     {
-                        @foreach (var medium in _objectMediums)
+                        @for (var index = 0; index < _objectMediums.Count; index++)
                         {
+                            var medium = _objectMediums[index];
+
                             <div class="image-wrapper" title="@Item?.Name">
-                                <img 
-                                    src="@medium.Url"
-                                    alt="@Item?.Name"
-                                    itemprop="photo"
-                                    class="apartment-image" 
-                                    loading="lazy"
-                                    decoding="async"
-                                />
+                                @if (ShouldRenderImageSource(index))
+                                {
+                                    <img 
+                                        src="@GetListingImageUrl(medium)"
+                                        alt="@Item?.Name"
+                                        itemprop="photo"
+                                        class="apartment-image"
+                                        loading="@GetImageLoading(index)"
+                                        fetchpriority="@GetImageFetchPriority(index)"
+                                        decoding="async"
+                                    />
+                                }
+                                else
+                                {
+                                    <div class="apartment-image apartment-image-placeholder" aria-hidden="true"></div>
+                                }
                             </div>
                         }
                     }
@@ -52,11 +63,12 @@
                     {
                         <div class="image-wrapper" title="@Item?.Name">
                             <img 
-                                src="@_currentObjectMedium.Url"
+                                src="@GetListingImageUrl(_currentObjectMedium)"
                                 alt="@Item?.Name"
                                 itemprop="photo"
                                 class="apartment-image" 
-                                loading="lazy"
+                                loading="eager"
+                                fetchpriority="high"
                                 decoding="async"
                             />
                         </div>
@@ -202,7 +214,7 @@
                     else
                     {
                         <div class="price-wrapper">
-                            @if (IsSuggestionsLoading && !(SuggestionDates?.Any() == true))
+                            @if (IsSuggestionLoading() && !(SuggestionDates?.Any() == true))
                             {
                                 <span class="availability-status loading">
                                     <span class="mini-spinner"></span>
@@ -253,7 +265,7 @@
                     }
                     else
                     {
-                        @if (IsSuggestionsLoading)
+                        @if (IsSuggestionLoading())
                         {
                             <small class="non-offer">
                                 <span class="mini-spinner"></span>
@@ -285,12 +297,13 @@
     [Parameter] public bool Readonly { get; set; } = false;
     
     [Parameter] public bool DisableForGoToReservation { get; set; } = false;
-    [Parameter] public bool IsSuggestionsLoading { get; set; } = false;
+    [Parameter] public SuggestionStatus SuggestionState { get; set; } = SuggestionStatus.NotStarted;
     
     [Parameter] public IReadOnlyList<AvailableTerm>? SuggestionDates { get; set; } = null;
 
     [Parameter] public string? Width { get; set; } = null;
     [Parameter] public string ListingSource { get; set; } = "apartments-list";
+    [Parameter] public bool DeferGalleryImages { get; set; } = false;
 
     private List<ObjectMedium>? _objectMediums = null;
     private int _currentMediumIndex = 0;
@@ -307,29 +320,26 @@
     private bool _isMediaLoaded = false;
     private bool _isSliderInitialized = false;
     private bool _isDisposed = false;
+    private readonly HashSet<int> _activatedImageIndexes = new();
 
     protected override void OnInitialized()
     {
         _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
         CalculateDetailsUrl();
         ResolveOfferLength();
-        
-        if (Item?.Id != null)
-        {
-            if (MediaCache.TryGetCachedMedia(Item.Id, out var cachedMedia))
-            {
-                _objectMediums = cachedMedia;
-                _currentMediumIndex = 0;
-                _currentObjectMedium = _objectMediums?.FirstOrDefault();
-                _isMediaLoaded = true; 
-            }
-        }
+        TryLoadMediaFromCache();
     }
 
     protected override void OnParametersSet()
     {
+        _bedsCount = Item?.BedsConfiguration?.Sum(item => item.Count);
         CalculateDetailsUrl();
         ResolveOfferLength();
+
+        if (!_isMediaLoaded)
+        {
+            TryLoadMediaFromCache();
+        }
     }
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -372,6 +382,17 @@
     public async Task LoadMedia()
     {
         if (_isMediaLoaded || _isDisposed) return;
+
+        if (TryLoadMediaFromCache())
+        {
+            if (!_isDisposed)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+
+            return;
+        }
+
         _isMediaLoaded = true;
 
         try
@@ -395,6 +416,8 @@
         
         _currentMediumIndex = index;
         _currentObjectMedium = _objectMediums[index];
+        ActivateImageIndex(index);
+        PrefetchNextImage(index);
         await InvokeAsync(StateHasChanged);
     }
 
@@ -403,14 +426,39 @@
         var id = Item?.Id;
         if (id != null)
         {
-            _objectMediums = await MediaCache.GetOrFetchMediaAsync(
+            var media = await MediaCache.GetOrFetchMediaAsync(
                 id.Value, 
-                async () => await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id.Value) ?? new List<ObjectMedium>()
+                async () => await ApartmentMediaCatalogService.GetApartmentMediaAsync(id.Value)
             );
 
-            _currentMediumIndex = 0;
-            _currentObjectMedium = _objectMediums.FirstOrDefault();
+            ApplyLoadedMedia(media);
         }
+    }
+
+    private bool TryLoadMediaFromCache()
+    {
+        var id = Item?.Id;
+        if (id == null)
+        {
+            return false;
+        }
+
+        if (!MediaCache.TryGetCachedMedia(id.Value, out var cachedMedia) || cachedMedia == null || !cachedMedia.Any())
+        {
+            return false;
+        }
+
+        _isMediaLoaded = true;
+        ApplyLoadedMedia(cachedMedia);
+        return true;
+    }
+
+    private void ApplyLoadedMedia(List<ObjectMedium> media)
+    {
+        _objectMediums = media;
+        _currentMediumIndex = 0;
+        _currentObjectMedium = _objectMediums.FirstOrDefault();
+        ResetActivatedImages();
     }
 
     private async Task ChangeCurrentObjectMedium(int step)
@@ -422,6 +470,10 @@
         else if (_currentMediumIndex >= _objectMediums.Count) _currentMediumIndex = 0;
 
         _currentObjectMedium = _objectMediums[_currentMediumIndex];
+        ActivateImageIndex(_currentMediumIndex);
+        PrefetchNextImage(_currentMediumIndex);
+
+        await InvokeAsync(StateHasChanged);
 
         if (_sliderModule != null)
         {
@@ -458,6 +510,67 @@
             _detailsUrl = baseUrl;
         }
         _detailsUrl = _detailsUrl.Replace("//", "/");
+    }
+
+    private bool ShouldRenderImageSource(int index)
+    {
+        return !DeferGalleryImages || _activatedImageIndexes.Contains(index);
+    }
+
+    private static string? GetListingImageUrl(ObjectMedium? medium)
+    {
+        return medium?.CardUrl ?? medium?.Url;
+    }
+
+    private bool IsSuggestionLoading()
+    {
+        return SuggestionState == SuggestionStatus.Loading;
+    }
+
+    private string GetImageLoading(int index)
+    {
+        return index == 0 ? "eager" : "lazy";
+    }
+
+    private string GetImageFetchPriority(int index)
+    {
+        return index == 0 ? "high" : "low";
+    }
+
+    private void ResetActivatedImages()
+    {
+        _activatedImageIndexes.Clear();
+
+        if (_objectMediums?.Count > 0)
+        {
+            _activatedImageIndexes.Add(0);
+        }
+    }
+
+    private void ActivateImageIndex(int index)
+    {
+        if (_objectMediums == null || index < 0 || index >= _objectMediums.Count)
+        {
+            return;
+        }
+
+        _activatedImageIndexes.Add(index);
+    }
+
+    private void PrefetchNextImage(int index)
+    {
+        if (!DeferGalleryImages || _objectMediums == null || _objectMediums.Count <= 1)
+        {
+            return;
+        }
+
+        var nextIndex = index + 1;
+        if (nextIndex >= _objectMediums.Count)
+        {
+            nextIndex = 0;
+        }
+
+        _activatedImageIndexes.Add(nextIndex);
     }
 
     private void ResolveOfferLength()

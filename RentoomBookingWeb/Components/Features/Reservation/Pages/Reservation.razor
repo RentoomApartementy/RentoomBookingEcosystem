@@ -4,9 +4,10 @@
 @using RentoomBooking.SharedClasses.Models.Database.EFEntitites
 @using RentoomBooking.SharedClasses.Models.IdoBooking;
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
-@using RentoomBooking.SharedClasses.Services.IdoBooking;
+@using RentoomBooking.SharedClasses.Services.IdoBooking
+@using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 @inject IApartmentsService ApartmentsService;
-@inject IIdoApartmentService IdoApartmentService;
+@inject IApartmentMediaCatalogService ApartmentMediaCatalogService;
 @inject NavigationManager Navigation;
 @inject IIdoOfferService OfferService;
 @inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer;
@@ -226,7 +227,7 @@
         
         if (_apartment !=null)
         {
-            _objectMediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(_apartment.Id) ?? new List<ObjectMedium>();
+            _objectMediums = await ApartmentMediaCatalogService.GetApartmentMediaAsync(_apartment.Id);
             _currentMediumIndex = 0;
             _currentObjectMedium = _objectMediums.FirstOrDefault();
         }

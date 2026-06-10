@@ -1,9 +1,9 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
-@using RentoomBooking.SharedClasses.Services.IdoBooking
+@using RentoomBooking.SharedClasses.Services.ApartmentMedia
 @using Microsoft.JSInterop
 @inject IApartmentsService ApartmentsApiService
-@inject IIdoApartmentService IdoApartmentService
+@inject IApartmentMediaCatalogService ApartmentMediaCatalogService
 @inject IJSRuntime JSRuntime
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @using RentoomBookingWeb.Helpers
@@ -181,12 +181,12 @@
     public async Task<string> OnMarkerClicked(string id)
     {
         var media = await GetObjectMedia(int.Parse(id));
-        return media?.Url ?? "";
+        return media?.CardUrl ?? media?.Url ?? "";
     }
 
     private async Task<ObjectMedium?> GetObjectMedia(int id)
     {
-        var mediums = await IdoApartmentService.GetObjectMediaFromIdoSellAsync(id) ?? new List<ObjectMedium>();
+        var mediums = await ApartmentMediaCatalogService.GetApartmentMediaAsync(id);
         return mediums.FirstOrDefault();
     }
 

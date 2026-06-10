@@ -17,6 +17,8 @@ namespace RentoomBooking.SharedClasses.Database
         public DbSet<ApartmentInfoEntity> ApartmentInfos => Set<ApartmentInfoEntity>();
         public DbSet<ApartmentAmenityEntity> ApartmentAmenities => Set<ApartmentAmenityEntity>();
         public DbSet<ApartmentHashEntity> ApartmentHashes => Set<ApartmentHashEntity>();
+        public DbSet<ApartmentMediaAssetEntity> ApartmentMediaAssets => Set<ApartmentMediaAssetEntity>();
+        public DbSet<ApartmentMediaSyncRunEntity> ApartmentMediaSyncRuns => Set<ApartmentMediaSyncRunEntity>();
         
         //MS: będziemy uzywac jednego z tych dwóch poniższych.... muszę pomyslec jak to zrefaktorowac odpowiednio.. 
         //MS: bo rezerwacje w ido NEW reservation vs Reservation to troche inne obiekty... 
@@ -69,6 +71,33 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+            });
+
+            modelBuilder.Entity<ApartmentMediaAssetEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).UseIdentityByDefaultColumn();
+                entity.Property(e => e.IdoSourceUrl).HasColumnType("varchar").IsRequired();
+                entity.Property(e => e.StorageKey).HasColumnType("varchar").IsRequired();
+                entity.Property(e => e.ContentType).HasColumnType("varchar");
+                entity.Property(e => e.Extension).HasColumnType("varchar");
+                entity.Property(e => e.CardStorageKey).HasColumnType("varchar");
+                entity.Property(e => e.CardContentType).HasColumnType("varchar");
+                entity.Property(e => e.SourceEtag).HasColumnType("varchar");
+                entity.Property(e => e.ChecksumSha256).HasColumnType("varchar");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+                entity.HasIndex(e => new { e.ApartmentId, e.IdoSourceUrl }).IsUnique();
+                entity.HasIndex(e => new { e.ApartmentId, e.PictureDisplaySequence });
+            });
+
+            modelBuilder.Entity<ApartmentMediaSyncRunEntity>(entity =>
+            {
+                entity.HasKey(e => e.RunId);
+                entity.Property(e => e.Status).HasColumnType("varchar").IsRequired();
+                entity.Property(e => e.SummaryJson).HasColumnType("jsonb").IsRequired();
+                entity.Property(e => e.StartedAt).HasDefaultValueSql("NOW()");
+                entity.HasIndex(e => e.StartedAt).HasDatabaseName("idx_apartment_media_sync_runs_started_at");
             });
 
             modelBuilder.Entity<ReservationEntity>(entity =>

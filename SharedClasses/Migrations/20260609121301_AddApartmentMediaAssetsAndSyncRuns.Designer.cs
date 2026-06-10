@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RentoomBooking.SharedClasses.Database;
@@ -11,9 +12,11 @@ using RentoomBooking.SharedClasses.Database;
 namespace RentoomBooking.SharedClasses.Migrations
 {
     [DbContext(typeof(PostgresBookingDbContext))]
-    partial class PostgresBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260609121301_AddApartmentMediaAssetsAndSyncRuns")]
+    partial class AddApartmentMediaAssetsAndSyncRuns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -634,22 +637,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("apartment_id");
 
-                    b.Property<string>("CardContentType")
-                        .HasColumnType("varchar")
-                        .HasColumnName("card_content_type");
-
-                    b.Property<int?>("CardHeight")
-                        .HasColumnType("integer")
-                        .HasColumnName("card_height");
-
-                    b.Property<string>("CardStorageKey")
-                        .HasColumnType("varchar")
-                        .HasColumnName("card_storage_key");
-
-                    b.Property<int?>("CardWidth")
-                        .HasColumnType("integer")
-                        .HasColumnName("card_width");
-
                     b.Property<string>("ChecksumSha256")
                         .HasColumnType("varchar")
                         .HasColumnName("checksum_sha256");
@@ -724,14 +711,6 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.Property<int>("ApartmentsProcessed")
                         .HasColumnType("integer")
                         .HasColumnName("apartments_processed");
-
-                    b.Property<int>("CardGeneratedCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("card_generated_count");
-
-                    b.Property<int>("CardReplacedCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("card_replaced_count");
 
                     b.Property<int>("DeletedCount")
                         .HasColumnType("integer")

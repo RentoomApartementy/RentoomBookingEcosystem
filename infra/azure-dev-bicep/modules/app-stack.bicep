@@ -232,8 +232,13 @@ var applicationRuntimeEnvironment = environment == 'prod' ? 'Production' : 'Deve
 var rentoomWebIsLinux = environment == 'prod'
 var idoBookingUseDummySetting = idoBookingUseDummy ? 'True' : 'False'
 var postgresPoolingEnabledSetting = postgresPoolingEnabled ? 'true' : 'false'
+var apartmentMediaCardMaxWidth = 800
+var apartmentMediaCardMaxHeight = 520
+var apartmentMediaCardWebpQuality = 75
 var staywellDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${staywellDbName};Port=5432;User Id=${staywellDbAppUser};Password=${staywellDbAppPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
 var rentoomAppDbConnectionString = 'Server=${existingPostgres.name}.postgres.database.azure.com;Database=${rentoomAppDbName};Port=5432;User Id=${rentoomAppDbUser};Password=${rentoomAppDbPassword};Ssl Mode=VerifyFull;Include Error Detail=True'
+var apartmentPhotosStorageAccountName = 'rentoombookingstorage'
+var apartmentPhotosContainerName = 'apartmentsphotos-${environment}'
 
 // Built-in role IDs
 var storageBlobDataOwnerRoleId = 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
@@ -319,8 +324,8 @@ resource deploymentContainer 'Microsoft.Storage/storageAccounts/blobServices/con
   }
 }
 
-resource rentoomDataStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
-  name: rentoomDataStorageAccountName
+resource rentoomDataStorage 'Microsoft.Storage/storageAccounts@2025-06-01' = {
+  name: apartmentPhotosStorageAccountName
   location: location
   kind: 'StorageV2'
   sku: {
@@ -334,6 +339,20 @@ resource rentoomDataStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     minimumTlsVersion: 'TLS1_2'
     allowBlobPublicAccess: false
     publicNetworkAccess: 'Enabled'
+  }
+}
+
+resource rentoomDataStorageBlobService 'Microsoft.Storage/storageAccounts/blobServices@2025-06-01' = {
+  parent: rentoomDataStorage
+  name: 'default'
+  properties: {}
+}
+
+resource apartmentPhotosContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2025-06-01' = {
+  parent: rentoomDataStorageBlobService
+  name: apartmentPhotosContainerName
+  properties: {
+    publicAccess: 'None'
   }
 }
 
@@ -502,6 +521,30 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
           name: 'Storage__AccountName'
           value: rentoomDataStorage.name
         }
+        {
+          name: 'ApartmentPhotosStorage__Container'
+          value: apartmentPhotosContainerName
+        }
+        {
+          name: 'ApartmentPhotosStorage__ConnectionString'
+          value: ''
+        }
+        {
+          name: 'ApartmentPhotosStorage__AccountName'
+          value: rentoomDataStorage.name
+        }
+        {
+          name: 'ApartmentMediaVariants__CardMaxWidth'
+          value: string(apartmentMediaCardMaxWidth)
+        }
+        {
+          name: 'ApartmentMediaVariants__CardMaxHeight'
+          value: string(apartmentMediaCardMaxHeight)
+        }
+        {
+          name: 'ApartmentMediaVariants__CardWebpQuality'
+          value: string(apartmentMediaCardWebpQuality)
+        }
       ]
     } : {
       netFrameworkVersion: 'v8.0'
@@ -639,6 +682,30 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
           name: 'Storage__AccountName'
           value: rentoomDataStorage.name
         }
+        {
+          name: 'ApartmentPhotosStorage__Container'
+          value: apartmentPhotosContainerName
+        }
+        {
+          name: 'ApartmentPhotosStorage__ConnectionString'
+          value: ''
+        }
+        {
+          name: 'ApartmentPhotosStorage__AccountName'
+          value: rentoomDataStorage.name
+        }
+        {
+          name: 'ApartmentMediaVariants__CardMaxWidth'
+          value: string(apartmentMediaCardMaxWidth)
+        }
+        {
+          name: 'ApartmentMediaVariants__CardMaxHeight'
+          value: string(apartmentMediaCardMaxHeight)
+        }
+        {
+          name: 'ApartmentMediaVariants__CardWebpQuality'
+          value: string(apartmentMediaCardWebpQuality)
+        }
       ]
     }
   }
@@ -738,6 +805,12 @@ resource staywellApiAppSettings 'Microsoft.Web/sites/config@2024-04-01' = {
     InstructionsStorage__Container: instructionsStorageContainerName
     InstructionsStorage__ConnectionString: ''
     InstructionsStorage__AccountName: rentoomDataStorage.name
+    ApartmentPhotosStorage__Container: apartmentPhotosContainerName
+    ApartmentPhotosStorage__ConnectionString: ''
+    ApartmentPhotosStorage__AccountName: rentoomDataStorage.name
+    ApartmentMediaVariants__CardMaxWidth: string(apartmentMediaCardMaxWidth)
+    ApartmentMediaVariants__CardMaxHeight: string(apartmentMediaCardMaxHeight)
+    ApartmentMediaVariants__CardWebpQuality: string(apartmentMediaCardWebpQuality)
 
     // TTLock configuration
     TTLOCK__ClientId: ttlockClientId

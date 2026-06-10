@@ -1,5 +1,6 @@
 @page "/apartamenty"
 @using RentoomBookingWeb.Components.Features.Apartments.Components
+@using RentoomBookingWeb.Components.Features.Apartments.ViewModels
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
@@ -93,12 +94,13 @@
                                     Item="@item" 
                                     Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)" 
                                     OfferLength="@_offerLength"
+                                    DeferGalleryImages="true"
                                     ShowPrice="@ViewModel.IsSearch"
                                     StartDate="@ViewModel.StartDate"
                                     EndDate="@ViewModel.EndDate"
                                     Adults="@ViewModel.Adults"
                                     Children="@ViewModel.Children"
-                                    IsSuggestionsLoading="@ViewModel.IsSuggestionsLoading"
+                                    SuggestionState="@ViewModel.GetSuggestionStatusByObjectId(item.Id)"
                                     SuggestionDates="@ViewModel.GetSuggestionsByObjectId(item.Id)"
                                     ListingSource="apartments-list"
                                     />
