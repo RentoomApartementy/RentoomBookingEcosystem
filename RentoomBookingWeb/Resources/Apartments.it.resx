@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Prezzo per soggiorno</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Appartamenti Toruń - elenco completo degli alloggi</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Attualmente non ci sono appartamenti disponibili.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Caricamento...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Appartamenti Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Ricerca chiara</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Cerca un appartamento per nome...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Appartamenti</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Cerca un appartamento per nome</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Consulta l'elenco di tutti i nostri appartamenti a Toruń. Alloggio confortevole, ottima posizione vicino alla Città Vecchia. Controlla i dettagli di ogni appartamento.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Appartamenti Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Scopri la nostra gamma completa di appartamenti confortevoli nel cuore di Toruń.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Appartamenti in affitto, alloggio, prenotazioni, prenotazione di appartamenti, Rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Non furono trovati appartamenti per il nome di battesimo.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Appartamento</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Nessuna offerta</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Numero di persone</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Appartamenti</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Numero di letti</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Numero di bagni</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Offerte</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Dimensione dell'appartamento</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Posizione</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Risultati della ricerca: {0} offerte - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Controlla gli appartamenti disponibili tra {0} e {1}. Abbiamo trovato {2} offerte perfette per te. Prenota in modo sicuro online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Scopri l'ampia gamma di appartamenti a Rentoom. Comfort, ottimi luoghi e alto livello. Perfetto per le vacanze e i viaggi di lavoro.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Appartamenti di lusso in affitto - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Non ci sono appartamenti disponibili per questa data - Rentoom</value>
   </data>
 </root>

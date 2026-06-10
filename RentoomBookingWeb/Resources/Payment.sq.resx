@@ -520,4 +520,43 @@
   <data name="BonusDiscountLabel" xml:space="preserve">
     <value>Zbritje bonus</value>
   </data>
+  <data name="Summary_QrButtonAriaLabel" xml:space="preserve">
+    <value>Kodi QR</value>
+  </data>
+  <data name="Summary_DocumentLinkAriaLabel" xml:space="preserve">
+    <value>Lidhja me dokumentin</value>
+  </data>
+  <data name="Summary_ErrorIconAriaLabel" xml:space="preserve">
+    <value>Ikona e gabimit</value>
+  </data>
+  <data name="Summary_StaywellQrAlt" xml:space="preserve">
+    <value>Kodi QR StayWell</value>
+  </data>
+  <data name="Summary_ReservationIconAriaLabel" xml:space="preserve">
+    <value>Ikona e statusit të rezervimit</value>
+  </data>
+  <data name="Summary_EmailIconAriaLabel" xml:space="preserve">
+    <value>Ikona e statusit të emailit</value>
+  </data>
+  <data name="Summary_WaitingIconAriaLabel" xml:space="preserve">
+    <value>Ikona e pritjes</value>
+  </data>
+  <data name="Summary_PaymentStatusIconAriaLabel" xml:space="preserve">
+    <value>Ikona e statusit të pagesës</value>
+  </data>
+  <data name="Summary_TpayIconAlt" xml:space="preserve">
+    <value>Ikona Tpay</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerTitle" xml:space="preserve">
+    <value>Ne konfirmojmë pagesën</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerMessage" xml:space="preserve">
+    <value>Ne jemi në pritje të konfirmimit të pagesës nga Tpay. Statusi i rezervimit do të përditësohet automatikisht kur ruani grepin e internetit.</value>
+  </data>
+  <data name="PaymentConfirmationInProgressTitle" xml:space="preserve">
+    <value>Ne konfirmojmë pagesën</value>
+  </data>
+  <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
+    <value>Ju jeni në pritje të konfirmimit të pagesës nga Tpay. Ne do t'ju tregojmë statusin aktual të rezervimit tuaj në një moment.</value>
+  </data>
 </root>

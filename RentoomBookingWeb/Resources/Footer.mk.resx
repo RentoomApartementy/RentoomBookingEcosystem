@@ -149,4 +149,19 @@
   <data name="AboutCity" xml:space="preserve">
     <value>За Торуњ</value>
   </data>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Фејсбук</value>
+  </data>
+  <data name="Footer_FacebookAriaLabel" xml:space="preserve">
+    <value>Рентум на Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Рентум на Инстаграм</value>
+  </data>
+  <data name="Footer_InstagramIconAlt" xml:space="preserve">
+    <value>Инстаграм</value>
+  </data>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Рентум - Апартмани</value>
+  </data>
 </root>

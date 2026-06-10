@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>An bhfuil tú ag lorg lóistín i Toruń? Cuireann Rentoom árasáin ar cíos gearrthéarmach ar fáil i Toruń agus fanann sé sna háiteanna is fearr sa chathair.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Árasáin i Toruń - taobh istigh</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Ríomhphost</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Árasáin i Toruń - lánléargas cathrach</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Faigh tuilleadh eolais</value>
+  </data>
 </root>

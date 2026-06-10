@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Bent u op zoek naar accommodatie in Toruń? Rentoom biedt appartementen voor kortetermijnverhuur in Toruń en verblijft op de beste locaties van de stad.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Appartementen in Toruń - interieur</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Appartementen in Toruń - stadspanorama</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Lees meer</value>
+  </data>
 </root>

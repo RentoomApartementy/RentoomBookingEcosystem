@@ -520,4 +520,43 @@
   <data name="BonusDiscountLabel" xml:space="preserve">
     <value>Бонусна знижка</value>
   </data>
+  <data name="Summary_QrButtonAriaLabel" xml:space="preserve">
+    <value>QR-код</value>
+  </data>
+  <data name="Summary_DocumentLinkAriaLabel" xml:space="preserve">
+    <value>Посилання на документ</value>
+  </data>
+  <data name="Summary_ErrorIconAriaLabel" xml:space="preserve">
+    <value>Іконка помилки</value>
+  </data>
+  <data name="Summary_StaywellQrAlt" xml:space="preserve">
+    <value>QR-код StayWell</value>
+  </data>
+  <data name="Summary_ReservationIconAriaLabel" xml:space="preserve">
+    <value>Іконка статусу бронювання</value>
+  </data>
+  <data name="Summary_EmailIconAriaLabel" xml:space="preserve">
+    <value>Іконка статусу електронної пошти</value>
+  </data>
+  <data name="Summary_WaitingIconAriaLabel" xml:space="preserve">
+    <value>Іконка очікування</value>
+  </data>
+  <data name="Summary_PaymentStatusIconAriaLabel" xml:space="preserve">
+    <value>Іконка статусу платежу</value>
+  </data>
+  <data name="Summary_TpayIconAlt" xml:space="preserve">
+    <value>Ікона Тпая</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerTitle" xml:space="preserve">
+    <value>Ми підтверджуємо оплату</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerMessage" xml:space="preserve">
+    <value>Ми чекаємо підтвердження оплати від Tpay. Статус бронювання оновлюватиметься автоматично, коли ви збережете вебхук.</value>
+  </data>
+  <data name="PaymentConfirmationInProgressTitle" xml:space="preserve">
+    <value>Ми підтверджуємо оплату</value>
+  </data>
+  <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
+    <value>Ви чекаєте на підтвердження платежу від Tpay. Ми покажемо вам поточний статус вашого бронювання за мить.</value>
+  </data>
 </root>

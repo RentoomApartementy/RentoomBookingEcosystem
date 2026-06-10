@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>O contato poderia ser salvo, mas o acordo não pôde ser feito. Verifique o Bitrix antes de reenviar.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Cooperação</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Contato</value>
+  </data>
 </root>

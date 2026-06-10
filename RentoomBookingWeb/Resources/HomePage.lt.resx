@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Ieškote nakvynės Torunėje? "Rentoom" siūlo trumpalaikės nuomos apartamentus Torunėje ir apsistoja geriausiose miesto vietose.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Butai Torunėje - interjeras</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>El paštas</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Butai Torunėje - miesto panorama</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Sužinoti daugiau, sužinok daugiau</value>
+  </data>
 </root>

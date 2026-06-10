@@ -520,4 +520,43 @@
   <data name="BonusDiscountLabel" xml:space="preserve">
     <value>Bonusrabatt</value>
   </data>
+  <data name="Summary_QrButtonAriaLabel" xml:space="preserve">
+    <value>QR-Code</value>
+  </data>
+  <data name="Summary_DocumentLinkAriaLabel" xml:space="preserve">
+    <value>Link zum Dokument</value>
+  </data>
+  <data name="Summary_ErrorIconAriaLabel" xml:space="preserve">
+    <value>Fehlersymbol</value>
+  </data>
+  <data name="Summary_StaywellQrAlt" xml:space="preserve">
+    <value>StayWell QR-Code</value>
+  </data>
+  <data name="Summary_ReservationIconAriaLabel" xml:space="preserve">
+    <value>Buchungsstatus-Symbol</value>
+  </data>
+  <data name="Summary_EmailIconAriaLabel" xml:space="preserve">
+    <value>E-Mail-Statussymbol</value>
+  </data>
+  <data name="Summary_WaitingIconAriaLabel" xml:space="preserve">
+    <value>Warte-Symbol</value>
+  </data>
+  <data name="Summary_PaymentStatusIconAriaLabel" xml:space="preserve">
+    <value>Zahlungsstatus-Symbol</value>
+  </data>
+  <data name="Summary_TpayIconAlt" xml:space="preserve">
+    <value>Tpay-Symbol</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerTitle" xml:space="preserve">
+    <value>Wir bestätigen die Zahlung</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerMessage" xml:space="preserve">
+    <value>Wir warten auf eine Zahlungsbestätigung von Tpay. Der Buchungsstatus wird automatisch aktualisiert, wenn du den Webhook speicherst.</value>
+  </data>
+  <data name="PaymentConfirmationInProgressTitle" xml:space="preserve">
+    <value>Wir bestätigen die Zahlung</value>
+  </data>
+  <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
+    <value>Sie warten auf die Bestätigung der Zahlung von Tpay. Wir zeigen Ihnen gleich den aktuellen Status Ihrer Reservierung.</value>
+  </data>
 </root>

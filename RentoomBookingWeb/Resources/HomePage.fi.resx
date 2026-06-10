@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Etsitkö majoitusta Toruńista? Rentoom tarjoaa lyhytaikaisia vuokra-asuntoja Toruńissa ja majoittuu kaupungin parhaissa paikoissa.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Asunnot Toruńissa – sisätilat</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Sähköposti</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Asunnot Toruńissa – kaupunkipanoraama</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Opi lisää</value>
+  </data>
 </root>

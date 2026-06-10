@@ -520,4 +520,43 @@
   <data name="BonusDiscountLabel" xml:space="preserve">
     <value>Lascaine bónas</value>
   </data>
+  <data name="Summary_QrButtonAriaLabel" xml:space="preserve">
+    <value>Cód QR</value>
+  </data>
+  <data name="Summary_DocumentLinkAriaLabel" xml:space="preserve">
+    <value>Nasc leis an gcáipéis</value>
+  </data>
+  <data name="Summary_ErrorIconAriaLabel" xml:space="preserve">
+    <value>Deilbhín earráide</value>
+  </data>
+  <data name="Summary_StaywellQrAlt" xml:space="preserve">
+    <value>Cód QR StayWell</value>
+  </data>
+  <data name="Summary_ReservationIconAriaLabel" xml:space="preserve">
+    <value>Deilbhín Stádas Áirithinte</value>
+  </data>
+  <data name="Summary_EmailIconAriaLabel" xml:space="preserve">
+    <value>Deilbhín stádais ríomhphoist</value>
+  </data>
+  <data name="Summary_WaitingIconAriaLabel" xml:space="preserve">
+    <value>Deilbhín ag fanacht</value>
+  </data>
+  <data name="Summary_PaymentStatusIconAriaLabel" xml:space="preserve">
+    <value>Deilbhín stádas íocaíochta</value>
+  </data>
+  <data name="Summary_TpayIconAlt" xml:space="preserve">
+    <value>Deilbhín Tpay</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerTitle" xml:space="preserve">
+    <value>Dearbhaímid an íocaíocht</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerMessage" xml:space="preserve">
+    <value>Táimid ag fanacht le deimhniú íocaíochta ó Tpay. Déanfar an stádas áirithinte a nuashonrú go huathoibríoch nuair a shábhálann tú an webhook.</value>
+  </data>
+  <data name="PaymentConfirmationInProgressTitle" xml:space="preserve">
+    <value>Dearbhaímid an íocaíocht</value>
+  </data>
+  <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
+    <value>Tá tú ag fanacht le deimhniú na híocaíochta ó Tpay. Taispeánfaimid stádas reatha d'áirithint duit i gceann tamaill.</value>
+  </data>
 </root>

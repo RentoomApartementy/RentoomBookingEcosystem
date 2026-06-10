@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Over Toruń</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Hoofdmenu van de site</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Terug naar de homepage</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>We werken aan de voorbereiding van dit gedeelte.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Er is een fout opgetreden</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook-icoon</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Menu-sluitpictogram</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>We nodigen je snel uit!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Rentoom Icoon</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Geen aanbiedingen</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Ik kon de toestemming niet redden. Probeer het alsjeblieft opnieuw.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram-icoon</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Aanbiedingen</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Facebook Rentoom Apartments</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Kalendericoon</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Appartementen</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Locatie in aanbouw</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Apartments</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Sluit het bericht</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Menu-icoon</value>
+  </data>
 </root>

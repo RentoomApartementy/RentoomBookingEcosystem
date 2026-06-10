@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Par Toruņu</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Vietnes galvenā izvēlne</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Atgriezties sākumlapā</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Mēs strādājam pie šīs sadaļas sagatavošanas.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Adrese</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Radusies kļūda</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook ikona</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Izvēlnes aizvēršanas ikona</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Aicinām jūs drīzumā!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Rentoom ikona</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Nav piedāvājumu</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Es nevarēju saglabāt piekrišanu. Lūdzu, mēģiniet vēlreiz.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram ikona</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Piedāvājumi</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Facebook Rentoom dzīvokļi</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Kalendāra ikona</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Dzīvokļi</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Vietne tiek veidota</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Sākums</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom dzīvokļi</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Ziņojuma aizvēršana</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Izvēlnes ikona</value>
+  </data>
 </root>

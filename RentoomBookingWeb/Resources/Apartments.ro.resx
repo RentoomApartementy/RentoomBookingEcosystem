@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Preț pe ședere</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Apartamente Toruń - lista completă a cazărilor</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>În prezent nu există apartamente disponibile.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Se încarcă...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Apartamente Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Căutare curată</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Caută un apartament după nume...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Apartamente</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Caută un apartament după nume</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Vezi lista tuturor apartamentelor noastre din Toruń. Cazare confortabilă, locație excelentă aproape de Old Town. Verifică detaliile fiecărui apartament.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Apartamente Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Descoperă gama noastră completă de apartamente confortabile în inima orașului Toruń.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>apartamente de închiriat, cazare, rezervare, rezervare de apartament, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Nu au fost găsite apartamente pentru acest nume.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Apartament</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Nicio ofertă</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Numărul de persoane</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartamente</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Numărul de paturi</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Numărul băilor</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Oferte</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Dimensiunea apartamentului</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Localizare</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Rezultate căutării: {0} oferte - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Verifică apartamentele disponibile între {0} și {1}. Am găsit {2} oferte perfecte pentru tine. Rezervă în siguranță online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Descoperă gama largă de apartamente Rentoom. Confort, locații excelente și standarde ridicate. Perfect pentru sărbători și călătorii de afaceri.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Apartamente de lux de închiriat - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Nu există apartamente disponibile pentru această dată - Rentoom</value>
   </data>
 </root>

@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Η επαφή μπορούσε να αποθηκευτεί, αλλά η συμφωνία δεν μπορούσε να δημιουργηθεί. Ελέγξτε το Bitrix πριν από την εκ νέου αποστολή.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Φωτογραφία</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Συνεργασία</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Επικοινωνία</value>
+  </data>
 </root>

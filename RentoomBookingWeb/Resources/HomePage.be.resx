@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Вы шукаеце жыллё ў Торуні? Rentoom прапануе кватэры для кароткатэрміновай арэнды ў Торуні і спыняецца ў лепшых месцах горада.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Кватэры ў Торуні — інтэр'ер</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Электронная пошта</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Кватэры ў Торуні — гарадская панорама</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Даведацца болей</value>
+  </data>
 </root>

@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakten kunde räddas, men avtalet kunde inte ingås. Kolla Bitrix innan du skickar vidare.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Samarbete</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
 </root>

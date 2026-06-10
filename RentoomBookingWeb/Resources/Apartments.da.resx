@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Pris pr. ophold</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Lejligheder Toruń - komplet oversigt over overnatningsmuligheder</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Der er i øjeblikket ingen lejligheder tilgængelige.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Indlæser...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Lejligheder Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Ryd søgning</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Søg efter en lejlighed ved navn...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Lejligheder</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Søg efter en lejlighed efter navn</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Se en liste over alle vores lejligheder i Toruń. Komfortabel indkvartering, fantastisk beliggenhed tæt på den gamle bydel. Tjek detaljerne for hver lejlighed.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Lejligheder Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Oplev vores fulde udvalg af komfortable lejligheder i hjertet af Toruń.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Lejligheder til leje, indkvartering, booking, lejlighedsreservation, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Der blev ikke fundet nogen lejligheder med det givne navn.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Lejlighed</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Ingen tilbud</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Antal personer</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Lejligheder</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Antal senge</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Antal badeværelser</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Tilbud</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Lejlighedsstørrelse</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Beliggenhed</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Søgeresultater: {0} tilbud - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Tjek ledige lejligheder mellem {0} og {1}. Vi har fundet {2} tilbud, der passer perfekt til dig. Book sikkert online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Oplev det brede udvalg af lejligheder i Rentoom. Komfort, gode beliggenheder og høj standard. Perfekt til ferier og forretningsrejser.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luksuslejligheder til leje - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Der er ingen lejligheder tilgængelige på denne dato - Rentoom</value>
   </data>
 </root>

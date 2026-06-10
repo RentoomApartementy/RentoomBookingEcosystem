@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Maidir le Toruń</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Príomh-Roghchlár an tSuímh</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Fill ar an leathanach baile</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Táimid ag obair ar ullmhú na rannóige seo.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Seoladh</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Tharla earráid</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Deilbhín Facebook</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Deilbhín dúnta roghchláir</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Tugaimid cuireadh duit go luath!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Deilbhín Rentoom</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Gan aon tairiscintí</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Ní raibh mé in ann an toiliú a shábháil. Bain triail as arís le do thoil.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Deilbhín Instagram</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Tairiscintí</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Facebook Árasáin Rentoom</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Deilbhín féilire</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Árasáin</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Suíomh á thógáil</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Baile</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Árasáin Instagram Rentoom</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Dún an teachtaireacht</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Deilbhín an roghchláir</value>
+  </data>
 </root>

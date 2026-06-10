@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Cena par uzturēšanos</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Dzīvokļi Toruņa - pilns naktsmītņu saraksts</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Šobrīd nav pieejami dzīvokļi.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Ielāde ...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Dzīvokļi Toruņa</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Notīrīt meklēšanu</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Meklēt dzīvokli pēc nosaukuma...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Dzīvokļi</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Meklēt dzīvokli pēc nosaukuma</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Skatiet visu mūsu dzīvokļu sarakstu Toruņa. Ērta naktsmītne, lieliska atrašanās vieta netālu no vecrīgas. Pārbaudiet informāciju par katru dzīvokli.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Dzīvokļi Toruņa</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Atklājiet visu mūsu ērto dzīvokļu klāstu pilsētas Toruņa centrā.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>dzīvokļu īre, izmitināšana, rezervēšana, dzīvokļu rezervācija, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Neviens dzīvoklis netika atrasts šim vārdam.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Dzīvoklis</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Nav piedāvājumu</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Cilvēku skaits</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Dzīvokļi</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Gultasvietu skaits</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Vannas istabu skaits</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Piedāvājumi</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Dzīvokļa izmērs</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Atrašanās vieta</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Meklēšanas rezultāti: {0} piedāvājumi - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Pārbaudiet pieejamos dzīvokļus laikā no {0} līdz {1}. Mēs atradām {2} piedāvājumus, kas ir ideāli piemēroti jums. Droši rezervējiet tiešsaistē.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Atklājiet plašo Rentoom dzīvokļu klāstu. Komforts, lieliskas atrašanās vietas un augsts standarts. Ideāli piemērots brīvdienām un komandējumiem.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luksusa dzīvokļu īre - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Šim datumam nav pieejami dzīvokļi - Rentoom</value>
   </data>
 </root>

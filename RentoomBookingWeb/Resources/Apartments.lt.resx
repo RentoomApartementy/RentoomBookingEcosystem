@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Viešnagės kaina</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Apartamentai Torunė - visas apgyvendinimo įstaigų sąrašas</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Šiuo metu laisvų apartamentų nėra.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Įkeliama...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Apartamentai Torunė</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Išvalyti paiešką</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Ieškokite buto pagal pavadinimą...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Apartamentai</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Ieškokite buto pagal pavadinimą</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Peržiūrėkite visų mūsų apartamentų Torunėje sąrašą. Patogus apgyvendinimas, puiki vieta netoli senamiesčio. Patikrinkite kiekvieno buto informaciją.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Apartamentai Torunė</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Atraskite visą mūsų patogių apartamentų asortimentą pačioje Torunės širdyje.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>apartamentų nuoma, apgyvendinimas, užsakymas, apartamentų rezervavimas, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Nebuvo rasta jokių butų pagal vardą.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Apartamentai</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Pasiūlymų nėra</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Žmonių skaičius</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartamentai</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Lovų skaičius</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Vonios kambarių skaičius</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Pasiūlymai</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Buto dydis</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Vieta</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Paieškos rezultatai: {0} pasiūlymai - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Patikrinkite laisvus apartamentus nuo {0} iki {1}. Radome {2} jums puikiai tinkančių pasiūlymų. Saugiai užsisakykite internetu.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Atraskite platų Rentoom apartamentų asortimentą. Komfortas, puikios vietos ir aukštas standartas. Puikiai tinka atostogoms ir verslo kelionėms.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Prabangių apartamentų nuoma - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Šiai datai nėra laisvų apartamentų - Rentoom</value>
   </data>
 </root>

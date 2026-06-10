@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Leder du efter bolig i Toruń? Rentoom tilbyder lejligheder til korttidsudlejning i Toruń og bor på byens bedste beliggenheder.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Lejligheder i Toruń - interiør</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Lejligheder i Toruń - bypanorama</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Læs mere</value>
+  </data>
 </root>
