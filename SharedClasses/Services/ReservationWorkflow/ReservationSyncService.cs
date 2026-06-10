@@ -21,6 +21,7 @@ public interface IReservationWorkflowSyncOperations
 {
     Task EnsurePaymentTotalsAsync(Guid reservationGuid, ReservationRecord record);
     Task<ReservationRecord> RequireReservationAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
+    Task RefreshCrmProjectionAsync(ReservationRecord record, Reservation? idoReservation = null, CancellationToken cancellationToken = default);
     Task<ReservationRecord> EnsureBitrixContactAndDealAsync(ReservationRecord record);
     Task UpdateBitrixDealAsync(ReservationRecord record, string updateReason, Reservation? idoReservation = null);
     Task<Reservation?> FetchIdoReservationAsync(ReservationRecord record, bool refreshCache, CancellationToken cancellationToken);
@@ -82,10 +83,12 @@ public class ReservationSyncService : IReservationSyncService
                 record.IdoStatus = request.IdoStatus;
             }
 
+            record.State.FlowType = ReservationFlowType.ExternalImported;
             record.PaymentStatus = requestedPaymentStatus;
 
             try
             {
+                await _workflowSyncOperations.RefreshCrmProjectionAsync(record);
                 await _store.UpdateAsync(record);
                 record = await _workflowSyncOperations.EnsureBitrixContactAndDealAsync(record);
 
@@ -180,7 +183,8 @@ public class ReservationSyncService : IReservationSyncService
         var apartmentChanged = false;
         if (record.State.StartRequest is not null)
         {
-            if (currentApartmentId.HasValue
+            if (record.State.FlowType == ReservationFlowType.ExternalImported
+                && currentApartmentId.HasValue
                 && currentApartmentId.Value > 0
                 && currentApartmentId.Value != record.State.StartRequest.ObjectId)
             {
@@ -188,7 +192,8 @@ public class ReservationSyncService : IReservationSyncService
                 apartmentChanged = true;
             }
 
-            if (currentApartmentItemId.HasValue
+            if (record.State.FlowType == ReservationFlowType.ExternalImported
+                && currentApartmentItemId.HasValue
                 && currentApartmentItemId.Value > 0
                 && currentApartmentItemId.Value != record.State.StartRequest.ObjectItemId)
             {
@@ -228,11 +233,13 @@ public class ReservationSyncService : IReservationSyncService
             && !record.DealBitrixId.HasValue
             && record.State.Client is not null)
         {
+            await _workflowSyncOperations.RefreshCrmProjectionAsync(record, idoReservation, cancellationToken);
             record = await _workflowSyncOperations.EnsureBitrixContactAndDealAsync(record);
         }
 
         if (!dryRun && record.DealBitrixId.HasValue && (apartmentChanged || idoStatusChanged))
         {
+            await _workflowSyncOperations.RefreshCrmProjectionAsync(record, idoReservation, cancellationToken);
             await _workflowSyncOperations.UpdateBitrixDealAsync(record, "Cron reservation status sync", idoReservation);
             result.BitrixUpdated = true;
         }

@@ -84,133 +84,41 @@
                     
                     @if (IsPaid)
                     {
-                        <div class="status-box success-bg paid-status-box">
-                            <div class="form-wrapper-title-icon-wrapper success-icon-color rounded-full">
-                                <GoogleIcon Name="check_circle" Class="status-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" Filled="true" />
-                            </div> 
-                        
-                            <div class="status-box-text">
-                                <h4 class="success-text-color">@Localizer["ReservationPaid"]</h4>
-                                <span>@Localizer["ReservationPaidInfo"]</span>
-                            </div>
-                        </div>
-                        <div class="status-box info-bg email-status-box">
-                            <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
-                                <GoogleIcon Name="mail" Class="status-icon" AriaLabel="@Localizer["Summary_EmailIconAriaLabel"]" />
-                            </div>
-
-                            <div class="status-box-text">
-                                @if (!string.IsNullOrEmpty(_emailError))
-                                {
-                                    <h4 class="danger-text-color">@Localizer["ReservationDanger"]</h4>
-                                    <span>@_emailError</span>
-                                }
-                                else if (_isCheckingEmail || _emailSent != true)
-                                {
-                                    <h4 class="info-text-color">@EmailDeliveryPendingTitle</h4>
-                                    <span>@EmailDeliveryPendingMessage</span>
-                                }
-                                else
-                                {
-                                    <h4 class="success-text-color">@MessageSentTitle</h4>
-                                    <span>@MessageSentDescription</span>
-                                }
-                            </div>
-                        </div>
-                        <div class="staywell-popup-wrapper">
-                            <button type="button" class="button staywell-trigger-button" @onclick="ToggleStaywellPopup">
-                                <GoogleIcon Name="qr_code_2" Class="staywell-trigger-icon" AriaLabel="@Localizer["Summary_QrButtonAriaLabel"]" />
-                                <span>@StaywellButtonText</span>
-                            </button>
-                            <a href="@staywellLink"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="staywell-mobile-direct-link">
-                                @Localizer["GoToStayWellQRCodePopupMobileText"]
-                            </a>
-
-                            @if (_isStaywellPopupOpen)
-                            {
-                                <div class="staywell-popup" role="dialog" aria-label="@Localizer["StaywellPopupAriaLabel"]">
-                                    <button type="button"
-                                            class="staywell-popup-close"
-                                            @onclick="CloseStaywellPopup"
-                                            aria-label="@Localizer["StaywellPopupCloseAriaLabel"]">×</button>
-
-                                    <div class="staywell-popup-content">
-                                        <div class="staywell-popup-col staywell-qr-col">
-                                            @if (!string.IsNullOrWhiteSpace(_staywellQrDataUri))
-                                            {
-                                                <img src="@_staywellQrDataUri" alt="@Localizer["Summary_StaywellQrAlt"]" class="staywell-qr" />
-                                            }
-                                        </div>
-
-                                        <div class="staywell-popup-col staywell-description-col">
-                                            <strong class="staywell-popup-title">@Localizer["StaywellPopupTitle"]</strong>
-                                            <p class="staywell-popup-description">
-                                                <span class="staywell-popup-description-desktop">@Localizer["StaywellPopupDescription"]</span>
-                                                <span class="staywell-popup-description-mobile">@Localizer["StaywellPopupDescriptionMobile"]</span>
-                                            </p>
-
-                                            <a href="@staywellLink" target="_blank" rel="noopener noreferrer" class="staywell-popup-link">
-                                                <span class="staywell-popup-link-desktop">@Localizer["GoToStayWellQRCodePopupText"]</span>
-                                                <span class="staywell-popup-link-mobile">@Localizer["GoToStayWellQRCodePopupMobileText"]</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-
-                       
+                        <SummaryPaidCompletedView EmailSent="@_emailSent"
+                                                  IsCheckingEmail="@_isCheckingEmail"
+                                                  EmailError="@_emailError"
+                                                  EmailDeliveryPendingTitle="@EmailDeliveryPendingTitle"
+                                                  EmailDeliveryPendingMessage="@EmailDeliveryPendingMessage"
+                                                  MessageSentTitle="@MessageSentTitle"
+                                                  MessageSentDescription="@MessageSentDescription"
+                                                  StaywellButtonText="@StaywellButtonText"
+                                                  StaywellLink="@staywellLink"
+                                                  IsStaywellPopupOpen="@_isStaywellPopupOpen"
+                                                  StaywellQrDataUri="@_staywellQrDataUri"
+                                                  OnToggleStaywell="ToggleStaywellPopup"
+                                                  OnCloseStaywell="CloseStaywellPopup" />
                     }
                     else if (IsPaymentInitiated && !ShouldShowTermsAndPayment)
                     {
-                        <div class="status-box info-bg">
-                            <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
-                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="@Localizer["Summary_WaitingIconAriaLabel"]" />
-                            </div>
-
-                            <div class="status-box-text">
-                                <h4 class="info-text-color">@Localizer["WaitingPayment"]</h4>
-                                <span>@Localizer["NotRefreshPage"]</span>
-                            </div>
-                        </div>
-
-                        <Button OnClick="RetryPayment" Disabled="@IsRetryPaymentDisabled">
-                            @RetryPaymentButtonText
-                        </Button>
+                        <SummaryPaymentPendingView IsFailed="false"
+                                                   Title="@Localizer["WaitingPayment"]"
+                                                   Message="@Localizer["NotRefreshPage"]"
+                                                   IsRetryPaymentDisabled="@IsRetryPaymentDisabled"
+                                                   RetryPaymentButtonText="@RetryPaymentButtonText"
+                                                   OnRetryPayment="RetryPayment" />
                     }
                     else if (IsPaymentFailed)
                     {
-                        <div class="status-box danger-bg">
-                            <div class="form-wrapper-title-icon-wrapper danger-icon-color rounded-full">
-                                <GoogleIcon Name="error" Class="status-icon" AriaLabel="@Localizer["Summary_ErrorIconAriaLabel"]" Filled="true" />
-                            </div>
-
-                            <div class="status-box-text">
-                                <h4 class="danger-text-color">@Localizer["PaymentFailed"]</h4>
-                                <span>@Localizer["PaymentFailedText"]</span>
-                            </div>
-                        </div>
-
-                        <Button OnClick="RetryPayment" Disabled="@IsRetryPaymentDisabled">
-                            @RetryPaymentButtonText
-                        </Button>
+                        <SummaryPaymentPendingView IsFailed="true"
+                                                   Title="@Localizer["PaymentFailed"]"
+                                                   Message="@Localizer["PaymentFailedText"]"
+                                                   IsRetryPaymentDisabled="@IsRetryPaymentDisabled"
+                                                   RetryPaymentButtonText="@RetryPaymentButtonText"
+                                                   OnRetryPayment="RetryPayment" />
                     }
                     else if (ShouldShowTermsAndPayment)
                     {
-                        <div class="status-box pending-bg">
-                            <div class="form-wrapper-title-icon-wrapper pending-icon-color rounded-full">
-                                <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
-                            </div> 
-                        
-                            <div class="status-box-text">
-                                <h4 class="pending-text-color">@Localizer["ReservationPending"]</h4>
-                                <span>@Localizer["ReservationPendingInfo"]</span>
-                            </div>
-                        </div>
-                        
+                        <SummaryWorkflowPendingView>
                         <div class="customer-terms-section">
                             @if (_isTermsLoading)
                             {
@@ -287,6 +195,7 @@
                                 @CancelReservationButtonText
                             </Button>
                         }
+                        </SummaryWorkflowPendingView>
                     }
                     else if (@_summary.IdoStatus != "accepted")
                     {
