@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
@@ -24,12 +25,15 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly IApartmentMediaCatalogService _apartmentMediaCatalogService;
         private readonly ILogger<ApartmentsViewModel> _logger;
         private static readonly TimeSpan SuggestionsFetchTimeout = TimeSpan.FromSeconds(30);
+        private static readonly TimeSpan MediaWarmTimeout = TimeSpan.FromSeconds(5);
 
         private string? _token;
         private const int PageSize = 12;
         private bool _isInitialized = false;
         private ApartmentFilters? _currentFilters = null;
         private CancellationTokenSource? _suggestionsCts;
+        private readonly object _mediaWarmLock = new();
+        private CancellationTokenSource _mediaWarmGenerationCts = new();
         
         private List<PricingOffer> _allMatchingOffers = new();
         private List<ApartmentObject> _matchingMetaItems = new();
@@ -103,6 +107,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public async Task InitializeAsync(CancellationToken ct = default)
         {
             CancelSuggestionsFetch();
+            CancelMediaWarmOperations();
             var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
             var query = QueryHelpers.ParseQuery(uri.Query);
             string GetVal(string key) => query.TryGetValue(key, out var val) ? val.ToString() : "";
@@ -172,7 +177,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             {
                 HasMore = true; ApartmentsIsLoading = false;
                 ResetPriceScales();
-                await LoadMoreAsync();
+                await LoadMoreAsync(ct);
             }
             
             _isInitialized = true;
@@ -182,6 +187,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public async Task HandleSearchAsync(Dictionary<string, string> query)
         {
             CancelSuggestionsFetch();
+            CancelMediaWarmOperations();
             UpdateUrlParams(query);
             
             Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null; 
@@ -208,6 +214,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public async Task HandleFiltersChangedAsync((ApartmentFilters Filters, int MinPrice, int MaxPrice) data)
         {
             CancelSuggestionsFetch();
+            CancelMediaWarmOperations();
             bool metaChanged = IsMetaFilterChanged(data.Filters);
 
             _currentFilters = data.Filters;
@@ -355,11 +362,18 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             return !list1.Except(list2).Any() && !list2.Except(list1).Any();
         }
 
-        public async Task LoadMoreAsync()
+        public async Task LoadMoreAsync(CancellationToken cancellationToken = default)
         {
-            if (ApartmentsIsLoading || !HasMore) return;
+            if (cancellationToken.IsCancellationRequested || ApartmentsIsLoading || !HasMore) return;
             
             if (!await _loadLock.WaitAsync(0)) return;
+
+            var loadStopwatch = Stopwatch.StartNew();
+            Task? mediaWarmTask = null;
+            var requestedPageSize = PageSize;
+            var continuationToken = _token;
+            var returnedCount = 0;
+            var visibleItemsAfterLoad = Items.Count;
 
             try
             {
@@ -375,13 +389,23 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
                 ApartmentsIsLoading = true; 
                 Error = null; 
-                NotifyStateChanged();
+                NotifyStateChanged(force: true);
 
-                var requestedPageSize = remainingCount.HasValue
+                requestedPageSize = remainingCount.HasValue
                     ? Math.Min(PageSize, remainingCount.Value)
                     : PageSize;
+                continuationToken = _token;
+
+                _logger.LogInformation(
+                    "Apartment list load more started. RequestedPageSize={RequestedPageSize}, CurrentVisibleItems={CurrentVisibleItems}, ContinuationToken={ContinuationToken}, HasMore={HasMore}, IsSearch={IsSearch}",
+                    requestedPageSize,
+                    Items.Count,
+                    continuationToken,
+                    HasMore,
+                    IsSearch);
 
                 var page = await _apartmentsService.GetApartmentsByPageAsync(_token, top: requestedPageSize);
+                returnedCount = page?.Items?.Count ?? 0;
                 if (page?.Items is { Count: > 0 })
                 {
                     Items.AddRange(page.Items);
@@ -394,20 +418,63 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                         HasMore = false;
                     }
 
-                    await WarmMediaCacheForItemsAsync(page.Items);
+                    visibleItemsAfterLoad = Items.Count;
+                    mediaWarmTask = StartWarmMediaCacheForItemsAsync(page.Items, cancellationToken);
 
                     if (IsSearch)
                     {
                         await FetchOffersForVisibleItems(page.Items);
                     }
                 }
-                else { HasMore = false; }
+                else
+                {
+                    HasMore = false;
+                    visibleItemsAfterLoad = Items.Count;
+                }
+
+                _logger.LogInformation(
+                    "Apartment list load more completed. RequestedPageSize={RequestedPageSize}, ReturnedCount={ReturnedCount}, NextToken={NextToken}, HasMore={HasMore}, VisibleItems={VisibleItems}, ElapsedMs={ElapsedMs}",
+                    requestedPageSize,
+                    returnedCount,
+                    _token,
+                    HasMore,
+                    visibleItemsAfterLoad,
+                    loadStopwatch.ElapsedMilliseconds);
             }
-            catch (Exception ex) { Error = ex.Message; HasMore = false; }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                _logger.LogDebug(
+                    "Apartment list load more canceled. RequestedPageSize={RequestedPageSize}, ContinuationToken={ContinuationToken}, VisibleItems={VisibleItems}, ElapsedMs={ElapsedMs}",
+                    requestedPageSize,
+                    continuationToken,
+                    Items.Count,
+                    loadStopwatch.ElapsedMilliseconds);
+            }
+            catch (Exception ex)
+            {
+                Error = ex.Message;
+                HasMore = false;
+                _logger.LogWarning(ex,
+                    "Apartment list load more failed. RequestedPageSize={RequestedPageSize}, ContinuationToken={ContinuationToken}, VisibleItems={VisibleItems}, ElapsedMs={ElapsedMs}",
+                    requestedPageSize,
+                    continuationToken,
+                    Items.Count,
+                    loadStopwatch.ElapsedMilliseconds);
+            }
             finally 
             { 
                 ApartmentsIsLoading = false; 
-                NotifyStateChanged(); 
+                NotifyStateChanged(force: true); 
+
+                if (mediaWarmTask is { IsCompleted: false })
+                {
+                    _logger.LogInformation(
+                        "Apartment list batch rendered before media warm completion. RequestedPageSize={RequestedPageSize}, ReturnedCount={ReturnedCount}, VisibleItems={VisibleItems}",
+                        requestedPageSize,
+                        returnedCount,
+                        visibleItemsAfterLoad);
+                }
+
                 _loadLock.Release();
             }
         }
@@ -453,7 +520,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             catch { }
         }
 
-        private async Task WarmMediaCacheForItemsAsync(IEnumerable<ApartmentObject> items)
+        private Task StartWarmMediaCacheForItemsAsync(IEnumerable<ApartmentObject> items, CancellationToken cancellationToken)
         {
             var apartmentIds = items
                 .Select(item => item.Id)
@@ -463,17 +530,73 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             if (apartmentIds.Count == 0)
             {
-                return;
+                return Task.CompletedTask;
             }
+
+            var linkedCts = CreateMediaWarmLinkedTokenSource(cancellationToken);
+            return WarmMediaCacheForItemsAsync(apartmentIds, linkedCts);
+        }
+
+        private async Task WarmMediaCacheForItemsAsync(IReadOnlyCollection<int> apartmentIds, CancellationTokenSource linkedCts)
+        {
+            var warmStopwatch = Stopwatch.StartNew();
+            var apartmentIdsCsv = string.Join(",", apartmentIds);
 
             try
             {
-                var mediaByApartmentId = await _apartmentMediaCatalogService.GetApartmentMediaBatchAsync(apartmentIds);
+                _logger.LogInformation(
+                    "Apartment media warm started. ApartmentCount={ApartmentCount}, ApartmentIds={ApartmentIds}, TimeoutSeconds={TimeoutSeconds}",
+                    apartmentIds.Count,
+                    apartmentIdsCsv,
+                    MediaWarmTimeout.TotalSeconds);
+
+                using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(linkedCts.Token);
+                timeoutCts.CancelAfter(MediaWarmTimeout);
+
+                var mediaByApartmentId = await _apartmentMediaCatalogService.GetApartmentMediaBatchAsync(apartmentIds, timeoutCts.Token);
+                if (linkedCts.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 _mediaCache.PrimeMediaBatch(mediaByApartmentId);
+
+                _logger.LogInformation(
+                    "Apartment media warm completed. ApartmentCount={ApartmentCount}, WarmedApartmentCount={WarmedApartmentCount}, ApartmentIds={ApartmentIds}, ElapsedMs={ElapsedMs}",
+                    apartmentIds.Count,
+                    mediaByApartmentId.Count,
+                    apartmentIdsCsv,
+                    warmStopwatch.ElapsedMilliseconds);
+            }
+            catch (OperationCanceledException) when (linkedCts.IsCancellationRequested)
+            {
+                _logger.LogDebug(
+                    "Apartment media warm canceled. ApartmentCount={ApartmentCount}, ApartmentIds={ApartmentIds}, ElapsedMs={ElapsedMs}",
+                    apartmentIds.Count,
+                    apartmentIdsCsv,
+                    warmStopwatch.ElapsedMilliseconds);
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning(
+                    "Apartment media warm timed out. ApartmentCount={ApartmentCount}, ApartmentIds={ApartmentIds}, TimeoutSeconds={TimeoutSeconds}, ElapsedMs={ElapsedMs}",
+                    apartmentIds.Count,
+                    apartmentIdsCsv,
+                    MediaWarmTimeout.TotalSeconds,
+                    warmStopwatch.ElapsedMilliseconds);
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Failed to warm apartment media cache for {ApartmentCount} apartments.", apartmentIds.Count);
+                _logger.LogWarning(
+                    ex,
+                    "Apartment media warm failed. ApartmentCount={ApartmentCount}, ApartmentIds={ApartmentIds}, ElapsedMs={ElapsedMs}",
+                    apartmentIds.Count,
+                    apartmentIdsCsv,
+                    warmStopwatch.ElapsedMilliseconds);
+            }
+            finally
+            {
+                linkedCts.Dispose();
             }
         }
 
@@ -606,6 +729,30 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             UpdateSuggestionsLoadingState();
         }
 
+        private void CancelMediaWarmOperations()
+        {
+            CancellationTokenSource currentCts;
+
+            lock (_mediaWarmLock)
+            {
+                currentCts = _mediaWarmGenerationCts;
+                _mediaWarmGenerationCts = new CancellationTokenSource();
+            }
+
+            currentCts.Cancel();
+            currentCts.Dispose();
+        }
+
+        private CancellationTokenSource CreateMediaWarmLinkedTokenSource(CancellationToken cancellationToken)
+        {
+            lock (_mediaWarmLock)
+            {
+                return cancellationToken.CanBeCanceled
+                    ? CancellationTokenSource.CreateLinkedTokenSource(_mediaWarmGenerationCts.Token, cancellationToken)
+                    : CancellationTokenSource.CreateLinkedTokenSource(_mediaWarmGenerationCts.Token);
+            }
+        }
+
         private void SetSuggestionsLoading(int runId, bool isLoading)
         {
             if (runId != _suggestionsRunId) return;
@@ -724,7 +871,10 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 filters.ApartmentLocationsFilter = locationNames.Any() ? locationNames : null;
                 filters.ApartmentAmenitiesFilter = amenityIds.Any() ? amenityIds : null;
             }
-            catch (Exception ex) { Console.WriteLine(ex); }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to reconstruct apartment filters from URL.");
+            }
             return filters;
         }
 
@@ -787,12 +937,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         
         private void ResetPriceScales() { ScaleMinPrice = 0; ScaleMaxPrice = 0; FilterMinPrice = 0; FilterMaxPrice = 0; }
         public void ToggleView(bool isMap) { IsMapView = isMap; NotifyStateChanged(); }
-        private void NotifyStateChanged()
+        private void NotifyStateChanged(bool force = false)
         {
             lock (_notifyLock)
             {
                 var now = DateTime.UtcNow;
-                if ((now - _lastNotifyTime).TotalMilliseconds < 100) return;
+                if (!force && (now - _lastNotifyTime).TotalMilliseconds < 100) return;
                 _lastNotifyTime = now;
             }
             
@@ -802,7 +952,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in NotifyStateChanged: {ex.Message}");
+                _logger.LogWarning(ex, "Apartments view model state notification failed.");
             }
         }
     }

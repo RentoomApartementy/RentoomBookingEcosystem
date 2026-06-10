@@ -387,7 +387,9 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
     httpsOnly: true
     siteConfig: rentoomWebIsLinux ? {
       linuxFxVersion: 'DOTNETCORE|8.0'
-      alwaysOn: false
+      alwaysOn: environment == 'prod'
+      webSocketsEnabled: true
+      http20Enabled: true
       appSettings: [
         {
           name: 'ASPNETCORE_ENVIRONMENT'
@@ -548,7 +550,9 @@ resource rentoomWeb 'Microsoft.Web/sites@2025-03-01' = {
       ]
     } : {
       netFrameworkVersion: 'v8.0'
-      alwaysOn: false
+      alwaysOn: environment == 'prod'
+      webSocketsEnabled: true
+      http20Enabled: true
       appSettings: [
         {
           name: 'ASPNETCORE_ENVIRONMENT'
