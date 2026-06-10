@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.41.2.15936",
-      "templateHash": "853651217896266282"
+      "templateHash": "3371967574550525527"
     }
   },
   "parameters": {
@@ -735,7 +735,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.41.2.15936",
-              "templateHash": "13677186508919713498"
+              "templateHash": "126319421177132290"
             }
           },
           "parameters": {
@@ -1168,8 +1168,13 @@
             "rentoomWebIsLinux": "[equals(parameters('environment'), 'prod')]",
             "idoBookingUseDummySetting": "[if(parameters('idoBookingUseDummy'), 'True', 'False')]",
             "postgresPoolingEnabledSetting": "[if(parameters('postgresPoolingEnabled'), 'true', 'false')]",
+            "apartmentMediaCardMaxWidth": 800,
+            "apartmentMediaCardMaxHeight": 520,
+            "apartmentMediaCardWebpQuality": 75,
             "staywellDbConnectionString": "[format('Server={0}.postgres.database.azure.com;Database={1};Port=5432;User Id={2};Password={3};Ssl Mode=VerifyFull;Include Error Detail=True', parameters('postgresServerName'), parameters('staywellDbName'), parameters('staywellDbAppUser'), parameters('staywellDbAppPassword'))]",
             "rentoomAppDbConnectionString": "[format('Server={0}.postgres.database.azure.com;Database={1};Port=5432;User Id={2};Password={3};Ssl Mode=VerifyFull;Include Error Detail=True', parameters('postgresServerName'), parameters('rentoomAppDbName'), parameters('rentoomAppDbUser'), parameters('rentoomAppDbPassword'))]",
+            "apartmentPhotosStorageAccountName": "rentoombookingstorage",
+            "apartmentPhotosContainerName": "[format('apartmentsphotos-{0}', parameters('environment'))]",
             "storageBlobDataOwnerRoleId": "b7e6dc6d-f1e8-4753-8033-0f276bb0955b",
             "storageQueueDataContributorRoleId": "974c5e8b-45b9-4653-ba55-5f855dd0fb88",
             "storageAccountContributorRoleId": "17d1049b-9a84-46fb-8f53-869881c3d3ab"
@@ -1258,8 +1263,8 @@
             },
             {
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2023-05-01",
-              "name": "[parameters('rentoomDataStorageAccountName')]",
+              "apiVersion": "2025-06-01",
+              "name": "[variables('apartmentPhotosStorageAccountName')]",
               "location": "[parameters('location')]",
               "kind": "StorageV2",
               "sku": {
@@ -1272,6 +1277,26 @@
                 "allowBlobPublicAccess": false,
                 "publicNetworkAccess": "Enabled"
               }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices",
+              "apiVersion": "2025-06-01",
+              "name": "[format('{0}/{1}', variables('apartmentPhotosStorageAccountName'), 'default')]",
+              "properties": {},
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('apartmentPhotosStorageAccountName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2025-06-01",
+              "name": "[format('{0}/{1}/{2}', variables('apartmentPhotosStorageAccountName'), 'default', variables('apartmentPhotosContainerName'))]",
+              "properties": {
+                "publicAccess": "None"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('apartmentPhotosStorageAccountName'), 'default')]"
+              ]
             },
             {
               "type": "Microsoft.Web/serverfarms",
@@ -1303,10 +1328,10 @@
               "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webPlanName'))]",
                 "httpsOnly": true,
-                "siteConfig": "[if(variables('rentoomWebIsLinux'), createObject('linuxFxVersion', 'DOTNETCORE|8.0', 'alwaysOn', false(), 'appSettings', createArray(createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', variables('applicationRuntimeEnvironment')), createObject('name', 'WEBSITE_RUN_FROM_PACKAGE', 'value', '1'), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString), createObject('name', 'ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL', 'value', variables('staywellDbConnectionString')), createObject('name', 'ConnectionStrings__RentoomDbConnectionString', 'value', variables('rentoomAppDbConnectionString')), createObject('name', 'PostgresPooling__Enabled', 'value', variables('postgresPoolingEnabledSetting')), createObject('name', 'PostgresPooling__MinimumPoolSize', 'value', string(parameters('postgresPoolingMinimumPoolSize'))), createObject('name', 'PostgresPooling__MaximumPoolSize', 'value', string(parameters('rentoomWebPostgresMaximumPoolSize'))), createObject('name', 'PostgresPooling__ConnectionIdleLifetime', 'value', string(parameters('postgresPoolingConnectionIdleLifetime'))), createObject('name', 'PostgresPooling__ConnectionPruningInterval', 'value', string(parameters('postgresPoolingConnectionPruningInterval'))), createObject('name', 'PostgresPooling__Timeout', 'value', string(parameters('postgresPoolingTimeout'))), createObject('name', 'PostgresPooling__CommandTimeout', 'value', string(parameters('postgresPoolingCommandTimeout'))), createObject('name', 'Tpay__ApiBaseUrl', 'value', parameters('tpayApiBaseUrl')), createObject('name', 'Tpay__ClientId', 'value', parameters('tpayClientId')), createObject('name', 'Tpay__ClientSecret', 'value', parameters('tpayClientSecret')), createObject('name', 'Tpay__MerchantSecurityCode', 'value', parameters('tpayMerchantSecurityCode')), createObject('name', 'Tpay__JwsCertPrefix', 'value', parameters('tpayJwsCertPrefix')), createObject('name', 'Tpay__RootCaPemUrl', 'value', parameters('tpayRootCaPemUrl')), createObject('name', 'Tpay__NotificationUrl', 'value', variables('tpayNotificationUrl')), createObject('name', 'Tpay__RentoomSiteBaseUrl', 'value', variables('normalizedTpayWebRentoomSiteBaseUrl')), createObject('name', 'Tpay__SuccessUrl', 'value', parameters('tpayWebSuccessUrl')), createObject('name', 'Tpay__ErrorUrl', 'value', parameters('tpayWebErrorUrl')), createObject('name', 'IdoBooking__UseDummy', 'value', variables('idoBookingUseDummySetting')), createObject('name', 'IdoBooking__DummyReservationTemplateKey', 'value', parameters('idoBookingDummyReservationTemplateKey')), createObject('name', 'IDOBOOKING_BASE_API_URL', 'value', parameters('idoBookingBaseApiUrl')), createObject('name', 'IDOBOOKING_API_USER', 'value', parameters('idoBookingApiUser')), createObject('name', 'IDOBOOKING_API_PWD', 'value', parameters('idoBookingApiPassword')), createObject('name', 'StayWellUrlBase', 'value', variables('staywellUrlBase')), createObject('name', 'StayWellReservationUrlBase', 'value', variables('staywellReservationUrlBase')), createObject('name', 'Bitrix__ReservationPipelineName', 'value', parameters('bitrixReservationPipelineName')), createObject('name', 'Storage__Container', 'value', parameters('uploadsStorageContainerName')), createObject('name', 'Storage__ConnectionString', 'value', ''), createObject('name', 'Storage__AccountName', 'value', parameters('rentoomDataStorageAccountName')))), createObject('netFrameworkVersion', 'v8.0', 'alwaysOn', false(), 'appSettings', createArray(createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', variables('applicationRuntimeEnvironment')), createObject('name', 'WEBSITE_RUN_FROM_PACKAGE', 'value', '1'), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString), createObject('name', 'ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL', 'value', variables('staywellDbConnectionString')), createObject('name', 'ConnectionStrings__RentoomDbConnectionString', 'value', variables('rentoomAppDbConnectionString')), createObject('name', 'PostgresPooling__Enabled', 'value', variables('postgresPoolingEnabledSetting')), createObject('name', 'PostgresPooling__MinimumPoolSize', 'value', string(parameters('postgresPoolingMinimumPoolSize'))), createObject('name', 'PostgresPooling__MaximumPoolSize', 'value', string(parameters('rentoomWebPostgresMaximumPoolSize'))), createObject('name', 'PostgresPooling__ConnectionIdleLifetime', 'value', string(parameters('postgresPoolingConnectionIdleLifetime'))), createObject('name', 'PostgresPooling__ConnectionPruningInterval', 'value', string(parameters('postgresPoolingConnectionPruningInterval'))), createObject('name', 'PostgresPooling__Timeout', 'value', string(parameters('postgresPoolingTimeout'))), createObject('name', 'PostgresPooling__CommandTimeout', 'value', string(parameters('postgresPoolingCommandTimeout'))), createObject('name', 'Tpay__ApiBaseUrl', 'value', parameters('tpayApiBaseUrl')), createObject('name', 'Tpay__ClientId', 'value', parameters('tpayClientId')), createObject('name', 'Tpay__ClientSecret', 'value', parameters('tpayClientSecret')), createObject('name', 'Tpay__MerchantSecurityCode', 'value', parameters('tpayMerchantSecurityCode')), createObject('name', 'Tpay__JwsCertPrefix', 'value', parameters('tpayJwsCertPrefix')), createObject('name', 'Tpay__RootCaPemUrl', 'value', parameters('tpayRootCaPemUrl')), createObject('name', 'Tpay__NotificationUrl', 'value', variables('tpayNotificationUrl')), createObject('name', 'Tpay__RentoomSiteBaseUrl', 'value', variables('normalizedTpayWebRentoomSiteBaseUrl')), createObject('name', 'Tpay__SuccessUrl', 'value', parameters('tpayWebSuccessUrl')), createObject('name', 'Tpay__ErrorUrl', 'value', parameters('tpayWebErrorUrl')), createObject('name', 'IdoBooking__UseDummy', 'value', variables('idoBookingUseDummySetting')), createObject('name', 'IdoBooking__DummyReservationTemplateKey', 'value', parameters('idoBookingDummyReservationTemplateKey')), createObject('name', 'IDOBOOKING_BASE_API_URL', 'value', parameters('idoBookingBaseApiUrl')), createObject('name', 'IDOBOOKING_API_USER', 'value', parameters('idoBookingApiUser')), createObject('name', 'IDOBOOKING_API_PWD', 'value', parameters('idoBookingApiPassword')), createObject('name', 'StayWellUrlBase', 'value', variables('staywellUrlBase')), createObject('name', 'StayWellReservationUrlBase', 'value', variables('staywellReservationUrlBase')), createObject('name', 'Bitrix__ReservationPipelineName', 'value', parameters('bitrixReservationPipelineName')), createObject('name', 'Storage__Container', 'value', parameters('uploadsStorageContainerName')), createObject('name', 'Storage__ConnectionString', 'value', ''), createObject('name', 'Storage__AccountName', 'value', parameters('rentoomDataStorageAccountName')))))]"
+                "siteConfig": "[if(variables('rentoomWebIsLinux'), createObject('linuxFxVersion', 'DOTNETCORE|8.0', 'alwaysOn', equals(parameters('environment'), 'prod'), 'webSocketsEnabled', true(), 'http20Enabled', true(), 'appSettings', createArray(createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', variables('applicationRuntimeEnvironment')), createObject('name', 'WEBSITE_RUN_FROM_PACKAGE', 'value', '1'), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString), createObject('name', 'ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL', 'value', variables('staywellDbConnectionString')), createObject('name', 'ConnectionStrings__RentoomDbConnectionString', 'value', variables('rentoomAppDbConnectionString')), createObject('name', 'PostgresPooling__Enabled', 'value', variables('postgresPoolingEnabledSetting')), createObject('name', 'PostgresPooling__MinimumPoolSize', 'value', string(parameters('postgresPoolingMinimumPoolSize'))), createObject('name', 'PostgresPooling__MaximumPoolSize', 'value', string(parameters('rentoomWebPostgresMaximumPoolSize'))), createObject('name', 'PostgresPooling__ConnectionIdleLifetime', 'value', string(parameters('postgresPoolingConnectionIdleLifetime'))), createObject('name', 'PostgresPooling__ConnectionPruningInterval', 'value', string(parameters('postgresPoolingConnectionPruningInterval'))), createObject('name', 'PostgresPooling__Timeout', 'value', string(parameters('postgresPoolingTimeout'))), createObject('name', 'PostgresPooling__CommandTimeout', 'value', string(parameters('postgresPoolingCommandTimeout'))), createObject('name', 'Tpay__ApiBaseUrl', 'value', parameters('tpayApiBaseUrl')), createObject('name', 'Tpay__ClientId', 'value', parameters('tpayClientId')), createObject('name', 'Tpay__ClientSecret', 'value', parameters('tpayClientSecret')), createObject('name', 'Tpay__MerchantSecurityCode', 'value', parameters('tpayMerchantSecurityCode')), createObject('name', 'Tpay__JwsCertPrefix', 'value', parameters('tpayJwsCertPrefix')), createObject('name', 'Tpay__RootCaPemUrl', 'value', parameters('tpayRootCaPemUrl')), createObject('name', 'Tpay__NotificationUrl', 'value', variables('tpayNotificationUrl')), createObject('name', 'Tpay__RentoomSiteBaseUrl', 'value', variables('normalizedTpayWebRentoomSiteBaseUrl')), createObject('name', 'Tpay__SuccessUrl', 'value', parameters('tpayWebSuccessUrl')), createObject('name', 'Tpay__ErrorUrl', 'value', parameters('tpayWebErrorUrl')), createObject('name', 'IdoBooking__UseDummy', 'value', variables('idoBookingUseDummySetting')), createObject('name', 'IdoBooking__DummyReservationTemplateKey', 'value', parameters('idoBookingDummyReservationTemplateKey')), createObject('name', 'IDOBOOKING_BASE_API_URL', 'value', parameters('idoBookingBaseApiUrl')), createObject('name', 'IDOBOOKING_API_USER', 'value', parameters('idoBookingApiUser')), createObject('name', 'IDOBOOKING_API_PWD', 'value', parameters('idoBookingApiPassword')), createObject('name', 'StayWellUrlBase', 'value', variables('staywellUrlBase')), createObject('name', 'StayWellReservationUrlBase', 'value', variables('staywellReservationUrlBase')), createObject('name', 'Bitrix__ReservationPipelineName', 'value', parameters('bitrixReservationPipelineName')), createObject('name', 'Storage__Container', 'value', parameters('uploadsStorageContainerName')), createObject('name', 'Storage__ConnectionString', 'value', ''), createObject('name', 'Storage__AccountName', 'value', variables('apartmentPhotosStorageAccountName')), createObject('name', 'ApartmentPhotosStorage__Container', 'value', variables('apartmentPhotosContainerName')), createObject('name', 'ApartmentPhotosStorage__ConnectionString', 'value', ''), createObject('name', 'ApartmentPhotosStorage__AccountName', 'value', variables('apartmentPhotosStorageAccountName')), createObject('name', 'ApartmentMediaVariants__CardMaxWidth', 'value', string(variables('apartmentMediaCardMaxWidth'))), createObject('name', 'ApartmentMediaVariants__CardMaxHeight', 'value', string(variables('apartmentMediaCardMaxHeight'))), createObject('name', 'ApartmentMediaVariants__CardWebpQuality', 'value', string(variables('apartmentMediaCardWebpQuality'))))), createObject('netFrameworkVersion', 'v8.0', 'alwaysOn', equals(parameters('environment'), 'prod'), 'webSocketsEnabled', true(), 'http20Enabled', true(), 'appSettings', createArray(createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', variables('applicationRuntimeEnvironment')), createObject('name', 'WEBSITE_RUN_FROM_PACKAGE', 'value', '1'), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName')), '2020-02-02').ConnectionString), createObject('name', 'ConnectionStrings__POSTGRES_RENTOOM_BOOKING_DB_LOCAL', 'value', variables('staywellDbConnectionString')), createObject('name', 'ConnectionStrings__RentoomDbConnectionString', 'value', variables('rentoomAppDbConnectionString')), createObject('name', 'PostgresPooling__Enabled', 'value', variables('postgresPoolingEnabledSetting')), createObject('name', 'PostgresPooling__MinimumPoolSize', 'value', string(parameters('postgresPoolingMinimumPoolSize'))), createObject('name', 'PostgresPooling__MaximumPoolSize', 'value', string(parameters('rentoomWebPostgresMaximumPoolSize'))), createObject('name', 'PostgresPooling__ConnectionIdleLifetime', 'value', string(parameters('postgresPoolingConnectionIdleLifetime'))), createObject('name', 'PostgresPooling__ConnectionPruningInterval', 'value', string(parameters('postgresPoolingConnectionPruningInterval'))), createObject('name', 'PostgresPooling__Timeout', 'value', string(parameters('postgresPoolingTimeout'))), createObject('name', 'PostgresPooling__CommandTimeout', 'value', string(parameters('postgresPoolingCommandTimeout'))), createObject('name', 'Tpay__ApiBaseUrl', 'value', parameters('tpayApiBaseUrl')), createObject('name', 'Tpay__ClientId', 'value', parameters('tpayClientId')), createObject('name', 'Tpay__ClientSecret', 'value', parameters('tpayClientSecret')), createObject('name', 'Tpay__MerchantSecurityCode', 'value', parameters('tpayMerchantSecurityCode')), createObject('name', 'Tpay__JwsCertPrefix', 'value', parameters('tpayJwsCertPrefix')), createObject('name', 'Tpay__RootCaPemUrl', 'value', parameters('tpayRootCaPemUrl')), createObject('name', 'Tpay__NotificationUrl', 'value', variables('tpayNotificationUrl')), createObject('name', 'Tpay__RentoomSiteBaseUrl', 'value', variables('normalizedTpayWebRentoomSiteBaseUrl')), createObject('name', 'Tpay__SuccessUrl', 'value', parameters('tpayWebSuccessUrl')), createObject('name', 'Tpay__ErrorUrl', 'value', parameters('tpayWebErrorUrl')), createObject('name', 'IdoBooking__UseDummy', 'value', variables('idoBookingUseDummySetting')), createObject('name', 'IdoBooking__DummyReservationTemplateKey', 'value', parameters('idoBookingDummyReservationTemplateKey')), createObject('name', 'IDOBOOKING_BASE_API_URL', 'value', parameters('idoBookingBaseApiUrl')), createObject('name', 'IDOBOOKING_API_USER', 'value', parameters('idoBookingApiUser')), createObject('name', 'IDOBOOKING_API_PWD', 'value', parameters('idoBookingApiPassword')), createObject('name', 'StayWellUrlBase', 'value', variables('staywellUrlBase')), createObject('name', 'StayWellReservationUrlBase', 'value', variables('staywellReservationUrlBase')), createObject('name', 'Bitrix__ReservationPipelineName', 'value', parameters('bitrixReservationPipelineName')), createObject('name', 'Storage__Container', 'value', parameters('uploadsStorageContainerName')), createObject('name', 'Storage__ConnectionString', 'value', ''), createObject('name', 'Storage__AccountName', 'value', variables('apartmentPhotosStorageAccountName')), createObject('name', 'ApartmentPhotosStorage__Container', 'value', variables('apartmentPhotosContainerName')), createObject('name', 'ApartmentPhotosStorage__ConnectionString', 'value', ''), createObject('name', 'ApartmentPhotosStorage__AccountName', 'value', variables('apartmentPhotosStorageAccountName')), createObject('name', 'ApartmentMediaVariants__CardMaxWidth', 'value', string(variables('apartmentMediaCardMaxWidth'))), createObject('name', 'ApartmentMediaVariants__CardMaxHeight', 'value', string(variables('apartmentMediaCardMaxHeight'))), createObject('name', 'ApartmentMediaVariants__CardWebpQuality', 'value', string(variables('apartmentMediaCardWebpQuality'))))))]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('rentoomDataStorageAccountName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('apartmentPhotosStorageAccountName'))]",
                 "[resourceId('Microsoft.Insights/components', parameters('rentoomWebAppInsightsName'))]",
                 "[resourceId('Microsoft.Web/serverfarms', parameters('webPlanName'))]"
               ]
@@ -1397,10 +1422,16 @@
                 "Bitrix__ReservationPipelineName": "[parameters('bitrixReservationPipelineName')]",
                 "Storage__Container": "[parameters('uploadsStorageContainerName')]",
                 "Storage__ConnectionString": "",
-                "Storage__AccountName": "[parameters('rentoomDataStorageAccountName')]",
+                "Storage__AccountName": "[variables('apartmentPhotosStorageAccountName')]",
                 "InstructionsStorage__Container": "[parameters('instructionsStorageContainerName')]",
                 "InstructionsStorage__ConnectionString": "",
-                "InstructionsStorage__AccountName": "[parameters('rentoomDataStorageAccountName')]",
+                "InstructionsStorage__AccountName": "[variables('apartmentPhotosStorageAccountName')]",
+                "ApartmentPhotosStorage__Container": "[variables('apartmentPhotosContainerName')]",
+                "ApartmentPhotosStorage__ConnectionString": "",
+                "ApartmentPhotosStorage__AccountName": "[variables('apartmentPhotosStorageAccountName')]",
+                "ApartmentMediaVariants__CardMaxWidth": "[string(variables('apartmentMediaCardMaxWidth'))]",
+                "ApartmentMediaVariants__CardMaxHeight": "[string(variables('apartmentMediaCardMaxHeight'))]",
+                "ApartmentMediaVariants__CardWebpQuality": "[string(variables('apartmentMediaCardWebpQuality'))]",
                 "TTLOCK__ClientId": "[parameters('ttlockClientId')]",
                 "TTLOCK__ClientSecret": "[parameters('ttlockClientSecret')]",
                 "TTLOCK__Username": "[parameters('ttlockUsername')]",
@@ -1416,7 +1447,7 @@
                 "PostgresPooling__CommandTimeout": "[string(parameters('postgresPoolingCommandTimeout'))]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('rentoomDataStorageAccountName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('apartmentPhotosStorageAccountName'))]",
                 "[resourceId('Microsoft.Web/sites', parameters('staywellApiFunctionName'))]",
                 "[resourceId('Microsoft.Insights/components', parameters('staywellApiAppInsightsName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
@@ -1569,11 +1600,11 @@
             },
             "rentoomDataStorageAccountName": {
               "type": "string",
-              "value": "[parameters('rentoomDataStorageAccountName')]"
+              "value": "[variables('apartmentPhotosStorageAccountName')]"
             },
             "rentoomDataStoragePrimaryBlobEndpoint": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('rentoomDataStorageAccountName')), '2023-05-01').primaryEndpoints.blob]"
+              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('apartmentPhotosStorageAccountName')), '2025-06-01').primaryEndpoints.blob]"
             },
             "logAnalyticsWorkspaceId": {
               "type": "string",

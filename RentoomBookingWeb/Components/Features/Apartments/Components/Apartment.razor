@@ -7,6 +7,7 @@
 @using RentoomBookingWeb.Services
 @inject IJSRuntime JS
 @using RentoomBookingWeb.Helpers
+@using Microsoft.Extensions.Logging
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer;
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> ApartmentLocalizer;
@@ -16,9 +17,10 @@
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @inject GoogleAnalyticsService GoogleAnalytics
+@inject ILogger<Apartment> Logger
 @implements IAsyncDisposable
 
-<article class="apartment-card" 
+<article id="@($"{Item?.Name}-{Item?.Id}")" class="apartment-card" 
          @ref="_elementRef"
          style="@($"{ (DisableForGoToReservation ? "cursor: default; " : "") }{ (!string.IsNullOrEmpty(Width) ? $"width: {Width}; min-width: {Width}; max-width: {Width};" : "") }")"
          itemscope itemtype="https://schema.org/Apartment">
@@ -358,7 +360,7 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lazy load init failed: {ex.Message}");
+                Logger.LogWarning(ex, "Apartment lazy load initialization failed for apartment {ApartmentId}. Falling back to immediate media load.", Item?.Id);
                 _ = LoadMedia();
             }
         }
@@ -373,7 +375,7 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Slider init failed: {ex.Message}");
+                Logger.LogDebug(ex, "Apartment slider initialization failed for apartment {ApartmentId}.", Item?.Id);
             }
         }
     }
@@ -405,7 +407,7 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading media: {ex.Message}");
+            Logger.LogWarning(ex, "Apartment media loading failed for apartment {ApartmentId}.", Item?.Id);
         }
     }
 
@@ -713,7 +715,12 @@
         } 
         catch (Exception ex)
         {
-            Console.WriteLine($"Dispose error: {ex.Message}");
+            if (ex is JSDisconnectedException)
+            {
+                return;
+            }
+
+            Logger.LogDebug(ex, "Apartment component dispose failed for apartment {ApartmentId}.", Item?.Id);
         }
     }
 }

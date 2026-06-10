@@ -36,7 +36,7 @@ public interface IApartmentsViewModel
     public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId);
 
     Task InitializeAsync(CancellationToken ct = default);
-    Task LoadMoreAsync();
+    Task LoadMoreAsync(CancellationToken cancellationToken = default);
 
     void ToggleView(bool isMap);
     Task HandleSearchAsync(Dictionary<string, string> query);
