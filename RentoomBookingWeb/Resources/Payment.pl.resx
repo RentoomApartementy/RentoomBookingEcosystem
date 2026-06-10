@@ -590,4 +590,16 @@
   <data name="Summary_TpayIconAlt" xml:space="preserve">
     <value>Ikona Tpay</value>
   </data>
+  <data name="PaymentReturnConfirmingBannerTitle" xml:space="preserve">
+    <value>Potwierdzamy płatność</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerMessage" xml:space="preserve">
+    <value>Czekamy na potwierdzenie płatności z Tpay. Status rezerwacji zaktualizuje się automatycznie po zapisaniu webhooka.</value>
+  </data>
+  <data name="PaymentConfirmationInProgressTitle" xml:space="preserve">
+    <value>Potwierdzamy płatność</value>
+  </data>
+  <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
+    <value>Trwa oczekiwanie na potwierdzenie płatności z Tpay. Za chwilę pokażemy aktualny status rezerwacji.</value>
+  </data>
 </root>

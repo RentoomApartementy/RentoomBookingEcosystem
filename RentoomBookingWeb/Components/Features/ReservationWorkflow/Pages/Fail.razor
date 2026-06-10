@@ -70,7 +70,7 @@
         {
             for (var attempt = 1; attempt <= 3; attempt++)
             {
-                var paymentState = await ReservationWorkflowService.VerifyPaymentAfterErrorReturnAsync(ReservationTokenGuid);
+                var paymentState = await ReservationWorkflowService.GetPaymentStateAsync(ReservationTokenGuid);
                 if (string.Equals(paymentState.PaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase))
                 {
                     WorkflowTelemetry.TrackEvent(

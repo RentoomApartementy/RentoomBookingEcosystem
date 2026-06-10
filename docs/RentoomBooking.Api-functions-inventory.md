@@ -464,7 +464,7 @@ Konwencje:
 ### SyncActiveReservationStatusesCron
 - Trigger: `TimerTrigger`, schedule `%CRON_SYNC_ACTIVE_RESERVATION_STATUSES%`
 - Input payload: brak payloadu HTTP.
-- Logic description: pobiera aktywne rekordy rezerwacji z Ido ID, przetwarza je batchami po 50, dociąga rezerwacje z IdoSell i synchronizuje status rezerwacji, status płatności oraz skutki uboczne zdefiniowane w `IReservationSyncService`.
+- Logic description: pobiera aktywne rekordy rezerwacji z Ido ID, przetwarza je batchami po 50, dociąga rezerwacje z IdoSell i synchronizuje status rezerwacji oraz skutki uboczne zdefiniowane w `IReservationSyncService`; nie odpytuje Tpay o status płatności.
 - Output response: brak odpowiedzi HTTP; wynik i liczniki są logowane.
 - Errors returned:
   - Błędy pojedynczych rekordów są łapane i raportowane w logach.
@@ -473,7 +473,7 @@ Konwencje:
 ### SyncActiveReservationStatuses
 - Endpoint: `POST`, auth `Function`, route `reservations/statuses/sync-active`
 - Input payload: brak wymaganego body.
-- Logic description: uruchamia pełną synchronizację aktywnych rezerwacji identycznie jak cron, ale zwraca podsumowanie HTTP.
+- Logic description: uruchamia pełną synchronizację aktywnych rezerwacji identycznie jak cron, ale zwraca podsumowanie HTTP; status płatności pochodzi wyłącznie z rekordu w DB.
 - Output response: `200` JSON z `processedCount`, `succeededCount`, `failedCount`, `results[]`.
 - Errors returned:
   - Błędy pojedynczych rekordów trafiają do `results[]`.
@@ -482,7 +482,7 @@ Konwencje:
 ### PreviewActiveReservationStatuses
 - Endpoint: `POST`, auth `Function`, route `reservations/statuses/sync-active/preview`
 - Input payload: brak wymaganego body.
-- Logic description: wykonuje tę samą synchronizację w trybie `dryRun`, bez trwałego zapisu zmian.
+- Logic description: wykonuje tę samą synchronizację w trybie `dryRun`, bez trwałego zapisu zmian; nie wykonuje żadnych lookupów statusu do Tpay.
 - Output response: `200` JSON z `dryRun=true` oraz licznikami i `results[]`.
 - Errors returned:
   - Błędy pojedynczych rekordów trafiają do `results[]`.

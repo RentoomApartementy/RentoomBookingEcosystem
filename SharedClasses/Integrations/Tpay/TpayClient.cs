@@ -13,10 +13,6 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
         Task<TpayTransactionResult> CreateTransactionAsync(
             TpayTransactionRequest request,
             CancellationToken cancellationToken = default);
-
-        Task<TpayTransactionResult> GetTransactionAsync(
-            string transactionUid,
-            CancellationToken cancellationToken = default);
     }
 
     public class TpayClient : ITpayClient
@@ -144,79 +140,6 @@ namespace RentoomBooking.SharedClasses.Integrations.Tpay
                 Success = true,
                 RedirectUrl = redirectUrl,
                 TransactionId = transactionId,
-                TransactionUid = parsed?.TransactionId,
-                TransactionStatus = parsed?.Payments?.Status ?? parsed?.Status,
-                AmountPaid = parsed?.Payments?.AmountPaid,
-                RawResponse = body
-            };
-        }
-
-        public async Task<TpayTransactionResult> GetTransactionAsync(
-            string transactionUid,
-            CancellationToken cancellationToken = default)
-        {
-            if (string.IsNullOrWhiteSpace(transactionUid))
-            {
-                throw new ArgumentNullException(nameof(transactionUid));
-            }
-
-            var validationMessage = ValidateConfiguration();
-            if (!string.IsNullOrEmpty(validationMessage))
-            {
-                return new TpayTransactionResult { Success = false, Message = validationMessage };
-            }
-
-            var tokenResult = await EnsureAccessTokenAsync(cancellationToken);
-            if (!tokenResult.Success)
-            {
-                return new TpayTransactionResult
-                {
-                    Success = false,
-                    Message = tokenResult.Message ?? "Failed to obtain Tpay access token.",
-                    RawResponse = tokenResult.RawResponse
-                };
-            }
-
-            using var httpRequest = new HttpRequestMessage(HttpMethod.Get, BuildUri($"/transactions/{transactionUid}"));
-            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-
-            using var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
-            var body = await response.Content.ReadAsStringAsync(cancellationToken);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogWarning("Tpay transaction lookup failed for {TransactionUid} with status {Status}: {Body}",
-                    transactionUid,
-                    response.StatusCode,
-                    body);
-
-                return new TpayTransactionResult
-                {
-                    Success = false,
-                    Message = "Failed to fetch payment status from Tpay.",
-                    RawResponse = body
-                };
-            }
-
-            var parsed = JsonConvert.DeserializeObject<TpayTransactionCreatedResponse>(body);
-            var apiErrorMessage = ExtractApiErrorMessage(parsed);
-            if (!string.IsNullOrWhiteSpace(apiErrorMessage))
-            {
-                return new TpayTransactionResult
-                {
-                    Success = false,
-                    Message = apiErrorMessage,
-                    RawResponse = body
-                };
-            }
-
-            return new TpayTransactionResult
-            {
-                Success = true,
-                TransactionId = parsed?.Title,
-                TransactionUid = parsed?.TransactionId ?? transactionUid,
-                TransactionStatus = parsed?.Payments?.Status ?? parsed?.Status,
-                AmountPaid = parsed?.Payments?.AmountPaid,
                 RawResponse = body
             };
         }
