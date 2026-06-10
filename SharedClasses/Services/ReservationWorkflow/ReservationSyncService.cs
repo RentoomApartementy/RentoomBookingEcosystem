@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using System.Globalization;
@@ -31,22 +30,16 @@ public interface IReservationWorkflowSyncOperations
 public class ReservationSyncService : IReservationSyncService
 {
     private readonly IReservationStore _store;
-    private readonly IReservationWorkflowService _workflowService;
     private readonly IReservationWorkflowSyncOperations _workflowSyncOperations;
-    private readonly ITpayGateway _tpayGateway;
     private readonly ILogger<ReservationSyncService> _logger;
 
     public ReservationSyncService(
         IReservationStore store,
-        IReservationWorkflowService workflowService,
         IReservationWorkflowSyncOperations workflowSyncOperations,
-        ITpayGateway tpayGateway,
         ILogger<ReservationSyncService> logger)
     {
         _store = store ?? throw new ArgumentNullException(nameof(store));
-        _workflowService = workflowService ?? throw new ArgumentNullException(nameof(workflowService));
         _workflowSyncOperations = workflowSyncOperations ?? throw new ArgumentNullException(nameof(workflowSyncOperations));
-        _tpayGateway = tpayGateway ?? throw new ArgumentNullException(nameof(tpayGateway));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -175,56 +168,6 @@ public class ReservationSyncService : IReservationSyncService
         };
 
         var currentPaymentStatus = record.PaymentStatus;
-        if (!IsFinalPaymentStatus(record.PaymentStatus)
-            && !string.IsNullOrWhiteSpace(record.State.ProviderTransactionUid))
-        {
-            result.TpayChecked = true;
-
-            var tpayState = await _tpayGateway.GetPaymentStatusAsync(record.State.ProviderTransactionUid, cancellationToken);
-            if (!tpayState.Success)
-            {
-                result.Warning = tpayState.Message;
-            }
-            else
-            {
-                var mappedPaymentStatus = MapTpayStatusToWorkflowStatus(tpayState.TransactionStatus, tpayState.AmountPaid);
-
-                if (!string.Equals(mappedPaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase)
-                    && record.PaymentSessionGuid.HasValue
-                    && !string.IsNullOrWhiteSpace(record.ProviderTransactionId))
-                {
-                    if (dryRun)
-                    {
-                        currentPaymentStatus = mappedPaymentStatus;
-                        result.TpayFinalStatusApplied = true;
-                    }
-                    else
-                    {
-                        await _workflowService.HandleTpayWebhookAsync(new TpayWebhookDto
-                        {
-                            ReservationGuid = record.ReservationGuid,
-                            PaymentSessionGuid = record.PaymentSessionGuid.Value,
-                            ProviderTransactionId = record.ProviderTransactionId,
-                            Status = string.Equals(mappedPaymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase) ? "PAID" : "FAILED",
-                            Signature = "cron-sync"
-                        });
-
-                        result.TpayFinalStatusApplied = true;
-                        record = await _workflowSyncOperations.RequireReservationAsync(record.ReservationGuid, cancellationToken);
-                        currentPaymentStatus = record.PaymentStatus;
-                    }
-                }
-                else if (!string.Equals(mappedPaymentStatus, record.PaymentStatus, StringComparison.OrdinalIgnoreCase))
-                {
-                    currentPaymentStatus = mappedPaymentStatus;
-                    if (!dryRun)
-                    {
-                        record.PaymentStatus = mappedPaymentStatus;
-                        await _store.UpdateAsync(record, cancellationToken);
-                    }
-                }
-            }
-        }
 
         var idoReservation = preloadedIdoReservation ?? await _workflowSyncOperations.FetchIdoReservationAsync(record, true, cancellationToken);
         var idoStatus = idoReservation?.ReservationDetails?.status;
@@ -308,31 +251,6 @@ public class ReservationSyncService : IReservationSyncService
 
         return result;
     }
-
-    private static bool IsFinalPaymentStatus(string? paymentStatus)
-    {
-        return string.Equals(paymentStatus, PaymentStatuses.Paid, StringComparison.OrdinalIgnoreCase)
-            || string.Equals(paymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static string MapTpayStatusToWorkflowStatus(string? tpayStatus, decimal? amountPaid)
-    {
-        if (string.IsNullOrWhiteSpace(tpayStatus))
-        {
-            return PaymentStatuses.Initiated;
-        }
-
-        return tpayStatus.Trim().ToLowerInvariant() switch
-        {
-            "correct" when amountPaid.GetValueOrDefault() > 0m => PaymentStatuses.Paid,
-            "paid" when amountPaid.GetValueOrDefault() > 0m => PaymentStatuses.Paid,
-            "declined" => PaymentStatuses.Failed,
-            "canceled" => PaymentStatuses.Failed,
-            "error" => PaymentStatuses.Failed,
-            _ => PaymentStatuses.Initiated
-        };
-    }
-
     private static string BuildReservationSyncChangeSummary(
         string? previousStatus,
         string? currentStatus,

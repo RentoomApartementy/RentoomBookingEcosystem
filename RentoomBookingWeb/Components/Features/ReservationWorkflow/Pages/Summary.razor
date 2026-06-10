@@ -417,6 +417,7 @@
     private bool IsPaymentInitiated => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Initiated, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentFailed => string.Equals(_summary?.PaymentStatus, PaymentStatuses.Failed, StringComparison.OrdinalIgnoreCase);
     private bool IsPaymentReturnFailed => string.Equals(_paymentReturn, "failed", StringComparison.OrdinalIgnoreCase);
+    private bool IsPaymentReturnConfirming => string.Equals(_paymentReturn, "confirming", StringComparison.OrdinalIgnoreCase);
     private bool ShouldResumeInitiatedPayment => IsPaymentInitiated && _resumePaymentSessionGuid.HasValue;
     private bool ShouldShowPaymentReturnBanner => !IsPaid && !string.IsNullOrWhiteSpace(_paymentReturn);
     private bool ShouldShowRetryPaymentButton => IsPaymentInitiated || IsPaymentFailed;
@@ -801,10 +802,13 @@
 
     private async Task PollPaymentStatusAsync(CancellationToken token)
     {
+        var attempt = 0;
+
         while (!token.IsCancellationRequested)
         {
             try
             {
+                attempt++;
                 var state = await ReservationWorkflowService.GetPaymentStateAsync(ReservationTokenGuid);
                 if (_summary is not null)
                 {
@@ -832,7 +836,7 @@
                 }
 
                 await InvokeAsync(StateHasChanged);
-                await Task.Delay(TimeSpan.FromSeconds(20), token);
+                await Task.Delay(GetPaymentPollingDelay(attempt), token);
             }
             catch (OperationCanceledException) when (token.IsCancellationRequested)
             {
@@ -845,6 +849,16 @@
                 return;
             }
         }
+    }
+
+    private TimeSpan GetPaymentPollingDelay(int attempt)
+    {
+        if (IsPaymentReturnConfirming && attempt < 10)
+        {
+            return TimeSpan.FromSeconds(2);
+        }
+
+        return TimeSpan.FromSeconds(5);
     }
 
     private void StartEmailPollingIfNeeded()
@@ -991,12 +1005,16 @@
     }
 
     private string PaymentReturnBannerTitle =>
-        IsPaymentReturnFailed
+        IsPaymentReturnConfirming
+            ? Localizer["PaymentReturnConfirmingBannerTitle"]
+            : IsPaymentReturnFailed
             ? Localizer["PaymentReturnFailedBannerTitle"]
             : Localizer["PaymentReturnPendingBannerTitle"];
 
     private string PaymentReturnBannerMessage =>
-        IsPaymentReturnFailed
+        IsPaymentReturnConfirming
+            ? Localizer["PaymentReturnConfirmingBannerMessage"]
+            : IsPaymentReturnFailed
             ? Localizer["PaymentReturnFailedBannerMessage"]
             : Localizer["PaymentReturnPendingBannerMessage"];
 

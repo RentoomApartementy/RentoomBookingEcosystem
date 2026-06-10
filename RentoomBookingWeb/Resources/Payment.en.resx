@@ -586,4 +586,16 @@
   <data name="Summary_TpayIconAlt" xml:space="preserve">
     <value>Tpay icon</value>
   </data>
+  <data name="PaymentReturnConfirmingBannerTitle" xml:space="preserve">
+    <value>Confirming payment</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerMessage" xml:space="preserve">
+    <value>We are waiting for payment confirmation from Tpay. The reservation status will update automatically after the webhook is saved.</value>
+  </data>
+  <data name="PaymentConfirmationInProgressTitle" xml:space="preserve">
+    <value>Confirming payment</value>
+  </data>
+  <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
+    <value>We are waiting for payment confirmation from Tpay. We will show the latest reservation status shortly.</value>
+  </data>
 </root>

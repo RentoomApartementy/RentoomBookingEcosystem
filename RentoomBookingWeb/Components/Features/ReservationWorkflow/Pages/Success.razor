@@ -20,8 +20,8 @@
                 <div class="spinner-container">
                     <div class="loading-spinner"></div>
                 </div>
-                <h2>@Localizer["PaymentSuccessful"]</h2>
-                <p class="sub-message">@Localizer["NotRefreshPage"]</p>
+                <h2>@Localizer["PaymentConfirmationInProgressTitle"]</h2>
+                <p class="sub-message">@Localizer["PaymentConfirmationInProgressMessage"]</p>
             }
             else
             {
@@ -44,8 +44,7 @@
             _confirmationStarted = true;
             try
             {
-               // await ReservationWorkflowService.MarkPaymentAsPaidAsync(ReservationTokenGuid);//<< for  testing : flag _idoApi.UseDummyIdoBooking
-                Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie/", true);
+                Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie?paymentReturn=confirming", true);
             }
             catch (Exception)
             {
@@ -57,6 +56,6 @@
 
     private void GoToSummary()
     {
-        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie/");
+        Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie?paymentReturn=confirming");
     }
 }
