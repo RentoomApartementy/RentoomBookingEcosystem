@@ -22,7 +22,6 @@ public interface IApartmentsViewModel
     string EndDate { get; set; }
     string Adults { get; set; }
     string Children { get; set; }
-    string Rooms { get; set; }
     int? FilterMinPrice { get; }
     int? FilterMaxPrice { get; }
 
@@ -32,6 +31,7 @@ public interface IApartmentsViewModel
     int ScaleMaxPrice { get; }
     public Guid SliderResetKey { get; }
     PricingOffer? GetPricingOfferByObjectId(int objectId);
+    SuggestionStatus GetSuggestionStatusByObjectId(int objectId);
     public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId);
     public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId);
 

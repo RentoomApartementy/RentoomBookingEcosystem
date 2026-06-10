@@ -282,4 +282,190 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Korduma kippuvad küsimused (KKK)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Öö</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Ööd</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Hind saadaval pärast kuupäeva valikut</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Vali kuupäev</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Näita täielikku kirjeldust ja mugavusi</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Öö</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Ööd</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Ööd</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Isik</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>isikud</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Inimesed</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Teenused ja varustus</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Muuda kuupäeva</value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Boonus on eemaldatud.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Lisaboonus: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Pakutavat boonust ei eksisteeri.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>See boonus on praegu keelatud.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>See boonus ei kehti valitud korterile.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Boonus ei ole saadaval selle broneeringu alguskuupäeval.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>See boonus nõuab pikemat viibimist.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>See boonus nõuab suuremat kogutellimuste summat.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Boonus kehtib ainult RentoomBookingWebi broneeringute puhul.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Boonus ei vähenda selle broneeringu praegust hinda.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Täida kuupäevad ja vali pakkumine, et boonust rakendada.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Pakkumise hinda, mida tuleb arvutada, ei olnud võimalik lugeda.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Boonust ei rakendatud.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Kas sul on sooduskood?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Sisesta sooduskood</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Rakenda kood</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Kontrollin...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Boonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Eemalda boonus</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Eelvaade</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>See reservaat ei ole enam aktiivne. Kui vajad endiselt majutust, mine tagasi korterite nimekirja ja loo uus broneering.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Voodite arv</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Broneeri {0} Rentoomist. Suurepärane asukoht, {1} tube, kõrge tase.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Ööde arv</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Lisasid ei ole</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Lisamaterjali kirjeldust ei ole</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Broneering tühistatud</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Tõenäoliselt tulid sa meile vanast ümbersuunamisest, mis enam ei eksisteeri. Viime teid kohe korterite lehele.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Jätka</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Korteri broneerimiseks vali kuupäev ja inimeste arv</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Inimeste arv</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Hind</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Tualettide arv</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Kahjuks pole sellel kuupäeval selle korteri jaoks pakkumisi</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Korteriandmed - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Reservatsioon</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Broneeri korter</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Korterid</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>korter toruń, majutus toruń, rentoom, lühiajaline rent, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Korterite suurus</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Poola</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>See on meie uus portaal</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Valige oma viibimiskuupäevad, et kontrollida meie pakkumiste saadavust ja hindu.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Korter</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Broneeri korter({0})</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Soovin saada käibemaksu arvet</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Vaata korteri andmeid ja broneeri oma peatus Rentoomis.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Viga 404</value>
+  </data>
 </root>

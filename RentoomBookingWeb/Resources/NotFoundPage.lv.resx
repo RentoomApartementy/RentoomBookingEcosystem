@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -62,22 +62,22 @@
     <value>Lapa nav atrasta</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>KÄ¼Å«da 404</value>
+    <value>BÅ'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>DiemÅ¾Ä“l meklÄ“tÄ lapa neeksistÄ“ vai ir pÄrvietota.</value>
+    <value>Diemžēl meklētā lapa neeksistē vai ir pārvietota.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>AtpakaÄ¼ uz sÄkumlapu</value>
+    <value>Atgriezties galvenajā lapā</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>VarbÅ«t jÅ«s meklÄ“jat:</value>
+    <value>Iespējams, jūs meklējat:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
-    <value>DzÄ«vokÄ¼u saraksts</value>
+    <value>Dzīvokļu saraksts</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>SadarbÄ«ba</value>
+    <value>Sadarbība</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontakti</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Rezervācija atcelta</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Šis ir mūsu jaunais portāls</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Šī rezervācija vairs nav aktīva. Ja jums joprojām ir nepieciešama uzturēšanās, pievienojiet dzīvokļu sarakstu un izveidojiet jaunu. rezervācija. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Visticamāk, tas nonāca pie mums no vecas novirzīšanas, kas vairs nepastāv. Mēs jūs aizvedīsim™ uz dzīvokļu lapu™™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BÅ'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Rezervēt dzīvokli</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Rezervēt dzīvokli ({0}-us)</value></data>
 </root>

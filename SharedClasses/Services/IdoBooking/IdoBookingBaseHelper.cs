@@ -24,6 +24,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
     }
     public class IdoBookingConnectService: IIdoBookingConnectService
     {
+        public const string HttpClientName = "IdoBooking";
 
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<IdoBookingConnectService> _logger;
@@ -63,7 +64,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         public async Task<TResponse?> PostAsync<TRequest, TResponse>(string relativeUrl, TRequest? request, CancellationToken cancellationToken)
         {
-            var httpClient = _httpClientFactory.CreateClient();
+            var httpClient = _httpClientFactory.CreateClient(HttpClientName);
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

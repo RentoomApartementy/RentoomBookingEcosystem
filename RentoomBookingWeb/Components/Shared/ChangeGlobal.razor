@@ -1,6 +1,8 @@
 @using System.Globalization
 @using RentoomBooking.SharedFrontend.Localization
+@using RentoomBookingWeb.Services.Localization
 @inject NavigationManager Navigation
+@inject IRouteLocalizationService RouteService
 
 <div class="language-switcher-container">
     @* Dodano warunkową klasę 'scrolled' *@
@@ -44,13 +46,76 @@
         }
 
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var returnUrl = $"{uri.AbsolutePath}{uri.Query}{uri.Fragment}";
-        var cultureQuery = Uri.EscapeDataString(selectedCulture);
-        var returnUrlQuery = Uri.EscapeDataString(returnUrl);
-        var newUri = $"/culture/set?culture={cultureQuery}&returnUrl={returnUrlQuery}";
+        var relativePath = Navigation.ToBaseRelativePath(Navigation.Uri);
+        
+        // Remove existing culture prefix if any
+        var parts = relativePath.Split('/');
+        string? currentCultureInUrl = null;
+        string? firstSlug = null;
+        string remainingPath = "";
+
+        if (parts.Length > 0 && SupportedLanguagesProvider.SupportedCultureNames.Any(c => string.Equals(c.Split('-')[0], parts[0], StringComparison.OrdinalIgnoreCase) || string.Equals(c, parts[0], StringComparison.OrdinalIgnoreCase)))
+        {
+            currentCultureInUrl = parts[0];
+            firstSlug = parts.Length > 1 ? parts[1].Split('?')[0] : null;
+            if (parts.Length > 2)
+            {
+                remainingPath = "/" + string.Join("/", parts.Skip(2));
+            }
+        }
+        else
+        {
+            firstSlug = parts[0].Split('?')[0];
+            if (parts.Length > 1)
+            {
+                remainingPath = "/" + string.Join("/", parts.Skip(1));
+            }
+        }
+        
+        string newUri;
+        if (!string.IsNullOrEmpty(firstSlug) && RouteService.TryGetPageKeyFromSlug(firstSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
+        {
+            newUri = RouteService.GetLocalizedUrl(pageKey!, selectedCulture) + remainingPath;
+            if (uri.Query.Length > 0) newUri += uri.Query;
+        }
+        else if (string.IsNullOrEmpty(firstSlug) || firstSlug == "/")
+        {
+            newUri = $"/{GetShortCode(selectedCulture)}";
+        }
+        else
+        {
+            // Fallback for special pages or if current slug wasn't in registry
+            var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(firstSlug);
+            if (pageKeyFromCanonical != null)
+            {
+                newUri = RouteService.GetLocalizedUrl(pageKeyFromCanonical, selectedCulture) + remainingPath;
+            }
+            else
+            {
+                // Last resort: keep the slug as is but change the culture prefix
+                newUri = $"/{GetShortCode(selectedCulture)}/{firstSlug}{remainingPath}";
+            }
+            
+            if (uri.Query.Length > 0) newUri += uri.Query;
+        }
 
         _isDropdownOpen = false; 
-        Navigation.NavigateTo(newUri, forceLoad: true);
+        
+        // ENTERPRISE REDIRECT: Use the /culture/set endpoint to set the cookie securely and then redirect
+        var setCultureUrl = $"/culture/set?culture={selectedCulture}&returnUrl={Uri.EscapeDataString(newUri)}";
+        Navigation.NavigateTo(setCultureUrl, forceLoad: true);
     }
-}
 
+    private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
+
+    private string? GetPageKeyFromCanonicalSlug(string slug) => slug.ToLower() switch
+    {
+        "apartamenty" => "Apartments",
+        "kontakt" => "Contact",
+        "wspolpraca" => "Cooperation",
+        "regulaminy" => "Statute",
+        "polozenie-torunia" => "AboutCity",
+        "torun" => "AboutCity",
+        _ => null
+    };
+}

@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – kuriame unikalią viešnagės Torunėje patirtį
-</value>
+    <value>Rentoom Apartments – kuriame unikalią viešnagės Torunėje patirtį</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Ieškote patogaus buto Torunėje?</value>
+    <value>Ieškote patogaus buto Torunėje?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Apartamentai Torunėje – patogus apgyvendinimas</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Ieškote patogaus buto Torunėje?
-
-</value>
+    <value>Ieškote patogaus buto Torunėje?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>"Rentoom Apartamenty" yra modernus trumpalaikės nuomos prekės ženklas, kuriame aukštas apgyvendinimo lygis derinamas su autentiškomis Torunės žiniomis. Kuriame erdves, sukurtas atsižvelgiant į komfortą, estetiką ir funkcionalumą - tiek turistams, tiek verslo svečiams.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Džiaugiamės, kad atėjote pas mus!
-</value>
+    <value>Džiaugiamės, kad atėjote pas mus!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Mūsų pasiūlyme yra dešimtys kruopščiai atrinktų butų patraukliausiose miesto vietose. Kiekviena vieta buvo pasirinkta taip, kad būtų lengva pasiekti pagrindines lankytinas vietas, restoranus ir verslo zonas.
-Kiekvienas butas yra erdvė, skirta suteikti tikrą poilsį ir privatumą po intensyvios ekskursijų ar darbo dienos.
-</value>
+    <value>Mūsų pasiūlyme yra dešimtys kruopščiai atrinktų butų patraukliausiose miesto vietose. Kiekviena vieta buvo pasirinkta taip, kad būtų lengva pasiekti pagrindines lankytinas vietas, restoranus ir verslo zonas.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Butai geriausiose Torunės vietose</value>
@@ -47,37 +40,28 @@ Kiekvienas butas yra erdvė, skirta suteikti tikrą poilsį ir privatumą po int
     <value>Patenkinti klientai</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Apartamentai Torunėje
-
-</value>
+    <value>Apartamentai Torunėje</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Vieta Torunėje</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Kodėl verta rinktis "Rentoom"?
-</value>
+    <value>Kodėl verta rinktis "Rentoom"?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>"Rentoom Apartments" yra daugiau nei tik nakvynė Torunėje. Mes siūlome aukšto lygio apartamentus geriausiose vietose ir realius privalumus, kurie padidina visos viešnagės vertę.
-</value>
+    <value>"Rentoom Apartments" yra daugiau nei tik nakvynė Torunėje. Mes siūlome aukšto lygio apartamentus geriausiose vietose ir realius privalumus, kurie padidina visos viešnagės vertę.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Pagal mūsų partnerių programą svečiai gali naudotis specialiomis nuolaidomis pasirinktiems restoranams, kavinėms ir turistų lankomoms vietoms. Dabartinės nuolaidos ir rekomendacijos yra tiesiai apartamentuose, todėl galite naudotis patikrintomis vietomis ir sutaupyti pinigų lankydamiesi.
-</value>
+    <value>Pagal mūsų partnerių programą svečiai gali naudotis specialiomis nuolaidomis pasirinktiems restoranams, kavinėms ir turistų lankomoms vietoms.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Dirbame tik su patikimais, vietiniais partneriais, rūpinamės kiekvienos rekomendacijos kokybe. Pasirinkę "Rentoom", įgyjate komfortą, profesionalų aptarnavimą ir papildomų privalumų, dėl kurių jūsų viešnagė Torunėje tampa patogesnė, rafinuotesnė ir tiesiog pelningesnė.
-</value>
+    <value>Dirbame tik su patikimais, vietiniais partneriais, rūpinamės kiekvienos rekomendacijos kokybe.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Susipažinkite su žmonių, kurie miegojo mūsų apartamentuose Torunėje, nuomone.
-
-</value>
+    <value>Susipažinkite su žmonių, kurie miegojo mūsų apartamentuose Torunėje, nuomone.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Palikite savo kontaktinę informaciją ir mes su jumis susisieksime!
-</value>
+    <value>Palikite savo kontaktinę informaciją ir mes su jumis susisieksime!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Susisiekite su tiekėju</value>
@@ -98,8 +82,27 @@ Kiekvienas butas yra erdvė, skirta suteikti tikrą poilsį ir privatumą po int
     <value>Siųsti</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Kuo mūsų butai skiriasi nuo kitų?
-
-</value>
+    <value>Kuo mūsų butai skiriasi nuo kitų?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Apartamentai Torunė - Trumpalaikė nuoma | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Peržiūrėkite mūsų apartamentus pačioje Torunės širdyje. Puikiai tinka savaitgaliui ir ilgesniam poilsiui.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Apartamentai Torunė - patogus apgyvendinimas</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Apartamentai Torunė, Apgyvendinimas Torunė, Trumpalaikė nuoma, Senamiesčio apartamentai, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Pradžia</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Ieškote nakvynės Torunėje? Siūlome patogius apartamentus centre ir senamiestyje. Užsisakykite tiesiogiai internetu - mažiausios kainos, jokių tarpininkavimo komisinių.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Ieškote nakvynės Torunėje? "Rentoom" siūlo trumpalaikės nuomos apartamentus Torunėje ir apsistoja geriausiose miesto vietose.</value>
   </data>
 </root>

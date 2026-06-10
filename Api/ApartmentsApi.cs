@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Models.Enum;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using System.Net;
@@ -16,15 +17,17 @@ public class ApartmentsApi
     private readonly IdoSellService _service;
     private readonly IApartmentsService _apartmentsService;
     private readonly IIdoApartmentService _idoApartmentService;
+    private readonly IApartmentMediaCatalogService _apartmentMediaCatalogService;
     private readonly ILogger<ApartmentsApi> _logger;
    // private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
-    public ApartmentsApi(IdoSellService service, IIdoApartmentService idoApartmentService, IApartmentsService apartmentsService , ILogger<ApartmentsApi> logger)
+    public ApartmentsApi(IdoSellService service, IIdoApartmentService idoApartmentService, IApartmentsService apartmentsService, IApartmentMediaCatalogService apartmentMediaCatalogService , ILogger<ApartmentsApi> logger)
     {
         _service = service;
         _logger = logger;
         _apartmentsService = apartmentsService;
         _idoApartmentService = idoApartmentService;
+        _apartmentMediaCatalogService = apartmentMediaCatalogService;
     }
 
     // GET /api/apartments?city=Gdansk&top=50&continuationToken=...
@@ -64,7 +67,7 @@ public class ApartmentsApi
                 return response;
             }
 
-            List<ObjectMedium>? media = await _idoApartmentService.GetObjectMediaFromIdoSellAsync(objectId);
+            List<ObjectMedium>? media = await _apartmentMediaCatalogService.GetApartmentMediaAsync(objectId);
 
             if (media == null)
             {

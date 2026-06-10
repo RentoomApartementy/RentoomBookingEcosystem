@@ -1,8 +1,8 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
-@using RentoomBooking.SharedClasses.Services.IdoBooking
+@using RentoomBooking.SharedClasses.Services.ApartmentMedia
 @using RentoomBookingWeb.Services
 @using Microsoft.Extensions.Localization
-@inject IIdoApartmentService IdoApartmentService
+@inject IApartmentMediaCatalogService ApartmentMediaCatalogService
 @inject MediaCacheService MediaCache
 @inject IJSRuntime JS
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
@@ -77,8 +77,9 @@
 
         try
         {
-            var media = await MediaCache.GetOrFetchMediaAsync(Id, () => IdoApartmentService.GetObjectMediaFromIdoSellAsync(Id));
-            _imageUrl = media?.FirstOrDefault()?.Url;
+            var media = await MediaCache.GetOrFetchMediaAsync(Id, () => ApartmentMediaCatalogService.GetApartmentMediaAsync(Id));
+            var first = media?.FirstOrDefault();
+            _imageUrl = first?.CardUrl ?? first?.Url;
             
             await InvokeAsync(StateHasChanged);
         }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,55 +59,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>Ð¡Ñ‚Ð°Ñ€Ð¾Ð½ÐºÐ° Ð½Ðµ Ð·Ð½Ð¾Ð¹Ð´Ð·ÐµÐ½Ð°</value>
+    <value>Старонка не знойдзена</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>ÐŸÐ°Ð¼Ñ‹Ð»ÐºÐ° 404</value>
+    <value>Бå'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>ÐŸÑ€Ð°Ð±Ð°Ñ‡Ñ†Ðµ, Ð°Ð»Ðµ ÑÑ‚Ð°Ñ€Ð¾Ð½ÐºÐ°, ÑÐºÑƒÑŽ Ð²Ñ‹ ÑˆÑƒÐºÐ°ÐµÑ†Ðµ, Ð½Ðµ Ñ–ÑÐ½ÑƒÐµ Ð°Ð±Ð¾ Ð±Ñ‹Ð»Ð° Ð¿ÐµÑ€Ð°Ð¼ÐµÑˆÑ‡Ð°Ð½Ð°.</value>
+    <value>Прабачце, але старонка, якую вы шукаеце, не існуе або была перамешчана.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>Ð’ÑÑ€Ð½ÑƒÑ†Ñ†Ð° Ð½Ð° Ð³Ð°Ð»Ð¾ÑžÐ½ÑƒÑŽ ÑÑ‚Ð°Ñ€Ð¾Ð½ÐºÑƒ</value>
+    <value>Вярнуцца на галоўную старонку</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>ÐœÐ°Ð³Ñ‡Ñ‹Ð¼Ð°, Ð²Ñ‹ ÑˆÑƒÐºÐ°ÐµÑ†Ðµ:</value>
+    <value>Магчыма, вы шукаеце:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
-    <value>Ð¡Ð¿Ñ–Ñ ÐºÐ²Ð°Ñ‚ÑÑ€</value>
+    <value>Спіс кватэр</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>Ð¡ÑƒÐ¿Ñ€Ð°Ñ†Ð¾ÑžÐ½Ñ–Ñ†Ñ‚Ð²Ð°</value>
+    <value>Супрацоўніцтва</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
-    <value>ÐšÐ°Ð½Ñ‚Ð°ÐºÑ‚</value>
+    <value>Кантакт</value>
   </data>
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Браніраванне адменена</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Гэта наш новы партал</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Гэта браніраванне больш не дзейнічае. Калі вам усё яшчэ патрэбна пражыванне, дадайце ў спіс кватэр і стварыце новую. Браніраванне. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Хутчэй за ўсё, ён прыйшоў да нас праз старое перанакіраванне, якое ўжо не існуе. Мы перанясем вас™ на старонку™ кватэр праз хвіліну™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>Бå'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Браніруйце кватэру</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Браніраваць кватэру({0})</value></data>
 </root>

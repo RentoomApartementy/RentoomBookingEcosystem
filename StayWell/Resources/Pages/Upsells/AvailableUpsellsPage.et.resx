@@ -132,4 +132,10 @@
   <data name="VoucherNoLimitText" xml:space="preserve">
     <value>Piirangut pole</value>
   </data>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Kustuta</value>
+  </data>
 </root>

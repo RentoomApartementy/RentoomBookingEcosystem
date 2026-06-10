@@ -1,7 +1,4 @@
 @page "/apartamenty/{id:int}/{slug}"
-@page "/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}"
-@page "/apartamenty/{id:int}/{slug}/{reservationTokenGuid:guid}/{startDate?}/{endDate?}/{adults?}/{children?}"
-@page "/apartamenty/{id:int}/{slug}/{startDate?}/{endDate?}/{adults?}/{children?}"
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 
@@ -25,7 +22,7 @@
             CurrentPageName="@(_apartment.Name ?? ApartmentBreadcrumbFallbackName)"
             CurrentPagePath="@GetCanonicalUrl()"
             ParentPageName="@Localizer["Apartment_BreadcrumbParentName"]"
-            ParentPagePath="/apartamenty" />
+            ParentPagePath="@RouteService.GetLocalizedUrl("Apartments")" />
     }
 
     @(_apartment != null ? (MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>" : (MarkupString)"")
@@ -42,7 +39,7 @@
                 <h2>@Localizer["ApartmentNotFoundTitle"]</h2>
                 <p>@Localizer["ApartmentNotFoundDescription"]</p>
                 <div style="margin-top: 2rem;">
-                    <Button Type="ButtonType.Primary" OnClick='(() => Navigation.NavigateTo("/apartamenty"))'>
+                    <Button Type="ButtonType.Primary" OnClick='(() => Navigation.NavigateTo(RouteService.GetLocalizedUrl("Apartments")))'>
                         @Localizer["BackToApartments"]
                     </Button>
                 </div>

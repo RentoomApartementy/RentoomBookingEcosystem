@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ListTitle" xml:space="preserve">
+    <value>Tedd élvezetesebbé a tartózkodásodat</value>
+  </data>
+  <data name="ListSubtitle" xml:space="preserve">
+    <value>Exkluzív ajánlatok a foglalásra</value>
+  </data>
+  <data name="TermsDescription" xml:space="preserve">
+    <value>Érvényes az egész tartózkodás alatt. A váltáskor kódot kell mutatni.</value>
+  </data>
+  <data name="TermsTitle" xml:space="preserve">
+    <value>Feltételek</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Éjszakák</value>
+  </data>
+  <data name="Guests" xml:space="preserve">
+    <value>vendégek</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Leírás</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Törlés</value>
+  </data>
+  <data name="BadgeInfo" xml:space="preserve">
+    <value>Részletek megtekintése</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Ár</value>
+  </data>
+  <data name="PricingPerPersonPerDay" xml:space="preserve">
+    <value>Pers./nap</value>
+  </data>
+  <data name="PricingPerApartmentPerDay" xml:space="preserve">
+    <value>Lakás/nap</value>
+  </data>
+  <data name="PricingPerStay" xml:space="preserve">
+    <value>Maradj</value>
+  </data>
+  <data name="PricingOneTime" xml:space="preserve">
+    <value>egyszeri</value>
+  </data>
+  <data name="LinkLabel" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Részletek</value>
+  </data>
+  <data name="ShowVoucherCode" xml:space="preserve">
+    <value>Utalványkód megjelenítése</value>
+  </data>
+  <data name="YourCode" xml:space="preserve">
+    <value>A kódod</value>
+  </data>
+  <data name="ManualCodeLabel" xml:space="preserve">
+    <value>A kódot kézzel kell bevinni</value>
+  </data>
+  <data name="VoucherQrAlt" xml:space="preserve">
+    <value>QR utalványkód</value>
+  </data>
+  <data name="QrUnavailable" xml:space="preserve">
+    <value>QR nem elérhető</value>
+  </data>
+  <data name="Enlarge" xml:space="preserve">
+    <value>Nagyítás</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Cím</value>
+  </data>
+  <data name="VoucherUsageTitle" xml:space="preserve">
+    <value>Utalvány Váltás</value>
+  </data>
+  <data name="VoucherStatus" xml:space="preserve">
+    <value>Státusz</value>
+  </data>
+  <data name="VoucherUsedCount" xml:space="preserve">
+    <value>Használt</value>
+  </data>
+  <data name="VoucherRemaining" xml:space="preserve">
+    <value>Egyéb</value>
+  </data>
+  <data name="VoucherValidFrom" xml:space="preserve">
+    <value>Érvényes</value>
+  </data>
+  <data name="VoucherValidTo" xml:space="preserve">
+    <value>Érvényes</value>
+  </data>
+  <data name="VoucherNoLimit" xml:space="preserve">
+    <value>Nincs korlát</value>
+  </data>
+  <data name="ShowInRestaurant" xml:space="preserve">
+    <value>Előadás az étteremben</value>
+  </data>
+  <data name="VoucherCode" xml:space="preserve">
+    <value>Kód</value>
+  </data>
+  <data name="VoucherOverlayHint" xml:space="preserve">
+    <value>Mutasd meg ezt a kódot a személyzetnek, hogy beválthasd a voucheredet.</value>
+  </data>
+  <data name="PurchasedUpsellsPageTitle" xml:space="preserve">
+    <value>A vouchereim</value>
+  </data>
+  <data name="WaitingForPaymentConfirmation" xml:space="preserve">
+    <value>Várok a fizetés megerősítésére...</value>
+  </data>
+  <data name="TokenMissingError" xml:space="preserve">
+    <value>Token hiányzik.</value>
+  </data>
+  <data name="UpsellPaymentRedirectTitle" xml:space="preserve">
+    <value>Felvásárlási fizetés átirányítása</value>
+  </data>
+  <data name="SelectedUpsellsSummaryTitle" xml:space="preserve">
+    <value>Kiválasztott plusseller összefoglaló</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Betöltés...</value>
+  </data>
+  <data name="PaymentErrorTitle" xml:space="preserve">
+    <value>Fizetési hiba</value>
+  </data>
+</root>

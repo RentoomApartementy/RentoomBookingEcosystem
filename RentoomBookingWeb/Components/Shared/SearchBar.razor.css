@@ -2,6 +2,7 @@
     display: flex !important;
     justify-content: center !important;
     width: 100% !important;
+    position: relative !important;
 }
 
 .sticky {
@@ -21,6 +22,7 @@
     width: 100% !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
     border: 1px solid #E5E7EB !important;
+    overflow: visible !important; /* Critical: allow the guest modal to show outside the bar */
 }
 
 .search-item {

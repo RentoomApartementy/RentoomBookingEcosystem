@@ -132,4 +132,10 @@
   <data name="VoucherNoLimitText" xml:space="preserve">
     <value>Χωρίς όριο</value>
   </data>
+  <data name="AddButtonText" xml:space="preserve">
+    <value>Προσθήκη</value>
+  </data>
+  <data name="DeleteButtonText" xml:space="preserve">
+    <value>Διαγραφή</value>
+  </data>
 </root>

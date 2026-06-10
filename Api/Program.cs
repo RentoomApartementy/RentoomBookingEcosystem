@@ -23,19 +23,16 @@ using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Integrations.TTLock;
 using RentoomBooking.SharedClasses.Integrations.TTLock.Models;
 using RentoomBooking.SharedClasses.Integrations.TTLock.Services;
-using RentoomBooking.SharedClasses.Integrations.Tpay;
-using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.BookingCom;
-using RentoomBooking.SharedClasses.Services.BookingDatabaseService;
 using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
@@ -54,6 +51,10 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient(IdoBookingConnectService.HttpClientName, client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(20);
+});
 builder.Services.AddHttpClient("LinkPreview")
     .ConfigureHttpClient(c =>
     {
@@ -114,6 +115,9 @@ builder.Services.AddScoped<IIdoLocksService, IdoLocksService>();
 builder.Services.AddScoped<IApartmentSearchFiltersService, ApartmentSearchFiltersService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
+builder.Services.AddScoped<IApartmentMediaCatalogService, ApartmentMediaCatalogService>();
+builder.Services.AddScoped<IApartmentPhotoBlobStorage, ApartmentPhotoBlobStorage>();
+builder.Services.AddScoped<IApartmentMediaVariantGenerator, ApartmentMediaVariantGenerator>();
 builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();
 builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
 builder.Services.AddScoped<ApartmentRepository>();
@@ -161,6 +165,8 @@ builder.Services.AddSingleton<LockInstructionsService>();
 var TpaySection = builder.Configuration.GetSection("Tpay");
 builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
 builder.Services.Configure<StorageOptions>("InstructionsStorage", builder.Configuration.GetSection("InstructionsStorage"));
+builder.Services.Configure<StorageOptions>(ApartmentPhotoBlobStorage.StorageOptionsName, builder.Configuration.GetSection(ApartmentPhotoBlobStorage.StorageOptionsName));
+builder.Services.Configure<ApartmentMediaVariantsOptions>(builder.Configuration.GetSection(ApartmentMediaVariantsOptions.SectionName));
 
 builder.Services.Configure<TpaySettings>(TpaySection);
 

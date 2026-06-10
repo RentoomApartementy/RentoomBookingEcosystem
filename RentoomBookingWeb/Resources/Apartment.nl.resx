@@ -282,4 +282,190 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Contact</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Veelgestelde Vragen (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Nacht</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nachten</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Prijs beschikbaar na datumkeuze</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Kies een datum</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Toon volledige beschrijving en voorzieningen</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Nacht</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Nachten</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Nachten</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Persoon</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Personen</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Mensen</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Voorzieningen en uitrusting</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Verander de datum</value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>De bonus is verwijderd.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus toegepast: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>De bonus bestaat niet.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Deze bonus is momenteel uitgeschakeld.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Deze bonus geldt niet voor het geselecteerde appartement.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>De bonus is niet beschikbaar op de startdatum van deze boeking.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Deze bonus vereist een langer verblijf.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Deze bonus vereist een hoger totaal bestelbedrag.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>De bonus werkt alleen voor boekingen via RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>De bonus verlaagt de huidige prijs van deze boeking niet.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Vul de data in en selecteer het aanbod om de bonus toe te passen.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>De prijs van het te berekenen aanbod van de bonus kon niet worden gelezen.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>De bonus is niet toegepast.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Heb je een kortingscode?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Voer kortingscode in</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Apply Code</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Controleren...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Verwijder bonus</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Vooruitblik</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Deze reservering is niet langer actief. Als je nog steeds een verblijf nodig hebt, ga dan terug naar de lijst met appartementen en maak een nieuwe reservering.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Aantal bedden</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Boek {0} bij Rentoom. Geweldige locatie, {1} kamers, hoge standaard.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Aantal nachten</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Geen add-ons</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Geen toevoegingsbeschrijving</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Reservering geannuleerd</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Waarschijnlijk kwam je naar ons toe vanuit een oude omleiding die niet meer bestaat. We brengen je zo naar de appartementenpagina.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Ga verder</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Om een appartement te boeken, selecteer je de datum en het aantal personen</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Aantal mensen</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Kosten</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Aantal toiletten</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Helaas zijn er op deze datum geen aanbiedingen voor dit appartement</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Appartementgegevens - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Reservatie</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Boek een appartement</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Appartementen</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Appartement Toruń, accommodatie Toruń, Rentoom, kortetermijnverhuur, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Appartementgrootte</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Polen</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Dit is ons nieuwe portaal</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Selecteer uw verblijfsdata om beschikbaarheid en prijzen voor onze aanbiedingen te controleren.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Appartement</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Boek appartement({0}s)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Ik wil een btw-factuur ontvangen</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Controleer de appartementgegevens en boek je verblijf in Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Fout 404</value>
+  </data>
 </root>

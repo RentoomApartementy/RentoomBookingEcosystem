@@ -282,4 +282,190 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Samband</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Algengar spurningar (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Nótt</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nætur</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Verð laust eftir val á dagsetningu</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Veldu dagsetningu</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Sýndu fulla lýsingu og þægindi</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Nótt</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Nætur</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Nætur</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Persóna</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Persónur</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Fólk</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Þjónusta og búnaður</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Breyttu dagsetningunni</value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bónusinn hefur verið fjarlægður.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bónus beitt: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Bónusinn sem veittur er ekki til.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Þessi bónus er nú óvirkur.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Þessi bónus gildir ekki fyrir valna íbúð.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bónusinn er ekki í boði á upphafsdegi þessarar bókunar.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Þessi bónus krefst lengri dvalar.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Þessi bónus krefst hærri heildarpöntunarupphæðar.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bónusinn gildir aðeins fyrir bókanir hjá RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bónusinn lækkar ekki núverandi verð þessarar bókunar.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Fylltu út dagsetningarnar og veldu tilboðið til að beita bónusnum.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Ekki var hægt að lesa verð tilboðsins sem átti að reikna út af bónusnum.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Tókst ekki að beita bónusnum.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Ertu með afsláttarkóða?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Sláðu inn afsláttarkóða</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Apply Code</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Athuga...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bónus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Fjarlægja bónus</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Forskoðun</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Þessi verndarsvæði eru ekki lengur virk. Ef þú þarft samt að dvelja, farðu aftur á listann yfir íbúðir og búðu til nýja bókun.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Fjöldi rúma</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Bókaðu {0} í Rentoom. Frábær staðsetning, {1} herbergi, há gæðastaðal.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Fjöldi nætur</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Engar viðbætur</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Engin viðbótarlýsing</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Bókun felld niður</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Líklegast komst þú til okkar úr gömlu endurvísun sem er ekki lengur til. Við förum með þig á íbúðasíðuna á eftir.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Haltu áfram</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Til að bóka íbúð, veldu dagsetningu og fjölda fólks</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Fjöldi fólks</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Kostnaður</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Fjöldi baðherbergja</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Því miður eru engin tilboð í þessa íbúð þennan dag</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Íbúðarupplýsingar - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Verndarsvæði</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Bókaðu íbúð</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Íbúðir</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Íbúð Toruń, gisting Toruń, Rentoom, skammtímaleiga {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Íbúðarstærð</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Pólland</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Þetta er nýja hliðið okkar</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Veldu dvalardaga þína til að athuga framboð og verð fyrir skráningar okkar.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Íbúð</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Bókaðu íbúð({0}s)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Ég vil fá virðisaukaskattsreikning</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Skoðaðu upplýsingar um íbúðina og bókaðu dvöl þína á Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Villa 404</value>
+  </data>
 </root>

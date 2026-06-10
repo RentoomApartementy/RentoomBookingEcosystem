@@ -282,4 +282,190 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Contact</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Întrebări frecvente (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Noapte</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nopți</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Preț disponibil după selecția datei</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Alege o dată</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Afișează descrierea completă și facilitățile</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Noapte</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Nopți</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Nopți</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Persoană</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Persoane</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Persoane</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Facilități și echipamente</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Schimbă data</value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonusul a fost eliminat.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus aplicat: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Bonusul oferit nu există.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Acest bonus este dezactivat în prezent.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Acest bonus nu se aplică apartamentului selectat.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonusul nu este disponibil la data de începere a acestei rezervări.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Acest bonus necesită o ședere mai lungă.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Acest bonus necesită o comandă totală mai mare.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonusul funcționează doar pentru rezervările cu RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonusul nu reduce prețul actual al acestei rezervări.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Completează datele și selectează oferta pentru a aplica bonusul.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Prețul ofertei care urma să fie calculat din bonusul nu putea fi citit.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Nu am aplicat bonusul.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Ai un cod de reducere?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Introduceți codul de reducere</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Aplică codul</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Verific...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Bonus de eliminare</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Previzualizare</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Această rezervație nu mai este activă. Dacă tot ai nevoie de o cazare, întoarce-te la lista de apartamente și creează o nouă rezervare.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Numărul de paturi</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Rezervă {0} la Rentoom. Locație excelentă, camere {1}, standard ridicat.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Număr de nopți</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Fără add-on-uri</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Fără descriere suplimentară</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Rezervare anulată</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Cel mai probabil, ai venit la noi dintr-o veche redirecționare care nu mai există. Vă vom duce imediat la pagina de apartamente.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Continuă</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Pentru a rezerva un apartament, selectați data și numărul de persoane</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Numărul de persoane</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Numărul băilor</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Din păcate, nu există oferte pentru acest apartament în această zi</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Detalii despre apartament - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Rezervare</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Rezervă un apartament</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Apartamente</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Apartament Toruń, cazare Toruń, Rentoom, închiriere pe termen scurt, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Dimensiunea apartamentului</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Polonia</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Acesta este noul nostru portal</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Selectați datele de ședere pentru a verifica disponibilitatea și prețurile listărilor noastre.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Apartament</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Rezervă apartamentul({0}uri)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Vreau să primesc o factură TVA</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Verifică detaliile apartamentului și rezervă-ți șederea la Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Eroare 404</value>
+  </data>
 </root>

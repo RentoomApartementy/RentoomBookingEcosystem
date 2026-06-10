@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Apartamentet Rentoom – ne krijojmë përvoja unike të qëndrimit në Toruń
-</value>
+    <value>Apartamentet Rentoom – ne krijojmë përvoja unike të qëndrimit në Toruń</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Po kërkoni një apartament të rehatshëm në Toruń?</value>
+    <value>Po kërkoni një apartament të rehatshëm në Toruń?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Apartamente në Toruń – akomodim i rehatshëm</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Po kërkoni një apartament të rehatshëm në Toruń?
-
-</value>
+    <value>Po kërkoni një apartament të rehatshëm në Toruń?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty është një markë moderne me qira afatshkurtër që kombinon një standard të lartë akomodimi me njohuritë autentike të Toruń. Ne krijojmë vende të dizajnuara duke pasur parasysh komoditetin, estetikën dhe funksionalitetin - si për mysafirët turistikë ashtu edhe për ato të biznesit.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Jemi të lumtur që erdhët tek ne!
-</value>
+    <value>Jemi të lumtur që erdhët tek ne!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Oferta jonë përfshin dhjetëra apartamente të zgjedhura me kujdes në pjesët më tërheqëse të qytetit. Çdo vend është zgjedhur për të ofruar akses të lehtë në atraksionet kryesore, restorantet dhe zonat e biznesit.
-Çdo apartament është një hapësirë e krijuar për të ofruar pushim dhe privatësi të vërtetë pas një dite intensive vizitash ose pune.
-</value>
+    <value>Oferta jonë përfshin dhjetëra apartamente të zgjedhura me kujdes në pjesët më tërheqëse të qytetit. Çdo vend është zgjedhur për të ofruar akses të lehtë në atraksionet kryesore, restorantet dhe zonat e biznesit.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Apartamente në vendet më të mira në Toruń</value>
@@ -47,37 +40,28 @@ Po kërkoni një apartament të rehatshëm në Toruń?</value>
     <value>Klientë të kënaqur</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Apartamente në Toruń
-
-</value>
+    <value>Apartamente në Toruń</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Vendndodhja në Toruń</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Pse Rentoom?
-</value>
+    <value>Pse Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments është më shumë se thjesht një natë në Toruń. Ne ofrojmë një standard të lartë apartamentesh në vendet më të mira dhe përfitime reale që rrisin vlerën e të gjithë qëndrimit.
-</value>
+    <value>Rentoom Apartments është më shumë se thjesht një natë në Toruń. Ne ofrojmë një standard të lartë apartamentesh në vendet më të mira dhe përfitime reale që rrisin vlerën e të gjithë qëndrimit.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Si pjesë e Programit tonë të Partnerëve, mysafirët kanë akses në zbritje speciale në restorante, kafene dhe atraksione turistike të zgjedhura. Zbritjet dhe rekomandimet aktuale janë të vendosura direkt në apartamente, kështu që ju mund të përdorni vende të provuara dhe të kurseni para gjatë vizitave.
-</value>
+    <value>Si pjesë e Programit tonë të Partnerëve, mysafirët kanë akses në zbritje speciale në restorante, kafene dhe atraksione turistike të zgjedhura.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Ne punojmë vetëm me partnerë të besuar, lokalë, duke u kujdesur për cilësinë e çdo rekomandimi. Duke zgjedhur Rentoom, ju fitoni rehati, shërbim profesional dhe përfitime shtesë që e bëjnë qëndrimin tuaj në Toruń më të rehatshëm, më të rafinuar dhe thjesht më fitimprurës.
-</value>
+    <value>Ne punojmë vetëm me partnerë të besuar, lokalë, duke u kujdesur për cilësinë e çdo rekomandimi.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Njihuni me mendimet e njerëzve që kanë fjetur në apartamentet tona në Toruń.
-
-</value>
+    <value>Njihuni me mendimet e njerëzve që kanë fjetur në apartamentet tona në Toruń.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Lini informacionin tuaj të kontaktit dhe ne do t'ju kontaktojmë!
-</value>
+    <value>Lini informacionin tuaj të kontaktit dhe ne do t'ju kontaktojmë!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Kontaktoni furnizuesin</value>
@@ -98,8 +82,27 @@ Po kërkoni një apartament të rehatshëm në Toruń?</value>
     <value>Dërgo</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Çfarë i dallon apartamentet tona nga të tjerat?
-
-</value>
+    <value>Çfarë i dallon apartamentet tona nga të tjerat?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Apartamente Toruń - Qira afatshkurtra | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Shikoni apartamentet tona në zemër të Torunit. E përkryer për një fundjavë dhe një qëndrim më të gjatë.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Apartamentet Toruń - akomodimi juaj i rehatshëm</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Apartamente Toruń, Akomodim Toruń, Qira afatshkurtra, Apartamente në qytetin e vjetër, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Shtëpi</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Po kërkoni strehim në Toruń? Ne ofrojmë apartamente komode në qendër dhe në qytetin e vjetër. Rezervoni direkt në internet - çmimet më të ulëta, pa komisione ndërmjetësuese.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Po kërkoni strehim në Toruń? Rentoom ofron apartamente me qira afatshkurtër në Toruń dhe qëndron në vendet më të mira të qytetit.</value>
   </data>
 </root>

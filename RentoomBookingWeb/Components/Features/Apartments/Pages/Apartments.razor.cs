@@ -21,6 +21,11 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         private bool _isInteractive;
         private readonly CancellationTokenSource _initCts = new();
 
+        private string? _lastStartDate;
+        private string? _lastEndDate;
+        private string? _lastAdults;
+        private string? _lastChildren;
+
         private void HandleViewModelChange()
         {
             if (_isDisposed || !_isInteractive) return;
@@ -32,6 +37,36 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
             ViewModel.OnChange += HandleViewModelChange;
             _offerLength = CalculateOfferLength();
             await ViewModel.InitializeAsync(_initCts.Token);
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            bool routeParamsChanged = 
+                StartDate != _lastStartDate || 
+                EndDate != _lastEndDate || 
+                Adults != _lastAdults || 
+                Children != _lastChildren;
+
+            if (routeParamsChanged)
+            {
+                _lastStartDate = StartDate;
+                _lastEndDate = EndDate;
+                _lastAdults = Adults;
+                _lastChildren = Children;
+
+                // If we have dates in the route, we ensure they are pushed to the ViewModel 
+                // BEFORE the re-initialization.
+                if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
+                {
+                    ViewModel.StartDate = StartDate;
+                    ViewModel.EndDate = EndDate;
+                    ViewModel.Adults = Adults ?? "2";
+                    ViewModel.Children = Children ?? "0";
+
+                    _offerLength = CalculateOfferLength();
+                    await ViewModel.InitializeAsync(_initCts.Token);
+                }
+            }
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

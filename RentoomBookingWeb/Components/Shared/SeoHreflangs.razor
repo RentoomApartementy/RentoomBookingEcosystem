@@ -1,0 +1,122 @@
+@using System.Globalization
+@using RentoomBooking.SharedFrontend.Localization
+@using RentoomBookingWeb.Services.Localization
+@inject IRouteLocalizationService RouteService
+@inject NavigationManager NavManager
+
+@foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
+{
+    var url = GetFullUrlForCulture(culture);
+    if (!string.IsNullOrEmpty(url))
+    {
+        <link rel="alternate" hreflang="@GetShortCode(culture)" href="@url" />
+    }
+}
+
+@{
+    var xDefaultUrl = GetFullUrlForCulture("pl-PL");
+    if (!string.IsNullOrEmpty(xDefaultUrl))
+    {
+        <link rel="alternate" hreflang="x-default" href="@xDefaultUrl" />
+    }
+}
+
+@code {
+    private string GetFullUrlForCulture(string culture)
+    {
+        try
+        {
+            var baseUri = NavManager.BaseUri.TrimEnd('/');
+            
+            // Fix for the file:/// protocol issue
+            if (baseUri.StartsWith("file:", StringComparison.OrdinalIgnoreCase))
+            {
+                baseUri = "https://rentoom.pl"; 
+            }
+
+            var relativeUri = NavManager.ToBaseRelativePath(NavManager.Uri);
+            var uriParts = relativeUri.Split('?', 2);
+            var relativePath = uriParts[0];
+            var queryString = uriParts.Length > 1 ? "?" + uriParts[1] : "";
+            
+            var parts = relativePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            string? currentSlug = null;
+            string? currentCultureInUrl = null;
+            string remainingSegments = "";
+
+            // Identify culture prefix and main slug
+            if (parts.Length > 0 && SupportedLanguagesProvider.SupportedCultureNames.Any(c => 
+                string.Equals(c.Split('-')[0], parts[0], StringComparison.OrdinalIgnoreCase) || 
+                string.Equals(c, parts[0], StringComparison.OrdinalIgnoreCase)))
+            {
+                currentCultureInUrl = parts[0];
+                if (parts.Length > 1)
+                {
+                    currentSlug = parts[1];
+                    if (parts.Length > 2)
+                    {
+                        remainingSegments = "/" + string.Join("/", parts.Skip(2));
+                    }
+                }
+                else
+                {
+                    currentSlug = "";
+                }
+            }
+            else if (parts.Length > 0)
+            {
+                currentSlug = parts[0];
+                if (parts.Length > 1)
+                {
+                    remainingSegments = "/" + string.Join("/", parts.Skip(1));
+                }
+            }
+            else
+            {
+                currentSlug = "";
+            }
+
+            string resultUrl;
+            if (!string.IsNullOrEmpty(currentSlug) && RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
+            {
+                resultUrl = $"{baseUri}{RouteService.GetLocalizedUrl(pageKey!, culture)}{remainingSegments}{queryString}";
+            }
+            else if (string.IsNullOrEmpty(currentSlug))
+            {
+                resultUrl = $"{baseUri}/{GetShortCode(culture)}{queryString}";
+            }
+            else
+            {
+                var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(currentSlug);
+                if (pageKeyFromCanonical != null)
+                {
+                    resultUrl = $"{baseUri}{RouteService.GetLocalizedUrl(pageKeyFromCanonical, culture)}{remainingSegments}{queryString}";
+                }
+                else
+                {
+                    resultUrl = $"{baseUri}/{GetShortCode(culture)}/{currentSlug}{remainingSegments}{queryString}";
+                }
+            }
+            
+            return resultUrl;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SeoHreflangs] Error generating URL for {culture}: {ex.Message}");
+            return string.Empty;
+        }
+    }
+
+    private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
+
+    private string? GetPageKeyFromCanonicalSlug(string slug) => slug.ToLower() switch
+    {
+        "apartamenty" => "Apartments",
+        "kontakt" => "Contact",
+        "wspolpraca" => "Cooperation",
+        "regulaminy" => "Statute",
+        "polozenie-torunia" => "AboutCity",
+        "torun" => "AboutCity",
+        _ => null
+    };
+}

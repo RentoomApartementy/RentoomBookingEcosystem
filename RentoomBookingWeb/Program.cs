@@ -22,6 +22,7 @@ using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.Cookies;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Payments;
+using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBookingWeb.Components;
@@ -30,6 +31,7 @@ using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
 using RentoomBooking.SharedFrontend.Localization;
 using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Services.Localization;
 using RentoomBookingWeb.Configuration;
 using System.Globalization;
 using System.Linq;
@@ -52,7 +54,12 @@ namespace RentoomBookingWeb
             
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
             builder.Services.AddHttpClient();
+            builder.Services.AddHttpClient(IdoBookingConnectService.HttpClientName, client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(20);
+            });
             builder.Services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
@@ -117,6 +124,9 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<FiltersRepository>();
             builder.Services.AddScoped<RappQrMaintService>();
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
+            builder.Services.AddScoped<IApartmentMediaCatalogService, ApartmentMediaCatalogService>();
+            builder.Services.AddScoped<IApartmentPhotoBlobStorage, ApartmentPhotoBlobStorage>();
+            builder.Services.AddScoped<IApartmentMediaVariantGenerator, ApartmentMediaVariantGenerator>();
             builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
             builder.Services.AddScoped<IdoSellService>();
             builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();
@@ -134,6 +144,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixService>();
             builder.Services.AddScoped<BitrixLeadCaptureService>();
             builder.Services.AddScoped<IGusService, GusService>();
+            builder.Services.AddScoped<IRouteLocalizationService, RouteLocalizationService>();
             builder.Services.AddScoped<MediaCacheService>();
             builder.Services.AddScoped<ReservationWorkflowTelemetry>();
             builder.Services.AddScoped<GoogleAnalyticsService>();
@@ -146,6 +157,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<CustomerTermsRepository>();
             builder.Services.AddScoped<CustomerTermsService>();
             builder.Services.AddScoped<CookieConsentRepository>();
+            
             builder.Services.AddScoped<CookieConsentService>();
             builder.Services.AddScoped<IBonusesService, BonusesService>();
             builder.Services.AddScoped<IUpsellCatalogService, UpsellCatalogService>();
@@ -213,6 +225,8 @@ namespace RentoomBookingWeb
 
             //storage options:
             builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
+            builder.Services.Configure<StorageOptions>(ApartmentPhotoBlobStorage.StorageOptionsName, builder.Configuration.GetSection(ApartmentPhotoBlobStorage.StorageOptionsName));
+            builder.Services.Configure<ApartmentMediaVariantsOptions>(builder.Configuration.GetSection(ApartmentMediaVariantsOptions.SectionName));
 
             var app = builder.Build();
             
@@ -230,6 +244,22 @@ namespace RentoomBookingWeb
                 SupportedUICultures = supportedCultureInfos,
                 RequestCultureProviders = new List<IRequestCultureProvider>
                 {
+                    new CustomRequestCultureProvider(context =>
+                    {
+                        var path = context.Request.Path.Value;
+                        if (string.IsNullOrEmpty(path) || path == "/") return Task.FromResult<ProviderCultureResult?>(null);
+
+                        var parts = path.TrimStart('/').Split('/');
+                        var potentialCulture = parts[0];
+                        
+                        var matchedCulture = supportedCultures.FirstOrDefault(c => 
+                            string.Equals(c, potentialCulture, StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(c.Split('-')[0], potentialCulture, StringComparison.OrdinalIgnoreCase));
+
+                        return Task.FromResult<ProviderCultureResult?>(matchedCulture != null 
+                            ? new ProviderCultureResult(matchedCulture) 
+                            : null);
+                    }),
                     new CookieRequestCultureProvider
                     {
                         CookieName = CookieRequestCultureProvider.DefaultCookieName
@@ -252,28 +282,6 @@ namespace RentoomBookingWeb
                     }
                 }
             };
-
-            app.UseRequestLocalization(localizationOptions);
-
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
-
-            if (!app.Environment.IsProduction())
-            {
-                app.Use(async (context, next) =>
-                {
-                    context.Response.OnStarting(() =>
-                    {
-                        context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
-                        return Task.CompletedTask;
-                    });
-
-                    await next();
-                });
-            }
 
             app.UseHttpsRedirection();
             app.UseResponseCompression();
@@ -298,7 +306,47 @@ namespace RentoomBookingWeb
                     }
                 }
             });
-            
+
+            app.UseRouting();
+
+            app.UseMiddleware<LocalizedRoutingMiddleware>();
+            app.UseRequestLocalization(localizationOptions);
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            if (!app.Environment.IsProduction())
+            {
+                app.Use(async (context, next) =>
+                {
+                    context.Response.OnStarting(() =>
+                    {
+                        context.Response.Headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet";
+                        return Task.CompletedTask;
+                    });
+
+                    await next();
+                });
+            }
+
+            // DIAGNOSTIC LOGGING
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("WebRootPath: {Path}", app.Environment.WebRootPath);
+            logger.LogInformation("ContentRootPath: {Path}", app.Environment.ContentRootPath);
+
+            // 404 TRAP PROTECTION: Don't show HTML 404 for files
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404 && context.Request.Path.Value!.Contains('.'))
+                {
+                    // If it's a file and it's a 404, stop here. Don't let UseStatusCodePages re-execute to /404 HTML.
+                    return;
+                }
+            });
             // error 404
             app.UseStatusCodePagesWithReExecute("/404");
 
@@ -306,11 +354,12 @@ namespace RentoomBookingWeb
             
             app.MapControllers();
 
-            app.MapGet("/robots.txt", () =>
+            app.MapGet("/robots.txt", (HttpContext context) =>
             {
+                var baseUrl = $"{context.Request.Scheme}://{context.Request.Host}";
                 var content = app.Environment.IsProduction()
-                    ? "User-agent: *\nAllow: /"
-                    : "User-agent: *\nDisallow: /";
+                    ? $"User-agent: *\nAllow: /\nSitemap: {baseUrl}/sitemap.xml"
+                    : $"User-agent: *\nDisallow: /\nSitemap: {baseUrl}/sitemap.xml";
 
                 return Results.Text(content, "text/plain");
             });

@@ -621,6 +621,170 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.ToTable("ApartmentInfos");
                 });
 
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ApartmentMediaAssetEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApartmentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("apartment_id");
+
+                    b.Property<string>("CardContentType")
+                        .HasColumnType("varchar")
+                        .HasColumnName("card_content_type");
+
+                    b.Property<int?>("CardHeight")
+                        .HasColumnType("integer")
+                        .HasColumnName("card_height");
+
+                    b.Property<string>("CardStorageKey")
+                        .HasColumnType("varchar")
+                        .HasColumnName("card_storage_key");
+
+                    b.Property<int?>("CardWidth")
+                        .HasColumnType("integer")
+                        .HasColumnName("card_width");
+
+                    b.Property<string>("ChecksumSha256")
+                        .HasColumnType("varchar")
+                        .HasColumnName("checksum_sha256");
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("varchar")
+                        .HasColumnName("content_type");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("varchar")
+                        .HasColumnName("extension");
+
+                    b.Property<int?>("IdoObjectMediaId")
+                        .HasColumnType("integer")
+                        .HasColumnName("ido_object_media_id");
+
+                    b.Property<string>("IdoSourceUrl")
+                        .IsRequired()
+                        .HasColumnType("varchar")
+                        .HasColumnName("ido_source_url");
+
+                    b.Property<int>("PictureDisplaySequence")
+                        .HasColumnType("integer")
+                        .HasColumnName("picture_display_sequence");
+
+                    b.Property<long?>("SourceContentLength")
+                        .HasColumnType("bigint")
+                        .HasColumnName("source_content_length");
+
+                    b.Property<string>("SourceEtag")
+                        .HasColumnType("varchar")
+                        .HasColumnName("source_etag");
+
+                    b.Property<DateTime?>("SourceLastModifiedUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("source_last_modified_utc");
+
+                    b.Property<string>("StorageKey")
+                        .IsRequired()
+                        .HasColumnType("varchar")
+                        .HasColumnName("storage_key");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApartmentId", "IdoSourceUrl")
+                        .IsUnique();
+
+                    b.HasIndex("ApartmentId", "PictureDisplaySequence");
+
+                    b.ToTable("apartment_media_assets");
+                });
+
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ApartmentMediaSyncRunEntity", b =>
+                {
+                    b.Property<Guid>("RunId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("run_id");
+
+                    b.Property<int>("ApartmentsProcessed")
+                        .HasColumnType("integer")
+                        .HasColumnName("apartments_processed");
+
+                    b.Property<int>("CardGeneratedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("card_generated_count");
+
+                    b.Property<int>("CardReplacedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("card_replaced_count");
+
+                    b.Property<int>("DeletedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("deleted_count");
+
+                    b.Property<int>("DownloadedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("downloaded_count");
+
+                    b.Property<int>("FailedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("failed_count");
+
+                    b.Property<DateTime?>("FinishedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("finished_at");
+
+                    b.Property<int>("MediaItemsSeen")
+                        .HasColumnType("integer")
+                        .HasColumnName("media_items_seen");
+
+                    b.Property<int>("ReplacedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("replaced_count");
+
+                    b.Property<int>("SequenceUpdatedCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("sequence_updated_count");
+
+                    b.Property<DateTime>("StartedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("started_at")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar")
+                        .HasColumnName("status");
+
+                    b.Property<string>("SummaryJson")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("summary_json");
+
+                    b.HasKey("RunId");
+
+                    b.HasIndex("StartedAt")
+                        .HasDatabaseName("idx_apartment_media_sync_runs_started_at");
+
+                    b.ToTable("apartment_media_sync_runs");
+                });
+
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.BookingComLogEntity", b =>
                 {
                     b.Property<Guid>("BookingComLogGuid")

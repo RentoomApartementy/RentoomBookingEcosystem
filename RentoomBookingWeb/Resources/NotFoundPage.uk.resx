@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,55 +59,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>Ð¡Ñ‚Ð¾Ñ€Ñ–Ð½ÐºÐ° Ð½Ðµ Ð·Ð½Ð°Ð¹Ð´ÐµÐ½Ð°</value>
+    <value>Сторінка не знайдена</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>ÐŸÐ¾Ð¼Ð¸Ð»ÐºÐ° 404</value>
+    <value>Бå'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>Ð’Ð¸Ð±Ð°Ñ‡Ñ‚Ðµ, Ð°Ð»Ðµ ÑÑ‚Ð¾Ñ€Ñ–Ð½ÐºÐ°, ÑÐºÑƒ Ð²Ð¸ ÑˆÑƒÐºÐ°Ñ”Ñ‚Ðµ, Ð½Ðµ Ñ–ÑÐ½ÑƒÑ” Ð°Ð±Ð¾ Ñ—Ñ— Ð¿ÐµÑ€ÐµÐ¼Ñ–ÑÑ‚Ð¸Ð»Ð¸.</value>
+    <value>Вибачте, але сторінка, яку ви шукаєте, не існує або її перемістили.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>ÐŸÐ¾Ð²ÐµÑ€Ð½ÑƒÑ‚Ð¸ÑÑ Ð½Ð° Ð³Ð¾Ð»Ð¾Ð²Ð½Ñƒ ÑÑ‚Ð¾Ñ€Ñ–Ð½ÐºÑƒ</value>
+    <value>Повернутися на головну сторінку</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>ÐœÐ¾Ð¶Ð»Ð¸Ð²Ð¾, Ð²Ð¸ ÑˆÑƒÐºÐ°Ñ”Ñ‚Ðµ:</value>
+    <value>Можливо, ви шукаєте:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
-    <value>Ð¡Ð¿Ð¸ÑÐ¾Ðº ÐºÐ²Ð°Ñ€Ñ‚Ð¸Ñ€</value>
+    <value>Список квартир</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
-    <value>Ð¡Ð¿Ñ–Ð²Ð¿Ñ€Ð°Ñ†Ñ</value>
+    <value>Співпраця</value>
   </data>
   <data name="NotFoundContact" xml:space="preserve">
-    <value>ÐšÐ¾Ð½Ñ‚Ð°ÐºÑ‚</value>
+    <value>Контакт</value>
   </data>
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Бронювання скасовано</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Це наш новий портал</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Це бронювання більше не активне. Якщо вам все ще потрібне проживання, додайте до списку квартир і створіть нову. Бронювання. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Найімовірніше, він прийшов до нас через старе перенаправлення, якого вже немає. Зараз ми переведемо вас™ на сторінку™™ квартир.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>Бå'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Забронюйте квартиру</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Забронюйте квартиру({0})</value></data>
 </root>

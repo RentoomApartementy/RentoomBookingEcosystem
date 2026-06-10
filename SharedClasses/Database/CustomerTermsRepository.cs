@@ -11,16 +11,16 @@ namespace RentoomBooking.SharedClasses.Database
     public class CustomerTermsRepository
     {
         private static readonly TimeSpan TermsCacheTtl = TimeSpan.FromMinutes(30);
-        private readonly PostgresBookingDbContext _context;
+        private readonly IDbContextFactory<PostgresBookingDbContext> _contextFactory;
         private readonly IMemoryCache _memoryCache;
 
-        public CustomerTermsRepository(PostgresBookingDbContext context, IMemoryCache memoryCache)
+        public CustomerTermsRepository(IDbContextFactory<PostgresBookingDbContext> contextFactory, IMemoryCache memoryCache)
         {
-            _context = context;
+            _contextFactory = contextFactory;
             _memoryCache = memoryCache;
         }
 
-        public async Task<List<CustomerTermDisplayDto>> GetActiveTermsSourcesAsync(string? cultureName, bool onlyRequiredForWorkflow = false)
+        public async Task<List<CustomerTermDisplayDto>> GetActiveTermsSourcesAsync(string? cultureName, bool onlyRequiredForWorkflow = false, CancellationToken ct = default)
         {
             var normalizedCulture = NormalizeCulture(cultureName);
             var neutralCulture = normalizedCulture.Split('-')[0];
@@ -30,20 +30,16 @@ namespace RentoomBooking.SharedClasses.Database
             {
                 entry.AbsoluteExpirationRelativeToNow = TermsCacheTtl;
 
-                var query = _context.CustomerTermsSources
+                using var context = await _contextFactory.CreateDbContextAsync(ct);
+                var query = context.CustomerTermsSources
                     .AsNoTracking()
-                    .Where(t => t.IsActive);//.ToListAsync();
-
-                //if (onlyRequiredForWorkflow)
-                //{
-                //   query = query.Where(t => t.IsRequiredForReservationWorkflow);
-                //}
+                    .Where(t => t.IsActive);
 
                 var sources = await query
                     .Include(t => t.Translations)
                     .OrderBy(t => t.SortOrder)
                     .ThenBy(t => t.Id)
-                    .ToListAsync();
+                    .ToListAsync(ct);
 
                 return sources.Select(source =>
                 {
@@ -65,16 +61,17 @@ namespace RentoomBooking.SharedClasses.Database
             return cachedTerms ?? [];
         }
 
-        public async Task<CustomerTermDisplayDto?> GetTermByIdAsync(int id, string? cultureName)
+        public async Task<CustomerTermDisplayDto?> GetTermByIdAsync(int id, string? cultureName, CancellationToken ct = default)
         {
-            var terms = await GetActiveTermsSourcesAsync(cultureName);
+            var terms = await GetActiveTermsSourcesAsync(cultureName, ct: ct);
             return terms.FirstOrDefault(t => t.Id == id);
         }
 
         public async Task AddAgreedTermsAsync(IEnumerable<CustomerAgreedTerms> agreedTerms)
         {
-            await _context.CustomerAgreedTerms.AddRangeAsync(agreedTerms);
-            await _context.SaveChangesAsync();
+            using var context = await _contextFactory.CreateDbContextAsync();
+            await context.CustomerAgreedTerms.AddRangeAsync(agreedTerms);
+            await context.SaveChangesAsync();
         }
 
         public async Task SaveAgreedTermsAsync(IEnumerable<CustomerAgreedTerms> agreedTerms)
@@ -85,10 +82,11 @@ namespace RentoomBooking.SharedClasses.Database
                 return;
             }
 
+            using var context = await _contextFactory.CreateDbContextAsync();
             var reservationGuid = termsList[0].ReservationGuid;
             var termIds = termsList.Select(t => t.TermsSourceId).Distinct().ToList();
 
-            var existingTerms = await _context.CustomerAgreedTerms
+            var existingTerms = await context.CustomerAgreedTerms
                 .Where(t => t.ReservationGuid == reservationGuid && termIds.Contains(t.TermsSourceId))
                 .ToListAsync();
 
@@ -97,7 +95,7 @@ namespace RentoomBooking.SharedClasses.Database
                 var existing = existingTerms.FirstOrDefault(t => t.TermsSourceId == agreedTerm.TermsSourceId);
                 if (existing is null)
                 {
-                    await _context.CustomerAgreedTerms.AddAsync(agreedTerm);
+                    await context.CustomerAgreedTerms.AddAsync(agreedTerm);
                     continue;
                 }
 
@@ -106,7 +104,7 @@ namespace RentoomBooking.SharedClasses.Database
                 existing.ClientBitrixId = agreedTerm.ClientBitrixId;
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(Guid reservationGuid, string? cultureName = null)
@@ -114,7 +112,8 @@ namespace RentoomBooking.SharedClasses.Database
             var normalizedCulture = NormalizeCulture(cultureName);
             var neutralCulture = normalizedCulture.Split('-')[0];
 
-            var terms = await _context.CustomerAgreedTerms
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var terms = await context.CustomerAgreedTerms
                 .AsNoTracking()
                 .Where(t => t.ReservationGuid == reservationGuid)
                 .Include(t => t.TermsSource)
@@ -139,7 +138,8 @@ namespace RentoomBooking.SharedClasses.Database
 
         public async Task<bool> UpdateAgreedTermAsync(Guid reservationGuid, int termsSourceId, bool isAccepted)
         {
-            var entity = await _context.CustomerAgreedTerms
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var entity = await context.CustomerAgreedTerms
                 .FirstOrDefaultAsync(t => t.ReservationGuid == reservationGuid && t.TermsSourceId == termsSourceId);
 
             if (entity is null)
@@ -150,7 +150,7 @@ namespace RentoomBooking.SharedClasses.Database
             entity.IsAccepted = isAccepted;
             entity.AgreedAt = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return true;
         }
 

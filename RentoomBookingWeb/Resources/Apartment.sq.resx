@@ -282,4 +282,190 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontaktoni</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Pyetjet e bëra më shpesh (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Natë</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Netët</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Çmimi i disponueshëm pas zgjedhjes së datës</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Zgjidhni një datë</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Shfaq përshkrimin e plotë dhe pajisjet</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Natë</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Netët</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Netët</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Personi</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>personat</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Njerëzit</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Komoditetet dhe pajisjet</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Ndryshoni datën</value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonusi është hequr.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonusi i aplikuar: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Bonusi i dhënë nuk ekziston.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Ky bonus aktualisht është i çaktivizuar.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Ky bonus nuk vlen për apartamentin e zgjedhur.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonusi nuk është i disponueshëm për datën e fillimit të këtij rezervimi.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Ky bonus kërkon një qëndrim më të gjatë.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Ky bonus kërkon një shumë më të lartë totale të porosisë.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonusi funksionon vetëm për rezervime me RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonusi nuk e ul çmimin aktual të këtij rezervimi.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Plotësoni datat dhe zgjidhni ofertën për të aplikuar bonusin.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Çmimi i ofertës që do të llogaritej i bonusit nuk mund të lexohej.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Dështoi në aplikimin e bonusit.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>A keni një kod zbritjeje?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Futni kodin e zbritjes</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Aplikoni kodin</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Duke kontrolluar...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Hiq bonusin</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Pamje paraprake</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Ky rezervim nuk është më aktiv. Nëse keni ende nevojë për një qëndrim, kthehuni në listën e apartamenteve dhe krijoni një rezervim të ri.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Numri i shtretërve</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Rezervoni {0} në Rentoom. Vendndodhje e shkëlqyeshme, {1} dhoma, standard i lartë.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Numri i netëve</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Nuk ka shtesa</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Nuk ka përshkrim shtesë</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Rezervimi u anulua</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Me shumë mundësi, ju keni ardhur tek ne nga një ridrejtim i vjetër që nuk ekziston më. Ne do t'ju çojmë në faqen e apartamenteve në një moment.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Vazhdo</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Për të rezervuar një apartament, zgjidhni datën dhe numrin e personave</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Numri i njerëzve</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Kosto</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Numri i banjove</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Fatkeqësisht, nuk ka oferta për këtë apartament në këtë datë</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Detajet e apartamentit - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Rezervimi</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Rezervoni një apartament</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Apartamente</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Apartament Toruń, Akomodim Toruń, Rentoom, Qira afatshkurtër, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Madhësia e apartamentit</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Polonia</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Ky është portali ynë i ri</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Zgjidhni datat tuaja të qëndrimit për të kontrolluar disponueshmërinë dhe çmimet për listat tona.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Apartament</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Rezervoni apartament({0})</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Dua të marr një faturë TVSH</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Kontrolloni detajet e apartamentit dhe rezervoni qëndrimin tuaj në Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Gabimi 404</value>
+  </data>
 </root>

@@ -282,4 +282,190 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kapcsolat</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Gyakran Ismételt Kérdések (GYIK)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Éjszakát</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Éjszakák</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Az ár elérhető dátum kiválasztása után</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Válassz egy dátumot</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Teljes leírás és szolgáltatások megjelenítése</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Éjszakát</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Éjszakák</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Éjszakák</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Személy</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>Személyek</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>Emberek</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Szolgáltatások és felszerelés</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Dátum módosítása</value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>A bónuszt eltávolították.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bónusz alkalmazás: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>A biztosított bónusz nem létezik.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Ez a bónusz jelenleg le van tiltva.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Ez a bónusz nem vonatkozik a kiválasztott lakásra.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>A bónusz nem elérhető a foglalás kezdeti dátumánál.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>Ez a bónusz hosszabb tartózkodást igényel.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>Ez a bónusz magasabb teljes rendelési összeget igényel.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>A bónusz csak a RentoomBookingWeb-en történő foglalásokra érvényes.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>A bónusz nem csökkenti a foglalás aktuális árát.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Töltsd ki a dátumokat, és válaszd ki az ajánlatot, hogy alkalmazd a bónuszt.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>A bónusz kiszámítandó ajánlatára nem lehetett olvasni.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Nem alkalmaztam a bónuszt.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Van kedvezménykódod?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Adja be a kedvezménykódot</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Alkalmazás kód</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Ellenőrizem...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bónusz: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Eltávolítani a bónuszt</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Előzetes</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Ez a rezervátum már nem aktív. Ha még mindig tartózkodásra van szükséged, térj vissza a lakások listájához, és készíts új foglalást.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Ágyak száma</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Foglald {0} a Rentoom-on. Remek elhelyezkedés, {1} szobák, magas színvonal.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Éjszakák száma</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Nincsenek kiegészítők</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Nincs kiegészítő leírás</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Foglalás törölve</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Valószínűleg egy régi, már nem létező átirányításból jöttél hozzánk. Hamarosan elviszünk a lakások oldalára.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Folytatás</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>A lakásfoglaláshoz válaszd ki a dátumot és az emberek számát</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Emberek száma</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Költség</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>A fürdőszobák száma</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Sajnos ezen a napon nincs ajánlat erre a lakásra</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Lakás részletei - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Foglalás</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Foglalj lakást</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Lakások</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>Apartment toruń, accommodation toruń, rentoom, rövid távú bérlés, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Lakásméret</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Lengyelország</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>Ez az új portálunk</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Válaszd ki tartózkodási dátumodat, hogy ellenőrizd a kínálatot és az árakat a kínálatunkhoz.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Lakás</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Lakás ({0})</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Szeretnék ÁFA-számlát kapni</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Nézd meg a lakás részleteit, és foglald le a szállást a Rentoomnál.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>404-es hiba</value>
+  </data>
 </root>

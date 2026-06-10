@@ -13,32 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="title2" xml:space="preserve">
-    <value>Rentoom Apartments – vi skapar unika upplevelser av att bo i Toruń
-</value>
+    <value>Rentoom Apartments – vi skapar unika upplevelser av att bo i Toruń</value>
   </data>
   <data name="title2subtitle" xml:space="preserve">
-    <value>
-Letar du efter en bekväm lägenhet i Toruń?</value>
+    <value>Letar du efter en bekväm lägenhet i Toruń?</value>
   </data>
   <data name="title3" xml:space="preserve">
     <value>Lägenheter i Toruń – bekvämt boende</value>
   </data>
   <data name="title3subtitle" xml:space="preserve">
-    <value>Letar du efter en bekväm lägenhet i Toruń?
-
-</value>
+    <value>Letar du efter en bekväm lägenhet i Toruń?</value>
   </data>
   <data name="text1description" xml:space="preserve">
     <value>Rentoom Apartamenty är ett modernt korttidsuthyrningsmärke som kombinerar hög standard på boendet med autentisk kunskap om Toruń. Vi skapar platser designade med komfort, estetik och funktionalitet i åtanke – för både turister och affärsgäster.</value>
   </data>
   <data name="text1title" xml:space="preserve">
-    <value>Vi är glada att du kom till oss!
-</value>
+    <value>Vi är glada att du kom till oss!</value>
   </data>
   <data name="text1description2" xml:space="preserve">
-    <value>Vårt erbjudande inkluderar dussintals noggrant utvalda lägenheter i stadens mest attraktiva delar. Varje plats har valts för att ge enkel tillgång till viktiga sevärdheter, restauranger och affärszoner.
-Varje lägenhet är ett utrymme utformat för att ge verklig vila och avskildhet efter en intensiv dag med sightseeing eller arbete.
-</value>
+    <value>Vårt erbjudande inkluderar dussintals noggrant utvalda lägenheter i stadens mest attraktiva delar. Varje plats har valts för att ge enkel tillgång till viktiga sevärdheter, restauranger och affärszoner.</value>
   </data>
   <data name="text1title2" xml:space="preserve">
     <value>Lägenheter på de bästa platserna i Toruń</value>
@@ -47,37 +40,28 @@ Varje lägenhet är ett utrymme utformat för att ge verklig vila och avskildhet
     <value>Nöjda kunder</value>
   </data>
   <data name="apartmentsstats" xml:space="preserve">
-    <value>Lägenheter i Toruń
-
-</value>
+    <value>Lägenheter i Toruń</value>
   </data>
   <data name="locationsstats" xml:space="preserve">
     <value>Läge i Toruń</value>
   </data>
   <data name="whyRentoom" xml:space="preserve">
-    <value>Varför Rentoom?
-</value>
+    <value>Varför Rentoom?</value>
   </data>
   <data name="whyRentoomTitle" xml:space="preserve">
-    <value>Rentoom Apartments är mer än bara en övernattning i Toruń. Vi erbjuder en hög standard på lägenheter på de bästa platserna och verkliga fördelar som ökar värdet på hela vistelsen.
-</value>
+    <value>Rentoom Apartments är mer än bara en övernattning i Toruń. Vi erbjuder en hög standard på lägenheter på de bästa platserna och verkliga fördelar som ökar värdet på hela vistelsen.</value>
   </data>
   <data name="whyRentoomText1" xml:space="preserve">
-    <value>Som en del av vårt partnerprogram får gäster tillgång till specialrabatter på utvalda restauranger, kaféer och turistattraktioner. Nuvarande rabatter och rekommendationer finns direkt i lägenheterna, så du kan använda beprövade platser och spara pengar under sightseeing.
-</value>
+    <value>Som en del av vårt partnerprogram får gäster tillgång till specialrabatter på utvalda restauranger, kaféer och turistattraktioner.</value>
   </data>
   <data name="whyRentoomText2" xml:space="preserve">
-    <value>Vi arbetar endast med pålitliga, lokala partners och ser till kvaliteten på varje rekommendation. Genom att välja Rentoom får du komfort, professionell service och ytterligare fördelar som gör din vistelse i Toruń mer bekväm, mer förfinad och helt enkelt mer lönsam.
-</value>
+    <value>Vi arbetar endast med pålitliga, lokala partners och ser till kvaliteten på varje rekommendation.</value>
   </data>
   <data name="opinionText" xml:space="preserve">
-    <value>Lär känna åsikterna hos personer som har sovit i våra lägenheter i Toruń.
-
-</value>
+    <value>Lär känna åsikterna hos personer som har sovit i våra lägenheter i Toruń.</value>
   </data>
   <data name="formtext" xml:space="preserve">
-    <value>Lämna dina kontaktuppgifter så återkommer vi till dig!
-</value>
+    <value>Lämna dina kontaktuppgifter så återkommer vi till dig!</value>
   </data>
   <data name="formContactText" xml:space="preserve">
     <value>Kontakta leverantör</value>
@@ -98,8 +82,27 @@ Varje lägenhet är ett utrymme utformat för att ge verklig vila och avskildhet
     <value>Skicka</value>
   </data>
   <data name="whyRentoomSubtitle" xml:space="preserve">
-    <value>Vad skiljer våra lägenheter från andra?
-
-</value>
+    <value>Vad skiljer våra lägenheter från andra?</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Lägenheter Toruń - Korttidsuthyrning | Rentoom</value>
+  </data>
+  <data name="Home_OgDescription" xml:space="preserve">
+    <value>Kolla in våra lägenheter i hjärtat av Toruń. Perfekt för en helg och en längre vistelse.</value>
+  </data>
+  <data name="Home_OgTitle" xml:space="preserve">
+    <value>Lägenheterna Toruń – ditt bekväma boende</value>
+  </data>
+  <data name="Home_MetaKeywords" xml:space="preserve">
+    <value>Lägenheter Toruń, Boende Toruń, korttidsuthyrning, Gamla stans lägenheter, Rentoom</value>
+  </data>
+  <data name="Home_BreadcrumbName" xml:space="preserve">
+    <value>Hem</value>
+  </data>
+  <data name="Home_MetaDescription" xml:space="preserve">
+    <value>Letar du efter boende i Toruń? Vi erbjuder bekväma lägenheter i centrum och i Gamla stan. Boka direkt online – lägsta priser, inga mellanhandsprovisioner.</value>
+  </data>
+  <data name="Home_OrganizationDescription" xml:space="preserve">
+    <value>Letar du efter boende i Toruń? Rentoom erbjuder lägenheter för korttidsuthyrning i Toruń och bor på stadens bästa platser.</value>
   </data>
 </root>

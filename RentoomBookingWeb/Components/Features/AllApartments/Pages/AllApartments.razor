@@ -6,6 +6,7 @@
 @using RentoomBookingWeb.Components.Features.AllApartments.Components
 @inject IApartmentsService ApartmentsService
 @inject NavigationManager Navigation
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<RentoomBookingWeb.Apartments> Localizer
 
@@ -14,7 +15,7 @@
 <HeadContent>
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@Localizer["AllApartments_MetaDescription"]" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["AllApartments_BreadcrumbName"]" CurrentPagePath="/apartamenty-torun" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["AllApartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("AllApartments")" />
 </HeadContent>
 
 <HeaderSection Title="@Localizer["AllApartments_HeaderTitle"]" 
@@ -112,7 +113,8 @@
         if (item == null) return "#";
 
         string slug = item.Name?.ToSlug() ?? "szczegoly";
+        string localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
         
-        return $"/apartamenty/{item.Id}/{slug}";
+        return $"{localizedBase}/{item.Id}/{slug}";
     }
 }

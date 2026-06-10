@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,22 +59,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PageNotFoundTitle" xml:space="preserve">
-    <value>SÃ­Ã°a fannst ekki</value>
+    <value>Síða fannst ekki</value>
   </data>
   <data name="NotFoundHeaderTitle" xml:space="preserve">
-    <value>Villa 404</value>
+    <value>BÅ'Ä... d 404</value>
   </data>
   <data name="PageNotFoundDescription" xml:space="preserve">
-    <value>ÃžvÃ­ miÃ°ur, en sÃ­Ã°an sem Ã¾Ãº ert aÃ° leita aÃ° er ekki til eÃ°a hefur veriÃ° fÃ¦rÃ°.</value>
+    <value>Því miður, en síðan sem þú ert að leita að er ekki til eða hefur verið færð.</value>
   </data>
   <data name="BackToHome" xml:space="preserve">
-    <value>Til baka Ã¡ forsÃ­Ã°u</value>
+    <value>Aftur á aðalsíðu</value>
   </data>
   <data name="NotFoundMaybeLookingFor" xml:space="preserve">
-    <value>Kannski ertu aÃ° leita aÃ°:</value>
+    <value>Þú gætir verið að leita að:</value>
   </data>
   <data name="NotFoundApartmentsList" xml:space="preserve">
-    <value>Listi yfir Ã­bÃºÃ°ir</value>
+    <value>Listi yfir íbúðir</value>
   </data>
   <data name="NotFoundCooperation" xml:space="preserve">
     <value>Samstarf</value>
@@ -85,29 +85,29 @@
   <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
     
     
-  <value>Reservation canceled</value></data>
+  <value>Bókun felld niður</value></data>
   <data name="NotFoundPopupTitleDefault" xml:space="preserve">
     
     
-  <value>This is our new portal</value></data>
+  <value>Þetta er nýja hliðið okkar</value></data>
   <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
     
     
-  <value>This reservation is no longer active. If you still need a stay, return to the apartments list and create a new booking.</value></data>
+  <value>Þessi bókun er ekki lengur virk. Ef þú þarft samt dvöl, bættu við listann yfir íbúðir og búðu til nýja. Bókun. ™</value></data>
   <data name="NotFoundPopupMessageDefault" xml:space="preserve">
     
     
-  <value>You most likely reached us from an old redirect that no longer exists. We will take you to the apartments page.</value></data>
+  <value>Líklegast kom það til okkar frá gömlum endurvísun sem er ekki lengur til. Við förum með þig™ á íbúðasíðuna™ á eftir™.</value></data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     
     
-  <value>Error 404</value></data>
+  <value>BÅ'Ä... d 404</value></data>
   <data name="NotFoundPopupButton" xml:space="preserve">
     
     
-  <value>Book an apartment</value></data>
+  <value>Bókaðu íbúð</value></data>
   <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
     
     
-  <value>Book an apartment ({0}s)</value></data>
+  <value>Bókaðu íbúð({0}s)</value></data>
 </root>
