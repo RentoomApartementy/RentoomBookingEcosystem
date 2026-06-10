@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Microsoft.Extensions.Logging;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 
 namespace RentoomBookingWeb.Components.Features.Apartments.Pages
@@ -14,6 +15,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         
         [Inject]
         public NavigationManager NavManager { get; set; } = default!;
+
+        [Inject]
+        public ILogger<Apartments> Logger { get; set; } = default!;
 
         private DotNetObjectReference<Apartments>? _objRef;
         private IJSObjectReference? _jsModule;
@@ -85,7 +89,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         {
             if (!ViewModel.ApartmentsIsLoading && ViewModel.HasMore)
             {
-                await ViewModel.LoadMoreAsync();
+                await ViewModel.LoadMoreAsync(_initCts.Token);
             }
         }
 
@@ -98,13 +102,33 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
 
             if (_jsModule is not null && _objRef is not null)
             {
-                await _jsModule.InvokeVoidAsync("unregister", _objRef);
+                try
+                {
+                    await _jsModule.InvokeVoidAsync("unregister", _objRef);
+                }
+                catch (JSDisconnectedException)
+                {
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogDebug(ex, "Failed to unregister apartments infinite scroll JS hook.");
+                }
             }
 
             _objRef?.Dispose();
             if (_jsModule != null)
             {
-                await _jsModule.DisposeAsync();
+                try
+                {
+                    await _jsModule.DisposeAsync();
+                }
+                catch (JSDisconnectedException)
+                {
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogDebug(ex, "Failed to dispose apartments infinite scroll JS module.");
+                }
             }
         }
         
