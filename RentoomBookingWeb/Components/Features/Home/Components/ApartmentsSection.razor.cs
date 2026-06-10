@@ -35,7 +35,7 @@ public partial class ApartmentsSection : ComponentBase
     {
         Apartments.Clear();
         Offers.Clear();
-        
+       
         await GetFilteredOffers();
 
         SortItemsByOffers();

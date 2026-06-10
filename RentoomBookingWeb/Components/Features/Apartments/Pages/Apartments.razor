@@ -93,7 +93,6 @@
                                     @key="@($"apartment-{item.Id}")"
                                     Item="@item" 
                                     Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)" 
-                                    OfferLength="@_offerLength"
                                     DeferGalleryImages="true"
                                     ShowPrice="@ViewModel.IsSearch"
                                     StartDate="@ViewModel.StartDate"
@@ -141,27 +140,4 @@
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? Adults { get; set; }
     [Parameter] public string? Children { get; set; }
-
-    private int? _offerLength;
-
-    protected override void OnParametersSet()
-    {
-        if (!string.IsNullOrEmpty(StartDate)) ViewModel.StartDate = StartDate;
-        if (!string.IsNullOrEmpty(EndDate)) ViewModel.EndDate = EndDate;
-        if (!string.IsNullOrEmpty(Adults)) ViewModel.Adults = Adults;
-        if (!string.IsNullOrEmpty(Children)) ViewModel.Children = Children;
-
-        _offerLength = CalculateOfferLength();
-    }
-
-    private int? CalculateOfferLength()
-    {
-        if (!DateTime.TryParse(ViewModel.StartDate, out var startDate) || !DateTime.TryParse(ViewModel.EndDate, out var endDate))
-        {
-            return null;
-        }
-
-        var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
-        return nights > 0 ? nights : null;
-    }
 }

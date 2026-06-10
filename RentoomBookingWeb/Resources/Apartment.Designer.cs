@@ -160,6 +160,24 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This bonus requires a higher total order amount..
+        /// </summary>
+        internal static string BonusReasonBelowMinimumOrderGrossAmount {
+            get {
+                return ResourceManager.GetString("BonusReasonBelowMinimumOrderGrossAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This bonus requires a longer reservation..
+        /// </summary>
+        internal static string BonusReasonBelowMinimumReservationDays {
+            get {
+                return ResourceManager.GetString("BonusReasonBelowMinimumReservationDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This bonus works only for reservations from RentoomBookingWeb..
         /// </summary>
         internal static string BonusReasonChannelNotSupported {
