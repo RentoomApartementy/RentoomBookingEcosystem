@@ -1580,6 +1580,9 @@ private static TimeZoneInfo GetWarsawTimeZone()
                     ["ASSIGNED_BY_ID"] = _bitrixAssignedByUserId
                 };
 
+                if (!string.IsNullOrEmpty(record.ProviderTransactionId))
+                    dealUpdateFields["UF_CRM_1768566766553"] = record.ProviderTransactionId;
+
                 if (paymentRetryLink != null) {
                     //RB_Link_Anuluj_Rezerwacje
                     dealUpdateFields["UF_CRM_1775071948450"] = paymentRetryLink;
@@ -1687,11 +1690,16 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
                     ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
                     : "None"
+ 
+                
 
             };
             AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
 
             var paymentRetryLink = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true);
+
+            if (!string.IsNullOrEmpty(record.ProviderTransactionId))
+                fields["UF_CRM_1768566766553"] = record.ProviderTransactionId;
 
             if (paymentRetryLink != null)
             {
