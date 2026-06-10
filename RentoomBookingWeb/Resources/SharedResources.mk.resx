@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>За Торуњ</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Главно мени на сајтот</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Врати се на почетната страница</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Работиме на подготовка на овој дел.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Адреса</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Се случи грешка</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Икона на Facebook</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Икона за затворање на мени</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Ве покануваме наскоро!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Икона на Рентум</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Нема понуди</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Не можев да ја зачувам согласноста. Ве молам обидете се повторно.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram икона</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Понуди</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Фејсбук Рентум Апартмани</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Календарска икона</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Станови</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Локација во изградба</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Дом</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Инстаграм Рентум Апартмани</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Затвори ја пораката</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Икона на менито</value>
+  </data>
 </root>

@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontaktą pavyko įrašyti, bet sandorio sukurti nepavyko. Patikrinkite Bitrix prieš pakartotinai siunčiant.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Nuotrauka</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Bendradarbiavimas</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Kontaktai</value>
+  </data>
 </root>

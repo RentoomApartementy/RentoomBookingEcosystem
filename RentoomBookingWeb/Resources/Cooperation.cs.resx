@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakt mohl být zachráněn, ale dohoda nebyla uzavřena. Před opětovným odesláním zkontrolujte Bitrix.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Spolupráce</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
 </root>

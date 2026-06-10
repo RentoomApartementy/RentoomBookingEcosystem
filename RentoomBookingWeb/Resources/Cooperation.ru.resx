@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Контакт можно было спасти, но сделку не удалось заключить. Проверьте Bitrix перед повторной отправкой.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Фото</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Сотрудничество</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Контакт</value>
+  </data>
 </root>

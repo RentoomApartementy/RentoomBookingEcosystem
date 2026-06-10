@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Vai meklējat naktsmītni Toruņa? Rentoom piedāvā dzīvokļus īstermiņa īrei Toruņā un nakšņo labākajās pilsētas vietās.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Dzīvokļi Toruņā - interjers</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>E-pasts</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Dzīvokļi Toruņā - pilsētas panorāma</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Uzzināt vairāk</value>
+  </data>
 </root>

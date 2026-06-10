@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontaktpersonu varēja saglabāt, bet darījumu nevarēja izveidot. Pārbaudiet Bitrix pirms atkārtotas nosūtīšanas.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Fotogrāfija</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Sadarbība</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Kontakti</value>
+  </data>
 </root>

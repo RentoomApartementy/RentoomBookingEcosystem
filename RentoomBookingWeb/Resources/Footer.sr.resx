@@ -149,4 +149,19 @@
   <data name="AboutCity" xml:space="preserve">
     <value>O Torunu</value>
   </data>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Fejsbuk</value>
+  </data>
+  <data name="Footer_FacebookAriaLabel" xml:space="preserve">
+    <value>Rentoom na Fejsbuku</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Iznajmljivanje na Instagramu</value>
+  </data>
+  <data name="Footer_InstagramIconAlt" xml:space="preserve">
+    <value>Fejsbuk</value>
+  </data>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Apartmani</value>
+  </data>
 </root>

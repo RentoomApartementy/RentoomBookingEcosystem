@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Cena za pobyt</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Apartmány Toruń – kompletní seznam ubytování</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>V současnosti nejsou k dispozici žádné byty.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Načítám...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Byty Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Čisté vyhledávání</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Hledej byt podle jména...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Byty</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Hledat byt podle jména</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Podívejte se na seznam všech našich bytů v Toruni. Pohodlné ubytování, skvělá poloha blízko Starého Města. Zkontrolujte podrobnosti o každém bytě.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Byty Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Objevte naši kompletní nabídku pohodlných bytů v srdci Toruně.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Byty k pronájmu, ubytování, rezervace, rezervace apartmánů, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Nebyly nalezeny žádné byty pro dané jméno.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Byt</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Žádné nabídky</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Počet osob</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Byty</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Počet lůžek</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Počet toalet</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Nabídky</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Velikost bytu</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Poloha</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Výsledky vyhledávání: {0} nabídky - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Zkontrolujte dostupné byty mezi {0} a {1}. Našli jsme {2} nabídky, které jsou pro vás ideální. Rezervujte si bezpečně online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Objevte širokou škálu bytů v Rentoomu. Pohodlí, skvělé lokality a vysoký standard. Ideální na dovolenou a služební cesty.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luxusní byty k pronájmu - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Pro tento termín nejsou k dispozici žádné byty - Rentoom</value>
   </data>
 </root>

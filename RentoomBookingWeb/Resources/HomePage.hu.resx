@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Szállást keres Toruńban? A Rentoom rövid távú bérleti lakásokat kínál Toruńban, és a város legjobb helyein száll meg.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Lakások Toruńban – belső tér</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Lakások Toruńban – várospanoráma</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Tudjon meg többet</value>
+  </data>
 </root>

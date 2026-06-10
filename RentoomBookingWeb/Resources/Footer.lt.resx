@@ -149,4 +149,19 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Apie Torunę</value>
   </data>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>"Facebook"</value>
+  </data>
+  <data name="Footer_FacebookAriaLabel" xml:space="preserve">
+    <value>Rentoom "Facebook"</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom "Instagram" tinkle</value>
+  </data>
+  <data name="Footer_InstagramIconAlt" xml:space="preserve">
+    <value>Instagramas</value>
+  </data>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Apartamentai</value>
+  </data>
 </root>

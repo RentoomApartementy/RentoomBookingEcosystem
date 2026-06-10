@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Prijs per verblijf</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Appartementen Toruń - volledige lijst van accommodaties</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Er zijn momenteel geen appartementen beschikbaar.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Laden...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Appartementen Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Zoek vrij</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Zoek een appartement op naam...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Appartementen</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Zoek een appartement op naam</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Bekijk een lijst van al onze appartementen in Toruń. Comfortabele accommodatie, geweldige locatie dicht bij de oude stad. Controleer de details van elk appartement.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Appartementen Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Ontdek ons volledige aanbod van comfortabele appartementen in het hart van Toruń.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Appartementen te huur, accommodatie, boeking, appartementreservering, renttoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Er werden geen appartementen gevonden met de voornaam.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Appartement</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Geen aanbiedingen</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Aantal mensen</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Appartementen</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Aantal bedden</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Aantal toiletten</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Aanbiedingen</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Appartementgrootte</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Locatie</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Zoekresultaten: {0} aanbiedingen - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Controleer beschikbare appartementen tussen {0} en {1}. We hebben {2} deals gevonden die perfect voor u zijn. Boek veilig online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Ontdek het brede aanbod van appartementen in Rentoom. Comfort, geweldige locaties en hoge standaard. Perfect voor vakanties en zakenreizen.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luxe appartementen te huur - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Er zijn geen appartementen beschikbaar voor deze datum - Rentoom</value>
   </data>
 </root>

@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Дали барате сместување во Торун? Рентум нуди станови за краткорочен изнајмување во Торуњ и престојува на најдобрите локации во градот.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Станови во Торуњ - ентериер</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Е-пошта</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Станови во Торуњ - панорама на градот</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Дознај повеќе</value>
+  </data>
 </root>

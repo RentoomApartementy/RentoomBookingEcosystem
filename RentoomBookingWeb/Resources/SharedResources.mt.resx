@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Dwar Toruń</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Menu Prinċipali tas-Sit</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Ritorna għall-paġna ewlenija</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Qed naħdmu fuq il-preparazzjoni ta' din is-sezzjoni.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Indirizz</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Seħħ żball</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Ikona ta' Facebook</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Ikona ta' għeluq tal-menu</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Nistednuk dalwaqt!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Ikona ta' Rentoom</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>L-ebda offerti</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Ma stajtx insalva l-kunsens. Jekk jogħġbok ipprova mill-ġdid.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Ikona ta' Instagram</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Offerti</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Appartamenti Rentoom fuq Facebook</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Ikona tal-kalendarju</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Appartamenti</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Sit għaddej mill-kostruzzjoni</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Dar</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Apartments</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Agħlaq il-messaġġ</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Ikona tal-menu</value>
+  </data>
 </root>

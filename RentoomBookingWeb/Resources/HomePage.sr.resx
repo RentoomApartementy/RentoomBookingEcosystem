@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Da li ste u potrazi za smeštajem u Torunu? Rentoom nudi stanove za kratkoročni najam u Torunu i boravi na najboljim lokacijama u gradu.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Apartmani u Torunu - enterijer</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>E-mail poruka</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Apartmani u Torunu - panorama grada</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Saznajte više</value>
+  </data>
 </root>

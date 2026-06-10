@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Ertu að leita að gistingu í Toruń? Rentoom býður upp á íbúðir til skammtímaleigu í Toruń og gistir á bestu stöðum borgarinnar.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Íbúðir í Toruń - innra rými</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Netfang</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Íbúðir í Toruń - borgarútsýni</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Lærðu meira</value>
+  </data>
 </root>

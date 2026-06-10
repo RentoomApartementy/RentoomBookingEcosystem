@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Hinta per majoitus</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Asunnot Toruńissa – täydellinen majoituslista</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Tällä hetkellä asuntoja ei ole saatavilla.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Ladataan...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Asunnot Toruńissa</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Selkeä haku</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Etsi asunto nimellä...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Asunnot</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Etsi asuntoa nimen perusteella</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Katso lista kaikista asunnoistamme Toruńissa. Mukava majoitus, erinomainen sijainti lähellä vanhaa kaupunkia. Tarkista jokaisen asunnon tiedot.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Asunnot Toruńissa</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Tutustu koko valikoimaamme mukavia asuntoja Toruńin sydämessä.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Asunnot vuokrattavaksi, majoitus, varaus, asunnon varaus, vuokra-asunto</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Etunimelle ei löytynyt asuntoja.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Asunto</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Ei tarjouksia</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Henkilöiden määrä</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Asunnot</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Vuodemäärä</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Vessojen määrä</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Tarjoukset</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Asunnon koko</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Sijainti</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Hakutulokset: {0} tarjoukset - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Tarkista saatavilla olevat asunnot {0} ja {1} välillä. Löysimme {2} tarjouksia, jotka sopivat sinulle täydellisesti. Varaa turvallisesti verkossa.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Tutustu laajaan valikoimaan Rentoomin asuntoja. Mukavuus, erinomaiset sijainnit ja korkea laatu. Täydellinen lomille ja työmatkoille.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luksusasunnot vuokrattavaksi - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Tälle päivälle ei ole saatavilla asuntoja – Rentoom</value>
   </data>
 </root>

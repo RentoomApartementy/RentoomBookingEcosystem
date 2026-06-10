@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Кошт за пражыванне</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Апартаменты Торунь — поўны спіс жылля</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>У цяперашні час кватэр няма.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Апартаменты Торунь</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Чысты пошук</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Шукай кватэру па назве...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Кватэры</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Пошук кватэры па назве</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Глядзіце спіс усіх нашых кватэр у Торуні. Камфортнае жыллё, выдатнае размяшчэнне блізка да Старога горада. Праверце дэталі кожнай кватэры.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Апартаменты Торунь</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Адкрыйце для сябе поўны асартымент камфортных кватэр у самым сэрцы Торуні.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Кватэры для арэнды, пражыванне, браніраванне, браніраванне кватэр, Рэнтум</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Кватэры для гэтага імя не знайшлі.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Кватэра</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Ніякіх прапаноў</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Колькасць людзей</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Кватэры</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Колькасць ложкаў</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Колькасць туалетаў</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Прапановы</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Памер кватэры</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Месцазнаходжанне</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Вынікі пошуку: {0} прапановы - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Праверце даступныя кватэры паміж {0} і {1}. Мы знайшлі {2} прапановы, якія ідэальна падыходзяць вам. Браніруйце бяспечна анлайн.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Адкрыйце для сябе шырокі выбар кватэр у Рэнтуме. Камфорт, выдатныя месцы і высокі ўзровень. Ідэальна падыходзіць для адпачынку і дзелавых паездак.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Раскошныя кватэры для арэнды — Рэнтум</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>На гэтую дату няма даступных кватэр — Рэнтум</value>
   </data>
 </root>

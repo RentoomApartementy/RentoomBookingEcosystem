@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Yhteys voitiin pelastaa, mutta sopimusta ei voitu tehdä. Tarkista Bitrix ennen uudelleenlähetystä.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Kuva</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Yhteistyö</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Yhteystiedot</value>
+  </data>
 </root>

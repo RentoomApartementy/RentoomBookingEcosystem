@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>A kapcsolatot meg lehetett menteni, de az üzletet nem lehetett megkötni. Nézd meg a Bitrixet az újraszállítás előtt.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Fotó</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Együttműködés</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Kapcsolat</value>
+  </data>
 </root>

@@ -149,4 +149,19 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Tietoa Toruńista</value>
   </data>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="Footer_FacebookAriaLabel" xml:space="preserve">
+    <value>Rentoom Facebookissa</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom Instagramissa</value>
+  </data>
+  <data name="Footer_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram</value>
+  </data>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Asunnot</value>
+  </data>
 </root>

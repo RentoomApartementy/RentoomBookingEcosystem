@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Cauți cazare în Toruń? Rentoom oferă apartamente cu chirie pe termen scurt în Toruń și locuiește în cele mai bune locații ale orașului.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Apartamente în Toruń - interior</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Apartamente în Toruń - peisajul orașului</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Află mai multe</value>
+  </data>
 </root>

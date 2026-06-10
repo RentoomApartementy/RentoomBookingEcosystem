@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Sambandið gat verið bjargað, en samningurinn var ekki gerður. Skoðaðu Bitrix áður en þú sendir aftur.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Ljósmynd</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Samstarf</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Samband</value>
+  </data>
 </root>

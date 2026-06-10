@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Suchen Sie eine Unterkunft in Toruń? Rentoom bietet Wohnungen zur Kurzzeitmiete in Toruń an und übernachtet an den besten Standorten der Stadt.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Wohnungen in Toruń – Innenraum</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>E-Mail</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Wohnungen in Toruń – Stadtpanorama</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Erfahren Sie mehr</value>
+  </data>
 </root>

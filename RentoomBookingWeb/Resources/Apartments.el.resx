@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Τιμή ανά διαμονή</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Apartments Toruń - πλήρης λίστα καταλυμάτων</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Προς το παρόν δεν υπάρχουν διαθέσιμα διαμερίσματα.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Φόρτωση...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Διαμερίσματα Τορούν</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Εκκαθάριση αναζήτησης</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Αναζητήστε ένα διαμέρισμα με το όνομα...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Διαμερίσματα</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Αναζήτηση διαμερίσματος με το όνομα</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Δείτε μια λίστα με όλα τα διαμερίσματά μας στο Τορούν. Άνετα καταλύματα, εξαιρετική τοποθεσία κοντά στην Παλιά Πόλη. Ελέγξτε τις λεπτομέρειες κάθε διαμερίσματος.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Διαμερίσματα Τορούν</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Ανακαλύψτε την πλήρη γκάμα των άνετων διαμερισμάτων μας στην καρδιά του Τορούν.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>διαμερίσματα προς ενοικίαση, διαμονή, κράτηση, κράτηση διαμερίσματος, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Δεν βρέθηκαν διαμερίσματα για το όνομα.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Διαμέρισμα</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Δεν υπάρχουν προσφορές</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Αριθμός ατόμων</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Διαμερίσματα</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Αριθμός κρεβατιών</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Αριθμός λουτρών</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Προσφορές</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Μέγεθος διαμερίσματος</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Τοποθεσία</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Αποτελέσματα αναζήτησης: {0} προσφορές - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Ελέγξτε τα διαθέσιμα διαμερίσματα μεταξύ {0} και {1}. Βρήκαμε {2} προσφορές που είναι ιδανικές για εσάς. Κάντε κράτηση με ασφάλεια online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Ανακαλύψτε τη μεγάλη γκάμα διαμερισμάτων Rentoom. Άνεση, εξαιρετικές τοποθεσίες και υψηλά πρότυπα. Ιδανικό για διακοπές και επαγγελματικά ταξίδια.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Πολυτελή Διαμερίσματα προς Ενοικίαση - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Δεν υπάρχουν διαθέσιμα διαμερίσματα για αυτή την ημερομηνία - Rentoom</value>
   </data>
 </root>

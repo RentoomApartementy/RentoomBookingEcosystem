@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>D'fhéadfaí an teagmháil a shábháil, ach níorbh fhéidir an déileáil a chruthú. Seiceáil Bitrix sula ndéantar é a ath-loingseoireacht.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Grianghraf</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Comhar</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Teagmháil</value>
+  </data>
 </root>

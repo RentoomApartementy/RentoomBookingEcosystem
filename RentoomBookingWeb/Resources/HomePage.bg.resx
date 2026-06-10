@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Търсите ли настаняване в Торун? Rentoom предлага апартаменти за краткосрочен наем в Торунь и се настанява на най-добрите локации на града.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Апартаменти в Торун - интериор</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Имейл</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Апартаменти в Торун – градска панорама</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Научете повече</value>
+  </data>
 </root>
