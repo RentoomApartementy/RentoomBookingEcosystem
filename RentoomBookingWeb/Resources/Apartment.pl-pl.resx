@@ -258,6 +258,27 @@
   <data name="ContinueReservation" xml:space="preserve">
     <value>Dokończ rezerwację</value>
   </data>
+  <data name="Nights" xml:space="preserve">
+    <value>nocy</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>noc</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>noce</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>nocy</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>osoba</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>osoby</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>osób</value>
+  </data>
   <data name="PageNotFoundTitle" xml:space="preserve">
     <value>Strona nie została odnaleziona</value>
   </data>
@@ -282,130 +303,11 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Kontakt</value>
   </data>
-  <data name="Reservation_Preview" xml:space="preserve">
-    <value />
-    <value>Podgląd</value>
-  </data>
-  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
-    <value />
-    <value>Ta rezerwacja nie jest już aktywna. Jeśli nadal potrzebujesz pobytu, wróć do listy apartamentów i utwórz nową rezerwację.</value>
-  </data>
-  <data name="Reservation_AltBeds" xml:space="preserve">
-    <value />
-    <value>Liczba łóżek</value>
-  </data>
-  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
-    <value />
-    <value>Zarezerwuj {0} w Rentoom. Świetna lokalizacja, {1} pokoje, wysoki standard.</value>
-  </data>
-  <data name="Reservation_NightsCount" xml:space="preserve">
-    <value />
-    <value>Liczba nocy</value>
-  </data>
-  <data name="Reservation_NoAddons" xml:space="preserve">
-    <value />
-    <value>Brak dodatków</value>
-  </data>
-  <data name="Apartment_NoAddonDescription" xml:space="preserve">
-    <value />
-    <value>Brak opisu dodatku</value>
-  </data>
-  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
-    <value />
-    <value>Rezerwacja została anulowana</value>
-  </data>
-  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
-    <value />
-    <value>Najprawdopodobniej trafiłeś do nas ze starego przekierowania, które już nie istnieje. Za chwilę przeniesiemy Cię na stronę apartamentów.</value>
-  </data>
-  <data name="Reservation_NextButton" xml:space="preserve">
-    <value />
-    <value>Przejdź dalej</value>
-  </data>
-  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
-    <value />
-    <value>Aby zarezerwować apartament wybierz termin i ilość osób</value>
-  </data>
-  <data name="Reservation_AltOccupancy" xml:space="preserve">
-    <value />
-    <value>Liczba osób</value>
-  </data>
-  <data name="Reservation_Cost" xml:space="preserve">
-    <value />
-    <value>Koszt</value>
-  </data>
-  <data name="Reservation_AltBathrooms" xml:space="preserve">
-    <value />
-    <value>Liczba łazienek</value>
-  </data>
-  <data name="Reservation_NoOffersForDate" xml:space="preserve">
-    <value />
-    <value>Niestety w tym terminie nie ma ofert dla tego apartamentu</value>
-  </data>
-  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
-    <value />
-    <value>Szczegóły apartamentu - Rentoom</value>
-  </data>
-  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
-    <value />
-    <value>Rezerwacja</value>
-  </data>
-  <data name="NotFoundPopupButton" xml:space="preserve">
-    <value />
-    <value>Zarezerwuj apartament</value>
-  </data>
-  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
-    <value />
-    <value>Apartamenty</value>
-  </data>
-  <data name="Apartment_SeoKeywords" xml:space="preserve">
-    <value />
-    <value>apartament toruń, nocleg toruń, rentoom, wynajem krótkoterminowy, {0}</value>
-  </data>
-  <data name="Reservation_AltArea" xml:space="preserve">
-    <value />
-    <value>Powierzchnia apartamentu</value>
-  </data>
-  <data name="Apartment_CountryName" xml:space="preserve">
-    <value />
-    <value>Polska</value>
-  </data>
-  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
-    <value />
-    <value>To jest nasz nowy portal</value>
-  </data>
-  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
-    <value />
-    <value>Wybierz daty pobytu, aby sprawdzić dostępność i ceny naszych ofert.</value>
-  </data>
-  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
-    <value />
-    <value>Apartament</value>
-  </data>
-  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
-    <value />
-    <value>Zarezerwuj apartament ({0}s)</value>
-  </data>
-  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
-    <value />
-    <value>Chcę otrzymać fakturę VAT</value>
-  </data>
-  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
-    <value />
-    <value>Sprawdź szczegóły apartamentu i zarezerwuj pobyt w Rentoom.</value>
-  </data>
-  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
-    <value />
-    <value>Błąd 404</value>
-  </data>
   <data name="FAQ_Title" xml:space="preserve">
     <value>Często zadawane pytania (FAQ)</value>
   </data>
   <data name="Night" xml:space="preserve">
     <value>noc</value>
-  </data>
-  <data name="Nights" xml:space="preserve">
-    <value>nocy</value>
   </data>
   <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
     <value>Cena dostępna po wybraniu terminu</value>
@@ -416,28 +318,97 @@
   <data name="ShowAllDetails" xml:space="preserve">
     <value>Pokaż pełny opis i udogodnienia</value>
   </data>
-  <data name="StayNight_1" xml:space="preserve">
-    <value>noc</value>
-  </data>
-  <data name="StayNight_234" xml:space="preserve">
-    <value>noce</value>
-  </data>
-  <data name="StayNight_Many" xml:space="preserve">
-    <value>noce</value>
-  </data>
-  <data name="StayPerson_1" xml:space="preserve">
-    <value>osoba</value>
-  </data>
-  <data name="StayPerson_234" xml:space="preserve">
-    <value>osoby</value>
-  </data>
-  <data name="StayPerson_Many" xml:space="preserve">
-    <value>osób</value>
-  </data>
   <data name="Amenities_Title" xml:space="preserve">
     <value>Udogodnienia i wyposażenie</value>
   </data>
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Zmień termin</value>
+  </data>
+  <data name="Reservation_Preview" xml:space="preserve">
+    <value>Podgląd</value>
+  </data>
+  <data name="NotFoundPopupMessageReservationCanceled" xml:space="preserve">
+    <value>Ta rezerwacja nie jest już aktywna. Jeśli nadal potrzebujesz pobytu, wróć do listy apartamentów i utwórz nową rezerwację.</value>
+  </data>
+  <data name="Reservation_AltBeds" xml:space="preserve">
+    <value>Liczba łóżek</value>
+  </data>
+  <data name="Apartment_SeoDescriptionWithName" xml:space="preserve">
+    <value>Zarezerwuj {0} w Rentoom. Świetna lokalizacja, {1} pokoje, wysoki standard.</value>
+  </data>
+  <data name="Reservation_NightsCount" xml:space="preserve">
+    <value>Liczba nocy</value>
+  </data>
+  <data name="Reservation_NoAddons" xml:space="preserve">
+    <value>Brak dodatków</value>
+  </data>
+  <data name="Apartment_NoAddonDescription" xml:space="preserve">
+    <value>Brak opisu dodatku</value>
+  </data>
+  <data name="NotFoundPopupTitleReservationCanceled" xml:space="preserve">
+    <value>Rezerwacja została anulowana</value>
+  </data>
+  <data name="NotFoundPopupMessageDefault" xml:space="preserve">
+    <value>Najprawdopodobniej trafiłeś do nas ze starego przekierowania, które już nie istnieje. Za chwilę przeniesiemy Cię na stronę apartamentów.</value>
+  </data>
+  <data name="Reservation_NextButton" xml:space="preserve">
+    <value>Przejdź dalej</value>
+  </data>
+  <data name="Reservation_SelectDateAndGuests" xml:space="preserve">
+    <value>Aby zarezerwować apartament wybierz termin i ilość osób</value>
+  </data>
+  <data name="Reservation_AltOccupancy" xml:space="preserve">
+    <value>Liczba osób</value>
+  </data>
+  <data name="Reservation_Cost" xml:space="preserve">
+    <value>Koszt</value>
+  </data>
+  <data name="Reservation_AltBathrooms" xml:space="preserve">
+    <value>Liczba łazienek</value>
+  </data>
+  <data name="Reservation_NoOffersForDate" xml:space="preserve">
+    <value>Niestety w tym terminie nie ma ofert dla tego apartamentu</value>
+  </data>
+  <data name="Apartment_SeoTitleFallback" xml:space="preserve">
+    <value>Szczegóły apartamentu - Rentoom</value>
+  </data>
+  <data name="Reservation_PageTitlePrefix" xml:space="preserve">
+    <value>Rezerwacja</value>
+  </data>
+  <data name="NotFoundPopupButton" xml:space="preserve">
+    <value>Zarezerwuj apartament</value>
+  </data>
+  <data name="Apartment_BreadcrumbParentName" xml:space="preserve">
+    <value>Apartamenty</value>
+  </data>
+  <data name="Apartment_SeoKeywords" xml:space="preserve">
+    <value>apartament toruń, nocleg toruń, rentoom, wynajem krótkoterminowy, {0}</value>
+  </data>
+  <data name="Reservation_AltArea" xml:space="preserve">
+    <value>Powierzchnia apartamentu</value>
+  </data>
+  <data name="Apartment_CountryName" xml:space="preserve">
+    <value>Polska</value>
+  </data>
+  <data name="NotFoundPopupTitleDefault" xml:space="preserve">
+    <value>To jest nasz nowy portal</value>
+  </data>
+  <data name="Apartment_PriceSelectDatesDescription" xml:space="preserve">
+    <value>Wybierz daty pobytu, aby sprawdzić dostępność i ceny naszych ofert.</value>
+  </data>
+  <data name="Apartment_BreadcrumbFallbackName" xml:space="preserve">
+    <value>Apartament</value>
+  </data>
+  <data name="NotFoundPopupButtonWithCountdown" xml:space="preserve">
+    <value>Zarezerwuj apartament ({0}s)</value>
+  </data>
+  <data name="Reservation_InvoiceCheckbox" xml:space="preserve">
+    <value>Chcę otrzymać fakturę VAT</value>
+  </data>
+  <data name="Apartment_SeoDescriptionFallback" xml:space="preserve">
+    <value>Sprawdź szczegóły apartamentu i zarezerwuj pobyt w Rentoom.</value>
+  </data>
+  <data name="NotFoundPopupSecondaryText" xml:space="preserve">
+    <value>Błąd 404</value>
   </data>
 </root>
