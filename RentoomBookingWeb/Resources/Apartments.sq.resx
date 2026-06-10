@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Çmimi për qëndrim</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Apartamentet Toruń - lista e plotë e akomodimeve</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Aktualisht nuk ka apartamente në dispozicion.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Duke ngarkuar...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Apartamente Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Kërkimi i pastër</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Kërkoni një apartament me emër...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Apartamente</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Kërkoni një apartament sipas emrit</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Shihni një listë të të gjitha apartamenteve tona në Toruń. Akomodim i rehatshëm, vendndodhje e shkëlqyer afër qytetit të vjetër. Kontrolloni detajet e secilit apartament.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Apartamente Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Zbuloni gamën tonë të plotë të apartamenteve komode në zemër të Torunit.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Apartamente me qira, akomodim, rezervim, rezervim apartamenti, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Asnjë apartament nuk u gjet për emrin e dhënë.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Apartament</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Nuk ka oferta</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Numri i njerëzve</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartamente</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Numri i shtretërve</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Numri i banjove</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Ofertat</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Madhësia e apartamentit</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Vendndodhja</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Rezultatet e kërkimit: {0} oferta - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Kontrolloni apartamentet e disponueshme midis {0} dhe {1}. Ne gjetëm {2} oferta që janë perfekte për ju. Rezervoni në mënyrë të sigurt në internet.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Zbuloni gamën e gjerë të apartamenteve Rentoum. Komoditet, vendndodhje të shkëlqyera dhe standard të lartë. E përkryer për pushime dhe udhëtime pune.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Apartamente luksoze me qira - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Nuk ka apartamente në dispozicion për këtë datë - Rentoom</value>
   </data>
 </root>

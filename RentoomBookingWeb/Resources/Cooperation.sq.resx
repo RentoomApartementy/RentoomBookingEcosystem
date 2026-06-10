@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakti mund të ruhej, por marrëveshja nuk mund të krijohej. Kontrolloni Bitrix përpara se të ridërgoni.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Bashkëpunimi</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Kontaktoni</value>
+  </data>
 </root>

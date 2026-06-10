@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Om Toruń</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Hovedmeny på stedet</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Tilbake til hjemmesiden</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Vi jobber med forberedelsen av denne delen.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>En feil har oppstått</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook-ikon</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Meny-lukkeikon</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Vi inviterer deg snart!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Rentoom-ikonet</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Ingen tilbud</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Jeg klarte ikke å redde samtykket. Vennligst prøv igjen.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram-ikon</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Tilbud</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Facebook Rentoom Apartments</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Kalenderikon</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Leiligheter</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Området under bygging</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Hjem</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Apartments</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Lukk meldingen</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Menyikon</value>
+  </data>
 </root>

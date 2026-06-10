@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Szállásonkénti ár</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Lakások Toruńban – teljes szálláshelylista</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Jelenleg nincs elérhető lakás.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Betöltés...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Toruń apartmanok</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Tiszta keresés</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Keress lakást név szerint...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Lakások</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Lakáskeresés név szerint</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Tekintse meg az összes Toruńi lakásunk listáját. Kényelmes szállás, kiváló elhelyezkedés az Óváros közelében. Nézd meg az egyes lakások részleteit.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Toruń apartmanok</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Fedezze fel teljes választékunkat kényelmes lakásokkal Toruń szívében.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Lakások bérlésre, szállás, foglalás, lakásfoglalás, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>A név alapján nem találtak lakásokat.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Lakás</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Nincs ajánlat</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Emberek száma</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Lakások</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Ágyak száma</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>A fürdőszobák száma</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Ajánlatok</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Lakásméret</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Elhelyezkedés</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Keresési eredmények: {0} ajánlatok - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Nézd meg a rendelkezésre álló lakásokat {0} és {1} között. Találtunk {2} ajánlatot, ami tökéletes számodra. Biztonságosan foglalj online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Fedezze fel a Rentoom lakások széles választékát. Kényelm, kiváló helyszínek és magas színvonal. Tökéletes nyaralásokhoz és üzleti utazásokhoz.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Luxus lakások bérelhető - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Ezen a dátumon nincs elérhető lakás – Rentoom</value>
   </data>
 </root>

@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Цена по престој</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Апартмани Торуњ - целосна листа на сместување</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Во моментов нема достапни станови.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Се вчитува...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Апартмани Торуњ</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Чисто пребарување</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Барај стан по име...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Станови</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Пребарувајте стан по име</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Погледнете листа на сите наши станови во Торун. Удобно сместување, одлична локација блиску до Стариот град. Проверете ги деталите за секој стан.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Апартмани Торуњ</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Откријте го целиот наш избор на удобни станови во срцето на Торун.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Станови за изнајмување, сместување, резервација, резервација на станови, Рентум</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Не беа пронајдени станови за тоа име.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Стан</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Нема понуди</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Број на луѓе</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Станови</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Број на кревети</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Број на тоалети</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Понуди</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Големина на станот</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Локација</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Резултати од пребарување: {0} понуди - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Проверете достапни станови помеѓу {0} и {1}. Ние најдовме {2} понуди кои се совршени за вас. Резервирајте безбедно онлајн.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Откријте го широкиот избор на станови во Рентум. Удобност, одлични локации и висок стандард. Совршено за одмори и службени патувања.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Луксузни станови за изнајмување - Рентум</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>За овој датум нема достапни станови - Рентум</value>
   </data>
 </root>

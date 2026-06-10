@@ -368,3 +368,5 @@ FodyWeavers.xsd
 
 # ResxTranslator cache
 Tools/ResxTranslator/.resx-hashes.json
+/RentoomBooking.ResxTranslator/apssettings.local.json
+/RentoomBooking.ResxTranslator/appsettings.local.json

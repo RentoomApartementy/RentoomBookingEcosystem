@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Toruńist</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Saidi põhimenüü</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Tagasi avalehele</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Töötame selle osa ettevalmistamise kallal.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Aadress</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>On tekkinud viga</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Facebooki ikoon</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Menüü sulgemise ikoon</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Kutsume teid varsti!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Rentoomi ikoon</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Pakkumisi ei ole</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Ma ei suutnud nõusolekut päästa. Palun proovi uuesti.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagrami ikoon</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Pakkumised</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Facebook Rentoomi korterid</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Kalendri ikoon</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Korterid</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Ehitusplats</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Kodu</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoomi korterid</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Sulge sõnum</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Menüü ikoon</value>
+  </data>
 </root>

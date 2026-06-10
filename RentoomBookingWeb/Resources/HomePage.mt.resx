@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Qed tfittex akkomodazzjoni f'Toruń? Rentoom joffri appartamenti b'kera ta' żmien qasir f'Toruń u joqgħod fl-aqwa postijiet tal-belt.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Appartamenti f'Toruń - ġewwa</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Appartamenti f'Toruń - panorama tal-belt</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Tgħallem aktar</value>
+  </data>
 </root>

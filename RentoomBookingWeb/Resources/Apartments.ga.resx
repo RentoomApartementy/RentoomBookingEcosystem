@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Praghas in aghaidh na fanachta</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Árasáin Toruń - liosta iomlán de chóiríocht</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Níl aon árasán ar fáil faoi láthair.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Á Luchtú...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Árasáin Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Glan cuardach</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Cuardaigh árasán de réir ainm...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Árasáin</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Cuardaigh árasán de réir ainm</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Féach liosta dár n-árasáin go léir i Toruń. Cóiríocht chompordach, suíomh iontach gar don Seanbhaile. Seiceáil sonraí gach árasáin.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Árasáin Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Faigh amach ár raon iomlán árasán compordach i gcroílár Toruń.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>árasáin ar cíos, cóiríocht, áirithint, áirithint árasán, rentoom</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Níor aimsíodh aon árasáin don ainm tugtha.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Árasán</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Gan aon tairiscintí</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Líon na ndaoine</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Árasáin</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Líon na leapacha</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Líon na seomraí folctha</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Tairiscintí</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Méid an árasáin</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Suíomh</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Torthaí cuardaigh: {0} tairiscintí - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Seiceáil árasáin atá ar fáil idir {0} agus {1}. Fuaireamar {2} déileálann atá foirfe duitse. Cuir in áirithe go sábháilte ar líne.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Faigh amach an raon leathan árasán Rentoom. Compord, suíomhanna iontacha agus ardchaighdeán. Foirfe le haghaidh laethanta saoire agus turais ghnó.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Árasáin Só ar Cíos - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Níl aon árasán ar fáil don dáta seo - Rentoom</value>
   </data>
 </root>

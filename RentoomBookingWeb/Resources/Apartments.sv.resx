@@ -215,6 +215,87 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="OfferPriceMapLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+    <value>Pris per vistelse</value>
+  </data>
+  <data name="AllApartments_PageTitle" xml:space="preserve">
+    <value>Lägenheterna Toruń - fullständig lista över boenden</value>
+  </data>
+  <data name="AllApartments_NoApartments" xml:space="preserve">
+    <value>Det finns för närvarande inga lägenheter tillgängliga.</value>
+  </data>
+  <data name="AllApartments_Loading" xml:space="preserve">
+    <value>Laddar...</value>
+  </data>
+  <data name="AllApartments_HeaderTitle" xml:space="preserve">
+    <value>Lägenheterna Toruń</value>
+  </data>
+  <data name="AllApartments_SearchClearAriaLabel" xml:space="preserve">
+    <value>Rensa sökning</value>
+  </data>
+  <data name="AllApartments_SearchPlaceholder" xml:space="preserve">
+    <value>Sök efter en lägenhet vid namn...</value>
+  </data>
+  <data name="Apartments_BreadcrumbName" xml:space="preserve">
+    <value>Lägenheter</value>
+  </data>
+  <data name="AllApartments_SearchAriaLabel" xml:space="preserve">
+    <value>Sök efter en lägenhet efter namn</value>
+  </data>
+  <data name="AllApartments_MetaDescription" xml:space="preserve">
+    <value>Se en lista över alla våra lägenheter i Toruń. Bekvämt boende, utmärkt läge nära gamla stan. Kolla detaljerna för varje lägenhet.</value>
+  </data>
+  <data name="AllApartments_BreadcrumbName" xml:space="preserve">
+    <value>Lägenheterna Toruń</value>
+  </data>
+  <data name="AllApartments_IntroText" xml:space="preserve">
+    <value>Upptäck vårt kompletta utbud av bekväma lägenheter i hjärtat av Toruń.</value>
+  </data>
+  <data name="Apartments_SeoKeywords" xml:space="preserve">
+    <value>Lägenheter för uthyrning, boende, bokning, lägenhetsbokning, hyresgäst</value>
+  </data>
+  <data name="AllApartments_NoApartmentsFound" xml:space="preserve">
+    <value>Inga lägenheter hittades med det förnamnet.</value>
+  </data>
+  <data name="Map_ApartmentImageAlt" xml:space="preserve">
+    <value>Lägenhet</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Inga erbjudanden</value>
+  </data>
+  <data name="Map_AltGuests" xml:space="preserve">
+    <value>Antal personer</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Lägenheter</value>
+  </data>
+  <data name="Map_AltBeds" xml:space="preserve">
+    <value>Antal bäddar</value>
+  </data>
+  <data name="Map_AltBathrooms" xml:space="preserve">
+    <value>Antal badrum</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Erbjudanden</value>
+  </data>
+  <data name="Map_AltArea" xml:space="preserve">
+    <value>Lägenhetsstorlek</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Läge</value>
+  </data>
+  <data name="Apartments_SeoTitleSearchWithOffers" xml:space="preserve">
+    <value>Sökresultat: {0} erbjudanden - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoDescriptionSearch" xml:space="preserve">
+    <value>Kolla tillgängliga lägenheter mellan {0} och {1}. Vi har hittat {2} erbjudanden som passar dig perfekt. Boka säkert online.</value>
+  </data>
+  <data name="Apartments_SeoDescriptionDefault" xml:space="preserve">
+    <value>Upptäck det breda utbudet av lägenheter i Rentoom. Komfort, fantastiska lägen och hög standard. Perfekt för semestrar och affärsresor.</value>
+  </data>
+  <data name="Apartments_SeoTitleDefault" xml:space="preserve">
+    <value>Lyxlägenheter att hyra - Rentoom</value>
+  </data>
+  <data name="Apartments_SeoTitleNoOffers" xml:space="preserve">
+    <value>Det finns inga lägenheter tillgängliga för detta datum - Rentoom</value>
   </data>
 </root>

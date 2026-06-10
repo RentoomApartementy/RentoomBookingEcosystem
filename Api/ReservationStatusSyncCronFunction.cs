@@ -115,7 +115,7 @@ public class ReservationStatusSyncCronFunction
                     succeededCount++;
 
                     _logger.LogInformation(
-                        "{Mode} reservation sync for {ReservationGuid} / {IdoReservationId}. IdoStatus: {PreviousIdoStatus} -> {CurrentIdoStatus}. PaymentStatus: {PreviousPaymentStatus} -> {CurrentPaymentStatus}. Changes={SyncChangeSummary}. TpayChecked={TpayChecked}. TpayFinalStatusApplied={TpayFinalStatusApplied}. BitrixUpdated={BitrixUpdated}. Warning={Warning}",
+                        "{Mode} reservation sync for {ReservationGuid} / {IdoReservationId}. IdoStatus: {PreviousIdoStatus} -> {CurrentIdoStatus}. PaymentStatus: {PreviousPaymentStatus} -> {CurrentPaymentStatus}. Changes={SyncChangeSummary}. BitrixUpdated={BitrixUpdated}. Warning={Warning}",
                         dryRun ? "Previewed" : "Synchronized",
                         syncResult.ReservationGuid,
                         syncResult.IdoReservationId,
@@ -124,8 +124,6 @@ public class ReservationStatusSyncCronFunction
                         syncResult.PreviousPaymentStatus,
                         syncResult.CurrentPaymentStatus,
                         syncResult.SyncChangeSummary,
-                        syncResult.TpayChecked,
-                        syncResult.TpayFinalStatusApplied,
                         syncResult.BitrixUpdated,
                         syncResult.Warning);
 

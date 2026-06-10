@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Il-kuntatt seta' jiġi salvat, iżda l-ftehim ma setax jinħoloq. Iċċekkja lil Bitrix qabel terġa' tibgħat.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Ritratt</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Kooperazzjoni</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Kuntatt</value>
+  </data>
 </root>

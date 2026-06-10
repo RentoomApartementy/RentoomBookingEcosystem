@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Stik je bilo mogoče rešiti, a dogovora ni bilo mogoče skleniti. Pred ponovnim pošiljanjem preverite Bitrix.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Fotografija</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Sodelovanje</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Stik</value>
+  </data>
 </root>

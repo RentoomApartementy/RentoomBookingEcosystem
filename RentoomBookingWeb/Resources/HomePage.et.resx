@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Kas otsite majutust Toruńis? Rentoom pakub Toruńis lühiajalisi kortereid ning peatub linna parimates asukohtades.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Korterid Toruńis – interjöör</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Meil</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Korterid Toruńis – linna panoraam</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Loe lähemalt</value>
+  </data>
 </root>

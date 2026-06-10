@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Informazioni su Toruń</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Menu principale del sito</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Torna alla homepage</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Stiamo lavorando alla preparazione di questa sezione.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Indirizzo</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Si è verificato un errore</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Icona di Facebook</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Icona di chiusura del menu</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Vi invitiamo presto!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Rentoom Icon</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Nessuna offerta</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Non sono riuscito a salvare il consenso. Per favore, riprova.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Icona di Instagram</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Offerte</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Facebook Rentoom Apartments</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Icona del calendario</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Appartamenti</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Sito in costruzione</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Casa</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Apartments</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Chiudi il messaggio</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Icona del menu</value>
+  </data>
 </root>

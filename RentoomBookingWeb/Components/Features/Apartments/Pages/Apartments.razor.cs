@@ -39,7 +39,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         protected override async Task OnInitializedAsync()
         {
             ViewModel.OnChange += HandleViewModelChange;
-            _offerLength = CalculateOfferLength();
             await ViewModel.InitializeAsync(_initCts.Token);
         }
 
@@ -67,7 +66,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
                     ViewModel.Adults = Adults ?? "2";
                     ViewModel.Children = Children ?? "0";
 
-                    _offerLength = CalculateOfferLength();
                     await ViewModel.InitializeAsync(_initCts.Token);
                 }
             }

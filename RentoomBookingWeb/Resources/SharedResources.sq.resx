@@ -192,4 +192,70 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Rreth Torunit</value>
   </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Menyja kryesore e faqes</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Kthehu në faqen kryesore</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Ne jemi duke punuar në përgatitjen e këtij seksioni.</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Adresa</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Ka ndodhur një gabim</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Ikona e Facebook</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Ikona e mbylljes së menusë</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Ju ftojmë së shpejti!</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Ikona Rentoom</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Nuk ka oferta</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Nuk mund ta ruaja pëlqimin. Ju lutemi provoni përsëri.</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Ikona e Instagramit</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Ofertat</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Facebook Apartamentet Rentoom</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Ikona e kalendarit</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartamente</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Vendi në ndërtim e sipër</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Shtëpi</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Apartamentet Rentoom në Instagram</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Mbyllni mesazhin</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Ikona e menusë</value>
+  </data>
 </root>

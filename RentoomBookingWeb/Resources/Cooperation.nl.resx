@@ -133,4 +133,13 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Het contact kon worden gered, maar de deal kon niet worden gesloten. Controleer Bitrix voordat je opnieuw verzendt.</value>
   </data>
+  <data name="AboutUsImageAlt" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
+    <value>Samenwerking</value>
+  </data>
+  <data name="ContactImageAlt" xml:space="preserve">
+    <value>Contact</value>
+  </data>
 </root>

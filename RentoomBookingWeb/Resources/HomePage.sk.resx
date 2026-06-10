@@ -105,4 +105,16 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Hľadáte ubytovanie v Toruni? Rentoom ponúka byty na krátkodobý prenájom v Toruni a býva na najlepších lokalitách mesta.</value>
   </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Byty v Toruni - interiér</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Byty v Toruni – panorama mesta</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Zistite viac</value>
+  </data>
 </root>
