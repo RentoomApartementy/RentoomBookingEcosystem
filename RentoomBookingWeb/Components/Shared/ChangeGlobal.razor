@@ -46,7 +46,7 @@
         }
 
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-        var relativePath = Navigation.ToBaseRelativePath(Navigation.Uri);
+        var relativePath = Uri.UnescapeDataString(Navigation.ToBaseRelativePath(Navigation.Uri));
         
         // Remove existing culture prefix if any
         var parts = relativePath.Split('/');
@@ -85,10 +85,9 @@
         else
         {
             // Fallback for special pages or if current slug wasn't in registry
-            var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(firstSlug);
-            if (pageKeyFromCanonical != null)
+            if (RouteService.TryFindPageKeyAnyCulture(firstSlug, out var pageKeyFromAny))
             {
-                newUri = RouteService.GetLocalizedUrl(pageKeyFromCanonical, selectedCulture) + remainingPath;
+                newUri = RouteService.GetLocalizedUrl(pageKeyFromAny!, selectedCulture) + remainingPath;
             }
             else
             {
@@ -107,15 +106,4 @@
     }
 
     private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
-
-    private string? GetPageKeyFromCanonicalSlug(string slug) => slug.ToLower() switch
-    {
-        "apartamenty" => "Apartments",
-        "kontakt" => "Contact",
-        "wspolpraca" => "Cooperation",
-        "regulaminy" => "Statute",
-        "polozenie-torunia" => "AboutCity",
-        "torun" => "AboutCity",
-        _ => null
-    };
 }

@@ -10,6 +10,12 @@ namespace RentoomBookingWeb.Services.Localization
 {
     public class RouteLocalizationService : IRouteLocalizationService
     {
+        private static readonly Dictionary<string, string> AlternativeSlugs = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["polozenie-torunia"] = "AboutCity",
+            ["torun"] = "AboutCity"
+        };
+
         private readonly NavigationManager _navigationManager;
         private readonly ResourceManager _resourceManager;
 
@@ -127,6 +133,35 @@ namespace RentoomBookingWeb.Services.Localization
         {
             var parts = culture.Split('-');
             return parts[0].ToLowerInvariant();
+        }
+
+        public bool TryFindPageKeyAnyCulture(string slug, out string? pageKey)
+        {
+            if (string.IsNullOrEmpty(slug))
+            {
+                pageKey = null;
+                return false;
+            }
+
+            // 1. Sprawdzamy historyczne / alternatywne aliasy
+            if (AlternativeSlugs.TryGetValue(slug, out pageKey))
+            {
+                return true;
+            }
+
+            // 2. Szukamy dynamicznie we wszystkich językach wspieranych przez system
+            foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
+            {
+                var keys = GetPageKeysFromSlug(slug, culture);
+                pageKey = keys.FirstOrDefault();
+                if (pageKey != null)
+                {
+                    return true;
+                }
+            }
+
+            pageKey = null;
+            return false;
         }
     }
 }

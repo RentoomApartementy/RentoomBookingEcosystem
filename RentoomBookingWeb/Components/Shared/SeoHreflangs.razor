@@ -34,7 +34,7 @@
                 baseUri = "https://rentoom.pl"; 
             }
 
-            var relativeUri = NavManager.ToBaseRelativePath(NavManager.Uri);
+            var relativeUri = Uri.UnescapeDataString(NavManager.ToBaseRelativePath(NavManager.Uri));
             var uriParts = relativeUri.Split('?', 2);
             var relativePath = uriParts[0];
             var queryString = uriParts.Length > 1 ? "?" + uriParts[1] : "";
@@ -87,10 +87,9 @@
             }
             else
             {
-                var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(currentSlug);
-                if (pageKeyFromCanonical != null)
+                if (RouteService.TryFindPageKeyAnyCulture(currentSlug, out var pageKeyFromAny))
                 {
-                    resultUrl = $"{baseUri}{RouteService.GetLocalizedUrl(pageKeyFromCanonical, culture)}{remainingSegments}{queryString}";
+                    resultUrl = $"{baseUri}{RouteService.GetLocalizedUrl(pageKeyFromAny!, culture)}{remainingSegments}{queryString}";
                 }
                 else
                 {
@@ -108,15 +107,4 @@
     }
 
     private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
-
-    private string? GetPageKeyFromCanonicalSlug(string slug) => slug.ToLower() switch
-    {
-        "apartamenty" => "Apartments",
-        "kontakt" => "Contact",
-        "wspolpraca" => "Cooperation",
-        "regulaminy" => "Statute",
-        "polozenie-torunia" => "AboutCity",
-        "torun" => "AboutCity",
-        _ => null
-    };
 }

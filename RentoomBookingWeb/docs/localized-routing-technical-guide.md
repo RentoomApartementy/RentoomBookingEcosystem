@@ -31,6 +31,7 @@ Odpowiada za dwa krytyczne procesy:
 ### RouteLocalizationService.cs
 Implementuje logikę biznesową tłumaczenia adresów:
 - **TryGetPageKeyFromSlug:** Iteruje po zasobach `.resx` w celu dopasowania sluga (np. "apartamenty") do klucza technicznego ("Apartments"). Posiada wbudowany mechanizm fallbacku do języka polskiego.
+- **TryFindPageKeyAnyCulture:** Wyszukuje klucz strony na podstawie sluga w dowolnej ze wspieranych kultur, sprawdzając również zlokalizowane aliasy historyczne/alternatywne (zdefiniowane centralnie w kodzie serwisu, np. `"polozenie-torunia"`). Pozwala to na eliminację twardego kodowania slugów w komponentach UI (takich jak przełącznik języków czy moduł hreflangów).
 - **GetLocalizedUrl:** Generuje pełne adresy URL z prefiksami na podstawie klucza i opcjonalnej kultury.
 
 ### LocalizedUrlBuilder.cs
@@ -80,3 +81,17 @@ Jeśli w przyszłości zajdzie potrzeba obsługi linków, w których środkowe s
     *   Zwrócić 404, jeśli segment w URL nie pasuje do tłumaczenia w aktualnym języku.
 
 Dzięki temu system pozostanie generyczny i umożliwi tworzenie nieskończenie złożonych, w pełni zlokalizowanych struktur URL bez zmiany podstawowej architektury.
+
+---
+
+## 8. Obsługa znaków narodowych (non-ASCII) i zapobieganie Double-Encoding
+
+System w pełni wspiera znaki narodowe (np. polskie znaki diakrytyczne `ą, ć, ń, ż`, cyrylicę, znaki greckie) w strukturach adresów URL. Ze względu na specyfikację protokołu HTTP oraz serwera Kestrel, wdrożono dedykowane zabezpieczenia w warstwie routingu i przekierowań:
+
+### Zabezpieczenie nagłówka Location (Program.cs)
+Serwer Kestrel zabrania umieszczania surowych znaków nie-ASCII (np. greckiego `Ο` - `0x039F`) w nagłówkach odpowiedzi HTTP, co przy bezpośrednim przekierowaniu przez `Results.LocalRedirect` wywoływało błąd `InvalidOperationException`.
+- **Rozwiązanie:** W `/culture/set` wdrożono helper `EscapeRelativeUrl`, który automatycznie koduje ścieżkę (path) i parametry (query string) do bezpiecznego formatu ASCII (percent-encoding, np. `%CE%9F`), zachowując przy tym prawidłową strukturę adresową i ukośniki `/`.
+
+### Rozwiązanie problemu Double-Encoding (ChangeGlobal.razor / SeoHreflangs.razor)
+Metoda Blazora `Navigation.ToBaseRelativePath` zwraca relatywną ścieżkę w postaci zakodowanej (URL-encoded), podczas gdy słowniki `.resx` przechowują slugi odkodowane. Różnica ta uniemożliwiała poprawne dopasowanie klucza strony i prowadziła do awaryjnego podwójnego zakodowania adresu (np. `%25D0` zamiast `%D0`), co skutkowało błędami 404.
+- **Rozwiązanie:** W komponentach `ChangeGlobal.razor` oraz `SeoHreflangs.razor` ścieżka wejściowa jest odkodowywana przed jakąkolwiek analizą za pomocą `Uri.UnescapeDataString(Navigation.ToBaseRelativePath(...))`. Zapewnia to poprawne porównanie ciągów tekstowych z bazą zasobów oraz generowanie pojedynczo zakodowanych, prawidłowych adresów URL.
