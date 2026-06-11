@@ -1,0 +1,99 @@
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
+
+<div class="status-box success-bg paid-status-box">
+    <div class="form-wrapper-title-icon-wrapper success-icon-color rounded-full">
+        <GoogleIcon Name="check_circle" Class="status-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" Filled="true" />
+    </div>
+
+    <div class="status-box-text">
+        <h4 class="success-text-color">@Localizer["ReservationPaid"]</h4>
+        <span>@Localizer["ReservationPaidInfo"]</span>
+    </div>
+</div>
+
+<div class="status-box info-bg email-status-box">
+    <div class="form-wrapper-title-icon-wrapper info-icon-color rounded-full">
+        <GoogleIcon Name="mail" Class="status-icon" AriaLabel="@Localizer["Summary_EmailIconAriaLabel"]" />
+    </div>
+
+    <div class="status-box-text">
+        @if (!string.IsNullOrEmpty(EmailError))
+        {
+            <h4 class="danger-text-color">@Localizer["ReservationDanger"]</h4>
+            <span>@EmailError</span>
+        }
+        else if (IsCheckingEmail || EmailSent != true)
+        {
+            <h4 class="info-text-color">@EmailDeliveryPendingTitle</h4>
+            <span>@EmailDeliveryPendingMessage</span>
+        }
+        else
+        {
+            <h4 class="success-text-color">@MessageSentTitle</h4>
+            <span>@MessageSentDescription</span>
+        }
+    </div>
+</div>
+
+<div class="staywell-popup-wrapper">
+    <button type="button" class="button staywell-trigger-button" @onclick="OnToggleStaywell">
+        <GoogleIcon Name="qr_code_2" Class="staywell-trigger-icon" AriaLabel="@Localizer["Summary_QrButtonAriaLabel"]" />
+        <span>@StaywellButtonText</span>
+    </button>
+    <a href="@StaywellLink"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="staywell-mobile-direct-link">
+        @Localizer["GoToStayWellQRCodePopupMobileText"]
+    </a>
+
+    @if (IsStaywellPopupOpen)
+    {
+        <div class="staywell-popup" role="dialog" aria-label="@Localizer["StaywellPopupAriaLabel"]">
+            <button type="button"
+                    class="staywell-popup-close"
+                    @onclick="OnCloseStaywell"
+                    aria-label="@Localizer["StaywellPopupCloseAriaLabel"]">×</button>
+
+            <div class="staywell-popup-content">
+                <div class="staywell-popup-col staywell-qr-col">
+                    @if (!string.IsNullOrWhiteSpace(StaywellQrDataUri))
+                    {
+                        <img src="@StaywellQrDataUri" alt="@Localizer["Summary_StaywellQrAlt"]" class="staywell-qr" />
+                    }
+                </div>
+
+                <div class="staywell-popup-col staywell-description-col">
+                    <strong class="staywell-popup-title">@Localizer["StaywellPopupTitle"]</strong>
+                    <p class="staywell-popup-description">
+                        <span class="staywell-popup-description-desktop">@Localizer["StaywellPopupDescription"]</span>
+                        <span class="staywell-popup-description-mobile">@Localizer["StaywellPopupDescriptionMobile"]</span>
+                    </p>
+
+                    <a href="@StaywellLink" target="_blank" rel="noopener noreferrer" class="staywell-popup-link">
+                        <span class="staywell-popup-link-desktop">@Localizer["GoToStayWellQRCodePopupText"]</span>
+                        <span class="staywell-popup-link-mobile">@Localizer["GoToStayWellQRCodePopupMobileText"]</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public bool? EmailSent { get; set; }
+    [Parameter] public bool IsCheckingEmail { get; set; }
+    [Parameter] public string? EmailError { get; set; }
+    [Parameter] public string EmailDeliveryPendingTitle { get; set; } = string.Empty;
+    [Parameter] public string EmailDeliveryPendingMessage { get; set; } = string.Empty;
+    [Parameter] public string MessageSentTitle { get; set; } = string.Empty;
+    [Parameter] public string MessageSentDescription { get; set; } = string.Empty;
+    [Parameter] public string StaywellButtonText { get; set; } = string.Empty;
+    [Parameter] public string? StaywellLink { get; set; }
+    [Parameter] public bool IsStaywellPopupOpen { get; set; }
+    [Parameter] public string? StaywellQrDataUri { get; set; }
+    [Parameter] public EventCallback OnToggleStaywell { get; set; }
+    [Parameter] public EventCallback OnCloseStaywell { get; set; }
+}

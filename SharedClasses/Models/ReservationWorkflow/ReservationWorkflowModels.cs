@@ -57,6 +57,12 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         ExternalImport = 1
     }
 
+    public enum ReservationFlowType
+    {
+        WebDirect = 0,
+        ExternalImported = 1
+    }
+
     public class ClientInfoDto
     {
         public string FirstName { get; set; } = string.Empty;
@@ -134,18 +140,83 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
 
     public class ReservationState
     {
+        public ReservationFlowType FlowType { get; set; } = ReservationFlowType.WebDirect;
         public StartReservationRequest? StartRequest { get; set; }
         public ClientInfoDto? Client { get; set; }
         public InvoiceInfoDto? Invoice { get; set; }
         public string GoogleMapsLink { get; set; } = string.Empty;
         public string ParkingMapUrl { get; set; } = string.Empty;
         public string StayWellLink { get; set; } = string.Empty;
+        public TermsSnapshot Terms { get; set; } = new();
+        public ResolvedReservationSnapshot Resolved { get; set; } = new();
+        public ReservationCrmProjection CrmProjection { get; set; } = new();
 
         //  public List<TermsAndConditionsAcceptanceInfo> {get;set;}
         public string? PaymentRedirectUrl { get; set; }
         public string? PaymentInsideRentoomRedirectUrl { get; set; }
         public decimal PaymentUpsellsTotal { get; set; }
         public decimal PaymentGrandTotal { get; set; }
+    }
+
+    public class TermsSnapshot
+    {
+        public Dictionary<int, bool> Selections { get; set; } = new();
+        public DateTime? SavedAtUtc { get; set; }
+    }
+
+    public class ResolvedReservationSnapshot
+    {
+        public int? EffectiveObjectId { get; set; }
+        public int? EffectiveObjectItemId { get; set; }
+        public string ApartmentName { get; set; } = string.Empty;
+        public string ApartmentAddress { get; set; } = string.Empty;
+        public string ReservationSourceValue { get; set; } = string.Empty;
+        public string StayWellLink { get; set; } = string.Empty;
+        public string GoogleMapsLink { get; set; } = string.Empty;
+        public string ParkingMapUrl { get; set; } = string.Empty;
+        public DateOnly? EffectiveStartDate { get; set; }
+        public DateOnly? EffectiveEndDate { get; set; }
+        public int? EffectiveAdults { get; set; }
+        public int? EffectiveNights { get; set; }
+    }
+
+    public class ReservationCrmProjection
+    {
+        public string DealTitle { get; set; } = string.Empty;
+        public bool HasInvoice { get; set; }
+        public string ClientLanguage { get; set; } = string.Empty;
+        public string ClientCountryCode { get; set; } = string.Empty;
+        public int? Adults { get; set; }
+        public int? Nights { get; set; }
+        public string? CheckInBitrixDateTime { get; set; }
+        public string? CheckOutBitrixDateTime { get; set; }
+        public string CheckInTimeText { get; set; } = string.Empty;
+        public string CheckOutTimeText { get; set; } = string.Empty;
+        public string CheckInText { get; set; } = string.Empty;
+        public string CheckOutText { get; set; } = string.Empty;
+        public bool EarlyCheckIn { get; set; }
+        public bool LateCheckOut { get; set; }
+        public string PurchasedAddonsValue { get; set; } = string.Empty;
+        public string ReservationSourceValue { get; set; } = string.Empty;
+        public string StayWellLink { get; set; } = string.Empty;
+        public string StayWellMessageLink { get; set; } = string.Empty;
+        public string RetryPaymentLink { get; set; } = string.Empty;
+        public string CancelReservationLink { get; set; } = string.Empty;
+        public string AppliedBonusSummary { get; set; } = "None";
+        public decimal PaymentGrandTotal { get; set; }
+        public string Currency { get; set; } = "PLN";
+        public string PaymentStatus { get; set; } = PaymentStatuses.None;
+        public string IdoStatus { get; set; } = string.Empty;
+        public string ProviderTransactionId { get; set; } = string.Empty;
+        public int? IdoReservationId { get; set; }
+        public string ApartmentName { get; set; } = string.Empty;
+        public string ApartmentAddress { get; set; } = string.Empty;
+        public string GoogleMapsLink { get; set; } = string.Empty;
+        public string ParkingMapUrl { get; set; } = string.Empty;
+        public DateOnly? EffectiveStartDate { get; set; }
+        public DateOnly? EffectiveEndDate { get; set; }
+        public bool TermsAccepted { get; set; }
+        public Dictionary<int, bool> TermSelections { get; set; } = new();
     }
 
     public class ReservationRecord
