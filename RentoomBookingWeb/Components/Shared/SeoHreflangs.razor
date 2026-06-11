@@ -76,6 +76,16 @@
                 currentSlug = "";
             }
 
+            // --- DYNAMIC BYPASS FOR PREFIX-LESS OR TECHNICAL PAGES ---
+            // If the page has a slug (not the homepage) but this slug does not belong to any localized route mapping in any language,
+            // then it's a technical/prefix-less page (like /rezerwuj, /tpay-mock, /404). We do not generate hreflangs for it.
+            if (!string.IsNullOrEmpty(currentSlug) && 
+                !RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out _) &&
+                !RouteService.TryFindPageKeyAnyCulture(currentSlug, out _))
+            {
+                return string.Empty;
+            }
+
             string resultUrl;
             if (!string.IsNullOrEmpty(currentSlug) && RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
             {

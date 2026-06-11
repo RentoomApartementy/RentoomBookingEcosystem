@@ -58,7 +58,8 @@ namespace RentoomBookingWeb.Services.Localization
             try
             {
                 var fullCulture = ResolveFullCulture(culture);
-                return _resourceManager.GetString(pageKey, new CultureInfo(fullCulture));
+                var resourceKey = GetResourceKey(pageKey);
+                return _resourceManager.GetString(resourceKey, new CultureInfo(fullCulture));
             }
             catch
             {
@@ -106,13 +107,14 @@ namespace RentoomBookingWeb.Services.Localization
             {
                 if (key == "Home") continue;
 
-                var translatedSlug = _resourceManager.GetString(key, cultureInfo);
+                var resourceKey = GetResourceKey(key);
+                var translatedSlug = _resourceManager.GetString(resourceKey, cultureInfo);
                 if (string.Equals(translatedSlug, slug, StringComparison.OrdinalIgnoreCase))
                 {
                     results.Add(key);
                 }
 
-                var plSlug = _resourceManager.GetString(key, plCulture);
+                var plSlug = _resourceManager.GetString(resourceKey, plCulture);
                 if (string.Equals(plSlug, slug, StringComparison.OrdinalIgnoreCase))
                 {
                     results.Add(key);
@@ -162,6 +164,15 @@ namespace RentoomBookingWeb.Services.Localization
 
             pageKey = null;
             return false;
+        }
+
+        private string GetResourceKey(string key)
+        {
+            if (key == "ApartmentDetailWithToken")
+            {
+                return "ApartmentDetail";
+            }
+            return key;
         }
     }
 }
