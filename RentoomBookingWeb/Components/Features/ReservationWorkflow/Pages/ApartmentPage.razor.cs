@@ -457,6 +457,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             CultureInfo.CurrentUICulture.Name
         ) ?? CultureInfo.CurrentUICulture.Name;
 
+        protected string CurrentAmenityLanguage => CurrentLanguage;
+
         protected string GetSeoTitle()
         {
             if (_aiDescription != null && !string.IsNullOrEmpty(_aiDescription.MetaTitle)) return _aiDescription.MetaTitle;
@@ -1026,7 +1028,17 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected async Task<List<ObjectAmenity>?> GetAmenities(int objectId)
         {
-            return await IdoApartmentService.GetObjectAmenitiesAsync(objectId);
+            var amenities = await ApartmentsService.GetApartmentAmenitiesAsync(CurrentAmenityLanguage, objectId);
+
+            return amenities
+                .Select(x => new ObjectAmenity
+                {
+                    Id = x.AmenityId,
+                    ObjectId = objectId,
+                    Name = x.AmenityName,
+                    IconName= x.IconSource
+                })
+                .ToList();
         }
 
         protected PricingOffersRequest CurrentRequest => new PricingOffersRequest

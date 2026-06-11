@@ -47,6 +47,8 @@ namespace RentoomBooking.SharedClasses.Database
 
         public DbSet<TTLockPasscodeEntity> TTLockPasscodes => Set<TTLockPasscodeEntity>();
 
+        public DbSet<DefinedAmenityEntity> DefinedAmenities => Set<DefinedAmenityEntity>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApartmentInfoEntity>(entity =>
