@@ -1,0 +1,20 @@
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
+
+<div class="status-box pending-bg">
+    <div class="form-wrapper-title-icon-wrapper pending-icon-color rounded-full">
+        <GoogleIcon Name="schedule" Class="status-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
+    </div>
+
+    <div class="status-box-text">
+        <h4 class="pending-text-color">@Localizer["ReservationPending"]</h4>
+        <span>@Localizer["ReservationPendingInfo"]</span>
+    </div>
+</div>
+
+@ChildContent
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

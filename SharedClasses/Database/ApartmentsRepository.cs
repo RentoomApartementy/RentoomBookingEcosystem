@@ -24,6 +24,7 @@ namespace RentoomBooking.SharedClasses.Database
         private static readonly TimeSpan ApartmentCatalogCacheTtl = TimeSpan.FromMinutes(30);
         private static readonly TimeSpan ApartmentAmenitiesCacheTtl = TimeSpan.FromMinutes(30);
         private static readonly TimeSpan DefinedAddonsCacheTtl = TimeSpan.FromMinutes(30);
+        private static readonly TimeSpan DefinedAmenitiesCacheTtl = TimeSpan.FromMinutes(30);
        
         //  private const string ContainerName = "ApartmentInfo";
         /// <summary>
@@ -247,6 +248,52 @@ namespace RentoomBooking.SharedClasses.Database
             return cachedAddons ?? [];
         }
 
+        public async Task<List<ApartmentDefinedAmenityDto>> GetDefinedAmenitiesAsync(string? lang, CancellationToken cancellationToken = default)
+        {
+            var normalizedLang = NormalizeLanguage(lang);
+            var cacheKey = BuildDefinedAmenitiesCacheKey(normalizedLang);
+
+            var cachedAmenities = await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = DefinedAmenitiesCacheTtl;
+
+                await using var context = _dbContextFactory.CreateDbContext();
+                return await context.DefinedAmenities
+                    .AsNoTracking()
+                    .Where(x => x.Lang == normalizedLang)
+                    .OrderBy(x => x.AmenityTypeName)
+                    .ThenBy(x => x.AmenityName)
+                    .Select(x => new ApartmentDefinedAmenityDto
+                    {
+                        Id = x.Id,
+                        AmenityId = x.AmenityId,
+                        AmenityTypeName = x.AmenityTypeName,
+                        AmenityName = x.AmenityName,
+                        Lang = x.Lang,
+                        IconSource = x.IconSource
+                    })
+                    .ToListAsync(cancellationToken);
+            });
+
+            return cachedAmenities ?? [];
+        }
+
+        public async Task<ApartmentAmenitiesDocument?> GetApartmentAmenitiesDocumentAsync(int apartmentId, CancellationToken cancellationToken = default)
+        {
+            if (apartmentId <= 0)
+            {
+                return null;
+            }
+
+            var allAmenitiesDocuments = await GetApartmentAmenitiesSnapshotAsync(cancellationToken);
+            return allAmenitiesDocuments.FirstOrDefault(doc => doc.ApartmentId == apartmentId || doc.Id == apartmentId);
+        }
+
+        public long GetApartmentAmenitiesCacheVersion()
+        {
+            return Volatile.Read(ref _apartmentAmenitiesCacheVersion);
+        }
+
         private async Task<List<ApartmentObject>> GetActiveApartmentsSnapshotAsync(CancellationToken cancellationToken = default)
         {
             var cacheKey = BuildActiveApartmentsCacheKey();
@@ -341,9 +388,24 @@ namespace RentoomBooking.SharedClasses.Database
             return "apartments:defined-addons";
         }
 
+        private static string BuildDefinedAmenitiesCacheKey(string lang)
+        {
+            return $"apartments:defined-amenities:{lang}";
+        }
+
         private static void InvalidateApartmentAmenitiesCache()
         {
             Interlocked.Increment(ref _apartmentAmenitiesCacheVersion);
+        }
+
+        private static string NormalizeLanguage(string? lang)
+        {
+            if (string.IsNullOrWhiteSpace(lang))
+            {
+                return "pl";
+            }
+
+            return lang.Trim().ToLowerInvariant();
         }
     }
 

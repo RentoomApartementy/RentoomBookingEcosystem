@@ -1,0 +1,30 @@
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
+
+<div class="status-box @(IsFailed ? "danger-bg" : "info-bg")">
+    <div class="form-wrapper-title-icon-wrapper @((IsFailed ? "danger-icon-color" : "info-icon-color")) rounded-full">
+        <GoogleIcon Name="@(IsFailed ? "error" : "schedule")"
+                    Class="status-icon"
+                    AriaLabel="@Localizer[IsFailed ? "Summary_ErrorIconAriaLabel" : "Summary_WaitingIconAriaLabel"]"
+                    Filled="@IsFailed" />
+    </div>
+
+    <div class="status-box-text">
+        <h4 class="@(IsFailed ? "danger-text-color" : "info-text-color")">@Title</h4>
+        <span>@Message</span>
+    </div>
+</div>
+
+<Button OnClick="OnRetryPayment" Disabled="@IsRetryPaymentDisabled">
+    @RetryPaymentButtonText
+</Button>
+
+@code {
+    [Parameter] public bool IsFailed { get; set; }
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string Message { get; set; } = string.Empty;
+    [Parameter] public bool IsRetryPaymentDisabled { get; set; }
+    [Parameter] public string RetryPaymentButtonText { get; set; } = string.Empty;
+    [Parameter] public EventCallback OnRetryPayment { get; set; }
+}

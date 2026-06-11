@@ -409,6 +409,25 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
             return await _dbContext.DefinedAddons.AsNoTracking().ToListAsync(cancellationToken);
         }
 
+        public async Task<List<ApartmentDefinedAmenityDto>> GetDefinedAmenitiesAsync(string? lang, CancellationToken cancellationToken = default)
+        {
+            await using var _dbContext = _dbContextFactory.CreateDbContext();
+
+            var query = _dbContext.DefinedAmenities.AsNoTracking().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(lang))
+            {
+                var normalizedLang = NormalizeLanguage(lang);
+                query = query.Where(x => x.Lang == normalizedLang);
+            }
+
+            return await query
+                .OrderBy(x => x.AmenityTypeName)
+                .ThenBy(x => x.AmenityName)
+                .Select(MapToDtoExpression())
+                .ToListAsync(cancellationToken);
+        }
+
         internal async void UpdateReservationStatusInWorkflow(int reservationId, string status)
         {
             await using var _dbContext = _dbContextFactory.CreateDbContext();
@@ -445,6 +464,24 @@ namespace RentoomBooking.SharedClasses.Services.BookingDatabaseService
                 Id = payloadReservation.id,
                 ResToken = resToken,
                 Reservation = payloadReservation
+            };
+        }
+
+        public static string NormalizeLanguage(string? lang)
+        {
+            return string.IsNullOrWhiteSpace(lang) ? "pl" : lang.Trim().ToLowerInvariant();
+        }
+
+        private static System.Linq.Expressions.Expression<Func<DefinedAmenityEntity, ApartmentDefinedAmenityDto>> MapToDtoExpression()
+        {
+            return entity => new ApartmentDefinedAmenityDto
+            {
+                Id = entity.Id,
+                AmenityId = entity.AmenityId,
+                AmenityTypeName = entity.AmenityTypeName,
+                AmenityName = entity.AmenityName,
+                Lang = entity.Lang,
+                IconSource = entity.IconSource
             };
         }
     }

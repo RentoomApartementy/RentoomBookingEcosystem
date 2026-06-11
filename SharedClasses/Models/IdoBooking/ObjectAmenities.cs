@@ -77,5 +77,8 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
 
         [JsonPropertyName("name")]
         public string? Name { get; set; }
+        
+        [JsonPropertyName("iconName")]
+        public string? IconName { get; set; }
     }
 }

@@ -289,10 +289,134 @@ private static TimeZoneInfo GetWarsawTimeZone()
         return changed;
     }
 
+    private static void EnsureStateDefaults(ReservationState state)
+    {
+        state.Terms ??= new TermsSnapshot();
+        state.Resolved ??= new ResolvedReservationSnapshot();
+        state.CrmProjection ??= new ReservationCrmProjection();
+    }
+
+    public async Task RefreshCrmProjectionAsync(ReservationRecord record, Reservation? idoReservation = null, CancellationToken cancellationToken = default)
+    {
+        EnsureStateDefaults(record.State);
+
+        var startRequest = record.State.StartRequest;
+        ApartmentObject? apartmentInfo = null;
+        ApartmentItemLocalSettings? apartmentItemLocalSettings = null;
+
+        if (record.IdoReservationId.HasValue)
+        {
+            idoReservation ??= await FetchIdoReservationAsync(record, refreshCache: false, cancellationToken);
+        }
+
+        apartmentInfo = ResolveApartmentInfo(startRequest, idoReservation);
+        apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(startRequest, idoReservation, cancellationToken);
+        var reservationSourceValue = await ResolveBitrixReservationSourceValueAsync(record, idoReservation, cancellationToken) ?? string.Empty;
+        var purchasedAddonsValue = await BuildPurchasedAddonsBitrixValueAsync(startRequest);
+        UpdateReservationLocationState(record, apartmentInfo, apartmentItemLocalSettings);
+
+        var effectiveStartDate = startRequest?.StartDate;
+        var effectiveEndDate = startRequest?.EndDate;
+        var effectiveAdults = startRequest?.Adults;
+        int? effectiveNights = startRequest is null ? null : Math.Max(1, startRequest.EndDate.DayNumber - startRequest.StartDate.DayNumber);
+        var apartmentName = apartmentInfo?.Name ?? idoReservation?.Items?.FirstOrDefault()?.objectName ?? string.Empty;
+        var apartmentAddress = string.Empty;
+        var location = apartmentInfo?.ObjectLocation?.LocalizationItem;
+        if (location is not null)
+        {
+            apartmentAddress = $"{location.ZipCode} {location.City}, ul. {location.Street}";
+        }
+
+        if (idoReservation?.ReservationDetails is not null)
+        {
+            effectiveStartDate = DateOnly.TryParse(idoReservation.ReservationDetails.dateFrom, out var parsedStart) ? parsedStart : effectiveStartDate;
+            effectiveEndDate = DateOnly.TryParse(idoReservation.ReservationDetails.dateTo, out var parsedEnd) ? parsedEnd : effectiveEndDate;
+            effectiveNights = idoReservation.ReservationDetails.getDuration();
+        }
+
+        if (idoReservation?.Items?.FirstOrDefault() is { } idoItem && idoItem.numberOfAdults > 0)
+        {
+            effectiveAdults = idoItem.numberOfAdults;
+        }
+
+        var stayWellLink = BuildStayWellLink(record.ReservationGuid.ToString()) ?? string.Empty;
+        record.State.StayWellLink = stayWellLink;
+        record.State.Resolved.EffectiveObjectId = startRequest?.ObjectId > 0 ? startRequest.ObjectId : idoReservation?.Items?.FirstOrDefault()?.objectId;
+        record.State.Resolved.EffectiveObjectItemId = startRequest?.ObjectItemId > 0 ? startRequest.ObjectItemId : idoReservation?.Items?.FirstOrDefault()?.objectItemId;
+        record.State.Resolved.ApartmentName = apartmentName;
+        record.State.Resolved.ApartmentAddress = apartmentAddress;
+        record.State.Resolved.ReservationSourceValue = reservationSourceValue;
+        record.State.Resolved.StayWellLink = stayWellLink;
+        record.State.Resolved.GoogleMapsLink = record.State.GoogleMapsLink;
+        record.State.Resolved.ParkingMapUrl = record.State.ParkingMapUrl;
+        record.State.Resolved.EffectiveStartDate = effectiveStartDate;
+        record.State.Resolved.EffectiveEndDate = effectiveEndDate;
+        record.State.Resolved.EffectiveAdults = effectiveAdults;
+        record.State.Resolved.EffectiveNights = effectiveNights;
+
+        string? checkInBitrix = null;
+        string? checkOutBitrix = null;
+        if (startRequest is not null)
+        {
+            var reservationStartOffset = GetWarsawOffset(startRequest.StartDate, startRequest.CheckInTime);
+            var bitrixServerUtcOffset = await _bitrixService.GetServerUtcOffsetAsync();
+            var differenceInHours = bitrixServerUtcOffset.TotalHours - reservationStartOffset.TotalHours;
+            checkInBitrix = ToBitrixDateTime(startRequest.StartDate, startRequest.CheckInTime, bitrixServerUtcOffset, differenceInHours);
+            checkOutBitrix = ToBitrixDateTime(startRequest.EndDate, startRequest.CheckOutTime, bitrixServerUtcOffset, differenceInHours);
+        }
+
+        record.State.CrmProjection = new ReservationCrmProjection
+        {
+            DealTitle = record.IdoReservationId.HasValue ? $"Rezerwacja #{record.IdoReservationId}" : $"Rezerwacja {record.ReservationGuid:D}",
+            HasInvoice = record.State.Invoice is not null,
+            ClientLanguage = ResolveBitrixLanguage(record.State.Client?.Language),
+            ClientCountryCode = record.State.Client?.CountryCode ?? string.Empty,
+            Adults = effectiveAdults,
+            Nights = effectiveNights,
+            CheckInBitrixDateTime = checkInBitrix,
+            CheckOutBitrixDateTime = checkOutBitrix,
+            CheckInTimeText = startRequest?.CheckInTime.ToString("HH:mm") ?? string.Empty,
+            CheckOutTimeText = startRequest?.CheckOutTime.ToString("HH:mm") ?? string.Empty,
+            CheckInText = startRequest is null ? string.Empty : $"{startRequest.StartDate:yyyy-MM-dd} {startRequest.CheckInTime:HH\\:mm}",
+            CheckOutText = startRequest is null ? string.Empty : $"{startRequest.EndDate:yyyy-MM-dd} {startRequest.CheckOutTime:HH\\:mm}",
+            EarlyCheckIn = startRequest?.CheckInTime < new TimeOnly(15, 0),
+            LateCheckOut = startRequest?.CheckOutTime > new TimeOnly(11, 0),
+            PurchasedAddonsValue = purchasedAddonsValue ?? string.Empty,
+            ReservationSourceValue = reservationSourceValue,
+            StayWellLink = stayWellLink,
+            StayWellMessageLink = stayWellLink,
+            RetryPaymentLink = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: false) ?? string.Empty,
+            CancelReservationLink = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true) ?? string.Empty,
+            AppliedBonusSummary = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
+                ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
+                : "None",
+            PaymentGrandTotal = record.State.PaymentGrandTotal,
+            Currency = record.State.StartRequest?.Currency ?? "PLN",
+            PaymentStatus = record.PaymentStatus,
+            IdoStatus = record.IdoStatus ?? string.Empty,
+            ProviderTransactionId = record.ProviderTransactionId ?? string.Empty,
+            IdoReservationId = record.IdoReservationId,
+            ApartmentName = apartmentName,
+            ApartmentAddress = apartmentAddress,
+            GoogleMapsLink = record.State.GoogleMapsLink,
+            ParkingMapUrl = record.State.ParkingMapUrl,
+            EffectiveStartDate = effectiveStartDate,
+            EffectiveEndDate = effectiveEndDate,
+            TermsAccepted = record.State.Terms.Selections.Count > 0 && record.State.Terms.Selections.All(x => x.Value),
+            TermSelections = new Dictionary<int, bool>(record.State.Terms.Selections)
+        };
+    }
+
     public async Task<Guid> StartAsync(StartReservationRequest request)
         {
             if (request is null) throw new ArgumentNullException(nameof(request));
             var record = await _store.CreateAsync(request);
+            EnsureStateDefaults(record.State);
+            record.State.FlowType = request.BookingChannel == BookingChannel.ExternalImport
+                ? ReservationFlowType.ExternalImported
+                : ReservationFlowType.WebDirect;
+            await RefreshCrmProjectionAsync(record);
+            await _store.UpdateAsync(record);
             return record.ReservationGuid; //<== to jest tez reservation token dla staywell
         }
 
@@ -302,6 +426,11 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
             var record = await RequireReservationAsync(reservationGuid);
             record.State.StartRequest = request;
+            if (request.BookingChannel == BookingChannel.ExternalImport)
+            {
+                record.State.FlowType = ReservationFlowType.ExternalImported;
+            }
+            await RefreshCrmProjectionAsync(record);
             await _store.UpdateAsync(record);
         }
 
@@ -311,6 +440,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
             record.State.Client = client ?? throw new ArgumentNullException(nameof(client));
             record.State.Client.Language = NormalizeIdoLanguage(record.State.Client.Language);
             record.State.Invoice = invoice;
+            await RefreshCrmProjectionAsync(record);
             await _store.UpdateAsync(record);
 
           //  record = await EnsureBitrixContactAndDealAsync(record);
@@ -331,7 +461,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);
                 
                 record = await EnsureBitrixContactAndDealAsync(record);
-                
+                await RefreshCrmProjectionAsync(record);
                 await _store.UpdateAsync(record);
                 //await UpdateIdoStatusAsync(record, ReservationStatusType.WaitingForPayment);// <<usuniete bo link do retry platnosci wchodzil za pozno
                 await UpdateBitrixDealAsync(record, "BuildSummaryAsync Update");// <<usuniete bo link do retry platnosci wchodzil za pozno
@@ -562,6 +692,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
             if (updated)
             {
+                await RefreshCrmProjectionAsync(record);
                 await _store.UpdateAsync(record);
             }
         }
@@ -634,6 +765,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
                 try
                 {
+                    await RefreshCrmProjectionAsync(record);
                     await _store.UpdateAsync(record);
                     await UpdateBitrixPaymentRetryLinkAsync(record, paymentSessionGuid); //<< najpierw retry link dodajemy
                     
@@ -856,6 +988,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
             await UpdateIdoStatusAsync(record, ReservationStatusType.Canceled);
             record.IdoStatus = ReservationStatusType.Canceled;
+            await RefreshCrmProjectionAsync(record, cancellationToken: cancellationToken);
             await _store.UpdateAsync(record, cancellationToken);
 
             if (!record.DealBitrixId.HasValue && record.State.Client is not null)
@@ -907,6 +1040,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
                 try
                 {
+                    await RefreshCrmProjectionAsync(record);
                     await _store.UpdateAsync(record);
 
                     await _idoApi.FetchReservationByIDFromIdoSellAsync(record.IdoReservationId.Value, true,record.ReservationGuid.ToString("D"));
@@ -1145,7 +1279,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
                         record.IdoReservationId = idoresponse.Reservations[0].ReservationId;
                         record.IdoStatus = initialStatus;
-
+                        await RefreshCrmProjectionAsync(record);
                         await _store.UpdateAsync(record);
                     }
                   //  record = await EnsureBitrixContactAndDealAsync(record);
@@ -1288,9 +1422,11 @@ private static TimeZoneInfo GetWarsawTimeZone()
           
             string paymentquery = string.Empty;
             if (paymentSessionGuid != null)
-                paymentquery = $"payment_session={paymentSessionGuid:D}&enableaction=cancel";
+                paymentquery = $"payment_session={paymentSessionGuid:D}";
 
-            return $"{baseUrl.TrimEnd('/')}/rezerwuj/{reservationGuid:D}/podsumowanie?{paymentquery}&enableaction=cancel";
+            var actionQuery = cancelaction ? "enableaction=cancel" : string.Empty;
+            var query = string.Join("&", new[] { paymentquery, actionQuery }.Where(x => !string.IsNullOrWhiteSpace(x)));
+            return $"{baseUrl.TrimEnd('/')}/rezerwuj/{reservationGuid:D}/podsumowanie{(string.IsNullOrWhiteSpace(query) ? string.Empty : "?" + query)}";
         }
 
 
@@ -1463,6 +1599,86 @@ private static TimeZoneInfo GetWarsawTimeZone()
             return parts.Count == 0 ? null : string.Join(", ", parts);
         }
 
+        private Dictionary<string, object?> BuildBitrixProjectionFields(ReservationRecord record, string updateReason)
+        {
+            var projection = record.State.CrmProjection;
+            var fields = new Dictionary<string, object?>
+            {
+                ["COMMENTS"] = $"{DateTime.Now}: Status Rezerwacji {projection.IdoReservationId} (z IDB): {projection.IdoStatus ?? "Unknown"}, Status Platnosci TPAY: {projection.PaymentStatus} ({updateReason}).",
+                ["UF_CRM_1768566732609"] = projection.PaymentStatus,
+                ["UF_CRM_1773079785969"] = projection.HasInvoice,
+                ["UF_CRM_1769797476812"] = projection.ClientLanguage,
+                ["UF_CRM_1769797498979"] = projection.ClientCountryCode,
+                ["UF_CRM_1768566710921"] = projection.IdoStatus,
+                ["UF_CRM_1768566766553"] = string.IsNullOrWhiteSpace(projection.ProviderTransactionId) ? string.Empty : projection.ProviderTransactionId,
+                [BitrixPurchasedAddonsFieldName] = projection.PurchasedAddonsValue,
+                [BitrixReservationSourceFieldName] = projection.ReservationSourceValue,
+                [BitrixService.IdoReservationIdFieldName] = projection.IdoReservationId,
+                [BitrixStayWellLinkFieldName] = projection.StayWellLink,
+                ["UF_CRM_1780004115483"] = projection.StayWellMessageLink,
+                ["UF_CRM_1778170129465"] = projection.CheckInTimeText,
+                ["UF_CRM_1778170154231"] = projection.CheckOutTimeText,
+                ["UF_CRM_1778790928572"] = projection.CheckInText,
+                ["UF_CRM_1778790948473"] = projection.CheckOutText,
+                ["UF_CRM_1778175040438"] = projection.AppliedBonusSummary,
+                ["UF_CRM_1768566682522"] = projection.ApartmentName,
+                ["UF_CRM_1768840472108"] = projection.ApartmentAddress,
+                ["UF_CRM_1773873147169"] = projection.GoogleMapsLink,
+                ["UF_CRM_1774428026254"] = projection.ParkingMapUrl,
+                ["UF_CRM_1775071948450"] = projection.CancelReservationLink,
+                ["UF_CRM_1775071642554"] = projection.RetryPaymentLink
+            };
+
+            if (projection.Adults.HasValue)
+            {
+                fields["UF_CRM_1768836801823"] = projection.Adults.Value;
+            }
+
+            if (projection.Nights.HasValue)
+            {
+                fields["UF_CRM_1768836818927"] = projection.Nights.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(projection.CheckInBitrixDateTime))
+            {
+                fields["UF_CRM_1773256016575"] = projection.CheckInBitrixDateTime;
+            }
+
+            if (!string.IsNullOrWhiteSpace(projection.CheckOutBitrixDateTime))
+            {
+                fields["UF_CRM_1773310028374"] = projection.CheckOutBitrixDateTime;
+            }
+
+            if (projection.EffectiveStartDate.HasValue)
+            {
+                fields["UF_CRM_1768566963962"] = projection.EffectiveStartDate.Value.ToString("yyyy-MM-dd");
+                fields["BEGINDATE"] = projection.EffectiveStartDate.Value.ToString("yyyy-MM-dd");
+            }
+
+            if (projection.EffectiveEndDate.HasValue)
+            {
+                fields["UF_CRM_1768566980297"] = projection.EffectiveEndDate.Value.ToString("yyyy-MM-dd");
+                fields["CLOSEDATE"] = projection.EffectiveEndDate.Value.ToString("yyyy-MM-dd");
+            }
+
+            if (projection.PaymentGrandTotal > 0)
+            {
+                fields["OPPORTUNITY"] = projection.PaymentGrandTotal;
+            }
+
+            if (!string.IsNullOrWhiteSpace(projection.Currency))
+            {
+                fields["CURRENCY_ID"] = projection.Currency;
+            }
+
+            if (record.ClientBitrixId.HasValue)
+            {
+                fields["CONTACT_ID"] = record.ClientBitrixId.Value;
+            }
+
+            return fields;
+        }
+
 
         public async Task<ReservationRecord> EnsureBitrixContactAndDealAsync(ReservationRecord record)
         {
@@ -1502,126 +1718,31 @@ private static TimeZoneInfo GetWarsawTimeZone()
                 _logger.LogInformation("Updated Bitrix contact {ContactId} for reservation {ReservationGuid}.", record.ClientBitrixId, record.ReservationGuid);
             }
             await EnsurePaymentTotalsAsync(record.ReservationGuid,record);
+            await RefreshCrmProjectionAsync(record);
             if (!record.DealBitrixId.HasValue)
             {
-               
-
                 var pipelines = await _bitrixService.GetDealPipelinesAsync();
                 var pipelineName = BitrixConfiguration.GetReservationPipelineName(_configuration);
                 var rentalPipeline = pipelines.FirstOrDefault(p => string.Equals(p.Name, pipelineName, StringComparison.OrdinalIgnoreCase));
                 var pipelineId = rentalPipeline?.Id ?? 0;
                 var stages = await _bitrixService.GetDealStagesAsync(pipelineId);
                 var newStage = stages.FirstOrDefault(s => string.Equals(s.Name, "W toku", StringComparison.OrdinalIgnoreCase));
-
-                var dealTitle = record.IdoReservationId.HasValue
-                    ? $"Rezerwacja #{record.IdoReservationId}"
-                    : $"Rezerwacja {record.ReservationGuid:D}";
-                var apartmentInfo = ResolveApartmentInfo(record.State.StartRequest);
-                var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest);
-                var purchasedAddonsValue = await BuildPurchasedAddonsBitrixValueAsync(record.State.StartRequest);
-                var reservationSourceValue = await ResolveBitrixReservationSourceValueAsync(record);
-                UpdateReservationLocationState(record, apartmentInfo, apartmentItemLocalSettings);
-                var startRequest = record.State.StartRequest;
-                if (startRequest is null)
+                var projection = record.State.CrmProjection;
+                var customFields = BuildBitrixProjectionFields(record, "EnsureBitrixContactAndDealAsync");
+                var dealUpdateFields = new Dictionary<string, object?>(customFields)
                 {
-                    throw new ArgumentNullException(nameof(record.State.StartRequest), "Bitrix reservation sync requires a start request.");
-                }
-
-                var reservationStartOffset = GetWarsawOffset(startRequest.StartDate, startRequest.CheckInTime);
-                var bitrixServerUTCOffset = await _bitrixService.GetServerUtcOffsetAsync();
-                var differenceInHours = bitrixServerUTCOffset.TotalHours - reservationStartOffset.TotalHours;
-                var StayWellLink = BuildStayWellLink(record.ReservationGuid.ToString());
-                var paymentRetryLink = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true);
-                var customFields = new Dictionary<string, object?>
-                {
-                    ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
-                    ["UF_CRM_1769797476812"] = ResolveBitrixLanguage(record.State.Client.Language),
-                    ["UF_CRM_1769797498979"] = record.State.Client.CountryCode,
-                    ["UF_CRM_1768836801823"] = startRequest?.Adults,
-                    ["UF_CRM_1768836818927"] = startRequest?.EndDate.DayNumber - startRequest?.StartDate.DayNumber,
-                    ["UF_CRM_1773256016575"] = ToBitrixDateTime(startRequest?.StartDate, startRequest?.CheckInTime, bitrixServerUTCOffset, differenceInHours),
-                    ["UF_CRM_1773310028374"] = ToBitrixDateTime(startRequest?.EndDate, startRequest?.CheckOutTime, bitrixServerUTCOffset, differenceInHours),
-
-                    //RB_Godzina_Zameldowania
-                    ["UF_CRM_1778170129465"] = startRequest?.CheckInTime.ToString("HH:mm"),
-                    //RB_Godzina_Wymeldowania
-                    ["UF_CRM_1778170154231"] = startRequest?.CheckOutTime.ToString("HH:mm"),
-                    
-                    //rb_data_meldunek
-                    ["UF_CRM_1778790928572"] = startRequest?.StartDate.ToString("yyyy-MM-dd") + " " + startRequest?.CheckInTime.ToString("HH:mm"),
-                    //rb_data_wymeldunek
-                    ["UF_CRM_1778790948473"] = startRequest?.EndDate.ToString("yyyy-MM-dd") + " " + startRequest?.CheckOutTime.ToString("HH:mm"),
-
-                    ["UF_CRM_1773310079975"] = startRequest?.CheckInTime < new TimeOnly(15, 0),
-                    ["UF_CRM_1773310094605"] = startRequest?.CheckOutTime > new TimeOnly(11, 0),
-                    [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
-                    [BitrixReservationSourceFieldName] = reservationSourceValue,
-                    [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
-
-                    //rb_format_staywell
-                    [BitrixStayWellLinkFieldName] = StayWellLink,
-
-                    //b_rb_format_staywell
-                    ["UF_CRM_1780004115483"] = StayWellLink, //pole string only w bitrix dla wiadomosci.
-                    
-
-                    //RB_Zastosowany_Bonus
-                    ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
-                    ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
-                    : "None"
-
-
-                };
-                AddBitrixLocationFields(customFields, apartmentInfo, apartmentItemLocalSettings);
-
-                var dealUpdateFields = new Dictionary<string, object?>
-                {
-                    ["TITLE"] = dealTitle,
+                    ["TITLE"] = projection.DealTitle,
                     ["ASSIGNED_BY_ID"] = _bitrixAssignedByUserId
                 };
-
-                if (!string.IsNullOrEmpty(record.ProviderTransactionId))
-                    dealUpdateFields["UF_CRM_1768566766553"] = record.ProviderTransactionId;
-
-                if (paymentRetryLink != null) {
-                    //RB_Link_Anuluj_Rezerwacje
-                    dealUpdateFields["UF_CRM_1775071948450"] = paymentRetryLink;
-                    
-                    //RB_Link_Do_Platnosci
-                    dealUpdateFields["UF_CRM_1775071642554"] = paymentRetryLink;
-                }
-                    
-                
-
-                if (record.State.PaymentGrandTotal > 0)
-                {
-                    dealUpdateFields["OPPORTUNITY"] = record.State.PaymentGrandTotal;
-                }
-
-                if (!string.IsNullOrWhiteSpace(record.State.StartRequest?.Currency))
-                {
-                    dealUpdateFields["CURRENCY_ID"] = record.State.StartRequest.Currency;
-                }
-
-                if (record.ClientBitrixId.HasValue)
-                {
-                    dealUpdateFields["CONTACT_ID"] = record.ClientBitrixId.Value;
-                }
-
-                foreach (var customField in customFields)
-                {
-                    dealUpdateFields[customField.Key] = customField.Value;
-                }
-
                 dealUpdateFields["COMMENT"] = DateTime.UtcNow.ToString() +  ": EnsureBitrixContactAndDealAsync";
 
                 record.DealBitrixId = await _bitrixService.UpsertDealAsync(record.DealBitrixId, new CreateDealRequest(
-                    Title: dealTitle,
+                    Title: projection.DealTitle,
                     CategoryId: pipelineId,
                     StageId: newStage?.StageId ?? "NEW",
                     AssignedById: _bitrixAssignedByUserId,
-                    Opportunity: record.State.PaymentGrandTotal, //record.State.StartRequest?.OfferPrice,
-                    CurrencyId: record.State.StartRequest?.Currency ?? "PLN",
+                    Opportunity: projection.PaymentGrandTotal,
+                    CurrencyId: projection.Currency,
                     ContactId: record.ClientBitrixId,
                     CustomFields: customFields
                 ), dealUpdateFields);
@@ -1649,121 +1770,10 @@ private static TimeZoneInfo GetWarsawTimeZone()
             {
                 idoReservation ??= await FetchIdoReservationAsync(record, refreshCache: false, CancellationToken.None);
             }
-            var apartmentInf = ResolveApartmentInfo(record.State.StartRequest, idoReservation);
-            var apartmentItemLocalSettings = await ResolveApartmentItemLocalSettingsAsync(record.State.StartRequest, idoReservation);
-            var purchasedAddonsValue = await BuildPurchasedAddonsBitrixValueAsync(record.State.StartRequest);
-            var reservationSourceValue = await ResolveBitrixReservationSourceValueAsync(record, idoReservation);
-            var stateLocationChanged = UpdateReservationLocationState(record, apartmentInf, apartmentItemLocalSettings);
-
-            //pola UF_CRM* to pola customowe - tu sa wpisane na sztywno ale mozna je pobrac z bitrixa dynamicznie jesli trzeba.. ewentualne TODO.
-            var fields = new Dictionary<string, object?>
-            {
-                ["COMMENTS"] = $"{DateTime.Now.ToString()}: Status Rezerwacji {record.IdoReservationId} (z IDB): {record.IdoStatus ?? "Unknown"}, Status Platnosci TPAY: {record.PaymentStatus} ({updateReason}).",
-                //RB_Status_Platnosci
-                ["UF_CRM_1768566732609"] = record.PaymentStatus,
-                //Czy faktura
-                ["UF_CRM_1773079785969"] = record.State.Invoice is not null,
-                //Jezyk
-                ["UF_CRM_1769797476812"] = ResolveBitrixLanguage(record.State.Client?.Language),
-                //RB_Status_Rezerwacji
-                ["UF_CRM_1768566710921"] = record.IdoStatus,
-                //RB_KodTpay_Platnosci
-                ["UF_CRM_1768566766553"] = string.Empty,
-                [BitrixPurchasedAddonsFieldName] = purchasedAddonsValue,
-                [BitrixReservationSourceFieldName] = reservationSourceValue,
-                //RB_ID_Rezrerwacji
-                [BitrixService.IdoReservationIdFieldName] = record.IdoReservationId,
-                //RB_Link_StayWell
-                [BitrixStayWellLinkFieldName] = BuildStayWellLink(record.ReservationGuid.ToString()),
-
-                //RB_Godzina_Zameldowania
-                ["UF_CRM_1778170129465"] = record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
-                //RB_Godzina_Wymeldowania
-                ["UF_CRM_1778170154231"] = record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
-
-                //rb_data_meldunek
-                ["UF_CRM_1778790928572"] = record.State.StartRequest?.StartDate.ToString("yyyy-MM-dd") + " " + record.State.StartRequest?.CheckInTime.ToString("HH:mm"),
-                //rb_data_wymeldunek
-                ["UF_CRM_1778790948473"] = record.State.StartRequest?.EndDate.ToString("yyyy-MM-dd") + " " + record.State.StartRequest?.CheckOutTime.ToString("HH:mm"),
-
-                //RB_Zastosowany_Bonus
-                ["UF_CRM_1778175040438"] = record.State.StartRequest != null && record.State.StartRequest.AppliedBonusId.HasValue
-                    ? $"{record.State.StartRequest.AppliedBonusName} ({record.State.StartRequest.DiscountAmountPln} zł, {record.State.StartRequest.AppliedBonusValue}{(record.State.StartRequest.AppliedBonusValueType == BonusDiscountValueType.Percent ? "%" : "PLN")})"
-                    : "None"
- 
-                
-
-            };
-            AddBitrixLocationFields(fields, apartmentInf, apartmentItemLocalSettings);
-
-            var paymentRetryLink = BuildPaymentRetryLink(record.ReservationGuid, record.PaymentSessionGuid, reservationSourceValue, cancelaction: true);
-
-            if (!string.IsNullOrEmpty(record.ProviderTransactionId))
-                fields["UF_CRM_1768566766553"] = record.ProviderTransactionId;
-
-            if (paymentRetryLink != null)
-            {
-                //RB_Link_Anuluj_Rezerwacje
-                fields["UF_CRM_1775071948450"] = paymentRetryLink;
-
-                //RB_Link_Do_Platnosci
-                fields["UF_CRM_1775071642554"] = paymentRetryLink;
-            }
-            if (record.State.PaymentGrandTotal >0)
-            {
-                fields["OPPORTUNITY"] = record.State.PaymentGrandTotal; //record.State.StartRequest.OfferPrice.Value;
-            }
-
-            if (!string.IsNullOrWhiteSpace(record.State.StartRequest?.Currency))
-            {
-                fields["CURRENCY_ID"] = record.State.StartRequest.Currency;
-            }
-
-            if (record.ClientBitrixId.HasValue)
-            {
-                fields["CONTACT_ID"] = record.ClientBitrixId.Value;
-            }
-
-            var apartmentName = idoReservation?.Items?.FirstOrDefault()?.objectName;
-            if (!string.IsNullOrWhiteSpace(apartmentName))
-            {
-                //RB_Nazwa_Apartamentu
-                fields["UF_CRM_1768566682522"] = apartmentName;
-            }
-
-            var location = apartmentInf?.ObjectLocation?.LocalizationItem;
-            if (location is not null)
-            {
-                //RB_Adres_Apartamentu
-                fields["UF_CRM_1768840472108"] = $"{location.ZipCode} {location.City}, ul. {location.Street}";
-            }
-
-            if (idoReservation?.ReservationDetails is not null)
-            {
-                //RB_Poczatek_Rezerwacji
-                fields["UF_CRM_1768566963962"] = idoReservation.ReservationDetails.dateFrom;
-                fields["BEGINDATE"] = idoReservation.ReservationDetails.dateFrom; //deal field
-
-                //RB_Koniec_Rezerwacji
-                fields["UF_CRM_1768566980297"] = idoReservation.ReservationDetails.dateTo;
-                fields["CLOSEDATE"] = idoReservation.ReservationDetails.dateTo; //deal field
-
-                //RB_Ilosc_Nocy
-                fields["UF_CRM_1768836818927"] = idoReservation.ReservationDetails.getDuration();
-            }
-
-            if (idoReservation?.Client?.Guests is not null)
-            {
-                //RB_Ilosc_Gosci
-                fields["UF_CRM_1768836801823"] = idoReservation.Items[0].numberOfAdults;
-            }
-
+            await RefreshCrmProjectionAsync(record, idoReservation);
+            var fields = BuildBitrixProjectionFields(record, updateReason);
             await _bitrixService.UpdateDealAsync(record.DealBitrixId.Value, fields);
-
-            if (stateLocationChanged)
-            {
-                await _store.UpdateAsync(record);
-            }
+            await _store.UpdateAsync(record);
         }
 
       
@@ -1821,6 +1831,11 @@ private static TimeZoneInfo GetWarsawTimeZone()
         public async Task SaveCustomerTermsAsync(Guid reservationGuid, Dictionary<int, bool> termSelections)
         {
             var record = await RequireReservationAsync(reservationGuid);
+            EnsureStateDefaults(record.State);
+            record.State.Terms.Selections = termSelections.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            record.State.Terms.SavedAtUtc = DateTime.UtcNow;
+            await RefreshCrmProjectionAsync(record);
+            await _store.UpdateAsync(record);
             record = await EnsureBitrixContactAndDealAsync(record);
             var agreedEntities = termSelections.Select(kvp => new CustomerAgreedTerms
             {
@@ -1858,6 +1873,7 @@ private static TimeZoneInfo GetWarsawTimeZone()
 
             record.PaymentStatus = PaymentStatuses.Paid;
             record.IdoStatus = ReservationStatusType.Accepted;
+            await RefreshCrmProjectionAsync(record);
             await _store.UpdateAsync(record);
 
             var dto = new TpayWebhookDto
