@@ -42,7 +42,6 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             var reservationGuid = Guid.NewGuid();
             var state = new ReservationState
             {
-                FlowType = ReservationFlowType.WebDirect,
                 StartRequest = request
             };
 
@@ -140,10 +139,6 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             var state = string.IsNullOrWhiteSpace(entity.ReservationJson)
                 ? new ReservationState()
                 : JsonConvert.DeserializeObject<ReservationState>(entity.ReservationJson) ?? new ReservationState();
-
-            state.Terms ??= new TermsSnapshot();
-            state.Resolved ??= new ResolvedReservationSnapshot();
-            state.CrmProjection ??= new ReservationCrmProjection();
 
             return new ReservationRecord
             {
