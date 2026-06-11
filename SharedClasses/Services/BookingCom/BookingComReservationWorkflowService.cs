@@ -262,7 +262,6 @@ namespace RentoomBooking.SharedClasses.Services.BookingCom
                 var record = await _reservationStore.GetAsync(reservationGuid, cancellationToken)
                     ?? throw new InvalidOperationException($"Reservation workflow record {reservationGuid} was not found.");
 
-                record.State.FlowType = ReservationFlowType.ExternalImported;
                 record.IdoReservationId = reservation.id;
                 record.IdoStatus = reservation.ReservationDetails?.status;
                 record.Provider = provider;
