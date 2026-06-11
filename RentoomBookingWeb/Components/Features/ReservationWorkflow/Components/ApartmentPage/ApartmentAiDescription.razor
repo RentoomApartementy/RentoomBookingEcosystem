@@ -34,7 +34,7 @@
             }
         </div>
 
-        @if (Amenities != null && Amenities.Any() &&!doNotShow)
+        @if (Amenities != null && Amenities.Any())
         {
             <div class="amenities-section">
                 <h3 class="section-title">@Localizer["Amenities_Title"]</h3>
@@ -43,7 +43,7 @@
                     {
                         <div class="amenity-item">
                             <div class="amenity-check">
-                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                <span class="material-symbols-outlined">@amenity.IconName</span>
                             </div>
                             <span class="amenity-name">@amenity.Name</span>
                         </div>
@@ -71,5 +71,4 @@
     [Parameter] public bool IsExpanded { get; set; }
     [Parameter] public EventCallback OnToggleExpand { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
-    bool doNotShow = true; //wyłaczone bo nie jest to tłumaczone.
 }

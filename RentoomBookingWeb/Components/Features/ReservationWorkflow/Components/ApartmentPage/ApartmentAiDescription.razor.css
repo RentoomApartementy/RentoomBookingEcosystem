@@ -103,6 +103,11 @@
     margin-top: 2px;
 }
 
+.amenity-check .material-symbols-outlined {
+    font-size: 18px;
+    line-height: 1;
+}
+
 .amenity-check svg {
     width: 14px;
     height: 14px;
