@@ -141,17 +141,13 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             CancellationToken cancellationToken = default)
         {
             await using var context = _dbContextFactory.CreateDbContext();
-            var existing = await context.ReservationRecords
-                .FirstOrDefaultAsync(r => r.ReservationGuid == reservationGuid, cancellationToken);
-
-            if (existing is null)
-            {
-                return;
-            }
-
-            existing.SyncChangeSummary = syncChangeSummary;
-            existing.LastStatusSyncAt = lastStatusSyncAt;
-            await context.SaveChangesAsync(cancellationToken);
+            await context.ReservationRecords
+                .Where(r => r.ReservationGuid == reservationGuid)
+                .ExecuteUpdateAsync(
+                    setters => setters
+                        .SetProperty(r => r.SyncChangeSummary, syncChangeSummary)
+                        .SetProperty(r => r.LastStatusSyncAt, lastStatusSyncAt),
+                    cancellationToken);
         }
 
 
