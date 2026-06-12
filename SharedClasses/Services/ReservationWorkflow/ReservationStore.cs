@@ -20,6 +20,11 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<ReservationRecord?> GetByIdoReservationIdAsync(int idoReservationId, CancellationToken cancellationToken = default);
         Task<ReservationRecord?> GetByDealBitrixIdAsync(int dealBitrixId, CancellationToken cancellationToken = default);
         Task UpdateAsync(ReservationRecord record, CancellationToken cancellationToken = default);
+        Task UpdateStatusSyncMetadataAsync(
+            Guid reservationGuid,
+            string? syncChangeSummary,
+            DateTime lastStatusSyncAt,
+            CancellationToken cancellationToken = default);
         Task<ReservationRecord?> GetByProviderTransactionIdAsync(string providerTransactionId, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<ReservationRecord>> ListActiveWithIdoReservationAsync(CancellationToken cancellationToken = default);
     }
@@ -123,9 +128,30 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             existing.ProviderTransactionId = record.ProviderTransactionId;
             existing.SyncChangeSummary = record.SyncChangeSummary;
             existing.UpdatedAt = DateTime.UtcNow;
+            existing.LastStatusSyncAt = record.LastStatusSyncAt;
             existing.ConfirmationEmailBitrixId = record.DealBitrixSentConfirmationEmailId;
             await context.SaveChangesAsync(cancellationToken);
 
+        }
+
+        public async Task UpdateStatusSyncMetadataAsync(
+            Guid reservationGuid,
+            string? syncChangeSummary,
+            DateTime lastStatusSyncAt,
+            CancellationToken cancellationToken = default)
+        {
+            await using var context = _dbContextFactory.CreateDbContext();
+            var existing = await context.ReservationRecords
+                .FirstOrDefaultAsync(r => r.ReservationGuid == reservationGuid, cancellationToken);
+
+            if (existing is null)
+            {
+                return;
+            }
+
+            existing.SyncChangeSummary = syncChangeSummary;
+            existing.LastStatusSyncAt = lastStatusSyncAt;
+            await context.SaveChangesAsync(cancellationToken);
         }
 
 
@@ -156,6 +182,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 RowVersion = entity.RowVersion ?? Array.Empty<byte>(),
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt,
+                LastStatusSyncAt = entity.LastStatusSyncAt,
                 DealBitrixSentConfirmationEmailId = entity.ConfirmationEmailBitrixId
             };
         }
@@ -178,6 +205,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 RowVersion = record.RowVersion,
                 CreatedAt = record.CreatedAt,
                 UpdatedAt = record.UpdatedAt,
+                LastStatusSyncAt = record.LastStatusSyncAt,
                 ConfirmationEmailBitrixId = record.DealBitrixSentConfirmationEmailId
             };
         }
