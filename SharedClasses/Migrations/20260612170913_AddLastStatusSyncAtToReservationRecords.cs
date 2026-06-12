@@ -18,7 +18,7 @@ namespace RentoomBooking.SharedClasses.Migrations
                 type: "timestamp with time zone",
                 nullable: true);
 
-            migrationBuilder.CreateTable(
+           /* migrationBuilder.CreateTable (
                 name: "defined_amenities",
                 columns: table => new
                 {
@@ -33,14 +33,14 @@ namespace RentoomBooking.SharedClasses.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_defined_amenities", x => x.id);
-                });
+                });*/
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "defined_amenities");
+         /*   migrationBuilder.DropTable(
+                name: "defined_amenities");*/
 
             migrationBuilder.DropColumn(
                 name: "last_status_sync_at",
