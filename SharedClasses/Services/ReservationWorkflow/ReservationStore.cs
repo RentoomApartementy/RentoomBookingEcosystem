@@ -31,6 +31,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
     public class ReservationStore : IReservationStore
     {
+        private static readonly TimeSpan ActiveReservationStatusSyncInterval = TimeSpan.FromMinutes(15);
         private readonly IDbContextFactory<PostgresBookingDbContext> _dbContextFactory;
         private readonly Task _initializationTask;
 
@@ -227,13 +228,16 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         public async Task<IReadOnlyList<ReservationRecord>> ListActiveWithIdoReservationAsync(CancellationToken cancellationToken = default)
         {
             await using var context = _dbContextFactory.CreateDbContext();
+            var syncCutoff = DateTime.UtcNow - ActiveReservationStatusSyncInterval; //odrzuca rekordy syncowane w ostatnich 15 minutach
 
             var entities = await context.ReservationRecords.AsNoTracking()
                 .Where(r => r.IdoReservationId.HasValue)
                 .Where(r => r.IdoStatus == null
                     || (r.IdoStatus != ReservationStatusType.Canceled
                         && r.IdoStatus != ReservationStatusType.Completed))
-                .OrderBy(r => r.UpdatedAt)
+                .Where(r => !r.LastStatusSyncAt.HasValue || r.LastStatusSyncAt < syncCutoff) //odrzuca rekordy syncowane w ostatnich 15 minutach
+                .OrderBy(r => r.LastStatusSyncAt ?? DateTime.MinValue)
+                .ThenBy(r => r.UpdatedAt)
                 .ToListAsync(cancellationToken);
 
             return entities.Select(MapToRecord).ToList();
