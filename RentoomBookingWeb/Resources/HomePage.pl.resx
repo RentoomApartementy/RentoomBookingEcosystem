@@ -117,4 +117,40 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Dowiedz się więcej</value>
   </data>
+  <data name="HomeAb_PageTitle" xml:space="preserve">
+    <value>Rentoom A/B Test - nocleg w sercu Torunia</value>
+  </data>
+  <data name="HomeAb_MetaDescription" xml:space="preserve">
+    <value>Poznaj nowy wariant strony głównej Rentoom z bezpośrednim wyszukiwaniem apartamentów i mocniejszą sekcją hero.</value>
+  </data>
+  <data name="HomeAb_OgTitle" xml:space="preserve">
+    <value>Rentoom A/B Test - apartamenty w Toruniu z rezerwacją bezpośrednią</value>
+  </data>
+  <data name="HomeAb_OgDescription" xml:space="preserve">
+    <value>Sprawdź nowy wariant strony głównej Rentoom i wyszukaj apartament w Toruniu bez pośredników.</value>
+  </data>
+  <data name="HomeAb_Badge" xml:space="preserve">
+    <value>60 000+ zadowolonych gości</value>
+  </data>
+  <data name="HomeAb_Eyebrow" xml:space="preserve">
+    <value>Rezerwuj bezpośrednio w Toruniu</value>
+  </data>
+  <data name="HomeAb_Title" xml:space="preserve">
+    <value>Zasypiaj w apartamencie, budź się w sercu Torunia.</value>
+  </data>
+  <data name="HomeAb_Lead" xml:space="preserve">
+    <value>Wybierz sprawdzony apartament Rentoom z wygodną kuchnią, świetną lokalizacją i rezerwacją online bez pośredników.</value>
+  </data>
+  <data name="HomeAb_BenefitLocation" xml:space="preserve">
+    <value>Apartamenty w centrum i na Starówce</value>
+  </data>
+  <data name="HomeAb_BenefitDirect" xml:space="preserve">
+    <value>Rezerwacja bezpośrednio w Rentoom</value>
+  </data>
+  <data name="HomeAb_PostcardCaption" xml:space="preserve">
+    <value>Toruń na wyciągnięcie ręki</value>
+  </data>
+  <data name="HomeAb_PostcardImageAlt" xml:space="preserve">
+    <value>Panorama Torunia w pobliżu apartamentów Rentoom</value>
+  </data>
 </root>

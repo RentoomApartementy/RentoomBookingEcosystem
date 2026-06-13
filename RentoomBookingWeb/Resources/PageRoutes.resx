@@ -71,6 +71,9 @@
   <data name="Home" xml:space="preserve">
     <value>home</value>
   </data>
+  <data name="HomeAbTest" xml:space="preserve">
+    <value>home-ab-test</value>
+  </data>
   <data name="Statute" xml:space="preserve">
     <value>regulations</value>
   </data>

@@ -117,4 +117,40 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Learn more</value>
   </data>
+  <data name="HomeAb_PageTitle" xml:space="preserve">
+    <value>Rentoom A/B Test - Stay in the heart of Torun</value>
+  </data>
+  <data name="HomeAb_MetaDescription" xml:space="preserve">
+    <value>Explore the new Rentoom homepage concept with direct apartment search and a stronger editorial hero.</value>
+  </data>
+  <data name="HomeAb_OgTitle" xml:space="preserve">
+    <value>Rentoom A/B Test - Torun apartments with direct booking</value>
+  </data>
+  <data name="HomeAb_OgDescription" xml:space="preserve">
+    <value>Browse the new Rentoom homepage variant and search for apartments in Torun without intermediaries.</value>
+  </data>
+  <data name="HomeAb_Badge" xml:space="preserve">
+    <value>60,000+ satisfied guests</value>
+  </data>
+  <data name="HomeAb_Eyebrow" xml:space="preserve">
+    <value>Book direct in Torun</value>
+  </data>
+  <data name="HomeAb_Title" xml:space="preserve">
+    <value>Fall asleep in an apartment, wake up in the heart of Torun.</value>
+  </data>
+  <data name="HomeAb_Lead" xml:space="preserve">
+    <value>Choose a verified Rentoom apartment with a comfortable kitchen, a strong city location, and direct online booking without intermediaries.</value>
+  </data>
+  <data name="HomeAb_BenefitLocation" xml:space="preserve">
+    <value>Apartments in the center and Old Town</value>
+  </data>
+  <data name="HomeAb_BenefitDirect" xml:space="preserve">
+    <value>Direct booking with Rentoom</value>
+  </data>
+  <data name="HomeAb_PostcardCaption" xml:space="preserve">
+    <value>Torun within reach</value>
+  </data>
+  <data name="HomeAb_PostcardImageAlt" xml:space="preserve">
+    <value>Torun panorama near Rentoom apartments</value>
+  </data>
 </root>

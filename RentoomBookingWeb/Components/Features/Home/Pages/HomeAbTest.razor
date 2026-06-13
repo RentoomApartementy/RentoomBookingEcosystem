@@ -1,0 +1,67 @@
+@using RentoomBookingWeb.Components.Features.Home.Components
+@using System.Text.Encodings.Web
+@using System.Text.Json
+@using Microsoft.Extensions.Localization
+@inject NavigationManager Navigation
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject IStringLocalizer<RentoomBookingWeb.HomePage> Localizer
+
+<PageTitle>@Localizer["HomeAb_PageTitle"]</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="@Localizer["HomeAb_MetaDescription"]" />
+    <meta name="keywords" content="@Localizer["Home_MetaKeywords"]" />
+    <meta name="robots" content="noindex,nofollow" />
+
+    <link rel="canonical" href="@GetCanonicalUrl()" />
+
+    <meta property="og:title" content="@Localizer["HomeAb_OgTitle"]" />
+    <meta property="og:description" content="@Localizer["HomeAb_OgDescription"]" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@GetCanonicalUrl()" />
+    <meta property="og:image" content="@($"{Navigation.BaseUri}assets/images/apartment.png")" />
+    <script type="application/ld+json">
+        @((MarkupString)HomeJsonLd)
+    </script>
+</HeadContent>
+
+<div class="home-container home-container-ab">
+    <HomeAbHeroSection />
+    <ApartmentsSection />
+    <CitySection />
+    <StatsSection />
+    <WhyRentoomSection />
+    <OpinionsSection />
+    <ContactSection />
+</div>
+
+@code {
+    private string GetCanonicalUrl()
+    {
+        var relative = RouteService.GetLocalizedUrl("HomeAbTest").TrimStart('/');
+        return new Uri(new Uri(Navigation.BaseUri), relative).ToString();
+    }
+
+    private string HomeJsonLd => JsonSerializer.Serialize(new Dictionary<string, object>
+    {
+        ["@context"] = "https://schema.org",
+        ["@graph"] = new object[]
+        {
+            new Dictionary<string, object>
+            {
+                ["@type"] = "WebPage",
+                ["@id"] = $"{GetCanonicalUrl()}#webpage",
+                ["url"] = GetCanonicalUrl(),
+                ["name"] = Localizer["HomeAb_PageTitle"].Value,
+                ["description"] = Localizer["HomeAb_MetaDescription"].Value,
+                ["isPartOf"] = new Dictionary<string, object>
+                {
+                    ["@id"] = "https://rentoom.pl/#website"
+                }
+            }
+        }
+    }, new JsonSerializerOptions
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    });
+}

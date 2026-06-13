@@ -1,0 +1,50 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<HomePage> Localizer
+
+<section class="home-ab-hero">
+    <div class="home-ab-hero__backdrop"></div>
+
+    <div class="home-ab-hero__content">
+        <div class="home-ab-hero__copy">
+            <div class="home-ab-hero__badge">
+                <div class="home-ab-hero__avatars" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span>@Localizer["HomeAb_Badge"]</span>
+            </div>
+
+            <p class="home-ab-hero__eyebrow">@Localizer["HomeAb_Eyebrow"]</p>
+            <h1>@Localizer["HomeAb_Title"]</h1>
+            <p class="home-ab-hero__lead">@Localizer["HomeAb_Lead"]</p>
+
+            <ul class="home-ab-hero__benefits">
+                <li>
+                    <GoogleIcon Name="check_circle" Filled="true" Class="home-ab-hero__benefit-icon" AriaLabel="@Localizer["HomeAb_BenefitLocation"]" />
+                    <span>@Localizer["HomeAb_BenefitLocation"]</span>
+                </li>
+                <li>
+                    <GoogleIcon Name="check_circle" Filled="true" Class="home-ab-hero__benefit-icon" AriaLabel="@Localizer["HomeAb_BenefitDirect"]" />
+                    <span>@Localizer["HomeAb_BenefitDirect"]</span>
+                </li>
+            </ul>
+
+            <div class="home-ab-hero__search">
+                <SearchBar StartDate="@_startDate" EndDate="@_endDate" Adults="2" />
+            </div>
+        </div>
+
+        <div class="home-ab-hero__media">
+            <div class="home-ab-hero__postcard">
+                <img src="assets/images/torun.jpeg" alt="@Localizer["HomeAb_PostcardImageAlt"]" />
+                <div class="home-ab-hero__postcard-caption">@Localizer["HomeAb_PostcardCaption"]</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    private readonly string _startDate = DateTime.Now.ToString("yyyy-MM-dd");
+    private readonly string _endDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+}

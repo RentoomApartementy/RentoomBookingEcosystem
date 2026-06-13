@@ -10,6 +10,7 @@ namespace RentoomBookingWeb.Services.Localization
         public static readonly Dictionary<string, RouteDefinition> KeyToComponent = new()
         {
             ["Home"] = new(typeof(RentoomBookingWeb.Components.Features.Home.Pages.Home), Priority: 0),
+            ["HomeAbTest"] = new(typeof(RentoomBookingWeb.Components.Features.Home.Pages.HomeAbTest), Priority: 0),
             ["Apartments"] = new(typeof(RentoomBookingWeb.Components.Features.Apartments.Pages.Apartments), "{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 5, MinRequiredSegments: 0),
             ["AllApartments"] = new(typeof(RentoomBookingWeb.Components.Features.AllApartments.Pages.AllApartments), Priority: 0),
             ["ApartmentDetail"] = new(typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage), "{Id}/{Slug}/{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 10, MinRequiredSegments: 1),

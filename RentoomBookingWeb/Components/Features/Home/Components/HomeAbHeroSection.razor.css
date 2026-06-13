@@ -1,0 +1,235 @@
+.home-ab-hero {
+    position: relative;
+    width: 100%;
+    min-height: 92svh;
+    overflow: hidden;
+    background:
+        linear-gradient(90deg, rgba(248, 244, 237, 0.96) 0%, rgba(248, 244, 237, 0.88) 34%, rgba(248, 244, 237, 0.18) 64%, rgba(248, 244, 237, 0.08) 100%),
+        url("/assets/images/apartment.png");
+    background-size: cover;
+    background-position: center;
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+}
+
+.home-ab-hero__backdrop {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
+        linear-gradient(180deg, rgba(247, 247, 247, 0.08) 0%, rgba(247, 247, 247, 0.24) 100%);
+    pointer-events: none;
+}
+
+.home-ab-hero__content {
+    position: relative;
+    z-index: 1;
+    max-width: 1440px;
+    min-height: 92svh;
+    margin: 0 auto;
+    padding: 7.5rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: minmax(0, 620px) minmax(280px, 1fr);
+    gap: 3rem;
+    align-items: center;
+}
+
+.home-ab-hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+    min-width: 0;
+    color: #3f3225;
+}
+
+.home-ab-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 20px 40px rgba(73, 50, 28, 0.12);
+    font-size: 0.92rem;
+    color: #6f5234;
+}
+
+.home-ab-hero__avatars {
+    display: flex;
+    margin-right: 0.1rem;
+}
+
+.home-ab-hero__avatars span {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin-left: -0.35rem;
+    background-size: cover;
+    background-position: center;
+}
+
+.home-ab-hero__avatars span:first-child {
+    margin-left: 0;
+    background-image: url("/assets/images/test-user-opinion.jpeg");
+}
+
+.home-ab-hero__avatars span:nth-child(2) {
+    background-image: url("/assets/images/apartment.jpeg");
+}
+
+.home-ab-hero__avatars span:nth-child(3) {
+    background-image: url("/assets/images/hero-bg.jpeg");
+}
+
+.home-ab-hero__eyebrow {
+    margin: 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #9a744c;
+}
+
+.home-ab-hero h1 {
+    margin: 0;
+    max-width: 10ch;
+    font-size: clamp(3.3rem, 5vw, 5.4rem);
+    line-height: 0.94;
+    font-weight: 500;
+    color: #4c3822;
+    overflow-wrap: anywhere;
+}
+
+.home-ab-hero__lead {
+    margin: 0;
+    max-width: 40rem;
+    font-size: 1.08rem;
+    line-height: 1.75;
+    color: rgba(76, 56, 34, 0.86);
+}
+
+.home-ab-hero__benefits {
+    display: grid;
+    gap: 0.7rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.home-ab-hero__benefits li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 1rem;
+    color: #5b4630;
+}
+
+.home-ab-hero__benefit-icon {
+    color: #945F28;
+    font-size: 1.15rem;
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+.home-ab-hero__search {
+    width: min(100%, 930px);
+    margin-top: 0.4rem;
+}
+
+.home-ab-hero__media {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 100%;
+}
+
+.home-ab-hero__postcard {
+    position: absolute;
+    right: clamp(0.5rem, 4vw, 3rem);
+    bottom: 3rem;
+    width: min(100%, 360px);
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 20px;
+    padding: 0.8rem;
+    box-shadow: 0 28px 60px rgba(46, 31, 17, 0.22);
+    transform: rotate(-5deg);
+}
+
+.home-ab-hero__postcard img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.home-ab-hero__postcard-caption {
+    padding-top: 0.75rem;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7b5e40;
+}
+
+@media (max-width: 1100px) {
+    .home-ab-hero__content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding-top: 7rem;
+    }
+
+    .home-ab-hero__copy {
+        max-width: 760px;
+    }
+
+    .home-ab-hero__media {
+        min-height: 280px;
+    }
+
+    .home-ab-hero__postcard {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        transform: rotate(-3deg);
+    }
+}
+
+@media (max-width: 700px) {
+    .home-ab-hero {
+        min-height: auto;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        background-position: 68% center;
+    }
+
+    .home-ab-hero__content {
+        min-height: auto;
+        padding: 6.25rem 1rem 2.5rem;
+    }
+
+    .home-ab-hero h1 {
+        max-width: 8ch;
+        font-size: clamp(2.3rem, 10.2vw, 3.35rem);
+        line-height: 0.98;
+    }
+
+    .home-ab-hero__lead {
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+
+    .home-ab-hero__badge {
+        padding: 0.55rem 0.85rem;
+        font-size: 0.82rem;
+    }
+
+    .home-ab-hero__avatars span {
+        width: 1.55rem;
+        height: 1.55rem;
+    }
+}
