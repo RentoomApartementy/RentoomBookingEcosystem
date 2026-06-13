@@ -36,11 +36,14 @@ public interface IApartmentsViewModel
     public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId);
 
     Task InitializeAsync(CancellationToken ct = default);
+    Task InitializeForSliderAsync(CancellationToken ct = default);
     Task LoadMoreAsync(CancellationToken cancellationToken = default);
 
     void ToggleView(bool isMap);
     Task HandleSearchAsync(Dictionary<string, string> query);
     Task HandleFiltersChangedAsync((ApartmentFilters Filters, int MinPrice, int MaxPrice) data);
+    Task NavigateToApartmentAsync(int apartmentId, string? apartmentName, string listingSource, CancellationToken ct = default);
+    int? GetOfferLengthDays();
 
     event Action? OnChange;
 }
