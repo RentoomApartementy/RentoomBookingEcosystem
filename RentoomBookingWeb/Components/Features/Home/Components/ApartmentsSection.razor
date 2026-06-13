@@ -14,38 +14,42 @@
     }
     else if (ViewModel.Items.Count == 0 && ViewModel.ApartmentsIsLoading)
     {
-        <SimpleCarousel>
-            @for (int i = 0; i < 8; i++)
-            {
-                <Apartment @key="@($"skeleton-loader-{i}")" Width="min(370px, 85vw)" />
-            }
-        </SimpleCarousel>
+        <div @ref="_carouselWrapper">
+            <SimpleCarousel>
+                @for (int i = 0; i < 8; i++)
+                {
+                    <Apartment @key="@($"skeleton-loader-{i}")" Width="min(370px, 85vw)" />
+                }
+            </SimpleCarousel>
+        </div>
     }
     else
     {
-        <SimpleCarousel>
-            @foreach (var apartment in ViewModel.Items)
-            {
-                <div @key="@($"apartment-{apartment.Id}")"
-                     @onclick='() => ViewModel.NavigateToApartmentAsync(apartment.Id, apartment.Name, "home-carousel")'>
-                    <Apartment Item="@apartment"
-                               Offer="@ViewModel.GetPricingOfferByObjectId(apartment.Id)"
-                               OfferLength="@ViewModel.GetOfferLengthDays()"
-                               ShowPrice="true"
-                               DisableForGoToReservation="true"
-                               SuggestionState="@ViewModel.GetSuggestionStatusByObjectId(apartment.Id)"
-                               SuggestionDates="@ViewModel.GetSuggestionsByObjectId(apartment.Id)"
-                               Width="min(370px, 85vw)" />
-                </div>
-            }
-
-            @if (ViewModel.ApartmentsIsLoading)
-            {
-                @for (int i = 0; i < 4; i++)
+        <div @ref="_carouselWrapper">
+            <SimpleCarousel>
+                @foreach (var apartment in ViewModel.Items)
                 {
-                    <Apartment @key="@($"loading-more-{i}")" Width="min(370px, 85vw)" />
+                    <div @key="@($"apartment-{apartment.Id}")"
+                         @onclick='() => ViewModel.NavigateToApartmentAsync(apartment.Id, apartment.Name, "home-carousel")'>
+                        <Apartment Item="@apartment"
+                                   Offer="@ViewModel.GetPricingOfferByObjectId(apartment.Id)"
+                                   OfferLength="@ViewModel.GetOfferLengthDays()"
+                                   ShowPrice="true"
+                                   DisableForGoToReservation="true"
+                                   SuggestionState="@ViewModel.GetSuggestionStatusByObjectId(apartment.Id)"
+                                   SuggestionDates="@ViewModel.GetSuggestionsByObjectId(apartment.Id)"
+                                   Width="min(370px, 85vw)" />
+                    </div>
                 }
-            }
-        </SimpleCarousel>
+
+                @if (ViewModel.ApartmentsIsLoading)
+                {
+                    @for (int i = 0; i < 4; i++)
+                    {
+                        <Apartment @key="@($"loading-more-{i}")" Width="min(370px, 85vw)" />
+                    }
+                }
+            </SimpleCarousel>
+        </div>
     }
 </div>

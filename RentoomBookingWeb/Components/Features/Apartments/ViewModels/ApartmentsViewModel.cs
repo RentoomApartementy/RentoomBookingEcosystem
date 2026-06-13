@@ -35,6 +35,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private bool _isInitialized = false;
         private ApartmentFilters? _currentFilters = null;
         private CancellationTokenSource? _suggestionsCts;
+        private readonly List<CancellationTokenSource> _incrementalSuggestionsCts = new();
         private readonly object _mediaWarmLock = new();
         private CancellationTokenSource _mediaWarmGenerationCts = new();
 
@@ -468,6 +469,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     if (IsSearch)
                     {
                         await FetchOffersForVisibleItems(page.Items);
+                        StartSuggestionsFetchForNewItems(page.Items);
                     }
                 }
                 else
@@ -766,11 +768,58 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             _ = FetchSuggestionsInBackground(apartmentIds, _suggestionsCts.Token, runId);
         }
 
+        /// <summary>
+        /// Fetches availability suggestions for apartments loaded by a subsequent LoadMoreAsync page,
+        /// without cancelling any suggestions fetch already running for previously loaded items.
+        /// </summary>
+        private void StartSuggestionsFetchForNewItems(IEnumerable<ApartmentObject> newItems)
+        {
+            if (!IsSearch) return;
+
+            var apartmentIds = newItems
+                .Where(item => !Offers.Any(o => o.ObjectId == item.Id))
+                .Where(item => !SuggestionStatuses.ContainsKey(item.Id))
+                .Select(item => item.Id)
+                .Distinct()
+                .ToList();
+
+            if (apartmentIds.Count == 0) return;
+
+            var cts = new CancellationTokenSource();
+            _incrementalSuggestionsCts.Add(cts);
+
+            var runId = _suggestionsRunId;
+            MarkSuggestionsLoading(runId, apartmentIds);
+
+            _ = RunIncrementalSuggestionsFetch(apartmentIds, cts, runId);
+        }
+
+        private async Task RunIncrementalSuggestionsFetch(IReadOnlyCollection<int> apartmentIds, CancellationTokenSource cts, int runId)
+        {
+            try
+            {
+                await FetchSuggestionsInBackground(apartmentIds, cts.Token, runId);
+            }
+            finally
+            {
+                _incrementalSuggestionsCts.Remove(cts);
+                cts.Dispose();
+            }
+        }
+
         private void CancelSuggestionsFetch()
         {
             _suggestionsCts?.Cancel();
             _suggestionsCts?.Dispose();
             _suggestionsCts = null;
+
+            foreach (var cts in _incrementalSuggestionsCts)
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+            _incrementalSuggestionsCts.Clear();
+
             _suggestionsRunId++;
             ResetLoadingSuggestionStatuses();
             UpdateSuggestionsLoadingState();
