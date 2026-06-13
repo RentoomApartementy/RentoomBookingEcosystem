@@ -1,4 +1,4 @@
-using BlazorDateRangePicker;
+﻿using BlazorDateRangePicker;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Identity;
@@ -184,8 +184,8 @@ namespace RentoomBookingWeb
 
 
             //view scoped
-            builder.Services.AddScoped<IApartmentsViewModel, ApartmentsViewModel>();
-            
+            builder.Services.AddTransient<IApartmentsViewModel, ApartmentsViewModel>(); //po zmianie ApartmentSection  - zmiana na transiet bo musi miec swoj stan jesli uzywany go wspolnie na jakiejs stronie gdzie inny komponenet go tez wywołuje , zeby nie był "globalny" dla wszystkich komponentów używających IApartmentsViewModel
+
             builder.Services.AddDateRangePicker(config => { });
 
             //config

@@ -8,42 +8,44 @@
         <h2 class="city-subtitle">@Localizer["title2subtitle"]</h2>
     </div>
 
-    @if (!string.IsNullOrEmpty(Error))
+    @if (!string.IsNullOrEmpty(ViewModel.Error))
     {
-        <p class="text-red-600">@Error</p>
+        <p class="text-red-600">@ViewModel.Error</p>
+    }
+    else if (ViewModel.Items.Count == 0 && ViewModel.ApartmentsIsLoading)
+    {
+        <SimpleCarousel>
+            @for (int i = 0; i < 8; i++)
+            {
+                <Apartment @key="@($"skeleton-loader-{i}")" Width="min(370px, 85vw)" />
+            }
+        </SimpleCarousel>
     }
     else
     {
-        @if (!ApartmentsIsLoading)
-        {
-            <SimpleCarousel>
-                @foreach (var apartment in Apartments)
+        <SimpleCarousel>
+            @foreach (var apartment in ViewModel.Items)
+            {
+                <div @key="@($"apartment-{apartment.Id}")"
+                     @onclick='() => ViewModel.NavigateToApartmentAsync(apartment.Id, apartment.Name, "home-carousel")'>
+                    <Apartment Item="@apartment"
+                               Offer="@ViewModel.GetPricingOfferByObjectId(apartment.Id)"
+                               OfferLength="@ViewModel.GetOfferLengthDays()"
+                               ShowPrice="true"
+                               DisableForGoToReservation="true"
+                               SuggestionState="@ViewModel.GetSuggestionStatusByObjectId(apartment.Id)"
+                               SuggestionDates="@ViewModel.GetSuggestionsByObjectId(apartment.Id)"
+                               Width="min(370px, 85vw)" />
+                </div>
+            }
+
+            @if (ViewModel.ApartmentsIsLoading)
+            {
+                @for (int i = 0; i < 4; i++)
                 {
-                    <div @onclick="() => GoToApartmentWithOffer(apartment.Id, apartment.Name)">
-                        <Apartment
-                            @key="apartment.Id"
-                            Item="@apartment"
-                            Offer="@GetPricingOfferByObjectId(apartment.Id)"
-                            OfferLength = "@(_dateTo.DayNumber-_dateFrom.DayNumber)"
-                            ShowPrice="true"
-                            DisableForGoToReservation="true"
-                            Width="min(370px, 85vw)"/>
-                    </div>
+                    <Apartment @key="@($"loading-more-{i}")" Width="min(370px, 85vw)" />
                 }
-            </SimpleCarousel>
-        }
-        else
-        {
-            <SimpleCarousel>
-                <Apartment Width="min(370px, 85vw)"/>
-                <Apartment Width="min(370px, 85vw)"/>
-                <Apartment Width="min(370px, 85vw)"/>
-                <Apartment Width="min(370px, 85vw)"/>
-                <Apartment Width="min(370px, 85vw)"/>
-                <Apartment Width="min(370px, 85vw)"/>
-                <Apartment Width="min(370px, 85vw)"/>
-                <Apartment Width="min(370px, 85vw)"/>
-            </SimpleCarousel>
-        }
+            }
+        </SimpleCarousel>
     }
 </div>
