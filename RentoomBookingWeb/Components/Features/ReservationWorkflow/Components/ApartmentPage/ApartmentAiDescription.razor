@@ -1,4 +1,4 @@
-﻿@using RentoomBooking.SharedClasses.Services.Descriptions
+@using RentoomBooking.SharedClasses.Services.Descriptions
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 
@@ -7,7 +7,7 @@
     <article class="ai-intro-content">
         @if (!string.IsNullOrEmpty(Data?.H1))
         {
-            <h1 class="ai-h1">@Data.H1</h1>
+            <h3 class="ai-h1">@Data.H1</h3>
         }
 
         @if (!string.IsNullOrEmpty(Data?.ShortDescription))
@@ -38,17 +38,17 @@
         {
             <div class="amenities-section">
                 <h3 class="section-title">@Localizer["Amenities_Title"]</h3>
-                <div class="amenities-grid">
+                <ul class="amenities-grid">
                     @foreach (var amenity in Amenities)
                     {
-                        <div class="amenity-item">
+                        <li class="amenity-item">
                             <div class="amenity-check">
                                 <span class="material-symbols-outlined">@amenity.IconName</span>
                             </div>
                             <span class="amenity-name">@amenity.Name</span>
-                        </div>
+                        </li>
                     }
-                </div>
+                </ul>
             </div>
         }
 

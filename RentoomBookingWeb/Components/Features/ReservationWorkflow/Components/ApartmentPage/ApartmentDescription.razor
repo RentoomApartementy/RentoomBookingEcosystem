@@ -17,17 +17,17 @@
         }
     </article>
 
-    <div class="amenities-wrapper">
+    <ul class="amenities-wrapper">
         @if (Amenities != null)
         {
             @foreach (var amenity in Amenities)
             {
-                <div class="amenity">
+                <li class="amenity">
                     @amenity.Name
-                </div>
+                </li>
             }
         }
-    </div>
+    </ul>
 
     @if (!IsExpanded)
     {
