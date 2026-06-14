@@ -6,11 +6,20 @@
 @inject CustomerTermsService TermsService
 @inject NavigationManager NavManager
 @inject IStringLocalizer<Statute> Localizer
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="@CanonicalUrl" />
+    <meta name="description" content="@SeoDescription" />
+
+    <meta property="og:title" content="@CurrentBreadcrumbName" />
+    <meta property="og:description" content="@SeoDescription" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@CanonicalUrl" />
+
     <BreadcrumbJsonLd CurrentPageName="@CurrentBreadcrumbName" CurrentPagePath="@CurrentBreadcrumbPath" />
 </HeadContent>
 
@@ -53,8 +62,14 @@
 
     private string CurrentBreadcrumbName => _currentTerm?.Title ?? _currentTerm?.Description ?? Localizer["StatuteHeader"];
     private string CurrentBreadcrumbPath => Id.HasValue
-        ? $"/regulaminy/{Id}{(string.IsNullOrWhiteSpace(Slug) ? string.Empty : $"/{Slug}")}"
-        : "/regulaminy";
+        ? $"{RouteService.GetLocalizedUrl("Statute")}/{Id}{(string.IsNullOrWhiteSpace(Slug) ? string.Empty : $"/{Slug}")}"
+        : RouteService.GetLocalizedUrl("Statute");
+
+    private string CanonicalUrl => $"{NavManager.BaseUri.TrimEnd('/')}{CurrentBreadcrumbPath}";
+    private string SeoDescription => !string.IsNullOrWhiteSpace(_currentTerm?.Description) 
+        ? _currentTerm.Description 
+        : (!string.IsNullOrWhiteSpace(_currentTerm?.Title) ? _currentTerm.Title : Localizer["StatuteHeader"].Value);
+
 
     protected override async Task OnParametersSetAsync()
     {

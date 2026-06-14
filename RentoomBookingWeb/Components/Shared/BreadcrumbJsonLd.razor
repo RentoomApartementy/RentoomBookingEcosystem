@@ -2,8 +2,10 @@
 @using System.Text.Encodings.Web
 @using System.Text.Json
 @using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Services.Localization
 @inject NavigationManager Navigation
 @inject IStringLocalizer<SharedResources> Localizer
+@inject IRouteLocalizationService RouteService
 
 @if (!string.IsNullOrWhiteSpace(JsonLd))
 {
@@ -35,7 +37,7 @@
                 @type = "ListItem",
                 position = position++,
                 name = HomeLabel,
-                item = ToAbsoluteUrl("/")
+                item = ToAbsoluteUrl(RouteService.GetLocalizedUrl("Home"))
             });
 
             if (!string.IsNullOrWhiteSpace(ParentPageName) && !string.IsNullOrWhiteSpace(ParentPagePath))
@@ -82,6 +84,11 @@
 
     private string ToAbsoluteUrl(string path)
     {
+        if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
+        {
+            return uri.AbsoluteUri;
+        }
+
         try
         {
             return Navigation.ToAbsoluteUri(path).AbsoluteUri;
@@ -92,3 +99,4 @@
         }
     }
 }
+

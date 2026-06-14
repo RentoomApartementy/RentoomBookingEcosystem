@@ -1,4 +1,4 @@
-﻿using BlazorDateRangePicker;
+using BlazorDateRangePicker;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Identity;
@@ -375,7 +375,7 @@ namespace RentoomBookingWeb
             {
                 var baseUrl = $"{context.Request.Scheme}://{context.Request.Host}";
                 var content = app.Environment.IsProduction()
-                    ? $"User-agent: *\nAllow: /\nSitemap: {baseUrl}/sitemap.xml"
+                    ? $"User-agent: *\nAllow: /\nDisallow: /rezerwuj/\nDisallow: /tpay-mock/\nSitemap: {baseUrl}/sitemap.xml"
                     : $"User-agent: *\nDisallow: /\nSitemap: {baseUrl}/sitemap.xml";
 
                 return Results.Text(content, "text/plain");
