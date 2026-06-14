@@ -54,8 +54,25 @@ Router zastępuje standardowy mechanizm `@page` i procesuje trasy `/{cultureCode
 
 ## 5. SEO i Internationalization
 
-### SeoHreflangs.razor
+### 5.1 SeoHreflangs.razor
 Komponent wstrzyknięty centralnie w `App.razor`. Dla każdego żądania generuje komplet 33 tagów `<link rel="alternate" hreflang="..." />`. Dzięki architekturze Runtime, system potrafi wygenerować zlokalizowane linki (np. zamiana `apartamenty` na `apartments`) dla dowolnie głębokich adresów z parametrami.
+
+### 5.2 Dynamiczne Breadcrumbs (BreadcrumbJsonLd.razor)
+Komponent generuje strukturę JSON-LD `BreadcrumbList` dla wyszukiwarek:
+* **Dynamiczna Strona Główna**: Zamiast twardo kodować `/` dla pierwszego elementu ("Strona główna"), system dynamicznie odpytuje `RouteService.GetLocalizedUrl("Home")`. Zapobiega to przekierowaniom 302 z `/` do `/pl` lub innego języka domyślnego, co chroni przed błędami przekierowania w Google Search Console.
+* **Bezpieczeństwo Ścieżek Absolutnych (Fix macOS/Linux)**: Metoda pomocnicza `ToAbsoluteUrl` weryfikuje poprawność schematów sieciowych. W systemach Unixowych (np. macOS, Linux) ścieżki zaczynające się od `/` (np. `/bs`) są rozpoznawane przez `Uri.TryCreate` jako absolutne ścieżki do plików w systemie operacyjnym (schemat `file:///`). Zabezpieczono to warunkiem, że wykryty URI musi mieć schemat `http` lub `https`.
+* **Zachowanie znaku `@` w Serializacji**: Serializator C# usuwa znak `@` z nazw właściwości obiektów anonimowych (np. `@context` staje się `"context"`). Aby zachować zgodność ze specyfikacją Schema.org, komponent tworzy metadane przy użyciu słownika `Dictionary<string, object>`, co pozwala na zachowanie kluczy `"@context"`, `"@type"` oraz `"@id"`.
+
+### 5.3 Spójność Hreflang w Sitemap (SitemapController.cs)
+Aby wyeliminować ostrzeżenia Google Search Console o niedopasowaniu hreflangów, kody języków w `SitemapController.cs` zostały ujednolicone z kodami renderowanymi w HTML. Sitemap generuje dwuliterowe kody języków ISO (np. `pl`, `en`, `cs` zamiast pełnych nazw kultur `pl-PL`, `en-US`, `cs-CZ`) poprzez operację podziału ciągu: `cult.Split('-')[0].ToLowerInvariant()`.
+
+### 5.4 Ograniczenie Indeksowania w robots.txt (Program.cs)
+W środowisku produkcyjnym endpoint `/robots.txt` dynamicznie wyklucza z indeksowania ścieżki transakcyjne oraz testowe bramki płatności:
+```txt
+Disallow: /rezerwuj/
+Disallow: /tpay-mock/
+```
+W środowiskach deweloperskich (`!Environment.IsProduction()`) robots.txt wyklucza całą domenę (`Disallow: /`), dodatkowo wstrzykując tag `<meta name="robots" content="noindex, nofollow..." />` w `App.razor`.
 
 ---
 
