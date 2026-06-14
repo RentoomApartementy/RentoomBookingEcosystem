@@ -1,4 +1,4 @@
-﻿using BlazorDateRangePicker;
+using BlazorDateRangePicker;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Identity;
@@ -375,7 +375,7 @@ namespace RentoomBookingWeb
             {
                 var baseUrl = $"{context.Request.Scheme}://{context.Request.Host}";
                 var content = app.Environment.IsProduction()
-                    ? $"User-agent: *\nAllow: /\nSitemap: {baseUrl}/sitemap.xml"
+                    ? $"User-agent: *\nAllow: /\nDisallow: /rezerwuj/\nDisallow: /tpay-mock/\nSitemap: {baseUrl}/sitemap.xml"
                     : $"User-agent: *\nDisallow: /\nSitemap: {baseUrl}/sitemap.xml";
 
                 return Results.Text(content, "text/plain");
@@ -404,7 +404,8 @@ namespace RentoomBookingWeb
                         Secure = context.Request.IsHttps
                     });
 
-                return Results.LocalRedirect(safeReturnUrl);
+                var escapedReturnUrl = EscapeRelativeUrl(safeReturnUrl);
+                return Results.LocalRedirect(escapedReturnUrl);
             });
 
             app.MapRazorComponents<App>()
@@ -459,6 +460,28 @@ namespace RentoomBookingWeb
             {
                 context.Response.Headers[name] = value;
             }
+        }
+
+        private static string EscapeRelativeUrl(string url)
+        {
+            var parts = url.Split('?', 2);
+            var path = parts[0];
+            var escapedPath = string.Join('/', path.Split('/').Select(Uri.EscapeDataString));
+
+            if (parts.Length > 1)
+            {
+                var query = parts[1];
+                var queryParts = query.Split('&').Select(qp =>
+                {
+                    var kv = qp.Split('=', 2);
+                    var k = Uri.EscapeDataString(kv[0]);
+                    var v = kv.Length > 1 ? "=" + Uri.EscapeDataString(kv[1]) : "";
+                    return k + v;
+                });
+                return escapedPath + "?" + string.Join('&', queryParts);
+            }
+
+            return escapedPath;
         }
     }
 }

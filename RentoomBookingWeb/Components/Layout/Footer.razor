@@ -4,7 +4,7 @@
 @inject IStringLocalizer<RentoomBookingWeb.Footer> Localizer;
 @inject IRouteLocalizationService RouteService
 @inject RentoomBookingWeb.Services.FooterEnvironmentInfo FooterEnvironmentInfo;
-<div class="footer">
+<footer class="footer">
     <div class="footer-section-logo">
         <div class="footer-logo">
             <img src="assets/svgs/logo-white.svg" alt="@Localizer["Footer_LogoAlt"]" class="logo-img"/>
@@ -40,7 +40,7 @@
         <a href="#" aria-label="Rentoom na YouTube"><img src="assets/svgs/yt-white.svg" alt="YouTube" class="social-icon"/></a>
       *@
     </div>
-</div>
+</footer>
 
 <div class="footer-bottom">
     <a href="@RouteService.GetLocalizedUrl("AllApartments")" class="all-apartments-link">@Localizer["AllApartmentsText"]</a>

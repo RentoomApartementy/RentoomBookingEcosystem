@@ -12,6 +12,7 @@ namespace RentoomBookingWeb.Services.Localization
             ["Home"] = new(typeof(RentoomBookingWeb.Components.Features.Home.Pages.Home), Priority: 0),
             ["Apartments"] = new(typeof(RentoomBookingWeb.Components.Features.Apartments.Pages.Apartments), "{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 5, MinRequiredSegments: 0),
             ["AllApartments"] = new(typeof(RentoomBookingWeb.Components.Features.AllApartments.Pages.AllApartments), Priority: 0),
+            ["ApartmentDetailWithToken"] = new(typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage), "{Id}/{Slug}/{ReservationTokenGuid}/{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 15, MinRequiredSegments: 3),
             ["ApartmentDetail"] = new(typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage), "{Id}/{Slug}/{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 10, MinRequiredSegments: 1),
             ["Statute"] = new(typeof(RentoomBookingWeb.Components.Features.Statute.Pages.Statute), "{Id}/{Slug}", Priority: 10, MinRequiredSegments: 0), // Statute is special, ID is optional for main list
             ["Contact"] = new(typeof(RentoomBookingWeb.Components.Features.Contact.Pages.Contact), Priority: 0),

@@ -193,51 +193,39 @@
     <value>About Toruń City</value>
   </data>
   <data name="ErrorPageRequestIdLabel" xml:space="preserve">
-    <value />
     <value>Request ID:</value>
   </data>
   <data name="ErrorPageHeading" xml:space="preserve">
-    <value />
     <value>Error.</value>
   </data>
   <data name="TorunLocation_Keywords" xml:space="preserve">
-    <value />
     <value>Toruń location, where is Toruń, Toruń map, how to get to Toruń, Toruń Old Town</value>
   </data>
   <data name="TorunLocation_Breadcrumb" xml:space="preserve">
-    <value />
     <value>Torun location</value>
   </data>
   <data name="ErrorPageDescription" xml:space="preserve">
-    <value />
     <value>An error occurred while processing your request.</value>
   </data>
   <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
-    <value />
     <value>The Development environment should not be enabled for deployed applications.</value>
   </data>
   <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
-    <value />
     <value>It can result in displaying sensitive information from exceptions to end users. For local debugging, set ASPNETCORE_ENVIRONMENT to Development and restart the app.</value>
   </data>
   <data name="TorunLocation_PageTitle" xml:space="preserve">
-    <value />
     <value>Toruń location, map and access | Rentoom</value>
   </data>
   <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
-    <value />
     <value>Switching to the Development environment will display more detailed information about the error that occurred.</value>
   </data>
   <data name="TorunLocation_Description" xml:space="preserve">
-    <value />
     <value>See where Toruń is located, how to reach the Old Town, and use a practical OpenStreetMap embed for the city.</value>
   </data>
   <data name="ErrorPageTitle" xml:space="preserve">
-    <value />
     <value>Error</value>
   </data>
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
-    <value />
     <value>Development Mode</value>
   </data>
   <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
@@ -265,7 +253,7 @@
     <value>Coming soon!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom icon</value>
+    <value>Rentoom - apartments for rent</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>no offers</value>
