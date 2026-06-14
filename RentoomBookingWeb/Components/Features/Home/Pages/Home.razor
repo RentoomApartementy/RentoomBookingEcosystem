@@ -104,7 +104,7 @@
                         ["@type"] = "ListItem",
                         ["position"] = 1,
                         ["name"] = Localizer["Home_BreadcrumbName"].Value,
-                        ["item"] = "https://rentoom.pl/"
+                        ["item"] = $"{Navigation.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Home")}"
                     }
                 }
             }
