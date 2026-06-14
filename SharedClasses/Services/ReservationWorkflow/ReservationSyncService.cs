@@ -32,15 +32,18 @@ public class ReservationSyncService : IReservationSyncService
     private readonly IReservationStore _store;
     private readonly IReservationWorkflowSyncOperations _workflowSyncOperations;
     private readonly ILogger<ReservationSyncService> _logger;
+    private readonly TimeProvider _timeProvider;
 
     public ReservationSyncService(
         IReservationStore store,
         IReservationWorkflowSyncOperations workflowSyncOperations,
-        ILogger<ReservationSyncService> logger)
+        ILogger<ReservationSyncService> logger,
+        TimeProvider? timeProvider = null)
     {
         _store = store ?? throw new ArgumentNullException(nameof(store));
         _workflowSyncOperations = workflowSyncOperations ?? throw new ArgumentNullException(nameof(workflowSyncOperations));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _timeProvider = timeProvider ?? TimeProvider.System;
     }
 
     public async Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request)
@@ -157,6 +160,7 @@ public class ReservationSyncService : IReservationSyncService
 
         var previousStatus = record.IdoStatus;
         var previousApartmentId = record.State.StartRequest?.ObjectId;
+        var syncTimestamp = _timeProvider.GetUtcNow().UtcDateTime;
 
         var result = new ReservationStatusSyncResultDto
         {
@@ -205,11 +209,6 @@ public class ReservationSyncService : IReservationSyncService
             idoStatusChanged = true;
         }
 
-        if (!dryRun && (apartmentChanged || idoStatusChanged))
-        {
-            await _store.UpdateAsync(record, cancellationToken);
-        }
-
         var syncChangeSummary = BuildReservationSyncChangeSummary(
             previousStatus,
             record.IdoStatus,
@@ -217,10 +216,24 @@ public class ReservationSyncService : IReservationSyncService
             record.State.StartRequest?.ObjectId);
         result.SyncChangeSummary = syncChangeSummary;
 
+        record.SyncChangeSummary = syncChangeSummary;
+
         if (!dryRun)
         {
-            record.SyncChangeSummary = syncChangeSummary;
-            await _store.UpdateAsync(record, cancellationToken);
+            record.LastStatusSyncAt = syncTimestamp;
+
+            if (apartmentChanged || idoStatusChanged)
+            {
+                await _store.UpdateAsync(record, cancellationToken);
+            }
+            else
+            {
+                await _store.UpdateStatusSyncMetadataAsync(
+                    record.ReservationGuid,
+                    syncChangeSummary,
+                    syncTimestamp,
+                    cancellationToken);
+            }
         }
 
         if (!dryRun

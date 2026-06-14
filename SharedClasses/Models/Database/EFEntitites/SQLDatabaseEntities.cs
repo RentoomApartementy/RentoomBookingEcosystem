@@ -256,6 +256,9 @@ namespace RentoomBooking.SharedClasses.Models.Database.EFEntitites
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
+        [Column("last_status_sync_at")]
+        public DateTime? LastStatusSyncAt { get; set; }
+
         public ICollection<UpsellOrderRecordEntity> UpsellOrderRecords { get; set; } = new List<UpsellOrderRecordEntity>();
     }
 

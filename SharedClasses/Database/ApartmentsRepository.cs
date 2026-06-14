@@ -305,6 +305,7 @@ namespace RentoomBooking.SharedClasses.Database
                 var entities = await context.ApartmentInfos
                     .AsNoTracking()
                     .Where(a => !a.IsArchived)
+                    .Where(a => context.ApartmentMediaAssets.Any(media => media.ApartmentId == a.Id))
                     .OrderBy(a => a.Id)
                     .ToListAsync(cancellationToken);
 

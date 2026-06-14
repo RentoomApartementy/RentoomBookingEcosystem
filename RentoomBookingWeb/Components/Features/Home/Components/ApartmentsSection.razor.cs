@@ -1,129 +1,93 @@
 using Microsoft.AspNetCore.Components;
-using RentoomBooking.SharedClasses.Models.IdoBooking;
-using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
-using RentoomBooking.SharedClasses.Models.RentoomBooking;
-using RentoomBooking.SharedClasses.Services;
-using RentoomBookingWeb.Helpers;
-using RentoomBookingWeb.Services;
+using Microsoft.JSInterop;
+using Microsoft.Extensions.Logging;
+using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 
 namespace RentoomBookingWeb.Components.Features.Home.Components;
-public partial class ApartmentsSection : ComponentBase
+
+public partial class ApartmentsSection : ComponentBase, IAsyncDisposable
 {
-    [Inject] private IRentoomOfferService RentoomOfferService { get; set; } = default!;
-    [Inject] private NavigationManager Navigation { get; set; } = default!;
-    [Inject] private ReservationWorkflowTelemetry WorkflowTelemetry { get; set; } = default!;
-    [Inject] private GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
-    [Inject] private RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService { get; set; } = default!;
-    
-    public List<ApartmentObject> Apartments { get; private set; } = new();
-    public List<PricingOffer> Offers { get; private set; } = new();
-    public bool ApartmentsIsLoading = true;
+    [Inject] public IApartmentsViewModel ViewModel { get; set; } = default!;
 
-    public string? Error { get; private set; }
+    [Inject] private IJSRuntime JS { get; set; } = default!;
 
-    public DateOnly _dateFrom { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
-    public DateOnly _dateTo { get; private set; } = DateOnly.FromDateTime((DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday) ? DateTime.Now.AddDays(2) : DateTime.Now.AddDays(1));
+    [Inject] private ILogger<ApartmentsSection> Logger { get; set; } = default!;
 
+    private ElementReference _carouselWrapper;
+    private DotNetObjectReference<ApartmentsSection>? _objRef;
+    private IJSObjectReference? _jsModule;
+    private bool _isDisposed;
+    private bool _isInteractive;
+    private readonly CancellationTokenSource _initCts = new();
 
+    private void HandleViewModelChange()
+    {
+        if (_isDisposed || !_isInteractive) return;
+        InvokeAsync(StateHasChanged);
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        await HandleSearchAsync();
+        ViewModel.OnChange += HandleViewModelChange;
+        await ViewModel.InitializeForSliderAsync(_initCts.Token);
     }
 
-    private async Task HandleSearchAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        Apartments.Clear();
-        Offers.Clear();
-       
-        await GetFilteredOffers();
-
-        SortItemsByOffers();
-
-        ApartmentsIsLoading = false;
-    }
-    
-    private async Task GetFilteredOffers()
-    {
-
-      
-        try
+        if (firstRender)
         {
-            var idoParams = new PricingOffersRequest
-            {
-                ObjectIds = [],
-                DateFrom = _dateFrom.ToString("yyyy-MM-dd"),
-                DateTo = _dateTo.ToString("yyyy-MM-dd"),
-                NumberOfAdults = 2,
-                NumberOfBigChildren = 0,
-            };
-
-            var filters = new RentoomQueryOffer
-            {
-                IdoOfferParams = idoParams,
-                ApartmentFilterParams = new ApartmentFilters()
-            };
-
-            var filteredOffers = await RentoomOfferService.getOfferWitFilter(filters);
-            if (filteredOffers?.PricingOffers != null)
-            {
-                Apartments.AddRange(filteredOffers.ApartmentObjects);
-                Offers.AddRange(filteredOffers.PricingOffers);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Wystąpił błąd: {ex.Message}");
+            _isInteractive = true;
+            _objRef = DotNetObjectReference.Create(this);
+            _jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/apartmentsSectionScroll.js");
+            await _jsModule.InvokeVoidAsync("init", _objRef, _carouselWrapper);
         }
     }
-    
-    private void SortItemsByOffers()
+
+    [JSInvokable]
+    public async Task LoadMoreOnScroll()
     {
-        Apartments.Sort((a, b) =>
+        if (!ViewModel.ApartmentsIsLoading && ViewModel.HasMore)
         {
-            var offerA = GetPricingOfferByObjectId(a.Id);
-            var offerB = GetPricingOfferByObjectId(b.Id);
-        
-            if (offerA != null && offerB == null) return -1;
-        
-            if (offerA == null && offerB != null) return 1;
-
-            if (offerA != null && offerB != null)
-            {
-                return offerB.MinimalPrice.CompareTo(offerA.MinimalPrice);
-            }
-
-            return 0; 
-        });
+            await ViewModel.LoadMoreAsync(_initCts.Token);
+        }
     }
-    
-    public PricingOffer? GetPricingOfferByObjectId(int objectId)
-        => Offers.Find(o => o.ObjectId == objectId);
 
-    public async Task GoToApartmentWithOffer(int apartmentId, string apartmentName)
+    public async ValueTask DisposeAsync()
     {
-        WorkflowTelemetry.TrackEvent(
-            "HomeApartmentClicked",
-            new Dictionary<string, string?>
-            {
-                ["ApartmentId"] = apartmentId.ToString(),
-                ["ApartmentName"] = apartmentName,
-                ["StartDate"] = _dateFrom.ToString("yyyy-MM-dd"),
-                ["EndDate"] = _dateTo.ToString("yyyy-MM-dd"),
-                ["Adults"] = "2",
-                ["Children"] = "0"
-            });
-        await GoogleAnalytics.TrackEventAsync("home_apartment_click", new Dictionary<string, object?>
+        _isDisposed = true;
+        _initCts.Cancel();
+        _initCts.Dispose();
+        ViewModel.OnChange -= HandleViewModelChange;
+
+        if (_jsModule is not null)
         {
-            ["apartment_id"] = apartmentId,
-            ["apartment_name"] = apartmentName,
-            ["listing_source"] = "home-carousel",
-            ["start_date"] = _dateFrom.ToString("yyyy-MM-dd"),
-            ["end_date"] = _dateTo.ToString("yyyy-MM-dd"),
-            ["adults"] = 2,
-            ["children"] = 0
-        });
-        var localizedBase = RouteService.GetLocalizedUrl("Apartments");
-        Navigation.NavigateTo($"{localizedBase}/{apartmentId}/{apartmentName.ToSlug()}/{_dateFrom:yyyy-MM-dd}/{_dateTo:yyyy-MM-dd}/2/0");
+            try
+            {
+                await _jsModule.InvokeVoidAsync("unregister");
+            }
+            catch (JSDisconnectedException)
+            {
+            }
+            catch (Exception ex)
+            {
+                Logger.LogDebug(ex, "Failed to unregister apartments section infinite scroll JS hook.");
+            }
+        }
+
+        _objRef?.Dispose();
+        if (_jsModule != null)
+        {
+            try
+            {
+                await _jsModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+            }
+            catch (Exception ex)
+            {
+                Logger.LogDebug(ex, "Failed to dispose apartments section infinite scroll JS module.");
+            }
+        }
     }
 }

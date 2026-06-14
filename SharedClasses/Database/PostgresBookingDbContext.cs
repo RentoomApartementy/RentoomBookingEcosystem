@@ -115,6 +115,7 @@ namespace RentoomBooking.SharedClasses.Database
             {
 
                 entity.HasKey(e => e.ReservationGuid);
+                entity.Property(e => e.LastStatusSyncAt).HasColumnName("last_status_sync_at");
                 //entity.Property(e => e.Payload).HasColumnType("jsonb").IsRequired();
                 //entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
             });

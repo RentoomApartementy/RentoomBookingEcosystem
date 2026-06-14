@@ -20,12 +20,18 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         Task<ReservationRecord?> GetByIdoReservationIdAsync(int idoReservationId, CancellationToken cancellationToken = default);
         Task<ReservationRecord?> GetByDealBitrixIdAsync(int dealBitrixId, CancellationToken cancellationToken = default);
         Task UpdateAsync(ReservationRecord record, CancellationToken cancellationToken = default);
+        Task UpdateStatusSyncMetadataAsync(
+            Guid reservationGuid,
+            string? syncChangeSummary,
+            DateTime lastStatusSyncAt,
+            CancellationToken cancellationToken = default);
         Task<ReservationRecord?> GetByProviderTransactionIdAsync(string providerTransactionId, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<ReservationRecord>> ListActiveWithIdoReservationAsync(CancellationToken cancellationToken = default);
     }
 
     public class ReservationStore : IReservationStore
     {
+        private static readonly TimeSpan ActiveReservationStatusSyncInterval = TimeSpan.FromMinutes(15);
         private readonly IDbContextFactory<PostgresBookingDbContext> _dbContextFactory;
         private readonly Task _initializationTask;
 
@@ -123,9 +129,26 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             existing.ProviderTransactionId = record.ProviderTransactionId;
             existing.SyncChangeSummary = record.SyncChangeSummary;
             existing.UpdatedAt = DateTime.UtcNow;
+            existing.LastStatusSyncAt = record.LastStatusSyncAt;
             existing.ConfirmationEmailBitrixId = record.DealBitrixSentConfirmationEmailId;
             await context.SaveChangesAsync(cancellationToken);
 
+        }
+
+        public async Task UpdateStatusSyncMetadataAsync(
+            Guid reservationGuid,
+            string? syncChangeSummary,
+            DateTime lastStatusSyncAt,
+            CancellationToken cancellationToken = default)
+        {
+            await using var context = _dbContextFactory.CreateDbContext();
+            await context.ReservationRecords
+                .Where(r => r.ReservationGuid == reservationGuid)
+                .ExecuteUpdateAsync(
+                    setters => setters
+                        .SetProperty(r => r.SyncChangeSummary, syncChangeSummary)
+                        .SetProperty(r => r.LastStatusSyncAt, lastStatusSyncAt),
+                    cancellationToken);
         }
 
 
@@ -156,6 +179,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 RowVersion = entity.RowVersion ?? Array.Empty<byte>(),
                 CreatedAt = entity.CreatedAt,
                 UpdatedAt = entity.UpdatedAt,
+                LastStatusSyncAt = entity.LastStatusSyncAt,
                 DealBitrixSentConfirmationEmailId = entity.ConfirmationEmailBitrixId
             };
         }
@@ -178,6 +202,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
                 RowVersion = record.RowVersion,
                 CreatedAt = record.CreatedAt,
                 UpdatedAt = record.UpdatedAt,
+                LastStatusSyncAt = record.LastStatusSyncAt,
                 ConfirmationEmailBitrixId = record.DealBitrixSentConfirmationEmailId
             };
         }
@@ -203,13 +228,16 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
         public async Task<IReadOnlyList<ReservationRecord>> ListActiveWithIdoReservationAsync(CancellationToken cancellationToken = default)
         {
             await using var context = _dbContextFactory.CreateDbContext();
+            var syncCutoff = DateTime.UtcNow - ActiveReservationStatusSyncInterval; //odrzuca rekordy syncowane w ostatnich 15 minutach
 
             var entities = await context.ReservationRecords.AsNoTracking()
                 .Where(r => r.IdoReservationId.HasValue)
                 .Where(r => r.IdoStatus == null
                     || (r.IdoStatus != ReservationStatusType.Canceled
                         && r.IdoStatus != ReservationStatusType.Completed))
-                .OrderBy(r => r.UpdatedAt)
+                .Where(r => !r.LastStatusSyncAt.HasValue || r.LastStatusSyncAt < syncCutoff) //odrzuca rekordy syncowane w ostatnich 15 minutach
+                .OrderBy(r => r.LastStatusSyncAt ?? DateTime.MinValue)
+                .ThenBy(r => r.UpdatedAt)
                 .ToListAsync(cancellationToken);
 
             return entities.Select(MapToRecord).ToList();

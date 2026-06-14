@@ -12,6 +12,7 @@ namespace RentoomBooking.Api;
 
 public class ReservationStatusSyncCronFunction
 {
+    private const int MaxConcurrentFetchAndSyncWorkers = 4;
     private readonly ILogger<ReservationStatusSyncCronFunction> _logger;
     private readonly IReservationStore _reservationStore;
     private readonly IReservationSyncService _reservationSyncService;
@@ -98,21 +99,34 @@ public class ReservationStatusSyncCronFunction
         var results = new List<object>();
         var succeededCount = 0;
         var failedCount = 0;
+        var resultsLock = new object();
+
+        _logger.LogInformation(
+            "Starting reservation status sync with single-reservation IdoBooking fetches because the batch fetch endpoint is unreliable. BatchSize={BatchSize}, MaxConcurrentFetchAndSyncWorkers={MaxConcurrentFetchAndSyncWorkers}, DryRun={DryRun}.",
+            BatchSize,
+            MaxConcurrentFetchAndSyncWorkers,
+            dryRun);
 
         foreach (var batch in records.Chunk(BatchSize))
         {
-            var idoReservations = await FetchBatchReservationsAsync(batch, dryRun, cancellationToken);
-
-            foreach (var record in batch)
+            using var concurrencyLimiter = new SemaphoreSlim(MaxConcurrentFetchAndSyncWorkers);
+            var batchTasks = batch.Select(async record =>
             {
+                await concurrencyLimiter.WaitAsync(cancellationToken);
+
                 try
                 {
-                    idoReservations.TryGetValue(record.IdoReservationId!.Value, out var idoReservation);
+                    var idoReservation = await FetchSingleReservationAsync(record, dryRun, cancellationToken);
 
                     var syncResult = dryRun
                         ? await _reservationSyncService.PreviewReservationStatusSyncAsync(record, idoReservation, cancellationToken)
                         : await _reservationSyncService.SyncReservationStatusAsync(record, idoReservation, cancellationToken);
-                    succeededCount++;
+
+                    lock (resultsLock)
+                    {
+                        succeededCount++;
+                        results.Add(syncResult);
+                    }
 
                     _logger.LogInformation(
                         "{Mode} reservation sync for {ReservationGuid} / {IdoReservationId}. IdoStatus: {PreviousIdoStatus} -> {CurrentIdoStatus}. PaymentStatus: {PreviousPaymentStatus} -> {CurrentPaymentStatus}. Changes={SyncChangeSummary}. BitrixUpdated={BitrixUpdated}. Warning={Warning}",
@@ -126,28 +140,42 @@ public class ReservationStatusSyncCronFunction
                         syncResult.SyncChangeSummary,
                         syncResult.BitrixUpdated,
                         syncResult.Warning);
-
-                    results.Add(syncResult);
                 }
                 catch (Exception ex)
                 {
-                    failedCount++;
                     _logger.LogError(
                         ex,
                         "Failed to synchronize reservation {ReservationGuid} / {IdoReservationId}.",
                         record.ReservationGuid,
                         record.IdoReservationId);
 
-                    results.Add(new
+                    lock (resultsLock)
                     {
-                        reservationGuid = record.ReservationGuid,
-                        idoReservationId = record.IdoReservationId,
-                        success = false,
-                        error = ex.Message
-                    });
+                        failedCount++;
+                        results.Add(new
+                        {
+                            reservationGuid = record.ReservationGuid,
+                            idoReservationId = record.IdoReservationId,
+                            success = false,
+                            error = ex.Message
+                        });
+                    }
                 }
-            }
+                finally
+                {
+                    concurrencyLimiter.Release();
+                }
+            });
+
+            await Task.WhenAll(batchTasks);
         }
+
+        _logger.LogInformation(
+            "Completed reservation status sync with single-reservation IdoBooking fetches. Processed={Processed}, Succeeded={Succeeded}, Failed={Failed}, MaxConcurrentFetchAndSyncWorkers={MaxConcurrentFetchAndSyncWorkers}.",
+            records.Count,
+            succeededCount,
+            failedCount,
+            MaxConcurrentFetchAndSyncWorkers);
 
         return new SyncSummary
         {
@@ -158,43 +186,29 @@ public class ReservationStatusSyncCronFunction
         };
     }
 
-    private async Task<IReadOnlyDictionary<int, Reservation>> FetchBatchReservationsAsync(
-        IEnumerable<ReservationRecord> batch,
+    private async Task<Reservation?> FetchSingleReservationAsync(
+        ReservationRecord record,
         bool dryRun,
         CancellationToken cancellationToken)
     {
-        var batchList = batch
-            .Where(record => record.IdoReservationId.HasValue)
-            .ToList();
-
-        if (batchList.Count == 0)
+        if (!record.IdoReservationId.HasValue)
         {
-            return new Dictionary<int, Reservation>();
+            return null;
         }
 
-        var idoReservationIds = batchList
-            .Select(record => record.IdoReservationId!.Value)
-            .Distinct()
-            .ToList();
-
-        var reservationTokensById = batchList
-            .GroupBy(record => record.IdoReservationId!.Value)
-            .ToDictionary(
-                group => group.Key,
-                group => dryRun ? null : group.First().ReservationGuid.ToString("D"));
-
         _logger.LogInformation(
-            "Fetching IdoBooking reservations in batch. Count={Count}, FirstReservationId={FirstReservationId}, LastReservationId={LastReservationId}, DryRun={DryRun}.",
-            idoReservationIds.Count,
-            idoReservationIds.First(),
-            idoReservationIds.Last(),
+            "Fetching single IdoBooking reservation for sync. ReservationGuid={ReservationGuid}, IdoReservationId={IdoReservationId}, DryRun={DryRun}.",
+            record.ReservationGuid,
+            record.IdoReservationId,
             dryRun);
 
-        return await _idoSellService.FetchReservationsByIDsFromIdoSellAsync(
-            idoReservationIds,
+        var response = await _idoSellService.FetchReservationByIDFromIdoSellAsync(
+            record.IdoReservationId.Value,
             saveToDb: !dryRun,
-            reservationTokensById,
+            existingResToken: dryRun ? null : record.ReservationGuid.ToString("D"),
             cancellationToken);
+
+        return response?.ReservationResponse?.result?.Reservations?.FirstOrDefault();
     }
 
     private sealed class SyncSummary
