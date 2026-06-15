@@ -62,6 +62,26 @@
 
                     <div class="reservation-field">
                         <span class="reservation-field__label">
+                            <img class="reservation-field__icon" src="/icons/clock.svg" />
+                            @Localizer["SelectedCheckInTime"]:
+                        </span>
+                        <span class="reservation-field__value">
+                            @{
+                                var selectedCheckIn = RegistrationCardState.CurrentCard?.CheckInTime;
+                            }
+                            @if (selectedCheckIn is { } cit && cit.TimeOfDay != TimeSpan.Zero)
+                            {
+                                <span>@cit.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span>@Localizer["CheckInTimeNotSpecified"]</span>
+                            }
+                        </span>
+                    </div>
+
+                    <div class="reservation-field">
+                        <span class="reservation-field__label">
                             <img class="reservation-field__icon" src="/icons/users.svg" />
                             @Localizer["RegisteredGuests"]:
                         </span>
@@ -384,7 +404,7 @@
                 @foreach (var amenity in amenities)
                 {
                     <div class="amenity-pill">
-                        <img src="/icons/check.svg" class="amenity-pill__icon" alt="" aria-hidden="true" />
+                        <img src="/icons/circle-check.svg" class="amenity-pill__icon" alt="" aria-hidden="true" />
                         <span class="amenity-pill__name">@amenity.Name</span>
                     </div>
                 }

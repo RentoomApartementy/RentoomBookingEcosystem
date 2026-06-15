@@ -186,6 +186,12 @@
   <data name="RegisteredGuests" xml:space="preserve">
     <value>Registered guests</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Selected arrival time</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>I don't know yet</value>
+  </data>
   <data name="ShowAmenitiesButton" xml:space="preserve">
     <value>Show amenities</value>
   </data>
