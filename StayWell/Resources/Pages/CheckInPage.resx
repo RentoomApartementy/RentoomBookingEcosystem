@@ -30,4 +30,10 @@
   <data name="InstructionsTitle" xml:space="preserve">
     <value>Check-in instructions</value>
   </data>
+  <data name="LockGuideTitle" xml:space="preserve">
+    <value>How to use the lock</value>
+  </data>
+  <data name="LockGuideSubtitle" xml:space="preserve">
+    <value>See how to open and close the door</value>
+  </data>
 </root>
