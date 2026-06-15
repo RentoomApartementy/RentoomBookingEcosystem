@@ -19,6 +19,21 @@
     <h3 class="checkin-section__title">@Localizer["ApartmentCodeTitle"]</h3>
     <ApartmentAccessCode Token="@Token" />
     <RemoteOpenTile Token="@Token" />
+
+    <button class="lock-guide-tile" @onclick="ShowLockGuide">
+        <span class="lock-guide-tile__icon-wrap">
+            <img src="/icons/door-open.svg" alt="" aria-hidden="true" />
+        </span>
+        <span class="lock-guide-tile__text">
+            <span class="lock-guide-tile__title">@Localizer["LockGuideTitle"]</span>
+            <span class="lock-guide-tile__subtitle">@Localizer["LockGuideSubtitle"]</span>
+        </span>
+        <img src="/icons/chevron-right.svg" class="lock-guide-tile__chevron" alt="" aria-hidden="true" />
+    </button>
+
+    <LockGuideModal IsOpen="@_isLockGuideOpen"
+                    Title="@Localizer["LockGuideTitle"]"
+                    OnClose="CloseLockGuide" />
 </section>
 
 <section class="checkin-section">
@@ -131,6 +146,12 @@
     {
         InvokeAsync(StateHasChanged);
     }
+
+    private bool _isLockGuideOpen;
+
+    private void ShowLockGuide() => _isLockGuideOpen = true;
+
+    private void CloseLockGuide() => _isLockGuideOpen = false;
 
     private string NormalizeImageUrl(string? imageUrl)
     {

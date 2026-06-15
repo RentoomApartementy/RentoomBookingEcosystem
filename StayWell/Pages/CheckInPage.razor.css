@@ -12,6 +12,75 @@
     color: #111827;
 }
 
+/* Kafelek otwierajacy modal z instrukcja obslugi zamka */
+.lock-guide-tile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.lock-guide-tile:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.08);
+}
+
+.lock-guide-tile__icon-wrap {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #f0f5f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lock-guide-tile__icon-wrap img {
+    width: 22px;
+    height: 22px;
+    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
+}
+
+.lock-guide-tile__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.lock-guide-tile__title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #111827;
+}
+
+.lock-guide-tile__subtitle {
+    font-size: 0.78rem;
+    color: #6b7280;
+    line-height: 1.35;
+}
+
+.lock-guide-tile__chevron {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    opacity: 0.45;
+}
+
 /* Horizontal scrolling steps strip */
 .checkin-roadmap-scroll {
     display: flex;
