@@ -1,0 +1,191 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.StayWell.Services
+
+@inject IStringLocalizer<RentoomBooking.StayWell.Pages.OpenApartmentPage> Localizer
+@inject IJSRuntime JS
+@inject GlobalizationService GlobalizationService
+
+@implements IDisposable
+
+<div class="guide-card @(Frameless ? "guide-card--frameless" : "")">
+    <div class="guide-card__controls">
+        <div class="guide-card__mode-switch">
+            <button class="guide-mode-btn @(ActiveInstructionMode == InstructionMode.Open ? "guide-mode-btn--active" : "")"
+                    @onclick="() => ActiveInstructionMode = InstructionMode.Open">
+                <img src="/icons/door-open.svg" class="guide-mode-btn__icon" />
+                @Localizer["InstructionOpenTitle"]
+            </button>
+            <button class="guide-mode-btn @(ActiveInstructionMode == InstructionMode.Close ? "guide-mode-btn--active" : "")"
+                    @onclick="() => ActiveInstructionMode = InstructionMode.Close">
+                <img src="/icons/door-closed-2.svg" class="guide-mode-btn__icon" />
+                @Localizer["InstructionCloseTitle"]
+            </button>
+        </div>
+        <div class="guide-card__dots">
+            <button class="dot @(ActiveLockSlide == 0 ? "dot--active" : "")"
+                    @onclick="() => SetSlide(0)"
+                    aria-label="@Localizer["LockTypeSpinning"]">
+            </button>
+            <button class="dot @(ActiveLockSlide == 1 ? "dot--active" : "")"
+                    @onclick="() => SetSlide(1)"
+                    aria-label="@Localizer["LockTypePanel"]">
+            </button>
+        </div>
+    </div>
+
+    <div class="guide-card__slide-track" id="guide-slide-track">
+        <div class="guide-card__slide">
+            <div class="guide-card__animation-part">
+                <div class="guide-card__animation-label">
+                    @Localizer["HowTo"] @Localizer["LockTypeSpinning"]
+                    <span class="guide-card__animation-sublabel">(@Localizer["CylinderTopView"])</span>
+                </div>
+                <RentoomBooking.StayWell.Components.AnimationsComponents.LockAnimation />
+            </div>
+            <div class="guide-card__instruction-part">
+                <div class="instruction-content">
+                    @if (ActiveInstructionMode == InstructionMode.Open)
+                    {
+                        @FormatInstructionText(Localizer["InstructionCylinderOpen"])
+                    }
+                    else
+                    {
+                        @FormatInstructionText(Localizer["InstructionCylinderClose"])
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="guide-card__slide">
+            <div class="guide-card__animation-part">
+                <div class="guide-card__animation-label">@Localizer["HowTo"] @Localizer["LockTypePanel"]</div>
+                <RentoomBooking.StayWell.Components.AnimationsComponents.LockPanelAnimation />
+            </div>
+            <div class="guide-card__instruction-part">
+                <div class="instruction-content">
+                    @if (ActiveInstructionMode == InstructionMode.Open)
+                    {
+                        @FormatInstructionText(Localizer["InstructionPanelOpen"])
+                    }
+                    else
+                    {
+                        @FormatInstructionText(Localizer["InstructionPanelClose"])
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool Frameless { get; set; }
+
+    private enum InstructionMode { Open, Close }
+    private InstructionMode ActiveInstructionMode = InstructionMode.Open;
+    private int ActiveLockSlide = 0;
+
+    private DotNetObjectReference<LockGuideCard>? _dotNetRef;
+
+    protected override void OnInitialized()
+    {
+        GlobalizationService.OnChange += StateHasChanged;
+    }
+
+    private async Task SetSlide(int index)
+    {
+        ActiveLockSlide = index;
+        await JS.InvokeVoidAsync("scrollGuideTrack", index);
+    }
+
+    [JSInvokable]
+    public async Task OnSwipeSlide(int index)
+    {
+        ActiveLockSlide = index;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("initGuideCardSwipe", _dotNetRef);
+        }
+    }
+
+    public void Dispose()
+    {
+        GlobalizationService.OnChange -= StateHasChanged;
+        _dotNetRef?.Dispose();
+    }
+
+    private static MarkupString FormatInstructionText(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return new MarkupString(string.Empty);
+
+        var lines = text.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+
+        var sb = new System.Text.StringBuilder();
+        var steps = new List<(string StepText, List<string> Hints, string? Continuation)>();
+
+        void FlushSteps()
+        {
+            if (steps.Count == 0) return;
+            sb.Append("<ol class=\"instruction-steps\">");
+            foreach (var (stepText, hints, continuation) in steps)
+            {
+                sb.Append("<li class=\"instruction-steps__step\">")
+                    .Append($"<span class=\"instruction-steps__step-text\">{System.Net.WebUtility.HtmlEncode(stepText)}</span>");
+                if (hints.Count > 0)
+                {
+                    sb.Append("<div class=\"instruction-steps__body\">");
+                    foreach (var hint in hints)
+                        sb.Append($"<div class=\"instruction-steps__hint\">{System.Net.WebUtility.HtmlEncode(hint)}</div>");
+                    sb.Append("</div>");
+                }
+                if (continuation is not null)
+                    sb.Append($"<div class=\"instruction-steps__continuation\">{System.Net.WebUtility.HtmlEncode(continuation)}</div>");
+                sb.Append("</li>");
+            }
+            sb.Append("</ol>");
+            steps.Clear();
+        }
+
+        foreach (var rawLine in lines)
+        {
+            var line = rawLine.Trim();
+            if (string.IsNullOrEmpty(line)) continue;
+
+            if (line.StartsWith("## ", StringComparison.Ordinal))
+            {
+                FlushSteps();
+                sb.Append($"<div class=\"instruction-section-heading\">{System.Net.WebUtility.HtmlEncode(line[3..].Trim())}</div>");
+                continue;
+            }
+
+            var stepMatch = System.Text.RegularExpressions.Regex.Match(line, @"^(\d+)\.\s+(.+)$");
+            if (stepMatch.Success)
+            {
+                steps.Add((stepMatch.Groups[2].Value, [], null));
+                continue;
+            }
+
+            if (steps.Count == 0)
+            {
+                steps.Add((line, [], null));
+                continue;
+            }
+
+            if (line.StartsWith('(') && line.EndsWith(')'))
+            {
+                steps[^1].Hints.Add(line[1..^1]);
+                continue;
+            }
+            var (st, hints, _) = steps[^1];
+            steps[^1] = (st, hints, line);
+        }
+
+        FlushSteps();
+        return new MarkupString(sb.ToString());
+    }
+}
