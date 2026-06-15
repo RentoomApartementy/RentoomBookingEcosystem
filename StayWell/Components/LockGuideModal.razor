@@ -1,0 +1,94 @@
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<RentoomBooking.StayWell.Pages.OpenApartmentPage> Localizer
+
+@if (IsOpen)
+{
+    <div class="lock-guide-overlay" @onclick="CloseAsync">
+        <div class="lock-guide-sheet @(_isDragging ? "lock-guide-sheet--dragging" : "")"
+             style="@SheetStyle"
+             @onclick:stopPropagation
+             role="dialog"
+             aria-modal="true"
+             aria-label="@Title">
+
+            <div class="lock-guide-sheet__header"
+                 @onpointerdown="OnDragStart"
+                 @onpointermove="OnDragMove"
+                 @onpointerup="OnDragEnd"
+                 @onpointercancel="OnDragCancel">
+                <div class="lock-guide-sheet__grab" aria-hidden="true"></div>
+                <div class="lock-guide-sheet__header-row">
+                    <span class="lock-guide-sheet__title">@Title</span>
+                    <button class="lock-guide-sheet__close" @onclick="CloseAsync" aria-label="Zamknij">
+                        ×
+                    </button>
+                </div>
+            </div>
+
+            <div class="lock-guide-sheet__body">
+                <LockGuideCard Frameless="true" />
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    // Przeciaganie sheetu za naglowek (pointer events maja implicit capture dla dotyku)
+    private const double CloseThresholdPx = 110;
+
+    private bool _isDragging;
+    private double _dragStartY;
+    private double _dragOffset;
+
+    private string SheetStyle =>
+        _dragOffset > 0
+            ? $"transform: translateY({_dragOffset.ToString("0", System.Globalization.CultureInfo.InvariantCulture)}px);"
+            : string.Empty;
+
+    private Task CloseAsync()
+    {
+        _isDragging = false;
+        _dragOffset = 0;
+        return OnClose.InvokeAsync();
+    }
+
+    private void OnDragStart(PointerEventArgs e)
+    {
+        _isDragging = true;
+        _dragStartY = e.ClientY;
+        _dragOffset = 0;
+    }
+
+    private void OnDragMove(PointerEventArgs e)
+    {
+        if (!_isDragging) return;
+        _dragOffset = Math.Max(0, e.ClientY - _dragStartY);
+    }
+
+    private async Task OnDragEnd(PointerEventArgs e)
+    {
+        if (!_isDragging) return;
+        _isDragging = false;
+
+        if (_dragOffset > CloseThresholdPx)
+        {
+            await CloseAsync();
+        }
+        else
+        {
+            // Za malo - sheet wraca na miejsce (animacja przez CSS transition)
+            _dragOffset = 0;
+        }
+    }
+
+    private void OnDragCancel(PointerEventArgs e)
+    {
+        _isDragging = false;
+        _dragOffset = 0;
+    }
+}
