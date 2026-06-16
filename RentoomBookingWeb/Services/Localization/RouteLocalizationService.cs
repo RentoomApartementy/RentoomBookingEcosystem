@@ -10,6 +10,12 @@ namespace RentoomBookingWeb.Services.Localization
 {
     public class RouteLocalizationService : IRouteLocalizationService
     {
+        private static readonly Dictionary<string, string> AlternativeSlugs = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["polozenie-torunia"] = "AboutCity",
+            ["torun"] = "AboutCity"
+        };
+
         private readonly NavigationManager _navigationManager;
         private readonly ResourceManager _resourceManager;
 
@@ -52,7 +58,8 @@ namespace RentoomBookingWeb.Services.Localization
             try
             {
                 var fullCulture = ResolveFullCulture(culture);
-                return _resourceManager.GetString(pageKey, new CultureInfo(fullCulture));
+                var resourceKey = GetResourceKey(pageKey);
+                return _resourceManager.GetString(resourceKey, new CultureInfo(fullCulture));
             }
             catch
             {
@@ -100,13 +107,14 @@ namespace RentoomBookingWeb.Services.Localization
             {
                 if (key == "Home") continue;
 
-                var translatedSlug = _resourceManager.GetString(key, cultureInfo);
+                var resourceKey = GetResourceKey(key);
+                var translatedSlug = _resourceManager.GetString(resourceKey, cultureInfo);
                 if (string.Equals(translatedSlug, slug, StringComparison.OrdinalIgnoreCase))
                 {
                     results.Add(key);
                 }
 
-                var plSlug = _resourceManager.GetString(key, plCulture);
+                var plSlug = _resourceManager.GetString(resourceKey, plCulture);
                 if (string.Equals(plSlug, slug, StringComparison.OrdinalIgnoreCase))
                 {
                     results.Add(key);
@@ -127,6 +135,44 @@ namespace RentoomBookingWeb.Services.Localization
         {
             var parts = culture.Split('-');
             return parts[0].ToLowerInvariant();
+        }
+
+        public bool TryFindPageKeyAnyCulture(string slug, out string? pageKey)
+        {
+            if (string.IsNullOrEmpty(slug))
+            {
+                pageKey = null;
+                return false;
+            }
+
+            // 1. Sprawdzamy historyczne / alternatywne aliasy
+            if (AlternativeSlugs.TryGetValue(slug, out pageKey))
+            {
+                return true;
+            }
+
+            // 2. Szukamy dynamicznie we wszystkich językach wspieranych przez system
+            foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
+            {
+                var keys = GetPageKeysFromSlug(slug, culture);
+                pageKey = keys.FirstOrDefault();
+                if (pageKey != null)
+                {
+                    return true;
+                }
+            }
+
+            pageKey = null;
+            return false;
+        }
+
+        private string GetResourceKey(string key)
+        {
+            if (key == "ApartmentDetailWithToken")
+            {
+                return "ApartmentDetail";
+            }
+            return key;
         }
     }
 }

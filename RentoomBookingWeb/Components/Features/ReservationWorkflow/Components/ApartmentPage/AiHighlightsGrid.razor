@@ -3,17 +3,17 @@
 @if (Highlights != null && Highlights.Any())
 {
     <div class="ai-highlights-container">
-        <div class="highlights-grid">
+        <ul class="highlights-grid">
             @foreach (var highlight in Highlights)
             {
-                <div class="highlight-item">
-                    <div class="highlight-icon">
+                <li class="highlight-item">
+                    <span class="highlight-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    </div>
-                    <span class="highlight-text">@highlight</span>
-                </div>
+                    </span>
+                    <span class="highlight-text">@((MarkupString)highlight)</span>
+                </li>
             }
-        </div>
+        </ul>
     </div>
 }
 

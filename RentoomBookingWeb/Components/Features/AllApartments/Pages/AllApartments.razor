@@ -15,6 +15,13 @@
 <HeadContent>
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@Localizer["AllApartments_MetaDescription"]" />
+    <link rel="canonical" href="@CanonicalUrl" />
+
+    <meta property="og:title" content="@Localizer["AllApartments_PageTitle"]" />
+    <meta property="og:description" content="@Localizer["AllApartments_MetaDescription"]" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@CanonicalUrl" />
+
     <BreadcrumbJsonLd CurrentPageName="@Localizer["AllApartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("AllApartments")" />
 </HeadContent>
 
@@ -77,6 +84,7 @@
 </div>
 
 @code {
+    private string CanonicalUrl => $"{Navigation.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("AllApartments")}";
     private List<ApartmentObject> _apartments = new();
     private bool _isLoading = true;
     private string _searchText = string.Empty;

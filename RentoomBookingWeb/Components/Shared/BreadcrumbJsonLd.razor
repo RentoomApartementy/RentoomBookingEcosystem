@@ -2,8 +2,10 @@
 @using System.Text.Encodings.Web
 @using System.Text.Json
 @using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Services.Localization
 @inject NavigationManager Navigation
 @inject IStringLocalizer<SharedResources> Localizer
+@inject IRouteLocalizationService RouteService
 
 @if (!string.IsNullOrWhiteSpace(JsonLd))
 {
@@ -30,42 +32,44 @@
             var items = new List<object>();
             var position = 1;
 
-            items.Add(new
+            items.Add(new Dictionary<string, object>
             {
-                @type = "ListItem",
-                position = position++,
-                name = HomeLabel,
-                item = ToAbsoluteUrl("/")
+                { "@type", "ListItem" },
+                { "position", position++ },
+                { "name", HomeLabel },
+                { "item", ToAbsoluteUrl(RouteService.GetLocalizedUrl("Home")) }
             });
 
             if (!string.IsNullOrWhiteSpace(ParentPageName) && !string.IsNullOrWhiteSpace(ParentPagePath))
             {
-                items.Add(new
+                items.Add(new Dictionary<string, object>
                 {
-                    @type = "ListItem",
-                    position = position++,
-                    name = ParentPageName,
-                    item = ToAbsoluteUrl(ParentPagePath)
+                    { "@type", "ListItem" },
+                    { "position", position++ },
+                    { "name", ParentPageName },
+                    { "item", ToAbsoluteUrl(ParentPagePath) }
                 });
             }
 
             if (!IsHome(CurrentPagePath))
             {
-                items.Add(new
+                items.Add(new Dictionary<string, object>
                 {
-                    @type = "ListItem",
-                    position,
-                    name = CurrentPageName,
-                    item = ToAbsoluteUrl(CurrentPagePath)
+                    { "@type", "ListItem" },
+                    { "position", position },
+                    { "name", CurrentPageName },
+                    { "item", ToAbsoluteUrl(CurrentPagePath) }
                 });
             }
 
-            return JsonSerializer.Serialize(new
+            var jsonLdData = new Dictionary<string, object>
             {
-                @context = "https://schema.org",
-                @type = "BreadcrumbList",
-                itemListElement = items
-            }, new JsonSerializerOptions
+                { "@context", "https://schema.org" },
+                { "@type", "BreadcrumbList" },
+                { "itemListElement", items }
+            };
+
+            return JsonSerializer.Serialize(jsonLdData, new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
@@ -82,6 +86,11 @@
 
     private string ToAbsoluteUrl(string path)
     {
+        if (Uri.TryCreate(path, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+        {
+            return uri.AbsoluteUri;
+        }
+
         try
         {
             return Navigation.ToAbsoluteUri(path).AbsoluteUri;
@@ -92,3 +101,4 @@
         }
     }
 }
+

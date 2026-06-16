@@ -6,6 +6,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Components;
 public partial class Images : ComponentBase
 {
     [Parameter] public List<ObjectMedium>? ImagesList { get; set; }
+    [Parameter] public string ApartmentName { get; set; } = string.Empty;
 
     private bool _isModalOpen = false;
     private int _currentImageIndex = 0;

@@ -1,4 +1,3 @@
-@page "/kontakt"
 @using Microsoft.AspNetCore.Components.Web;
 @inject IJSRuntime JSRuntime;
 @inject NavigationManager NavManager;
@@ -7,6 +6,7 @@
 @using System.Net.Mail;
 @inject IStringLocalizer<RentoomBookingWeb.Contact> Localizer;
 @inject BitrixLeadCaptureService LeadCaptureService
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 
 <PageTitle>@Localizer["Contact_PageTitle"]</PageTitle>
 
@@ -14,14 +14,14 @@
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@Localizer["Contact_MetaDescription"]" />
     <meta name="keywords" content="@Localizer["Contact_MetaKeywords"]" />
-    <link rel="canonical" href="@NavManager.Uri" />
+    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Contact")}")" />
 
     <meta property="og:title" content="@Localizer["Contact_OgTitle"]" />
     <meta property="og:description" content="@Localizer["Contact_OgDescription"]" />
     <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg")" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="@NavManager.Uri" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["ContactText"]" CurrentPagePath="/kontakt" />
+    <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Contact")}")" />
+    <BreadcrumbJsonLd CurrentPageName="@Localizer["ContactText"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Contact")" />
 </HeadContent>
 
 <main class="contact-container">

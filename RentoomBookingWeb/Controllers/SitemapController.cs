@@ -118,7 +118,7 @@ namespace RentoomBookingWeb.Controllers
 
                 urlElement.Add(new XElement(xhtml + "link",
                     new XAttribute("rel", "alternate"),
-                    new XAttribute("hreflang", cult.ToLowerInvariant()),
+                    new XAttribute("hreflang", cult.Split('-')[0].ToLowerInvariant()),
                     new XAttribute("href", altLoc)
                 ));
             }
@@ -145,7 +145,7 @@ namespace RentoomBookingWeb.Controllers
 
                 urlElement.Add(new XElement(xhtml + "link",
                     new XAttribute("rel", "alternate"),
-                    new XAttribute("hreflang", cult.ToLowerInvariant()),
+                    new XAttribute("hreflang", cult.Split('-')[0].ToLowerInvariant()),
                     new XAttribute("href", altLoc)
                 ));
             }

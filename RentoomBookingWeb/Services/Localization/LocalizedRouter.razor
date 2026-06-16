@@ -72,10 +72,11 @@ else if (!_isResolving)
 
         if (!isSupported)
         {
-            // --- LEGACY SEO BRIDGE: Try to resolve as a prefix-less Polish link ---
-            if (RouteService.TryGetPageKeyFromSlug(cultureCode, "pl-PL", out var legacyPageKey) && legacyPageKey != null)
+            // --- LEGACY SEO BRIDGE: Try to resolve as a prefix-less link in any language ---
+            if (RouteService.TryFindPageKeyAnyCulture(cultureCode, out var legacyPageKey) && legacyPageKey != null)
             {
-                var newUrl = RouteService.GetLocalizedUrl(legacyPageKey, "pl-PL");
+                var targetCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+                var newUrl = RouteService.GetLocalizedUrl(legacyPageKey, targetCulture);
                 var remainingPath = !string.IsNullOrEmpty(routeSegments) ? $"/{routeSegments}" : "";
                 var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
                 NavManager.NavigateTo($"{newUrl}{remainingPath}{uri.Query}", replace: true);
@@ -130,6 +131,14 @@ else if (!_isResolving)
                 if (part.Equals("Id", StringComparison.OrdinalIgnoreCase))
                 {
                     if (!int.TryParse(value, out _))
+                    {
+                        isTrialMatch = false;
+                        break;
+                    }
+                }
+                else if (part.Equals("ReservationTokenGuid", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!Guid.TryParse(value, out _))
                     {
                         isTrialMatch = false;
                         break;
@@ -213,6 +222,10 @@ else if (!_isResolving)
             if (part.Equals("Id", StringComparison.OrdinalIgnoreCase))
             {
                 if (int.TryParse(value, out var id)) _parameters["Id"] = id;
+            }
+            else if (part.Equals("ReservationTokenGuid", StringComparison.OrdinalIgnoreCase))
+            {
+                if (Guid.TryParse(value, out var guid)) _parameters["ReservationTokenGuid"] = guid;
             }
             else
             {

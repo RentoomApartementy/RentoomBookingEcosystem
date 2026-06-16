@@ -1,10 +1,11 @@
-﻿@page "/"
+@page "/"
 @using RentoomBookingWeb.Components.Features.Home.Components
 @using System.Text.Encodings.Web
 @using System.Text.Json
 @using Microsoft.Extensions.Localization
 @inject NavigationManager Navigation
 @inject IStringLocalizer<RentoomBookingWeb.HomePage> Localizer
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 
 <PageTitle>@Localizer["Home_PageTitle"]</PageTitle>
 
@@ -13,12 +14,12 @@
 
     <meta name="keywords" content="@Localizer["Home_MetaKeywords"]" />
 
-    <link rel="canonical" href="@Navigation.BaseUri" />
+    <link rel="canonical" href="@($"{Navigation.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Home")}")" />
 
     <meta property="og:title" content="@Localizer["Home_OgTitle"]" />
     <meta property="og:description" content="@Localizer["Home_OgDescription"]" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="@Navigation.BaseUri" />
+    <meta property="og:url" content="@($"{Navigation.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Home")}")" />
     <meta property="og:image" content="@($"{Navigation.BaseUri}assets/images/hero-bg.jpeg")" />
     <script type="application/ld+json">
         @((MarkupString)HomeJsonLd)
@@ -103,7 +104,7 @@
                         ["@type"] = "ListItem",
                         ["position"] = 1,
                         ["name"] = Localizer["Home_BreadcrumbName"].Value,
-                        ["item"] = "https://rentoom.pl/"
+                        ["item"] = $"{Navigation.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Home")}"
                     }
                 }
             }

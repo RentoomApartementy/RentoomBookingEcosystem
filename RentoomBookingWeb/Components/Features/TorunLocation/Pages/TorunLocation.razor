@@ -1,10 +1,10 @@
-@page "/polozenie-torunia"
 @using System.Globalization
 @using RentoomBookingWeb.Components.Features.Home.Components
 @using RentoomBookingWeb.Components.Features.TorunLocation.Components
 @using Microsoft.Extensions.Localization
 @inject NavigationManager Navigation
 @inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 
 <PageTitle>@PageTitleText</PageTitle>
 
@@ -18,7 +18,7 @@
     <meta property="og:url" content="@CanonicalUrl" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="@CanonicalUrl" />
-    <BreadcrumbJsonLd CurrentPageName="@BreadcrumbName" CurrentPagePath="/polozenie-torunia/" />
+    <BreadcrumbJsonLd CurrentPageName="@BreadcrumbName" CurrentPagePath="@RouteService.GetLocalizedUrl("AboutCity")" />
 </HeadContent>
 
  <HeroSection/>
@@ -35,7 +35,7 @@ else
 @code {
     private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
 
-    private string CanonicalUrl => $"{Navigation.BaseUri.TrimEnd('/')}/polozenie-torunia/";
+    private string CanonicalUrl => $"{Navigation.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("AboutCity")}";
 
     private string PageTitleText => Localizer["TorunLocation_PageTitle"];
 

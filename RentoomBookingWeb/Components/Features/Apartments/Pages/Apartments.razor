@@ -1,4 +1,3 @@
-@page "/apartamenty"
 @using RentoomBookingWeb.Components.Features.Apartments.Components
 @using RentoomBookingWeb.Components.Features.Apartments.ViewModels
 @using Microsoft.Extensions.Localization
@@ -12,13 +11,13 @@
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@GetSeoDescription()" />
     <meta name="keywords" content="@Localizer["Apartments_SeoKeywords"]" />
-    <link rel="canonical" href="@NavManager.Uri" />
+    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Apartments")}")" />
 
     <meta property="og:title" content="@GetSeoTitle()" />
     <meta property="og:description" content="@GetSeoDescription()" />
     <meta property="og:image" content="@GetSeoImage()" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="@NavManager.Uri" />
+    <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Apartments")}")" />
     <BreadcrumbJsonLd CurrentPageName="@Localizer["Apartments_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Apartments")" />
 </HeadContent>
 

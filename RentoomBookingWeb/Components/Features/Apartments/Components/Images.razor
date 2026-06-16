@@ -4,20 +4,20 @@
         <div class="images-wrapper">
             <img class="images-left" 
                  src="@ImagesList.First().Url" 
-                 alt="" 
+                 alt="@($"{ApartmentName} photo 1")" 
                  @onclick="() => OpenGallery(0)">
         
             <div class="images-right">
                 @if (ImagesList.Count > 1)
                 {
                     <img src="@ImagesList[1].Url" 
-                         alt="" 
+                         alt="@($"{ApartmentName} photo 2")" 
                          @onclick="() => OpenGallery(1)">   
                 }
                 @if (ImagesList.Count > 2)
                 {
                     <img src="@ImagesList[2].Url" 
-                         alt="" 
+                         alt="@($"{ApartmentName} photo 3")" 
                          @onclick="() => OpenGallery(2)">   
                 }
             </div>
@@ -34,7 +34,7 @@
                     var currentIndex = sliderIndex;
                     <div class="other-image">
                         <img src="@image.Url" 
-                             alt="" 
+                             alt="@($"{ApartmentName} photo {currentIndex + 1}")" 
                              @onclick="() => OpenGallery(currentIndex)">   
                     </div>
                     sliderIndex++;
@@ -72,7 +72,7 @@ else
             
             <div class="modal-main-view">
                 <button class="nav-btn prev-btn" @onclick="PrevImage">&#10094;</button>
-                <img class="modal-image" src="@ImagesList[_currentImageIndex].Url" alt="">
+                <img class="modal-image" src="@ImagesList[_currentImageIndex].Url" alt="@($"{ApartmentName} photo {_currentImageIndex + 1}")">
                 <button class="nav-btn next-btn" @onclick="NextImage">&#10095;</button>
             </div>
 
@@ -81,9 +81,9 @@ else
                 {
                     var index = i;
                     <img src="@ImagesList[i].Url" 
-                         class="@(index == _currentImageIndex ? "thumbnail-image active" : "thumbnail-image")"
-                         @onclick="() => SelectImage(index)"
-                         alt="" />
+                          class="@(index == _currentImageIndex ? "thumbnail-image active" : "thumbnail-image")"
+                          @onclick="() => SelectImage(index)"
+                          alt="@($"{ApartmentName} photo thumbnail {i + 1}")" />
                 }
             </div>
         </div>
