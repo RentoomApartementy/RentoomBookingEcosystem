@@ -3,6 +3,7 @@
 @using RentoomBookingWeb.Services.Localization
 @inject IRouteLocalizationService RouteService
 @inject NavigationManager NavManager
+@implements IDisposable
 
 @foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
 {
@@ -22,6 +23,20 @@
 }
 
 @code {
+    protected override void OnInitialized()
+    {
+        NavManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        NavManager.LocationChanged -= OnLocationChanged;
+    }
     private string GetFullUrlForCulture(string culture)
     {
         try
