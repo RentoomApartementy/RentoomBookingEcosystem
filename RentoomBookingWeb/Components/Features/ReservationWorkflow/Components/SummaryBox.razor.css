@@ -92,7 +92,7 @@
     margin-top: 0.1rem;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 915px) {
     .order-wrapper {
         width: 100%;
         position: static;
