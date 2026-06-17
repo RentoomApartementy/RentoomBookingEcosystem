@@ -22,6 +22,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Contact")}")" />
     <BreadcrumbJsonLd CurrentPageName="@Localizer["ContactText"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Contact")" />
+    <SeoHreflangs />
 </HeadContent>
 
 <main class="contact-container">
