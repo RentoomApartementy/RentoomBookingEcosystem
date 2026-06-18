@@ -1,7 +1,18 @@
 <section class="header-section @(HasImage ? "" : "skeleton-bg") @(IsShadow ? "header-shadow" : "")"
          style="@BackgroundStyle"
          aria-label="@Title">
-    <h1>@Title</h1>
+    @if (HeadingLevel == 1)
+    {
+        <h1>@Title</h1>
+    }
+    else if (HeadingLevel == 2)
+    {
+        <h2>@Title</h2>
+    }
+    else
+    {
+        <div class="h1-style">@Title</div>
+    }
 </section>
 
 @code {
@@ -9,6 +20,7 @@
     [Parameter] public string Title { get; set; } = string.Empty;
     [Parameter] public string Height { get; set; } = "250px";
     [Parameter] public bool IsShadow { get; set; } = false;
+    [Parameter] public int HeadingLevel { get; set; } = 1;
 
     private bool HasImage => !string.IsNullOrWhiteSpace(ImagePath);
 

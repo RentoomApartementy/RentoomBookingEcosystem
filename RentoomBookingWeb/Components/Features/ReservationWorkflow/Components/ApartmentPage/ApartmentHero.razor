@@ -33,7 +33,7 @@
 
 <div class="hero-images-spacer"></div>
 
-<Images ImagesList="Mediums"></Images>
+<Images ImagesList="Mediums" ApartmentName="@Apartment?.Name"></Images>
 
 @code {
     [Parameter] public ApartmentObject? Apartment { get; set; }

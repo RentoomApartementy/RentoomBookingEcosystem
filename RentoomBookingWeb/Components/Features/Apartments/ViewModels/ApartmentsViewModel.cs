@@ -8,7 +8,9 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Services.Localization;
 
 namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 {
@@ -23,6 +25,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly GoogleAnalyticsService _googleAnalytics;
         private readonly MediaCacheService _mediaCache;
         private readonly IApartmentMediaCatalogService _apartmentMediaCatalogService;
+        private readonly IRouteLocalizationService _routeService;
         private readonly ILogger<ApartmentsViewModel> _logger;
         private static readonly TimeSpan SuggestionsFetchTimeout = TimeSpan.FromSeconds(30);
         private static readonly TimeSpan MediaWarmTimeout = TimeSpan.FromSeconds(5);
@@ -32,9 +35,10 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private bool _isInitialized = false;
         private ApartmentFilters? _currentFilters = null;
         private CancellationTokenSource? _suggestionsCts;
+        private readonly List<CancellationTokenSource> _incrementalSuggestionsCts = new();
         private readonly object _mediaWarmLock = new();
         private CancellationTokenSource _mediaWarmGenerationCts = new();
-        
+
         private List<PricingOffer> _allMatchingOffers = new();
         private List<ApartmentObject> _matchingMetaItems = new();
 
@@ -59,7 +63,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         public int? FilterMinPrice { get; private set; }
         public int? FilterMaxPrice { get; private set; }
-        
+
         public int ScaleMinPrice { get; private set; }
         public int ScaleMaxPrice { get; private set; }
         public Guid SliderResetKey { get; private set; } = Guid.NewGuid();
@@ -80,6 +84,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             GoogleAnalyticsService googleAnalytics,
             MediaCacheService mediaCache,
             IApartmentMediaCatalogService apartmentMediaCatalogService,
+            IRouteLocalizationService routeService,
             ILogger<ApartmentsViewModel> logger)
         {
             _apartmentsService = apartmentsService;
@@ -91,6 +96,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             _googleAnalytics = googleAnalytics;
             _mediaCache = mediaCache;
             _apartmentMediaCatalogService = apartmentMediaCatalogService;
+            _routeService = routeService;
             _logger = logger;
         }
 
@@ -124,7 +130,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             string c = GetVal("children");
             if (string.IsNullOrEmpty(c)) c = Children;
-            
+
             int? urlMin = int.TryParse(GetVal("minPrice"), out int minV) ? minV : null;
             int? urlMax = int.TryParse(GetVal("maxPrice"), out int maxV) ? maxV : null;
             int? urlUpsell = int.TryParse(GetVal("upsellId"), out int uV) ? uV : null;
@@ -151,7 +157,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             }
 
             Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
-            
+
             bool hasActiveFilters = IsSearch || (_currentFilters != null && (_currentFilters.ApartmentLocationsFilter?.Any() == true || _currentFilters.ApartmentAmenitiesFilter?.Any() == true || _currentFilters.ApartmentAddonFilter?.Any() == true));
 
             if (hasActiveFilters)
@@ -159,9 +165,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 ApartmentsIsLoading = true; HasMore = false; NotifyStateChanged();
 
                 var allItems = await GetAllApartments() ?? new List<ApartmentObject>();
-                
+
                 await FetchOffersAndSetScale(allItems, _currentFilters, updateScale: true);
-                
+
                 if (ScaleMaxPrice > 0)
                 {
                     FilterMinPrice = urlMin ?? ScaleMinPrice;
@@ -169,7 +175,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 }
 
                 ApplyPriceFilterToItems(allItems);
-                
+
                 ApartmentsIsLoading = false;
                 StartSuggestionsFetch(Items);
             }
@@ -179,7 +185,41 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 ResetPriceScales();
                 await LoadMoreAsync(ct);
             }
-            
+
+            _isInitialized = true;
+            NotifyStateChanged();
+        }
+
+        public async Task InitializeForSliderAsync(CancellationToken ct = default)
+        {
+            CancelSuggestionsFetch();
+            CancelMediaWarmOperations();
+
+            var now = DateTime.Now;
+            var dateFrom = DateOnly.FromDateTime(now);
+            var dateTo = DateOnly.FromDateTime(
+                (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
+                    ? now.AddDays(2)
+                    : now.AddDays(1));
+
+            StartDate = dateFrom.ToString("yyyy-MM-dd");
+            EndDate = dateTo.ToString("yyyy-MM-dd");
+            Adults = "2";
+            Children = "0";
+            IsSearch = true;
+            FilterMinPrice = null;
+            FilterMaxPrice = null;
+            _currentFilters = null;
+
+            Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
+
+            await GetApartmentsCount();
+
+            HasMore = true; ApartmentsIsLoading = false;
+            ResetPriceScales();
+            await LoadMoreAsync(ct);
+            StartSuggestionsFetch(Items);
+
             _isInitialized = true;
             NotifyStateChanged();
         }
@@ -189,15 +229,15 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
             UpdateUrlParams(query);
-            
-            Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null; 
+
+            Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
             HasMore = false; ApartmentsIsLoading = true; IsSearch = true;
             NotifyStateChanged();
 
             var allItems = await GetAllApartments() ?? new List<ApartmentObject>();
-            
+
             await FetchOffersAndSetScale(allItems, _currentFilters, updateScale: true);
-            
+
             FilterMinPrice = ScaleMinPrice;
             FilterMaxPrice = ScaleMaxPrice;
             SliderResetKey = Guid.NewGuid();
@@ -226,9 +266,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 ResetSuggestionState();
             }
 
-            ApartmentsIsLoading = true; HasMore = false; 
-            
-            Items.Clear(); 
+            ApartmentsIsLoading = true; HasMore = false;
+
+            Items.Clear();
             Offers.Clear();
             NotifyStateChanged();
 
@@ -249,8 +289,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             ApartmentsIsLoading = false;
             NotifyStateChanged();
-            
-            if (metaChanged) 
+
+            if (metaChanged)
             {
                 StartSuggestionsFetch(Items);
             }
@@ -258,7 +298,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         private async Task FetchOffersAndSetScale(List<ApartmentObject> items, ApartmentFilters? filters, bool updateScale)
         {
-            if (items == null || !items.Any()) { if(updateScale) ResetPriceScales(); return; }
+            if (items == null || !items.Any()) { if (updateScale) ResetPriceScales(); return; }
 
             try
             {
@@ -266,15 +306,20 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 var fChildren = int.TryParse(Children, out var c) ? c : 0;
                 var ids = items.Select(x => x.Id).ToList();
 
-                var idoParams = new PricingOffersRequest {
-                    ObjectIds = ids, DateFrom = StartDate, DateTo = EndDate,
-                    NumberOfAdults = fAdults, NumberOfBigChildren = fChildren
+                var idoParams = new PricingOffersRequest
+                {
+                    ObjectIds = ids,
+                    DateFrom = StartDate,
+                    DateTo = EndDate,
+                    NumberOfAdults = fAdults,
+                    NumberOfBigChildren = fChildren
                 };
 
-                var queryObj = new RentoomQueryOffer { 
-                    IdoOfferParams = idoParams, 
-                    ApartmentFilterParams = filters ?? new ApartmentFilters(), 
-                    PriceFilter = null 
+                var queryObj = new RentoomQueryOffer
+                {
+                    IdoOfferParams = idoParams,
+                    ApartmentFilterParams = filters ?? new ApartmentFilters(),
+                    PriceFilter = null
                 };
 
                 var response = await _rentoomOfferService.getOfferWitFilter(queryObj);
@@ -294,9 +339,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     }
                 }
             }
-            catch 
+            catch
             {
-                if(updateScale) ResetPriceScales();
+                if (updateScale) ResetPriceScales();
                 _allMatchingOffers.Clear();
                 _matchingMetaItems.Clear();
             }
@@ -321,12 +366,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             var visibleOfferIds = visibleOffers.Select(o => o.ObjectId).ToHashSet();
             var allOfferIdsForMeta = _allMatchingOffers.Select(o => o.ObjectId).ToHashSet();
-            
+
             bool hasActiveMetaFilters = _currentFilters != null && (_currentFilters.ApartmentLocationsFilter?.Any() == true || _currentFilters.ApartmentAmenitiesFilter?.Any() == true || _currentFilters.ApartmentAddonFilter?.Any() == true);
             var baseSet = hasActiveMetaFilters ? _matchingMetaItems : allItems;
 
             var group1 = baseSet.Where(a => visibleOfferIds.Contains(a.Id)).ToList();
-            
+
             group1.Sort((a, b) => {
                 var offerA = GetPricingOfferByObjectId(a.Id);
                 var offerB = GetPricingOfferByObjectId(b.Id);
@@ -343,7 +388,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private bool IsMetaFilterChanged(ApartmentFilters? newFilters)
         {
             if (_currentFilters == null && newFilters == null) return false;
-            
+
             var oldLocs = _currentFilters?.ApartmentLocationsFilter ?? new List<string>();
             var newLocs = newFilters?.ApartmentLocationsFilter ?? new List<string>();
             var oldAmes = _currentFilters?.ApartmentAmenitiesFilter ?? new List<int>();
@@ -365,7 +410,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public async Task LoadMoreAsync(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested || ApartmentsIsLoading || !HasMore) return;
-            
+
             if (!await _loadLock.WaitAsync(0)) return;
 
             var loadStopwatch = Stopwatch.StartNew();
@@ -387,8 +432,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     }
                 }
 
-                ApartmentsIsLoading = true; 
-                Error = null; 
+                ApartmentsIsLoading = true;
+                Error = null;
                 NotifyStateChanged(force: true);
 
                 requestedPageSize = remainingCount.HasValue
@@ -424,6 +469,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     if (IsSearch)
                     {
                         await FetchOffersForVisibleItems(page.Items);
+                        StartSuggestionsFetchForNewItems(page.Items);
                     }
                 }
                 else
@@ -461,10 +507,10 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     Items.Count,
                     loadStopwatch.ElapsedMilliseconds);
             }
-            finally 
-            { 
-                ApartmentsIsLoading = false; 
-                NotifyStateChanged(force: true); 
+            finally
+            {
+                ApartmentsIsLoading = false;
+                NotifyStateChanged(force: true);
 
                 if (mediaWarmTask is { IsCompleted: false })
                 {
@@ -501,16 +547,19 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             {
                 var ids = items.Select(x => x.Id).ToList();
                 var fAdults = int.TryParse(Adults, out var a) && a > 0 ? a : 2;
-                var idoParams = new PricingOffersRequest {
-                    ObjectIds = ids, DateFrom = StartDate, DateTo = EndDate,
+                var idoParams = new PricingOffersRequest
+                {
+                    ObjectIds = ids,
+                    DateFrom = StartDate,
+                    DateTo = EndDate,
                     NumberOfAdults = fAdults
                 };
                 var queryObj = new RentoomQueryOffer { IdoOfferParams = idoParams, PriceFilter = null };
                 var response = await _rentoomOfferService.getOfferWitFilter(queryObj);
-                
+
                 if (response?.PricingOffers != null)
                 {
-                    foreach(var offer in response.PricingOffers)
+                    foreach (var offer in response.PricingOffers)
                     {
                         var existing = Offers.FirstOrDefault(o => o.ObjectId == offer.ObjectId);
                         if (existing == null) Offers.Add(offer);
@@ -719,11 +768,58 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             _ = FetchSuggestionsInBackground(apartmentIds, _suggestionsCts.Token, runId);
         }
 
+        /// <summary>
+        /// Fetches availability suggestions for apartments loaded by a subsequent LoadMoreAsync page,
+        /// without cancelling any suggestions fetch already running for previously loaded items.
+        /// </summary>
+        private void StartSuggestionsFetchForNewItems(IEnumerable<ApartmentObject> newItems)
+        {
+            if (!IsSearch) return;
+
+            var apartmentIds = newItems
+                .Where(item => !Offers.Any(o => o.ObjectId == item.Id))
+                .Where(item => !SuggestionStatuses.ContainsKey(item.Id))
+                .Select(item => item.Id)
+                .Distinct()
+                .ToList();
+
+            if (apartmentIds.Count == 0) return;
+
+            var cts = new CancellationTokenSource();
+            _incrementalSuggestionsCts.Add(cts);
+
+            var runId = _suggestionsRunId;
+            MarkSuggestionsLoading(runId, apartmentIds);
+
+            _ = RunIncrementalSuggestionsFetch(apartmentIds, cts, runId);
+        }
+
+        private async Task RunIncrementalSuggestionsFetch(IReadOnlyCollection<int> apartmentIds, CancellationTokenSource cts, int runId)
+        {
+            try
+            {
+                await FetchSuggestionsInBackground(apartmentIds, cts.Token, runId);
+            }
+            finally
+            {
+                _incrementalSuggestionsCts.Remove(cts);
+                cts.Dispose();
+            }
+        }
+
         private void CancelSuggestionsFetch()
         {
             _suggestionsCts?.Cancel();
             _suggestionsCts?.Dispose();
             _suggestionsCts = null;
+
+            foreach (var cts in _incrementalSuggestionsCts)
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+            _incrementalSuggestionsCts.Clear();
+
             _suggestionsRunId++;
             ResetLoadingSuggestionStatuses();
             UpdateSuggestionsLoadingState();
@@ -850,7 +946,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private async Task<ApartmentFilters> ReconstructFiltersFromUrl(HashSet<string> urlLocs, HashSet<string> urlAmes)
         {
             var filters = new ApartmentFilters();
-            try 
+            try
             {
                 var allFilters = await _filterService.GetFiltersAsync();
                 var locationNames = new List<string>();
@@ -859,14 +955,14 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 var locDefs = allFilters.FirstOrDefault(f => f.id == "city-regions-filter")?.filtersDictionary.GetValueOrDefault("pl");
                 if (locDefs != null)
                 {
-                    foreach(var id in urlLocs)
+                    foreach (var id in urlLocs)
                     {
                         var match = locDefs.FirstOrDefault(l => l.id.ToString() == id);
                         if (match != null) locationNames.Add(match.name);
                     }
                 }
 
-                foreach(var idStr in urlAmes) if (int.TryParse(idStr, out int id)) amenityIds.Add(id);
+                foreach (var idStr in urlAmes) if (int.TryParse(idStr, out int id)) amenityIds.Add(id);
 
                 filters.ApartmentLocationsFilter = locationNames.Any() ? locationNames : null;
                 filters.ApartmentAmenitiesFilter = amenityIds.Any() ? amenityIds : null;
@@ -885,11 +981,11 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             catch { ApartmentsCount = null; }
             finally { IsLoading = false; NotifyStateChanged(); }
         }
-        
+
         private async Task<List<ApartmentObject>?> GetAllApartments()
         {
-             try { var page = await _apartmentsService.GetAllApartmentsList(); return page?.Items?.ToList(); }
-             catch { return null; }
+            try { var page = await _apartmentsService.GetAllApartmentsList(); return page?.Items?.ToList(); }
+            catch { return null; }
         }
 
         private void TrackSearchResultsEvent(string eventName)
@@ -934,7 +1030,102 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 ["max_price"] = FilterMaxPrice ?? 0
             });
         }
-        
+
+        public int? GetOfferLengthDays()
+        {
+            if (DateOnly.TryParse(StartDate, out var s) && DateOnly.TryParse(EndDate, out var e))
+            {
+                var days = e.DayNumber - s.DayNumber;
+                return days > 0 ? days : null;
+            }
+
+            return null;
+        }
+
+        public async Task NavigateToApartmentAsync(int apartmentId, string? apartmentName, string listingSource, CancellationToken ct = default)
+        {
+            apartmentName ??= "apartament";
+
+            if (!DateOnly.TryParse(StartDate, out var navigationStartDate))
+            {
+                navigationStartDate = DateOnly.FromDateTime(DateTime.Now);
+            }
+
+            if (!DateOnly.TryParse(EndDate, out var navigationEndDate))
+            {
+                navigationEndDate = navigationStartDate.AddDays(1);
+            }
+
+            var currentOffer = GetPricingOfferByObjectId(apartmentId);
+
+            if (currentOffer == null)
+            {
+                var firstAvailableTerm = GetSuggestionsByObjectId(apartmentId)?.FirstOrDefault();
+
+                if (firstAvailableTerm == null)
+                {
+                    try
+                    {
+                        var fAdults = int.TryParse(Adults, out var a) && a > 0 ? a : 2;
+                        var fChildren = int.TryParse(Children, out var c) ? c : 0;
+
+                        var suggestedTerm = await _availabilityFinder.FindAvailableTermsForApartmentAsync(
+                            apartmentId,
+                            StartDate,
+                            EndDate,
+                            fAdults,
+                            fChildren);
+
+                        firstAvailableTerm = suggestedTerm.AvailableTerms?.FirstOrDefault();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to find nearest available term for apartment {ApartmentId}.", apartmentId);
+                    }
+                }
+
+                if (firstAvailableTerm != null
+                    && DateOnly.TryParse(firstAvailableTerm.StartDate, out var suggestedStartDate)
+                    && DateOnly.TryParse(firstAvailableTerm.EndDate, out var suggestedEndDate))
+                {
+                    navigationStartDate = suggestedStartDate;
+                    navigationEndDate = suggestedEndDate;
+                }
+            }
+
+            var adultsForNav = int.TryParse(Adults, out var adultsVal) && adultsVal > 0 ? adultsVal.ToString() : "2";
+            var childrenForNav = int.TryParse(Children, out var childrenVal) && childrenVal >= 0 ? childrenVal.ToString() : "0";
+
+            _telemetry.TrackEvent(
+                "HomeApartmentClicked",
+                new Dictionary<string, string?>
+                {
+                    ["ApartmentId"] = apartmentId.ToString(),
+                    ["ApartmentName"] = apartmentName,
+                    ["StartDate"] = navigationStartDate.ToString("yyyy-MM-dd"),
+                    ["EndDate"] = navigationEndDate.ToString("yyyy-MM-dd"),
+                    ["Adults"] = adultsForNav,
+                    ["Children"] = childrenForNav,
+                    ["ListingSource"] = listingSource,
+                    ["HasOfferForRequestedDates"] = currentOffer != null ? "true" : "false"
+                });
+
+            await _googleAnalytics.TrackEventAsync("home_apartment_click", new Dictionary<string, object?>
+            {
+                ["apartment_id"] = apartmentId,
+                ["apartment_name"] = apartmentName,
+                ["listing_source"] = listingSource,
+                ["start_date"] = navigationStartDate.ToString("yyyy-MM-dd"),
+                ["end_date"] = navigationEndDate.ToString("yyyy-MM-dd"),
+                ["adults"] = adultsForNav,
+                ["children"] = childrenForNav,
+                ["has_offer_for_requested_dates"] = currentOffer != null ? 1 : 0
+            });
+
+            var localizedBase = _routeService.GetLocalizedUrl("Apartments");
+            _navManager.NavigateTo($"{localizedBase}/{apartmentId}/{apartmentName.ToSlug()}/{navigationStartDate:yyyy-MM-dd}/{navigationEndDate:yyyy-MM-dd}/{adultsForNav}/{childrenForNav}");
+        }
+
         private void ResetPriceScales() { ScaleMinPrice = 0; ScaleMaxPrice = 0; FilterMinPrice = 0; FilterMaxPrice = 0; }
         public void ToggleView(bool isMap) { IsMapView = isMap; NotifyStateChanged(); }
         private void NotifyStateChanged(bool force = false)
@@ -945,8 +1136,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 if (!force && (now - _lastNotifyTime).TotalMilliseconds < 100) return;
                 _lastNotifyTime = now;
             }
-            
-            try 
+
+            try
             {
                 OnChange?.Invoke();
             }

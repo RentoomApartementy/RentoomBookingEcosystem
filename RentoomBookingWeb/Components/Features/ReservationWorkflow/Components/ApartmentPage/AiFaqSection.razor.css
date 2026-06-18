@@ -28,8 +28,12 @@
     border-color: #1f5a41;
 }
 
-.faq-toggle {
+.faq-question::-webkit-details-marker {
     display: none;
+}
+
+.faq-question {
+    list-style: none;
 }
 
 .faq-question {
@@ -71,10 +75,10 @@
     font-size: 0.95rem;
 }
 
-.faq-toggle:checked ~ .faq-answer {
+.faq-item[open] .faq-answer {
     max-height: 500px;
 }
 
-.faq-toggle:checked ~ .faq-question .faq-chevron {
+.faq-item[open] .faq-question .faq-chevron {
     transform: rotate(180deg);
 }

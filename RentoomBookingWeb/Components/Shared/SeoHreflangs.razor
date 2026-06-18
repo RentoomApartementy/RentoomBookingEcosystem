@@ -3,6 +3,7 @@
 @using RentoomBookingWeb.Services.Localization
 @inject IRouteLocalizationService RouteService
 @inject NavigationManager NavManager
+@implements IDisposable
 
 @foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
 {
@@ -22,6 +23,20 @@
 }
 
 @code {
+    protected override void OnInitialized()
+    {
+        NavManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        NavManager.LocationChanged -= OnLocationChanged;
+    }
     private string GetFullUrlForCulture(string culture)
     {
         try
@@ -34,7 +49,7 @@
                 baseUri = "https://rentoom.pl"; 
             }
 
-            var relativeUri = NavManager.ToBaseRelativePath(NavManager.Uri);
+            var relativeUri = Uri.UnescapeDataString(NavManager.ToBaseRelativePath(NavManager.Uri));
             var uriParts = relativeUri.Split('?', 2);
             var relativePath = uriParts[0];
             var queryString = uriParts.Length > 1 ? "?" + uriParts[1] : "";
@@ -76,6 +91,16 @@
                 currentSlug = "";
             }
 
+            // --- DYNAMIC BYPASS FOR PREFIX-LESS OR TECHNICAL PAGES ---
+            // If the page has a slug (not the homepage) but this slug does not belong to any localized route mapping in any language,
+            // then it's a technical/prefix-less page (like /rezerwuj, /tpay-mock, /404). We do not generate hreflangs for it.
+            if (!string.IsNullOrEmpty(currentSlug) && 
+                !RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out _) &&
+                !RouteService.TryFindPageKeyAnyCulture(currentSlug, out _))
+            {
+                return string.Empty;
+            }
+
             string resultUrl;
             if (!string.IsNullOrEmpty(currentSlug) && RouteService.TryGetPageKeyFromSlug(currentSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
             {
@@ -87,10 +112,9 @@
             }
             else
             {
-                var pageKeyFromCanonical = GetPageKeyFromCanonicalSlug(currentSlug);
-                if (pageKeyFromCanonical != null)
+                if (RouteService.TryFindPageKeyAnyCulture(currentSlug, out var pageKeyFromAny))
                 {
-                    resultUrl = $"{baseUri}{RouteService.GetLocalizedUrl(pageKeyFromCanonical, culture)}{remainingSegments}{queryString}";
+                    resultUrl = $"{baseUri}{RouteService.GetLocalizedUrl(pageKeyFromAny!, culture)}{remainingSegments}{queryString}";
                 }
                 else
                 {
@@ -108,15 +132,4 @@
     }
 
     private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
-
-    private string? GetPageKeyFromCanonicalSlug(string slug) => slug.ToLower() switch
-    {
-        "apartamenty" => "Apartments",
-        "kontakt" => "Contact",
-        "wspolpraca" => "Cooperation",
-        "regulaminy" => "Statute",
-        "polozenie-torunia" => "AboutCity",
-        "torun" => "AboutCity",
-        _ => null
-    };
 }

@@ -538,9 +538,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 }).ToList();
             }
 
-            var jsonLd = new Dictionary<string, object>
+            var vacationRental = new Dictionary<string, object>
             {
-                ["@context"] = "https://schema.org",
                 ["@type"] = "VacationRental",
                 ["identifier"] = apartment.Id.ToString(),
                 ["name"] = apartment.Name ?? "",
@@ -565,6 +564,34 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 },
 
                 ["containsPlace"] = new[] { apartmentUnit }
+            };
+
+            var graphItems = new List<object> { vacationRental };
+
+            if (_aiDescription?.Faqs != null && _aiDescription.Faqs.Any())
+            {
+                var faqPage = new Dictionary<string, object>
+                {
+                    ["@type"] = "FAQPage",
+                    ["mainEntity"] = _aiDescription.Faqs.Select(faq => new Dictionary<string, object>
+                    {
+                        ["@type"] = "Question",
+                        ["name"] = faq.Question ?? "",
+                        ["acceptedAnswer"] = new Dictionary<string, object>
+                        {
+                            ["@type"] = "Answer",
+                            ["text"] = faq.Answer ?? ""
+                        }
+                    }).ToList()
+                };
+
+                graphItems.Add(faqPage);
+            }
+
+            var jsonLd = new Dictionary<string, object>
+            {
+                ["@context"] = "https://schema.org",
+                ["@graph"] = graphItems
             };
 
             var options = new System.Text.Json.JsonSerializerOptions

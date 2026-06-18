@@ -123,27 +123,21 @@
         <value>The contact may have been created, but the deal could not be created. Check Bitrix before sending again.</value>
     </data>
   <data name="Cooperation_MetaKeywords" xml:space="preserve">
-    <value />
     <value>rental management torun, apartment management, hands-off investment, rentoom cooperation, rental income optimization</value>
   </data>
   <data name="Cooperation_MetaDescription" xml:space="preserve">
-    <value />
     <value>Turn your apartment into a hands-off investment with Rentoom. We provide full rental management in Torun, revenue optimization, and guest support 24/7.</value>
   </data>
   <data name="Cooperation_OgTitle" xml:space="preserve">
-    <value />
     <value>Cooperation - Rentoom | Professional Rental Management</value>
   </data>
   <data name="Cooperation_BreadcrumbName" xml:space="preserve">
-    <value />
     <value>Cooperation</value>
   </data>
   <data name="Cooperation_OgDescription" xml:space="preserve">
-    <value />
     <value>We are a market leader in Torun. Full-service operations, modern technology, and profit optimization for your property.</value>
   </data>
   <data name="Cooperation_PageTitle" xml:space="preserve">
-    <value />
     <value>Cooperation - Rentoom | Rental Management Torun</value>
   </data>
     <data name="AboutUsImageAlt" xml:space="preserve">

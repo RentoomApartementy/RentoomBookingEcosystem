@@ -69,43 +69,33 @@
         <value>The contact may have been created, but the deal could not be created. Check Bitrix before sending again.</value>
     </data>
   <data name="Contact_CopyPlnTitle" xml:space="preserve">
-    <value />
     <value>Copy PLN number</value>
   </data>
   <data name="Contact_CopyEurTitle" xml:space="preserve">
-    <value />
     <value>Copy EUR number</value>
   </data>
   <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
-    <value />
     <value>Copy EUR account number to clipboard</value>
   </data>
   <data name="Contact_OgDescription" xml:space="preserve">
-    <value />
     <value>Do you have questions about rental management? Contact us and check our address and banking details.</value>
   </data>
   <data name="Contact_MetaKeywords" xml:space="preserve">
-    <value />
     <value>rentoom contact, rentoom office torun, rental management contact, rentoom invoice details</value>
   </data>
   <data name="Contact_DealTitlePrefix" xml:space="preserve">
-    <value />
     <value>Contact</value>
   </data>
   <data name="Contact_PageTitle" xml:space="preserve">
-    <value />
     <value>Contact - Rentoom | Customer Service and Rental Management Torun</value>
   </data>
   <data name="Contact_OgTitle" xml:space="preserve">
-    <value />
     <value>Contact - Rentoom | Professional Rental Management</value>
   </data>
   <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
-    <value />
     <value>Copy PLN account number to clipboard</value>
   </data>
   <data name="Contact_MetaDescription" xml:space="preserve">
-    <value />
     <value>Get in touch with the Rentoom team in Torun. Address details, bank account numbers (PLN/EUR), and a contact form. Professional rental support.</value>
   </data>
 </root>

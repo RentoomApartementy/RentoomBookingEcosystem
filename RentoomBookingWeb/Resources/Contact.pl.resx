@@ -70,43 +70,33 @@
         <value>Kontakt mógł zostać zapisany, ale nie udało się utworzyć deala. Sprawdź Bitrix przed ponowną wysyłką.</value>
     </data>
   <data name="Contact_CopyPlnTitle" xml:space="preserve">
-    <value />
     <value>Kopiuj numer PLN</value>
   </data>
   <data name="Contact_CopyEurTitle" xml:space="preserve">
-    <value />
     <value>Kopiuj numer EUR</value>
   </data>
   <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
-    <value />
     <value>Skopiuj numer konta EUR do schowka</value>
   </data>
   <data name="Contact_OgDescription" xml:space="preserve">
-    <value />
     <value>Masz pytania dotyczące zarządzania najmem? Skontaktuj się z nami! Sprawdź nasze dane adresowe i bankowe.</value>
   </data>
   <data name="Contact_MetaKeywords" xml:space="preserve">
-    <value />
     <value>kontakt rentoom, biuro rentoom toruń, zarządzanie najmem kontakt, dane do faktury rentoom</value>
   </data>
   <data name="Contact_DealTitlePrefix" xml:space="preserve">
-    <value />
     <value>Kontakt</value>
   </data>
   <data name="Contact_PageTitle" xml:space="preserve">
-    <value />
     <value>Kontakt - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</value>
   </data>
   <data name="Contact_OgTitle" xml:space="preserve">
-    <value />
     <value>Kontakt - Rentoom | Profesjonalne Zarządzanie Najmem</value>
   </data>
   <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
-    <value />
     <value>Skopiuj numer konta PLN do schowka</value>
   </data>
   <data name="Contact_MetaDescription" xml:space="preserve">
-    <value />
     <value>Skontaktuj się z zespołem Rentoom w Toruniu. Dane adresowe, numery kont bankowych (PLN/EUR) oraz formularz kontaktowy. Profesjonalna obsługa najmu.</value>
   </data>
 </root>

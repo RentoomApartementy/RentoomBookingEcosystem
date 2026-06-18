@@ -184,8 +184,8 @@ namespace RentoomBookingWeb
 
 
             //view scoped
-            builder.Services.AddScoped<IApartmentsViewModel, ApartmentsViewModel>();
-            
+            builder.Services.AddTransient<IApartmentsViewModel, ApartmentsViewModel>(); //po zmianie ApartmentSection  - zmiana na transiet bo musi miec swoj stan jesli uzywany go wspolnie na jakiejs stronie gdzie inny komponenet go tez wywołuje , zeby nie był "globalny" dla wszystkich komponentów używających IApartmentsViewModel
+
             builder.Services.AddDateRangePicker(config => { });
 
             //config
@@ -284,6 +284,23 @@ namespace RentoomBookingWeb
             };
 
             app.UseHttpsRedirection();
+            app.Use(async (context, next) =>
+            {
+                context.Response.OnStarting(() =>
+                {
+                    AddHeaderIfMissing(context, "Content-Security-Policy", ContentSecurityPolicy);
+                    AddHeaderIfMissing(context, "X-Content-Type-Options", "nosniff");
+                    AddHeaderIfMissing(context, "Referrer-Policy", "strict-origin-when-cross-origin");
+                    AddHeaderIfMissing(
+                        context,
+                        "Permissions-Policy",
+                        "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
+
+                    return Task.CompletedTask;
+                });
+
+                await next();
+            });
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -358,7 +375,7 @@ namespace RentoomBookingWeb
             {
                 var baseUrl = $"{context.Request.Scheme}://{context.Request.Host}";
                 var content = app.Environment.IsProduction()
-                    ? $"User-agent: *\nAllow: /\nSitemap: {baseUrl}/sitemap.xml"
+                    ? $"User-agent: *\nAllow: /\nDisallow: /rezerwuj/\nDisallow: /tpay-mock/\nSitemap: {baseUrl}/sitemap.xml"
                     : $"User-agent: *\nDisallow: /\nSitemap: {baseUrl}/sitemap.xml";
 
                 return Results.Text(content, "text/plain");
@@ -387,7 +404,8 @@ namespace RentoomBookingWeb
                         Secure = context.Request.IsHttps
                     });
 
-                return Results.LocalRedirect(safeReturnUrl);
+                var escapedReturnUrl = EscapeRelativeUrl(safeReturnUrl);
+                return Results.LocalRedirect(escapedReturnUrl);
             });
 
             app.MapRazorComponents<App>()
@@ -418,6 +436,52 @@ namespace RentoomBookingWeb
             }
 
             return true;
+        }
+
+        private const string ContentSecurityPolicy =
+            "default-src 'self'; " +
+            "base-uri 'self'; " +
+            "object-src 'none'; " +
+            "frame-ancestors 'self'; " +
+            "form-action 'self' https://secure.tpay.com https://secure.sandbox.tpay.com; " +
+            "script-src 'self' 'unsafe-inline' https://unpkg.com https://www.googletagmanager.com https://t.contentsquare.net https://*.contentsquare.net; " +
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; " +
+            "font-src 'self' data: https://fonts.gstatic.com; " +
+            "img-src 'self' data: blob: https:; " +
+            "connect-src 'self' ws: wss: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://*.contentsquare.net; " +
+            "frame-src 'self' https://www.openstreetmap.org; " +
+            "worker-src 'self' blob:; " +
+            "manifest-src 'self'; " +
+            "media-src 'self' https:;";
+
+        private static void AddHeaderIfMissing(HttpContext context, string name, string value)
+        {
+            if (!context.Response.Headers.ContainsKey(name))
+            {
+                context.Response.Headers[name] = value;
+            }
+        }
+
+        private static string EscapeRelativeUrl(string url)
+        {
+            var parts = url.Split('?', 2);
+            var path = parts[0];
+            var escapedPath = string.Join('/', path.Split('/').Select(Uri.EscapeDataString));
+
+            if (parts.Length > 1)
+            {
+                var query = parts[1];
+                var queryParts = query.Split('&').Select(qp =>
+                {
+                    var kv = qp.Split('=', 2);
+                    var k = Uri.EscapeDataString(kv[0]);
+                    var v = kv.Length > 1 ? "=" + Uri.EscapeDataString(kv[1]) : "";
+                    return k + v;
+                });
+                return escapedPath + "?" + string.Join('&', queryParts);
+            }
+
+            return escapedPath;
         }
     }
 }

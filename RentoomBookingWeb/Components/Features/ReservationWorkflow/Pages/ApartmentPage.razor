@@ -1,4 +1,3 @@
-@page "/apartamenty/{id:int}/{slug}"
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 
@@ -26,6 +25,7 @@
     }
 
     @(_apartment != null ? (MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>" : (MarkupString)"")
+    <SeoHreflangs />
 </HeadContent>
 
 <div class="apartment-container">
@@ -53,6 +53,7 @@
             Title="@_apartment?.Name"
             Height="230px"
             IsShadow="true"
+            HeadingLevel="1"
         />   
         
         <div class="main-wrapper">
