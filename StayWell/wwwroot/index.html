@@ -14,8 +14,126 @@
     <link href="manifest.webmanifest" rel="manifest" />
     <link rel="apple-touch-icon" sizes="512x512" href="rentoom-logo-color.svg" />
     <link rel="apple-touch-icon" sizes="192x192" href="rentoom-logo-color.svg" />
+    <script type="text/javascript" src="https://js.monitor.azure.com/scripts/b/ai.3.gbl.min.js"></script>
     <script>
-        
+        window.__staywellAppInsightsConnectionString = "InstrumentationKey=0fdb8d76-efd0-4df8-a434-285fcce6e965;IngestionEndpoint=https://polandcentral-0.in.applicationinsights.azure.com/;LiveEndpoint=https://polandcentral.livediagnostics.monitor.azure.com/;ApplicationId=3f06e4d1-29f7-4a4f-9193-2d22b49ee1bb";
+
+        window.staywellTelemetry = (function () {
+            var initialized = false;
+            var appInsights = null;
+
+            function toProperties(properties) {
+                if (!properties) {
+                    return {};
+                }
+
+                var sanitized = {};
+                Object.keys(properties).forEach(function (key) {
+                    var value = properties[key];
+                    sanitized[key] = value === null || value === undefined ? "" : String(value);
+                });
+
+                return sanitized;
+            }
+
+            function getAppInsights() {
+                if (appInsights || !window.Microsoft || !window.Microsoft.ApplicationInsights || !window.Microsoft.ApplicationInsights.ApplicationInsights) {
+                    return appInsights;
+                }
+
+                appInsights = new window.Microsoft.ApplicationInsights.ApplicationInsights({
+                    config: {
+                        connectionString: window.__staywellAppInsightsConnectionString,
+                        enableAutoRouteTracking: true,
+                        disableFetchTracking: false,
+                        disableAjaxTracking: false,
+                        autoTrackPageVisitTime: true
+                    }
+                });
+
+                appInsights.loadAppInsights();
+                appInsights.trackPageView();
+
+                return appInsights;
+            }
+
+            function trackException(payload) {
+                var client = getAppInsights();
+                if (!client || !payload) {
+                    return;
+                }
+
+                var error = new Error(payload.message || "Frontend exception");
+                if (payload.type) {
+                    error.name = payload.type;
+                }
+                if (payload.stack) {
+                    error.stack = payload.stack;
+                }
+
+                client.trackException({
+                    exception: error,
+                    properties: toProperties(payload.properties)
+                });
+            }
+
+            function trackMessage(payload) {
+                var client = getAppInsights();
+                if (!client || !payload || !payload.message) {
+                    return;
+                }
+
+                client.trackTrace({
+                    message: payload.message,
+                    properties: toProperties(payload.properties),
+                    severityLevel: 3
+                });
+            }
+
+            function init() {
+                if (initialized) {
+                    return;
+                }
+
+                initialized = true;
+                getAppInsights();
+
+                window.addEventListener("error", function (event) {
+                    trackException({
+                        message: event && event.message ? event.message : "Unhandled window error",
+                        type: event && event.error && event.error.name ? event.error.name : "JavaScriptError",
+                        stack: event && event.error && event.error.stack ? event.error.stack : null,
+                        properties: {
+                            source: "window.onerror",
+                            fileName: event && event.filename ? event.filename : "",
+                            lineNumber: event && event.lineno ? event.lineno : "",
+                            columnNumber: event && event.colno ? event.colno : "",
+                            currentUrl: window.location.href
+                        }
+                    });
+                });
+
+                window.addEventListener("unhandledrejection", function (event) {
+                    var reason = event ? event.reason : null;
+                    trackException({
+                        message: reason && reason.message ? reason.message : "Unhandled promise rejection",
+                        type: reason && reason.name ? reason.name : "UnhandledPromiseRejection",
+                        stack: reason && reason.stack ? reason.stack : (typeof reason === "string" ? reason : JSON.stringify(reason)),
+                        properties: {
+                            source: "window.unhandledrejection",
+                            currentUrl: window.location.href
+                        }
+                    });
+                });
+            }
+
+            return {
+                init: init,
+                trackException: trackException,
+                trackMessage: trackMessage
+            };
+        })();
+
         window.blazorCulture = {
             get: function () {
                 try {
