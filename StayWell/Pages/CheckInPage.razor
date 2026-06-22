@@ -15,7 +15,7 @@
 
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
-<section class="checkin-section">
+<section id="open-focus-target" class="checkin-section checkin-section--scroll-target @(IsActiveFocus("open") ? "checkin-section--active" : string.Empty)">
     <h3 class="checkin-section__title">@Localizer["ApartmentCodeTitle"]</h3>
     <ApartmentAccessCode Token="@Token" />
     <RemoteOpenTile Token="@Token" />
@@ -41,7 +41,7 @@
     <AccessCodesList />
 </section>
 
-<section class="checkin-section">
+<section id="instructions-focus-target" class="checkin-section checkin-section--scroll-target @(IsActiveFocus("instructions") ? "checkin-section--active" : string.Empty)">
     <h3 class="checkin-section__title">@Localizer["InstructionsTitle"]</h3>
     <div class="checkin-roadmap-scroll">
         @if (ApartmentState.IsLoading)
@@ -81,6 +81,21 @@
 
 @code {
     private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "focus")]
+    public string? Focus { get; set; }
+
+    private string? _activeFocus;
+
+    private static readonly Dictionary<string, string> FocusTargetIds = new(StringComparer.OrdinalIgnoreCase)
+    {
+        { "open", "open-focus-target" },
+        { "instructions", "instructions-focus-target" }
+    };
+
+    private bool IsActiveFocus(string focus) =>
+        string.Equals(_activeFocus, focus, StringComparison.OrdinalIgnoreCase);
 
     private IReadOnlyList<ApartmentArrivalInstructionStepDTO> Steps =>
         ApartmentState.ArrivalInstructionSteps ?? Array.Empty<ApartmentArrivalInstructionStepDTO>();
@@ -137,9 +152,29 @@
         if (firstRender)
         {
             await JS.InvokeVoidAsync("setupCheckInRoadmap");
+            await FocusRequestedSectionAsync();
         }
 
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task FocusRequestedSectionAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Focus) ||
+            !FocusTargetIds.TryGetValue(Focus, out var targetId))
+        {
+            return;
+        }
+
+        await JS.InvokeVoidAsync("scrollInMainBodyToElement", targetId);
+
+        _activeFocus = Focus;
+        await InvokeAsync(StateHasChanged);
+
+        await Task.Delay(2600);
+
+        _activeFocus = null;
+        await InvokeAsync(StateHasChanged);
     }
 
     private void OnStateChanged()
