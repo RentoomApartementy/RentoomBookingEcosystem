@@ -35,6 +35,7 @@
     public string? Reason { get; set; }
 
     private bool IsCanceledReason => string.Equals(Reason, "canceled", StringComparison.OrdinalIgnoreCase);
+    private bool IsExpiredReason => string.Equals(Reason, "expired", StringComparison.OrdinalIgnoreCase);
     private string CurrentEnvironmentName =>
         string.IsNullOrWhiteSpace(Configuration["ASPNETCORE_ENVIRONMENT_STAYWELL"])
             ? HostEnvironment.Environment
@@ -47,17 +48,22 @@
 
     private string TitleText => IsCanceledReason
         ? Localizer["ReservationCanceledTitle"]
-        : Localizer["NoSuchPage"];
+        : IsExpiredReason
+            ? Localizer["ReservationExpiredTitle"]
+            : Localizer["NoSuchPage"];
 
     private string DescriptionText => IsCanceledReason
         ? Localizer["ReservationCanceledDesc"]
-        : Localizer["BookOnDesc"];
+        : IsExpiredReason
+            ? Localizer["ReservationExpiredDesc"]
+            : Localizer["BookOnDesc"];
 
     protected override void OnInitialized()
     {
         LayoutState.OnChange += StateHasChanged;
         GlobalizationService.OnChange += StateHasChanged;
         LayoutState.ShowFooter = false;
+        LayoutState.IsContentReady = true;
     }
 
     public void Dispose()

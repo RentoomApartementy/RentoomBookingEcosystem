@@ -190,6 +190,12 @@
   <data name="ReservationCanceledDesc" xml:space="preserve">
     <value>Ta rezerwacja nie jest już aktywna. Skontaktuj się z Rentoom, jeśli potrzebujesz pomocy.</value>
   </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Ta rezerwacja wygasła</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Twój pobyt już się zakończył. Mamy nadzieję, że był udany — zapraszamy do ponownej rezerwacji w Rentoom.</value>
+  </data>
   <data name="AiChatTitle" xml:space="preserve">
     <value>StayWell AI</value>
   </data>

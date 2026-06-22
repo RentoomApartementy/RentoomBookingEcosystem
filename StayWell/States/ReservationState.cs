@@ -47,6 +47,9 @@ namespace RentoomBooking.StayWell.States
                 ReservationStatusType.Canceled,
                 StringComparison.OrdinalIgnoreCase);
 
+        // Serwer zwraca 410 Gone, gdy data wyjazdu rezerwacji jest już w przeszłości (rezerwacja wygasła).
+        public bool IsExpiredReservation => CurrentStatus == HttpStatusCode.Gone;
+
         public bool IsActiveReservation
         {
             get

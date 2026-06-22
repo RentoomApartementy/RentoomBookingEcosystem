@@ -49,11 +49,14 @@ namespace RentoomBooking.StayWell.Models
         protected bool IsInitializedSuccessfully { get; private set; } = false;
 
         private readonly string _instanceId = Guid.NewGuid().ToString("N");
-
         protected override async Task OnInitializedAsync()
         {
 
             Subscribe();
+
+            // Zamykamy bramkę treścifna czas bootstrapu/redirectu — MainLayout pokazuje loader
+            // zamiast @Body, dzięki czemu strona, z której zaraz przekierowujemy, nie błyśnie treścią.
+            LayoutState.IsContentReady = false;
 
             if (IsDisabled)
             {
@@ -67,6 +70,7 @@ namespace RentoomBooking.StayWell.Models
                 IsLoading = false;
                 IsInitializedSuccessfully = true;
                 //SetLanguage();
+                FinishInitialization();
                 return;
             }
 
@@ -76,9 +80,7 @@ namespace RentoomBooking.StayWell.Models
 
                 if (!IsInitializedSuccessfully)
                 {
-                    NavigationManager.NavigateTo(ReservationState.IsCanceledReservation
-                        ? "/NotFound?reason=canceled"
-                        : "/NotFound");
+                    NavigationManager.NavigateTo(ResolveNotFoundUrl());
                     return;
                 }
 
@@ -88,14 +90,42 @@ namespace RentoomBooking.StayWell.Models
                     return;
                 }
 
-
-
-                if (RegistrationCardState.CurrentCard == null)
-                {
-                    NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival");
-                }
+                FinishInitialization();
             }
         }
+
+        private string ResolveNotFoundUrl()
+        {
+            if (ReservationState.IsCanceledReservation)
+            {
+                return "/NotFound?reason=canceled";
+            }
+
+            if (ReservationState.IsExpiredReservation)
+            {
+                return "/NotFound?reason=expired";
+            }
+
+            return "/NotFound";
+        }
+
+
+        private void FinishInitialization()
+        {
+            if (RegistrationCardState.CurrentCard == null && !IsOnRegistrationFlowRoute())
+            {
+                NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival", replace: true);
+                return;
+            }
+
+            ShouldRenderContent = true;
+            LayoutState.IsContentReady = true;
+        }
+
+        private bool IsOnRegistrationFlowRoute()
+            => NavigationManager.Uri.Contains("/Prearrival", StringComparison.OrdinalIgnoreCase)
+               || NavigationManager.Uri.Contains("/TermsPage", StringComparison.OrdinalIgnoreCase)
+               || NavigationManager.Uri.Contains("Registration", StringComparison.OrdinalIgnoreCase);
 
         private async Task SetLanguageAsync()
         {
@@ -246,15 +276,8 @@ namespace RentoomBooking.StayWell.Models
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-
-            if (IsInitializedSuccessfully
-                && RegistrationCardState.CurrentCard == null
-                && !NavigationManager.Uri.Contains("/Prearrival", StringComparison.OrdinalIgnoreCase)
-                && !NavigationManager.Uri.Contains("/TermsPage", StringComparison.OrdinalIgnoreCase)
-                && !NavigationManager.Uri.Contains("/RegistrationPage", StringComparison.OrdinalIgnoreCase))
-            {
-                NavigationManager.NavigateTo($"/reservation/{Token}/Prearrival", replace: true);
-            }
+            // Redirect do Prearrival jest teraz obsługiwany w FinishInitialization() (przed renderem),
+            // co eliminuje błysk treści. Nie powielamy tu nawigacji.
         }
     }
 }
