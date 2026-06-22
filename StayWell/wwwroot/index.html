@@ -292,6 +292,14 @@
             scrollContainer.removeEventListener('scroll', scrollContainer._headerScrollHandler);
             delete scrollContainer._headerScrollHandler;
         };
+
+        window.scrollContainerToTop = (bodyId) => {
+            const scrollContainer = document.getElementById(bodyId);
+            if (scrollContainer) {
+                scrollContainer.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            }
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        };
     </script>
     <script>
         window.setupInstructionShortcutScrollReset = function (dotnetRef) {

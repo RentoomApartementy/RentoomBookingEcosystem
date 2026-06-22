@@ -15,6 +15,7 @@
 @inject LayoutState LayoutState
 @inject IJSRuntime JSRuntime
 @inject FeatureFlagsService FeatureFlagsService
+@inject NavigationManager Navigation
 
 <div class="layout-page @(HasEnvironmentBanner ? "layout-page--has-environment-banner" : string.Empty)">
     <EnvironmentBanner EnvironmentName="@BannerEnvironmentName" />
@@ -91,7 +92,17 @@
         ToastService.OnShow += ShowToast;
         ToastService.OnHide += HideToast;
 
+        Navigation.LocationChanged += OnLocationChanged;
+
         InvokeAsync(StateHasChanged);
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            await JSRuntime.InvokeVoidAsync("scrollContainerToTop", "main-body");
+        });
     }
 
     private void ShowModal(string title, RenderFragment? content, ModalVariant variant)
@@ -123,6 +134,7 @@
 
     public async ValueTask DisposeAsync()
     {
+        Navigation.LocationChanged -= OnLocationChanged;
         await JSRuntime.InvokeVoidAsync("removeHeaderScroll", "main-body");
         ReservationState.OnChange -= StateHasChanged;
         MediaState.OnChange -= StateHasChanged;
