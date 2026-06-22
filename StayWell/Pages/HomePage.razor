@@ -61,7 +61,7 @@ else
     }
 
     <div class="tile--row">
-        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/InstructionsPage")'>
+        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/CheckIn?focus=instructions")'>
             <div class="tile-header">
                 <span class="tile-text">@Localizer["Instructions"]</span>
                 <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
@@ -70,7 +70,7 @@ else
                 <img class="fas" src="/icons/book.svg" />
             </div>
         </div>
-        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/OpenApartmentPage")'>
+        <div class="tile" @onclick='() => Navigation.NavigateTo($"/reservation/{Token}/CheckIn?focus=open")'>
             <div class="tile-header">
                 <span class="tile-text">@Localizer["OpenApartment"]</span>
                 <img class="tile-chevron" src="/icons/chevron-right.svg" alt="" aria-hidden="true" />
