@@ -193,6 +193,12 @@
   <data name="ReservationCanceledDesc" xml:space="preserve">
     <value>This reservation is no longer active. Please contact Rentoom if you need help.</value>
   </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>This reservation has expired</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Your stay has already ended. We hope you enjoyed it — feel free to book with Rentoom again.</value>
+  </data>
   <data name="AiChatTitle" xml:space="preserve">
     <value>StayWell AI</value>
   </data>

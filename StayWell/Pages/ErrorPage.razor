@@ -1,6 +1,7 @@
 @page "/Error"
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<ErrorPage> Localizer
+@inject States.LayoutState LayoutState
 
 <div class="w-100 h-100 text-center">
     <h3>@Localizer["Title"]</h3>
@@ -9,5 +10,8 @@
 </div>
 
 @code {
-
+    protected override void OnInitialized()
+    {
+        LayoutState.IsContentReady = true;
+    }
 }

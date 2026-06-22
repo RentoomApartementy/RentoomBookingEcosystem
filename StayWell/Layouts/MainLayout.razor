@@ -27,9 +27,16 @@
         </div>
     }
     <div class="layout-body" id="main-body">
-        @Body
+        @if (LayoutState.IsContentReady)
+        {
+            @Body
+        }
+        else
+        {
+            <FullPageLoader />
+        }
     </div>
-    @if (LayoutState.ShowFooter)
+    @if (LayoutState.ShowFooter && LayoutState.IsContentReady)
     {
         <div class="layout-footer-nav">
             <FooterNavigation />
