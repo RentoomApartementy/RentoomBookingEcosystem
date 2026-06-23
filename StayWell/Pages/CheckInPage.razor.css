@@ -12,7 +12,14 @@
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.checkin-section--active {
+/* Grupa sektorow podswietlanych razem (kody do budynku + instrukcje) */
+.checkin-focus-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkin-section--active,
+.checkin-focus-group--active {
     background-color: #f4fff9;
     box-shadow: 0 0 0 2px rgba(7, 112, 78, 0.14);
     animation: sectionHighlightIn 600ms cubic-bezier(0.2, 0.85, 0.2, 1);

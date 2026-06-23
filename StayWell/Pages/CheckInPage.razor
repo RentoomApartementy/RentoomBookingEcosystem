@@ -36,14 +36,15 @@
                     OnClose="CloseLockGuide" />
 </section>
 
-<section class="checkin-section">
-    <h3 class="checkin-section__title">@Localizer["BuildingCodesTitle"]</h3>
-    <AccessCodesList />
-</section>
+<div id="building-codes-focus-target" class="checkin-focus-group checkin-section--scroll-target @(IsActiveFocus("instructions") ? "checkin-focus-group--active" : string.Empty)">
+    <section class="checkin-section">
+        <h3 class="checkin-section__title">@Localizer["BuildingCodesTitle"]</h3>
+        <AccessCodesList />
+    </section>
 
-<section id="instructions-focus-target" class="checkin-section checkin-section--scroll-target @(IsActiveFocus("instructions") ? "checkin-section--active" : string.Empty)">
-    <h3 class="checkin-section__title">@Localizer["InstructionsTitle"]</h3>
-    <div class="checkin-roadmap-scroll">
+    <section class="checkin-section">
+        <h3 class="checkin-section__title">@Localizer["InstructionsTitle"]</h3>
+        <div class="checkin-roadmap-scroll">
         @if (ApartmentState.IsLoading)
         {
             @for (int i = 0; i < 3; i++)
@@ -77,7 +78,8 @@
             }
         }
     </div>
-</section>
+    </section>
+</div>
 
 @code {
     private const string InstructionPlaceholderUrl = "/images/placeholders/apartment_placeholder.png";
@@ -91,7 +93,7 @@
     private static readonly Dictionary<string, string> FocusTargetIds = new(StringComparer.OrdinalIgnoreCase)
     {
         { "open", "open-focus-target" },
-        { "instructions", "instructions-focus-target" }
+        { "instructions", "building-codes-focus-target" }
     };
 
     private bool IsActiveFocus(string focus) =>
@@ -112,6 +114,11 @@
 
         if (!string.IsNullOrWhiteSpace(Token))
         {
+            if (LocksState.ApartmentItemCodes is null)
+            {
+                _ = LocksState.GetApartmentItemCodesAsync(Token);
+            }
+
             if (!LocksState.IsStatusResolved)
             {
                 _ = LocksState.CheckTTLockStatusAsync(Token);

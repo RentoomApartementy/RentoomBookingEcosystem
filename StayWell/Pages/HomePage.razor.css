@@ -98,20 +98,20 @@
     color: #fff;
     filter: brightness(0) invert(1);
     transform-origin: 50% 50%;
-    animation: pointer-tap 6s ease-in-out infinite;
+    animation: pointer-tap 2.2s ease-in-out infinite;
 }
 
 @keyframes pointer-tap {
     0%, 100% {
         transform: translateY(-50%) scale(1) rotate(0deg);
     }
-    10% {
-        transform: translateY(-50%) scale(0.82) rotate(-8deg);
+    22% {
+        transform: translateY(-50%) scale(0.8) rotate(-9deg);
     }
-    19% {
-        transform: translateY(-50%) scale(0.82) rotate(-8deg);
+    44% {
+        transform: translateY(-50%) scale(0.8) rotate(-9deg);
     }
-    28% {
+    66% {
         transform: translateY(-50%) scale(1) rotate(0deg);
     }
 }
