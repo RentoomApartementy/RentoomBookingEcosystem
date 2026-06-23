@@ -175,7 +175,7 @@
     padding: 8px 20px;
     border-radius: 20px;
     border: 1.5px solid var(--rentoom-green-dark);
-    background: transparent;
+    background: #ffffff;
     color: var(--rentoom-green-dark);
     font-weight: 600;
     font-size: 0.82rem;
