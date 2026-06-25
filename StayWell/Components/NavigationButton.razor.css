@@ -15,6 +15,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .footer-nav-btn {
@@ -27,7 +29,7 @@
     justify-content: center;
     background: transparent;
     border: none;
-    border-radius: 14px;
+    border-radius: 999px;
     padding: 6px 2px;
     margin: 0;
     cursor: pointer;
@@ -39,8 +41,7 @@
 }
 
     .footer-nav-btn.active {
-        background: rgba(33, 87, 62, 0.12);
-        transform: translate3d(0, -4px, 0);
+        transform: none;
     }
 
     .footer-nav-btn:not(.active) {
@@ -49,7 +50,6 @@
 
     .footer-nav-btn:active {
         transform: translate3d(0, 2px, 0) scale(0.96);
-        background: rgba(33, 87, 62, 0.08);
     }
 
     .footer-nav-btn:disabled {
@@ -63,25 +63,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 26px;
+    height: 22px;
     margin-bottom: 4px;
 }
 
-    .footer-nav-icon img {
-        width: 24px;
-        height: 24px;
-        object-fit: contain;
-        display: block;
-        transform: translate3d(0, 0, 0);
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-.footer-nav-btn.active .footer-nav-icon img {
-    transform: scale(1.1) translate3d(0, -1px, 0);
-}
+/* NOTE: the icon <img> is authored in FooterNavigation.razor's <Icon> content, so it
+   carries that component's CSS-isolation scope — its sizing lives in
+   FooterNavigation.razor.css, not here, or the rule would never match. */
 
 .footer-nav-text {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
     color: #000;
     line-height: 1.1;
@@ -102,7 +93,6 @@
 }
 
 .footer-nav-btn.active .footer-nav-icon{
-    transform: scale(1.1) translate3d(0, -1px, 0);
     filter: invert(27%) sepia(47%) saturate(537%) hue-rotate(108deg) brightness(87%) contrast(94%);
 }
 
@@ -112,12 +102,7 @@
     }
 
     .footer-nav-text {
-        font-size: 11px;
-    }
-
-    .footer-nav-icon img {
-        width: 22px;
-        height: 22px;
+        font-size: 9px;
     }
 }
 
@@ -133,16 +118,11 @@
     }
 
     .footer-nav-text {
-        font-size: 13px;
+        font-size: 11px;
         margin-top: 4px;
     }
 
     .footer-nav-icon {
-        height: 30px;
+        height: 26px;
     }
-
-        .footer-nav-icon img {
-            width: 28px;
-            height: 28px;
-        }
 }
