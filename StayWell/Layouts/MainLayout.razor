@@ -28,11 +28,10 @@
         </div>
     }
     <div class="layout-body" id="main-body">
-        @if (LayoutState.IsContentReady)
-        {
+        <div class="content-gate@(LayoutState.IsContentReady ? string.Empty : " content-gate--hidden")">
             @Body
-        }
-        else
+        </div>
+        @if (!LayoutState.IsContentReady)
         {
             <FullPageLoader />
         }
