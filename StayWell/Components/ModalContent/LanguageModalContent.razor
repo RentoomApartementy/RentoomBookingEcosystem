@@ -14,6 +14,8 @@
         @Localizer["CurrentLanguage"]: <strong>@SupportedLanguagesProvider.GetLanguageLabel(CultureInfo.CurrentCulture)</strong>
     </p>
 
+    <p class="language-modal__disclaimer">@Localizer["TranslationDisclaimer"]</p>
+
     <div class="language-modal__options">
         @foreach (var culture in _supportedCultures)
         {
