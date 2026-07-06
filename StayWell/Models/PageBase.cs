@@ -48,6 +48,8 @@ namespace RentoomBooking.StayWell.Models
         protected bool ShouldRenderContent { get; private set; } = false;
         protected bool IsInitializedSuccessfully { get; private set; } = false;
 
+        protected virtual bool DeferSecondaryData => false;
+
         private readonly string _instanceId = Guid.NewGuid().ToString("N");
         protected override async Task OnInitializedAsync()
         {
@@ -199,39 +201,24 @@ namespace RentoomBooking.StayWell.Models
                     return;
                 }
 
-                await Task.WhenAll(
-                    //TermsState.GetTermsAsync(Token),
-                    RegistrationCardState.GetCardAsync(Token)
-                );
+                // Karta meldunkowa jest potrzebna do bramki nawigacyjnej (FinishInitialization).
+                var cardTask = RegistrationCardState.GetCardAsync(Token);
 
-                await Task.WhenAll(
-                    ApartmentState.GetApartmentByIdAsync(item.objectId),
-                    MediaState.GetMediaAsync(item.objectId),
-                    AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId)
-                );
+                if (DeferSecondaryData)
+                {
+                    // Do renderu wystarczy karta — resztę danych ładujemy w tle (nie blokują
+                    // pierwszego renderu). Scoped-state'y i tak wypełnią się dla dalszych ekranów,
+                    // a subskrypcje OnChange odświeżą widok gdy dane dojdą.
+                    await cardTask;
+                    _ = LoadSecondaryDataAsync(reservation, item);
+                }
+                else
+                {
+                    // Karta ładuje się równolegle z danymi wtórnymi — nie blokuje odkrycia
+                    // obrazu LCP (miniatura apartamentu pochodzi z MediaState).
+                    await Task.WhenAll(cardTask, LoadSecondaryDataAsync(reservation, item));
+                }
 
-                await Task.WhenAll(
-                    ApartmentState.GetDefinedAddonsAsync(),
-                    ApartmentState.GetQrMaintFormUrlAsync(item.objectItemId),
-                    ApartmentState.GetWifiInfoAsync(item.objectItemId),
-                    // ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId), //<< to ma być tu wyłączone - spowalnia ładowanie strony! ładują się na stronie instrukcji tylko. nie ma potrzeby ładować ich tutaj
-                    LocksState.GetLocksAsync(reservation.id, item.objectItemId),
-                    LocksState.GetApartmentItemCodesAsync(Token)
-                );
-
-                //await Task.WhenAll(
-                //    TermsState.GetTermsAsync(Token),
-                //    RegistrationCardState.GetCardAsync(Token),
-                //    MediaState.GetMediaAsync(item.objectId),
-                //    ApartmentState.GetApartmentByIdAsync(item.objectId),
-                //    ApartmentState.GetDefinedAddonsAsync(),
-                //    ApartmentState.GetQrMaintFormUrlAsync(item.objectId),
-                //    ApartmentState.GetWifiInfoAsync(item.objectId),
-                //    ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId),
-                //    AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
-                //    LocksState.GetLocksAsync(reservation.id, item.itemId),
-                //    LocksState.GetApartmentItemCodesAsync(Token)
-                //);
                 IsInitializedSuccessfully = true;
             }
             catch (Exception ex)
@@ -242,6 +229,28 @@ namespace RentoomBooking.StayWell.Models
             {
                 IsLoading = false;
                 StateHasChanged();
+            }
+        }
+
+        private async Task LoadSecondaryDataAsync(Reservation reservation, ReservationItem item)
+        {
+            try
+            {
+                await Task.WhenAll(
+                    MediaState.GetMediaAsync(item.objectId),
+                    ApartmentState.GetApartmentByIdAsync(item.objectId),
+                    AmenitiesState.GetAmenitiesForObjectsAsync(item.objectId),
+                    ApartmentState.GetDefinedAddonsAsync(),
+                    ApartmentState.GetQrMaintFormUrlAsync(item.objectItemId),
+                    ApartmentState.GetWifiInfoAsync(item.objectItemId),
+                    // ApartmentState.GetArrivalInstructionStepsAsync(item.objectItemId), //<< to ma być tu wyłączone - spowalnia ładowanie strony! ładują się na stronie instrukcji tylko. nie ma potrzeby ładować ich tutaj
+                    LocksState.GetLocksAsync(reservation.id, item.objectItemId),
+                    LocksState.GetApartmentItemCodesAsync(Token)
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"LoadSecondaryDataAsync failed: {ex}");
             }
         }
 

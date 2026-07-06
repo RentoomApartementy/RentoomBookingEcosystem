@@ -66,6 +66,14 @@
     box-sizing: border-box;
 }
 
+.content-gate {
+    display: contents;
+}
+
+.content-gate--hidden {
+    display: none;
+}
+
 .layout-footer-nav {
     position: fixed;
     bottom: 0;

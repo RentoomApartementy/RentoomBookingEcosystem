@@ -168,6 +168,8 @@
         OnClick="HandleNextClick" />
 
 @code {
+    protected override bool DeferSecondaryData => true;
+
     private enum ViewState { Rules, Terms, RegistrationCard }
 
     private (string Image, string Text)[] rules => new[]
