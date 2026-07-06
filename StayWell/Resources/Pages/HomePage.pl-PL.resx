@@ -217,4 +217,7 @@
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Koszyk</value>
   </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Tłumaczenia są generowane automatycznie i mogą zawierać błędy. Zachęcamy do ich zgłaszania.</value>
+  </data>
 </root>
