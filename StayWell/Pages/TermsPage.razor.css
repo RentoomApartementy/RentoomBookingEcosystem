@@ -296,8 +296,6 @@
     font-size: 0.9rem;
     line-height: 1.6;
     color: #333;
-    max-height: 60vh;
-    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding: 4px 0;
 }

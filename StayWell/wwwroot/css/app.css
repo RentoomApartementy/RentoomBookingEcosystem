@@ -200,3 +200,43 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.terms-modal-content {
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+    .terms-modal-content * {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .terms-modal-content img {
+        height: auto;
+    }
+
+    .terms-modal-content table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .terms-modal-content th,
+    .terms-modal-content td {
+        line-height: 1.4;
+        padding: 4px 6px;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .terms-modal-content th{
+        font-size: 0.6rem;
+        padding: 6px !important;
+    }
+
+    .terms-modal-content pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
