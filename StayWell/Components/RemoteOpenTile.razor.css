@@ -163,21 +163,53 @@
     cursor: not-allowed;
 }
 
-.inactive-reservation-badge {
+/* Stan „zdalne otwieranie niedostępne" — dysk echem okrągłego przycisku + wyciszony opis */
+.inactive-state {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    padding: 20px;
+    gap: 14px;
+    padding: 12px 0 4px;
     text-align: center;
-    font-weight: 600;
-    font-size: 1.05rem;
-    color: black;
 }
 
-.inactive-reservation-icon {
-    height: 48px;
-    width: 48px;
+.inactive-state__disc {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px dashed rgba(33, 87, 62, 0.35);
+    background: rgba(139, 156, 140, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.inactive-state__disc img {
+    width: 28px;
+    height: 28px;
+    opacity: 0.75;
+    filter: invert(23%) sepia(25%) saturate(1200%) hue-rotate(105deg) brightness(88%) contrast(90%);
+}
+
+.inactive-state--ended .inactive-state__disc {
+    border-style: solid;
+    border-color: rgba(156, 163, 175, 0.4);
+    background: rgba(156, 163, 175, 0.1);
+}
+
+.inactive-state--ended .inactive-state__disc img {
+    opacity: 0.55;
+    filter: invert(43%) sepia(8%) saturate(600%) hue-rotate(179deg) brightness(95%) contrast(88%);
+}
+
+.inactive-state__text {
+    margin: 0;
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #6b7280;
+    max-width: 260px;
 }
 
 .error-message {

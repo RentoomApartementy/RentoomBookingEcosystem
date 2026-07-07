@@ -138,6 +138,62 @@
     flex-shrink: 0;
 }
 
+/* Stan „kod niedostępny" — widmowe kropki w miejscu przyszłych cyfr + wyciszony opis */
+.code-unavailable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 6px 0 2px;
+}
+
+.code-unavailable__ghost {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 0;
+    line-height: 1;
+}
+
+.code-unavailable__ghost span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--rentoom-green-sage);
+    opacity: 0.35;
+}
+
+.code-unavailable:not(.code-unavailable--ended) .code-unavailable__ghost span {
+    animation: ghost-pulse 2.4s ease-in-out infinite;
+}
+
+.code-unavailable__ghost span:nth-child(2) { animation-delay: 0.3s; }
+.code-unavailable__ghost span:nth-child(3) { animation-delay: 0.6s; }
+.code-unavailable__ghost span:nth-child(4) { animation-delay: 0.9s; }
+
+@keyframes ghost-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .code-unavailable__ghost span { animation: none !important; }
+}
+
+.code-unavailable--ended .code-unavailable__ghost span {
+    opacity: 0.22;
+    background: #9ca3af;
+}
+
+.code-unavailable__text {
+    margin: 0;
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #6b7280;
+    max-width: 260px;
+}
+
 .passcode-no-code {
     display: flex;
     flex-direction: column;
