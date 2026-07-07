@@ -220,4 +220,7 @@
   <data name="TranslationDisclaimer" xml:space="preserve">
     <value>Tłumaczenia są generowane automatycznie i mogą zawierać błędy. Zachęcamy do ich zgłaszania.</value>
   </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
 </root>

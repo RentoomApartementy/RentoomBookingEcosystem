@@ -21,6 +21,10 @@
             <img src="/icons/square-parking.svg" alt="@Localizer["ParkingFooter"]" />
             <span>@Localizer["ParkingFooter"]</span>
         </button>
+        <button class="footer-menu-item @(IsActive($"/reservation/{TokenFromUrl}/WifiPage") ? "active" : "")" @onclick="@(() => NavigateTo($"/reservation/{TokenFromUrl}/WifiPage"))">
+            <img src="/icons/wifi.svg" alt="@Localizer["WifiFooter"]" />
+            <span>@Localizer["WifiFooter"]</span>
+        </button>
 
 
         @if(FeatureFlagsService.FeatureAllowed("loyalty-programme"))

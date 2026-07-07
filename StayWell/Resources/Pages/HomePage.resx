@@ -220,4 +220,7 @@
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Shopping Cart</value>
   </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
 </root>
