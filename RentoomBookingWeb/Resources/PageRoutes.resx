@@ -53,6 +53,12 @@
   <data name="AboutCity" xml:space="preserve">
     <value>about-torun-city</value>
   </data>
+  <data name="BlogList" xml:space="preserve">
+    <value>blog</value>
+  </data>
+  <data name="BlogPost" xml:space="preserve">
+    <value>blog</value>
+  </data>
   <data name="AllApartments" xml:space="preserve">
     <value>apartments-in-torun</value>
   </data>

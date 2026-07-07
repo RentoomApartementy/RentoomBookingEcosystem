@@ -1,0 +1,58 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Services.Blog
+@inject IBlogContentReader BlogContentReader
+@inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject NavigationManager NavManager
+
+<PageTitle>Blog</PageTitle>
+
+<HeadContent>
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content="Blog Rentoom" />
+    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogList")}")" />
+    <SeoHreflangs />
+</HeadContent>
+
+<h1>Blog</h1>
+
+@if (!string.IsNullOrWhiteSpace(Error))
+{
+    <p>@Error</p>
+}
+else if (IsLoading && Items.Count == 0)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in Items)
+        {
+            <li>
+                <a href="@BuildPostUrl(item.Slug)">@item.Title</a>
+                @if (!string.IsNullOrWhiteSpace(item.Subtitle))
+                {
+                    <div>@item.Subtitle</div>
+                }
+                <div>Author: @item.AuthorDisplayName</div>
+                <div>Published: @item.PublishedAtUtc.ToString("yyyy-MM-dd")</div>
+                @if (!string.IsNullOrWhiteSpace(item.Excerpt))
+                {
+                    <div>@item.Excerpt</div>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@if (IsLoading && Items.Count > 0)
+{
+    <p>Loading...</p>
+}
+
+<div id="scroll-anchor" style="height: 10px; width: 100%;"></div>
+
+@code {
+    private string BuildPostUrl(string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{slug}";
+}
