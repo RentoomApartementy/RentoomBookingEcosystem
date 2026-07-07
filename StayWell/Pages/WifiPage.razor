@@ -1,0 +1,96 @@
+@page "/reservation/{token}/WifiPage"
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject NavigationManager Navigation
+@inject StayWell.Services.ClipboardService ClipboardService
+@* Reużywamy zasobów InstructionsPage — klucze Wifi/WifiSsid/WifiPassword/Security/NoWifi/Copied
+   są już przetłumaczone na wszystkie języki i to ten sam kafelek co na stronie instrukcji. *@
+@inject IStringLocalizer<InstructionsPage> Localizer
+
+@inherits Models.PageBase
+
+<PageTitle>@Localizer["Wifi"]</PageTitle>
+
+<div class="wifi-page">
+    <section class="instructions-section">
+        <header class="instructions-section__header">
+            <h3 class="instructions-section__title">@Localizer["Wifi"]</h3>
+        </header>
+
+        <div class="codes-grid">
+            <div class="code-card">
+                <div class="code-card__icon-wrapper">
+                    <img src="/icons/wifi.svg" class="code-card__icon" />
+                </div>
+                <div class="code-card__content">
+                    <div class="code-card__label">@Localizer["Wifi"]</div>
+                    @if (ApartmentState.IsLoading)
+                    {
+                        <div class="skeleton skeleton--value"></div>
+                    }
+                    else if (HasWifiInfo())
+                    {
+                        @if (HasCode(WifiSsid))
+                        {
+                            <div class="code-card__meta" style="padding-top: 10px;">@Localizer["WifiSsid"]</div>
+                            <div class="code-card__value">@WifiSsid</div>
+                        }
+                        @if (HasCode(WifiPassword))
+                        {
+                            <div class="code-card__meta" style="padding-top: 10px;">@Localizer["WifiPassword"]</div>
+                            <div @onclick="CopyToClipboard" class="code-card__row" style="background-color: whitesmoke; padding: 10px; border-radius: 12px; justify-content: center;">
+                                <div class="code-card__value">@WifiPassword</div>
+                                <button class="copy-button" title="Skopiuj">
+                                    <img src="/icons/copy.svg" />
+                                </button>
+                            </div>
+                        }
+                        @if (HasCode(WifiAuth))
+                        {
+                            <div class="code-card__meta">@Localizer["Security"]: @WifiAuth</div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="code-card__meta">@Localizer["NoWifi"]</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@code {
+    private string? WifiPassword => ApartmentState.WifiInfo?.Password;
+    private string? WifiSsid => ApartmentState.WifiInfo?.Ssid;
+    private string? WifiAuth => ApartmentState.WifiInfo?.Auth;
+
+    private static bool HasCode(string? code)
+    {
+        return !string.IsNullOrWhiteSpace(code);
+    }
+
+    private bool HasWifiInfo()
+    {
+        return HasCode(WifiSsid) || HasCode(WifiPassword) || HasCode(WifiAuth);
+    }
+
+    private async Task CopyToClipboard()
+    {
+        var password = WifiPassword;
+        if (!HasCode(password))
+        {
+            return;
+        }
+
+        try
+        {
+            await ClipboardService.WriteTextAsync(password);
+            ToastService.ShowToast($"{Localizer["Copied"]} {password}");
+        }
+        catch
+        {
+            Console.WriteLine("Cannot write text to clipboard");
+        }
+    }
+}
