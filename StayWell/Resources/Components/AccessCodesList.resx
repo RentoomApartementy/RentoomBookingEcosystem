@@ -24,4 +24,13 @@
   <data name="KeySafeCode" xml:space="preserve">
     <value>Key safe code</value>
   </data>
+  <data name="ParkingNumber" xml:space="preserve">
+    <value>Parking spot no.</value>
+  </data>
+  <data name="ParkingMap" xml:space="preserve">
+    <value>Parking map</value>
+  </data>
+  <data name="OpenMap" xml:space="preserve">
+    <value>Open map</value>
+  </data>
 </root>

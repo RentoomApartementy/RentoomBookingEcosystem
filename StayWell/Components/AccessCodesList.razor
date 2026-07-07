@@ -22,6 +22,38 @@
     }
     else
     {
+        @if (HasCode(ParkingSpotNumber) || HasMapLink(ParkingMapUrl))
+        {
+            @if (HasMapLink(ParkingMapUrl))
+            {
+                <a class="access-code-card access-code-card--link" href="@ParkingMapUrl" target="_blank" rel="noopener noreferrer">
+                    <div class="access-code-card__icon-wrapper">
+                        <img src="/icons/square-parking.svg" class="access-code-card__icon" alt="" aria-hidden="true" />
+                    </div>
+                    <div class="access-code-card__content">
+                        <div class="access-code-card__label">@(HasCode(ParkingSpotNumber) ? Localizer["ParkingNumber"] : Localizer["ParkingMap"])</div>
+                        <div class="access-code-card__value">@(HasCode(ParkingSpotNumber) ? ParkingSpotNumber : Localizer["ParkingMap"])</div>
+                        <div class="access-code-card__cta">
+                            <span>@Localizer["OpenMap"]</span>
+                            <img src="/icons/external-link.svg" class="access-code-card__cta-icon" alt="" aria-hidden="true" />
+                        </div>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="access-code-card">
+                    <div class="access-code-card__icon-wrapper">
+                        <img src="/icons/square-parking.svg" class="access-code-card__icon" alt="" aria-hidden="true" />
+                    </div>
+                    <div class="access-code-card__content">
+                        <div class="access-code-card__label">@Localizer["ParkingNumber"]</div>
+                        <div class="access-code-card__value">@ParkingSpotNumber</div>
+                    </div>
+                </div>
+            }
+        }
+
         @if (HasCode(LocksState.ApartmentItemCodes.GateCode))
         {
             <div class="access-code-card">
@@ -77,6 +109,12 @@
 </div>
 
 @code {
+    [Parameter]
+    public string? ParkingSpotNumber { get; set; }
+
+    [Parameter]
+    public string? ParkingMapUrl { get; set; }
+
     protected override void OnInitialized() =>
         LocksState.OnChange += OnLocksStateChanged;
 
@@ -100,6 +138,8 @@
         System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled);
 
     private static bool HasCode(string? code) => !string.IsNullOrWhiteSpace(code);
+
+    private static bool HasMapLink(string? url) => !string.IsNullOrWhiteSpace(url);
 
     private MarkupString RenderCodeTiles(string? code)
     {
