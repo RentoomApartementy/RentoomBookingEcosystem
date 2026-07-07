@@ -15,23 +15,30 @@
 {
     // Dane jeszcze się ustalają — nic nie renderujemy, żeby kafelek nie mrugał treścią.
 }
-else if (!ReservationState.IsActiveReservation && !IsDevMockLock)
+else if (!ReservationState.IsActiveReservation && LocksState.IsTTLockAvailable && !IsDevMockLock)
 {
     <div class="tile tile--center">
         <div class="tile__title" style="margin-bottom: 10px;">
             @Localizer["RemoteOpen"]
         </div>
-        <div class="inactive-reservation-badge">
-            <img src="/icons/octagon-alert.svg" class="inactive-reservation-icon" />
-            @if (ReservationState.IsAfterCheckOut)
-            {
-                <span>@Localizer["ReservationEnded"]</span>
-            }
-            else
-            {
-                <span>@string.Format(CultureInfo.CurrentCulture, Localizer["ReservationNotActive"], ReservationState.CheckInTime.ToString("HH:mm"))</span>
-            }
-        </div>
+        @if (ReservationState.IsAfterCheckOut)
+        {
+            <div class="inactive-state inactive-state--ended">
+                <div class="inactive-state__disc">
+                    <img src="/icons/door-closed.svg" alt="" aria-hidden="true" />
+                </div>
+                <p class="inactive-state__text">@Localizer["ReservationEnded"]</p>
+            </div>
+        }
+        else
+        {
+            <div class="inactive-state">
+                <div class="inactive-state__disc">
+                    <img src="/icons/clock.svg" alt="" aria-hidden="true" />
+                </div>
+                <p class="inactive-state__text">@string.Format(CultureInfo.CurrentCulture, Localizer["ReservationNotActive"], ReservationState.CheckInTime.ToString("HH:mm"))</p>
+            </div>
+        }
     </div>
 }
 else if (LocksState.IsTTLockAvailable || IsDevMockLock)

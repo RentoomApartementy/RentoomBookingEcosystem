@@ -78,7 +78,8 @@ else
             <div class="tile-icon">
                 <img class="fas" src="/icons/lock.svg" />
             </div>
-            @if (!LocksState.IsLoading && LocksState.CurrentCode is not null)
+            @if (!LocksState.IsLoading && LocksState.CurrentCode is not null
+                 && (ReservationState.IsCodeAvailable || FeatureFlagsService.FeatureAllowed("dev-mock-lock")))
             {
                 <div class="tile-access-code">
                     <span class="tile-access-code__number">@LocksState.CurrentCode.Code</span>
