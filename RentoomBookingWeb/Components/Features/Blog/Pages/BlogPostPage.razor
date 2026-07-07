@@ -1,0 +1,157 @@
+@using Microsoft.AspNetCore.Components
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Services.Blog
+@inject IBlogContentReader BlogContentReader
+@inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject NavigationManager NavManager
+
+<PageTitle>@(Post?.MetaTitle ?? Post?.Title ?? "Blog")</PageTitle>
+
+@if (Post is not null)
+{
+    <HeadContent>
+        <meta name="robots" content="index, follow" />
+        <meta name="description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+        <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogPost")}/{Post.Slug}")" />
+        <SeoHreflangs />
+    </HeadContent>
+}
+
+@if (!string.IsNullOrWhiteSpace(Error))
+{
+    <p>@Error</p>
+}
+else if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (Post is null)
+{
+    <p>Not found.</p>
+}
+else
+{
+    <article>
+        <h1>@Post.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
+        {
+            <p>@Post.Subtitle</p>
+        }
+        <p>Author: @Post.AuthorDisplayName</p>
+        <p>Published: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</p>
+
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <img src="@Post.HeroImageUrl" alt="@Post.Title" />
+        }
+
+        @foreach (var block in Post.Blocks)
+        {
+            @RenderBlock(block)
+        }
+
+        <hr />
+
+        @if (Post.PreviousPost is not null)
+        {
+            <div>
+                Previous:
+                <a href="@BuildPostUrl(Post.PreviousPost.Slug)">@Post.PreviousPost.Title</a>
+            </div>
+        }
+
+        @if (Post.NextPost is not null)
+        {
+            <div>
+                Next:
+                <a href="@BuildPostUrl(Post.NextPost.Slug)">@Post.NextPost.Title</a>
+            </div>
+        }
+    </article>
+}
+
+@code {
+    [Parameter] public string Slug { get; set; } = string.Empty;
+
+    private string BuildPostUrl(string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{slug}";
+
+    private RenderFragment RenderBlock(BlogBlock block) => builder =>
+    {
+        var sequence = 0;
+        switch (block.BlockType)
+        {
+            case "Heading":
+                var headingTag = NormalizeHeading(block.HeadingLevel);
+                builder.OpenElement(sequence++, headingTag);
+                builder.AddContent(sequence++, block.TextContent);
+                builder.CloseElement();
+                break;
+            case "Paragraph":
+                builder.OpenElement(sequence++, "div");
+                builder.AddMarkupContent(sequence++, block.HtmlContent ?? string.Empty);
+                builder.CloseElement();
+                break;
+            case "Quote":
+                builder.OpenElement(sequence++, "blockquote");
+                builder.AddContent(sequence++, block.TextContent);
+                if (!string.IsNullOrWhiteSpace(block.QuoteAuthor))
+                {
+                    builder.OpenElement(sequence++, "footer");
+                    builder.AddContent(sequence++, block.QuoteAuthor);
+                    builder.CloseElement();
+                }
+                builder.CloseElement();
+                break;
+            case "Image":
+                if (!string.IsNullOrWhiteSpace(block.ImageUrl))
+                {
+                    builder.OpenElement(sequence++, "figure");
+                    builder.OpenElement(sequence++, "img");
+                    builder.AddAttribute(sequence++, "src", block.ImageUrl);
+                    builder.AddAttribute(sequence++, "alt", block.AltText ?? string.Empty);
+                    builder.CloseElement();
+                    if (!string.IsNullOrWhiteSpace(block.Caption))
+                    {
+                        builder.OpenElement(sequence++, "figcaption");
+                        builder.AddContent(sequence++, block.Caption);
+                        builder.CloseElement();
+                    }
+                    builder.CloseElement();
+                }
+                break;
+            case "YouTube":
+            case "Instagram":
+                if (!string.IsNullOrWhiteSpace(block.EmbedUrl))
+                {
+                    builder.OpenElement(sequence++, "iframe");
+                    builder.AddAttribute(sequence++, "src", block.EmbedUrl);
+                    builder.AddAttribute(sequence++, "title", block.BlockType);
+                    builder.AddAttribute(sequence++, "loading", "lazy");
+                    builder.CloseElement();
+                }
+                break;
+            default:
+                if (!string.IsNullOrWhiteSpace(block.TextContent))
+                {
+                    builder.OpenElement(sequence++, "div");
+                    builder.AddContent(sequence++, block.TextContent);
+                    builder.CloseElement();
+                }
+                break;
+        }
+    };
+
+    private static string NormalizeHeading(string? headingLevel)
+    {
+        return headingLevel?.ToUpperInvariant() switch
+        {
+            "H2" => "h2",
+            "H3" => "h3",
+            "H4" => "h4",
+            "H5" => "h5",
+            "H6" => "h6",
+            _ => "h2"
+        };
+    }
+}
