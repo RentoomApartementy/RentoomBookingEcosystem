@@ -102,7 +102,7 @@ else if (!_isResolving)
                 var newUrl = RouteService.GetLocalizedUrl(legacyPageKey, targetCulture);
                 var remainingPath = !string.IsNullOrEmpty(routeSegments) ? $"/{routeSegments}" : "";
                 var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-                NavManager.NavigateTo($"{newUrl}{remainingPath}{uri.Query}", replace: true);
+                TryNavigateTo($"{newUrl}{remainingPath}{uri.Query}");
                 return;
             }
 
@@ -195,7 +195,7 @@ else if (!_isResolving)
                         ? routeSegments.Substring(slug.Length) 
                         : "";
                     var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-                    NavManager.NavigateTo($"{canonicalUrl}{pathAfterSlug}{uri.Query}", replace: true);
+                    TryNavigateTo($"{canonicalUrl}{pathAfterSlug}{uri.Query}");
                     return;
                 }
             }
@@ -212,7 +212,7 @@ else if (!_isResolving)
                 var canonicalUrl = RouteService.GetLocalizedUrl(bestPageKey, fullCulture);
                 var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
                 var pathAfterSlug = routeSegments.Substring(slug.Length);
-                NavManager.NavigateTo($"{canonicalUrl}{pathAfterSlug}{uri.Query}", replace: true);
+                TryNavigateTo($"{canonicalUrl}{pathAfterSlug}{uri.Query}");
                 return;
             }
 
@@ -254,6 +254,27 @@ else if (!_isResolving)
             {
                 _parameters[part] = value;
             }
+        }
+    }
+
+    private void TryNavigateTo(string targetUri)
+    {
+        var currentUri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        var destinationUri = NavManager.ToAbsoluteUri(targetUri);
+
+        if (Uri.Compare(currentUri, destinationUri, UriComponents.PathAndQuery, UriFormat.Unescaped, StringComparison.OrdinalIgnoreCase) == 0)
+        {
+            _isResolving = false;
+            return;
+        }
+
+        try
+        {
+            NavManager.NavigateTo(targetUri, replace: true);
+        }
+        catch (NavigationException)
+        {
+            // During server-side prerender/SSR Blazor may throw to complete the redirect response.
         }
     }
 
