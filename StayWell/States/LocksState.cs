@@ -486,6 +486,47 @@ namespace RentoomBooking.StayWell.States
             }
         }
 
+        public string? GetLocalizedParkingSpotNumber(string twoLetterLanguage)
+        {
+            var apartmentItemCodes = ApartmentItemCodes;
+            if (apartmentItemCodes is null)
+            {
+                return null;
+            }
+
+            if (string.Equals(twoLetterLanguage, "pl", StringComparison.OrdinalIgnoreCase) ||
+                string.IsNullOrWhiteSpace(apartmentItemCodes.ParkingSpotNumberTranslationsJson))
+            {
+                return apartmentItemCodes.ParkingSpotNumber;
+            }
+
+            try
+            {
+                var translations = System.Text.Json.JsonSerializer.Deserialize<List<ParkingSpotTranslation>>(
+                    apartmentItemCodes.ParkingSpotNumberTranslationsJson);
+
+                var languageMatch = translations?
+                    .FirstOrDefault(t => string.Equals(t.Language, twoLetterLanguage, StringComparison.OrdinalIgnoreCase))?
+                    .Value;
+
+                if (!string.IsNullOrWhiteSpace(languageMatch))
+                {
+                    return languageMatch;
+                }
+            }
+            catch (System.Text.Json.JsonException)
+            {
+            }
+
+            return apartmentItemCodes.ParkingSpotNumber;
+        }
+
+        private class ParkingSpotTranslation
+        {
+            public string Language { get; set; } = string.Empty;
+            public string? Value { get; set; }
+        }
+
         public event Action? OnChange;
 
         public void SetLocks(List<Lock?> media)

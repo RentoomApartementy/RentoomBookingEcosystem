@@ -376,50 +376,9 @@
         return Navigation.ToAbsoluteUri(normalizedImageUrl.TrimStart('/')).ToString();
     }
 
-    private string? GetParkingSpotNumber()
-    {
-        var apartmentItemCodes = LocksState.ApartmentItemCodes;
-        if (apartmentItemCodes is null)
-        {
-            return null;
-        }
-
-        var language = GlobalizationService.CurrentCulture.TwoLetterISOLanguageName;
-        if (string.Equals(language, "pl", StringComparison.OrdinalIgnoreCase))
-        {
-            return apartmentItemCodes.ParkingSpotNumber;
-        }
-
-        if (string.IsNullOrWhiteSpace(apartmentItemCodes.ParkingSpotNumberTranslationsJson))
-        {
-            return apartmentItemCodes.ParkingSpotNumber;
-        }
-
-        try
-        {
-            var translations = JsonSerializer.Deserialize<List<ParkingLanguage>>(
-                apartmentItemCodes.ParkingSpotNumberTranslationsJson);
-
-            if (translations is null || translations.Count == 0)
-            {
-                return apartmentItemCodes.ParkingSpotNumber;
-            }
-
-            var translationDict = translations.ToDictionary(
-                t => t.Language, t => t.Value, StringComparer.OrdinalIgnoreCase);
-
-            if (translationDict.TryGetValue(language, out var languageMatch) &&
-                HasCode(languageMatch))
-            {
-                return languageMatch;
-            }
-        }
-        catch (JsonException)
-        {
-        }
-
-        return apartmentItemCodes.ParkingSpotNumber;
-    }
+    private string? GetParkingSpotNumber() =>
+        LocksState.GetLocalizedParkingSpotNumber(
+            GlobalizationService.CurrentCulture.TwoLetterISOLanguageName);
 
     private MarkupString RenderCodeTiles(string? code)
     {
@@ -631,11 +590,4 @@
         LocksState.OnChange -= OnStateChanged;
         base.Dispose();
     }
-
-    private class ParkingLanguage
-    {
-        public string Language { get; set; } = string.Empty;
-        public string? Value { get; set; }
-    }
-
 }

@@ -99,6 +99,40 @@
     opacity: 0.75;
 }
 
+.access-code-card--link {
+    text-decoration: none;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.access-code-card--link:hover,
+.access-code-card--link:focus-visible {
+    border-color: rgba(7, 112, 78, 0.25);
+    box-shadow: 0 3px 8px rgba(7, 112, 78, 0.1);
+}
+
+.access-code-card--link:focus-visible {
+    outline: 2px solid rgba(7, 112, 78, 0.5);
+    outline-offset: 2px;
+}
+
+.access-code-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #07704e;
+}
+
+.access-code-card__cta-icon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.8;
+}
+
 @keyframes access-code-shimmer {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
