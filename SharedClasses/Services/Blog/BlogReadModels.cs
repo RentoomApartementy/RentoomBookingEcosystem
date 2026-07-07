@@ -49,6 +49,7 @@ public sealed class BlogPostDetails
 
 public sealed class BlogAdjacentPostLink
 {
+    public Guid PublicId { get; init; }
     public string Slug { get; init; } = string.Empty;
     public string Title { get; init; } = string.Empty;
     public DateTime PublishedAtUtc { get; init; }

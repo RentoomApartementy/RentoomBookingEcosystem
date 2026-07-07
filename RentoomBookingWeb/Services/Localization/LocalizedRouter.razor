@@ -167,6 +167,14 @@ else if (!_isResolving)
                         break;
                     }
                 }
+                else if (part.Equals("PublicId", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!Guid.TryParse(value, out _))
+                    {
+                        isTrialMatch = false;
+                        break;
+                    }
+                }
             }
 
             if (isTrialMatch)
@@ -249,6 +257,10 @@ else if (!_isResolving)
             else if (part.Equals("ReservationTokenGuid", StringComparison.OrdinalIgnoreCase))
             {
                 if (Guid.TryParse(value, out var guid)) _parameters["ReservationTokenGuid"] = guid;
+            }
+            else if (part.Equals("PublicId", StringComparison.OrdinalIgnoreCase))
+            {
+                if (Guid.TryParse(value, out var guid)) _parameters["PublicId"] = guid;
             }
             else
             {

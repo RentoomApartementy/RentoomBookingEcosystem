@@ -30,7 +30,7 @@ else
         @foreach (var item in Items)
         {
             <li>
-                <a href="@BuildPostUrl(item.Slug)">@item.Title</a>
+                <a href="@BuildPostUrl(item.PublicId, item.Slug)">@item.Title</a>
                 @if (!string.IsNullOrWhiteSpace(item.Subtitle))
                 {
                     <div>@item.Subtitle</div>
@@ -54,5 +54,5 @@ else
 <div id="scroll-anchor" style="height: 10px; width: 100%;"></div>
 
 @code {
-    private string BuildPostUrl(string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{slug}";
+    private string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
 }
