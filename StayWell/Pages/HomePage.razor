@@ -19,7 +19,7 @@
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <div class="image-wrapper">
-    @if (MediaState.IsLoading || ReservationState.IsLoading || ImageUrl == string.Empty)
+    @if (MediaState.IsLoading || ReservationState.IsLoading || string.IsNullOrEmpty(ImageUrl))
     {
         <div class="skeleton"></div>
     }
@@ -231,8 +231,9 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await LoadPurchasedVouchersCountAsync();
         LoadData();
+        // Licznik voucherów ładuje się w tle — nie blokuje pierwszego renderu strony.
+        _ = LoadPurchasedVouchersCountAsync();
 
         if (!string.IsNullOrWhiteSpace(Token))
         {
@@ -271,12 +272,21 @@ else
             return;
         }
 
-        var purchasedSummary = await BackendApi.GetPurchasedUpsellsByReservationTokenAsync(Token);
-        var purchasedVoucherLines = purchasedSummary?.PurchasedUpsellsWithVouchers ?? [];
+        try
+        {
+            var purchasedSummary = await BackendApi.GetPurchasedUpsellsByReservationTokenAsync(Token);
+            var purchasedVoucherLines = purchasedSummary?.PurchasedUpsellsWithVouchers ?? [];
 
-        PurchasedVouchersCount = purchasedVoucherLines
-            .Where(line => line.Voucher is not null)
-            .Sum(line => line.Quantity > 0 ? line.Quantity : 0);
+            PurchasedVouchersCount = purchasedVoucherLines
+                .Where(line => line.Voucher is not null)
+                .Sum(line => line.Quantity > 0 ? line.Quantity : 0);
+
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"LoadPurchasedVouchersCountAsync failed: {ex}");
+        }
     }
 
     private void LoadData()
