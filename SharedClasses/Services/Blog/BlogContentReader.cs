@@ -20,6 +20,10 @@ public sealed class BlogContentReader : IBlogContentReader
     private const int DefaultTake = 12;
     private const int MaxTake = 50;
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+    private static readonly JsonSerializerOptions PropsJsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        PropertyNameCaseInsensitive = true
+    };
 
     private readonly IDbContextFactory<RappBlogReadDbContext> _blogDbContextFactory;
     private readonly IDbContextFactory<RappPartnersDBContext> _partnersDbContextFactory;
@@ -455,12 +459,16 @@ public sealed class BlogContentReader : IBlogContentReader
     private BlogBlock MapBlock(BlockRow row, IReadOnlyDictionary<int, string> assetUrlMap)
     {
         var blockType = row.BlockType ?? string.Empty;
+        var props = ReadBlockProps(row.PropsJson);
         var htmlContent = string.Equals(blockType, "Paragraph", StringComparison.OrdinalIgnoreCase)
             ? SanitizeHtml(row.TextContent)
             : null;
         var faqItems = string.Equals(blockType, "Faq", StringComparison.OrdinalIgnoreCase)
             ? GetFaqItems(row.PropsJson)
             : Array.Empty<FaqItemDto>();
+        var youtubeDimensions = string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase)
+            ? ResolveYoutubeDimensions(props?.YouTubeWidth, props?.YouTubeHeight, props?.YouTubeEmbedCode)
+            : (Width: (int?)null, Height: (int?)null);
 
         return new BlogBlock
         {
@@ -472,22 +480,31 @@ public sealed class BlogContentReader : IBlogContentReader
             ImageUrl = string.Equals(blockType, "Image", StringComparison.OrdinalIgnoreCase)
                 ? ResolveImageUrl(
                     row.MediaAssetId,
-                    GetIntProp(row.PropsJson, "webpMediaAssetId"),
-                    GetStringProp(row.PropsJson, "selectedVariant"),
+                    props?.WebpMediaAssetId,
+                    props?.SelectedVariant,
                     null,
                     assetUrlMap)
                 : null,
             AltText = row.AltText,
             Caption = row.Caption,
-            EmbedUrl = BuildEmbedUrl(blockType, row.ExternalUrl),
+            EmbedUrl = BuildEmbedUrl(blockType, props),
+            EmbedHtml = string.Equals(blockType, "Instagram", StringComparison.OrdinalIgnoreCase)
+                ? BuildInstagramEmbedHtml(props?.InstagramEmbedCode)
+                : null,
+            EmbedTitle = string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase)
+                ? (string.IsNullOrWhiteSpace(props?.YouTubeTitle) ? "YouTube video player" : props.YouTubeTitle)
+                : null,
+            EmbedWidth = youtubeDimensions.Width,
+            EmbedHeight = youtubeDimensions.Height,
             HeadingLevel = string.Equals(blockType, "Heading", StringComparison.OrdinalIgnoreCase)
-                ? GetStringProp(row.PropsJson, "headingLevel") ?? "H2"
+                ? props?.HeadingLevel ?? "H2"
                 : null,
             QuoteAuthor = string.Equals(blockType, "Quote", StringComparison.OrdinalIgnoreCase)
-                ? GetStringProp(row.PropsJson, "quoteAuthor")
+                ? props?.QuoteAuthor
                 : null,
             DisplaySize = string.Equals(blockType, "Image", StringComparison.OrdinalIgnoreCase)
-                ? GetStringProp(row.PropsJson, "displaySize")
+                    || string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase)
+                ? props?.DisplaySize
                 : null,
             FaqItems = faqItems
         };
@@ -596,24 +613,54 @@ public sealed class BlogContentReader : IBlogContentReader
         return sanitized;
     }
 
-    private static string? BuildEmbedUrl(string blockType, string? externalUrl)
+    private static string? BuildEmbedUrl(string blockType, BlockProps? props)
     {
-        if (string.IsNullOrWhiteSpace(externalUrl))
+        if (string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase))
+        {
+            return BuildYoutubeEmbedUrl(props);
+        }
+
+        return null;
+    }
+
+    private static string? BuildYoutubeEmbedUrl(BlockProps? props)
+    {
+        var source = ParseYoutubeSource(props?.YouTubeEmbedCode);
+        if (source is null)
         {
             return null;
         }
 
-        if (string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase))
+        var queryParams = new List<string>();
+
+        if (props?.YouTubeAutoplay == true)
         {
-            return NormalizeYoutubeUrl(externalUrl);
+            queryParams.Add("autoplay=1");
         }
 
-        if (string.Equals(blockType, "Instagram", StringComparison.OrdinalIgnoreCase))
+        if (props?.YouTubeMute == true)
         {
-            return NormalizeInstagramUrl(externalUrl);
+            queryParams.Add("mute=1");
         }
 
-        return null;
+        if (props?.YouTubeControls == false)
+        {
+            queryParams.Add("controls=0");
+        }
+
+        if (props?.YouTubeModestBranding == true)
+        {
+            queryParams.Add("modestbranding=1");
+        }
+
+        if (props?.YouTubeLoop == true)
+        {
+            queryParams.Add("loop=1");
+            queryParams.Add($"playlist={Uri.EscapeDataString(source.VideoId)}");
+        }
+
+        var query = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : string.Empty;
+        return $"https://www.youtube.com/embed/{source.VideoId}{query}";
     }
 
     private static string? NormalizeYoutubeUrl(string externalUrl)
@@ -653,6 +700,69 @@ public sealed class BlogContentReader : IBlogContentReader
             : $"https://www.youtube-nocookie.com/embed/{videoId}";
     }
 
+    private static (int? Width, int? Height) ResolveYoutubeDimensions(int? configuredWidth, int? configuredHeight, string? embedCode)
+    {
+        if (configuredWidth is > 0 && configuredHeight is > 0)
+        {
+            return (configuredWidth, configuredHeight);
+        }
+
+        var source = ParseYoutubeSource(embedCode);
+        return (source?.Width, source?.Height);
+    }
+
+    private static YoutubeSource? ParseYoutubeSource(string? embedCode)
+    {
+        if (string.IsNullOrWhiteSpace(embedCode))
+        {
+            return null;
+        }
+
+        var src = ExtractAttributeValue(embedCode, "src");
+        if (string.IsNullOrWhiteSpace(src) || !Uri.TryCreate(src.Trim(), UriKind.Absolute, out var uri))
+        {
+            return null;
+        }
+
+        var videoId = TryExtractYoutubeVideoId(uri);
+        if (string.IsNullOrWhiteSpace(videoId))
+        {
+            return null;
+        }
+
+        return new YoutubeSource(
+            videoId,
+            ExtractIntAttribute(embedCode, "width"),
+            ExtractIntAttribute(embedCode, "height"));
+    }
+
+    private static string? TryExtractYoutubeVideoId(Uri uri)
+    {
+        if (uri.Host.Contains("youtu.be", StringComparison.OrdinalIgnoreCase))
+        {
+            return uri.AbsolutePath.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+        }
+
+        if (!uri.Host.Contains("youtube.com", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        if (uri.AbsolutePath.StartsWith("/watch", StringComparison.OrdinalIgnoreCase))
+        {
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+            return query.TryGetValue("v", out var value) ? value.ToString() : null;
+        }
+
+        if (uri.AbsolutePath.StartsWith("/embed/", StringComparison.OrdinalIgnoreCase)
+            || uri.AbsolutePath.StartsWith("/shorts/", StringComparison.OrdinalIgnoreCase))
+        {
+            return uri.AbsolutePath.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries).Skip(1).FirstOrDefault();
+        }
+
+        return null;
+    }
+
     private static string? NormalizeInstagramUrl(string externalUrl)
     {
         if (!Uri.TryCreate(externalUrl.Trim(), UriKind.Absolute, out var uri))
@@ -678,6 +788,80 @@ public sealed class BlogContentReader : IBlogContentReader
         }
 
         return $"https://www.instagram.com/{segments[0]}/{segments[1]}/embed";
+    }
+
+    private static string? BuildInstagramEmbedHtml(string? embedCode)
+    {
+        if (!string.IsNullOrWhiteSpace(embedCode) && embedCode.Contains("instagram-media", StringComparison.OrdinalIgnoreCase))
+        {
+            return StripScriptTags(embedCode).Trim();
+        }
+
+        var permalink = ExtractInstagramPermalink(embedCode);
+
+        if (string.IsNullOrWhiteSpace(permalink))
+        {
+            return null;
+        }
+
+        return $"<blockquote class=\"instagram-media\" data-instgrm-permalink=\"{permalink}\" " +
+               "data-instgrm-version=\"14\"></blockquote>";
+    }
+
+    private static string? ExtractInstagramPermalink(string? embedCode)
+    {
+        if (string.IsNullOrWhiteSpace(embedCode))
+        {
+            return null;
+        }
+
+        var permalink = ExtractAttributeValue(embedCode, "data-instgrm-permalink");
+        if (!string.IsNullOrWhiteSpace(permalink))
+        {
+            return NormalizeInstagramPermalink(permalink);
+        }
+
+        var hrefMatch = Regex.Match(
+            embedCode,
+            @"href\s*=\s*[""'](https?://(?:www\.)?instagram\.com/[^""']+)[""']",
+            RegexOptions.IgnoreCase);
+
+        return hrefMatch.Success
+            ? NormalizeInstagramPermalink(hrefMatch.Groups[1].Value)
+            : null;
+    }
+
+    private static string? NormalizeInstagramPermalink(string? rawUrl)
+    {
+        if (string.IsNullOrWhiteSpace(rawUrl) || !Uri.TryCreate(rawUrl.Trim(), UriKind.Absolute, out var uri))
+        {
+            return null;
+        }
+
+        if (!uri.Host.Contains("instagram.com", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        var path = uri.AbsolutePath.TrimEnd('/');
+        return $"https://www.instagram.com{path}/";
+    }
+
+    private static string StripScriptTags(string html)
+    {
+        return Regex.Replace(html, @"<script\b[^>]*>[\s\S]*?</script\s*>", string.Empty, RegexOptions.IgnoreCase);
+    }
+
+    private static string? ExtractAttributeValue(string html, string attributeName)
+    {
+        var match = Regex.Match(html, $@"{Regex.Escape(attributeName)}\s*=\s*[""']([^""']+)[""']", RegexOptions.IgnoreCase);
+        return match.Success ? match.Groups[1].Value : null;
+    }
+
+    private static int? ExtractIntAttribute(string html, string attributeName)
+    {
+        var raw = ExtractAttributeValue(html, attributeName);
+        return int.TryParse(raw, out var value) && value > 0 ? value : null;
     }
 
     private static string? GetStringProp(string? json, string propertyName)
@@ -803,6 +987,23 @@ public sealed class BlogContentReader : IBlogContentReader
         }
     }
 
+    private static BlockProps? ReadBlockProps(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return null;
+        }
+
+        try
+        {
+            return JsonSerializer.Deserialize<BlockProps>(json, PropsJsonOptions);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
     private static string EncodeCursor(BlogCursor cursor)
     {
         var json = JsonSerializer.Serialize(cursor, JsonOptions);
@@ -922,6 +1123,27 @@ public sealed class BlogContentReader : IBlogContentReader
         public string? Caption { get; init; }
         public string? PropsJson { get; init; }
     }
+
+    private sealed class BlockProps
+    {
+        public string? HeadingLevel { get; init; }
+        public string? SelectedVariant { get; init; }
+        public int? WebpMediaAssetId { get; init; }
+        public string? DisplaySize { get; init; }
+        public string? QuoteAuthor { get; init; }
+        public string? YouTubeTitle { get; init; }
+        public string? YouTubeEmbedCode { get; init; }
+        public bool YouTubeAutoplay { get; init; }
+        public bool YouTubeLoop { get; init; }
+        public bool YouTubeMute { get; init; }
+        public bool YouTubeControls { get; init; } = true;
+        public bool YouTubeModestBranding { get; init; }
+        public int? YouTubeWidth { get; init; }
+        public int? YouTubeHeight { get; init; }
+        public string? InstagramEmbedCode { get; init; }
+    }
+
+    private sealed record YoutubeSource(string VideoId, int? Width, int? Height);
 
     private static string ComputeSha256(string value)
     {

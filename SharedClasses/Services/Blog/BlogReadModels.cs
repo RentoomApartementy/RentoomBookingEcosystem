@@ -68,6 +68,10 @@ public sealed class BlogBlock
     public string? AltText { get; init; }
     public string? Caption { get; init; }
     public string? EmbedUrl { get; init; }
+    public string? EmbedHtml { get; init; }
+    public string? EmbedTitle { get; init; }
+    public int? EmbedWidth { get; init; }
+    public int? EmbedHeight { get; init; }
     public string? HeadingLevel { get; init; }
     public string? QuoteAuthor { get; init; }
     public string? DisplaySize { get; init; }
