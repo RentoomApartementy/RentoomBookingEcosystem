@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Descriptions.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Blog.Database;
 using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
@@ -25,6 +26,7 @@ using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
+using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBooking.SharedClasses.Services.Gus;
@@ -112,7 +114,11 @@ namespace RentoomBookingWeb
             builder.Services.AddDbContextFactory<RappDescriptionsDbContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
 
+            builder.Services.AddDbContextFactory<RappBlogReadDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
             builder.Services.AddScoped<IApartmentAiDescriptionService, ApartmentAiDescriptionService>();
+            builder.Services.AddScoped<IBlogContentReader, BlogContentReader>();
 
             var footerEnvironmentInfo = FooterEnvironmentInfo.Create(
                builder.Environment,
