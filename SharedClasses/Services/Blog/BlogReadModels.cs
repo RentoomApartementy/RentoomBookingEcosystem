@@ -1,3 +1,5 @@
+using RentoomBooking.SharedClasses.Services.Descriptions;
+
 namespace RentoomBooking.SharedClasses.Services.Blog;
 
 public sealed class CursorPage<T>
@@ -69,4 +71,5 @@ public sealed class BlogBlock
     public string? HeadingLevel { get; init; }
     public string? QuoteAuthor { get; init; }
     public string? DisplaySize { get; init; }
+    public IReadOnlyList<FaqItemDto> FaqItems { get; init; } = Array.Empty<FaqItemDto>();
 }
