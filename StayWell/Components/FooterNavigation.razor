@@ -33,7 +33,7 @@
     </div>
 
     <div class="footer-navigation-row">
-        <div class="footer-nav-indicator @(_activeIndex >= 0 ? "show" : "") @_indicatorDir @(_indicatorDir != "" ? (_pulseToggle ? "neck-a" : "neck-b") : "")" style="--i:@_activeIndex"></div>
+        <div class="footer-nav-indicator @(_activeIndex >= 0 ? "show" : "") @_indicatorDir @(_indicatorDir != "" ? (_pulseToggle ? "neck-a" : "neck-b") : "")" style="--i:@_pillIndex"></div>
 
         <NavigationButton href="@($"/reservation/{TokenFromUrl}/InstructionsPage")"
                           active="@IsActive($"/reservation/{TokenFromUrl}/InstructionsPage")"
@@ -85,17 +85,20 @@
 @code {
     private bool _menuOpen = false;
 
-    // Column the sliding pill currently rests in: 0-3 nav buttons, 4 = Menu, -1 = hidden.
+    // Which nav column the pill marks: 0-3 nav buttons, -1 = hidden (page isn't in the footer).
     private int _activeIndex = -1;
+    // Column the pill is physically positioned over. Held at the last real button while hidden,
+    // so leaving the footer fades the pill out in place instead of sliding it off to the left.
+    private int _pillIndex = 2;
     // Travel direction class so the trailing edge can lag and stretch the pill.
     private string _indicatorDir = "";
     // Alternates each move so the raindrop "neck" animation restarts every time.
     private bool _pulseToggle;
 
-    // Column the pill should travel to, derived from route + menu state.
+    // Nav column the pill should mark, derived from the current route. The Menu button is
+    // deliberately excluded — opening the menu must not drag the active pill onto it.
     private int CalculateActiveIndex()
     {
-        if (_menuOpen) return 4;
         var t = TokenFromUrl;
         if (IsActive($"/reservation/{t}/InstructionsPage")) return 0;
         if (IsActive($"/reservation/{t}/OpenApartmentPage")) return 1;
@@ -120,6 +123,9 @@
             _indicatorDir = "";
         }
         _activeIndex = idx;
+        // Keep the pill parked on the last real button when the page has no footer entry,
+        // so the fade-out happens in place rather than animating over to column -1.
+        if (idx >= 0) _pillIndex = idx;
     }
 
     protected override void OnInitialized()
