@@ -89,6 +89,7 @@
     public string? Focus { get; set; }
 
     private string? _activeFocus;
+    private string? _lastHandledFocus;
 
     private static readonly Dictionary<string, string> FocusTargetIds = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -159,6 +160,13 @@
         if (firstRender)
         {
             await JS.InvokeVoidAsync("setupCheckInRoadmap");
+        }
+
+        // Reaguje też na zmianę ?focus=... bez przeładowania strony (np. klik w stopce,
+        // gdy użytkownik już jest na CheckIn) — nie tylko na pierwszy render.
+        if (!string.Equals(Focus, _lastHandledFocus, StringComparison.OrdinalIgnoreCase))
+        {
+            _lastHandledFocus = Focus;
             await FocusRequestedSectionAsync();
         }
 
