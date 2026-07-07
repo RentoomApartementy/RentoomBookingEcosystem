@@ -15,7 +15,7 @@
         <meta name="description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
         @if (!Post.IsPreview)
         {
-            <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogPost")}/{Post.Slug}")" />
+            <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.PublicId, Post.Slug)}")" />
             <SeoHreflangs />
         }
     </HeadContent>
@@ -65,7 +65,7 @@ else
         {
             <div>
                 Previous:
-                <a href="@BuildPostUrl(Post.PreviousPost.Slug)">@Post.PreviousPost.Title</a>
+                <a href="@BuildPostUrl(Post.PreviousPost.PublicId, Post.PreviousPost.Slug)">@Post.PreviousPost.Title</a>
             </div>
         }
 
@@ -73,7 +73,7 @@ else
         {
             <div>
                 Next:
-                <a href="@BuildPostUrl(Post.NextPost.Slug)">@Post.NextPost.Title</a>
+                <a href="@BuildPostUrl(Post.NextPost.PublicId, Post.NextPost.Slug)">@Post.NextPost.Title</a>
             </div>
         }
     </article>
@@ -82,7 +82,7 @@ else
 @code {
     [Parameter] public string Slug { get; set; } = string.Empty;
 
-    private string BuildPostUrl(string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{slug}";
+    private string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
 
     private RenderFragment RenderBlock(BlogBlock block) => builder =>
     {

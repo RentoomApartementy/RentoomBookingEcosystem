@@ -14,6 +14,7 @@ namespace RentoomBooking.SharedClasses.Services.Blog;
 
 public sealed class BlogContentReader : IBlogContentReader
 {
+    public const string BlogStorageOptionsName = "BlogStorage";
     private const string PublishedStatus = "Published";
     private const int DefaultTake = 12;
     private const int MaxTake = 50;
@@ -28,12 +29,12 @@ public sealed class BlogContentReader : IBlogContentReader
         IDbContextFactory<RappBlogReadDbContext> blogDbContextFactory,
         IDbContextFactory<RappPartnersDBContext> partnersDbContextFactory,
         IMemoryCache cache,
-        IOptions<StorageOptions> storageOptions)
+        IOptionsMonitor<StorageOptions> storageOptionsMonitor)
     {
         _blogDbContextFactory = blogDbContextFactory;
         _partnersDbContextFactory = partnersDbContextFactory;
         _cache = cache;
-        _storageOptions = storageOptions.Value;
+        _storageOptions = storageOptionsMonitor.Get(BlogStorageOptionsName);
     }
 
     public async Task<CursorPage<BlogPostListItem>> GetPublishedPostsFeedAsync(
@@ -139,14 +140,15 @@ public sealed class BlogContentReader : IBlogContentReader
         return result;
     }
 
-    public async Task<BlogPostDetails?> GetPublishedPostBySlugAsync(
+    public async Task<BlogPostDetails?> GetPublishedPostAsync(
+        Guid publicId,
         string slug,
         string culture,
         CancellationToken cancellationToken = default)
     {
         var normalizedCulture = NormalizeSourceLanguage(culture);
         var normalizedSlug = slug.Trim().ToLowerInvariant();
-        var cacheKey = $"blog:post:{normalizedCulture}:{normalizedSlug}";
+        var cacheKey = $"blog:post:{normalizedCulture}:{publicId:D}:{normalizedSlug}";
 
         if (_cache.TryGetValue(cacheKey, out BlogPostDetails? cached) && cached is not null)
         {
@@ -162,6 +164,7 @@ public sealed class BlogContentReader : IBlogContentReader
             .Where(x => x.PublishedAt != null)
             .Where(x => x.PublishedVersionNo != null)
             .Where(x => x.SourceLanguage == normalizedCulture)
+            .Where(x => x.PublicId == publicId)
             .Where(x => x.Slug == normalizedSlug)
             .Select(x => new PostRow
             {
@@ -264,7 +267,8 @@ public sealed class BlogContentReader : IBlogContentReader
         return result;
     }
 
-    public async Task<BlogPostDetails?> GetPreviewPostBySlugAsync(
+    public async Task<BlogPostDetails?> GetPreviewPostAsync(
+        Guid publicId,
         string slug,
         string previewToken,
         string culture,
@@ -278,7 +282,7 @@ public sealed class BlogContentReader : IBlogContentReader
         var normalizedCulture = NormalizeSourceLanguage(culture);
         var normalizedSlug = slug.Trim().ToLowerInvariant();
         var normalizedToken = previewToken.Trim();
-        var cacheKey = $"blog:preview:{normalizedCulture}:{normalizedSlug}:{normalizedToken}";
+        var cacheKey = $"blog:preview:{normalizedCulture}:{publicId:D}:{normalizedSlug}:{normalizedToken}";
 
         if (_cache.TryGetValue(cacheKey, out BlogPostDetails? cached) && cached is not null)
         {
@@ -293,6 +297,7 @@ public sealed class BlogContentReader : IBlogContentReader
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
             .Where(x => x.SourceLanguage == normalizedCulture)
+            .Where(x => x.PublicId == publicId)
             .Where(x => x.Slug == normalizedSlug)
             .Where(x => x.PreviewTokenHash != null)
             .Where(x => x.PreviewTokenExpiresAt != null)
@@ -423,6 +428,7 @@ public sealed class BlogContentReader : IBlogContentReader
             .ThenBy(x => x.Id)
             .Select(x => new BlogAdjacentPostLink
             {
+                PublicId = x.PublicId,
                 Slug = x.Slug,
                 Title = x.Title,
                 PublishedAtUtc = x.PublishedAt!.Value
@@ -435,6 +441,7 @@ public sealed class BlogContentReader : IBlogContentReader
             .ThenByDescending(x => x.Id)
             .Select(x => new BlogAdjacentPostLink
             {
+                PublicId = x.PublicId,
                 Slug = x.Slug,
                 Title = x.Title,
                 PublishedAtUtc = x.PublishedAt!.Value
@@ -698,11 +705,24 @@ public sealed class BlogContentReader : IBlogContentReader
         try
         {
             using var document = JsonDocument.Parse(json);
-            return document.RootElement.TryGetProperty(propertyName, out var property) && property.TryGetInt32(out var value)
-                ? value
-                : null;
+            if (!document.RootElement.TryGetProperty(propertyName, out var property))
+            {
+                return null;
+            }
+
+            return property.ValueKind switch
+            {
+                JsonValueKind.Number when property.TryGetInt32(out var numberValue) => numberValue,
+                JsonValueKind.String when int.TryParse(property.GetString(), out var stringValue) => stringValue,
+                JsonValueKind.Null => null,
+                _ => null
+            };
         }
         catch (JsonException)
+        {
+            return null;
+        }
+        catch (InvalidOperationException)
         {
             return null;
         }

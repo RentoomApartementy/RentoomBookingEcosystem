@@ -14,7 +14,7 @@ namespace RentoomBookingWeb.Services.Localization
             ["AllApartments"] = new(typeof(RentoomBookingWeb.Components.Features.AllApartments.Pages.AllApartments), Priority: 0),
             ["ApartmentDetailWithToken"] = new(typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage), "{Id}/{Slug}/{ReservationTokenGuid}/{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 15, MinRequiredSegments: 3),
             ["ApartmentDetail"] = new(typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage), "{Id}/{Slug}/{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 10, MinRequiredSegments: 1),
-            ["BlogPost"] = new(typeof(RentoomBookingWeb.Components.Features.Blog.Pages.BlogPostPage), "{Slug}", Priority: 10, MinRequiredSegments: 1),
+            ["BlogPost"] = new(typeof(RentoomBookingWeb.Components.Features.Blog.Pages.BlogPostPage), "{PublicId}/{Slug}", Priority: 10, MinRequiredSegments: 2),
             ["BlogList"] = new(typeof(RentoomBookingWeb.Components.Features.Blog.Pages.BlogListPage), Priority: 0),
             ["Statute"] = new(typeof(RentoomBookingWeb.Components.Features.Statute.Pages.Statute), "{Id}/{Slug}", Priority: 10, MinRequiredSegments: 0), // Statute is special, ID is optional for main list
             ["Contact"] = new(typeof(RentoomBookingWeb.Components.Features.Contact.Pages.Contact), Priority: 0),

@@ -21,11 +21,13 @@ public partial class BlogPostPage : ComponentBase
             Error = null;
             var culture = System.Globalization.CultureInfo.CurrentUICulture.Name;
             Post = string.IsNullOrWhiteSpace(PreviewToken)
-                ? await BlogContentReader.GetPublishedPostBySlugAsync(
+                ? await BlogContentReader.GetPublishedPostAsync(
+                    PublicId,
                     Slug,
                     culture,
                     CancellationToken.None)
-                : await BlogContentReader.GetPreviewPostBySlugAsync(
+                : await BlogContentReader.GetPreviewPostAsync(
+                    PublicId,
                     Slug,
                     PreviewToken,
                     culture,
@@ -43,4 +45,5 @@ public partial class BlogPostPage : ComponentBase
     }
 
     [Inject] public ILogger<BlogPostPage> Logger { get; set; } = default!;
+    [Parameter] public Guid PublicId { get; set; }
 }
