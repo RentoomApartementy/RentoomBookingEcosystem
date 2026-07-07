@@ -8,6 +8,10 @@ public partial class BlogPostPage : ComponentBase
     protected BlogPostDetails? Post;
     protected bool IsLoading;
     protected string? Error;
+    protected bool IsPreviewMode => Post?.IsPreview == true;
+
+    [SupplyParameterFromQuery(Name = "preview")]
+    public string? PreviewToken { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -15,10 +19,17 @@ public partial class BlogPostPage : ComponentBase
         {
             IsLoading = true;
             Error = null;
-            Post = await BlogContentReader.GetPublishedPostBySlugAsync(
-                Slug,
-                System.Globalization.CultureInfo.CurrentUICulture.Name,
-                CancellationToken.None);
+            var culture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+            Post = string.IsNullOrWhiteSpace(PreviewToken)
+                ? await BlogContentReader.GetPublishedPostBySlugAsync(
+                    Slug,
+                    culture,
+                    CancellationToken.None)
+                : await BlogContentReader.GetPreviewPostBySlugAsync(
+                    Slug,
+                    PreviewToken,
+                    culture,
+                    CancellationToken.None);
         }
         catch (Exception ex)
         {

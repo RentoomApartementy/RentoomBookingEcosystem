@@ -11,10 +11,13 @@
 @if (Post is not null)
 {
     <HeadContent>
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="@(Post.IsPreview ? "noindex, nofollow, noarchive, nosnippet" : "index, follow")" />
         <meta name="description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
-        <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogPost")}/{Post.Slug}")" />
-        <SeoHreflangs />
+        @if (!Post.IsPreview)
+        {
+            <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogPost")}/{Post.Slug}")" />
+            <SeoHreflangs />
+        }
     </HeadContent>
 }
 
@@ -33,6 +36,11 @@ else if (Post is null)
 else
 {
     <article>
+        @if (Post.IsPreview)
+        {
+            <p>Preview mode</p>
+        }
+
         <h1>@Post.Title</h1>
         @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
         {
@@ -53,7 +61,7 @@ else
 
         <hr />
 
-        @if (Post.PreviousPost is not null)
+        @if (!Post.IsPreview && Post.PreviousPost is not null)
         {
             <div>
                 Previous:
@@ -61,7 +69,7 @@ else
             </div>
         }
 
-        @if (Post.NextPost is not null)
+        @if (!Post.IsPreview && Post.NextPost is not null)
         {
             <div>
                 Next:
