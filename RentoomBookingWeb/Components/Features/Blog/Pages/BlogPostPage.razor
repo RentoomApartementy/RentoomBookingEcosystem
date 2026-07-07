@@ -1,6 +1,7 @@
 @using Microsoft.AspNetCore.Components
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Services.Blog
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
 @inject IBlogContentReader BlogContentReader
 @inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
@@ -126,6 +127,15 @@ else
                         builder.CloseElement();
                     }
                     builder.CloseElement();
+                }
+                break;
+            case "Faq":
+                if (block.FaqItems.Count > 0)
+                {
+                    builder.OpenComponent<AiFaqSection>(sequence++);
+                    builder.AddAttribute(sequence++, "Faqs", block.FaqItems);
+                    builder.AddAttribute(sequence++, "Localizer", Localizer);
+                    builder.CloseComponent();
                 }
                 break;
             case "YouTube":
