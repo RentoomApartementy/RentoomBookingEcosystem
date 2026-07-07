@@ -1,0 +1,96 @@
+/* PartnersSlider.razor.css */
+
+.partners-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 15px 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+/* Left and right inner-shadow overlays to create a premium fade-in/out effect */
+.partners-slider::before,
+.partners-slider::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 70px;
+    height: 100%;
+    z-index: 10; /* High z-index to guarantee they render on top of moving cards */
+    pointer-events: none;
+    border-radius: 10px;
+}
+
+.partners-slider::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(14, 39, 28, 0.60) 0%, rgba(18, 53, 37, 0) 100%);
+}
+
+.partners-slider::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(14, 39, 28, 0.60) 0%, rgba(18, 53, 37, 0) 100%);
+}
+
+.slider-track {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: scroll-partners 30s linear infinite;
+    position: relative;
+    z-index: 1; /* Rendered below the overlays */
+}
+
+/* Pause the animation on hover so the user can easily interact */
+.partners-slider:hover .slider-track {
+    animation-play-state: paused;
+}
+
+.partner-item-link {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.partner-item-wrapper {
+    background-color: #ffffff;
+    border-radius: 10px; /* Zaokrąglone rogi (szeroki prostokąt) */
+    padding: 6px 12px;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    width: 130px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+}
+
+.partner-item-link .partner-item-wrapper {
+    cursor: pointer;
+}
+
+.partner-item-link:hover .partner-item-wrapper {
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.partner-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Infinite scrolling animation */
+@keyframes scroll-partners {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}

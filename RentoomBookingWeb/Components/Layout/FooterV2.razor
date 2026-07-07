@@ -7,7 +7,7 @@
 <footer class="footer-v2">
     <div class="footer-v2-container">
         <div class="footer-v2-main">
-            <!-- Left Side: Mission Statement & Partners Placeholder -->
+            <!-- Left Side: Mission Statement & Partners Slider -->
             <div class="footer-v2-about">
                 @{
                     var (boldPart, regularPart) = SplitFooterText(Localizer["footerText1"]);
@@ -16,11 +16,10 @@
                     <strong class="footer-v2-description-bold">@boldPart</strong>@regularPart
                 </p>
                 
-                <!-- Red partners container prepared for future custom content -->
+                <!-- Partners Slider Component (seamless infinite loop) -->
                 <div class="footer-v2-partners-container">
-                    <div class="footer-v2-partners-box">
-                        PARTNERZY
-                    </div>
+                    <h4 class="footer-v2-partners-title">Nasi partnerzy</h4>
+                    <PartnersSlider Partners="@Partners" />
                 </div>
             </div>
 
@@ -30,7 +29,7 @@
                 <address class="footer-v2-col">
                     <h3 class="footer-v2-title">@Localizer["contactText"]</h3>
                     <div class="footer-v2-contact-group">
-                        <span class="footer-v2-label">@Localizer["CallUs"]</span>
+                        <span class="footer-v2-label">@Localizer["CallUsText"]</span>
                         <a href="tel:+48881388001" class="footer-v2-link footer-v2-contact-link">+48 881 388 001</a>
                     </div>
                     <div class="footer-v2-contact-group">
@@ -97,6 +96,28 @@
 </footer>
 
 @code {
+    // Strongly typed list simulating backend data structure
+    private List<PartnersSlider.PartnerItem> Partners = new()
+    {
+        new() { ImageUrl = "assets/images/partners/7.png", Label = "Meltme Tender" },
+        new() { ImageUrl = "assets/images/partners/8.png", Label = "Rolki" },
+        new() { ImageUrl = "assets/images/partners/9.png", Label = "Grande Piccolo Pizza & Pasta" },
+        new() { ImageUrl = "assets/images/partners/10.png", Label = "ArtSplash" },
+        new() { ImageUrl = "assets/images/partners/11.png", Label = "OmniKaiser Patisserie" },
+        new() { ImageUrl = "assets/images/partners/12.png", Label = "Dom Pizzy i Tapas" },
+        new() { ImageUrl = "assets/images/partners/13.png", Label = "Dom Pizzy i Tapas Bistro" },
+        new() { ImageUrl = "assets/images/partners/14.png", Label = "Monka Restauracja i Apartamenty" },
+        new() { ImageUrl = "assets/images/partners/15.png", Label = "Olender Centrum Sportu i Rekreacji" },
+        new() { ImageUrl = "assets/images/partners/16.png", Label = "Ale fajne Taxi" },
+        new() { ImageUrl = "assets/images/partners/17.png", Label = "Dom Kłódek Escape Room" },
+        new() { ImageUrl = "assets/images/partners/18.png", Label = "Bułka" },
+        new() { ImageUrl = "assets/images/partners/19.png", Label = "Baciare Bistro" },
+        new() { ImageUrl = "assets/images/partners/20.png", Label = "Haust" },
+        new() { ImageUrl = "assets/images/partners/21.png", Label = "Kart Place - Tor Kartingowy" },
+        new() { ImageUrl = "assets/images/partners/22.png", Label = "Rolki" },
+        new() { ImageUrl = "assets/images/partners/23.png", Label = "Baciare Bistro" }
+    };
+
     private (string BoldPart, string RegularPart) SplitFooterText(string text)
     {
         if (string.IsNullOrEmpty(text))
@@ -105,7 +126,6 @@
         int periodIndex = text.IndexOf('.');
         if (periodIndex >= 0)
         {
-            // Include the period inside the bold part
             return (text.Substring(0, periodIndex + 1), text.Substring(periodIndex + 1));
         }
 

@@ -50,22 +50,16 @@
 /* Red Partner Box Container */
 .footer-v2-partners-container {
     width: 100%;
+    max-width: 540px; /* Limits slider width to match aesthetic proportions */
+    overflow: hidden;
 }
 
-.footer-v2-partners-box {
-    background-color: #ff0303; /* Jaskrawoczerwone tło z makiety */
+.footer-v2-partners-title {
+    font-size: 0.95rem;
+    font-weight: 700;
     color: #ffffff;
-    font-size: 1.75rem; /* Zmniejszona czcionka */
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-align: center;
-    padding: 16px 12px;
-    border: none;
-    box-shadow: 0 4px 15px rgba(255, 3, 3, 0.25);
-    user-select: none;
-    text-transform: uppercase;
-    max-width: 320px; /* Dopasowana szerokość */
-    transition: transform 0.2s ease;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
 }
 
 /* Right Side: 2x2 grid layout on desktop */
