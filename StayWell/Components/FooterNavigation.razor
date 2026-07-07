@@ -35,16 +35,16 @@
     <div class="footer-navigation-row">
         <div class="footer-nav-indicator @(_activeIndex >= 0 ? "show" : "") @_indicatorDir @(_indicatorDir != "" ? (_pulseToggle ? "neck-a" : "neck-b") : "")" style="--i:@_pillIndex"></div>
 
-        <NavigationButton href="@($"/reservation/{TokenFromUrl}/InstructionsPage")"
-                          active="@IsActive($"/reservation/{TokenFromUrl}/InstructionsPage")"
+        <NavigationButton href="@($"/reservation/{TokenFromUrl}/CheckIn?focus=instructions")"
+                          active="@IsCheckInActive("instructions")"
                           Text="@Localizer["InstructionsFooter"]">
             <Icon>
                 <img src="/icons/book.svg" alt="Instrukcja" />
             </Icon>
         </NavigationButton>
 
-        <NavigationButton href="@($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
-                          active="@IsActive($"/reservation/{TokenFromUrl}/OpenApartmentPage")"
+        <NavigationButton href="@($"/reservation/{TokenFromUrl}/CheckIn?focus=open")"
+                          active="@IsCheckInActive("open")"
                           Text="@Localizer["Open"]">
             <Icon>
                 <img src="/icons/lock.svg" alt="Otwórz" />
@@ -100,8 +100,8 @@
     private int CalculateActiveIndex()
     {
         var t = TokenFromUrl;
-        if (IsActive($"/reservation/{t}/InstructionsPage")) return 0;
-        if (IsActive($"/reservation/{t}/OpenApartmentPage")) return 1;
+        if (IsCheckInActive("instructions")) return 0;
+        if (IsCheckInActive("open")) return 1;
         if (IsActive(new List<string> { $"/reservation/{t}/HomePage", $"/reservation/{t}/", $"/reservation/{t}" })) return 2;
         if (IsActive($"/reservation/{t}/ManageStayPage")) return 3;
         return -1;
@@ -189,6 +189,21 @@
         GlobalizationService.OnChange -= StateHasChanged;
         if (_menuOpen)
             JS.InvokeVoidAsync("eval", "var b=document.getElementById('main-body');if(b)b.style.overflowY=''");
+    }
+
+    // Aktywność przycisków prowadzących na CheckIn rozróżniamy po parametrze ?focus=...,
+    // bo obie pozycje stopki (Instrukcja i Otwórz) wskazują tę samą stronę.
+    private bool IsCheckInActive(string focus)
+    {
+        var rel = Navigation.ToBaseRelativePath(Navigation.Uri).Split('#')[0];
+        var parts = rel.Split('?', 2);
+        var path = "/" + parts[0].Trim('/');
+
+        if (!path.Equals($"/reservation/{TokenFromUrl}/CheckIn", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        var query = parts.Length > 1 ? parts[1] : string.Empty;
+        return query.Split('&').Any(p => p.Equals($"focus={focus}", StringComparison.OrdinalIgnoreCase));
     }
 
     private bool IsActive(string href)
