@@ -61,6 +61,7 @@
     private string _modalTitle = string.Empty;
     private RenderFragment? _modalContent;
     private Toast? _toastComponent;
+    private bool _bootLoaderHidden = false;
     private string BannerEnvironmentName => FeatureFlagsService.CurrentEnvironmentName;
     private bool HasEnvironmentBanner => EnvironmentBannerState.ShouldDisplay(BannerEnvironmentName);
 
@@ -69,6 +70,15 @@
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("initHeaderScroll", "main-body", "main-header");
+            // WASM zbootowany — boot loader przechodzi z paska postępu w fazę pulsowania (ładowanie danych).
+            await JSRuntime.InvokeVoidAsync("bootLoader.dataPhase");
+        }
+
+        // Pierwsze IsContentReady = treść jest już wyrenderowana pod overlayem — można go płynnie zdjąć.
+        if (!_bootLoaderHidden && LayoutState.IsContentReady)
+        {
+            _bootLoaderHidden = true;
+            await JSRuntime.InvokeVoidAsync("bootLoader.hide");
         }
     }
 

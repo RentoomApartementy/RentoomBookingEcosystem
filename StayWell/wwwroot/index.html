@@ -162,16 +162,136 @@
 
 <body>
     <style>
-        .loading-logo {
+        /* Boot loader żyje POZA #app, więc Blazor nie usuwa go przy pierwszym renderze —
+           jeden ciągły ekran ładowania od zimnego startu aż do IsContentReady (bootLoader.hide z MainLayout). */
+        #boot-loader {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 900; /* poniżej #blazor-error-ui (1000) */
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        #boot-loader.boot-loader--hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .boot-loader__logo {
+            position: relative;
             width: 140px;
-            height: auto;
-            display: block;
             margin: 40vh auto 0;
         }
+
+        .boot-loader__logo img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .boot-loader__logo-gray {
+            filter: grayscale(1) opacity(0.35);
+        }
+
+        /* Kolorowa warstwa odsłaniana od lewej realnym postępem pobierania WASM
+           (--blazor-load-percentage ustawia blazor.webassembly.js na <html>). */
+        .boot-loader__logo-color {
+            position: absolute;
+            inset: 0;
+            clip-path: inset(0 calc(100% - var(--blazor-load-percentage, 0%)) 0 0);
+            transition: clip-path 0.35s ease;
+        }
+
+        .boot-loader__bar {
+            position: relative;
+            width: 140px;
+            height: 3px;
+            margin: 20px auto 0;
+            border-radius: 2px;
+            background: rgba(33, 87, 62, 0.15);
+            overflow: hidden;
+        }
+
+        .boot-loader__bar-fill {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: var(--blazor-load-percentage, 0%);
+            border-radius: 2px;
+            background: #21573e;
+            transition: width 0.35s ease;
+        }
+
+        /* Faza ładowania danych (po boocie WASM): logo w pełni kolorowe + delikatny pulse,
+           pasek przechodzi w shimmer (postęp nieokreślony). */
+        #boot-loader.boot-loader--pulse .boot-loader__logo-color {
+            clip-path: inset(0 0 0 0);
+        }
+
+        #boot-loader.boot-loader--pulse .boot-loader__logo {
+            animation: boot-logo-pulse 1.4s ease-in-out 0.4s infinite;
+        }
+
+        /* Pasek zostaje pełny — shimmer to tylko rozbłysk przesuwający się po wierzchu,
+           żeby nie wyglądało na ponowne ładowanie od zera. */
+        #boot-loader.boot-loader--pulse .boot-loader__bar-fill {
+            width: 100%;
+        }
+
+        #boot-loader.boot-loader--pulse .boot-loader__bar-fill::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+            transform: translateX(-100%);
+            animation: boot-bar-shimmer 1.4s ease-in-out 0.2s infinite;
+        }
+
+        /* Podczas fade-outu zamrażamy animacje — żadnego "dogrywania" w tle. */
+        #boot-loader.boot-loader--hidden .boot-loader__logo,
+        #boot-loader.boot-loader--hidden .boot-loader__bar-fill::after {
+            animation: none;
+        }
+
+        @keyframes boot-logo-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.55; }
+        }
+
+        @keyframes boot-bar-shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
     </style>
-    <div id="app">
-        <img class="loading-logo" src="/images/resized-logo.png" alt="Loading..." />
+    <div id="app"></div>
+
+    <div id="boot-loader" role="status" aria-live="polite">
+        <div class="boot-loader__logo">
+            <img class="boot-loader__logo-gray" src="/images/resized-logo.png" alt="" aria-hidden="true" />
+            <img class="boot-loader__logo-color" src="/images/resized-logo.png" alt="Loading..." />
+        </div>
+        <div class="boot-loader__bar">
+            <div class="boot-loader__bar-fill"></div>
+        </div>
     </div>
+    <script>
+        window.bootLoader = {
+            dataPhase: function () {
+                var el = document.getElementById("boot-loader");
+                if (el) { el.classList.add("boot-loader--pulse"); }
+            },
+            hide: function () {
+                var el = document.getElementById("boot-loader");
+                if (!el || el.classList.contains("boot-loader--hidden")) { return; }
+                el.classList.add("boot-loader--hidden");
+                setTimeout(function () {
+                    if (el.parentNode) { el.parentNode.removeChild(el); }
+                }, 600);
+            }
+        };
+    </script>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
