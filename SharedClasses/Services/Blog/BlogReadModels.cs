@@ -40,6 +40,8 @@ public sealed class BlogPostDetails
     public DateTime PublishedAtUtc { get; init; }
     public string? HeroImageUrl { get; init; }
     public int PublishedVersionNo { get; init; }
+    public bool IsPreview { get; init; }
+    public DateTime? PreviewExpiresAtUtc { get; init; }
     public IReadOnlyList<BlogBlock> Blocks { get; init; } = Array.Empty<BlogBlock>();
     public BlogAdjacentPostLink? PreviousPost { get; init; }
     public BlogAdjacentPostLink? NextPost { get; init; }
