@@ -42,6 +42,7 @@ namespace RentoomBooking.StayWell.States
         public bool IsPasscodeLoading { get; private set; }
         public int PasscodeLoadingElapsedSeconds { get; private set; }
 
+        public bool AreCodesLoaded => AccessCodes is not null;
         public BackendApi.AccessCodeDto? CurrentCode => AccessCodes?.CurrentCode;
         public List<BackendApi.AccessCodeDto> AllCodes => AccessCodes?.History ?? [];
         public bool CanGenerate => AccessCodes?.CanGenerate ?? false;
