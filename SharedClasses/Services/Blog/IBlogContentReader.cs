@@ -8,12 +8,14 @@ public interface IBlogContentReader
         int take,
         CancellationToken cancellationToken = default);
 
-    Task<BlogPostDetails?> GetPublishedPostBySlugAsync(
+    Task<BlogPostDetails?> GetPublishedPostAsync(
+        Guid publicId,
         string slug,
         string culture,
         CancellationToken cancellationToken = default);
 
-    Task<BlogPostDetails?> GetPreviewPostBySlugAsync(
+    Task<BlogPostDetails?> GetPreviewPostAsync(
+        Guid publicId,
         string slug,
         string previewToken,
         string culture,

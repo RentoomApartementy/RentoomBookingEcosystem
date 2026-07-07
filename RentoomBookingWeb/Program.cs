@@ -232,6 +232,7 @@ namespace RentoomBookingWeb
             //storage options:
             builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
             builder.Services.Configure<StorageOptions>(ApartmentPhotoBlobStorage.StorageOptionsName, builder.Configuration.GetSection(ApartmentPhotoBlobStorage.StorageOptionsName));
+            builder.Services.Configure<StorageOptions>(BlogContentReader.BlogStorageOptionsName, builder.Configuration.GetSection(BlogContentReader.BlogStorageOptionsName));
             builder.Services.Configure<ApartmentMediaVariantsOptions>(builder.Configuration.GetSection(ApartmentMediaVariantsOptions.SectionName));
 
             var app = builder.Build();
@@ -455,7 +456,7 @@ namespace RentoomBookingWeb
             "font-src 'self' data: https://fonts.gstatic.com; " +
             "img-src 'self' data: blob: https:; " +
             "connect-src 'self' ws: wss: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://*.contentsquare.net; " +
-            "frame-src 'self' https://www.openstreetmap.org; " +
+            "frame-src 'self' https://www.openstreetmap.org https://www.youtube-nocookie.com https://www.youtube.com https://www.instagram.com; " +
             "worker-src 'self' blob:; " +
             "manifest-src 'self'; " +
             "media-src 'self' https:;";
