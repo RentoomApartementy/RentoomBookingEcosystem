@@ -1002,6 +1002,10 @@ public sealed class BlogContentReader : IBlogContentReader
         {
             return null;
         }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     private static string EncodeCursor(BlogCursor cursor)
