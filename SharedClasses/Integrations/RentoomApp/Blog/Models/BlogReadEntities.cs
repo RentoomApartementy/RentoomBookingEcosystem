@@ -25,6 +25,8 @@ public class BlogPostReadEntity
     public string TemplateVersion { get; set; } = string.Empty;
     public int CurrentDraftVersionNo { get; set; }
     public int? PublishedVersionNo { get; set; }
+    public string? PreviewTokenHash { get; set; }
+    public DateTime? PreviewTokenExpiresAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime? PublishedAt { get; set; }

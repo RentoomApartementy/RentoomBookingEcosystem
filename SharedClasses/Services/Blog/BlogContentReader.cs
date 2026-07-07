@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -260,6 +261,142 @@ public sealed class BlogContentReader : IBlogContentReader
         };
 
         _cache.Set(cacheKey, result, TimeSpan.FromMinutes(4));
+        return result;
+    }
+
+    public async Task<BlogPostDetails?> GetPreviewPostBySlugAsync(
+        string slug,
+        string previewToken,
+        string culture,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(previewToken))
+        {
+            return null;
+        }
+
+        var normalizedCulture = NormalizeSourceLanguage(culture);
+        var normalizedSlug = slug.Trim().ToLowerInvariant();
+        var normalizedToken = previewToken.Trim();
+        var cacheKey = $"blog:preview:{normalizedCulture}:{normalizedSlug}:{normalizedToken}";
+
+        if (_cache.TryGetValue(cacheKey, out BlogPostDetails? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        await using var dbContext = await _blogDbContextFactory.CreateDbContextAsync(cancellationToken);
+        var tokenHash = ComputeSha256(normalizedToken);
+        var utcNow = DateTime.UtcNow;
+
+        var post = await dbContext.BlogPosts
+            .AsNoTracking()
+            .Where(x => x.DeletedAt == null)
+            .Where(x => x.SourceLanguage == normalizedCulture)
+            .Where(x => x.Slug == normalizedSlug)
+            .Where(x => x.PreviewTokenHash != null)
+            .Where(x => x.PreviewTokenExpiresAt != null)
+            .Where(x => x.PreviewTokenExpiresAt > utcNow)
+            .Where(x => x.PreviewTokenHash == tokenHash)
+            .Select(x => new PreviewPostRow
+            {
+                Id = x.Id,
+                PublicId = x.PublicId,
+                Slug = x.Slug,
+                SourceLanguage = x.SourceLanguage,
+                Title = x.Title,
+                Subtitle = x.Subtitle,
+                AuthorDisplayName = x.AuthorDisplayName,
+                MetaTitle = x.MetaTitle,
+                MetaDescription = x.MetaDescription,
+                Excerpt = x.Excerpt,
+                Category = x.Category,
+                TagsJson = x.TagsJson,
+                PublishedAtUtc = x.PublishedAt,
+                HeroMediaAssetId = x.HeroMediaAssetId,
+                HeroWebpMediaAssetId = x.HeroWebpMediaAssetId,
+                HeroSelectedVariant = x.HeroSelectedVariant,
+                HeroImageUrl = x.HeroImageUrl,
+                CurrentDraftVersionNo = x.CurrentDraftVersionNo,
+                PreviewExpiresAtUtc = x.PreviewTokenExpiresAt
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (post is null)
+        {
+            return null;
+        }
+
+        var version = await dbContext.BlogPostVersions
+            .AsNoTracking()
+            .Where(x => x.BlogPostId == post.Id && x.VersionNo == post.CurrentDraftVersionNo)
+            .Select(x => new VersionRow
+            {
+                Id = x.Id,
+                VersionNo = x.VersionNo
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (version is null)
+        {
+            return null;
+        }
+
+        var blocks = await dbContext.BlogPostBlocks
+            .AsNoTracking()
+            .Where(x => x.PostVersionId == version.Id)
+            .OrderBy(x => x.SortOrder)
+            .Select(x => new BlockRow
+            {
+                BlockKey = x.BlockKey,
+                SortOrder = x.SortOrder,
+                BlockType = x.BlockType,
+                TextContent = x.TextContent,
+                MediaAssetId = x.MediaAssetId,
+                ExternalUrl = x.ExternalUrl,
+                EmbedProvider = x.EmbedProvider,
+                AltText = x.AltText,
+                Caption = x.Caption,
+                PropsJson = x.PropsJson
+            })
+            .ToListAsync(cancellationToken);
+
+        var assetIds = new List<int?>();
+        assetIds.Add(post.HeroMediaAssetId);
+        assetIds.Add(post.HeroWebpMediaAssetId);
+        foreach (var block in blocks)
+        {
+            assetIds.Add(block.MediaAssetId);
+            assetIds.Add(GetIntProp(block.PropsJson, "webpMediaAssetId"));
+        }
+
+        var assetUrlMap = await ResolveAssetUrlsAsync(assetIds, cancellationToken);
+
+        var result = new BlogPostDetails
+        {
+            Id = post.Id,
+            PublicId = post.PublicId,
+            Slug = post.Slug,
+            SourceLanguage = post.SourceLanguage,
+            Title = post.Title,
+            Subtitle = post.Subtitle,
+            AuthorDisplayName = post.AuthorDisplayName,
+            MetaTitle = post.MetaTitle,
+            MetaDescription = post.MetaDescription,
+            Excerpt = post.Excerpt,
+            Category = post.Category,
+            Tags = DeserializeTags(post.TagsJson),
+            PublishedAtUtc = post.PublishedAtUtc ?? DateTime.MinValue,
+            HeroImageUrl = ResolveImageUrl(post.HeroMediaAssetId, post.HeroWebpMediaAssetId, post.HeroSelectedVariant, post.HeroImageUrl, assetUrlMap),
+            PublishedVersionNo = post.CurrentDraftVersionNo,
+            IsPreview = true,
+            PreviewExpiresAtUtc = post.PreviewExpiresAtUtc,
+            Blocks = blocks.Select(x => MapBlock(x, assetUrlMap)).ToList(),
+            PreviousPost = null,
+            NextPost = null
+        };
+
+        _cache.Set(cacheKey, result, TimeSpan.FromSeconds(30));
         return result;
     }
 
@@ -648,6 +785,29 @@ public sealed class BlogContentReader : IBlogContentReader
         public int PublishedVersionNo { get; init; }
     }
 
+    private sealed class PreviewPostRow
+    {
+        public int Id { get; init; }
+        public Guid PublicId { get; init; }
+        public string Slug { get; init; } = string.Empty;
+        public string SourceLanguage { get; init; } = "pl";
+        public string Title { get; init; } = string.Empty;
+        public string? Subtitle { get; init; }
+        public string AuthorDisplayName { get; init; } = string.Empty;
+        public string? MetaTitle { get; init; }
+        public string? MetaDescription { get; init; }
+        public string? Excerpt { get; init; }
+        public string? Category { get; init; }
+        public string? TagsJson { get; init; }
+        public DateTime? PublishedAtUtc { get; init; }
+        public int? HeroMediaAssetId { get; init; }
+        public int? HeroWebpMediaAssetId { get; init; }
+        public string? HeroSelectedVariant { get; init; }
+        public string? HeroImageUrl { get; init; }
+        public int CurrentDraftVersionNo { get; init; }
+        public DateTime? PreviewExpiresAtUtc { get; init; }
+    }
+
     private sealed class VersionRow
     {
         public int Id { get; init; }
@@ -666,5 +826,11 @@ public sealed class BlogContentReader : IBlogContentReader
         public string? AltText { get; init; }
         public string? Caption { get; init; }
         public string? PropsJson { get; init; }
+    }
+
+    private static string ComputeSha256(string value)
+    {
+        var hash = SHA256.HashData(Encoding.UTF8.GetBytes(value));
+        return Convert.ToHexString(hash);
     }
 }
