@@ -1,0 +1,114 @@
+@inject NavigationManager Navigation;
+@using Microsoft.Extensions.Localization;
+@using RentoomBookingWeb.Services.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Footer> Localizer;
+@inject IRouteLocalizationService RouteService
+
+<footer class="footer-v2">
+    <div class="footer-v2-container">
+        <div class="footer-v2-main">
+            <!-- Left Side: Mission Statement & Partners Placeholder -->
+            <div class="footer-v2-about">
+                @{
+                    var (boldPart, regularPart) = SplitFooterText(Localizer["footerText1"]);
+                }
+                <p class="footer-v2-description">
+                    <strong class="footer-v2-description-bold">@boldPart</strong>@regularPart
+                </p>
+                
+                <!-- Red partners container prepared for future custom content -->
+                <div class="footer-v2-partners-container">
+                    <div class="footer-v2-partners-box">
+                        PARTNERZY
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Links & Contact (4 Columns arranged as 2x2 grid) -->
+            <div class="footer-v2-nav">
+                <!-- Column 1: Kontakt -->
+                <address class="footer-v2-col">
+                    <h3 class="footer-v2-title">@Localizer["contactText"]</h3>
+                    <div class="footer-v2-contact-group">
+                        <span class="footer-v2-label">@Localizer["CallUs"]</span>
+                        <a href="tel:+48881388001" class="footer-v2-link footer-v2-contact-link">+48 881 388 001</a>
+                    </div>
+                    <div class="footer-v2-contact-group">
+                        <span class="footer-v2-label">@Localizer["WriteUs"]</span>
+                        <a href="mailto:info@rentoom.pl" class="footer-v2-link footer-v2-contact-link">info@rentoom.pl</a>
+                    </div>
+                </address>
+
+                <!-- Column 2: Regulaminy (Matches original component links) -->
+                <nav class="footer-v2-col" aria-labelledby="footer-v2-regulations-heading">
+                    <h3 id="footer-v2-regulations-heading" class="footer-v2-title">@Localizer["Regulations1"]</h3>
+                    <ul class="footer-v2-list">
+                        <li>
+                            <a href="@RouteService.GetLocalizedUrl("Statute")" class="footer-v2-link">
+                                @Localizer["Regulations2"]
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@RouteService.GetLocalizedUrl("AboutCity")" class="footer-v2-link">
+                                @Localizer["AboutCity"]
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Column 3: Media społecznościowe (Matches original component socials) -->
+                <nav class="footer-v2-col" aria-labelledby="footer-v2-socials-heading">
+                    <h3 id="footer-v2-socials-heading" class="footer-v2-title">Media społecznościowe</h3>
+                    <ul class="footer-v2-list">
+                        <li>
+                            <a href="https://www.facebook.com/RentoomApartamenty" target="_blank" rel="noopener noreferrer" class="footer-v2-link" aria-label="@Localizer["Footer_FacebookAriaLabel"]">
+                                Facebook
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/rentoomapartamenty/" target="_blank" rel="noopener noreferrer" class="footer-v2-link" aria-label="@Localizer["Footer_InstagramAriaLabel"]">
+                                Instagram
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Column 4: Linki (Matches original component bottom link) -->
+                <nav class="footer-v2-col" aria-labelledby="footer-v2-links-heading">
+                    <h3 id="footer-v2-links-heading" class="footer-v2-title">Linki</h3>
+                    <ul class="footer-v2-list">
+                        <li>
+                            <a href="@RouteService.GetLocalizedUrl("AllApartments")" class="footer-v2-link">
+                                @Localizer["AllApartmentsText"]
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Bottom: Logo Section -->
+        <div class="footer-v2-bottom">
+            <div class="footer-v2-logo-wrapper">
+                <img src="assets/svgs/logo-white.svg" alt="@Localizer["Footer_LogoAlt"]" class="footer-v2-logo-img" />
+            </div>
+        </div>
+    </div>
+</footer>
+
+@code {
+    private (string BoldPart, string RegularPart) SplitFooterText(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return (string.Empty, string.Empty);
+
+        int periodIndex = text.IndexOf('.');
+        if (periodIndex >= 0)
+        {
+            // Include the period inside the bold part
+            return (text.Substring(0, periodIndex + 1), text.Substring(periodIndex + 1));
+        }
+
+        return (text, string.Empty);
+    }
+}

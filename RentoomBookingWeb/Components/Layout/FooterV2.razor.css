@@ -1,0 +1,219 @@
+/* FooterV2.razor.css */
+
+.footer-v2 {
+    background: radial-gradient(circle at 50% 100%, #1d4e37 0%, #0e271c 100%);
+    color: #ffffff;
+    padding: 60px 24px 40px 24px;
+    font-family: inherit;
+    width: 100%;
+    align-self: stretch; /* Forces full width alignment inside flex container (.layout) */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-v2-container {
+    max-width: 1400px; /* Matches rest of page width alignment */
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.footer-v2-main {
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+    margin-bottom: 60px;
+}
+
+/* Left Side: About & Partners Box */
+.footer-v2-about {
+    flex: 0 1 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer-v2-description {
+    font-size: 0.875rem; /* Mniejszy tekst */
+    line-height: 1.6;
+    font-weight: 400; /* Regularny styl */
+    color: #ffffff;
+    margin: 0;
+    text-wrap: pretty;
+}
+
+.footer-v2-description-bold {
+    font-weight: 700; /* Pogrubione tylko pierwsze zdanie */
+}
+
+/* Red Partner Box Container */
+.footer-v2-partners-container {
+    width: 100%;
+}
+
+.footer-v2-partners-box {
+    background-color: #ff0303; /* Jaskrawoczerwone tło z makiety */
+    color: #ffffff;
+    font-size: 1.75rem; /* Zmniejszona czcionka */
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 16px 12px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 3, 3, 0.25);
+    user-select: none;
+    text-transform: uppercase;
+    max-width: 320px; /* Dopasowana szerokość */
+    transition: transform 0.2s ease;
+}
+
+/* Right Side: 2x2 grid layout on desktop */
+.footer-v2-nav {
+    flex: 0 1 45%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Układ 2x2 */
+    gap: 32px 48px; /* Odstępy w pionie i poziomie */
+}
+
+.footer-v2-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-style: normal;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-v2-title {
+    font-size: 0.95rem; /* Zmniejszony nagłówek */
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+}
+
+.footer-v2-contact-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 6px;
+}
+
+.footer-v2-contact-group:last-of-type {
+    margin-bottom: 0;
+}
+
+.footer-v2-label {
+    font-size: 0.75rem; /* Zmniejszona etykieta */
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
+}
+
+.footer-v2-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Mniejsze odstępy między linkami */
+}
+
+.footer-v2-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.85rem; /* Zmniejszone czcionki linków */
+    line-height: 1.4;
+    transition: opacity 0.2s ease;
+}
+
+.footer-v2-link:hover {
+    opacity: 0.8;
+}
+
+/* Underlines on contact details (mockup style) */
+.footer-v2-contact-link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Bottom area with logo */
+.footer-v2-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-v2-logo-wrapper {
+    width: 100%;
+    max-width: 600px; /* Zmniejszone logo dla lepszych proporcji */
+    display: flex;
+    justify-content: center;
+}
+
+.footer-v2-logo-img {
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+    object-fit: contain;
+}
+
+/* --- RWD Media Queries --- */
+
+@media (max-width: 1024px) {
+    .footer-v2-main {
+        flex-direction: column;
+        gap: 48px;
+        margin-bottom: 48px;
+    }
+    
+    .footer-v2-about {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .footer-v2-description {
+        max-width: 100%;
+    }
+
+    .footer-v2-nav {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-v2 {
+        padding: 48px 16px 32px 16px;
+    }
+
+    .footer-v2-main {
+        gap: 40px;
+        margin-bottom: 40px;
+    }
+
+    .footer-v2-partners-box {
+        font-size: 1.5rem;
+        padding: 16px 10px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .footer-v2-nav {
+        grid-template-columns: 1fr; /* 1 kolumna na mobile */
+        gap: 24px;
+    }
+
+    .footer-v2-title {
+        margin-bottom: 12px;
+    }
+
+    .footer-v2-bottom {
+        padding-top: 32px;
+    }
+
+    .footer-v2-logo-wrapper {
+        max-width: 90%;
+    }
+}
