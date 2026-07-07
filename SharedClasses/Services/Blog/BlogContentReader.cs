@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Blog.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Blog.Models;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
+using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Models.Storage;
 
 namespace RentoomBooking.SharedClasses.Services.Blog;
@@ -457,6 +458,9 @@ public sealed class BlogContentReader : IBlogContentReader
         var htmlContent = string.Equals(blockType, "Paragraph", StringComparison.OrdinalIgnoreCase)
             ? SanitizeHtml(row.TextContent)
             : null;
+        var faqItems = string.Equals(blockType, "Faq", StringComparison.OrdinalIgnoreCase)
+            ? GetFaqItems(row.PropsJson)
+            : Array.Empty<FaqItemDto>();
 
         return new BlogBlock
         {
@@ -484,7 +488,8 @@ public sealed class BlogContentReader : IBlogContentReader
                 : null,
             DisplaySize = string.Equals(blockType, "Image", StringComparison.OrdinalIgnoreCase)
                 ? GetStringProp(row.PropsJson, "displaySize")
-                : null
+                : null,
+            FaqItems = faqItems
         };
     }
 
@@ -693,6 +698,76 @@ public sealed class BlogContentReader : IBlogContentReader
         {
             return null;
         }
+    }
+
+    private static IReadOnlyList<FaqItemDto> GetFaqItems(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return Array.Empty<FaqItemDto>();
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(json);
+            if (!document.RootElement.TryGetProperty("faq", out var faqElement) || faqElement.ValueKind != JsonValueKind.Object)
+            {
+                return Array.Empty<FaqItemDto>();
+            }
+
+            if (!faqElement.TryGetProperty("items", out var itemsElement) || itemsElement.ValueKind != JsonValueKind.Array)
+            {
+                return Array.Empty<FaqItemDto>();
+            }
+
+            var items = new List<FaqItemDto>();
+            foreach (var itemElement in itemsElement.EnumerateArray())
+            {
+                if (itemElement.ValueKind != JsonValueKind.Object)
+                {
+                    continue;
+                }
+
+                var question = GetStringValue(itemElement, "question");
+                var answer = GetStringValue(itemElement, "answer");
+
+                if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(answer))
+                {
+                    continue;
+                }
+
+                items.Add(new FaqItemDto
+                {
+                    Question = question.Trim(),
+                    Answer = SanitizeHtml(answer)
+                });
+            }
+
+            return items;
+        }
+        catch (JsonException)
+        {
+            return Array.Empty<FaqItemDto>();
+        }
+        catch (InvalidOperationException)
+        {
+            return Array.Empty<FaqItemDto>();
+        }
+    }
+
+    private static string? GetStringValue(JsonElement element, string propertyName)
+    {
+        if (!element.TryGetProperty(propertyName, out var property))
+        {
+            return null;
+        }
+
+        return property.ValueKind switch
+        {
+            JsonValueKind.String => property.GetString(),
+            JsonValueKind.Null => null,
+            _ => null
+        };
     }
 
     private static int? GetIntProp(string? json, string propertyName)
