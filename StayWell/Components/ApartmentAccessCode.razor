@@ -18,7 +18,7 @@
         @Localizer["YourIndividualCode"]:
     </div>
     <div class="tile__content">
-        @if (ReservationState.IsLoading || LocksState.IsLoading)
+        @if (ReservationState.IsLoading || LocksState.IsLoading || IsWaitingForCodes)
         {
             <div class="skeleton skeleton--code"></div>
             <div class="skeleton skeleton--text-short" style="margin-top: 8px;"></div>
@@ -116,6 +116,11 @@
     [Parameter] public string? Token { get; set; }
 
     private bool IsDevMockLock => FeatureFlagsService.FeatureAllowed("dev-mock-lock");
+
+    // Rezerwacja mówi, że kod jest dostępny, ale kody zamka jeszcze nie dojechały —
+    // trzymamy skeleton, żeby nie mrugnąć gałęzią „NoCode".
+    private bool IsWaitingForCodes =>
+        !IsDevMockLock && ReservationState.IsCodeAvailable && !LocksState.AreCodesLoaded;
 
     private bool IsGenerateButtonEnabled =>
         LocksState.IsPasscodeGenerationAllowed || IsDevMockLock;

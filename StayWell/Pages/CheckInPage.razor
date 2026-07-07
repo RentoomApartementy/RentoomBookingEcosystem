@@ -16,7 +16,7 @@
 <PageTitle>@Localizer["PageTitle"]</PageTitle>
 
 <section id="open-focus-target" class="checkin-section checkin-section--scroll-target @(IsActiveFocus("open") ? "checkin-section--active" : string.Empty)">
-    <h3 class="checkin-section__title">@Localizer["ApartmentCodeTitle"]</h3>
+    @*<h3 class="checkin-section__title">@Localizer["ApartmentCodeTitle"]</h3>*@
     <ApartmentAccessCode Token="@Token" />
     <RemoteOpenTile Token="@Token" />
 

@@ -11,24 +11,9 @@
 
 @implements IDisposable
 
-@if (LocksState.IsLoading && !IsDevMockLock)
+@if (IsResolving)
 {
-    <div class="tile tile--center">
-        <div class="skeleton skeleton--button"></div>
-        <div class="skeleton skeleton--text" style="margin-top: 15px;"></div>
-    </div>
-}
-else if (LocksState.IsTTLockLoading && !IsDevMockLock)
-{
-    <div class="tile tile--center">
-        <div class="tile__title" style="margin-bottom: 10px;">
-            @Localizer["RemoteOpen"]
-        </div>
-        <div class="spinner"></div>
-        <div class="status-text">
-            <span>@Localizer["CheckingLock"]</span>
-        </div>
-    </div>
+    // Dane jeszcze się ustalają — nic nie renderujemy, żeby kafelek nie mrugał treścią.
 }
 else if (!ReservationState.IsActiveReservation && !IsDevMockLock)
 {
@@ -99,6 +84,10 @@ else if (LocksState.IsTTLockAvailable || IsDevMockLock)
     private string? ErrorMessage;
 
     private bool IsDevMockLock => FeatureFlagsService.FeatureAllowed("dev-mock-lock");
+
+    private bool IsResolving =>
+        !IsDevMockLock
+        && (ReservationState.IsLoading || LocksState.IsLoading || !LocksState.IsStatusResolved);
 
     private bool IsButtonDisabled =>
         !IsDevMockLock
