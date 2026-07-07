@@ -50,7 +50,7 @@
 /* Red Partner Box Container */
 .footer-v2-partners-container {
     width: 100%;
-    max-width: 540px; /* Limits slider width to match aesthetic proportions */
+    max-width: 600px; /* Limits slider width to match aesthetic proportions */
     overflow: hidden;
 }
 
