@@ -4,6 +4,8 @@
 @inject LocksState LocksState
 @inject IStringLocalizer<AccessCodesList> Localizer
 
+@implements IDisposable
+
 <div class="access-codes-list">
     @if (LocksState.ApartmentItemCodes is null)
     {
@@ -75,6 +77,13 @@
 </div>
 
 @code {
+    protected override void OnInitialized() =>
+        LocksState.OnChange += OnLocksStateChanged;
+
+    private void OnLocksStateChanged() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => LocksState.OnChange -= OnLocksStateChanged;
+
     private static readonly Dictionary<string, string> CodeIconMappings = new(StringComparer.OrdinalIgnoreCase)
     {
         { "dzwonek", "/icons/bell-ring.svg" },
