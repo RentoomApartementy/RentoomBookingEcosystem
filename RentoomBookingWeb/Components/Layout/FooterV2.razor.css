@@ -211,3 +211,20 @@
         max-width: 90%;
     }
 }
+
+.footer-v2-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-v2-social-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+
+.footer-v2-social-link:hover .footer-v2-social-icon {
+    transform: scale(1.1);
+}

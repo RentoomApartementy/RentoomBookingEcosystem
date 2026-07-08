@@ -1,6 +1,7 @@
 @inject NavigationManager Navigation;
 @using Microsoft.Extensions.Localization;
 @using RentoomBookingWeb.Services.Localization
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
 @inject IStringLocalizer<RentoomBookingWeb.Footer> Localizer;
 @inject IRouteLocalizationService RouteService
 
@@ -18,7 +19,7 @@
                 
                 <!-- Partners Slider Component (seamless infinite loop) -->
                 <div class="footer-v2-partners-container">
-                    <h4 class="footer-v2-partners-title">Nasi partnerzy</h4>
+                    <h4 class="footer-v2-partners-title">@Localizer["Footer_PartnersTitle"]</h4>
                     <PartnersSlider Partners="@Partners" />
                 </div>
             </div>
@@ -29,7 +30,7 @@
                 <address class="footer-v2-col">
                     <h3 class="footer-v2-title">@Localizer["contactText"]</h3>
                     <div class="footer-v2-contact-group">
-                        <span class="footer-v2-label">@Localizer["CallUsText"]</span>
+                        <span class="footer-v2-label">@Localizer["CallUs"]</span>
                         <a href="tel:+48881388001" class="footer-v2-link footer-v2-contact-link">+48 881 388 001</a>
                     </div>
                     <div class="footer-v2-contact-group">
@@ -60,12 +61,14 @@
                     <h3 id="footer-v2-socials-heading" class="footer-v2-title">Media społecznościowe</h3>
                     <ul class="footer-v2-list">
                         <li>
-                            <a href="https://www.facebook.com/RentoomApartamenty" target="_blank" rel="noopener noreferrer" class="footer-v2-link" aria-label="@Localizer["Footer_FacebookAriaLabel"]">
+                            <a href="https://www.facebook.com/RentoomApartamenty" target="_blank" rel="noopener noreferrer" class="footer-v2-link footer-v2-social-link" aria-label="@Localizer["Footer_FacebookAriaLabel"]">
+                                <img src="assets/svgs/fb-white.svg" class="footer-v2-social-icon" alt="" />
                                 Facebook
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.instagram.com/rentoomapartamenty/" target="_blank" rel="noopener noreferrer" class="footer-v2-link" aria-label="@Localizer["Footer_InstagramAriaLabel"]">
+                            <a href="https://www.instagram.com/rentoomapartamenty/" target="_blank" rel="noopener noreferrer" class="footer-v2-link footer-v2-social-link" aria-label="@Localizer["Footer_InstagramAriaLabel"]">
+                                <img src="assets/svgs/ig-white.svg" class="footer-v2-social-icon" alt="" />
                                 Instagram
                             </a>
                         </li>
@@ -96,27 +99,7 @@
 </footer>
 
 @code {
-    // Strongly typed list simulating backend data structure
-    private List<PartnersSlider.PartnerItem> Partners = new()
-    {
-        new() { ImageUrl = "assets/images/partners/7.png", Label = "Meltme Tender" },
-        new() { ImageUrl = "assets/images/partners/8.png", Label = "Rolki" },
-        new() { ImageUrl = "assets/images/partners/9.png", Label = "Grande Piccolo Pizza & Pasta" },
-        new() { ImageUrl = "assets/images/partners/10.png", Label = "ArtSplash" },
-        new() { ImageUrl = "assets/images/partners/11.png", Label = "OmniKaiser Patisserie" },
-        new() { ImageUrl = "assets/images/partners/12.png", Label = "Dom Pizzy i Tapas" },
-        new() { ImageUrl = "assets/images/partners/13.png", Label = "Dom Pizzy i Tapas Bistro" },
-        new() { ImageUrl = "assets/images/partners/14.png", Label = "Monka Restauracja i Apartamenty" },
-        new() { ImageUrl = "assets/images/partners/15.png", Label = "Olender Centrum Sportu i Rekreacji" },
-        new() { ImageUrl = "assets/images/partners/16.png", Label = "Ale fajne Taxi" },
-        new() { ImageUrl = "assets/images/partners/17.png", Label = "Dom Kłódek Escape Room" },
-        new() { ImageUrl = "assets/images/partners/18.png", Label = "Bułka" },
-        new() { ImageUrl = "assets/images/partners/19.png", Label = "Baciare Bistro" },
-        new() { ImageUrl = "assets/images/partners/20.png", Label = "Haust" },
-        new() { ImageUrl = "assets/images/partners/21.png", Label = "Kart Place - Tor Kartingowy" },
-        new() { ImageUrl = "assets/images/partners/22.png", Label = "Rolki" },
-        new() { ImageUrl = "assets/images/partners/23.png", Label = "Baciare Bistro" }
-    };
+    private List<PartnerItem> Partners = RentoomBookingWeb.Helpers.PartnersData.Partners;
 
     private (string BoldPart, string RegularPart) SplitFooterText(string text)
     {

@@ -23,21 +23,21 @@
     border-radius: 10px;
 }
 
-.partners-slider::before {
-    left: 0;
-    background: linear-gradient(to right, rgba(14, 39, 28, 0.60) 0%, rgba(18, 53, 37, 0) 100%);
-}
+/*.partners-slider::before {*/
+/*    left: 0;*/
+/*    background: linear-gradient(to right, rgba(14, 39, 28, 0.60) 0%, rgba(18, 53, 37, 0) 100%);*/
+/*}*/
 
-.partners-slider::after {
-    right: 0;
-    background: linear-gradient(to left, rgba(14, 39, 28, 0.60) 0%, rgba(18, 53, 37, 0) 100%);
-}
+/*.partners-slider::after {*/
+/*    right: 0;*/
+/*    background: linear-gradient(to left, rgba(14, 39, 28, 0.60) 0%, rgba(18, 53, 37, 0) 100%);*/
+/*}*/
 
 .slider-track {
     display: flex;
     width: max-content;
     align-items: center;
-    animation: scroll-partners 30s linear infinite;
+    animation: scroll-partners 60s linear infinite;
     position: relative;
     z-index: 1; /* Rendered below the overlays */
 }

@@ -1,4 +1,5 @@
 @namespace RentoomBookingWeb.Components.Shared
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
 
 <div class="partners-slider">
     <div class="slider-track">
@@ -29,11 +30,4 @@
 @code {
     [Parameter]
     public List<PartnerItem> Partners { get; set; } = new();
-
-    public class PartnerItem
-    {
-        public string ImageUrl { get; set; } = string.Empty;
-        public string Label { get; set; } = string.Empty;
-        public string? Link { get; set; }
-    }
 }

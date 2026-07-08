@@ -1,0 +1,107 @@
+.home-partners-section {
+    background-color: transparent; /* No background for the section */
+    padding: 60px 24px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.home-partners-container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home-partners-header {
+    text-align: center;
+    margin-bottom: 32px;
+    max-width: 800px;
+}
+
+.home-partners-title {
+    color: #1F5A41;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+}
+
+.home-partners-subtitle {
+    color: #666;
+    font-size: 1.05rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.home-partners-carousel-wrapper {
+    width: 100%;
+}
+
+/* Partner Card wrapper size inside SimpleCarousel track */
+.partner-card-wrapper {
+    width: 240px; /* Width on desktop */
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    padding: 10px 0;
+}
+
+/* Solid white card with rounded corners to merge image backgrounds and hide sharp corners */
+.partner-card {
+    background: #ffffff; /* White background hides sharp borders of white PNGs */
+    border: none; /* No grey borders */
+    border-radius: 16px; /* Rounded corners */
+    height: 140px; /* Maximize height for readability */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px; /* Small padding to keep images large but safe from corner clipping */
+    box-sizing: border-box;
+    box-shadow: none; /* No shadow */
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.partner-card-link {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+.partner-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: all 0.2s ease;
+    border-radius: 16px; /* Rounded corners */
+}
+
+/* Hover effects */
+.partner-card:hover {
+    transform: scale(1.08);
+}
+
+/* Theme overrides for SimpleCarousel in partners context */
+.home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .carousel-nav-buttons {
+    margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+    .home-partners-section {
+        padding: 40px 16px;
+    }
+
+    .home-partners-title {
+        font-size: 1.8rem;
+    }
+
+    .partner-card-wrapper {
+        width: 180px;
+    }
+
+    .partner-card {
+        height: 100px;
+        border-radius: 12px;
+    }
+}
