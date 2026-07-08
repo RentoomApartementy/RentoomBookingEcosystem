@@ -1,3 +1,10 @@
+const LEAFLET_CSS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+const LEAFLET_JS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+const MARKER_CLUSTER_CSS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css";
+const MARKER_CLUSTER_DEFAULT_CSS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css";
+const MARKER_CLUSTER_JS_URL = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js";
+
+let leafletAssetsPromise = null;
 const DEFAULT_MAP_LABELS = {
     apartmentsPrefix: "Apartments",
     offersPrefix: "Offers",
@@ -9,14 +16,56 @@ function getMapLabels(rawLabels) {
     return { ...DEFAULT_MAP_LABELS, ...(rawLabels || {}) };
 }
 
-window.ensureLeafletLoaded = async function () {
-    if (!window.L) {
-        throw new Error("Leaflet assets are not loaded.");
+function hasLink(href) {
+    return Array.from(document.querySelectorAll("link[rel='stylesheet']")).some(link => link.href === href);
+}
+
+function hasScript(src) {
+    return Array.from(document.querySelectorAll("script")).some(script => script.src === src);
+}
+
+function loadStylesheet(href) {
+    if (hasLink(href)) {
+        return Promise.resolve();
     }
 
-    if (typeof L.markerClusterGroup !== "function") {
-        throw new Error("Leaflet MarkerCluster assets are not loaded.");
+    return new Promise((resolve, reject) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        link.onload = () => resolve();
+        link.onerror = () => reject(new Error(`Failed to load stylesheet: ${href}`));
+        document.head.appendChild(link);
+    });
+}
+
+function loadScript(src) {
+    if (hasScript(src)) {
+        return Promise.resolve();
     }
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+        document.head.appendChild(script);
+    });
+}
+
+window.ensureLeafletLoaded = async function () {
+    if (!leafletAssetsPromise) {
+        leafletAssetsPromise = (async () => {
+            await loadStylesheet(LEAFLET_CSS_URL);
+            await loadStylesheet(MARKER_CLUSTER_CSS_URL);
+            await loadStylesheet(MARKER_CLUSTER_DEFAULT_CSS_URL);
+            await loadScript(LEAFLET_JS_URL);
+            await loadScript(MARKER_CLUSTER_JS_URL);
+        })();
+    }
+
+    return leafletAssetsPromise;
 };
 
 window.leafletMap = {

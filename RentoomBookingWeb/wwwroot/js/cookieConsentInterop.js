@@ -1,8 +1,6 @@
 window.rentoomCookieInterop = {
     trackingEnabled: false,
     sessionRecordingEnabled: false,
-    trackingConfigured: false,
-    pendingEvents: [],
 
     enableTracking: function (gtmId, gaId) {
         if (window.rentoomCookieInterop.trackingEnabled) {
@@ -39,8 +37,6 @@ window.rentoomCookieInterop = {
         if (gaId) {
             window.gtag("js", new Date());
             window.gtag("config", gaId);
-            window.rentoomCookieInterop.trackingConfigured = true;
-            window.rentoomAnalytics.flushPendingEvents();
         }
     },
 
@@ -67,7 +63,7 @@ window.rentoomCookieInterop = {
 
 window.rentoomAnalytics = {
     trackEvent: function (eventName, parameters) {
-        if (!window.rentoomCookieInterop?.trackingEnabled || !eventName) {
+        if (!window.rentoomCookieInterop?.trackingEnabled || typeof window.gtag !== "function" || !eventName) {
             return;
         }
 
@@ -81,29 +77,6 @@ window.rentoomAnalytics = {
             });
         }
 
-        if (!window.rentoomCookieInterop.trackingConfigured || typeof window.gtag !== "function") {
-            window.rentoomCookieInterop.pendingEvents.push({
-                eventName: eventName,
-                parameters: normalizedParameters
-            });
-            return;
-        }
-
         window.gtag("event", eventName, normalizedParameters);
-    },
-
-    flushPendingEvents: function () {
-        if (!window.rentoomCookieInterop?.trackingConfigured || typeof window.gtag !== "function") {
-            return;
-        }
-
-        const pendingEvents = window.rentoomCookieInterop.pendingEvents.splice(0);
-        pendingEvents.forEach(entry => {
-            if (!entry?.eventName) {
-                return;
-            }
-
-            window.gtag("event", entry.eventName, entry.parameters || {});
-        });
     }
 };
