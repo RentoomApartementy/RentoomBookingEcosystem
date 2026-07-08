@@ -4,7 +4,8 @@
 
 <div class="carousel-outer-wrapper @Theme">
     <div class="carousel-main-container" 
-         @onwheel="HandleUserInteraction" 
+         @onmouseenter="HandleMouseEnter" 
+         @onmouseleave="HandleMouseLeave"
          @ontouchstart="HandleUserInteraction">
         
         <div class="carousel-list-wrapper" @ref="_scrollContainer">
@@ -73,6 +74,19 @@
         }, null, interval, interval);
     }
 
+    private void HandleMouseEnter()
+    {
+        _isAutoScrollActive = false;
+    }
+
+    private void HandleMouseLeave()
+    {
+        if (EnableAutoScroll && _timer is not null)
+        {
+            _isAutoScrollActive = true;
+        }
+    }
+
     private void HandleUserInteraction()
     {
         StopTimer();
@@ -80,7 +94,7 @@
 
     private void StopTimer()
     {
-        if (_isAutoScrollActive)
+        if (_isAutoScrollActive || _timer is not null)
         {
             _isAutoScrollActive = false;
             _timer?.Dispose();

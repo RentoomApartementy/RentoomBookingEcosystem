@@ -1,15 +1,14 @@
 .home-partners-section {
-    background-color: transparent; /* No background for the section */
-    padding: 60px 24px;
+    background-color: transparent; /* Inherits #F7F7F7 from .home-container */
+    padding: 40px 0; /* Vertical padding */
     display: flex;
     justify-content: center;
     box-sizing: border-box;
+    width: 100%;
 }
 
 .home-partners-container {
-    max-width: 1400px;
-    width: 100%;
-    margin: 0 auto;
+    width: 100%; /* Stretches to full screen width */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,8 +16,9 @@
 
 .home-partners-header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
     max-width: 800px;
+    padding: 0 24px;
 }
 
 .home-partners-title {
@@ -42,24 +42,24 @@
 
 /* Partner Card wrapper size inside SimpleCarousel track */
 .partner-card-wrapper {
-    width: 240px; /* Width on desktop */
+    width: 180px; /* Reduced to match height, making cards perfect 180x180 squares */
     box-sizing: border-box;
     scroll-snap-align: start;
     padding: 10px 0;
 }
 
-/* Solid white card with rounded corners to merge image backgrounds and hide sharp corners */
+/* Completely transparent card container with no border, shadow, or background */
 .partner-card {
-    background: #ffffff; /* White background hides sharp borders of white PNGs */
-    border: none; /* No grey borders */
-    border-radius: 16px; /* Rounded corners */
-    height: 140px; /* Maximize height for readability */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    height: 180px; /* Matches wrapper width for a square layout */
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px; /* Small padding to keep images large but safe from corner clipping */
+    padding: 0;
     box-sizing: border-box;
-    box-shadow: none; /* No shadow */
+    box-shadow: none;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -69,12 +69,14 @@
     width: 100%;
 }
 
+/* Force image to maintain natural aspect ratio and round its corners */
 .partner-card-img {
-    width: 100%;
     height: 100%;
+    width: auto;
+    max-width: 100%;
     object-fit: contain;
+    border-radius: 16px;
     transition: all 0.2s ease;
-    border-radius: 16px; /* Rounded corners */
 }
 
 /* Hover effects */
@@ -83,13 +85,29 @@
 }
 
 /* Theme overrides for SimpleCarousel in partners context */
+.home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .carousel-list-wrapper {
+    gap: 12px; /* Small, clean spacing between cards */
+    padding: 10px 4px;
+}
+
 .home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .carousel-nav-buttons {
     margin-top: 24px;
 }
 
+.home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .nav-btn {
+    border-color: #eaeaea;
+    color: #1F5A41;
+}
+
+.home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .nav-btn:hover {
+    background: #1F5A41;
+    color: #ffffff;
+    border-color: #1F5A41;
+}
+
 @media (max-width: 768px) {
     .home-partners-section {
-        padding: 40px 16px;
+        padding: 24px 0;
     }
 
     .home-partners-title {
@@ -97,11 +115,10 @@
     }
 
     .partner-card-wrapper {
-        width: 180px;
+        width: 120px; /* Perfect square width on mobile */
     }
 
     .partner-card {
-        height: 100px;
-        border-radius: 12px;
+        height: 120px; /* Perfect square height on mobile */
     }
 }

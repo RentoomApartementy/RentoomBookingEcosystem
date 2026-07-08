@@ -1,12 +1,12 @@
 @using RentoomBookingWeb.Components.Shared
 @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<RentoomBookingWeb.Footer> Localizer
+@inject IStringLocalizer<HomePage> Localizer
 
 <section class="home-partners-section" aria-labelledby="home-partners-title">
     <div class="home-partners-container">
         <div class="home-partners-header">
-            <h2 id="home-partners-title" class="home-partners-title">@Localizer["Footer_PartnersTitle"]</h2>
-            <p class="home-partners-subtitle">Współpracujemy ze sprawdzonymi lokalnymi markami, aby Twój pobyt w Toruniu był wyjątkowy</p>
+            <h2 id="home-partners-title" class="home-partners-title">@Localizer["PartnersTitle"]</h2>
+            <p class="home-partners-subtitle">@Localizer["PartnersSubtitle"]</p>
         </div>
 
         <div class="home-partners-carousel-wrapper">
