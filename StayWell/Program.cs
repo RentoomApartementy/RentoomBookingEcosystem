@@ -36,6 +36,7 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<AiChatClientService>();
             builder.Services.AddScoped<LiveChatClientService>();
             builder.Services.AddScoped<SafeMarkdownService>();
+            builder.Services.AddScoped<FrontendTelemetryService>();
             builder.Services.AddScoped<UpsellCartState>();
             builder.Services.AddScoped<UpsellTextsState>();
             builder.Services.AddScoped<FeatureFlagsService>();
@@ -51,32 +52,32 @@ namespace RentoomBooking.StayWell
             builder.Services.AddScoped<RegistrationCardState>();
             builder.Services.AddScoped<CustomerAgreedTermsState>();
 
-         
+
 
 
             //available upsells
             builder.Services.AddScoped<AvailableUpsellsState>();
 
             builder.Services.AddHttpClient("FunctionsApi", c =>
+            {
+                if (builder.HostEnvironment.IsDevelopment())
                 {
-                    if (builder.HostEnvironment.IsDevelopment())
-                    {
-                        // Local dev:
-                        c.BaseAddress = new Uri("https://localhost:7238/api/");
-                    }
-                    else
-                    {
-                        // Azure Static Web App: functions api sa deployowane oddzielne, ale sa "podpiete" w Static Website (Settings->Api) na Azure - wiec powinny byc dostepny pod adresem /api
-                        var appBase = new Uri(builder.HostEnvironment.BaseAddress);
-                        c.BaseAddress = new Uri(appBase, "api/");
-                    }
-                })
+                    // Local dev:
+                    c.BaseAddress = new Uri("https://localhost:7238/api/");
+                }
+                else
+                {
+                    // Azure Static Web App: functions api sa deployowane oddzielne, ale sa "podpiete" w Static Website (Settings->Api) na Azure - wiec powinny byc dostepny pod adresem /api
+                    var appBase = new Uri(builder.HostEnvironment.BaseAddress);
+                    c.BaseAddress = new Uri(appBase, "api/");
+                }
+            })
                 .AddHttpMessageHandler<FunctionsApiConcurrencyHandler>();
 
             builder.Services.AddScoped<BackendApi>();
 
             builder.Services.AddSingleton(new JsonSerializerOptions(JsonSerializerDefaults.Web));
-            
+
             builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 
@@ -104,6 +105,9 @@ namespace RentoomBooking.StayWell
             var startupCulture = new System.Globalization.CultureInfo(cultureName);
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture = startupCulture;
             System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = startupCulture;
+
+            var frontendTelemetry = host.Services.GetRequiredService<FrontendTelemetryService>();
+            await frontendTelemetry.InitializeAsync();
 
             await host.RunAsync();
         }
