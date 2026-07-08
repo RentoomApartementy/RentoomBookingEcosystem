@@ -102,12 +102,21 @@
         ToastService.OnHide += HideToast;
 
         Navigation.LocationChanged += OnLocationChanged;
+        _lastLocation = Navigation.Uri;
 
         InvokeAsync(StateHasChanged);
     }
 
+    private string? _lastLocation;
+
     private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
     {
+        // Ponowny klik w link na biezacy adres nie moze zrzucac scrolla na gore
+        // (np. drugi klik w ten sam przycisk stopki podczas dojazdu do sekcji).
+        if (string.Equals(e.Location, _lastLocation, StringComparison.Ordinal))
+            return;
+        _lastLocation = e.Location;
+
         InvokeAsync(async () =>
         {
             await JSRuntime.InvokeVoidAsync("scrollContainerToTop", "main-body");

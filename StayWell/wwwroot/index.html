@@ -469,6 +469,9 @@
             delete container._instructionShortcutResetDotnetRef;
         };
 
+        // Wlasna animacja rAF zamiast natywnego smooth scrolla: przy szybkim
+        // przeklikiwaniu stopki nowy cel jest przejmowany w locie (wygladzanie
+        // wykladnicze od biezacej pozycji), wiec ruch nigdy nie szarpie restartem.
         window.scrollInMainBodyToElement = function (elementId) {
             return new Promise(function (resolve) {
                 var target = document.getElementById(elementId);
@@ -484,26 +487,84 @@
                     return;
                 }
 
+                function targetTop() {
+                    var containerRect = container.getBoundingClientRect();
+                    var targetRect = target.getBoundingClientRect();
+                    var top = targetRect.top - containerRect.top + container.scrollTop - 100;
+                    var max = container.scrollHeight - container.clientHeight;
+                    return Math.min(Math.max(top, 0), Math.max(max, 0));
+                }
+
+                var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                if (reducedMotion) {
+                    container.scrollTop = targetTop();
+                    resolve();
+                    return;
+                }
+
+                var anim = container._smoothScrollAnim;
+                if (anim) {
+                    // Retarget w locie: ta sama petla rAF plynnie skreca do nowego celu.
+                    anim.targetTop = targetTop;
+                    anim.resolve();       // zwolnij await poprzedniego wywolania
+                    anim.resolve = resolve;
+                    return;
+                }
+
+                anim = container._smoothScrollAnim = {
+                    targetTop: targetTop,
+                    resolve: resolve,
+                    pos: container.scrollTop,
+                    lastTime: null,
+                    rafId: 0
+                };
+
                 container._instructionAutoScrolling = true;
                 container._instructionUserScrolling = false;
-
                 if (container._instructionAutoScrollingTimeout) {
                     clearTimeout(container._instructionAutoScrollingTimeout);
                 }
 
-                var containerRect = container.getBoundingClientRect();
-                var targetRect = target.getBoundingClientRect();
-                var top = targetRect.top - containerRect.top + container.scrollTop - 100;
+                function finish() {
+                    cancelAnimationFrame(anim.rafId);
+                    container.removeEventListener("wheel", cancelByUser);
+                    container.removeEventListener("touchstart", cancelByUser);
+                    container._smoothScrollAnim = null;
+                    // Chwila zapasu, zeby ogon zdarzen scroll nie liczyl sie jako scroll uzytkownika.
+                    container._instructionAutoScrollingTimeout = setTimeout(function () {
+                        container._instructionAutoScrolling = false;
+                    }, 120);
+                    anim.resolve();
+                }
 
-                container.scrollTo({
-                    top: Math.max(top, 0),
-                    behavior: "smooth"
-                });
+                function cancelByUser() {
+                    finish();
+                }
 
-                container._instructionAutoScrollingTimeout = setTimeout(function () {
-                    container._instructionAutoScrolling = false;
-                    resolve();
-                }, 700);
+                container.addEventListener("wheel", cancelByUser, { passive: true });
+                container.addEventListener("touchstart", cancelByUser, { passive: true });
+
+                function step(now) {
+                    if (anim.lastTime === null) anim.lastTime = now;
+                    var dt = Math.min(now - anim.lastTime, 64);
+                    anim.lastTime = now;
+
+                    var dest = anim.targetTop();
+                    // Wygladzanie wykladnicze (tau ~110 ms) — dojazd konczy sie w ok. pol sekundy.
+                    var k = 1 - Math.exp(-dt / 110);
+                    anim.pos += (dest - anim.pos) * k;
+
+                    if (Math.abs(dest - anim.pos) < 1) {
+                        container.scrollTop = dest;
+                        finish();
+                        return;
+                    }
+
+                    container.scrollTop = anim.pos;
+                    anim.rafId = requestAnimationFrame(step);
+                }
+
+                anim.rafId = requestAnimationFrame(step);
             });
         };
     </script>
