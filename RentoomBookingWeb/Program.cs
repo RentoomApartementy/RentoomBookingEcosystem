@@ -444,8 +444,8 @@ namespace RentoomBookingWeb
             "object-src 'none'; " +
             "frame-ancestors 'self'; " +
             "form-action 'self' https://secure.tpay.com https://secure.sandbox.tpay.com; " +
-            "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://t.contentsquare.net https://*.contentsquare.net; " +
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+            "script-src 'self' 'unsafe-inline' https://unpkg.com https://www.googletagmanager.com https://t.contentsquare.net https://*.contentsquare.net; " +
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; " +
             "font-src 'self' data: https://fonts.gstatic.com; " +
             "img-src 'self' data: blob: https:; " +
             "connect-src 'self' ws: wss: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://*.contentsquare.net; " +
