@@ -91,6 +91,9 @@
 
     private string? _activeFocus;
     private string? _lastHandledFocus;
+    // Ustawiane przy kazdym LocationChanged — wymusza ponowny dojazd do sekcji
+    // nawet gdy ?focus= sie nie zmienil (podwojny klik w ten sam przycisk stopki).
+    private bool _focusNavPending;
 
     private static readonly Dictionary<string, string> FocusTargetIds = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -125,6 +128,7 @@
         GlobalizationService.OnChange += OnLanguageChanged;
         ApartmentState.OnChange += OnStateChanged;
         LocksState.OnChange += OnStateChanged;
+        Navigation.LocationChanged += OnNavigated;
         OnLanguageChanged();
 
         if (!string.IsNullOrWhiteSpace(Token))
@@ -176,16 +180,22 @@
             await JS.InvokeVoidAsync("setupCheckInRoadmap");
         }
 
-        // Reaguje też na zmianę ?focus=... bez przeładowania strony (np. klik w stopce,
-        // gdy użytkownik już jest na CheckIn) — nie tylko na pierwszy render.
-        if (!string.Equals(Focus, _lastHandledFocus, StringComparison.OrdinalIgnoreCase))
+        // Reaguje na kazda nawigacje na te strone, nie tylko na zmiane wartosci ?focus=...
+        // — ponowny klik w ten sam przycisk stopki tez ma dojechac do sekcji.
+        if (_focusNavPending || !string.Equals(Focus, _lastHandledFocus, StringComparison.OrdinalIgnoreCase))
         {
+            _focusNavPending = false;
             _lastHandledFocus = Focus;
-            await FocusRequestedSectionAsync();
+            // Fire-and-forget: render nie moze czekac 2,6 s na wygasniecie podswietlenia.
+            _ = FocusRequestedSectionAsync();
         }
 
         await base.OnAfterRenderAsync(firstRender);
     }
+
+    // Anuluje wygaszanie podswietlenia z poprzedniego kliku, zeby przy szybkim
+    // przeklikiwaniu stopki stary Task.Delay nie gasil swiezo podswietlonej sekcji.
+    private CancellationTokenSource? _focusCts;
 
     private async Task FocusRequestedSectionAsync()
     {
@@ -195,12 +205,25 @@
             return;
         }
 
-        await JS.InvokeVoidAsync("scrollInMainBodyToElement", targetId);
+        _focusCts?.Cancel();
+        _focusCts?.Dispose();
+        var cts = _focusCts = new CancellationTokenSource();
 
+        // Podswietlenie od razu — czekanie na koniec scrolla czyta sie jak lag.
         _activeFocus = Focus;
         await InvokeAsync(StateHasChanged);
 
-        await Task.Delay(2600);
+        // Kolejny klik w trakcie scrolla po prostu przekierowuje smooth scroll na nowy cel.
+        await JS.InvokeVoidAsync("scrollInMainBodyToElement", targetId);
+
+        try
+        {
+            await Task.Delay(2600, cts.Token);
+        }
+        catch (TaskCanceledException)
+        {
+            return; // nowszy klik przejal podswietlenie
+        }
 
         _activeFocus = null;
         await InvokeAsync(StateHasChanged);
@@ -208,6 +231,12 @@
 
     private void OnStateChanged()
     {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnNavigated(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        _focusNavPending = true;
         InvokeAsync(StateHasChanged);
     }
 
@@ -246,6 +275,9 @@
 
     public override void Dispose()
     {
+        _focusCts?.Cancel();
+        _focusCts?.Dispose();
+        Navigation.LocationChanged -= OnNavigated;
         GlobalizationService.OnChange -= OnLanguageChanged;
         ApartmentState.OnChange -= OnStateChanged;
         LocksState.OnChange -= OnStateChanged;
