@@ -407,6 +407,7 @@
 
     private const int RetryPaymentDelaySeconds = 30;
     private bool _summaryViewedTracked;
+    private bool _purchaseEligible;
     private bool _purchaseTracked;
     private string _bonusInputName = string.Empty;
     private string? _bonusStatusMessage;
@@ -462,14 +463,19 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!_scrollToTopPending || _loading)
+        if (_loading)
         {
             return;
         }
 
-        _scrollToTopPending = false;
-        var scrollModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
-        await scrollModule.InvokeVoidAsync("scrollToTop");
+        if (_scrollToTopPending)
+        {
+            _scrollToTopPending = false;
+            var scrollModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+            await scrollModule.InvokeVoidAsync("scrollToTop");
+        }
+
+        await TryTrackPurchaseAfterRenderAsync();
     }
     
     private async Task GoToPayment()
@@ -689,7 +695,7 @@
                 });
         }
 
-        await TrackPurchaseIfEligibleAsync();
+        _purchaseEligible = IsPaid && _summary?.StartRequest is not null;
 
         //aut pokazywanie QR kodu StayWell po płatności - na razie wyłączone
       /*  if (IsPaid && !string.IsNullOrWhiteSpace(staywellLink))
@@ -700,18 +706,26 @@
         StartRetryCountdownIfNeeded();
     }
 
-    private async Task TrackPurchaseIfEligibleAsync()
+    private async Task TryTrackPurchaseAfterRenderAsync()
     {
-        if (_purchaseTracked || !IsPaid || _summary?.StartRequest is null)
+        if (_purchaseTracked || !_purchaseEligible || _summary?.StartRequest is null)
         {
             return;
         }
 
         var startRequest = _summary.StartRequest;
         var transactionId = _summary.IdoReservationId?.ToString() ?? _summary.ReservationGuid.ToString("N");
+        var storageKey = BuildPurchaseTrackingStorageKey(transactionId);
+        var alreadyTracked = await JSRuntime.InvokeAsync<string?>("sessionStorage.getItem", storageKey);
+        if (string.Equals(alreadyTracked, "1", StringComparison.Ordinal))
+        {
+            _purchaseTracked = true;
+            return;
+        }
+
         var item = BuildGa4ApartmentItem(startRequest, _summary.OfferPrice ?? startRequest.OfferPrice ?? 0m);
 
-        await GoogleAnalytics.TrackEventAsync("purchase", new Dictionary<string, object?>
+        var tracked = await GoogleAnalytics.TrackEventAsync("purchase", new Dictionary<string, object?>
         {
             ["transaction_id"] = transactionId,
             ["currency"] = string.IsNullOrWhiteSpace(_summary.Currency) ? "PLN" : _summary.Currency,
@@ -721,7 +735,18 @@
             ["end_date"] = startRequest.EndDate.ToString("yyyy-MM-dd")
         });
 
+        if (!tracked)
+        {
+            return;
+        }
+
+        await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", storageKey, "1");
         _purchaseTracked = true;
+    }
+
+    private string BuildPurchaseTrackingStorageKey(string transactionId)
+    {
+        return $"rentoombookingweb:ga4:purchase:{ReservationTokenGuid:N}:{transactionId}";
     }
 
     private Dictionary<string, object?> BuildGa4ApartmentItem(StartReservationRequest startRequest, decimal offerTotalPrice)
