@@ -16,6 +16,7 @@ public class GoogleAnalyticsService
         try
         {
             await _jsRuntime.InvokeVoidAsync("rentoomAnalytics.trackEvent", eventName, parameters);
+            Console.WriteLine($"Tracked GOOGLE event: {eventName} with parameters: {parameters}");
         }
         catch (InvalidOperationException)
         {
