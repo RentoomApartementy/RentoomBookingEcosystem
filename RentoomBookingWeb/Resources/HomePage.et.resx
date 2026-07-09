@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Loe lähemalt</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Meie partnerid</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Teeme koostööd tõestatud kohalike brändidega, et muuta teie viibimine Toruńis ainulaadseks</value>
+  </data>
 </root>

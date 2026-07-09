@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Fjernåpning av dør</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Sjekker låsetilgjengelighet...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Bestillingen din er avsluttet. Fjernåpning er ikke lenger tilgjengelig.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Fjernåpning vil være tilgjengelig fra {0} på innsjekkingsdagen.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Bearbeiding</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Åpne dører</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Trykk for å åpne</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Fjernåpning er for øyeblikket ikke tilgjengelig.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Vennligst prøv igjen</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Prøv igjen i {0}</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Feilåpning</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Feil ved avstenging</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Servertilkoblingsfeil</value>
+  </data>
+</root>

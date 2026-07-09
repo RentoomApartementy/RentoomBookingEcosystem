@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Tekintse meg a dokumentumot</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Kiválasztott érkezési idő</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Még nem tudom</value>
+  </data>
 </root>

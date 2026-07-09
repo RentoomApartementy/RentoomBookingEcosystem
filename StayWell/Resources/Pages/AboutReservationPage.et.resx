@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Vaata dokumenti</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Valitud saabumisaeg</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Ma ei tea veel.</value>
+  </data>
 </root>

@@ -337,4 +337,7 @@ Az angol nyelvű bérleti szabályok elérhetők a www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Feltételek és beleegyezések</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Tartózkodási szabályok</value>
+  </data>
 </root>

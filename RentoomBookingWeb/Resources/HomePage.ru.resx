@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Узнать больше</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Наши партнёры</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Мы сотрудничаем с проверенными местными брендами, чтобы сделать ваше пребывание в Торуне уникальным</value>
+  </data>
 </root>

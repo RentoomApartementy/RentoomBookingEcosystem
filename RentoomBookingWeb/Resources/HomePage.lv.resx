@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Uzzināt vairāk</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Mūsu partneri</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Mēs sadarbojamies ar pārbaudītiem vietējiem zīmoliem, lai padarītu jūsu uzturēšanos Toruņā unikālu</value>
+  </data>
 </root>

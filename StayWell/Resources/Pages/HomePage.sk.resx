@@ -149,7 +149,7 @@
     <value>Domov</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Pokyny na prihlásenie</value>
+    <value>Vstúpte do budovy</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Návod</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Vozík</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Táto rezervácia vypršala</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Tvoj pobyt skončil. Dúfame, že to bol úspech — pozývame vás, aby ste si rezervovali opäť v Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Preklady sa generujú automaticky a môžu obsahovať chyby. Odporúčame vám ich nahlásiť.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Registrácia</value>
   </data>
 </root>

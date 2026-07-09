@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Upravljanje iznajmljivanjem Toruń, usluge stanova, investicije bez održavanja, saradnja u rentoomu, optimizacija profita od najma, kratkoročni najam toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Pretvorite svoj stan u investiciju bez održavanja uz Rentoom. Nudimo sveobuhvatno upravljanje najmom u Toruńu, optimizaciju prihoda i 24/7 uslugu gostima. Kladite se na kvalitet i iskustvo.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Saradnja - Rentoom | Profesionalno upravljanje zakupom</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Saradnja</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Mi smo tržišni lider u Toruńu. Nudimo kompletnu uslugu, inovativne tehnologije i maksimizaciju vaših profita. Budite mirni, radimo za vas.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Saradnja - Rentoom | Upravljanje najmom Toruń</value>
+  </data>
 </root>

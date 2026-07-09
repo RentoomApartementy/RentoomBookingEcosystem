@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Sambandið gat verið bjargað, en samningurinn var ekki gerður. Skoðaðu Bitrix áður en þú sendir aftur.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Afritaðu PLN númer</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Afritaðu EUR-númerið</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Afritaðu EUR reikningsnúmerið á klippitöflu</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Ertu með spurningar um leigustjórnun? Hafðu samband við okkur! Skoðaðu heimilisfang okkar og bankaupplýsingar.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Hafðu samband við Rentoom, Rentoom Toruń Office, Rental Management Contact, Rentoom invoice data</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Samband</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Hafðu samband - Rentoom | Leigu- og stjórnunarskrifstofa Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Hafðu samband - Rentoom | Fagleg leigustjórnun</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Afritaðu PLN reikningsnúmerið á klippiborðið</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Hafðu samband við Rentoom teymið í Toruń. Heimilisfangsupplýsingar, bankareikningsnúmer (PLN/EUR) og tengiliðareyðublað. Fagleg leiguþjónusta.</value>
+  </data>
 </root>

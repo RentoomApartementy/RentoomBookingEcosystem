@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Η επαφή μπορούσε να αποθηκευτεί, αλλά η συμφωνία δεν μπορούσε να δημιουργηθεί. Ελέγξτε το Bitrix πριν από την εκ νέου αποστολή.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Αντιγραφή αριθμού PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Αντιγράψτε τον αριθμό EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Αντιγράψτε τον αριθμό λογαριασμού EUR στο πρόχειρο</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Έχετε ερωτήσεις σχετικά με τη διαχείριση ενοικίασης; Επικοινωνήστε μαζί μας! Ελέγξτε τη διεύθυνση και τα τραπεζικά μας στοιχεία.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Επικοινωνία με τη Rentoom, Γραφείο Rentoom Toruń, Επικοινωνία διαχείρισης ενοικίασης, Δεδομένα τιμολογίου Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Επικοινωνία</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Επικοινωνία - Rentoom | Γραφείο Υπηρεσιών και Διαχείρισης Ενοικιάσεων Τορούν</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Επικοινωνία - Rentoom | Επαγγελματική Διαχείριση Μισθώσεων</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Αντιγράψτε τον αριθμό λογαριασμού PLN στο πρόχειρο</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Επικοινωνήστε με την ομάδα Rentoom στο Τορούν. Στοιχεία διεύθυνσης, αριθμοί τραπεζικών λογαριασμών (PLN/EUR) και φόρμα επικοινωνίας. Επαγγελματική υπηρεσία ενοικίασης.</value>
+  </data>
 </root>

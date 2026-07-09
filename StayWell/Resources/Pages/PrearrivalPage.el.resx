@@ -337,4 +337,7 @@ www.rentoom.pl | τηλ. +48 881 388 001
   <data name="TOS" xml:space="preserve">
     <value>Όροι και Προϋποθέσεις και Συναινέσεις</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Κανονισμοί Διαμονής</value>
+  </data>
 </root>

@@ -337,4 +337,7 @@ Nomas noteikumi angļu valodā ir pieejami www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Noteikumi un nosacījumi un piekrišana</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Uzturēšanās noteikumi</value>
+  </data>
 </root>

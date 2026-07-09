@@ -149,7 +149,7 @@
     <value>Acasă</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Instrucțiuni de check-in</value>
+    <value>Intră în clădire</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Instrucțiuni</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Cărucior</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Această rezervare a expirat</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Șederea ta s-a încheiat. Sperăm că a fost un succes — vă invităm să rezervați din nou la Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Traducerile sunt generate automat și pot conține erori. Vă încurajăm să le raportați.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Check-in</value>
   </data>
 </root>

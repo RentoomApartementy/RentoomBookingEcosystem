@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakten kunne reddes, men avtalen kunne ikke inngås. Sjekk Bitrix før du sender den på nytt.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopier PLN-nummer</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopier EUR-nummeret</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Kopier EUR-kontonummeret til utklippstavlen</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Har du spørsmål om utleieforvaltning? Kontakt oss! Sjekk adressen og bankopplysningene våre.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Kontakt Rentoom, Rentoom Toruń Office, Rental Management Contact, Rentoom fakturadata</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Utleie- og forvaltningskontor Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Profesjonell leieforvaltning</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Kopier PLN-kontonummeret til utklippstavlen</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Kontakt Rentoom-teamet i Toruń. Adresseopplysninger, bankkontonumre (PLN/EUR) og et kontaktskjema. Profesjonell utleietjeneste.</value>
+  </data>
 </root>

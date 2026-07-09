@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakti sai päästa, kuid tehingut ei saanud sõlmida. Kontrolli Bitrixi enne uuesti saatmist.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopeeri PLN number</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopeeri EUR number</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Kopeeri EUR konto number lõikelauale</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Kas sul on küsimusi üürihalduse kohta? Võta meiega ühendust! Kontrollige meie aadressi ja pangaandmeid.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Kontakt Rentoom, Rentoom Toruń kontor, üürihaldus kontakt, Rentoom arve andmed</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Rendi- ja halduskontor Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Professionaalne rendihaldus</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Kopeeri PLN konto number lõikelauale</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Võta ühendust Rentoomi meeskonnaga Toruńis. Aadressiandmed, pangakonto numbrid (PLN/EUR) ja kontaktvorm. Professionaalne renditeenus.</value>
+  </data>
 </root>

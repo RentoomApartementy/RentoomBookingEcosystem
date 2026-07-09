@@ -173,4 +173,7 @@
   <data name="LinksText" xml:space="preserve">
     <value>Liens</value>
   </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Nos partenaires</value>
+  </data>
 </root>

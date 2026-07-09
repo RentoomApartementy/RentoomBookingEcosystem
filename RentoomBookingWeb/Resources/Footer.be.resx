@@ -164,4 +164,7 @@
   <data name="Footer_InstagramAriaLabel" xml:space="preserve">
     <value>Rentoom у Instagram</value>
   </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Нашы партнёры</value>
+  </data>
 </root>

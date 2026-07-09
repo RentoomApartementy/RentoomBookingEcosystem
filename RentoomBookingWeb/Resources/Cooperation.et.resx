@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Üürihaldus toruń, korteriteenus, hooldusvaba investeering, rentoom-koostöö, üürikasumi optimeerimine, lühiajaline üür toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Muuda oma korter hooldusvabaks investeeringuks Rentoomi abil. Pakume põhjalikku üürihaldust Toruńis, sissetulekute optimeerimist ja ööpäevaringset külalisteenust. Panusta kvaliteedile ja kogemusele.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Koostöö - Rentoom | Professionaalne rendihaldus</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Koostöö</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Me oleme Toruńi turuliider. Pakume täisteenust, uuenduslikke tehnoloogiaid ja teie kasumi maksimeerimist. Puhka rahulikult, me töötame sinu heaks.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Koostöö - Rentoom | Rendihaldus Toruń</value>
+  </data>
 </root>

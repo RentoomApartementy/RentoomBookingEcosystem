@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Skatīt dokumentu</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Izvēlētais ierašanās laiks</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Es vēl nezinu</value>
+  </data>
 </root>

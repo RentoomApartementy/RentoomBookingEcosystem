@@ -33,11 +33,11 @@
     "AdditionalOptions": "479054da3881f497663f5e2d9561f4073192b54ff081d97ad1d73bd5cc106373",
     "DecreaseQuantity": "f765e0d043bd09ff647e2f44fdcb3868d47fefc192331f876e1c41d955d44b03",
     "IncreaseQuantity": "90f54bd3b6b1299edf506b6f43fa61968eb2f6da1fabf9f4cdbdaea6d93bda29",
-    "Op\u0142ata serwisowa 139 x": "2e80933e28898fbb2f2017757ed37a7e944f63881a133739dc47f18d5fc69ee0",
-    "Zwierz\u0119": "b467e53caa53ae452f73a951ccc5b2f3a20d59a99c45c6f4dcb72037b025a567",
-    "\u0141\u00F3\u017Ceczko dla niemowlaka": "c570d629365784ac1b6064a930b2dbb0c6389b24691c23bb98cba267fca38394",
-    "\u0141\u00F3\u017Ceczko turystyczne": "51032979b25cb7eb52d0e3e043df5a3d78c8bd8f1a7d535e5fae23b94ec4e7ed",
-    "P\u00D3\u0179NE WYMELDOWANIE": "41e71dcb9d7397c9f605a4dc2bbd73ab91de0c5d2082e1264390511dc61c94d8",
+    "Opłata serwisowa 139 x": "2e80933e28898fbb2f2017757ed37a7e944f63881a133739dc47f18d5fc69ee0",
+    "Zwierzę": "b467e53caa53ae452f73a951ccc5b2f3a20d59a99c45c6f4dcb72037b025a567",
+    "Łóżeczko dla niemowlaka": "c570d629365784ac1b6064a930b2dbb0c6389b24691c23bb98cba267fca38394",
+    "Łóżeczko turystyczne": "51032979b25cb7eb52d0e3e043df5a3d78c8bd8f1a7d535e5fae23b94ec4e7ed",
+    "PÓŹNE WYMELDOWANIE": "41e71dcb9d7397c9f605a4dc2bbd73ab91de0c5d2082e1264390511dc61c94d8",
     "WCZESNE ZAMELDOWANIE": "2a58c7a47e1467d943481479d2807fd6ee6e1977668fc760e6b3777260afa628",
     "Kwiaty": "07bf6a46b26eea5f15dcb6f13a233f9f014252436d4524c2f20deb86c2a520aa",
     "Upgrade": "7ec0261b8e8aa3e0b1affde5f18ca1930ae73d81a5303d667aae9ffd2803cbc7",
@@ -186,11 +186,11 @@
     "Filters": "7624f595af68712e657367c796d0424cddb8bf8095520f54b33dc229e43b943b",
     "Stare Miasto": "38c420d63d70601d90396b70fe4ad17d9efb7a65a2040a01d7347c5723d1b91e",
     "Centrum": "7a0099cf0c2d78506bbb06527e62871f0fe5bd7033060a79adf710dc9961ed05",
-    "Gara\u017C": "fa603ee742d18a195017c4947871ecb7ed4d9a196b19c7850cd16a4bb40a8b2e",
+    "Garaż": "fa603ee742d18a195017c4947871ecb7ed4d9a196b19c7850cd16a4bb40a8b2e",
     "Balkon": "ff9f658402a62fc66b04b801da499a7fe6c0313f7b603891b6c497a653e8698f",
-    "Zwierz\u0119ta dozwolone": "5208a60056e1817c8faf7bcc9588ab471cf1775923c5767b5356175b660cdbe6",
+    "Zwierzęta dozwolone": "5208a60056e1817c8faf7bcc9588ab471cf1775923c5767b5356175b660cdbe6",
     "Winda": "929e596a13ff12fb3726aac93ad749712670ebd2f11116a787bfc2a7b057996e",
-    "Dost\u0119p dla w\u00F3zk\u00F3w inwalidzkich": "49b145a07ae20bb2a7d4869f1674149dc3fff6502cd260ebecfd84e77ed6f854",
+    "Dostęp dla wózków inwalidzkich": "49b145a07ae20bb2a7d4869f1674149dc3fff6502cd260ebecfd84e77ed6f854",
     "Pralka": "b8b927a66306679c56dcb0c5d21702dba5ba23d55a2e486af55dcd9207526a86",
     "ApplyFilters": "c081a72e0dbe974ddafcdecb2caff4384342c14ec173db68dffe3eb3074b7cd5",
     "Loading": "1d625a5057dcc21191721b6605cc6350580257e3655caf676b94fc31ef05940c",
@@ -962,7 +962,9 @@
     "TaxIdLabel": "994d245fc70e37d850e10d338bdb845db2216440a4c14710410c4c08961a4d9c",
     "WithdrawConsentModalCancel": "3782abeb599d602dfc43cf2650afcb929ab75dfbe6fb0fd283bfb1948533a9c5",
     "WithdrawConsentModalQuestion": "223051c5e25c8ce14ffe031c4fbcf25d8a3f71587a1ff0cc9ff52d5ee477212b",
-    "ViewDocument": "cec18ac249a9c0f73dfaf5e007cec4581b5d7940b5ef6fb0d593fa15967104c5"
+    "ViewDocument": "cec18ac249a9c0f73dfaf5e007cec4581b5d7940b5ef6fb0d593fa15967104c5",
+    "SelectedCheckInTime": "b46cd834f934c527d88a43f865df8a3cb387c27887c80f5d3dbf3fe6e56170db",
+    "CheckInTimeNotSpecified": "181481f9116b8016a943abcbd06b6e020e8471bbfe4475a386f54d6f8fbce1bb"
   },
   "StayWell/Resources/Pages/HomePage.pl-PL.resx": {
     "AboutReservation": "fae2e5ec0047f5ba31c8f864b34d0c0d1d9ff955cdf4fb82814973cf489c76c7",
@@ -975,7 +977,7 @@
     "CurrentLanguage": "90efbcc9aa57f96a6bdcbb8fa5bfb000f812ad7ecc7d6b244f8e35934f9cac54",
     "Enhance": "eab53f92c6b27d2461fedfbee4d4d7a8549fd84ab6accbbd0b4094aaaad8aef9",
     "Home": "a9203b56f06b0b3f0441e6c83e992ba93252d69b456d01faad01fe795c2aed13",
-    "Instructions": "ad7a8e5292e05e62388125708bd72e1ec32969236598767954775f058979db35",
+    "Instructions": "af67fefaccc312102420a1a447a831a23fb08cf443c0c01f35586c8a3bcd9cb0",
     "InstructionsFooter": "a582fcc5fd59fb11576eb61cce41bd12995e8a33256d5d5e79718a1a52e017a8",
     "LanguageChanged": "6005192328530f6b539f4d2cbe8397413b423a1a3d4b5d98bbb45f4544311396",
     "Manage": "02de0c40d285a60a36dc104769a1465a5ae9a96bdf299a35c3431fd7e1103315",
@@ -995,7 +997,12 @@
     "AboutReservationFooter": "b8066bbfd0e493233ae213b8708f0eae9d221ba8b9198fedbdd3a0d750d836a6",
     "LoyaltyFooter": "ffb94d0180a273bf016552372ec6713a28330c442fa3c5793be4443f8479c7d1",
     "AddonsLabel": "420c0260999a6c5a8085a80131898703ed86ed3e8ec04a73e0c5c5e7adb7cc6f",
-    "CartButtonAlt": "4e06427657cbe70c6700fc9810bcd798a36bfaf43aa849110eab13b3f60a0b80"
+    "CartButtonAlt": "4e06427657cbe70c6700fc9810bcd798a36bfaf43aa849110eab13b3f60a0b80",
+    "ReservationExpiredTitle": "25d78c923764851b124b1d7e6fadf14db58641b1b75d13e9de1a5669e6104ff3",
+    "ReservationExpiredDesc": "b07e7ac043f1d32aa1824f3f00be2b2f1223f829217ed11fe19ae5761cddbc27",
+    "TranslationDisclaimer": "640641b31e3198550905dc129627408240b451cff701d2e00b0f41fa74f02551",
+    "WifiFooter": "337253f2e8d4d14af575667d2e74aba123c5098fcf998ed7a63f1abf90830f09",
+    "CheckInNow": "692086a9daee31f5353d142cb8d54fc0614825aab54ff358d8c967e41e252b54"
   },
   "StayWell/Resources/Pages/InstructionsPage.pl-PL.resx": {
     "Address": "32c6bebf1cb00776af32fe71dce4cdf4afb5955bfd9792011d5dcddc30c84755",
@@ -1128,7 +1135,8 @@
     "TermsAndRegistrationPageTitle": "ae04eff1f367bee2010332da58b68181bafc2cda7e05c460ceae8a3f4dd253b7",
     "RegistrationSaveError": "f19f8b955370f1670ec93d3021716893ce7dc4dc8f24bbab165dd9a6f9d60a42",
     "NoAccessToPage": "e34fdcac23285b710aaeb4e6b24172c3c54e98f8453595b02f65a725a86e1fce",
-    "TOS": "149767ea45c408d1478d862569797eb558079b60242bea0b2a822a4d893c5fd0"
+    "TOS": "149767ea45c408d1478d862569797eb558079b60242bea0b2a822a4d893c5fd0",
+    "HouseRulesTitle": "5033ec9e38c76aeace7ab1c42e9e34d46d20e8aef8848806ed57f822c4af67c1"
   },
   "StayWell/Resources/Pages/PurchasedUpsell.pl-PL.resx": {
     "ListTitle": "5733ae6e486ce5d130e232609fd6ebbd7aa8e9ffc76927734aa93d0ee1e53db1",
@@ -1997,5 +2005,56 @@
     "SelectedUpsellsSummaryTitle": "630bf33e14481e178f0e5679ec917b0f23653a163aaeebab0354f72f52728621",
     "Loading": "47d2a515ef2f05b87d688656286a61e4f743da4b878684c7654969db17711c40",
     "PaymentErrorTitle": "4575779241f0371ffb9bfc72be66fad3153eed0fcdcda2930c35de7ab51a5a02"
+  },
+  "StayWell/Resources/Components/AccessCodesList.pl-PL.resx": {
+    "GateCode": "25ff272321dee5634978ebd7c3befcfe8bf3ccf078f6510db6a46f8400205dce",
+    "BuildingCode": "7b254e4ba53edc665b486344995e0f66270552cb6e2f1f9de864fecf85b01787",
+    "SharedDoorsCode": "15f0f37d1f99fdd53656c96982d587871e0b969006e909e5b2ace1f444db6182",
+    "KeySafeCode": "fe026f6a55bab18e5950befb8651068b0479b90f52cb8c20b4efbf23a0e2edff",
+    "ParkingNumber": "cf6acf561a68a23832b08e68ae97640b1034336df96b2f18420eab2d9a91d334",
+    "ParkingMap": "44f49d91d01580b20b45dd1af184812d57920b61e891c3511af72f20baf1e345",
+    "OpenMap": "0dbc3c3dde4609fa738ba523f3648e54acb243d2ec4cb1532df86b1b805693f3"
+  },
+  "StayWell/Resources/Components/ApartmentAccessCode.pl-PL.resx": {
+    "YourIndividualCode": "5a69bf6c61bbae994a87062c36ef3a461ed73ab1fcfccf317693f1541f79e8a5",
+    "Confirm": "95ea948f7066d4085a801a08a40fb4fc0a8ad814355e1822f8a895733864a30f",
+    "Or": "d0afe5ed2bd67151d4dd103cbc58f94c43e56d5ebb122e9538f2718ee6d48c4c",
+    "NoCode": "f76c629df5c075e8cac458177595c3a9e2fb4ac557621deb15d4f7c95b57ab68",
+    "CodeNotAvailable": "733ed66539496b0cbc07bb5ac062cfceaf09beceaeba0db3978d1f0d11e947e2",
+    "CodeNoLongerAvailable": "b8c109311bbb89d14aa7bcfd4d40956bd6487c3dae14371920f4ccce53005352",
+    "GenerateNewCode": "b2cfdd4243e0849e923ae41479c87fff67cf1af9102bcfc888235c77210c6422",
+    "NewCodeIn": "c914efcf93554c29ba9221f0344e418d070dbab91be1327a70a7d8bac36e988b",
+    "GeneratingCode": "88e355589e11e433f2710c4fa0785ba15cb6aa3911a94dffa90357481649a837",
+    "CodeValidFromTo": "aeca5ab74fe2b8e1bbf4af448bd9c7e3f5981845a99b716eb24e47c90f3bb23b",
+    "CodeValidFrom": "1a68d2c9ad0e1a620272c12a826c72f194744f156bc9c668571a37a00ee5a77c",
+    "CodeValidTo": "02333017df82d594f90a4c013d777880ea97f594c61a19951dab1d05ad0c1251",
+    "PreviousCodes": "70b0d39fe1b117a16c151dc5216ed97a87ef1482e9193fe2c7e327b91cbc167d",
+    "CodeFromIdo": "5610aae59fe06fb3f75bfe9386ee73380c127de4a9337755006e0539ed2e0513",
+    "PasscodeGeneratedSuccess": "7ce50c7d83a32a92538b6c18f2424f29ea762b5ba469e86d3bde2380ed7ec793"
+  },
+  "StayWell/Resources/Components/RemoteOpenTile.pl-PL.resx": {
+    "RemoteOpen": "7b7e837d07f7f28cad315e8ba938cf17c35061add71a6201ae3054b95eb49d9a",
+    "CheckingLock": "d029fc65c8392f87f364d54404fdbc13029cf205405f7c10fbf9031627d53d78",
+    "ReservationEnded": "c2a8d177b7e50e0c9aa0179330214b741be2abe4e3834d6acc9900c6355cb655",
+    "ReservationNotActive": "e6c02b8b0d4711f43f1c62847ec877ba8a063100c03b05fa4b5ef2418745deaa",
+    "Processing": "53767f1353c10dc2ca34b02d7aa69214ea7114b6936840dba80294030f0f2a1b",
+    "DoorOpened": "c770110d193732ed727a65a5003ec799835cf1dbfceafd338d89199c0a8198e8",
+    "PressToOpen": "eb57c78b97bfe7c075f15dd4ada51095a3c699a2661e21789b7a973ce987d8d2",
+    "RemoteUnavailable": "0ea72bb3401ba65afde1681dc19f52f0a4480c2dbcd68abb067bb9e84e8ac939",
+    "TryAgain": "7237b73bc691a25bb9b93e220927d567b4bae12242f34fd2ed7043b3204cb09d",
+    "TryAgainIn": "4e49b6bca2be9104f2628036e2c9d15ed31ef54dbd811a0c805a85fa80c587b3",
+    "ErrorOpening": "3655f460dbb0b03a582ea3412f4ef2ebbbd48b115142e272069f4ff18659cb9f",
+    "ErrorClosing": "ccb412223f34bf702e0c59744ffe26b8eced8d720d5dbaa6798e972ee667ed54",
+    "ErrorServerConnection": "8d56c3539c581496506fcefdeffa7cf7d6082adc7675743eec747aad988d737a"
+  },
+  "StayWell/Resources/Pages/CheckInPage.pl-PL.resx": {
+    "PageTitle": "e8a6a79b532cdb38fce478d2aa0070baa0c44c0b7c9699e85bd86c7cba32b59a",
+    "PageSubtitle": "b3f6367d1d3b94ffa034c41e93bad26d6bb772f73ed01f9eb4f57bf35ff5d55f",
+    "NoSteps": "734759f7722128caea01b166669f833390c0d05d576450c2e60018fea0c85d7c",
+    "BuildingCodesTitle": "99421c24a9ea824d1406a01b4be6620c0c2a974e0ae30a695c2df620630040e0",
+    "ApartmentCodeTitle": "b6884eb86e615ce62236b95a3f4a8802f19bf2ce5d486c4b96bcfc9eec0a38ab",
+    "InstructionsTitle": "196a36cc2c8047cf99bcc40faeb53a0a630fbeb151cf3072ab6249c1ddedb984",
+    "LockGuideTitle": "247317b508d5d62e6603a9c49102b9264a4c99d210e25d8688f99d6251c050d6",
+    "LockGuideSubtitle": "54cbf5549d02b35385c1dc55f1cb93283058b4cb32ab6e5c5694e2f8e3a19ef0"
   }
 }

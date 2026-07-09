@@ -337,4 +337,7 @@ Regulamentos de aluguel em inglês estão disponíveis em www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Termos e Condições e Consentimentos</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Regulamentos de Estadia</value>
+  </data>
 </root>
