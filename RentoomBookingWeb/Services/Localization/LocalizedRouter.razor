@@ -1,5 +1,6 @@
 @page "/{cultureCode}"
 @page "/{cultureCode}/{*routeSegments}"
+@implements IDisposable
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.Rendering
 @using System.Globalization
@@ -27,6 +28,11 @@ else if (!_isResolving)
     private bool _isResolving = true;
     private string? _lastResolvedPath;
 
+    protected override void OnInitialized()
+    {
+        NavManager.LocationChanged += OnLocationChanged;
+    }
+
     protected override void OnParametersSet()
     {
         // Track full URI to react to QueryString changes
@@ -37,6 +43,23 @@ else if (!_isResolving)
             _renderKey = Guid.NewGuid();
             ResolveRoute();
         }
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        var currentPath = NavManager.Uri;
+        if (currentPath != _lastResolvedPath)
+        {
+            _lastResolvedPath = currentPath;
+            _renderKey = Guid.NewGuid();
+            ResolveRoute();
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        NavManager.LocationChanged -= OnLocationChanged;
     }
 
     private void ResolveRoute()

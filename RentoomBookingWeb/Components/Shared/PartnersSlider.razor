@@ -1,0 +1,33 @@
+@namespace RentoomBookingWeb.Components.Shared
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+
+<div class="partners-slider">
+    <div class="slider-track">
+        @* We render the list twice to achieve seamless looping *@
+        @for (int i = 0; i < 2; i++)
+        {
+            @foreach (var partner in Partners)
+            {
+                @if (!string.IsNullOrEmpty(partner.Link))
+                {
+                    <a href="@partner.Link" target="_blank" rel="noopener noreferrer" class="partner-item-link" title="@partner.Label">
+                        <div class="partner-item-wrapper">
+                            <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-img" loading="lazy" />
+                        </div>
+                    </a>
+                }
+                else
+                {
+                    <div class="partner-item-wrapper" title="@partner.Label">
+                        <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-img" loading="lazy" />
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<PartnerItem> Partners { get; set; } = new();
+}

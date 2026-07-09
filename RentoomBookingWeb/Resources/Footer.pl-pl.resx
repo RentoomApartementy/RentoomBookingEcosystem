@@ -149,4 +149,7 @@
   <data name="AboutCity" xml:space="preserve">
     <value>O Toruniu</value>
   </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Nasi partnerzy</value>
+  </data>
 </root>

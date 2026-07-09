@@ -29,6 +29,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         private string? _lastEndDate;
         private string? _lastAdults;
         private string? _lastChildren;
+        private bool _isFirstParametersSet = true;
 
         private void HandleViewModelChange()
         {
@@ -39,12 +40,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
         protected override async Task OnInitializedAsync()
         {
             ViewModel.OnChange += HandleViewModelChange;
-            await ViewModel.InitializeAsync(_initCts.Token);
         }
 
         protected override async Task OnParametersSetAsync()
         {
             bool routeParamsChanged = 
+                _isFirstParametersSet ||
                 StartDate != _lastStartDate || 
                 EndDate != _lastEndDate || 
                 Adults != _lastAdults || 
@@ -52,22 +53,19 @@ namespace RentoomBookingWeb.Components.Features.Apartments.Pages
 
             if (routeParamsChanged)
             {
+                _isFirstParametersSet = false;
                 _lastStartDate = StartDate;
                 _lastEndDate = EndDate;
                 _lastAdults = Adults;
                 _lastChildren = Children;
 
-                // If we have dates in the route, we ensure they are pushed to the ViewModel 
-                // BEFORE the re-initialization.
-                if (!string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate))
-                {
-                    ViewModel.StartDate = StartDate;
-                    ViewModel.EndDate = EndDate;
-                    ViewModel.Adults = Adults ?? "2";
-                    ViewModel.Children = Children ?? "0";
+                // Push new route params to the ViewModel (will clear parameters if null/empty)
+                ViewModel.StartDate = StartDate ?? string.Empty;
+                ViewModel.EndDate = EndDate ?? string.Empty;
+                ViewModel.Adults = Adults ?? "2";
+                ViewModel.Children = Children ?? "0";
 
-                    await ViewModel.InitializeAsync(_initCts.Token);
-                }
+                await ViewModel.InitializeAsync(_initCts.Token);
             }
         }
 

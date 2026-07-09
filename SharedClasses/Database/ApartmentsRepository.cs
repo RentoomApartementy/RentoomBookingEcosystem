@@ -126,16 +126,17 @@ namespace RentoomBooking.SharedClasses.Database
 
             _logger?.LogDebug("Total apartments in DB: {TotalCount}", totalCount);
 
-            var query = apartments.AsEnumerable();
+            // Sort descending to show newest apartments first (by ID descending)
+            var query = apartments.OrderByDescending(a => a.Id).AsEnumerable();
 
-            
-            // continuation token , jeśli jest to jest to ostatnie pobrane Id (posortowane) i kolejny page zaczyna się od większych ostatniego id. 
+            // continuation token - if present, it is the ID of the last item in the previous page.
+            // Since we sort descending, the next page starts with items having a smaller ID.
             if (!string.IsNullOrWhiteSpace(continuationToken))
             {
                 if (int.TryParse(continuationToken, out var lastId))
                 {
-                    query = query.Where(a => a.Id > lastId);
-                    _logger?.LogDebug("Applied continuation filter: Id > {LastId}", lastId);
+                    query = query.Where(a => a.Id < lastId);
+                    _logger?.LogDebug("Applied continuation filter: Id < {LastId}", lastId);
                 }
                 else
                 {

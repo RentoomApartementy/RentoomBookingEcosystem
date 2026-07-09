@@ -1,0 +1,40 @@
+@using RentoomBookingWeb.Components.Shared
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<HomePage> Localizer
+
+<section class="home-partners-section" aria-labelledby="home-partners-title">
+    <div class="home-partners-container">
+        <div class="home-partners-header">
+            <h2 id="home-partners-title" class="home-partners-title">@Localizer["PartnersTitle"]</h2>
+            <p class="home-partners-subtitle">@Localizer["PartnersSubtitle"]</p>
+        </div>
+
+        <div class="home-partners-carousel-wrapper">
+            <SimpleCarousel EnableAutoScroll="true" AutoScrollIntervalSeconds="1" ScrollAmount="220" Theme="partners-theme">
+                @foreach (var partner in Partners)
+                {
+                    <div class="partner-card-wrapper">
+                        @if (!string.IsNullOrEmpty(partner.Link))
+                        {
+                            <a href="@partner.Link" target="_blank" rel="noopener noreferrer" class="partner-card-link" title="@partner.Label">
+                                <div class="partner-card">
+                                    <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-card-img" loading="lazy" />
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="partner-card" title="@partner.Label">
+                                <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-card-img" loading="lazy" />
+                            </div>
+                        }
+                    </div>
+                }
+            </SimpleCarousel>
+        </div>
+    </div>
+</section>
+
+@code {
+    private List<RentoomBooking.SharedClasses.Models.RentoomBooking.PartnerItem> Partners = RentoomBookingWeb.Helpers.PartnersData.Partners;
+}
