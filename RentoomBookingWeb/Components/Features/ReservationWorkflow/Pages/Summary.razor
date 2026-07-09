@@ -409,6 +409,7 @@
     private bool _summaryViewedTracked;
     private bool _purchaseEligible;
     private bool _purchaseTracked;
+    private bool _purchaseTrackingInProgress;
     private string _bonusInputName = string.Empty;
     private string? _bonusStatusMessage;
     private bool _bonusStatusIsError;
@@ -708,11 +709,15 @@
 
     private async Task TryTrackPurchaseAfterRenderAsync()
     {
-        if (_purchaseTracked || !_purchaseEligible || _summary?.StartRequest is null)
+        if (_purchaseTracked || _purchaseTrackingInProgress || !_purchaseEligible || _summary?.StartRequest is null)
         {
             return;
         }
 
+        _purchaseTrackingInProgress = true;
+
+        try
+        {
         var startRequest = _summary.StartRequest;
         var transactionId = _summary.IdoReservationId?.ToString() ?? _summary.ReservationGuid.ToString("N");
         var storageKey = BuildPurchaseTrackingStorageKey(transactionId);
@@ -742,6 +747,11 @@
 
         await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", storageKey, "1");
         _purchaseTracked = true;
+        }
+        finally
+        {
+            _purchaseTrackingInProgress = false;
+        }
     }
 
     private string BuildPurchaseTrackingStorageKey(string transactionId)
