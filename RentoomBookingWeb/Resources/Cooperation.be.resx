@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Кантакт</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Кіраванне арэндай Toruń, абслугоўванне кватэр, інвестыцыі без тэхнічнага абслугоўвання, супрацоўніцтва з Rentoom, аптымізацыя арэнднага прыбытку, кароткатэрміновая арэнда Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Ператварыце сваю кватэру ў інвестыцыю без неабходнага абслугоўвання з Rentoom. Мы прапануем комплекснае кіраванне арэндай у Торуні, аптымізацыю даходаў і абслугоўванне гасцей 24/7. Стаўце на якасць і вопыт.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Супрацоўніцтва - Rentoom | Прафесійнае кіраванне арэндай</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Супрацоўніцтва</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Мы — лідар рынку ў Торуні. Мы прапануем поўны сэрвіс, інавацыйныя тэхналогіі і максімізацыю вашага прыбытку. Спакойна, мы працуем на цябе.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Супрацоўніцтва - Rentoom | Кіраванне арэндай у Торуні</value>
+  </data>
 </root>

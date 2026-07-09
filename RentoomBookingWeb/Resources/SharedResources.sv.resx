@@ -217,7 +217,7 @@
     <value>Vi bjuder in dig snart!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom-ikonen</value>
+    <value>Rentoom - lägenheter att hyra</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Inga erbjudanden</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Menyikon</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Begäran-ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Fel.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Plats för Toruń, där Toruń ligger, karta över Toruń, tillgång till Toruń, gamla staden</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Toruńs läge</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Ett fel uppstod under behandlingen av din begäran.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Utvecklingsmiljön bör inte aktiveras vid produktion.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Detta kan exponera känslig information från undantag för slutanvändare. För lokal felsökning, sätt variablen ASPNETCORE_ENVIRONMENT environment till Development och starta om applikationen.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruńs plats, karta och vägbeskrivning | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Att byta miljö till Utveckling kommer att visa mer detaljerad information om felet.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Kolla var Toruń ligger, hur man tar sig till gamla stan och se en praktisk OpenStreetMap-karta med stadens läge.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Fel</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Utvecklarläge</value>
   </data>
 </root>

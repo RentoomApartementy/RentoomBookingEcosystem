@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Správa pronájmu Toruń, bytová služba, bezúdržbová investice, spolupráce s nájemem, optimalizace zisku z pronájmu, krátkodobý pronájem toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Proměňte svůj byt v bezúdržbovou investici s Rentoom. Nabízíme komplexní správu pronájmu v Toruni, optimalizaci příjmů a nepřetržitý servis pro hosty. Sázejte na kvalitu a zkušenosti.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Spolupráce - Rentoom | Profesionální správa nájemních smluv</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Spolupráce</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Jsme lídrem trhu v Toruni. Nabízíme kompletní služby, inovativní technologie a maximalizaci vašich zisků. Odpočívej v klidu, pracujeme pro tebe.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Spolupráce - Rentoom | Správa pronájmu Toruń</value>
+  </data>
 </root>

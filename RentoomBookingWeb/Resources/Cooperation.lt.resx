@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontaktai</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Nuomos valdymas Torunė, butų aptarnavimas, investicijos be priežiūros, "Rentoom" bendradarbiavimas, nuomos pelno optimizavimas, trumpalaikė nuoma Torunė</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Paverskite savo butą investicija be priežiūros su Rentoom. Siūlome visapusišką nuomos valdymą Torunėje, pajamų optimizavimą ir 24/7 svečių aptarnavimą. Lažinkitės dėl kokybės ir patirties.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Bendradarbiavimas - Rentoom | Profesionalus nuomos valdymas</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Bendradarbiavimas</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Esame rinkos lyderiai Torunėje. Siūlome pilną aptarnavimą, novatoriškas technologijas ir maksimalų jūsų pelną. Būkite ramūs, mes dirbame jums.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Bendradarbiavimas - Rentoom | Nuomos valdymas Torunė</value>
+  </data>
 </root>

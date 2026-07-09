@@ -217,7 +217,7 @@
     <value>Vi inviterer dig snart!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom-ikonet</value>
+    <value>Rentoom - lejligheder til leje</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Ingen tilbud</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Menuikon</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Anmodnings-ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Fejl.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>beliggenhed af Toruń, hvor Toruń ligger, kort over Toruń, adgang til Toruń, den gamle bydel</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Toruńs beliggenhed</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Der opstod en fejl under behandlingen af din anmodning.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Udviklingsmiljøet bør ikke aktiveres på produktion.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Dette kan eksponere følsomme oplysninger fra undtagelser for slutbrugere. For lokal fejlfinding skal du sætte variablen ASPNETCORE_ENVIRONMENT miljø til Udvikling og genstarte applikationen.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruńs placering, kort og vejbeskrivelser | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Skift til miljø til Udvikling vil vise mere detaljeret information om fejlen.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Tjek hvor Toruń ligger, hvordan du kommer til den gamle bydel, og se et praktisk OpenStreetMap-kort med byens placering.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Fejl</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Udviklertilstand</value>
   </data>
 </root>

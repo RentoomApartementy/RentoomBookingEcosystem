@@ -217,7 +217,7 @@
     <value>Aicinām jūs drīzumā!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom ikona</value>
+    <value>Rentoom - dzīvokļu īre</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Nav piedāvājumu</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Izvēlnes ikona</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Pieprasījuma ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Kļūda.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Toruņas atrašanās vieta, kur atrodas Toruņa, Toruņas karte, piekļuve Toruņai, Toruņas vecpilsēta</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Atrašanās vieta Toruņa</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Pieprasījuma apstrādes laikā radās kļūda.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Izstrādes vidi nevajadzētu iespējot ražošanā.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Tas var atklāt sensitīvu informāciju no izņēmumiem lietotājiem. Vietējai atkļūdošanai iestatiet ASPNETCORE_ENVIRONMENT vides mainīgo uz Izstrāde un restartējiet lietojumprogrammu.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruņa atrašanās vieta, karte un norādes | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Pārslēdzot vidi uz Izstrāde, tiks parādīta detalizētāka informācija par kļūdu.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Pārbaudiet, kur atrodas Toruņa, kā nokļūt vecpilsētā, un apskatiet praktisku OpenStreetMap karti ar pilsētas atrašanās vietu.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Kļūda</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Izstrādātāja režīms</value>
   </data>
 </root>

@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Vizualizați documentul</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Ora selectată de sosire</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Încă nu știu</value>
+  </data>
 </root>

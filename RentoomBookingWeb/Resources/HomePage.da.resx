@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Læs mere</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Vores partnere</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Vi arbejder sammen med veletablerede lokale brands for at gøre dit ophold i Toruń unikt</value>
+  </data>
 </root>

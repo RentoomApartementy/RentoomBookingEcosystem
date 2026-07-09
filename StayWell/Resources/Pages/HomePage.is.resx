@@ -149,7 +149,7 @@
     <value>Heimili</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Innritunarleiðbeiningar</value>
+    <value>Farið inn í bygginguna</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Leiðbeiningar</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Vagn</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Þessi bókun er útrunnin</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Dvölin þín er búin. Við vonum að það hafi tekist — við bjóðum þér að bóka aftur hjá Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Þýðingar eru sjálfkrafa búnar til og geta innihaldið villur. Við hvetjum þig til að tilkynna þær.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Skráðu þig inn</value>
   </data>
 </root>

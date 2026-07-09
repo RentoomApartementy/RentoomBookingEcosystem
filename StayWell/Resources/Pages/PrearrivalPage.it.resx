@@ -337,4 +337,7 @@ Le normative sugli affitti in inglese sono disponibili su www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Termini e Condizioni e Consenso</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Regolamenti sul soggiorno</value>
+  </data>
 </root>

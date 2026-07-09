@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Opi lisää</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Kumppanimme</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Teemme yhteistyötä todistettujen paikallisten brändien kanssa, jotta oleskelustasi Toruńissa olisi ainutlaatuinen</value>
+  </data>
 </root>

@@ -149,7 +149,7 @@
     <value>Дім</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Інструкції для реєстрації</value>
+    <value>Заходьте до будівлі</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Інструкції</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Візок</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Термін дії бронювання закінчився</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Твоє перебування закінчилося. Сподіваємося, що це було успішно — запрошуємо вас знову забронювати на Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Переклади генеруються автоматично і можуть містити помилки. Ми закликаємо вас повідомити про це.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Реєстрація</value>
   </data>
 </root>

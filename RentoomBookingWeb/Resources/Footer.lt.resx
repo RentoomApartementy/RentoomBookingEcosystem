@@ -164,4 +164,7 @@
   <data name="Footer_LogoAlt" xml:space="preserve">
     <value>Rentoom - Apartamentai</value>
   </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Mūsų partneriai</value>
+  </data>
 </root>

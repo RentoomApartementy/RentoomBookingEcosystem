@@ -337,4 +337,7 @@ Udlejningsregler på engelsk er tilgængelige på www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Vilkår og betingelser og samtykker</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Opholdsregler</value>
+  </data>
 </root>

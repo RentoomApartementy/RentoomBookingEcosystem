@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Féach ar an gcáipéis</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Am teachta roghnaithe</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Níl a fhios agam go fóill</value>
+  </data>
 </root>

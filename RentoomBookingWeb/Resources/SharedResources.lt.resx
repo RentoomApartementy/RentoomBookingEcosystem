@@ -217,7 +217,7 @@
     <value>Kviečiame netrukus!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom piktograma</value>
+    <value>Rentoom - butų nuoma</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Pasiūlymų nėra</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Meniu piktograma</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Užklausos ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Klaida.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Torunės vieta, kur yra Torunė, Torunės žemėlapis, privažiavimas prie Torunės, Torunės senamiestis</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Torunės vieta</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Apdorojant užklausą įvyko klaida.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Kūrimo aplinka neturėtų būti įgalinta gamyboje.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Tai gali atskleisti slaptą informaciją iš išimčių galutiniams vartotojams. Norėdami atlikti vietinį derinimą, nustatykite ASPNETCORE_ENVIRONMENT aplinkos kintamąjį į Kūrimas ir iš naujo paleiskite programą.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Torunės vieta, žemėlapis ir nuorodos | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Perjungus aplinką į Kūrimas, bus rodoma išsamesnė informacija apie klaidą.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Patikrinkite, kur yra Torunė, kaip patekti į senamiestį, ir pamatykite praktišką "OpenStreetMap" žemėlapį su miesto vieta.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Klaida</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Kūrėjo režimas</value>
   </data>
 </root>

@@ -217,7 +217,7 @@
     <value>Ju ftojmë së shpejti!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Ikona Rentoom</value>
+    <value>Rentoom - apartamente me qira</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Nuk ka oferta</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Ikona e menusë</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>ID e kërkesës:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Gabim.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>vendndodhja e Toruń, ku ndodhet Toruń, harta e Toruń, hyrja në Toruń, qyteti i vjetër i Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Vendndodhja e Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Një gabim ndodhi gjatë përpunimit të kërkesës suaj.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Mjedisi i zhvillimit nuk duhet të aktivizohet në prodhim.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Kjo mund të ekspozojë informacione të ndjeshme nga përjashtimet për përdoruesit fundorë. Për korrigjimin lokal, vendosni variablin ASPNETCORE_ENVIRONMENT të mjedisit në Zhvillim dhe rinisni aplikacionin.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Vendndodhja, harta dhe udhëzimet e Toruń | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Kalimi i mjedisit në Zhvillim do të shfaqë informacion më të detajuar rreth gabimit.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Kontrolloni se ku ndodhet Toruń, si të shkoni në qytetin e vjetër dhe shihni një hartë praktike OpenStreetMap me vendndodhjen e qytetit.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Gabim</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Modaliteti i zhvilluesit</value>
   </data>
 </root>

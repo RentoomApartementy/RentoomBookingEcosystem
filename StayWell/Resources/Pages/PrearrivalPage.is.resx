@@ -337,4 +337,7 @@ Leigureglur á ensku eru aðgengilegar á www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Skilmálar og samþykki</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Reglur um dvöl</value>
+  </data>
 </root>

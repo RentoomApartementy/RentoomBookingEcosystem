@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Teagmháil</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Bainistíocht cíosa Toruń, seirbhís árasán, infheistíocht saor ó chothabháil, comhar rentoom, barrfheabhsú brabús cíosa, cíos gearrthéarmach</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Cas d'árasán ina infheistíocht saor ó chothabháil le Rentoom. Cuirimid bainistíocht chuimsitheach cíosa ar fáil i Toruń, barrfheabhsú ioncaim agus seirbhís aoi 24/7. Geall ar cháilíocht agus taithí.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Comhar - Rentoom | Bainistíocht Léasa Gairmiúil</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Comhar</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Is muid an ceannaire margaidh i Toruń. Cuirimid seirbhís iomlán, teicneolaíochtaí nuálacha agus uasmhéadú do bhrabúis ar fáil. Bí suaimhneach, táimid ag obair duit.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Comhar - Rentoom | Bainistíocht Cíosa Toruń</value>
+  </data>
 </root>

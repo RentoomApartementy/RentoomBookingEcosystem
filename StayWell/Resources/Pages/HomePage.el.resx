@@ -149,7 +149,7 @@
     <value>Σπίτι</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Οδηγίες check-in</value>
+    <value>Μπείτε στο κτίριο</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Οδηγίες</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Καλάθι</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Αυτή η κράτηση έχει λήξει</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Η διαμονή σας τελείωσε. Ελπίζουμε ότι ήταν επιτυχής — σας προσκαλούμε να κάνετε ξανά κράτηση στο Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Οι μεταφράσεις δημιουργούνται αυτόματα και ενδέχεται να περιέχουν σφάλματα. Σας ενθαρρύνουμε να τα αναφέρετε.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Ασύρματο δίκτυο</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Άφιξη</value>
   </data>
 </root>

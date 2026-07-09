@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Faigh tuilleadh eolais</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Ár gcomhpháirtithe</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Oibrímid le brandaí áitiúla cruthaithe chun do chuid fanacht i Toruń a dhéanamh uathúil</value>
+  </data>
 </root>

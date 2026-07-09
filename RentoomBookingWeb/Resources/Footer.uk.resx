@@ -164,4 +164,7 @@
   <data name="Footer_LogoAlt" xml:space="preserve">
     <value>Рентум — апартаменти</value>
   </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Наші партнери</value>
+  </data>
 </root>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Kód vašeho bytu</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Potvrďte</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>nebo</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Žádný kód na zámek. Kontaktujte podporu!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Váš kód bude k dispozici u {0} v den přihlášení.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Vaše rezervace skončila. Kód již není dostupný.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Generování nového kódu</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Nový kód pro {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Generování... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Důležité: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Platné od: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Platné do: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Předchozí kódy</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Původní kód</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Nový přístupový kód byl úspěšně vygenerován.</value>
+  </data>
+</root>

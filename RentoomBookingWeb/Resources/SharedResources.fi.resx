@@ -217,7 +217,7 @@
     <value>Kutsumme sinut pian!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom-ikoni</value>
+    <value>Rentoom – vuokra-asunnot</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Ei tarjouksia</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Valikkokuvake</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Pyyntötunnus:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Virhe.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Toruńin sijainti, jossa Toruń sijaitsee, Toruńin kartta, pääsy Toruńiin, Toruńin vanhaankaupunkiin</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Toruńin sijainti</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Virhe tapahtui pyynnön käsittelyn aikana.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Kehitysympäristöä ei tulisi mahdollistaa tuotannossa.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Tämä voi paljastaa arkaluontoista tietoa poikkeuksista loppukäyttäjille. Paikallista virheenkorjausta varten aseta ASPNETCORE_ENVIRONMENT ympäristömuuttujaksi Kehitys ja käynnistä sovellus uudelleen.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruńin sijainti, kartta ja reitit | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Ympäristön vaihtaminen Kehitykseen näyttää tarkempaa tietoa virheestä.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Tarkista, missä Toruń sijaitsee, miten päästä vanhaan kaupunkiin ja katso käytännöllinen OpenStreetMap-kartta, jossa on kaupungin sijainti.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Virhe</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Kehittäjätila</value>
   </data>
 </root>

@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontaktpersonu varēja saglabāt, bet darījumu nevarēja izveidot. Pārbaudiet Bitrix pirms atkārtotas nosūtīšanas.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopēt PLN numuru</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopēt EUR numuru</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Kopējiet EUR konta numuru starpliktuvē</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Vai jums ir jautājumi par īres pārvaldību? Sazinieties ar mums! Pārbaudiet mūsu adresi un bankas datus.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Sazinieties ar Rentoom, Rentoom Toruń biroju, īres pārvaldības kontaktpersonu, Rentoom rēķina datiem</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kontakti</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kontakti - Rentoom | Nomas pakalpojumu un vadības birojs Toruņa</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kontakti - Rentoom | Profesionāla nomas pārvaldība</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Kopējiet PLN konta numuru starpliktuvē</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Sazinieties ar Rentoom komandu Toruņā. Adrese, bankas kontu numuri (PLN/EUR) un saziņas veidlapa. Profesionāls nomas serviss.</value>
+  </data>
 </root>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>A lakáskódod</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Megerősítse</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>vagy</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Nincs kód a zárhoz. Lépj kapcsolatba a támogatással!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>A kódod a bejelentkezés napján elérhető lesz {0}-től.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>A foglalásod véget ért. A jelszó már nem elérhető.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Új kód generálása</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Új kód {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Generálni... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Fontos: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Érvényes: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Érvényes: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Korábbi kódok</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Eredeti kód</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Sikeresen generáltak egy új jelszót.</value>
+  </data>
+</root>

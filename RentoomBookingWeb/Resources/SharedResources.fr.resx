@@ -217,7 +217,7 @@
     <value>Nous vous invitons bientôt !</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Icône Rentoom</value>
+    <value>Rentoom - appartements à louer</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Aucune offre</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Icône de menu</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>ID de la demande :</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Erreur.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>emplacement de Toruń, où se trouve Toruń, carte de Toruń, accès à Toruń, vieille ville de Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Localisation de Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Une erreur s’est produite lors du traitement de votre demande.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>L’environnement de développement ne devrait pas être favorisé lors de la production.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Cela peut exposer aux utilisateurs finaux des informations sensibles issues des exceptions. Pour le débogage local, réglez la variable d’environnement ASPNETCORE_ENVIRONMENT sur Development et redémarrez l’application.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Emplacement, carte et itinéraires de Toruń | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Passer l’environnement en Développement affichera des informations plus détaillées sur l’erreur.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Vérifiez où se trouve Toruń, comment rejoindre la vieille ville et voyez une carte OpenStreetMap pratique avec l’emplacement de la ville.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Mode développeur</value>
   </data>
 </root>

@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Izvedite več</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Naši partnerji</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Sodelujemo z preverjenimi lokalnimi blagovnimi znamkami, da bo vaše bivanje v Torunu edinstveno</value>
+  </data>
 </root>

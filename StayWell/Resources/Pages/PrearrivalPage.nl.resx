@@ -337,4 +337,7 @@ Huurregels in het Engels zijn beschikbaar op www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Algemene voorwaarden en toestemmingen</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Verblijfsregels</value>
+  </data>
 </root>

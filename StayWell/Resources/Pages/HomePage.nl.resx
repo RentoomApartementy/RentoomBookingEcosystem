@@ -149,7 +149,7 @@
     <value>Home</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Incheckinstructies</value>
+    <value>Betreed het gebouw</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Instructies</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Kar</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Deze reservering is verlopen</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Je verblijf is voorbij. We hopen dat het een succes is geweest — we nodigen u uit om opnieuw te boeken bij Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Vertalingen worden automatisch gegenereerd en kunnen fouten bevatten. We moedigen u aan ze te melden.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Check in</value>
   </data>
 </root>

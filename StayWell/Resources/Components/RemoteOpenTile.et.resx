@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Kaugukse avamine</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Kontrollin luku saadavust...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Sinu broneering on lõppenud. Kaugavamine pole enam saadaval.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Kaugavamine on saadaval alates {0} registreerimispäeval.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Töötlemine</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Ava uksed</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Vajuta avamiseks</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Kaugavamine pole hetkel saadaval.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Palun proovi uuesti</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Proovi uuesti {0}s</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Vea avamine</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Viga väljalülitamisel</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Serveri ühenduse viga</value>
+  </data>
+</root>

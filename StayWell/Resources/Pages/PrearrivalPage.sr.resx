@@ -337,4 +337,7 @@ Propisi o iznajmljivanju na engleskom jeziku dostupni su na www.rentoom.pl</valu
   <data name="TOS" xml:space="preserve">
     <value>Uslovi korišćenja i saglasnosti</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Pravila o boravku</value>
+  </data>
 </root>

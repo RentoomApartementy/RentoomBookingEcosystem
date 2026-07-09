@@ -217,7 +217,7 @@
     <value>Nistednuk dalwaqt!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Ikona ta' Rentoom</value>
+    <value>Rentoom - appartamenti għall-kiri</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>L-ebda offerti</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Ikona tal-menu</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>ID tal-Talba:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Żball.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>post ta' Toruń, fejn jinsab Toruń, mappa ta' Toruń, aċċess għal Toruń, il-belt qadima ta' Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Post ta' Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Żball seħħ waqt li kien qed jipproċessa t-talba tiegħek.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>L-ambjent ta' żvilupp m'għandux jiġi attivat waqt il-produzzjoni.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Dan jista' jesponi informazzjoni sensittiva minn eċċezzjonijiet għall-utenti finali. Għad-debugging lokali, issettja l-varjabbli tal-ambjent tal-ASPNETCORE_ENVIRONMENT għal Development u erġa' beda l-applikazzjoni.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Post, mappa u direzzjonijiet ta' Toruń | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Il-bidla tal-ambjent għal Żvilupp turi informazzjoni aktar dettaljata dwar l-iżball.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Iċċekkja fejn jinsab Toruń, kif tasal fil-belt qadima u ara mappa prattika OpenStreetMap bil-post tal-belt.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Żball</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Modalità ta' Żviluppatur</value>
   </data>
 </root>

@@ -337,4 +337,7 @@ Predpisy o prenájme v angličtine sú dostupné na www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Obchodné podmienky a súhlasy</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Pravidlá pobytu</value>
+  </data>
 </root>

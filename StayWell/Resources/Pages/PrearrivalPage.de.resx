@@ -337,4 +337,7 @@ Mietvorschriften auf Englisch sind unter www.rentoom.pl verfügbar.</value>
   <data name="TOS" xml:space="preserve">
     <value>Allgemeine Geschäftsbedingungen und Zustimmungen</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Aufenthaltsbestimmungen</value>
+  </data>
 </root>

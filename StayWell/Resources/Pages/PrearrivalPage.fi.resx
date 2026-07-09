@@ -337,4 +337,7 @@ Englanninkieliset vuokraussäännöt ovat saatavilla osoitteessa www.rentoom.pl<
   <data name="TOS" xml:space="preserve">
     <value>Ehdot ja suostumukset</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Oleskelusäännökset</value>
+  </data>
 </root>

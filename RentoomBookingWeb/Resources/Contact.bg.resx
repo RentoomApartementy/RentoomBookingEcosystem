@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Контактът можеше да бъде спасен, но сделката не можеше да бъде създадена. Проверете Bitrix преди да го изпратите отново.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Копирай номера на PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Копирай EUR номера</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Копирайте номера на сметката в EUR в клипборда</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Имате ли въпроси относно управлението на наеми? Свържете се с нас! Проверете нашия адрес и банкови данни.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Contact Rentoom, Rentoom Toruń Office, Rental Management Контакт, данни за фактури на Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Контакт</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Контакт - Rentoom | Офис за услуги и управление под наем в Торун</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Контакт - Rentoom | Професионално управление на наеми</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Копирайте номера на PLN акаунта в клипборда</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Свържете се с екипа на Rentoom в Торун. Данни за адреса, номера на банкови сметки (PLN/EUR) и форма за контакт. Професионална услуга за наем.</value>
+  </data>
 </root>

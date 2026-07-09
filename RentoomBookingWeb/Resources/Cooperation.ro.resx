@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Contact</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Administrarea închirierilor Toruń, Servicii de apartamente, Investiții fără întreținere, Cooperare Rentoom, Optimizarea profitului de închiriere, Închiriere pe termen scurt Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Transformă-ți apartamentul într-o investiție fără întreținere cu Rentoom. Oferim o administrare completă a închirierilor în Toruń, optimizare a veniturilor și servicii pentru oaspeți 24/7. Pariază pe calitate și experiență.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Cooperare - Rentoom | Managementul Contractelor de Închiriere Profesionale</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Cooperare</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Suntem liderul pieței din Toruń. Oferim servicii complete, tehnologii inovatoare și maximizarea profiturilor tale. Stai liniștit, lucrăm pentru tine.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Cooperare - Rentoom | Administrarea închirierilor Toruń</value>
+  </data>
 </root>

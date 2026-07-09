@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Je appartementcode</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bevestig</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Geen code voor het slot. Neem contact op met de support!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Je code is op de dag van inchecken beschikbaar bij {0}.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Je boeking is afgelopen. De toegangscode is niet langer beschikbaar.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Genereer nieuwe code</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Nieuwe code voor {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Genereren... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Belangrijk: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Geldig van: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Geldig tot: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Vorige codes</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Oorspronkelijke code</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Er is een nieuwe toegangscode succesvol gegenereerd.</value>
+  </data>
+</root>

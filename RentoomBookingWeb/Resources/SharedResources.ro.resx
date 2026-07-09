@@ -217,7 +217,7 @@
     <value>Vă invităm curând!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Icoana Rentoom</value>
+    <value>Rentoom - apartamente de închiriat</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Nicio ofertă</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Pictogramă meniu</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>ID de solicitare:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Eroare.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>locația orașului Toruń, unde se află Toruń, harta orașului Toruń, accesul la Toruń, orașul vechi al orașului</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Locația orașului Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>A apărut o eroare în timpul procesării cererii tale.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Mediul de dezvoltare nu ar trebui să fie favorizat în producție.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Acest lucru poate expune informații sensibile din excepții către utilizatorii finali. Pentru depanarea locală, setează variabila de mediu ASPNETCORE_ENVIRONMENT pe Development și repornește aplicația.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Locație, hartă și direcții Toruń | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Comutarea mediului pe Development va afișa informații mai detaliate despre eroare.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Verifică unde se află Toruń, cum ajungi în orașul vechi și vezi o hartă practică OpenStreetMap cu locația orașului.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Modul Dezvoltator</value>
   </data>
 </root>

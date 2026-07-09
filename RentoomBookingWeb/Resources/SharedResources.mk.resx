@@ -217,7 +217,7 @@
     <value>Ве покануваме наскоро!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Икона на Рентум</value>
+    <value>Рентум - станови за изнајмување</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Нема понуди</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Икона на менито</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Барање ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Грешка.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>локација на Торуњ, каде што се наоѓа Торун, мапа на Торуњ, пристап до Торун, стар град на Торуњ</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Локација на Торун</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Се појави грешка додека го обработувавте вашето барање.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Развојната средина не треба да се овозможи на продукција.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Ова може да ги изложи чувствителните информации од исклучоци за крајните корисници. За локално дебагирање, поставете ја променливата ASPNETCORE_ENVIRONMENT environment на Development и рестартирајте ја апликацијата.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Локација, мапа и насоки на Торуњ | Рентум</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Префрлањето на околината во Development ќе прикаже подетални информации за грешката.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Проверете каде се наоѓа Торуњ, како да стигнете до стариот град и видете практична OpenStreetMap мапа со локацијата на градот.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Грешка</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Режим за развивачи</value>
   </data>
 </root>

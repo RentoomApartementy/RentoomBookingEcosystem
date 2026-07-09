@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>D'fhéadfaí an teagmháil a shábháil, ach níorbh fhéidir an déileáil a chruthú. Seiceáil Bitrix sula ndéantar é a ath-loingseoireacht.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Cóipeáil uimhir PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Cóip uimhir EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Cóipeáil uimhir chuntais EUR chuig an ngearrthaisce</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>An bhfuil ceisteanna agat faoi bhainistíocht cíosa? Déan teagmháil linn! Seiceáil ár seoladh agus sonraí bainc.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Déan teagmháil le Rentoom, Oifig Rentoom Toruń, Bainistíocht Cíosa Teagmháil, sonraí sonraisc Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Teagmháil</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Teagmháil - Rentoom | Oifig Seirbhíse agus Bainistíochta Cíosa Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Teagmháil - Rentoom | Bainistíocht Léasa Gairmiúil</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Cóipeáil uimhir chuntais PLN chuig an ngearrthaisce</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Déan teagmháil le foireann Rentoom i Toruń. Sonraí seolta, uimhreacha cuntais bhainc (PLN/EUR) agus foirm teagmhála. Seirbhís ghairmiúil ar cíos.</value>
+  </data>
 </root>

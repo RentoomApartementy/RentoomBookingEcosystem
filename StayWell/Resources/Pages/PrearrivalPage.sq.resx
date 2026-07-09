@@ -337,4 +337,7 @@ Rregulloret e qirasë në anglisht janë të disponueshme në www.rentoom.pl</va
   <data name="TOS" xml:space="preserve">
     <value>Termat dhe Kushtet dhe Pëlqimet</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Rregulloret e qëndrimit</value>
+  </data>
 </root>

@@ -149,7 +149,7 @@
     <value>Дом</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Инструкции по регистрации</value>
+    <value>Входите в здание</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Инструкции</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Тележка</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Срок действия этой брони истёк</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Твоё пребывание закончилось. Надеемся, что всё прошло успешно — приглашаем вас снова забронировать концерт в Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Переводы генерируются автоматически и могут содержать ошибки. Мы призываем вас сообщить о них.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Регистрация</value>
   </data>
 </root>

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Oscailt dorais iargúlta</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Infhaighteacht an ghlais á sheiceáil...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Tá d'áirithint críochnaithe. Níl cianoscailt ar fáil a thuilleadh.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Beidh cianoscailt ar fáil ó {0} ar lá na seiceála isteach.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Próiseáil</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Doirse oscailte</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Brúigh chun é a oscailt</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Níl cianoscailt ar fáil faoi láthair.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Bain triail as arís le do thoil</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Bain triail as arís i {0}</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Earráid ag oscailt</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Earráid agus tú ag múchadh síos</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Earráid ceangail freastalaí</value>
+  </data>
+</root>

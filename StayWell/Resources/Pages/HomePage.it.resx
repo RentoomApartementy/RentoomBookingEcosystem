@@ -149,7 +149,7 @@
     <value>Casa</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Istruzioni per il check-in</value>
+    <value>Entriamo nell'edificio</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Istruzioni</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Carrello</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Questa riserva è scaduta</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Il tuo soggiorno è finito. Speriamo sia stato un successo — vi invitiamo a prenotare di nuovo da Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Le traduzioni vengono generate automaticamente e possono contenere errori. Vi incoraggiamo a segnalarli.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Check-in</value>
   </data>
 </root>

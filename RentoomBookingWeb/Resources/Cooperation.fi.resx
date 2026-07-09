@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Yhteystiedot</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>vuokranhallinta toruń, asuntopalvelu, huoltovapaa sijoitus, rentoom-yhteistyö, vuokravoiton optimointi, lyhytaikainen vuokraus toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Muuta asuntosi huoltovapaaksi sijoitukseksi Rentoomin avulla. Tarjoamme kattavan vuokranhallinnan Toruńissa, tulojen optimoinnin ja 24/7-asiakaspalvelun. Panosta laatuun ja kokemukseen.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Yhteistyö - Rentoom | Ammatillinen vuokrasopimusten hallinta</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Yhteistyö</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Olemme markkinajohtaja Toruńissa. Tarjoamme täyden palvelun, innovatiivisia teknologioita ja voittojesi maksimoimista. Lepää rauhassa, me työskentelemme puolestasi.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Yhteistyö - Rentoom | Vuokranhallinta Toruń</value>
+  </data>
 </root>

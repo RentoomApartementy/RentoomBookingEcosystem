@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Jūsu dzīvokļa kods</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Apstiprināt</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>vai</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Slēdzenes koda nav. Sazinieties ar atbalsta dienestu!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Jūsu kods būs pieejams no {0} reģistrēšanās dienā.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Jūsu rezervācija ir beigusies. Piekļuves kods vairs nav pieejams.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Ģenerēt jaunu kodu</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Jauns kods {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Ģenerēšana... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Svarīgi: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Derīgs no: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Derīgs līdz: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Iepriekšējie kodi</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Oriģinālais kods</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Jauns piekļuves kods ir veiksmīgi ģenerēts.</value>
+  </data>
+</root>

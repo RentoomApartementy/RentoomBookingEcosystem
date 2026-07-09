@@ -149,7 +149,7 @@
     <value>Koti</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Sisäänkirjautumisohjeet</value>
+    <value>Sisään rakennukseen</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Ohjeet</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Kärry</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Tämä varaus on vanhentunut</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Oleskelusi on ohi. Toivomme, että se onnistui — kutsumme sinut varaamaan uudelleen Rentoomiin.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Käännökset luodaan automaattisesti ja ne voivat sisältää virheitä. Kannustamme sinua ilmoittamaan heistä.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Sisäänkirjaus</value>
   </data>
 </root>

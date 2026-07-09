@@ -149,7 +149,7 @@
     <value>O NAMA</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Instrukcije za prijavu</value>
+    <value>Uđite u zgradu</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Instrukcije</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Bilten</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Ova rezervacija je istekla</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Tvoj boravak je završen. Nadamo se da je bio uspešan - pozivamo vas da ponovo rezervišete u Rentoom-u.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Prevodi se automatski generišu i mogu da sadrže greške. Ohrabrujemo vas da ih prijavite.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Vi-Fi internet</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Prijavite se</value>
   </data>
 </root>

@@ -217,7 +217,7 @@
     <value>Запрошуємо вас незабаром!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Ікона Рентум</value>
+    <value>Rentoom — квартири в оренду</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Жодних пропозицій</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Іконка меню</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Ідентифікатор запиту:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Помилка.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>розташування Торуня, де розташований Торунь, карта Торуні, доступ до Торуні, старе місто Торуні</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Розташування Торуня</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Під час обробки вашого запиту сталася помилка.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Середовище розробки не повинно бути активоване на виробництві.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Це може виявити конфіденційну інформацію з винятків для кінцевих користувачів. Для локального налагодження встановіть змінну ASPNETCORE_ENVIRONMENT середовища на Development і перезапустіть застосунок.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Місцезнаходження Торуні, карта та маршрути | Рентум</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Перемикання середовища на Розробку з'явиться більш детальна інформація про помилку.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Перевірте, де розташований Торунь, як дістатися до старого міста, і перегляньте практичну карту OpenStreetMap з місцем розташування міста.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Помилка</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Режим розробника</value>
   </data>
 </root>

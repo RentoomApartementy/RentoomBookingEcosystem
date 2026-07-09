@@ -217,7 +217,7 @@
     <value>Запрашаем вас хутка!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Ікона Рэнтум</value>
+    <value>Рэнтум — кватэры для арэнды</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Ніякіх прапаноў</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Іконка меню</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Ідэнтыфікатар запыту:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Памылка.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Месцазнаходжанне Торуні, дзе знаходзіцца Торунь, карта Торуні, доступ да Торуні, стары горад Торуні</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Месцазнаходжанне Торуня</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Падчас апрацоўкі вашага запыту ўзнікла памылка.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Асяроддзе распрацоўкі не павінна быць уключана ў вытворчасці.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Гэта можа раскрыць канчатковых карыстальнікаў канчатковую інфармацыю ад выключэнняў. Для лакальнай адладкі ўсталюйце зменную ASPNETCORE_ENVIRONMENT асяроддзя ў Development і перазапусціце праграму.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Месцазнаходжанне, карта і напрамкі Торуні | Рэнтум</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Пераключэнне асяроддзя на распрацоўку пакажа больш падрабязную інфармацыю пра памылку.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Праверце, дзе знаходзіцца Торунь, як дабрацца да старога горада і паглядзіце практычную карту OpenStreetMap з месцазнаходжаннем горада.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Памылка</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Рэжым распрацоўшчыка</value>
   </data>
 </root>

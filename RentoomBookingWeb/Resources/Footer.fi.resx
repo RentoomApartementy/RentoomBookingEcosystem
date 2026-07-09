@@ -164,4 +164,7 @@
   <data name="Footer_LogoAlt" xml:space="preserve">
     <value>Rentoom - Asunnot</value>
   </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Kumppanimme</value>
+  </data>
 </root>

@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Дознај повеќе</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Нашите партнери</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Работиме со докажани локални брендови за да го направиме вашиот престој во Торуњ уникатен</value>
+  </data>
 </root>

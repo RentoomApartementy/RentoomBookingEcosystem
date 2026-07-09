@@ -217,7 +217,7 @@
     <value>We nodigen je snel uit!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom Icoon</value>
+    <value>Rentoom - appartementen te huur</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Geen aanbiedingen</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Menu-icoon</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Verzoek-ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Fout.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>locatie van Toruń, waar Toruń ligt, kaart van Toruń, toegang tot Toruń, oude stad van Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Locatie van Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Er is een fout opgetreden tijdens het verwerken van uw verzoek.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>De Development-omgeving mag niet worden ingeschakeld voor productie.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Dit kan gevoelige informatie van uitzonderingen blootstellen aan eindgebruikers. Voor lokaal debuggen zet je de ASPNETCORE_ENVIRONMENT environment-variabele op Development en start je de applicatie opnieuw.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruń locatie, kaart en routebeschrijving | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Het schakelen van de omgeving naar Development toont meer gedetailleerde informatie over de fout.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Controleer waar Toruń ligt, hoe je bij de oude stad komt en bekijk een praktische OpenStreetMap-kaart met de locatie van de stad.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Fout</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Ontwikkelaarmodus</value>
   </data>
 </root>

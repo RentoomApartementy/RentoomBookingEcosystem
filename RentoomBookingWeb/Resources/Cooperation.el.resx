@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Επικοινωνία</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Διαχείριση ενοικίασης Toruń, υπηρεσία διαμερισμάτων, επένδυση χωρίς συντήρηση, συνεργασία rentoom, βελτιστοποίηση κέρδους ενοικίασης, βραχυπρόθεσμη ενοικίαση toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Μετατρέψτε το διαμέρισμά σας σε επένδυση χωρίς συντήρηση με το Rentoom. Προσφέρουμε ολοκληρωμένη διαχείριση ενοικίασης στο Τορούν, βελτιστοποίηση εισοδήματος και εξυπηρέτηση επισκεπτών 24/7. Ποντάρετε στην ποιότητα και την εμπειρία.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Συνεργασία - Rentoom | Επαγγελματική Διαχείριση Μισθώσεων</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Συνεργασία</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Είμαστε ο ηγέτης της αγοράς στο Τορούν. Προσφέρουμε πλήρη εξυπηρέτηση, καινοτόμες τεχνολογίες και μεγιστοποίηση των κερδών σας. Να είστε ήσυχοι, δουλεύουμε για εσάς.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Συνεργασία - Rentoom | Διαχείριση ενοικίασης Τορούν</value>
+  </data>
 </root>

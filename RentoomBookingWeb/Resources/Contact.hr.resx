@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakt se mogao spasiti, ali dogovor nije mogao biti sklopljen. Provjerite Bitrix prije ponovnog slanja.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopiraj PLN broj</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopiraj EUR broj</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Kopirajte broj EUR računa u međuspremnik</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Imate li pitanja o upravljanju najmom? Kontaktirajte nas! Provjerite našu adresu i bankovne podatke.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Kontaktirajte Rentoom, ured Rentoom Toruń, kontakt za upravljanje najmom, podatke o računima Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Ured za usluge i upravljanje najmom Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Profesionalno upravljanje najmom</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Kopirajte broj PLN računa u međuspremnik</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Kontaktirajte Rentoom tim u Toruńu. Podaci o adresi, brojevi bankovnih računa (PLN/EUR) i kontakt obrazac. Profesionalna usluga najma.</value>
+  </data>
 </root>

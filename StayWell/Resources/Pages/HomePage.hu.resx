@@ -149,7 +149,7 @@
     <value>Otthon</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Bejelentkezési útmutatók</value>
+    <value>Lépj be az épületbe</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Utasítások</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Kocsi</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Ez a foglalás lejárt</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>A tartózkodásod véget ért. Reméljük, sikeres lett — meghívunk, hogy foglaljanak újra a Rentoomban.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>A fordítások automatikusan generálódnak, és hibákat is tartalmazhatnak. Bátorítjuk, hogy jelentse őket.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Jelentkezzen be</value>
   </data>
 </root>

@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Μάθετε περισσότερα</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Οι συνεργάτες μας</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Συνεργαζόμαστε με αποδεδειγμένες τοπικές μάρκες για να κάνουμε τη διαμονή σας στο Τορούν μοναδική</value>
+  </data>
 </root>

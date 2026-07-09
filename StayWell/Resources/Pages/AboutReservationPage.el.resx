@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Προβολή του εγγράφου</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Επιλεγμένη ώρα άφιξης</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Δεν ξέρω ακόμα</value>
+  </data>
 </root>

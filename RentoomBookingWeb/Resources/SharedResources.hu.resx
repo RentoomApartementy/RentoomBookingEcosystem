@@ -217,7 +217,7 @@
     <value>Hamarosan meghívunk!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom Icon</value>
+    <value>Rentoom – bérbeadó lakások</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Nincs ajánlat</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Menü ikon</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Kérelem azonosító:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Hiba.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Toruń helye, ahol Toruń található, Toruń térképe, hozzáférés Toruńhoz, Toruń óvárosához</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Toruń elhelyezkedése</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Hiba történt a kérés feldolgozása közben.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>A fejlesztési környezetet nem szabad engedélyezni a termelés során.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Ez érzékeny információkat is felfedhet a kivételektől a végfelhasználóknak. Helyi hibakereséshez állítsd be a ASPNETCORE_ENVIRONMENT környezeti változót Fejlesztésre, és indítsd el az alkalmazást.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruń helyszíne, térkép és útbaigazítások | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>A környezet fejlesztésre váltása részletesebb információkat jelenít meg a hibáról.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Nézd meg, hol található Toruń, hogyan jutsz el az óvárosba, és nézz meg egy praktikus OpenStreetMap térképet a város helyével.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Hiba</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Fejlesztő mód</value>
   </data>
 </root>

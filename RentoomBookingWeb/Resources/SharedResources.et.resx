@@ -217,7 +217,7 @@
     <value>Kutsume teid varsti!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoomi ikoon</value>
+    <value>Rentoom – üürikorterid</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Pakkumisi ei ole</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Menüü ikoon</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Taotluse ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Viga.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Toruńi asukoht, kus Toruń asub, Toruńi kaart, ligipääs Toruńile, Toruńi vanalinn</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Toruńi asukoht</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Taotluse töötlemisel tekkis viga.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Arenduskeskkonda ei tohiks tootmises võimaldada.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>See võib paljastada tundlikku teavet eranditest lõppkasutajatele. Kohaliku silumise jaoks määra ASPNETCORE_ENVIRONMENT keskkonnamuutuja Arendus ja taaskäivita rakendus.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruńi asukoht, kaart ja juhised | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Keskkonna lülitamine arendusrežiimile kuvab vea kohta üksikasjalikumat teavet.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Vaata, kus Toruń asub, kuidas vanalinna pääseda, ja vaata praktilist OpenStreetMapi kaarti linna asukohaga.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Viga</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Arendaja režiim</value>
   </data>
 </root>

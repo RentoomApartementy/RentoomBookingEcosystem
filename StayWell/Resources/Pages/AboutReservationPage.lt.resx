@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Peržiūrėti dokumentą</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Pasirinktas atvykimo laikas</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Dar nežinau</value>
+  </data>
 </root>

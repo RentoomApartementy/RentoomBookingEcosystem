@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Oddaljeno odpiranje vrat</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Preverjam razpoložljivost ključavnic...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Vaša rezervacija se je končala. Oddaljeno odpiranje ni več na voljo.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Oddaljeno odpiranje bo na voljo od {0} na dan prijave.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Obdelava</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Odprta vrata</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Pritisni za odpiranje</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Oddaljeno odpiranje trenutno ni na voljo.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Prosim, poskusite znova</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Poskusi znova v {0}</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Napaka pri odpiranju</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Napaka pri izklopu</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Napaka pri povezavi strežnika</value>
+  </data>
+</root>

@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Skoðaðu skjalið</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Valinn komutími</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Ég veit það ekki enn</value>
+  </data>
 </root>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Dokončite proces registrácie</value>
+  </data>
+  <data name="NoSteps" xml:space="preserve">
+    <value>Kroky na registráciu pri tejto rezervácii nie sú k dispozícii.</value>
+  </data>
+  <data name="BuildingCodesTitle" xml:space="preserve">
+    <value>Stavebné predpisy</value>
+  </data>
+  <data name="ApartmentCodeTitle" xml:space="preserve">
+    <value>Kód bytu</value>
+  </data>
+  <data name="InstructionsTitle" xml:space="preserve">
+    <value>Pokyny na prihlásenie</value>
+  </data>
+  <data name="LockGuideTitle" xml:space="preserve">
+    <value>Prevádzka zámku</value>
+  </data>
+  <data name="LockGuideSubtitle" xml:space="preserve">
+    <value>Pozrite sa, ako otvoriť a zatvoriť dvere</value>
+  </data>
+</root>

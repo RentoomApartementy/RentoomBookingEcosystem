@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Jūsų buto kodas</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Patvirtinti</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>arba</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Nėra spynos kodo. Susisiekite su palaikymo komanda!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Jūsų kodas bus pasiekiamas nuo {0} atvykimo dieną.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Jūsų užsakymas baigėsi. Slaptažodis nebepasiekiamas.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Generuoti naują kodą</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Naujas {0} kodas</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Generuojama... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Svarbu: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Galioja nuo: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Galioja iki: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Ankstesni kodai</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Pradinis kodas</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Sėkmingai sugeneruotas naujas slaptažodis.</value>
+  </data>
+</root>

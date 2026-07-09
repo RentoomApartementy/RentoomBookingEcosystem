@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>A kapcsolatot meg lehetett menteni, de az üzletet nem lehetett megkötni. Nézd meg a Bitrixet az újraszállítás előtt.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Másolj PLN számot</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Másolj EUR számot</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Másold le az EUR számlaszámot a clipboardra</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Van kérdése a bérleti bérleti menedzsmenttel kapcsolatban? Lépj kapcsolatba velünk! Nézd meg címünket és banki adatainkat.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Contact Rentoom, Rentoom Toruń Office, Rental Management Contact, Rentoom invoice data</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kapcsolat</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kapcsolat - Rentoom | Bérbeadási és Menedzsment Iroda Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kapcsolat - Rentoom | Professzionális bérleti menedzsment</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Másold le a PLN számlaszámot a clipboardra</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Lépjen kapcsolatba a Rentoom csapatával Toruńban. Címadatok, bankszámlaszámok (PLN/EUR) és egy kapcsolatfelvételi űrlap. Professzionális bérbeadási szolgáltatás.</value>
+  </data>
 </root>

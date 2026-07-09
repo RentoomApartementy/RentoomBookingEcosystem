@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontaktą pavyko įrašyti, bet sandorio sukurti nepavyko. Patikrinkite Bitrix prieš pakartotinai siunčiant.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopijuoti PLN numerį</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopijuoti EUR numerį</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>EUR sąskaitos numerio kopijavimas į mainų sritį</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Turite klausimų apie nuomos valdymą? Susisiekite su mumis! Patikrinkite mūsų adresą ir banko duomenis.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Susisiekite su Rentoom, Rentoom Toruń biuru, Nuomos valdymo kontaktais, Rentoom sąskaitų faktūrų duomenimis</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kontaktai</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kontaktai - Rentoom | Nuomos paslaugų ir valdymo biuras Torunėje</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kontaktai - Rentoom | Profesionalus nuomos valdymas</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Nukopijuokite PLN sąskaitos numerį į mainų sritį</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Susisiekite su "Rentoom" komanda Torunėje. Adreso duomenys, banko sąskaitų numeriai (PLN/EUR) ir kontaktinė forma. Profesionali nuomos paslauga.</value>
+  </data>
 </root>

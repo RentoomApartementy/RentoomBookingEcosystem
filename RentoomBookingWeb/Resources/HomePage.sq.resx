@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Mëso më shumë</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Partnerët tanë</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Ne punojmë me marka të provuara lokale për ta bërë qëndrimin tuaj në Toruń unik</value>
+  </data>
 </root>

@@ -217,7 +217,7 @@
     <value>Pozývame vás čoskoro!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom Icon</value>
+    <value>Rentoom - byty na prenájom</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Žiadne ponuky</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Ikona menu</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>ID požiadavky:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Chyba.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>poloha Toruňa, kde sa Toruň nachádza, mapa Toruňa, prístup do Toruňa, staré mesto Toruňa</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Poloha Toruňa</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Pri spracovaní vašej žiadosti došlo k chybe.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Vývojové prostredie by nemalo byť zapnuté v produkcii.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>To môže vystaviť citlivé informácie z výnimiek koncovým používateľom. Pre lokálne ladenie nastavte ASPNETCORE_ENVIRONMENT environmentálnu premennú na Development a reštartujte aplikáciu.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Poloha Toruńa, mapa a smerovanie | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Prepnutie prostredia na vývoj zobrazí podrobnejšie informácie o chybe.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Skontrolujte, kde sa nachádza Toruń, ako sa dostať do starého mesta a pozrite si praktickú mapu OpenStreetMap s polohou mesta.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Chyba</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Vývojársky režim</value>
   </data>
 </root>

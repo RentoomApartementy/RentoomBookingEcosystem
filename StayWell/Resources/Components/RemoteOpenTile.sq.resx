@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Hapja e derës në distancë</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Kontrollimi i disponueshmërisë së bllokimit...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Rezervimi juaj ka përfunduar. Hapja në distancë nuk është më e disponueshme.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Hapja në distancë do të jetë e disponueshme nga {0} në ditën e check-in.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Përpunimi</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Dyer të hapura</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Shtypni për të hapur</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Hapja në distancë aktualisht nuk është e disponueshme.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Ju lutemi provoni përsëri</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Provoni përsëri në {0}</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Gabim në hapje</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Gabim gjatë mbylljes</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Gabim i lidhjes së serverit</value>
+  </data>
+</root>

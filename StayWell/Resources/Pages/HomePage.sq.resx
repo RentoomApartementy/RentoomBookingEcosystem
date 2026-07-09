@@ -149,7 +149,7 @@
     <value>Shtëpi</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Udhëzimet e check-in</value>
+    <value>Hyni në ndërtesë</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Udhëzime</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Shporta</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Kjo rezervim ka skaduar</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Qëndrimi juaj ka mbaruar. Shpresojmë që të ishte një sukses - ju ftojmë të rezervoni përsëri në Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Përkthimet gjenerohen automatikisht dhe mund të përmbajnë gabime. Ju inkurajojmë t'i raportoni ato.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Regjistrohem</value>
   </data>
 </root>

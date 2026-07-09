@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Кантакт можна было выратаваць, але здзелку не ўдалося заключыць. Праверце Bitrix перад паўторнай адпраўкай.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Скапіраваць нумар PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Скапіраваць нумар EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Скапіруйце нумар рахунку EUR у буфер абмену</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Ці ёсць у вас пытанні пра кіраванне арэндай? Звяжыцеся з намі! Праверце наш адрас і банкаўскія дадзеныя.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Кантакт Rentoom, офіс Rentoom Toruń, кантакт па кіраванні арэндай, дадзеныя рахунку Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Кантакт</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Кантакт - Rentoom | Офіс арэнды і кіравання Торунь</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Кантакт - Rentoom | Прафесійнае кіраванне арэндай</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Скапіруйце нумар акаўнта PLN у буфер абмену</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Звяртайцеся да каманды Rentoom у Торуні. Адрасныя дадзеныя, нумары банкаўскіх рахункаў (PLN/EUR) і форма кантакту. Прафесійны сэрвіс арэнды.</value>
+  </data>
 </root>

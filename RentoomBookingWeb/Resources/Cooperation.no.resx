@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Utleieforvaltning Toruń, leilighetsservice, vedlikeholdsfri investering, Rentoom-samarbeid, optimalisering av leiefortjeneste, korttidsutleie Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Gjør leiligheten din til en vedlikeholdsfri investering med Rentoom. Vi tilbyr omfattende leieadministrasjon i Toruń, inntektsoptimalisering og døgnåpen gjesteservice. Sats på kvalitet og erfaring.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Samarbeid - Rentoom | Profesjonell leieforvaltning</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Samarbeid</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Vi er markedsleder i Toruń. Vi tilbyr full service, innovative teknologier og maksimering av dine fortjenester. Slapp av, vi jobber for deg.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Samarbeid - Rentoom | Utleieforvaltning Toruń</value>
+  </data>
 </root>

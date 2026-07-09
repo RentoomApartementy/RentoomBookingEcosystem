@@ -217,7 +217,7 @@
     <value>Σας προσκαλούμε σύντομα!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Εικονίδιο Rentoom</value>
+    <value>Rentoom - ενοικιαζόμενα διαμερίσματα</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Δεν υπάρχουν προσφορές</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Εικονίδιο μενού</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Αναγνωριστικό αιτήματος:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Λάθος.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>τοποθεσία του Τορούν, όπου βρίσκεται το Τορούν, χάρτης του Τορούν, πρόσβαση στο Τορούν, παλιά πόλη του Τορούν</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Τοποθεσία του Τορούν</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα κατά την επεξεργασία του αιτήματός σας.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Το περιβάλλον ανάπτυξης δεν πρέπει να είναι ενεργοποιημένο στην παραγωγή.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Αυτό μπορεί να εκθέσει ευαίσθητες πληροφορίες από εξαιρέσεις στους τελικούς χρήστες. Για τοπικό εντοπισμό σφαλμάτων, ορίστε τη μεταβλητή περιβάλλοντος ASPNETCORE_ENVIRONMENT σε Ανάπτυξη και επανεκκινήστε την εφαρμογή.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Τοποθεσία, χάρτης και οδηγίες Τορούν | Ρεντόουμ</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Η αλλαγή του περιβάλλοντος σε Ανάπτυξη θα εμφανίσει πιο λεπτομερείς πληροφορίες σχετικά με το σφάλμα.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Ελέγξτε πού βρίσκεται το Τορούν, πώς να φτάσετε στην παλιά πόλη και δείτε έναν πρακτικό χάρτη OpenStreetMap με την τοποθεσία της πόλης.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Λάθος</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Λειτουργία προγραμματιστή</value>
   </data>
 </root>

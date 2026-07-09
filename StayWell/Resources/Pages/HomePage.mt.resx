@@ -149,7 +149,7 @@
     <value>Dar</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Istruzzjonijiet għall-Check-in</value>
+    <value>Daħal fil-binja</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Istruzzjonijiet</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Karrettun</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Din ir-riżerva skadiet</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Il-waqfa tiegħek spiċċat. Nittamaw li kien suċċess — nistednuk terġa' tibbukkja f'Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>It-traduzzjonijiet jiġu ġġenerati awtomatikament u jistgħu jinkludu żbalji. Nħeġġukom tirrapportawhom.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Ċekk in</value>
   </data>
 </root>

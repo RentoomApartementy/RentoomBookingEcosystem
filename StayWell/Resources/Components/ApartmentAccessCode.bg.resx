@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Кодът на апартамента ти</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Потвърдете</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>или</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Няма код за ключалката. Свържете се с поддръжката!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Вашият код ще бъде достъпен от {0} в деня на чекирането.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Твоята резервация приключи. Паролата вече не е налична.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Генериране на нов код</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Нов код за {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Генериране... {0}с</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Важно: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Валидно от: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Валидно до: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Предишни кодове</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Оригинален код</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Нова парола е успешно генерирана.</value>
+  </data>
+</root>

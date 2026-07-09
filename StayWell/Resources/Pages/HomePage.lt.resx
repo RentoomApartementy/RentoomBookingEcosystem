@@ -149,7 +149,7 @@
     <value>Pradžia</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Registracijos instrukcijos</value>
+    <value>Įeikite į pastatą</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Instrukcijos</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Krepšelis</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Šio rezervavimo galiojimo laikas baigėsi</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Jūsų viešnagė baigėsi. Tikimės, kad tai buvo sėkmė – kviečiame dar kartą užsisakyti "Rentoom".</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Vertimai generuojami automatiškai ir juose gali būti klaidų. Raginame apie juos pranešti.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>"Wi-Fi"</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Įsiregistruoti, įsiregistruok</value>
   </data>
 </root>

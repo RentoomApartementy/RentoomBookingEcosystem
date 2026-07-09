@@ -217,7 +217,7 @@
     <value>Vi inviterer deg snart!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom-ikonet</value>
+    <value>Rentoom - leiligheter til leie</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Ingen tilbud</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Menyikon</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Forespørsels-ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Feil.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Beliggenhet Toruń, hvor Toruń ligger, kart over Toruń, tilgang til Toruń, gamlebyen</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Toruńs beliggenhet</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>En feil oppsto under behandlingen av forespørselen din.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Utviklingsmiljøet bør ikke aktiveres i produksjon.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Dette kan eksponere sensitiv informasjon fra unntak for sluttbrukere. For lokal feilsøking, sett ASPNETCORE_ENVIRONMENT environment-variabelen til Utvikling og start applikasjonen på nytt.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruńs beliggenhet, kart og veibeskrivelser | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Å bytte miljøet til Utvikling vil vise mer detaljert informasjon om feilen.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Sjekk hvor Toruń ligger, hvordan du kommer til gamlebyen og se et praktisk OpenStreetMap-kart med byens plassering.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Feil</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Utviklermodus</value>
   </data>
 </root>

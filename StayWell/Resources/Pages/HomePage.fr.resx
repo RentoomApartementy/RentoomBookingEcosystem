@@ -149,7 +149,7 @@
     <value>Accueil</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Instructions d’enregistrement</value>
+    <value>Entrez dans le bâtiment</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Instructions</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Wagon</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Cette réservation est expirée</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Ton séjour est terminé. Nous espérons que ce fut un succès — nous vous invitons à réserver à nouveau chez Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Les traductions sont générées automatiquement et peuvent contenir des erreurs. Nous vous encourageons à les signaler.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Enregistrement</value>
   </data>
 </root>

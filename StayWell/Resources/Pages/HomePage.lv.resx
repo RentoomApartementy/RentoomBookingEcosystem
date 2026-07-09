@@ -149,7 +149,7 @@
     <value>Sākums</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Reģistrēšanās instrukcijas</value>
+    <value>Ieejiet ēkā</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Instrukcijas</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Grozs</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Šīs rezervācijas termiņš ir beidzies</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Jūsu uzturēšanās ir beigusies. Mēs ceram, ka tas bija veiksmīgs - mēs aicinām jūs vēlreiz rezervēt Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Tulkojumi tiek ģenerēti automātiski, un tajos var būt kļūdas. Mēs aicinām jūs ziņot par tiem.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Reģistrēties</value>
   </data>
 </root>

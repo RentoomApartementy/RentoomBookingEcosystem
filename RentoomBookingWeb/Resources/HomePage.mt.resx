@@ -117,4 +117,10 @@
   <data name="LearnMore" xml:space="preserve">
     <value>Tgħallem aktar</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Il-partners tagħna</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Naħdmu ma' marki lokali provati biex nagħmlu l-waqfa tiegħek f'Toruń unika</value>
+  </data>
 </root>

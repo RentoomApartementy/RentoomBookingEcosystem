@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Távoli ajtónyitás</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Ellenőrizem a zár elérhetőségét...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>A foglalásod véget ért. A távoli megnyitás már nem elérhető.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>A távoli nyitás {0}-tól elérhető lesz a bejelentkezés napján.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Feldolgozás</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Nyisd meg az ajtókat</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Nyomd meg a nyitáshoz</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Jelenleg a távoli nyitás nem elérhető.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Kérlek, próbáld meg újra</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Próbáld meg újra {0}</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Hibanyitás</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Hiba a leállításkor</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Szerverkapcsolati hiba</value>
+  </data>
+</root>

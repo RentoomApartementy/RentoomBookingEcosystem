@@ -217,7 +217,7 @@
     <value>Tugaimid cuireadh duit go luath!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Deilbhín Rentoom</value>
+    <value>Rentoom - árasáin ar cíos</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Gan aon tairiscintí</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Deilbhín an roghchláir</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Aitheantas Iarratais:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Earráid.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>suíomh Toruń, áit a bhfuil Toruń suite, léarscáil de Toruń, rochtain ar Toruń, seanbhaile Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Suíomh Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Tharla earráid agus d'iarratas á phróiseáil.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Níor chóir an timpeallacht forbartha a chumasú ar tháirgeadh.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Féadann sé seo faisnéis íogair a nochtadh ó eisceachtaí d'úsáideoirí deiridh. Maidir le dífhabhtú logánta, socraigh an athróg timpeallachta ASPNETCORE_ENVIRONMENT go Development agus atosaigh an feidhmchlár.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Suíomh, léarscáil agus treoracha Toruń | An tSinn</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Má aistrítear an timpeallacht go Forbairt, taispeánfar faisnéis níos mionsonraithe faoin earráid.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Seiceáil cá bhfuil Toruń suite, conas dul go dtí an seanbhaile agus féach léarscáil praiticiúil OpenStreetMap le suíomh na cathrach.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Earráid</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Mód Forbróra</value>
   </data>
 </root>

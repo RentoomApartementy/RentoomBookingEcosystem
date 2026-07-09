@@ -149,7 +149,7 @@
     <value>Kodu</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Registreerimisjuhised</value>
+    <value>Siseneme hoonesse</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Juhised</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Käru</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>See broneering on aegunud</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Sinu viibimine on läbi. Loodame, et see oli edukas — kutsume teid uuesti broneerima Rentoomis.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Tõlked genereeritakse automaatselt ja võivad sisaldada vigu. Soovitame teil neist teatada.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Registreerima</value>
   </data>
 </root>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="YourIndividualCode" xml:space="preserve">
+    <value>Ο κωδικός του διαμερίσματός σας</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Επιβεβαιώνω</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>ή</value>
+  </data>
+  <data name="NoCode" xml:space="preserve">
+    <value>Δεν υπάρχει κωδικός για την κλειδαριά. Επικοινωνήστε με την υποστήριξη!</value>
+  </data>
+  <data name="CodeNotAvailable" xml:space="preserve">
+    <value>Ο κωδικός σας θα είναι διαθέσιμος από {0} την ημέρα του check-in.</value>
+  </data>
+  <data name="CodeNoLongerAvailable" xml:space="preserve">
+    <value>Η κράτησή σας έληξε. Το συνθηματικό δεν είναι πλέον διαθέσιμο.</value>
+  </data>
+  <data name="GenerateNewCode" xml:space="preserve">
+    <value>Δημιουργία νέου κώδικα</value>
+  </data>
+  <data name="NewCodeIn" xml:space="preserve">
+    <value>Νέος κωδικός για {0}</value>
+  </data>
+  <data name="GeneratingCode" xml:space="preserve">
+    <value>Δημιουργώντας... {0}</value>
+  </data>
+  <data name="CodeValidFromTo" xml:space="preserve">
+    <value>Σημαντικό: {0} – {1}</value>
+  </data>
+  <data name="CodeValidFrom" xml:space="preserve">
+    <value>Ισχύει από: {0}</value>
+  </data>
+  <data name="CodeValidTo" xml:space="preserve">
+    <value>Ισχύει μέχρι: {0}</value>
+  </data>
+  <data name="PreviousCodes" xml:space="preserve">
+    <value>Προηγούμενοι κωδικοί</value>
+  </data>
+  <data name="CodeFromIdo" xml:space="preserve">
+    <value>Αρχικός κώδικας</value>
+  </data>
+  <data name="PasscodeGeneratedSuccess" xml:space="preserve">
+    <value>Ένας νέος κωδικός πρόσβασης δημιουργήθηκε με επιτυχία.</value>
+  </data>
+</root>

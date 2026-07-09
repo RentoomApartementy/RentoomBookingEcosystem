@@ -217,7 +217,7 @@
     <value>Convidamos você em breve!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Ícone Rentoom</value>
+    <value>Rentoom - apartamentos para aluguel</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Sem ofertas</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Ícone do menu</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>ID do pedido:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Erro.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>localização de Toruń, onde está localizada Toruń, mapa de Toruń, acesso a Toruń, cidade antiga de Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Localização de Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Ocorreu um erro durante o processamento do seu pedido.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>O ambiente de desenvolvimento não deve ser habilitado na produção.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Isso pode expor informações sensíveis de exceções para os usuários finais. Para depuração local, defina a variável de ambiente ASPNETCORE_ENVIRONMENT para Development e reinicie o aplicativo.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Localização, mapa e direções de Toruń | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Mudar o ambiente para Desenvolvimento exibirá informações mais detalhadas sobre o erro.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Verifique onde fica Toruń, como chegar à cidade antiga e veja um mapa prático do OpenStreetMap com a localização da cidade.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Modo Desenvolvedor</value>
   </data>
 </root>

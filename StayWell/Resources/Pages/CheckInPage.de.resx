@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Check-in</value>
+  </data>
+  <data name="PageSubtitle" xml:space="preserve">
+    <value>Abschließen Sie den Check-in-Prozess</value>
+  </data>
+  <data name="NoSteps" xml:space="preserve">
+    <value>Check-in-Schritte sind für diese Buchung nicht verfügbar.</value>
+  </data>
+  <data name="BuildingCodesTitle" xml:space="preserve">
+    <value>Bauvorschriften</value>
+  </data>
+  <data name="ApartmentCodeTitle" xml:space="preserve">
+    <value>Wohnungscode</value>
+  </data>
+  <data name="InstructionsTitle" xml:space="preserve">
+    <value>Check-in-Anweisungen</value>
+  </data>
+  <data name="LockGuideTitle" xml:space="preserve">
+    <value>Schleusenbetrieb</value>
+  </data>
+  <data name="LockGuideSubtitle" xml:space="preserve">
+    <value>Sieh, wie man eine Tür öffnet und schließt</value>
+  </data>
+</root>

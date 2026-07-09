@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontakti</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Īres pārvaldība Toruń, dzīvokļa serviss, investīcijas bez apkopes, rentoom sadarbība, īres peļņas optimizācija, īstermiņa īre toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Pārvērtiet savu dzīvokli par ieguldījumu bez apkopes ar Rentoom. Mēs piedāvājam visaptverošu īres pārvaldību Toruņā, ienākumu optimizāciju un 24/7 viesu apkalpošanu. Likmes uz kvalitāti un pieredzi.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Sadarbība - Rentoom | Profesionāla nomas pārvaldība</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Sadarbība</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Mēs esam tirgus līderis Toruņā. Mēs piedāvājam pilnu servisu, inovatīvas tehnoloģijas un jūsu peļņas maksimizēšanu. Esiet mierīgi, mēs strādājam jūsu labā.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Sadarbība - Rentoom | Īres pārvaldība Toruņa</value>
+  </data>
 </root>

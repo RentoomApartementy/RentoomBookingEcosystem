@@ -149,7 +149,7 @@
     <value>Baile</value>
   </data>
   <data name="Instructions" xml:space="preserve">
-    <value>Treoracha Seiceála Isteach</value>
+    <value>Téigh isteach san fhoirgneamh</value>
   </data>
   <data name="InstructionsFooter" xml:space="preserve">
     <value>Treoracha</value>
@@ -210,5 +210,20 @@
   </data>
   <data name="CartButtonAlt" xml:space="preserve">
     <value>Cart</value>
+  </data>
+  <data name="ReservationExpiredTitle" xml:space="preserve">
+    <value>Tá an áirithint seo imithe in éag</value>
+  </data>
+  <data name="ReservationExpiredDesc" xml:space="preserve">
+    <value>Tá do fanacht thart. Tá súil againn gur éirigh leis - tugaimid cuireadh duit áirithint a dhéanamh arís ag Rentoom.</value>
+  </data>
+  <data name="TranslationDisclaimer" xml:space="preserve">
+    <value>Gintear aistriúcháin go huathoibríoch agus d'fhéadfadh earráidí a bheith ann. Molaimid duit iad a thuairisciú.</value>
+  </data>
+  <data name="WifiFooter" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="CheckInNow" xml:space="preserve">
+    <value>Seiceáil isteach</value>
   </data>
 </root>

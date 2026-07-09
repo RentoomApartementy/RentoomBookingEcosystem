@@ -234,4 +234,10 @@
   <data name="ViewDocument" xml:space="preserve">
     <value>Shiko dokumentin</value>
   </data>
+  <data name="SelectedCheckInTime" xml:space="preserve">
+    <value>Koha e zgjedhur e mbërritjes</value>
+  </data>
+  <data name="CheckInTimeNotSpecified" xml:space="preserve">
+    <value>Akoma nuk e di</value>
+  </data>
 </root>

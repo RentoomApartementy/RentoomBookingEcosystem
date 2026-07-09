@@ -337,4 +337,7 @@ Nuomos taisykles anglų kalba rasite adresu www.rentoom.pl</value>
   <data name="TOS" xml:space="preserve">
     <value>Taisyklės ir sąlygos bei sutikimai</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Viešnagės taisyklės</value>
+  </data>
 </root>

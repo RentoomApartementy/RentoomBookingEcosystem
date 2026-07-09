@@ -217,7 +217,7 @@
     <value>Каним ви скоро!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Икона на Рентум</value>
+    <value>Рентум - апартаменти под наем</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Няма оферти</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Икона на менюто</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Заявка ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Грешка.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>местоположение на Торун, където се намира Торун, карта на Торун, достъп до Торун, стария град на Торун</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Местоположение на Торун</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Възникна грешка по време на обработката на вашата заявка.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Средата за разработка не трябва да бъде активирана при производство.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Това може да изложи чувствителна информация от изключения за крайните потребители. За локално отстраняване на грешки задайте променливата ASPNETCORE_ENVIRONMENT среда на Development и рестартирайте приложението.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Местоположение, карта и упътвания в Торун | Рентум</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Превключването на средата в Development ще покаже по-подробна информация за грешката.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Проверете къде се намира Торун, как да стигнете до стария град и вижте практична карта на OpenStreetMap с местоположението на града.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Грешка</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Режим за разработчици</value>
   </data>
 </root>

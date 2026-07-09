@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RemoteOpen" xml:space="preserve">
+    <value>Απομακρυσμένο άνοιγμα πόρτας</value>
+  </data>
+  <data name="CheckingLock" xml:space="preserve">
+    <value>Έλεγχος διαθεσιμότητας κλειδαριάς...</value>
+  </data>
+  <data name="ReservationEnded" xml:space="preserve">
+    <value>Η κράτησή σας έληξε. Το απομακρυσμένο άνοιγμα δεν είναι πλέον διαθέσιμο.</value>
+  </data>
+  <data name="ReservationNotActive" xml:space="preserve">
+    <value>Το απομακρυσμένο άνοιγμα θα είναι διαθέσιμο από τις {0} την ημέρα του check-in.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Επεξεργασία</value>
+  </data>
+  <data name="DoorOpened" xml:space="preserve">
+    <value>Ανοιχτές πόρτες</value>
+  </data>
+  <data name="PressToOpen" xml:space="preserve">
+    <value>Πατήστε για άνοιγμα</value>
+  </data>
+  <data name="RemoteUnavailable" xml:space="preserve">
+    <value>Το απομακρυσμένο άνοιγμα δεν είναι διαθέσιμο αυτήν τη στιγμή.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Παρακαλώ προσπαθήστε ξανά</value>
+  </data>
+  <data name="TryAgainIn" xml:space="preserve">
+    <value>Δοκιμάστε ξανά σε {0}</value>
+  </data>
+  <data name="ErrorOpening" xml:space="preserve">
+    <value>Σφάλμα κατά το άνοιγμα</value>
+  </data>
+  <data name="ErrorClosing" xml:space="preserve">
+    <value>Σφάλμα κατά τον τερματισμό λειτουργίας</value>
+  </data>
+  <data name="ErrorServerConnection" xml:space="preserve">
+    <value>Σφάλμα σύνδεσης διακομιστή</value>
+  </data>
+</root>

@@ -217,7 +217,7 @@
     <value>Pozivamo vas uskoro!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Ikona Rentoom</value>
+    <value>Rentoom - apartmani za iznajmljivanje</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Nema ponuda</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Ikona menija</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Zahtev ID:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Greška.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>lokacija Torunja, gde se nalazi Toruń, karta Torunja, prilaz Torunu, stari grad Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Lokacija Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Došlo je do greške prilikom obrade vašeg zahteva.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Razvojno okruženje ne bi trebalo da bude omogućeno u proizvodnji.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Ovo može izložiti osetljive informacije od izuzetaka krajnjim korisnicima. Za lokalno otklanjanje grešaka, podesite promenljivu okruženja ASPNETCORE_ENVIRONMENT na Razvoj i ponovo pokrenite aplikaciju.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Toruń lokacija, mapa i uputstva | Iznajmljivanje</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Prebacivanje okruženja na razvoj će prikazati detaljnije informacije o grešci.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Proverite gde se nalazi Toruń, kako doći do starog grada i pogledajte praktičnu OpenStreetMap mapu sa lokacijom grada.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Pretraga</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Režim za programere</value>
   </data>
 </root>

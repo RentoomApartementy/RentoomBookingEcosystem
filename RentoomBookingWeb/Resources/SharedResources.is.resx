@@ -217,7 +217,7 @@
     <value>Við bjóðum þér fljótlega velkominn!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom táknið</value>
+    <value>Rentoom - íbúðir til leigu</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Engin tilboð</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Valmyndartákn</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Beiðni um auðkenni:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Villa.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>staðsetning Toruń, þar sem Toruń er staðsett, kort af Toruń, aðgangur að Toruń, gamla bænum</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Staðsetning Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Villa kom upp við vinnslu beiðni þinnar.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Þróunarumhverfið ætti ekki að vera virkjað á framleiðslu.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Þetta getur afhjúpað viðkvæmar upplýsingar frá undantekningum fyrir endanotendur. Fyrir staðbundna villuleit, stilltu ASPNETCORE_ENVIRONMENT umhverfisbreytuna á Þróun og endurræstu forritið.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Staðsetning Toruń, kort og leiðbeiningar | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Að skipta umhverfinu yfir í þróun sýnir ítarlegri upplýsingar um villuna.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Athugaðu hvar Toruń er staðsett, hvernig á að komast í gamla bæinn og sjáðu hagnýtt OpenStreetMap kort með staðsetningu borgarinnar.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Villa</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Þróunarhamur</value>
   </data>
 </root>

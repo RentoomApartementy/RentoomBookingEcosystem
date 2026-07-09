@@ -217,7 +217,7 @@
     <value>Brzy vás zveme k dispozici!</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom Icon</value>
+    <value>Rentoom – byty k pronájmu</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Žádné nabídky</value>
@@ -257,5 +257,41 @@
   </data>
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Ikona menu</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>ID požadavku:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Chyba.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>poloha Toruně, kde se Toruň nachází, mapa Toruně, přístup do Toruně, staré město Toruně</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Poloha Toruně</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Při zpracování vašeho požadavku došlo k chybě.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Vývojové prostředí by nemělo být zapnuté v produkci.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>To může vystavit citlivé informace z výjimek koncovým uživatelům. Pro lokální ladění nastavte proměnnou ASPNETCORE_ENVIRONMENT prostředí na Vývoj a restartujte aplikaci.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Poloha Toruně, mapa a směr | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Přepnutí prostředí na vývoj zobrazí podrobnější informace o chybě.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Podívejte se, kde se Toruń nachází, jak se dostat do starého města a podívejte se na praktickou mapu OpenStreetMap s polohou města.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Chyba</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Vývojářský režim</value>
   </data>
 </root>
