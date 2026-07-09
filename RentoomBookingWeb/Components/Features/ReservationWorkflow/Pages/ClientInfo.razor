@@ -23,6 +23,7 @@
 @using Microsoft.JSInterop
 @inject IStringLocalizer<RentoomBookingWeb.Payment> Localizer
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
+@inject GoogleAnalyticsService GoogleAnalytics
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 
 <PageTitle>@Localizer["ClientInfoPageTitle"]</PageTitle>
@@ -559,6 +560,21 @@
                     ["UseInvoice"] = _form.UseInvoice.ToString(),
                     ["Language"] = _form.Client.Language
                 });
+
+            var startRequest = _summary?.StartRequest;
+            if (startRequest is not null && _apartment is not null)
+            {
+                var item = BuildGa4ApartmentItem(_apartment, _summary?.OfferPrice ?? startRequest.OfferPrice ?? 0m, startRequest);
+                await GoogleAnalytics.TrackEventAsync("customer_info_completed", new Dictionary<string, object?>
+                {
+                    ["currency"] = string.IsNullOrWhiteSpace(_summary?.Currency) ? "PLN" : _summary!.Currency,
+                    ["value"] = _summary?.GrandTotal ?? 0m,
+                    ["items"] = new[] { item },
+                    ["use_invoice"] = _form.UseInvoice,
+                    ["language"] = _form.Client.Language
+                });
+            }
+
             Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/podsumowanie");
         }
         catch (Exception ex)
@@ -583,6 +599,21 @@
         }
 
         return cultureName.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "eng" : "pol";
+    }
+
+    private static Dictionary<string, object?> BuildGa4ApartmentItem(ApartmentObject apartment, decimal offerTotalPrice, StartReservationRequest startRequest)
+    {
+        var nights = Math.Max(1, startRequest.EndDate.DayNumber - startRequest.StartDate.DayNumber);
+        var unitPrice = Math.Round(offerTotalPrice / nights, 2, MidpointRounding.AwayFromZero);
+
+        return new Dictionary<string, object?>
+        {
+            ["item_id"] = apartment.Id.ToString(),
+            ["item_name"] = apartment.Name,
+            ["item_category"] = apartment.ObjectLocation?.LocalizationItem?.City,
+            ["price"] = unitPrice,
+            ["quantity"] = nights
+        };
     }
 
     private void ValidateAndBuildPhone()

@@ -105,4 +105,10 @@
   <data name="Home_OrganizationDescription" xml:space="preserve">
     <value>Szukasz noclegu w Toruniu? Rentoom oferuje apartamenty na wynajem krótkoterminowy w Toruniu i pobyty w najlepszych lokalizacjach miasta.</value>
   </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Nasi partnerzy</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>Współpracujemy ze sprawdzonymi lokalnymi markami, aby Twój pobyt w Toruniu był wyjątkowy</value>
+  </data>
 </root>

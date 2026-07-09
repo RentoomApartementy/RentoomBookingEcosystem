@@ -1,0 +1,124 @@
+.home-partners-section {
+    background-color: transparent; /* Inherits #F7F7F7 from .home-container */
+    padding: 40px 0; /* Vertical padding */
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.home-partners-container {
+    width: 100%; /* Stretches to full screen width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home-partners-header {
+    text-align: center;
+    margin-bottom: 20px;
+    max-width: 800px;
+    padding: 0 24px;
+}
+
+.home-partners-title {
+    color: #1F5A41;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+}
+
+.home-partners-subtitle {
+    color: #666;
+    font-size: 1.05rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.home-partners-carousel-wrapper {
+    width: 100%;
+}
+
+/* Partner Card wrapper size inside SimpleCarousel track */
+.partner-card-wrapper {
+    width: 180px; /* Reduced to match height, making cards perfect 180x180 squares */
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    padding: 10px 0;
+}
+
+/* Completely transparent card container with no border, shadow, or background */
+.partner-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    height: 180px; /* Matches wrapper width for a square layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+    box-shadow: none;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.partner-card-link {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+/* Force image to maintain natural aspect ratio and round its corners */
+.partner-card-img {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 16px;
+    transition: all 0.2s ease;
+}
+
+/* Hover effects */
+.partner-card:hover {
+    transform: scale(1.08);
+}
+
+/* Theme overrides for SimpleCarousel in partners context */
+.home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .carousel-list-wrapper {
+    gap: 12px; /* Small, clean spacing between cards */
+    padding: 10px 4px;
+}
+
+.home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .carousel-nav-buttons {
+    margin-top: 24px;
+}
+
+.home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .nav-btn {
+    border-color: #eaeaea;
+    color: #1F5A41;
+}
+
+.home-partners-carousel-wrapper ::deep .carousel-outer-wrapper.partners-theme .nav-btn:hover {
+    background: #1F5A41;
+    color: #ffffff;
+    border-color: #1F5A41;
+}
+
+@media (max-width: 768px) {
+    .home-partners-section {
+        padding: 24px 0;
+    }
+
+    .home-partners-title {
+        font-size: 1.8rem;
+    }
+
+    .partner-card-wrapper {
+        width: 120px; /* Perfect square width on mobile */
+    }
+
+    .partner-card {
+        height: 120px; /* Perfect square height on mobile */
+    }
+}
