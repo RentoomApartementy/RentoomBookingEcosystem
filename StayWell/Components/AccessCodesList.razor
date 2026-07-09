@@ -54,7 +54,7 @@
             }
         }
 
-        @if (HasCode(LocksState.ApartmentItemCodes.GateCode))
+        @if (HasCode(LocksState.ApartmentItemCodes.GateDoorCode))
         {
             <div class="access-code-card">
                 <div class="access-code-card__icon-wrapper">
@@ -62,12 +62,12 @@
                 </div>
                 <div class="access-code-card__content">
                     <div class="access-code-card__label">@Localizer["GateCode"]</div>
-                    <div class="access-code-card__value">@RenderCodeTiles(LocksState.ApartmentItemCodes.GateCode)</div>
+                    <div class="access-code-card__value">@RenderCodeTiles(LocksState.ApartmentItemCodes.GateDoorCode)</div>
                 </div>
             </div>
         }
 
-        @if (HasCode(LocksState.ApartmentItemCodes.GateDoorCode))
+        @if (HasCode(LocksState.ApartmentItemCodes.GateCode))
         {
             <div class="access-code-card">
                 <div class="access-code-card__icon-wrapper">
@@ -75,7 +75,7 @@
                 </div>
                 <div class="access-code-card__content">
                     <div class="access-code-card__label">@Localizer["BuildingCode"]</div>
-                    <div class="access-code-card__value">@RenderCodeTiles(LocksState.ApartmentItemCodes.GateDoorCode)</div>
+                    <div class="access-code-card__value">@RenderCodeTiles(LocksState.ApartmentItemCodes.GateCode)</div>
                 </div>
             </div>
         }
