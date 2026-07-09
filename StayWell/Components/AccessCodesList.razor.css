@@ -23,8 +23,7 @@
     width: 42px;
     height: 42px;
     border-radius: 12px;
-    background: linear-gradient(180deg, rgba(7, 112, 78, 0.08), rgba(7, 112, 78, 0.03));
-    border: 1px solid rgba(7, 112, 78, 0.08);
+    background: #f0f5f2;
     flex-shrink: 0;
 }
 
@@ -88,8 +87,6 @@
 }
 
 .access-code-card__value ::deep .code-tile--icon {
-    background: linear-gradient(180deg, rgba(7, 112, 78, 0.06), rgba(7, 112, 78, 0.02));
-    border-color: rgba(7, 112, 78, 0.12);
     padding: 0 8px;
 }
 

@@ -23,20 +23,16 @@ else if (!ReservationState.IsActiveReservation && LocksState.IsTTLockAvailable &
         </div>
         @if (ReservationState.IsAfterCheckOut)
         {
-            <div class="inactive-state inactive-state--ended">
-                <div class="inactive-state__disc">
-                    <img src="/icons/door-closed.svg" alt="" aria-hidden="true" />
-                </div>
-                <p class="inactive-state__text">@Localizer["ReservationEnded"]</p>
+            <div class="inactive-state">
+                <img src="/icons/door-closed.svg" alt="" aria-hidden="true" />
+                <p>@Localizer["ReservationEnded"]</p>
             </div>
         }
         else
         {
             <div class="inactive-state">
-                <div class="inactive-state__disc">
-                    <img src="/icons/clock.svg" alt="" aria-hidden="true" />
-                </div>
-                <p class="inactive-state__text">@string.Format(CultureInfo.CurrentCulture, Localizer["ReservationNotActive"], ReservationState.CheckInTime.ToString("HH:mm"))</p>
+                <img src="/icons/clock.svg" alt="" aria-hidden="true" />
+                <p>@string.Format(CultureInfo.CurrentCulture, Localizer["ReservationNotActive"], ReservationState.CheckInTime.ToString("HH:mm"))</p>
             </div>
         }
     </div>

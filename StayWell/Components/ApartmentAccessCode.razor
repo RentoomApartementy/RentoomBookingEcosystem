@@ -27,20 +27,16 @@
         {
             @if (ReservationState.IsAfterCheckOut)
             {
-                <div class="code-unavailable code-unavailable--ended">
-                    <div class="code-unavailable__ghost" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span>
-                    </div>
-                    <p class="code-unavailable__text">@Localizer["CodeNoLongerAvailable"]</p>
+                <div class="code-unavailable">
+                    <img src="/icons/door-closed.svg" alt="" aria-hidden="true" />
+                    <p>@Localizer["CodeNoLongerAvailable"]</p>
                 </div>
             }
             else
             {
                 <div class="code-unavailable">
-                    <div class="code-unavailable__ghost" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span>
-                    </div>
-                    <p class="code-unavailable__text">@string.Format(CultureInfo.CurrentCulture, Localizer["CodeNotAvailable"], ReservationState.CodeAvailableFromTime.ToString("HH:mm"))</p>
+                    <img src="/icons/clock.svg" alt="" aria-hidden="true" />
+                    <p>@string.Format(CultureInfo.CurrentCulture, Localizer["CodeNotAvailable"], ReservationState.CodeAvailableFromTime.ToString("HH:mm"))</p>
                 </div>
             }
         }
