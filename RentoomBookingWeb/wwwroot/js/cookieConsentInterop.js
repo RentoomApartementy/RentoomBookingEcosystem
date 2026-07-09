@@ -68,7 +68,7 @@ window.rentoomCookieInterop = {
 window.rentoomAnalytics = {
     trackEvent: function (eventName, parameters) {
         if (!window.rentoomCookieInterop?.trackingEnabled || !eventName) {
-            return;
+            return "ignored";
         }
 
         const normalizedParameters = {};
@@ -86,10 +86,11 @@ window.rentoomAnalytics = {
                 eventName: eventName,
                 parameters: normalizedParameters
             });
-            return;
+            return "queued";
         }
 
         window.gtag("event", eventName, normalizedParameters);
+        return "sent";
     },
 
     flushPendingEvents: function () {
