@@ -79,16 +79,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #f0f5f2;
     flex-shrink: 0;
 }
 
 .code-card__icon {
-    width: 24px;
-    height: 24px;
-    opacity: 0.7;
+    width: 22px;
+    height: 22px;
+    opacity: 0.82;
 }
 
 .code-card__content {

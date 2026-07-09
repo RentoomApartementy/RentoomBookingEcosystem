@@ -89,7 +89,7 @@
 .lock-guide-tile__icon-wrap img {
     width: 22px;
     height: 22px;
-    filter: invert(28%) sepia(18%) saturate(1435%) hue-rotate(105deg) brightness(92%) contrast(88%);
+    opacity: 0.82;
 }
 
 .lock-guide-tile__text {
