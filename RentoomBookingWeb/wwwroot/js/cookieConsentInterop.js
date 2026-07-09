@@ -1,9 +1,9 @@
-window.rentoomCookieInterop = {
-    trackingEnabled: false,
-    sessionRecordingEnabled: false,
-    trackingConfigured: false,
-    pendingEvents: [],
-
+window.rentoomCookieInterop = window.rentoomCookieInterop || {};
+window.rentoomCookieInterop.trackingEnabled = window.rentoomCookieInterop.trackingEnabled || false;
+window.rentoomCookieInterop.sessionRecordingEnabled = window.rentoomCookieInterop.sessionRecordingEnabled || false;
+window.rentoomCookieInterop.trackingConfigured = window.rentoomCookieInterop.trackingConfigured || false;
+window.rentoomCookieInterop.pendingEvents = window.rentoomCookieInterop.pendingEvents || [];
+Object.assign(window.rentoomCookieInterop, {
     enableTracking: function (gtmId, gaId) {
         if (window.rentoomCookieInterop.trackingEnabled) {
             return;
@@ -63,12 +63,13 @@ window.rentoomCookieInterop = {
 
         window.rentoomCookieInterop.sessionRecordingEnabled = true;
     }
-};
+});
 
-window.rentoomAnalytics = {
-    trackEvent: function (eventName, parameters) {
-        if (!window.rentoomCookieInterop?.trackingEnabled || !eventName) {
-            return;
+window.rentoomAnalytics = window.rentoomAnalytics || {};
+Object.assign(window.rentoomAnalytics, {
+    trackEvent: function (eventName, parameters, dedupeKey) {
+        if (!eventName) {
+            return "ignored";
         }
 
         const normalizedParameters = {};
@@ -81,15 +82,18 @@ window.rentoomAnalytics = {
             });
         }
 
+        if (dedupeKey && this.isEventDeduped(dedupeKey)) {
+            return "duplicate";
+        }
+
         if (!window.rentoomCookieInterop.trackingConfigured || typeof window.gtag !== "function") {
-            window.rentoomCookieInterop.pendingEvents.push({
-                eventName: eventName,
-                parameters: normalizedParameters
-            });
-            return;
+            this.queuePendingEvent(eventName, normalizedParameters, dedupeKey);
+            return "queued";
         }
 
         window.gtag("event", eventName, normalizedParameters);
+        this.markEventDeduped(dedupeKey);
+        return "sent";
     },
 
     flushPendingEvents: function () {
@@ -103,7 +107,51 @@ window.rentoomAnalytics = {
                 return;
             }
 
+            if (entry.dedupeKey && window.rentoomAnalytics.isEventDeduped(entry.dedupeKey)) {
+                return;
+            }
+
             window.gtag("event", entry.eventName, entry.parameters || {});
+            window.rentoomAnalytics.markEventDeduped(entry.dedupeKey);
         });
+    },
+
+    queuePendingEvent: function (eventName, parameters, dedupeKey) {
+        if (dedupeKey) {
+            const alreadyQueued = window.rentoomCookieInterop.pendingEvents.some(entry => entry?.dedupeKey === dedupeKey);
+            if (alreadyQueued) {
+                return;
+            }
+        }
+
+        window.rentoomCookieInterop.pendingEvents.push({
+            eventName: eventName,
+            parameters: parameters,
+            dedupeKey: dedupeKey || null
+        });
+    },
+
+    isEventDeduped: function (dedupeKey) {
+        if (!dedupeKey) {
+            return false;
+        }
+
+        try {
+            return window.sessionStorage?.getItem(dedupeKey) === "1";
+        } catch {
+            return false;
+        }
+    },
+
+    markEventDeduped: function (dedupeKey) {
+        if (!dedupeKey) {
+            return;
+        }
+
+        try {
+            window.sessionStorage?.setItem(dedupeKey, "1");
+        } catch {
+            // Analytics storage failures must not break the reservation flow.
+        }
     }
-};
+});

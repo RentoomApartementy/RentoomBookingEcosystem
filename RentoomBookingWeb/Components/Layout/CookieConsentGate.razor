@@ -168,21 +168,21 @@
         return Localizer["CookieConsent_SaveError"];
     }
 
-    private ValueTask EnableTrackingAsync()
+    private async ValueTask EnableTrackingAsync()
     {
         if (string.IsNullOrWhiteSpace(_analytics.GoogleTagManagerId) || string.IsNullOrWhiteSpace(_analytics.GoogleAnalyticsId))
         {
-            return ValueTask.CompletedTask;
+            return;
         }
 
-        JS.InvokeVoidAsync("rentoomCookieInterop.enableTracking", _analytics.GoogleTagManagerId, _analytics.GoogleAnalyticsId);
+        await JS.InvokeVoidAsync("rentoomCookieInterop.enableTracking", _analytics.GoogleTagManagerId, _analytics.GoogleAnalyticsId);
 
         if (string.IsNullOrWhiteSpace(_analytics.ContentSquareProjectId))
         {
-            return ValueTask.CompletedTask;
+            return;
         }
 
-        return JS.InvokeVoidAsync("rentoomCookieInterop.enableSessionRecording", _analytics.ContentSquareProjectId);
+        await JS.InvokeVoidAsync("rentoomCookieInterop.enableSessionRecording", _analytics.ContentSquareProjectId);
     }
 
     private CookieConsentRequestMetadata BuildRequestMetadata()
