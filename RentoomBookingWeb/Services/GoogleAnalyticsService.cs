@@ -5,19 +5,26 @@ namespace RentoomBookingWeb.Services;
 public class GoogleAnalyticsService
 {
     private readonly IJSRuntime _jsRuntime;
+    private IJSObjectReference? _analyticsModule;
 
     public GoogleAnalyticsService(IJSRuntime jsRuntime)
     {
         _jsRuntime = jsRuntime;
     }
 
-    public async Task<bool> TrackEventAsync(string eventName, IDictionary<string, object?>? parameters = null)
+    public async Task<bool> TrackEventAsync(
+        string eventName,
+        IDictionary<string, object?>? parameters = null,
+        string? dedupeKey = null)
     {
         try
         {
-            var result = await _jsRuntime.InvokeAsync<string?>("rentoomAnalytics.trackEvent", eventName, parameters);
+            await EnsureAnalyticsInteropLoadedAsync();
+
+            var result = await _jsRuntime.InvokeAsync<string?>("rentoomAnalytics.trackEvent", eventName, parameters, dedupeKey);
             return string.Equals(result, "sent", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(result, "queued", StringComparison.OrdinalIgnoreCase);
+                || string.Equals(result, "queued", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(result, "duplicate", StringComparison.OrdinalIgnoreCase);
         }
         catch (InvalidOperationException)
         {
@@ -29,5 +36,10 @@ public class GoogleAnalyticsService
             // Frontend analytics should never break user flow.
             return false;
         }
+    }
+
+    private async Task EnsureAnalyticsInteropLoadedAsync()
+    {
+        _analyticsModule ??= await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/cookieConsentInterop.js");
     }
 }

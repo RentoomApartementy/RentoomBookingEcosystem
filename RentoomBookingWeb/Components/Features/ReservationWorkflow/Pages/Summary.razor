@@ -718,35 +718,25 @@
 
         try
         {
-        var startRequest = _summary.StartRequest;
-        var transactionId = _summary.IdoReservationId?.ToString() ?? _summary.ReservationGuid.ToString("N");
-        var storageKey = BuildPurchaseTrackingStorageKey(transactionId);
-        var alreadyTracked = await JSRuntime.InvokeAsync<string?>("sessionStorage.getItem", storageKey);
-        if (string.Equals(alreadyTracked, "1", StringComparison.Ordinal))
-        {
-            _purchaseTracked = true;
-            return;
-        }
+            var startRequest = _summary.StartRequest;
+            var transactionId = _summary.IdoReservationId?.ToString() ?? _summary.ReservationGuid.ToString("N");
+            var storageKey = BuildPurchaseTrackingStorageKey(transactionId);
+            var item = BuildGa4ApartmentItem(startRequest, _summary.OfferPrice ?? startRequest.OfferPrice ?? 0m);
 
-        var item = BuildGa4ApartmentItem(startRequest, _summary.OfferPrice ?? startRequest.OfferPrice ?? 0m);
+            var tracked = await GoogleAnalytics.TrackEventAsync("purchase", new Dictionary<string, object?>
+            {
+                ["transaction_id"] = transactionId,
+                ["currency"] = string.IsNullOrWhiteSpace(_summary.Currency) ? "PLN" : _summary.Currency,
+                ["value"] = _summary.GrandTotal,
+                ["items"] = new[] { item },
+                ["start_date"] = startRequest.StartDate.ToString("yyyy-MM-dd"),
+                ["end_date"] = startRequest.EndDate.ToString("yyyy-MM-dd")
+            }, storageKey);
 
-        var tracked = await GoogleAnalytics.TrackEventAsync("purchase", new Dictionary<string, object?>
-        {
-            ["transaction_id"] = transactionId,
-            ["currency"] = string.IsNullOrWhiteSpace(_summary.Currency) ? "PLN" : _summary.Currency,
-            ["value"] = _summary.GrandTotal,
-            ["items"] = new[] { item },
-            ["start_date"] = startRequest.StartDate.ToString("yyyy-MM-dd"),
-            ["end_date"] = startRequest.EndDate.ToString("yyyy-MM-dd")
-        });
-
-        if (!tracked)
-        {
-            return;
-        }
-
-        await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", storageKey, "1");
-        _purchaseTracked = true;
+            if (tracked)
+            {
+                _purchaseTracked = true;
+            }
         }
         finally
         {
