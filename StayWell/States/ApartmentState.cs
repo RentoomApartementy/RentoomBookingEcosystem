@@ -233,7 +233,7 @@ namespace RentoomBooking.StayWell.States
                 "de" => "de",
                 "deu" => "de",
                 "iv" => "default",
-                _ => "default"
+                _ => lowered
             };
         }
 
