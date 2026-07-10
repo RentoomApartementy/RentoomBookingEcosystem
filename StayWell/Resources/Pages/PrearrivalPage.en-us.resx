@@ -328,6 +328,9 @@ Rental regulations in English are available at www.rentoom.pl</value>
   <data name="TermsAndRegistrationPageTitle" xml:space="preserve">
     <value>Terms &amp; Conditions</value>
   </data>
+  <data name="HouseRulesTitle" xml:space="preserve">
+    <value>Stay Regulations</value>
+  </data>
   <data name="RegistrationSaveError" xml:space="preserve">
     <value>Data write error.</value>
   </data>
@@ -336,8 +339,5 @@ Rental regulations in English are available at www.rentoom.pl</value>
   </data>
   <data name="TOS" xml:space="preserve">
     <value>Terms and Conditions and Consents</value>
-  </data>
-  <data name="HouseRulesTitle" xml:space="preserve">
-    <value>Stay Regulations</value>
   </data>
 </root>

@@ -32,8 +32,8 @@
     
     Each data row contains a name, and value. The row also contains a 
     type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+    text/value conversion through the TypeConverter classes. 
+    Classes that don't support these are serialized and stored with the 
     mimetype set.
     
     The mimetype is used for serialized objects, and tells the 
@@ -117,113 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutReservation" xml:space="preserve">
-    <value>Your Reservation</value>
+  <data name="You" xml:space="preserve">
+    <value>You</value>
   </data>
-  <data name="BookOnBtn" xml:space="preserve">
-    <value>Book on Rentoom.pl</value>
+  <data name="Assistant" xml:space="preserve">
+    <value>Assistant</value>
   </data>
-  <data name="BookOnDesc" xml:space="preserve">
-    <value>Book your perfect stay in Toruń and enjoy a unique apartment.</value>
+  <data name="AssistantTyping" xml:space="preserve">
+    <value>The assistant writes...</value>
   </data>
-  <data name="ChangeLanguage" xml:space="preserve">
-    <value>Change language</value>
+  <data name="AiChatModeAriaLabel" xml:space="preserve">
+    <value>AI Talk Mode</value>
   </data>
-  <data name="CheckIn" xml:space="preserve">
-    <value>Check-in</value>
+  <data name="ClassicModeTitle" xml:space="preserve">
+    <value>Classic chat path</value>
   </data>
-  <data name="CheckInNow" xml:space="preserve">
-    <value>Check in</value>
+  <data name="ClassicMode" xml:space="preserve">
+    <value>Classic</value>
   </data>
-  <data name="CheckOut" xml:space="preserve">
-    <value>Check-out</value>
+  <data name="AgentModeTitle" xml:space="preserve">
+    <value>Path by Agent Foundry</value>
   </data>
-  <data name="ClubBenefits" xml:space="preserve">
-    <value>Rentoom Benefits Club</value>
+  <data name="AgentMode" xml:space="preserve">
+    <value>Agent</value>
   </data>
-  <data name="CurrentLanguage" xml:space="preserve">
-    <value>Current Language</value>
+  <data name="MessageInputPlaceholder" xml:space="preserve">
+    <value>Write a message...</value>
   </data>
-  <data name="Enhance" xml:space="preserve">
-    <value>Enhance your stay</value>
-    <comment>&#x8;</comment>
+  <data name="StopMicrophoneAriaLabel" xml:space="preserve">
+    <value>Stop listening to the microphone</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="StartMicrophoneAriaLabel" xml:space="preserve">
+    <value>Start the microphone</value>
   </data>
-  <data name="Instructions" xml:space="preserve">
-    <value>Check-in Instructions</value>
+  <data name="ListeningTitle" xml:space="preserve">
+    <value>Listening...</value>
   </data>
-  <data name="InstructionsFooter" xml:space="preserve">
-    <value>Guide</value>
+  <data name="MicrophoneTitle" xml:space="preserve">
+    <value>Microphone</value>
   </data>
-  <data name="LanguageChanged" xml:space="preserve">
-    <value>Language changed to:</value>
+  <data name="StopGeneratingAriaLabel" xml:space="preserve">
+    <value>Stop Generation</value>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
+  <data name="StopTitle" xml:space="preserve">
+    <value>Stop</value>
   </data>
-  <data name="ManageStay" xml:space="preserve">
-    <value>Manage Your Stay</value>
+  <data name="SendMessageAriaLabel" xml:space="preserve">
+    <value>Send a message</value>
   </data>
-  <data name="More" xml:space="preserve">
-    <value>more...</value>
+  <data name="SendTitle" xml:space="preserve">
+    <value>Send</value>
   </data>
-  <data name="MyVouchers" xml:space="preserve">
-    <value>My Vouchers</value>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Hello! I am a StayWell assistant. How can I help during your stay?</value>
   </data>
-  <data name="NoSuchPage" xml:space="preserve">
-    <value>Oops, this page doesn't exist!</value>
+  <data name="MissingReservationTokenError" xml:space="preserve">
+    <value>No booking token. Please refresh the page and try again.</value>
   </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
+  <data name="MissingReservationDataError" xml:space="preserve">
+    <value>No booking details. Please refresh the page and try again.</value>
   </data>
-  <data name="OpenApartment" xml:space="preserve">
-    <value>Open Apartment</value>
+  <data name="NoModelResponse" xml:space="preserve">
+    <value>No response from the model.</value>
   </data>
-  <data name="PageTitle" xml:space="preserve">
-    <value>Staywell - Manage Your Stay </value>
-  </data>
-  <data name="ReservationID" xml:space="preserve">
-    <value>reservation id</value>
-  </data>
-  <data name="ReservationCanceledTitle" xml:space="preserve">
-    <value>This reservation has been canceled</value>
-  </data>
-  <data name="ReservationCanceledDesc" xml:space="preserve">
-    <value>This reservation is no longer active. Please contact Rentoom if you need help.</value>
-  </data>
-  <data name="ReservationExpiredTitle" xml:space="preserve">
-    <value>This reservation has expired</value>
-  </data>
-  <data name="ReservationExpiredDesc" xml:space="preserve">
-    <value>Your stay has already ended. We hope you enjoyed it — feel free to book with Rentoom again.</value>
-  </data>
-  <data name="AiChatTitle" xml:space="preserve">
-    <value>StayWell AI</value>
-  </data>
-  <data name="AiAssistant" xml:space="preserve">
-    <value>AI Assistant</value>
-  </data>
-  <data name="ParkingFooter" xml:space="preserve">
-    <value>City Parking</value>
-  </data>
-  <data name="AboutReservationFooter" xml:space="preserve">
-    <value>Reservation Info</value>
-  </data>
-  <data name="LoyaltyFooter" xml:space="preserve">
-    <value>Twoje punkty</value>
-  </data>
-  <data name="AddonsLabel" xml:space="preserve">
-    <value>Add-ons</value>
-  </data>
-  <data name="CartButtonAlt" xml:space="preserve">
-    <value>Shopping Cart</value>
-  </data>
-  <data name="WifiFooter" xml:space="preserve">
-    <value>Wi-Fi</value>
-  </data>
-  <data name="TranslationDisclaimer" xml:space="preserve">
-    <value>Translations are automatically generated and may contain errors. We encourage you to report them.</value>
+  <data name="SpeechRecognitionStartError" xml:space="preserve">
+    <value>Speech recognition failed.</value>
   </data>
 </root>
