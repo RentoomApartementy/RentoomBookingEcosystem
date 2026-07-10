@@ -444,4 +444,28 @@
   <data name="ShowAllDetails" xml:space="preserve">
     <value>Show full description and amenities</value>
   </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Page not found</value>
+  </data>
+  <data name="PageNotFoundDescription" xml:space="preserve">
+    <value>We're sorry, but the page you're looking for doesn't exist or has been moved.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Back to homepage</value>
+  </data>
+  <data name="NotFoundHeaderTitle" xml:space="preserve">
+    <value>Error 404</value>
+  </data>
+  <data name="NotFoundMaybeLookingFor" xml:space="preserve">
+    <value>Maybe you're looking for:</value>
+  </data>
+  <data name="NotFoundApartmentsList" xml:space="preserve">
+    <value>List of apartments</value>
+  </data>
+  <data name="NotFoundCooperation" xml:space="preserve">
+    <value>Cooperation</value>
+  </data>
+  <data name="NotFoundContact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
 </root>

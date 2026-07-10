@@ -1,38 +1,141 @@
 {
   "defaultCulture": "en-US",
   "cultures": [
-    { "culture": "be", "nativeName": "Беларуская" },
-    { "culture": "bg", "nativeName": "Български" },
-    { "culture": "bs", "nativeName": "Bosanski" },
-    { "culture": "cs", "nativeName": "Čeština" },
-    { "culture": "da", "nativeName": "Dansk" },
-    { "culture": "de", "nativeName": "Deutsch" },
-    { "culture": "el", "nativeName": "Ελληνικά" },
-    { "culture": "en-US", "nativeName": "English" },
-    { "culture": "es", "nativeName": "Español" },
-    { "culture": "et", "nativeName": "Eesti" },
-    { "culture": "fi", "nativeName": "Suomi" },
-    { "culture": "fr", "nativeName": "Français" },
-    { "culture": "ga", "nativeName": "Gaeilge" },
-    { "culture": "hr", "nativeName": "Hrvatski" },
-    { "culture": "hu", "nativeName": "Magyar" },
-    { "culture": "is", "nativeName": "Íslenska" },
-    { "culture": "it", "nativeName": "Italiano" },
-    { "culture": "lt", "nativeName": "Lietuvių" },
-    { "culture": "lv", "nativeName": "Latviešu" },
-    { "culture": "mk", "nativeName": "Македонски" },
-    { "culture": "mt", "nativeName": "Malti" },
-    { "culture": "nl", "nativeName": "Nederlands" },
-    { "culture": "no", "nativeName": "Norsk" },
-    { "culture": "pl-PL", "nativeName": "Polski" },
-    { "culture": "pt", "nativeName": "Português" },
-    { "culture": "ro", "nativeName": "Română" },
-    { "culture": "ru", "nativeName": "Русский" },
-    { "culture": "sk", "nativeName": "Slovenčina" },
-    { "culture": "sl", "nativeName": "Slovenščina" },
-    { "culture": "sq", "nativeName": "Shqip" },
-    { "culture": "sr", "nativeName": "Српски" },
-    { "culture": "sv", "nativeName": "Svenska" },
-    { "culture": "uk", "nativeName": "Українська" }
+    {
+      "culture": "be",
+      "nativeName": "Беларуская"
+    },
+    {
+      "culture": "bg",
+      "nativeName": "Български"
+    },
+    {
+      "culture": "bs",
+      "nativeName": "Bosanski"
+    },
+    {
+      "culture": "cs",
+      "nativeName": "Čeština"
+    },
+    {
+      "culture": "da",
+      "nativeName": "Dansk"
+    },
+    {
+      "culture": "de",
+      "nativeName": "Deutsch"
+    },
+    {
+      "culture": "el",
+      "nativeName": "Ελληνικά"
+    },
+    {
+      "culture": "en",
+      "nativeName": "English"
+    },
+    {
+      "culture": "en-US",
+      "nativeName": "English"
+    },
+    {
+      "culture": "es",
+      "nativeName": "Español"
+    },
+    {
+      "culture": "et",
+      "nativeName": "Eesti"
+    },
+    {
+      "culture": "fi",
+      "nativeName": "Suomi"
+    },
+    {
+      "culture": "fr",
+      "nativeName": "Français"
+    },
+    {
+      "culture": "ga",
+      "nativeName": "Gaeilge"
+    },
+    {
+      "culture": "hr",
+      "nativeName": "Hrvatski"
+    },
+    {
+      "culture": "hu",
+      "nativeName": "Magyar"
+    },
+    {
+      "culture": "is",
+      "nativeName": "Íslenska"
+    },
+    {
+      "culture": "it",
+      "nativeName": "Italiano"
+    },
+    {
+      "culture": "lt",
+      "nativeName": "Lietuvių"
+    },
+    {
+      "culture": "lv",
+      "nativeName": "Latviešu"
+    },
+    {
+      "culture": "mk",
+      "nativeName": "Македонски"
+    },
+    {
+      "culture": "mt",
+      "nativeName": "Malti"
+    },
+    {
+      "culture": "nl",
+      "nativeName": "Nederlands"
+    },
+    {
+      "culture": "no",
+      "nativeName": "Norsk"
+    },
+    {
+      "culture": "pl-PL",
+      "nativeName": "Polski"
+    },
+    {
+      "culture": "pt",
+      "nativeName": "Português"
+    },
+    {
+      "culture": "ro",
+      "nativeName": "Română"
+    },
+    {
+      "culture": "ru",
+      "nativeName": "Русский"
+    },
+    {
+      "culture": "sk",
+      "nativeName": "Slovenčina"
+    },
+    {
+      "culture": "sl",
+      "nativeName": "Slovenščina"
+    },
+    {
+      "culture": "sq",
+      "nativeName": "Shqip"
+    },
+    {
+      "culture": "sr",
+      "nativeName": "Српски"
+    },
+    {
+      "culture": "sv",
+      "nativeName": "Svenska"
+    },
+    {
+      "culture": "uk",
+      "nativeName": "Українська"
+    }
   ]
 }

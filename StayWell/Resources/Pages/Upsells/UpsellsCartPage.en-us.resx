@@ -117,113 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutReservation" xml:space="preserve">
-    <value>Your Reservation</value>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
   </data>
-  <data name="BookOnBtn" xml:space="preserve">
-    <value>Book on Rentoom.pl</value>
+  <data name="Empty" xml:space="preserve">
+    <value>Your cart is empty</value>
   </data>
-  <data name="BookOnDesc" xml:space="preserve">
-    <value>Book your perfect stay in Toruń and enjoy a unique apartment.</value>
+  <data name="Nights" xml:space="preserve">
+    <value>Nights</value>
   </data>
-  <data name="ChangeLanguage" xml:space="preserve">
-    <value>Change language</value>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
   </data>
-  <data name="CheckIn" xml:space="preserve">
-    <value>Check-in</value>
+  <data name="Redirecting" xml:space="preserve">
+    <value>Redirecting</value>
   </data>
-  <data name="CheckInNow" xml:space="preserve">
-    <value>Check in</value>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove from cart</value>
   </data>
-  <data name="CheckOut" xml:space="preserve">
-    <value>Check-out</value>
+  <data name="Savings" xml:space="preserve">
+    <value>With us you will save</value>
   </data>
-  <data name="ClubBenefits" xml:space="preserve">
-    <value>Rentoom Benefits Club</value>
+  <data name="Summary" xml:space="preserve">
+    <value>Summary</value>
   </data>
-  <data name="CurrentLanguage" xml:space="preserve">
-    <value>Current Language</value>
+  <data name="title" xml:space="preserve">
+    <value>Vouchers and Services</value>
   </data>
-  <data name="Enhance" xml:space="preserve">
-    <value>Enhance your stay</value>
-    <comment>&#x8;</comment>
+  <data name="Total" xml:space="preserve">
+    <value>Sum to be paid</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="Unit" xml:space="preserve">
+    <value>unit.</value>
   </data>
-  <data name="Instructions" xml:space="preserve">
-    <value>Check-in Instructions</value>
+  <data name="YourCart" xml:space="preserve">
+    <value>Your Cart</value>
   </data>
-  <data name="InstructionsFooter" xml:space="preserve">
-    <value>Guide</value>
+  <data name="Addons" xml:space="preserve">
+    <value>Booking Extras</value>
   </data>
-  <data name="LanguageChanged" xml:space="preserve">
-    <value>Language changed to:</value>
+  <data name="Pay" xml:space="preserve">
+    <value>Pay</value>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
+  <data name="CartPageTitle" xml:space="preserve">
+    <value>Cart - summary</value>
   </data>
-  <data name="ManageStay" xml:space="preserve">
-    <value>Manage Your Stay</value>
+  <data name="PaymentNotRequiredMessage" xml:space="preserve">
+    <value>Payment Not Required / Already Paid</value>
   </data>
-  <data name="More" xml:space="preserve">
-    <value>more...</value>
+  <data name="ClearCart" xml:space="preserve">
+    <value>Clear cart</value>
   </data>
-  <data name="MyVouchers" xml:space="preserve">
-    <value>My Vouchers</value>
-  </data>
-  <data name="NoSuchPage" xml:space="preserve">
-    <value>Oops, this page doesn't exist!</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="OpenApartment" xml:space="preserve">
-    <value>Open Apartment</value>
-  </data>
-  <data name="PageTitle" xml:space="preserve">
-    <value>Staywell - Manage Your Stay </value>
-  </data>
-  <data name="ReservationID" xml:space="preserve">
-    <value>reservation id</value>
-  </data>
-  <data name="ReservationCanceledTitle" xml:space="preserve">
-    <value>This reservation has been canceled</value>
-  </data>
-  <data name="ReservationCanceledDesc" xml:space="preserve">
-    <value>This reservation is no longer active. Please contact Rentoom if you need help.</value>
-  </data>
-  <data name="ReservationExpiredTitle" xml:space="preserve">
-    <value>This reservation has expired</value>
-  </data>
-  <data name="ReservationExpiredDesc" xml:space="preserve">
-    <value>Your stay has already ended. We hope you enjoyed it — feel free to book with Rentoom again.</value>
-  </data>
-  <data name="AiChatTitle" xml:space="preserve">
-    <value>StayWell AI</value>
-  </data>
-  <data name="AiAssistant" xml:space="preserve">
-    <value>AI Assistant</value>
-  </data>
-  <data name="ParkingFooter" xml:space="preserve">
-    <value>City Parking</value>
-  </data>
-  <data name="AboutReservationFooter" xml:space="preserve">
-    <value>Reservation Info</value>
-  </data>
-  <data name="LoyaltyFooter" xml:space="preserve">
-    <value>Twoje punkty</value>
-  </data>
-  <data name="AddonsLabel" xml:space="preserve">
-    <value>Add-ons</value>
-  </data>
-  <data name="CartButtonAlt" xml:space="preserve">
-    <value>Shopping Cart</value>
-  </data>
-  <data name="WifiFooter" xml:space="preserve">
-    <value>Wi-Fi</value>
-  </data>
-  <data name="TranslationDisclaimer" xml:space="preserve">
-    <value>Translations are automatically generated and may contain errors. We encourage you to report them.</value>
+  <data name="CreateOrderError" xml:space="preserve">
+    <value>Failed to create an add-on order.</value>
   </data>
 </root>

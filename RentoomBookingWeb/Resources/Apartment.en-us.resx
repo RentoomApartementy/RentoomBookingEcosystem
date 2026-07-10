@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -368,5 +368,104 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Error 404</value>
+  </data>
+  <data name="Nights" xml:space="preserve">
+    <value>Nights</value>
+  </data>
+  <data name="StayNight_1" xml:space="preserve">
+    <value>Night</value>
+  </data>
+  <data name="StayNight_234" xml:space="preserve">
+    <value>Nights</value>
+  </data>
+  <data name="StayNight_Many" xml:space="preserve">
+    <value>Nights</value>
+  </data>
+  <data name="StayPerson_1" xml:space="preserve">
+    <value>Person</value>
+  </data>
+  <data name="StayPerson_234" xml:space="preserve">
+    <value>persons</value>
+  </data>
+  <data name="StayPerson_Many" xml:space="preserve">
+    <value>people</value>
+  </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Frequently Asked Questions (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>Night</value>
+  </data>
+  <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
+    <value>Price available after date selection</value>
+  </data>
+  <data name="SelectDatesButtonLabel" xml:space="preserve">
+    <value>Select a date</value>
+  </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Show full description &amp; amenities</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Amenities and equipment</value>
+  </data>
+  <data name="ChangeDatesButtonLabel" xml:space="preserve">
+    <value>Change the date</value>
+  </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>The bonus has been removed.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus applied: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>The bonus provided does not exist.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>This bonus is currently disabled.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>This bonus does not apply to the selected apartment.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>The bonus is not available for the start date of this booking.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumReservationDays" xml:space="preserve">
+    <value>This bonus requires a longer stay.</value>
+  </data>
+  <data name="BonusReasonBelowMinimumOrderGrossAmount" xml:space="preserve">
+    <value>This bonus requires a higher total order amount.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>The bonus only works for bookings with RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>The bonus does not reduce the current price of this booking.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Fill in the dates and select the offer to apply the bonus.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>The price of the offer to be calculated of the bonus could not be read.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Failed to apply the bonus.</value>
+  </data>
+  <data name="BonusCodeBoxTitle" xml:space="preserve">
+    <value>Do you have a discount code?</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Enter discount code</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Apply Code</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Checking...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Remove bonus</value>
   </data>
 </root>

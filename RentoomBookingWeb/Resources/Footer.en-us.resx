@@ -144,4 +144,22 @@
   <data name="AboutCity" xml:space="preserve">
     <value>About Toruń City</value>
   </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Our partners</value>
+  </data>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="Footer_FacebookAriaLabel" xml:space="preserve">
+    <value>Rentoom on Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom on Instagram</value>
+  </data>
+  <data name="Footer_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram</value>
+  </data>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Apartments</value>
+  </data>
 </root>
