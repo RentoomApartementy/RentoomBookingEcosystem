@@ -513,6 +513,14 @@ namespace RentoomBooking.StayWell.States
                 {
                     return languageMatch;
                 }
+                var englishMatch = translations?
+                    .FirstOrDefault(t => string.Equals(t.Language, "en", StringComparison.OrdinalIgnoreCase))?
+                    .Value;
+
+                if (!string.IsNullOrWhiteSpace(englishMatch))
+                {
+                    return englishMatch;
+                }
             }
             catch (System.Text.Json.JsonException)
             {
