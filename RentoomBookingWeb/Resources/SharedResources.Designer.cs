@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RentoomBookingWeb {
+namespace RentoomBookingWeb{
     using System;
     
     
@@ -19,7 +19,7 @@ namespace RentoomBookingWeb {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class SharedResources {
@@ -115,6 +115,33 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close message.
+        /// </summary>
+        internal static string AppError_CloseAriaLabel {
+            get {
+                return ResourceManager.GetString("AppError_CloseAriaLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred.
+        /// </summary>
+        internal static string AppError_DefaultTitle {
+            get {
+                return ResourceManager.GetString("AppError_DefaultTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        internal static string Breadcrumb_Home {
+            get {
+                return ResourceManager.GetString("Breadcrumb_Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string CallUs {
@@ -178,6 +205,15 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not save consent. Please try again..
+        /// </summary>
+        internal static string CookieConsent_SaveError {
+            get {
+                return ResourceManager.GetString("CookieConsent_SaveError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Cooperation {
@@ -187,11 +223,29 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calendar icon.
+        /// </summary>
+        internal static string DatePicker_CalendarIconAlt {
+            get {
+                return ResourceManager.GetString("DatePicker_CalendarIconAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Dates {
             get {
                 return ResourceManager.GetString("Dates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Często Zadawane Pytania.
+        /// </summary>
+        internal static string FAQ_Title {
+            get {
+                return ResourceManager.GetString("FAQ_Title", resourceCulture);
             }
         }
         
@@ -219,6 +273,123 @@ namespace RentoomBookingWeb {
         internal static string HomeHeroText {
             get {
                 return ResourceManager.GetString("HomeHeroText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address.
+        /// </summary>
+        internal static string Map_AddressFallback {
+            get {
+                return ResourceManager.GetString("Map_AddressFallback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apartments.
+        /// </summary>
+        internal static string Map_ClusterApartmentsPrefix {
+            get {
+                return ResourceManager.GetString("Map_ClusterApartmentsPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to no offers.
+        /// </summary>
+        internal static string Map_ClusterNoOffers {
+            get {
+                return ResourceManager.GetString("Map_ClusterNoOffers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offers.
+        /// </summary>
+        internal static string Map_ClusterOffersPrefix {
+            get {
+                return ResourceManager.GetString("Map_ClusterOffersPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PLN.
+        /// </summary>
+        internal static string Map_DefaultCurrency {
+            get {
+                return ResourceManager.GetString("Map_DefaultCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open menu icon.
+        /// </summary>
+        internal static string Menu_BurgerIconAriaLabel {
+            get {
+                return ResourceManager.GetString("Menu_BurgerIconAriaLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close menu icon.
+        /// </summary>
+        internal static string Menu_CloseIconAriaLabel {
+            get {
+                return ResourceManager.GetString("Menu_CloseIconAriaLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rentoom on Facebook.
+        /// </summary>
+        internal static string Menu_FacebookAriaLabel {
+            get {
+                return ResourceManager.GetString("Menu_FacebookAriaLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Facebook icon.
+        /// </summary>
+        internal static string Menu_FacebookIconAlt {
+            get {
+                return ResourceManager.GetString("Menu_FacebookIconAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rentoom on Instagram.
+        /// </summary>
+        internal static string Menu_InstagramAriaLabel {
+            get {
+                return ResourceManager.GetString("Menu_InstagramAriaLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instagram icon.
+        /// </summary>
+        internal static string Menu_InstagramIconAlt {
+            get {
+                return ResourceManager.GetString("Menu_InstagramIconAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rentoom - apartments for rent.
+        /// </summary>
+        internal static string Menu_LogoAlt {
+            get {
+                return ResourceManager.GetString("Menu_LogoAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main site navigation.
+        /// </summary>
+        internal static string Menu_MainNavigationAriaLabel {
+            get {
+                return ResourceManager.GetString("Menu_MainNavigationAriaLabel", resourceCulture);
             }
         }
         
@@ -282,6 +453,42 @@ namespace RentoomBookingWeb {
         internal static string SelectNumberOfGuests {
             get {
                 return ResourceManager.GetString("SelectNumberOfGuests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to home page.
+        /// </summary>
+        internal static string UnderConstruction_BackHome {
+            get {
+                return ResourceManager.GetString("UnderConstruction_BackHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We are working on this section..
+        /// </summary>
+        internal static string UnderConstruction_DescriptionLine1 {
+            get {
+                return ResourceManager.GetString("UnderConstruction_DescriptionLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coming soon!.
+        /// </summary>
+        internal static string UnderConstruction_DescriptionLine2 {
+            get {
+                return ResourceManager.GetString("UnderConstruction_DescriptionLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page under construction.
+        /// </summary>
+        internal static string UnderConstruction_Title {
+            get {
+                return ResourceManager.GetString("UnderConstruction_Title", resourceCulture);
             }
         }
     }

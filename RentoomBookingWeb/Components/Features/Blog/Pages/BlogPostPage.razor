@@ -1,0 +1,209 @@
+@using Microsoft.AspNetCore.Components
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Services.Blog
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+@inject IBlogContentReader BlogContentReader
+@inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject NavigationManager NavManager
+
+<PageTitle>@(Post?.MetaTitle ?? Post?.Title ?? "Blog")</PageTitle>
+
+@if (Post is not null)
+{
+    <HeadContent>
+        <meta name="robots" content="@(Post.IsPreview ? "noindex, nofollow, noarchive, nosnippet" : "index, follow")" />
+        <meta name="description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+        @if (HasInstagramEmbeds)
+        {
+            <link rel="preconnect" href="https://www.instagram.com" />
+        }
+        @if (!Post.IsPreview)
+        {
+            <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.PublicId, Post.Slug)}")" />
+            <SeoHreflangs />
+        }
+    </HeadContent>
+}
+
+@if (!string.IsNullOrWhiteSpace(Error))
+{
+    <section class="blog-post-status">
+        <p class="blog-post-status__error">@Error</p>
+    </section>
+}
+else if (IsLoading)
+{
+    <section class="blog-post-status">
+        <p class="blog-post-status__loading">Loading...</p>
+    </section>
+}
+else if (Post is null)
+{
+    <section class="blog-post-status">
+        <p class="blog-post-status__empty">Not found.</p>
+    </section>
+}
+else
+{
+    <article class="blog-post">
+        @if (Post.IsPreview)
+        {
+            <div class="blog-post__preview-banner">
+                Preview mode
+                @if (Post.PreviewExpiresAtUtc.HasValue)
+                {
+                    <span class="blog-post__preview-expiry">Valid until @Post.PreviewExpiresAtUtc.Value.ToLocalTime().ToString("HH:mm")</span>
+        }
+            </div>
+        }
+
+        <header class="blog-post__header">
+            <div class="blog-post__meta">
+                <span class="blog-post__author">@Post.AuthorDisplayName</span>
+                <span class="blog-post__meta-separator">·</span>
+                <time class="blog-post__published" datetime="@Post.PublishedAtUtc.ToString("O")">@Post.PublishedAtUtc.ToString("yyyy-MM-dd")</time>
+            </div>
+
+            <h1 class="blog-post__title">@Post.Title</h1>
+
+        @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
+        {
+                <p class="blog-post__subtitle">@Post.Subtitle</p>
+        }
+        <p>Author: @Post.AuthorDisplayName</p>
+        <p>Published: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</p>
+
+            @if (!string.IsNullOrWhiteSpace(Post.Category) || Post.Tags.Count > 0)
+        {
+                <div class="blog-post__taxonomy">
+                    @if (!string.IsNullOrWhiteSpace(Post.Category))
+        {
+                        <span class="blog-post__category">@Post.Category</span>
+        }
+                    @foreach (var tag in Post.Tags)
+        {
+                        <span class="blog-post__tag">@tag</span>
+                    }
+            </div>
+        }
+        </header>
+
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <figure class="blog-post__hero">
+                <img src="@Post.HeroImageUrl" alt="@Post.Title" loading="eager" />
+            </figure>
+        }
+    </article>
+}
+
+        <section class="blog-post__body">
+            @foreach (var block in Post.Blocks)
+    {
+                <section class="blog-block blog-block--@block.BlockType.ToLowerInvariant()">
+                    @switch (NormalizeBlockType(block.BlockType))
+        {
+            case "Heading":
+                var headingTag = NormalizeHeading(block.HeadingLevel);
+                            @switch (headingTag)
+                            {
+                                case "h1":
+                                    <h1 class="blog-heading blog-heading--h1">@block.TextContent</h1>
+                break;
+                                case "h2":
+                                    <h2 class="blog-heading blog-heading--h2">@block.TextContent</h2>
+                                    break;
+                                case "h3":
+                                    <h3 class="blog-heading blog-heading--h3">@block.TextContent</h3>
+                                    break;
+                                case "h4":
+                                    <h4 class="blog-heading blog-heading--h4">@block.TextContent</h4>
+                                    break;
+                                case "h5":
+                                    <h5 class="blog-heading blog-heading--h5">@block.TextContent</h5>
+                                    break;
+                                default:
+                                    <h6 class="blog-heading blog-heading--h6">@block.TextContent</h6>
+                                    break;
+                            }
+                            break;
+            case "Paragraph":
+                            <div class="blog-richtext">@((MarkupString)(block.HtmlContent ?? string.Empty))</div>
+                break;
+            case "Quote":
+                            <blockquote class="blog-quote">
+                                <p>@block.TextContent</p>
+                                @if (!string.IsNullOrWhiteSpace(block.QuoteAuthor))
+                {
+                                    <footer class="blog-quote__author">@block.QuoteAuthor</footer>
+                }
+                            </blockquote>
+                break;
+                        case "Image" when !string.IsNullOrWhiteSpace(block.ImageUrl):
+                            <figure class="blog-media blog-media--image @ResolveImageSizeClass(block.DisplaySize)">
+                                <img src="@block.ImageUrl" alt="@block.AltText" loading="lazy" />
+                                @if (!string.IsNullOrWhiteSpace(block.Caption))
+                    {
+                                    <figcaption class="blog-media__caption">@block.Caption</figcaption>
+                }
+                            </figure>
+                            break;
+                        case "Faq" when block.FaqItems.Count > 0:
+                            <div class="blog-faq">
+                                <AiFaqSection Faqs="@block.FaqItems" Localizer="@Localizer" />
+                            </div>
+                break;
+                        case "YouTube" when !string.IsNullOrWhiteSpace(block.EmbedUrl):
+                            <div class="blog-embed blog-embed--youtube @ResolveYoutubeSizeClass(block.DisplaySize)">
+                                <div class="blog-embed__aspect" style="@ResolveAspectRatioStyle(block.EmbedWidth, block.EmbedHeight)">
+                                    <iframe src="@block.EmbedUrl"
+                                            title="@(string.IsNullOrWhiteSpace(block.EmbedTitle) ? "YouTube video player" : block.EmbedTitle)"
+                                            loading="lazy"
+                                            referrerpolicy="strict-origin-when-cross-origin"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                            allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                break;
+                        case "Instagram" when !string.IsNullOrWhiteSpace(block.EmbedHtml):
+                            <div class="blog-embed blog-embed--instagram">
+                                <div class="blog-instagram-embed">
+                                    @((MarkupString)block.EmbedHtml)
+                                </div>
+                            </div>
+                break;
+            default:
+                if (!string.IsNullOrWhiteSpace(block.TextContent))
+                {
+                                <div class="blog-text-block">@block.TextContent</div>
+                }
+                break;
+        }
+                </section>
+            }
+        </section>
+
+        @if (!Post.IsPreview && (Post.PreviousPost is not null || Post.NextPost is not null))
+        {
+            <nav class="blog-post__navigation" aria-label="Blog post navigation">
+                @if (Post.PreviousPost is not null)
+    {
+                    <a class="blog-post__navigation-link" href="@BuildPostUrl(Post.PreviousPost.PublicId, Post.PreviousPost.Slug)">
+                        <span class="blog-post__navigation-label">Previous</span>
+                        <span class="blog-post__navigation-title">@Post.PreviousPost.Title</span>
+                    </a>
+                }
+
+                @if (Post.NextPost is not null)
+        {
+                    <a class="blog-post__navigation-link blog-post__navigation-link--next" href="@BuildPostUrl(Post.NextPost.PublicId, Post.NextPost.Slug)">
+                        <span class="blog-post__navigation-label">Next</span>
+                        <span class="blog-post__navigation-title">@Post.NextPost.Title</span>
+                    </a>
+                }
+            </nav>
+    }
+    </article>
+}

@@ -192,29 +192,14 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Um Toruń</value>
   </data>
-  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
-    <value>Aðalvalmynd svæðisins</value>
-  </data>
-  <data name="UnderConstruction_BackHome" xml:space="preserve">
-    <value>Aftur á forsíðu</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
-    <value>Við erum að vinna að undirbúningi þessa kafla.</value>
-  </data>
-  <data name="Map_AddressFallback" xml:space="preserve">
-    <value>Heimilisfang</value>
-  </data>
-  <data name="AppError_DefaultTitle" xml:space="preserve">
-    <value>Villa hefur átt sér stað</value>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
   </data>
   <data name="Menu_FacebookIconAlt" xml:space="preserve">
     <value>Facebook-tákn</value>
   </data>
-  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
-    <value>Valmyndarlokunartákn</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
-    <value>Við bjóðum þér fljótlega velkominn!</value>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram-tákn</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
     <value>Rentoom táknið</value>
@@ -222,40 +207,55 @@
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Engin tilboð</value>
   </data>
-  <data name="Map_DefaultCurrency" xml:space="preserve">
-    <value>PLN</value>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Svæði í byggingu</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Íbúðir</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Lokaðu skilaboðunum</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Villa hefur átt sér stað</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Tilboð</value>
+  </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Aðalvalmynd svæðisins</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Heimili</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Við erum að vinna að undirbúningi þessa kafla.</value>
   </data>
   <data name="CookieConsent_SaveError" xml:space="preserve">
     <value>Ég gat ekki bjargað samþykkinu. Vinsamlegast reyndu aftur.</value>
   </data>
-  <data name="Menu_InstagramIconAlt" xml:space="preserve">
-    <value>Instagram-tákn</value>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom íbúðir</value>
   </data>
-  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
-    <value>Tilboð</value>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Valmyndartákn</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Aftur á forsíðu</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Heimilisfang</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Valmyndarlokunartákn</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Við bjóðum þér fljótlega velkominn!</value>
   </data>
   <data name="Menu_FacebookAriaLabel" xml:space="preserve">
     <value>Facebook Rentoom íbúðir</value>
   </data>
   <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
     <value>Dagatalstákn</value>
-  </data>
-  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
-    <value>Íbúðir</value>
-  </data>
-  <data name="UnderConstruction_Title" xml:space="preserve">
-    <value>Svæði í byggingu</value>
-  </data>
-  <data name="Breadcrumb_Home" xml:space="preserve">
-    <value>Heimili</value>
-  </data>
-  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
-    <value>Instagram Rentoom íbúðir</value>
-  </data>
-  <data name="AppError_CloseAriaLabel" xml:space="preserve">
-    <value>Lokaðu skilaboðunum</value>
-  </data>
-  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
-    <value>Valmyndartákn</value>
   </data>
 </root>

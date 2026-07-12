@@ -192,29 +192,14 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Om Toruń</value>
   </data>
-  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
-    <value>Huvudmenyn på sidan</value>
-  </data>
-  <data name="UnderConstruction_BackHome" xml:space="preserve">
-    <value>Tillbaka till startsidan</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
-    <value>Vi arbetar med förberedelserna av denna sektion.</value>
-  </data>
-  <data name="Map_AddressFallback" xml:space="preserve">
-    <value>Adress</value>
-  </data>
-  <data name="AppError_DefaultTitle" xml:space="preserve">
-    <value>Ett fel har inträffat</value>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
   </data>
   <data name="Menu_FacebookIconAlt" xml:space="preserve">
     <value>Facebook-ikon</value>
   </data>
-  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
-    <value>Menystängningsikon</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
-    <value>Vi bjuder in dig snart!</value>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram-ikon</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
     <value>Rentoom-ikonen</value>
@@ -222,40 +207,55 @@
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Inga erbjudanden</value>
   </data>
-  <data name="Map_DefaultCurrency" xml:space="preserve">
-    <value>PLN</value>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Området under uppbyggnad</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Lägenheter</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Stäng meddelandet</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Ett fel har inträffat</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Erbjudanden</value>
+  </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Huvudmenyn på sidan</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Hem</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Vi arbetar med förberedelserna av denna sektion.</value>
   </data>
   <data name="CookieConsent_SaveError" xml:space="preserve">
     <value>Jag kunde inte rädda samtycket. Försök igen, tack.</value>
   </data>
-  <data name="Menu_InstagramIconAlt" xml:space="preserve">
-    <value>Instagram-ikon</value>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Apartments</value>
   </data>
-  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
-    <value>Erbjudanden</value>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Menyikon</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Tillbaka till startsidan</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Adress</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Menystängningsikon</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Vi bjuder in dig snart!</value>
   </data>
   <data name="Menu_FacebookAriaLabel" xml:space="preserve">
     <value>Facebook Rentoom Apartments</value>
   </data>
   <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
     <value>Kalenderikon</value>
-  </data>
-  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
-    <value>Lägenheter</value>
-  </data>
-  <data name="UnderConstruction_Title" xml:space="preserve">
-    <value>Området under uppbyggnad</value>
-  </data>
-  <data name="Breadcrumb_Home" xml:space="preserve">
-    <value>Hem</value>
-  </data>
-  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
-    <value>Instagram Rentoom Apartments</value>
-  </data>
-  <data name="AppError_CloseAriaLabel" xml:space="preserve">
-    <value>Stäng meddelandet</value>
-  </data>
-  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
-    <value>Menyikon</value>
   </data>
 </root>

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Descriptions.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Blog.Database;
 using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
@@ -25,6 +26,7 @@ using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
+using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBooking.SharedClasses.Services.Gus;
@@ -112,7 +114,11 @@ namespace RentoomBookingWeb
             builder.Services.AddDbContextFactory<RappDescriptionsDbContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
 
+            builder.Services.AddDbContextFactory<RappBlogReadDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
             builder.Services.AddScoped<IApartmentAiDescriptionService, ApartmentAiDescriptionService>();
+            builder.Services.AddScoped<IBlogContentReader, BlogContentReader>();
 
             var footerEnvironmentInfo = FooterEnvironmentInfo.Create(
                builder.Environment,
@@ -226,6 +232,7 @@ namespace RentoomBookingWeb
             //storage options:
             builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
             builder.Services.Configure<StorageOptions>(ApartmentPhotoBlobStorage.StorageOptionsName, builder.Configuration.GetSection(ApartmentPhotoBlobStorage.StorageOptionsName));
+            builder.Services.Configure<StorageOptions>(BlogContentReader.BlogStorageOptionsName, builder.Configuration.GetSection(BlogContentReader.BlogStorageOptionsName));
             builder.Services.Configure<ApartmentMediaVariantsOptions>(builder.Configuration.GetSection(ApartmentMediaVariantsOptions.SectionName));
 
             var app = builder.Build();
@@ -444,12 +451,12 @@ namespace RentoomBookingWeb
             "object-src 'none'; " +
             "frame-ancestors 'self'; " +
             "form-action 'self' https://secure.tpay.com https://secure.sandbox.tpay.com; " +
-            "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://t.contentsquare.net https://*.contentsquare.net; " +
+            "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://t.contentsquare.net https://*.contentsquare.net https://www.instagram.com; " +
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
             "font-src 'self' data: https://fonts.gstatic.com; " +
             "img-src 'self' data: blob: https:; " +
             "connect-src 'self' ws: wss: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://*.contentsquare.net; " +
-            "frame-src 'self' https://www.openstreetmap.org; " +
+            "frame-src 'self' https://www.openstreetmap.org https://www.youtube-nocookie.com https://www.youtube.com https://www.instagram.com; " +
             "worker-src 'self' blob:; " +
             "manifest-src 'self'; " +
             "media-src 'self' https:;";

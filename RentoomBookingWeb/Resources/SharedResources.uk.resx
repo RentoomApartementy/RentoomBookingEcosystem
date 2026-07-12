@@ -192,29 +192,14 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Про Торунь</value>
   </data>
-  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
-    <value>Головне меню сайту</value>
-  </data>
-  <data name="UnderConstruction_BackHome" xml:space="preserve">
-    <value>Повернутися на головну сторінку</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
-    <value>Ми працюємо над підготовкою цього розділу.</value>
-  </data>
-  <data name="Map_AddressFallback" xml:space="preserve">
-    <value>Адреса</value>
-  </data>
-  <data name="AppError_DefaultTitle" xml:space="preserve">
-    <value>Сталася помилка</value>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
   </data>
   <data name="Menu_FacebookIconAlt" xml:space="preserve">
     <value>Іконка Facebook</value>
   </data>
-  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
-    <value>Іконка закриття меню</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
-    <value>Запрошуємо вас незабаром!</value>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Ікона Instagram</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
     <value>Ікона Рентум</value>
@@ -222,40 +207,55 @@
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Жодних пропозицій</value>
   </data>
-  <data name="Map_DefaultCurrency" xml:space="preserve">
-    <value>PLN</value>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Об'єкт, що перебуває на стадії будівництва</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Квартири</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Закрити повідомлення</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Сталася помилка</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Пропозиції</value>
+  </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Головне меню сайту</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Дім</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Ми працюємо над підготовкою цього розділу.</value>
   </data>
   <data name="CookieConsent_SaveError" xml:space="preserve">
     <value>Я не зміг зберегти згоду. Будь ласка, спробуйте ще раз.</value>
   </data>
-  <data name="Menu_InstagramIconAlt" xml:space="preserve">
-    <value>Ікона Instagram</value>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Рентум Апартаменти</value>
   </data>
-  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
-    <value>Пропозиції</value>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Іконка меню</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Повернутися на головну сторінку</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Адреса</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Іконка закриття меню</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Запрошуємо вас незабаром!</value>
   </data>
   <data name="Menu_FacebookAriaLabel" xml:space="preserve">
     <value>Facebook Рентум Апартаменти</value>
   </data>
   <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
     <value>Іконка календаря</value>
-  </data>
-  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
-    <value>Квартири</value>
-  </data>
-  <data name="UnderConstruction_Title" xml:space="preserve">
-    <value>Об'єкт, що перебуває на стадії будівництва</value>
-  </data>
-  <data name="Breadcrumb_Home" xml:space="preserve">
-    <value>Дім</value>
-  </data>
-  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
-    <value>Instagram Рентум Апартаменти</value>
-  </data>
-  <data name="AppError_CloseAriaLabel" xml:space="preserve">
-    <value>Закрити повідомлення</value>
-  </data>
-  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
-    <value>Іконка меню</value>
   </data>
 </root>
