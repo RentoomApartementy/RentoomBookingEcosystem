@@ -1,0 +1,36 @@
+
+<section class="blog_section_header">
+    @if (!string.IsNullOrWhiteSpace(Item.HeroImageUrl))
+    {
+        <img src="@Item.HeroImageUrl" alt="@Item.Title" class="blog_header_bg" />
+    }
+    
+    <div class="blog_header_container">
+        <div class="blog_header_card">
+            <div class="blog_card_header">
+                <span class="blog_card_read_time">@GetReadTimeText()</span>
+                <span class="blog_card_date">@Item.PublishedAtUtc.ToString("dd.MM.yyyy")</span>
+            </div>
+            
+            <h1 class="blog_card_title">@Item.Title</h1>
+            
+            <p class="blog_card_excerpt">@Item.Excerpt</p>
+            
+            @if (Item.Tags is not null && Item.Tags.Any())
+            {
+                <div class="blog_card_tags">
+                    @foreach (var tag in Item.Tags)
+                    {
+                        <Tag Text="@tag" />
+                    }
+                </div>
+            }
+            
+            <div class="blog_card_action">
+                <Button Href="@BuildPostUrl(Item.PublicId, Item.Slug)" Type="ButtonType.Primary">
+                    @Localizer["ReadMore"]
+                </Button>
+            </div>
+        </div>
+    </div>
+</section>

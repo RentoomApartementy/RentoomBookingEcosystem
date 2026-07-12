@@ -23,4 +23,16 @@
     <data name="CouldNotLoadBlogPosts" xml:space="preserve">
         <value>Nie udało się załadować wpisów na blogu.</value>
     </data>
+    <data name="BlogHeaderTitle" xml:space="preserve">
+        <value>Blog Rentoom</value>
+    </data>
+    <data name="BlogHeaderSubtitle" xml:space="preserve">
+        <value>Najnowsze wpisy, porady i wiadomości z życia Rentoom.</value>
+    </data>
+    <data name="ReadMore" xml:space="preserve">
+        <value>Czytaj dalej</value>
+    </data>
+    <data name="ReadTimeFormat" xml:space="preserve">
+        <value>{0} min czytania</value>
+    </data>
 </root>

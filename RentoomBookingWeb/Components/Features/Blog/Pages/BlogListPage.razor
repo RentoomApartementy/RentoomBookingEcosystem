@@ -1,3 +1,5 @@
+@using RentoomBookingWeb.Components.Features.Blog.Components;
+
 <PageTitle>Blog</PageTitle>
 
 <HeadContent>
@@ -7,7 +9,10 @@
     <SeoHreflangs />
 </HeadContent>
 
-<h1>Blog</h1>
+@if (Items.Count > 0)
+{
+    <BlogHeaderSection Item="Items.First()" />
+}
 
 @if (!string.IsNullOrWhiteSpace(Error))
 {
