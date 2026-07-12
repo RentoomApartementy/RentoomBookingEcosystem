@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 using RentoomBooking.SharedClasses.Services.Blog;
 
@@ -8,6 +9,9 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
 {
     [Inject] public IJSRuntime JS { get; set; } = default!;
     [Inject] public ILogger<BlogListPage> Logger { get; set; } = default!;
+    [Inject] public PersistentComponentState ApplicationState { get; set; } = default!;
+
+    private const int PageSize = 12;
 
     protected readonly List<BlogPostListItem> Items = new();
     protected bool IsLoading;
@@ -17,13 +21,36 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
 
     private DotNetObjectReference<BlogListPage>? _objRef;
     private IJSObjectReference? _jsModule;
+    private PersistingComponentStateSubscription _subscription;
     private readonly CancellationTokenSource _cts = new();
     private bool _interactive;
     private bool _disposed;
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadNextPageAsync(_cts.Token);
+        _subscription = ApplicationState.RegisterOnPersisting(PersistState);
+
+        if (ApplicationState.TryTakeFromJson<BlogState>("blog_state", out var restoredState) && restoredState is not null)
+        {
+            Items.AddRange(restoredState.Items);
+            NextCursor = restoredState.NextCursor;
+            HasMore = restoredState.HasMore;
+        }
+        else
+        {
+            await LoadNextPageAsync(_cts.Token);
+        }
+    }
+
+    private Task PersistState()
+    {
+        ApplicationState.PersistAsJson("blog_state", new BlogState
+        {
+            Items = Items,
+            NextCursor = NextCursor,
+            HasMore = HasMore
+        });
+        return Task.CompletedTask;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -45,7 +72,15 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
             return;
         }
 
-        await LoadNextPageAsync(_cts.Token);
+        IsLoading = true;
+        try
+        {
+            await LoadNextPageAsync(_cts.Token);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
         await InvokeAsync(StateHasChanged);
     }
 
@@ -59,10 +94,11 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
             var result = await BlogContentReader.GetPublishedPostsFeedAsync(
                 System.Globalization.CultureInfo.CurrentUICulture.Name,
                 NextCursor,
-                12,
+                PageSize,
                 cancellationToken);
 
-            Items.AddRange(result.Items);
+            var newItems = result.Items.Where(newItem => !Items.Any(existingItem => existingItem.PublicId == newItem.PublicId));
+            Items.AddRange(newItems);
             NextCursor = result.NextCursor;
             HasMore = result.HasMore;
         }
@@ -71,7 +107,7 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
         }
         catch (Exception ex)
         {
-            Error = "Could not load blog posts.";
+            Error = Localizer["CouldNotLoadBlogPosts"];
             Logger.LogError(ex, "Failed to load blog feed.");
         }
         finally
@@ -83,6 +119,7 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         _disposed = true;
+        _subscription.Dispose();
         _cts.Cancel();
         _cts.Dispose();
 
@@ -103,5 +140,12 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
         }
 
         _objRef?.Dispose();
+    }
+
+    private class BlogState
+    {
+        public List<BlogPostListItem> Items { get; set; } = new();
+        public string? NextCursor { get; set; }
+        public bool HasMore { get; set; }
     }
 }
