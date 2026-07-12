@@ -54,7 +54,7 @@ else
                 @if (Post.PreviewExpiresAtUtc.HasValue)
                 {
                     <span class="blog-post__preview-expiry">Valid until @Post.PreviewExpiresAtUtc.Value.ToLocalTime().ToString("HH:mm")</span>
-                }
+        }
             </div>
         }
 
@@ -67,24 +67,26 @@ else
 
             <h1 class="blog-post__title">@Post.Title</h1>
 
-            @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
-            {
+        @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
+        {
                 <p class="blog-post__subtitle">@Post.Subtitle</p>
-            }
+        }
+        <p>Author: @Post.AuthorDisplayName</p>
+        <p>Published: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</p>
 
             @if (!string.IsNullOrWhiteSpace(Post.Category) || Post.Tags.Count > 0)
-            {
+        {
                 <div class="blog-post__taxonomy">
                     @if (!string.IsNullOrWhiteSpace(Post.Category))
-                    {
+        {
                         <span class="blog-post__category">@Post.Category</span>
-                    }
+        }
                     @foreach (var tag in Post.Tags)
-                    {
+        {
                         <span class="blog-post__tag">@tag</span>
                     }
-                </div>
-            }
+            </div>
+        }
         </header>
 
         @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
@@ -93,20 +95,22 @@ else
                 <img src="@Post.HeroImageUrl" alt="@Post.Title" loading="eager" />
             </figure>
         }
+    </article>
+}
 
         <section class="blog-post__body">
             @foreach (var block in Post.Blocks)
-            {
+    {
                 <section class="blog-block blog-block--@block.BlockType.ToLowerInvariant()">
                     @switch (NormalizeBlockType(block.BlockType))
-                    {
-                        case "Heading":
-                            var headingTag = NormalizeHeading(block.HeadingLevel);
+        {
+            case "Heading":
+                var headingTag = NormalizeHeading(block.HeadingLevel);
                             @switch (headingTag)
                             {
                                 case "h1":
                                     <h1 class="blog-heading blog-heading--h1">@block.TextContent</h1>
-                                    break;
+                break;
                                 case "h2":
                                     <h2 class="blog-heading blog-heading--h2">@block.TextContent</h2>
                                     break;
@@ -124,32 +128,32 @@ else
                                     break;
                             }
                             break;
-                        case "Paragraph":
+            case "Paragraph":
                             <div class="blog-richtext">@((MarkupString)(block.HtmlContent ?? string.Empty))</div>
-                            break;
-                        case "Quote":
+                break;
+            case "Quote":
                             <blockquote class="blog-quote">
                                 <p>@block.TextContent</p>
                                 @if (!string.IsNullOrWhiteSpace(block.QuoteAuthor))
-                                {
+                {
                                     <footer class="blog-quote__author">@block.QuoteAuthor</footer>
-                                }
+                }
                             </blockquote>
-                            break;
+                break;
                         case "Image" when !string.IsNullOrWhiteSpace(block.ImageUrl):
                             <figure class="blog-media blog-media--image @ResolveImageSizeClass(block.DisplaySize)">
                                 <img src="@block.ImageUrl" alt="@block.AltText" loading="lazy" />
                                 @if (!string.IsNullOrWhiteSpace(block.Caption))
-                                {
+                    {
                                     <figcaption class="blog-media__caption">@block.Caption</figcaption>
-                                }
+                }
                             </figure>
                             break;
                         case "Faq" when block.FaqItems.Count > 0:
                             <div class="blog-faq">
                                 <AiFaqSection Faqs="@block.FaqItems" Localizer="@Localizer" />
                             </div>
-                            break;
+                break;
                         case "YouTube" when !string.IsNullOrWhiteSpace(block.EmbedUrl):
                             <div class="blog-embed blog-embed--youtube @ResolveYoutubeSizeClass(block.DisplaySize)">
                                 <div class="blog-embed__aspect" style="@ResolveAspectRatioStyle(block.EmbedWidth, block.EmbedHeight)">
@@ -162,21 +166,21 @@ else
                                     </iframe>
                                 </div>
                             </div>
-                            break;
+                break;
                         case "Instagram" when !string.IsNullOrWhiteSpace(block.EmbedHtml):
                             <div class="blog-embed blog-embed--instagram">
                                 <div class="blog-instagram-embed">
                                     @((MarkupString)block.EmbedHtml)
                                 </div>
                             </div>
-                            break;
-                        default:
-                            if (!string.IsNullOrWhiteSpace(block.TextContent))
-                            {
+                break;
+            default:
+                if (!string.IsNullOrWhiteSpace(block.TextContent))
+                {
                                 <div class="blog-text-block">@block.TextContent</div>
-                            }
-                            break;
-                    }
+                }
+                break;
+        }
                 </section>
             }
         </section>
@@ -185,7 +189,7 @@ else
         {
             <nav class="blog-post__navigation" aria-label="Blog post navigation">
                 @if (Post.PreviousPost is not null)
-                {
+    {
                     <a class="blog-post__navigation-link" href="@BuildPostUrl(Post.PreviousPost.PublicId, Post.PreviousPost.Slug)">
                         <span class="blog-post__navigation-label">Previous</span>
                         <span class="blog-post__navigation-title">@Post.PreviousPost.Title</span>
@@ -193,13 +197,13 @@ else
                 }
 
                 @if (Post.NextPost is not null)
-                {
+        {
                     <a class="blog-post__navigation-link blog-post__navigation-link--next" href="@BuildPostUrl(Post.NextPost.PublicId, Post.NextPost.Slug)">
                         <span class="blog-post__navigation-label">Next</span>
                         <span class="blog-post__navigation-title">@Post.NextPost.Title</span>
                     </a>
                 }
             </nav>
-        }
+    }
     </article>
 }

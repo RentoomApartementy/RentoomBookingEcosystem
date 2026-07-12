@@ -36,10 +36,10 @@ public partial class BlogPostPage : ComponentBase, IAsyncDisposable
                     CancellationToken.None)
                 : await BlogContentReader.GetPreviewPostAsync(
                     PublicId,
-                Slug,
+                    Slug,
                     PreviewToken,
                     culture,
-                CancellationToken.None);
+                    CancellationToken.None);
         }
         catch (Exception ex)
         {

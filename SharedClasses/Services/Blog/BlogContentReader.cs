@@ -984,7 +984,7 @@ public sealed class BlogContentReader : IBlogContentReader
         if (string.IsNullOrWhiteSpace(json))
         {
             return null;
-        }
+    }
 
         try
         {
