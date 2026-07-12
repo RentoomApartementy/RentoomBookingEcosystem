@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 using RentoomBooking.SharedClasses.Services.Blog;
+using RentoomBookingWeb.Services.Localization;
 
 namespace RentoomBookingWeb.Components.Features.Blog.Pages;
 
@@ -10,6 +11,10 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
     [Inject] public IJSRuntime JS { get; set; } = default!;
     [Inject] public ILogger<BlogListPage> Logger { get; set; } = default!;
     [Inject] public PersistentComponentState ApplicationState { get; set; } = default!;
+    [Inject] public IBlogContentReader BlogContentReader { get; set; } = default!;
+    [Inject] internal IStringLocalizer<RentoomBookingWeb.Blog> Localizer { get; set; } = default!;
+    [Inject] public IRouteLocalizationService RouteService { get; set; } = default!;
+    [Inject] public NavigationManager NavManager { get; set; } = default!;
 
     private const int PageSize = 12;
 
@@ -25,6 +30,7 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
     private readonly CancellationTokenSource _cts = new();
     private bool _interactive;
     private bool _disposed;
+    private string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
 
     protected override async Task OnInitializedAsync()
     {

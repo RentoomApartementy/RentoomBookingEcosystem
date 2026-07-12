@@ -1,10 +1,3 @@
-@using Microsoft.Extensions.Localization
-@using RentoomBooking.SharedClasses.Services.Blog
-@inject IBlogContentReader BlogContentReader
-@inject IStringLocalizer<RentoomBookingWeb.Blog> Localizer
-@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
-@inject NavigationManager NavManager
-
 <PageTitle>Blog</PageTitle>
 
 <HeadContent>
@@ -52,7 +45,3 @@ else
 }
 
 <div id="scroll-anchor" style="height: 10px; width: 100%;"></div>
-
-@code {
-    private string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
-}
