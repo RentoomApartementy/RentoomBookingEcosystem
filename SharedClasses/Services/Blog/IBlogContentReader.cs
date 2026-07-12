@@ -20,11 +20,4 @@ public interface IBlogContentReader
         string previewToken,
         string culture,
         CancellationToken cancellationToken = default);
-
-    Task<BlogPostDetails?> GetPreviewPostAsync(
-        Guid publicId,
-        string slug,
-        string previewToken,
-        string culture,
-        CancellationToken cancellationToken = default);
 }

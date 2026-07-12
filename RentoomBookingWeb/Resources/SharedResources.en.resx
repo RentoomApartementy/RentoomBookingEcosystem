@@ -192,6 +192,72 @@
   <data name="AboutCity" xml:space="preserve">
     <value>About Toruń City</value>
   </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook icon</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram icon</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Rentoom - apartments for rent</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>no offers</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Page under construction</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartments</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Close message</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Offers</value>
+  </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Main site navigation</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>We are working on this section.</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Could not save consent. Please try again.</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom on Instagram</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Open menu icon</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Back to home page</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Close menu icon</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Coming soon!</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Rentoom on Facebook</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Calendar icon</value>
+  </data>
   <data name="ErrorPageRequestIdLabel" xml:space="preserve">
     <value>Request ID:</value>
   </data>
@@ -227,71 +293,5 @@
   </data>
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
     <value>Development Mode</value>
-  </data>
-  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
-    <value>Main site navigation</value>
-  </data>
-  <data name="UnderConstruction_BackHome" xml:space="preserve">
-    <value>Back to home page</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
-    <value>We are working on this section.</value>
-  </data>
-  <data name="Map_AddressFallback" xml:space="preserve">
-    <value>Address</value>
-  </data>
-  <data name="AppError_DefaultTitle" xml:space="preserve">
-    <value>An error occurred</value>
-  </data>
-  <data name="Menu_FacebookIconAlt" xml:space="preserve">
-    <value>Facebook icon</value>
-  </data>
-  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
-    <value>Close menu icon</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
-    <value>Coming soon!</value>
-  </data>
-  <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom - apartments for rent</value>
-  </data>
-  <data name="Map_ClusterNoOffers" xml:space="preserve">
-    <value>no offers</value>
-  </data>
-  <data name="Map_DefaultCurrency" xml:space="preserve">
-    <value>PLN</value>
-  </data>
-  <data name="CookieConsent_SaveError" xml:space="preserve">
-    <value>Could not save consent. Please try again.</value>
-  </data>
-  <data name="Menu_InstagramIconAlt" xml:space="preserve">
-    <value>Instagram icon</value>
-  </data>
-  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
-    <value>Offers</value>
-  </data>
-  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
-    <value>Rentoom on Facebook</value>
-  </data>
-  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
-    <value>Calendar icon</value>
-  </data>
-  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
-    <value>Apartments</value>
-  </data>
-  <data name="UnderConstruction_Title" xml:space="preserve">
-    <value>Page under construction</value>
-  </data>
-  <data name="Breadcrumb_Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
-    <value>Rentoom on Instagram</value>
-  </data>
-  <data name="AppError_CloseAriaLabel" xml:space="preserve">
-    <value>Close message</value>
-  </data>
-  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
-    <value>Open menu icon</value>
   </data>
 </root>

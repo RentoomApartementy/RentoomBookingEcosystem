@@ -98,7 +98,7 @@ else
             @foreach (var block in Post.Blocks)
             {
                 <section class="blog-block blog-block--@block.BlockType.ToLowerInvariant()">
-                    @switch (block.BlockType)
+                    @switch (NormalizeBlockType(block.BlockType))
                     {
                         case "Heading":
                             var headingTag = NormalizeHeading(block.HeadingLevel);

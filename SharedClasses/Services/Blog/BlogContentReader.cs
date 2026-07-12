@@ -157,7 +157,7 @@ public sealed class BlogContentReader : IBlogContentReader
 
         if (_cache.TryGetValue(cacheKey, out BlogPostDetails? cached) && cached is not null)
         {
-            return cached;
+           // return cached;
         }
 
         await using var dbContext = await _blogDbContextFactory.CreateDbContextAsync(cancellationToken);
@@ -487,7 +487,9 @@ public sealed class BlogContentReader : IBlogContentReader
                 : null,
             AltText = row.AltText,
             Caption = row.Caption,
-            EmbedUrl = BuildEmbedUrl(blockType, props),
+            EmbedUrl = string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase)
+                ? BuildYoutubeEmbedUrl(props)
+                : null,
             EmbedHtml = string.Equals(blockType, "Instagram", StringComparison.OrdinalIgnoreCase)
                 ? BuildInstagramEmbedHtml(props?.InstagramEmbedCode)
                 : null,
@@ -611,16 +613,6 @@ public sealed class BlogContentReader : IBlogContentReader
         sanitized = Regex.Replace(sanitized, "\\son\\w+\\s*=\\s*(['\"]).*?\\1", string.Empty, RegexOptions.IgnoreCase | RegexOptions.Singleline);
         sanitized = Regex.Replace(sanitized, "\\s(href|src)\\s*=\\s*(['\"])javascript:.*?\\2", string.Empty, RegexOptions.IgnoreCase | RegexOptions.Singleline);
         return sanitized;
-    }
-
-    private static string? BuildEmbedUrl(string blockType, BlockProps? props)
-    {
-        if (string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase))
-        {
-            return BuildYoutubeEmbedUrl(props);
-        }
-
-        return null;
     }
 
     private static string? BuildYoutubeEmbedUrl(BlockProps? props)
@@ -1137,11 +1129,11 @@ public sealed class BlogContentReader : IBlogContentReader
         public string? QuoteAuthor { get; init; }
         public string? YouTubeTitle { get; init; }
         public string? YouTubeEmbedCode { get; init; }
-        public bool YouTubeAutoplay { get; init; }
-        public bool YouTubeLoop { get; init; }
-        public bool YouTubeMute { get; init; }
-        public bool YouTubeControls { get; init; } = true;
-        public bool YouTubeModestBranding { get; init; }
+        public bool? YouTubeAutoplay { get; init; }
+        public bool? YouTubeLoop { get; init; }
+        public bool? YouTubeMute { get; init; }
+        public bool? YouTubeControls { get; init; }
+        public bool? YouTubeModestBranding { get; init; }
         public int? YouTubeWidth { get; init; }
         public int? YouTubeHeight { get; init; }
         public string? InstagramEmbedCode { get; init; }

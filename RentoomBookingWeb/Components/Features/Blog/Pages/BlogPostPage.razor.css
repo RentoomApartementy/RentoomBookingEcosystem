@@ -200,6 +200,7 @@
     line-height: 1.6;
     font-style: italic;
     color: #334155;
+    white-space: pre-line;
 }
 
 .blog-quote__author {
@@ -295,21 +296,46 @@
 }
 
 .blog-embed--instagram {
+    width: 100%;
     display: flex;
     justify-content: center;
 }
 
 .blog-instagram-embed {
+    display: flex;
+    justify-content: center;
     width: min(100%, 540px);
+    max-width: 540px;
+    margin: 0 auto;
+    overflow: hidden;
 }
 
 .blog-instagram-embed :deep(blockquote.instagram-media) {
+    display: block !important;
     width: 100% !important;
     max-width: 540px !important;
     min-width: 0 !important;
     margin: 0 auto !important;
     border-radius: 18px !important;
     overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.blog-instagram-embed :deep(iframe.instagram-media) {
+    width: 100% !important;
+    max-width: 540px !important;
+    min-width: 0 !important;
+}
+
+.blog-instagram-embed :deep(blockquote.instagram-media > div) {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.blog-instagram-embed :deep(a),
+.blog-instagram-embed :deep(p),
+.blog-instagram-embed :deep(div) {
+    max-width: 100%;
 }
 
 .blog-faq {
@@ -426,5 +452,6 @@
 
     .blog-instagram-embed {
         width: 100%;
+        max-width: 100%;
     }
 }

@@ -192,29 +192,14 @@
   <data name="AboutCity" xml:space="preserve">
     <value>O Toruni</value>
   </data>
-  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
-    <value>Hlavní menu stránky</value>
-  </data>
-  <data name="UnderConstruction_BackHome" xml:space="preserve">
-    <value>Návrat na domovskou stránku</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
-    <value>Pracujeme na přípravě této části.</value>
-  </data>
-  <data name="Map_AddressFallback" xml:space="preserve">
-    <value>Adresa</value>
-  </data>
-  <data name="AppError_DefaultTitle" xml:space="preserve">
-    <value>Došlo k chybě</value>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
   </data>
   <data name="Menu_FacebookIconAlt" xml:space="preserve">
     <value>Ikona Facebooku</value>
   </data>
-  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
-    <value>Ikona zavřít menu</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
-    <value>Brzy vás zveme k dispozici!</value>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagramová ikona</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
     <value>Rentoom Icon</value>
@@ -222,40 +207,55 @@
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Žádné nabídky</value>
   </data>
-  <data name="Map_DefaultCurrency" xml:space="preserve">
-    <value>PLN</value>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Stavba na místě</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Byty</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Ukonči zprávu</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Došlo k chybě</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Nabídky</value>
+  </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Hlavní menu stránky</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Domov</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Pracujeme na přípravě této části.</value>
   </data>
   <data name="CookieConsent_SaveError" xml:space="preserve">
     <value>Souhlas jsem nemohl zachránit. Zkuste to prosím znovu.</value>
   </data>
-  <data name="Menu_InstagramIconAlt" xml:space="preserve">
-    <value>Instagramová ikona</value>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Apartments</value>
   </data>
-  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
-    <value>Nabídky</value>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Ikona menu</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Návrat na domovskou stránku</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Adresa</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Ikona zavřít menu</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Brzy vás zveme k dispozici!</value>
   </data>
   <data name="Menu_FacebookAriaLabel" xml:space="preserve">
     <value>Facebook Rentoom Apartments</value>
   </data>
   <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
     <value>Ikona kalendáře</value>
-  </data>
-  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
-    <value>Byty</value>
-  </data>
-  <data name="UnderConstruction_Title" xml:space="preserve">
-    <value>Stavba na místě</value>
-  </data>
-  <data name="Breadcrumb_Home" xml:space="preserve">
-    <value>Domov</value>
-  </data>
-  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
-    <value>Instagram Rentoom Apartments</value>
-  </data>
-  <data name="AppError_CloseAriaLabel" xml:space="preserve">
-    <value>Ukonči zprávu</value>
-  </data>
-  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
-    <value>Ikona menu</value>
   </data>
 </root>

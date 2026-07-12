@@ -130,6 +130,26 @@ public partial class BlogPostPage : ComponentBase, IAsyncDisposable
         };
     }
 
+    protected static string NormalizeBlockType(string? blockType)
+    {
+        if (string.IsNullOrWhiteSpace(blockType))
+        {
+            return string.Empty;
+        }
+
+        return blockType.Trim().ToLowerInvariant() switch
+        {
+            "heading" => "Heading",
+            "paragraph" => "Paragraph",
+            "quote" => "Quote",
+            "image" => "Image",
+            "faq" => "Faq",
+            "youtube" => "YouTube",
+            "instagram" => "Instagram",
+            _ => blockType.Trim()
+        };
+    }
+
     public async ValueTask DisposeAsync()
     {
         _disposed = true;
