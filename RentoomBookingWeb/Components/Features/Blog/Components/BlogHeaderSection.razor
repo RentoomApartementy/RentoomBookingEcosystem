@@ -16,12 +16,25 @@
             
             <p class="blog_card_excerpt">@Item.Excerpt</p>
             
-            @if (Item.Tags is not null && Item.Tags.Any())
+            @if (!string.IsNullOrWhiteSpace(Item.Category) || (Item.Tags is not null && Item.Tags.Any()))
             {
                 <div class="blog_card_tags">
-                    @foreach (var tag in Item.Tags)
+                    @if (!string.IsNullOrWhiteSpace(Item.Category))
                     {
-                        <Tag Text="@tag" />
+                        <Tag Text="@Item.Category" />
+                    }
+                    
+                    @if (!string.IsNullOrWhiteSpace(Item.Category) && Item.Tags is not null && Item.Tags.Any())
+                    {
+                        <span class="blog_card_separator"></span>
+                    }
+                    
+                    @if (Item.Tags is not null && Item.Tags.Any())
+                    {
+                        @foreach (var tag in Item.Tags)
+                        {
+                            <Tag Text="@tag" />
+                        }
                     }
                 </div>
             }
