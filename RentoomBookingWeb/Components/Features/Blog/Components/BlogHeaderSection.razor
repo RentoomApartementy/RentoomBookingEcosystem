@@ -46,11 +46,14 @@
                 </div>
             }
             
-            <div class="blog_card_action">
-                <Button Href="@BuildPostUrl(Item.PublicId, Item.Slug)" Type="ButtonType.Primary">
-                    @Localizer["ReadMore"]
-                </Button>
-            </div>
+            @if (ShowReadMoreButton)
+            {
+                <div class="blog_card_action">
+                    <Button Href="@BuildPostUrl(Item.PublicId, Item.Slug)" Type="ButtonType.Primary">
+                        @Localizer["ReadMore"]
+                    </Button>
+                </div>
+            }
         </article>
     </div>
 </section>
