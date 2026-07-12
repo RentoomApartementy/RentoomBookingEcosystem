@@ -9,7 +9,10 @@
     <SeoHreflangs />
 </HeadContent>
 
-<BlogHeaderSection  />
+@if (Items.Count > 0)
+{
+    <BlogHeaderSection Item="Items.First()" />
+}
 
 @if (!string.IsNullOrWhiteSpace(Error))
 {
