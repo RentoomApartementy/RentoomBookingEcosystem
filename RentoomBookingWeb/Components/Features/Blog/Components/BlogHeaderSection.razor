@@ -2,16 +2,16 @@
 <section class="blog_section_header">
     @if (!string.IsNullOrWhiteSpace(Item.HeroImageUrl))
     {
-        <img src="@Item.HeroImageUrl" alt="@Item.Title" class="blog_header_bg" />
+        <img src="@Item.HeroImageUrl" alt="@Item.Title" class="blog_header_bg" fetchpriority="high" />
     }
     
     <div class="blog_header_container">
-        <div class="blog_header_card">
+        <article class="blog_header_card">
             @{
                 var filteredTags = Item.Tags?.Where(t => !string.Equals(t, Item.Category, System.StringComparison.OrdinalIgnoreCase)).ToList() ?? new System.Collections.Generic.List<string>();
             }
 
-            <div class="blog_card_header">
+            <header class="blog_card_header">
                 <span class="blog_card_read_time">
                     @if (!string.IsNullOrWhiteSpace(Item.AuthorDisplayName))
                     {
@@ -20,7 +20,7 @@
                     @GetReadTimeText()
                 </span>
                 <span class="blog_card_date">@Item.PublishedAtUtc.ToString("dd.MM.yyyy")</span>
-            </div>
+            </header>
             
             <h1 class="blog_card_title">@Item.Title</h1>
             
@@ -51,6 +51,6 @@
                     @Localizer["ReadMore"]
                 </Button>
             </div>
-        </div>
+        </article>
     </div>
 </section>
