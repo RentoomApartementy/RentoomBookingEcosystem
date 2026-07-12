@@ -59,12 +59,12 @@ else
         }
 
         <header class="blog-post__header">
-            <div class="blog-post__meta">
+         @*   <div class="blog-post__meta">
                 <span class="blog-post__author">@Post.AuthorDisplayName</span>
                 <span class="blog-post__meta-separator">·</span>
                 <time class="blog-post__published" datetime="@Post.PublishedAtUtc.ToString("O")">@Post.PublishedAtUtc.ToString("yyyy-MM-dd")</time>
             </div>
-
+            *@
             <h1 class="blog-post__title">@Post.Title</h1>
 
         @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
