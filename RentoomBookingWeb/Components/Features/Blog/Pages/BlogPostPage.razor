@@ -53,9 +53,7 @@
 
 @if (!string.IsNullOrWhiteSpace(Error))
 {
-    <section class="blog-post-status">
-        <p class="blog-post-status__error">@Error</p>
-    </section>
+    <BlogErrorSection ErrorMessage="@Error" />
 }
 else if (IsLoading)
 {
@@ -63,9 +61,7 @@ else if (IsLoading)
 }
 else if (Post is null)
 {
-    <section class="blog-post-status">
-        <p class="blog-post-status__empty">Not found.</p>
-    </section>
+    <BlogErrorSection IsNotFound="true" />
 }
 else
 {

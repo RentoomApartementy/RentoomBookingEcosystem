@@ -41,4 +41,19 @@
     <data name="PublishedLabel" xml:space="preserve">
         <value>Published</value>
     </data>
+    <data name="ErrorTitle" xml:space="preserve">
+        <value>Something went wrong</value>
+    </data>
+    <data name="ErrorDescription" xml:space="preserve">
+        <value>We couldn't load this blog post.</value>
+    </data>
+    <data name="PostNotFoundTitle" xml:space="preserve">
+        <value>Article not found</value>
+    </data>
+    <data name="PostNotFoundDescription" xml:space="preserve">
+        <value>The article you are looking for does not exist or has been removed.</value>
+    </data>
+    <data name="BackToBlog" xml:space="preserve">
+        <value>Back to blog</value>
+    </data>
 </root>
