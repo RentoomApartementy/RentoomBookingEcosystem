@@ -17,6 +17,9 @@ public partial class BlogHeaderSection : ComponentBase
     [Parameter]
     public bool ShowReadMoreButton { get; set; } = true;
 
+    [Parameter]
+    public bool UseH1ForTitle { get; set; } = true;
+
     private string BuildPostUrl(Guid publicId, string slug) 
         => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
 

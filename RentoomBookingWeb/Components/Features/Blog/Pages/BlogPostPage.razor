@@ -2,8 +2,10 @@
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Services.Blog
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+@using RentoomBookingWeb.Components.Features.Blog.Components
 @inject IBlogContentReader BlogContentReader
 @inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
+@inject IStringLocalizer<RentoomBookingWeb.Blog> BlogLocalizer
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject NavigationManager NavManager
 
@@ -46,6 +48,8 @@ else if (Post is null)
 }
 else
 {
+    <BlogHeaderSection Item="MapToListItem(Post)" ShowReadMoreButton="false" UseH1ForTitle="false" />
+    
     <article class="blog-post">
         @if (Post.IsPreview)
         {
@@ -59,20 +63,17 @@ else
         }
 
         <header class="blog-post__header">
-         @*   <div class="blog-post__meta">
-                <span class="blog-post__author">@Post.AuthorDisplayName</span>
+            <div class="blog-post__meta">
+                <span class="blog-post__author">@BlogLocalizer["AuthorLabel"]: @Post.AuthorDisplayName</span>
                 <span class="blog-post__meta-separator">·</span>
-                <time class="blog-post__published" datetime="@Post.PublishedAtUtc.ToString("O")">@Post.PublishedAtUtc.ToString("yyyy-MM-dd")</time>
+                <time class="blog-post__published" datetime="@Post.PublishedAtUtc.ToString("O")">@BlogLocalizer["PublishedLabel"]: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</time>
             </div>
-            *@
             <h1 class="blog-post__title">@Post.Title</h1>
 
         @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
         {
                 <p class="blog-post__subtitle">@Post.Subtitle</p>
         }
-        <p>Author: @Post.AuthorDisplayName</p>
-        <p>Published: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</p>
 
             @if (!string.IsNullOrWhiteSpace(Post.Category) || Post.Tags.Count > 0)
         {

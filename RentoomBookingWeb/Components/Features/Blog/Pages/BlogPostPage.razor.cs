@@ -81,6 +81,27 @@ public partial class BlogPostPage : ComponentBase, IAsyncDisposable
 
     protected string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
 
+    protected BlogPostListItem? MapToListItem(BlogPostDetails? details)
+    {
+        if (details is null) return null;
+
+        return new BlogPostListItem
+        {
+            Id = details.Id,
+            PublicId = details.PublicId,
+            Slug = details.Slug,
+            SourceLanguage = details.SourceLanguage,
+            Title = details.Title,
+            Subtitle = details.Subtitle,
+            AuthorDisplayName = details.AuthorDisplayName,
+            Excerpt = details.Excerpt,
+            Category = details.Category,
+            Tags = details.Tags,
+            PublishedAtUtc = details.PublishedAtUtc,
+            HeroImageUrl = details.HeroImageUrl
+        };
+    }
+
     protected static string ResolveImageSizeClass(string? displaySize)
     {
         return $"blog-image-size-{NormalizeDisplaySize(displaySize)}";

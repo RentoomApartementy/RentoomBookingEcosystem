@@ -22,7 +22,14 @@
                 <span class="blog_card_date">@Item.PublishedAtUtc.ToString("dd.MM.yyyy")</span>
             </header>
             
-            <h1 class="blog_card_title">@Item.Title</h1>
+            @if (UseH1ForTitle)
+            {
+                <h1 class="blog_card_title">@Item.Title</h1>
+            }
+            else
+            {
+                <p class="blog_card_title">@Item.Title</p>
+            }
             
             <p class="blog_card_excerpt">@Item.Excerpt</p>
             
