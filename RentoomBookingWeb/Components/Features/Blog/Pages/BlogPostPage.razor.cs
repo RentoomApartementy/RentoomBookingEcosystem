@@ -23,11 +23,13 @@ public partial class BlogPostPage : ComponentBase, IAsyncDisposable
 
     protected override async Task OnParametersSetAsync()
     {
+
         try
         {
             IsLoading = true;
             Error = null;
             var culture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+
             Post = string.IsNullOrWhiteSpace(PreviewToken)
                 ? await BlogContentReader.GetPublishedPostAsync(
                     PublicId,
@@ -80,6 +82,40 @@ public partial class BlogPostPage : ComponentBase, IAsyncDisposable
     }
 
     protected string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
+
+    protected MarkupString GetJsonLd()
+    {
+        if (Post is null) return new MarkupString(string.Empty);
+
+        var canonicalUrl = $"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.PublicId, Post.Slug)}";
+        var title = System.Text.Json.JsonSerializer.Serialize(Post.Title);
+        var excerpt = System.Text.Json.JsonSerializer.Serialize(Post.Excerpt ?? Post.MetaDescription ?? Post.Title);
+        var author = System.Text.Json.JsonSerializer.Serialize(Post.AuthorDisplayName);
+        var imageUrl = System.Text.Json.JsonSerializer.Serialize(Post.HeroImageUrl ?? string.Empty);
+        var dateIso = Post.PublishedAtUtc.ToString("o");
+
+        var json = $$"""
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": {{title}},
+          "image": {{imageUrl}},
+          "datePublished": "{{dateIso}}",
+          "dateModified": "{{dateIso}}",
+          "author": {
+            "@type": "Person",
+            "name": {{author}}
+          },
+          "description": {{excerpt}},
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "{{canonicalUrl}}"
+          }
+        }
+        """;
+
+        return new MarkupString(json);
+    }
 
     protected BlogPostListItem? MapToListItem(BlogPostDetails? details)
     {

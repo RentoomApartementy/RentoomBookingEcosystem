@@ -16,6 +16,29 @@
     <HeadContent>
         <meta name="robots" content="@(Post.IsPreview ? "noindex, nofollow, noarchive, nosnippet" : "index, follow")" />
         <meta name="description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:title" content="@(Post.MetaTitle ?? Post.Title)" />
+        <meta property="og:description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.PublicId, Post.Slug)}")" />
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <meta property="og:image" content="@Post.HeroImageUrl" />
+        }
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="@(Post.MetaTitle ?? Post.Title)" />
+        <meta name="twitter:description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <meta name="twitter:image" content="@Post.HeroImageUrl" />
+        }
+
+        <!-- Schema.org Structured Data (JSON-LD) -->
+        @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
+
         @if (HasInstagramEmbeds)
         {
             <link rel="preconnect" href="https://www.instagram.com" />
@@ -36,9 +59,7 @@
 }
 else if (IsLoading)
 {
-    <section class="blog-post-status">
-        <p class="blog-post-status__loading">Loading...</p>
-    </section>
+    <BlogPostSkeleton />
 }
 else if (Post is null)
 {
