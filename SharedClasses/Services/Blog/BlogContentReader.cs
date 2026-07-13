@@ -410,6 +410,78 @@ public sealed class BlogContentReader : IBlogContentReader
         return result;
     }
 
+    public async Task<IReadOnlyList<BlogPostListItem>> GetAllPublishedPostsAsync(
+        string culture,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedCulture = NormalizeSourceLanguage(culture);
+        var cacheKey = $"blog:all-published:{normalizedCulture}";
+
+        if (_cache.TryGetValue(cacheKey, out IReadOnlyList<BlogPostListItem>? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        await using var dbContext = await _blogDbContextFactory.CreateDbContextAsync(cancellationToken);
+
+        var rows = await dbContext.BlogPosts
+            .AsNoTracking()
+            .Where(x => x.DeletedAt == null)
+            .Where(x => x.Status == PublishedStatus)
+            .Where(x => x.PublishedAt != null)
+            .Where(x => x.PublishedVersionNo != null)
+            .Where(x => x.SourceLanguage == normalizedCulture)
+            .OrderByDescending(x => x.PublishedAt)
+            .ThenByDescending(x => x.Id)
+            .Select(x => new FeedRow
+            {
+                Id = x.Id,
+                PublicId = x.PublicId,
+                Slug = x.Slug,
+                SourceLanguage = x.SourceLanguage,
+                Title = x.Title,
+                Subtitle = x.Subtitle,
+                AuthorDisplayName = x.AuthorDisplayName,
+                Excerpt = x.Excerpt,
+                Category = x.Category,
+                TagsJson = x.TagsJson,
+                PublishedAtUtc = x.PublishedAt!.Value,
+                HeroMediaAssetId = x.HeroMediaAssetId,
+                HeroWebpMediaAssetId = x.HeroWebpMediaAssetId,
+                HeroSelectedVariant = x.HeroSelectedVariant,
+                HeroImageUrl = x.HeroImageUrl
+            })
+            .ToListAsync(cancellationToken);
+
+        var assetUrlMap = await ResolveAssetUrlsAsync(
+            rows.SelectMany(x => new[] { x.HeroMediaAssetId, x.HeroWebpMediaAssetId }),
+            cancellationToken);
+
+        IReadOnlyList<BlogPostListItem> items = rows.Select(x => new BlogPostListItem
+        {
+            Id = x.Id,
+            PublicId = x.PublicId,
+            Slug = x.Slug,
+            SourceLanguage = x.SourceLanguage,
+            Title = x.Title,
+            Subtitle = x.Subtitle,
+            AuthorDisplayName = x.AuthorDisplayName,
+            Excerpt = x.Excerpt,
+            Category = x.Category,
+            Tags = DeserializeTags(x.TagsJson),
+            PublishedAtUtc = x.PublishedAtUtc,
+            HeroImageUrl = ResolveImageUrl(
+                x.HeroMediaAssetId,
+                x.HeroWebpMediaAssetId,
+                x.HeroSelectedVariant,
+                x.HeroImageUrl,
+                assetUrlMap)
+        }).ToList();
+
+        _cache.Set(cacheKey, items, TimeSpan.FromMinutes(5));
+        return items;
+    }
+
     private static async Task<(BlogAdjacentPostLink? PreviousPost, BlogAdjacentPostLink? NextPost)> GetAdjacentCoreAsync(
         RappBlogReadDbContext dbContext,
         string slug,

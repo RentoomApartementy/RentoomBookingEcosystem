@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBookingWeb.Services.Localization;
+using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBooking.SharedFrontend.Localization;
 using System.Globalization;
 
@@ -17,15 +18,18 @@ namespace RentoomBookingWeb.Controllers
         private readonly IApartmentsService _apartmentsService;
         private readonly IIdoApartmentService _idoApartmentService;
         private readonly IRouteLocalizationService _routeService;
+        private readonly IBlogContentReader _blogContentReader;
 
         public SitemapController(
             IApartmentsService apartmentsService, 
             IIdoApartmentService idoApartmentService,
-            IRouteLocalizationService routeService)
+            IRouteLocalizationService routeService,
+            IBlogContentReader blogContentReader)
         {
             _apartmentsService = apartmentsService;
             _idoApartmentService = idoApartmentService;
             _routeService = routeService;
+            _blogContentReader = blogContentReader;
         }
 
         [Route("sitemap.xml")]
@@ -59,6 +63,7 @@ namespace RentoomBookingWeb.Controllers
 
             var result = await _apartmentsService.GetAllApartmentsList();
             var apartments = result?.Items ?? new List<ApartmentObject>();
+            var blogPosts = await _blogContentReader.GetAllPublishedPostsAsync(currentCulture);
 
             var staticPageKeys = new List<string>
             {
@@ -66,7 +71,8 @@ namespace RentoomBookingWeb.Controllers
                 "Cooperation",
                 "Contact",
                 "AboutCity",
-                "AllApartments"
+                "AllApartments",
+                "BlogList"
             };
 
             var baseUrl = $"{Request.Scheme}://{Request.Host}";
@@ -88,6 +94,12 @@ namespace RentoomBookingWeb.Controllers
             foreach (var apt in apartments)
             {
                 urlElements.Add(CreateApartmentUrlElement(ns, xhtml, baseUrl, apt, currentCulture, supportedCultures, "0.8", "weekly"));
+            }
+
+            // 4. Blog Posts
+            foreach (var post in blogPosts)
+            {
+                urlElements.Add(CreateBlogPostUrlElement(ns, xhtml, baseUrl, post, currentCulture, supportedCultures, "0.6", "weekly"));
             }
 
             var sitemap = new XElement(ns + "urlset", 
@@ -142,6 +154,32 @@ namespace RentoomBookingWeb.Controllers
             {
                 var cultLocalizedBase = _routeService.GetLocalizedUrl("ApartmentDetail", cult);
                 var altLoc = $"{baseUrl}{cultLocalizedBase}/{apt.Id}/{slug}";
+
+                urlElement.Add(new XElement(xhtml + "link",
+                    new XAttribute("rel", "alternate"),
+                    new XAttribute("hreflang", cult.Split('-')[0].ToLowerInvariant()),
+                    new XAttribute("href", altLoc)
+                ));
+            }
+
+            return urlElement;
+        }
+
+        private XElement CreateBlogPostUrlElement(XNamespace ns, XNamespace xhtml, string baseUrl, BlogPostListItem post, string currentCulture, IEnumerable<string> allCultures, string priority, string freq)
+        {
+            var localizedBase = _routeService.GetLocalizedUrl("BlogPost", currentCulture);
+            var loc = $"{baseUrl}{localizedBase}/{post.PublicId:D}/{post.Slug}";
+
+            var urlElement = new XElement(ns + "url",
+                new XElement(ns + "loc", loc),
+                new XElement(ns + "changefreq", freq),
+                new XElement(ns + "priority", priority)
+            );
+
+            foreach (var cult in allCultures)
+            {
+                var cultLocalizedBase = _routeService.GetLocalizedUrl("BlogPost", cult);
+                var altLoc = $"{baseUrl}{cultLocalizedBase}/{post.PublicId:D}/{post.Slug}";
 
                 urlElement.Add(new XElement(xhtml + "link",
                     new XAttribute("rel", "alternate"),
