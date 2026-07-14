@@ -205,21 +205,31 @@ else
         {
             <nav class="blog-post__navigation" aria-label="Blog post navigation">
                 @if (Post.PreviousPost is not null)
-    {
-                    <a class="blog-post__navigation-link" href="@BuildPostUrl(Post.PreviousPost.PublicId, Post.PreviousPost.Slug)">
-                        <span class="blog-post__navigation-label">Previous</span>
-                        <span class="blog-post__navigation-title">@Post.PreviousPost.Title</span>
+                {
+                    <a class="blog-post__nav-card blog-post__nav-card--prev" href="@BuildPostUrl(Post.PreviousPost.PublicId, Post.PreviousPost.Slug)">
+                        <div class="blog-post__nav-icon-wrapper">
+                            <GoogleIcon Name="arrow_back" SizePx="24" Class="blog-post__nav-arrow" />
+                        </div>
+                        <div class="blog-post__nav-content">
+                            <span class="blog-post__nav-label">@BlogLocalizer["PreviousPostLabel"]</span>
+                            <span class="blog-post__nav-title">@Post.PreviousPost.Title</span>
+                        </div>
                     </a>
                 }
 
                 @if (Post.NextPost is not null)
-        {
-                    <a class="blog-post__navigation-link blog-post__navigation-link--next" href="@BuildPostUrl(Post.NextPost.PublicId, Post.NextPost.Slug)">
-                        <span class="blog-post__navigation-label">Next</span>
-                        <span class="blog-post__navigation-title">@Post.NextPost.Title</span>
+                {
+                    <a class="blog-post__nav-card blog-post__nav-card--next" href="@BuildPostUrl(Post.NextPost.PublicId, Post.NextPost.Slug)">
+                        <div class="blog-post__nav-content">
+                            <span class="blog-post__nav-label">@BlogLocalizer["NextPostLabel"]</span>
+                            <span class="blog-post__nav-title">@Post.NextPost.Title</span>
+                        </div>
+                        <div class="blog-post__nav-icon-wrapper">
+                            <GoogleIcon Name="arrow_forward" SizePx="24" Class="blog-post__nav-arrow" />
+                        </div>
                     </a>
                 }
             </nav>
-    }
+        }
     </article>
 }

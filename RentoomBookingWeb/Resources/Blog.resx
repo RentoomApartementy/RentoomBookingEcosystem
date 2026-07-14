@@ -80,4 +80,10 @@
     <data name="SeeAllPosts" xml:space="preserve">
         <value>See all posts</value>
     </data>
+    <data name="PreviousPostLabel" xml:space="preserve">
+        <value>Previous post</value>
+    </data>
+    <data name="NextPostLabel" xml:space="preserve">
+        <value>Next post</value>
+    </data>
 </root>
