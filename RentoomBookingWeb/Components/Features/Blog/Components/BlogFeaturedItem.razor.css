@@ -1,0 +1,152 @@
+.blog-featured-card {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    height: 421.03px; /* Matches standard BlogItem height */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-featured-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+}
+
+.blog-featured-card__link-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.blog-featured-card__bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    transition: transform 0.5s ease;
+}
+
+.blog-featured-card:hover .blog-featured-card__bg-image {
+    transform: scale(1.02);
+}
+
+.blog-featured-card__date-badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background-color: #233e33; /* Dark green/forest capsule */
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35rem 0.85rem;
+    border-radius: 99px;
+    z-index: 2;
+    letter-spacing: 0.02em;
+}
+
+.blog-featured-card__overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-sizing: border-box;
+}
+
+.blog-featured-card__tags-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.blog-featured-card__info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+}
+
+.blog-featured-card__text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+    min-height: 0;
+}
+
+.blog-featured-card__title {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0;
+}
+
+.blog-featured-card__excerpt {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.blog-featured-card__action-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.blog-featured-card__read-time {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Modifies the custom primary button inside the featured context specifically */
+.blog-featured-card__action-group::deep(.blog-featured-card__btn) {
+    padding: 0.45rem 1.5rem !important;
+    font-size: 0.85rem !important;
+    min-height: auto !important;
+    line-height: 1.2 !important;
+    position: relative;
+    z-index: 3; /* Allows the button to be hovered/clicked over the card link overlay */
+}
+
+@media (max-width: 768px) {
+    .blog-featured-card {
+        grid-column: span 1;
+        height: 380px;
+    }
+
+    .blog-featured-card__info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .blog-featured-card__action-group {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.25rem;
+    }
+}
