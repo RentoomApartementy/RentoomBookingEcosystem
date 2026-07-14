@@ -1,6 +1,6 @@
 @using RentoomBookingWeb.Components.Features.Blog.Components;
 
-<PageTitle>Blog</PageTitle>
+<PageTitle>@Localizer["BlogPageTitle"]</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
@@ -11,7 +11,7 @@
 
 @if (Items.Count > 0)
 {
-    <BlogHeaderSection Item="Items.First()" />
+    <BlogHeaderSection Item="Items.First()" UseH1ForTitle="true" />
 }
 
 @if (!string.IsNullOrWhiteSpace(Error))

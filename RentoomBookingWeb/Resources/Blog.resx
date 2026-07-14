@@ -74,4 +74,7 @@
     <data name="NoPostsTitle" xml:space="preserve">
         <value>New articles coming soon</value>
     </data>
+    <data name="BlogPageTitle" xml:space="preserve">
+        <value>Blog - Rentoom Apartments</value>
+    </data>
 </root>
