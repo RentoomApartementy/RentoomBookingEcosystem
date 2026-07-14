@@ -16,7 +16,7 @@
 
 @if (!string.IsNullOrWhiteSpace(Error))
 {
-    <p>@Error</p>
+    <BlogErrorSection ErrorMessage="@Error" IsNotFound="false" />
 }
 else if (IsLoading && Items.Count == 0)
 {
@@ -26,12 +26,20 @@ else
 {
     <div class="blog-list-container">
         <h2 class="blog-list-title">@Localizer["LatestPosts"]</h2>
-        <div class="blog-posts-grid">
-            @foreach (var item in Items)
-            {
-                <BlogItem Item="item" />
-            }
-        </div>
+        
+        @if (Items.Skip(1).Any())
+        {
+            <div class="blog-posts-grid">
+                @foreach (var item in Items.Skip(1))
+                {
+                    <BlogItem Item="item" />
+                }
+            </div>
+        }
+        else
+        {
+            <BlogEmptySection />
+        }
     </div>
 }
 

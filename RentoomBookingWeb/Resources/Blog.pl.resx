@@ -68,4 +68,10 @@
     <data name="LatestPosts" xml:space="preserve">
         <value>Najnowsze wpisy</value>
     </data>
+    <data name="NoPostsDescription" xml:space="preserve">
+        <value>Wkrótce pojawią się tutaj nowe artykuły. Zajrzyj do nas później!</value>
+    </data>
+    <data name="NoPostsTitle" xml:space="preserve">
+        <value>Wkrótce nowe artykuły</value>
+    </data>
 </root>
