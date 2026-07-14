@@ -27,13 +27,13 @@ else
     <div class="blog-list-container">
         <h2 class="blog-list-title">@Localizer["LatestPosts"]</h2>
         
-        @if (Items.Skip(1).Any())
+        @if (Items.Any())
         {
             <div class="blog-posts-grid">
                 @{
                     int index = 0;
                 }
-                @foreach (var item in Items.Skip(1))
+                @foreach (var item in Items)
                 {
                     if (index == 0)
                     {
