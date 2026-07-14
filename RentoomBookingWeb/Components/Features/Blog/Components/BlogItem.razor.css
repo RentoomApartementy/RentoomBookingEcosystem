@@ -7,10 +7,12 @@
     background-clip: padding-box; /* Fixes browser subpixel bleeding border glitch */
     overflow: hidden;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
-    width: 442.43px;  /* Exact Figma Width */
+    width: 100%;
+    max-width: 442.43px;
     height: 421.03px; /* Exact Figma Height */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     flex-shrink: 0;
+    justify-self: center;
 }
 
 .blog-item-card:hover {
