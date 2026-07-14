@@ -294,4 +294,7 @@
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
     <value>Modaliteti i zhvilluesit</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Pyetjet e bëra më shpesh</value>
+  </data>
 </root>

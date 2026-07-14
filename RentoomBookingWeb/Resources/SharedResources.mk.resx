@@ -294,4 +294,7 @@
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
     <value>Режим за развивачи</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Често поставувани прашања</value>
+  </data>
 </root>

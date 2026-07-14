@@ -294,4 +294,7 @@
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
     <value>Izstrādātāja režīms</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Biežāk uzdotie jautājumi</value>
+  </data>
 </root>

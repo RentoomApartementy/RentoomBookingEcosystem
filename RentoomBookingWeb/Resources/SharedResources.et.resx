@@ -294,4 +294,7 @@
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
     <value>Arendaja režiim</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Korduma kippuvad küsimused</value>
+  </data>
 </root>

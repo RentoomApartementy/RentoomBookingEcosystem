@@ -294,4 +294,7 @@
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
     <value>Udviklertilstand</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Ofte stillede spørgsmål</value>
+  </data>
 </root>

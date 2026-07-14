@@ -294,4 +294,7 @@
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
     <value>Mód Forbróra</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Ceisteanna Coitianta</value>
+  </data>
 </root>

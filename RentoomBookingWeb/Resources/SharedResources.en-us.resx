@@ -294,4 +294,7 @@
   <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
     <value>Menu icon</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Frequently Asked Questions</value>
+  </data>
 </root>

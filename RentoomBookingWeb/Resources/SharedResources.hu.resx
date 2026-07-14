@@ -294,4 +294,7 @@
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
     <value>Fejlesztő mód</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Gyakran Ismételt Kérdések</value>
+  </data>
 </root>
