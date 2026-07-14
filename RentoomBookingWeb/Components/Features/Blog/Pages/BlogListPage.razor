@@ -24,24 +24,15 @@ else if (IsLoading && Items.Count == 0)
 }
 else
 {
-    <ul>
-        @foreach (var item in Items)
-        {
-            <li>
-                <a href="@BuildPostUrl(item.PublicId, item.Slug)">@item.Title</a>
-                @if (!string.IsNullOrWhiteSpace(item.Subtitle))
-                {
-                    <div>@item.Subtitle</div>
-                }
-                <div>Author: @item.AuthorDisplayName</div>
-                <div>Published: @item.PublishedAtUtc.ToString("yyyy-MM-dd")</div>
-                @if (!string.IsNullOrWhiteSpace(item.Excerpt))
-                {
-                    <div>@item.Excerpt</div>
-                }
-            </li>
-        }
-    </ul>
+    <div class="blog-list-container">
+        <h2 class="blog-list-title">@Localizer["LatestPosts"]</h2>
+        <div class="blog-posts-grid">
+            @foreach (var item in Items)
+            {
+                <BlogItem Item="item" />
+            }
+        </div>
+    </div>
 }
 
 <div id="scroll-anchor" style="height: 10px; width: 100%;"></div>

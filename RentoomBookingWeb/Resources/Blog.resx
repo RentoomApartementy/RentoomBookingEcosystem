@@ -56,4 +56,16 @@
     <data name="BackToBlog" xml:space="preserve">
         <value>Back to blog</value>
     </data>
+    <data name="CheckLabel" xml:space="preserve">
+        <value>Check</value>
+    </data>
+    <data name="CategoryLabel" xml:space="preserve">
+        <value>Category</value>
+    </data>
+    <data name="DefaultCategory" xml:space="preserve">
+        <value>Article</value>
+    </data>
+    <data name="LatestPosts" xml:space="preserve">
+        <value>Latest posts</value>
+    </data>
 </root>

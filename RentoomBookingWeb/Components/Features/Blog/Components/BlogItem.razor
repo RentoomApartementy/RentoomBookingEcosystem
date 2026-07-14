@@ -1,0 +1,65 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Services.Blog
+@using RentoomBookingWeb.Services.Localization
+@using RentoomBookingWeb.Components.Shared
+@inject IRouteLocalizationService RouteService
+@inject IStringLocalizer<RentoomBookingWeb.Blog> Localizer
+
+<article class="blog-item-card">
+    <figure class="blog-item-card__image-container">
+        <a href="@BuildPostUrl(Item.PublicId, Item.Slug)">
+            @if (!string.IsNullOrWhiteSpace(Item.HeroImageUrl))
+            {
+                <img src="@Item.HeroImageUrl" alt="@Item.Title" class="blog-item-card__image" loading="lazy" />
+            }
+            else
+            {
+                <div class="blog-item-card__placeholder"></div>
+            }
+        </a>
+        <time class="blog-item-card__date-badge" datetime="@Item.PublishedAtUtc.ToString("yyyy-MM-dd")">
+            @Item.PublishedAtUtc.ToString("dd.MM.yyyy")
+        </time>
+    </figure>
+    
+    <div class="blog-item-card__content">
+        <div class="blog-item-card__meta">
+            <span class="blog-item-card__category">
+                @($"{Localizer["CategoryLabel"].Value.ToUpperInvariant()} | {(string.IsNullOrWhiteSpace(Item.Category) ? Localizer["DefaultCategory"].Value : Item.Category).ToUpperInvariant()}")
+            </span>
+            <span class="blog-item-card__read-time">@GetReadTimeText()</span>
+        </div>
+        
+        <h3 class="blog-item-card__title">
+            <a href="@BuildPostUrl(Item.PublicId, Item.Slug)">@Item.Title</a>
+        </h3>
+        
+        @if (!string.IsNullOrWhiteSpace(Item.Excerpt))
+        {
+            <p class="blog-item-card__excerpt">
+                @Item.Excerpt
+            </p>
+        }
+        
+        <div class="blog-item-card__action">
+            <Button Href="@BuildPostUrl(Item.PublicId, Item.Slug)" Type="ButtonType.Primary" Class="blog-item-card__btn">
+                @Localizer["CheckLabel"]
+            </Button>
+        </div>
+    </div>
+</article>
+
+@code {
+    [Parameter]
+    public required BlogPostListItem Item { get; set; }
+
+    private string BuildPostUrl(Guid publicId, string slug) 
+        => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
+
+    private string GetReadTimeText()
+    {
+        var charCount = (Item.Excerpt?.Length ?? 0) + Item.Title.Length + 300;
+        var minutes = Math.Max(3, (int)Math.Ceiling(charCount / 200.0));
+        return string.Format(Localizer["ReadTimeFormat"], minutes);
+    }
+}
