@@ -30,9 +30,20 @@ else
         @if (Items.Skip(1).Any())
         {
             <div class="blog-posts-grid">
+                @{
+                    int index = 0;
+                }
                 @foreach (var item in Items.Skip(1))
                 {
-                    <BlogItem Item="item" />
+                    if (index == 0)
+                    {
+                        <BlogFeaturedItem Item="item" />
+                    }
+                    else
+                    {
+                        <BlogItem Item="item" />
+                    }
+                    index++;
                 }
             </div>
         }
