@@ -77,4 +77,7 @@
     <data name="BlogPageTitle" xml:space="preserve">
         <value>Blog - Rentoom Apartments</value>
     </data>
+    <data name="SeeAllPosts" xml:space="preserve">
+        <value>See all posts</value>
+    </data>
 </root>

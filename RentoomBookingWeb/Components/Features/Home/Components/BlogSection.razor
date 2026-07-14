@@ -1,0 +1,83 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Services.Blog
+@using RentoomBookingWeb.Services.Localization
+@using RentoomBookingWeb.Components.Shared
+@using RentoomBookingWeb.Components.Features.Blog.Components
+@implements IDisposable
+@inject IBlogContentReader BlogContentReader
+@inject IStringLocalizer<RentoomBookingWeb.Blog> Localizer
+@inject IRouteLocalizationService RouteService
+
+<div class="blog-section-container">
+    <div class="blog-section-header">
+        <h2 class="blog-section-title">@Localizer["LatestPosts"]</h2>
+        <a href="@RouteService.GetLocalizedUrl("BlogList")" class="blog-section-all-btn">
+            @Localizer["SeeAllPosts"]
+        </a>
+    </div>
+
+    @if (IsLoading && Items.Count == 0)
+    {
+        <div class="blog-carousel-wrapper">
+            <SimpleCarousel EnableAutoScroll="false" ShowNavigation="true">
+                <div class="blog-skeleton__featured-card-placeholder"></div>
+                <div class="blog-skeleton__item-card-placeholder"></div>
+                <div class="blog-skeleton__item-card-placeholder"></div>
+            </SimpleCarousel>
+        </div>
+    }
+    else if (Items.Count > 0)
+    {
+        <div class="blog-carousel-wrapper">
+            <SimpleCarousel EnableAutoScroll="true" ShowNavigation="true" ScrollAmount="442">
+                @for (int i = 0; i < Items.Count; i++)
+                {
+                    var item = Items[i];
+                    if (i == 0)
+                    {
+                        <BlogFeaturedItem Item="item" />
+                    }
+                    else
+                    {
+                        <BlogItem Item="item" />
+                    }
+                }
+            </SimpleCarousel>
+        </div>
+    }
+</div>
+
+@code {
+    private readonly List<BlogPostListItem> Items = new();
+    private bool IsLoading = true;
+    private readonly CancellationTokenSource _cts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            var result = await BlogContentReader.GetPublishedPostsFeedAsync(
+                System.Globalization.CultureInfo.CurrentUICulture.Name,
+                null,
+                8, // Single request limit (loads first 8 posts)
+                _cts.Token);
+
+            Items.AddRange(result.Items);
+        }
+        catch (Exception)
+        {
+            // Fail silently to keep the homepage running if the blog database has an error
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
+}
