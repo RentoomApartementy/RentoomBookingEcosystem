@@ -2,8 +2,10 @@
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Services.Blog
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+@using RentoomBookingWeb.Components.Features.Blog.Components
 @inject IBlogContentReader BlogContentReader
 @inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
+@inject IStringLocalizer<RentoomBookingWeb.Blog> BlogLocalizer
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject NavigationManager NavManager
 
@@ -14,6 +16,29 @@
     <HeadContent>
         <meta name="robots" content="@(Post.IsPreview ? "noindex, nofollow, noarchive, nosnippet" : "index, follow")" />
         <meta name="description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:title" content="@(Post.MetaTitle ?? Post.Title)" />
+        <meta property="og:description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.PublicId, Post.Slug)}")" />
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <meta property="og:image" content="@Post.HeroImageUrl" />
+        }
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="@(Post.MetaTitle ?? Post.Title)" />
+        <meta name="twitter:description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <meta name="twitter:image" content="@Post.HeroImageUrl" />
+        }
+
+        <!-- Schema.org Structured Data (JSON-LD) -->
+        @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
+
         @if (HasInstagramEmbeds)
         {
             <link rel="preconnect" href="https://www.instagram.com" />
@@ -28,24 +53,20 @@
 
 @if (!string.IsNullOrWhiteSpace(Error))
 {
-    <section class="blog-post-status">
-        <p class="blog-post-status__error">@Error</p>
-    </section>
+    <BlogErrorSection ErrorMessage="@Error" />
 }
 else if (IsLoading)
 {
-    <section class="blog-post-status">
-        <p class="blog-post-status__loading">Loading...</p>
-    </section>
+    <BlogPostSkeleton />
 }
 else if (Post is null)
 {
-    <section class="blog-post-status">
-        <p class="blog-post-status__empty">Not found.</p>
-    </section>
+    <BlogErrorSection IsNotFound="true" />
 }
 else
 {
+    <BlogHeaderSection Item="MapToListItem(Post)" ShowReadMoreButton="false" UseH1ForTitle="false" />
+    
     <article class="blog-post">
         @if (Post.IsPreview)
         {
@@ -59,20 +80,17 @@ else
         }
 
         <header class="blog-post__header">
-         @*   <div class="blog-post__meta">
-                <span class="blog-post__author">@Post.AuthorDisplayName</span>
+            <div class="blog-post__meta">
+                <span class="blog-post__author">@BlogLocalizer["AuthorLabel"]: @Post.AuthorDisplayName</span>
                 <span class="blog-post__meta-separator">·</span>
-                <time class="blog-post__published" datetime="@Post.PublishedAtUtc.ToString("O")">@Post.PublishedAtUtc.ToString("yyyy-MM-dd")</time>
+                <time class="blog-post__published" datetime="@Post.PublishedAtUtc.ToString("O")">@BlogLocalizer["PublishedLabel"]: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</time>
             </div>
-            *@
             <h1 class="blog-post__title">@Post.Title</h1>
 
         @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
         {
                 <p class="blog-post__subtitle">@Post.Subtitle</p>
         }
-        <p>Author: @Post.AuthorDisplayName</p>
-        <p>Published: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</p>
 
             @if (!string.IsNullOrWhiteSpace(Post.Category) || Post.Tags.Count > 0)
         {
@@ -187,21 +205,31 @@ else
         {
             <nav class="blog-post__navigation" aria-label="Blog post navigation">
                 @if (Post.PreviousPost is not null)
-    {
-                    <a class="blog-post__navigation-link" href="@BuildPostUrl(Post.PreviousPost.PublicId, Post.PreviousPost.Slug)">
-                        <span class="blog-post__navigation-label">Previous</span>
-                        <span class="blog-post__navigation-title">@Post.PreviousPost.Title</span>
+                {
+                    <a class="blog-post__nav-card blog-post__nav-card--prev" href="@BuildPostUrl(Post.PreviousPost.PublicId, Post.PreviousPost.Slug)">
+                        <div class="blog-post__nav-icon-wrapper">
+                            <GoogleIcon Name="arrow_back" SizePx="24" Class="blog-post__nav-arrow" />
+                        </div>
+                        <div class="blog-post__nav-content">
+                            <span class="blog-post__nav-label">@BlogLocalizer["PreviousPostLabel"]</span>
+                            <span class="blog-post__nav-title">@Post.PreviousPost.Title</span>
+                        </div>
                     </a>
                 }
 
                 @if (Post.NextPost is not null)
-        {
-                    <a class="blog-post__navigation-link blog-post__navigation-link--next" href="@BuildPostUrl(Post.NextPost.PublicId, Post.NextPost.Slug)">
-                        <span class="blog-post__navigation-label">Next</span>
-                        <span class="blog-post__navigation-title">@Post.NextPost.Title</span>
+                {
+                    <a class="blog-post__nav-card blog-post__nav-card--next" href="@BuildPostUrl(Post.NextPost.PublicId, Post.NextPost.Slug)">
+                        <div class="blog-post__nav-content">
+                            <span class="blog-post__nav-label">@BlogLocalizer["NextPostLabel"]</span>
+                            <span class="blog-post__nav-title">@Post.NextPost.Title</span>
+                        </div>
+                        <div class="blog-post__nav-icon-wrapper">
+                            <GoogleIcon Name="arrow_forward" SizePx="24" Class="blog-post__nav-arrow" />
+                        </div>
                     </a>
                 }
             </nav>
-    }
+        }
     </article>
 }

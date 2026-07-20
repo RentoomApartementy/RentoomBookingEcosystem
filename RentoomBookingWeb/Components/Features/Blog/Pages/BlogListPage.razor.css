@@ -1,0 +1,33 @@
+.blog-list-container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 4rem auto;
+    padding: 0 1.5rem;
+}
+
+.blog-list-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1b4b3e; /* Brand dark green */
+    margin: 0 0 2rem 0;
+    text-align: left;
+}
+
+.blog-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .blog-list-container {
+        margin: 2.5rem auto;
+        padding: 0 1rem;
+    }
+
+    .blog-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+    }
+}
