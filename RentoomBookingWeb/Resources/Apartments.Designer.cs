@@ -39,7 +39,7 @@ namespace RentoomBookingWeb {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RentoomBookingWeb.Resources.Apartments", typeof(Apartments).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RentoomBookingWeb.Apartments", typeof(Apartments).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

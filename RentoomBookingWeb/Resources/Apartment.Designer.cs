@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RentoomBookingWeb.Resources {
+namespace RentoomBookingWeb {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace RentoomBookingWeb.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RentoomBookingWeb.Resources.Apartment", typeof(Apartment).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RentoomBookingWeb.Apartment", typeof(Apartment).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
