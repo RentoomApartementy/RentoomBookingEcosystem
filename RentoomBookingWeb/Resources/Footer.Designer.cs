@@ -19,7 +19,7 @@ namespace RentoomBookingWeb {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Footer {
@@ -115,6 +115,60 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rentoom on Facebook.
+        /// </summary>
+        internal static string Footer_FacebookAriaLabel {
+            get {
+                return ResourceManager.GetString("Footer_FacebookAriaLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Facebook.
+        /// </summary>
+        internal static string Footer_FacebookIconAlt {
+            get {
+                return ResourceManager.GetString("Footer_FacebookIconAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rentoom on Instagram.
+        /// </summary>
+        internal static string Footer_InstagramAriaLabel {
+            get {
+                return ResourceManager.GetString("Footer_InstagramAriaLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instagram.
+        /// </summary>
+        internal static string Footer_InstagramIconAlt {
+            get {
+                return ResourceManager.GetString("Footer_InstagramIconAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rentoom - Apartments.
+        /// </summary>
+        internal static string Footer_LogoAlt {
+            get {
+                return ResourceManager.GetString("Footer_LogoAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Our partners.
+        /// </summary>
+        internal static string Footer_PartnersTitle {
+            get {
+                return ResourceManager.GetString("Footer_PartnersTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string footerText1 {
@@ -156,6 +210,15 @@ namespace RentoomBookingWeb {
         internal static string RegulationsText {
             get {
                 return ResourceManager.GetString("RegulationsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Social Media.
+        /// </summary>
+        internal static string SocialMediaLabel {
+            get {
+                return ResourceManager.GetString("SocialMediaLabel", resourceCulture);
             }
         }
         

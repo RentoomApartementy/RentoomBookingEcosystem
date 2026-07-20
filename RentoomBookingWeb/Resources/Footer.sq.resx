@@ -149,19 +149,19 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Rreth Torunit</value>
   </data>
-  <data name="Footer_FacebookIconAlt" xml:space="preserve">
-    <value>Në Facebook</value>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Apartamente</value>
   </data>
   <data name="Footer_FacebookAriaLabel" xml:space="preserve">
     <value>Rentoom në Facebook</value>
   </data>
-  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
-    <value>Rentoom në Instagram</value>
-  </data>
   <data name="Footer_InstagramIconAlt" xml:space="preserve">
     <value>Instagrami</value>
   </data>
-  <data name="Footer_LogoAlt" xml:space="preserve">
-    <value>Rentoom - Apartamente</value>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Në Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom në Instagram</value>
   </data>
 </root>

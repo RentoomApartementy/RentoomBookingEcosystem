@@ -149,27 +149,25 @@
   <data name="AboutCity" xml:space="preserve">
     <value>O Toruniu</value>
   </data>
-    <data name="Footer_FacebookIconAlt" xml:space="preserve">
-    <value>Facebook</value>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Apartamenty</value>
   </data>
-    <data name="Footer_FacebookAriaLabel" xml:space="preserve">
+  <data name="Footer_FacebookAriaLabel" xml:space="preserve">
     <value>Rentoom na Facebooku</value>
   </data>
-    <data name="Footer_InstagramAriaLabel" xml:space="preserve">
-    <value>Rentoom na Instagramie</value>
-  </data>
-    <data name="Footer_InstagramIconAlt" xml:space="preserve">
+  <data name="Footer_InstagramIconAlt" xml:space="preserve">
     <value>Instagram</value>
   </data>
-    <data name="Footer_LogoAlt" xml:space="preserve">
-    <value>Rentoom - Apartamenty</value>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom na Instagramie</value>
   </data>
   <data name="Footer_PartnersTitle" xml:space="preserve">
     <value>Nasi partnerzy</value>
   </data>
+  <data name="SocialMediaLabel" xml:space="preserve">
+    <value>Media Społecznościowe</value>
+  </data>
 </root>
-
-
-
-
-

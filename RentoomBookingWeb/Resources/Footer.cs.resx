@@ -149,19 +149,25 @@
   <data name="AboutCity" xml:space="preserve">
     <value>O Toruni</value>
   </data>
-  <data name="Footer_FacebookIconAlt" xml:space="preserve">
-    <value>Facebook</value>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Byty</value>
   </data>
   <data name="Footer_FacebookAriaLabel" xml:space="preserve">
     <value>Rentoom na Facebooku</value>
   </data>
-  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
-    <value>Rentoom na Instagramu</value>
-  </data>
   <data name="Footer_InstagramIconAlt" xml:space="preserve">
     <value>Instagram</value>
   </data>
-  <data name="Footer_LogoAlt" xml:space="preserve">
-    <value>Rentoom - Byty</value>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom na Instagramu</value>
+  </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Naši partneři</value>
+  </data>
+  <data name="SocialMediaLabel" xml:space="preserve">
+    <value>Sociální média</value>
   </data>
 </root>

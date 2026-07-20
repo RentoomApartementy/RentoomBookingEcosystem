@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -110,5 +110,17 @@
   </data>
   <data name="PartnersSubtitle" xml:space="preserve">
     <value>Współpracujemy ze sprawdzonymi lokalnymi markami, aby Twój pobyt w Toruniu był wyjątkowy</value>
+  </data>
+  <data name="whyRentoomImageAlt" xml:space="preserve">
+    <value>Apartamenty w Toruniu - wnętrze</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="cityPanoramaImageAlt" xml:space="preserve">
+    <value>Apartamenty w Toruniu - panorama miasta</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Dowiedz się więcej</value>
   </data>
 </root>

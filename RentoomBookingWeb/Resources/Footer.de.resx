@@ -149,19 +149,25 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Über Toruń</value>
   </data>
-  <data name="Footer_FacebookIconAlt" xml:space="preserve">
-    <value>Facebook</value>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom – Wohnungen</value>
   </data>
   <data name="Footer_FacebookAriaLabel" xml:space="preserve">
     <value>Rentoom auf Facebook</value>
   </data>
-  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
-    <value>Rentoom auf Instagram</value>
-  </data>
   <data name="Footer_InstagramIconAlt" xml:space="preserve">
     <value>Instagram</value>
   </data>
-  <data name="Footer_LogoAlt" xml:space="preserve">
-    <value>Rentoom – Wohnungen</value>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom auf Instagram</value>
+  </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Unsere Partner</value>
+  </data>
+  <data name="SocialMediaLabel" xml:space="preserve">
+    <value>Soziale Medien</value>
   </data>
 </root>

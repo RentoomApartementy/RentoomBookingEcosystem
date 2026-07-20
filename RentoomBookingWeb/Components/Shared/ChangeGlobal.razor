@@ -47,64 +47,12 @@
 
         var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
         var relativePath = Uri.UnescapeDataString(Navigation.ToBaseRelativePath(Navigation.Uri));
-        
-        // Remove existing culture prefix if any
-        var parts = relativePath.Split('/');
-        string? currentCultureInUrl = null;
-        string? firstSlug = null;
-        string remainingPath = "";
-
-        if (parts.Length > 0 && SupportedLanguagesProvider.SupportedCultureNames.Any(c => string.Equals(c.Split('-')[0], parts[0], StringComparison.OrdinalIgnoreCase) || string.Equals(c, parts[0], StringComparison.OrdinalIgnoreCase)))
-        {
-            currentCultureInUrl = parts[0];
-            firstSlug = parts.Length > 1 ? parts[1].Split('?')[0] : null;
-            if (parts.Length > 2)
-            {
-                remainingPath = "/" + string.Join("/", parts.Skip(2));
-            }
-        }
-        else
-        {
-            firstSlug = parts[0].Split('?')[0];
-            if (parts.Length > 1)
-            {
-                remainingPath = "/" + string.Join("/", parts.Skip(1));
-            }
-        }
-        
-        string newUri;
-        if (!string.IsNullOrEmpty(firstSlug) && RouteService.TryGetPageKeyFromSlug(firstSlug, currentCultureInUrl ?? CultureInfo.CurrentUICulture.Name, out var pageKey))
-        {
-            newUri = RouteService.GetLocalizedUrl(pageKey!, selectedCulture) + remainingPath;
-            if (uri.Query.Length > 0) newUri += uri.Query;
-        }
-        else if (string.IsNullOrEmpty(firstSlug) || firstSlug == "/")
-        {
-            newUri = $"/{GetShortCode(selectedCulture)}";
-        }
-        else
-        {
-            // Fallback for special pages or if current slug wasn't in registry
-            if (RouteService.TryFindPageKeyAnyCulture(firstSlug, out var pageKeyFromAny))
-            {
-                newUri = RouteService.GetLocalizedUrl(pageKeyFromAny!, selectedCulture) + remainingPath;
-            }
-            else
-            {
-                if (currentCultureInUrl == null)
-                {
-                    // No culture prefix in current URL -> keep it prefix-less!
-                    newUri = "/" + firstSlug + remainingPath;
-                }
-                else
-                {
-                    // Replace existing culture prefix
-                    newUri = $"/{GetShortCode(selectedCulture)}/{firstSlug}{remainingPath}";
-                }
-            }
-            
-            if (uri.Query.Length > 0) newUri += uri.Query;
-        }
+        var newUri = LanguageSwitchNavigationHelper.BuildTargetPath(
+            relativePath,
+            uri.Query,
+            CultureInfo.CurrentUICulture.Name,
+            selectedCulture,
+            RouteService);
 
         _isDropdownOpen = false; 
         
@@ -112,6 +60,4 @@
         var setCultureUrl = $"/culture/set?culture={selectedCulture}&returnUrl={Uri.EscapeDataString(newUri)}";
         Navigation.NavigateTo(setCultureUrl, forceLoad: true);
     }
-
-    private string GetShortCode(string culture) => culture.Split('-')[0].ToLowerInvariant();
 }
