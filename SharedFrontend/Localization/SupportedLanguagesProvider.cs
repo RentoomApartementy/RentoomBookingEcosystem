@@ -54,7 +54,8 @@ public static class SupportedLanguagesProvider
             using var reader = new StreamReader(stream);
             var json = reader.ReadToEnd();
             var config = JsonSerializer.Deserialize<SupportedLanguagesConfig>(json);
-            return BuildSnapshot(config?.Cultures ?? [], config?.DefaultCulture);
+            var activeCultures = (config?.Cultures ?? []).Where(c => c.Active);
+            return BuildSnapshot(activeCultures, config?.DefaultCulture);
         }
         catch
         {
