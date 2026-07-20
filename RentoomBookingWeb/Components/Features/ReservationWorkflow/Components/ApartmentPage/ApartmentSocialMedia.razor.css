@@ -1,0 +1,28 @@
+.apartment-social-media {
+    display: flex;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.apartment-social-media--stacked {
+    flex-direction: column;
+}
+
+.apartment-social-media--side-by-side {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.apartment-social-media--side-by-side .apartment-social-media__item {
+    flex: 1 1 300px;
+    min-width: 280px;
+}
+
+.apartment-social-media__item--youtube {
+    width: 100%;
+}
+
+.apartment-social-media__item--instagram {
+    display: flex;
+    justify-content: center;
+}

@@ -214,8 +214,7 @@
     content: "\2014  ";
 }
 
-.blog-media,
-.blog-embed {
+.blog-media {
     width: 100%;
     margin: 0 auto;
 }
@@ -257,85 +256,6 @@
 
 .blog-image-size-xl {
     max-width: 860px;
-}
-
-.blog-youtube-size-s {
-    max-width: 320px;
-}
-
-.blog-youtube-size-m {
-    max-width: 480px;
-}
-
-.blog-youtube-size-l {
-    max-width: 640px;
-}
-
-.blog-youtube-size-xl {
-    max-width: 860px;
-}
-
-.blog-embed--youtube {
-    overflow: hidden;
-    border-radius: 18px;
-    background: #0f172a;
-}
-
-.blog-embed__aspect {
-    position: relative;
-    width: 100%;
-}
-
-.blog-embed__aspect iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-    display: block;
-}
-
-.blog-embed--instagram {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.blog-instagram-embed {
-    display: flex;
-    justify-content: center;
-    width: min(100%, 540px);
-    max-width: 540px;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-.blog-instagram-embed :deep(blockquote.instagram-media) {
-    display: block !important;
-    width: 100% !important;
-    max-width: 540px !important;
-    min-width: 0 !important;
-    margin: 0 auto !important;
-    border-radius: 18px !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-}
-
-.blog-instagram-embed :deep(iframe.instagram-media) {
-    width: 100% !important;
-    max-width: 540px !important;
-    min-width: 0 !important;
-}
-
-.blog-instagram-embed :deep(blockquote.instagram-media > div) {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-.blog-instagram-embed :deep(a),
-.blog-instagram-embed :deep(p),
-.blog-instagram-embed :deep(div) {
-    max-width: 100%;
 }
 
 .blog-faq {
@@ -489,16 +409,7 @@
     .blog-image-size-s,
     .blog-image-size-m,
     .blog-image-size-l,
-    .blog-image-size-xl,
-    .blog-youtube-size-s,
-    .blog-youtube-size-m,
-    .blog-youtube-size-l,
-    .blog-youtube-size-xl {
-        max-width: 100%;
-    }
-
-    .blog-instagram-embed {
-        width: 100%;
+    .blog-image-size-xl {
         max-width: 100%;
     }
 }
