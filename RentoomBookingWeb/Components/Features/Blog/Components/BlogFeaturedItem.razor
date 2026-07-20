@@ -1,0 +1,60 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Services.Blog
+@using RentoomBookingWeb.Services.Localization
+@using RentoomBookingWeb.Components.Shared
+@inject IRouteLocalizationService RouteService
+@inject IStringLocalizer<RentoomBookingWeb.Blog> Localizer
+
+<article class="blog-featured-card">
+    <a href="@BuildPostUrl(Item.PublicId, Item.Slug)" class="blog-featured-card__link-overlay"></a>
+    
+    @if (!string.IsNullOrWhiteSpace(Item.HeroImageUrl))
+    {
+        <img src="@Item.HeroImageUrl" alt="@Item.Title" class="blog-featured-card__bg-image" />
+    }
+    
+    <time class="blog-featured-card__date-badge" datetime="@Item.PublishedAtUtc.ToString("yyyy-MM-dd")">
+        @Item.PublishedAtUtc.ToString("dd.MM.yyyy")
+    </time>
+
+    <div class="blog-featured-card__overlay">
+        <div class="blog-featured-card__tags-row">
+            @if (Item.Tags is not null)
+            {
+                @foreach (var tag in Item.Tags.Take(2))
+                {
+                    <Tag Text="@tag.ToUpperInvariant()" />
+                }
+            }
+        </div>
+        
+        <div class="blog-featured-card__info-row">
+            <div class="blog-featured-card__text-group">
+                <h3 class="blog-featured-card__title">@Item.Title</h3>
+                <p class="blog-featured-card__excerpt">@Item.Excerpt</p>
+            </div>
+            
+            <div class="blog-featured-card__action-group">
+                <span class="blog-featured-card__read-time">@GetReadTimeText()</span>
+                <Button Href="@BuildPostUrl(Item.PublicId, Item.Slug)" Type="ButtonType.Primary" Class="blog-featured-card__btn">
+                    @Localizer["CheckLabel"]
+                </Button>
+            </div>
+        </div>
+    </div>
+</article>
+
+@code {
+    [Parameter, EditorRequired]
+    public required BlogPostListItem Item { get; set; }
+
+    private string BuildPostUrl(Guid publicId, string slug) 
+        => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
+
+    private string GetReadTimeText()
+    {
+        var charCount = (Item.Excerpt?.Length ?? 0) + Item.Title.Length + 300;
+        var minutes = Math.Max(3, (int)Math.Ceiling(charCount / 200.0));
+        return string.Format(Localizer["ReadTimeFormat"], minutes);
+    }
+}

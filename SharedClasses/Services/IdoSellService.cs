@@ -41,6 +41,7 @@ namespace RentoomBooking.SharedClasses.Services
         private readonly bool _useDummyIdoBooking;
         private readonly bool _bookingProcessingFlag;
         private readonly string _dummyReservationTemplateKey;
+        private readonly bool _logOutgoingReservationJson;
 
 
         private const string ReservationsGetEndpoint = "reservations/get/34/json";
@@ -78,6 +79,7 @@ namespace RentoomBooking.SharedClasses.Services
             _useDummyIdoBooking = configuration.GetValue("IdoBooking:UseDummy", false);
             _bookingProcessingFlag = configuration.GetValue("BookingCom:ReservationProcessingEnabled", false);
             _dummyReservationTemplateKey = configuration.GetValue<string>("IdoBooking:DummyReservationTemplateKey") ?? "default";
+            _logOutgoingReservationJson = configuration.GetValue("IdoBooking:LogOutgoingReservationJson", false);
 
         }
 
@@ -461,11 +463,6 @@ namespace RentoomBooking.SharedClasses.Services
                 throw new ArgumentException("Dodaj przynajmniej jedną rezerwację.", nameof(reservations));
             }
 
-            if (_useDummyIdoBooking)
-            {
-                return await AddReservationsDummyAsync(reservationsList, cancellationToken);
-            }
-
             var request = new ReservationAddRequest
             {
                 Authenticate = _idoConnect.AuthObjectIdo(),
@@ -474,6 +471,19 @@ namespace RentoomBooking.SharedClasses.Services
                     Reservations = reservationsList
                 }
             };
+
+            if (_logOutgoingReservationJson)
+            {
+                _logger.LogInformation(
+                    "IdoBooking reservations/add payload (UseDummy={UseDummy}): {Payload}",
+                    _useDummyIdoBooking,
+                    JsonHelper.SerializeOnlyNonNullProperties(request));
+            }
+
+            if (_useDummyIdoBooking)
+            {
+                return await AddReservationsDummyAsync(reservationsList, cancellationToken);
+            }
 
             var response = await _idoConnect.PostAsync<ReservationAddRequest, ReservationAddResponseType>(ReservationsAddEndpoint, request, cancellationToken);
             return response?.Result;

@@ -23,7 +23,6 @@ using RentoomBookingWeb.Components.Enums;
 using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services;
 using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents;
-using RentoomBookingWeb.Resources;
 
 namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 {

@@ -1,0 +1,66 @@
+
+<section class="blog_section_header">
+    @if (!string.IsNullOrWhiteSpace(Item.HeroImageUrl))
+    {
+        <img src="@Item.HeroImageUrl" alt="@Item.Title" class="blog_header_bg" fetchpriority="high" />
+    }
+    
+    <div class="blog_header_container">
+        <article class="blog_header_card">
+            @{
+                var filteredTags = Item.Tags?.Where(t => !string.Equals(t, Item.Category, System.StringComparison.OrdinalIgnoreCase)).ToList() ?? new System.Collections.Generic.List<string>();
+            }
+
+            <header class="blog_card_header">
+                <span class="blog_card_read_time">
+                    @if (!string.IsNullOrWhiteSpace(Item.AuthorDisplayName))
+                    {
+                        <span>@Item.AuthorDisplayName • </span>
+                    }
+                    @GetReadTimeText()
+                </span>
+                <span class="blog_card_date">@Item.PublishedAtUtc.ToString("dd.MM.yyyy")</span>
+            </header>
+            
+            @if (UseH1ForTitle)
+            {
+                <h1 class="blog_card_title">@Item.Title</h1>
+            }
+            else
+            {
+                <p class="blog_card_title">@Item.Title</p>
+            }
+            
+            <p class="blog_card_excerpt">@Item.Excerpt</p>
+            
+            @if (!string.IsNullOrWhiteSpace(Item.Category) || filteredTags.Any())
+            {
+                <div class="blog_card_tags">
+                    @if (!string.IsNullOrWhiteSpace(Item.Category))
+                    {
+                        <Tag Text="@Item.Category" />
+                    }
+                    
+                    @if (!string.IsNullOrWhiteSpace(Item.Category) && filteredTags.Any())
+                    {
+                        <span class="blog_card_separator"></span>
+                    }
+                    
+                    @foreach (var tag in filteredTags)
+                    {
+                        <Tag Text="@tag" />
+                    }
+                </div>
+            }
+            
+            @if (ShowReadMoreButton)
+            {
+                <div class="blog_card_action">
+                    <Button Href="@BuildPostUrl(Item.PublicId, Item.Slug)" Type="ButtonType.Primary">
+                        @Localizer["ReadMore"]
+                    </Button>
+                </div>
+            }
+        </article>
+    </div>
+</section>

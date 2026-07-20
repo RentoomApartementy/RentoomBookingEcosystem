@@ -73,6 +73,30 @@ public sealed class TranslationOrchestrator
             return;
         }
 
+        // Skip cultures explicitly deactivated ("active": false) in supported-languages.json.
+        // Cultures not yet present in the config (brand new languages) are still allowed through.
+        var activeCultures = LanguageConfigUpdater.GetActiveCultures(_repoRoot);
+        var configuredCultures = LanguageConfigUpdater.GetConfiguredCultures(_repoRoot);
+        var deactivatedRequested = targetCultures
+            .Where(c => configuredCultures.Contains(c) && !activeCultures.Contains(c))
+            .ToArray();
+
+        if (deactivatedRequested.Length > 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"  Skipping deactivated culture(s) (active: false in supported-languages.json): {string.Join(", ", deactivatedRequested)}");
+            Console.ResetColor();
+            targetCultures = targetCultures.Except(deactivatedRequested, StringComparer.OrdinalIgnoreCase).ToArray();
+        }
+
+        if (targetCultures.Length == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("All requested cultures are deactivated. Nothing to translate.");
+            Console.ResetColor();
+            return;
+        }
+
         Console.WriteLine($"  Targets: {string.Join(", ", targetCultures)}");
         Console.WriteLine();
 

@@ -1,58 +1,57 @@
-@using Microsoft.Extensions.Localization
-@using RentoomBooking.SharedClasses.Services.Blog
-@inject IBlogContentReader BlogContentReader
-@inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
-@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
-@inject NavigationManager NavManager
+@using RentoomBookingWeb.Components.Features.Blog.Components;
 
-<PageTitle>Blog</PageTitle>
+<PageTitle>@Localizer["BlogPageTitle"]</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
-    <meta name="description" content="Blog Rentoom" />
+    <meta name="description" content="@Localizer["BlogDescription"]" />
     <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogList")}")" />
     <SeoHreflangs />
 </HeadContent>
 
-<h1>Blog</h1>
+@if (Items.Count > 0)
+{
+    <BlogHeaderSection Item="Items.First()" UseH1ForTitle="true" />
+}
 
 @if (!string.IsNullOrWhiteSpace(Error))
 {
-    <p>@Error</p>
+    <BlogErrorSection ErrorMessage="@Error" IsNotFound="false" />
 }
 else if (IsLoading && Items.Count == 0)
 {
-    <p>Loading...</p>
+    <BlogListSkeleton />
 }
 else
 {
-    <ul>
-        @foreach (var item in Items)
+    <div class="blog-list-container">
+        <h2 class="blog-list-title">@Localizer["LatestPosts"]</h2>
+        
+        @if (Items.Any())
         {
-            <li>
-                <a href="@BuildPostUrl(item.PublicId, item.Slug)">@item.Title</a>
-                @if (!string.IsNullOrWhiteSpace(item.Subtitle))
-                {
-                    <div>@item.Subtitle</div>
+            <div class="blog-posts-grid">
+                @{
+                    int index = 0;
                 }
-                <div>Author: @item.AuthorDisplayName</div>
-                <div>Published: @item.PublishedAtUtc.ToString("yyyy-MM-dd")</div>
-                @if (!string.IsNullOrWhiteSpace(item.Excerpt))
+                @foreach (var item in Items)
                 {
-                    <div>@item.Excerpt</div>
+                    if (index == 0)
+                    {
+                        <BlogFeaturedItem Item="item" />
+                    }
+                    else
+                    {
+                        <BlogItem Item="item" />
+                    }
+                    index++;
                 }
-            </li>
+            </div>
         }
-    </ul>
-}
-
-@if (IsLoading && Items.Count > 0)
-{
-    <p>Loading...</p>
+        else
+        {
+            <BlogEmptySection />
+        }
+    </div>
 }
 
 <div id="scroll-anchor" style="height: 10px; width: 100%;"></div>
-
-@code {
-    private string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
-}

@@ -132,6 +132,9 @@
   <data name="RentoomDesigner" xml:space="preserve">
     <value>Rentoom Designer</value>
   </data>
+  <data name="Blog" xml:space="preserve">
+    <value>Blog</value>
+  </data>
   <data name="Others" xml:space="preserve">
     <value>Inne</value>
   </data>

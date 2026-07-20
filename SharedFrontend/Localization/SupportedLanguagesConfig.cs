@@ -18,4 +18,7 @@ public sealed class SupportedLanguageConfigItem
 
     [JsonPropertyName("nativeName")]
     public string? NativeName { get; init; }
+
+    [JsonPropertyName("active")]
+    public bool Active { get; init; } = false;
 }

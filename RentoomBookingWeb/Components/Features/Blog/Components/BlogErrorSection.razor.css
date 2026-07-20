@@ -1,0 +1,102 @@
+.blog-error-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh;
+    background-color: #ffffff;
+}
+
+.blog-error-content-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 80px 20px;
+}
+
+.blog-error-container {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.blog-error-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 30px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.blog-error-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blog-error-graphic {
+    width: 10rem;
+    height: 10rem;
+    background-color: rgba(209, 191, 172, 0.15);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #8d6133;
+}
+
+.blog-error-graphic svg {
+    width: 5rem;
+    height: 5rem;
+    fill: currentColor;
+}
+
+.blog-error-text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.blog-error-main-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+
+.blog-error-description {
+    font-size: 1.2rem;
+    color: #64748b;
+    margin-bottom: 35px;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+.blog-error-button-group {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .blog-error-content-wrapper {
+        padding: 50px 20px;
+    }
+
+    .blog-error-main-title {
+        font-size: 2rem;
+    }
+
+    .blog-error-graphic {
+        width: 8rem;
+        height: 8rem;
+    }
+
+    .blog-error-graphic svg {
+        width: 4rem;
+        height: 4rem;
+    }
+}

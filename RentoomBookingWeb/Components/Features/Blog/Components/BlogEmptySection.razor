@@ -1,0 +1,23 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Components.Shared
+@inject IStringLocalizer<RentoomBookingWeb.Blog> Localizer
+
+<article class="blog-empty-card">
+    <div class="blog-empty-card__image-container">
+        <GoogleIcon Name="feed" Class="blog-empty-card__icon" SizePx="48" />
+    </div>
+    
+    <div class="blog-empty-card__content">
+        <div class="blog-empty-card__meta">
+            <span class="blog-empty-card__category">INFO | BLOG</span>
+        </div>
+        
+        <h3 class="blog-empty-card__title">
+            @Localizer["NoPostsTitle"]
+        </h3>
+        
+        <p class="blog-empty-card__excerpt">
+            @Localizer["NoPostsDescription"]
+        </p>
+    </div>
+</article>
