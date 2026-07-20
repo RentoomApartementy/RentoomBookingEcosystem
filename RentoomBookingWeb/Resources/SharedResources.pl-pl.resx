@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -230,5 +230,74 @@
   </data>
   <data name="FAQ_Title" xml:space="preserve">
     <value>Często Zadawane Pytania</value>
+  </data>
+  <data name="Blog" xml:space="preserve">
+    <value>Blog</value>
+  </data>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Rentoom - apartamenty na wynajem</value>
+  </data>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
+  </data>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Ikona Facebook</value>
+  </data>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Ikona Instagram</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>brak ofert</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Strona w budowie</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Apartamenty</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Zamknij komunikat</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Wystąpił błąd</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Oferty</value>
+  </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Główne menu strony</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Strona główna</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Pracujemy nad przygotowaniem tej sekcji.</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Nie udało się zapisać zgody. Spróbuj ponownie.</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Apartamenty</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Ikona menu</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Wróć na stronę główną</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Ikona zamknięcia menu</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Zapraszamy wkrótce!</value>
+  </data>
+  <data name="Menu_FacebookAriaLabel" xml:space="preserve">
+    <value>Facebook Rentoom Apartamenty</value>
+  </data>
+  <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
+    <value>Ikona kalendarza</value>
   </data>
 </root>

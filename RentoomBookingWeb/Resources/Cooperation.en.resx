@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -123,33 +124,30 @@
         <value>The contact may have been created, but the deal could not be created. Check Bitrix before sending again.</value>
     </data>
   <data name="Cooperation_MetaKeywords" xml:space="preserve">
-    <value>rental management torun, apartment management, hands-off investment, rentoom cooperation, rental income optimization</value>
+    <value>rental management toruń, apartment service, maintenance-free investment, rentoom cooperation, optimization of rental profit, short-term rental toruń</value>
   </data>
   <data name="Cooperation_MetaDescription" xml:space="preserve">
-    <value>Turn your apartment into a hands-off investment with Rentoom. We provide full rental management in Torun, revenue optimization, and guest support 24/7.</value>
+    <value>Turn your apartment into a maintenance-free investment with Rentoom. We offer comprehensive rental management in Toruń, income optimization and 24/7 guest service. Bet on quality and experience.</value>
   </data>
   <data name="Cooperation_OgTitle" xml:space="preserve">
-    <value>Cooperation - Rentoom | Professional Rental Management</value>
+    <value>Cooperation - Rentoom | Professional Lease Management</value>
   </data>
   <data name="Cooperation_BreadcrumbName" xml:space="preserve">
     <value>Cooperation</value>
   </data>
   <data name="Cooperation_OgDescription" xml:space="preserve">
-    <value>We are a market leader in Torun. Full-service operations, modern technology, and profit optimization for your property.</value>
+    <value>We are the market leader in Toruń. We offer full service, innovative technologies and maximization of your profits. Rest easy, we're working for you.</value>
   </data>
   <data name="Cooperation_PageTitle" xml:space="preserve">
-    <value>Cooperation - Rentoom | Rental Management Torun</value>
+    <value>Cooperation - Rentoom | Rental Management Toruń</value>
   </data>
-    <data name="AboutUsImageAlt" xml:space="preserve">
+  <data name="AboutUsImageAlt" xml:space="preserve">
     <value>Photo</value>
   </data>
-    <data name="ContactImageAlt" xml:space="preserve">
+  <data name="ContactImageAlt" xml:space="preserve">
     <value>Contact</value>
   </data>
-    <data name="CooperationDealTitlePrefix" xml:space="preserve">
+  <data name="CooperationDealTitlePrefix" xml:space="preserve">
     <value>Cooperation</value>
   </data>
 </root>
-
-
-

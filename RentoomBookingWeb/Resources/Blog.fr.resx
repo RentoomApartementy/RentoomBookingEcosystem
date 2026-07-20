@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BlogDescription" xml:space="preserve">
+    <value>Blog Rentoom - Appartements</value>
+  </data>
+  <data name="CouldNotLoadBlogPosts" xml:space="preserve">
+    <value>Échec de charger les articles de blog.</value>
+  </data>
+  <data name="BlogHeaderTitle" xml:space="preserve">
+    <value>Blog Rentoom</value>
+  </data>
+  <data name="BlogHeaderSubtitle" xml:space="preserve">
+    <value>Les derniers articles, conseils et actualités de la vie de Rentoom.</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>En savoir plus</value>
+  </data>
+  <data name="ReadTimeFormat" xml:space="preserve">
+    <value>{0} de lecture de minute</value>
+  </data>
+  <data name="AuthorLabel" xml:space="preserve">
+    <value>Squirt</value>
+  </data>
+  <data name="PublishedLabel" xml:space="preserve">
+    <value>Publié le</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Quelque chose a mal tourné</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>Nous n’avons pas pu charger cet article.</value>
+  </data>
+  <data name="PostNotFoundTitle" xml:space="preserve">
+    <value>Article non trouvé</value>
+  </data>
+  <data name="PostNotFoundDescription" xml:space="preserve">
+    <value>L’article que vous cherchez n’existe pas ou a été supprimé.</value>
+  </data>
+  <data name="BackToBlog" xml:space="preserve">
+    <value>Retour au blog</value>
+  </data>
+  <data name="CheckLabel" xml:space="preserve">
+    <value>Regarde ça</value>
+  </data>
+  <data name="CategoryLabel" xml:space="preserve">
+    <value>Catégorie</value>
+  </data>
+  <data name="DefaultCategory" xml:space="preserve">
+    <value>Article</value>
+  </data>
+  <data name="LatestPosts" xml:space="preserve">
+    <value>Publications récentes</value>
+  </data>
+  <data name="NoPostsDescription" xml:space="preserve">
+    <value>De nouveaux articles paraîtront bientôt ici. Revenez nous voir plus tard !</value>
+  </data>
+  <data name="NoPostsTitle" xml:space="preserve">
+    <value>De nouveaux articles à venir bientôt</value>
+  </data>
+  <data name="BlogPageTitle" xml:space="preserve">
+    <value>Blog - Appartements Rentoom</value>
+  </data>
+  <data name="SeeAllPosts" xml:space="preserve">
+    <value>Voir tous les articles</value>
+  </data>
+  <data name="PreviousPostLabel" xml:space="preserve">
+    <value>Article précédent</value>
+  </data>
+  <data name="NextPostLabel" xml:space="preserve">
+    <value>Article suivant</value>
+  </data>
+</root>

@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BlogDescription" xml:space="preserve">
+    <value>Rentoom Blog - Stanovanja</value>
+  </data>
+  <data name="CouldNotLoadBlogPosts" xml:space="preserve">
+    <value>Ni uspelo naložiti blog objav.</value>
+  </data>
+  <data name="BlogHeaderTitle" xml:space="preserve">
+    <value>Blog Rentoom</value>
+  </data>
+  <data name="BlogHeaderSubtitle" xml:space="preserve">
+    <value>Najnovejše objave, nasveti in novice iz življenja Rentooma.</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Preberite več</value>
+  </data>
+  <data name="ReadTimeFormat" xml:space="preserve">
+    <value>{0} min branje</value>
+  </data>
+  <data name="AuthorLabel" xml:space="preserve">
+    <value>Špric</value>
+  </data>
+  <data name="PublishedLabel" xml:space="preserve">
+    <value>Objavljeno na</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Nekaj je šlo narobe</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>Tega članka nismo mogli naložiti.</value>
+  </data>
+  <data name="PostNotFoundTitle" xml:space="preserve">
+    <value>Članek ni najden</value>
+  </data>
+  <data name="PostNotFoundDescription" xml:space="preserve">
+    <value>Članek, ki ga iščete, ne obstaja ali je bil izbrisan.</value>
+  </data>
+  <data name="BackToBlog" xml:space="preserve">
+    <value>Nazaj na blog</value>
+  </data>
+  <data name="CheckLabel" xml:space="preserve">
+    <value>Poglej</value>
+  </data>
+  <data name="CategoryLabel" xml:space="preserve">
+    <value>Kategorija</value>
+  </data>
+  <data name="DefaultCategory" xml:space="preserve">
+    <value>Članek</value>
+  </data>
+  <data name="LatestPosts" xml:space="preserve">
+    <value>Nedavne objave</value>
+  </data>
+  <data name="NoPostsDescription" xml:space="preserve">
+    <value>Kmalu bodo tukaj objavljeni novi članki. Preverite nas kasneje!</value>
+  </data>
+  <data name="NoPostsTitle" xml:space="preserve">
+    <value>Novi članki prihajajo kmalu</value>
+  </data>
+  <data name="BlogPageTitle" xml:space="preserve">
+    <value>Blog - Rentoom Apartments</value>
+  </data>
+  <data name="SeeAllPosts" xml:space="preserve">
+    <value>Oglejte si vse objave</value>
+  </data>
+  <data name="PreviousPostLabel" xml:space="preserve">
+    <value>Prejšnja objava</value>
+  </data>
+  <data name="NextPostLabel" xml:space="preserve">
+    <value>Naslednja objava</value>
+  </data>
+</root>

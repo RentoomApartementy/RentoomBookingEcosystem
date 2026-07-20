@@ -171,4 +171,7 @@
   <data name="Footer_PartnersTitle" xml:space="preserve">
     <value>Our partners</value>
   </data>
+  <data name="SocialMediaLabel" xml:space="preserve">
+    <value>Social Media</value>
+  </data>
 </root>

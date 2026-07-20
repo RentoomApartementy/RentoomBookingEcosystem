@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -151,5 +151,23 @@
   </data>
   <data name="Footer_PartnersTitle" xml:space="preserve">
     <value>Nasi partnerzy</value>
+  </data>
+  <data name="SocialMediaLabel" xml:space="preserve">
+    <value>Media Społecznościowe</value>
+  </data>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Apartamenty</value>
+  </data>
+  <data name="Footer_FacebookAriaLabel" xml:space="preserve">
+    <value>Rentoom na Facebooku</value>
+  </data>
+  <data name="Footer_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram</value>
+  </data>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom na Instagramie</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -268,33 +268,36 @@
     <value>Error.</value>
   </data>
   <data name="TorunLocation_Keywords" xml:space="preserve">
-    <value>Toruń location, where is Toruń, Toruń map, how to get to Toruń, Toruń Old Town</value>
+    <value>location of Toruń, where Toruń is located, map of Toruń, access to Toruń, old town of Toruń</value>
   </data>
   <data name="TorunLocation_Breadcrumb" xml:space="preserve">
-    <value>Torun location</value>
+    <value>Location of Toruń</value>
   </data>
   <data name="ErrorPageDescription" xml:space="preserve">
     <value>An error occurred while processing your request.</value>
   </data>
   <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
-    <value>The Development environment should not be enabled for deployed applications.</value>
+    <value>The Development environment should not be enabled on production.</value>
   </data>
   <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
-    <value>It can result in displaying sensitive information from exceptions to end users. For local debugging, set ASPNETCORE_ENVIRONMENT to Development and restart the app.</value>
+    <value>This can expose sensitive information from exceptions to end users. For local debugging, set the ASPNETCORE_ENVIRONMENT environment variable to Development and restart the application.</value>
   </data>
   <data name="TorunLocation_PageTitle" xml:space="preserve">
-    <value>Toruń location, map and access | Rentoom</value>
+    <value>Toruń location, map and directions | Rentoom</value>
   </data>
   <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
-    <value>Switching to the Development environment will display more detailed information about the error that occurred.</value>
+    <value>Switching the environment to Development will display more detailed information about the error.</value>
   </data>
   <data name="TorunLocation_Description" xml:space="preserve">
-    <value>See where Toruń is located, how to reach the Old Town, and use a practical OpenStreetMap embed for the city.</value>
+    <value>Check where Toruń is located, how to get to the old town and see a practical OpenStreetMap map with the location of the city.</value>
   </data>
   <data name="ErrorPageTitle" xml:space="preserve">
     <value>Error</value>
   </data>
   <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
-    <value>Development Mode</value>
+    <value>Developer Mode</value>
+  </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Frequently Asked Questions</value>
   </data>
 </root>

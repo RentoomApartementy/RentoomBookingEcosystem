@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -158,5 +158,11 @@
   </data>
   <data name="Footer_InstagramAriaLabel" xml:space="preserve">
     <value>Rentoom on Instagram</value>
+  </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Our partners</value>
+  </data>
+  <data name="SocialMediaLabel" xml:space="preserve">
+    <value>Social Media</value>
   </data>
 </root>

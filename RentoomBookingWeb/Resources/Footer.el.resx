@@ -149,19 +149,19 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Σχετικά με το Τορούν</value>
   </data>
-  <data name="Footer_FacebookIconAlt" xml:space="preserve">
-    <value>Το Facebook</value>
+  <data name="Footer_LogoAlt" xml:space="preserve">
+    <value>Rentoom - Διαμερίσματα</value>
   </data>
   <data name="Footer_FacebookAriaLabel" xml:space="preserve">
     <value>Rentoom στο Facebook</value>
   </data>
-  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
-    <value>Rentoom στο Instagram</value>
-  </data>
   <data name="Footer_InstagramIconAlt" xml:space="preserve">
     <value>Ίνσταγκρα</value>
   </data>
-  <data name="Footer_LogoAlt" xml:space="preserve">
-    <value>Rentoom - Διαμερίσματα</value>
+  <data name="Footer_FacebookIconAlt" xml:space="preserve">
+    <value>Το Facebook</value>
+  </data>
+  <data name="Footer_InstagramAriaLabel" xml:space="preserve">
+    <value>Rentoom στο Instagram</value>
   </data>
 </root>

@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Mietverwaltung Toruń, Wohnungsservice, wartungsfreie Investition, Rentoom-Kooperation, Optimierung des Mietgewinns, Kurzzeitmietung Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Machen Sie Ihre Wohnung mit Rentoom zu einer wartungsfreien Investition. Wir bieten ein umfassendes Mietmanagement in Toruń, Einkommensoptimierung und 24/7-Gästeservice. Setzen Sie auf Qualität und Erfahrung.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Zusammenarbeit – Rentoom | Professionelles Mietvertragsmanagement</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Zusammenarbeit</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Wir sind Marktführer in Toruń. Wir bieten Full-Service, innovative Technologien und die Maximierung Ihrer Gewinne. Sei beruhigt, wir arbeiten für dich.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Zusammenarbeit – Rentoom | Mietverwaltung Toruń</value>
+  </data>
 </root>

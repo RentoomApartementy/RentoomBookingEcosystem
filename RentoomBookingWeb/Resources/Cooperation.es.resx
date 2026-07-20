@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Contacto</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Gestión de alquileres Toruń, servicio de apartamentos, inversión sin mantenimiento, cooperación rentoom, optimización de beneficios de alquiler, alquiler a corto plazo Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Convierte tu apartamento en una inversión sin mantenimiento con Rentoom. Ofrecemos una gestión integral de alquileres en Toruń, optimización de ingresos y servicio al huésped 24/7. Apuesta por la calidad y la experiencia.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Cooperación - Rentoom | Gestión profesional de arrendamientos</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Cooperación</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Somos el líder del mercado en Toruń. Ofrecemos un servicio completo, tecnologías innovadoras y la maximización de tus beneficios. Descansa tranquilo, trabajamos para ti.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Cooperación - Rentoom | Gestión de alquileres Toruń</value>
+  </data>
 </root>

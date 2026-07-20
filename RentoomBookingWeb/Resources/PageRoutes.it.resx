@@ -74,4 +74,10 @@
   <data name="Statute" xml:space="preserve">
     <value>Termini e Condizioni</value>
   </data>
+  <data name="BlogList" xml:space="preserve">
+    <value>Blog</value>
+  </data>
+  <data name="BlogPost" xml:space="preserve">
+    <value>Blog</value>
+  </data>
 </root>

@@ -202,7 +202,7 @@
     <value>Icono de Instagram</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom Icon</value>
+    <value>Rentoom - apartamentos en alquiler</value>
   </data>
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Sin ofertas</value>
@@ -257,5 +257,47 @@
   </data>
   <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
     <value>Icono del calendario</value>
+  </data>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>ID de la solicitud:</value>
+  </data>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Error.</value>
+  </data>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>ubicación de Toruń, donde se encuentra Toruń, mapa de Toruń, acceso a Toruń, casco antiguo de Toruń</value>
+  </data>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Ubicación de Toruń</value>
+  </data>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Se produjo un error mientras procesaba tu solicitud.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>El entorno de desarrollo no debería estar habilitado en la producción.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Esto puede exponer información sensible de las excepciones a los usuarios finales. Para la depuración local, configura la variable de entorno ASPNETCORE_ENVIRONMENT en Desarrollo y reinicia la aplicación.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Ubicación, mapa y direcciones de Toruń | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Cambiar el entorno a Desarrollo mostrará información más detallada sobre el error.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Consulta dónde está Toruń, cómo llegar al casco antiguo y consulta un mapa práctico de OpenStreetMap con la ubicación de la ciudad.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Modo Desarrollador</value>
+  </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Preguntas frecuentes</value>
+  </data>
+  <data name="Blog" xml:space="preserve">
+    <value>Blog</value>
   </data>
 </root>
