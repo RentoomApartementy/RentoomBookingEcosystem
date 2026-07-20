@@ -12,6 +12,8 @@ using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.Bonuses;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Models;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.Descriptions;
@@ -52,6 +54,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] public IBonusesService BonusesService { get; set; } = default!;
         [Inject] public MediaCacheService MediaCache { get; set; } = default!;
         [Inject] public IApartmentMediaCatalogService ApartmentMediaCatalogService { get; set; } = default!;
+        [Inject] public ApartmentSocialMediaService ApartmentSocialMediaService { get; set; } = default!;
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
@@ -60,6 +63,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected ApartmentObject? _apartment;
         protected ApartmentAiDescriptionDto? _aiDescription;
         protected List<ObjectMedium>? _objectMediums = null;
+        protected ApartmentSocialMediaDTO? _socialMedia = null;
         protected List<ObjectAmenity>? _amenities = null;
         protected int? _bedsCount = null;
         protected bool _isExpanded = false;
@@ -616,6 +620,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
             await GetObjectMedia();
+            await GetApartmentSocialMedia();
 
             if (_reservationTokenGuid.HasValue)
             {
@@ -1042,6 +1047,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                     _apartment.Id,
                     async () => await ApartmentMediaCatalogService.GetApartmentMediaAsync(_apartment.Id)
                 );
+            }
+        }
+
+        protected async Task GetApartmentSocialMedia()
+        {
+            if (_apartment != null)
+            {
+                _socialMedia = await ApartmentSocialMediaService.GetApartmentSocialMediaAsync(_apartment.Items[0].Id.Value);
             }
         }
 

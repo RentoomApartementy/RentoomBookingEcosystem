@@ -1,0 +1,68 @@
+@using Microsoft.JSInterop
+@using Microsoft.Extensions.Logging
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+@inject ILogger<InstagramEmbed> Logger
+
+@if (!string.IsNullOrWhiteSpace(EmbedHtml))
+{
+    <div class="embed-instagram">
+        <div class="embed-instagram__widget">
+            @((MarkupString)EmbedHtml)
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string? EmbedHtml { get; set; }
+
+    private IJSObjectReference? _jsModule;
+    private string? _processedEmbedHtml;
+    private bool _disposed;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_disposed || string.IsNullOrWhiteSpace(EmbedHtml))
+        {
+            return;
+        }
+
+        if (!firstRender && string.Equals(_processedEmbedHtml, EmbedHtml, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        try
+        {
+            _jsModule ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/instagramEmbed.js");
+            await _jsModule.InvokeVoidAsync("processEmbeds");
+            _processedEmbedHtml = EmbedHtml;
+        }
+        catch (JSDisconnectedException)
+        {
+        }
+        catch (Exception ex)
+        {
+            Logger.LogDebug(ex, "Failed to process Instagram embed.");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _disposed = true;
+
+        if (_jsModule is not null)
+        {
+            try
+            {
+                await _jsModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+}

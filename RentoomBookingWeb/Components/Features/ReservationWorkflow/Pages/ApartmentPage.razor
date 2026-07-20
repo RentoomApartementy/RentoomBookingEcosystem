@@ -64,6 +64,11 @@
                     Mediums="_objectMediums"
                     BedsCount="_bedsCount" />
 
+                @if (_socialMedia != null)
+                {
+                    <ApartmentSocialMedia Data="_socialMedia" />
+                }
+
                 @if (_aiDescription != null)
                 {
                     <ApartmentAiDescription 

@@ -1,0 +1,46 @@
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Models
+@using RentoomBooking.SharedClasses.Services.Embeds
+
+@if (ShowYouTube || ShowInstagram)
+{
+    <div class="apartment-social-media apartment-social-media--@(Layout == SocialMediaLayout.SideBySide ? "side-by-side" : "stacked")">
+        @if (ShowYouTube)
+        {
+            <div class="apartment-social-media__item apartment-social-media__item--youtube">
+                <YouTubeEmbed EmbedUrl="@YouTubeEmbedUrl" DisplaySize="@Data?.YouTubeDisplaySize" Width="@Data?.YouTubeWidth" Height="@Data?.YouTubeHeight" />
+            </div>
+        }
+        @if (ShowInstagram)
+        {
+            <div class="apartment-social-media__item apartment-social-media__item--instagram">
+                <InstagramEmbed EmbedHtml="@InstagramEmbedHtml" />
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public ApartmentSocialMediaDTO? Data { get; set; }
+    [Parameter] public SocialMediaContentType ContentType { get; set; } = SocialMediaContentType.All;
+    [Parameter] public SocialMediaLayout Layout { get; set; } = SocialMediaLayout.Stacked;
+
+    private bool ShowYouTube =>
+        (ContentType == SocialMediaContentType.All || ContentType == SocialMediaContentType.YouTube)
+        && Data?.YouTubeVisibleOnRentoom == true
+        && YouTubeEmbedUrl != null;
+
+    private bool ShowInstagram =>
+        (ContentType == SocialMediaContentType.All || ContentType == SocialMediaContentType.Instagram)
+        && Data?.InstagramVisibleOnRentoom == true
+        && InstagramEmbedHtml != null;
+
+    private string? YouTubeEmbedUrl => YoutubeEmbedHelper.BuildEmbedUrl(
+        Data?.YouTubeEmbedCode,
+        Data?.YouTubeAutoplay,
+        Data?.YouTubeMute,
+        Data?.YouTubeControls,
+        Data?.YouTubeModestBranding,
+        Data?.YouTubeLoop);
+
+    private string? InstagramEmbedHtml => InstagramEmbedHelper.BuildEmbedHtml(Data?.InstagramEmbedCode);
+}

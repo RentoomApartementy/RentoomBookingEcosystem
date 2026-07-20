@@ -171,24 +171,10 @@ else
                             </div>
                 break;
                         case "YouTube" when !string.IsNullOrWhiteSpace(block.EmbedUrl):
-                            <div class="blog-embed blog-embed--youtube @ResolveYoutubeSizeClass(block.DisplaySize)">
-                                <div class="blog-embed__aspect" style="@ResolveAspectRatioStyle(block.EmbedWidth, block.EmbedHeight)">
-                                    <iframe src="@block.EmbedUrl"
-                                            title="@(string.IsNullOrWhiteSpace(block.EmbedTitle) ? "YouTube video player" : block.EmbedTitle)"
-                                            loading="lazy"
-                                            referrerpolicy="strict-origin-when-cross-origin"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                            allowfullscreen>
-                                    </iframe>
-                                </div>
-                            </div>
+                            <YouTubeEmbed EmbedUrl="@block.EmbedUrl" Title="@block.EmbedTitle" DisplaySize="@block.DisplaySize" Width="@block.EmbedWidth" Height="@block.EmbedHeight" />
                 break;
                         case "Instagram" when !string.IsNullOrWhiteSpace(block.EmbedHtml):
-                            <div class="blog-embed blog-embed--instagram">
-                                <div class="blog-instagram-embed">
-                                    @((MarkupString)block.EmbedHtml)
-                                </div>
-                            </div>
+                            <InstagramEmbed EmbedHtml="@block.EmbedHtml" />
                 break;
             default:
                 if (!string.IsNullOrWhiteSpace(block.TextContent))
