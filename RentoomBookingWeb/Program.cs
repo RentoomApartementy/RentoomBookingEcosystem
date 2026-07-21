@@ -244,7 +244,7 @@ namespace RentoomBookingWeb
             var app = builder.Build();
             
             var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames.ToArray();
-            const string defaultCulture = "pl-PL";
+            var defaultCulture = SupportedLanguagesProvider.DefaultCultureName;
             var supportedCultureSet = new HashSet<string>(supportedCultures, StringComparer.OrdinalIgnoreCase);
             var supportedCultureInfos = supportedCultures
                 .Select(CultureInfo.GetCultureInfo)

@@ -6,7 +6,7 @@ namespace RentoomBooking.SharedFrontend.Localization;
 
 public static class SupportedLanguagesProvider
 {
-    private const string FallbackCulture = "en-US";
+    private const string FallbackCulture = "pl-PL";
     private static readonly Lazy<SupportedLanguagesConfigSnapshot> Snapshot = new(LoadSnapshot);
 
     public static IReadOnlyList<string> SupportedCultureNames => Snapshot.Value.SupportedCultureNames;

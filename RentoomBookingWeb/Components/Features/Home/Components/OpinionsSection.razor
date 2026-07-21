@@ -1,37 +1,47 @@
+@using System.Globalization
 @using RentoomBookingWeb.Components.Features.Home.Components
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<HomePage> Localizer;
 
-<div class="opinions-title">
-    @Localizer["opinionText"]
-</div>
+@* These sample testimonials only exist in Polish today, so the section is hidden for
+   every other language rather than showing untranslated Polish prose on e.g. /en. *@
+@if (IsPolish)
+{
+    <div class="opinions-title">
+        @Localizer["opinionText"]
+    </div>
 
-<div class="options-slider-wrapper">
- <SimpleCarousel EnableAutoScroll="false">
-        <Opinion 
-            Stars="4" 
-            UserImage="assets/images/test-user-opinion.jpeg" 
-            Title="Apartament Srebrny Sen by Rentoom" 
-            Description="Mieszkanie było bardzo czyste, pokoje przestronne i jasne, dodatkowym atutem była dostępna na miejscu biblioteczka. Mimo że w czasie naszego pobytu panowały mrozy, w mieszkaniu we wszystkich pomieszczeniach było ciepło. Pościel i ręczniki były czyste i świeże, było ich dużo."/>
-        
-        <Opinion 
-            UserImage="assets/images/test-user-opinion.jpeg" 
-            Title="Apartament Perła Torunia by Rentoom" 
-            Description="Kamienica w której czuć klimat, mający swój urok. Świetna lokalizacja, wszędzie blisko starego miasta. Apartament przestronny, dobrze przygotowany."/>
-        
-        <Opinion 
-            UserImage="assets/images/test-user-opinion.jpeg" 
-            Title="Apartament Logan by Rentoom" 
-            Description="Jestem pod ogromnym wrażeniem apartamentu. Przede wszystkim przytulnie urządzony, idealnie czysty, komfortowy. Bardzo miłe są dodatki przygotowane dla gości, Czułam się jak gość, o którego się dba. Zdecydowanie polecam, wrócę ponownie."/>
-        
-        <Opinion
-            UserImage="assets/images/test-user-opinion.jpeg" 
-            Title="Apartament Dzikie Wino by Rentoom" 
-            Description="Czysto i schludnie. Dobrze wyposażony apartament. Lokalizacja w samym centrum rynku."/>
-        
-        <Opinion 
-            UserImage="assets/images/test-user-opinion.jpeg" 
-            Title="Apartament Katarzynki by Rentoom" 
-            Description="Piękna, odnowiona kamienica. Przyjemny wystrój, bardzo wygodne łóżko - twardy materac. Doskonale wyposażona kuchnia. Jednym słowem jest wszystko co potrzebne."/>
-    </SimpleCarousel>
-</div>
+    <div class="options-slider-wrapper">
+     <SimpleCarousel EnableAutoScroll="false">
+            <Opinion
+                Stars="4"
+                UserImage="assets/images/test-user-opinion.jpeg"
+                Title="Apartament Srebrny Sen by Rentoom"
+                Description="Mieszkanie było bardzo czyste, pokoje przestronne i jasne, dodatkowym atutem była dostępna na miejscu biblioteczka. Mimo że w czasie naszego pobytu panowały mrozy, w mieszkaniu we wszystkich pomieszczeniach było ciepło. Pościel i ręczniki były czyste i świeże, było ich dużo."/>
+
+            <Opinion
+                UserImage="assets/images/test-user-opinion.jpeg"
+                Title="Apartament Perła Torunia by Rentoom"
+                Description="Kamienica w której czuć klimat, mający swój urok. Świetna lokalizacja, wszędzie blisko starego miasta. Apartament przestronny, dobrze przygotowany."/>
+
+            <Opinion
+                UserImage="assets/images/test-user-opinion.jpeg"
+                Title="Apartament Logan by Rentoom"
+                Description="Jestem pod ogromnym wrażeniem apartamentu. Przede wszystkim przytulnie urządzony, idealnie czysty, komfortowy. Bardzo miłe są dodatki przygotowane dla gości, Czułam się jak gość, o którego się dba. Zdecydowanie polecam, wrócę ponownie."/>
+
+            <Opinion
+                UserImage="assets/images/test-user-opinion.jpeg"
+                Title="Apartament Dzikie Wino by Rentoom"
+                Description="Czysto i schludnie. Dobrze wyposażony apartament. Lokalizacja w samym centrum rynku."/>
+
+            <Opinion
+                UserImage="assets/images/test-user-opinion.jpeg"
+                Title="Apartament Katarzynki by Rentoom"
+                Description="Piękna, odnowiona kamienica. Przyjemny wystrój, bardzo wygodne łóżko - twardy materac. Doskonale wyposażona kuchnia. Jednym słowem jest wszystko co potrzebne."/>
+        </SimpleCarousel>
+    </div>
+}
+
+@code {
+    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+}
