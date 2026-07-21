@@ -149,12 +149,6 @@
   <data name="AboutCity" xml:space="preserve">
     <value>O Toruniu</value>
   </data>
-  <data name="Footer_PartnersTitle" xml:space="preserve">
-    <value>Nasi partnerzy</value>
-  </data>
-  <data name="SocialMediaLabel" xml:space="preserve">
-    <value>Media Społecznościowe</value>
-  </data>
   <data name="Footer_LogoAlt" xml:space="preserve">
     <value>Rentoom - Apartamenty</value>
   </data>
@@ -169,5 +163,14 @@
   </data>
   <data name="Footer_InstagramAriaLabel" xml:space="preserve">
     <value>Rentoom na Instagramie</value>
+  </data>
+  <data name="Footer_PartnersTitle" xml:space="preserve">
+    <value>Nasi partnerzy</value>
+  </data>
+  <data name="SocialMediaLabel" xml:space="preserve">
+    <value>Media Społecznościowe</value>
+  </data>
+  <data name="LinksText" xml:space="preserve">
+    <value>Linki</value>
   </data>
 </root>

@@ -127,7 +127,7 @@ namespace RentoomBookingWeb.Services.Localization
             }
 
             // 3. Fallback to default culture
-            return "pl-PL";
+            return SupportedLanguagesProvider.DefaultCultureName;
         }
 
         private string? ParseCultureFromCookie(string? cookieValue)

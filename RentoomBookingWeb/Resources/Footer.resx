@@ -174,4 +174,7 @@
   <data name="SocialMediaLabel" xml:space="preserve">
     <value>Social Media</value>
   </data>
+  <data name="LinksText" xml:space="preserve">
+    <value>Links</value>
+  </data>
 </root>

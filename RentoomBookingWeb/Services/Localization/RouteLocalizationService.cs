@@ -73,7 +73,7 @@ namespace RentoomBookingWeb.Services.Localization
                 string.Equals(c, cultureCode, StringComparison.OrdinalIgnoreCase) || 
                 string.Equals(c.Split('-')[0], cultureCode, StringComparison.OrdinalIgnoreCase));
             
-            return matched ?? "pl-PL";
+            return matched ?? SupportedLanguagesProvider.DefaultCultureName;
         }
 
         public LocalizedUrlBuilder CreateBuilder(string pageKey, string? culture = null)

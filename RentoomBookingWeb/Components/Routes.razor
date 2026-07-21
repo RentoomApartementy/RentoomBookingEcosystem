@@ -1,3 +1,9 @@
+@using System.Globalization
+@using RentoomBooking.SharedFrontend.Localization
+@implements IDisposable
+@inject NavigationManager NavManager
+@inject IJSRuntime JS
+
 <Router AppAssembly="typeof(Program).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
@@ -9,3 +15,66 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    private string? _lastSyncedCultureName;
+
+    protected override void OnInitialized()
+    {
+        ApplyCultureFromUrl();
+        NavManager.LocationChanged += OnLocationChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (CultureInfo.CurrentUICulture.Name != _lastSyncedCultureName)
+        {
+            _lastSyncedCultureName = CultureInfo.CurrentUICulture.Name;
+            var htmlLang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLowerInvariant();
+            await JS.InvokeVoidAsync("rentoomCultureInterop.setHtmlLang", htmlLang);
+        }
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        ApplyCultureFromUrl();
+        InvokeAsync(StateHasChanged);
+    }
+
+    // Pins CultureInfo.CurrentCulture/CurrentUICulture to whatever the URL says on every
+    // navigation, at the top of the render tree, before MainLayout/page children construct.
+    // Blazor Server's interactive circuit doesn't reliably carry the same ambient culture
+    // as the original HTTP request's prerender pass, so components reading
+    // CultureInfo.CurrentUICulture at render/init time (cookie banner, TorunLocation,
+    // BlogSection, Statute, ApartmentPage's AI description, etc.) can otherwise render in
+    // the wrong language even though the URL and <html lang> are correct.
+    private void ApplyCultureFromUrl()
+    {
+        var path = NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath;
+        var segment = path.TrimStart('/').Split('/').FirstOrDefault();
+
+        if (string.IsNullOrEmpty(segment))
+        {
+            return;
+        }
+
+        var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames;
+        var matched = supportedCultures.FirstOrDefault(c =>
+            string.Equals(c, segment, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(c.Split('-')[0], segment, StringComparison.OrdinalIgnoreCase));
+
+        if (matched is null)
+        {
+            return;
+        }
+
+        var cultureInfo = CultureInfo.GetCultureInfo(matched);
+        CultureInfo.CurrentCulture = cultureInfo;
+        CultureInfo.CurrentUICulture = cultureInfo;
+    }
+
+    public void Dispose()
+    {
+        NavManager.LocationChanged -= OnLocationChanged;
+    }
+}

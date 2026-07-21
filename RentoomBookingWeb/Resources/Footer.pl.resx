@@ -170,4 +170,7 @@
   <data name="SocialMediaLabel" xml:space="preserve">
     <value>Media Społecznościowe</value>
   </data>
+  <data name="LinksText" xml:space="preserve">
+    <value>Linki</value>
+  </data>
 </root>

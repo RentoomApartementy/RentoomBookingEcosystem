@@ -280,9 +280,18 @@ else if (!_isResolving)
             return;
         }
 
+        // These corrective redirects (canonical slug enforcement, legacy prefix-less
+        // bridge, global fallback) are functionally 301s. When they cross a culture
+        // boundary, force a real reload so the destination gets a fresh, correctly
+        // negotiated culture from the server instead of a client-side patch.
+        var destinationCultureSegment = destinationUri.AbsolutePath.TrimStart('/').Split('/').FirstOrDefault();
+        var crossesCulture = !string.IsNullOrEmpty(destinationCultureSegment) &&
+            !string.Equals(destinationCultureSegment, cultureCode, StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(destinationCultureSegment.Split('-')[0], cultureCode?.Split('-')[0], StringComparison.OrdinalIgnoreCase);
+
         try
         {
-            NavManager.NavigateTo(targetUri, replace: true);
+            NavManager.NavigateTo(targetUri, forceLoad: crossesCulture, replace: true);
         }
         catch (NavigationException)
         {
