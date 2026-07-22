@@ -22,6 +22,8 @@ using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Events.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
@@ -108,6 +110,9 @@ builder.Services.AddDbContextFactory<RappInstructionsDbContext>(options =>
 builder.Services.AddDbContextFactory<RappEventsDbContext>(options =>
     options.UseNpgsql(rentoomAppConnectionString));
 
+builder.Services.AddDbContextFactory<RappNearbyAttractionsDbContext>(options =>
+    options.UseNpgsql(rentoomAppConnectionString));
+
 
 builder.Services.AddScoped<PostgresBookingDatabase>();
 builder.Services.AddScoped<IdoSellService>();
@@ -120,6 +125,7 @@ builder.Services.AddScoped<IApartmentPhotoBlobStorage, ApartmentPhotoBlobStorage
 builder.Services.AddScoped<IApartmentMediaVariantGenerator, ApartmentMediaVariantGenerator>();
 builder.Services.AddScoped<IIdoBookingConnectService, IdoBookingConnectService>();
 builder.Services.AddScoped<IApartmentsService, ApartmentsService>();
+builder.Services.AddScoped<ApartmentNearbyAttractionsService>();
 builder.Services.AddScoped<ApartmentRepository>();
 builder.Services.AddScoped<FiltersRepository>();
 builder.Services.AddScoped<TermsRepository>();

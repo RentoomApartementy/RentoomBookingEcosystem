@@ -69,6 +69,33 @@
                     <ApartmentSocialMedia Data="_socialMedia" />
                 }
 
+                @if (_nearbyAttractions?.Items is { Count: > 0 })
+                {
+                    <section class="nearby-attractions">
+                        <h3>Atrakcje w okolicy</h3>
+                        @foreach (var group in _nearbyAttractions.Items.GroupBy(i => i.Category).OrderBy(g => g.Key))
+                        {
+                            <h4>@group.Key</h4>
+                            <ul>
+                                @foreach (var item in group.OrderBy(i => i.DistanceMeters))
+                                {
+                                    <li>
+                                        @if (!string.IsNullOrEmpty(item.GoogleMapsUri))
+                                        {
+                                            <a href="@item.GoogleMapsUri" target="_blank" rel="noopener">@item.Name</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.Name</span>
+                                        }
+                                        <span class="dist">@FormatDistance(item.DistanceMeters) · ~@item.WalkMinutes min pieszo</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </section>
+                }
+
                 @if (_aiDescription != null)
                 {
                     <ApartmentAiDescription 
