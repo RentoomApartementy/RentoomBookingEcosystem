@@ -71,9 +71,10 @@
 
                 @if (_aiDescription != null)
                 {
-                    <ApartmentAiDescription 
-                        Data="_aiDescription" 
+                    <ApartmentAiDescription
+                        Data="_aiDescription"
                         Amenities="_amenities"
+                        NearbyAttractions="_nearbyAttractions"
                         IsExpanded="_isExpanded"
                         OnToggleExpand="ToggleExpand"
                         Localizer="Localizer" />
@@ -83,6 +84,7 @@
                     <ApartmentDescription
                         Description="_objectDescription"
                         Amenities="_amenities"
+                        NearbyAttractions="_nearbyAttractions"
                         IsExpanded="_isExpanded"
                         OnToggleExpand="ToggleExpand"
                         Localizer="Localizer" />

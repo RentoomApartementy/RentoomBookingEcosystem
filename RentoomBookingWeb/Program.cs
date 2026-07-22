@@ -16,6 +16,8 @@ using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
@@ -122,6 +124,9 @@ namespace RentoomBookingWeb
             builder.Services.AddDbContextFactory<RappSocialMediaDbContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
 
+            builder.Services.AddDbContextFactory<RappNearbyAttractionsDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
             builder.Services.AddScoped<IApartmentAiDescriptionService, ApartmentAiDescriptionService>();
             builder.Services.AddScoped<IBlogContentReader, BlogContentReader>();
 
@@ -135,6 +140,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<FiltersRepository>();
             builder.Services.AddScoped<RappQrMaintService>();
             builder.Services.AddScoped<ApartmentSocialMediaService>();
+            builder.Services.AddScoped<ApartmentNearbyAttractionsService>();
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
             builder.Services.AddScoped<IApartmentMediaCatalogService, ApartmentMediaCatalogService>();
             builder.Services.AddScoped<IApartmentPhotoBlobStorage, ApartmentPhotoBlobStorage>();

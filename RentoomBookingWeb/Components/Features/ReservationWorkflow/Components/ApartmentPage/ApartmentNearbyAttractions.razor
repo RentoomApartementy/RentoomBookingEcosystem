@@ -1,0 +1,150 @@
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Models
+
+@if (Groups.Count > 0)
+{
+    <section class="nearby">
+        <header class="nearby__header">
+            @if (!string.IsNullOrWhiteSpace(Title))
+            {
+                <h3 class="nearby__title">@Title</h3>
+            }
+            @if (!string.IsNullOrWhiteSpace(Subtitle))
+            {
+                <p class="nearby__subtitle">@Subtitle</p>
+            }
+        </header>
+
+        @* Tabs — visible only on small screens (CSS controlled) *@
+        <div class="nearby__tabs" role="tablist">
+            @for (var i = 0; i < Groups.Count; i++)
+            {
+                var index = i;
+                var group = Groups[index];
+                <button type="button"
+                        class="nearby__tab @(index == _active ? "is-active" : "")"
+                        role="tab"
+                        aria-selected="@(index == _active ? "true" : "false")"
+                        @onclick="() => _active = index">
+                    <span class="nearby__tab-icon">@GetCategoryIcon(group.Key)</span>
+                    <span class="nearby__tab-label">@group.Key</span>
+                </button>
+            }
+        </div>
+
+        @* Panels — columns on desktop (max 3 per row), single active panel on mobile *@
+        <div class="nearby__panels">
+            @for (var i = 0; i < Groups.Count; i++)
+            {
+                var index = i;
+                var group = Groups[index];
+                <div class="nearby__panel @(index == _active ? "is-active" : "")" role="tabpanel">
+                    <h4 class="nearby__category">
+                        <span class="nearby__category-icon">@GetCategoryIcon(group.Key)</span>
+                        <span>@group.Key</span>
+                    </h4>
+                    <ul class="nearby__list">
+                        @foreach (var item in group.OrderBy(x => x.DistanceMeters))
+                        {
+                            <li class="nearby__item">
+                                @if (!string.IsNullOrEmpty(item.GoogleMapsUri))
+                                {
+                                    <a class="nearby__name" href="@item.GoogleMapsUri" target="_blank" rel="noopener">@item.Name</a>
+                                }
+                                else
+                                {
+                                    <span class="nearby__name">@item.Name</span>
+                                }
+                                <span class="nearby__meta">@FormatMeta(item)</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </section>
+}
+
+@code {
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string? Subtitle { get; set; }
+    [Parameter] public NearbyAttractionsResultDTO? Data { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+
+    private int _active = 0;
+
+    private List<IGrouping<string, NearbyAttractionDto>> Groups =>
+        Data?.Items is { Count: > 0 }
+            ? Data.Items
+                .Where(i => !string.IsNullOrWhiteSpace(i.Category))
+                .GroupBy(i => i.Category)
+                .OrderBy(g => g.Key)
+                .ToList()
+            : new();
+
+    private string FormatMeta(NearbyAttractionDto item)
+    {
+        var distance = FormatDistance(item.DistanceMeters);
+
+        // Walk time only makes sense for walkable distances (airports/stations get distance only).
+        if (item.DistanceMeters <= 2000 && item.WalkMinutes > 0)
+        {
+            var walk = string.Format(Localizer["NearbyAttractions_WalkTime"].Value, item.WalkMinutes);
+            return $"{walk} · {distance}";
+        }
+
+        return distance;
+    }
+
+    private string FormatDistance(int meters)
+    {
+        if (meters < 75) return string.Format(Localizer["NearbyAttractions_DistanceMeters"].Value, 50); //około 50 m
+        if (meters < 300) return string.Format(Localizer["NearbyAttractions_DistanceMeters"].Value, 100);
+        if (meters < 750) return string.Format(Localizer["NearbyAttractions_DistanceMeters"].Value, 500);
+        if (meters >=1000 ) return FormatDistance_km(meters);
+        
+        return FormatDistance_km(meters);
+    }
+
+
+    private string FormatDistance_km(int meters)
+    {
+      
+        var km = (meters / 1000.0).ToString("0.#", CultureInfo.CurrentCulture);
+        return string.Format(Localizer["NearbyAttractions_DistanceKm"].Value, km);
+    }
+
+    private static CategoryIconKind ResolveIcon(string category)
+    {
+        var c = category.ToLowerInvariant();
+
+        if (c.Contains("restaur") || c.Contains("kawiar") || c.Contains("bar") || c.Contains("jedzen") || c.Contains("food") || c.Contains("cafe"))
+            return CategoryIconKind.Food;
+        if (c.Contains("lotnisk") || c.Contains("airport"))
+            return CategoryIconKind.Airport;
+        if (c.Contains("przystan") || c.Contains("dworz") || c.Contains("pociąg") || c.Contains("pociag")
+            || c.Contains("transport") || c.Contains("stac") || c.Contains("station") || c.Contains("bus") || c.Contains("train"))
+            return CategoryIconKind.Transport;
+        if (c.Contains("sklep") || c.Contains("market") || c.Contains("shop") || c.Contains("store"))
+            return CategoryIconKind.Shop;
+
+        return CategoryIconKind.Attraction;
+    }
+
+    private enum CategoryIconKind { Attraction, Food, Transport, Airport, Shop }
+
+    private static MarkupString GetCategoryIcon(string category) => ResolveIcon(category) switch
+    {
+        CategoryIconKind.Food => new MarkupString(
+            "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 3v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V3\"/><path d=\"M6 12v9\"/><path d=\"M18 3c-1.7 0-3 1.8-3 4s1.3 4 3 4v10\"/></svg>"),
+        CategoryIconKind.Transport => new MarkupString(
+            "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"5\" y=\"3\" width=\"14\" height=\"14\" rx=\"2\"/><path d=\"M5 11h14\"/><path d=\"M8 17l-2 4\"/><path d=\"M16 17l2 4\"/><circle cx=\"8.5\" cy=\"14\" r=\"0.5\"/><circle cx=\"15.5\" cy=\"14\" r=\"0.5\"/></svg>"),
+        CategoryIconKind.Airport => new MarkupString(
+            "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-.9 1.7l6.1 3.9-2 2H4l-1 1 3 1.5L10 21l1-1v-4l2-2 3.9 6.1a1 1 0 0 0 1.7-.9z\"/></svg>"),
+        CategoryIconKind.Shop => new MarkupString(
+            "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L22 7H6\"/><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/></svg>"),
+        _ => new MarkupString(
+            "<svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z\"/><circle cx=\"12\" cy=\"10\" r=\"2.5\"/></svg>")
+    };
+}
