@@ -15,6 +15,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions
         public double? Rating { get; set; }
         public string? GoogleMapsUri { get; set; }
         public string? ExternalPlaceId { get; set; }
+        public bool RentoomWebsiteEnabled { get; set; } = true; // czy pokazać na stronie
     }
 
     public class NearbyAttractionsResultDTO
@@ -55,5 +56,6 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions
         public double? Rating { get; set; }
         public string? GoogleMapsUri { get; set; }
         public string? ExternalPlaceId { get; set; }
+        public bool RentoomWebsiteEnabled { get; set; } = true;
     }
 }

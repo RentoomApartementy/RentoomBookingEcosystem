@@ -49,6 +49,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions
                 LastRefreshedUtc = set.LastRefreshedUtc,
                 Status = set.LastRefreshStatus,
                 Items = set.Attractions
+                    .Where(a => a.RentoomWebsiteEnabled)   // pokazujemy tylko atrakcje włączone dla strony
                     .OrderBy(a => a.DistanceMeters)
                     .Select(a => new NearbyAttractionDto
                     {
@@ -59,7 +60,8 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions
                         Address = a.Address,
                         Rating = a.Rating,
                         GoogleMapsUri = a.GoogleMapsUri,
-                        ExternalPlaceId = a.ExternalPlaceId
+                        ExternalPlaceId = a.ExternalPlaceId,
+                        RentoomWebsiteEnabled = a.RentoomWebsiteEnabled
                     })
                     .ToList()
             };

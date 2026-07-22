@@ -46,6 +46,7 @@ zrobiono to dla social mediów, i zrób tak samo.
 | `Rating` | `double` (nullable) | ocena Google (1–5). |
 | `GoogleMapsUri` | `text` (nullable) | link do Map Google. |
 | `ExternalPlaceId` | `text` (nullable) | place id Google (dedup). |
+| `RentoomWebsiteEnabled` | `bool` (NOT NULL, default `true`) | **czy atrakcja ma być pokazana na stronie Rentoom.** Ustawiana ręcznie w panelu Rentoom (checkbox per wpis / per kategoria). **Konsument powinien serwować tylko wiersze z `true`.** |
 
 > **Uwaga o kolumnach:** nazwy są **PascalCase** (encje w Rentoom nie używają `[Column]`), więc encje EF
 > po tej stronie też mają PascalCase i **nie** potrzebują `[Column]`. Wymagany jest tylko
@@ -102,6 +103,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions
         public double? Rating { get; set; }
         public string? GoogleMapsUri { get; set; }
         public string? ExternalPlaceId { get; set; }
+        public bool RentoomWebsiteEnabled { get; set; } = true; // czy pokazać na stronie
     }
 
     public class NearbyAttractionsResultDTO
@@ -142,6 +144,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions
         public double? Rating { get; set; }
         public string? GoogleMapsUri { get; set; }
         public string? ExternalPlaceId { get; set; }
+        public bool RentoomWebsiteEnabled { get; set; } = true;
     }
 }
 ```
@@ -237,6 +240,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions
                 LastRefreshedUtc = set.LastRefreshedUtc,
                 Status = set.LastRefreshStatus,
                 Items = set.Attractions
+                    .Where(a => a.RentoomWebsiteEnabled)   // pokazujemy tylko atrakcje włączone dla strony
                     .OrderBy(a => a.DistanceMeters)
                     .Select(a => new NearbyAttractionDto
                     {
@@ -247,7 +251,8 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions
                         Address = a.Address,
                         Rating = a.Rating,
                         GoogleMapsUri = a.GoogleMapsUri,
-                        ExternalPlaceId = a.ExternalPlaceId
+                        ExternalPlaceId = a.ExternalPlaceId,
+                        RentoomWebsiteEnabled = a.RentoomWebsiteEnabled
                     })
                     .ToList()
             };
@@ -442,6 +447,10 @@ Render w StayWell — analogicznie jak w §6.3 (te same `Items`/`Category`/`Dist
   Api/StayWell operują `objectId` (IdoSell) → używają `GetNearbyAttractionsByObjectIdAsync` (najświeższy set).
 - **JSON camelCase po obu stronach.** Api serializuje Newtonsoftem z globalnym `CamelCasePropertyNamesContractResolver`;
   StayWell deserializuje System.Text.Json z `JsonSerializerDefaults.Web`. Dlatego DTO **nie** potrzebują atrybutów JSON.
+- **Widoczność (`RentoomWebsiteEnabled`).** Redaktor w panelu Rentoom włącza/wyłącza pojedyncze atrakcje
+  (checkbox per wpis / per kategoria). **Konsument serwuje tylko wiersze z `RentoomWebsiteEnabled == true`** —
+  filtr jest już w `MapToDto` (`.Where(a => a.RentoomWebsiteEnabled)`). Flaga jest przenoszona przez odświeżenia
+  (dopasowanie po `ExternalPlaceId`), więc raz wyłączona atrakcja pozostaje wyłączona.
 - **Read‑only.** Nie zapisujemy ani nie odświeżamy tych danych tutaj — robi to aplikacja Rentoom.
   Kolumn/tabel nie migrujemy w tym solutionie (migracje należą do Rentoom).
 - **Statusy.** `failed`/`no-location`/`no-api-key` oznaczają brak świeżych danych; UI powinno wtedy albo nie
@@ -469,7 +478,8 @@ Render w StayWell — analogicznie jak w §6.3 (te same `Items`/`Category`/`Dist
       "address": "ul. Przykładowa 1",
       "rating": 4.6,
       "googleMapsUri": "https://maps.google.com/?cid=...",
-      "externalPlaceId": "ChIJ..."
+      "externalPlaceId": "ChIJ...",
+      "rentoomWebsiteEnabled": true
     },
     {
       "name": "Przystanek Rynek",
@@ -479,11 +489,13 @@ Render w StayWell — analogicznie jak w §6.3 (te same `Items`/`Category`/`Dist
       "address": null,
       "rating": null,
       "googleMapsUri": "https://maps.google.com/?cid=...",
-      "externalPlaceId": "ChIJ..."
+      "externalPlaceId": "ChIJ...",
+      "rentoomWebsiteEnabled": true
     }
   ]
 }
 ```
+> `items` zawiera już wyłącznie atrakcje z `rentoomWebsiteEnabled == true` (filtr w `MapToDto`).
 
 ---
 
@@ -505,13 +517,14 @@ Render w StayWell — analogicznie jak w §6.3 (te same `Items`/`Category`/`Dist
 >    `NearbyAttractionDto`, `NearbyAttractionsResultDTO` oraz encje `ApartmentNearbyAttractionsSet`
 >    (`[Table("ApartmentNearbyAttractionsSets", Schema="rentoom")]`, `[Key] ApartmentItemId`, nawigacja
 >    `Attractions`) i `ApartmentNearbyAttraction` (`[Table("ApartmentNearbyAttractions", Schema="rentoom")]`).
->    Kolumny PascalCase, bez `[Column]`.
+>    Kolumny PascalCase, bez `[Column]`. Encja i DTO atrakcji zawierają `bool RentoomWebsiteEnabled` (default `true`).
 > 2. `...\NearbyAttractions\Database\RappNearbyAttractionsDbContext.cs` — dwa `DbSet` + `OnModelCreating`
 >    z relacją 1‑do‑wielu set→atrakcje po `ApartmentItemId`.
 > 3. `...\NearbyAttractions\ApartmentNearbyAttractionsService.cs` — konkretny serwis (bez interfejsu),
 >    `IDbContextFactory<RappNearbyAttractionsDbContext>`, `AsNoTracking().Include(s => s.Attractions)`,
 >    metody `GetNearbyAttractionsAsync(int apartmentItemId)` i `GetNearbyAttractionsByObjectIdAsync(int objectId)`
->    (najświeższy set po `LastRefreshedUtc`), prywatne `MapToDto`.
+>    (najświeższy set po `LastRefreshedUtc`), prywatne `MapToDto` **filtrujące `.Where(a => a.RentoomWebsiteEnabled)`**
+>    (serwujemy tylko atrakcje włączone dla strony).
 > 4. Rejestracja `AddDbContextFactory<RappNearbyAttractionsDbContext>(o => o.UseNpgsql(rentoomAppConnectionString))`
 >    + `AddScoped<ApartmentNearbyAttractionsService>()` w OBU `Program.cs` (Web i Api), obok SocialMedia.
 > 5. Web: w `ApartmentPage.razor.cs` wstrzyknij serwis, pobierz po `_apartment.Items[0].Id.Value`, wyrenderuj
@@ -525,5 +538,6 @@ Render w StayWell — analogicznie jak w §6.3 (te same `Items`/`Category`/`Dist
 >    (`GetFromJsonAsync<NearbyAttractionsResultDTO>($"apartments/{objectId}/nearby-attractions", _json)`).
 >
 > **Kryteria akceptacji:** solution się kompiluje; endpoint zwraca JSON w kształcie z sekcji „Przykładowy
-> payload”; strona apartamentu pokazuje listę atrakcji, gdy status = `ok` i `Items` niepuste; brak zapisów do
-> bazy (tylko odczyt); żadnych migracji w tym repo.
+> payload”; **`Items` zawiera wyłącznie atrakcje z `RentoomWebsiteEnabled == true`**; strona apartamentu
+> pokazuje listę atrakcji, gdy status = `ok` i `Items` niepuste; brak zapisów do bazy (tylko odczyt);
+> żadnych migracji w tym repo.
