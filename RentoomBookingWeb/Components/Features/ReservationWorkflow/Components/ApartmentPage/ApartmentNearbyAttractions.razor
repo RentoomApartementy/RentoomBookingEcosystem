@@ -1,6 +1,8 @@
 @using System.Globalization
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Models
+@implements IAsyncDisposable
+@inject IJSRuntime JS
 
 @if (Groups.Count > 0)
 {
@@ -17,7 +19,7 @@
         </header>
 
         @* Tabs — visible only on small screens (CSS controlled) *@
-        <div class="nearby__tabs" role="tablist">
+        <div class="nearby__tabs" role="tablist" @ref="_tabsRef">
             @for (var i = 0; i < Groups.Count; i++)
             {
                 var index = i;
@@ -33,8 +35,9 @@
             }
         </div>
 
-        @* Panels — columns on desktop (max 3 per row), single active panel on mobile *@
-        <div class="nearby__panels">
+        @* Panels — columns on desktop (max 3 per row), single active panel on mobile.
+           Horizontal swipe on the list switches category (mobile carousel behaviour). *@
+        <div class="nearby__panels" @ontouchstart="OnTouchStart" @ontouchend="OnTouchEnd">
             @for (var i = 0; i < Groups.Count; i++)
             {
                 var index = i;
@@ -73,6 +76,97 @@
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
 
     private int _active = 0;
+
+    // --- Mobile swipe (change category by swiping the attractions list) ---
+    private ElementReference _tabsRef;
+    private IJSObjectReference? _tabsModule;
+    private double _touchStartX;
+    private double _touchStartY;
+    private bool _scrollTabPending;
+
+    private const double SwipeThresholdPx = 50;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _tabsModule = await JS.InvokeAsync<IJSObjectReference>(
+                "import", "./js/nearbyAttractionsTabs.js");
+        }
+
+        if (_scrollTabPending)
+        {
+            _scrollTabPending = false;
+            await ScrollActiveTabIntoViewAsync();
+        }
+    }
+
+    private void OnTouchStart(TouchEventArgs e)
+    {
+        if (e.Touches.Length > 0)
+        {
+            _touchStartX = e.Touches[0].ClientX;
+            _touchStartY = e.Touches[0].ClientY;
+        }
+    }
+
+    private void OnTouchEnd(TouchEventArgs e)
+    {
+        if (e.ChangedTouches.Length == 0)
+        {
+            return;
+        }
+
+        var dx = e.ChangedTouches[0].ClientX - _touchStartX;
+        var dy = e.ChangedTouches[0].ClientY - _touchStartY;
+
+        // Ignore taps and vertical scrolls — only horizontal swipes switch category.
+        if (Math.Abs(dx) < SwipeThresholdPx || Math.Abs(dx) <= Math.Abs(dy))
+        {
+            return;
+        }
+
+        var newIndex = Math.Clamp(dx < 0 ? _active + 1 : _active - 1, 0, Groups.Count - 1);
+        if (newIndex == _active)
+        {
+            return;
+        }
+
+        _active = newIndex;               // swipe left → next, swipe right → previous
+        _scrollTabPending = true;         // scroll the tab strip after the DOM updates
+    }
+
+    private async Task ScrollActiveTabIntoViewAsync()
+    {
+        if (_tabsModule is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await _tabsModule.InvokeVoidAsync("scrollActiveTabIntoView", _tabsRef);
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit gone — nothing to scroll.
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_tabsModule is not null)
+        {
+            try
+            {
+                await _tabsModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // Circuit already torn down.
+            }
+        }
+    }
 
     private List<IGrouping<string, NearbyAttractionDto>> Groups =>
         Data?.Items is { Count: > 0 }
