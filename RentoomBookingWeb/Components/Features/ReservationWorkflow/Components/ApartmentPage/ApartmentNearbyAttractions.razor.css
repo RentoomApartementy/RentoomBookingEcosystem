@@ -27,6 +27,7 @@
     gap: 0.25rem;
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 1rem;
+    scroll-behavior: smooth;
 }
 
 .nearby__tab {
@@ -133,6 +134,8 @@ a.nearby__name:hover {
 
     .nearby__panels {
         display: block;
+        /* Let vertical page scroll through, but keep horizontal swipes for us. */
+        touch-action: pan-y;
     }
 
     .nearby__panel {
