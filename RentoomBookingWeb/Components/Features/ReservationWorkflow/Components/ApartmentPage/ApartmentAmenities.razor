@@ -1,0 +1,25 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.RentoomBooking
+
+@if (Amenities != null && Amenities.Any())
+{
+    <div class="amenities-section">
+        <h3 class="section-title">@Localizer["Amenities_Title"]</h3>
+        <ul class="amenities-grid">
+            @foreach (var amenity in Amenities)
+            {
+                <li class="amenity-item">
+                    <div class="amenity-check">
+                        <span class="material-symbols-outlined">@amenity.IconName</span>
+                    </div>
+                    <span class="amenity-name">@amenity.Name</span>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    [Parameter] public List<ObjectAmenity>? Amenities { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+}

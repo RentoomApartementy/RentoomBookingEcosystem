@@ -1,0 +1,150 @@
+.nearby {
+    width: 100%;
+    margin: 1.5rem 0;
+}
+
+.nearby__header {
+    margin-bottom: 1.25rem;
+}
+
+.nearby__title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.nearby__subtitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1f5a41;
+    margin: 0.25rem 0 0;
+}
+
+/* ---------- Tabs (mobile only) ---------- */
+.nearby__tabs {
+    display: none;
+    gap: 0.25rem;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 1rem;
+}
+
+.nearby__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.6rem 0.5rem;
+    margin-bottom: -1px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.nearby__tab.is-active {
+    color: #1f5a41;
+    border-bottom-color: #1f5a41;
+}
+
+.nearby__tab-icon {
+    display: inline-flex;
+    color: currentColor;
+}
+
+/* ---------- Panels (desktop: max 3 columns per row) ---------- */
+.nearby__panels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+}
+
+.nearby__panel {
+    min-width: 0;
+}
+
+.nearby__category {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 0.75rem;
+}
+
+.nearby__category-icon {
+    display: inline-flex;
+    color: #1f5a41;
+    flex-shrink: 0;
+}
+
+.nearby__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nearby__item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+}
+
+.nearby__name {
+    font-size: 0.9rem;
+    color: #374151;
+    overflow-wrap: anywhere;
+}
+
+a.nearby__name {
+    color: #1f5a41;
+    text-decoration: none;
+}
+
+a.nearby__name:hover {
+    text-decoration: underline;
+}
+
+.nearby__meta {
+    font-size: 0.85rem;
+    color: #6b7280;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ---------- Responsive: switch to tabs ---------- */
+@media (max-width: 991px) {
+    .nearby__panels {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .nearby__tabs {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .nearby__panels {
+        display: block;
+    }
+
+    .nearby__panel {
+        display: none;
+    }
+
+    .nearby__panel.is-active {
+        display: block;
+    }
+
+    /* Tab bar already labels the active category. */
+    .nearby__category {
+        display: none;
+    }
+}

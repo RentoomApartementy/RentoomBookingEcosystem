@@ -1072,17 +1072,6 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             }
         }
 
-        private static string FormatDistance(int meters) => meters switch
-        {
-            < 75    => "około 50m",
-            < 300   => "około 100m",
-            < 750   => "około 500m",
-            < 1500  => "około 1km",
-            <= 2500 => "około 2km",
-            <= 5000 => "więcej niż 2km",
-            _       => "więcej niż 5km"
-        };
-
         protected ObjectDescription? _objectDescription = null;
         protected async Task GetObjectDescription(int objectId, string? language)
         {

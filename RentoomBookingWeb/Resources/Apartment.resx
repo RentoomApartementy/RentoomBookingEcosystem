@@ -339,4 +339,19 @@
   <data name="BonusClearButtonTitle" xml:space="preserve">
     <value>Remove</value>
   </data>
+  <data name="NearbyAttractions_Title" xml:space="preserve">
+    <value>Property surroundings</value>
+  </data>
+  <data name="NearbyAttractions_Subtitle" xml:space="preserve">
+    <value>Excellent location</value>
+  </data>
+  <data name="NearbyAttractions_WalkTime" xml:space="preserve">
+    <value>~{0} min</value>
+  </data>
+  <data name="NearbyAttractions_DistanceMeters" xml:space="preserve">
+    <value>{0} m</value>
+  </data>
+  <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
+    <value>{0} km</value>
+  </data>
 </root>
