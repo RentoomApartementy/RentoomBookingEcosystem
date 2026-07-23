@@ -31,6 +31,7 @@
                                    DisableForGoToReservation="true"
                                    SuggestionState="@(ShowSuggestions ? ViewModel.GetSuggestionStatusByObjectId(apartment.Id) : SuggestionStatus.NotStarted)"
                                    SuggestionDates="@(ShowSuggestions ? ViewModel.GetSuggestionsByObjectId(apartment.Id) : null)"
+                                   ShowSuggestionPrice="true"
                                    Width="min(370px, 85vw)" />
                     </div>
                 </CardTemplate>

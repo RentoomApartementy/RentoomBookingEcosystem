@@ -429,16 +429,18 @@ namespace RentoomBooking.SharedClasses.Services
                 };
 
                 var response = await _offerService.GetPricingOffersAsync(pricingRequest, cancellationToken);
-                var availableApartmentIds = response?.Result?.PricingOffers?
+                var offersByApartmentId = response?.Result?.PricingOffers?
                     .Where(o => o.Offers != null && o.Offers.Any())
-                    .Select(o => o.ObjectId)
-                    .ToHashSet() ?? new HashSet<int>();
+                    .GroupBy(o => o.ObjectId)
+                    .ToDictionary(group => group.Key, group => group.First())
+                    ?? new Dictionary<int, PricingOffer>();
 
                 foreach (var item in rangeGroup)
                 {
-                    if (availableApartmentIds.Contains(item.ApartmentId))
+                    if (offersByApartmentId.TryGetValue(item.ApartmentId, out var offer))
                     {
                         validatedTermKeys.Add(new TermKey(item.ApartmentId, item.Term.StartDate, item.Term.EndDate));
+                        item.Term.MinimalPrice = offer.MinimalPrice;
                     }
                 }
             }

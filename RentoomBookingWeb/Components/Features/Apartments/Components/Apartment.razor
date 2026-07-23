@@ -228,7 +228,11 @@
                     else
                     {
                         <div class="price-wrapper">
-                            @if (IsSuggestionLoading() && !(SuggestionDates?.Any() == true))
+                            @if (ShowSuggestionPrice && GetClosestSuggestionPrice() is decimal suggestionPrice)
+                            {
+                                <span class="price">@suggestionPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
+                            }
+                            else if (IsSuggestionLoading() && !(SuggestionDates?.Any() == true))
                             {
                                 <span class="availability-status loading">
                                     <span class="mini-spinner"></span>
@@ -247,8 +251,7 @@
             @if (Item == null || (ShowPrice && Offer == null))
             {
                 <Button Href="@_detailsUrl"
-                        OnClick='(() => TrackApartmentClickAsync("button"))'
-                        Disabled="@(Item == null || (ShowPrice && Offer == null && PublicOffer == null && string.IsNullOrWhiteSpace(NoOfferPriceHint)))">
+                        OnClick='(() => TrackApartmentClickAsync("button"))'>
                     @Localizer["Details"]
                 </Button>
             }
@@ -319,6 +322,7 @@
     [Parameter] public SuggestionStatus SuggestionState { get; set; } = SuggestionStatus.NotStarted;
     
     [Parameter] public IReadOnlyList<AvailableTerm>? SuggestionDates { get; set; } = null;
+    [Parameter] public bool ShowSuggestionPrice { get; set; } = false;
 
     [Parameter] public string? Width { get; set; } = null;
     [Parameter] public string ListingSource { get; set; } = "apartments-list";
@@ -544,6 +548,11 @@
     private bool IsSuggestionLoading()
     {
         return SuggestionState == SuggestionStatus.Loading;
+    }
+
+    private decimal? GetClosestSuggestionPrice()
+    {
+        return SuggestionDates?.FirstOrDefault(term => term.MinimalPrice.HasValue)?.MinimalPrice;
     }
 
     private string GetImageLoading(int index)
