@@ -195,4 +195,22 @@
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
     <value>Nawigacja okruszkowa</value>
   </data>
+  <data name="ShareArticle" xml:space="preserve">
+    <value>Udostępnij artykuł</value>
+  </data>
+  <data name="ShareOnFacebook" xml:space="preserve">
+    <value>Udostępnij na Facebooku</value>
+  </data>
+  <data name="ShareOnLinkedIn" xml:space="preserve">
+    <value>Udostępnij na LinkedIn</value>
+  </data>
+  <data name="ShareOnWhatsApp" xml:space="preserve">
+    <value>Udostępnij na WhatsApp</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Kopiuj link</value>
+  </data>
+  <data name="LinkCopied" xml:space="preserve">
+    <value>Link skopiowany</value>
+  </data>
 </root>

@@ -1,0 +1,82 @@
+@using Microsoft.Extensions.Localization
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@inject IStringLocalizer<RentoomBookingWeb.Blog> Localizer
+
+<div class="blog-share-bar" aria-label="@Localizer["ShareArticle"]">
+    <span class="blog-share-bar__label">@Localizer["ShareArticle"]</span>
+
+    <a class="blog-share-btn blog-share-btn--facebook"
+       href="@FacebookShareUrl"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="@Localizer["ShareOnFacebook"]">
+        <svg class="blog-share-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H7.5v-3H10V9.5C10 7.01 11.49 5.6 13.73 5.6c1.07 0 2.19.19 2.19.19v2.41h-1.24c-1.23 0-1.62.77-1.62 1.56V12h2.72l-.43 3h-2.29v6.8c4.56-.93 8-4.96 8-9.8z" /></svg>
+    </a>
+
+    <a class="blog-share-btn blog-share-btn--linkedin"
+       href="@LinkedInShareUrl"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="@Localizer["ShareOnLinkedIn"]">
+        <svg class="blog-share-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" /></svg>
+    </a>
+
+    <a class="blog-share-btn blog-share-btn--whatsapp"
+       href="@WhatsAppShareUrl"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="@Localizer["ShareOnWhatsApp"]">
+        <svg class="blog-share-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c4.55 0 8.24 3.69 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.17 8.17 0 0 1-5.83 2.42c-1.47 0-2.91-.39-4.18-1.14l-.3-.18-3.11.82.83-3.03-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.55 3.69-8.24 8.23-8.24m-3.53 4.51c-.13 0-.28.05-.41.19-.13.14-.52.51-.52 1.25 0 .74.54 1.46.61 1.56.08.1 1.07 1.63 2.58 2.29.36.16.64.25.86.32.36.11.69.1.95.06.29-.05.89-.36 1.02-.72.13-.36.13-.67.09-.72-.04-.05-.17-.09-.37-.19s-1.18-.58-1.36-.65c-.18-.07-.31-.1-.44.1-.13.19-.51.65-.63.79-.12.14-.24.16-.44.06s-.85-.31-1.62-.99c-.6-.54-1.01-1.2-1.13-1.4-.12-.2-.01-.31.09-.4.09-.09.2-.24.3-.36.1-.12.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.09-.44-1.07-.61-1.47-.16-.39-.33-.33-.45-.34z" /></svg>
+    </a>
+
+    <button type="button"
+            class="blog-share-btn blog-share-btn--copy @(IsCopied ? "blog-share-btn--copied" : string.Empty)"
+            @onclick="CopyUrlToClipboard"
+            aria-label="@(IsCopied ? Localizer["LinkCopied"] : Localizer["CopyLink"])">
+        @if (IsCopied)
+        {
+            <span aria-hidden="true">✓</span>
+        }
+        else
+        {
+            <svg class="blog-share-btn__icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.59 13.41a1.996 1.996 0 0 0 2.82 0l3.59-3.59a2 2 0 0 0-2.82-2.82l-1.17 1.17a1 1 0 1 1-1.41-1.41l1.17-1.17a4 4 0 1 1 5.66 5.66l-3.59 3.59a4 4 0 0 1-5.66 0 1 1 0 0 1 1.41-1.41zm2.82-2.82a1 1 0 0 1-1.41 0 1.996 1.996 0 0 0-2.82 0l-3.59 3.59A2 2 0 0 0 8.41 17l1.17-1.17a1 1 0 1 1 1.41 1.41l-1.17 1.17a4 4 0 1 1-5.66-5.66l3.59-3.59a4 4 0 0 1 5.66 0 1 1 0 0 1 0 1.41z" /></svg>
+        }
+    </button>
+    <span class="visually-hidden" aria-live="polite">@(IsCopied ? Localizer["LinkCopied"] : string.Empty)</span>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string PostTitle { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string PostSlug { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string ArticleUrl { get; set; } = string.Empty;
+
+    private bool IsCopied { get; set; }
+    private string SharedUrl => BuildUtmUrl(Navigation.ToAbsoluteUri(ArticleUrl).AbsoluteUri);
+    private string FacebookShareUrl => $"https://www.facebook.com/sharer/sharer.php?u={Uri.EscapeDataString(SharedUrl)}";
+    private string LinkedInShareUrl => $"https://www.linkedin.com/sharing/share-offsite/?url={Uri.EscapeDataString(SharedUrl)}";
+    private string WhatsAppShareUrl => $"https://api.whatsapp.com/send?text={Uri.EscapeDataString($"{PostTitle} {SharedUrl}")}";
+
+    private string BuildUtmUrl(string url)
+    {
+        var separator = url.Contains('?') ? "&" : "?";
+        var content = string.IsNullOrWhiteSpace(PostSlug) ? "share_button" : Uri.EscapeDataString(PostSlug);
+        return $"{url}{separator}utm_source=blog_article&utm_medium=social_share&utm_campaign=blog_distribution&utm_content={content}";
+    }
+
+    private async Task CopyUrlToClipboard()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", SharedUrl);
+            IsCopied = true;
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(TimeSpan.FromSeconds(2));
+            IsCopied = false;
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (JSException)
+        {
+        }
+    }
+}

@@ -98,4 +98,22 @@
     <data name="BreadcrumbNavigationLabel" xml:space="preserve">
         <value>Breadcrumb navigation</value>
     </data>
+    <data name="ShareArticle" xml:space="preserve">
+        <value>Share article</value>
+    </data>
+    <data name="ShareOnFacebook" xml:space="preserve">
+        <value>Share on Facebook</value>
+    </data>
+    <data name="ShareOnLinkedIn" xml:space="preserve">
+        <value>Share on LinkedIn</value>
+    </data>
+    <data name="ShareOnWhatsApp" xml:space="preserve">
+        <value>Share on WhatsApp</value>
+    </data>
+    <data name="CopyLink" xml:space="preserve">
+        <value>Copy link</value>
+    </data>
+    <data name="LinkCopied" xml:space="preserve">
+        <value>Link copied</value>
+    </data>
 </root>

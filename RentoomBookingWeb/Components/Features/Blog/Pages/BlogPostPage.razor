@@ -105,6 +105,9 @@ else
                 <time class="blog-post__published" datetime="@Post.PublishedAtUtc.ToString("O")">@BlogLocalizer["PublishedLabel"]: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</time>
             </div>
             <h1 class="blog-post__title">@Post.Title</h1>
+            <BlogShareBar PostTitle="@Post.Title"
+                           PostSlug="@Post.Slug"
+                           ArticleUrl="@BuildPostUrl(Post.PublicId, Post.Slug)" />
 
         @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
         {
