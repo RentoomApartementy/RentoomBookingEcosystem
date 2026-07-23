@@ -24,7 +24,7 @@
          @ref="_elementRef"
          style="@($"{ (DisableForGoToReservation ? "cursor: default; " : "") }{ (!string.IsNullOrEmpty(Width) ? $"width: {Width}; min-width: {Width}; max-width: {Width};" : "") }")"
          itemscope itemtype="https://schema.org/Apartment">
-    <header>
+    <header @onclick:stopPropagation="true">
         @if (_currentObjectMedium == null)
         {
             <div class="loading-image">
@@ -107,7 +107,7 @@
                     <h2 itemprop="name">
                         @if (!string.IsNullOrEmpty(_detailsUrl))
                         {
-                            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClickAsync("title"))' style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
+                            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClickAsync("title"))' @onclick:stopPropagation="true" style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
                         }
                         else
                         {
@@ -249,20 +249,22 @@
                 </div>
             }
             
-            @if (Item == null || (ShowPrice && Offer == null))
-            {
-                <Button Href="@_detailsUrl"
-                        OnClick='(() => TrackApartmentClickAsync("button"))'>
-                    @Localizer["Details"]
-                </Button>
-            }
-            else
-            {
-                <Button Href="@_detailsUrl"
-                        OnClick='(() => TrackApartmentClickAsync("button"))'>
-                    @Localizer["BookNow"]
-                </Button>
-            }
+            <div @onclick:stopPropagation="true">
+                @if (Item == null || (ShowPrice && Offer == null))
+                {
+                    <Button Href="@_detailsUrl"
+                            OnClick='(() => TrackApartmentClickAsync("button"))'>
+                        @Localizer["Details"]
+                    </Button>
+                }
+                else
+                {
+                    <Button Href="@_detailsUrl"
+                            OnClick='(() => TrackApartmentClickAsync("button"))'>
+                        @Localizer["BookNow"]
+                    </Button>
+                }
+            </div>
             </div>
 
             @if (ShowPrice && Offer == null && Item != null && string.IsNullOrWhiteSpace(NoOfferPriceHint))
@@ -275,7 +277,8 @@
                             {
                                 <a href="@GetSuggestionUrl(term)"
                                    class="suggestion-label"
-                                   @onclick='(() => TrackApartmentClickAsync("suggestion"))'>
+                                   @onclick='(() => TrackApartmentClickAsync("suggestion"))'
+                                   @onclick:stopPropagation="true">
                                     @FormatSuggestionLabel(term)
                                 </a>
                             }
