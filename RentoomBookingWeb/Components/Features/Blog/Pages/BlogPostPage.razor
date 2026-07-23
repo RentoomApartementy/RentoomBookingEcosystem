@@ -38,6 +38,11 @@
 
         <!-- Schema.org Structured Data (JSON-LD) -->
         @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
+        <BreadcrumbJsonLd CurrentPageName="@Post.Title"
+                          CurrentPagePath="@BuildPostUrl(Post.PublicId, Post.Slug)"
+                          ParentPageName="Blog"
+                          ParentPagePath="@RouteService.GetLocalizedUrl("BlogList")"
+                          FirstPageName="Rentoom" />
 
         @if (HasInstagramEmbeds)
         {
@@ -66,6 +71,15 @@ else if (Post is null)
 else
 {
     <BlogHeaderSection Item="MapToListItem(Post)" ShowReadMoreButton="false" UseH1ForTitle="false" />
+
+    <div class="blog-post-breadcrumb">
+        <BlogBreadcrumb NavigationLabel="@BlogLocalizer["BreadcrumbNavigationLabel"]"
+                        HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                        HomeLabel="Rentoom"
+                        ParentPageName="Blog"
+                        ParentPageUrl="@RouteService.GetLocalizedUrl("BlogList")"
+                        CurrentPageName="@Post.Title" />
+    </div>
     
     <article class="blog-post">
         @if (Post.IsPreview)

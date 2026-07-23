@@ -6,6 +6,7 @@
     <meta name="robots" content="index, follow" />
     <meta name="description" content="@Localizer["BlogDescription"]" />
     <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogList")}")" />
+    <BreadcrumbJsonLd CurrentPageName="Blog" CurrentPagePath="@RouteService.GetLocalizedUrl("BlogList")" FirstPageName="Rentoom" />
     <SeoHreflangs />
 </HeadContent>
 
@@ -13,6 +14,13 @@
 {
     <BlogHeaderSection Items="Items" UseH1ForTitle="true" />
 }
+
+<div class="blog-list-breadcrumb">
+    <BlogBreadcrumb NavigationLabel="@Localizer["BreadcrumbNavigationLabel"]"
+                    HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                    HomeLabel="Rentoom"
+                    CurrentPageName="Blog" />
+</div>
 
 @if (!string.IsNullOrWhiteSpace(Error))
 {

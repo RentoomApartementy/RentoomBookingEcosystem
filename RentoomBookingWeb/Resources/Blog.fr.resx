@@ -90,4 +90,7 @@
   <data name="NextPostLabel" xml:space="preserve">
     <value>Article suivant</value>
   </data>
+  <data name="BreadcrumbNavigationLabel" xml:space="preserve">
+    <value>Fil d’Ariane</value>
+  </data>
 </root>

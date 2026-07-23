@@ -90,4 +90,7 @@
   <data name="NextPostLabel" xml:space="preserve">
     <value>Naslednja objava</value>
   </data>
+  <data name="BreadcrumbNavigationLabel" xml:space="preserve">
+    <value>Krušna navigacija</value>
+  </data>
 </root>

@@ -90,4 +90,7 @@
   <data name="NextPostLabel" xml:space="preserve">
     <value>Siguiente publicación</value>
   </data>
+  <data name="BreadcrumbNavigationLabel" xml:space="preserve">
+    <value>Navegación de migas de pan</value>
+  </data>
 </root>

@@ -192,4 +192,7 @@
   <data name="NextPostLabel" xml:space="preserve">
     <value>Następny wpis</value>
   </data>
+  <data name="BreadcrumbNavigationLabel" xml:space="preserve">
+    <value>Nawigacja okruszkowa</value>
+  </data>
 </root>

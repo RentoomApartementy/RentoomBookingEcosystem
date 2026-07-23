@@ -17,6 +17,7 @@
 @code {
     [Parameter, EditorRequired] public string CurrentPageName { get; set; } = string.Empty;
     [Parameter, EditorRequired] public string CurrentPagePath { get; set; } = string.Empty;
+    [Parameter] public string? FirstPageName { get; set; }
     [Parameter] public string? ParentPageName { get; set; }
     [Parameter] public string? ParentPagePath { get; set; }
 
@@ -36,7 +37,7 @@
             {
                 { "@type", "ListItem" },
                 { "position", position++ },
-                { "name", HomeLabel },
+                { "name", FirstPageName ?? HomeLabel },
                 { "item", ToAbsoluteUrl(RouteService.GetLocalizedUrl("Home")) }
             });
 

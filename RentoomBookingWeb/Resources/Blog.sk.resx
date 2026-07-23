@@ -90,4 +90,7 @@
   <data name="NextPostLabel" xml:space="preserve">
     <value>Ďalší príspevok</value>
   </data>
+  <data name="BreadcrumbNavigationLabel" xml:space="preserve">
+    <value>Omrvinková navigácia</value>
+  </data>
 </root>
