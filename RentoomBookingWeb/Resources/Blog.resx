@@ -35,6 +35,12 @@
     <data name="ReadTimeFormat" xml:space="preserve">
         <value>{0} min read</value>
     </data>
+    <data name="GoToSlideAriaLabel" xml:space="preserve">
+        <value>Go to slide {0} of {1}</value>
+    </data>
+    <data name="CarouselPaginationLabel" xml:space="preserve">
+        <value>Carousel pagination</value>
+    </data>
     <data name="AuthorLabel" xml:space="preserve">
         <value>Author</value>
     </data>

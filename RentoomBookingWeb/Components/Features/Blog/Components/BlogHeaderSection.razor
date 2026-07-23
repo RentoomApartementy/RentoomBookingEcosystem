@@ -1,66 +1,91 @@
-
-<section class="blog_section_header">
-    @if (!string.IsNullOrWhiteSpace(Item.HeroImageUrl))
+<section class="blog_section_header" @onmouseenter="HandleMouseEnter" @onmouseleave="HandleMouseLeave">
+    @for (var index = 0; index < _slides.Count; index++)
     {
-        <img src="@Item.HeroImageUrl" alt="@Item.Title" class="blog_header_bg" fetchpriority="high" />
-    }
-    
-    <div class="blog_header_container">
-        <article class="blog_header_card">
-            @{
-                var filteredTags = Item.Tags?.Where(t => !string.Equals(t, Item.Category, System.StringComparison.OrdinalIgnoreCase)).ToList() ?? new System.Collections.Generic.List<string>();
+        var item = _slides[index];
+        var isActive = index == _currentIndex;
+
+        <div @key="item.PublicId" class="blog_header_slide @(isActive ? "is-active" : string.Empty)" aria-hidden="@(!isActive)" inert="@(!isActive)">
+            @if (!string.IsNullOrWhiteSpace(item.HeroImageUrl))
+            {
+                <img src="@item.HeroImageUrl" alt="@item.Title" class="blog_header_bg" fetchpriority="@(isActive ? "high" : "auto")" />
             }
 
-            <header class="blog_card_header">
-                <span class="blog_card_read_time">
-                    @if (!string.IsNullOrWhiteSpace(Item.AuthorDisplayName))
-                    {
-                        <span>@Item.AuthorDisplayName • </span>
+            <div class="blog_header_container">
+                <article class="blog_header_card">
+                    @{
+                        var filteredTags = item.Tags?.Where(tag => !string.Equals(tag, item.Category, System.StringComparison.OrdinalIgnoreCase)).ToList()
+                            ?? new System.Collections.Generic.List<string>();
                     }
-                    @GetReadTimeText()
-                </span>
-                <span class="blog_card_date">@Item.PublishedAtUtc.ToString("dd.MM.yyyy")</span>
-            </header>
-            
-            @if (UseH1ForTitle)
-            {
-                <h1 class="blog_card_title">@Item.Title</h1>
-            }
-            else
-            {
-                <p class="blog_card_title">@Item.Title</p>
-            }
-            
-            <p class="blog_card_excerpt">@Item.Excerpt</p>
-            
-            @if (!string.IsNullOrWhiteSpace(Item.Category) || filteredTags.Any())
-            {
-                <div class="blog_card_tags">
-                    @if (!string.IsNullOrWhiteSpace(Item.Category))
+
+                    <header class="blog_card_header">
+                        <span class="blog_card_read_time">
+                            @if (!string.IsNullOrWhiteSpace(item.AuthorDisplayName))
+                            {
+                                <span>@item.AuthorDisplayName • </span>
+                            }
+                            @GetReadTimeText(item)
+                        </span>
+                        <span class="blog_card_date">@item.PublishedAtUtc.ToString("dd.MM.yyyy")</span>
+                    </header>
+
+                    @if (UseH1ForTitle && isActive)
                     {
-                        <Tag Text="@Item.Category" />
+                        <h1 class="blog_card_title">@item.Title</h1>
                     }
-                    
-                    @if (!string.IsNullOrWhiteSpace(Item.Category) && filteredTags.Any())
+                    else
                     {
-                        <span class="blog_card_separator"></span>
+                        <p class="blog_card_title">@item.Title</p>
                     }
-                    
-                    @foreach (var tag in filteredTags)
+
+                    <p class="blog_card_excerpt">@item.Excerpt</p>
+
+                    @if (!string.IsNullOrWhiteSpace(item.Category) || filteredTags.Any())
                     {
-                        <Tag Text="@tag" />
+                        <div class="blog_card_tags">
+                            @if (!string.IsNullOrWhiteSpace(item.Category))
+                            {
+                                <Tag Text="@item.Category" />
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(item.Category) && filteredTags.Any())
+                            {
+                                <span class="blog_card_separator"></span>
+                            }
+
+                            @foreach (var tag in filteredTags)
+                            {
+                                <Tag Text="@tag" />
+                            }
+                        </div>
                     }
-                </div>
-            }
-            
-            @if (ShowReadMoreButton)
+
+                    @if (ShowReadMoreButton && isActive)
+                    {
+                        <div class="blog_card_action">
+                            <Button Href="@BuildPostUrl(item.PublicId, item.Slug)" Type="ButtonType.Primary">
+                                @Localizer["ReadMore"]
+                            </Button>
+                        </div>
+                    }
+                </article>
+            </div>
+        </div>
+    }
+
+    @if (_slides.Count > 1)
+    {
+        <div class="blog_header_dots" role="tablist" aria-label="@Localizer["CarouselPaginationLabel"]">
+            @for (var index = 0; index < _slides.Count; index++)
             {
-                <div class="blog_card_action">
-                    <Button Href="@BuildPostUrl(Item.PublicId, Item.Slug)" Type="ButtonType.Primary">
-                        @Localizer["ReadMore"]
-                    </Button>
-                </div>
+                var slideIndex = index;
+                var isActive = slideIndex == _currentIndex;
+                <button type="button"
+                        class="blog_header_dot @(isActive ? "active" : string.Empty)"
+                        role="tab"
+                        aria-selected="@isActive"
+                        aria-label="@string.Format(Localizer["GoToSlideAriaLabel"], slideIndex + 1, _slides.Count)"
+                        @onclick="() => GoToSlide(slideIndex)"></button>
             }
-        </article>
-    </div>
+        </div>
+    }
 </section>

@@ -11,7 +11,7 @@
 
 @if (Items.Count > 0)
 {
-    <BlogHeaderSection Item="Items.First()" UseH1ForTitle="true" />
+    <BlogHeaderSection Items="Items" UseH1ForTitle="true" />
 }
 
 @if (!string.IsNullOrWhiteSpace(Error))

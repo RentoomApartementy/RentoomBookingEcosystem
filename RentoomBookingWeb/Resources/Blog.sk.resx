@@ -33,7 +33,13 @@
   <data name="ReadTimeFormat" xml:space="preserve">
     <value>{0} minúta čítania</value>
   </data>
-  <data name="AuthorLabel" xml:space="preserve">
+    <data name="GoToSlideAriaLabel" xml:space="preserve">
+        <value>Prejsť na snímku {0} z {1}</value>
+    </data>
+    <data name="CarouselPaginationLabel" xml:space="preserve">
+        <value>Stránkovanie karuselu</value>
+    </data>
+    <data name="AuthorLabel" xml:space="preserve">
     <value>Squirt</value>
   </data>
   <data name="PublishedLabel" xml:space="preserve">
