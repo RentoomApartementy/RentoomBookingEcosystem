@@ -2,6 +2,7 @@ using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace RentoomBooking.SharedClasses.Services
 {
@@ -30,14 +31,17 @@ namespace RentoomBooking.SharedClasses.Services
         private const int RestrictionDaysAfterEnd = 14; // do kiedy (do+ X dni)
         private const int MaxEarlierArrivalDays = 0; // ile max dni przed poczatkiem zeby przyjezdzac (w sumie to zaweza bardziej RestrictionDaysBeforeStart)
         private const int TopTermsPerApartment = 2; // ile pokazywać dodatkowych terminów
+        private static readonly TimeSpan SuggestionsCacheTtl = TimeSpan.FromMinutes(5);
 
         private readonly IIdoOfferService _offerService;
         private readonly IdoSellService _idoSellService;
+        private readonly IMemoryCache _memoryCache;
 
-        public AvailabilityFinderService2(IIdoOfferService offerService, IdoSellService idoSellService)
+        public AvailabilityFinderService2(IIdoOfferService offerService, IdoSellService idoSellService, IMemoryCache memoryCache)
         {
             _offerService = offerService;
             _idoSellService = idoSellService;
+            _memoryCache = memoryCache;
         }
 
         public async Task<ApartmentAvailableTermsResult> FindAvailableTermsForApartmentAsync(
@@ -77,7 +81,21 @@ namespace RentoomBooking.SharedClasses.Services
 
             var uniqueApartmentIds = apartmentIds?
                 .Distinct()
+                .OrderBy(id => id)
                 .ToList();
+
+            var cacheKey = BuildSuggestionsCacheKey(
+                uniqueApartmentIds,
+                requestedStart,
+                requestedEnd,
+                adults,
+                children);
+
+            if (_memoryCache.TryGetValue(cacheKey, out List<ApartmentAvailableTermsResult>? cachedResults)
+                && cachedResults is not null)
+            {
+                return cachedResults;
+            }
 
             var restrictionsFrom = (new[] { DateTime.Now, requestedStart.AddDays(-RestrictionDaysBeforeStart) }).Max();
             var restrictionsTo = requestedEnd.AddDays(RestrictionDaysAfterEnd);
@@ -144,7 +162,7 @@ namespace RentoomBooking.SharedClasses.Services
 
             var validated = await ValidateTopCandidatesWithPricingAsync(topCandidates, adults, children, cancellationToken);
 
-            return apartmentIdsToProcess
+            var results = apartmentIdsToProcess
                 .OrderBy(id => id)
                 .Select(id => new ApartmentAvailableTermsResult
                 {
@@ -152,6 +170,20 @@ namespace RentoomBooking.SharedClasses.Services
                     AvailableTerms = validated.TryGetValue(id, out var terms) ? terms : new List<AvailableTerm>()
                 })
                 .ToList();
+
+            _memoryCache.Set(cacheKey, results, SuggestionsCacheTtl);
+            return results;
+        }
+
+        private static string BuildSuggestionsCacheKey(
+            IReadOnlyCollection<int>? apartmentIds,
+            DateTime startDate,
+            DateTime endDate,
+            int adults,
+            int children)
+        {
+            var ids = apartmentIds is { Count: > 0 } ? string.Join(',', apartmentIds) : "all";
+            return $"availability-suggestions:{ids}:{startDate:yyyy-MM-dd}:{endDate:yyyy-MM-dd}:{adults}:{children}";
         }
 
         private static bool TryParseRequestedRange(

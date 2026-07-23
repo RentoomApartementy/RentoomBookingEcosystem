@@ -47,6 +47,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         private const string PublicOfferEndpoint = "public/offer/34/json";
 
         private static readonly TimeSpan PublicOfferCacheTtl = TimeSpan.FromMinutes(10);
+        private static readonly TimeSpan DatedOffersCacheTtl = TimeSpan.FromMinutes(5);
         private const int PublicOfferMaxConcurrency = 6;
 
         public IdoOfferService(IIdoBookingConnectService idoBookingConnectService, ILogger<IdoOfferService> logger, IMemoryCache memoryCache)
@@ -58,6 +59,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         public async Task<PricingOffersResponse?> GetPricingOffersAsync(PricingOffersRequest request, CancellationToken cancellationToken = default)
         {
+            var cacheKey = BuildPricingOffersCacheKey(request);
+            if (_memoryCache.TryGetValue(cacheKey, out PricingOffersResponse? cachedResponse)
+                && cachedResponse is not null)
+            {
+                return cachedResponse;
+            }
 
             _logger.LogInformation("Requesting pricing offers for {ObjectCount} objects between {DateFrom} and {DateTo}.",
                 request.ObjectIds?.Count ?? 0, request.DateFrom, request.DateTo);
@@ -82,6 +89,11 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                     .Where(offer => offer != null)
                     .Cast<PricingOffer>()
                     .ToList();
+            }
+
+            if (response?.Errors is null && response?.Result?.PricingOffers is not null)
+            {
+                _memoryCache.Set(cacheKey, response, DatedOffersCacheTtl);
             }
 
             return response;
@@ -244,6 +256,23 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         }
 
         private static string BuildPublicOfferCacheKey(int apartmentId) => $"idobooking:public-offer:{apartmentId}";
+
+        private static string BuildPricingOffersCacheKey(PricingOffersRequest request)
+        {
+            var ids = request.ObjectIds is { Count: > 0 }
+                ? string.Join(',', request.ObjectIds.OrderBy(id => id))
+                : "all";
+
+            return string.Join(':',
+                "idobooking:pricing-offers",
+                ids,
+                request.DateFrom ?? string.Empty,
+                request.DateTo ?? string.Empty,
+                request.Currency ?? string.Empty,
+                request.NumberOfAdults?.ToString() ?? string.Empty,
+                request.NumberOfBigChildren?.ToString() ?? string.Empty,
+                request.Language ?? string.Empty);
+        }
 
         private static bool ShouldReturnOnlyNonRefundableOffers(string? dateFrom)
         {
