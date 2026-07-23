@@ -64,6 +64,7 @@ public sealed class BlogContentReader : IBlogContentReader
         var query = dbContext.BlogPosts
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
+            .Where(x => x.InactiveAt == null)
             .Where(x => x.Status == PublishedStatus)
             .Where(x => x.PublishedAt != null)
             .Where(x => x.PublishedVersionNo != null)
@@ -166,6 +167,7 @@ public sealed class BlogContentReader : IBlogContentReader
         var post = await dbContext.BlogPosts
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
+            .Where(x => x.InactiveAt == null)
             .Where(x => x.Status == PublishedStatus)
             .Where(x => x.PublishedAt != null)
             .Where(x => x.PublishedVersionNo != null)
@@ -428,6 +430,7 @@ public sealed class BlogContentReader : IBlogContentReader
         var rows = await dbContext.BlogPosts
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
+            .Where(x => x.InactiveAt == null)
             .Where(x => x.Status == PublishedStatus)
             .Where(x => x.PublishedAt != null)
             .Where(x => x.PublishedVersionNo != null)
@@ -494,6 +497,7 @@ public sealed class BlogContentReader : IBlogContentReader
         var baseQuery = dbContext.BlogPosts
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
+            .Where(x => x.InactiveAt == null)
             .Where(x => x.Status == PublishedStatus)
             .Where(x => x.PublishedAt != null)
             .Where(x => x.PublishedVersionNo != null)
