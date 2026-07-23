@@ -10,6 +10,9 @@
     }
     <meta name="description" content="@Localizer["BlogDescription"]" />
     <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogList")}")" />
+    <BlogJsonLd Name="@Localizer["BlogDescription"]"
+                Description="@Localizer["BlogHeaderSubtitle"]"
+                Url="@RouteService.GetLocalizedUrl("BlogList")" />
     <BreadcrumbJsonLd CurrentPageName="Blog" CurrentPagePath="@RouteService.GetLocalizedUrl("BlogList")" FirstPageName="Rentoom" />
     <SeoHreflangs />
 </HeadContent>
