@@ -1,3 +1,10 @@
+.blog-list-breadcrumb {
+    width: 100%;
+    max-width: 1440px;
+    margin: 2rem auto 0;
+    padding: 0 1.5rem;
+}
+
 .blog-list-container {
     width: 100%;
     max-width: 1440px;
@@ -21,6 +28,11 @@
 }
 
 @media (max-width: 768px) {
+    .blog-list-breadcrumb {
+        margin-top: 1.5rem;
+        padding: 0 1rem;
+    }
+
     .blog-list-container {
         margin: 2.5rem auto;
         padding: 0 1rem;

@@ -1,0 +1,30 @@
+@namespace RentoomBookingWeb.Components.Features.Blog.Components
+@using RentoomBookingWeb.Components.Features.Apartments.Components
+
+@* Public renderer for the blog "ApartmentsListing" block.
+   Resolves the selected (or all active) apartments and their public fallback offers server-side,
+   then reuses ApartmentsCarousel with a blog-specific card configuration. *@
+
+@if (_isLoading)
+{
+    <div class="blog-apartments-listing">
+        <ApartmentsCarousel SkeletonWidth="min(370px, 85vw)" LeadingSkeletonCount="4" />
+    </div>
+}
+else if (_apartments.Count > 0)
+{
+    <div class="blog-apartments-listing">
+        <ApartmentsCarousel Apartments="@_apartments" SkeletonWidth="min(370px, 85vw)">
+            <CardTemplate Context="apartment">
+                <div @key="@($"blog-apartment-{apartment.Id}")">
+                    <Apartment Item="@apartment"
+                               ShowPrice="true"
+                               PublicOffer="@(ShowPublicOffer ? GetOffer(apartment.Id) : null)"
+                               NoOfferPriceHint="@(ShowPublicOffer ? null : PriceHintText)"
+                               ListingSource="blog-apartments-listing"
+                               Width="min(370px, 85vw)" />
+                </div>
+            </CardTemplate>
+        </ApartmentsCarousel>
+    </div>
+}

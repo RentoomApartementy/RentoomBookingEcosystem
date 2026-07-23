@@ -6,6 +6,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<RentoomBookingWeb.HomePage> Localizer
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 
 <PageTitle>@Localizer["Home_PageTitle"]</PageTitle>
 
@@ -29,10 +30,13 @@
 
 <div class="home-container">
     <HeroSection/>
-    <ApartmentsSection/>
+    <ApartmentsSection ShowPublicOffer="false"  ShowSuggestions="true"/>
     @*<PackagesSection/>*@
     <CitySection/>
-    <BlogSection/>
+    @if (FeatureFlags.FeatureAllowed("blog"))
+    {
+        <BlogSection />
+    }
     <StatsSection/>
     <WhyRentoomSection/>
     <HomePartnersSection/>

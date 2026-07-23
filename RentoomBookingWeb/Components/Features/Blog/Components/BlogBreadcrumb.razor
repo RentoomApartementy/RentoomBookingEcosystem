@@ -1,0 +1,27 @@
+<nav class="blog-breadcrumb" aria-label="@NavigationLabel">
+    <ol class="blog-breadcrumb__list">
+        <li class="blog-breadcrumb__item">
+            <a class="blog-breadcrumb__link" href="@HomeUrl">@HomeLabel</a>
+        </li>
+
+        @if (!string.IsNullOrWhiteSpace(ParentPageName) && !string.IsNullOrWhiteSpace(ParentPageUrl))
+        {
+            <li class="blog-breadcrumb__item">
+                <a class="blog-breadcrumb__link" href="@ParentPageUrl">@ParentPageName</a>
+            </li>
+        }
+
+        <li class="blog-breadcrumb__item blog-breadcrumb__item--current">
+            <span class="blog-breadcrumb__current" aria-current="page" title="@CurrentPageName">@CurrentPageName</span>
+        </li>
+    </ol>
+</nav>
+
+@code {
+    [Parameter, EditorRequired] public string NavigationLabel { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string HomeUrl { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string HomeLabel { get; set; } = "Rentoom";
+    [Parameter, EditorRequired] public string CurrentPageName { get; set; } = string.Empty;
+    [Parameter] public string? ParentPageName { get; set; }
+    [Parameter] public string? ParentPageUrl { get; set; }
+}

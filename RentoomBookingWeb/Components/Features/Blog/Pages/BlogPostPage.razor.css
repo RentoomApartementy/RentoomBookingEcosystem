@@ -1,3 +1,9 @@
+.blog-post-breadcrumb {
+    width: min(100%, 1080px);
+    margin: 2rem auto 0;
+    padding: 0 1rem;
+}
+
 .blog-post {
     width: min(100%, 1080px);
     margin: 0 auto;
@@ -100,11 +106,16 @@
 
 .blog-post__body {
     display: grid;
+    /* minmax(0, 1fr) lets the single column shrink below its content's intrinsic size,
+       so wide blocks (e.g. the apartments carousel) scroll internally instead of
+       stretching the article/page and breaking the layout. */
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.75rem;
 }
 
 .blog-block {
     width: 100%;
+    min-width: 0; /* allow the grid item to shrink; wide content scrolls inside its own block */
 }
 
 .blog-heading {

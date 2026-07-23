@@ -1,0 +1,51 @@
+@using System.Text.Encodings.Web
+@using System.Text.Json
+@inject NavigationManager Navigation
+
+@if (!string.IsNullOrWhiteSpace(JsonLd))
+{
+    <script type="application/ld+json">
+        @((MarkupString)JsonLd)
+    </script>
+}
+
+@code {
+    [Parameter, EditorRequired] public string Name { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string Description { get; set; } = string.Empty;
+    [Parameter, EditorRequired] public string Url { get; set; } = string.Empty;
+
+    private string JsonLd
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Description) || string.IsNullOrWhiteSpace(Url))
+            {
+                return string.Empty;
+            }
+
+            var data = new Dictionary<string, object>
+            {
+                ["@context"] = "https://schema.org",
+                ["@type"] = "Blog",
+                ["name"] = Name,
+                ["description"] = Description,
+                ["url"] = ToAbsoluteUrl(Url)
+            };
+
+            return JsonSerializer.Serialize(data, new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
+        }
+    }
+
+    private string ToAbsoluteUrl(string url)
+    {
+        if (Uri.TryCreate(url, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+        {
+            return uri.AbsoluteUri;
+        }
+
+        return Navigation.ToAbsoluteUri(url).AbsoluteUri;
+    }
+}

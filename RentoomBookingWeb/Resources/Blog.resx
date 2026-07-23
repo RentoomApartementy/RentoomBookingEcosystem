@@ -35,6 +35,12 @@
     <data name="ReadTimeFormat" xml:space="preserve">
         <value>{0} min read</value>
     </data>
+    <data name="GoToSlideAriaLabel" xml:space="preserve">
+        <value>Go to slide {0} of {1}</value>
+    </data>
+    <data name="CarouselPaginationLabel" xml:space="preserve">
+        <value>Carousel pagination</value>
+    </data>
     <data name="AuthorLabel" xml:space="preserve">
         <value>Author</value>
     </data>
@@ -85,5 +91,29 @@
     </data>
     <data name="NextPostLabel" xml:space="preserve">
         <value>Next post</value>
+    </data>
+    <data name="ApartmentsListingPriceAfterDate" xml:space="preserve">
+        <value>Price after choosing dates</value>
+    </data>
+    <data name="BreadcrumbNavigationLabel" xml:space="preserve">
+        <value>Breadcrumb navigation</value>
+    </data>
+    <data name="ShareArticle" xml:space="preserve">
+        <value>Share article</value>
+    </data>
+    <data name="ShareOnFacebook" xml:space="preserve">
+        <value>Share on Facebook</value>
+    </data>
+    <data name="ShareOnLinkedIn" xml:space="preserve">
+        <value>Share on LinkedIn</value>
+    </data>
+    <data name="ShareOnWhatsApp" xml:space="preserve">
+        <value>Share on WhatsApp</value>
+    </data>
+    <data name="CopyLink" xml:space="preserve">
+        <value>Copy link</value>
+    </data>
+    <data name="LinkCopied" xml:space="preserve">
+        <value>Link copied</value>
     </data>
 </root>

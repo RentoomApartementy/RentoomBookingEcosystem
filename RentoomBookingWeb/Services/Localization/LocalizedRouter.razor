@@ -7,6 +7,7 @@
 @using RentoomBooking.SharedFrontend.Localization
 @using Microsoft.AspNetCore.WebUtilities
 @inject IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 @inject NavigationManager NavManager
 
 @if (_resolvedComponentType != null)
@@ -123,7 +124,8 @@ else if (!_isResolving)
         var remainingSegments = segments.Skip(1).ToArray();
 
         // 3. Find potential page keys matching this slug
-        var potentialKeys = RouteService.GetPageKeysFromSlug(slug, cultureCode);
+        var potentialKeys = RouteService.GetPageKeysFromSlug(slug, cultureCode)
+            .Where(IsPageAllowed);
         
         // --- SENIOR AMBIGUITY RESOLUTION: Priority + Trial Mapping ---
         string? bestPageKey = null;
@@ -195,7 +197,7 @@ else if (!_isResolving)
             foreach (var culture in SupportedLanguagesProvider.SupportedCultureNames)
             {
                 var keys = RouteService.GetPageKeysFromSlug(slug, culture);
-                var key = keys.FirstOrDefault();
+                var key = keys.FirstOrDefault(IsPageAllowed);
                 if (key != null)
                 {
                     var canonicalUrl = RouteService.GetLocalizedUrl(key, cultureCode); // Use target culture
@@ -267,6 +269,11 @@ else if (!_isResolving)
                 _parameters[part] = value;
             }
         }
+    }
+
+    private bool IsPageAllowed(string pageKey)
+    {
+        return pageKey is not ("BlogList" or "BlogPost") || FeatureFlags.FeatureAllowed("blog");
     }
 
     private void TryNavigateTo(string targetUri)

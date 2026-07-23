@@ -1,18 +1,33 @@
 @using RentoomBookingWeb.Components.Features.Blog.Components;
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 
 <PageTitle>@Localizer["BlogPageTitle"]</PageTitle>
 
 <HeadContent>
-    <meta name="robots" content="index, follow" />
+    @if (Environment.IsProduction())
+    {
+        <meta name="robots" content="index, follow" />
+    }
     <meta name="description" content="@Localizer["BlogDescription"]" />
     <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogList")}")" />
+    <BlogJsonLd Name="@Localizer["BlogDescription"]"
+                Description="@Localizer["BlogHeaderSubtitle"]"
+                Url="@RouteService.GetLocalizedUrl("BlogList")" />
+    <BreadcrumbJsonLd CurrentPageName="Blog" CurrentPagePath="@RouteService.GetLocalizedUrl("BlogList")" FirstPageName="Rentoom" />
     <SeoHreflangs />
 </HeadContent>
 
 @if (Items.Count > 0)
 {
-    <BlogHeaderSection Item="Items.First()" UseH1ForTitle="true" />
+    <BlogHeaderSection Items="Items" UseH1ForTitle="true" />
 }
+
+<div class="blog-list-breadcrumb">
+    <BlogBreadcrumb NavigationLabel="@Localizer["BreadcrumbNavigationLabel"]"
+                    HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                    HomeLabel="Rentoom"
+                    CurrentPageName="Blog" />
+</div>
 
 @if (!string.IsNullOrWhiteSpace(Error))
 {

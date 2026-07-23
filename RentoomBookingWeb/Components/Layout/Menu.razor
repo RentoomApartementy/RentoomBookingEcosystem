@@ -6,6 +6,7 @@
 @using RentoomBookingWeb.Services.Localization;
 @inject IStringLocalizer<SharedResources> Localizer;
 @inject IRouteLocalizationService RouteService;
+@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 
 <div>
     <nav class="@NavState.NavClass" aria-label="@Localizer["Menu_MainNavigationAriaLabel"]">
@@ -31,9 +32,12 @@
             <li>
                 <NavLink href="@RouteService.GetLocalizedUrl("AboutCity")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["AboutCity"]</NavLink>
             </li>
-            <li>
-                <NavLink href="@RouteService.GetLocalizedUrl("BlogList")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Blog"]</NavLink>
-            </li>
+            @if (FeatureFlags.FeatureAllowed("blog"))
+            {
+                <li>
+                    <NavLink href="@RouteService.GetLocalizedUrl("BlogList")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Blog"]</NavLink>
+                </li>
+            }
              <li>
                  <NavLink href="https://app.rentoom.pl/" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["ForInvestors"]</NavLink>
             </li>
@@ -91,9 +95,12 @@
             <div>
                 <NavLink href="@RouteService.GetLocalizedUrl("AboutCity")" class="nav-link" ActiveClass="nav-link">@Localizer["AboutCity"]</NavLink>
             </div>
-            <div>
-                <NavLink href="@RouteService.GetLocalizedUrl("BlogList")" class="nav-link" ActiveClass="nav-link">@Localizer["Blog"]</NavLink>
-            </div>
+            @if (FeatureFlags.FeatureAllowed("blog"))
+            {
+                <div>
+                    <NavLink href="@RouteService.GetLocalizedUrl("BlogList")" class="nav-link" ActiveClass="nav-link">@Localizer["Blog"]</NavLink>
+                </div>
+            }
             <div>
                 <NavLink href="https://app.rentoom.pl/" target="_blank" class="nav-link" ActiveClass="nav-link">@Localizer["ForInvestors"]</NavLink>
             </div>

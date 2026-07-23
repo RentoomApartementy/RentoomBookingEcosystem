@@ -546,6 +546,9 @@ public sealed class BlogContentReader : IBlogContentReader
         var youtubeDimensions = string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase)
             ? YoutubeEmbedHelper.ResolveDimensions(props?.YouTubeWidth, props?.YouTubeHeight, props?.YouTubeEmbedCode)
             : (Width: (int?)null, Height: (int?)null);
+        var apartmentIds = string.Equals(blockType, "ApartmentsListing", StringComparison.OrdinalIgnoreCase)
+            ? ParseApartmentIds(row.PropsJson)
+            : Array.Empty<int>();
 
         return new BlogBlock
         {
@@ -591,8 +594,47 @@ public sealed class BlogContentReader : IBlogContentReader
                     || string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase)
                 ? props?.DisplaySize
                 : null,
-            FaqItems = faqItems
+            FaqItems = faqItems,
+            ApartmentIds = apartmentIds
         };
+    }
+
+    // ApartmentsListing PropsJson is a raw int array, e.g. [256,341]. Order is preserved (author intent).
+    // An empty/invalid array yields an empty list, which the renderer interprets as "all active apartments".
+    private static IReadOnlyList<int> ParseApartmentIds(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return Array.Empty<int>();
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(json);
+            if (document.RootElement.ValueKind != JsonValueKind.Array)
+            {
+                return Array.Empty<int>();
+            }
+
+            var ids = new List<int>();
+            foreach (var element in document.RootElement.EnumerateArray())
+            {
+                if (element.ValueKind == JsonValueKind.Number && element.TryGetInt32(out var id) && id > 0)
+                {
+                    ids.Add(id);
+                }
+                else if (element.ValueKind == JsonValueKind.String && int.TryParse(element.GetString(), out var parsed) && parsed > 0)
+                {
+                    ids.Add(parsed);
+                }
+            }
+
+            return ids;
+        }
+        catch (JsonException)
+        {
+            return Array.Empty<int>();
+        }
     }
 
     private async Task<Dictionary<int, string>> ResolveAssetUrlsAsync(IEnumerable<int?> assetIds, CancellationToken cancellationToken)

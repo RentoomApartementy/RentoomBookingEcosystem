@@ -33,7 +33,13 @@
   <data name="ReadTimeFormat" xml:space="preserve">
     <value>{0} minut čtení</value>
   </data>
-  <data name="AuthorLabel" xml:space="preserve">
+    <data name="GoToSlideAriaLabel" xml:space="preserve">
+        <value>Přejít na snímek {0} z {1}</value>
+    </data>
+    <data name="CarouselPaginationLabel" xml:space="preserve">
+        <value>Stránkování karuselu</value>
+    </data>
+    <data name="AuthorLabel" xml:space="preserve">
     <value>Squirt</value>
   </data>
   <data name="PublishedLabel" xml:space="preserve">
@@ -83,5 +89,8 @@
   </data>
   <data name="NextPostLabel" xml:space="preserve">
     <value>Další příspěvek</value>
+  </data>
+  <data name="BreadcrumbNavigationLabel" xml:space="preserve">
+    <value>Drobečková navigace</value>
   </data>
 </root>

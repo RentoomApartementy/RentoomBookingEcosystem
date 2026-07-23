@@ -1,0 +1,45 @@
+@using System.Text.Encodings.Web
+@using System.Text.Json
+@using RentoomBooking.SharedClasses.Services.Descriptions
+
+@if (ValidFaqs.Count > 0)
+{
+    <script type="application/ld+json">
+        @((MarkupString)JsonLd)
+    </script>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<FaqItemDto>? Faqs { get; set; }
+
+    private IReadOnlyList<FaqItemDto> ValidFaqs => Faqs?
+        .Where(faq => !string.IsNullOrWhiteSpace(faq.Question) && !string.IsNullOrWhiteSpace(faq.Answer))
+        .ToArray() ?? Array.Empty<FaqItemDto>();
+
+    private string JsonLd
+    {
+        get
+        {
+            var faqPage = new Dictionary<string, object>
+            {
+                ["@context"] = "https://schema.org",
+                ["@type"] = "FAQPage",
+                ["mainEntity"] = ValidFaqs.Select(faq => new Dictionary<string, object>
+                {
+                    ["@type"] = "Question",
+                    ["name"] = faq.Question,
+                    ["acceptedAnswer"] = new Dictionary<string, object>
+                    {
+                        ["@type"] = "Answer",
+                        ["text"] = faq.Answer
+                    }
+                }).ToList()
+            };
+
+            return JsonSerializer.Serialize(faqPage, new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
+        }
+    }
+}

@@ -24,7 +24,7 @@
          @ref="_elementRef"
          style="@($"{ (DisableForGoToReservation ? "cursor: default; " : "") }{ (!string.IsNullOrEmpty(Width) ? $"width: {Width}; min-width: {Width}; max-width: {Width};" : "") }")"
          itemscope itemtype="https://schema.org/Apartment">
-    <header>
+    <header @onclick:stopPropagation="true">
         @if (_currentObjectMedium == null)
         {
             <div class="loading-image">
@@ -107,7 +107,7 @@
                     <h2 itemprop="name">
                         @if (!string.IsNullOrEmpty(_detailsUrl))
                         {
-                            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClickAsync("title"))' style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
+                            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClickAsync("title"))' @onclick:stopPropagation="true" style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
                         }
                         else
                         {
@@ -206,17 +206,34 @@
                             }
                         </div>
                     }
-                    else if (Item == null) 
+                    else if (PublicOffer != null)
+                    {
+                        <div class="price-wrapper">
+                            <span class="price">@ApartmentLocalizer["From"] @PublicOffer.MinimalPrice.ToString("N2") @(string.IsNullOrWhiteSpace(PublicOffer.Currency) ? CurrencyLocalizer["PLN"].Value : PublicOffer.Currency)</span>
+                        </div>
+                    }
+                    else if (Item == null)
                     {
                         <div class="price-wrapper">
                             <span class="skeleton skeleton-text mini" style="width: 80px; height: 24px;"></span>
                             <small class="skeleton skeleton-text mini" style="width: 60px; height: 12px; margin-top: 4px;"></small>
                         </div>
                     }
+                    else if (!string.IsNullOrWhiteSpace(NoOfferPriceHint))
+                    {
+                        <div class="price-wrapper">
+                            <span class="price-hint">@NoOfferPriceHint</span>
+                        </div>
+                    }
                     else
                     {
                         <div class="price-wrapper">
-                            @if (IsSuggestionLoading() && !(SuggestionDates?.Any() == true))
+                            @if (ShowSuggestionPrice && GetClosestSuggestionTerm() is { MinimalPrice: decimal suggestionPrice } suggestionTerm)
+                            {
+                                <span class="price">@suggestionPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
+                                <small>@Localizer["TotalPrice"] @GetTermNights(suggestionTerm) @GetNightLabel(GetTermNights(suggestionTerm))</small>
+                            }
+                            else if (IsSuggestionLoading() && !(SuggestionDates?.Any() == true))
                             {
                                 <span class="availability-status loading">
                                     <span class="mini-spinner"></span>
@@ -232,34 +249,36 @@
                 </div>
             }
             
-            @if (Item == null || (ShowPrice && Offer == null))
-            {
-                <Button Href="@_detailsUrl"
-                        OnClick='(() => TrackApartmentClickAsync("button"))'
-                        Disabled="@(Item == null || (ShowPrice && Offer == null))">
-                    @Localizer["Details"]
-                </Button>
-            }
-            else
-            {
-                <Button Href="@_detailsUrl"
-                        OnClick='(() => TrackApartmentClickAsync("button"))'>
-                    @Localizer["BookNow"]
-                </Button>
-            }
+            <div @onclick:stopPropagation="true">
+                @if (Item == null || (ShowPrice && Offer == null))
+                {
+                    <Button Href="@_detailsUrl"
+                            OnClick='(() => TrackApartmentClickAsync("button"))'>
+                        @Localizer["Details"]
+                    </Button>
+                }
+                else
+                {
+                    <Button Href="@_detailsUrl"
+                            OnClick='(() => TrackApartmentClickAsync("button"))'>
+                        @Localizer["BookNow"]
+                    </Button>
+                }
+            </div>
             </div>
 
-            @if (ShowPrice && Offer == null && Item != null)
+            @if (ShowPrice && Offer == null && Item != null && string.IsNullOrWhiteSpace(NoOfferPriceHint))
             {
                 <div class="non-offer-wrapper">
                     @if (SuggestionDates?.Any() == true)
                     {
                         <div class="suggestion-labels-row">
-                            @foreach (var term in SuggestionDates.Take(3))
+                            @foreach (var term in SuggestionDates.Take(2))
                             {
                                 <a href="@GetSuggestionUrl(term)"
                                    class="suggestion-label"
-                                   @onclick='(() => TrackApartmentClickAsync("suggestion"))'>
+                                   @onclick='(() => TrackApartmentClickAsync("suggestion"))'
+                                   @onclick:stopPropagation="true">
                                     @FormatSuggestionLabel(term)
                                 </a>
                             }
@@ -289,6 +308,11 @@
     [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
     [Parameter] public ApartmentObject? Item { get; set; } = null;
     [Parameter] public PricingOffer? Offer { get; set; } = null;
+    // Fallback offer from the IdoBooking public/offer endpoint. Used only when there is no dated Offer.
+    [Parameter] public PublicApartmentOffer? PublicOffer { get; set; } = null;
+    // When set and there is neither a dated nor a public offer, shows this hint in place of the price/availability
+    // (e.g. "Cena po wybraniu terminu") and keeps the Details button active. Used by the blog listing.
+    [Parameter] public string? NoOfferPriceHint { get; set; } = null;
     [Parameter] public int? OfferLength { get; set; } = null;
     [Parameter] public bool ShowPrice { get; set; } = false;
     
@@ -302,6 +326,8 @@
     [Parameter] public SuggestionStatus SuggestionState { get; set; } = SuggestionStatus.NotStarted;
     
     [Parameter] public IReadOnlyList<AvailableTerm>? SuggestionDates { get; set; } = null;
+    [Parameter] public bool ShowSuggestionPrice { get; set; } = false;
+    [Parameter] public AvailableTerm? SuggestedNavigationTerm { get; set; } = null;
 
     [Parameter] public string? Width { get; set; } = null;
     [Parameter] public string ListingSource { get; set; } = "apartments-list";
@@ -497,13 +523,22 @@
         string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : GetQ("adults");
         string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : GetQ("children");
 
+        if (Offer == null
+            && SuggestedNavigationTerm != null
+            && DateOnly.TryParse(SuggestedNavigationTerm.StartDate, out _)
+            && DateOnly.TryParse(SuggestedNavigationTerm.EndDate, out _))
+        {
+            finalStart = SuggestedNavigationTerm.StartDate;
+            finalEnd = SuggestedNavigationTerm.EndDate;
+        }
+
         string localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
         string baseUrl = $"{localizedBase}/{Item.Id}/{Item.Name?.ToSlug()}";
 
         if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd))
         {
             var segments = new List<string> {
-                finalStart ?? "null", finalEnd ?? "null", finalAdults ?? "1", finalChildren ?? "0"
+                finalStart ?? "null", finalEnd ?? "null", finalAdults ?? "2", finalChildren ?? "0"
             };
             _detailsUrl = $"{baseUrl}/{string.Join("/", segments)}";
         }
@@ -527,6 +562,11 @@
     private bool IsSuggestionLoading()
     {
         return SuggestionState == SuggestionStatus.Loading;
+    }
+
+    private AvailableTerm? GetClosestSuggestionTerm()
+    {
+        return SuggestionDates?.FirstOrDefault(term => term.MinimalPrice.HasValue);
     }
 
     private string GetImageLoading(int index)
@@ -603,8 +643,19 @@
             return $"{term.StartDate}-{term.EndDate}";
         }
 
-        var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
-        return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} {GetNightLabel(nights)})";
+        var nights = GetTermNights(term);
+        var price = term.MinimalPrice.HasValue
+            ? $" · {Localizer["OfferPriceMapLabel"]}: {term.MinimalPrice.Value:N2} {CurrencyLocalizer["PLN"]}"
+            : string.Empty;
+
+        return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} {GetNightLabel(nights)}){price}";
+    }
+
+    private static int GetTermNights(AvailableTerm term)
+    {
+        return DateTime.TryParse(term.StartDate, out var startDate) && DateTime.TryParse(term.EndDate, out var endDate)
+            ? Math.Max(0, (endDate.Date - startDate.Date).Days)
+            : 0;
     }
 
     private string GetStayLengthSuffix()
@@ -666,6 +717,9 @@
             return;
         }
 
+        // Distinguish a dated offer from the public/offer fallback price, without touching the existing fields.
+        var priceSource = Offer is not null ? "dated" : (PublicOffer is not null ? "public-fallback" : "none");
+
         WorkflowTelemetry.TrackEvent(
             "ApartmentListingClicked",
             new Dictionary<string, string?>
@@ -678,12 +732,15 @@
                 ["StartDate"] = StartDate,
                 ["EndDate"] = EndDate,
                 ["Adults"] = Adults,
-                ["Children"] = Children
+                ["Children"] = Children,
+                ["PriceSource"] = priceSource
             },
             new Dictionary<string, double>
             {
                 ["HasOffer"] = Offer is null ? 0 : 1,
-                ["MinimalPrice"] = (double?)Offer?.MinimalPrice ?? 0
+                ["MinimalPrice"] = (double?)Offer?.MinimalPrice ?? 0,
+                ["HasPublicOffer"] = PublicOffer is null ? 0 : 1,
+                ["PublicMinimalPrice"] = (double?)PublicOffer?.MinimalPrice ?? 0
             });
 
         await GoogleAnalytics.TrackEventAsync("apartment_listing_click", new Dictionary<string, object?>
@@ -697,7 +754,9 @@
             ["adults"] = Adults,
             ["children"] = Children,
             ["has_offer"] = Offer is null ? 0 : 1,
-            ["minimal_price"] = Offer?.MinimalPrice
+            ["minimal_price"] = Offer?.MinimalPrice,
+            ["price_source"] = priceSource,
+            ["public_minimal_price"] = PublicOffer?.MinimalPrice
         });
     }
 

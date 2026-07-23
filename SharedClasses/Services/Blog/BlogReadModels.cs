@@ -76,4 +76,8 @@ public sealed class BlogBlock
     public string? QuoteAuthor { get; init; }
     public string? DisplaySize { get; init; }
     public IReadOnlyList<FaqItemDto> FaqItems { get; init; } = Array.Empty<FaqItemDto>();
+
+    // ApartmentsListing block: apartment ids selected in RentoomApp, in author order.
+    // An empty list means "all active apartments" (not "no apartments").
+    public IReadOnlyList<int> ApartmentIds { get; init; } = Array.Empty<int>();
 }
