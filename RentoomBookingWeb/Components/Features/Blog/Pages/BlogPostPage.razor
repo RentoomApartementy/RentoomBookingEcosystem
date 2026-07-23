@@ -8,13 +8,17 @@
 @inject IStringLocalizer<RentoomBookingWeb.Blog> BlogLocalizer
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject NavigationManager NavManager
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 
 <PageTitle>@(Post?.MetaTitle ?? Post?.Title ?? "Blog")</PageTitle>
 
 @if (Post is not null)
 {
     <HeadContent>
-        <meta name="robots" content="@(Post.IsPreview ? "noindex, nofollow, noarchive, nosnippet" : "index, follow")" />
+        @if (Environment.IsProduction())
+        {
+            <meta name="robots" content="@(Post.IsPreview ? "noindex, nofollow, noarchive, nosnippet" : "index, follow")" />
+        }
         <meta name="description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
 
         <!-- Open Graph / Facebook -->

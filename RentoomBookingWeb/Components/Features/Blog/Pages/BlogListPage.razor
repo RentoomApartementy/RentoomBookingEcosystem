@@ -1,9 +1,13 @@
 @using RentoomBookingWeb.Components.Features.Blog.Components;
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 
 <PageTitle>@Localizer["BlogPageTitle"]</PageTitle>
 
 <HeadContent>
-    <meta name="robots" content="index, follow" />
+    @if (Environment.IsProduction())
+    {
+        <meta name="robots" content="index, follow" />
+    }
     <meta name="description" content="@Localizer["BlogDescription"]" />
     <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogList")}")" />
     <BreadcrumbJsonLd CurrentPageName="Blog" CurrentPagePath="@RouteService.GetLocalizedUrl("BlogList")" FirstPageName="Rentoom" />
