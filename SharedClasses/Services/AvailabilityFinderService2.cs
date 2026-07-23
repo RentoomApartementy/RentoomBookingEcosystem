@@ -97,7 +97,8 @@ namespace RentoomBooking.SharedClasses.Services
                 return cachedResults;
             }
 
-            var restrictionsFrom = (new[] { DateTime.Now, requestedStart.AddDays(-RestrictionDaysBeforeStart) }).Max();
+            var warsawNow = GetWarsawNow();
+            var restrictionsFrom = (new[] { warsawNow, requestedStart.AddDays(-RestrictionDaysBeforeStart) }).Max();
             var restrictionsTo = requestedEnd.AddDays(RestrictionDaysAfterEnd);
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -110,9 +111,9 @@ namespace RentoomBooking.SharedClasses.Services
                 .Max();
 
             var candidateStartFrom = requestedStart.AddDays(-MaxEarlierArrivalDays);
-            if (candidateStartFrom < DateTime.Today)
+            if (candidateStartFrom < warsawNow.Date)
             {
-                candidateStartFrom = DateTime.Today;
+                candidateStartFrom = warsawNow.Date;
             }
 
             var candidateStartTo = requestedEnd.AddDays(RestrictionDaysAfterEnd);
@@ -184,6 +185,20 @@ namespace RentoomBooking.SharedClasses.Services
         {
             var ids = apartmentIds is { Count: > 0 } ? string.Join(',', apartmentIds) : "all";
             return $"availability-suggestions:{ids}:{startDate:yyyy-MM-dd}:{endDate:yyyy-MM-dd}:{adults}:{children}";
+        }
+
+        private static DateTime GetWarsawNow()
+        {
+            try
+            {
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Warsaw");
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+            }
         }
 
         private static bool TryParseRequestedRange(
