@@ -1,0 +1,124 @@
+@namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+
+<div class="abw">
+
+    @* ---- Step 1: guests first ---- *@
+    <div class="abw-guests">
+        <div class="abw-section-title">@Localizer["CalendarGuestsTitle"]</div>
+
+        <div class="abw-stepper-row">
+            <span class="abw-stepper-label">@Localizer["CalendarAdults"]</span>
+            <div class="abw-stepper-controls">
+                <button type="button" class="abw-stepper-btn" @onclick="DecrementAdults" disabled="@(_adults <= MinAdults)" aria-label="−">−</button>
+                <span class="abw-stepper-value">@_adults</span>
+                <button type="button" class="abw-stepper-btn" @onclick="IncrementAdults" disabled="@(TotalGuests >= MaxGuests)" aria-label="+">+</button>
+            </div>
+        </div>
+
+        <div class="abw-stepper-row">
+            <span class="abw-stepper-label">@Localizer["CalendarChildren"]</span>
+            <div class="abw-stepper-controls">
+                <button type="button" class="abw-stepper-btn" @onclick="DecrementChildren" disabled="@(_children <= 0)" aria-label="−">−</button>
+                <span class="abw-stepper-value">@_children</span>
+                <button type="button" class="abw-stepper-btn" @onclick="IncrementChildren" disabled="@(TotalGuests >= MaxGuests)" aria-label="+">+</button>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(_occupancyNotice))
+        {
+            <div class="abw-notice">@_occupancyNotice</div>
+        }
+    </div>
+
+    @* ---- Price-from anchor ---- *@
+    @if (_calendar?.FromPriceGross is decimal fromPrice)
+    {
+        <div class="abw-fromprice">@Localizer["CalendarFromPerNight", FormatPrice(fromPrice)]</div>
+    }
+
+    @* ---- Step 2: availability-aware calendar ---- *@
+    <div class="abw-dates">
+        <div class="abw-dates-prompt">@CheckInPrompt</div>
+
+        @if (_loading && _calendar is null)
+        {
+            <div class="abw-loading">
+                <span class="abw-spinner"></span>
+                <span>@Localizer["CalendarLoading"]</span>
+            </div>
+        }
+        else
+        {
+            <div class="abw-weekdays">
+                @foreach (var wd in WeekdayHeaders())
+                {
+                    <span class="abw-weekday">@wd</span>
+                }
+            </div>
+
+            <div class="abw-months @(_loading ? "is-refreshing" : "")">
+                @foreach (var monthStart in MonthStarts())
+                {
+                    <div class="abw-month">
+                        <div class="abw-month-title">@MonthTitle(monthStart)</div>
+                        <div class="abw-grid">
+                            @for (var b = 0; b < LeadingBlanks(monthStart); b++)
+                            {
+                                <span class="abw-day abw-day-blank"></span>
+                            }
+                            @for (var d = 1; d <= DaysInMonth(monthStart); d++)
+                            {
+                                var date = new DateOnly(monthStart.Year, monthStart.Month, d);
+                                var selectable = IsSelectable(date);
+                                var price = PriceFor(date);
+                                var classes = "abw-day"
+                                    + (selectable ? " abw-day-available" : " abw-day-disabled")
+                                    + (IsSelectedStart(date) ? " abw-day-start" : "")
+                                    + (IsSelectedEnd(date) ? " abw-day-end" : "")
+                                    + (IsInRange(date) ? " abw-day-inrange" : "");
+                                <button type="button"
+                                        class="@classes"
+                                        disabled="@(!selectable)"
+                                        @onclick="@(() => OnDayClicked(date))">
+                                    <span class="abw-day-num">@d</span>
+                                    @if (selectable && price is decimal p)
+                                    {
+                                        <span class="abw-day-price">@FormatPrice(p)</span>
+                                    }
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (CanLoadMore())
+            {
+                <button type="button" class="abw-loadmore" @onclick="LoadMoreMonths" disabled="@_loading">
+                    @Localizer["CalendarLoadMore"]
+                </button>
+            }
+        }
+
+        @if (!string.IsNullOrEmpty(_dateNotice))
+        {
+            <div class="abw-notice">@_dateNotice</div>
+        }
+    </div>
+
+    @* ---- Footer: summary + primary CTA ---- *@
+    <div class="abw-footer">
+        <div class="abw-summary">
+            @if (HasCompleteRange)
+            {
+                <span class="abw-nights">@Localizer["CalendarNights", SelectedNights]</span>
+                <span class="abw-total">@Localizer["CalendarStayTotal", FormatPrice(SelectedTotal())]</span>
+            }
+        </div>
+        <button type="button" class="abw-reserve" disabled="@(!HasCompleteRange)" @onclick="Confirm">
+            @Localizer["BookNow"]
+        </button>
+    </div>
+
+</div>
