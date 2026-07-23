@@ -323,6 +323,7 @@
     
     [Parameter] public IReadOnlyList<AvailableTerm>? SuggestionDates { get; set; } = null;
     [Parameter] public bool ShowSuggestionPrice { get; set; } = false;
+    [Parameter] public AvailableTerm? SuggestedNavigationTerm { get; set; } = null;
 
     [Parameter] public string? Width { get; set; } = null;
     [Parameter] public string ListingSource { get; set; } = "apartments-list";
@@ -518,13 +519,22 @@
         string? finalAdults = !string.IsNullOrEmpty(Adults) ? Adults : GetQ("adults");
         string? finalChildren = !string.IsNullOrEmpty(Children) ? Children : GetQ("children");
 
+        if (Offer == null
+            && SuggestedNavigationTerm != null
+            && DateOnly.TryParse(SuggestedNavigationTerm.StartDate, out _)
+            && DateOnly.TryParse(SuggestedNavigationTerm.EndDate, out _))
+        {
+            finalStart = SuggestedNavigationTerm.StartDate;
+            finalEnd = SuggestedNavigationTerm.EndDate;
+        }
+
         string localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
         string baseUrl = $"{localizedBase}/{Item.Id}/{Item.Name?.ToSlug()}";
 
         if (!string.IsNullOrEmpty(finalStart) || !string.IsNullOrEmpty(finalEnd))
         {
             var segments = new List<string> {
-                finalStart ?? "null", finalEnd ?? "null", finalAdults ?? "1", finalChildren ?? "0"
+                finalStart ?? "null", finalEnd ?? "null", finalAdults ?? "2", finalChildren ?? "0"
             };
             _detailsUrl = $"{baseUrl}/{string.Join("/", segments)}";
         }

@@ -28,10 +28,10 @@
                                    PublicOffer="@(ShowPublicOffer ? ViewModel.GetPublicOfferByObjectId(apartment.Id) : null)"
                                    OfferLength="@ViewModel.GetOfferLengthDays()"
                                    ShowPrice="true"
-                                   DisableForGoToReservation="true"
                                    SuggestionState="@(ShowSuggestions ? ViewModel.GetSuggestionStatusByObjectId(apartment.Id) : SuggestionStatus.NotStarted)"
                                    SuggestionDates="@(ShowSuggestions ? ViewModel.GetSuggestionsByObjectId(apartment.Id) : null)"
                                    ShowSuggestionPrice="true"
+                                   SuggestedNavigationTerm="@(ViewModel.GetPricingOfferByObjectId(apartment.Id) == null ? ViewModel.GetSuggestionsByObjectId(apartment.Id)?.FirstOrDefault() : null)"
                                    Width="min(370px, 85vw)" />
                     </div>
                 </CardTemplate>
