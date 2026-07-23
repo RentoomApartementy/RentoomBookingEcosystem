@@ -29,7 +29,7 @@ namespace RentoomBooking.SharedClasses.Services
         private const int RestrictionDaysBeforeStart = 7; //od kiedy pokazywac restrykcje(-7 lub od dzis)
         private const int RestrictionDaysAfterEnd = 14; // do kiedy (do+ X dni)
         private const int MaxEarlierArrivalDays = 0; // ile max dni przed poczatkiem zeby przyjezdzac (w sumie to zaweza bardziej RestrictionDaysBeforeStart)
-        private const int TopTermsPerApartment = 3; //ile pokazywac dodatkowych termin�w
+        private const int TopTermsPerApartment = 2; // ile pokazywać dodatkowych terminów
 
         private readonly IIdoOfferService _offerService;
         private readonly IdoSellService _idoSellService;

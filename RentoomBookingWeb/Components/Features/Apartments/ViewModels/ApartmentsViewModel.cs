@@ -769,7 +769,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             var suggestionsByApartmentId = newSuggestions.ToDictionary(
                 result => result.ApartmentId,
                 result => (result.AvailableTerms ?? new List<AvailableTerm>())
-                    .Take(3)
+                    .Take(2)
                     .ToList());
 
             foreach (var apartmentId in apartmentIds)

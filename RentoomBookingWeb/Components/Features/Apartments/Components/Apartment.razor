@@ -228,9 +228,10 @@
                     else
                     {
                         <div class="price-wrapper">
-                            @if (ShowSuggestionPrice && GetClosestSuggestionPrice() is decimal suggestionPrice)
+                            @if (ShowSuggestionPrice && GetClosestSuggestionTerm() is { MinimalPrice: decimal suggestionPrice } suggestionTerm)
                             {
                                 <span class="price">@suggestionPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
+                                <small>@Localizer["TotalPrice"] @GetTermNights(suggestionTerm) @GetNightLabel(GetTermNights(suggestionTerm))</small>
                             }
                             else if (IsSuggestionLoading() && !(SuggestionDates?.Any() == true))
                             {
@@ -270,7 +271,7 @@
                     @if (SuggestionDates?.Any() == true)
                     {
                         <div class="suggestion-labels-row">
-                            @foreach (var term in SuggestionDates.Take(3))
+                            @foreach (var term in SuggestionDates.Take(2))
                             {
                                 <a href="@GetSuggestionUrl(term)"
                                    class="suggestion-label"
@@ -560,9 +561,9 @@
         return SuggestionState == SuggestionStatus.Loading;
     }
 
-    private decimal? GetClosestSuggestionPrice()
+    private AvailableTerm? GetClosestSuggestionTerm()
     {
-        return SuggestionDates?.FirstOrDefault(term => term.MinimalPrice.HasValue)?.MinimalPrice;
+        return SuggestionDates?.FirstOrDefault(term => term.MinimalPrice.HasValue);
     }
 
     private string GetImageLoading(int index)
@@ -639,8 +640,19 @@
             return $"{term.StartDate}-{term.EndDate}";
         }
 
-        var nights = Math.Max(0, (endDate.Date - startDate.Date).Days);
-        return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} {GetNightLabel(nights)})";
+        var nights = GetTermNights(term);
+        var price = term.MinimalPrice.HasValue
+            ? $" · {Localizer["OfferPriceMapLabel"]}: {term.MinimalPrice.Value:N2} {CurrencyLocalizer["PLN"]}"
+            : string.Empty;
+
+        return $"{startDate:dd.MM}-{endDate:dd.MM} ({nights} {GetNightLabel(nights)}){price}";
+    }
+
+    private static int GetTermNights(AvailableTerm term)
+    {
+        return DateTime.TryParse(term.StartDate, out var startDate) && DateTime.TryParse(term.EndDate, out var endDate)
+            ? Math.Max(0, (endDate.Date - startDate.Date).Days)
+            : 0;
     }
 
     private string GetStayLengthSuffix()
