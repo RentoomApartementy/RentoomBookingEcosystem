@@ -1,0 +1,6 @@
+/* When the selected apartments fit within the container (a single "page", no horizontal
+   overflow), center them. The `safe` keyword falls back to flex-start when the cards
+   overflow (multiple pages), so scrolling still starts from the first card. */
+.blog-apartments-listing ::deep .carousel-list-wrapper {
+    justify-content: safe center;
+}
