@@ -86,4 +86,7 @@
     <data name="NextPostLabel" xml:space="preserve">
         <value>Następny wpis</value>
     </data>
+    <data name="ApartmentsListingPriceAfterDate" xml:space="preserve">
+        <value>Cena po wybraniu terminu</value>
+    </data>
 </root>

@@ -19,7 +19,8 @@ else if (_apartments.Count > 0)
                 <div @key="@($"blog-apartment-{apartment.Id}")">
                     <Apartment Item="@apartment"
                                ShowPrice="true"
-                               PublicOffer="@GetOffer(apartment.Id)"
+                               PublicOffer="@(ShowPublicOffer ? GetOffer(apartment.Id) : null)"
+                               NoOfferPriceHint="@(ShowPublicOffer ? null : PriceHintText)"
                                ListingSource="blog-apartments-listing"
                                Width="min(370px, 85vw)" />
                 </div>

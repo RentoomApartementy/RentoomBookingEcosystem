@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Services;
@@ -14,8 +15,15 @@ public partial class BlogApartmentsListing : ComponentBase
     /// </summary>
     [Parameter] public IReadOnlyList<int> ApartmentIds { get; set; } = Array.Empty<int>();
 
+    /// <summary>
+    /// When true (default), fetch and show the IdoBooking public offer price on the cards.
+    /// When false, no public offer is fetched and the card shows a "price after choosing dates" hint instead.
+    /// </summary>
+    [Parameter] public bool ShowPublicOffer { get; set; } = true;
+
     [Inject] private IApartmentsService ApartmentsService { get; set; } = default!;
     [Inject] private IIdoOfferService OfferService { get; set; } = default!;
+    [Inject] private IStringLocalizer<RentoomBookingWeb.Blog> BlogLocalizer { get; set; } = default!;
     [Inject] private ILogger<BlogApartmentsListing> Logger { get; set; } = default!;
 
     private IReadOnlyList<ApartmentObject> _apartments = Array.Empty<ApartmentObject>();
@@ -23,9 +31,18 @@ public partial class BlogApartmentsListing : ComponentBase
     private bool _isLoading = true;
     private string? _loadedSignature;
 
+    private string PriceHintText
+    {
+        get
+        {
+            var localized = BlogLocalizer["ApartmentsListingPriceAfterDate"];
+            return localized.ResourceNotFound ? "Cena po wybraniu terminu" : localized.Value;
+        }
+    }
+
     protected override async Task OnParametersSetAsync()
     {
-        var signature = string.Join(",", ApartmentIds);
+        var signature = $"{ShowPublicOffer}:{string.Join(",", ApartmentIds)}";
         if (!_isLoading && signature == _loadedSignature)
         {
             return; // Already resolved for this exact selection.
@@ -41,9 +58,10 @@ public partial class BlogApartmentsListing : ComponentBase
             _apartments = BlogApartmentSelection.SelectOrdered(allActive, ApartmentIds);
 
             // Public fallback prices are fetched server-side, cached per apartment, resilient to per-id failures.
-            _offers = await OfferService.GetPublicOffersAsync(
-                _apartments.Select(a => a.Id),
-                CancellationToken.None);
+            // Skipped entirely when the block is configured to hide public offers.
+            _offers = ShowPublicOffer
+                ? await OfferService.GetPublicOffersAsync(_apartments.Select(a => a.Id), CancellationToken.None)
+                : new Dictionary<int, PublicApartmentOffer>();
 
             _loadedSignature = signature;
         }
