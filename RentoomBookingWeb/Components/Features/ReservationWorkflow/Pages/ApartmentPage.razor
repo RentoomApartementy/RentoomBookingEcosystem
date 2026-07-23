@@ -25,6 +25,7 @@
     }
 
     @(_apartment != null ? (MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>" : (MarkupString)"")
+    <FaqPageJsonLd Faqs="@_aiDescription?.Faqs" />
     <SeoHreflangs />
 </HeadContent>
 

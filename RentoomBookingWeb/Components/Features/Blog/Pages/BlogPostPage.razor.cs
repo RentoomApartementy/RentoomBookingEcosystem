@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using RentoomBooking.SharedClasses.Services.Blog;
+using RentoomBooking.SharedClasses.Services.Descriptions;
 
 namespace RentoomBookingWeb.Components.Features.Blog.Pages;
 
@@ -12,6 +13,10 @@ public partial class BlogPostPage : ComponentBase
     protected bool HasInstagramEmbeds => Post?.Blocks.Any(x =>
         string.Equals(x.BlockType, "Instagram", StringComparison.OrdinalIgnoreCase)
         && !string.IsNullOrWhiteSpace(x.EmbedHtml)) == true;
+    protected IReadOnlyList<FaqItemDto> BlogFaqs => Post?.Blocks
+        .Where(block => NormalizeBlockType(block.BlockType) == "Faq")
+        .SelectMany(block => block.FaqItems)
+        .ToArray() ?? Array.Empty<FaqItemDto>();
 
     [SupplyParameterFromQuery(Name = "preview")]
     public string? PreviewToken { get; set; }
@@ -69,10 +74,18 @@ public partial class BlogPostPage : ComponentBase
           "headline": {{title}},
           "image": {{imageUrl}},
           "datePublished": "{{dateIso}}",
-          "dateModified": "{{dateIso}}",
           "author": {
             "@type": "Person",
             "name": {{author}}
+          },
+          "publisher": {
+            "@type": "Organization",
+            "@id": "https://rentoom.pl/#organization",
+            "name": "Rentoom",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://rentoom.pl/assets/images/logo-nowe-Rentoom-final-158x112.png"
+            }
           },
           "description": {{excerpt}},
           "mainEntityOfPage": {

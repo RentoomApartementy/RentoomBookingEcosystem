@@ -42,6 +42,7 @@
 
         <!-- Schema.org Structured Data (JSON-LD) -->
         @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
+        <FaqPageJsonLd Faqs="@BlogFaqs" />
         <BreadcrumbJsonLd CurrentPageName="@Post.Title"
                           CurrentPagePath="@BuildPostUrl(Post.PublicId, Post.Slug)"
                           ParentPageName="Blog"
