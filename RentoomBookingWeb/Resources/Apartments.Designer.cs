@@ -19,7 +19,7 @@ namespace RentoomBookingWeb {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Apartments {
@@ -39,7 +39,7 @@ namespace RentoomBookingWeb {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RentoomBookingWeb.Apartments", typeof(Apartments).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RentoomBookingWeb.Resources.Apartments", typeof(Apartments).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,51 @@ namespace RentoomBookingWeb {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discover Rentoom apartments. Comfort, great locations, and high standards for holidays and business stays..
+        /// </summary>
+        internal static string Apartments_SeoDescriptionDefault {
+            get {
+                return ResourceManager.GetString("Apartments_SeoDescriptionDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check available apartments for {0} - {1}. We found {2} offers tailored for you. Book securely online..
+        /// </summary>
+        internal static string Apartments_SeoDescriptionSearch {
+            get {
+                return ResourceManager.GetString("Apartments_SeoDescriptionSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Luxury apartments for rent - Rentoom.
+        /// </summary>
+        internal static string Apartments_SeoTitleDefault {
+            get {
+                return ResourceManager.GetString("Apartments_SeoTitleDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No apartments available for these dates - Rentoom.
+        /// </summary>
+        internal static string Apartments_SeoTitleNoOffers {
+            get {
+                return ResourceManager.GetString("Apartments_SeoTitleNoOffers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search results: {0} offers - Rentoom.
+        /// </summary>
+        internal static string Apartments_SeoTitleSearchWithOffers {
+            get {
+                return ResourceManager.GetString("Apartments_SeoTitleSearchWithOffers", resourceCulture);
             }
         }
         
@@ -187,6 +232,15 @@ namespace RentoomBookingWeb {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        internal static string Location {
+            get {
+                return ResourceManager.GetString("Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string MandatoryOptions {
@@ -201,6 +255,78 @@ namespace RentoomBookingWeb {
         internal static string Map {
             get {
                 return ResourceManager.GetString("Map", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apartment area.
+        /// </summary>
+        internal static string Map_AltArea {
+            get {
+                return ResourceManager.GetString("Map_AltArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of bathrooms.
+        /// </summary>
+        internal static string Map_AltBathrooms {
+            get {
+                return ResourceManager.GetString("Map_AltBathrooms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of beds.
+        /// </summary>
+        internal static string Map_AltBeds {
+            get {
+                return ResourceManager.GetString("Map_AltBeds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of guests.
+        /// </summary>
+        internal static string Map_AltGuests {
+            get {
+                return ResourceManager.GetString("Map_AltGuests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apartment.
+        /// </summary>
+        internal static string Map_ApartmentImageAlt {
+            get {
+                return ResourceManager.GetString("Map_ApartmentImageAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apartments.
+        /// </summary>
+        internal static string Map_ClusterApartmentsPrefix {
+            get {
+                return ResourceManager.GetString("Map_ClusterApartmentsPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to no offers.
+        /// </summary>
+        internal static string Map_ClusterNoOffers {
+            get {
+                return ResourceManager.GetString("Map_ClusterNoOffers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offers.
+        /// </summary>
+        internal static string Map_ClusterOffersPrefix {
+            get {
+                return ResourceManager.GetString("Map_ClusterOffersPrefix", resourceCulture);
             }
         }
         

@@ -336,17 +336,66 @@
   <data name="BonusClearButtonTitle" xml:space="preserve">
     <value>Usuń bonus</value>
   </data>
+  <data name="NearbyAttractions_Title" xml:space="preserve">
+    <value>Otoczenie obiektu</value>
+  </data>
+  <data name="NearbyAttractions_Subtitle" xml:space="preserve">
+    <value>Doskonała lokalizacja</value>
+  </data>
+  <data name="NearbyAttractions_WalkTime" xml:space="preserve">
+    <value>~{0} min</value>
+  </data>
+  <data name="NearbyAttractions_DistanceMeters" xml:space="preserve">
+    <value>{0} m</value>
+  </data>
+  <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
+    <value>{0} km</value>
+  </data>
+  <data name="PageNotFoundTitle" xml:space="preserve">
+    <value>Strona nie została odnaleziona</value>
+  </data>
+  <data name="PageNotFoundDescription" xml:space="preserve">
+    <value>Przepraszamy, ale strona, której szukasz, nie istnieje lub została przeniesiona.</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Wróć do strony głównej</value>
+  </data>
+  <data name="NotFoundHeaderTitle" xml:space="preserve">
+    <value>Błąd 404</value>
+  </data>
+  <data name="NotFoundMaybeLookingFor" xml:space="preserve">
+    <value>Może szukasz:</value>
+  </data>
+  <data name="NotFoundApartmentsList" xml:space="preserve">
+    <value>Lista apartamentów
+</value>
+  </data>
+  <data name="NotFoundCooperation" xml:space="preserve">
+    <value>Współpraca</value>
+  </data>
+  <data name="NotFoundContact" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Często zadawane pytania (FAQ)</value>
+  </data>
+  <data name="Night" xml:space="preserve">
+    <value>noc</value>
+  </data>
   <data name="PriceAvailableAfterSelectingDates" xml:space="preserve">
     <value>Cena dostępna po wybraniu terminu</value>
   </data>
   <data name="SelectDatesButtonLabel" xml:space="preserve">
     <value>Wybierz termin</value>
   </data>
+  <data name="ShowAllDetails" xml:space="preserve">
+    <value>Pokaż pełny opis i udogodnienia</value>
+  </data>
+  <data name="Amenities_Title" xml:space="preserve">
+    <value>Udogodnienia i wyposażenie</value>
+  </data>
   <data name="ChangeDatesButtonLabel" xml:space="preserve">
     <value>Zmień termin</value>
-  </data>
-  <data name="Night" xml:space="preserve">
-    <value>noc</value>
   </data>
   <data name="Reservation_Preview" xml:space="preserve">
     <value>Podgląd</value>
@@ -434,29 +483,5 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Błąd 404</value>
-  </data>
-  <data name="FAQ_Title" xml:space="preserve">
-    <value>Często zadawane pytania (FAQ)</value>
-  </data>
-  <data name="Amenities_Title" xml:space="preserve">
-    <value>Udogodnienia i wyposażenie</value>
-  </data>
-  <data name="ShowAllDetails" xml:space="preserve">
-    <value>Pokaż pełny opis i udogodnienia</value>
-  </data>
-  <data name="NearbyAttractions_Title" xml:space="preserve">
-    <value>Otoczenie obiektu</value>
-  </data>
-  <data name="NearbyAttractions_Subtitle" xml:space="preserve">
-    <value>Doskonała lokalizacja</value>
-  </data>
-  <data name="NearbyAttractions_WalkTime" xml:space="preserve">
-    <value>~{0} min</value>
-  </data>
-  <data name="NearbyAttractions_DistanceMeters" xml:space="preserve">
-    <value>{0} m</value>
-  </data>
-  <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
-    <value>{0} km</value>
   </data>
 </root>
