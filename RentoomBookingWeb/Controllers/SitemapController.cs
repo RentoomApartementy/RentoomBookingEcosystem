@@ -10,6 +10,7 @@ using RentoomBookingWeb.Services.Localization;
 using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBooking.SharedFrontend.Localization;
 using System.Globalization;
+using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb.Controllers
 {
@@ -19,17 +20,20 @@ namespace RentoomBookingWeb.Controllers
         private readonly IIdoApartmentService _idoApartmentService;
         private readonly IRouteLocalizationService _routeService;
         private readonly IBlogContentReader _blogContentReader;
+        private readonly FeatureFlagsService _featureFlags;
 
         public SitemapController(
             IApartmentsService apartmentsService, 
             IIdoApartmentService idoApartmentService,
             IRouteLocalizationService routeService,
-            IBlogContentReader blogContentReader)
+            IBlogContentReader blogContentReader,
+            FeatureFlagsService featureFlags)
         {
             _apartmentsService = apartmentsService;
             _idoApartmentService = idoApartmentService;
             _routeService = routeService;
             _blogContentReader = blogContentReader;
+            _featureFlags = featureFlags;
         }
 
         [Route("sitemap.xml")]
@@ -63,7 +67,10 @@ namespace RentoomBookingWeb.Controllers
 
             var result = await _apartmentsService.GetAllApartmentsList();
             var apartments = result?.Items ?? new List<ApartmentObject>();
-            var blogPosts = await _blogContentReader.GetAllPublishedPostsAsync(currentCulture);
+            var isBlogEnabled = _featureFlags.FeatureAllowed("blog");
+            var blogPosts = isBlogEnabled
+                ? await _blogContentReader.GetAllPublishedPostsAsync(currentCulture)
+                : Array.Empty<BlogPostListItem>();
 
             var staticPageKeys = new List<string>
             {
@@ -71,9 +78,13 @@ namespace RentoomBookingWeb.Controllers
                 "Cooperation",
                 "Contact",
                 "AboutCity",
-                "AllApartments",
-                "BlogList"
+                "AllApartments"
             };
+
+            if (isBlogEnabled)
+            {
+                staticPageKeys.Add("BlogList");
+            }
 
             var baseUrl = $"{Request.Scheme}://{Request.Host}";
             XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";

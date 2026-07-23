@@ -163,6 +163,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixLeadCaptureService>();
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<IRouteLocalizationService, RouteLocalizationService>();
+            builder.Services.AddScoped<FeatureFlagsService>();
             builder.Services.AddScoped<MediaCacheService>();
             builder.Services.AddScoped<ReservationWorkflowTelemetry>();
             builder.Services.AddScoped<GoogleAnalyticsService>();
