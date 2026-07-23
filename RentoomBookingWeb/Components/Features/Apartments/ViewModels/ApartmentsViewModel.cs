@@ -212,7 +212,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
 
-            var now = DateTime.Now;
+            var now = GetWarsawNow();
             var dateFrom = DateOnly.FromDateTime(now);
             var dateTo = DateOnly.FromDateTime(
                 (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
@@ -1097,7 +1097,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             if (!DateOnly.TryParse(StartDate, out var navigationStartDate))
             {
-                navigationStartDate = DateOnly.FromDateTime(DateTime.Now);
+                navigationStartDate = DateOnly.FromDateTime(GetWarsawNow());
             }
 
             if (!DateOnly.TryParse(EndDate, out var navigationEndDate))
@@ -1193,6 +1193,20 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Apartments view model state notification failed.");
+            }
+        }
+
+        private static DateTime GetWarsawNow()
+        {
+            try
+            {
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Warsaw");
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
             }
         }
     }

@@ -418,6 +418,14 @@ namespace RentoomBooking.SharedClasses.Services
 
             var response = await _idoConnect.PostAsync<GetRestrictionsExceptionsRequestType, GetRestrictionsExceptionsResponseType>(RestrictionsExceptionsGetEndpoint, request, cancellationToken);
 
+            if (response?.Result?.Errors is { } error)
+            {
+                _logger.LogWarning(
+                    "IdoBooking restrictions request returned error {FaultCode}: {FaultString}.",
+                    error.FaultCode,
+                    error.FaultString);
+            }
+
             return response?.Result.GetRestrictionExceptions;
         }
 
