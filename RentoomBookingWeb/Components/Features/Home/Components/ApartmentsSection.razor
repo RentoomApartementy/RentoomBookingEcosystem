@@ -1,4 +1,5 @@
 @using RentoomBookingWeb.Components.Features.Apartments.Components;
+@using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<HomePage> Localizer;
 
@@ -12,44 +13,28 @@
     {
         <p class="text-red-600">@ViewModel.Error</p>
     }
-    else if (ViewModel.Items.Count == 0 && ViewModel.ApartmentsIsLoading)
-    {
-        <div @ref="_carouselWrapper">
-            <SimpleCarousel>
-                @for (int i = 0; i < 8; i++)
-                {
-                    <Apartment @key="@($"skeleton-loader-{i}")" Width="min(370px, 85vw)" />
-                }
-            </SimpleCarousel>
-        </div>
-    }
     else
     {
         <div @ref="_carouselWrapper">
-            <SimpleCarousel>
-                @foreach (var apartment in ViewModel.Items)
-                {
+            <ApartmentsCarousel Apartments="@ViewModel.Items"
+                                SkeletonWidth="min(370px, 85vw)"
+                                LeadingSkeletonCount="@(ViewModel.Items.Count == 0 && ViewModel.ApartmentsIsLoading ? 8 : 0)"
+                                TrailingSkeletonCount="@(ViewModel.Items.Count > 0 && ViewModel.ApartmentsIsLoading ? 4 : 0)">
+                <CardTemplate Context="apartment">
                     <div @key="@($"apartment-{apartment.Id}")"
                          @onclick='() => ViewModel.NavigateToApartmentAsync(apartment.Id, apartment.Name, "home-carousel")'>
                         <Apartment Item="@apartment"
-                                   Offer="@ViewModel.GetPricingOfferByObjectId(apartment.Id)"
+                                   Offer="@(EnforcePublicOffer ? null : ViewModel.GetPricingOfferByObjectId(apartment.Id))"
+                                   PublicOffer="@(ShowPublicOffer ? ViewModel.GetPublicOfferByObjectId(apartment.Id) : null)"
                                    OfferLength="@ViewModel.GetOfferLengthDays()"
                                    ShowPrice="true"
                                    DisableForGoToReservation="true"
-                                   SuggestionState="@ViewModel.GetSuggestionStatusByObjectId(apartment.Id)"
-                                   SuggestionDates="@ViewModel.GetSuggestionsByObjectId(apartment.Id)"
+                                   SuggestionState="@(ShowSuggestions ? ViewModel.GetSuggestionStatusByObjectId(apartment.Id) : SuggestionStatus.NotStarted)"
+                                   SuggestionDates="@(ShowSuggestions ? ViewModel.GetSuggestionsByObjectId(apartment.Id) : null)"
                                    Width="min(370px, 85vw)" />
                     </div>
-                }
-
-                @if (ViewModel.ApartmentsIsLoading)
-                {
-                    @for (int i = 0; i < 4; i++)
-                    {
-                        <Apartment @key="@($"loading-more-{i}")" Width="min(370px, 85vw)" />
-                    }
-                }
-            </SimpleCarousel>
+                </CardTemplate>
+            </ApartmentsCarousel>
         </div>
     }
 </div>

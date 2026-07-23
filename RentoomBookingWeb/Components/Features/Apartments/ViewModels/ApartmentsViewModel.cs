@@ -8,6 +8,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services;
 using RentoomBookingWeb.Services.Localization;
@@ -18,6 +19,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
     {
         private readonly IApartmentsService _apartmentsService;
         private readonly IRentoomOfferService _rentoomOfferService;
+        private readonly IIdoOfferService _idoOfferService;
         private readonly NavigationManager _navManager;
         private readonly IAvailabilityFinderService2 _availabilityFinder;
         private readonly IApartmentSearchFiltersService _filterService;
@@ -44,8 +46,15 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         public List<ApartmentObject> Items { get; private set; } = new();
         public List<PricingOffer> Offers { get; private set; } = new();
+        public Dictionary<int, PublicApartmentOffer> PublicOffers { get; private set; } = new();
         public Dictionary<int, List<AvailableTerm>> AvailableTerms { get; private set; } = new();
         private Dictionary<int, SuggestionStatus> SuggestionStatuses { get; } = new();
+
+        // Slider fetch flags. Defaults preserve the non-slider (apartments list page) behavior, whose
+        // transient ViewModel instance never calls InitializeForSliderAsync.
+        private bool _fetchDatedOffers = true;
+        private bool _fetchPublicOffers = false;
+        private bool _fetchSuggestions = true;
 
         public long? ApartmentsCount { get; private set; }
         public bool IsLoading { get; private set; } = true;
@@ -77,6 +86,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public ApartmentsViewModel(
             IApartmentsService apartmentsService,
             IRentoomOfferService rentoomOfferService,
+            IIdoOfferService idoOfferService,
             NavigationManager navManager,
             IAvailabilityFinderService2 availabilityFinder,
             IApartmentSearchFiltersService filterService,
@@ -89,6 +99,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         {
             _apartmentsService = apartmentsService;
             _rentoomOfferService = rentoomOfferService;
+            _idoOfferService = idoOfferService;
             _navManager = navManager;
             _availabilityFinder = availabilityFinder;
             _filterService = filterService;
@@ -104,6 +115,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public int MaxOfferPrice => ScaleMaxPrice;
 
         public PricingOffer? GetPricingOfferByObjectId(int objectId) => Offers.Find(o => o.ObjectId == objectId);
+        public PublicApartmentOffer? GetPublicOfferByObjectId(int objectId) =>
+            PublicOffers.TryGetValue(objectId, out var offer) ? offer : null;
         public SuggestionStatus GetSuggestionStatusByObjectId(int objectId) =>
             SuggestionStatuses.TryGetValue(objectId, out var status) ? status : SuggestionStatus.NotStarted;
         public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId) => GetSuggestionsByObjectId(objectId);
@@ -190,8 +203,12 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             NotifyStateChanged();
         }
 
-        public async Task InitializeForSliderAsync(CancellationToken ct = default)
+        public async Task InitializeForSliderAsync(bool showSuggestions = true, bool showPublicOffer = false, bool fetchDatedOffers = true, CancellationToken ct = default)
         {
+            _fetchSuggestions = showSuggestions;
+            _fetchPublicOffers = showPublicOffer;
+            _fetchDatedOffers = fetchDatedOffers;
+
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
 
@@ -211,14 +228,17 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             FilterMaxPrice = null;
             _currentFilters = null;
 
-            Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
+            Items.Clear(); Offers.Clear(); PublicOffers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
 
             await GetApartmentsCount();
 
             HasMore = true; ApartmentsIsLoading = false;
             ResetPriceScales();
             await LoadMoreAsync(ct);
-            StartSuggestionsFetch(Items);
+            if (_fetchSuggestions)
+            {
+                StartSuggestionsFetch(Items);
+            }
 
             _isInitialized = true;
             NotifyStateChanged();
@@ -468,8 +488,18 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
                     if (IsSearch)
                     {
-                        await FetchOffersForVisibleItems(page.Items);
-                        StartSuggestionsFetchForNewItems(page.Items);
+                        if (_fetchDatedOffers)
+                        {
+                            await FetchOffersForVisibleItems(page.Items);
+                        }
+                        if (_fetchPublicOffers)
+                        {
+                            await FetchPublicOffersForVisibleItems(page.Items);
+                        }
+                        if (_fetchSuggestions)
+                        {
+                            StartSuggestionsFetchForNewItems(page.Items);
+                        }
                     }
                 }
                 else
@@ -564,6 +594,25 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                         var existing = Offers.FirstOrDefault(o => o.ObjectId == offer.ObjectId);
                         if (existing == null) Offers.Add(offer);
                     }
+                }
+            }
+            catch { }
+        }
+
+        private async Task FetchPublicOffersForVisibleItems(IEnumerable<ApartmentObject> items)
+        {
+            try
+            {
+                var ids = items.Select(x => x.Id).Where(id => id > 0).ToList();
+                if (ids.Count == 0)
+                {
+                    return;
+                }
+
+                var map = await _idoOfferService.GetPublicOffersAsync(ids);
+                foreach (var kvp in map)
+                {
+                    PublicOffers[kvp.Key] = kvp.Value;
                 }
             }
             catch { }

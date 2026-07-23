@@ -146,6 +146,7 @@ public partial class BlogPostPage : ComponentBase
             "faq" => "Faq",
             "youtube" => "YouTube",
             "instagram" => "Instagram",
+            "apartmentslisting" => "ApartmentsListing",
             _ => blockType.Trim()
         };
     }

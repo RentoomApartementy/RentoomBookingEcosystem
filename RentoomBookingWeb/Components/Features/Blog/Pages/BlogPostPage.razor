@@ -176,6 +176,9 @@ else
                         case "Instagram" when !string.IsNullOrWhiteSpace(block.EmbedHtml):
                             <InstagramEmbed EmbedHtml="@block.EmbedHtml" />
                 break;
+                        case "ApartmentsListing":
+                            <BlogApartmentsListing ApartmentIds="@block.ApartmentIds" />
+                            break;
             default:
                 if (!string.IsNullOrWhiteSpace(block.TextContent))
                 {
