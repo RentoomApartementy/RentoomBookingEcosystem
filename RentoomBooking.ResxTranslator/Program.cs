@@ -46,7 +46,7 @@ var repoRootOption = new Option<string?>(
 // ── Culture option — shared between translate and rollback ──
 var cultureOption = new Option<string[]>(
     "--culture",
-    description: "Culture codes to process (e.g. en-US de-DE fr-FR). Required — specify at least one culture code.")
+    description: "Culture codes to process (e.g. en-US de-DE fr-FR). For 'translate', omit to use all cultures marked active: true in supported-languages.json. Required for 'rollback'.")
 { AllowMultipleArgumentsPerToken = true };
 
 var allOption = new Option<bool>(
@@ -79,11 +79,15 @@ var translateCommand = new Command("translate", """
     Translate .resx resource files to target languages using Azure Cognitive Services Translator API.
 
     Examples:
+      translate --translator-key <key>
       translate --culture en-US --translator-key <key>
       translate --culture en-US de-DE fr-FR --source pl-PL --translator-key <key>
       translate --culture en-US --dry-run
       translate --culture en-US --all --translator-key <key>
       translate --culture en-US --include RentoomBookingWeb --translator-key <key>
+
+    If --culture is omitted, all cultures marked "active": true in
+    SharedFrontend/Localization/supported-languages.json are used.
     """);
 
 translateCommand.AddOption(sourceOption);
@@ -113,13 +117,21 @@ translateCommand.SetHandler(async (InvocationContext ctx) =>
                            ?? config["AzureTranslator:Region"]
                            ?? "polandcentral";
 
+    // No --culture given: fall back to cultures marked "active": true in supported-languages.json.
     if (cultures.Length == 0)
     {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.Error.WriteLine("ERROR: --culture is required. Specify one or more culture codes (e.g. --culture en-US de-DE).");
-        Console.ResetColor();
-        ctx.ExitCode = 1;
-        return;
+        cultures = LanguageConfigUpdater.GetActiveCultures(repoRoot).ToArray();
+
+        if (cultures.Length == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine("ERROR: --culture was not specified and no active cultures were found in SharedFrontend/Localization/supported-languages.json.");
+            Console.ResetColor();
+            ctx.ExitCode = 1;
+            return;
+        }
+
+        Console.WriteLine($"No --culture specified — using active cultures from supported-languages.json: {string.Join(", ", cultures)}");
     }
 
     if (!ValidateCultures(cultures, out var cultureError))

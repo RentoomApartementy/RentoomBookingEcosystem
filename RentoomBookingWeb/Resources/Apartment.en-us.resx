@@ -282,6 +282,9 @@
   <data name="NotFoundContact" xml:space="preserve">
     <value>Contact</value>
   </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Frequently Asked Questions (FAQ)</value>
+  </data>
   <data name="Reservation_Preview" xml:space="preserve">
     <value>Preview</value>
   </data>

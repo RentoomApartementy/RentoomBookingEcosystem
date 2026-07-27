@@ -5,7 +5,7 @@ namespace RentoomBookingWeb.Helpers;
 
 public static class SeoCultureHelper
 {
-    private const string FallbackCulture = "pl-PL";
+    private static string FallbackCulture => SupportedLanguagesProvider.DefaultCultureName;
     private static readonly StringComparer Comparer = StringComparer.OrdinalIgnoreCase;
     private static readonly Lazy<HashSet<string>> SupportedCultures = new(
         () => new HashSet<string>(SupportedLanguagesProvider.SupportedCultureNames, Comparer));

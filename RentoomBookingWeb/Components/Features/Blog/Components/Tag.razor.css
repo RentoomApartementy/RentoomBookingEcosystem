@@ -1,0 +1,11 @@
+.blog_tag {
+    background-color: #1b4b3e;
+    color: #ffffff;
+    border-radius: 2rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+}

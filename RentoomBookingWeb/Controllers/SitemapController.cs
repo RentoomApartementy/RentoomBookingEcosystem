@@ -1,14 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
-using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.Blog;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBooking.SharedFrontend.Localization;
+using RentoomBookingWeb.Helpers;
+using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Services.Localization;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
-using RentoomBooking.SharedClasses.Models.IdoBooking;
-using RentoomBooking.SharedClasses.Services.IdoBooking;
-using RentoomBookingWeb.Services.Localization;
-using RentoomBooking.SharedFrontend.Localization;
-using System.Globalization;
 
 namespace RentoomBookingWeb.Controllers
 {
@@ -17,15 +21,21 @@ namespace RentoomBookingWeb.Controllers
         private readonly IApartmentsService _apartmentsService;
         private readonly IIdoApartmentService _idoApartmentService;
         private readonly IRouteLocalizationService _routeService;
+        private readonly IBlogContentReader _blogContentReader;
+        private readonly FeatureFlagsService _featureFlags;
 
         public SitemapController(
             IApartmentsService apartmentsService, 
             IIdoApartmentService idoApartmentService,
-            IRouteLocalizationService routeService)
+            IRouteLocalizationService routeService,
+            IBlogContentReader blogContentReader,
+            FeatureFlagsService featureFlags)
         {
             _apartmentsService = apartmentsService;
             _idoApartmentService = idoApartmentService;
             _routeService = routeService;
+            _blogContentReader = blogContentReader;
+            _featureFlags = featureFlags;
         }
 
         [Route("sitemap.xml")]
@@ -59,6 +69,10 @@ namespace RentoomBookingWeb.Controllers
 
             var result = await _apartmentsService.GetAllApartmentsList();
             var apartments = result?.Items ?? new List<ApartmentObject>();
+            var isBlogEnabled = _featureFlags.FeatureAllowed("blog");
+            var blogPosts = isBlogEnabled
+                ? await _blogContentReader.GetAllPublishedPostsAsync(currentCulture)
+                : Array.Empty<BlogPostListItem>();
 
             var staticPageKeys = new List<string>
             {
@@ -68,6 +82,11 @@ namespace RentoomBookingWeb.Controllers
                 "AboutCity",
                 "AllApartments"
             };
+
+            if (isBlogEnabled)
+            {
+                staticPageKeys.Add("BlogList");
+            }
 
             var baseUrl = $"{Request.Scheme}://{Request.Host}";
             XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
@@ -88,6 +107,12 @@ namespace RentoomBookingWeb.Controllers
             foreach (var apt in apartments)
             {
                 urlElements.Add(CreateApartmentUrlElement(ns, xhtml, baseUrl, apt, currentCulture, supportedCultures, "0.8", "weekly"));
+            }
+
+            // 4. Blog Posts
+            foreach (var post in blogPosts)
+            {
+                urlElements.Add(CreateBlogPostUrlElement(ns, baseUrl, post, currentCulture, "0.6", "weekly"));
             }
 
             var sitemap = new XElement(ns + "urlset", 
@@ -152,7 +177,32 @@ namespace RentoomBookingWeb.Controllers
 
             return urlElement;
         }
-        
+
+        private XElement CreateBlogPostUrlElement(XNamespace ns, string baseUrl, BlogPostListItem post, string currentCulture, string priority, string freq)
+        {
+            var loc = $"{baseUrl}{BlogUrlBuilder.BuildPostUrl(_routeService, post.Category, post.Slug, currentCulture)}";
+
+            // Blog content is single-language (per post.SourceLanguage) - there is no translated
+            // version of this specific post in other cultures, so no hreflang alternates are emitted.
+            return new XElement(ns + "url",
+                new XElement(ns + "loc", loc),
+                new XElement(ns + "changefreq", freq),
+                new XElement(ns + "priority", priority)
+            );
+            // If in the future we have multi-language blog posts, we can add hreflang alternates here.
+            /*foreach (var cult in allCultures)
+            {
+                var altLoc = $"{baseUrl}{BlogUrlBuilder.BuildPostUrl(_routeService, post.Category, post.Slug, cult)}";
+
+                urlElement.Add(new XElement(xhtml + "link",
+                    new XAttribute("rel", "alternate"),
+                    new XAttribute("hreflang", cult.Split('-')[0].ToLowerInvariant()),
+                    new XAttribute("href", altLoc)
+                ));
+            }*/
+
+        }
+
         [Route("llms.txt")]
         [ResponseCache(Duration = 3600)]
         public async Task<IActionResult> GetLlmsTxt()

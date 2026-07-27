@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakt mohl být zachráněn, ale dohoda nebyla uzavřena. Před opětovným odesláním zkontrolujte Bitrix.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopie čísla PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopírovat číslo EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Zkopírovat číslo účtu EUR do schránky</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Máte otázky ohledně správy nájmu? Kontaktujte nás! Zkontrolujte naši adresu a bankovní údaje.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Kontaktujte Rentoom, kancelář Rentoom Toruń, kontakt pro správu pronájmu, data faktur Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Kancelář pro pronájem a správu Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Profesionální správa nájemních smluv</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Zkopírovat číslo účtu PLN do schránky</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Kontaktujte tým Rentoom v Toruni. Údaje o adrese, čísla bankovních účtů (PLN/EUR) a kontaktní formulář. Profesionální půjčovna.</value>
+  </data>
 </root>

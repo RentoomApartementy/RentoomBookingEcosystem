@@ -27,7 +27,8 @@ public static class LanguageConfigUpdater
         config.Cultures.Add(new LanguageItem
         {
             Culture = culture,
-            NativeName = BuildNativeName(culture)
+            NativeName = BuildNativeName(culture),
+            Active = true
         });
         config.Cultures.Sort((a, b) =>
             string.Compare(a.Culture, b.Culture, StringComparison.OrdinalIgnoreCase));
@@ -146,5 +147,32 @@ public static class LanguageConfigUpdater
 
         [JsonPropertyName("nativeName")]
         public string NativeName { get; set; } = "";
+
+        [JsonPropertyName("active")]
+        public bool Active { get; set; } = false;
+    }
+
+    /// <summary>
+    /// Returns the set of culture codes marked "active": true in supported-languages.json.
+    /// Used by the translator to skip cultures that exist in config but are turned off.
+    /// </summary>
+    public static HashSet<string> GetActiveCultures(string repoRoot)
+    {
+        var config = Load(ConfigPath(repoRoot));
+        return new HashSet<string>(
+            (config?.Cultures ?? []).Where(c => c.Active).Select(c => c.Culture),
+            StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Returns every culture code currently present in supported-languages.json,
+    /// regardless of its "active" flag.
+    /// </summary>
+    public static HashSet<string> GetConfiguredCultures(string repoRoot)
+    {
+        var config = Load(ConfigPath(repoRoot));
+        return new HashSet<string>(
+            (config?.Cultures ?? []).Select(c => c.Culture),
+            StringComparer.OrdinalIgnoreCase);
     }
 }

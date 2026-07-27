@@ -1,0 +1,273 @@
+@using Microsoft.AspNetCore.Components
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Services.Blog
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+@using RentoomBookingWeb.Components.Features.Blog.Components
+@inject IBlogContentReader BlogContentReader
+@inject IStringLocalizer<RentoomBookingWeb.SharedResources> Localizer
+@inject IStringLocalizer<RentoomBookingWeb.Blog> BlogLocalizer
+@inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject NavigationManager NavManager
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
+
+<PageTitle>@(Post?.MetaTitle ?? Post?.Title ?? "Blog")</PageTitle>
+
+@if (Post is not null)
+{
+    <HeadContent>
+        @if (Environment.IsProduction())
+        {
+            <meta name="robots" content="@(Post.IsPreview ? "noindex, nofollow, noarchive, nosnippet" : "index, follow")" />
+        }
+        <meta name="description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:title" content="@(Post.MetaTitle ?? Post.Title)" />
+        <meta property="og:description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.Category, Post.Slug)}")" />
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <meta property="og:image" content="@Post.HeroImageUrl" />
+        }
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="@(Post.MetaTitle ?? Post.Title)" />
+        <meta name="twitter:description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <meta name="twitter:image" content="@Post.HeroImageUrl" />
+        }
+
+        <!-- Schema.org Structured Data (JSON-LD) -->
+        @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
+        <FaqPageJsonLd Faqs="@BlogFaqs" />
+        @if (!string.IsNullOrWhiteSpace(Post.Category))
+        {
+            <BreadcrumbJsonLd CurrentPageName="@Post.Title"
+                              CurrentPagePath="@BuildPostUrl(Post.Category, Post.Slug)"
+                              GrandparentPageName="Blog"
+                              GrandparentPagePath="@RouteService.GetLocalizedUrl("BlogList")"
+                              ParentPageName="@Post.Category"
+                              ParentPagePath="@BuildCategoryListUrl(Post.Category)"
+                              FirstPageName="Rentoom" />
+        }
+        else
+        {
+            <BreadcrumbJsonLd CurrentPageName="@Post.Title"
+                              CurrentPagePath="@BuildPostUrl(Post.Category, Post.Slug)"
+                              ParentPageName="Blog"
+                              ParentPagePath="@RouteService.GetLocalizedUrl("BlogList")"
+                              FirstPageName="Rentoom" />
+        }
+
+        @if (HasInstagramEmbeds)
+        {
+            <link rel="preconnect" href="https://www.instagram.com" />
+        }
+        @if (!Post.IsPreview)
+        {
+            <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.Category, Post.Slug)}")" />
+            <SeoHreflangs />
+        }
+    </HeadContent>
+}
+
+@if (!string.IsNullOrWhiteSpace(Error))
+{
+    <BlogErrorSection ErrorMessage="@Error" />
+}
+else if (IsLoading)
+{
+    <BlogPostSkeleton />
+}
+else if (Post is null)
+{
+    <BlogErrorSection IsNotFound="true" />
+}
+else
+{
+    <BlogHeaderSection Item="MapToListItem(Post)" ShowReadMoreButton="false" UseH1ForTitle="false" />
+
+    <div class="blog-post-breadcrumb">
+        @if (!string.IsNullOrWhiteSpace(Post.Category))
+        {
+            <BlogBreadcrumb NavigationLabel="@BlogLocalizer["BreadcrumbNavigationLabel"]"
+                            HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                            HomeLabel="Rentoom"
+                            GrandparentPageName="Blog"
+                            GrandparentPageUrl="@RouteService.GetLocalizedUrl("BlogList")"
+                            ParentPageName="@Post.Category"
+                            ParentPageUrl="@BuildCategoryListUrl(Post.Category)"
+                            CurrentPageName="@Post.Title" />
+        }
+        else
+        {
+            <BlogBreadcrumb NavigationLabel="@BlogLocalizer["BreadcrumbNavigationLabel"]"
+                            HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                            HomeLabel="Rentoom"
+                            ParentPageName="Blog"
+                            ParentPageUrl="@RouteService.GetLocalizedUrl("BlogList")"
+                            CurrentPageName="@Post.Title" />
+        }
+    </div>
+    
+    <article class="blog-post">
+        @if (Post.IsPreview)
+        {
+            <div class="blog-post__preview-banner">
+                Preview mode
+                @if (Post.PreviewExpiresAtUtc.HasValue)
+                {
+                    <span class="blog-post__preview-expiry">Valid until @Post.PreviewExpiresAtUtc.Value.ToLocalTime().ToString("HH:mm")</span>
+        }
+            </div>
+        }
+
+        <header class="blog-post__header">
+            <div class="blog-post__meta">
+                <span class="blog-post__author">@BlogLocalizer["AuthorLabel"]: @Post.AuthorDisplayName</span>
+                <span class="blog-post__meta-separator">·</span>
+                <time class="blog-post__published" datetime="@Post.PublishedAtUtc.ToString("O")">@BlogLocalizer["PublishedLabel"]: @Post.PublishedAtUtc.ToString("yyyy-MM-dd")</time>
+            </div>
+            <h1 class="blog-post__title">@Post.Title</h1>
+            <BlogShareBar PostTitle="@Post.Title"
+                           PostSlug="@Post.Slug"
+                           ArticleUrl="@BuildPostUrl(Post.Category, Post.Slug)" />
+
+        @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
+        {
+                <p class="blog-post__subtitle">@Post.Subtitle</p>
+        }
+
+            @if (!string.IsNullOrWhiteSpace(Post.Category) || Post.Tags.Count > 0)
+        {
+                <div class="blog-post__taxonomy">
+                    @if (!string.IsNullOrWhiteSpace(Post.Category))
+        {
+                        <a class="blog-post__category" href="@BuildCategoryListUrl(Post.Category)">@Post.Category</a>
+        }
+                    @foreach (var tag in Post.Tags)
+        {
+                        <span class="blog-post__tag">@tag</span>
+                    }
+            </div>
+        }
+        </header>
+
+        @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
+        {
+            <figure class="blog-post__hero">
+                <img src="@Post.HeroImageUrl" alt="@Post.Title" loading="eager" />
+            </figure>
+        }
+ 
+        <section class="blog-post__body">
+            @foreach (var block in Post.Blocks)
+    {
+                <section class="blog-block blog-block--@block.BlockType.ToLowerInvariant()">
+                    @switch (NormalizeBlockType(block.BlockType))
+        {
+            case "Heading":
+                var headingTag = NormalizeHeading(block.HeadingLevel);
+                            @switch (headingTag)
+                            {
+                                case "h1":
+                                    <h1 class="blog-heading blog-heading--h1">@block.TextContent</h1>
+                break;
+                                case "h2":
+                                    <h2 class="blog-heading blog-heading--h2">@block.TextContent</h2>
+                                    break;
+                                case "h3":
+                                    <h3 class="blog-heading blog-heading--h3">@block.TextContent</h3>
+                                    break;
+                                case "h4":
+                                    <h4 class="blog-heading blog-heading--h4">@block.TextContent</h4>
+                                    break;
+                                case "h5":
+                                    <h5 class="blog-heading blog-heading--h5">@block.TextContent</h5>
+                                    break;
+                                default:
+                                    <h6 class="blog-heading blog-heading--h6">@block.TextContent</h6>
+                                    break;
+                            }
+                            break;
+            case "Paragraph":
+                            <div class="blog-richtext">@((MarkupString)(block.HtmlContent ?? string.Empty))</div>
+                break;
+            case "Quote":
+                            <blockquote class="blog-quote">
+                                <p>@block.TextContent</p>
+                                @if (!string.IsNullOrWhiteSpace(block.QuoteAuthor))
+                {
+                                    <footer class="blog-quote__author">@block.QuoteAuthor</footer>
+                }
+                            </blockquote>
+                break;
+                        case "Image" when !string.IsNullOrWhiteSpace(block.ImageUrl):
+                            <figure class="blog-media blog-media--image @ResolveImageSizeClass(block.DisplaySize)">
+                                <img src="@block.ImageUrl" alt="@block.AltText" loading="lazy" />
+                                @if (!string.IsNullOrWhiteSpace(block.Caption))
+                    {
+                                    <figcaption class="blog-media__caption">@block.Caption</figcaption>
+                }
+                            </figure>
+                            break;
+                        case "Faq" when block.FaqItems.Count > 0:
+                            <div class="blog-faq">
+                                <AiFaqSection Faqs="@block.FaqItems" Localizer="@Localizer" />
+                            </div>
+                break;
+                        case "YouTube" when !string.IsNullOrWhiteSpace(block.EmbedUrl):
+                            <YouTubeEmbed EmbedUrl="@block.EmbedUrl" Title="@block.EmbedTitle" DisplaySize="@block.DisplaySize" Width="@block.EmbedWidth" Height="@block.EmbedHeight" />
+                break;
+                        case "Instagram" when !string.IsNullOrWhiteSpace(block.EmbedHtml):
+                            <InstagramEmbed EmbedHtml="@block.EmbedHtml" />
+                break;
+                        case "ApartmentsListing":
+                            <BlogApartmentsListing ApartmentIds="@block.ApartmentIds" />
+                            break;
+            default:
+                if (!string.IsNullOrWhiteSpace(block.TextContent))
+                {
+                                <div class="blog-text-block">@block.TextContent</div>
+                }
+                break;
+        }
+                </section>
+            }
+        </section>
+
+        @if (!Post.IsPreview && (Post.PreviousPost is not null || Post.NextPost is not null))
+        {
+            <nav class="blog-post__navigation" aria-label="Blog post navigation">
+                @if (Post.PreviousPost is not null)
+                {
+                    <a class="blog-post__nav-card blog-post__nav-card--prev" href="@BuildPostUrl(Post.PreviousPost.Category, Post.PreviousPost.Slug)">
+                        <div class="blog-post__nav-icon-wrapper">
+                            <GoogleIcon Name="arrow_back" SizePx="24" Class="blog-post__nav-arrow" />
+                        </div>
+                        <div class="blog-post__nav-content">
+                            <span class="blog-post__nav-label">@BlogLocalizer["PreviousPostLabel"]</span>
+                            <span class="blog-post__nav-title">@Post.PreviousPost.Title</span>
+                        </div>
+                    </a>
+                }
+
+                @if (Post.NextPost is not null)
+                {
+                    <a class="blog-post__nav-card blog-post__nav-card--next" href="@BuildPostUrl(Post.NextPost.Category, Post.NextPost.Slug)">
+                        <div class="blog-post__nav-content">
+                            <span class="blog-post__nav-label">@BlogLocalizer["NextPostLabel"]</span>
+                            <span class="blog-post__nav-title">@Post.NextPost.Title</span>
+                        </div>
+                        <div class="blog-post__nav-icon-wrapper">
+                            <GoogleIcon Name="arrow_forward" SizePx="24" Class="blog-post__nav-arrow" />
+                        </div>
+                    </a>
+                }
+            </nav>
+        }
+    </article>
+}

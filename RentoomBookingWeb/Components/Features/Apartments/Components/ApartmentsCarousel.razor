@@ -1,0 +1,56 @@
+@* Reusable presentational carousel of apartment cards.
+   Wraps SimpleCarousel and renders a caller-supplied CardTemplate per apartment, so different hosts
+   (home slider, blog ApartmentsListing) share the same shell, autoscroll and navigation while keeping
+   their own card configuration. Loading/paging (e.g. infinite scroll) stays in the host. *@
+
+<SimpleCarousel Theme="@Theme"
+                ScrollAmount="@ScrollAmount"
+                ShowNavigation="@ShowNavigation"
+                EnableAutoScroll="@EnableAutoScroll"
+                AutoScrollIntervalSeconds="@AutoScrollIntervalSeconds">
+    @for (var i = 0; i < LeadingSkeletonCount; i++)
+    {
+        <Apartment @key="@($"carousel-skeleton-lead-{i}")" Width="@SkeletonWidth" />
+    }
+
+    @foreach (var apartment in Apartments)
+    {
+        @if (CardTemplate is not null)
+        {
+            @CardTemplate(apartment)
+        }
+        else
+        {
+            <Apartment @key="@($"carousel-apartment-{apartment.Id}")" Item="@apartment" Width="@SkeletonWidth" />
+        }
+    }
+
+    @for (var i = 0; i < TrailingSkeletonCount; i++)
+    {
+        <Apartment @key="@($"carousel-skeleton-trail-{i}")" Width="@SkeletonWidth" />
+    }
+</SimpleCarousel>
+
+@code {
+    /// <summary>Apartments to render as cards, in the order supplied by the caller.</summary>
+    [Parameter] public IReadOnlyList<ApartmentObject> Apartments { get; set; } = Array.Empty<ApartmentObject>();
+
+    /// <summary>Per-apartment card configuration. When null, a default read-only card is rendered.</summary>
+    [Parameter] public RenderFragment<ApartmentObject>? CardTemplate { get; set; }
+
+    /// <summary>Skeleton placeholder cards rendered before the items (e.g. initial load).</summary>
+    [Parameter] public int LeadingSkeletonCount { get; set; } = 0;
+
+    /// <summary>Skeleton placeholder cards rendered after the items (e.g. loading more).</summary>
+    [Parameter] public int TrailingSkeletonCount { get; set; } = 0;
+
+    /// <summary>Width applied to skeleton and default cards, e.g. "min(370px, 85vw)".</summary>
+    [Parameter] public string? SkeletonWidth { get; set; }
+
+    // SimpleCarousel passthrough.
+    [Parameter] public string Theme { get; set; } = "rentoom-theme";
+    [Parameter] public int ScrollAmount { get; set; } = 420;
+    [Parameter] public bool ShowNavigation { get; set; } = true;
+    [Parameter] public bool EnableAutoScroll { get; set; } = true;
+    [Parameter] public int AutoScrollIntervalSeconds { get; set; } = 3;
+}

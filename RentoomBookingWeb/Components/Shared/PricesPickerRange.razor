@@ -4,8 +4,8 @@
 
 <div class="price-slider-container">
     <div class="price-labels">
-        <span>@MinSelected.ToString("N0", new CultureInfo("pl-PL")) @CurrencyLocalizer["PLN"]</span>
-        <span>@MaxSelected.ToString("N0", new CultureInfo("pl-PL")) @CurrencyLocalizer["PLN"]</span>
+        <PriceDisplay AmountPln="@((decimal)MinSelected)" />
+        <PriceDisplay AmountPln="@((decimal)MaxSelected)" />
     </div>
 
     <div class="slider-wrapper">

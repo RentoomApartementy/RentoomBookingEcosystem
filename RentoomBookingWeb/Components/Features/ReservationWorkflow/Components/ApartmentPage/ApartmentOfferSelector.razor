@@ -2,7 +2,7 @@
 @using RentoomBooking.SharedClasses.Models.AvailableTerms
 @using Microsoft.Extensions.Localization
 
-@if (StartDate == null || EndDate == null)
+@if (StartDate == null || EndDate == null || ShowNoOffersPlaceholder)
 {
     <div class="placeholder-offer" @onclick="OnSearchModalOpen">
         <div class="placeholder-icon">
@@ -42,10 +42,10 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
                 <small>@Localizer["NonRefundableText"]</small>
                 <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                     <span class="summary-offer-price-button-price">
-                        <b>@nonRefundableDiscountedPrice.ToString("N2") @CurrencySymbol</b>
+                        <b><PriceDisplay AmountPln="@nonRefundableDiscountedPrice" /></b>
                         @if (BonusDiscountAmount > 0m)
                         {
-                            <span class="summary-offer-price-old">@nonRefundableStandardPrice.ToString("N2") @CurrencySymbol</span>
+                            <span class="summary-offer-price-old"><PriceDisplay AmountPln="@nonRefundableStandardPrice" /></span>
                         }
                         <span class="stay-summary-text">@StaySummaryText</span>
                     </span>
@@ -70,10 +70,10 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
                 <small>@RefundableOfferText</small>
                 <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                     <span class="summary-offer-price-button-price">
-                        <b>@refundableDiscountedPrice.ToString("N2") @CurrencySymbol</b>
+                        <b><PriceDisplay AmountPln="@refundableDiscountedPrice" /></b>
                         @if (BonusDiscountAmount > 0m)
                         {
-                            <span class="summary-offer-price-old">@refundableStandardPrice.ToString("N2") @CurrencySymbol</span>
+                            <span class="summary-offer-price-old"><PriceDisplay AmountPln="@refundableStandardPrice" /></span>
                         }
                         <span class="stay-summary-text">@StaySummaryText</span>
                     </span>
@@ -138,7 +138,6 @@ else
     [Parameter] public PricingOffersResponse? OffersResponse { get; set; }
     [Parameter] public decimal TotalAdditionalPriceBeforeDiscount { get; set; }
     [Parameter] public decimal BonusDiscountAmount { get; set; }
-    [Parameter] public string CurrencySymbol { get; set; } = "PLN";
     [Parameter] public string StaySummaryText { get; set; } = "";
     [Parameter] public string RefundableOfferText { get; set; } = "";
     [Parameter] public string? SelectedOfferType { get; set; }
@@ -153,7 +152,15 @@ else
     [Parameter] public EventCallback<AvailableTerm> OnSuggestionSelected { get; set; }
     [Parameter] public EventCallback<AvailableTerm> OnGoToSuggestion { get; set; }
 
-    private bool IsSelectedOffer(string offerType) => 
+    // Data z URL nie dała oferty ani sugerowanych alternatywnych terminów - traktujemy tak samo jak brak daty w URL.
+    private bool ShowNoOffersPlaceholder =>
+        StartDate != null && EndDate != null
+        && !IsOfferLoading
+        && !(OffersResponse?.Result?.PricingOffers?.Count > 0)
+        && SuggestionDates.Count == 0
+        && !IsSuggestionLoading;
+
+    private bool IsSelectedOffer(string offerType) =>
         string.Equals(SelectedOfferType, offerType, StringComparison.OrdinalIgnoreCase);
 
     private string GetOfferButtonLabel(string offerType) => 

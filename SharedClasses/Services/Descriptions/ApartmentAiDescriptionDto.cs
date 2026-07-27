@@ -12,12 +12,12 @@ namespace RentoomBooking.SharedClasses.Services.Descriptions
         public string VariantType { get; set; } = string.Empty;
         public string LanguageCode { get; set; } = string.Empty;
 
-        public List<AiFaqItemDto> Faqs { get; set; } = new();
+        public List<FaqItemDto> Faqs { get; set; } = new();
         public List<string> Highlights { get; set; } = new();
         public List<string> SeoPhrases { get; set; } = new();
     }
 
-    public class AiFaqItemDto
+    public class FaqItemDto
     {
         public string Question { get; set; } = string.Empty;
         public string Answer { get; set; } = string.Empty;

@@ -1,0 +1,60 @@
+.blog-share-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    margin: 1.5rem 0 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.blog-share-bar__label {
+    margin-right: 0.25rem;
+    color: #475569;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.blog-share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 160ms ease, opacity 160ms ease, background-color 160ms ease;
+}
+
+.blog-share-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.blog-share-btn:focus-visible {
+    outline: 3px solid #f5c542;
+    outline-offset: 3px;
+}
+
+.blog-share-btn__icon {
+    width: 1.125rem;
+    height: 1.125rem;
+}
+
+.blog-share-btn--facebook { background: #1877f2; }
+.blog-share-btn--linkedin { background: #0a66c2; }
+.blog-share-btn--whatsapp { background: #25d366; }
+.blog-share-btn--copy { background: #64748b; }
+.blog-share-btn--copied { background: #198754; }
+
+@media (max-width: 480px) {
+    .blog-share-bar__label {
+        width: 100%;
+    }
+}

@@ -142,4 +142,22 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Contatto</value>
   </data>
+  <data name="Cooperation_MetaKeywords" xml:space="preserve">
+    <value>Gestione degli affitti Toruń, servizi di appartamenti, investimenti senza manutenzione, cooperazione con Rentoom, ottimizzazione degli profitti sugli affitti, affitti a breve termine Toruń</value>
+  </data>
+  <data name="Cooperation_MetaDescription" xml:space="preserve">
+    <value>Trasforma il tuo appartamento in un investimento senza manutenzione con Rentoom. Offriamo una gestione completa degli affitti a Toruń, ottimizzazione dei redditi e servizio agli ospiti 24/7. Scommetti sulla qualità e sull'esperienza.</value>
+  </data>
+  <data name="Cooperation_OgTitle" xml:space="preserve">
+    <value>Cooperazione - Rentoom | Gestione professionale dei contratti di locazione</value>
+  </data>
+  <data name="Cooperation_BreadcrumbName" xml:space="preserve">
+    <value>Cooperazione</value>
+  </data>
+  <data name="Cooperation_OgDescription" xml:space="preserve">
+    <value>Siamo il leader di mercato a Toruń. Offriamo un servizio completo, tecnologie innovative e la massimizzazione dei tuoi profitti. Stai tranquillo, stiamo lavorando per te.</value>
+  </data>
+  <data name="Cooperation_PageTitle" xml:space="preserve">
+    <value>Cooperazione - Rentoom | Gestione degli affitti Toruń</value>
+  </data>
 </root>

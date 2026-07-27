@@ -1,6 +1,7 @@
 @using RentoomBooking.SharedClasses.Services.Descriptions
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Models
 
 <div class="ai-description-container">
     @* TOP: Always visible intro (Hook) *@
@@ -34,23 +35,13 @@
             }
         </div>
 
-        @if (Amenities != null && Amenities.Any())
-        {
-            <div class="amenities-section">
-                <h3 class="section-title">@Localizer["Amenities_Title"]</h3>
-                <ul class="amenities-grid">
-                    @foreach (var amenity in Amenities)
-                    {
-                        <li class="amenity-item">
-                            <div class="amenity-check">
-                                <span class="material-symbols-outlined">@amenity.IconName</span>
-                            </div>
-                            <span class="amenity-name">@amenity.Name</span>
-                        </li>
-                    }
-                </ul>
-            </div>
-        }
+        <ApartmentAmenities Amenities="Amenities" Localizer="Localizer" />
+
+        <ApartmentNearbyAttractions
+            Title="@Localizer["NearbyAttractions_Title"]"
+            Subtitle="@Localizer["NearbyAttractions_Subtitle"]"
+            Data="NearbyAttractions"
+            Localizer="Localizer" />
 
         <div class="faq-section">
             <AiFaqSection Faqs="Data?.Faqs" Localizer="Localizer" />
@@ -68,6 +59,7 @@
 @code {
     [Parameter] public ApartmentAiDescriptionDto? Data { get; set; }
     [Parameter] public List<ObjectAmenity>? Amenities { get; set; }
+    [Parameter] public NearbyAttractionsResultDTO? NearbyAttractions { get; set; }
     [Parameter] public bool IsExpanded { get; set; }
     [Parameter] public EventCallback OnToggleExpand { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;

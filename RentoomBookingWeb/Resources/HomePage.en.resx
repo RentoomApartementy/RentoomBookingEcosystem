@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -116,5 +117,11 @@ Each apartment is a space designed to provide genuine rest and privacy after an 
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Learn more</value>
+  </data>
+  <data name="PartnersTitle" xml:space="preserve">
+    <value>Our partners</value>
+  </data>
+  <data name="PartnersSubtitle" xml:space="preserve">
+    <value>We work with proven local brands to make your stay in Toruń unique</value>
   </data>
 </root>

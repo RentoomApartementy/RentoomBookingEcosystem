@@ -1,6 +1,7 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking.Public
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Models
 
 <div class="apartment-wrapper @(IsExpanded ? "expanded" : "collapsed")">
     <article class="description-wrapper">
@@ -29,6 +30,12 @@
         }
     </ul>
 
+    <ApartmentNearbyAttractions
+        Title="@Localizer["NearbyAttractions_Title"]"
+        Subtitle="@Localizer["NearbyAttractions_Subtitle"]"
+        Data="NearbyAttractions"
+        Localizer="Localizer" />
+
     @if (!IsExpanded)
     {
         <div class="wrapper-shadow"></div>
@@ -42,6 +49,7 @@
 @code {
     [Parameter] public ObjectDescription? Description { get; set; }
     [Parameter] public List<ObjectAmenity>? Amenities { get; set; }
+    [Parameter] public NearbyAttractionsResultDTO? NearbyAttractions { get; set; }
     [Parameter] public bool IsExpanded { get; set; }
     [Parameter] public EventCallback OnToggleExpand { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;

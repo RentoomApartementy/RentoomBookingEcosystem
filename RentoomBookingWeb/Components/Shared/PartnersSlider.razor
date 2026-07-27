@@ -10,7 +10,7 @@
             {
                 @if (!string.IsNullOrEmpty(partner.Link))
                 {
-                    <a href="@partner.Link" target="_blank" rel="noopener noreferrer" class="partner-item-link" title="@partner.Label">
+                    <a href="@partner.Link" target="_blank" rel=@($"noopener noreferrer {Rel}") class="partner-item-link" title="@partner.Label">
                         <div class="partner-item-wrapper">
                             <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-img" loading="lazy" />
                         </div>
@@ -30,4 +30,6 @@
 @code {
     [Parameter]
     public List<PartnerItem> Partners { get; set; } = new();
+    [Parameter]
+    public string? Rel { get; set; } = String.Empty;
 }

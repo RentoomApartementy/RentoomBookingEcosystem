@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Il contatto poteva essere salvato, ma l'accordo non poteva essere creato. Controlla Bitrix prima di rispedire.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Copia numero PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Copia il numero EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Copia il numero di conto EUR nella cartellina</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Hai domande sulla gestione degli affitti? Contattaci! Controlla il nostro indirizzo e i nostri dati bancari.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Contatta Rentoom, Ufficio Rentoom Toruń, Gestione Affitti, Dati fattura Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Contatto</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Contatto - Rentoom | Ufficio Servizi e Gestione Noleggio Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Contatto - Rentoom | Gestione professionale dei contratti di locazione</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Copia il numero di conto PLN nella cartellina</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Contatta il team Rentoom a Toruń. Dettagli dell'indirizzo, numeri di conto bancario (PLN/EUR) e un modulo di contatto. Servizio di noleggio professionale.</value>
+  </data>
 </root>

@@ -8,11 +8,16 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using RentoomBooking.SharedClasses.Configuration;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Descriptions.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Blog.Database;
 using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Integrations.Bitrix.Services;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Database;
 using RentoomBooking.SharedClasses.Integrations.Tpay;
 using RentoomBooking.SharedClasses.Integrations.Tpay.Models;
 using RentoomBooking.SharedClasses.Models.Storage;
@@ -25,11 +30,14 @@ using RentoomBooking.SharedClasses.Services.Payments;
 using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
+using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
+using RentoomBooking.SharedClasses.Services.Currency;
 using RentoomBooking.SharedFrontend.Localization;
+using RentoomBooking.SharedFrontend.Currency;
 using RentoomBookingWeb.Services;
 using RentoomBookingWeb.Services.Localization;
 using RentoomBookingWeb.Configuration;
@@ -112,7 +120,17 @@ namespace RentoomBookingWeb
             builder.Services.AddDbContextFactory<RappDescriptionsDbContext>(options =>
                 options.UseNpgsql(rentoomAppConnectionString));
 
+            builder.Services.AddDbContextFactory<RappBlogReadDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
+            builder.Services.AddDbContextFactory<RappSocialMediaDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
+            builder.Services.AddDbContextFactory<RappNearbyAttractionsDbContext>(options =>
+                options.UseNpgsql(rentoomAppConnectionString));
+
             builder.Services.AddScoped<IApartmentAiDescriptionService, ApartmentAiDescriptionService>();
+            builder.Services.AddScoped<IBlogContentReader, BlogContentReader>();
 
             var footerEnvironmentInfo = FooterEnvironmentInfo.Create(
                builder.Environment,
@@ -123,6 +141,8 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<ApartmentRepository>();
             builder.Services.AddScoped<FiltersRepository>();
             builder.Services.AddScoped<RappQrMaintService>();
+            builder.Services.AddScoped<ApartmentSocialMediaService>();
+            builder.Services.AddScoped<ApartmentNearbyAttractionsService>();
             builder.Services.AddScoped<IIdoApartmentService, IdoApartmentService>();
             builder.Services.AddScoped<IApartmentMediaCatalogService, ApartmentMediaCatalogService>();
             builder.Services.AddScoped<IApartmentPhotoBlobStorage, ApartmentPhotoBlobStorage>();
@@ -145,6 +165,7 @@ namespace RentoomBookingWeb
             builder.Services.AddScoped<BitrixLeadCaptureService>();
             builder.Services.AddScoped<IGusService, GusService>();
             builder.Services.AddScoped<IRouteLocalizationService, RouteLocalizationService>();
+            builder.Services.AddScoped<FeatureFlagsService>();
             builder.Services.AddScoped<MediaCacheService>();
             builder.Services.AddScoped<ReservationWorkflowTelemetry>();
             builder.Services.AddScoped<GoogleAnalyticsService>();
@@ -174,6 +195,15 @@ namespace RentoomBookingWeb
             //GUS
             builder.Services.Configure<GusApiSettings>(builder.Configuration.GetSection("GusApi"));
             builder.Services.AddScoped<IGusService, GusService>();
+
+            //NBP - kursy walut dla cen w walucie języka UI
+            builder.Services.AddHttpClient(ExchangeRateService.HttpClientName, client =>
+            {
+                client.BaseAddress = new Uri("https://api.nbp.pl/");
+                client.Timeout = TimeSpan.FromSeconds(5);
+            });
+            builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
+            builder.Services.AddScoped<ICurrentUiCurrencyProvider, CurrentUiCurrencyProvider>();
 
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
             builder.Services.AddScoped<IAvailabilityFinderService2, AvailabilityFinderService2>();
@@ -226,12 +256,13 @@ namespace RentoomBookingWeb
             //storage options:
             builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
             builder.Services.Configure<StorageOptions>(ApartmentPhotoBlobStorage.StorageOptionsName, builder.Configuration.GetSection(ApartmentPhotoBlobStorage.StorageOptionsName));
+            builder.Services.Configure<StorageOptions>(BlogContentReader.BlogStorageOptionsName, builder.Configuration.GetSection(BlogContentReader.BlogStorageOptionsName));
             builder.Services.Configure<ApartmentMediaVariantsOptions>(builder.Configuration.GetSection(ApartmentMediaVariantsOptions.SectionName));
 
             var app = builder.Build();
             
             var supportedCultures = SupportedLanguagesProvider.SupportedCultureNames.ToArray();
-            const string defaultCulture = "pl-PL";
+            var defaultCulture = SupportedLanguagesProvider.DefaultCultureName;
             var supportedCultureSet = new HashSet<string>(supportedCultures, StringComparer.OrdinalIgnoreCase);
             var supportedCultureInfos = supportedCultures
                 .Select(CultureInfo.GetCultureInfo)
@@ -444,12 +475,12 @@ namespace RentoomBookingWeb
             "object-src 'none'; " +
             "frame-ancestors 'self'; " +
             "form-action 'self' https://secure.tpay.com https://secure.sandbox.tpay.com; " +
-            "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://t.contentsquare.net https://*.contentsquare.net; " +
+            "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://t.contentsquare.net https://*.contentsquare.net https://www.instagram.com; " +
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
             "font-src 'self' data: https://fonts.gstatic.com; " +
             "img-src 'self' data: blob: https:; " +
             "connect-src 'self' ws: wss: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://*.contentsquare.net; " +
-            "frame-src 'self' https://www.openstreetmap.org; " +
+            "frame-src 'self' https://www.openstreetmap.org https://www.youtube-nocookie.com https://www.youtube.com https://www.instagram.com; " +
             "worker-src 'self' blob:; " +
             "manifest-src 'self'; " +
             "media-src 'self' https:;";

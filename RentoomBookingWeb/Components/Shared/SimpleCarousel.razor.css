@@ -44,7 +44,7 @@
     flex-direction: row;
     gap: 24px;
     overflow-x: auto;
-    padding: 16px 8px; /* Extra padding to avoid cutting off card shadows */
+    padding: 16px 12px 32px 12px; /* Increased bottom and side padding to prevent shadow cut-off */
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;

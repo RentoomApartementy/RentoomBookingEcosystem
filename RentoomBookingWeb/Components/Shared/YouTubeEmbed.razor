@@ -1,0 +1,24 @@
+@using RentoomBooking.SharedClasses.Services.Embeds
+
+@if (!string.IsNullOrWhiteSpace(EmbedUrl))
+{
+    <div class="embed-youtube @YoutubeEmbedHelper.ResolveSizeClass(DisplaySize)">
+        <div class="embed-youtube__aspect" style="@YoutubeEmbedHelper.ResolveAspectRatioStyle(Width, Height)">
+            <iframe src="@EmbedUrl"
+                    title="@(string.IsNullOrWhiteSpace(Title) ? "YouTube video player" : Title)"
+                    loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string? EmbedUrl { get; set; }
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string? DisplaySize { get; set; } = "M";
+    [Parameter] public int? Width { get; set; }
+    [Parameter] public int? Height { get; set; }
+}

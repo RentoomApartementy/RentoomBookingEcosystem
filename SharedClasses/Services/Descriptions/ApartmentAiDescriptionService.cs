@@ -110,7 +110,7 @@ namespace RentoomBooking.SharedClasses.Services.Descriptions
                 MetaDescription = targetVariant.MetaDescription,
                 VariantType = variantType,
                 LanguageCode = langCode,
-                Faqs = faqs.Select(f => new AiFaqItemDto { Question = f.Question, Answer = f.Answer }).ToList(),
+                Faqs = faqs.Select(f => new FaqItemDto { Question = f.Question, Answer = f.Answer }).ToList(),
                 Highlights = highlights.Select(h => h.Text).ToList(),
                 SeoPhrases = seoPhrases.Select(p => p.Phrase).ToList()
             };

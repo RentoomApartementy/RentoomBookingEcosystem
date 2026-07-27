@@ -192,29 +192,14 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Σχετικά με το Τορούν</value>
   </data>
-  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
-    <value>Κύριο μενού του ιστότοπου</value>
-  </data>
-  <data name="UnderConstruction_BackHome" xml:space="preserve">
-    <value>Επιστροφή στην αρχική σελίδα</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
-    <value>Εργαζόμαστε για την προετοιμασία αυτής της ενότητας.</value>
-  </data>
-  <data name="Map_AddressFallback" xml:space="preserve">
-    <value>Διεύθυνση</value>
-  </data>
-  <data name="AppError_DefaultTitle" xml:space="preserve">
-    <value>Παρουσιάστηκε σφάλμα</value>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>ΠΛΝ</value>
   </data>
   <data name="Menu_FacebookIconAlt" xml:space="preserve">
     <value>Εικονίδιο Facebook</value>
   </data>
-  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
-    <value>Εικονίδιο κλεισίματος μενού</value>
-  </data>
-  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
-    <value>Σας προσκαλούμε σύντομα!</value>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Εικονίδιο Instagram</value>
   </data>
   <data name="Menu_LogoAlt" xml:space="preserve">
     <value>Εικονίδιο Rentoom</value>
@@ -222,40 +207,55 @@
   <data name="Map_ClusterNoOffers" xml:space="preserve">
     <value>Δεν υπάρχουν προσφορές</value>
   </data>
-  <data name="Map_DefaultCurrency" xml:space="preserve">
-    <value>ΠΛΝ</value>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Εργοτάξιο υπό κατασκευή</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Διαμερίσματα</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Κλείστε το μήνυμα</value>
+  </data>
+  <data name="AppError_DefaultTitle" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα</value>
+  </data>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Προσφορές</value>
+  </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Κύριο μενού του ιστότοπου</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Σπίτι</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Εργαζόμαστε για την προετοιμασία αυτής της ενότητας.</value>
   </data>
   <data name="CookieConsent_SaveError" xml:space="preserve">
     <value>Δεν μπορούσα να σώσω τη συγκατάθεση. Παρακαλώ προσπαθήστε ξανά.</value>
   </data>
-  <data name="Menu_InstagramIconAlt" xml:space="preserve">
-    <value>Εικονίδιο Instagram</value>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Διαμερίσματα</value>
   </data>
-  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
-    <value>Προσφορές</value>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Εικονίδιο μενού</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Επιστροφή στην αρχική σελίδα</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Διεύθυνση</value>
+  </data>
+  <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
+    <value>Εικονίδιο κλεισίματος μενού</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
+    <value>Σας προσκαλούμε σύντομα!</value>
   </data>
   <data name="Menu_FacebookAriaLabel" xml:space="preserve">
     <value>Facebook Rentoom Διαμερίσματα</value>
   </data>
   <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
     <value>Εικονίδιο ημερολογίου</value>
-  </data>
-  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
-    <value>Διαμερίσματα</value>
-  </data>
-  <data name="UnderConstruction_Title" xml:space="preserve">
-    <value>Εργοτάξιο υπό κατασκευή</value>
-  </data>
-  <data name="Breadcrumb_Home" xml:space="preserve">
-    <value>Σπίτι</value>
-  </data>
-  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
-    <value>Instagram Rentoom Διαμερίσματα</value>
-  </data>
-  <data name="AppError_CloseAriaLabel" xml:space="preserve">
-    <value>Κλείστε το μήνυμα</value>
-  </data>
-  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
-    <value>Εικονίδιο μενού</value>
   </data>
 </root>

@@ -98,16 +98,20 @@ namespace RentoomBooking.SharedClasses.Database
             };
         }
 
+        private const string DefaultCulture = "pl-PL";
+
         private static CookieNoticeTranslation? SelectTranslation(ICollection<CookieNoticeTranslation> translations, string normalizedCulture)
         {
             var neutralCulture = normalizedCulture.Split('-')[0];
+            var neutralDefaultCulture = DefaultCulture.Split('-')[0];
 
             return translations.FirstOrDefault(t => string.Equals(t.Culture, normalizedCulture, StringComparison.OrdinalIgnoreCase))
+                // requested is more specific than stored (e.g. request "en-GB", stored "en")
                 ?? translations.FirstOrDefault(t => string.Equals(t.Culture, neutralCulture, StringComparison.OrdinalIgnoreCase))
-                ?? translations.FirstOrDefault(t => string.Equals(t.Culture, "pl-PL", StringComparison.OrdinalIgnoreCase))
-                ?? translations.FirstOrDefault(t => string.Equals(t.Culture, "pl", StringComparison.OrdinalIgnoreCase))
-                ?? translations.FirstOrDefault(t => string.Equals(t.Culture, "en-US", StringComparison.OrdinalIgnoreCase))
-                ?? translations.FirstOrDefault(t => string.Equals(t.Culture, "en", StringComparison.OrdinalIgnoreCase))
+                // stored is more specific than requested (e.g. request "de", stored "de-DE"; request "pl", stored "pl-PL")
+                ?? translations.FirstOrDefault(t => string.Equals(t.Culture.Split('-')[0], neutralCulture, StringComparison.OrdinalIgnoreCase))
+                ?? translations.FirstOrDefault(t => string.Equals(t.Culture, DefaultCulture, StringComparison.OrdinalIgnoreCase))
+                ?? translations.FirstOrDefault(t => string.Equals(t.Culture.Split('-')[0], neutralDefaultCulture, StringComparison.OrdinalIgnoreCase))
                 ?? translations.OrderBy(t => t.Id).FirstOrDefault();
         }
 
@@ -133,7 +137,7 @@ namespace RentoomBooking.SharedClasses.Database
         {
             if (string.IsNullOrWhiteSpace(cultureName))
             {
-                return "pl-PL";
+                return DefaultCulture;
             }
 
             try
@@ -142,7 +146,7 @@ namespace RentoomBooking.SharedClasses.Database
             }
             catch (CultureNotFoundException)
             {
-                return "pl-PL";
+                return DefaultCulture;
             }
         }
 

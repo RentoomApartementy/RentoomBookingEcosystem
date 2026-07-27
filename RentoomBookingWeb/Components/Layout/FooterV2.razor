@@ -20,7 +20,7 @@
                 <!-- Partners Slider Component (seamless infinite loop) -->
                 <div class="footer-v2-partners-container">
                     <h4 class="footer-v2-partners-title">@Localizer["Footer_PartnersTitle"]</h4>
-                    <PartnersSlider Partners="@Partners" />
+                    <PartnersSlider Partners="@Partners" Rel="sponsored" />
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
 
                 <!-- Column 3: Media społecznościowe (Matches original component socials) -->
                 <nav class="footer-v2-col" aria-labelledby="footer-v2-socials-heading">
-                    <h3 id="footer-v2-socials-heading" class="footer-v2-title">Media społecznościowe</h3>
+                    <h3 id="footer-v2-socials-heading" class="footer-v2-title">@Localizer["SocialMediaLabel"]</h3>
                     <ul class="footer-v2-list">
                         <li>
                             <a href="https://www.facebook.com/RentoomApartamenty" target="_blank" rel="noopener noreferrer" class="footer-v2-link footer-v2-social-link" aria-label="@Localizer["Footer_FacebookAriaLabel"]">
@@ -77,7 +77,7 @@
 
                 <!-- Column 4: Linki (Matches original component bottom link) -->
                 <nav class="footer-v2-col" aria-labelledby="footer-v2-links-heading">
-                    <h3 id="footer-v2-links-heading" class="footer-v2-title">Linki</h3>
+                    <h3 id="footer-v2-links-heading" class="footer-v2-title">@Localizer["LinksText"]</h3>
                     <ul class="footer-v2-list">
                         <li>
                             <a href="@RouteService.GetLocalizedUrl("AllApartments")" class="footer-v2-link">

@@ -469,4 +469,94 @@
   <data name="CancelReservationButtonText" xml:space="preserve">
     <value>Anuluj rezerwację</value>
   </data>
+  <data name="BonusRemovedMessage" xml:space="preserve">
+    <value>Bonus został usunięty.</value>
+  </data>
+  <data name="BonusAppliedMessage" xml:space="preserve">
+    <value>Bonus został zastosowany: -{0} PLN</value>
+  </data>
+  <data name="BonusReasonNotFound" xml:space="preserve">
+    <value>Podany bonus nie istnieje.</value>
+  </data>
+  <data name="BonusReasonDisabled" xml:space="preserve">
+    <value>Ten bonus jest obecnie wyłączony.</value>
+  </data>
+  <data name="BonusReasonInvalidTarget" xml:space="preserve">
+    <value>Ten bonus nie dotyczy wybranego apartamentu.</value>
+  </data>
+  <data name="BonusReasonOutsideReservationDates" xml:space="preserve">
+    <value>Bonus nie jest dostępny dla daty rozpoczęcia tej rezerwacji.</value>
+  </data>
+  <data name="BonusReasonChannelNotSupported" xml:space="preserve">
+    <value>Bonus działa tylko dla rezerwacji z RentoomBookingWeb.</value>
+  </data>
+  <data name="BonusReasonNoDiscount" xml:space="preserve">
+    <value>Bonus nie obniża aktualnej ceny tej rezerwacji.</value>
+  </data>
+  <data name="BonusReasonMissingReservationData" xml:space="preserve">
+    <value>Uzupełnij daty i wybierz ofertę, aby zastosować bonus.</value>
+  </data>
+  <data name="BonusReasonMissingOfferPrice" xml:space="preserve">
+    <value>Nie udało się odczytać ceny oferty do przeliczenia bonusu.</value>
+  </data>
+  <data name="BonusReasonUnknown" xml:space="preserve">
+    <value>Nie udało się zastosować bonusu.</value>
+  </data>
+  <data name="BonusInputPlaceholder" xml:space="preserve">
+    <value>Wpisz kod bonusu</value>
+  </data>
+  <data name="BonusApplyButton" xml:space="preserve">
+    <value>Zastosuj bonus</value>
+  </data>
+  <data name="BonusApplyingButton" xml:space="preserve">
+    <value>Sprawdzanie...</value>
+  </data>
+  <data name="BonusAppliedInline" xml:space="preserve">
+    <value>Bonus: {0} (-{1} PLN)</value>
+  </data>
+  <data name="BonusClearButtonTitle" xml:space="preserve">
+    <value>Usuń bonus</value>
+  </data>
+  <data name="BonusDiscountLabel" xml:space="preserve">
+    <value>Rabat bonusowy</value>
+  </data>
+  <data name="Summary_QrButtonAriaLabel" xml:space="preserve">
+    <value>Kod QR</value>
+  </data>
+  <data name="Summary_DocumentLinkAriaLabel" xml:space="preserve">
+    <value>Link do dokumentu</value>
+  </data>
+  <data name="Summary_ErrorIconAriaLabel" xml:space="preserve">
+    <value>Ikona błędu</value>
+  </data>
+  <data name="Summary_StaywellQrAlt" xml:space="preserve">
+    <value>Kod QR StayWell</value>
+  </data>
+  <data name="Summary_ReservationIconAriaLabel" xml:space="preserve">
+    <value>Ikona statusu rezerwacji</value>
+  </data>
+  <data name="Summary_EmailIconAriaLabel" xml:space="preserve">
+    <value>Ikona statusu e-maila</value>
+  </data>
+  <data name="Summary_WaitingIconAriaLabel" xml:space="preserve">
+    <value>Ikona oczekiwania</value>
+  </data>
+  <data name="Summary_PaymentStatusIconAriaLabel" xml:space="preserve">
+    <value>Ikona statusu płatności</value>
+  </data>
+  <data name="Summary_TpayIconAlt" xml:space="preserve">
+    <value>Ikona Tpay</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerTitle" xml:space="preserve">
+    <value>Potwierdzamy płatność</value>
+  </data>
+  <data name="PaymentReturnConfirmingBannerMessage" xml:space="preserve">
+    <value>Czekamy na potwierdzenie płatności z Tpay. Status rezerwacji zaktualizuje się automatycznie po zapisaniu webhooka.</value>
+  </data>
+  <data name="PaymentConfirmationInProgressTitle" xml:space="preserve">
+    <value>Potwierdzamy płatność</value>
+  </data>
+  <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
+    <value>Trwa oczekiwanie na potwierdzenie płatności z Tpay. Za chwilę pokażemy aktualny status rezerwacji.</value>
+  </data>
 </root>

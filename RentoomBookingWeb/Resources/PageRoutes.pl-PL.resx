@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -52,6 +52,12 @@
   </resheader>
   <data name="AboutCity" xml:space="preserve">
     <value>o-toruniu</value>
+  </data>
+  <data name="BlogList" xml:space="preserve">
+    <value>blog</value>
+  </data>
+  <data name="BlogPost" xml:space="preserve">
+    <value>blog</value>
   </data>
   <data name="AllApartments" xml:space="preserve">
     <value>apartamenty-torun</value>

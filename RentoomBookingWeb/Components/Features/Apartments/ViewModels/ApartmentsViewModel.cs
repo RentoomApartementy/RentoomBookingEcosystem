@@ -8,6 +8,7 @@ using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services;
 using RentoomBookingWeb.Services.Localization;
@@ -18,6 +19,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
     {
         private readonly IApartmentsService _apartmentsService;
         private readonly IRentoomOfferService _rentoomOfferService;
+        private readonly IIdoOfferService _idoOfferService;
         private readonly NavigationManager _navManager;
         private readonly IAvailabilityFinderService2 _availabilityFinder;
         private readonly IApartmentSearchFiltersService _filterService;
@@ -42,10 +44,22 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private List<PricingOffer> _allMatchingOffers = new();
         private List<ApartmentObject> _matchingMetaItems = new();
 
+        // Zakres dat faktycznie używany do pobierania ofert/sugestii - zawsze wypełniony (jawny wybór usera
+        // albo domyślne okno jak na Home), niezależnie od publicznych StartDate/EndDate wiązanych do SearchBar.
+        private string _effectiveStartDate = "";
+        private string _effectiveEndDate = "";
+
         public List<ApartmentObject> Items { get; private set; } = new();
         public List<PricingOffer> Offers { get; private set; } = new();
+        public Dictionary<int, PublicApartmentOffer> PublicOffers { get; private set; } = new();
         public Dictionary<int, List<AvailableTerm>> AvailableTerms { get; private set; } = new();
         private Dictionary<int, SuggestionStatus> SuggestionStatuses { get; } = new();
+
+        // Slider fetch flags. Defaults preserve the non-slider (apartments list page) behavior, whose
+        // transient ViewModel instance never calls InitializeForSliderAsync.
+        private bool _fetchDatedOffers = true;
+        private bool _fetchPublicOffers = false;
+        private bool _fetchSuggestions = true;
 
         public long? ApartmentsCount { get; private set; }
         public bool IsLoading { get; private set; } = true;
@@ -77,6 +91,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public ApartmentsViewModel(
             IApartmentsService apartmentsService,
             IRentoomOfferService rentoomOfferService,
+            IIdoOfferService idoOfferService,
             NavigationManager navManager,
             IAvailabilityFinderService2 availabilityFinder,
             IApartmentSearchFiltersService filterService,
@@ -89,6 +104,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         {
             _apartmentsService = apartmentsService;
             _rentoomOfferService = rentoomOfferService;
+            _idoOfferService = idoOfferService;
             _navManager = navManager;
             _availabilityFinder = availabilityFinder;
             _filterService = filterService;
@@ -104,6 +120,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public int MaxOfferPrice => ScaleMaxPrice;
 
         public PricingOffer? GetPricingOfferByObjectId(int objectId) => Offers.Find(o => o.ObjectId == objectId);
+        public PublicApartmentOffer? GetPublicOfferByObjectId(int objectId) =>
+            PublicOffers.TryGetValue(objectId, out var offer) ? offer : null;
         public SuggestionStatus GetSuggestionStatusByObjectId(int objectId) =>
             SuggestionStatuses.TryGetValue(objectId, out var status) ? status : SuggestionStatus.NotStarted;
         public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId) => GetSuggestionsByObjectId(objectId);
@@ -143,6 +161,10 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             FilterMinPrice = urlMin;
             FilterMaxPrice = urlMax;
             IsSearch = !string.IsNullOrEmpty(StartDate) && !string.IsNullOrEmpty(EndDate);
+
+            (_effectiveStartDate, _effectiveEndDate) = IsSearch
+                ? (StartDate, EndDate)
+                : GetDefaultDateWindow();
 
             await GetApartmentsCount();
 
@@ -190,20 +212,18 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             NotifyStateChanged();
         }
 
-        public async Task InitializeForSliderAsync(CancellationToken ct = default)
+        public async Task InitializeForSliderAsync(bool showSuggestions = true, bool showPublicOffer = false, bool fetchDatedOffers = true, CancellationToken ct = default)
         {
+            _fetchSuggestions = showSuggestions;
+            _fetchPublicOffers = showPublicOffer;
+            _fetchDatedOffers = fetchDatedOffers;
+
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
 
-            var now = DateTime.Now;
-            var dateFrom = DateOnly.FromDateTime(now);
-            var dateTo = DateOnly.FromDateTime(
-                (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
-                    ? now.AddDays(2)
-                    : now.AddDays(1));
-
-            StartDate = dateFrom.ToString("yyyy-MM-dd");
-            EndDate = dateTo.ToString("yyyy-MM-dd");
+            (StartDate, EndDate) = GetDefaultDateWindow();
+            _effectiveStartDate = StartDate;
+            _effectiveEndDate = EndDate;
             Adults = "2";
             Children = "0";
             IsSearch = true;
@@ -211,14 +231,17 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             FilterMaxPrice = null;
             _currentFilters = null;
 
-            Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
+            Items.Clear(); Offers.Clear(); PublicOffers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
 
             await GetApartmentsCount();
 
             HasMore = true; ApartmentsIsLoading = false;
             ResetPriceScales();
             await LoadMoreAsync(ct);
-            StartSuggestionsFetch(Items);
+            if (_fetchSuggestions)
+            {
+                StartSuggestionsFetch(Items);
+            }
 
             _isInitialized = true;
             NotifyStateChanged();
@@ -229,6 +252,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
             UpdateUrlParams(query);
+
+            _effectiveStartDate = StartDate;
+            _effectiveEndDate = EndDate;
 
             Items.Clear(); Offers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
             HasMore = false; ApartmentsIsLoading = true; IsSearch = true;
@@ -309,8 +335,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 var idoParams = new PricingOffersRequest
                 {
                     ObjectIds = ids,
-                    DateFrom = StartDate,
-                    DateTo = EndDate,
+                    DateFrom = _effectiveStartDate,
+                    DateTo = _effectiveEndDate,
                     NumberOfAdults = fAdults,
                     NumberOfBigChildren = fChildren
                 };
@@ -466,9 +492,16 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                     visibleItemsAfterLoad = Items.Count;
                     mediaWarmTask = StartWarmMediaCacheForItemsAsync(page.Items, cancellationToken);
 
-                    if (IsSearch)
+                    if (_fetchDatedOffers)
                     {
                         await FetchOffersForVisibleItems(page.Items);
+                    }
+                    if (_fetchPublicOffers)
+                    {
+                        await FetchPublicOffersForVisibleItems(page.Items);
+                    }
+                    if (_fetchSuggestions)
+                    {
                         StartSuggestionsFetchForNewItems(page.Items);
                     }
                 }
@@ -550,8 +583,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 var idoParams = new PricingOffersRequest
                 {
                     ObjectIds = ids,
-                    DateFrom = StartDate,
-                    DateTo = EndDate,
+                    DateFrom = _effectiveStartDate,
+                    DateTo = _effectiveEndDate,
                     NumberOfAdults = fAdults
                 };
                 var queryObj = new RentoomQueryOffer { IdoOfferParams = idoParams, PriceFilter = null };
@@ -564,6 +597,25 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                         var existing = Offers.FirstOrDefault(o => o.ObjectId == offer.ObjectId);
                         if (existing == null) Offers.Add(offer);
                     }
+                }
+            }
+            catch { }
+        }
+
+        private async Task FetchPublicOffersForVisibleItems(IEnumerable<ApartmentObject> items)
+        {
+            try
+            {
+                var ids = items.Select(x => x.Id).Where(id => id > 0).ToList();
+                if (ids.Count == 0)
+                {
+                    return;
+                }
+
+                var map = await _idoOfferService.GetPublicOffersAsync(ids);
+                foreach (var kvp in map)
+                {
+                    PublicOffers[kvp.Key] = kvp.Value;
                 }
             }
             catch { }
@@ -694,7 +746,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         private async Task FetchSuggestionsForApartmentIds(IReadOnlyCollection<int> apartmentIds, CancellationToken ct, int runId)
         {
-            if (string.IsNullOrEmpty(StartDate) || string.IsNullOrEmpty(EndDate)) return;
+            if (string.IsNullOrEmpty(_effectiveStartDate) || string.IsNullOrEmpty(_effectiveEndDate)) return;
             if (apartmentIds.Count == 0) return;
 
             if (ct.IsCancellationRequested) return;
@@ -704,8 +756,8 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             var newSuggestions = await _availabilityFinder.FindAvailableTermsAsync(
                 apartmentIds.ToList(),
-                StartDate,
-                EndDate,
+                _effectiveStartDate,
+                _effectiveEndDate,
                 adults,
                 children,
                 ct);
@@ -720,7 +772,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             var suggestionsByApartmentId = newSuggestions.ToDictionary(
                 result => result.ApartmentId,
                 result => (result.AvailableTerms ?? new List<AvailableTerm>())
-                    .Take(3)
+                    .Take(2)
                     .ToList());
 
             foreach (var apartmentId in apartmentIds)
@@ -743,12 +795,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         private void StartSuggestionsFetch(IEnumerable<ApartmentObject> items)
         {
-            if (!IsSearch)
-            {
-                CancelSuggestionsFetch();
-                return;
-            }
-
             var apartmentIds = items
                 .Where(item => !Offers.Any(o => o.ObjectId == item.Id))
                 .Select(item => item.Id)
@@ -774,8 +820,6 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         /// </summary>
         private void StartSuggestionsFetchForNewItems(IEnumerable<ApartmentObject> newItems)
         {
-            if (!IsSearch) return;
-
             var apartmentIds = newItems
                 .Where(item => !Offers.Any(o => o.ObjectId == item.Id))
                 .Where(item => !SuggestionStatuses.ContainsKey(item.Id))
@@ -1033,7 +1077,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         public int? GetOfferLengthDays()
         {
-            if (DateOnly.TryParse(StartDate, out var s) && DateOnly.TryParse(EndDate, out var e))
+            if (DateOnly.TryParse(_effectiveStartDate, out var s) && DateOnly.TryParse(_effectiveEndDate, out var e))
             {
                 var days = e.DayNumber - s.DayNumber;
                 return days > 0 ? days : null;
@@ -1048,7 +1092,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             if (!DateOnly.TryParse(StartDate, out var navigationStartDate))
             {
-                navigationStartDate = DateOnly.FromDateTime(DateTime.Now);
+                navigationStartDate = DateOnly.FromDateTime(GetWarsawNow());
             }
 
             if (!DateOnly.TryParse(EndDate, out var navigationEndDate))
@@ -1144,6 +1188,32 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Apartments view model state notification failed.");
+            }
+        }
+
+        private static (string StartDate, string EndDate) GetDefaultDateWindow()
+        {
+            var now = GetWarsawNow();
+            var dateFrom = DateOnly.FromDateTime(now);
+            var dateTo = DateOnly.FromDateTime(
+                (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
+                    ? now.AddDays(2)
+                    : now.AddDays(1));
+
+            return (dateFrom.ToString("yyyy-MM-dd"), dateTo.ToString("yyyy-MM-dd"));
+        }
+
+        private static DateTime GetWarsawNow()
+        {
+            try
+            {
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Warsaw");
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
             }
         }
     }

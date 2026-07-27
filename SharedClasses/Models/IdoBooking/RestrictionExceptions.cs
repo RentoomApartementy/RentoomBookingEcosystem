@@ -32,7 +32,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
     public class GetRestrictionsExceptionsResponse
     {
         public AuthenticateType? Authenticate { get; set; }
-        public List<GateErrorType>? Errors { get; set; }
+        public GateErrorType? Errors { get; set; }
         public bool? Success { get; set; }
         public List<RestrictionException>? GetRestrictionExceptions { get; set; }
     }

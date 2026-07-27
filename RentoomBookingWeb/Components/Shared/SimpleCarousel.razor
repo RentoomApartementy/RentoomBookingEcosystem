@@ -15,10 +15,10 @@
         @if (ShowNavigation)
         {
             <div class="carousel-nav-buttons">
-                <button class="nav-btn prev" @onclick="async () => { StopTimer(); await ScrollList(-ScrollAmount); }">
+                <button class="nav-btn prev" @onclick="async () => await ScrollList(-ScrollAmount)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
-                <button class="nav-btn next" @onclick="async () => { StopTimer(); await ScrollList(ScrollAmount); }">
+                <button class="nav-btn next" @onclick="async () => await ScrollList(ScrollAmount)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                 </button>
             </div>

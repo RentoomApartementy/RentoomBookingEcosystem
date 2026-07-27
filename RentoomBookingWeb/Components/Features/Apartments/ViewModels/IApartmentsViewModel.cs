@@ -31,12 +31,13 @@ public interface IApartmentsViewModel
     int ScaleMaxPrice { get; }
     public Guid SliderResetKey { get; }
     PricingOffer? GetPricingOfferByObjectId(int objectId);
+    PublicApartmentOffer? GetPublicOfferByObjectId(int objectId);
     SuggestionStatus GetSuggestionStatusByObjectId(int objectId);
     public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId);
     public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId);
 
     Task InitializeAsync(CancellationToken ct = default);
-    Task InitializeForSliderAsync(CancellationToken ct = default);
+    Task InitializeForSliderAsync(bool showSuggestions = true, bool showPublicOffer = false, bool fetchDatedOffers = true, CancellationToken ct = default);
     Task LoadMoreAsync(CancellationToken cancellationToken = default);
 
     void ToggleView(bool isMap);

@@ -16,7 +16,7 @@
             }
             else
             {
-                <span>-@Tile.Discount.Value.ToString("F2") @Texts.Currency</span>
+                <span>-<PriceDisplay AmountPln="@Tile.Discount.Value" /></span>
             }
         </div>
     }
@@ -28,7 +28,7 @@
             
             <div class="package-pricing">
                 <span class="price-label">@Texts.PriceLabel</span>
-                <span class="price-value">@Tile.Price.ToString("N2") @Texts.Currency</span>
+                <PriceDisplay AmountPln="@Tile.Price" CssClass="price-value" />
                 <span class="price-unit">/ @GetPricingModelText(Tile.PricingModel)</span>
             </div>
 

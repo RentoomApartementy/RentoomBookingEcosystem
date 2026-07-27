@@ -12,6 +12,10 @@ using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.Upsell;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Partners.Models.Bonuses;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Models;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Models;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.ApartmentMedia;
 using RentoomBooking.SharedClasses.Services.Descriptions;
@@ -19,6 +23,7 @@ using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
+using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBookingWeb.Components.Enums;
 using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services;
@@ -52,14 +57,21 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] public IBonusesService BonusesService { get; set; } = default!;
         [Inject] public MediaCacheService MediaCache { get; set; } = default!;
         [Inject] public IApartmentMediaCatalogService ApartmentMediaCatalogService { get; set; } = default!;
+        [Inject] public ApartmentSocialMediaService ApartmentSocialMediaService { get; set; } = default!;
+        [Inject] public ApartmentNearbyAttractionsService NearbyAttractionsService { get; set; } = default!;
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
         [Inject] public RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService { get; set; } = default!;
+        [Inject] public IBlogContentReader BlogContentReader { get; set; } = default!;
+        [Inject] public ILogger<ApartmentPage> Logger { get; set; } = default!;
 
         protected ApartmentObject? _apartment;
+        protected IReadOnlyList<BlogPostListItem>? _relatedPosts;
         protected ApartmentAiDescriptionDto? _aiDescription;
         protected List<ObjectMedium>? _objectMediums = null;
+        protected ApartmentSocialMediaDTO? _socialMedia = null;
+        protected NearbyAttractionsResultDTO? _nearbyAttractions = null;
         protected List<ObjectAmenity>? _amenities = null;
         protected int? _bedsCount = null;
         protected bool _isExpanded = false;
@@ -568,26 +580,6 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             var graphItems = new List<object> { vacationRental };
 
-            if (_aiDescription?.Faqs != null && _aiDescription.Faqs.Any())
-            {
-                var faqPage = new Dictionary<string, object>
-                {
-                    ["@type"] = "FAQPage",
-                    ["mainEntity"] = _aiDescription.Faqs.Select(faq => new Dictionary<string, object>
-                    {
-                        ["@type"] = "Question",
-                        ["name"] = faq.Question ?? "",
-                        ["acceptedAnswer"] = new Dictionary<string, object>
-                        {
-                            ["@type"] = "Answer",
-                            ["text"] = faq.Answer ?? ""
-                        }
-                    }).ToList()
-                };
-
-                graphItems.Add(faqPage);
-            }
-
             var jsonLd = new Dictionary<string, object>
             {
                 ["@context"] = "https://schema.org",
@@ -616,6 +608,10 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
             await GetObjectMedia();
+            await GetApartmentSocialMedia();
+            await GetNearbyAttractions();
+
+            _ = LoadRelatedPostsInBackgroundAsync(Id, CultureInfo.CurrentUICulture.Name);
 
             if (_reservationTokenGuid.HasValue)
             {
@@ -1042,6 +1038,42 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                     _apartment.Id,
                     async () => await ApartmentMediaCatalogService.GetApartmentMediaAsync(_apartment.Id)
                 );
+            }
+        }
+
+        protected async Task GetApartmentSocialMedia()
+        {
+            if (_apartment != null)
+            {
+                _socialMedia = await ApartmentSocialMediaService.GetApartmentSocialMediaAsync(_apartment.Items[0].Id.Value);
+            }
+        }
+
+        protected async Task GetNearbyAttractions()
+        {
+            if (_apartment?.Items is { Count: > 0 } && _apartment.Items[0].Id.HasValue)
+            {
+                _nearbyAttractions = await NearbyAttractionsService
+                    .GetNearbyAttractionsAsync(_apartment.Items[0].Id.Value);
+            }
+        }
+
+        private async Task LoadRelatedPostsInBackgroundAsync(int apartmentId, string culture)
+        {
+            try
+            {
+                var posts = await BlogContentReader.GetRelatedPostsForApartmentAsync(apartmentId, culture);
+                if (posts.Count == 0)
+                {
+                    return;
+                }
+
+                _relatedPosts = posts;
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Failed to load related blog posts for ApartmentId: {ApartmentId}", apartmentId);
             }
         }
 

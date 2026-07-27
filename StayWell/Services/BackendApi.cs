@@ -1,4 +1,5 @@
 ﻿using RentoomBooking.SharedClasses.Integrations.RentoomApp.ArrivalInstructions;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Models;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Cookies;
@@ -431,6 +432,13 @@ namespace RentoomBooking.StayWell.Services
 
             return await response.Content.ReadFromJsonAsync<ApartmentInstructionsDTO>(_json)
                    ?? new ApartmentInstructionsDTO();
+        }
+
+        public async Task<NearbyAttractionsResultDTO> GetNearbyAttractionsAsync(int objectId)
+        {
+            var result = await _http.GetFromJsonAsync<NearbyAttractionsResultDTO>(
+                $"apartments/{objectId}/nearby-attractions", _json);
+            return result ?? new NearbyAttractionsResultDTO();
         }
 
         public async Task<ApartmentItemLocalSettings?> GetApartmentItemCodesAsync(

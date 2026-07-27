@@ -192,23 +192,59 @@
   <data name="AboutCity" xml:space="preserve">
     <value>Über Toruń</value>
   </data>
-  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
-    <value>Hauptmenü der Seite</value>
+  <data name="Map_DefaultCurrency" xml:space="preserve">
+    <value>PLN</value>
   </data>
-  <data name="UnderConstruction_BackHome" xml:space="preserve">
-    <value>Zurück zur Startseite</value>
+  <data name="Menu_FacebookIconAlt" xml:space="preserve">
+    <value>Facebook-Symbol</value>
   </data>
-  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
-    <value>Wir arbeiten an der Vorbereitung dieses Abschnitts.</value>
+  <data name="Menu_InstagramIconAlt" xml:space="preserve">
+    <value>Instagram-Symbol</value>
   </data>
-  <data name="Map_AddressFallback" xml:space="preserve">
-    <value>Adresse</value>
+  <data name="Menu_LogoAlt" xml:space="preserve">
+    <value>Rentoom – Wohnungen zur Miete</value>
+  </data>
+  <data name="Map_ClusterNoOffers" xml:space="preserve">
+    <value>Keine Angebote</value>
+  </data>
+  <data name="UnderConstruction_Title" xml:space="preserve">
+    <value>Gelände im Bau</value>
+  </data>
+  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
+    <value>Wohnungen</value>
+  </data>
+  <data name="AppError_CloseAriaLabel" xml:space="preserve">
+    <value>Schließen Sie die Nachricht</value>
   </data>
   <data name="AppError_DefaultTitle" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten</value>
   </data>
-  <data name="Menu_FacebookIconAlt" xml:space="preserve">
-    <value>Facebook-Symbol</value>
+  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
+    <value>Angebote</value>
+  </data>
+  <data name="Menu_MainNavigationAriaLabel" xml:space="preserve">
+    <value>Hauptmenü der Seite</value>
+  </data>
+  <data name="Breadcrumb_Home" xml:space="preserve">
+    <value>Zuhause</value>
+  </data>
+  <data name="UnderConstruction_DescriptionLine1" xml:space="preserve">
+    <value>Wir arbeiten an der Vorbereitung dieses Abschnitts.</value>
+  </data>
+  <data name="CookieConsent_SaveError" xml:space="preserve">
+    <value>Ich konnte die Zustimmung nicht retten. Bitte versuchen Sie es erneut.</value>
+  </data>
+  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
+    <value>Instagram Rentoom Apartments</value>
+  </data>
+  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
+    <value>Menü-Symbol</value>
+  </data>
+  <data name="UnderConstruction_BackHome" xml:space="preserve">
+    <value>Zurück zur Startseite</value>
+  </data>
+  <data name="Map_AddressFallback" xml:space="preserve">
+    <value>Adresse</value>
   </data>
   <data name="Menu_CloseIconAriaLabel" xml:space="preserve">
     <value>Menü-Schließen-Symbol</value>
@@ -216,46 +252,52 @@
   <data name="UnderConstruction_DescriptionLine2" xml:space="preserve">
     <value>Wir laden Sie bald ein!</value>
   </data>
-  <data name="Menu_LogoAlt" xml:space="preserve">
-    <value>Rentoom-Ikone</value>
-  </data>
-  <data name="Map_ClusterNoOffers" xml:space="preserve">
-    <value>Keine Angebote</value>
-  </data>
-  <data name="Map_DefaultCurrency" xml:space="preserve">
-    <value>PLN</value>
-  </data>
-  <data name="CookieConsent_SaveError" xml:space="preserve">
-    <value>Ich konnte die Zustimmung nicht retten. Bitte versuchen Sie es erneut.</value>
-  </data>
-  <data name="Menu_InstagramIconAlt" xml:space="preserve">
-    <value>Instagram-Symbol</value>
-  </data>
-  <data name="Map_ClusterOffersPrefix" xml:space="preserve">
-    <value>Angebote</value>
-  </data>
   <data name="Menu_FacebookAriaLabel" xml:space="preserve">
     <value>Facebook Rentoom Apartments</value>
   </data>
   <data name="DatePicker_CalendarIconAlt" xml:space="preserve">
     <value>Kalendersymbol</value>
   </data>
-  <data name="Map_ClusterApartmentsPrefix" xml:space="preserve">
-    <value>Wohnungen</value>
+  <data name="ErrorPageRequestIdLabel" xml:space="preserve">
+    <value>Anfrage-ID:</value>
   </data>
-  <data name="UnderConstruction_Title" xml:space="preserve">
-    <value>Gelände im Bau</value>
+  <data name="ErrorPageHeading" xml:space="preserve">
+    <value>Fehler.</value>
   </data>
-  <data name="Breadcrumb_Home" xml:space="preserve">
-    <value>Zuhause</value>
+  <data name="TorunLocation_Keywords" xml:space="preserve">
+    <value>Lage von Toruń, wo Toruń liegt, Karte von Toruń, Zugang zu Toruń, Altstadt von Toruń</value>
   </data>
-  <data name="Menu_InstagramAriaLabel" xml:space="preserve">
-    <value>Instagram Rentoom Apartments</value>
+  <data name="TorunLocation_Breadcrumb" xml:space="preserve">
+    <value>Lage von Toruń</value>
   </data>
-  <data name="AppError_CloseAriaLabel" xml:space="preserve">
-    <value>Schließen Sie die Nachricht</value>
+  <data name="ErrorPageDescription" xml:space="preserve">
+    <value>Während der Bearbeitung Ihrer Anfrage ist ein Fehler aufgetreten.</value>
   </data>
-  <data name="Menu_BurgerIconAriaLabel" xml:space="preserve">
-    <value>Menü-Symbol</value>
+  <data name="ErrorPageDevelopmentModeWarning" xml:space="preserve">
+    <value>Die Entwicklungsumgebung sollte in der Produktion nicht aktiviert werden.</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeGuidance" xml:space="preserve">
+    <value>Dies kann sensible Informationen aus Ausnahmen für Endnutzer offenlegen. Für das lokale Debugging setzen Sie die Variable ASPNETCORE_ENVIRONMENT Umgebung auf Entwicklung und starten Sie die Anwendung neu.</value>
+  </data>
+  <data name="TorunLocation_PageTitle" xml:space="preserve">
+    <value>Lage von Toruń, Karte und Wegbeschreibung | Rentoom</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeIntro" xml:space="preserve">
+    <value>Das Umschalten der Umgebung auf Entwicklung zeigt detailliertere Informationen zum Fehler an.</value>
+  </data>
+  <data name="TorunLocation_Description" xml:space="preserve">
+    <value>Schau dir an, wo Toruń liegt, wie man zur Altstadt gelangt, und sieh dir eine praktische OpenStreetMap-Karte mit dem Standort der Stadt an.</value>
+  </data>
+  <data name="ErrorPageTitle" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="ErrorPageDevelopmentModeTitle" xml:space="preserve">
+    <value>Entwicklermodus</value>
+  </data>
+  <data name="FAQ_Title" xml:space="preserve">
+    <value>Häufig gestellte Fragen</value>
+  </data>
+  <data name="Blog" xml:space="preserve">
+    <value>Blog</value>
   </data>
 </root>

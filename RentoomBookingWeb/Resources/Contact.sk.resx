@@ -69,4 +69,34 @@
   <data name="SubmitPartialError" xml:space="preserve">
     <value>Kontakt sa dal zachrániť, ale dohoda sa nepodarila uzavrieť. Pred opätovným odoslaním si skontrolujte Bitrix.</value>
   </data>
+  <data name="Contact_CopyPlnTitle" xml:space="preserve">
+    <value>Kopírovať číslo PLN</value>
+  </data>
+  <data name="Contact_CopyEurTitle" xml:space="preserve">
+    <value>Kopírovať číslo EUR</value>
+  </data>
+  <data name="Contact_CopyEurAriaLabel" xml:space="preserve">
+    <value>Skopírujte číslo EUR účtu do schránky</value>
+  </data>
+  <data name="Contact_OgDescription" xml:space="preserve">
+    <value>Máte otázky ohľadom správy prenájmu? Kontaktujte nás! Skontrolujte našu adresu a bankové údaje.</value>
+  </data>
+  <data name="Contact_MetaKeywords" xml:space="preserve">
+    <value>Kontaktujte Rentoom, kanceláriu Rentoom Toruń, kontakt pre správu prenájmu, údaje o faktúrach Rentoom</value>
+  </data>
+  <data name="Contact_DealTitlePrefix" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="Contact_PageTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Kancelária prenájmu a správy Toruń</value>
+  </data>
+  <data name="Contact_OgTitle" xml:space="preserve">
+    <value>Kontakt - Rentoom | Profesionálna správa nájomných zmlúv</value>
+  </data>
+  <data name="Contact_CopyPlnAriaLabel" xml:space="preserve">
+    <value>Skopírujte číslo účtu PLN do schránky</value>
+  </data>
+  <data name="Contact_MetaDescription" xml:space="preserve">
+    <value>Kontaktujte tím Rentoom v Toruni. Údaje o adrese, čísla bankových účtov (PLN/EUR) a kontaktný formulár. Profesionálna služba prenájmu.</value>
+  </data>
 </root>

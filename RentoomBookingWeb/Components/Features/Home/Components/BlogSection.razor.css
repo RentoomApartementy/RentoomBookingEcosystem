@@ -1,0 +1,104 @@
+.blog-section-container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 4rem auto;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+}
+
+.blog-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.blog-section-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1b4b3e; /* Brand dark green */
+    margin: 0;
+}
+
+.blog-section-all-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #8d6133; /* Rentoom gold/bronze button */
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.65rem 1.75rem;
+    border-radius: 99px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.blog-section-all-btn:hover {
+    background-color: #724e29;
+    transform: translateY(-1px);
+}
+
+.blog-carousel-wrapper {
+    width: 100%;
+}
+
+/* Wymuszenie szerokości kart TYLKO wewnątrz tej karuzeli na stronie głównej */
+.blog-carousel-wrapper ::deep .blog-featured-card {
+    width: 908.86px;
+    max-width: 90vw;
+    flex-shrink: 0;
+}
+
+.blog-carousel-wrapper ::deep .blog-item-card {
+    width: 442.43px;
+    max-width: 85vw;
+    flex-shrink: 0;
+}
+
+/* Skeleton Placeholders during initial load */
+.blog-skeleton__featured-card-placeholder {
+    width: 908.86px;
+    max-width: 90vw;
+    height: 421.03px;
+    background-color: rgba(235, 226, 215, 0.4);
+    border-radius: 20px;
+    flex-shrink: 0;
+    animation: skeleton-pulse 1.5s infinite ease-in-out;
+}
+
+.blog-skeleton__item-card-placeholder {
+    width: 442.43px;
+    max-width: 85vw;
+    height: 421.03px;
+    background-color: rgba(235, 226, 215, 0.4);
+    border-radius: 20px;
+    flex-shrink: 0;
+    animation: skeleton-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes skeleton-pulse {
+    0% {
+        background-color: rgba(235, 226, 215, 0.4);
+    }
+    50% {
+        background-color: rgba(209, 191, 172, 0.6);
+    }
+    100% {
+        background-color: rgba(235, 226, 215, 0.4);
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-section-title {
+        font-size: 1.8rem;
+    }
+    .blog-section-all-btn {
+        padding: 0.5rem 1.25rem;
+        font-size: 0.8rem;
+    }
+    .blog-carousel-wrapper ::deep .blog-featured-card {
+        width: 85vw;
+    }
+}
