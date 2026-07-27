@@ -31,6 +31,13 @@ public static class SupportedLanguagesProvider
         return string.IsNullOrWhiteSpace(noRegion) ? nativeName : noRegion;
     }
 
+    public static string? GetCurrencyForCulture(CultureInfo culture)
+    {
+        return Snapshot.Value.CurrencyByCultureName.TryGetValue(culture.Name, out var currencyCode)
+            ? currencyCode
+            : null;
+    }
+
     private static SupportedLanguagesConfigSnapshot LoadSnapshot()
     {
         var assembly = typeof(SupportedLanguagesProvider).Assembly;
@@ -67,6 +74,7 @@ public static class SupportedLanguagesProvider
     {
         var cultures = new List<CultureInfo>();
         var labelsByCulture = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var currencyByCulture = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var configuredCulture in configuredCultures)
@@ -87,6 +95,10 @@ public static class SupportedLanguagesProvider
                     {
                         labelsByCulture[culture.Name] = configuredCulture.NativeName.Trim();
                     }
+                    if (!string.IsNullOrWhiteSpace(configuredCulture.Currency))
+                    {
+                        currencyByCulture[culture.Name] = configuredCulture.Currency.Trim().ToUpperInvariant();
+                    }
                 }
             }
             catch (CultureNotFoundException)
@@ -104,7 +116,7 @@ public static class SupportedLanguagesProvider
             string.Equals(c.Name, defaultCultureName, StringComparison.OrdinalIgnoreCase))
             ?? cultures[0];
 
-        return new SupportedLanguagesConfigSnapshot(cultures, defaultCulture, labelsByCulture);
+        return new SupportedLanguagesConfigSnapshot(cultures, defaultCulture, labelsByCulture, currencyByCulture);
     }
 
     private sealed class SupportedLanguagesConfigSnapshot
@@ -112,13 +124,15 @@ public static class SupportedLanguagesProvider
         public SupportedLanguagesConfigSnapshot(
             IReadOnlyList<CultureInfo> supportedCultures,
             CultureInfo defaultCulture,
-            IReadOnlyDictionary<string, string> languageLabelsByCultureName)
+            IReadOnlyDictionary<string, string> languageLabelsByCultureName,
+            IReadOnlyDictionary<string, string> currencyByCultureName)
         {
             SupportedCultures = supportedCultures;
             SupportedCultureNames = supportedCultures.Select(c => c.Name).ToArray();
             DefaultCulture = defaultCulture;
             DefaultCultureName = defaultCulture.Name;
             LanguageLabelsByCultureName = languageLabelsByCultureName;
+            CurrencyByCultureName = currencyByCultureName;
         }
 
         public IReadOnlyList<CultureInfo> SupportedCultures { get; }
@@ -126,5 +140,6 @@ public static class SupportedLanguagesProvider
         public CultureInfo DefaultCulture { get; }
         public string DefaultCultureName { get; }
         public IReadOnlyDictionary<string, string> LanguageLabelsByCultureName { get; }
+        public IReadOnlyDictionary<string, string> CurrencyByCultureName { get; }
     }
 }

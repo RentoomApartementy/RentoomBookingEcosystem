@@ -53,7 +53,7 @@
             @if (_minPrice > MinPriceOffer || _maxPrice < MaxPriceOffer)
             {
                 <div class="filter-pill" @onclick="ResetPriceOnly">
-                    @_minPrice - @_maxPrice @CurrencyLocalizer["PLN"]
+                    <PriceDisplay AmountPln="@((decimal)_minPrice)" /> - <PriceDisplay AmountPln="@((decimal)_maxPrice)" />
                     <span class="pill-remove">&times;</span>
                 </div>
             }

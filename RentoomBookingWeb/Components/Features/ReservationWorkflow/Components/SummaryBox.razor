@@ -52,7 +52,7 @@
                 @* <span>@_pricePerNight.ToString("N2") @Summary?.StartRequest?.Currency x @_totalDays @Localizer["NightsText"]</span> *@
                 @* <b>@_basePrice.ToString("N2") @Summary?.StartRequest?.Currency</b> *@
                 <span>@GetStaySummaryText()</span>
-                <b>@_basePrice.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                <b><PriceDisplay AmountPln="@_basePrice" /></b>
             </div>
             @if (Summary?.StartRequest?.SelectedAddons?.Count > 0)
             {
@@ -60,7 +60,7 @@
                 {
                     <div class="summary-box-prices-text">
                         <span>@(!string.IsNullOrWhiteSpace(addon.DisplayText) ? addon.DisplayText : GetAddonName(addon.AddonId)) @(addon.PaymentType == AddonPaymentType.PayPerAmount? "x " + @addon.Quantity:"")</span>
-                        <b>@addon.LineTotalGross.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                        <b><PriceDisplay AmountPln="@addon.LineTotalGross" /></b>
                     </div>
                 }
             }
@@ -71,7 +71,7 @@
                 {
                     <div class="summary-box-prices-text">
                         <span>@(!string.IsNullOrWhiteSpace(addon.DisplayText) ? addon.DisplayText : GetAddonName(addon.AddonId)) @(addon.PaymentType == AddonPaymentType.PayPerAmount ? "x " + @addon.Quantity : "")</span>
-                        <b>@addon.LineTotalGross.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                        <b><PriceDisplay AmountPln="@addon.LineTotalGross" /></b>
                     </div>
                 }
             }
@@ -83,8 +83,7 @@
                 {
                     <div class="summary-box-prices-text">
                         <span>@upsell.Title</span>
-                        @* <b>@upsell.LineTotalGross.ToString("N2") @Summary.Currency</b> *@
-                        <b>@upsell.LineTotalGross.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                        <b><PriceDisplay AmountPln="@upsell.LineTotalGross" /></b>
                     </div>
                 }
             }
@@ -103,7 +102,7 @@
             {
                 <div class="summary-box-prices-text">
                     <span style="color: #0f766e; font-weight: 700;">@Localizer["BonusDiscountLabel"]</span>
-                    <b style="color: #0f766e;">-@Summary!.DiscountAmountPln.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                    <b style="color: #0f766e;"><PriceDisplay AmountPln="@(-Summary!.DiscountAmountPln)" /></b>
                 </div>
             }
 
@@ -117,10 +116,10 @@
                 @if ((Summary?.DiscountAmountPln ?? 0m) > 0m)
                 {
                     <small style="color: #94a3b8; text-decoration: line-through;">
-                        @Summary!.GrandTotalBeforeDiscount.ToString("N2") @CurrencyLocalizer["PLN"]
+                        <PriceDisplay AmountPln="@Summary!.GrandTotalBeforeDiscount" />
                     </small>
                 }
-                <b style="font-size: 1.2rem; color: #0f766e;">@Summary?.GrandTotal.ToString("N2") @CurrencyLocalizer["PLN"]</b>
+                <b style="font-size: 1.2rem; color: #0f766e;"><PriceDisplay AmountPln="@Summary?.GrandTotal" /></b>
             </span>
         </div>
     </div>

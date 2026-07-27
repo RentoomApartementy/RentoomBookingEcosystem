@@ -21,4 +21,7 @@ public sealed class SupportedLanguageConfigItem
 
     [JsonPropertyName("active")]
     public bool Active { get; init; } = false;
+
+    [JsonPropertyName("currency")]
+    public string? Currency { get; init; }
 }

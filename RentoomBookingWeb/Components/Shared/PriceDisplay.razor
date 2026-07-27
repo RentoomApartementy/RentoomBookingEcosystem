@@ -1,0 +1,49 @@
+@using RentoomBooking.SharedFrontend.Currency
+@using Microsoft.Extensions.Localization
+@inject ICurrentUiCurrencyProvider CurrencyProvider
+@inject IStringLocalizer<RentoomBookingWeb.Currency> CurrencyLocalizer
+
+<span class="price-display @CssClass">
+    <span class="price-primary">@AmountPln?.ToString("N2") @CurrencyLocalizer["PLN"]</span>
+    @if (_secondaryText is not null)
+    {
+        <span class="price-secondary">@_secondaryText</span>
+    }
+</span>
+
+@code {
+    [Parameter] public decimal? AmountPln { get; set; }
+    [Parameter] public string? CssClass { get; set; }
+
+    private string? _secondaryText;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _secondaryText = null;
+        if (AmountPln is null)
+        {
+            return;
+        }
+
+        if (CurrencyProvider.CurrencyCode is null)
+        {
+            return;
+        }
+
+        var rate = await CurrencyProvider.GetRateAsync();
+        if (rate is null)
+        {
+            return;
+        }
+
+        var converted = AmountPln.Value * rate.Rate;
+        var symbol = rate.CurrencyCode switch
+        {
+            "EUR" => "€",
+            "USD" => "$",
+            "GBP" => "£",
+            _ => rate.CurrencyCode
+        };
+        _secondaryText = $"≈ {converted.ToString("N2")} {symbol}";
+    }
+}

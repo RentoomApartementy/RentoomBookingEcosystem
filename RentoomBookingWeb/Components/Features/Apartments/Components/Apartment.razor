@@ -199,7 +199,7 @@
                     @if (Offer != null)
                     {
                         <div class="price-wrapper">
-                            <span class="price">@Offer?.MinimalPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
+                            <PriceDisplay AmountPln="@Offer?.MinimalPrice" CssClass="price" />
                             @if (_resolvedOfferLength.HasValue && _resolvedOfferLength.Value > 0)
                             {
                                 <small>@Localizer["TotalPrice"] @_resolvedOfferLength.Value @GetNightLabel(_resolvedOfferLength.Value)</small>
@@ -234,7 +234,7 @@
                             }
                             @if (ShowSuggestionPrice && suggestionFromPrice is decimal fromPrice)
                             {
-                                <span class="price">@ApartmentLocalizer["From"] @fromPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
+                                <span class="price">@ApartmentLocalizer["From"] <PriceDisplay AmountPln="@fromPrice" /></span>
                             }
                             else if (IsSuggestionLoading() && !(SuggestionDates?.Any() == true))
                             {

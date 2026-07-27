@@ -102,9 +102,8 @@
                             DefinedAddons="_definedAddons" 
                             SelectedAddons="_selectedAddons" 
                             ReservationContext="_reservationPricingContext" 
-                            CurrentAddonLanguage="@CurrentAddonLanguage" 
-                            CurrencySymbol="@CurrencyLocalizer["PLN"]" 
-                            Localizer="Localizer" 
+                            CurrentAddonLanguage="@CurrentAddonLanguage"
+                            Localizer="Localizer"
                             OnToggleAddon="((id) => ToggleAddonWrapper(id, _apartment?.Addons?.FirstOrDefault(x => x.Id == id)?.Optional))" 
                             OnQuantityUpdate="((args) => UpdateAddonQuantity(args.AddonId, args.Quantity))" />
 
@@ -119,7 +118,7 @@
                         @if (TotalAddonsPrice + TotalUpsellsPrice > 0)
                         {
                             <div class="additional-price">
-                                +@((TotalAddonsPrice + TotalUpsellsPrice).ToString("N2")) @CurrencyLocalizer["PLN"]
+                                +<PriceDisplay AmountPln="@(TotalAddonsPrice + TotalUpsellsPrice)" />
                             </div>
                         }
                     }
@@ -141,9 +140,8 @@
                         IsOfferLoading="_isOfferLoading" 
                         OffersResponse="_offersResponse" 
                         TotalAdditionalPriceBeforeDiscount="@(TotalAddonsPrice + TotalUpsellsPrice)" 
-                        BonusDiscountAmount="@_bonusDiscountAmount" 
-                        CurrencySymbol="@CurrencyLocalizer["PLN"]" 
-                        StaySummaryText="@GetStaySummaryText()" 
+                        BonusDiscountAmount="@_bonusDiscountAmount"
+                        StaySummaryText="@GetStaySummaryText()"
                         RefundableOfferText="@GetRefundableOfferText()" 
                         SelectedOfferType="@_selectedOfferType" 
                         HasActiveReservation="HasActiveReservation" 
@@ -162,9 +160,8 @@
                 <ApartmentStickySummary 
                     IsMobileExpanded="_isMobileExpanded" 
                     HasOffers="localHasOffers" 
-                    TotalMinPrice="@(localMinPrice + TotalPriceAdjustment ?? 0m)" 
-                    CurrencySymbol="@CurrencyLocalizer["PLN"]" 
-                    StartDate="@StartDate" 
+                    TotalMinPrice="@(localMinPrice + TotalPriceAdjustment ?? 0m)"
+                    StartDate="@StartDate"
                     EndDate="@EndDate" 
                     NightsSummaryText="@GetNightsSummaryText()" 
                     PersonsSummaryText="@GetPersonsSummaryText()" 
