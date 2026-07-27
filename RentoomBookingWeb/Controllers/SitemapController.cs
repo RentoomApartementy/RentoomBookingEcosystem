@@ -11,6 +11,7 @@ using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBooking.SharedFrontend.Localization;
 using System.Globalization;
 using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Helpers;
 
 namespace RentoomBookingWeb.Controllers
 {
@@ -178,8 +179,7 @@ namespace RentoomBookingWeb.Controllers
 
         private XElement CreateBlogPostUrlElement(XNamespace ns, XNamespace xhtml, string baseUrl, BlogPostListItem post, string currentCulture, IEnumerable<string> allCultures, string priority, string freq)
         {
-            var localizedBase = _routeService.GetLocalizedUrl("BlogPost", currentCulture);
-            var loc = $"{baseUrl}{localizedBase}/{post.PublicId:D}/{post.Slug}";
+            var loc = $"{baseUrl}{BlogUrlBuilder.BuildPostUrl(_routeService, post.Category, post.Slug, currentCulture)}";
 
             var urlElement = new XElement(ns + "url",
                 new XElement(ns + "loc", loc),
@@ -189,8 +189,7 @@ namespace RentoomBookingWeb.Controllers
 
             foreach (var cult in allCultures)
             {
-                var cultLocalizedBase = _routeService.GetLocalizedUrl("BlogPost", cult);
-                var altLoc = $"{baseUrl}{cultLocalizedBase}/{post.PublicId:D}/{post.Slug}";
+                var altLoc = $"{baseUrl}{BlogUrlBuilder.BuildPostUrl(_routeService, post.Category, post.Slug, cult)}";
 
                 urlElement.Add(new XElement(xhtml + "link",
                     new XAttribute("rel", "alternate"),

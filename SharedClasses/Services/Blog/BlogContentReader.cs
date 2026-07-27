@@ -148,14 +148,15 @@ public sealed class BlogContentReader : IBlogContentReader
     }
 
     public async Task<BlogPostDetails?> GetPublishedPostAsync(
-        Guid publicId,
+        string category,
         string slug,
         string culture,
         CancellationToken cancellationToken = default)
     {
         var normalizedCulture = NormalizeSourceLanguage(culture);
         var normalizedSlug = slug.Trim().ToLowerInvariant();
-        var cacheKey = $"blog:post:{normalizedCulture}:{publicId:D}:{normalizedSlug}";
+        var normalizedCategory = BlogRouteHelper.GetCategorySlug(category);
+        var cacheKey = $"blog:post:{normalizedCulture}:{normalizedCategory}:{normalizedSlug}";
 
         if (_cache.TryGetValue(cacheKey, out BlogPostDetails? cached) && cached is not null)
         {
@@ -164,7 +165,7 @@ public sealed class BlogContentReader : IBlogContentReader
 
         await using var dbContext = await _blogDbContextFactory.CreateDbContextAsync(cancellationToken);
 
-        var post = await dbContext.BlogPosts
+        var posts = await dbContext.BlogPosts
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
             .Where(x => x.InactiveAt == null)
@@ -172,7 +173,6 @@ public sealed class BlogContentReader : IBlogContentReader
             .Where(x => x.PublishedAt != null)
             .Where(x => x.PublishedVersionNo != null)
             .Where(x => x.SourceLanguage == normalizedCulture)
-            .Where(x => x.PublicId == publicId)
             .Where(x => x.Slug == normalizedSlug)
             .Select(x => new PostRow
             {
@@ -195,7 +195,10 @@ public sealed class BlogContentReader : IBlogContentReader
                 HeroImageUrl = x.HeroImageUrl,
                 PublishedVersionNo = x.PublishedVersionNo!.Value
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        var post = posts.FirstOrDefault(x =>
+            string.Equals(BlogRouteHelper.GetCategorySlug(x.Category), normalizedCategory, StringComparison.Ordinal));
 
         if (post is null)
         {
@@ -276,7 +279,7 @@ public sealed class BlogContentReader : IBlogContentReader
     }
 
     public async Task<BlogPostDetails?> GetPreviewPostAsync(
-        Guid publicId,
+        string category,
         string slug,
         string previewToken,
         string culture,
@@ -290,7 +293,8 @@ public sealed class BlogContentReader : IBlogContentReader
         var normalizedCulture = NormalizeSourceLanguage(culture);
         var normalizedSlug = slug.Trim().ToLowerInvariant();
         var normalizedToken = previewToken.Trim();
-        var cacheKey = $"blog:preview:{normalizedCulture}:{publicId:D}:{normalizedSlug}:{normalizedToken}";
+        var normalizedCategory = BlogRouteHelper.GetCategorySlug(category);
+        var cacheKey = $"blog:preview:{normalizedCulture}:{normalizedCategory}:{normalizedSlug}:{normalizedToken}";
 
         if (_cache.TryGetValue(cacheKey, out BlogPostDetails? cached) && cached is not null)
         {
@@ -301,11 +305,10 @@ public sealed class BlogContentReader : IBlogContentReader
         var tokenHash = ComputeSha256(normalizedToken);
         var utcNow = DateTime.UtcNow;
 
-        var post = await dbContext.BlogPosts
+        var posts = await dbContext.BlogPosts
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
             .Where(x => x.SourceLanguage == normalizedCulture)
-            .Where(x => x.PublicId == publicId)
             .Where(x => x.Slug == normalizedSlug)
             .Where(x => x.PreviewTokenHash != null)
             .Where(x => x.PreviewTokenExpiresAt != null)
@@ -333,7 +336,10 @@ public sealed class BlogContentReader : IBlogContentReader
                 CurrentDraftVersionNo = x.CurrentDraftVersionNo,
                 PreviewExpiresAtUtc = x.PreviewTokenExpiresAt
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        var post = posts.FirstOrDefault(x =>
+            string.Equals(BlogRouteHelper.GetCategorySlug(x.Category), normalizedCategory, StringComparison.Ordinal));
 
         if (post is null)
         {
@@ -741,6 +747,7 @@ public sealed class BlogContentReader : IBlogContentReader
             {
                 PublicId = x.PublicId,
                 Slug = x.Slug,
+                Category = x.Category,
                 Title = x.Title,
                 PublishedAtUtc = x.PublishedAt!.Value
             })
@@ -754,6 +761,7 @@ public sealed class BlogContentReader : IBlogContentReader
             {
                 PublicId = x.PublicId,
                 Slug = x.Slug,
+                Category = x.Category,
                 Title = x.Title,
                 PublishedAtUtc = x.PublishedAt!.Value
             })

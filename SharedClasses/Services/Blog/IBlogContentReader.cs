@@ -9,13 +9,13 @@ public interface IBlogContentReader
         CancellationToken cancellationToken = default);
 
     Task<BlogPostDetails?> GetPublishedPostAsync(
-        Guid publicId,
+        string category,
         string slug,
         string culture,
         CancellationToken cancellationToken = default);
 
     Task<BlogPostDetails?> GetPreviewPostAsync(
-        Guid publicId,
+        string category,
         string slug,
         string previewToken,
         string culture,

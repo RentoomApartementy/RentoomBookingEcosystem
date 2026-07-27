@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 using RentoomBooking.SharedClasses.Services.Blog;
+using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services.Localization;
 
 namespace RentoomBookingWeb.Components.Features.Blog.Pages;
@@ -30,7 +31,7 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
     private readonly CancellationTokenSource _cts = new();
     private bool _interactive;
     private bool _disposed;
-    private string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
+    private string BuildPostUrl(string? category, string slug) => BlogUrlBuilder.BuildPostUrl(RouteService, category, slug);
 
     protected override async Task OnInitializedAsync()
     {
