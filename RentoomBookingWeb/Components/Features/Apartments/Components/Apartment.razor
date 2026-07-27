@@ -199,7 +199,7 @@
                     @if (Offer != null)
                     {
                         <div class="price-wrapper">
-                            <PriceDisplay AmountPln="@Offer?.MinimalPrice" CssClass="price" />
+                            <span class="price"><PriceDisplay AmountPln="@Offer?.MinimalPrice" /></span>
                             @if (_resolvedOfferLength.HasValue && _resolvedOfferLength.Value > 0)
                             {
                                 <small>@Localizer["TotalPrice"] @_resolvedOfferLength.Value @GetNightLabel(_resolvedOfferLength.Value)</small>
