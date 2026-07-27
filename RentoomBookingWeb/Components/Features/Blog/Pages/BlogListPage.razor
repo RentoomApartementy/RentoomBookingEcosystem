@@ -1,19 +1,30 @@
 @using RentoomBookingWeb.Components.Features.Blog.Components;
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 
-<PageTitle>@Localizer["BlogPageTitle"]</PageTitle>
+<PageTitle>@(CategoryDisplayName ?? Localizer["BlogPageTitle"])</PageTitle>
 
 <HeadContent>
     @if (Environment.IsProduction())
     {
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="@(CategoryNotFound ? "noindex, nofollow" : "index, follow")" />
     }
     <meta name="description" content="@Localizer["BlogDescription"]" />
-    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("BlogList")}")" />
+    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildCategoryListUrl(Category)}")" />
     <BlogJsonLd Name="@Localizer["BlogDescription"]"
                 Description="@Localizer["BlogHeaderSubtitle"]"
-                Url="@RouteService.GetLocalizedUrl("BlogList")" />
-    <BreadcrumbJsonLd CurrentPageName="Blog" CurrentPagePath="@RouteService.GetLocalizedUrl("BlogList")" FirstPageName="Rentoom" />
+                Url="@BuildCategoryListUrl(Category)" />
+    @if (!string.IsNullOrWhiteSpace(Category) && !string.IsNullOrWhiteSpace(CategoryDisplayName))
+    {
+        <BreadcrumbJsonLd CurrentPageName="@CategoryDisplayName"
+                          CurrentPagePath="@BuildCategoryListUrl(Category)"
+                          ParentPageName="Blog"
+                          ParentPagePath="@RouteService.GetLocalizedUrl("BlogList")"
+                          FirstPageName="Rentoom" />
+    }
+    else
+    {
+        <BreadcrumbJsonLd CurrentPageName="Blog" CurrentPagePath="@RouteService.GetLocalizedUrl("BlogList")" FirstPageName="Rentoom" />
+    }
     <SeoHreflangs />
 </HeadContent>
 
@@ -23,10 +34,22 @@
 }
 
 <div class="blog-list-breadcrumb">
-    <BlogBreadcrumb NavigationLabel="@Localizer["BreadcrumbNavigationLabel"]"
-                    HomeUrl="@RouteService.GetLocalizedUrl("Home")"
-                    HomeLabel="Rentoom"
-                    CurrentPageName="Blog" />
+    @if (!string.IsNullOrWhiteSpace(Category) && !string.IsNullOrWhiteSpace(CategoryDisplayName))
+    {
+        <BlogBreadcrumb NavigationLabel="@Localizer["BreadcrumbNavigationLabel"]"
+                        HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                        HomeLabel="Rentoom"
+                        ParentPageName="Blog"
+                        ParentPageUrl="@RouteService.GetLocalizedUrl("BlogList")"
+                        CurrentPageName="@CategoryDisplayName" />
+    }
+    else
+    {
+        <BlogBreadcrumb NavigationLabel="@Localizer["BreadcrumbNavigationLabel"]"
+                        HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                        HomeLabel="Rentoom"
+                        CurrentPageName="Blog" />
+    }
 </div>
 
 @if (!string.IsNullOrWhiteSpace(Error))
@@ -37,11 +60,15 @@ else if (IsLoading && Items.Count == 0)
 {
     <BlogListSkeleton />
 }
+else if (CategoryNotFound)
+{
+    <BlogErrorSection IsNotFound="true" />
+}
 else
 {
     <div class="blog-list-container">
-        <h2 class="blog-list-title">@Localizer["LatestPosts"]</h2>
-        
+        <h2 class="blog-list-title">@(CategoryDisplayName ?? Localizer["LatestPosts"])</h2>
+
         @if (Items.Any())
         {
             <div class="blog-posts-grid">

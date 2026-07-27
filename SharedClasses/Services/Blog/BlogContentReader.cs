@@ -47,11 +47,13 @@ public sealed class BlogContentReader : IBlogContentReader
         string culture,
         string? cursor,
         int take,
+        string? categorySlug = null,
         CancellationToken cancellationToken = default)
     {
         var normalizedCulture = NormalizeSourceLanguage(culture);
         var normalizedTake = Math.Clamp(take <= 0 ? DefaultTake : take, 1, MaxTake);
-        var cacheKey = $"blog:feed:{normalizedCulture}:{cursor ?? "first"}:{normalizedTake}";
+        var normalizedCategorySlug = string.IsNullOrWhiteSpace(categorySlug) ? null : categorySlug.Trim().ToLowerInvariant();
+        var cacheKey = $"blog:feed:{normalizedCulture}:{normalizedCategorySlug ?? "all"}:{cursor ?? "first"}:{normalizedTake}";
 
         if (_cache.TryGetValue(cacheKey, out CursorPage<BlogPostListItem>? cached) && cached is not null)
         {
@@ -59,6 +61,22 @@ public sealed class BlogContentReader : IBlogContentReader
         }
 
         await using var dbContext = await _blogDbContextFactory.CreateDbContextAsync(cancellationToken);
+
+        // A category is a free-text column, not a stored slug, so the URL slug must be resolved back
+        // to the raw value(s) that produce it before it can be pushed into the SQL WHERE clause.
+        // An unresolvable slug means no post can match - short-circuit to an empty page.
+        string? resolvedCategory = null;
+        if (normalizedCategorySlug is not null)
+        {
+            resolvedCategory = await ResolveCategoryBySlugAsync(dbContext, normalizedCulture, normalizedCategorySlug, cancellationToken);
+            if (resolvedCategory is null)
+            {
+                var empty = new CursorPage<BlogPostListItem> { Items = Array.Empty<BlogPostListItem>(), NextCursor = null, HasMore = false };
+                _cache.Set(cacheKey, empty, TimeSpan.FromMinutes(2));
+                return empty;
+            }
+        }
+
         var parsedCursor = DecodeCursor(cursor);
 
         var query = dbContext.BlogPosts
@@ -69,6 +87,11 @@ public sealed class BlogContentReader : IBlogContentReader
             .Where(x => x.PublishedAt != null)
             .Where(x => x.PublishedVersionNo != null)
             .Where(x => x.SourceLanguage == normalizedCulture);
+
+        if (resolvedCategory is not null)
+        {
+            query = query.Where(x => x.Category == resolvedCategory);
+        }
 
         if (parsedCursor is not null)
         {
@@ -145,6 +168,38 @@ public sealed class BlogContentReader : IBlogContentReader
 
         _cache.Set(cacheKey, result, TimeSpan.FromMinutes(2));
         return result;
+    }
+
+    // Maps a URL category slug back to the raw Category string stored on posts, so it can be pushed
+    // into a SQL WHERE clause. Cached separately (longer TTL) since the set of distinct categories
+    // changes far less often than the post feed itself.
+    private async Task<string?> ResolveCategoryBySlugAsync(
+        RappBlogReadDbContext dbContext,
+        string normalizedCulture,
+        string normalizedCategorySlug,
+        CancellationToken cancellationToken)
+    {
+        var cacheKey = $"blog:category-slug:{normalizedCulture}:{normalizedCategorySlug}";
+        if (_cache.TryGetValue(cacheKey, out string? cachedCategory))
+        {
+            return cachedCategory;
+        }
+
+        var distinctCategories = await dbContext.BlogPosts
+            .AsNoTracking()
+            .Where(x => x.DeletedAt == null)
+            .Where(x => x.InactiveAt == null)
+            .Where(x => x.Status == PublishedStatus)
+            .Where(x => x.SourceLanguage == normalizedCulture)
+            .Select(x => x.Category)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+
+        var resolved = distinctCategories.FirstOrDefault(category =>
+            string.Equals(BlogRouteHelper.GetCategorySlug(category), normalizedCategorySlug, StringComparison.Ordinal));
+
+        _cache.Set(cacheKey, resolved, TimeSpan.FromMinutes(10));
+        return resolved;
     }
 
     public async Task<BlogPostDetails?> GetPublishedPostAsync(

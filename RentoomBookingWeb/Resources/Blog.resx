@@ -122,4 +122,7 @@
     <data name="RelatedContentTooltip" xml:space="preserve">
         <value>Blog articles that mention this apartment</value>
     </data>
+    <data name="LatestPostsInCategory" xml:space="preserve">
+        <value>Latest posts: {0}</value>
+    </data>
 </root>

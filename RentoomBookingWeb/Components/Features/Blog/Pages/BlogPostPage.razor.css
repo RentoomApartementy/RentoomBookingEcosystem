@@ -83,6 +83,13 @@
     background: #e8f0ff;
     color: #1d4ed8;
     font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+.blog-post__category:hover,
+.blog-post__category:focus-visible {
+    background: #d6e4ff;
 }
 
 .blog-post__tag {
