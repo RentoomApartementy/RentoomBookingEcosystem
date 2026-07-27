@@ -54,23 +54,12 @@
                 <span>@GetStaySummaryText()</span>
                 <b><PriceDisplay AmountPln="@_basePrice" /></b>
             </div>
-            @if (Summary?.StartRequest?.SelectedAddons?.Count > 0)
+            @if (Summary?.StartRequest?.SelectedAddons?.Count > 0 || Summary?.StartRequest?.MandatoryAddons?.Count > 0)
             {
                 @foreach (AddonSummaryLineDto addon in Summary.Addons)
                 {
                     <div class="summary-box-prices-text">
                         <span>@(!string.IsNullOrWhiteSpace(addon.DisplayText) ? addon.DisplayText : GetAddonName(addon.AddonId)) @(addon.PaymentType == AddonPaymentType.PayPerAmount? "x " + @addon.Quantity:"")</span>
-                        <b><PriceDisplay AmountPln="@addon.LineTotalGross" /></b>
-                    </div>
-                }
-            }
-
-            @if (Summary?.StartRequest?.MandatoryAddons?.Count > 0)
-            {
-                @foreach (AddonSummaryLineDto addon in Summary.Addons)
-                {
-                    <div class="summary-box-prices-text">
-                        <span>@(!string.IsNullOrWhiteSpace(addon.DisplayText) ? addon.DisplayText : GetAddonName(addon.AddonId)) @(addon.PaymentType == AddonPaymentType.PayPerAmount ? "x " + @addon.Quantity : "")</span>
                         <b><PriceDisplay AmountPln="@addon.LineTotalGross" /></b>
                     </div>
                 }
