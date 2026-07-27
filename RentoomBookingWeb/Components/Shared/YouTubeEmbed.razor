@@ -1,10 +1,13 @@
 @using RentoomBooking.SharedClasses.Services.Embeds
+@implements IAsyncDisposable
+@inject IJSRuntime JS
 
 @if (!string.IsNullOrWhiteSpace(EmbedUrl))
 {
     <div class="embed-youtube @YoutubeEmbedHelper.ResolveSizeClass(DisplaySize)">
         <div class="embed-youtube__aspect" style="@YoutubeEmbedHelper.ResolveAspectRatioStyle(Width, Height)">
-            <iframe src="@EmbedUrl"
+            <iframe id="@_playerElementId"
+                    src="@EmbedUrl"
                     title="@(string.IsNullOrWhiteSpace(Title) ? "YouTube video player" : Title)"
                     loading="lazy"
                     referrerpolicy="strict-origin-when-cross-origin"
@@ -19,6 +22,39 @@
     [Parameter] public string? EmbedUrl { get; set; }
     [Parameter] public string? Title { get; set; }
     [Parameter] public string? DisplaySize { get; set; } = "M";
+    [Parameter] public int? Volume { get; set; } = YoutubeEmbedHelper.DefaultVolume;
     [Parameter] public int? Width { get; set; }
     [Parameter] public int? Height { get; set; }
+
+    private readonly string _playerElementId = $"youtube-player-{Guid.NewGuid():N}";
+    private IJSObjectReference? _module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || string.IsNullOrWhiteSpace(EmbedUrl))
+        {
+            return;
+        }
+
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/youtubeEmbed.js");
+        await _module.InvokeVoidAsync("initialize", _playerElementId, YoutubeEmbedHelper.NormalizeVolume(Volume));
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_module is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await _module.InvokeVoidAsync("dispose", _playerElementId);
+            await _module.DisposeAsync();
+        }
+        catch (JSDisconnectedException)
+        {
+            // The browser connection may already be closed during component disposal.
+        }
+    }
 }

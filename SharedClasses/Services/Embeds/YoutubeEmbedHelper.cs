@@ -4,6 +4,8 @@ namespace RentoomBooking.SharedClasses.Services.Embeds;
 
 public static class YoutubeEmbedHelper
 {
+    public const int DefaultVolume = 10;
+
     public static string? BuildEmbedUrl(
         string? embedCode,
         bool? autoplay,
@@ -19,6 +21,9 @@ public static class YoutubeEmbedHelper
         }
 
         var queryParams = new List<string>();
+
+        // Required for controlling the iframe through the YouTube IFrame Player API.
+        queryParams.Add("enablejsapi=1");
 
         if (autoplay == true)
         {
@@ -48,6 +53,11 @@ public static class YoutubeEmbedHelper
 
         var query = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : string.Empty;
         return $"https://www.youtube.com/embed/{source.VideoId}{query}";
+    }
+
+    public static int NormalizeVolume(int? volume)
+    {
+        return Math.Clamp(volume ?? DefaultVolume, 0, 100);
     }
 
     public static (int? Width, int? Height) ResolveDimensions(int? configuredWidth, int? configuredHeight, string? embedCode)
