@@ -509,7 +509,7 @@ public sealed class BlogContentReader : IBlogContentReader
         // in memory afterwards, over what's normally a small result set.
         var candidateBlocks = await (
             from block in dbContext.BlogPostBlocks.AsNoTracking()
-            where (block.BlockType == "Paragraph" || block.BlockType == "ApartmentsListing") && block.PropsJson != null
+            where (block.BlockType == "Paragraph" || block.BlockType == "ApartmentsListing" || block.BlockType == "Faq") && block.PropsJson != null
             join version in dbContext.BlogPostVersions.AsNoTracking() on block.PostVersionId equals version.Id
             join post in dbContext.BlogPosts.AsNoTracking() on version.BlogPostId equals post.Id
             where post.DeletedAt == null
@@ -525,9 +525,14 @@ public sealed class BlogContentReader : IBlogContentReader
         var matchingPostIds = new HashSet<int>();
         foreach (var row in candidateBlocks)
         {
-            var matches = string.Equals(row.BlockType, "ApartmentsListing", StringComparison.OrdinalIgnoreCase)
-                ? ApartmentsListingMatchesApartment(row.PropsJson, apartmentId)
-                : ParagraphLinksContainApartment(row.PropsJson, apartmentId);
+            var matches = row.BlockType switch
+            {
+                var t when string.Equals(t, "ApartmentsListing", StringComparison.OrdinalIgnoreCase)
+                    => ApartmentsListingMatchesApartment(row.PropsJson, apartmentId),
+                var t when string.Equals(t, "Faq", StringComparison.OrdinalIgnoreCase)
+                    => FaqLinksContainApartment(row.PropsJson, apartmentId),
+                _ => ParagraphLinksContainApartment(row.PropsJson, apartmentId)
+            };
 
             if (matches)
             {
@@ -639,6 +644,66 @@ public sealed class BlogContentReader : IBlogContentReader
                     && linkApartmentId == apartmentId)
                 {
                     return true;
+                }
+            }
+
+            return false;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
+    // A Faq block's PropsJson is rooted at "faq" (sequence + items), not a top-level "links"
+    // array like Paragraph, so each item's own "links" array is walked instead.
+    private static bool FaqLinksContainApartment(string? propsJson, int apartmentId)
+    {
+        if (string.IsNullOrWhiteSpace(propsJson))
+        {
+            return false;
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(propsJson);
+            if (!document.RootElement.TryGetProperty("faq", out var faqElement) || faqElement.ValueKind != JsonValueKind.Object)
+            {
+                return false;
+            }
+
+            if (!faqElement.TryGetProperty("items", out var itemsElement) || itemsElement.ValueKind != JsonValueKind.Array)
+            {
+                return false;
+            }
+
+            foreach (var item in itemsElement.EnumerateArray())
+            {
+                if (!item.TryGetProperty("links", out var linksElement) || linksElement.ValueKind != JsonValueKind.Array)
+                {
+                    continue;
+                }
+
+                foreach (var link in linksElement.EnumerateArray())
+                {
+                    if (link.ValueKind != JsonValueKind.Object)
+                    {
+                        continue;
+                    }
+
+                    var type = GetStringValue(link, "type");
+                    if (!string.Equals(type, "apartment", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    if (link.TryGetProperty("apartmentId", out var idElement)
+                        && idElement.ValueKind == JsonValueKind.Number
+                        && idElement.TryGetInt32(out var linkApartmentId)
+                        && linkApartmentId == apartmentId)
+                    {
+                        return true;
+                    }
                 }
             }
 
