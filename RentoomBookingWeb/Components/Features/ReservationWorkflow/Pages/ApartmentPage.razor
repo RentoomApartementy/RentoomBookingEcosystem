@@ -196,6 +196,11 @@
             </div>
         </div>
 
+        @if (_relatedPosts is { Count: > 0 })
+        {
+            <RelatedBlogContent Posts="_relatedPosts" />
+        }
+
         <MapPopup
             @bind-IsModalOpen="_isModalOpen"
             Apartment="_apartment"

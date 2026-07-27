@@ -1,0 +1,43 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Services.Blog
+@using RentoomBookingWeb.Services.Localization
+@inject IRouteLocalizationService RouteService
+@inject IStringLocalizer<RentoomBookingWeb.Blog> Localizer
+
+<section class="related-blog-content">
+    <div class="related-blog-content__header">
+        <h2 class="related-blog-content__title">@Localizer["RelatedContentTitle"]</h2>
+        <span class="related-blog-content__info" title="@Localizer["RelatedContentTooltip"].Value">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
+                <path d="M12 11v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <circle cx="12" cy="8" r="1" fill="currentColor" />
+            </svg>
+        </span>
+    </div>
+
+    <div class="related-blog-content__grid">
+        @foreach (var post in Posts)
+        {
+            <a class="related-blog-content__item" href="@BuildPostUrl(post.PublicId, post.Slug)">
+                <span class="related-blog-content__icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 2h9l5 5v15H6V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                        <path d="M14 2v5h5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                </span>
+                <span class="related-blog-content__text">
+                    <span class="related-blog-content__item-title">@post.Title</span>
+                    <span class="related-blog-content__item-author">@post.AuthorDisplayName</span>
+                </span>
+            </a>
+        }
+    </div>
+</section>
+
+@code {
+    [Parameter] public required IReadOnlyList<BlogPostListItem> Posts { get; set; }
+
+    private string BuildPostUrl(Guid publicId, string slug)
+        => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
+}

@@ -23,6 +23,7 @@ using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Services.Upsell;
+using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBookingWeb.Components.Enums;
 using RentoomBookingWeb.Helpers;
 using RentoomBookingWeb.Services;
@@ -62,8 +63,11 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
         [Inject] public RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService { get; set; } = default!;
+        [Inject] public IBlogContentReader BlogContentReader { get; set; } = default!;
+        [Inject] public ILogger<ApartmentPage> Logger { get; set; } = default!;
 
         protected ApartmentObject? _apartment;
+        protected IReadOnlyList<BlogPostListItem>? _relatedPosts;
         protected ApartmentAiDescriptionDto? _aiDescription;
         protected List<ObjectMedium>? _objectMediums = null;
         protected ApartmentSocialMediaDTO? _socialMedia = null;
@@ -607,6 +611,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             await GetApartmentSocialMedia();
             await GetNearbyAttractions();
 
+            _ = LoadRelatedPostsInBackgroundAsync(Id, CultureInfo.CurrentUICulture.Name);
+
             if (_reservationTokenGuid.HasValue)
             {
                 await TryLoadReservationDraftAsync();
@@ -1049,6 +1055,25 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             {
                 _nearbyAttractions = await NearbyAttractionsService
                     .GetNearbyAttractionsAsync(_apartment.Items[0].Id.Value);
+            }
+        }
+
+        private async Task LoadRelatedPostsInBackgroundAsync(int apartmentId, string culture)
+        {
+            try
+            {
+                var posts = await BlogContentReader.GetRelatedPostsForApartmentAsync(apartmentId, culture);
+                if (posts.Count == 0)
+                {
+                    return;
+                }
+
+                _relatedPosts = posts;
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Failed to load related blog posts for ApartmentId: {ApartmentId}", apartmentId);
             }
         }
 

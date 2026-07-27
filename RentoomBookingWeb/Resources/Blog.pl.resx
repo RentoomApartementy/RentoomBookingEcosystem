@@ -216,4 +216,10 @@
   <data name="LinkCopied" xml:space="preserve">
     <value>Link skopiowany</value>
   </data>
+  <data name="RelatedContentTitle" xml:space="preserve">
+    <value>Powiązane treści</value>
+  </data>
+  <data name="RelatedContentTooltip" xml:space="preserve">
+    <value>Wpisy na blogu, w których wspomniano ten apartament</value>
+  </data>
 </root>
