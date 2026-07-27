@@ -12,6 +12,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Model
         public bool YouTubeMute { get; set; }
         public bool YouTubeControls { get; set; } = true;
         public bool YouTubeModestBranding { get; set; }
+        public int YouTubeVolume { get; set; } = 10;
         public int? YouTubeWidth { get; set; }
         public int? YouTubeHeight { get; set; }
         public string YouTubeDisplaySize { get; set; } = "M";
@@ -32,6 +33,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Model
         public bool YouTubeMute { get; set; }
         public bool YouTubeControls { get; set; } = true;
         public bool YouTubeModestBranding { get; set; }
+        public int YouTubeVolume { get; set; } = 10;
         public int? YouTubeWidth { get; set; }
         public int? YouTubeHeight { get; set; }
         public string YouTubeDisplaySize { get; set; } = "M";

@@ -1,5 +1,7 @@
 using RentoomBooking.SharedClasses.Services.Descriptions;
 
+using RentoomBooking.SharedClasses.Services.Embeds;
+
 namespace RentoomBooking.SharedClasses.Services.Blog;
 
 public sealed class CursorPage<T>
@@ -78,6 +80,7 @@ public sealed class BlogBlock
     public string? EmbedUrl { get; init; }
     public string? EmbedHtml { get; init; }
     public string? EmbedTitle { get; init; }
+    public int YouTubeVolume { get; init; } = YoutubeEmbedHelper.DefaultVolume;
     public int? EmbedWidth { get; init; }
     public int? EmbedHeight { get; init; }
     public string? HeadingLevel { get; init; }
