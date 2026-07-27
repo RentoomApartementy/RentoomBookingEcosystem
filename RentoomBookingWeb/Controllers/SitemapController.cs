@@ -1,17 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
-using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using RentoomBooking.SharedClasses.Services;
+using RentoomBooking.SharedClasses.Services.Blog;
+using RentoomBooking.SharedClasses.Services.IdoBooking;
+using RentoomBooking.SharedFrontend.Localization;
+using RentoomBookingWeb.Helpers;
+using RentoomBookingWeb.Services;
+using RentoomBookingWeb.Services.Localization;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
-using RentoomBooking.SharedClasses.Models.IdoBooking;
-using RentoomBooking.SharedClasses.Services.IdoBooking;
-using RentoomBookingWeb.Services.Localization;
-using RentoomBooking.SharedClasses.Services.Blog;
-using RentoomBooking.SharedFrontend.Localization;
-using System.Globalization;
-using RentoomBookingWeb.Services;
-using RentoomBookingWeb.Helpers;
 
 namespace RentoomBookingWeb.Controllers
 {
@@ -111,7 +112,7 @@ namespace RentoomBookingWeb.Controllers
             // 4. Blog Posts
             foreach (var post in blogPosts)
             {
-                urlElements.Add(CreateBlogPostUrlElement(ns, xhtml, baseUrl, post, currentCulture, supportedCultures, "0.6", "weekly"));
+                urlElements.Add(CreateBlogPostUrlElement(ns, baseUrl, post, currentCulture, "0.6", "weekly"));
             }
 
             var sitemap = new XElement(ns + "urlset", 
@@ -177,17 +178,19 @@ namespace RentoomBookingWeb.Controllers
             return urlElement;
         }
 
-        private XElement CreateBlogPostUrlElement(XNamespace ns, XNamespace xhtml, string baseUrl, BlogPostListItem post, string currentCulture, IEnumerable<string> allCultures, string priority, string freq)
+        private XElement CreateBlogPostUrlElement(XNamespace ns, string baseUrl, BlogPostListItem post, string currentCulture, string priority, string freq)
         {
             var loc = $"{baseUrl}{BlogUrlBuilder.BuildPostUrl(_routeService, post.Category, post.Slug, currentCulture)}";
 
-            var urlElement = new XElement(ns + "url",
+            // Blog content is single-language (per post.SourceLanguage) - there is no translated
+            // version of this specific post in other cultures, so no hreflang alternates are emitted.
+            return new XElement(ns + "url",
                 new XElement(ns + "loc", loc),
                 new XElement(ns + "changefreq", freq),
                 new XElement(ns + "priority", priority)
             );
-
-            foreach (var cult in allCultures)
+            // If in the future we have multi-language blog posts, we can add hreflang alternates here.
+            /*foreach (var cult in allCultures)
             {
                 var altLoc = $"{baseUrl}{BlogUrlBuilder.BuildPostUrl(_routeService, post.Category, post.Slug, cult)}";
 
@@ -196,11 +199,10 @@ namespace RentoomBookingWeb.Controllers
                     new XAttribute("hreflang", cult.Split('-')[0].ToLowerInvariant()),
                     new XAttribute("href", altLoc)
                 ));
-            }
+            }*/
 
-            return urlElement;
         }
-        
+
         [Route("llms.txt")]
         [ResponseCache(Duration = 3600)]
         public async Task<IActionResult> GetLlmsTxt()
