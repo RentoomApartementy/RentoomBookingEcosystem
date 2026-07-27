@@ -7,7 +7,7 @@
 
 <article class="blog-item-card">
     <figure class="blog-item-card__image-container">
-        <a href="@BuildPostUrl(Item.PublicId, Item.Slug)">
+        <a href="@BuildPostUrl(Item.Category, Item.Slug)">
             @if (!string.IsNullOrWhiteSpace(Item.HeroImageUrl))
             {
                 <img src="@Item.HeroImageUrl" alt="@Item.Title" class="blog-item-card__image" loading="lazy" />
@@ -31,7 +31,7 @@
         </div>
         
         <h3 class="blog-item-card__title">
-            <a href="@BuildPostUrl(Item.PublicId, Item.Slug)">@Item.Title</a>
+            <a href="@BuildPostUrl(Item.Category, Item.Slug)">@Item.Title</a>
         </h3>
         
         @if (!string.IsNullOrWhiteSpace(Item.Excerpt))
@@ -42,7 +42,7 @@
         }
         
         <div class="blog-item-card__action">
-            <Button Href="@BuildPostUrl(Item.PublicId, Item.Slug)" Type="ButtonType.Primary" Class="blog-item-card__btn">
+            <Button Href="@BuildPostUrl(Item.Category, Item.Slug)" Type="ButtonType.Primary" Class="blog-item-card__btn">
                 @Localizer["CheckLabel"]
             </Button>
         </div>
@@ -53,8 +53,8 @@
     [Parameter]
     public required BlogPostListItem Item { get; set; }
 
-    private string BuildPostUrl(Guid publicId, string slug) 
-        => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
+    private string BuildPostUrl(string? category, string slug) 
+        => BlogUrlBuilder.BuildPostUrl(RouteService, category, slug);
 
     private string GetReadTimeText()
     {

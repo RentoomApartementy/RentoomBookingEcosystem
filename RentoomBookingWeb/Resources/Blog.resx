@@ -116,4 +116,10 @@
     <data name="LinkCopied" xml:space="preserve">
         <value>Link copied</value>
     </data>
+    <data name="RelatedContentTitle" xml:space="preserve">
+        <value>Related content</value>
+    </data>
+    <data name="RelatedContentTooltip" xml:space="preserve">
+        <value>Blog articles that mention this apartment</value>
+    </data>
 </root>

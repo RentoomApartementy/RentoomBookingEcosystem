@@ -96,4 +96,10 @@
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
     <value>Breadcrumb navigation</value>
   </data>
+  <data name="RelatedContentTitle" xml:space="preserve">
+    <value>Related content</value>
+  </data>
+  <data name="RelatedContentTooltip" xml:space="preserve">
+    <value>Blog articles that mention this apartment</value>
+  </data>
 </root>

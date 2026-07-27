@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using RentoomBooking.SharedClasses.Services.Blog;
+using RentoomBookingWeb.Helpers;
 
 namespace RentoomBookingWeb.Components.Features.Blog.Components;
 
@@ -143,8 +144,8 @@ public partial class BlogHeaderSection : ComponentBase, IDisposable
         _timer = null;
     }
 
-    private string BuildPostUrl(Guid publicId, string slug) 
-        => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
+    private string BuildPostUrl(string? category, string slug) 
+        => BlogUrlBuilder.BuildPostUrl(RouteService, category, slug);
 
     private string GetReadTimeText(BlogPostListItem item)
     {

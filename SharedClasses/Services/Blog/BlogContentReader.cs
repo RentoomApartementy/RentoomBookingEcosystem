@@ -148,14 +148,15 @@ public sealed class BlogContentReader : IBlogContentReader
     }
 
     public async Task<BlogPostDetails?> GetPublishedPostAsync(
-        Guid publicId,
+        string category,
         string slug,
         string culture,
         CancellationToken cancellationToken = default)
     {
         var normalizedCulture = NormalizeSourceLanguage(culture);
         var normalizedSlug = slug.Trim().ToLowerInvariant();
-        var cacheKey = $"blog:post:{normalizedCulture}:{publicId:D}:{normalizedSlug}";
+        var normalizedCategory = BlogRouteHelper.GetCategorySlug(category);
+        var cacheKey = $"blog:post:{normalizedCulture}:{normalizedCategory}:{normalizedSlug}";
 
         if (_cache.TryGetValue(cacheKey, out BlogPostDetails? cached) && cached is not null)
         {
@@ -164,7 +165,7 @@ public sealed class BlogContentReader : IBlogContentReader
 
         await using var dbContext = await _blogDbContextFactory.CreateDbContextAsync(cancellationToken);
 
-        var post = await dbContext.BlogPosts
+        var posts = await dbContext.BlogPosts
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
             .Where(x => x.InactiveAt == null)
@@ -172,7 +173,6 @@ public sealed class BlogContentReader : IBlogContentReader
             .Where(x => x.PublishedAt != null)
             .Where(x => x.PublishedVersionNo != null)
             .Where(x => x.SourceLanguage == normalizedCulture)
-            .Where(x => x.PublicId == publicId)
             .Where(x => x.Slug == normalizedSlug)
             .Select(x => new PostRow
             {
@@ -195,7 +195,10 @@ public sealed class BlogContentReader : IBlogContentReader
                 HeroImageUrl = x.HeroImageUrl,
                 PublishedVersionNo = x.PublishedVersionNo!.Value
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        var post = posts.FirstOrDefault(x =>
+            string.Equals(BlogRouteHelper.GetCategorySlug(x.Category), normalizedCategory, StringComparison.Ordinal));
 
         if (post is null)
         {
@@ -276,7 +279,7 @@ public sealed class BlogContentReader : IBlogContentReader
     }
 
     public async Task<BlogPostDetails?> GetPreviewPostAsync(
-        Guid publicId,
+        string category,
         string slug,
         string previewToken,
         string culture,
@@ -290,7 +293,8 @@ public sealed class BlogContentReader : IBlogContentReader
         var normalizedCulture = NormalizeSourceLanguage(culture);
         var normalizedSlug = slug.Trim().ToLowerInvariant();
         var normalizedToken = previewToken.Trim();
-        var cacheKey = $"blog:preview:{normalizedCulture}:{publicId:D}:{normalizedSlug}:{normalizedToken}";
+        var normalizedCategory = BlogRouteHelper.GetCategorySlug(category);
+        var cacheKey = $"blog:preview:{normalizedCulture}:{normalizedCategory}:{normalizedSlug}:{normalizedToken}";
 
         if (_cache.TryGetValue(cacheKey, out BlogPostDetails? cached) && cached is not null)
         {
@@ -301,11 +305,10 @@ public sealed class BlogContentReader : IBlogContentReader
         var tokenHash = ComputeSha256(normalizedToken);
         var utcNow = DateTime.UtcNow;
 
-        var post = await dbContext.BlogPosts
+        var posts = await dbContext.BlogPosts
             .AsNoTracking()
             .Where(x => x.DeletedAt == null)
             .Where(x => x.SourceLanguage == normalizedCulture)
-            .Where(x => x.PublicId == publicId)
             .Where(x => x.Slug == normalizedSlug)
             .Where(x => x.PreviewTokenHash != null)
             .Where(x => x.PreviewTokenExpiresAt != null)
@@ -333,7 +336,10 @@ public sealed class BlogContentReader : IBlogContentReader
                 CurrentDraftVersionNo = x.CurrentDraftVersionNo,
                 PreviewExpiresAtUtc = x.PreviewTokenExpiresAt
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        var post = posts.FirstOrDefault(x =>
+            string.Equals(BlogRouteHelper.GetCategorySlug(x.Category), normalizedCategory, StringComparison.Ordinal));
 
         if (post is null)
         {
@@ -486,6 +492,235 @@ public sealed class BlogContentReader : IBlogContentReader
         return items;
     }
 
+    public async Task<IReadOnlyList<BlogPostListItem>> GetRelatedPostsForApartmentAsync(
+        int apartmentId,
+        string culture,
+        int take = 6,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedCulture = NormalizeSourceLanguage(culture);
+        var normalizedTake = Math.Clamp(take <= 0 ? 6 : take, 1, 20);
+        var cacheKey = $"blog:related-apartment:{normalizedCulture}:{apartmentId}:{normalizedTake}";
+
+        if (_cache.TryGetValue(cacheKey, out IReadOnlyList<BlogPostListItem>? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        await using var dbContext = await _blogDbContextFactory.CreateDbContextAsync(cancellationToken);
+
+        // No navigation properties exist on these flat read entities, so the join is explicit.
+        // PropsJson can't be queried structurally in SQL, so this narrows to candidate blocks
+        // belonging to a live, published post first — the precise apartmentId match happens
+        // in memory afterwards, over what's normally a small result set.
+        var candidateBlocks = await (
+            from block in dbContext.BlogPostBlocks.AsNoTracking()
+            where (block.BlockType == "Paragraph" || block.BlockType == "ApartmentsListing" || block.BlockType == "Faq") && block.PropsJson != null
+            join version in dbContext.BlogPostVersions.AsNoTracking() on block.PostVersionId equals version.Id
+            join post in dbContext.BlogPosts.AsNoTracking() on version.BlogPostId equals post.Id
+            where post.DeletedAt == null
+                && post.InactiveAt == null
+                && post.Status == PublishedStatus
+                && post.PublishedAt != null
+                && post.PublishedVersionNo != null
+                && version.VersionNo == post.PublishedVersionNo
+                && post.SourceLanguage == normalizedCulture
+            select new { block.BlockType, block.PropsJson, PostId = post.Id })
+            .ToListAsync(cancellationToken);
+
+        var matchingPostIds = new HashSet<int>();
+        foreach (var row in candidateBlocks)
+        {
+            var matches = row.BlockType switch
+            {
+                var t when string.Equals(t, "ApartmentsListing", StringComparison.OrdinalIgnoreCase)
+                    => ApartmentsListingMatchesApartment(row.PropsJson, apartmentId),
+                var t when string.Equals(t, "Faq", StringComparison.OrdinalIgnoreCase)
+                    => FaqLinksContainApartment(row.PropsJson, apartmentId),
+                _ => ParagraphLinksContainApartment(row.PropsJson, apartmentId)
+            };
+
+            if (matches)
+            {
+                matchingPostIds.Add(row.PostId);
+            }
+        }
+
+        if (matchingPostIds.Count == 0)
+        {
+            IReadOnlyList<BlogPostListItem> empty = Array.Empty<BlogPostListItem>();
+            _cache.Set(cacheKey, empty, TimeSpan.FromMinutes(2));
+            return empty;
+        }
+
+        var rows = await dbContext.BlogPosts
+            .AsNoTracking()
+            .Where(x => matchingPostIds.Contains(x.Id))
+            .OrderByDescending(x => x.PublishedAt)
+            .ThenByDescending(x => x.Id)
+            .Take(normalizedTake)
+            .Select(x => new FeedRow
+            {
+                Id = x.Id,
+                PublicId = x.PublicId,
+                Slug = x.Slug,
+                SourceLanguage = x.SourceLanguage,
+                Title = x.Title,
+                Subtitle = x.Subtitle,
+                AuthorDisplayName = x.AuthorDisplayName,
+                Excerpt = x.Excerpt,
+                Category = x.Category,
+                TagsJson = x.TagsJson,
+                PublishedAtUtc = x.PublishedAt!.Value,
+                HeroMediaAssetId = x.HeroMediaAssetId,
+                HeroWebpMediaAssetId = x.HeroWebpMediaAssetId,
+                HeroSelectedVariant = x.HeroSelectedVariant,
+                HeroImageUrl = x.HeroImageUrl
+            })
+            .ToListAsync(cancellationToken);
+
+        var assetUrlMap = await ResolveAssetUrlsAsync(
+            rows.SelectMany(x => new[] { x.HeroMediaAssetId, x.HeroWebpMediaAssetId }),
+            cancellationToken);
+
+        IReadOnlyList<BlogPostListItem> items = rows.Select(x => new BlogPostListItem
+        {
+            Id = x.Id,
+            PublicId = x.PublicId,
+            Slug = x.Slug,
+            SourceLanguage = x.SourceLanguage,
+            Title = x.Title,
+            Subtitle = x.Subtitle,
+            AuthorDisplayName = x.AuthorDisplayName,
+            Excerpt = x.Excerpt,
+            Category = x.Category,
+            Tags = DeserializeTags(x.TagsJson),
+            PublishedAtUtc = x.PublishedAtUtc,
+            HeroImageUrl = ResolveImageUrl(
+                x.HeroMediaAssetId,
+                x.HeroWebpMediaAssetId,
+                x.HeroSelectedVariant,
+                x.HeroImageUrl,
+                assetUrlMap)
+        }).ToList();
+
+        _cache.Set(cacheKey, items, TimeSpan.FromMinutes(2));
+        return items;
+    }
+
+    // [] (or an array with no valid ids) means "all active apartments" per the ApartmentsListing
+    // block's own contract — so it's relevant to every apartment's page, not just some.
+    private static bool ApartmentsListingMatchesApartment(string? propsJson, int apartmentId)
+    {
+        var ids = ParseApartmentIds(propsJson);
+        return ids.Count == 0 || ids.Contains(apartmentId);
+    }
+
+    private static bool ParagraphLinksContainApartment(string? propsJson, int apartmentId)
+    {
+        if (string.IsNullOrWhiteSpace(propsJson))
+        {
+            return false;
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(propsJson);
+            if (!document.RootElement.TryGetProperty("links", out var linksElement) || linksElement.ValueKind != JsonValueKind.Array)
+            {
+                return false;
+            }
+
+            foreach (var link in linksElement.EnumerateArray())
+            {
+                if (link.ValueKind != JsonValueKind.Object)
+                {
+                    continue;
+                }
+
+                var type = GetStringValue(link, "type");
+                if (!string.Equals(type, "apartment", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (link.TryGetProperty("apartmentId", out var idElement)
+                    && idElement.ValueKind == JsonValueKind.Number
+                    && idElement.TryGetInt32(out var linkApartmentId)
+                    && linkApartmentId == apartmentId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
+    // A Faq block's PropsJson is rooted at "faq" (sequence + items), not a top-level "links"
+    // array like Paragraph, so each item's own "links" array is walked instead.
+    private static bool FaqLinksContainApartment(string? propsJson, int apartmentId)
+    {
+        if (string.IsNullOrWhiteSpace(propsJson))
+        {
+            return false;
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(propsJson);
+            if (!document.RootElement.TryGetProperty("faq", out var faqElement) || faqElement.ValueKind != JsonValueKind.Object)
+            {
+                return false;
+            }
+
+            if (!faqElement.TryGetProperty("items", out var itemsElement) || itemsElement.ValueKind != JsonValueKind.Array)
+            {
+                return false;
+            }
+
+            foreach (var item in itemsElement.EnumerateArray())
+            {
+                if (!item.TryGetProperty("links", out var linksElement) || linksElement.ValueKind != JsonValueKind.Array)
+                {
+                    continue;
+                }
+
+                foreach (var link in linksElement.EnumerateArray())
+                {
+                    if (link.ValueKind != JsonValueKind.Object)
+                    {
+                        continue;
+                    }
+
+                    var type = GetStringValue(link, "type");
+                    if (!string.Equals(type, "apartment", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    if (link.TryGetProperty("apartmentId", out var idElement)
+                        && idElement.ValueKind == JsonValueKind.Number
+                        && idElement.TryGetInt32(out var linkApartmentId)
+                        && linkApartmentId == apartmentId)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
     private static async Task<(BlogAdjacentPostLink? PreviousPost, BlogAdjacentPostLink? NextPost)> GetAdjacentCoreAsync(
         RappBlogReadDbContext dbContext,
         string slug,
@@ -512,6 +747,7 @@ public sealed class BlogContentReader : IBlogContentReader
             {
                 PublicId = x.PublicId,
                 Slug = x.Slug,
+                Category = x.Category,
                 Title = x.Title,
                 PublishedAtUtc = x.PublishedAt!.Value
             })
@@ -525,6 +761,7 @@ public sealed class BlogContentReader : IBlogContentReader
             {
                 PublicId = x.PublicId,
                 Slug = x.Slug,
+                Category = x.Category,
                 Title = x.Title,
                 PublishedAtUtc = x.PublishedAt!.Value
             })

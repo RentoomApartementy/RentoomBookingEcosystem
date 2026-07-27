@@ -25,7 +25,7 @@
         <meta property="og:title" content="@(Post.MetaTitle ?? Post.Title)" />
         <meta property="og:description" content="@(Post.MetaDescription ?? Post.Excerpt ?? Post.Title)" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.PublicId, Post.Slug)}")" />
+        <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.Category, Post.Slug)}")" />
         @if (!string.IsNullOrWhiteSpace(Post.HeroImageUrl))
         {
             <meta property="og:image" content="@Post.HeroImageUrl" />
@@ -44,7 +44,7 @@
         @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
         <FaqPageJsonLd Faqs="@BlogFaqs" />
         <BreadcrumbJsonLd CurrentPageName="@Post.Title"
-                          CurrentPagePath="@BuildPostUrl(Post.PublicId, Post.Slug)"
+                          CurrentPagePath="@BuildPostUrl(Post.Category, Post.Slug)"
                           ParentPageName="Blog"
                           ParentPagePath="@RouteService.GetLocalizedUrl("BlogList")"
                           FirstPageName="Rentoom" />
@@ -55,7 +55,7 @@
         }
         @if (!Post.IsPreview)
         {
-            <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.PublicId, Post.Slug)}")" />
+            <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.Category, Post.Slug)}")" />
             <SeoHreflangs />
         }
     </HeadContent>
@@ -107,7 +107,7 @@ else
             <h1 class="blog-post__title">@Post.Title</h1>
             <BlogShareBar PostTitle="@Post.Title"
                            PostSlug="@Post.Slug"
-                           ArticleUrl="@BuildPostUrl(Post.PublicId, Post.Slug)" />
+                           ArticleUrl="@BuildPostUrl(Post.Category, Post.Slug)" />
 
         @if (!string.IsNullOrWhiteSpace(Post.Subtitle))
         {
@@ -217,7 +217,7 @@ else
             <nav class="blog-post__navigation" aria-label="Blog post navigation">
                 @if (Post.PreviousPost is not null)
                 {
-                    <a class="blog-post__nav-card blog-post__nav-card--prev" href="@BuildPostUrl(Post.PreviousPost.PublicId, Post.PreviousPost.Slug)">
+                    <a class="blog-post__nav-card blog-post__nav-card--prev" href="@BuildPostUrl(Post.PreviousPost.Category, Post.PreviousPost.Slug)">
                         <div class="blog-post__nav-icon-wrapper">
                             <GoogleIcon Name="arrow_back" SizePx="24" Class="blog-post__nav-arrow" />
                         </div>
@@ -230,7 +230,7 @@ else
 
                 @if (Post.NextPost is not null)
                 {
-                    <a class="blog-post__nav-card blog-post__nav-card--next" href="@BuildPostUrl(Post.NextPost.PublicId, Post.NextPost.Slug)">
+                    <a class="blog-post__nav-card blog-post__nav-card--next" href="@BuildPostUrl(Post.NextPost.Category, Post.NextPost.Slug)">
                         <div class="blog-post__nav-content">
                             <span class="blog-post__nav-label">@BlogLocalizer["NextPostLabel"]</span>
                             <span class="blog-post__nav-title">@Post.NextPost.Title</span>

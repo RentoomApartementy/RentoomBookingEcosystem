@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBooking.SharedClasses.Services.Descriptions;
+using RentoomBookingWeb.Helpers;
 
 namespace RentoomBookingWeb.Components.Features.Blog.Pages;
 
@@ -32,12 +33,12 @@ public partial class BlogPostPage : ComponentBase
 
             Post = string.IsNullOrWhiteSpace(PreviewToken)
                 ? await BlogContentReader.GetPublishedPostAsync(
-                    PublicId,
+                    Category,
                     Slug,
                     culture,
                     CancellationToken.None)
                 : await BlogContentReader.GetPreviewPostAsync(
-                    PublicId,
+                    Category,
                     Slug,
                     PreviewToken,
                     culture,
@@ -54,13 +55,13 @@ public partial class BlogPostPage : ComponentBase
         }
     }
 
-    protected string BuildPostUrl(Guid publicId, string slug) => $"{RouteService.GetLocalizedUrl("BlogPost")}/{publicId:D}/{slug}";
+    protected string BuildPostUrl(string? category, string slug) => BlogUrlBuilder.BuildPostUrl(RouteService, category, slug);
 
     protected MarkupString GetJsonLd()
     {
         if (Post is null) return new MarkupString(string.Empty);
 
-        var canonicalUrl = $"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.PublicId, Post.Slug)}";
+        var canonicalUrl = $"{NavManager.BaseUri.TrimEnd('/')}{BuildPostUrl(Post.Category, Post.Slug)}";
         var title = System.Text.Json.JsonSerializer.Serialize(Post.Title);
         var excerpt = System.Text.Json.JsonSerializer.Serialize(Post.Excerpt ?? Post.MetaDescription ?? Post.Title);
         var author = System.Text.Json.JsonSerializer.Serialize(Post.AuthorDisplayName);
@@ -165,6 +166,6 @@ public partial class BlogPostPage : ComponentBase
     }
 
     [Inject] public ILogger<BlogPostPage> Logger { get; set; } = default!;
-    [Parameter] public Guid PublicId { get; set; }
+    [Parameter] public string Category { get; set; } = string.Empty;
     [Parameter] public string Slug { get; set; } = string.Empty;
 }

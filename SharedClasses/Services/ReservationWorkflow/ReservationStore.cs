@@ -31,7 +31,7 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
 
     public class ReservationStore : IReservationStore
     {
-        private static readonly TimeSpan ActiveReservationStatusSyncInterval = TimeSpan.FromMinutes(15);
+        private static readonly TimeSpan ActiveReservationStatusSyncInterval = TimeSpan.FromMinutes(20);
         private readonly IDbContextFactory<PostgresBookingDbContext> _dbContextFactory;
         private readonly Task _initializationTask;
 
@@ -233,8 +233,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow
             var entities = await context.ReservationRecords.AsNoTracking()
                 .Where(r => r.IdoReservationId.HasValue)
                 .Where(r => r.IdoStatus == null
-                    || (r.IdoStatus != ReservationStatusType.Canceled
-                        && r.IdoStatus != ReservationStatusType.Completed))
+                    ||
+                    ( //r.IdoStatus != ReservationStatusType.Canceled && //27.07 <-canceled też powinny byc brane pod uwagę, bo może być zmiana przez pracownika na accepted (przypadek rezerwacji 34288)
+                    r.IdoStatus != ReservationStatusType.Completed))
                 .Where(r => !r.LastStatusSyncAt.HasValue || r.LastStatusSyncAt < syncCutoff) //odrzuca rekordy syncowane w ostatnich 15 minutach
                 .OrderBy(r => r.LastStatusSyncAt ?? DateTime.MinValue)
                 .ThenBy(r => r.UpdatedAt)

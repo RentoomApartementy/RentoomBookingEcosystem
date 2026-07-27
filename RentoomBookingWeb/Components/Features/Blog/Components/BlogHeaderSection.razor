@@ -62,7 +62,7 @@
                     @if (ShowReadMoreButton && isActive)
                     {
                         <div class="blog_card_action">
-                            <Button Href="@BuildPostUrl(item.PublicId, item.Slug)" Type="ButtonType.Primary">
+                            <Button Href="@BuildPostUrl(item.Category, item.Slug)" Type="ButtonType.Primary">
                                 @Localizer["ReadMore"]
                             </Button>
                         </div>
