@@ -1,5 +1,6 @@
 {
   "defaultCulture": "pl-PL",
+  "defaultFallbackCurrency": "EUR",
   "cultures": [
     { "culture": "be", "nativeName": "Беларуская" },
     { "culture": "bg", "nativeName": "Български" },

@@ -36,7 +36,8 @@
             return;
         }
 
-        var converted = AmountPln.Value * rate.Rate;
+        // rate.Rate to notowanie NBP: liczba PLN za 1 jednostkę waluty obcej (np. 1 USD = 3.80 PLN) - dzielimy, nie mnożymy.
+        var converted = AmountPln.Value / rate.Rate;
         var symbol = rate.CurrencyCode switch
         {
             "EUR" => "€",

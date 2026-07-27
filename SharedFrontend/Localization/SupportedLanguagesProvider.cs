@@ -13,6 +13,7 @@ public static class SupportedLanguagesProvider
     public static IReadOnlyList<CultureInfo> SupportedCultures => Snapshot.Value.SupportedCultures;
     public static string DefaultCultureName => Snapshot.Value.DefaultCultureName;
     public static CultureInfo DefaultCulture => Snapshot.Value.DefaultCulture;
+    public static string DefaultFallbackCurrency => Snapshot.Value.DefaultFallbackCurrency;
 
     public static string GetLanguageLabel(CultureInfo culture)
     {
@@ -47,7 +48,7 @@ public static class SupportedLanguagesProvider
 
         if (resourceName is null)
         {
-            return BuildSnapshot(Array.Empty<SupportedLanguageConfigItem>(), null);
+            return BuildSnapshot(Array.Empty<SupportedLanguageConfigItem>(), null, null);
         }
 
         try
@@ -55,22 +56,25 @@ public static class SupportedLanguagesProvider
             using var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream is null)
             {
-                return BuildSnapshot(Array.Empty<SupportedLanguageConfigItem>(), null);
+                return BuildSnapshot(Array.Empty<SupportedLanguageConfigItem>(), null, null);
             }
 
             using var reader = new StreamReader(stream);
             var json = reader.ReadToEnd();
             var config = JsonSerializer.Deserialize<SupportedLanguagesConfig>(json);
             var activeCultures = (config?.Cultures ?? []).Where(c => c.Active);
-            return BuildSnapshot(activeCultures, config?.DefaultCulture);
+            return BuildSnapshot(activeCultures, config?.DefaultCulture, config?.DefaultFallbackCurrency);
         }
         catch
         {
-            return BuildSnapshot(Array.Empty<SupportedLanguageConfigItem>(), null);
+            return BuildSnapshot(Array.Empty<SupportedLanguageConfigItem>(), null, null);
         }
     }
 
-    private static SupportedLanguagesConfigSnapshot BuildSnapshot(IEnumerable<SupportedLanguageConfigItem> configuredCultures, string? defaultCultureName)
+    private static SupportedLanguagesConfigSnapshot BuildSnapshot(
+        IEnumerable<SupportedLanguageConfigItem> configuredCultures,
+        string? defaultCultureName,
+        string? defaultFallbackCurrency)
     {
         var cultures = new List<CultureInfo>();
         var labelsByCulture = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -116,7 +120,11 @@ public static class SupportedLanguagesProvider
             string.Equals(c.Name, defaultCultureName, StringComparison.OrdinalIgnoreCase))
             ?? cultures[0];
 
-        return new SupportedLanguagesConfigSnapshot(cultures, defaultCulture, labelsByCulture, currencyByCulture);
+        var resolvedDefaultFallbackCurrency = string.IsNullOrWhiteSpace(defaultFallbackCurrency)
+            ? "USD"
+            : defaultFallbackCurrency.Trim().ToUpperInvariant();
+
+        return new SupportedLanguagesConfigSnapshot(cultures, defaultCulture, labelsByCulture, currencyByCulture, resolvedDefaultFallbackCurrency);
     }
 
     private sealed class SupportedLanguagesConfigSnapshot
@@ -125,7 +133,8 @@ public static class SupportedLanguagesProvider
             IReadOnlyList<CultureInfo> supportedCultures,
             CultureInfo defaultCulture,
             IReadOnlyDictionary<string, string> languageLabelsByCultureName,
-            IReadOnlyDictionary<string, string> currencyByCultureName)
+            IReadOnlyDictionary<string, string> currencyByCultureName,
+            string defaultFallbackCurrency)
         {
             SupportedCultures = supportedCultures;
             SupportedCultureNames = supportedCultures.Select(c => c.Name).ToArray();
@@ -133,6 +142,7 @@ public static class SupportedLanguagesProvider
             DefaultCultureName = defaultCulture.Name;
             LanguageLabelsByCultureName = languageLabelsByCultureName;
             CurrencyByCultureName = currencyByCultureName;
+            DefaultFallbackCurrency = defaultFallbackCurrency;
         }
 
         public IReadOnlyList<CultureInfo> SupportedCultures { get; }
@@ -141,5 +151,6 @@ public static class SupportedLanguagesProvider
         public string DefaultCultureName { get; }
         public IReadOnlyDictionary<string, string> LanguageLabelsByCultureName { get; }
         public IReadOnlyDictionary<string, string> CurrencyByCultureName { get; }
+        public string DefaultFallbackCurrency { get; }
     }
 }

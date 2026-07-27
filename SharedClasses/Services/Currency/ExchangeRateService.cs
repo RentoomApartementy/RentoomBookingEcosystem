@@ -12,11 +12,24 @@ namespace RentoomBooking.SharedClasses.Services.Currency
     {
         public const string HttpClientName = "Nbp";
 
+        // NBP nie publikuje kursów w weekendy/święta - cofamy się do MaxLookbackDays dni wstecz
+        // szukając ostatniego dnia z faktycznym notowaniem (typowo 1-3 dni, np. po długim weekendzie).
+        private const int MaxLookbackDays = 7;
+
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IMemoryCache _memoryCache;
         private readonly ILogger<ExchangeRateService> _logger;
 
         private static readonly ConcurrentDictionary<string, SemaphoreSlim> _fetchLocks = new();
+
+        private enum FetchOutcome
+        {
+            Found,
+            NotFoundForDate,
+            HardFailure
+        }
+
+        private sealed record CachedRateEntry(bool Found, ExchangeRateResult? Rate);
 
         public ExchangeRateService(
             IHttpClientFactory httpClientFactory,
@@ -28,7 +41,7 @@ namespace RentoomBooking.SharedClasses.Services.Currency
             _logger = logger;
         }
 
-        public async Task<ExchangeRateResult?> GetRateAsync(string currencyCode, CancellationToken cancellationToken = default)
+        public async Task<ExchangeRateResult?> GetRateAsync(string currencyCode, string fallbackCurrencyCode = "USD", CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(currencyCode))
             {
@@ -41,47 +54,79 @@ namespace RentoomBooking.SharedClasses.Services.Currency
                 return null;
             }
 
-            var effectiveDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1));
+            var fallbackCode = string.IsNullOrWhiteSpace(fallbackCurrencyCode)
+                ? "USD"
+                : fallbackCurrencyCode.Trim().ToUpperInvariant();
 
-            var primary = await GetCachedRateOrFetchAsync(code, effectiveDate, cancellationToken);
+            var primary = await FindRateWithLookbackAsync(code, cancellationToken);
             if (primary is not null)
             {
                 return primary;
             }
 
-            if (code == "USD")
+            if (code == fallbackCode || fallbackCode == "PLN")
             {
                 return null;
             }
 
-            return await GetCachedRateOrFetchAsync("USD", effectiveDate, cancellationToken);
+            return await FindRateWithLookbackAsync(fallbackCode, cancellationToken);
         }
 
-        private async Task<ExchangeRateResult?> GetCachedRateOrFetchAsync(string code, DateOnly effectiveDate, CancellationToken cancellationToken)
+        private async Task<ExchangeRateResult?> FindRateWithLookbackAsync(string code, CancellationToken cancellationToken)
+        {
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+            for (var daysBack = 1; daysBack <= MaxLookbackDays; daysBack++)
+            {
+                var date = today.AddDays(-daysBack);
+                var (outcome, rate) = await GetCachedRateOrFetchAsync(code, date, cancellationToken);
+
+                if (outcome == FetchOutcome.Found)
+                {
+                    return rate;
+                }
+
+                if (outcome == FetchOutcome.HardFailure)
+                {
+                    // Błąd sieci/serwera NBP - nie ma sensu dalej cofać się w czasie, spróbujemy przy następnym żądaniu.
+                    return null;
+                }
+
+                // NotFoundForDate (404/400 - brak notowania na ten dzień, np. weekend/święto) - próbujemy dzień wcześniej.
+            }
+
+            return null;
+        }
+
+        private async Task<(FetchOutcome Outcome, ExchangeRateResult? Rate)> GetCachedRateOrFetchAsync(string code, DateOnly effectiveDate, CancellationToken cancellationToken)
         {
             var cacheKey = BuildCacheKey(code, effectiveDate);
 
-            if (_memoryCache.TryGetValue(cacheKey, out ExchangeRateResult? cached))
+            if (_memoryCache.TryGetValue(cacheKey, out CachedRateEntry? cached) && cached is not null)
             {
-                return cached;
+                return (cached.Found ? FetchOutcome.Found : FetchOutcome.NotFoundForDate, cached.Rate);
             }
 
             var fetchLock = _fetchLocks.GetOrAdd(cacheKey, _ => new SemaphoreSlim(1, 1));
             await fetchLock.WaitAsync(cancellationToken);
             try
             {
-                if (_memoryCache.TryGetValue(cacheKey, out cached))
+                if (_memoryCache.TryGetValue(cacheKey, out cached) && cached is not null)
                 {
-                    return cached;
+                    return (cached.Found ? FetchOutcome.Found : FetchOutcome.NotFoundForDate, cached.Rate);
                 }
 
-                var result = await FetchRateAsync(code, effectiveDate, cancellationToken);
+                var (outcome, rate) = await FetchSingleDateAsync(code, effectiveDate, cancellationToken);
 
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-                _memoryCache.Set(cacheKey, result, cacheOptions);
+                if (outcome != FetchOutcome.HardFailure)
+                {
+                    // Cachujemy zarówno trafienia jak i potwierdzony brak notowania na dany dzień (fakt stabilny przez 1h).
+                    // Błędów sieciowych/serwera nie cachujemy, żeby kolejne żądanie mogło spróbować ponownie.
+                    var cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromHours(1));
+                    _memoryCache.Set(cacheKey, new CachedRateEntry(outcome == FetchOutcome.Found, rate), cacheOptions);
+                }
 
-                return result;
+                return (outcome, rate);
             }
             finally
             {
@@ -89,7 +134,7 @@ namespace RentoomBooking.SharedClasses.Services.Currency
             }
         }
 
-        private async Task<ExchangeRateResult?> FetchRateAsync(string code, DateOnly effectiveDate, CancellationToken cancellationToken)
+        private async Task<(FetchOutcome Outcome, ExchangeRateResult? Rate)> FetchSingleDateAsync(string code, DateOnly effectiveDate, CancellationToken cancellationToken)
         {
             try
             {
@@ -105,8 +150,8 @@ namespace RentoomBooking.SharedClasses.Services.Currency
                 if (response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     // 404: brak notowania dla tej daty (np. weekend/święto). 400: błędne zapytanie / przekroczony limit.
-                    // Oba przypadki traktujemy jako "brak danych" i pozwalamy wywołującemu spróbować fallbacku.
-                    return null;
+                    // Oba przypadki traktujemy jako "brak danych na ten dzień" - wywołujący spróbuje wcześniejszej daty lub fallbacku.
+                    return (FetchOutcome.NotFoundForDate, null);
                 }
 
                 response.EnsureSuccessStatusCode();
@@ -115,15 +160,16 @@ namespace RentoomBooking.SharedClasses.Services.Currency
                 var rate = dto?.Rates?.FirstOrDefault();
                 if (rate is null || string.IsNullOrWhiteSpace(rate.EffectiveDate))
                 {
-                    return null;
+                    return (FetchOutcome.NotFoundForDate, null);
                 }
 
-                return new ExchangeRateResult(code, rate.Mid, DateOnly.Parse(rate.EffectiveDate, CultureInfo.InvariantCulture));
+                var result = new ExchangeRateResult(code, rate.Mid, DateOnly.Parse(rate.EffectiveDate, CultureInfo.InvariantCulture));
+                return (FetchOutcome.Found, result);
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
-                _logger.LogWarning(ex, "Nie udało się pobrać kursu NBP dla waluty {CurrencyCode}", code);
-                return null;
+                _logger.LogWarning(ex, "Nie udało się pobrać kursu NBP dla waluty {CurrencyCode} na dzień {EffectiveDate}", code, effectiveDate);
+                return (FetchOutcome.HardFailure, null);
             }
         }
 

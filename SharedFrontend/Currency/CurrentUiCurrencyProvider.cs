@@ -23,5 +23,5 @@ public class CurrentUiCurrencyProvider : ICurrentUiCurrencyProvider
     private Task<ExchangeRateResult?> FetchRateAsync() =>
         CurrencyCode is null
             ? Task.FromResult<ExchangeRateResult?>(null)
-            : _exchangeRateService.GetRateAsync(CurrencyCode);
+            : _exchangeRateService.GetRateAsync(CurrencyCode, SupportedLanguagesProvider.DefaultFallbackCurrency);
 }
