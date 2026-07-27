@@ -2,7 +2,7 @@
 @using RentoomBooking.SharedClasses.Models.AvailableTerms
 @using Microsoft.Extensions.Localization
 
-@if (StartDate == null || EndDate == null)
+@if (StartDate == null || EndDate == null || ShowNoOffersPlaceholder)
 {
     <div class="placeholder-offer" @onclick="OnSearchModalOpen">
         <div class="placeholder-icon">
@@ -152,7 +152,15 @@ else
     [Parameter] public EventCallback<AvailableTerm> OnSuggestionSelected { get; set; }
     [Parameter] public EventCallback<AvailableTerm> OnGoToSuggestion { get; set; }
 
-    private bool IsSelectedOffer(string offerType) => 
+    // Data z URL nie dała oferty ani sugerowanych alternatywnych terminów - traktujemy tak samo jak brak daty w URL.
+    private bool ShowNoOffersPlaceholder =>
+        StartDate != null && EndDate != null
+        && !IsOfferLoading
+        && !(OffersResponse?.Result?.PricingOffers?.Count > 0)
+        && SuggestionDates.Count == 0
+        && !IsSuggestionLoading;
+
+    private bool IsSelectedOffer(string offerType) =>
         string.Equals(SelectedOfferType, offerType, StringComparison.OrdinalIgnoreCase);
 
     private string GetOfferButtonLabel(string offerType) => 
