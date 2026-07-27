@@ -9,6 +9,13 @@ public sealed class CursorPage<T>
     public bool HasMore { get; init; }
 }
 
+public sealed class BlogCategorySummary
+{
+    public string Name { get; init; } = string.Empty;
+    public string Slug { get; init; } = string.Empty;
+    public int PostCount { get; init; }
+}
+
 public sealed class BlogPostListItem
 {
     public int Id { get; init; }

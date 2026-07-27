@@ -89,18 +89,21 @@
                         {
                             @foreach (var item in ViewModel.Items)
                             {
-                                <Apartment 
+                                <Apartment
                                     @key="@($"apartment-{item.Id}")"
-                                    Item="@item" 
-                                    Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)" 
+                                    Item="@item"
+                                    Offer="@ViewModel.GetPricingOfferByObjectId(item.Id)"
+                                    OfferLength="@ViewModel.GetOfferLengthDays()"
                                     DeferGalleryImages="true"
-                                    ShowPrice="@ViewModel.IsSearch"
+                                    ShowPrice="true"
+                                    ShowSuggestionPrice="true"
                                     StartDate="@ViewModel.StartDate"
                                     EndDate="@ViewModel.EndDate"
                                     Adults="@ViewModel.Adults"
                                     Children="@ViewModel.Children"
                                     SuggestionState="@ViewModel.GetSuggestionStatusByObjectId(item.Id)"
                                     SuggestionDates="@ViewModel.GetSuggestionsByObjectId(item.Id)"
+                                    SuggestedNavigationTerm="@(ViewModel.GetPricingOfferByObjectId(item.Id) == null ? ViewModel.GetSuggestionsByObjectId(item.Id)?.FirstOrDefault() : null)"
                                     ListingSource="apartments-list"
                                     />
                             }

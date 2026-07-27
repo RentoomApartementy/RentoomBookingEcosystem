@@ -170,6 +170,45 @@ public sealed class BlogContentReader : IBlogContentReader
         return result;
     }
 
+    public async Task<IReadOnlyList<BlogCategorySummary>> GetPublishedCategorySummariesAsync(
+        string culture,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedCulture = NormalizeSourceLanguage(culture);
+        var cacheKey = $"blog:categories:{normalizedCulture}";
+        if (_cache.TryGetValue(cacheKey, out IReadOnlyList<BlogCategorySummary>? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        await using var dbContext = await _blogDbContextFactory.CreateDbContextAsync(cancellationToken);
+        var rows = await dbContext.BlogPosts
+            .AsNoTracking()
+            .Where(x => x.DeletedAt == null)
+            .Where(x => x.InactiveAt == null)
+            .Where(x => x.Status == PublishedStatus)
+            .Where(x => x.PublishedAt != null)
+            .Where(x => x.PublishedVersionNo != null)
+            .Where(x => x.SourceLanguage == normalizedCulture)
+            .Where(x => !string.IsNullOrWhiteSpace(x.Category))
+            .GroupBy(x => x.Category!)
+            .Select(group => new { Name = group.Key, PostCount = group.Count() })
+            .ToListAsync(cancellationToken);
+
+        IReadOnlyList<BlogCategorySummary> result = rows
+            .Select(x => new BlogCategorySummary
+            {
+                Name = x.Name,
+                Slug = BlogRouteHelper.GetCategorySlug(x.Name),
+                PostCount = x.PostCount
+            })
+            .OrderBy(x => x.Name, StringComparer.CurrentCultureIgnoreCase)
+            .ToList();
+
+        _cache.Set(cacheKey, result, TimeSpan.FromMinutes(10));
+        return result;
+    }
+
     // Maps a URL category slug back to the raw Category string stored on posts, so it can be pushed
     // into a SQL WHERE clause. Cached separately (longer TTL) since the set of distinct categories
     // changes far less often than the post feed itself.

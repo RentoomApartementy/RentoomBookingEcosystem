@@ -93,4 +93,10 @@
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
     <value>Omrvinková navigácia</value>
   </data>
+  <data name="AllPosts" xml:space="preserve">
+    <value>Všetky príspevky</value>
+  </data>
+  <data name="BlogCategories" xml:space="preserve">
+    <value>Kategórie príspevkov</value>
+  </data>
 </root>

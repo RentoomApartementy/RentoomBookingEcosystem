@@ -93,4 +93,10 @@
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
     <value>Krušna navigacija</value>
   </data>
+  <data name="AllPosts" xml:space="preserve">
+    <value>Vse objave</value>
+  </data>
+  <data name="BlogCategories" xml:space="preserve">
+    <value>Kategorije objav</value>
+  </data>
 </root>

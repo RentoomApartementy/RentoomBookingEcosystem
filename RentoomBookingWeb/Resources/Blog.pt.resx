@@ -93,4 +93,10 @@
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
     <value>Navegação estrutural</value>
   </data>
+  <data name="AllPosts" xml:space="preserve">
+    <value>Todos os artigos</value>
+  </data>
+  <data name="BlogCategories" xml:space="preserve">
+    <value>Categorias de artigos</value>
+  </data>
 </root>
