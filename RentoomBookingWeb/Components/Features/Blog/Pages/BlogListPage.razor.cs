@@ -20,6 +20,7 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
     private const int PageSize = 12;
 
     protected readonly List<BlogPostListItem> Items = new();
+    protected readonly List<BlogCategorySummary> Categories = new();
     protected bool IsLoading;
     protected bool HasMore = true;
     protected string? NextCursor;
@@ -56,12 +57,13 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
         if (ApplicationState.TryTakeFromJson<BlogState>("blog_state", out var restoredState) && restoredState is not null)
         {
             Items.AddRange(restoredState.Items);
+            Categories.AddRange(restoredState.Categories);
             NextCursor = restoredState.NextCursor;
             HasMore = restoredState.HasMore;
         }
         else
         {
-            await LoadNextPageAsync(_cts.Token);
+            await Task.WhenAll(LoadNextPageAsync(_cts.Token), LoadCategoriesAsync(_cts.Token));
         }
 
         _loadedCategory = Category;
@@ -91,6 +93,7 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
         ApplicationState.PersistAsJson("blog_state", new BlogState
         {
             Items = Items,
+            Categories = Categories,
             NextCursor = NextCursor,
             HasMore = HasMore
         });
@@ -161,6 +164,33 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
         }
     }
 
+    private async Task LoadCategoriesAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var categories = await BlogContentReader.GetPublishedCategorySummariesAsync(
+                System.Globalization.CultureInfo.CurrentUICulture.Name,
+                cancellationToken);
+            Categories.Clear();
+            Categories.AddRange(categories);
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to load blog categories.");
+        }
+    }
+
+    protected string GetCategoryLinkClass(string? categorySlug)
+    {
+        var isActive = string.IsNullOrWhiteSpace(categorySlug)
+            ? string.IsNullOrWhiteSpace(Category)
+            : string.Equals(Category, categorySlug, StringComparison.OrdinalIgnoreCase);
+        return isActive ? "blog-categories__item blog-categories__item--active" : "blog-categories__item";
+    }
+
     public async ValueTask DisposeAsync()
     {
         _disposed = true;
@@ -190,6 +220,7 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
     private class BlogState
     {
         public List<BlogPostListItem> Items { get; set; } = new();
+        public List<BlogCategorySummary> Categories { get; set; } = new();
         public string? NextCursor { get; set; }
         public bool HasMore { get; set; }
     }

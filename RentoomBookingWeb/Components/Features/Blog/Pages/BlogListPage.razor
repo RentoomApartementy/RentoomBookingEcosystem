@@ -1,7 +1,7 @@
 @using RentoomBookingWeb.Components.Features.Blog.Components;
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
 
-<PageTitle>@(CategoryDisplayName ?? Localizer["BlogPageTitle"])</PageTitle>
+<PageTitle>@(string.IsNullOrWhiteSpace(Category) ? Localizer["AllPosts"] : CategoryDisplayName ?? Localizer["BlogPageTitle"])</PageTitle>
 
 <HeadContent>
     @if (Environment.IsProduction())
@@ -67,32 +67,53 @@ else if (CategoryNotFound)
 else
 {
     <div class="blog-list-container">
-        <h2 class="blog-list-title">@(CategoryDisplayName ?? Localizer["LatestPosts"])</h2>
+        <div class="blog-list-layout">
+            <aside class="blog-categories" aria-label="@Localizer["BlogCategories"]">
+                <div class="blog-categories__heading">@Localizer["BlogCategories"]</div>
+                <div class="blog-categories__items">
+                    <a class="@GetCategoryLinkClass(null)" href="@BuildCategoryListUrl(null)">
+                        <span>@Localizer["AllPosts"]</span>
+                        <span class="blog-categories__count">@Categories.Sum(x => x.PostCount)</span>
+                    </a>
+                    @foreach (var category in Categories)
+                    {
+                        <a class="@GetCategoryLinkClass(category.Slug)" href="@BuildCategoryListUrl(category.Slug)">
+                            <span>@category.Name</span>
+                            <span class="blog-categories__count">@category.PostCount</span>
+                        </a>
+                    }
+                </div>
+            </aside>
 
-        @if (Items.Any())
-        {
-            <div class="blog-posts-grid">
-                @{
-                    int index = 0;
-                }
-                @foreach (var item in Items)
+            <section class="blog-list-content">
+                <h2 class="blog-list-title">@(string.IsNullOrWhiteSpace(Category) ? Localizer["AllPosts"] : CategoryDisplayName ?? Localizer["AllPosts"])</h2>
+
+                @if (Items.Any())
                 {
-                    if (index == 0)
-                    {
-                        <BlogFeaturedItem Item="item" />
-                    }
-                    else
-                    {
-                        <BlogItem Item="item" />
-                    }
-                    index++;
+                    <div class="blog-posts-grid">
+                        @{
+                            int index = 0;
+                        }
+                        @foreach (var item in Items)
+                        {
+                            if (index == 0)
+                            {
+                                <BlogFeaturedItem Item="item" />
+                            }
+                            else
+                            {
+                                <BlogItem Item="item" />
+                            }
+                            index++;
+                        }
+                    </div>
                 }
-            </div>
-        }
-        else
-        {
-            <BlogEmptySection />
-        }
+                else
+                {
+                    <BlogEmptySection />
+                }
+            </section>
+        </div>
     </div>
 }
 

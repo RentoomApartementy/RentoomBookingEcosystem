@@ -93,4 +93,10 @@
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
     <value>Fil d’Ariane</value>
   </data>
+  <data name="AllPosts" xml:space="preserve">
+    <value>Tous les articles</value>
+  </data>
+  <data name="BlogCategories" xml:space="preserve">
+    <value>Catégories d’articles</value>
+  </data>
 </root>

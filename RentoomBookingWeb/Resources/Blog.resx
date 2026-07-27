@@ -125,4 +125,10 @@
     <data name="LatestPostsInCategory" xml:space="preserve">
         <value>Latest posts: {0}</value>
     </data>
+  <data name="AllPosts" xml:space="preserve">
+    <value>All posts</value>
+  </data>
+  <data name="BlogCategories" xml:space="preserve">
+    <value>Post categories</value>
+  </data>
 </root>

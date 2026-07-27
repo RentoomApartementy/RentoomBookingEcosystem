@@ -14,6 +14,13 @@ public interface IBlogContentReader
         string? categorySlug = null,
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Categories used by published posts in the requested source language, with their post counts.
+    /// </summary>
+    Task<IReadOnlyList<BlogCategorySummary>> GetPublishedCategorySummariesAsync(
+        string culture,
+        CancellationToken cancellationToken = default);
+
     Task<BlogPostDetails?> GetPublishedPostAsync(
         string category,
         string slug,

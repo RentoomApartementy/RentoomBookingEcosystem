@@ -225,4 +225,10 @@
   <data name="RelatedContentTooltip" xml:space="preserve">
     <value>Wpisy na blogu, w których wspomniano ten apartament</value>
   </data>
+  <data name="AllPosts" xml:space="preserve">
+    <value>Wszystkie wpisy</value>
+  </data>
+  <data name="BlogCategories" xml:space="preserve">
+    <value>Kategorie wpisów</value>
+  </data>
 </root>
