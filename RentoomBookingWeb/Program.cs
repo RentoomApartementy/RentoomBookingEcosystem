@@ -35,7 +35,9 @@ using RentoomBookingWeb.Components;
 using RentoomBookingWeb.Components.Features.Apartments.ViewModels;
 using RentoomBooking.SharedClasses.Services.Gus;
 using RentoomBooking.SharedClasses.Models.Gus;
+using RentoomBooking.SharedClasses.Services.Currency;
 using RentoomBooking.SharedFrontend.Localization;
+using RentoomBooking.SharedFrontend.Currency;
 using RentoomBookingWeb.Services;
 using RentoomBookingWeb.Services.Localization;
 using RentoomBookingWeb.Configuration;
@@ -193,6 +195,15 @@ namespace RentoomBookingWeb
             //GUS
             builder.Services.Configure<GusApiSettings>(builder.Configuration.GetSection("GusApi"));
             builder.Services.AddScoped<IGusService, GusService>();
+
+            //NBP - kursy walut dla cen w walucie języka UI
+            builder.Services.AddHttpClient(ExchangeRateService.HttpClientName, client =>
+            {
+                client.BaseAddress = new Uri("https://api.nbp.pl/");
+                client.Timeout = TimeSpan.FromSeconds(5);
+            });
+            builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
+            builder.Services.AddScoped<ICurrentUiCurrencyProvider, CurrentUiCurrencyProvider>();
 
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
             builder.Services.AddScoped<IAvailabilityFinderService2, AvailabilityFinderService2>();

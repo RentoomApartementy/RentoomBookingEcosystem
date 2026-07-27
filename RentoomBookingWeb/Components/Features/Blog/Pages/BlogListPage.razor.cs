@@ -25,13 +25,29 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
     protected string? NextCursor;
     protected string? Error;
 
+    // Route-bound category slug, e.g. "aktualnosci" from /blog/aktualnosci. Null on the unfiltered /blog list.
+    [Parameter] public string? Category { get; set; }
+
     private DotNetObjectReference<BlogListPage>? _objRef;
     private IJSObjectReference? _jsModule;
     private PersistingComponentStateSubscription _subscription;
     private readonly CancellationTokenSource _cts = new();
     private bool _interactive;
     private bool _disposed;
+    private string? _loadedCategory;
+    private bool _hasInitialized;
     private string BuildPostUrl(string? category, string slug) => BlogUrlBuilder.BuildPostUrl(RouteService, category, slug);
+
+    // Category is free text on the post, not a fixed config list - the display name is simply
+    // whatever the currently loaded posts carry for this slug (they all share the same category).
+    protected string? CategoryDisplayName => Items.FirstOrDefault()?.Category;
+
+    protected string BuildCategoryListUrl(string? categorySlug) =>
+        string.IsNullOrWhiteSpace(categorySlug)
+            ? RouteService.GetLocalizedUrl("BlogList")
+            : BlogUrlBuilder.BuildCategoryListUrl(RouteService, categorySlug);
+
+    protected bool CategoryNotFound => !string.IsNullOrWhiteSpace(Category) && !IsLoading && string.IsNullOrWhiteSpace(Error) && Items.Count == 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,6 +63,27 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
         {
             await LoadNextPageAsync(_cts.Token);
         }
+
+        _loadedCategory = Category;
+        _hasInitialized = true;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!_hasInitialized || string.Equals(Category, _loadedCategory, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        // Category changed via in-app navigation (e.g. clicking a different category link) while this
+        // page instance is reused - reset paging state and reload from scratch for the new filter.
+        Items.Clear();
+        NextCursor = null;
+        HasMore = true;
+        Error = null;
+        _loadedCategory = Category;
+
+        await LoadNextPageAsync(_cts.Token);
     }
 
     private Task PersistState()
@@ -102,6 +139,7 @@ public partial class BlogListPage : ComponentBase, IAsyncDisposable
                 System.Globalization.CultureInfo.CurrentUICulture.Name,
                 NextCursor,
                 PageSize,
+                Category,
                 cancellationToken);
 
             var newItems = result.Items.Where(newItem => !Items.Any(existingItem => existingItem.PublicId == newItem.PublicId));

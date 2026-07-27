@@ -8,7 +8,7 @@
             @if (HasOffers)
             {
                 <span class="label">@Localizer["From"]</span>
-                <span class="price">@TotalMinPrice.ToString("N2") @CurrencySymbol</span>
+                <PriceDisplay AmountPln="@TotalMinPrice" CssClass="price" />
             }
         </div>
 
@@ -58,7 +58,7 @@
             {
                 <div class="reservation-header desktop-only">
                     <div class="header-price">
-                        <span class="price-value">@Localizer["From"] @TotalMinPrice.ToString("N2") @CurrencySymbol</span>
+                        <span class="price-value">@Localizer["From"] <PriceDisplay AmountPln="@TotalMinPrice" /></span>
                     </div>
                 </div>
             }
@@ -182,7 +182,6 @@
     [Parameter] public bool IsMobileExpanded { get; set; }
     [Parameter] public bool HasOffers { get; set; }
     [Parameter] public decimal TotalMinPrice { get; set; }
-    [Parameter] public string CurrencySymbol { get; set; } = "PLN";
     [Parameter] public string? StartDate { get; set; }
     [Parameter] public string? EndDate { get; set; }
     [Parameter] public string NightsSummaryText { get; set; } = "";

@@ -25,7 +25,7 @@
     <div class="blog-item-card__content">
         <div class="blog-item-card__meta">
             <span class="blog-item-card__category">
-                @($"{Localizer["CategoryLabel"].Value.ToUpperInvariant()} | {(string.IsNullOrWhiteSpace(Item.Category) ? Localizer["DefaultCategory"].Value : Item.Category).ToUpperInvariant()}")
+                @($"{(string.IsNullOrWhiteSpace(Item.Category) ? Localizer["DefaultCategory"].Value : Item.Category).ToUpperInvariant()}")
             </span>
             <span class="blog-item-card__read-time">@GetReadTimeText()</span>
         </div>

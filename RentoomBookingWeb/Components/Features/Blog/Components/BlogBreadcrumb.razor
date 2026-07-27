@@ -4,6 +4,13 @@
             <a class="blog-breadcrumb__link" href="@HomeUrl">@HomeLabel</a>
         </li>
 
+        @if (!string.IsNullOrWhiteSpace(GrandparentPageName) && !string.IsNullOrWhiteSpace(GrandparentPageUrl))
+        {
+            <li class="blog-breadcrumb__item">
+                <a class="blog-breadcrumb__link" href="@GrandparentPageUrl">@GrandparentPageName</a>
+            </li>
+        }
+
         @if (!string.IsNullOrWhiteSpace(ParentPageName) && !string.IsNullOrWhiteSpace(ParentPageUrl))
         {
             <li class="blog-breadcrumb__item">
@@ -22,6 +29,9 @@
     [Parameter, EditorRequired] public string HomeUrl { get; set; } = string.Empty;
     [Parameter, EditorRequired] public string HomeLabel { get; set; } = "Rentoom";
     [Parameter, EditorRequired] public string CurrentPageName { get; set; } = string.Empty;
+    // Level between Home and ParentPageName, e.g. "Blog" when ParentPageName is a category.
+    [Parameter] public string? GrandparentPageName { get; set; }
+    [Parameter] public string? GrandparentPageUrl { get; set; }
     [Parameter] public string? ParentPageName { get; set; }
     [Parameter] public string? ParentPageUrl { get; set; }
 }

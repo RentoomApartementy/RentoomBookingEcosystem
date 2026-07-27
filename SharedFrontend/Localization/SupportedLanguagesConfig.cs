@@ -7,6 +7,9 @@ public sealed class SupportedLanguagesConfig
     [JsonPropertyName("defaultCulture")]
     public string? DefaultCulture { get; init; }
 
+    [JsonPropertyName("defaultFallbackCurrency")]
+    public string? DefaultFallbackCurrency { get; init; }
+
     [JsonPropertyName("cultures")]
     public List<SupportedLanguageConfigItem>? Cultures { get; init; }
 }
@@ -21,4 +24,7 @@ public sealed class SupportedLanguageConfigItem
 
     [JsonPropertyName("active")]
     public bool Active { get; init; } = false;
+
+    [JsonPropertyName("currency")]
+    public string? Currency { get; init; }
 }

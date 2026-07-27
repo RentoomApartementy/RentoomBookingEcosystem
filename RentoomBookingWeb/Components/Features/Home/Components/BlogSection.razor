@@ -3,6 +3,7 @@
 @using RentoomBookingWeb.Services.Localization
 @using RentoomBookingWeb.Components.Shared
 @using RentoomBookingWeb.Components.Features.Blog.Components
+@using RentoomBookingWeb.Helpers
 @implements IDisposable
 @inject IBlogContentReader BlogContentReader
 @inject IStringLocalizer<RentoomBookingWeb.Blog> Localizer
@@ -10,8 +11,10 @@
 
 <div class="blog-section-container">
     <div class="blog-section-header">
-        <h2 class="blog-section-title">@Localizer["LatestPosts"]</h2>
-        <a href="@RouteService.GetLocalizedUrl("BlogList")" class="blog-section-all-btn">
+        <h2 class="blog-section-title">
+            @(CategoryDisplayName is null ? Localizer["LatestPosts"].Value : string.Format(Localizer["LatestPostsInCategory"], CategoryDisplayName))
+        </h2>
+        <a href="@SeeAllUrl" class="blog-section-all-btn">
             @Localizer["SeeAllPosts"]
         </a>
     </div>
@@ -48,9 +51,21 @@
 </div>
 
 @code {
+    // Optional category slug (e.g. "aktualnosci") to filter this section to a single category.
+    // Null shows the latest posts across all categories, unchanged from before.
+    [Parameter] public string? Category { get; set; }
+
     private readonly List<BlogPostListItem> Items = new();
     private bool IsLoading = true;
     private readonly CancellationTokenSource _cts = new();
+
+    // Category is free text on the post, not a fixed config list - the display name is simply
+    // whatever the currently loaded posts carry for this slug (they all share the same category).
+    private string? CategoryDisplayName => string.IsNullOrWhiteSpace(Category) ? null : Items.FirstOrDefault()?.Category;
+
+    private string SeeAllUrl => string.IsNullOrWhiteSpace(Category)
+        ? RouteService.GetLocalizedUrl("BlogList")
+        : BlogUrlBuilder.BuildCategoryListUrl(RouteService, Category);
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,6 +76,7 @@
                 System.Globalization.CultureInfo.CurrentUICulture.Name,
                 null,
                 8, // Single request limit (loads first 8 posts)
+                Category,
                 _cts.Token);
 
             Items.AddRange(result.Items);

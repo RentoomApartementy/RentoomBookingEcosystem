@@ -57,6 +57,9 @@ public partial class BlogPostPage : ComponentBase
 
     protected string BuildPostUrl(string? category, string slug) => BlogUrlBuilder.BuildPostUrl(RouteService, category, slug);
 
+    // Links the category label/breadcrumb to its list page, e.g. /blog/aktualnosci.
+    protected string BuildCategoryListUrl(string? category) => BlogUrlBuilder.BuildCategoryListUrl(RouteService, category);
+
     protected MarkupString GetJsonLd()
     {
         if (Post is null) return new MarkupString(string.Empty);
@@ -67,13 +70,16 @@ public partial class BlogPostPage : ComponentBase
         var author = System.Text.Json.JsonSerializer.Serialize(Post.AuthorDisplayName);
         var imageUrl = System.Text.Json.JsonSerializer.Serialize(Post.HeroImageUrl ?? string.Empty);
         var dateIso = Post.PublishedAtUtc.ToString("o");
+        var articleSection = string.IsNullOrWhiteSpace(Post.Category)
+            ? string.Empty
+            : $"""  "articleSection": {System.Text.Json.JsonSerializer.Serialize(Post.Category)},{"\n"}""";
 
         var json = $$"""
         {
           "@context": "https://schema.org",
           "@type": "BlogPosting",
           "headline": {{title}},
-          "image": {{imageUrl}},
+        {{articleSection}}  "image": {{imageUrl}},
           "datePublished": "{{dateIso}}",
           "author": {
             "@type": "Person",

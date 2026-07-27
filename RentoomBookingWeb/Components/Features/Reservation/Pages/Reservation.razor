@@ -120,7 +120,7 @@
                             <input type="checkbox" class="addon-checkbox" />
                             <span class="addon-name">@fadesc.Name</span>
                             <span class="addon-name">@fadesc.Description</span>
-                            <span class="addon-price">@fa.PriceGross.ToString("N0") @CurrencyLocalizer["PLN"]</span>
+                            <span class="addon-price"><PriceDisplay AmountPln="@fa.PriceGross" /></span>
                         </label>
                         </div>
                     }
@@ -174,7 +174,7 @@
 
                     <div class="summary-info">
                         <b class="info-text">@Localizer["Reservation_Cost"]</b>
-                        <p class="price-text">@_offersResponse.Result.PricingOffers[0].MinimalPrice @CurrencyLocalizer["PLN"]</p>
+                        <p class="price-text"><PriceDisplay AmountPln="@_offersResponse.Result.PricingOffers[0].MinimalPrice" /></p>
                     </div>
                 </div>
                 <p>@Localizer["Reservation_NightsCount"]: @GetNumberOfNights()</p>

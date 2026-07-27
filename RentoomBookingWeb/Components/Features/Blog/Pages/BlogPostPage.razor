@@ -43,11 +43,24 @@
         <!-- Schema.org Structured Data (JSON-LD) -->
         @((MarkupString)$@"<script type=""application/ld+json"">{GetJsonLd().Value}</script>")
         <FaqPageJsonLd Faqs="@BlogFaqs" />
-        <BreadcrumbJsonLd CurrentPageName="@Post.Title"
-                          CurrentPagePath="@BuildPostUrl(Post.Category, Post.Slug)"
-                          ParentPageName="Blog"
-                          ParentPagePath="@RouteService.GetLocalizedUrl("BlogList")"
-                          FirstPageName="Rentoom" />
+        @if (!string.IsNullOrWhiteSpace(Post.Category))
+        {
+            <BreadcrumbJsonLd CurrentPageName="@Post.Title"
+                              CurrentPagePath="@BuildPostUrl(Post.Category, Post.Slug)"
+                              GrandparentPageName="Blog"
+                              GrandparentPagePath="@RouteService.GetLocalizedUrl("BlogList")"
+                              ParentPageName="@Post.Category"
+                              ParentPagePath="@BuildCategoryListUrl(Post.Category)"
+                              FirstPageName="Rentoom" />
+        }
+        else
+        {
+            <BreadcrumbJsonLd CurrentPageName="@Post.Title"
+                              CurrentPagePath="@BuildPostUrl(Post.Category, Post.Slug)"
+                              ParentPageName="Blog"
+                              ParentPagePath="@RouteService.GetLocalizedUrl("BlogList")"
+                              FirstPageName="Rentoom" />
+        }
 
         @if (HasInstagramEmbeds)
         {
@@ -78,12 +91,26 @@ else
     <BlogHeaderSection Item="MapToListItem(Post)" ShowReadMoreButton="false" UseH1ForTitle="false" />
 
     <div class="blog-post-breadcrumb">
-        <BlogBreadcrumb NavigationLabel="@BlogLocalizer["BreadcrumbNavigationLabel"]"
-                        HomeUrl="@RouteService.GetLocalizedUrl("Home")"
-                        HomeLabel="Rentoom"
-                        ParentPageName="Blog"
-                        ParentPageUrl="@RouteService.GetLocalizedUrl("BlogList")"
-                        CurrentPageName="@Post.Title" />
+        @if (!string.IsNullOrWhiteSpace(Post.Category))
+        {
+            <BlogBreadcrumb NavigationLabel="@BlogLocalizer["BreadcrumbNavigationLabel"]"
+                            HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                            HomeLabel="Rentoom"
+                            GrandparentPageName="Blog"
+                            GrandparentPageUrl="@RouteService.GetLocalizedUrl("BlogList")"
+                            ParentPageName="@Post.Category"
+                            ParentPageUrl="@BuildCategoryListUrl(Post.Category)"
+                            CurrentPageName="@Post.Title" />
+        }
+        else
+        {
+            <BlogBreadcrumb NavigationLabel="@BlogLocalizer["BreadcrumbNavigationLabel"]"
+                            HomeUrl="@RouteService.GetLocalizedUrl("Home")"
+                            HomeLabel="Rentoom"
+                            ParentPageName="Blog"
+                            ParentPageUrl="@RouteService.GetLocalizedUrl("BlogList")"
+                            CurrentPageName="@Post.Title" />
+        }
     </div>
     
     <article class="blog-post">
@@ -119,7 +146,7 @@ else
                 <div class="blog-post__taxonomy">
                     @if (!string.IsNullOrWhiteSpace(Post.Category))
         {
-                        <span class="blog-post__category">@Post.Category</span>
+                        <a class="blog-post__category" href="@BuildCategoryListUrl(Post.Category)">@Post.Category</a>
         }
                     @foreach (var tag in Post.Tags)
         {

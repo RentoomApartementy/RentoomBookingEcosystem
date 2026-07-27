@@ -2,10 +2,16 @@ namespace RentoomBooking.SharedClasses.Services.Blog;
 
 public interface IBlogContentReader
 {
+    /// <summary>
+    /// Published posts feed, newest first. When <paramref name="categorySlug"/> is provided (the
+    /// URL-safe slug, e.g. "aktualnosci"), only posts whose category slugifies to the same value
+    /// are returned; an unrecognized slug yields an empty page rather than an error.
+    /// </summary>
     Task<CursorPage<BlogPostListItem>> GetPublishedPostsFeedAsync(
         string culture,
         string? cursor,
         int take,
+        string? categorySlug = null,
         CancellationToken cancellationToken = default);
 
     Task<BlogPostDetails?> GetPublishedPostAsync(

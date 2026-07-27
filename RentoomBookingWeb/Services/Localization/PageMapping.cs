@@ -15,7 +15,9 @@ namespace RentoomBookingWeb.Services.Localization
             ["ApartmentDetailWithToken"] = new(typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage), "{Id}/{Slug}/{ReservationTokenGuid}/{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 15, MinRequiredSegments: 3),
             ["ApartmentDetail"] = new(typeof(RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages.ApartmentPage), "{Id}/{Slug}/{StartDate}/{EndDate}/{Adults}/{Children}", Priority: 10, MinRequiredSegments: 1),
             ["BlogPost"] = new(typeof(RentoomBookingWeb.Components.Features.Blog.Pages.BlogPostPage), "{Category}/{Slug}", Priority: 10, MinRequiredSegments: 2),
-            ["BlogList"] = new(typeof(RentoomBookingWeb.Components.Features.Blog.Pages.BlogListPage), Priority: 0),
+            // MinRequiredSegments: 0 mirrors "Apartments" below - one key serves both /blog (no
+            // extra segment, Category stays null) and /blog/{category} (category list filter).
+            ["BlogList"] = new(typeof(RentoomBookingWeb.Components.Features.Blog.Pages.BlogListPage), "{Category}", Priority: 0, MinRequiredSegments: 0),
             ["Statute"] = new(typeof(RentoomBookingWeb.Components.Features.Statute.Pages.Statute), "{Id}/{Slug}", Priority: 10, MinRequiredSegments: 0), // Statute is special, ID is optional for main list
             ["Contact"] = new(typeof(RentoomBookingWeb.Components.Features.Contact.Pages.Contact), Priority: 0),
             ["Cooperation"] = new(typeof(RentoomBookingWeb.Components.Features.Cooperation.Pages.Cooperation), Priority: 0),

@@ -18,6 +18,10 @@
     [Parameter, EditorRequired] public string CurrentPageName { get; set; } = string.Empty;
     [Parameter, EditorRequired] public string CurrentPagePath { get; set; } = string.Empty;
     [Parameter] public string? FirstPageName { get; set; }
+    // Level between FirstPageName and ParentPageName, e.g. "Blog" when ParentPageName is a category
+    // (Rentoom -> Blog -> Category -> Current). Optional; existing single-level callers are unaffected.
+    [Parameter] public string? GrandparentPageName { get; set; }
+    [Parameter] public string? GrandparentPagePath { get; set; }
     [Parameter] public string? ParentPageName { get; set; }
     [Parameter] public string? ParentPagePath { get; set; }
 
@@ -40,6 +44,17 @@
                 { "name", FirstPageName ?? HomeLabel },
                 { "item", ToAbsoluteUrl(RouteService.GetLocalizedUrl("Home")) }
             });
+
+            if (!string.IsNullOrWhiteSpace(GrandparentPageName) && !string.IsNullOrWhiteSpace(GrandparentPagePath))
+            {
+                items.Add(new Dictionary<string, object>
+                {
+                    { "@type", "ListItem" },
+                    { "position", position++ },
+                    { "name", GrandparentPageName },
+                    { "item", ToAbsoluteUrl(GrandparentPagePath) }
+                });
+            }
 
             if (!string.IsNullOrWhiteSpace(ParentPageName) && !string.IsNullOrWhiteSpace(ParentPagePath))
             {
