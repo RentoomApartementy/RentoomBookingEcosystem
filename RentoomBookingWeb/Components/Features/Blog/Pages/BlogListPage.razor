@@ -71,13 +71,13 @@ else
             <aside class="blog-categories" aria-label="@Localizer["BlogCategories"]">
                 <div class="blog-categories__heading">@Localizer["BlogCategories"]</div>
                 <div class="blog-categories__items">
-                    <a class="@GetCategoryLinkClass(null)" href="@BuildCategoryListUrl(null)">
+                    <a class="@GetCategoryLinkClass(null)" href="@BuildCategoryListUrl(null)" aria-current="@(string.IsNullOrWhiteSpace(Category) ? "page" : null)">
                         <span>@Localizer["AllPosts"]</span>
                         <span class="blog-categories__count">@Categories.Sum(x => x.PostCount)</span>
                     </a>
                     @foreach (var category in Categories)
                     {
-                        <a class="@GetCategoryLinkClass(category.Slug)" href="@BuildCategoryListUrl(category.Slug)">
+                        <a class="@GetCategoryLinkClass(category.Slug)" href="@BuildCategoryListUrl(category.Slug)" aria-current="@(string.Equals(Category, category.Slug, StringComparison.OrdinalIgnoreCase) ? "page" : null)">
                             <span>@category.Name</span>
                             <span class="blog-categories__count">@category.PostCount</span>
                         </a>

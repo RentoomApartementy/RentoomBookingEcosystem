@@ -33,21 +33,31 @@
 }
 
 .blog-categories {
-    border: 2px solid #1b4b3e;
+    background: linear-gradient(160deg, rgba(141, 97, 51, 0.08) 0%, #ffffff 55%, rgba(141, 97, 51, 0.08) 100%);
+    border: 1px solid rgba(209, 191, 172, 0.35);
+    border-radius: 20px;
+    background-clip: padding-box;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
     order: 2;
+    position: sticky;
+    top: 6rem;
 }
 
 .blog-categories__heading {
-    background-color: #1b4b3e;
-    color: #fff;
-    font-size: 1.125rem;
-    font-weight: 700;
-    padding: .875rem 1rem;
+    color: #1b4b3e;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 1.5rem 1.5rem 0.75rem;
 }
 
 .blog-categories__items {
     display: flex;
     flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.25rem 0.75rem 1.25rem;
 }
 
 .blog-categories__item {
@@ -55,25 +65,49 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    color: #1b4b3e;
-    padding: .75rem 1rem;
+    color: #4a4038;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.65rem 0.9rem;
+    border-radius: 999px;
     text-decoration: none;
-}
-
-.blog-categories__item + .blog-categories__item {
-    border-top: 1px solid rgba(27, 75, 62, .22);
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .blog-categories__item:hover,
-.blog-categories__item:focus-visible,
+.blog-categories__item:focus-visible {
+    background-color: rgba(141, 97, 51, 0.12);
+    color: #8d6133;
+    outline: none;
+}
+
 .blog-categories__item--active {
-    background-color: rgba(27, 75, 62, .1);
-    color: #1b4b3e;
+    background-color: #1b4b3e;
+    color: #ffffff;
+}
+
+.blog-categories__item--active:hover,
+.blog-categories__item--active:focus-visible {
+    background-color: #16392f;
+    color: #ffffff;
 }
 
 .blog-categories__count {
     font-weight: 700;
+    font-size: 0.72rem;
+    line-height: 1;
+    min-width: 1.6rem;
+    text-align: center;
     white-space: nowrap;
+    padding: 0.3rem 0.5rem;
+    border-radius: 999px;
+    background-color: rgba(27, 75, 62, 0.1);
+    color: #1b4b3e;
+}
+
+.blog-categories__item--active .blog-categories__count {
+    background-color: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
 }
 
 .blog-posts-grid {
@@ -112,6 +146,7 @@
 
     .blog-categories {
         order: 1;
+        position: static;
     }
 
     .blog-list-content {
