@@ -220,7 +220,7 @@ else
                             </div>
                 break;
                         case "YouTube" when !string.IsNullOrWhiteSpace(block.EmbedUrl):
-                            <YouTubeEmbed EmbedUrl="@block.EmbedUrl" Title="@block.EmbedTitle" DisplaySize="@block.DisplaySize" Width="@block.EmbedWidth" Height="@block.EmbedHeight" />
+                            <YouTubeEmbed EmbedUrl="@block.EmbedUrl" Title="@block.EmbedTitle" DisplaySize="@block.DisplaySize" Volume="@block.YouTubeVolume" Width="@block.EmbedWidth" Height="@block.EmbedHeight" />
                 break;
                         case "Instagram" when !string.IsNullOrWhiteSpace(block.EmbedHtml):
                             <InstagramEmbed EmbedHtml="@block.EmbedHtml" />

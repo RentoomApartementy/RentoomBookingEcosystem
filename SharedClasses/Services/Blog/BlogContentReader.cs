@@ -913,6 +913,9 @@ public sealed class BlogContentReader : IBlogContentReader
             EmbedTitle = string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase)
                 ? (string.IsNullOrWhiteSpace(props?.YouTubeTitle) ? "YouTube video player" : props.YouTubeTitle)
                 : null,
+            YouTubeVolume = string.Equals(blockType, "YouTube", StringComparison.OrdinalIgnoreCase)
+                ? YoutubeEmbedHelper.NormalizeVolume(props?.YouTubeVolume)
+                : YoutubeEmbedHelper.DefaultVolume,
             EmbedWidth = youtubeDimensions.Width,
             EmbedHeight = youtubeDimensions.Height,
             HeadingLevel = string.Equals(blockType, "Heading", StringComparison.OrdinalIgnoreCase)
@@ -1413,6 +1416,7 @@ public sealed class BlogContentReader : IBlogContentReader
         public bool? YouTubeMute { get; init; }
         public bool? YouTubeControls { get; init; }
         public bool? YouTubeModestBranding { get; init; }
+        public int? YouTubeVolume { get; init; } = YoutubeEmbedHelper.DefaultVolume;
         public int? YouTubeWidth { get; init; }
         public int? YouTubeHeight { get; init; }
         public string? InstagramEmbedCode { get; init; }

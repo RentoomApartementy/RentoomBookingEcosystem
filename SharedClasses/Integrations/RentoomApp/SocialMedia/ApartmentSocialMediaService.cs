@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Models;
+using RentoomBooking.SharedClasses.Services.Embeds;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia
 {
@@ -35,6 +36,7 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia
                 YouTubeMute = entity.YouTubeMute,
                 YouTubeControls = entity.YouTubeControls,
                 YouTubeModestBranding = entity.YouTubeModestBranding,
+                YouTubeVolume = YoutubeEmbedHelper.NormalizeVolume(entity.YouTubeVolume),
                 YouTubeWidth = entity.YouTubeWidth,
                 YouTubeHeight = entity.YouTubeHeight,
                 YouTubeDisplaySize = entity.YouTubeDisplaySize,
