@@ -228,10 +228,13 @@
                     else
                     {
                         <div class="price-wrapper">
-                            @if (ShowSuggestionPrice && GetClosestSuggestionTerm() is { MinimalPrice: decimal suggestionPrice } suggestionTerm)
+                            @{
+                                var suggestionTerm = GetClosestSuggestionTerm();
+                                var suggestionFromPrice = suggestionTerm is not null ? GetSuggestionFromPrice(suggestionTerm) : null;
+                            }
+                            @if (ShowSuggestionPrice && suggestionFromPrice is decimal fromPrice)
                             {
-                                <span class="price">@suggestionPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
-                                <small>@Localizer["TotalPrice"] @GetTermNights(suggestionTerm) @GetNightLabel(GetTermNights(suggestionTerm))</small>
+                                <span class="price">@ApartmentLocalizer["From"] @fromPrice.ToString("N2") @CurrencyLocalizer["PLN"]</span>
                             }
                             else if (IsSuggestionLoading() && !(SuggestionDates?.Any() == true))
                             {
@@ -339,6 +342,9 @@
     private int? _bedsCount = null;
     private string? _detailsUrl;
     private int? _resolvedOfferLength;
+
+    // Tymczasowa opłata odejmowana od sugerowanej ceny przed podziałem na liczbę dni. TODO: wydzielić do konfiguracji.
+    private const decimal SuggestionFlatFee = 139m;
     
     private IJSObjectReference? _jsModule;
     private IJSObjectReference? _sliderModule;
@@ -567,6 +573,17 @@
     private AvailableTerm? GetClosestSuggestionTerm()
     {
         return SuggestionDates?.FirstOrDefault(term => term.MinimalPrice.HasValue);
+    }
+
+    private decimal? GetSuggestionFromPrice(AvailableTerm term)
+    {
+        if (!term.MinimalPrice.HasValue) return null;
+
+        var nights = GetTermNights(term);
+        if (nights <= 0) return null;
+
+        var fromPrice = ((term.MinimalPrice.Value - SuggestionFlatFee) / nights) + SuggestionFlatFee;
+        return fromPrice > 0 ? fromPrice : null;
     }
 
     private string GetImageLoading(int index)
