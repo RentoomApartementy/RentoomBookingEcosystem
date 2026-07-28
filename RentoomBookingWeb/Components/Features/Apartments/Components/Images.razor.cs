@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 
 namespace RentoomBookingWeb.Components.Features.Apartments.Components;
@@ -7,6 +8,12 @@ public partial class Images : ComponentBase
 {
     [Parameter] public List<ObjectMedium>? ImagesList { get; set; }
     [Parameter] public string ApartmentName { get; set; } = string.Empty;
+
+    [Inject] private IStringLocalizer<RentoomBookingWeb.Apartment> Localizer { get; set; } = default!;
+
+    private string PhotoAltFor(int index) => $"{ApartmentName} {Localizer["Apartment_PhotoAltSuffix"]} {index + 1}";
+
+    private string MainPhotoAlt => string.Format(Localizer["Apartment_MainPhotoAlt"], ApartmentName);
 
     private bool _isModalOpen = false;
     private int _currentImageIndex = 0;

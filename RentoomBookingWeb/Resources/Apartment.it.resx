@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -467,5 +467,11 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Errore 404</value>
+  </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>foto</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Foto principale dell&apos;appartamento {0}</value>
   </data>
 </root>

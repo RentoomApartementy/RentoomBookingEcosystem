@@ -226,7 +226,7 @@ else
                             <InstagramEmbed EmbedHtml="@block.EmbedHtml" />
                 break;
                         case "ApartmentsListing":
-                            <BlogApartmentsListing ApartmentIds="@block.ApartmentIds" />
+                            <BlogApartmentsListing ApartmentIds="@block.ApartmentIds" ShowPublicOffer="false" ShowSuggestions="true"/>
                             break;
             default:
                 if (!string.IsNullOrWhiteSpace(block.TextContent))

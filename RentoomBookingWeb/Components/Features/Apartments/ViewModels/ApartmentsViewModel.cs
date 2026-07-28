@@ -247,6 +247,67 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             NotifyStateChanged();
         }
 
+        public async Task InitializeForFixedApartmentsAsync(
+            IReadOnlyList<int> apartmentIds,
+            bool showSuggestions = true,
+            bool showPublicOffer = false,
+            bool fetchDatedOffers = true,
+            CancellationToken ct = default)
+        {
+            _fetchSuggestions = showSuggestions;
+            _fetchPublicOffers = showPublicOffer;
+            _fetchDatedOffers = fetchDatedOffers;
+
+            CancelSuggestionsFetch();
+            CancelMediaWarmOperations();
+
+            (StartDate, EndDate) = GetDefaultDateWindow();
+            _effectiveStartDate = StartDate;
+            _effectiveEndDate = EndDate;
+            Adults = "2";
+            Children = "0";
+            IsSearch = true;
+            FilterMinPrice = null;
+            FilterMaxPrice = null;
+            _currentFilters = null;
+
+            Items.Clear(); Offers.Clear(); PublicOffers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
+            HasMore = false; // Fixed set - no pagination.
+
+            var allActive = await _apartmentsService.GetAllApartmentsList();
+            var resolved = RentoomBooking.SharedClasses.Services.Blog.BlogApartmentSelection.SelectOrdered(
+                allActive?.Items ?? new List<ApartmentObject>(),
+                apartmentIds);
+
+            Items.AddRange(resolved);
+            ApartmentsCount = Items.Count;
+            ApartmentsIsLoading = false;
+            ResetPriceScales();
+            NotifyStateChanged(force: true);
+
+            if (Items.Count > 0)
+            {
+                _ = StartWarmMediaCacheForItemsAsync(Items, ct);
+
+                if (_fetchDatedOffers)
+                {
+                    await FetchOffersForVisibleItems(Items);
+                }
+                if (_fetchPublicOffers)
+                {
+                    await FetchPublicOffersForVisibleItems(Items);
+                }
+            }
+
+            if (_fetchSuggestions)
+            {
+                StartSuggestionsFetch(Items);
+            }
+
+            _isInitialized = true;
+            NotifyStateChanged();
+        }
+
         public async Task HandleSearchAsync(Dictionary<string, string> query)
         {
             CancelSuggestionsFetch();

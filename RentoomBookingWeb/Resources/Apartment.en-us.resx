@@ -372,4 +372,10 @@
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Error 404</value>
   </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>photo</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Main photo of {0} apartment</value>
+  </data>
 </root>

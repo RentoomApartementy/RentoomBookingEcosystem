@@ -314,6 +314,8 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 CardUrl = string.IsNullOrWhiteSpace(asset.CardStorageKey)
                     ? _blobStorage.BuildBlobUrl(asset.StorageKey)
                     : _blobStorage.BuildBlobUrl(asset.CardStorageKey),
+                Width = asset.CardWidth,
+                Height = asset.CardHeight,
                 Extension = asset.Extension,
                 Position = asset.PictureDisplaySequence,
                 Type = asset.ContentType

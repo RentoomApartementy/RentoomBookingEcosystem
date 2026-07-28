@@ -10,16 +10,16 @@
             {
                 @if (!string.IsNullOrEmpty(partner.Link))
                 {
-                    <a href="@partner.Link" target="_blank" rel=@($"noopener noreferrer {Rel}") class="partner-item-link" title="@partner.Label">
+                    <a href="@partner.Link" target="_blank" rel=@($"noopener noreferrer nofollow {Rel}") class="partner-item-link" title="@partner.Label">
                         <div class="partner-item-wrapper">
-                            <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-img" loading="lazy" />
+                            <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-img" width="100" height="100" loading="lazy" />
                         </div>
                     </a>
                 }
                 else
                 {
                     <div class="partner-item-wrapper" title="@partner.Label">
-                        <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-img" loading="lazy" />
+                        <img src="@partner.ImageUrl" alt="@partner.Label" class="partner-img" width="100" height="100" loading="lazy" />
                     </div>
                 }
             }

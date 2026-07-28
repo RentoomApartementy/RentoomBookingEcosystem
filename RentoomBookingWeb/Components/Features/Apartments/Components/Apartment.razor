@@ -44,9 +44,11 @@
                             <div class="image-wrapper" title="@Item?.Name">
                                 @if (ShouldRenderImageSource(index))
                                 {
-                                    <img 
+                                    <img
                                         src="@GetListingImageUrl(medium)"
-                                        alt="@Item?.Name"
+                                        alt="@GetPhotoAlt(index)"
+                                        width="@medium?.Width"
+                                        height="@medium?.Height"
                                         itemprop="photo"
                                         class="apartment-image"
                                         loading="@GetImageLoading(index)"
@@ -64,11 +66,13 @@
                     else if (_currentObjectMedium != null)
                     {
                         <div class="image-wrapper" title="@Item?.Name">
-                            <img 
+                            <img
                                 src="@GetListingImageUrl(_currentObjectMedium)"
-                                alt="@Item?.Name"
+                                alt="@GetMainPhotoAlt()"
+                                width="@_currentObjectMedium?.Width"
+                                height="@_currentObjectMedium?.Height"
                                 itemprop="photo"
-                                class="apartment-image" 
+                                class="apartment-image"
                                 loading="eager"
                                 fetchpriority="high"
                                 decoding="async"
@@ -219,12 +223,6 @@
                             <small class="skeleton skeleton-text mini" style="width: 60px; height: 12px; margin-top: 4px;"></small>
                         </div>
                     }
-                    else if (!string.IsNullOrWhiteSpace(NoOfferPriceHint))
-                    {
-                        <div class="price-wrapper">
-                            <span class="price-hint">@NoOfferPriceHint</span>
-                        </div>
-                    }
                     else
                     {
                         <div class="price-wrapper">
@@ -270,7 +268,7 @@
             </div>
             </div>
 
-            @if (ShowPrice && Offer == null && Item != null && string.IsNullOrWhiteSpace(NoOfferPriceHint))
+            @if (ShowPrice && Offer == null && Item != null)
             {
                 <div class="non-offer-wrapper">
                     @if (SuggestionDates?.Any() == true)
@@ -313,9 +311,6 @@
     [Parameter] public PricingOffer? Offer { get; set; } = null;
     // Fallback offer from the IdoBooking public/offer endpoint. Used only when there is no dated Offer.
     [Parameter] public PublicApartmentOffer? PublicOffer { get; set; } = null;
-    // When set and there is neither a dated nor a public offer, shows this hint in place of the price/availability
-    // (e.g. "Cena po wybraniu terminu") and keeps the Details button active. Used by the blog listing.
-    [Parameter] public string? NoOfferPriceHint { get; set; } = null;
     [Parameter] public int? OfferLength { get; set; } = null;
     [Parameter] public bool ShowPrice { get; set; } = false;
     
@@ -563,6 +558,18 @@
     private static string? GetListingImageUrl(ObjectMedium? medium)
     {
         return medium?.CardUrl ?? medium?.Url;
+    }
+
+    private string GetMainPhotoAlt()
+    {
+        return string.Format(ApartmentLocalizer["Apartment_MainPhotoAlt"], Item?.Name);
+    }
+
+    private string GetPhotoAlt(int index)
+    {
+        return index == 0
+            ? GetMainPhotoAlt()
+            : $"{Item?.Name} – {ApartmentLocalizer["Apartment_PhotoAltSuffix"]} {index + 1}";
     }
 
     private bool IsSuggestionLoading()

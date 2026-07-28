@@ -38,6 +38,20 @@ public interface IApartmentsViewModel
 
     Task InitializeAsync(CancellationToken ct = default);
     Task InitializeForSliderAsync(bool showSuggestions = true, bool showPublicOffer = false, bool fetchDatedOffers = true, CancellationToken ct = default);
+
+    /// <summary>
+    /// Loads a fixed, non-paginated set of apartments (an explicit id list, or all active apartments
+    /// when the list is empty) with the same dated-offer/public-offer/suggestion pipeline used by
+    /// <see cref="InitializeForSliderAsync"/>. Used by content blocks (e.g. the blog ApartmentsListing
+    /// block) that need identical pricing behavior without infinite-scroll pagination.
+    /// </summary>
+    Task InitializeForFixedApartmentsAsync(
+        IReadOnlyList<int> apartmentIds,
+        bool showSuggestions = true,
+        bool showPublicOffer = false,
+        bool fetchDatedOffers = true,
+        CancellationToken ct = default);
+
     Task LoadMoreAsync(CancellationToken cancellationToken = default);
 
     void ToggleView(bool isMap);
