@@ -41,5 +41,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public int Position { get; set; }
         public string? Url { get; set; }
         public string? CardUrl { get; set; }
+        public int? Width { get; set; }
+        public int? Height { get; set; }
     }
 }

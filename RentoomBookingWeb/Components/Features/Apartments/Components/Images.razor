@@ -2,23 +2,23 @@
 {
     <div class="images-container">
         <div class="images-wrapper">
-            <img class="images-left" 
-                 src="@ImagesList.First().Url" 
-                 alt="@($"{ApartmentName} photo 1")" 
+            <img class="images-left"
+                 src="@ImagesList.First().Url"
+                 alt="@($"{ApartmentName} photo 1")"
                  @onclick="() => OpenGallery(0)">
-        
+
             <div class="images-right">
                 @if (ImagesList.Count > 1)
                 {
-                    <img src="@ImagesList[1].Url" 
-                         alt="@($"{ApartmentName} photo 2")" 
-                         @onclick="() => OpenGallery(1)">   
+                    <img src="@ImagesList[1].Url"
+                         alt="@($"{ApartmentName} photo 2")"
+                         @onclick="() => OpenGallery(1)">
                 }
                 @if (ImagesList.Count > 2)
                 {
-                    <img src="@ImagesList[2].Url" 
-                         alt="@($"{ApartmentName} photo 3")" 
-                         @onclick="() => OpenGallery(2)">   
+                    <img src="@ImagesList[2].Url"
+                         alt="@($"{ApartmentName} photo 3")"
+                         @onclick="() => OpenGallery(2)">
                 }
             </div>
         </div>

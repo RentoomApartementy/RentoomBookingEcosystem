@@ -501,12 +501,23 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected string GetSeoImage()
         {
-            var img = _objectMediums?.FirstOrDefault()?.Url;
+            var medium = _objectMediums?.FirstOrDefault();
+            var img = medium?.CardUrl ?? medium?.Url;
             if (!string.IsNullOrEmpty(img))
             {
                 return img;
             }
             return $"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg";
+        }
+
+        protected int? GetSeoImageWidth()
+        {
+            return _objectMediums?.FirstOrDefault()?.Width;
+        }
+
+        protected int? GetSeoImageHeight()
+        {
+            return _objectMediums?.FirstOrDefault()?.Height;
         }
 
         protected string GetCanonicalUrl()

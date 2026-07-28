@@ -44,9 +44,11 @@
                             <div class="image-wrapper" title="@Item?.Name">
                                 @if (ShouldRenderImageSource(index))
                                 {
-                                    <img 
+                                    <img
                                         src="@GetListingImageUrl(medium)"
-                                        alt="@Item?.Name"
+                                        alt="@($"{Item?.Name} – zdjęcie {index + 1}")"
+                                        width="@medium?.Width"
+                                        height="@medium?.Height"
                                         itemprop="photo"
                                         class="apartment-image"
                                         loading="@GetImageLoading(index)"
@@ -64,11 +66,13 @@
                     else if (_currentObjectMedium != null)
                     {
                         <div class="image-wrapper" title="@Item?.Name">
-                            <img 
+                            <img
                                 src="@GetListingImageUrl(_currentObjectMedium)"
                                 alt="@Item?.Name"
+                                width="@_currentObjectMedium?.Width"
+                                height="@_currentObjectMedium?.Height"
                                 itemprop="photo"
-                                class="apartment-image" 
+                                class="apartment-image"
                                 loading="eager"
                                 fetchpriority="high"
                                 decoding="async"
