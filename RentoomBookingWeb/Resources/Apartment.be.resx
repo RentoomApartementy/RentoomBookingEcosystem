@@ -471,4 +471,7 @@
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
     <value>фота</value>
   </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Галоўнае фота апартаментаў {0}</value>
+  </data>
 </root>

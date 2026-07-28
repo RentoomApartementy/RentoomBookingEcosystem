@@ -471,4 +471,7 @@
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
     <value>nuotrauka</value>
   </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Pagrindinė buto {0} nuotrauka</value>
+  </data>
 </root>

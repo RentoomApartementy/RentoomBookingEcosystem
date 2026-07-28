@@ -471,4 +471,7 @@
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
     <value>φωτογραφία</value>
   </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Κύρια φωτογραφία του διαμερίσματος {0}</value>
+  </data>
 </root>

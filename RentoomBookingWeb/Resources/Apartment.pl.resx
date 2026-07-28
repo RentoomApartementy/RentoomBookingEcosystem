@@ -487,4 +487,7 @@
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
     <value>zdjęcie</value>
   </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Zdjęcie główne apartamentu {0}</value>
+  </data>
 </root>

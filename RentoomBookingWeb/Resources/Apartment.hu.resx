@@ -471,4 +471,7 @@
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
     <value>fénykép</value>
   </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>A(z) {0} apartman fő fotója</value>
+  </data>
 </root>

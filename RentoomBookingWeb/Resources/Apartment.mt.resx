@@ -471,4 +471,7 @@
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
     <value>ritratt</value>
   </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Ritratt ewlieni tal-appartament {0}</value>
+  </data>
 </root>

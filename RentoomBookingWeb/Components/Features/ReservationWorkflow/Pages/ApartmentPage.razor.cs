@@ -526,6 +526,29 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             return $"{NavManager.BaseUri.TrimEnd('/')}{localizedBase}/{Id}/{Slug}";
         }
 
+        protected List<object> GetJsonLdImages()
+        {
+            if (_objectMediums != null && _objectMediums.Any())
+            {
+                return _objectMediums.Select((m, i) => (object)new Dictionary<string, object>
+                {
+                    ["@type"] = "ImageObject",
+                    ["url"] = m.Url ?? string.Empty,
+                    ["representativeOfPage"] = i == 0
+                }).ToList();
+            }
+
+            return new List<object>
+            {
+                new Dictionary<string, object>
+                {
+                    ["@type"] = "ImageObject",
+                    ["url"] = GetSeoImage(),
+                    ["representativeOfPage"] = true
+                }
+            };
+        }
+
         protected MarkupString GetJsonLd()
         {
             var apartment = _apartment;
@@ -568,7 +591,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 ["name"] = apartment.Name ?? "",
                 ["description"] = GetSeoDescription(),
                 ["url"] = GetCanonicalUrl(),
-                ["image"] = _objectMediums?.Select(m => m.Url ?? string.Empty).ToList() ?? new List<string> { GetSeoImage() },
+                ["image"] = GetJsonLdImages(),
 
                 ["address"] = new Dictionary<string, object>
                 {

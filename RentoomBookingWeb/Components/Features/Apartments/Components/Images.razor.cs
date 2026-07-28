@@ -13,6 +13,8 @@ public partial class Images : ComponentBase
 
     private string PhotoAltFor(int index) => $"{ApartmentName} {Localizer["Apartment_PhotoAltSuffix"]} {index + 1}";
 
+    private string MainPhotoAlt => string.Format(Localizer["Apartment_MainPhotoAlt"], ApartmentName);
+
     private bool _isModalOpen = false;
     private int _currentImageIndex = 0;
 

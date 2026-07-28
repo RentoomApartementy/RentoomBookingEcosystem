@@ -46,7 +46,7 @@
                                 {
                                     <img
                                         src="@GetListingImageUrl(medium)"
-                                        alt="@($"{Item?.Name} – {ApartmentLocalizer["Apartment_PhotoAltSuffix"]} {index + 1}")"
+                                        alt="@GetPhotoAlt(index)"
                                         width="@medium?.Width"
                                         height="@medium?.Height"
                                         itemprop="photo"
@@ -68,7 +68,7 @@
                         <div class="image-wrapper" title="@Item?.Name">
                             <img
                                 src="@GetListingImageUrl(_currentObjectMedium)"
-                                alt="@Item?.Name"
+                                alt="@GetMainPhotoAlt()"
                                 width="@_currentObjectMedium?.Width"
                                 height="@_currentObjectMedium?.Height"
                                 itemprop="photo"
@@ -558,6 +558,18 @@
     private static string? GetListingImageUrl(ObjectMedium? medium)
     {
         return medium?.CardUrl ?? medium?.Url;
+    }
+
+    private string GetMainPhotoAlt()
+    {
+        return string.Format(ApartmentLocalizer["Apartment_MainPhotoAlt"], Item?.Name);
+    }
+
+    private string GetPhotoAlt(int index)
+    {
+        return index == 0
+            ? GetMainPhotoAlt()
+            : $"{Item?.Name} – {ApartmentLocalizer["Apartment_PhotoAltSuffix"]} {index + 1}";
     }
 
     private bool IsSuggestionLoading()
