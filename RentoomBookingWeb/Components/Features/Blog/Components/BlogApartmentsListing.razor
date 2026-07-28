@@ -1,26 +1,32 @@
 @namespace RentoomBookingWeb.Components.Features.Blog.Components
 @using RentoomBookingWeb.Components.Features.Apartments.Components
+@using RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
 @* Public renderer for the blog "ApartmentsListing" block.
-   Resolves the selected (or all active) apartments and their public fallback offers server-side,
-   then reuses ApartmentsCarousel with a blog-specific card configuration. *@
+   Uses the same IApartmentsViewModel as the home ApartmentsSection, so pricing (dated offer,
+   public offer fallback, suggested-term pricing) behaves identically in both places. *@
 
-@if (_isLoading)
+@if (!_hasLoadedOnce)
 {
     <div class="blog-apartments-listing">
         <ApartmentsCarousel SkeletonWidth="min(370px, 85vw)" LeadingSkeletonCount="4" />
     </div>
 }
-else if (_apartments.Count > 0)
+else if (ViewModel.Items.Count > 0)
 {
     <div class="blog-apartments-listing">
-        <ApartmentsCarousel Apartments="@_apartments" SkeletonWidth="min(370px, 85vw)">
+        <ApartmentsCarousel Apartments="@ViewModel.Items" SkeletonWidth="min(370px, 85vw)">
             <CardTemplate Context="apartment">
                 <div @key="@($"blog-apartment-{apartment.Id}")">
                     <Apartment Item="@apartment"
+                               Offer="@(EnforcePublicOffer ? null : ViewModel.GetPricingOfferByObjectId(apartment.Id))"
+                               PublicOffer="@(ShowPublicOffer ? ViewModel.GetPublicOfferByObjectId(apartment.Id) : null)"
+                               OfferLength="@ViewModel.GetOfferLengthDays()"
                                ShowPrice="true"
-                               PublicOffer="@(ShowPublicOffer ? GetOffer(apartment.Id) : null)"
-                               NoOfferPriceHint="@(ShowPublicOffer ? null : PriceHintText)"
+                               SuggestionState="@(ShowSuggestions ? ViewModel.GetSuggestionStatusByObjectId(apartment.Id) : SuggestionStatus.NotStarted)"
+                               SuggestionDates="@(ShowSuggestions ? ViewModel.GetSuggestionsByObjectId(apartment.Id) : null)"
+                               ShowSuggestionPrice="true"
+                               SuggestedNavigationTerm="@(ViewModel.GetPricingOfferByObjectId(apartment.Id) == null ? ViewModel.GetSuggestionsByObjectId(apartment.Id)?.FirstOrDefault() : null)"
                                ListingSource="blog-apartments-listing"
                                Width="min(370px, 85vw)" />
                 </div>

@@ -219,12 +219,6 @@
                             <small class="skeleton skeleton-text mini" style="width: 60px; height: 12px; margin-top: 4px;"></small>
                         </div>
                     }
-                    else if (!string.IsNullOrWhiteSpace(NoOfferPriceHint))
-                    {
-                        <div class="price-wrapper">
-                            <span class="price-hint">@NoOfferPriceHint</span>
-                        </div>
-                    }
                     else
                     {
                         <div class="price-wrapper">
@@ -270,7 +264,7 @@
             </div>
             </div>
 
-            @if (ShowPrice && Offer == null && Item != null && string.IsNullOrWhiteSpace(NoOfferPriceHint))
+            @if (ShowPrice && Offer == null && Item != null)
             {
                 <div class="non-offer-wrapper">
                     @if (SuggestionDates?.Any() == true)
@@ -313,9 +307,6 @@
     [Parameter] public PricingOffer? Offer { get; set; } = null;
     // Fallback offer from the IdoBooking public/offer endpoint. Used only when there is no dated Offer.
     [Parameter] public PublicApartmentOffer? PublicOffer { get; set; } = null;
-    // When set and there is neither a dated nor a public offer, shows this hint in place of the price/availability
-    // (e.g. "Cena po wybraniu terminu") and keeps the Details button active. Used by the blog listing.
-    [Parameter] public string? NoOfferPriceHint { get; set; } = null;
     [Parameter] public int? OfferLength { get; set; } = null;
     [Parameter] public bool ShowPrice { get; set; } = false;
     
