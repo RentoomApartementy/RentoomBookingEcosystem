@@ -1,6 +1,6 @@
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
-
+@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 <PageTitle>@GetSeoTitle()</PageTitle>
 
 <HeadContent>
@@ -66,14 +66,35 @@
         />   
         
         <div class="main-wrapper">
-            <div class="left-container">
-                
+            <div class="area-hero">
                 <ApartmentHero
                     Apartment="_apartment"
                     Mediums="_objectMediums"
                     BedsCount="_bedsCount" />
+            </div>
 
-                @if (_socialMedia != null)
+            <div class="area-booking" id="booking-panel">
+                <div class="booking-panel-header">
+                    <h3 class="booking-panel-title">@Localizer["BookingPanelTitle"]</h3>
+                    <p class="booking-panel-subtitle">@Localizer["BookingPanelSubtitle"]</p>
+                    @if (_calendarFromPrice is decimal fromPrice)
+                    {
+                        <div class="booking-panel-price">@Localizer["From"] <PriceDisplay AmountPln="@fromPrice" /> / @Localizer["Night"]</div>
+                    }
+                </div>
+                <ApartmentBookingWidget
+                    Apartment="_apartment"
+                    StartDate="@StartDate"
+                    EndDate="@EndDate"
+                    Adults="@Adults"
+                    Children="@Children"
+                    Localizer="Localizer"
+                    OnSearch="(query) => HandleSearch(query)"
+                    FromPriceChanged="OnCalendarFromPriceChanged" />
+            </div>
+
+            <div class="area-content">
+                @if (_socialMedia != null && FeatureFlags.FeatureAllowed("apartment-yt-ig-embed"))
                 {
                     <ApartmentSocialMedia Data="_socialMedia" />
                 }
@@ -153,53 +174,38 @@
                         RefundableOfferText="@GetRefundableOfferText()" 
                         SelectedOfferType="@_selectedOfferType" 
                         HasActiveReservation="HasActiveReservation" 
-                        SuggestionDates="_suggestionDates" 
-                        SelectedSuggestionDate="_selectedSuggestionDate" 
-                        IsSuggestionLoading="_suggestionLoading" 
-                        Localizer="Localizer" 
-                        OnSearchModalOpen="OpenSearchModal" 
-                        OnBookNow="GoToPayment" 
-                        OnSuggestionSelected="SelectSuggestionDate" 
+                        SuggestionDates="_suggestionDates"
+                        SelectedSuggestionDate="_selectedSuggestionDate"
+                        IsSuggestionLoading="_suggestionLoading"
+                        Localizer="Localizer"
+                        OnSearchModalOpen="ScrollToBookingPanel"
+                        OnBookNow="GoToPayment"
+                        OnSuggestionSelected="SelectSuggestionDate"
                         OnGoToSuggestion="GoToSuggestionDates" />
                 }
             </div>
 
-            <div class="right-container">
-                <ApartmentStickySummary 
-                    IsMobileExpanded="_isMobileExpanded" 
-                    HasOffers="localHasOffers" 
-                    TotalMinPrice="@(localMinPrice + TotalPriceAdjustment ?? 0m)"
-                    StartDate="@StartDate"
-                    EndDate="@EndDate" 
-                    NightsSummaryText="@GetNightsSummaryText()" 
-                    PersonsSummaryText="@GetPersonsSummaryText()" 
-                    IsOfferLoading="_isOfferLoading" 
-                    IsAtOffers="_isAtOffers" 
-                    IsAtSummary="_isAtSummary" 
-                    SuggestionDates="_suggestionDates" 
-                    IsSuggestionLoading="_suggestionLoading" 
-                    Localizer="Localizer" 
-                    OnToggleMobileExpand="ToggleMobileExpand" 
-                    OnSearchModalOpen="OpenSearchModal" 
-                    OnSmartAction="SmartScrollAction" 
-                    OnGoToSuggestion="GoToSuggestionDates">
-                    
-                    <ApartmentLocationMap 
-                        Location="_apartment?.ObjectLocation" 
-                        IsMobile="true" 
-                        MapId="apartmentMap-mobile" 
-                        OnSeeMore="OpenModal" 
-                        Localizer="Localizer" />
-                </ApartmentStickySummary>
-
-                <ApartmentLocationMap 
-                    Location="_apartment?.ObjectLocation" 
-                    IsMobile="false" 
-                    MapId="apartmentMap-desktop" 
-                    OnSeeMore="OpenModal" 
+            <div class="area-map">
+                <ApartmentLocationMap
+                    Location="_apartment?.ObjectLocation"
+                    IsMobile="false"
+                    MapId="apartmentMap-desktop"
+                    OnSeeMore="OpenModal"
                     Localizer="Localizer" />
             </div>
         </div>
+
+        <ApartmentStickySummary
+            IsMobileExpanded="_isMobileExpanded"
+            Localizer="Localizer"
+            OnToggleMobileExpand="ToggleMobileExpand">
+            <ApartmentLocationMap
+                Location="_apartment?.ObjectLocation"
+                IsMobile="true"
+                MapId="apartmentMap-mobile"
+                OnSeeMore="OpenModal"
+                Localizer="Localizer" />
+        </ApartmentStickySummary>
 
         @if (_relatedPosts is { Count: > 0 })
         {
@@ -213,27 +219,5 @@
             EndDate="@EndDate"
             Adults="@Adults"
             Children="@Children" />
-
-        @if (_isSearchModalOpen)
-        {
-            <div class="search-modal-overlay" @onclick="CloseSearchModal">
-                <div class="search-modal-content" @onclick:stopPropagation="true">
-                    <div class="search-modal-header">
-                        <h3>@Localizer["SelectDatesAndGuests"]</h3>
-                        <button class="close-modal-btn" @onclick="CloseSearchModal">&times;</button>
-                    </div>
-                    <div class="search-modal-body">
-                       <ApartmentBookingWidget
-                           Apartment="_apartment"
-                           StartDate="@StartDate"
-                           EndDate="@EndDate"
-                           Adults="@Adults"
-                           Children="@Children"
-                           Localizer="Localizer"
-                           OnSearch="async (query) => { await HandleSearch(query); CloseSearchModal(); }" />
-                    </div>
-                </div>
-            </div>
-        }
     }
 </div>

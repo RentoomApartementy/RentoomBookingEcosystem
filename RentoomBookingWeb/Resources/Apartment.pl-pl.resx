@@ -177,6 +177,15 @@
   <data name="From" xml:space="preserve">
     <value>Od</value>
   </data>
+  <data name="BookingPanelTitle" xml:space="preserve">
+    <value>Zarezerwuj bezpośrednio</value>
+  </data>
+  <data name="BookingPanelSubtitle" xml:space="preserve">
+    <value>Rezerwacja bezpośrednia — bez prowizji portali</value>
+  </data>
+  <data name="ShowMapLabel" xml:space="preserve">
+    <value>Zobacz lokalizację na mapie</value>
+  </data>
   <data name="To" xml:space="preserve">
     <value>Do</value>
   </data>

@@ -12,29 +12,62 @@
 .main-wrapper {
     max-width: 1440px;
     width: 97%;
-    display: flex;
+    display: grid;
     gap: 1.5rem;
+    grid-template-columns: minmax(0, 70%) minmax(0, 30%);
+    grid-template-areas:
+        "hero    booking"
+        "content booking"
+        "map     booking";
+    align-items: start;
 }
 
-.left-container {
-    width: 70%;
+.area-hero { grid-area: hero; min-width: 0; }
+
+.area-content {
+    grid-area: content;
     display: flex;
     flex-direction: column;
     padding: 0 10px;
     box-sizing: border-box;
+    min-width: 0;
 }
 
-.right-container {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    margin-top: 1rem;
-    align-self: flex-start;
+.area-map { grid-area: map; min-width: 0; }
+
+.area-booking {
+    grid-area: booking;
     position: sticky;
     top: 100px;
-    z-index: 10;
-    height: calc(100vh - 120px);
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    box-sizing: border-box;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.booking-panel-header {
+    background: #945F28;
+    padding: 0.85rem 1.25rem;
+    border-radius: 12px 12px 0 0;
+}
+
+.booking-panel-title {
+    color: #fff;
+    margin: 0;
+}
+
+.booking-panel-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+    margin: 0.25rem 0 0;
+}
+
+.booking-panel-price {
+    font-weight: bold;
+    color: #fff;
+    margin-top: 0.5rem;
 }
 
 .not-found-wrapper {
@@ -77,55 +110,6 @@
     line-height: 1.5;
 }
 
-/* Modal styles */
-.search-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    z-index: 1000;
-    padding: 10px;
-    backdrop-filter: blur(4px);
-}
-
-.search-modal-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 800px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    position: relative;
-    max-height: 95vh;
-    overflow-y: visible; 
-}
-
-.search-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.search-modal-header h3 {
-    margin: 0;
-    font-size: 1.25rem;
-}
-
-.close-modal-btn {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    line-height: 1;
-    color: #666;
-}
-
 .additional-price {
     display: flex;
     align-items: center;
@@ -150,22 +134,23 @@
 
 @media (max-width: 910px) {
     .main-wrapper {
-        flex-direction: column;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "hero"
+            "booking"
+            "content"
+            "map";
         width: 95%;
+        gap: 1rem;
     }
 
-    .left-container {
-        width: 100%;
+    .area-content {
         padding: 0;
     }
 
-    .right-container {
-        width: 100%;
-        margin: 0;
+    .area-booking {
         position: static;
         top: auto;
-        height: auto;
-        gap: 0;
     }
 }
 
@@ -179,23 +164,8 @@
         padding: 0 15px;
         box-sizing: border-box;
     }
-    
+
     .not-found-card {
         padding: 2rem 1.5rem;
-    }
-
-    .search-modal-overlay {
-        align-items: flex-start; 
-        padding-top: 5vh;        
-    }
-
-    .search-modal-content {
-        padding: 1.25rem;      
-        width: 95%;            
-        overflow-y: visible;   
-    }
-
-    .search-modal-header {
-        margin-bottom: 1rem;
     }
 }

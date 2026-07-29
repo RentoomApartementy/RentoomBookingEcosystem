@@ -9,6 +9,7 @@
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 @inject NavigationManager NavManager
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
+@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 
 <PageTitle>@(Post?.MetaTitle ?? Post?.Title ?? "Blog")</PageTitle>
 
@@ -219,10 +220,10 @@ else
                                 <AiFaqSection Faqs="@block.FaqItems" Localizer="@Localizer" />
                             </div>
                 break;
-                        case "YouTube" when !string.IsNullOrWhiteSpace(block.EmbedUrl):
+                        case "YouTube" when (!string.IsNullOrWhiteSpace(block.EmbedUrl) && FeatureFlags.FeatureAllowed("blog-youtube-embed")):
                             <YouTubeEmbed EmbedUrl="@block.EmbedUrl" Title="@block.EmbedTitle" DisplaySize="@block.DisplaySize" Volume="@block.YouTubeVolume" Width="@block.EmbedWidth" Height="@block.EmbedHeight" />
                 break;
-                        case "Instagram" when !string.IsNullOrWhiteSpace(block.EmbedHtml):
+                        case "Instagram" when (!string.IsNullOrWhiteSpace(block.EmbedHtml) && FeatureFlags.FeatureAllowed("blog-instagram-embed") ) :
                             <InstagramEmbed EmbedHtml="@block.EmbedHtml" />
                 break;
                         case "ApartmentsListing":

@@ -109,7 +109,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         public UpsellTextConfig UpsellTexts { get; set; } = new();
 
         protected bool _isModalOpen = false;
-        protected bool _isSearchModalOpen = false;
+        protected decimal? _calendarFromPrice;
 
         protected const int SmartScrollOffsetPx = 150;
         protected bool _isAtSummary = false;
@@ -145,14 +145,17 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             _isMobileExpanded = !_isMobileExpanded;
         }
 
-        protected void OpenSearchModal()
+        protected Task OnCalendarFromPriceChanged(decimal? price)
         {
-            _isSearchModalOpen = true;
+            _calendarFromPrice = price;
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
-        protected void CloseSearchModal()
+        protected async Task ScrollToBookingPanel()
         {
-            _isSearchModalOpen = false;
+            _scrollModule ??= await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+            await _scrollModule.InvokeVoidAsync("scrollToElement", "booking-panel", SmartScrollOffsetPx);
         }
 
         protected decimal TotalAddonsPrice

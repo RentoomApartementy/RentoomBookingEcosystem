@@ -22,6 +22,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         [Parameter] public string? Children { get; set; }
         [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
         [Parameter] public EventCallback<Dictionary<string, string>> OnSearch { get; set; }
+        [Parameter] public EventCallback<decimal?> FromPriceChanged { get; set; }
 
         [Inject] public IApartmentCalendarService CalendarService { get; set; } = default!;
 
@@ -111,6 +112,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                     _children);
 
                 RevalidateSelection();
+                await FromPriceChanged.InvokeAsync(_calendar?.FromPriceGross);
             }
             finally
             {

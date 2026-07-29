@@ -1,24 +1,27 @@
 .abw {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: .75rem;
     width: 100%;
-    font-size: 14px;
+    min-width: 0;
+    font-size: 13px;
     color: #1f2937;
+    padding: 1rem 1.25rem 1.25rem;
+    box-sizing: border-box;
 }
 
 /* ---- Guests ---- */
 .abw-section-title {
     font-weight: 600;
-    font-size: 15px;
-    margin-bottom: .5rem;
+    font-size: 13px;
+    margin-bottom: .35rem;
 }
 
 .abw-stepper-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: .4rem 0;
+    padding: .3rem 0;
 }
 
 .abw-stepper-label {
@@ -32,12 +35,12 @@
 }
 
 .abw-stepper-btn {
-    width: 34px;
-    height: 34px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     border: 1px solid #d1d5db;
     background: #fff;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1;
     cursor: pointer;
     display: flex;
@@ -47,7 +50,7 @@
 }
 
 .abw-stepper-btn:hover:not(:disabled) {
-    border-color: #111827;
+    border-color: #945F28;
 }
 
 .abw-stepper-btn:disabled {
@@ -85,7 +88,7 @@
 
 .abw-weekdays {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 2px;
     position: sticky;
     top: 0;
@@ -103,7 +106,7 @@
 }
 
 .abw-months {
-    max-height: 46vh;
+    max-height: 280px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     transition: opacity .15s;
@@ -120,12 +123,13 @@
 
 .abw-month-title {
     font-weight: 600;
-    margin: .25rem 0 .5rem;
+    font-size: 13px;
+    margin: .2rem 0 .4rem;
 }
 
 .abw-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 2px;
 }
 
@@ -149,20 +153,20 @@
 }
 
 .abw-day-num {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1;
 }
 
 .abw-day-price {
-    font-size: 9.5px;
+    font-size: 8.5px;
     color: #6b7280;
     line-height: 1;
 }
 
 /* Available */
 .abw-day-available:hover {
-    border-color: #111827;
+    border-color: #945F28;
 }
 
 /* Disabled / unavailable — consistent across month boundaries */
@@ -179,15 +183,15 @@
 
 /* Selection */
 .abw-day-inrange {
-    background: #eef2ff;
+    background: #f4eee7;
     border-radius: 0;
 }
 
 .abw-day-start,
 .abw-day-end {
-    background: #111827;
+    background: #945F28;
     color: #fff;
-    border-color: #111827;
+    border-color: #945F28;
 }
 
 .abw-day-start .abw-day-price,
@@ -226,7 +230,7 @@
     width: 18px;
     height: 18px;
     border: 2px solid #e5e7eb;
-    border-top-color: #111827;
+    border-top-color: #945F28;
     border-radius: 50%;
     animation: abw-spin .8s linear infinite;
 }
@@ -242,7 +246,7 @@
     justify-content: space-between;
     gap: 1rem;
     border-top: 1px solid #f3f4f6;
-    padding-top: 1rem;
+    padding-top: .75rem;
 }
 
 .abw-summary {
@@ -263,20 +267,20 @@
 
 .abw-reserve {
     flex: 0 0 auto;
-    min-width: 140px;
-    padding: .75rem 1.5rem;
+    min-width: 120px;
+    padding: .6rem 1.25rem;
     border: none;
-    border-radius: 12px;
-    background: #111827;
+    border-radius: 999px;
+    background: #945F28;
     color: #fff;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
     transition: background .15s;
 }
 
 .abw-reserve:hover:not(:disabled) {
-    background: #000;
+    background: #A66E38;
 }
 
 .abw-reserve:disabled {
