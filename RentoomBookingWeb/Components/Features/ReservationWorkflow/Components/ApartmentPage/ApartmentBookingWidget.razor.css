@@ -178,6 +178,18 @@
     cursor: not-allowed;
 }
 
+/* Availability not loaded yet — neutral placeholder, distinct from "booked" */
+.abw-day-loading {
+    color: #b9ac9a;
+    cursor: default;
+    animation: abw-day-pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes abw-day-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .45; }
+}
+
 /* Fully booked — deep inside an occupied stretch (neighbors on both sides also occupied) */
 .abw-day-booked {
     color: #c15a4d;
@@ -246,29 +258,6 @@
 .abw-loadmore:disabled {
     opacity: .5;
     cursor: default;
-}
-
-/* ---- Loading ---- */
-.abw-loading {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    padding: 2rem 0;
-    justify-content: center;
-    color: #6b7280;
-}
-
-.abw-spinner {
-    width: 18px;
-    height: 18px;
-    border: 2px solid #e5e7eb;
-    border-top-color: #945F28;
-    border-radius: 50%;
-    animation: abw-spin .8s linear infinite;
-}
-
-@keyframes abw-spin {
-    to { transform: rotate(360deg); }
 }
 
 /* ---- Footer ---- */

@@ -41,70 +41,63 @@
     <div class="abw-dates">
         <div class="abw-dates-prompt">@CheckInPrompt</div>
 
-        @if (_loading && _calendar is null)
-        {
-            <div class="abw-loading">
-                <span class="abw-spinner"></span>
-                <span>@Localizer["CalendarLoading"]</span>
-            </div>
-        }
-        else
-        {
-            <div class="abw-weekdays">
-                @foreach (var wd in WeekdayHeaders())
-                {
-                    <span class="abw-weekday">@wd</span>
-                }
-            </div>
-
-            <div class="abw-months @(_loading ? "is-refreshing" : "")">
-                @foreach (var monthStart in MonthStarts())
-                {
-                    <div class="abw-month">
-                        <div class="abw-month-title">@MonthTitle(monthStart)</div>
-                        <div class="abw-grid">
-                            @for (var b = 0; b < LeadingBlanks(monthStart); b++)
-                            {
-                                <span class="abw-day abw-day-blank"></span>
-                            }
-                            @for (var d = 1; d <= DaysInMonth(monthStart); d++)
-                            {
-                                var date = new DateOnly(monthStart.Year, monthStart.Month, d);
-                                var selectableNow = IsSelectableNow(date);
-                                var pastDisabled = date < _today;
-                                var isSelectedEdge = IsSelectedStart(date) || IsSelectedEnd(date);
-                                var halfDay = !pastDisabled && !isSelectedEdge && IsSingleNightGap(date);
-                                var fullyBooked = !pastDisabled && !halfDay && !selectableNow && !IsAvailable(date);
-                                var classes = "abw-day"
-                                    + (selectableNow ? " abw-day-available" : "")
-                                    + (halfDay ? " abw-day-booked-bottom" : "")
-                                    + (fullyBooked ? " abw-day-booked" : "")
-                                    + (pastDisabled ? " abw-day-disabled" : "")
-                                    + (IsSelectedStart(date) ? " abw-day-start" : "")
-                                    + (IsSelectedEnd(date) ? " abw-day-end" : "")
-                                    + (IsInRange(date) ? " abw-day-inrange" : "");
-                                <button type="button"
-                                        class="@classes"
-                                        disabled="@(!selectableNow)"
-                                        @onclick="@(() => OnDayClicked(date))">
-                                    <span class="abw-day-num">@d</span>
-                                    @if (fullyBooked)
-                                    {
-                                        <span class="abw-day-strike"></span>
-                                    }
-                                </button>
-                            }
-                        </div>
-                    </div>
-                }
-            </div>
-
-            @if (CanLoadMore())
+        <div class="abw-weekdays">
+            @foreach (var wd in WeekdayHeaders())
             {
-                <button type="button" class="abw-loadmore" @onclick="LoadMoreMonths" disabled="@_loading">
-                    @Localizer["CalendarLoadMore"]
-                </button>
+                <span class="abw-weekday">@wd</span>
             }
+        </div>
+
+        <div class="abw-months @(_loading ? "is-refreshing" : "")">
+            @foreach (var monthStart in MonthStarts())
+            {
+                <div class="abw-month">
+                    <div class="abw-month-title">@MonthTitle(monthStart)</div>
+                    <div class="abw-grid">
+                        @for (var b = 0; b < LeadingBlanks(monthStart); b++)
+                        {
+                            <span class="abw-day abw-day-blank"></span>
+                        }
+                        @for (var d = 1; d <= DaysInMonth(monthStart); d++)
+                        {
+                            var date = new DateOnly(monthStart.Year, monthStart.Month, d);
+                            var pastDisabled = date < _today;
+                            var dataLoaded = _calendar is not null;
+                            var selectableNow = dataLoaded && IsSelectableNow(date);
+                            var isSelectedEdge = IsSelectedStart(date) || IsSelectedEnd(date);
+                            var halfDay = dataLoaded && !pastDisabled && !isSelectedEdge && IsSingleNightGap(date);
+                            var fullyBooked = dataLoaded && !pastDisabled && !halfDay && !selectableNow && !IsAvailable(date);
+                            var loadingDay = !dataLoaded && !pastDisabled && !isSelectedEdge;
+                            var classes = "abw-day"
+                                + (selectableNow ? " abw-day-available" : "")
+                                + (halfDay ? " abw-day-booked-bottom" : "")
+                                + (fullyBooked ? " abw-day-booked" : "")
+                                + (pastDisabled ? " abw-day-disabled" : "")
+                                + (loadingDay ? " abw-day-loading" : "")
+                                + (IsSelectedStart(date) ? " abw-day-start" : "")
+                                + (IsSelectedEnd(date) ? " abw-day-end" : "")
+                                + (IsInRange(date) ? " abw-day-inrange" : "");
+                            <button type="button"
+                                    class="@classes"
+                                    disabled="@(!selectableNow)"
+                                    @onclick="@(() => OnDayClicked(date))">
+                                <span class="abw-day-num">@d</span>
+                                @if (fullyBooked)
+                                {
+                                    <span class="abw-day-strike"></span>
+                                }
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (CanLoadMore())
+        {
+            <button type="button" class="abw-loadmore" @onclick="LoadMoreMonths" disabled="@_loading">
+                @Localizer["CalendarLoadMore"]
+            </button>
         }
 
         @if (!string.IsNullOrEmpty(_dateNotice))

@@ -809,6 +809,19 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             }
 
             await GetOffer();
+
+            // Route ma już daty/gości — pokaż od razu ten sam wynik w kompaktowym panelu pod kalendarzem,
+            // bez drugiego zapytania do API (te same parametry co CurrentRequest powyżej).
+            if (HasRouteDates)
+            {
+                _pendingStartDate = StartDate;
+                _pendingEndDate = EndDate;
+                _pendingAdults = Adults;
+                _pendingChildren = Children;
+                _pendingOffersResponse = _offersResponse;
+                _pendingSelectedOfferType = _selectedOfferType;
+            }
+
             await RecalculateActiveBonusPreviewAsync();
 
             UpsellTexts = new UpsellTextConfig()

@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Microsoft.JSInterop;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBookingWeb.Services;
 
@@ -26,6 +27,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         [Parameter] public EventCallback<Dictionary<string, string>?> OnRangeSelected { get; set; }
 
         [Inject] public IApartmentCalendarService CalendarService { get; set; } = default!;
+        [Inject] public IJSRuntime JS { get; set; } = default!;
 
         private const int InitialMonths = 3;
         private const int MoreMonths = 2;
@@ -45,6 +47,9 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         private string? _occupancyNotice;
         private string? _dateNotice;
 
+        private IJSObjectReference? _scrollModule;
+        private bool _scrolledToSelection;
+
         private int MaxGuests => Apartment?.Capacity is int c && c > 0 ? c : 16;
         private int MinAdults => Apartment?.MinCapacity is int m && m > 0 ? Math.Min(m, MaxGuests) : 1;
         private int TotalGuests => _adults + _children;
@@ -58,6 +63,16 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             ParseIncomingRange();
 
             await LoadCalendarAsync();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender && _selStart is not null && !_scrolledToSelection)
+            {
+                _scrolledToSelection = true;
+                _scrollModule ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+                await _scrollModule.InvokeVoidAsync("scrollStartDayNearTop", ".abw-day-start", ".abw-months");
+            }
         }
 
         private void ParseGuests()

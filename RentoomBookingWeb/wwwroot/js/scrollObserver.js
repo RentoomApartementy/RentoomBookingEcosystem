@@ -57,7 +57,21 @@ export function scrollToTop(behavior = 'auto') {
     document.body.scrollTop = 0;
 }
 
+export function scrollStartDayNearTop(daySelector, containerSelector) {
+    const day = document.querySelector(daySelector);
+    const container = document.querySelector(containerSelector);
+    if (!day || !container) {
+        return;
+    }
+    const monthEl = day.closest('.abw-month');
+    const titleEl = monthEl ? monthEl.querySelector('.abw-month-title') : null;
+    const headerHeight = titleEl ? titleEl.getBoundingClientRect().height : 0;
+    const dayTopInContainer = day.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+    container.scrollTop = Math.max(0, dayTopInContainer - headerHeight);
+}
+
 // Backward compatibility for any remaining global JS interop call sites.
 window.registerScrollObserver = registerScrollObserver;
 window.scrollToElement = scrollToElement;
 window.scrollToTop = scrollToTop;
+window.scrollStartDayNearTop = scrollStartDayNearTop;
