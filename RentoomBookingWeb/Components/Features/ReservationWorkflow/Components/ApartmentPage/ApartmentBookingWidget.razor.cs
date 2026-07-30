@@ -338,6 +338,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             }
         }
 
+        private async Task ClearSelectionAsync()
+        {
+            _selStart = null;
+            _selEnd = null;
+            _dateNotice = null;
+            await NotifyRangeAsync();
+        }
+
         private bool HasCompleteRange => _selStart is not null && _selEnd is not null;
 
         private async Task NotifyRangeAsync()

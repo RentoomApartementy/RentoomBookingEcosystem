@@ -64,7 +64,8 @@
                             var pastDisabled = date < _today;
                             var dataLoaded = _calendar is not null;
                             var selectableNow = dataLoaded && IsSelectableNow(date);
-                            var isSelectedEdge = IsSelectedStart(date) || IsSelectedEnd(date);
+                            var isSelectedEnd = IsSelectedEnd(date);
+                            var isSelectedEdge = IsSelectedStart(date) || isSelectedEnd;
                             var halfDay = dataLoaded && !pastDisabled && !isSelectedEdge && IsSingleNightGap(date);
                             var fullyBooked = dataLoaded && !pastDisabled && !halfDay && !selectableNow && !IsAvailable(date);
                             var loadingDay = !dataLoaded && !pastDisabled && !isSelectedEdge;
@@ -75,18 +76,28 @@
                                 + (pastDisabled ? " abw-day-disabled" : "")
                                 + (loadingDay ? " abw-day-loading" : "")
                                 + (IsSelectedStart(date) ? " abw-day-start" : "")
-                                + (IsSelectedEnd(date) ? " abw-day-end" : "")
+                                + (isSelectedEnd ? " abw-day-end" : "")
                                 + (IsInRange(date) ? " abw-day-inrange" : "");
-                            <button type="button"
-                                    class="@classes"
-                                    disabled="@(!selectableNow)"
-                                    @onclick="@(() => OnDayClicked(date))">
-                                <span class="abw-day-num">@d</span>
-                                @if (fullyBooked)
+                            <span class="abw-day-cell">
+                                <button type="button"
+                                        class="@classes"
+                                        disabled="@(!selectableNow)"
+                                        @onclick="@(() => OnDayClicked(date))">
+                                    <span class="abw-day-num">@d</span>
+                                    @if (fullyBooked)
+                                    {
+                                        <span class="abw-day-strike"></span>
+                                    }
+                                </button>
+                                @if (isSelectedEnd)
                                 {
-                                    <span class="abw-day-strike"></span>
+                                    <button type="button"
+                                            class="abw-day-clear"
+                                            @onclick="ClearSelectionAsync"
+                                            @onclick:stopPropagation="true"
+                                            aria-label="@Localizer["CalendarClearSelection"]">×</button>
                                 }
-                            </button>
+                            </span>
                         }
                     </div>
                 </div>
