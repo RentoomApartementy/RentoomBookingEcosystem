@@ -68,13 +68,13 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public GateErrorType? Errors { get; set; }
 
         [JsonProperty("offerObjects")]
-        public List<OfferAvailabilityObject>? OfferObjects { get; set; }
+        public List<OfferAvailabilityAndPricesForDaysObject>? OfferObjects { get; set; }
 
         [JsonProperty("result")]
         public ResultResponseType? Result { get; set; }
     }
 
-    public class OfferAvailabilityObject
+    public class OfferAvailabilityAndPricesForDaysObject
     {
         [JsonProperty("objectId")]
         public int ObjectId { get; set; }

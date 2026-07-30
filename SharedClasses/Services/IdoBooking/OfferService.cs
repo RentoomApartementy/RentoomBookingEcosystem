@@ -19,7 +19,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         Task<PricingOffersResponse?> GetPricingOffersAsync(PricingOffersRequest request,
             CancellationToken cancellationToken = default);
 
-        Task<List<OfferAvailabilityObject>?> GetAvailabilityAndPricesForDaysAsync(OfferAvailabilityAndPricesParamsSearchInternal request,
+        Task<List<OfferAvailabilityAndPricesForDaysObject>?> GetAvailabilityAndPricesForDaysAsync(OfferAvailabilityAndPricesParamsSearchInternal request,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             return response;
         }
 
-        public async Task<List<OfferAvailabilityObject>?> GetAvailabilityAndPricesForDaysAsync(
+        public async Task<List<OfferAvailabilityAndPricesForDaysObject>?> GetAvailabilityAndPricesForDaysAsync(
            OfferAvailabilityAndPricesParamsSearchInternal payload,
            CancellationToken cancellationToken = default)
         {
@@ -145,6 +145,55 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
             return ret;
         }
+
+        public async Task<List<OfferAvailabilityAndPricesForDaysObject>?> GetAvailabilityForDaysAsync(
+          OfferAvailabilityAndPricesParamsSearchInternal payload,
+          CancellationToken cancellationToken = default)
+        {
+
+            var request = new OfferAvailabilityAndPricesForDaysRequest
+            {
+                Authenticate = _idoBookingConnectService.AuthObjectIdo(),
+                ParamsSearch = payload.ParamsSearch,
+                Result = new Models.ResultRequestPaging()
+
+            };
+
+            _logger.LogInformation(
+                "Requesting availability and prices between {DateFrom} and {DateTo} for {Adults} adults and {Children} children.",
+                request.ParamsSearch.DateFrom,
+                request.ParamsSearch.DateTo,
+                request.ParamsSearch.AdultsNumber,
+                request.ParamsSearch.ChildrenNumber ?? 0);
+
+            var response = await _idoBookingConnectService
+                .PostAsync<OfferAvailabilityAndPricesForDaysRequest, OfferAvailabilityAndPricesForDaysResponseRoot>(
+                    AvailabilityAndPricesForDaysEndpoint,
+                    request,
+                    cancellationToken)
+                .ConfigureAwait(false);
+
+            if (response?.Result.Errors != null)
+            {
+                _logger.LogWarning(
+                    "Availability and prices request returned error {FaultCode}: {FaultString}.",
+                    response.Result.Errors.FaultCode,
+                    response.Result.Errors.FaultString);
+            }
+
+
+            var ret = response?.Result.OfferObjects;
+            if (payload.ObjectIds != null && payload.ObjectIds.Any())
+            {
+                var idsHash = payload.ObjectIds.ToHashSet();
+
+                ret = ret?.Where(o => idsHash.Contains(o.ObjectId)).ToList();
+            }
+
+            return ret;
+        }
+
+
 
         public async Task<PublicApartmentOffer?> GetPublicOfferAsync(int apartmentId, CancellationToken cancellationToken = default)
         {

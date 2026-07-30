@@ -162,7 +162,7 @@ namespace RentoomBooking.Api
 
                 response.StatusCode = HttpStatusCode.OK;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-                await response.WriteStringAsync(JsonConvert.SerializeObject(availability ?? new List<OfferAvailabilityObject>())).ConfigureAwait(false);
+                await response.WriteStringAsync(JsonConvert.SerializeObject(availability ?? new List<OfferAvailabilityAndPricesForDaysObject>())).ConfigureAwait(false);
                 return response;
             }
             catch (Exception ex)
