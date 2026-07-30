@@ -22,6 +22,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         Task<List<OfferAvailabilityAndPricesForDaysObject>?> GetAvailabilityAndPricesForDaysAsync(OfferAvailabilityAndPricesParamsSearchInternal request,
             CancellationToken cancellationToken = default);
 
+        /// <summary>Availability-only feed (no prices, no minStay) from IdoBooking's dedicated
+        /// getAvailabilityForDays endpoint — lighter than GetAvailabilityAndPricesForDaysAsync for
+        /// callers (like the booking calendar) that don't need per-day prices.</summary>
+        Task<List<OfferAvailabilityForDaysObject>?> GetAvailabilityForDaysAsync(OfferAvailabilityForDaysParamsSearchInternal request,
+            CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Fetches a single public offer for the given apartment id from public/offer/34/json.
         /// Returns null when the apartment has no usable public offer (missing price, error response, or fetch failure).
@@ -44,6 +50,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
         private const string PricingOffersEndpoint = "public/pricingOffers/34/json";
         private const string AvailabilityAndPricesForDaysEndpoint = "offer/getAvailabilityAndPricesForDays/34/json";
+        private const string AvailabilityForDaysEndpoint = "offer/getAvailabilityForDays/36/json";
         private const string PublicOfferEndpoint = "public/offer/34/json";
 
         private static readonly TimeSpan PublicOfferCacheTtl = TimeSpan.FromMinutes(10);
@@ -146,29 +153,26 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             return ret;
         }
 
-        public async Task<List<OfferAvailabilityAndPricesForDaysObject>?> GetAvailabilityForDaysAsync(
-          OfferAvailabilityAndPricesParamsSearchInternal payload,
-          CancellationToken cancellationToken = default)
+        public async Task<List<OfferAvailabilityForDaysObject>?> GetAvailabilityForDaysAsync(
+            OfferAvailabilityForDaysParamsSearchInternal payload,
+            CancellationToken cancellationToken = default)
         {
-
-            var request = new OfferAvailabilityAndPricesForDaysRequest
+            var request = new OfferAvailabilityForDaysRequest
             {
                 Authenticate = _idoBookingConnectService.AuthObjectIdo(),
                 ParamsSearch = payload.ParamsSearch,
                 Result = new Models.ResultRequestPaging()
-
             };
 
             _logger.LogInformation(
-                "Requesting availability and prices between {DateFrom} and {DateTo} for {Adults} adults and {Children} children.",
-                request.ParamsSearch.DateFrom,
-                request.ParamsSearch.DateTo,
-                request.ParamsSearch.AdultsNumber,
-                request.ParamsSearch.ChildrenNumber ?? 0);
+                "Requesting availability (no prices) between {DateFrom} and {DateTo} for {Persons} persons.",
+                request.ParamsSearch?.DateFrom,
+                request.ParamsSearch?.DateTo,
+                request.ParamsSearch?.PersonsNumber ?? 0);
 
             var response = await _idoBookingConnectService
-                .PostAsync<OfferAvailabilityAndPricesForDaysRequest, OfferAvailabilityAndPricesForDaysResponseRoot>(
-                    AvailabilityAndPricesForDaysEndpoint,
+                .PostAsync<OfferAvailabilityForDaysRequest, OfferAvailabilityForDaysResponseRoot>(
+                    AvailabilityForDaysEndpoint,
                     request,
                     cancellationToken)
                 .ConfigureAwait(false);
@@ -176,11 +180,10 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             if (response?.Result.Errors != null)
             {
                 _logger.LogWarning(
-                    "Availability and prices request returned error {FaultCode}: {FaultString}.",
+                    "Availability request returned error {FaultCode}: {FaultString}.",
                     response.Result.Errors.FaultCode,
                     response.Result.Errors.FaultString);
             }
-
 
             var ret = response?.Result.OfferObjects;
             if (payload.ObjectIds != null && payload.ObjectIds.Any())
