@@ -125,6 +125,11 @@
     font-weight: 600;
     font-size: 13px;
     margin: .2rem 0 .4rem;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+    padding: .2rem 0 .3rem;
 }
 
 .abw-grid {

@@ -96,19 +96,14 @@
                 @if (_pendingStartDate != null && _pendingEndDate != null)
                 {
                     <div class="booking-panel-pending-offer">
-                        <ApartmentOfferSelector
-                            StartDate="@_pendingStartDate"
-                            EndDate="@_pendingEndDate"
+                        <ApartmentOfferSelectorMini
                             IsOfferLoading="_pendingOfferLoading"
                             OffersResponse="_pendingOffersResponse"
-                            TotalAdditionalPriceBeforeDiscount="0"
-                            BonusDiscountAmount="0"
                             StaySummaryText="@GetPendingStaySummaryText()"
                             RefundableOfferText="@GetPendingRefundableOfferText()"
                             SelectedOfferType="@_pendingSelectedOfferType"
                             HasActiveReservation="false"
                             Localizer="Localizer"
-                            OnSearchModalOpen="ScrollToBookingPanel"
                             OnBookNow="ConfirmPendingBooking" />
                     </div>
                 }

@@ -1,0 +1,73 @@
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using Microsoft.Extensions.Localization
+
+<div class="mini-offer-wrapper">
+    @if (IsOfferLoading)
+    {
+        <div class="mini-offer-loading">
+            <span class="mini-spinner"></span> @Localizer["Loading"]...
+        </div>
+    }
+    else
+    {
+        var pricingData = OffersResponse?.Result?.PricingOffers?.FirstOrDefault();
+        var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => string.Equals(o.OfferType, "nonrefundable", StringComparison.OrdinalIgnoreCase));
+        var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => string.Equals(o.OfferType, "refundable", StringComparison.OrdinalIgnoreCase));
+        @if (nonRefundableOffer != null || refundableOffer != null)
+        {
+            @if (nonRefundableOffer != null)
+            {
+                <div class="mini-offer @(IsSelectedOffer("nonrefundable") ? "selected-offer" : "")">
+                    <div class="mini-offer-header">
+                        <span>@Localizer["Non-refundableOffer"]</span>
+                        <span class="mini-offer-stay">@StaySummaryText</span>
+                    </div>
+                    <div class="mini-offer-desc">@Localizer["NonRefundableText"]</div>
+                    <div class="mini-offer-footer">
+                        <span class="mini-offer-price"><PriceDisplay AmountPln="@nonRefundableOffer.Price" /></span>
+                        <div @onclick="@(() => OnBookNow.InvokeAsync("nonrefundable"))" @onclick:stopPropagation="true">
+                            <Button Type="ButtonType.Secondary" Class="mini-offer-book-btn">@GetOfferButtonLabel("nonrefundable")</Button>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (refundableOffer != null)
+            {
+                <div class="mini-offer @(IsSelectedOffer("refundable") ? "selected-offer" : "")">
+                    <div class="mini-offer-header">
+                        <span>@Localizer["RefundableOffer"]</span>
+                        <span class="mini-offer-stay">@StaySummaryText</span>
+                    </div>
+                    <div class="mini-offer-desc">@RefundableOfferText</div>
+                    <div class="mini-offer-footer">
+                        <span class="mini-offer-price"><PriceDisplay AmountPln="@refundableOffer.Price" /></span>
+                        <div @onclick="@(() => OnBookNow.InvokeAsync("refundable"))" @onclick:stopPropagation="true">
+                            <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Secondary)" Class="mini-offer-book-btn">@GetOfferButtonLabel("refundable")</Button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="mini-offer-empty">@Localizer["NoOffersAvailable"]</div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public bool IsOfferLoading { get; set; }
+    [Parameter] public PricingOffersResponse? OffersResponse { get; set; }
+    [Parameter] public string StaySummaryText { get; set; } = "";
+    [Parameter] public string RefundableOfferText { get; set; } = "";
+    [Parameter] public string? SelectedOfferType { get; set; }
+    [Parameter] public bool HasActiveReservation { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+    [Parameter] public EventCallback<string> OnBookNow { get; set; }
+
+    private bool IsSelectedOffer(string offerType) =>
+        string.Equals(SelectedOfferType, offerType, StringComparison.OrdinalIgnoreCase);
+
+    private string GetOfferButtonLabel(string offerType) =>
+        HasActiveReservation && IsSelectedOffer(offerType) ? Localizer["ContinueReservation"] : Localizer["BookNow"];
+}
