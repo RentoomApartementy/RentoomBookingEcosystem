@@ -1,7 +1,7 @@
 @using RentoomBooking.SharedClasses.Models.IdoBooking
 @using Microsoft.Extensions.Localization
 
-<div class="mini-offer-wrapper">
+<div class="mini-offer-wrapper @(Layout == "Horizontal" ? "mini-offer-wrapper-horizontal" : "")">
     @if (IsOfferLoading)
     {
         <div class="mini-offer-loading">
@@ -56,6 +56,7 @@
 </div>
 
 @code {
+    [Parameter] public string Layout { get; set; } = "Vertical";
     [Parameter] public bool IsOfferLoading { get; set; }
     [Parameter] public PricingOffersResponse? OffersResponse { get; set; }
     [Parameter] public string StaySummaryText { get; set; } = "";

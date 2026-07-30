@@ -65,6 +65,26 @@
     white-space: nowrap;
 }
 
+.mini-offer-wrapper-horizontal {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.mini-offer-wrapper-horizontal .mini-offer {
+    flex: 1;
+    min-width: 0;
+}
+
+.mini-offer-wrapper-horizontal .mini-offer-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .35rem;
+}
+
+.mini-offer-wrapper-horizontal .mini-offer-book-btn {
+    width: 100%;
+}
+
 .mini-offer-loading,
 .mini-offer-empty {
     font-size: .8rem;

@@ -1,4 +1,4 @@
-@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+﻿@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 <PageTitle>@GetSeoTitle()</PageTitle>
@@ -91,7 +91,8 @@
                     Localizer="Localizer"
                     OnSearch="(query) => HandleSearch(query)"
                     OnRangeSelected="OnCalendarRangeSelected"
-                    FromPriceChanged="OnCalendarFromPriceChanged" />
+                    FromPriceChanged="OnCalendarFromPriceChanged" 
+                   />
 
                 @if (_pendingStartDate != null && _pendingEndDate != null)
                 {
@@ -104,7 +105,8 @@
                             SelectedOfferType="@_pendingSelectedOfferType"
                             HasActiveReservation="false"
                             Localizer="Localizer"
-                            OnBookNow="ConfirmPendingBooking" />
+                            OnBookNow="ConfirmPendingBooking"
+                            Layout="Vertical"/> @*Można tez zrobić "Horizontal" (w dwóch kolumnach obok siebie) - narazie na testy bo niedokończony*@
                     </div>
                 }
             </div>
