@@ -90,7 +90,28 @@
                     Children="@Children"
                     Localizer="Localizer"
                     OnSearch="(query) => HandleSearch(query)"
+                    OnRangeSelected="OnCalendarRangeSelected"
                     FromPriceChanged="OnCalendarFromPriceChanged" />
+
+                @if (_pendingStartDate != null && _pendingEndDate != null)
+                {
+                    <div class="booking-panel-pending-offer">
+                        <ApartmentOfferSelector
+                            StartDate="@_pendingStartDate"
+                            EndDate="@_pendingEndDate"
+                            IsOfferLoading="_pendingOfferLoading"
+                            OffersResponse="_pendingOffersResponse"
+                            TotalAdditionalPriceBeforeDiscount="0"
+                            BonusDiscountAmount="0"
+                            StaySummaryText="@GetPendingStaySummaryText()"
+                            RefundableOfferText="@GetPendingRefundableOfferText()"
+                            SelectedOfferType="@_pendingSelectedOfferType"
+                            HasActiveReservation="false"
+                            Localizer="Localizer"
+                            OnSearchModalOpen="ScrollToBookingPanel"
+                            OnBookNow="ConfirmPendingBooking" />
+                    </div>
+                }
             </div>
 
             <div class="area-content">
@@ -163,7 +184,7 @@
                         DiscountAmount="@_bonusDiscountAmount"
                         Localizer="Localizer" />
 
-                    <ApartmentOfferSelector 
+                    <ApartmentOfferSelector
                         StartDate="@StartDate" 
                         EndDate="@EndDate" 
                         IsOfferLoading="_isOfferLoading" 

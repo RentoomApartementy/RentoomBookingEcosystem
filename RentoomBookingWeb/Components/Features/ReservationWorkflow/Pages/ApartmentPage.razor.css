@@ -64,6 +64,13 @@
     margin: 0.25rem 0 0;
 }
 
+.booking-panel-pending-offer {
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid #f3f4f6;
+    margin-top: .5rem;
+    padding-top: 1rem;
+}
+
 .booking-panel-price {
     font-weight: bold;
     color: #fff;

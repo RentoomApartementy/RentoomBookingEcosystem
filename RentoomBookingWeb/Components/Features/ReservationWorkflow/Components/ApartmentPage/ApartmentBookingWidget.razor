@@ -70,21 +70,27 @@
                             @for (var d = 1; d <= DaysInMonth(monthStart); d++)
                             {
                                 var date = new DateOnly(monthStart.Year, monthStart.Month, d);
-                                var selectable = IsSelectable(date);
-                                var price = PriceFor(date);
+                                var selectableNow = IsSelectableNow(date);
+                                var pastDisabled = date < _today;
+                                var isSelectedEdge = IsSelectedStart(date) || IsSelectedEnd(date);
+                                var halfDay = !pastDisabled && !isSelectedEdge && IsSingleNightGap(date);
+                                var fullyBooked = !pastDisabled && !halfDay && !selectableNow && !IsAvailable(date);
                                 var classes = "abw-day"
-                                    + (selectable ? " abw-day-available" : " abw-day-disabled")
+                                    + (selectableNow ? " abw-day-available" : "")
+                                    + (halfDay ? " abw-day-booked-bottom" : "")
+                                    + (fullyBooked ? " abw-day-booked" : "")
+                                    + (pastDisabled ? " abw-day-disabled" : "")
                                     + (IsSelectedStart(date) ? " abw-day-start" : "")
                                     + (IsSelectedEnd(date) ? " abw-day-end" : "")
                                     + (IsInRange(date) ? " abw-day-inrange" : "");
                                 <button type="button"
                                         class="@classes"
-                                        disabled="@(!selectable)"
+                                        disabled="@(!selectableNow)"
                                         @onclick="@(() => OnDayClicked(date))">
                                     <span class="abw-day-num">@d</span>
-                                    @if (selectable && price is decimal p)
+                                    @if (fullyBooked)
                                     {
-                                        <span class="abw-day-price">@FormatPrice(p)</span>
+                                        <span class="abw-day-strike"></span>
                                     }
                                 </button>
                             }
@@ -107,15 +113,8 @@
         }
     </div>
 
-    @* ---- Footer: summary + primary CTA ---- *@
+    @* ---- Footer: fallback CTA (real price/offer preview renders below the widget) ---- *@
     <div class="abw-footer">
-        <div class="abw-summary">
-            @if (HasCompleteRange)
-            {
-                <span class="abw-nights">@Localizer["CalendarNights", SelectedNights]</span>
-                <span class="abw-total">@Localizer["CalendarStayTotal", FormatPrice(SelectedTotal())]</span>
-            }
-        </div>
         <button type="button" class="abw-reserve" disabled="@(!HasCompleteRange)" @onclick="Confirm">
             @Localizer["BookNow"]
         </button>

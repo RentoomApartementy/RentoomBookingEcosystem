@@ -23,6 +23,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
         [Parameter] public EventCallback<Dictionary<string, string>> OnSearch { get; set; }
         [Parameter] public EventCallback<decimal?> FromPriceChanged { get; set; }
+        [Parameter] public EventCallback<Dictionary<string, string>?> OnRangeSelected { get; set; }
 
         [Inject] public IApartmentCalendarService CalendarService { get; set; } = default!;
 
@@ -133,6 +134,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             }
             _adults++;
             await LoadCalendarAsync();
+            await NotifyRangeIfCompleteAsync();
         }
 
         private async Task DecrementAdults()
@@ -141,6 +143,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             if (_adults <= MinAdults) return;
             _adults--;
             await LoadCalendarAsync();
+            await NotifyRangeIfCompleteAsync();
         }
 
         private async Task IncrementChildren()
@@ -153,6 +156,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             }
             _children++;
             await LoadCalendarAsync();
+            await NotifyRangeIfCompleteAsync();
         }
 
         private async Task DecrementChildren()
@@ -161,7 +165,10 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             if (_children <= 0) return;
             _children--;
             await LoadCalendarAsync();
+            await NotifyRangeIfCompleteAsync();
         }
+
+        private Task NotifyRangeIfCompleteAsync() => HasCompleteRange ? NotifyRangeAsync() : Task.CompletedTask;
 
         // ---- Calendar model ----------------------------------------------
 
@@ -200,14 +207,43 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                && _calendar.Days.TryGetValue(date, out var cell)
                && cell.Available;
 
-        private decimal? PriceFor(DateOnly date)
-            => _calendar is not null && _calendar.Days.TryGetValue(date, out var cell) ? cell.PriceGross : null;
-
         private int MinStayFor(DateOnly date)
             => _calendar is not null && _calendar.Days.TryGetValue(date, out var cell) && cell.MinStay is int m && m > 0 ? m : 1;
 
         private bool IsSelectable(DateOnly date)
             => date >= _today && IsAvailable(date);
+
+        /// <summary>Occupied day whose immediately preceding day is available — a turnover slot.
+        /// Not bookable as the start of any real stay (its own night is unavailable), but the UI
+        /// still allows selecting it as a start so the user can see everything gray out afterward,
+        /// rather than looking permanently disabled.</summary>
+        private bool IsHalfDay(DateOnly date)
+            => !IsAvailable(date) && IsAvailable(date.AddDays(-1));
+
+        private bool CanBeStart(DateOnly date) => IsAvailable(date) || IsHalfDay(date);
+
+        /// <summary>Visual-only: an occupied day is a "single-night gap" when both its neighbors are
+        /// available — a genuine 1-night turnover. Longer occupied blocks starting right after an
+        /// available day are still selectable as start via IsHalfDay, just without this pink cue.</summary>
+        private bool IsSingleNightGap(DateOnly date)
+            => IsHalfDay(date) && IsAvailable(date.AddDays(1));
+
+        /// <summary>Checkout doesn't consume the night, so an end date is valid whenever it's actually
+        /// reachable from the current start (every night in between is free and min-stay is met) —
+        /// regardless of the end date's own availability.</summary>
+        private bool CanBeEnd(DateOnly date)
+        {
+            if (_selStart is not DateOnly s) return false;
+            var nights = date.DayNumber - s.DayNumber;
+            return nights >= MinStayFor(s) && IsRangeAllNightsAvailable(s, date);
+        }
+
+        private bool IsSelectableNow(DateOnly date)
+        {
+            if (date < _today) return false;
+            var awaitingEnd = _selStart is DateOnly s && _selEnd is null && date > s;
+            return awaitingEnd ? CanBeEnd(date) : CanBeStart(date);
+        }
 
         private bool IsSelectedStart(DateOnly date) => _selStart == date;
         private bool IsSelectedEnd(DateOnly date) => _selEnd == date;
@@ -217,11 +253,11 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         // ---- Selection ----------------------------------------------------
 
-        private void OnDayClicked(DateOnly date)
+        private async Task OnDayClicked(DateOnly date)
         {
             _dateNotice = null;
 
-            if (!IsSelectable(date))
+            if (!IsSelectableNow(date))
             {
                 return;
             }
@@ -231,6 +267,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             {
                 _selStart = date;
                 _selEnd = null;
+                await NotifyRangeAsync();
                 return;
             }
 
@@ -249,13 +286,15 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 // A gap of unavailable nights — restart the range at the clicked date.
                 _selStart = date;
                 _selEnd = null;
+                await NotifyRangeAsync();
                 return;
             }
 
             _selEnd = date;
+            await NotifyRangeAsync();
         }
 
-        /// <summary>Every night in [start, end) must be available (end is the checkout day).</summary>
+        /// <summary>Every night in [start, end) must be available (end itself is the checkout day, excluded).</summary>
         private bool IsRangeAllNightsAvailable(DateOnly start, DateOnly end)
         {
             for (var night = start; night < end; night = night.AddDays(1))
@@ -270,7 +309,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         private void RevalidateSelection()
         {
-            if (_selStart is DateOnly s && !IsAvailable(s))
+            if (_selStart is DateOnly s && !CanBeStart(s))
             {
                 _selStart = null;
                 _selEnd = null;
@@ -286,22 +325,26 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         private bool HasCompleteRange => _selStart is not null && _selEnd is not null;
 
-        private int SelectedNights =>
-            _selStart is DateOnly s && _selEnd is DateOnly e ? e.DayNumber - s.DayNumber : 0;
-
-        private decimal SelectedTotal()
+        private async Task NotifyRangeAsync()
         {
-            if (_selStart is not DateOnly s || _selEnd is not DateOnly e)
+            if (!OnRangeSelected.HasDelegate)
             {
-                return 0m;
+                return;
             }
 
-            decimal total = 0m;
-            for (var night = s; night < e; night = night.AddDays(1))
+            if (!HasCompleteRange)
             {
-                total += PriceFor(night) ?? 0m;
+                await OnRangeSelected.InvokeAsync(null);
+                return;
             }
-            return total;
+
+            await OnRangeSelected.InvokeAsync(new Dictionary<string, string>
+            {
+                ["startDate"] = _selStart!.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                ["endDate"] = _selEnd!.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                ["adults"] = _adults.ToString(CultureInfo.InvariantCulture),
+                ["children"] = _children.ToString(CultureInfo.InvariantCulture)
+            });
         }
 
         private async Task Confirm()

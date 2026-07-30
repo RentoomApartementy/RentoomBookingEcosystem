@@ -111,6 +111,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected bool _isModalOpen = false;
         protected decimal? _calendarFromPrice;
 
+        protected string? _pendingStartDate;
+        protected string? _pendingEndDate;
+        protected string? _pendingAdults;
+        protected string? _pendingChildren;
+        protected PricingOffersResponse? _pendingOffersResponse;
+        protected bool _pendingOfferLoading;
+        protected string? _pendingSelectedOfferType;
+
         protected const int SmartScrollOffsetPx = 150;
         protected bool _isAtSummary = false;
         protected bool _isAtOffers = false;
@@ -156,6 +164,105 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         {
             _scrollModule ??= await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
             await _scrollModule.InvokeVoidAsync("scrollToElement", "booking-panel", SmartScrollOffsetPx);
+        }
+
+        protected async Task OnCalendarRangeSelected(Dictionary<string, string>? query)
+        {
+            if (query is null)
+            {
+                _pendingStartDate = null;
+                _pendingEndDate = null;
+                _pendingAdults = null;
+                _pendingChildren = null;
+                _pendingOffersResponse = null;
+                _pendingSelectedOfferType = null;
+                StateHasChanged();
+                return;
+            }
+
+            query.TryGetValue("startDate", out _pendingStartDate);
+            query.TryGetValue("endDate", out _pendingEndDate);
+            query.TryGetValue("adults", out _pendingAdults);
+            query.TryGetValue("children", out _pendingChildren);
+
+            _pendingOfferLoading = true;
+            StateHasChanged();
+            try
+            {
+                _pendingOffersResponse = await OfferService.GetPricingOffersAsync(new PricingOffersRequest
+                {
+                    ObjectIds = _apartment != null ? new List<int> { _apartment.Id } : null,
+                    DateFrom = _pendingStartDate,
+                    DateTo = _pendingEndDate,
+                    NumberOfAdults = int.TryParse(_pendingAdults, out var pa) ? pa : null,
+                    NumberOfBigChildren = int.TryParse(_pendingChildren, out var pc) ? pc : null
+                });
+
+                var pendingOffers = _pendingOffersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers;
+                _pendingSelectedOfferType = pendingOffers?
+                    .FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase))?.OfferType
+                    ?? pendingOffers?.FirstOrDefault()?.OfferType;
+            }
+            finally
+            {
+                _pendingOfferLoading = false;
+                StateHasChanged();
+            }
+        }
+
+        protected string GetPendingStaySummaryText()
+        {
+            if (!TryParseDate(_pendingStartDate, out var start) || !TryParseDate(_pendingEndDate, out var end))
+            {
+                return string.Empty;
+            }
+
+            var nights = Math.Max(1, end.DayNumber - start.DayNumber);
+            var guests = (int.TryParse(_pendingAdults, out var a) ? a : 1) + (int.TryParse(_pendingChildren, out var c) ? c : 0);
+
+            string nightsKey = nights switch
+            {
+                1 => "StayNight_1",
+                var n when n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) => "StayNight_234",
+                _ => "StayNight_Many"
+            };
+            string personsKey = guests switch
+            {
+                1 => "StayPerson_1",
+                var g when g % 10 >= 2 && g % 10 <= 4 && (g % 100 < 10 || g % 100 >= 20) => "StayPerson_234",
+                _ => "StayPerson_Many"
+            };
+
+            return $"{nights} {Localizer[nightsKey]} / {guests} {Localizer[personsKey]}";
+        }
+
+        protected string GetPendingRefundableOfferText()
+        {
+            if (!TryParseDate(_pendingStartDate, out var startDate))
+            {
+                return Localizer["RefundableOfferTextFallback"];
+            }
+
+            var freeCancellationDeadline = startDate.AddDays(-14);
+            return Localizer["RefundableOfferText", freeCancellationDeadline.ToString("dd.MM.yyyy", CultureInfo.CurrentUICulture)];
+        }
+
+        protected async Task ConfirmPendingBooking(string? offerType)
+        {
+            if (_pendingStartDate is null || _pendingEndDate is null)
+            {
+                return;
+            }
+
+            await HandleSearch(new Dictionary<string, string>
+            {
+                ["startDate"] = _pendingStartDate,
+                ["endDate"] = _pendingEndDate,
+                ["adults"] = _pendingAdults ?? "1",
+                ["children"] = _pendingChildren ?? "0"
+            });
+
+            await GoToPayment(offerType ?? _pendingSelectedOfferType);
         }
 
         protected decimal TotalAddonsPrice
