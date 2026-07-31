@@ -1,7 +1,14 @@
 @using Microsoft.Extensions.Localization
 
 <div class="summary-offer-price @(IsSelected ? "selected-offer" : "")">
-    <b>@TitleText</b>
+    <div class="summary-offer-price-header">
+        <b>@TitleText</b>
+        <div @onclick="OnSearchModalOpen" @onclick:stopPropagation="true">
+            <Button Type="ButtonType.Secondary" Class="btn-offer-change" title="@Localizer["ChangeDatesButtonLabel"]">
+                <GoogleIcon Name="edit_calendar" SizePx="18" AriaLabel="@Localizer["ChangeDatesButtonLabel"]" />
+            </Button>
+        </div>
+    </div>
     <small>@DescriptionText</small>
     <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
         <span class="summary-offer-price-button-price">
@@ -12,15 +19,8 @@
             }
             <span class="stay-summary-text">@StaySummaryText</span>
         </span>
-        <div class="offer-action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
-            <div @onclick="OnSearchModalOpen" @onclick:stopPropagation="true">
-                <Button Type="ButtonType.Secondary" Class="btn-offer-change" title="@Localizer["ChangeDatesButtonLabel"]">
-                    <GoogleIcon Name="edit_calendar" SizePx="18" AriaLabel="@Localizer["ChangeDatesButtonLabel"]" />
-                </Button>
-            </div>
-            <div @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
-                <Button Type="@(IsSelected ? ButtonType.Tertiary : ButtonType.Primary)" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@ButtonLabel</Button>
-            </div>
+        <div @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))" @onclick:stopPropagation="true">
+            <Button Type="@(IsSelected ? ButtonType.Tertiary : ButtonType.Primary)" Class="btn-offer-mobile btn-offer-book" style="white-space: nowrap;">@ButtonLabel</Button>
         </div>
     </div>
 </div>

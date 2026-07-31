@@ -17,6 +17,13 @@
     border: #0c4128 2px solid;
 }
 
+.summary-offer-price-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
 .summary-offer-price b {
     display: block;
     font-size: 1.1rem;
@@ -67,6 +74,11 @@
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
+}
+
+::deep .btn-offer-book {
+    height: 52px !important;
+    padding: 0 1.75rem !important;
 }
 
 @media (max-width: 576px) {
