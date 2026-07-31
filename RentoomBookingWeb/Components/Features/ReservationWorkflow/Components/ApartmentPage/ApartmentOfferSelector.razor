@@ -54,7 +54,7 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
                             <Button Type="ButtonType.Secondary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@Localizer["ChangeDatesButtonLabel"]</Button>
                         </div>
                         <div @onclick="@(() => OnBookNow.InvokeAsync("nonrefundable"))" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
-                            <Button Type="ButtonType.Tertiary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@GetOfferButtonLabel("nonrefundable")</Button>
+                            <Button Type="@(IsSelectedOffer("nonrefundable") ? ButtonType.Tertiary:ButtonType.Primary)" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@GetOfferButtonLabel("nonrefundable")</Button>
                         </div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
                             <Button Type="ButtonType.Secondary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@Localizer["ChangeDatesButtonLabel"]</Button>
                         </div>
                         <div @onclick="@(() => OnBookNow.InvokeAsync("refundable"))" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
-                            <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Tertiary)" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@GetOfferButtonLabel("refundable")</Button>
+                            <Button Type="@(nonRefundableOffer != null ? (IsSelectedOffer("refundable") ? ButtonType.Tertiary : ButtonType.Primary) : ButtonType.Primary)" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@GetOfferButtonLabel("refundable")</Button>
                         </div>
                     </div>
                 </div>
