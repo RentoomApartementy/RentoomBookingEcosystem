@@ -20,7 +20,7 @@
             <span class="stay-summary-text">@StaySummaryText</span>
         </span>
         <div @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))" @onclick:stopPropagation="true">
-            <Button Type="@(IsSelected ? ButtonType.Tertiary : ButtonType.Primary)" Class="btn-offer-mobile btn-offer-book" style="white-space: nowrap;">@ButtonLabel</Button>
+            <Button Type="@(IsSelected ? ButtonType.Tertiary : ButtonType.Primary)" Class="btn-offer-book" style="white-space: nowrap;">@ButtonLabel</Button>
         </div>
     </div>
 </div>

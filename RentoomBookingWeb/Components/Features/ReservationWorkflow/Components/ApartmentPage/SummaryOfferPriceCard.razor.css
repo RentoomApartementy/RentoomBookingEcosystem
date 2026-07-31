@@ -82,13 +82,6 @@
 }
 
 @media (max-width: 576px) {
-    ::deep .btn-offer-mobile {
-        height: 30px !important;
-        padding: 0 8px !important;
-        font-size: 11px !important;
-        min-width: 0 !important;
-    }
-
     ::deep .btn-offer-change {
         display: inline-flex !important;
         height: 30px !important;
