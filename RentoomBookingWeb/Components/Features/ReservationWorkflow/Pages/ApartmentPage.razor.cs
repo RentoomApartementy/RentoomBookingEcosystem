@@ -176,6 +176,19 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 _pendingChildren = null;
                 _pendingOffersResponse = null;
                 _pendingSelectedOfferType = null;
+
+                // Clearing the calendar selection (v18's "×" button) always drops the full
+                // selector back to its no-offer placeholder state — regardless of whether the
+                // page originally loaded with dates in the URL. URL itself is never touched.
+                StartDate = null;
+                EndDate = null;
+                Adults = null;
+                Children = null;
+                _offersResponse = null;
+                _selectedOfferType = null;
+                RefreshAddonsParams();
+                UpdateReservationPricingContext();
+
                 StateHasChanged();
                 return;
             }
@@ -185,29 +198,39 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             query.TryGetValue("adults", out _pendingAdults);
             query.TryGetValue("children", out _pendingChildren);
 
+            // Mirror the calendar selection onto the page's own date/guest state — the same
+            // fields CurrentRequest/GetOffer() and the full ApartmentOfferSelector already use.
+            // Deliberately no NavigateTo here: this app's custom router remounts the whole page
+            // (refetching the apartment) on any location change, which would look like a reload.
+            StartDate = _pendingStartDate;
+            EndDate = _pendingEndDate;
+            Adults = _pendingAdults;
+            Children = _pendingChildren;
+
+            // The Summary section's addon selector needs a fresh ReservationPricingContext
+            // (nights/guests) to render without throwing, since it prices addons off it.
+            RefreshAddonsParams();
+            UpdateReservationPricingContext();
+
             _pendingOfferLoading = true;
             StateHasChanged();
             try
             {
-                _pendingOffersResponse = await OfferService.GetPricingOffersAsync(new PricingOffersRequest
-                {
-                    ObjectIds = _apartment != null ? new List<int> { _apartment.Id } : null,
-                    DateFrom = _pendingStartDate,
-                    DateTo = _pendingEndDate,
-                    NumberOfAdults = int.TryParse(_pendingAdults, out var pa) ? pa : null,
-                    NumberOfBigChildren = int.TryParse(_pendingChildren, out var pc) ? pc : null
-                });
-
-                var pendingOffers = _pendingOffersResponse?.Result?.PricingOffers?.FirstOrDefault()?.Offers;
-                _pendingSelectedOfferType = pendingOffers?
-                    .FirstOrDefault(o => string.Equals(o.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase))?.OfferType
-                    ?? pendingOffers?.FirstOrDefault()?.OfferType;
+                await GetOffer();
+                _pendingOffersResponse = _offersResponse;
+                _pendingSelectedOfferType = _selectedOfferType;
             }
             finally
             {
                 _pendingOfferLoading = false;
                 StateHasChanged();
             }
+        }
+
+        private async Task ScrollToOffersSection()
+        {
+            _scrollModule ??= await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+            await _scrollModule.InvokeVoidAsync("scrollToElement", "offers-section", SmartScrollOffsetPx);
         }
 
         protected string GetPendingStaySummaryText()
@@ -254,15 +277,15 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 return;
             }
 
-            await HandleSearch(new Dictionary<string, string>
-            {
-                ["startDate"] = _pendingStartDate,
-                ["endDate"] = _pendingEndDate,
-                ["adults"] = _pendingAdults ?? "1",
-                ["children"] = _pendingChildren ?? "0"
-            });
+            // StartDate/EndDate/_offersResponse are already synced from the calendar selection
+            // (OnCalendarRangeSelected) — clicking "Zarezerwuj" in the mini selector doesn't
+            // navigate anywhere; it just highlights this offer in the full selector below and
+            // scrolls to it. No new fetch, no NavigateTo (which would remount the whole page).
+            _selectedOfferType = offerType ?? _pendingSelectedOfferType;
+            _pendingSelectedOfferType = _selectedOfferType;
+            StateHasChanged();
 
-            await GoToPayment(offerType ?? _pendingSelectedOfferType);
+            await ScrollToOffersSection();
         }
 
         protected decimal TotalAddonsPrice
@@ -1265,32 +1288,6 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             NumberOfAdults = int.TryParse(Adults, out var a) ? a : null,
             NumberOfBigChildren = int.TryParse(Children, out var c) ? c : null
         };
-
-        protected async Task HandleSearch(Dictionary<string, string> query, bool updateUrl = true)
-        {
-            _isOfferLoading = true;
-            StateHasChanged();
-
-            query.TryGetValue("startDate", out var startDate);
-            query.TryGetValue("endDate", out var endDate);
-            query.TryGetValue("adults", out var adults);
-            query.TryGetValue("children", out var children);
-
-            StartDate = startDate;
-            EndDate = endDate;
-            Adults = adults;
-            Children = children;
-
-            RefreshAddonsParams();
-            UpdateReservationPricingContext();
-
-            if (_apartment != null)
-            {
-                var url = BuildApartmentUrl(_reservationTokenGuid);
-                Navigation.NavigateTo(url, forceLoad: false);
-                await GetOffer();
-            }
-        }
 
         protected async Task GoToSuggestionDates(AvailableTerm? selectedTerm = null)
         {

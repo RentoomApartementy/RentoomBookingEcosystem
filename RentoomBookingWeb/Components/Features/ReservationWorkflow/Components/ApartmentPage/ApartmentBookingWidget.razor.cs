@@ -11,8 +11,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
     /// Availability-aware, guests-first booking widget for a single apartment.
     /// Replaces the generic (portfolio-wide) SearchBar picker inside the apartment
     /// page modal. Unavailable nights cannot be selected, so the "no offers" dead-end
-    /// cannot arise on the mainline path (audit L7/L5). Emits the same
-    /// startDate/endDate/adults/children contract as SearchBar via <see cref="OnSearch"/>.
+    /// cannot arise on the mainline path (audit L7/L5).
     /// </summary>
     public partial class ApartmentBookingWidget : ComponentBase
     {
@@ -22,7 +21,6 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         [Parameter] public string? Adults { get; set; }
         [Parameter] public string? Children { get; set; }
         [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
-        [Parameter] public EventCallback<Dictionary<string, string>> OnSearch { get; set; }
         [Parameter] public EventCallback<decimal?> FromPriceChanged { get; set; }
         [Parameter] public EventCallback<Dictionary<string, string>?> OnRangeSelected { get; set; }
 
@@ -368,24 +366,6 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                 ["adults"] = _adults.ToString(CultureInfo.InvariantCulture),
                 ["children"] = _children.ToString(CultureInfo.InvariantCulture)
             });
-        }
-
-        private async Task Confirm()
-        {
-            if (!HasCompleteRange || !OnSearch.HasDelegate)
-            {
-                return;
-            }
-
-            var query = new Dictionary<string, string>
-            {
-                ["startDate"] = _selStart!.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                ["endDate"] = _selEnd!.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                ["adults"] = _adults.ToString(CultureInfo.InvariantCulture),
-                ["children"] = _children.ToString(CultureInfo.InvariantCulture)
-            };
-
-            await OnSearch.InvokeAsync(query);
         }
 
         // ---- Formatting helpers ------------------------------------------
