@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Ritratt ewlieni tal-appartament {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Mistednin</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Adulti</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Tfal</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Minn {0} / lejl</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Ħassar l-għażla</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Uri aktar</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>L-okkupazzjoni massima hija {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Il-permanenza minima hija {0} lejliet</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Agħżel id-data tal-wasla</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Agħżel id-data tat-tluq</value>
+  </data>
 </root>

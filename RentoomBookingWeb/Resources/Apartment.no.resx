@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Hovedbilde av leiligheten {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Gjester</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Voksne</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Barn</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Fra {0} / natt</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Fjern valg</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Vis mer</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Maksimalt antall gjester er {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimum opphold er {0} netter</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Velg innsjekkingsdato</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Velg utsjekkingsdato</value>
+  </data>
 </root>

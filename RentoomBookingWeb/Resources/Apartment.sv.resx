@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Huvudbild av lägenheten {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Gäster</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Vuxna</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Barn</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Från {0} / natt</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Rensa val</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Visa mer</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Max antal gäster är {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minsta vistelse är {0} nätter</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Välj incheckningsdatum</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Välj utcheckningsdatum</value>
+  </data>
 </root>

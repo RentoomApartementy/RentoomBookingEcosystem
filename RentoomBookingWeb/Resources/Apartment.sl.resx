@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Glavna fotografija apartmaja {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Gostje</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Odrasli</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Otroci</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Od {0} / noč</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Počisti izbor</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Prikaži več</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Največje število gostov je {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Najmanjše bivanje je {0} noči</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Izberite datum prihoda</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Izberite datum odhoda</value>
+  </data>
 </root>

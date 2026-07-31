@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>A(z) {0} apartman fő fotója</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Vendégek</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Felnőttek</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Gyerekek</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>{0}-tól / éjszaka</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Kijelölés törlése</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Több megjelenítése</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>A maximális létszám {0} fő</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>A minimális tartózkodás {0} éjszaka</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Válassza ki az érkezés dátumát</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Válassza ki a távozás dátumát</value>
+  </data>
 </root>

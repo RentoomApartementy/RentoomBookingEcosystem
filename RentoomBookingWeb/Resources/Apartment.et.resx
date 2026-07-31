@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Korteri {0} peafoto</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Külalised</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Täiskasvanud</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Lapsed</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Alates {0} / öö</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Tühjenda valik</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Näita rohkem</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Maksimaalne külaliste arv on {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimaalne viibimisaeg on {0} ööd</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Valige saabumiskuupäev</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Valige lahkumiskuupäev</value>
+  </data>
 </root>

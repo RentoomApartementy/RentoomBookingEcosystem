@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Foto principal del apartamento {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Huéspedes</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Adultos</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Niños</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Desde {0} / noche</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Borrar selección</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Mostrar más</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>La ocupación máxima es {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>La estancia mínima es de {0} noches</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Selecciona la fecha de entrada</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Selecciona la fecha de salida</value>
+  </data>
 </root>
