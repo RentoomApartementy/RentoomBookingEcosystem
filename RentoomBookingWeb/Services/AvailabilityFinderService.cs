@@ -141,7 +141,7 @@ namespace RentoomBookingWeb.Services
                    response.Result.PricingOffers.Any(o => o.ObjectId == apartmentId && o.Offers != null && o.Offers.Any());
         }
 
-        private List<AvailableTerm> FindPotentialAvailableTerms(OfferAvailabilityObject apartment, int duration, DateTime targetDate, int maxCount)
+        private List<AvailableTerm> FindPotentialAvailableTerms(OfferAvailabilityAndPricesForDaysObject apartment, int duration, DateTime targetDate, int maxCount)
         {
             var candidates = new List<AvailableTerm>();
             if (apartment.ObjectAvailability == null) return candidates;

@@ -1,0 +1,62 @@
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using Microsoft.Extensions.Localization
+
+<div class="mini-offer-wrapper @(Layout == "Horizontal" ? "mini-offer-wrapper-horizontal" : "")">
+    @if (IsOfferLoading)
+    {
+        <div class="mini-offer-loading">
+            <span class="mini-spinner"></span> @Localizer["Loading"]...
+        </div>
+    }
+    else
+    {
+        var pricingData = OffersResponse?.Result?.PricingOffers?.FirstOrDefault();
+        var nonRefundableOffer = pricingData?.Offers?.FirstOrDefault(o => string.Equals(o.OfferType, "nonrefundable", StringComparison.OrdinalIgnoreCase));
+        var refundableOffer = pricingData?.Offers?.FirstOrDefault(o => string.Equals(o.OfferType, "refundable", StringComparison.OrdinalIgnoreCase));
+        @if (nonRefundableOffer != null || refundableOffer != null)
+        {
+            @if (nonRefundableOffer != null)
+            {
+                <MiniOfferCard
+                    OfferTypeKey="nonrefundable"
+                    TitleText="@Localizer["Non-refundableOffer"]"
+                    DescriptionText="@Localizer["NonRefundableText"]"
+                    Price="@nonRefundableOffer.Price"
+                    StaySummaryText="@StaySummaryText"
+                    SelectedOfferType="@SelectedOfferType"
+                    HasActiveReservation="HasActiveReservation"
+                    Localizer="Localizer"
+                    OnBookNow="OnBookNow" />
+            }
+            @if (refundableOffer != null)
+            {
+                <MiniOfferCard
+                    OfferTypeKey="refundable"
+                    TitleText="@Localizer["RefundableOffer"]"
+                    DescriptionText="@RefundableOfferText"
+                    Price="@refundableOffer.Price"
+                    StaySummaryText="@StaySummaryText"
+                    SelectedOfferType="@SelectedOfferType"
+                    HasActiveReservation="HasActiveReservation"
+                    Localizer="Localizer"
+                    OnBookNow="OnBookNow" />
+            }
+        }
+        else
+        {
+            <div class="mini-offer-empty">@Localizer["NoOffersAvailable"]</div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public string Layout { get; set; } = "Vertical";
+    [Parameter] public bool IsOfferLoading { get; set; }
+    [Parameter] public PricingOffersResponse? OffersResponse { get; set; }
+    [Parameter] public string StaySummaryText { get; set; } = "";
+    [Parameter] public string RefundableOfferText { get; set; } = "";
+    [Parameter] public string? SelectedOfferType { get; set; }
+    [Parameter] public bool HasActiveReservation { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+    [Parameter] public EventCallback<string> OnBookNow { get; set; }
+}

@@ -7,6 +7,7 @@
 
 .images-wrapper {
     width: 100%;
+    min-width: 0;
     height: 40vh;
     display: flex;
     gap: .6rem;
@@ -16,6 +17,8 @@
 .images-left {
     border-radius: .5rem;
     width: 70%;
+    max-width: 70%;
+    min-width: 0;
     height: 100%;
     object-fit: cover;
 }
@@ -25,6 +28,7 @@
     flex-direction: column;
     gap: .6rem;
     width: 30%;
+    min-width: 0;
     height: 100%;
 }
 
@@ -35,10 +39,13 @@
 
     .images-left {
         width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
     }
 
     .images-wrapper {
         width: 100%;
+        min-width: 0;
         height: 25vh !important;
         display: flex;
         gap: .6rem;

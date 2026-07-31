@@ -177,6 +177,18 @@
   <data name="From" xml:space="preserve">
     <value>From</value>
   </data>
+  <data name="Night" xml:space="preserve">
+    <value>night</value>
+  </data>
+  <data name="BookingPanelTitle" xml:space="preserve">
+    <value>Book directly</value>
+  </data>
+  <data name="BookingPanelSubtitle" xml:space="preserve">
+    <value>Direct booking — no portal commission</value>
+  </data>
+  <data name="ShowMapLabel" xml:space="preserve">
+    <value>View location on map</value>
+  </data>
   <data name="To" xml:space="preserve">
     <value>To</value>
   </data>

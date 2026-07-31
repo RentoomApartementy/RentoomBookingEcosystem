@@ -1,0 +1,296 @@
+.abw {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    width: 100%;
+    min-width: 0;
+    font-size: 13px;
+    color: #1f2937;
+    padding: 1rem 1.25rem 1.25rem;
+    box-sizing: border-box;
+}
+
+/* ---- Guests ---- */
+.abw-section-title {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: .35rem;
+}
+
+.abw-stepper-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .3rem 0;
+}
+
+.abw-stepper-label {
+    font-weight: 500;
+}
+
+.abw-stepper-controls {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.abw-stepper-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .15s, background .15s;
+}
+
+.abw-stepper-btn:hover:not(:disabled) {
+    border-color: #945F28;
+}
+
+.abw-stepper-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.abw-stepper-value {
+    min-width: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* ---- Notices ---- */
+.abw-notice {
+    margin-top: .5rem;
+    padding: .5rem .75rem;
+    border-radius: 8px;
+    background: #fff7ed;
+    color: #b45309;
+    font-size: 13px;
+}
+
+/* ---- From-price anchor ---- */
+.abw-fromprice {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ---- Calendar ---- */
+.abw-dates-prompt {
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.abw-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 2px;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding-bottom: .35rem;
+    z-index: 1;
+}
+
+.abw-weekday {
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #9ca3af;
+}
+
+.abw-months {
+    max-height: 280px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transition: opacity .15s;
+}
+
+.abw-months.is-refreshing {
+    opacity: .5;
+    pointer-events: none;
+}
+
+.abw-month + .abw-month {
+    margin-top: 1rem;
+}
+
+.abw-month-title {
+    font-weight: 600;
+    font-size: 13px;
+    margin: .2rem 0 .4rem;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+    padding: .2rem 0 .3rem;
+}
+
+.abw-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 2px;
+}
+
+.abw-day-cell {
+    position: relative;
+    aspect-ratio: 1 / 1;
+}
+
+.abw-day-cell .abw-day {
+    width: 100%;
+    height: 100%;
+}
+
+.abw-day-clear {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid #fff;
+    background: #945F28;
+    color: #fff;
+    font-size: 11px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    z-index: 2;
+}
+
+.abw-day-clear:hover {
+    background: #7a4e20;
+}
+
+.abw-day {
+    aspect-ratio: 1 / 1;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 8px;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.abw-day-blank {
+    visibility: hidden;
+}
+
+.abw-day:disabled {
+    cursor: not-allowed;
+}
+
+.abw-day-num {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+/* Available */
+.abw-day-available:hover {
+    border-color: #945F28;
+}
+
+/* Past / otherwise disabled — not booked, just not selectable right now */
+.abw-day-disabled {
+    color: #c3cac4;
+    cursor: not-allowed;
+}
+
+/* Availability not loaded yet — neutral placeholder, distinct from "booked" */
+.abw-day-loading {
+    color: #b9ac9a;
+    cursor: default;
+    animation: abw-day-pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes abw-day-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .45; }
+}
+
+/* Fully booked — deep inside an occupied stretch (neighbors on both sides also occupied) */
+.abw-day-booked {
+    color: #c15a4d;
+    background: #fbe7e3;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.abw-day-strike {
+    position: absolute;
+    left: 22%;
+    right: 22%;
+    top: 50%;
+    height: 1px;
+    background: #d99b90;
+    transform: rotate(-12deg);
+}
+
+/* Half-booked — occupied day whose previous day is available, so it's a valid checkout target.
+   Can be genuinely clickable (once a start is selected), so no fixed cursor here —
+   it follows the button's actual disabled state. */
+.abw-day-booked-bottom {
+    position: relative;
+}
+
+.abw-day-booked-bottom::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #fbe7e3;
+    border-radius: 8px;
+    pointer-events: none;
+    clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+}
+
+.abw-day-booked-bottom .abw-day-num {
+    position: relative;
+    z-index: 1;
+}
+
+/* Selection */
+.abw-day-inrange {
+    background: #f4eee7;
+    border-radius: 0;
+}
+
+.abw-day-start,
+.abw-day-end {
+    background: #945F28;
+    color: #fff;
+    border-color: #945F28;
+}
+
+/* ---- Load more ---- */
+.abw-loadmore {
+    margin-top: .75rem;
+    width: 100%;
+    padding: .6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.abw-loadmore:disabled {
+    opacity: .5;
+    cursor: default;
+}

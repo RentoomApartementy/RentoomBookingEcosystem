@@ -109,7 +109,15 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         public UpsellTextConfig UpsellTexts { get; set; } = new();
 
         protected bool _isModalOpen = false;
-        protected bool _isSearchModalOpen = false;
+        protected decimal? _calendarFromPrice;
+
+        protected string? _pendingStartDate;
+        protected string? _pendingEndDate;
+        protected string? _pendingAdults;
+        protected string? _pendingChildren;
+        protected PricingOffersResponse? _pendingOffersResponse;
+        protected bool _pendingOfferLoading;
+        protected string? _pendingSelectedOfferType;
 
         protected const int SmartScrollOffsetPx = 150;
         protected bool _isAtSummary = false;
@@ -145,14 +153,139 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             _isMobileExpanded = !_isMobileExpanded;
         }
 
-        protected void OpenSearchModal()
+        protected Task OnCalendarFromPriceChanged(decimal? price)
         {
-            _isSearchModalOpen = true;
+            _calendarFromPrice = price;
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
-        protected void CloseSearchModal()
+        protected async Task ScrollToBookingPanel()
         {
-            _isSearchModalOpen = false;
+            _scrollModule ??= await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+            await _scrollModule.InvokeVoidAsync("scrollToElement", "booking-panel", SmartScrollOffsetPx);
+        }
+
+        protected async Task OnCalendarRangeSelected(Dictionary<string, string>? query)
+        {
+            if (query is null)
+            {
+                _pendingStartDate = null;
+                _pendingEndDate = null;
+                _pendingAdults = null;
+                _pendingChildren = null;
+                _pendingOffersResponse = null;
+                _pendingSelectedOfferType = null;
+
+                // Clearing the calendar selection (v18's "×" button) always drops the full
+                // selector back to its no-offer placeholder state — regardless of whether the
+                // page originally loaded with dates in the URL. URL itself is never touched.
+                StartDate = null;
+                EndDate = null;
+                Adults = null;
+                Children = null;
+                _offersResponse = null;
+                _selectedOfferType = null;
+                RefreshAddonsParams();
+                UpdateReservationPricingContext();
+
+                StateHasChanged();
+                return;
+            }
+
+            query.TryGetValue("startDate", out _pendingStartDate);
+            query.TryGetValue("endDate", out _pendingEndDate);
+            query.TryGetValue("adults", out _pendingAdults);
+            query.TryGetValue("children", out _pendingChildren);
+
+            // Mirror the calendar selection onto the page's own date/guest state — the same
+            // fields CurrentRequest/GetOffer() and the full ApartmentOfferSelector already use.
+            // Deliberately no NavigateTo here: this app's custom router remounts the whole page
+            // (refetching the apartment) on any location change, which would look like a reload.
+            StartDate = _pendingStartDate;
+            EndDate = _pendingEndDate;
+            Adults = _pendingAdults;
+            Children = _pendingChildren;
+
+            // The Summary section's addon selector needs a fresh ReservationPricingContext
+            // (nights/guests) to render without throwing, since it prices addons off it.
+            RefreshAddonsParams();
+            UpdateReservationPricingContext();
+
+            _pendingOfferLoading = true;
+            StateHasChanged();
+            try
+            {
+                await GetOffer();
+                _pendingOffersResponse = _offersResponse;
+                _pendingSelectedOfferType = _selectedOfferType;
+            }
+            finally
+            {
+                _pendingOfferLoading = false;
+                StateHasChanged();
+            }
+        }
+
+        private async Task ScrollToOffersSection()
+        {
+            _scrollModule ??= await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+            await _scrollModule.InvokeVoidAsync("scrollToElement", "offers-section", SmartScrollOffsetPx);
+        }
+
+        protected string GetPendingStaySummaryText()
+        {
+            if (!TryParseDate(_pendingStartDate, out var start) || !TryParseDate(_pendingEndDate, out var end))
+            {
+                return string.Empty;
+            }
+
+            var nights = Math.Max(1, end.DayNumber - start.DayNumber);
+            var guests = (int.TryParse(_pendingAdults, out var a) ? a : 1) + (int.TryParse(_pendingChildren, out var c) ? c : 0);
+
+            string nightsKey = nights switch
+            {
+                1 => "StayNight_1",
+                var n when n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) => "StayNight_234",
+                _ => "StayNight_Many"
+            };
+            string personsKey = guests switch
+            {
+                1 => "StayPerson_1",
+                var g when g % 10 >= 2 && g % 10 <= 4 && (g % 100 < 10 || g % 100 >= 20) => "StayPerson_234",
+                _ => "StayPerson_Many"
+            };
+
+            return $"{nights} {Localizer[nightsKey]} / {guests} {Localizer[personsKey]}";
+        }
+
+        protected string GetPendingRefundableOfferText()
+        {
+            if (!TryParseDate(_pendingStartDate, out var startDate))
+            {
+                return Localizer["RefundableOfferTextFallback"];
+            }
+
+            var freeCancellationDeadline = startDate.AddDays(-14);
+            return Localizer["RefundableOfferText", freeCancellationDeadline.ToString("dd.MM.yyyy", CultureInfo.CurrentUICulture)];
+        }
+
+        protected async Task ConfirmPendingBooking(string? offerType)
+        {
+            if (_pendingStartDate is null || _pendingEndDate is null)
+            {
+                return;
+            }
+
+            // StartDate/EndDate/_offersResponse are already synced from the calendar selection
+            // (OnCalendarRangeSelected) — clicking "Zarezerwuj" in the mini selector doesn't
+            // navigate anywhere; it just highlights this offer in the full selector below and
+            // scrolls to it. No new fetch, no NavigateTo (which would remount the whole page).
+            _selectedOfferType = offerType ?? _pendingSelectedOfferType;
+            _pendingSelectedOfferType = _selectedOfferType;
+            StateHasChanged();
+
+            await ScrollToOffersSection();
         }
 
         protected decimal TotalAddonsPrice
@@ -699,6 +832,19 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             }
 
             await GetOffer();
+
+            // Route ma już daty/gości — pokaż od razu ten sam wynik w kompaktowym panelu pod kalendarzem,
+            // bez drugiego zapytania do API (te same parametry co CurrentRequest powyżej).
+            if (HasRouteDates)
+            {
+                _pendingStartDate = StartDate;
+                _pendingEndDate = EndDate;
+                _pendingAdults = Adults;
+                _pendingChildren = Children;
+                _pendingOffersResponse = _offersResponse;
+                _pendingSelectedOfferType = _selectedOfferType;
+            }
+
             await RecalculateActiveBonusPreviewAsync();
 
             UpsellTexts = new UpsellTextConfig()
@@ -1142,32 +1288,6 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             NumberOfAdults = int.TryParse(Adults, out var a) ? a : null,
             NumberOfBigChildren = int.TryParse(Children, out var c) ? c : null
         };
-
-        protected async Task HandleSearch(Dictionary<string, string> query, bool updateUrl = true)
-        {
-            _isOfferLoading = true;
-            StateHasChanged();
-
-            query.TryGetValue("startDate", out var startDate);
-            query.TryGetValue("endDate", out var endDate);
-            query.TryGetValue("adults", out var adults);
-            query.TryGetValue("children", out var children);
-
-            StartDate = startDate;
-            EndDate = endDate;
-            Adults = adults;
-            Children = children;
-
-            RefreshAddonsParams();
-            UpdateReservationPricingContext();
-
-            if (_apartment != null)
-            {
-                var url = BuildApartmentUrl(_reservationTokenGuid);
-                Navigation.NavigateTo(url, forceLoad: false);
-                await GetOffer();
-            }
-        }
 
         protected async Task GoToSuggestionDates(AvailableTerm? selectedTerm = null)
         {
