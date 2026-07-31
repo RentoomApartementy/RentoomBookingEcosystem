@@ -17,35 +17,29 @@
         {
             @if (nonRefundableOffer != null)
             {
-                <div class="mini-offer @(IsSelectedOffer("nonrefundable") ? "selected-offer" : "")">
-                    <div class="mini-offer-header">
-                        <span>@Localizer["Non-refundableOffer"]</span>
-                        <span class="mini-offer-stay">@StaySummaryText</span>
-                    </div>
-                    <div class="mini-offer-desc">@Localizer["NonRefundableText"]</div>
-                    <div class="mini-offer-footer">
-                        <span class="mini-offer-price"><PriceDisplay AmountPln="@nonRefundableOffer.Price" /></span>
-                        <div @onclick="@(() => OnBookNow.InvokeAsync("nonrefundable"))" @onclick:stopPropagation="true">
-                            <Button Type="@(IsSelectedOffer("nonrefundable") ? ButtonType.Tertiary : ButtonType.Primary)" Class="mini-offer-book-btn">@GetOfferButtonLabel("nonrefundable")</Button>
-                        </div>
-                    </div>
-                </div>
+                <MiniOfferCard
+                    OfferTypeKey="nonrefundable"
+                    TitleText="@Localizer["Non-refundableOffer"]"
+                    DescriptionText="@Localizer["NonRefundableText"]"
+                    Price="@nonRefundableOffer.Price"
+                    StaySummaryText="@StaySummaryText"
+                    SelectedOfferType="@SelectedOfferType"
+                    HasActiveReservation="HasActiveReservation"
+                    Localizer="Localizer"
+                    OnBookNow="OnBookNow" />
             }
             @if (refundableOffer != null)
             {
-                <div class="mini-offer @(IsSelectedOffer("refundable") ? "selected-offer" : "")">
-                    <div class="mini-offer-header">
-                        <span>@Localizer["RefundableOffer"]</span>
-                        <span class="mini-offer-stay">@StaySummaryText</span>
-                    </div>
-                    <div class="mini-offer-desc">@RefundableOfferText</div>
-                    <div class="mini-offer-footer">
-                        <span class="mini-offer-price"><PriceDisplay AmountPln="@refundableOffer.Price" /></span>
-                        <div @onclick="@(() => OnBookNow.InvokeAsync("refundable"))" @onclick:stopPropagation="true">
-                            <Button Type="@(nonRefundableOffer != null ? (IsSelectedOffer("refundable") ? ButtonType.Tertiary : ButtonType.Primary) : ButtonType.Primary)" Class="mini-offer-book-btn">@GetOfferButtonLabel("refundable")</Button>
-                        </div>
-                    </div>
-                </div>
+                <MiniOfferCard
+                    OfferTypeKey="refundable"
+                    TitleText="@Localizer["RefundableOffer"]"
+                    DescriptionText="@RefundableOfferText"
+                    Price="@refundableOffer.Price"
+                    StaySummaryText="@StaySummaryText"
+                    SelectedOfferType="@SelectedOfferType"
+                    HasActiveReservation="HasActiveReservation"
+                    Localizer="Localizer"
+                    OnBookNow="OnBookNow" />
             }
         }
         else
@@ -65,10 +59,4 @@
     [Parameter] public bool HasActiveReservation { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
     [Parameter] public EventCallback<string> OnBookNow { get; set; }
-
-    private bool IsSelectedOffer(string offerType) =>
-        string.Equals(SelectedOfferType, offerType, StringComparison.OrdinalIgnoreCase);
-
-    private string GetOfferButtonLabel(string offerType) =>
-        HasActiveReservation && IsSelectedOffer(offerType) ? Localizer["ContinueReservation"] : Localizer["BookNow"];
 }

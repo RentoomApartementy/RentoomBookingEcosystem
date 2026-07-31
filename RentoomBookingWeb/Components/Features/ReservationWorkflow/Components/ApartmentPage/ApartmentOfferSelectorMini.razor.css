@@ -6,82 +6,23 @@
     margin-top: .75rem;
 }
 
-.mini-offer {
-    display: flex;
-    flex-direction: column;
-    gap: .2rem;
-    padding: .55rem .75rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background: #fff;
-    box-sizing: border-box;
-}
-
-.mini-offer.selected-offer {
-    border: #0c4128 2px solid;
-}
-
-.mini-offer-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: .5rem;
-    font-size: .78rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.mini-offer-stay {
-    font-weight: normal;
-    color: #888;
-    font-size: .72rem;
-    white-space: nowrap;
-}
-
-.mini-offer-desc {
-    font-size: .7rem;
-    color: #888;
-}
-
-.mini-offer-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .5rem;
-    margin-top: .2rem;
-}
-
-.mini-offer-price {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #1F5A41;
-}
-
-.mini-offer-book-btn {
-    height: 30px !important;
-    padding: 0 14px !important;
-    font-size: 12px !important;
-    min-width: 0 !important;
-    white-space: nowrap;
-}
-
 .mini-offer-wrapper-horizontal {
     flex-direction: row;
     align-items: stretch;
 }
 
-.mini-offer-wrapper-horizontal .mini-offer {
+.mini-offer-wrapper-horizontal ::deep .mini-offer {
     flex: 1;
     min-width: 0;
 }
 
-.mini-offer-wrapper-horizontal .mini-offer-footer {
+.mini-offer-wrapper-horizontal ::deep .mini-offer-footer {
     flex-direction: column;
     align-items: stretch;
     gap: .35rem;
 }
 
-.mini-offer-wrapper-horizontal .mini-offer-book-btn {
+.mini-offer-wrapper-horizontal ::deep .mini-offer-book-btn {
     width: 100%;
 }
 
