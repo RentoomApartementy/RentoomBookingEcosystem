@@ -225,6 +225,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 _pendingOfferLoading = false;
                 StateHasChanged();
             }
+
+            await ScrollPendingOfferAboveStickyBar();
+        }
+
+        private async Task ScrollPendingOfferAboveStickyBar()
+        {
+            _scrollModule ??= await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
+            await _scrollModule.InvokeVoidAsync("scrollElementAboveBar", "pending-offer-panel", "apartment-sticky-summary");
         }
 
         private async Task ScrollToOffersSection()

@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Hlavná fotografia apartmánu {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Hostia</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Dospelí</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Deti</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Od {0} / noc</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Zrušiť výber</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Zobraziť viac</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Maximálna obsadenosť je {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimálny pobyt je {0} nocí</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Vyberte dátum príchodu</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Vyberte dátum odchodu</value>
+  </data>
 </root>

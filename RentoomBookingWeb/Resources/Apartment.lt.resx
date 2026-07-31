@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Pagrindinė buto {0} nuotrauka</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Svečiai</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Suaugusieji</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Vaikai</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Nuo {0} / naktis</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Išvalyti pasirinkimą</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Rodyti daugiau</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Didžiausias svečių skaičius yra {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimali viešnagė yra {0} naktys</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Pasirinkite atvykimo datą</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Pasirinkite išvykimo datą</value>
+  </data>
 </root>

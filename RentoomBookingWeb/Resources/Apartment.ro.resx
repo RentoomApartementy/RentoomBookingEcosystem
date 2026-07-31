@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Fotografia principală a apartamentului {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Oaspeți</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Adulți</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Copii</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>De la {0} / noapte</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Șterge selecția</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Afișează mai multe</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Ocuparea maximă este {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Sejurul minim este de {0} nopți</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Selectați data sosirii</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Selectați data plecării</value>
+  </data>
 </root>

@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Hovedbillede af lejligheden {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Gæster</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Voksne</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Børn</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Fra {0} / nat</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Ryd valg</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Vis mere</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Maksimalt antal gæster er {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimumsophold er {0} nætter</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Vælg indtjekningsdato</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Vælg udtjekningsdato</value>
+  </data>
 </root>

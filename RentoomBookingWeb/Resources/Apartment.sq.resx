@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Foto kryesore e apartamentit {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Mysafirë</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Të rritur</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Fëmijë</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Nga {0} / natë</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Pastro përzgjedhjen</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Shfaq më shumë</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Numri maksimal i mysafirëve është {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Qëndrimi minimal është {0} netë</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Zgjidhni datën e mbërritjes</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Zgjidhni datën e nisjes</value>
+  </data>
 </root>

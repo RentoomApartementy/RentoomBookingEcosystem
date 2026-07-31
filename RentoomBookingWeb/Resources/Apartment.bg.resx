@@ -474,4 +474,34 @@
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
     <value>Основна снимка на апартамент {0}</value>
   </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Гости</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Възрастни</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Деца</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>От {0} / нощ</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Изчисти избора</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Покажи повече</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Максимален брой гости: {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Минимален престой: {0} нощувки</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Изберете дата на настаняване</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Изберете дата на напускане</value>
+  </data>
 </root>
