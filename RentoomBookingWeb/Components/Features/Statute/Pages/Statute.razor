@@ -5,27 +5,32 @@
 @using Microsoft.Extensions.Localization
 @inject CustomerTermsService TermsService
 @inject NavigationManager NavManager
-@inject IStringLocalizer<Statute> Localizer
+@inject IStringLocalizer<RentoomBookingWeb.StatutePage> Localizer
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
 
-<PageTitle>@Localizer["PageTitle"]</PageTitle>
+<PageTitle>@PageTitleText</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="@CanonicalUrl" />
     <meta name="description" content="@SeoDescription" />
+    @if (SeoKeywords is not null)
+    {
+        <meta name="keywords" content="@SeoKeywords" />
+    }
 
     <meta property="og:title" content="@CurrentBreadcrumbName" />
     <meta property="og:description" content="@SeoDescription" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@CanonicalUrl" />
+    <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-statute.jpg")" />
 
     <BreadcrumbJsonLd CurrentPageName="@CurrentBreadcrumbName" CurrentPagePath="@CurrentBreadcrumbPath" />
     <SeoHreflangs />
 </HeadContent>
 
 <main class="statute-container">
-    <HeaderSection ImagePath="/assets/images/header-bg-statute.jpg" Title="@Localizer["StatuteHeader"]" Height="230px" />
+    <HeaderSection ImagePath="/assets/images/header-bg-statute.jpg" Title="@HeroTitle" Height="230px" />
     
     <div class="main-wrapper">
         @if (_isLoading)
@@ -35,7 +40,11 @@
         else if (_currentTerm != null)
         {
             <div class="statute-content">
-                <h2>@(_currentTerm.Title ?? _currentTerm.Description)</h2>
+                @if (!IsDetailPage)
+                {
+                    @* Na stronie szczegółowej tytuł regulaminu jest już nagłówkiem H1, więc go tu nie powtarzamy. *@
+                    <h2>@(_currentTerm.Title ?? _currentTerm.Description)</h2>
+                }
                 <RegulationViewer Content="@_currentTerm.HtmlContent" />
             </div>
 
@@ -61,15 +70,65 @@
     private bool _isLoading = true;
     private CancellationTokenSource _cts = new();
 
-    private string CurrentBreadcrumbName => _currentTerm?.Title ?? _currentTerm?.Description ?? Localizer["StatuteHeader"];
+    // Bez Id strona jest listą regulaminów — _currentTerm jest wtedy tylko domyślnie
+    // załadowanym regulaminem "Main", więc o stronie szczegółowej decyduje Id, nie _currentTerm.
+    private bool IsDetailPage => Id.HasValue && _currentTerm is not null;
+    private string? TermTitle => _currentTerm?.Title ?? _currentTerm?.Description;
+
+    // Zwraca null zamiast pustej wartości/nazwy klucza, gdy tłumaczenie jeszcze nie istnieje
+    // w danym języku (nowe klucze trafiają do pozostałych kultur dopiero po uruchomieniu
+    // RentoomBooking.ResxTranslator). Dzięki temu strona nie renderuje pustych metadanych.
+    private string? LocalizedOrNull(string key)
+    {
+        var value = Localizer[key];
+        return value.ResourceNotFound || string.IsNullOrWhiteSpace(value.Value) ? null : value.Value;
+    }
+
+    private string HeroTitle => IsDetailPage && !string.IsNullOrWhiteSpace(TermTitle)
+        ? TermTitle!
+        : Localizer["StatuteHeader"];
+
+    private string PageTitleText
+    {
+        get
+        {
+            if (!IsDetailPage || string.IsNullOrWhiteSpace(TermTitle))
+            {
+                return Localizer["PageTitle"];
+            }
+
+            var format = LocalizedOrNull("PageTitleFormat");
+            // Brak przetłumaczonego formatu — zostajemy przy ogólnym tytule strony.
+            return format is not null ? string.Format(format, TermTitle) : Localizer["PageTitle"];
+        }
+    }
+
+    private string CurrentBreadcrumbName => IsDetailPage && !string.IsNullOrWhiteSpace(TermTitle)
+        ? TermTitle!
+        : Localizer["StatuteHeader"];
     private string CurrentBreadcrumbPath => Id.HasValue
         ? $"{RouteService.GetLocalizedUrl("Statute")}/{Id}{(string.IsNullOrWhiteSpace(Slug) ? string.Empty : $"/{Slug}")}"
         : RouteService.GetLocalizedUrl("Statute");
 
     private string CanonicalUrl => $"{NavManager.BaseUri.TrimEnd('/')}{CurrentBreadcrumbPath}";
-    private string SeoDescription => !string.IsNullOrWhiteSpace(_currentTerm?.Description) 
-        ? _currentTerm.Description 
-        : (!string.IsNullOrWhiteSpace(_currentTerm?.Title) ? _currentTerm.Title : Localizer["StatuteHeader"].Value);
+
+    private string SeoDescription
+    {
+        get
+        {
+            if (IsDetailPage)
+            {
+                if (!string.IsNullOrWhiteSpace(_currentTerm?.Description)) return _currentTerm.Description;
+                if (!string.IsNullOrWhiteSpace(_currentTerm?.Title)) return _currentTerm.Title;
+            }
+
+            return LocalizedOrNull("MetaDescription")
+                ?? (!string.IsNullOrWhiteSpace(_currentTerm?.Description) ? _currentTerm.Description : null)
+                ?? Localizer["StatuteHeader"].Value;
+        }
+    }
+
+    private string? SeoKeywords => LocalizedOrNull("MetaKeywords");
 
 
     protected override async Task OnParametersSetAsync()
