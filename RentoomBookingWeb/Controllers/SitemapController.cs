@@ -74,9 +74,10 @@ namespace RentoomBookingWeb.Controllers
                 ? await _blogContentReader.GetAllPublishedPostsAsync(currentCulture)
                 : Array.Empty<BlogPostListItem>();
 
+            // "Statute" celowo pominięty — strony regulaminów mają noindex, nofollow,
+            // więc nie zgłaszamy ich w sitemapie (sprzeczny sygnał dla robotów).
             var staticPageKeys = new List<string>
             {
-                "Statute",
                 "Cooperation",
                 "Contact",
                 "AboutCity",
