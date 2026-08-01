@@ -141,6 +141,24 @@
   <data name="IsInvoiceText" xml:space="preserve">
     <value />
   </data>
+  <data name="StepperStep1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StepperStep2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StepperStep3" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StepperStep4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StepperAriaLabel" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StepperCompletedAriaLabel" xml:space="preserve">
+    <value />
+  </data>
   <data name="IsSaveInfoText" xml:space="preserve">
     <value />
   </data>

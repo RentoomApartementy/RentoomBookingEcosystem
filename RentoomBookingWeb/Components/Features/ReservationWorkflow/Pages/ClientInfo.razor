@@ -29,6 +29,9 @@
 <PageTitle>@Localizer["ClientInfoPageTitle"]</PageTitle>
 
 <div class="payment-container">
+    <div class="reservation-progress-band">
+        <ReservationStepper CurrentStep="2" Localizer="Localizer" />
+    </div>
     <div class="payment-wrapper">
         <div  class="client-form-section">
             <EditForm id="client-form" EditContext="_editContext" OnValidSubmit="SaveAsync">

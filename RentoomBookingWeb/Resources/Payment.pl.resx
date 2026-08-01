@@ -141,6 +141,24 @@
   <data name="IsInvoiceText" xml:space="preserve">
     <value>Chcę otrzymać fakturę</value>
   </data>
+  <data name="StepperStep1" xml:space="preserve">
+    <value>Wybór oferty</value>
+  </data>
+  <data name="StepperStep2" xml:space="preserve">
+    <value>Dane klienta</value>
+  </data>
+  <data name="StepperStep3" xml:space="preserve">
+    <value>Podsumowanie</value>
+  </data>
+  <data name="StepperStep4" xml:space="preserve">
+    <value>Płatność</value>
+  </data>
+  <data name="StepperAriaLabel" xml:space="preserve">
+    <value>Etapy rezerwacji</value>
+  </data>
+  <data name="StepperCompletedAriaLabel" xml:space="preserve">
+    <value>Etap ukończony</value>
+  </data>
   <data name="IsSaveInfoText" xml:space="preserve">
     <value>Zapisz moje informacje na wypadek przyszłych transakcji</value>
   </data>

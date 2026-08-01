@@ -25,6 +25,14 @@
 
 <PageTitle>@Localizer["SummaryPageTitle"]</PageTitle>
 <div class="summary-container">
+    @if (!_loading && _summary is not null)
+    {
+        <div class="reservation-progress-band">
+            <ReservationStepper CurrentStep="CurrentStep"
+                                IsCurrentStepCompleted="IsPaid"
+                                Localizer="Localizer" />
+        </div>
+    }
     <AppError Message=@_error
               Title="@Localizer["SomethingWrong"]"
               Dismissible="false" />
@@ -425,6 +433,7 @@
     private bool ShouldShowRetryPaymentButton => IsPaymentInitiated || IsPaymentFailed;
     private bool IsRetryPaymentDisabled => _retryCountdownSeconds > 0;
     private bool ShouldShowCancelAction => true;// _enableCancelAction && ShouldShowTermsAndPayment && !IsPaid;
+    private int CurrentStep => (IsPaid || IsPaymentInitiated || IsPaymentFailed) ? 4 : 3;
     private bool ShouldShowTermsAndPayment => 
                                                  (  ( (
                                                       string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)

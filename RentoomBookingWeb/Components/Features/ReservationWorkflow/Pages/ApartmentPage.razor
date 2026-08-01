@@ -63,8 +63,10 @@
             Height="230px"
             IsShadow="true"
             HeadingLevel="1"
-        />   
-        
+        />
+
+        <ReservationStepper CurrentStep="@(StartDate != null && EndDate != null ? 1 : 0)" Localizer="StepperLocalizer" />
+
         <div class="main-wrapper">
             <div class="area-hero">
                 <ApartmentHero
