@@ -24,6 +24,7 @@ else if (ViewModel.Items.Count > 0)
                                Offer="@ViewModel.GetPricingOfferByObjectId(apartment.Id)"
                                OfferLength="@ViewModel.GetOfferLengthDays()"
                                ShowPrice="true"
+                               ApplyMandatoryAddonFeeToPrice="false"
                                SuggestionState="@(ShowSuggestions ? ViewModel.GetSuggestionStatusByObjectId(apartment.Id) : SuggestionStatus.NotStarted)"
                                SuggestionDates="@(ShowSuggestions ? ViewModel.GetSuggestionsByObjectId(apartment.Id) : null)"
                                ShowSuggestionPrice="true"

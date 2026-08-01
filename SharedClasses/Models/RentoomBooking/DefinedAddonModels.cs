@@ -29,4 +29,8 @@ namespace RentoomBooking.SharedClasses.Models.RentoomBooking
         public string PaymentTypeShortDescription { get; set; } = string.Empty;
     }
 
+    /// <summary>A mandatory (non-optional) addon's catalog price/payment model for an apartment,
+    /// resolved from DefinedAddonEntity - used to compute the flat fee baked into suggested "from" prices.</summary>
+    public readonly record struct MandatoryAddonCharge(AddonPaymentType PaymentType, decimal PriceGross);
+
 }
