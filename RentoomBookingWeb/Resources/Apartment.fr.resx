@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -469,13 +469,13 @@
     <value>Erreur 404</value>
   </data>
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
-    <value>photo</value>
+    <value>Photo</value>
   </data>
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
-    <value>Photo principale de l&apos;appartement {0}</value>
+    <value>Photo principale de l’appartement {0}</value>
   </data>
   <data name="CalendarGuestsTitle" xml:space="preserve">
-    <value>Voyageurs</value>
+    <value>Invités</value>
   </data>
   <data name="CalendarAdults" xml:space="preserve">
     <value>Adultes</value>
@@ -484,24 +484,48 @@
     <value>Enfants</value>
   </data>
   <data name="CalendarFromPerNight" xml:space="preserve">
-    <value>À partir de {0} / nuit</value>
+    <value>Depuis {0} / nuit</value>
   </data>
   <data name="CalendarClearSelection" xml:space="preserve">
-    <value>Effacer la sélection</value>
+    <value>Sélection claire</value>
   </data>
   <data name="CalendarLoadMore" xml:space="preserve">
     <value>Afficher plus</value>
   </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
-    <value>L'occupation maximale est de {0}</value>
+    <value>Le nombre maximal d’invités est {0}</value>
   </data>
   <data name="CalendarMinStayNotice" xml:space="preserve">
-    <value>Le séjour minimum est de {0} nuits</value>
+    <value>Le séjour minimum est {0} nuit</value>
   </data>
   <data name="CalendarSelectCheckIn" xml:space="preserve">
-    <value>Sélectionnez la date d'arrivée</value>
+    <value>Sélectionnez votre date d’arrivée</value>
   </data>
   <data name="CalendarSelectCheckOut" xml:space="preserve">
-    <value>Sélectionnez la date de départ</value>
+    <value>Choisissez votre date de départ</value>
+  </data>
+  <data name="BookingPanelTitle" xml:space="preserve">
+    <value>Réservez directement</value>
+  </data>
+  <data name="BookingPanelSubtitle" xml:space="preserve">
+    <value>Réservation directe - pas de commissions par le portail</value>
+  </data>
+  <data name="ShowMapLabel" xml:space="preserve">
+    <value>Voir l’emplacement sur la carte</value>
+  </data>
+  <data name="NearbyAttractions_Title" xml:space="preserve">
+    <value>Environnement des objets</value>
+  </data>
+  <data name="NearbyAttractions_Subtitle" xml:space="preserve">
+    <value>Emplacement excellent</value>
+  </data>
+  <data name="NearbyAttractions_WalkTime" xml:space="preserve">
+    <value>~{0} min</value>
+  </data>
+  <data name="NearbyAttractions_DistanceMeters" xml:space="preserve">
+    <value>{0} m</value>
+  </data>
+  <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
+    <value>{0} km</value>
   </data>
 </root>
