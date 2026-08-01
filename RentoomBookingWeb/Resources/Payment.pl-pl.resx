@@ -196,7 +196,7 @@
     <value>Sprawdź email i kontynuuj w StayWell</value>
   </data>
   <data name="ReservationPending" xml:space="preserve">
-    <value>W trakcie płatności</value>
+    <value>Rozpocznij płatność</value>
   </data>
   <data name="ReservationPendingInfo" xml:space="preserve">
     <value>Twoja rezerwacja została potwierdzona, ale nie została jeszcze opłacona</value>

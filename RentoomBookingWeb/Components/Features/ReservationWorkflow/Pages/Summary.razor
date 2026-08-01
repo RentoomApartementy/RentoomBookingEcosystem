@@ -324,7 +324,16 @@
                         DiscountAmount="@(_summary?.DiscountAmountPln ?? 0m)"
                         Localizer="Localizer" />
                 }
-                
+
+                @if (!IsPaid && !IsPaymentInitiated && _summary?.StartRequest is not null)
+                {
+                    <ReservationAddonsUpsellEditor
+                        ReservationTokenGuid="ReservationTokenGuid"
+                        StartRequest="_summary.StartRequest"
+                        Apartment="_apartment"
+                        OnUpdated="RefreshSummaryAndChecksAsync" />
+                }
+
                 <div class="guest-info">
                     <div class="box-text">
                         <GoogleIcon Name="person" Class="box-text-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
@@ -658,6 +667,13 @@
                 ["PaymentStatus"] = _summary?.PaymentStatus
             });
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
+    }
+
+    private async Task RefreshSummaryAndChecksAsync()
+    {
+        await RefreshSummaryAsync();
+        await EnsureWorkflowChecksAsync();
+        StateHasChanged();
     }
 
     private async Task EnsureWorkflowChecksAsync()
