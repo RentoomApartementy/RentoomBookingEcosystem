@@ -4,7 +4,8 @@
 
 @* Public renderer for the blog "ApartmentsListing" block.
    Uses the same IApartmentsViewModel as the home ApartmentsSection, so pricing (dated offer,
-   public offer fallback, suggested-term pricing) behaves identically in both places. *@
+   suggested-term pricing) behaves identically in both places. The broken IdoBooking public/offer
+   price is never fetched or shown here by design. *@
 
 @if (!_hasLoadedOnce)
 {
@@ -19,8 +20,8 @@ else if (ViewModel.Items.Count > 0)
             <CardTemplate Context="apartment">
                 <div @key="@($"blog-apartment-{apartment.Id}")">
                     <Apartment Item="@apartment"
-                               Offer="@(EnforcePublicOffer ? null : ViewModel.GetPricingOfferByObjectId(apartment.Id))"
-                               PublicOffer="@(ShowPublicOffer ? ViewModel.GetPublicOfferByObjectId(apartment.Id) : null)"
+                               HeadingTag="p"
+                               Offer="@ViewModel.GetPricingOfferByObjectId(apartment.Id)"
                                OfferLength="@ViewModel.GetOfferLengthDays()"
                                ShowPrice="true"
                                SuggestionState="@(ShowSuggestions ? ViewModel.GetSuggestionStatusByObjectId(apartment.Id) : SuggestionStatus.NotStarted)"
