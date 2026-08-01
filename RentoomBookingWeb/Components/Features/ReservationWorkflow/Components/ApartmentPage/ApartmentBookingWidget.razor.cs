@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using RentoomBooking.SharedClasses.Services;
 using RentoomBookingWeb.Services;
 
 namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
@@ -23,8 +25,12 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
         [Parameter] public EventCallback<decimal?> FromPriceChanged { get; set; }
         [Parameter] public EventCallback<Dictionary<string, string>?> OnRangeSelected { get; set; }
+        // Whether the "from" price is adjusted by the apartment's mandatory-addons flat fee (see
+        // ApartmentCalendarService.GetNearestSuggestedPriceAsync). When false, shown as a plain average.
+        [Parameter] public bool ApplyMandatoryAddonsFee { get; set; } = true;
 
         [Inject] public IApartmentCalendarService CalendarService { get; set; } = default!;
+        [Inject] public IApartmentsService ApartmentsService { get; set; } = default!;
         [Inject] public IJSRuntime JS { get; set; } = default!;
 
         private const int InitialMonths = 3;
@@ -42,6 +48,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         private ApartmentCalendarDto? _calendar;
         private bool _loading;
+        private IReadOnlyList<MandatoryAddonCharge> _mandatoryAddonCharges = Array.Empty<MandatoryAddonCharge>();
+        private int? _mandatoryAddonChargesApartmentId;
         private string? _occupancyNotice;
         private string? _dateNotice;
 
@@ -60,7 +68,24 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             ParseGuests();
             ParseIncomingRange();
 
+            await EnsureMandatoryAddonChargesLoadedAsync();
             await LoadCalendarAsync();
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            await EnsureMandatoryAddonChargesLoadedAsync();
+        }
+
+        private async Task EnsureMandatoryAddonChargesLoadedAsync()
+        {
+            if (Apartment is null || _mandatoryAddonChargesApartmentId == Apartment.Id)
+            {
+                return;
+            }
+
+            _mandatoryAddonChargesApartmentId = Apartment.Id;
+            _mandatoryAddonCharges = await ApartmentsService.GetMandatoryAddonChargesAsync(Apartment);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -123,7 +148,9 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                     _today,
                     LastVisibleDay(),
                     _adults,
-                    _children);
+                    _children,
+                    applyMandatoryAddonsFee: ApplyMandatoryAddonsFee,
+                    mandatoryAddonCharges: _mandatoryAddonCharges);
 
                 RevalidateSelection();
                 await FromPriceChanged.InvokeAsync(_calendar?.FromPriceGross);

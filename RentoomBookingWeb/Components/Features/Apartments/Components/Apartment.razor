@@ -18,6 +18,7 @@
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @inject GoogleAnalyticsService GoogleAnalytics
 @inject ILogger<Apartment> Logger
+@inject RentoomBooking.SharedClasses.Services.IApartmentsService ApartmentsService
 @implements IAsyncDisposable
 
 <article id="@($"{Item?.Name}-{Item?.Id}")" class="apartment-card" 
@@ -231,11 +232,7 @@
                     else
                     {
                         <div class="price-wrapper">
-                            @{
-                                var suggestionTerm = GetClosestSuggestionTerm();
-                                var suggestionFromPrice = suggestionTerm is not null ? GetSuggestionFromPrice(suggestionTerm) : null;
-                            }
-                            @if (ShowSuggestionPrice && suggestionFromPrice is decimal fromPrice)
+                            @if (ShowSuggestionPrice && _suggestionFromPrice is decimal fromPrice)
                             {
                                 <span class="price">@ApartmentLocalizer["From"] <PriceDisplay AmountPln="@fromPrice" /></span>
                             }
@@ -335,6 +332,9 @@
     [Parameter] public IReadOnlyList<AvailableTerm>? SuggestionDates { get; set; } = null;
     [Parameter] public bool ShowSuggestionPrice { get; set; } = false;
     [Parameter] public AvailableTerm? SuggestedNavigationTerm { get; set; } = null;
+    // Whether the suggested "from" price is adjusted by the apartment's mandatory-addons flat fee
+    // (see UpdateSuggestionFromPriceAsync). When false, the price is shown as a plain total/nights average.
+    [Parameter] public bool ApplyMandatoryAddonFeeToPrice { get; set; } = true;
 
     [Parameter] public string? Width { get; set; } = null;
     [Parameter] public string ListingSource { get; set; } = "apartments-list";
@@ -358,9 +358,9 @@
         }
     </text>;
 
-    // Tymczasowa opłata odejmowana od sugerowanej ceny przed podziałem na liczbę dni. TODO: wydzielić do konfiguracji.
-    private const decimal SuggestionFlatFee = 139m;
-    
+    private decimal? _suggestionFromPrice;
+    private string? _suggestionFromPriceSignature;
+
     private IJSObjectReference? _jsModule;
     private IJSObjectReference? _sliderModule;
     private DotNetObjectReference<Apartment>? _objRef;
@@ -390,7 +390,12 @@
             TryLoadMediaFromCache();
         }
     }
-    
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await UpdateSuggestionFromPriceAsync();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (Item != null && _objRef == null)
@@ -602,15 +607,71 @@
         return SuggestionDates?.FirstOrDefault(term => term.MinimalPrice.HasValue);
     }
 
-    private decimal? GetSuggestionFromPrice(AvailableTerm term)
+    private async Task UpdateSuggestionFromPriceAsync()
     {
-        if (!term.MinimalPrice.HasValue) return null;
+        var term = GetClosestSuggestionTerm();
+        if (term is null || !term.MinimalPrice.HasValue)
+        {
+            _suggestionFromPrice = null;
+            _suggestionFromPriceSignature = null;
+            return;
+        }
 
         var nights = GetTermNights(term);
-        if (nights <= 0) return null;
+        if (nights <= 0)
+        {
+            _suggestionFromPrice = null;
+            _suggestionFromPriceSignature = null;
+            return;
+        }
 
-        var fromPrice = ((term.MinimalPrice.Value - SuggestionFlatFee) / nights) + SuggestionFlatFee;
-        return fromPrice > 0 ? fromPrice : null;
+        var signature = $"{Item?.Id}:{term.StartDate}:{term.EndDate}:{term.MinimalPrice}:{ApplyMandatoryAddonFeeToPrice}:{Adults}:{Children}";
+        if (signature == _suggestionFromPriceSignature)
+        {
+            return;
+        }
+        _suggestionFromPriceSignature = signature;
+
+        var fee = 0m;
+        if (Item != null)
+        {
+            try
+            {
+                fee = await ApartmentsService.GetMandatoryAddonsTotalAsync(Item, nights, ResolveGuestCount());
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning(ex, "Failed to resolve mandatory addons fee for apartment {ApartmentId}.", Item.Id);
+                fee = 0m;
+            }
+        }
+
+
+
+        decimal? fromPrice;
+        if (!ApplyMandatoryAddonFeeToPrice)
+        {
+            fromPrice = (term.MinimalPrice.Value - fee) / nights;
+        }
+        else
+        {
+           
+
+            fromPrice = ((term.MinimalPrice.Value - fee) / nights) + fee;
+        }
+
+        _suggestionFromPrice = fromPrice is > 0 ? fromPrice : null;
+        if (!_isDisposed)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private int ResolveGuestCount()
+    {
+        var adults = int.TryParse(Adults, out var a) && a > 0 ? a : 2;
+        var children = int.TryParse(Children, out var c) && c > 0 ? c : 0;
+        return adults + children;
     }
 
     private string GetImageLoading(int index)

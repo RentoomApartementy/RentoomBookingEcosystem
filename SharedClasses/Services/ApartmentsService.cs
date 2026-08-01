@@ -4,6 +4,8 @@ using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.RentoomBooking;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 
 namespace RentoomBooking.SharedClasses.Services
 {
@@ -22,6 +24,15 @@ namespace RentoomBooking.SharedClasses.Services
         Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync(CancellationToken cancellationToken = default);
         Task<List<ApartmentDefinedAmenityDto>> GetDefinedAmenitiesAsync(string? lang, int? amenityId, CancellationToken cancellationToken = default);
         Task<List<ApartmentDefinedAmenityDto>> GetApartmentAmenitiesAsync(string? lang, int? objectId, CancellationToken cancellationToken = default);
+
+        /// <summary>Mandatory (Optional == false) addons of the apartment, resolved against the defined-addons
+        /// catalog for their price/payment model. No nights/guests context - use with AddonPricingCalculator
+        /// once those are known (see GetMandatoryAddonsTotalAsync for the common case).</summary>
+        Task<IReadOnlyList<MandatoryAddonCharge>> GetMandatoryAddonChargesAsync(ApartmentObject apartment, CancellationToken cancellationToken = default);
+
+        /// <summary>Sum of the apartment's mandatory addon charges for a given stay length/guest count,
+        /// via AddonPricingCalculator.CalculateTotal per addon's PaymentType.</summary>
+        Task<decimal> GetMandatoryAddonsTotalAsync(ApartmentObject apartment, int nights, int totalGuests, CancellationToken cancellationToken = default);
     }
 
     public class ApartmentsService : IApartmentsService
@@ -84,6 +95,38 @@ namespace RentoomBooking.SharedClasses.Services
         public async Task<List<DefinedAddonEntity>> GetDefinedAddonsAsync(CancellationToken cancellationToken = default)
         {
             return await _apartmentsRepository.GetDefinedAddonsAsync(cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<MandatoryAddonCharge>> GetMandatoryAddonChargesAsync(ApartmentObject apartment, CancellationToken cancellationToken = default)
+        {
+            var mandatoryIds = apartment.Addons?
+                .Where(a => a.Optional == false && a.Id.HasValue)
+                .Select(a => a.Id!.Value)
+                .ToHashSet();
+
+            if (mandatoryIds is not { Count: > 0 })
+            {
+                return Array.Empty<MandatoryAddonCharge>();
+            }
+
+            var definedAddons = await GetDefinedAddonsAsync(cancellationToken);
+            return definedAddons
+                .Where(d => mandatoryIds.Contains(d.IdoBookingId))
+                .Select(d => new MandatoryAddonCharge(d.PaymentType, d.PriceGross))
+                .ToList();
+        }
+
+        public async Task<decimal> GetMandatoryAddonsTotalAsync(ApartmentObject apartment, int nights, int totalGuests, CancellationToken cancellationToken = default)
+        {
+            var charges = await GetMandatoryAddonChargesAsync(apartment, cancellationToken);
+            if (charges.Count == 0)
+            {
+                return 0m;
+            }
+
+            var effectiveNights = Math.Max(nights, 1);
+            var effectiveGuests = Math.Max(totalGuests, 1);
+            return charges.Sum(c => AddonPricingCalculator.CalculateTotal(c.PaymentType, c.PriceGross, effectiveNights, effectiveGuests, quantity: 1));
         }
 
         public async Task<List<ApartmentDefinedAmenityDto>> GetDefinedAmenitiesAsync(string? lang, int? amenityId, CancellationToken cancellationToken = default)

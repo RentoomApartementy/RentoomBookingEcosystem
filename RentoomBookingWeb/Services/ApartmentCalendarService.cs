@@ -1,5 +1,7 @@
 using System.Globalization;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
+using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Models.RentoomBooking;
 using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 
@@ -22,6 +24,8 @@ namespace RentoomBookingWeb.Services
             DateOnly to,
             int adults,
             int children,
+            bool applyMandatoryAddonsFee = true,
+            IReadOnlyList<MandatoryAddonCharge>? mandatoryAddonCharges = null,
             CancellationToken cancellationToken = default);
     }
 
@@ -65,6 +69,8 @@ namespace RentoomBookingWeb.Services
             DateOnly to,
             int adults,
             int children,
+            bool applyMandatoryAddonsFee = true,
+            IReadOnlyList<MandatoryAddonCharge>? mandatoryAddonCharges = null,
             CancellationToken cancellationToken = default)
         {
             var result = new ApartmentCalendarDto();
@@ -109,23 +115,28 @@ namespace RentoomBookingWeb.Services
                 }
             }
 
-            result.FromPriceGross = await GetNearestSuggestedPriceAsync(objectId, adults, children, cancellationToken).ConfigureAwait(false);
+            result.FromPriceGross = await GetNearestSuggestedPriceAsync(
+                objectId, adults, children, applyMandatoryAddonsFee, mandatoryAddonCharges, cancellationToken).ConfigureAwait(false);
 
             return result;
         }
-
-        /// <summary>Same flat-fee-adjusted per-night divisor used by the apartments list page's
-        /// suggested-date price (see Apartment.razor's GetSuggestionFromPrice) — AvailableTerm.MinimalPrice
-        /// is the TOTAL price for the whole stay, not a nightly rate, so it must go through this same
-        /// calculator rather than being shown as-is.</summary>
-        private const decimal SuggestionFlatFee = 139m;
 
         /// <summary>"From X zł/night" anchor — the real, validated price (via the same suggested-date
         /// mechanism used elsewhere for "no offer for these dates, try these" alternatives) of the
         /// nearest available term to today, not an estimate. A 1-night reference range is used purely
         /// to ask "what's the closest available date" — the underlying search still finds and prices
-        /// the actual nearest available term regardless of its real length/min-stay.</summary>
-        private async Task<decimal?> GetNearestSuggestedPriceAsync(int objectId, int adults, int children, CancellationToken cancellationToken)
+        /// the actual nearest available term regardless of its real length/min-stay.
+        /// AvailableTerm.MinimalPrice is the TOTAL price for the whole stay, not a nightly rate — when
+        /// applyMandatoryAddonsFee is set (same flat-fee-adjusted divisor used by the apartments list
+        /// page's suggested-date price, see Apartment.razor's UpdateSuggestionFromPriceAsync), the
+        /// apartment's mandatory-addons total is added back per night rather than shown as a raw average.</summary>
+        private async Task<decimal?> GetNearestSuggestedPriceAsync(
+            int objectId,
+            int adults,
+            int children,
+            bool applyMandatoryAddonsFee,
+            IReadOnlyList<MandatoryAddonCharge>? mandatoryAddonCharges,
+            CancellationToken cancellationToken)
         {
             var today = DateOnly.FromDateTime(DateTime.Today);
             var referenceStart = today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -153,7 +164,16 @@ namespace RentoomBookingWeb.Services
                 return null;
             }
 
-            var perNight = ((totalPrice - SuggestionFlatFee) / nights) + SuggestionFlatFee;
+            var fee = mandatoryAddonCharges?.Sum(c => AddonPricingCalculator.CalculateTotal(c.PaymentType, c.PriceGross, nights, adults + children, quantity: 1)) ?? 0m;
+
+            if (!applyMandatoryAddonsFee)
+            {
+                var plainPerNight = (totalPrice-fee) / nights;
+                return plainPerNight > 0 ? plainPerNight : null;
+            }
+
+            
+            var perNight = ((totalPrice - fee) / nights) + fee;
             return perNight > 0 ? perNight : null;
         }
 
