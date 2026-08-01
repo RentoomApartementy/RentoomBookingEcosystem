@@ -24,7 +24,21 @@
         </div>
         <div class="content-section">
             <div class="info">
-                <h2 class="apartment-name">@Name</h2>
+                @switch (HeadingTag)
+                {
+                    case "h2":
+                        <h2 class="apartment-name">@Name</h2>
+                        break;
+                    case "h4":
+                        <h4 class="apartment-name">@Name</h4>
+                        break;
+                    case "p":
+                        <p class="apartment-name">@Name</p>
+                        break;
+                    default:
+                        <h3 class="apartment-name">@Name</h3>
+                        break;
+                }
                 <span class="apartment-city">
                     <GoogleIcon Name="location_on" Class="icon-small" AriaLabel="@Localizer["Location"]" />
                     @Location
@@ -43,6 +57,7 @@
     [Parameter] public string Name { get; set; } = string.Empty;
     [Parameter] public string Url { get; set; } = "#";
     [Parameter] public string Location { get; set; } = string.Empty;
+    [Parameter] public string HeadingTag { get; set; } = "h3";
 
     private string? _imageUrl;
     private ElementReference _elementRef;

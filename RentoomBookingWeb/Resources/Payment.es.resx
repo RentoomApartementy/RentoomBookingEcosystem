@@ -196,7 +196,7 @@
     <value>Revisa tu correo electrónico y continúa en StayWell</value>
   </data>
   <data name="ReservationPending" xml:space="preserve">
-    <value>Durante el pago</value>
+    <value>Inicio del pago</value>
   </data>
   <data name="ReservationPendingInfo" xml:space="preserve">
     <value>Tu reserva ha sido confirmada pero aún no pagada</value>
@@ -558,5 +558,23 @@
   </data>
   <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
     <value>Estás esperando la confirmación del pago por parte de Tpay. Te mostraremos el estado actual de tu reserva en un momento.</value>
+  </data>
+  <data name="StepperStep1" xml:space="preserve">
+    <value>Selección de la oferta</value>
+  </data>
+  <data name="StepperStep2" xml:space="preserve">
+    <value>Datos del cliente</value>
+  </data>
+  <data name="StepperStep3" xml:space="preserve">
+    <value>Resumen</value>
+  </data>
+  <data name="StepperStep4" xml:space="preserve">
+    <value>Pago</value>
+  </data>
+  <data name="StepperAriaLabel" xml:space="preserve">
+    <value>Pasos de reserva</value>
+  </data>
+  <data name="StepperCompletedAriaLabel" xml:space="preserve">
+    <value>Etapa completada</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -469,10 +469,10 @@
     <value>Chyba 404</value>
   </data>
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
-    <value>fotografia</value>
+    <value>Foto</value>
   </data>
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
-    <value>Hlavná fotografia apartmánu {0}</value>
+    <value>Hlavná fotografia bytu {0}</value>
   </data>
   <data name="CalendarGuestsTitle" xml:space="preserve">
     <value>Hostia</value>
@@ -487,21 +487,45 @@
     <value>Od {0} / noc</value>
   </data>
   <data name="CalendarClearSelection" xml:space="preserve">
-    <value>Zrušiť výber</value>
+    <value>Jasný výber</value>
   </data>
   <data name="CalendarLoadMore" xml:space="preserve">
     <value>Zobraziť viac</value>
   </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
-    <value>Maximálna obsadenosť je {0}</value>
+    <value>Maximálny počet hostí je {0}</value>
   </data>
   <data name="CalendarMinStayNotice" xml:space="preserve">
-    <value>Minimálny pobyt je {0} nocí</value>
+    <value>Minimálny pobyt je {0} noc</value>
   </data>
   <data name="CalendarSelectCheckIn" xml:space="preserve">
-    <value>Vyberte dátum príchodu</value>
+    <value>Vyberte si dátum príchodu</value>
   </data>
   <data name="CalendarSelectCheckOut" xml:space="preserve">
-    <value>Vyberte dátum odchodu</value>
+    <value>Vyberte si dátum odchodu</value>
+  </data>
+  <data name="BookingPanelTitle" xml:space="preserve">
+    <value>Bookujte priamo</value>
+  </data>
+  <data name="BookingPanelSubtitle" xml:space="preserve">
+    <value>Priama rezervácia – bez provízií cez portál</value>
+  </data>
+  <data name="ShowMapLabel" xml:space="preserve">
+    <value>Pozrite si polohu na mape</value>
+  </data>
+  <data name="NearbyAttractions_Title" xml:space="preserve">
+    <value>Okolie objektu</value>
+  </data>
+  <data name="NearbyAttractions_Subtitle" xml:space="preserve">
+    <value>Výborná poloha</value>
+  </data>
+  <data name="NearbyAttractions_WalkTime" xml:space="preserve">
+    <value>~{0} min</value>
+  </data>
+  <data name="NearbyAttractions_DistanceMeters" xml:space="preserve">
+    <value>{0} m</value>
+  </data>
+  <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
+    <value>{0} km</value>
   </data>
 </root>

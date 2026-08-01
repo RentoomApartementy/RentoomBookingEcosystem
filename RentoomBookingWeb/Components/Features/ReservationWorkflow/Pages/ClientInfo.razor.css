@@ -7,6 +7,8 @@
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    padding-top: calc(var(--environment-banner-offset, 0px) + 5.5rem);
+    box-sizing: border-box;
 }
 
 .payment-container::before {
@@ -18,6 +20,13 @@
     height: 100px;
     pointer-events: none;
     background: linear-gradient(to bottom, rgba(0,0,0,.55), transparent);
+    z-index: 0;
+}
+
+.reservation-progress-band {
+    width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .payment-wrapper {
@@ -25,7 +34,9 @@
     width: 97%;
     display: flex;
     gap: 2rem;
-    padding-top: 120px;
+    position: relative;
+    z-index: 1;
+    padding-top: 0;
     padding-bottom: 80px;
 }
 
@@ -239,7 +250,7 @@
 
     .payment-wrapper {
         flex-direction: column-reverse; /* SummaryBox on top */
-        padding-top: 120px; /* Increased to avoid menu overlap on mobile */
+        padding-top: 0;
         padding-bottom: 120px; /* Space for the floating button */
     }
 

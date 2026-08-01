@@ -225,4 +225,7 @@
   <data name="BlogCategories" xml:space="preserve">
     <value>Kategorie wpisów</value>
   </data>
+  <data name="LatestPostsInCategory" xml:space="preserve">
+    <value>Najnowsze wpisy: {0}</value>
+  </data>
 </root>

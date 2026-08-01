@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -181,10 +181,10 @@
     <value>Book directly</value>
   </data>
   <data name="BookingPanelSubtitle" xml:space="preserve">
-    <value>Direct booking — no portal commission</value>
+    <value>Direct booking - no portal commissions</value>
   </data>
   <data name="ShowMapLabel" xml:space="preserve">
-    <value>View location on map</value>
+    <value>See location on map</value>
   </data>
   <data name="To" xml:space="preserve">
     <value>To</value>
@@ -478,7 +478,7 @@
     <value>Contact</value>
   </data>
   <data name="NearbyAttractions_Title" xml:space="preserve">
-    <value>Property surroundings</value>
+    <value>Object surroundings</value>
   </data>
   <data name="NearbyAttractions_Subtitle" xml:space="preserve">
     <value>Excellent location</value>
@@ -493,10 +493,10 @@
     <value>{0} km</value>
   </data>
   <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
-    <value>photo</value>
+    <value>Photo</value>
   </data>
   <data name="Apartment_MainPhotoAlt" xml:space="preserve">
-    <value>Main photo of {0} apartment</value>
+    <value>Main photo of apartment {0}</value>
   </data>
   <data name="CalendarGuestsTitle" xml:space="preserve">
     <value>Guests</value>
@@ -514,18 +514,18 @@
     <value>Clear selection</value>
   </data>
   <data name="CalendarLoadMore" xml:space="preserve">
-    <value>Load more</value>
+    <value>Show more</value>
   </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
-    <value>Maximum occupancy is {0}</value>
+    <value>The maximum number of guests is {0}</value>
   </data>
   <data name="CalendarMinStayNotice" xml:space="preserve">
-    <value>Minimum stay is {0} nights</value>
+    <value>Minimum stay is {0} night</value>
   </data>
   <data name="CalendarSelectCheckIn" xml:space="preserve">
-    <value>Select check-in date</value>
+    <value>Select your arrival date</value>
   </data>
   <data name="CalendarSelectCheckOut" xml:space="preserve">
-    <value>Select check-out date</value>
+    <value>Choose your departure date</value>
   </data>
 </root>

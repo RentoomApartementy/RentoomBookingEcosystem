@@ -148,7 +148,7 @@
     <value>Fecha sugerida</value>
   </data>
   <data name="NoOfferText2" xml:space="preserve">
-    <value>No hay oferta en la fecha indicada</value>
+    <value>Fechas seleccionadas de estancia</value>
   </data>
   <data name="FromText" xml:space="preserve">
     <value>De</value>

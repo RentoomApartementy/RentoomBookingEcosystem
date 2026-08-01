@@ -1,10 +1,13 @@
 .summary-container {
+    position: relative;
     display: flex;
     width: 100%;
     min-height: 100vh;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
+    padding-top: calc(var(--environment-banner-offset, 0px) + 5.5rem);
+    box-sizing: border-box;
 }
 
 .summary-container::before {
@@ -16,6 +19,13 @@
     height: 100px;
     pointer-events: none;
     background: linear-gradient(to bottom, rgba(0,0,0,.55), transparent);
+    z-index: 0;
+}
+
+.reservation-progress-band {
+    width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .summary-wrapper {
@@ -23,7 +33,9 @@
     width: 97%;
     display: flex;
     gap: 2rem;
-    padding-top: 120px;
+    position: relative;
+    z-index: 1;
+    padding-top: 2rem;
     padding-bottom: 80px;
 }
 

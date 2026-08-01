@@ -170,4 +170,7 @@
   <data name="SocialMediaLabel" xml:space="preserve">
     <value>Sociální média</value>
   </data>
+  <data name="LinksText" xml:space="preserve">
+    <value>Odkazy</value>
+  </data>
 </root>

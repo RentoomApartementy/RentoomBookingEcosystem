@@ -60,6 +60,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         [Inject] public ApartmentSocialMediaService ApartmentSocialMediaService { get; set; } = default!;
         [Inject] public ApartmentNearbyAttractionsService NearbyAttractionsService { get; set; } = default!;
         [Inject] internal IStringLocalizer<Currency> CurrencyLocalizer { get; set; } = default!;
+        [Inject] internal IStringLocalizer<RentoomBookingWeb.Payment> StepperLocalizer { get; set; } = default!;
         [Inject] public GoogleAnalyticsService GoogleAnalytics { get; set; } = default!;
         [Inject] public IWebHostEnvironment Environment { get; set; } = default!;
         [Inject] public RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService { get; set; } = default!;

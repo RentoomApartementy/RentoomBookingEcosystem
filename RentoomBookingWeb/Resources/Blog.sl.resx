@@ -33,13 +33,13 @@
   <data name="ReadTimeFormat" xml:space="preserve">
     <value>{0} min branje</value>
   </data>
-    <data name="GoToSlideAriaLabel" xml:space="preserve">
-        <value>Pojdi na diapozitiv {0} od {1}</value>
+  <data name="GoToSlideAriaLabel" xml:space="preserve">
+        <value>Pojdi na diapozitiv {0} z {1}</value>
     </data>
-    <data name="CarouselPaginationLabel" xml:space="preserve">
+  <data name="CarouselPaginationLabel" xml:space="preserve">
         <value>Paginacija vrtiljaka</value>
     </data>
-    <data name="AuthorLabel" xml:space="preserve">
+  <data name="AuthorLabel" xml:space="preserve">
     <value>Špric</value>
   </data>
   <data name="PublishedLabel" xml:space="preserve">
@@ -61,7 +61,7 @@
     <value>Nazaj na blog</value>
   </data>
   <data name="CheckLabel" xml:space="preserve">
-    <value>Poglej</value>
+    <value>Preberite</value>
   </data>
   <data name="CategoryLabel" xml:space="preserve">
     <value>Kategorija</value>
@@ -91,12 +91,39 @@
     <value>Naslednja objava</value>
   </data>
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
-    <value>Krušna navigacija</value>
+    <value>Navigacija po drobticah</value>
   </data>
   <data name="AllPosts" xml:space="preserve">
     <value>Vse objave</value>
   </data>
   <data name="BlogCategories" xml:space="preserve">
-    <value>Kategorije objav</value>
+    <value>Kategorije prijav</value>
+  </data>
+  <data name="ShareArticle" xml:space="preserve">
+    <value>Delite ta članek</value>
+  </data>
+  <data name="ShareOnFacebook" xml:space="preserve">
+    <value>Delite na Facebooku</value>
+  </data>
+  <data name="ShareOnLinkedIn" xml:space="preserve">
+    <value>Delite na LinkedInu</value>
+  </data>
+  <data name="ShareOnWhatsApp" xml:space="preserve">
+    <value>Delite na WhatsAppu</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Kopiraj povezavo</value>
+  </data>
+  <data name="LinkCopied" xml:space="preserve">
+    <value>Povezava kopirana</value>
+  </data>
+  <data name="RelatedContentTitle" xml:space="preserve">
+    <value>Sorodna vsebina</value>
+  </data>
+  <data name="RelatedContentTooltip" xml:space="preserve">
+    <value>Blog zapisi, ki omenjajo to stanovanje</value>
+  </data>
+  <data name="LatestPostsInCategory" xml:space="preserve">
+    <value>Zadnje objave: {0}</value>
   </data>
 </root>

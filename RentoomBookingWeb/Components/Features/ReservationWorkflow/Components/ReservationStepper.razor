@@ -1,0 +1,44 @@
+@using Microsoft.Extensions.Localization
+
+<div class="reservation-stepper" role="list" aria-label="@Localizer["StepperAriaLabel"]">
+    <span class="reservation-stepper-track" aria-hidden="true"></span>
+
+    @for (var i = 1; i <= TotalSteps; i++)
+    {
+        var step = i;
+        var isCurrentStep = step == CurrentStep;
+        var isCompleted = step < CurrentStep || (IsCurrentStepCompleted && isCurrentStep);
+        var isActive = isCurrentStep && !IsCurrentStepCompleted;
+        <div class="reservation-step @(isCompleted ? "completed" : "") @(isActive ? "active" : "")"
+             role="listitem"
+             aria-current="@(isCurrentStep ? "step" : null)">
+            <span class="reservation-step-circle">
+                @if (isCompleted)
+                {
+                    <GoogleIcon Name="check" SizePx="14" AriaLabel="@Localizer["StepperCompletedAriaLabel"]" />
+                }
+                else
+                {
+                    @step
+                }
+            </span>
+            <span class="reservation-step-label">@GetStepLabel(step)</span>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public int CurrentStep { get; set; } = 1;
+    [Parameter] public int TotalSteps { get; set; } = 4;
+    [Parameter] public bool IsCurrentStepCompleted { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+
+    private string GetStepLabel(int step) => step switch
+    {
+        1 => Localizer["StepperStep1"],
+        2 => Localizer["StepperStep2"],
+        3 => Localizer["StepperStep3"],
+        4 => Localizer["StepperStep4"],
+        _ => ""
+    };
+}

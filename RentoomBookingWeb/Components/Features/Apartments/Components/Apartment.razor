@@ -108,16 +108,21 @@
                 }
                 else
                 {
-                    <h2 itemprop="name">
-                        @if (!string.IsNullOrEmpty(_detailsUrl))
-                        {
-                            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClickAsync("title"))' @onclick:stopPropagation="true" style="text-decoration: none; color: inherit;" title="@Item.Name">@Item.Name</a>
-                        }
-                        else
-                        {
-                            @Item.Name
-                        }
-                    </h2>
+                    @switch (HeadingTag)
+                    {
+                        case "h2":
+                            <h2 class="apartment-title" itemprop="name">@TitleContent</h2>
+                            break;
+                        case "h4":
+                            <h4 class="apartment-title" itemprop="name">@TitleContent</h4>
+                            break;
+                        case "p":
+                            <p class="apartment-title" itemprop="name">@TitleContent</p>
+                            break;
+                        default:
+                            <h3 class="apartment-title" itemprop="name">@TitleContent</h3>
+                            break;
+                    }
                 }
 
                 <p class="apartment-address" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
@@ -308,6 +313,10 @@
 @code {
     [Parameter] public string ImageUrl { get; set; } = "assets/images/rent.jpeg";
     [Parameter] public ApartmentObject? Item { get; set; } = null;
+    // Heading element for the apartment name. Valid: "h2", "h3" (default), "h4", "p".
+    // Defaults to h3 for real listing pages; callers embedding cards inside arbitrary
+    // CMS content (e.g. blog articles) should pass "p" to avoid heading-outline pollution.
+    [Parameter] public string HeadingTag { get; set; } = "h3";
     [Parameter] public PricingOffer? Offer { get; set; } = null;
     // Fallback offer from the IdoBooking public/offer endpoint. Used only when there is no dated Offer.
     [Parameter] public PublicApartmentOffer? PublicOffer { get; set; } = null;
@@ -337,6 +346,17 @@
     private int? _bedsCount = null;
     private string? _detailsUrl;
     private int? _resolvedOfferLength;
+
+    private RenderFragment TitleContent => @<text>
+        @if (!string.IsNullOrEmpty(_detailsUrl))
+        {
+            <a href="@_detailsUrl" @onclick='(() => TrackApartmentClickAsync("title"))' @onclick:stopPropagation="true" style="text-decoration: none; color: inherit;" title="@Item!.Name">@Item!.Name</a>
+        }
+        else
+        {
+            @Item!.Name
+        }
+    </text>;
 
     // Tymczasowa opłata odejmowana od sugerowanej ceny przed podziałem na liczbę dni. TODO: wydzielić do konfiguracji.
     private const decimal SuggestionFlatFee = 139m;
