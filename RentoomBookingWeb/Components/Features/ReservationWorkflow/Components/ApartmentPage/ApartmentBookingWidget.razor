@@ -36,6 +36,17 @@
     {
         <div class="abw-fromprice">@Localizer["CalendarFromPerNight", FormatPrice(fromPrice)]</div>
     }
+    else if (_minPriceLoading)
+    {
+        <div class="abw-fromprice">
+            <span class="mini-spinner"></span>
+            <span>@Localizer["Loading"]</span>
+        </div>
+    }
+    else if (_minPrice is decimal minPrice)
+    {
+        <div class="abw-fromprice">@Localizer["CalendarFromPerNight", FormatPrice(minPrice)]</div>
+    }
 
     @* ---- Step 2: availability-aware calendar ---- *@
     <div class="abw-dates">

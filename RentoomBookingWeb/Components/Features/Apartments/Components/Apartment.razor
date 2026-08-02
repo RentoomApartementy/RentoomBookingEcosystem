@@ -206,7 +206,22 @@
             @if (ShowPrice)
             {
                 <div class="apartment-price-info">
-                    @if (Offer != null)
+                    @if (MinPriceOverride is decimal minPrice)
+                    {
+                        <div class="price-wrapper">
+                            <span class="price">@ApartmentLocalizer["From"] <PriceDisplay AmountPln="@minPrice" /></span>
+                        </div>
+                    }
+                    else if (MinPriceLoading)
+                    {
+                        <div class="price-wrapper">
+                            <span class="availability-status loading">
+                                <span class="mini-spinner"></span>
+                                <span>@Localizer["SuggestedDateLoading"]</span>
+                            </span>
+                        </div>
+                    }
+                    else if (Offer != null)
                     {
                         <div class="price-wrapper">
                             <span class="price"><PriceDisplay AmountPln="@Offer?.MinimalPrice" /></span>
@@ -253,7 +268,7 @@
             }
             
             <div @onclick:stopPropagation="true">
-                @if (Item == null || (ShowPrice && Offer == null))
+                @if (Item == null || (ShowPrice && Offer == null && MinPriceOverride == null))
                 {
                     <Button Href="@_detailsUrl"
                             OnClick='(() => TrackApartmentClickAsync("button"))'>
@@ -270,7 +285,7 @@
             </div>
             </div>
 
-            @if (ShowPrice && Offer == null && Item != null)
+            @if (ShowPrice && Offer == null && Item != null && MinPriceOverride == null)
             {
                 <div class="non-offer-wrapper">
                     @if (SuggestionDates?.Any() == true)
@@ -335,6 +350,12 @@
     // Whether the suggested "from" price is adjusted by the apartment's mandatory-addons flat fee
     // (see UpdateSuggestionFromPriceAsync). When false, the price is shown as a plain total/nights average.
     [Parameter] public bool ApplyMandatoryAddonFeeToPrice { get; set; } = true;
+    // Backend-computed "from" price (e.g. from the site-wide min-price cache) that takes priority over
+    // the entire Offer/PublicOffer/suggestion cascade below when set. Skips suggestion-price computation.
+    [Parameter] public decimal? MinPriceOverride { get; set; }
+    // Shows a loading spinner in place of the price while MinPriceOverride is being fetched
+    // (e.g. cold-cache SOAP round-trip) instead of falling through to the Offer/suggestion cascade.
+    [Parameter] public bool MinPriceLoading { get; set; }
 
     [Parameter] public string? Width { get; set; } = null;
     [Parameter] public string ListingSource { get; set; } = "apartments-list";
@@ -609,6 +630,13 @@
 
     private async Task UpdateSuggestionFromPriceAsync()
     {
+        if (MinPriceOverride.HasValue)
+        {
+            _suggestionFromPrice = null;
+            _suggestionFromPriceSignature = null;
+            return;
+        }
+
         var term = GetClosestSuggestionTerm();
         if (term is null || !term.MinimalPrice.HasValue)
         {

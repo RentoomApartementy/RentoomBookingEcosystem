@@ -28,6 +28,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         Task<List<OfferAvailabilityForDaysObject>?> GetAvailabilityForDaysAsync(OfferAvailabilityForDaysParamsSearchInternal request,
             CancellationToken cancellationToken = default);
 
+        /// <summary>Per-day prices (no availability) from IdoBooking's dedicated getPricesForDays endpoint —
+        /// the lightest feed for bulk "minimum from-price" computations across the whole apartment catalog.
+        /// This endpoint does not paginate in practice (always returns the full list).</summary>
+        Task<List<OfferPricesForDaysObject>?> GetPricesForDaysAsync(OfferPricesForDaysParamsSearchInternal request,
+            CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Fetches a single public offer for the given apartment id from public/offer/34/json.
         /// Returns null when the apartment has no usable public offer (missing price, error response, or fetch failure).
@@ -51,6 +57,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         private const string PricingOffersEndpoint = "public/pricingOffers/34/json";
         private const string AvailabilityAndPricesForDaysEndpoint = "offer/getAvailabilityAndPricesForDays/34/json";
         private const string AvailabilityForDaysEndpoint = "offer/getAvailabilityForDays/36/json";
+        private const string PricesForDaysEndpoint = "offer/getPricesForDays/36/json";
         private const string PublicOfferEndpoint = "public/offer/34/json";
 
         private static readonly TimeSpan PublicOfferCacheTtl = TimeSpan.FromMinutes(10);
@@ -196,6 +203,49 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             return ret;
         }
 
+        public async Task<List<OfferPricesForDaysObject>?> GetPricesForDaysAsync(
+            OfferPricesForDaysParamsSearchInternal payload,
+            CancellationToken cancellationToken = default)
+        {
+            var request = new OfferPricesForDaysRequest
+            {
+                Authenticate = _idoBookingConnectService.AuthObjectIdo(),
+                ParamsSearch = payload.ParamsSearch
+                // No Result/paging - this endpoint always returns the full list.
+            };
+
+            _logger.LogInformation(
+                "Requesting prices for days between {DateFrom} and {DateTo} for {Adults} adults and {Children} children.",
+                request.ParamsSearch?.DateFrom,
+                request.ParamsSearch?.DateTo,
+                request.ParamsSearch?.AdultsNumber ?? 0,
+                request.ParamsSearch?.ChildrenNumber ?? null);
+
+            var response = await _idoBookingConnectService
+                .PostAsync<OfferPricesForDaysRequest, OfferPricesForDaysResponseRoot>(
+                    PricesForDaysEndpoint,
+                    request,
+                    cancellationToken)
+                .ConfigureAwait(false);
+
+            if (response?.Result.Errors != null)
+            {
+                _logger.LogWarning(
+                    "Prices for days request returned error {FaultCode}: {FaultString}.",
+                    response.Result.Errors.FaultCode,
+                    response.Result.Errors.FaultString);
+            }
+
+            var ret = response?.Result.OfferObjects;
+            if (payload.ObjectIds != null && payload.ObjectIds.Any())
+            {
+                var idsHash = payload.ObjectIds.ToHashSet();
+
+                ret = ret?.Where(o => idsHash.Contains(o.ObjectId)).ToList();
+            }
+
+            return ret;
+        }
 
 
         public async Task<PublicApartmentOffer?> GetPublicOfferAsync(int apartmentId, CancellationToken cancellationToken = default)

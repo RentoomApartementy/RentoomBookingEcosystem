@@ -13,6 +13,7 @@ public interface IApartmentsViewModel
     bool IsLoading { get; }
     bool ApartmentsIsLoading { get; }
     bool IsSuggestionsLoading { get; }
+    bool IsMinPricesLoading { get; }
     bool HasMore { get; }
     string? Error { get; }
     bool IsMapView { get; }
@@ -35,6 +36,11 @@ public interface IApartmentsViewModel
     SuggestionStatus GetSuggestionStatusByObjectId(int objectId);
     public IReadOnlyList<AvailableTerm>? GetSuggestionByObjectId(int objectId);
     public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId);
+
+    /// <summary>The apartment's cached backend-computed minimum daily "from" price (2 adults/0 children,
+    /// today..+1 month by default), with or without the mandatory-addons flat fee added on top.
+    /// Null when the apartment has no priced days in the cached window.</summary>
+    decimal? GetMinFromPriceByObjectId(int objectId, bool applyMandatoryAddonFee);
 
     Task InitializeAsync(CancellationToken ct = default);
     Task InitializeForSliderAsync(bool showSuggestions = true, bool showPublicOffer = false, bool fetchDatedOffers = true, CancellationToken ct = default);

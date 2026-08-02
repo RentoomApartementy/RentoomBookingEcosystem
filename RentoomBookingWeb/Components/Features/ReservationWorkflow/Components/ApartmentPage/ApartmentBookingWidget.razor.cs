@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
@@ -31,7 +32,9 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         [Inject] public IApartmentCalendarService CalendarService { get; set; } = default!;
         [Inject] public IApartmentsService ApartmentsService { get; set; } = default!;
+        [Inject] public IApartmentMinPriceService MinPriceService { get; set; } = default!;
         [Inject] public IJSRuntime JS { get; set; } = default!;
+        [Inject] public ILogger<ApartmentBookingWidget> Logger { get; set; } = default!;
 
         private const int InitialMonths = 3;
         private const int MoreMonths = 2;
@@ -50,6 +53,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         private bool _loading;
         private IReadOnlyList<MandatoryAddonCharge> _mandatoryAddonCharges = Array.Empty<MandatoryAddonCharge>();
         private int? _mandatoryAddonChargesApartmentId;
+
+        // Fallback "from" price sourced from the same site-wide min-price cache used by the apartment
+        // listing cards - covers visitors landing directly on this page (no listing-page visit to have
+        // warmed a ViewModel-local fetch). Shown only while the real, date-aware calendar price isn't
+        // available yet (or found no term at all).
+        private decimal? _minPrice;
+        private bool _minPriceLoading;
+        private int? _minPriceApartmentId;
         private string? _occupancyNotice;
         private string? _dateNotice;
 
@@ -69,12 +80,51 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
             ParseIncomingRange();
 
             await EnsureMandatoryAddonChargesLoadedAsync();
+            StartMinPriceFetch();
             await LoadCalendarAsync();
         }
 
         protected override async Task OnParametersSetAsync()
         {
             await EnsureMandatoryAddonChargesLoadedAsync();
+            StartMinPriceFetch();
+        }
+
+        // Fire-and-forget: doesn't block widget/calendar rendering. The min-price cache is usually
+        // warm (shared across all visitors, 60 min TTL) but on a cold start still shouldn't hold up
+        // the rest of the widget.
+        private void StartMinPriceFetch()
+        {
+            if (Apartment is null || _minPriceApartmentId == Apartment.Id)
+            {
+                return;
+            }
+
+            _minPriceApartmentId = Apartment.Id;
+            _minPriceLoading = true;
+            StateHasChanged();
+            _ = FetchMinPriceInBackgroundAsync(Apartment.Id);
+        }
+
+        private async Task FetchMinPriceInBackgroundAsync(int apartmentId)
+        {
+            try
+            {
+                var prices = await MinPriceService.GetMinPricesAsync();
+                _minPrice = prices.TryGetValue(apartmentId, out var price)
+                    ? (ApplyMandatoryAddonsFee ? price.PriceWithMandatoryFee : price.RawPrice)
+                    : null;
+            }
+            catch (Exception ex)
+            {
+                _minPrice = null;
+                Logger.LogWarning(ex, "Failed to load fallback min-price for apartment {ApartmentId}.", apartmentId);
+            }
+            finally
+            {
+                _minPriceLoading = false;
+                StateHasChanged();
+            }
         }
 
         private async Task EnsureMandatoryAddonChargesLoadedAsync()

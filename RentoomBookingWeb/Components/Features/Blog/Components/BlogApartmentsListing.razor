@@ -25,6 +25,8 @@ else if (ViewModel.Items.Count > 0)
                                OfferLength="@ViewModel.GetOfferLengthDays()"
                                ShowPrice="true"
                                ApplyMandatoryAddonFeeToPrice="false"
+                               MinPriceOverride="@(ShowOnlyFromMinPrice ? ViewModel.GetMinFromPriceByObjectId(apartment.Id, false) : null)"
+                               MinPriceLoading="@(ShowOnlyFromMinPrice && ViewModel.IsMinPricesLoading)"
                                SuggestionState="@(ShowSuggestions ? ViewModel.GetSuggestionStatusByObjectId(apartment.Id) : SuggestionStatus.NotStarted)"
                                SuggestionDates="@(ShowSuggestions ? ViewModel.GetSuggestionsByObjectId(apartment.Id) : null)"
                                ShowSuggestionPrice="true"

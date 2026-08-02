@@ -28,6 +28,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly MediaCacheService _mediaCache;
         private readonly IApartmentMediaCatalogService _apartmentMediaCatalogService;
         private readonly IRouteLocalizationService _routeService;
+        private readonly IApartmentMinPriceService _minPriceService;
         private readonly ILogger<ApartmentsViewModel> _logger;
         private static readonly TimeSpan SuggestionsFetchTimeout = TimeSpan.FromSeconds(30);
         private static readonly TimeSpan MediaWarmTimeout = TimeSpan.FromSeconds(5);
@@ -43,6 +44,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         private List<PricingOffer> _allMatchingOffers = new();
         private List<ApartmentObject> _matchingMetaItems = new();
+
+        private IReadOnlyDictionary<int, ApartmentMinPrice> _minPrices = new Dictionary<int, ApartmentMinPrice>();
+        private bool _minPricesLoaded;
 
         // Zakres dat faktycznie używany do pobierania ofert/sugestii - zawsze wypełniony (jawny wybór usera
         // albo domyślne okno jak na Home), niezależnie od publicznych StartDate/EndDate wiązanych do SearchBar.
@@ -65,6 +69,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public bool IsLoading { get; private set; } = true;
         public bool ApartmentsIsLoading { get; private set; } = false;
         public bool IsSuggestionsLoading { get; private set; } = false;
+        public bool IsMinPricesLoading { get; private set; } = false;
         public bool HasMore { get; private set; } = true;
         public string? Error { get; private set; }
         public bool IsMapView { get; private set; } = false;
@@ -100,6 +105,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             MediaCacheService mediaCache,
             IApartmentMediaCatalogService apartmentMediaCatalogService,
             IRouteLocalizationService routeService,
+            IApartmentMinPriceService minPriceService,
             ILogger<ApartmentsViewModel> logger)
         {
             _apartmentsService = apartmentsService;
@@ -113,6 +119,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             _mediaCache = mediaCache;
             _apartmentMediaCatalogService = apartmentMediaCatalogService;
             _routeService = routeService;
+            _minPriceService = minPriceService;
             _logger = logger;
         }
 
@@ -128,10 +135,54 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId) =>
             AvailableTerms.TryGetValue(objectId, out var terms) ? terms : null;
 
+        public decimal? GetMinFromPriceByObjectId(int objectId, bool applyMandatoryAddonFee)
+        {
+            if (!_minPrices.TryGetValue(objectId, out var price))
+            {
+                return null;
+            }
+
+            return applyMandatoryAddonFee ? price.PriceWithMandatoryFee : price.RawPrice;
+        }
+
+        // Fire-and-forget: kicks off the min-price fetch without blocking the caller's Initialize*
+        // flow (the cache is often warm across visitors, but on a cold start the SOAP round-trip
+        // shouldn't hold up rendering apartment cards/items).
+        private void StartMinPricesFetch()
+        {
+            if (_minPricesLoaded || IsMinPricesLoading)
+            {
+                return;
+            }
+
+            IsMinPricesLoading = true;
+            NotifyStateChanged(force: true);
+            _ = FetchMinPricesInBackgroundAsync();
+        }
+
+        private async Task FetchMinPricesInBackgroundAsync()
+        {
+            try
+            {
+                _minPrices = await _minPriceService.GetMinPricesAsync();
+                _minPricesLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load apartment min-price cache.");
+            }
+            finally
+            {
+                IsMinPricesLoading = false;
+                NotifyStateChanged(force: true);
+            }
+        }
+
         public async Task InitializeAsync(CancellationToken ct = default)
         {
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
+            StartMinPricesFetch();
             var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
             var query = QueryHelpers.ParseQuery(uri.Query);
             string GetVal(string key) => query.TryGetValue(key, out var val) ? val.ToString() : "";
@@ -220,6 +271,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
+            StartMinPricesFetch();
 
             (StartDate, EndDate) = GetDefaultDateWindow();
             _effectiveStartDate = StartDate;
@@ -260,6 +312,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
+            StartMinPricesFetch();
 
             (StartDate, EndDate) = GetDefaultDateWindow();
             _effectiveStartDate = StartDate;
