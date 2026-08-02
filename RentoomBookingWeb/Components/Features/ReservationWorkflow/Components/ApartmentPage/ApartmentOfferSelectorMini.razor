@@ -23,6 +23,8 @@
                     DescriptionText="@Localizer["NonRefundableText"]"
                     Price="@nonRefundableOffer.Price"
                     StaySummaryText="@StaySummaryText"
+                    StartDate="@StartDate"
+                    EndDate="@EndDate"
                     SelectedOfferType="@SelectedOfferType"
                     HasActiveReservation="HasActiveReservation"
                     Localizer="Localizer"
@@ -36,6 +38,8 @@
                     DescriptionText="@RefundableOfferText"
                     Price="@refundableOffer.Price"
                     StaySummaryText="@StaySummaryText"
+                    StartDate="@StartDate"
+                    EndDate="@EndDate"
                     SelectedOfferType="@SelectedOfferType"
                     HasActiveReservation="HasActiveReservation"
                     Localizer="Localizer"
@@ -54,6 +58,8 @@
     [Parameter] public bool IsOfferLoading { get; set; }
     [Parameter] public PricingOffersResponse? OffersResponse { get; set; }
     [Parameter] public string StaySummaryText { get; set; } = "";
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
     [Parameter] public string RefundableOfferText { get; set; } = "";
     [Parameter] public string? SelectedOfferType { get; set; }
     [Parameter] public bool HasActiveReservation { get; set; }

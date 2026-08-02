@@ -384,6 +384,9 @@
   <data name="CalendarLoadMore" xml:space="preserve">
     <value>Pokaż więcej</value>
   </data>
+  <data name="CalendarLoadingMoreMonths" xml:space="preserve">
+    <value>Ładuję kolejne miesiące...</value>
+  </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
     <value>Maksymalna liczba gości to {0}</value>
   </data>

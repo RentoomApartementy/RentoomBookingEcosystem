@@ -294,3 +294,13 @@
     opacity: .5;
     cursor: default;
 }
+
+.abw-loadmore-spinner {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    justify-content: center;
+    padding: .75rem;
+    font-size: 13px;
+    color: #6b7280;
+}

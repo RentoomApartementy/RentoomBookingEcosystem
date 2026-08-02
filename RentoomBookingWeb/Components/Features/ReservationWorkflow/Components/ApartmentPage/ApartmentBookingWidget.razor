@@ -32,7 +32,7 @@
     </div>
 
     @* ---- Price-from anchor ---- *@
-    @if (_calendar?.FromPriceGross is decimal fromPrice)
+    @if (_frozenFromPrice is decimal fromPrice)
     {
         <div class="abw-fromprice">@Localizer["CalendarFromPerNight", FormatPrice(fromPrice)]</div>
     }
@@ -59,7 +59,7 @@
             }
         </div>
 
-        <div class="abw-months @(_loading ? "is-refreshing" : "")">
+        <div class="abw-months @(_loading ? "is-refreshing" : "")" @ref="_monthsRef">
             @foreach (var monthStart in MonthStarts())
             {
                 <div class="abw-month">
@@ -113,14 +113,14 @@
                     </div>
                 </div>
             }
+            @if (_loadingMoreMonths)
+            {
+                <div class="abw-loadmore-spinner">
+                    <span class="mini-spinner"></span>
+                    <span>@Localizer["CalendarLoadingMoreMonths"]</span>
+                </div>
+            }
         </div>
-
-        @if (CanLoadMore())
-        {
-            <button type="button" class="abw-loadmore" @onclick="LoadMoreMonths" disabled="@_loading">
-                @Localizer["CalendarLoadMore"]
-            </button>
-        }
 
         @if (!string.IsNullOrEmpty(_dateNotice))
         {

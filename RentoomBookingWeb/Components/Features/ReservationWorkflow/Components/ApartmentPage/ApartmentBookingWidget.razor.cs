@@ -16,7 +16,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
     /// page modal. Unavailable nights cannot be selected, so the "no offers" dead-end
     /// cannot arise on the mainline path (audit L7/L5).
     /// </summary>
-    public partial class ApartmentBookingWidget : ComponentBase
+    public partial class ApartmentBookingWidget : ComponentBase, IAsyncDisposable
     {
         [Parameter] public ApartmentObject? Apartment { get; set; }
         [Parameter] public string? StartDate { get; set; }
@@ -51,6 +51,9 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         private ApartmentCalendarDto? _calendar;
         private bool _loading;
+        // Frozen once resolved - the displayed "from" price shouldn't change as the visitor
+        // adjusts guests or loads more months; only availability (_calendar.Days) keeps refreshing.
+        private decimal? _frozenFromPrice;
         private IReadOnlyList<MandatoryAddonCharge> _mandatoryAddonCharges = Array.Empty<MandatoryAddonCharge>();
         private int? _mandatoryAddonChargesApartmentId;
 
@@ -66,6 +69,11 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         private IJSObjectReference? _scrollModule;
         private bool _scrolledToSelection;
+
+        private ElementReference _monthsRef;
+        private DotNetObjectReference<ApartmentBookingWidget>? _objRef;
+        private IJSObjectReference? _calendarScrollModule;
+        private bool _loadingMoreMonths;
 
         private int MaxGuests => Apartment?.Capacity is int c && c > 0 ? c : 16;
         private int MinAdults => Apartment?.MinCapacity is int m && m > 0 ? Math.Min(m, MaxGuests) : 1;
@@ -140,12 +148,48 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            if (firstRender)
+            {
+                _objRef = DotNetObjectReference.Create(this);
+                _calendarScrollModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/apartmentCalendarScroll.js");
+                await _calendarScrollModule.InvokeVoidAsync("init", _objRef, _monthsRef);
+            }
+
             if (firstRender && _selStart is not null && !_scrolledToSelection)
             {
                 _scrolledToSelection = true;
                 _scrollModule ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/scrollObserver.js");
                 await _scrollModule.InvokeVoidAsync("scrollStartDayNearTop", ".abw-day-start", ".abw-months");
             }
+        }
+
+        [JSInvokable]
+        public async Task LoadMoreMonthsOnScroll()
+        {
+            if (_loading || !CanLoadMore())
+            {
+                return;
+            }
+
+            await LoadMoreMonths();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (_calendarScrollModule is not null)
+            {
+                try
+                {
+                    await _calendarScrollModule.InvokeVoidAsync("unregister");
+                }
+                catch (JSDisconnectedException)
+                {
+                }
+
+                await _calendarScrollModule.DisposeAsync();
+            }
+
+            _objRef?.Dispose();
         }
 
         private void ParseGuests()
@@ -203,7 +247,13 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
                     mandatoryAddonCharges: _mandatoryAddonCharges);
 
                 RevalidateSelection();
-                await FromPriceChanged.InvokeAsync(_calendar?.FromPriceGross);
+
+                if (_frozenFromPrice is null && _calendar?.FromPriceGross is decimal resolvedPrice)
+                {
+                    _frozenFromPrice = resolvedPrice;
+                }
+
+                await FromPriceChanged.InvokeAsync(_frozenFromPrice);
             }
             finally
             {
@@ -282,7 +332,17 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         {
             if (!CanLoadMore()) return;
             _windowEnd = AddMonthsClamped(_windowEnd, MoreMonths);
-            await LoadCalendarAsync();
+            _loadingMoreMonths = true;
+            StateHasChanged();
+            try
+            {
+                await LoadCalendarAsync();
+            }
+            finally
+            {
+                _loadingMoreMonths = false;
+                StateHasChanged();
+            }
         }
 
         /// <summary>Monday-first leading blank count for a month's first day.</summary>

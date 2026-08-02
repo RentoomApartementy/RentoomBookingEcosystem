@@ -1,6 +1,6 @@
 @using Microsoft.Extensions.Localization
 
-<div class="summary-offer-price @(IsSelected ? "selected-offer" : "")">
+<div class="summary-offer-price @(IsSelected ? "selected-offer" : "")" @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))">
     <div class="summary-offer-price-header">
         <b>@TitleText</b>
         <div @onclick="OnSearchModalOpen" @onclick:stopPropagation="true">
@@ -18,6 +18,7 @@
                 <span class="summary-offer-price-old"><PriceDisplay AmountPln="@StandardPrice" /></span>
             }
             <span class="stay-summary-text">@StaySummaryText</span>
+            <span class="offer-dates">@DateRangeText</span>
         </span>
         <div @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))" @onclick:stopPropagation="true">
             <Button Type="@(IsSelected ? ButtonType.Tertiary : ButtonType.Primary)" Class="btn-offer-book" style="white-space: nowrap;">@ButtonLabel</Button>
@@ -33,6 +34,8 @@
     [Parameter] public decimal TotalAdditionalPriceBeforeDiscount { get; set; }
     [Parameter] public decimal BonusDiscountAmount { get; set; }
     [Parameter] public string StaySummaryText { get; set; } = "";
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? SelectedOfferType { get; set; }
     [Parameter] public bool HasActiveReservation { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
@@ -43,4 +46,8 @@
     private decimal StandardPrice => Price + TotalAdditionalPriceBeforeDiscount;
     private decimal DiscountedPrice => Math.Max(0m, StandardPrice - BonusDiscountAmount);
     private string ButtonLabel => HasActiveReservation && IsSelected ? Localizer["ContinueReservation"] : Localizer["BookNow"];
+    private string DateRangeText =>
+        DateTime.TryParse(StartDate, out var s) && DateTime.TryParse(EndDate, out var e)
+            ? $"{s:dd.MM.yyyy} - {e:dd.MM.yyyy}"
+            : "";
 }

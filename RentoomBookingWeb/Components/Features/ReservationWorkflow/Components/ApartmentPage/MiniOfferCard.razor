@@ -1,9 +1,10 @@
 @using Microsoft.Extensions.Localization
 
-<div class="mini-offer @(IsSelected ? "selected-offer" : "")">
+<div class="mini-offer @(IsSelected ? "selected-offer" : "")" @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))">
     <div class="mini-offer-header">
         <span>@TitleText</span>
         <span class="mini-offer-stay">@StaySummaryText</span>
+        <span class="mini-offer-dates">@DateRangeText</span>
     </div>
     <div class="mini-offer-desc">@DescriptionText</div>
     <div class="mini-offer-footer">
@@ -20,6 +21,8 @@
     [Parameter] public string DescriptionText { get; set; } = "";
     [Parameter] public decimal Price { get; set; }
     [Parameter] public string StaySummaryText { get; set; } = "";
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
     [Parameter] public string? SelectedOfferType { get; set; }
     [Parameter] public bool HasActiveReservation { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
@@ -27,4 +30,8 @@
 
     private bool IsSelected => string.Equals(SelectedOfferType, OfferTypeKey, StringComparison.OrdinalIgnoreCase);
     private string ButtonLabel => HasActiveReservation && IsSelected ? Localizer["ContinueReservation"] : Localizer["BookNow"];
+    private string DateRangeText =>
+        DateTime.TryParse(StartDate, out var s) && DateTime.TryParse(EndDate, out var e)
+            ? $"{s:dd.MM.yyyy} - {e:dd.MM.yyyy}"
+            : "";
 }

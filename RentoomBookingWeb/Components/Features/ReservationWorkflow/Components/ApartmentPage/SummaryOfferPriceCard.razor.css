@@ -11,6 +11,7 @@
     box-shadow: 0 0 8px rgba(139, 115, 68, 0.3);
     box-sizing: border-box;
     transition: all 0.2s;
+    cursor: pointer;
 }
 
 .summary-offer-price.selected-offer {

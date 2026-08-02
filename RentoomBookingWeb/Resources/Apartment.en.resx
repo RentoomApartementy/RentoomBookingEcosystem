@@ -516,6 +516,9 @@
   <data name="CalendarLoadMore" xml:space="preserve">
     <value>Show more</value>
   </data>
+  <data name="CalendarLoadingMoreMonths" xml:space="preserve">
+    <value>Loading more months...</value>
+  </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
     <value>The maximum number of guests is {0}</value>
   </data>
