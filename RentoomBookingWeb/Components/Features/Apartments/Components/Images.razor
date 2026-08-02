@@ -70,7 +70,7 @@ else
         <div class="modal-content" @onclick:stopPropagation>
             <button class="close-btn" @onclick="CloseGallery">&times;</button>
             
-            <div class="modal-main-view">
+            <div class="modal-main-view" @ref="_modalMainViewRef">
                 <button class="nav-btn prev-btn" @onclick="PrevImage">&#10094;</button>
                 <img class="modal-image" src="@ImagesList[_currentImageIndex].Url" alt="@PhotoAltFor(_currentImageIndex)">
                 <button class="nav-btn next-btn" @onclick="NextImage">&#10095;</button>
