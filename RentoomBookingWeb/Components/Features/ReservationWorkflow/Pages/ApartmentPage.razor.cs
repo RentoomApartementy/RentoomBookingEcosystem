@@ -698,9 +698,16 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             if (apartment == null) return new MarkupString("");
 
             var images = (_objectMediums ?? new List<ObjectMedium>())
-                .SelectMany(static medium => new[] { medium.Url, medium.CardUrl })
-                .Append(GetSeoImage())
+                .Where(medium => string.Equals(medium.Extension, "jpg", StringComparison.OrdinalIgnoreCase)
+                               || string.Equals(medium.Extension, "jpeg", StringComparison.OrdinalIgnoreCase))
+                .Select(medium => medium.Url)
+                .Take(10)
                 .ToList();
+
+            if (images.Count == 0)
+            {
+                images.Add(GetSeoImage());
+            }
 
             var fromOffer = _calendarFromOffer is null
                 ? null
