@@ -32,6 +32,8 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
         Task<List<ObjectAmenity>?> GetObjectAmenitiesAsync(int objectId, CancellationToken ct = default);
         Task<List<ApartmentObject>> SyncApartmentsAndAmenitiesAsync(CancellationToken ct = default);
         Task<List<ApartmentObject>> SaveAllApartmentsToPostgresAsync(CancellationToken ct = default);
+        Task SyncApartmentAmenitiesAsync(int apartmentId, CancellationToken ct = default);
+        Task SyncApartmentMediaAssetsAsync(int apartmentId, CancellationToken ct = default);
 
     }
     public class IdoApartmentService : IIdoApartmentService
@@ -274,12 +276,32 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             _logger.LogInformation("Retrieved amenities for {Count} apartments.", amenitiesDocuments.Count);
 
             await _apartmentRepository.SaveApartmentAmenitiesAsync(amenitiesDocuments, _logger, ct);
-            await SyncApartmentMediaAssetsAsync(apartments, ct);
+            await SyncApartmentMediaAssetsForApartmentsAsync(apartments, ct);
 
             return apartments;// amenitiesDocuments;
         }
 
-        private async Task SyncApartmentMediaAssetsAsync(List<ApartmentObject> apartments, CancellationToken ct)
+        public async Task SyncApartmentAmenitiesAsync(int apartmentId, CancellationToken ct = default)
+        {
+            var amenities = await GetObjectAmenitiesAsync(apartmentId, ct) ?? new List<ObjectAmenity>();
+            await _apartmentRepository.SaveApartmentAmenitiesAsync(new[]
+            {
+                new ApartmentAmenitiesDocument
+                {
+                    Id = apartmentId,
+                    ApartmentId = apartmentId,
+                    Amenities = amenities
+                }
+            }, _logger, ct);
+        }
+
+        public Task SyncApartmentMediaAssetsAsync(int apartmentId, CancellationToken ct = default) =>
+            SyncApartmentMediaAssetsForApartmentsAsync(new List<ApartmentObject>
+            {
+                new() { Id = apartmentId }
+            }, ct);
+
+        private async Task SyncApartmentMediaAssetsForApartmentsAsync(List<ApartmentObject> apartments, CancellationToken ct)
         {
             var summary = new ApartmentMediaSyncRunSummary
             {

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.Functions.Worker.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
+using Microsoft.DurableTask.Client;
 using Newtonsoft.Json;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Services;
@@ -34,46 +36,30 @@ namespace RentoomBooking.Api
         
         [Function("GetAllApartmentsFromIdoSellWithLocalizationInfoAsync")]
         public async Task<HttpResponseData> GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(
-                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "idb/apartments/getAll")] HttpRequestData req)
+                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "idb/apartments/getAll")] HttpRequestData req,
+                [DurableClient] DurableTaskClient durableTaskClient)
         {
-
-            var cancellationToken = req.FunctionContext.CancellationToken;
             var response = req.CreateResponse();
-
-            _logger.LogInformation($"GetAllApartmentObjectsFunctionNew function started at: {DateTime.Now}");
-
             try
             {
-                //  var result  = await _idoAppartmenrService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
-                var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync();
-
-                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
-                await _filtersRepository.SaveRegionsFilters(regionsFilter,_logger);
-
-                response.StatusCode = HttpStatusCode.OK;
+                var instanceId = await IdoBookingSyncStarter.StartOrGetActiveAsync(durableTaskClient, req.FunctionContext.CancellationToken);
+                response.StatusCode = HttpStatusCode.Accepted;
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-                await response.WriteStringAsync(JsonConvert.SerializeObject(result));
-                _logger.LogInformation($"GetAllApartmentObjectsFunctionNew function finished at: {DateTime.Now}");
-                return response;
-                
-
-            }
-            catch (InvalidOperationException invalidOperationException)
-            {
-                _logger.LogError(invalidOperationException, "ApartmentsService is not configured for IdoBooking access.");
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                await response.WriteStringAsync("Apartment service configuration error.");
+                await response.WriteStringAsync(JsonConvert.SerializeObject(new
+                {
+                    instanceId,
+                    statusUrl = $"{req.Url.Scheme}://{req.Url.Authority}/api/idb/apartments/sync/{instanceId}",
+                    currentStatusUrl = $"{req.Url.Scheme}://{req.Url.Authority}/api/idb/apartments/sync/current"
+                }));
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to retrieve apartments." + ex.Message);
+                _logger.LogError(ex, "Failed to start durable IdoBooking synchronization.");
                 response.StatusCode = HttpStatusCode.InternalServerError;
-                await response.WriteStringAsync("Internal server error." + ex.Message);
+                await response.WriteStringAsync("Unable to start apartment synchronization.");
                 return response;
             }
-
-            
         }
 
         //runs every 4 hours "0 0 */4 * * *"
@@ -81,66 +67,70 @@ namespace RentoomBooking.Api
         [Microsoft.Azure.Functions.Worker.FixedDelayRetry(5, "00:00:10")]
         public async Task GetAllApartmentsFromIdoSellWithLocalizationInfoAsyncCron(
                [TimerTrigger("%CRON_SYNC_ALL_APARTMENTS_FROM_IDB%")] TimerInfo timerInfo,
-               FunctionContext context)
+               FunctionContext context,
+               [DurableClient] DurableTaskClient durableTaskClient)
         {
-
-            var cancellationToken = context.CancellationToken;
-
-            _logger.LogInformation($"GetAllApartmentObjectsFunctionNew function started at: {DateTime.Now}");
-
             try
             {
-                //  var result  = await _idoAppartmenrService.GetAllApartmentsFromIdoSellWithLocalizationInfoAsync();
-                var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync(cancellationToken);
-
-                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
-                await _filtersRepository.SaveRegionsFilters(regionsFilter, _logger);
-
-                _logger.LogInformation("Synchronized {ApartmentsCount} apartments from IdoSell. Next scheduled run: {NextRun}", result.Count, timerInfo.ScheduleStatus?.Next);
-                _logger.LogInformation($"GetAllApartmentObjectsFunctionNew function finished at: {DateTime.Now}");
-
-            }
-            catch (InvalidOperationException invalidOperationException)
-            {
-                _logger.LogError(invalidOperationException, "ApartmentsService is not configured for IdoBooking access.");
-                throw;
+                var instanceId = await IdoBookingSyncStarter.StartOrGetActiveAsync(durableTaskClient, context.CancellationToken);
+                _logger.LogInformation("IdoBooking sync is scheduled or already active. InstanceId={InstanceId}, NextScheduledRun={NextRun}", instanceId, timerInfo.ScheduleStatus?.Next);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to retrieve apartments." + ex.Message);
+                _logger.LogError(ex, "Failed to schedule IdoBooking durable synchronization.");
                 throw;
             }
-
-
         }
 
         [Function("SeedApartmentsToPostgres")]
         public async Task<HttpResponseData> SeedApartmentsToPostgres(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "postgres/apartments/seed")] HttpRequestData req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "postgres/apartments/seed")] HttpRequestData req,
+            [DurableClient] DurableTaskClient durableTaskClient)
         {
-            var cancellationToken = req.FunctionContext.CancellationToken;
-            var response = req.CreateResponse();
+            return await GetAllApartmentsFromIdoSellWithLocalizationInfoAsync(req, durableTaskClient);
+        }
 
-            try
+        [Function("GetIdoBookingApartmentSyncStatus")]
+        public async Task<HttpResponseData> GetIdoBookingApartmentSyncStatus(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "idb/apartments/sync/{instanceId}")] HttpRequestData req,
+            string instanceId,
+            [DurableClient] DurableTaskClient durableTaskClient)
+        {
+            var metadata = await durableTaskClient.GetInstanceAsync(instanceId, getInputsAndOutputs: true, req.FunctionContext.CancellationToken);
+            var response = req.CreateResponse(metadata is null ? HttpStatusCode.NotFound : HttpStatusCode.OK);
+            if (metadata is null)
             {
-                var result = await _idoAppartmenrService.SyncApartmentsAndAmenitiesAsync(cancellationToken);
-
-                List<string?> regionsFilter = result.Select(r => r?.ObjectLocation?.LocalizationItem?.Region).Distinct().ToList();
-
-                await _filtersRepository.SaveRegionsFilters(regionsFilter,_logger);
-
-                response.StatusCode = HttpStatusCode.OK;
-                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
-                await response.WriteStringAsync(JsonConvert.SerializeObject(result));
+                await response.WriteStringAsync("Synchronization instance was not found.");
                 return response;
             }
-            catch (Exception ex)
+
+            response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+            await response.WriteStringAsync(JsonConvert.SerializeObject(new
             {
-                _logger.LogError(ex, "Failed to seed apartments to PostgreSQL.");
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                await response.WriteStringAsync("Internal server error.");
-                return response;
+                instanceId = metadata.InstanceId,
+                runtimeStatus = metadata.RuntimeStatus.ToString(),
+                createdAtUtc = metadata.CreatedAt,
+                lastUpdatedAtUtc = metadata.LastUpdatedAt,
+                customStatus = metadata.ReadCustomStatusAs<IdoBookingSyncStatus>(),
+                result = metadata.ReadOutputAs<IdoBookingSyncResult>()
+            }));
+            return response;
+        }
+
+        [Function("GetCurrentIdoBookingApartmentSyncStatus")]
+        public async Task<HttpResponseData> GetCurrentIdoBookingApartmentSyncStatus(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "idb/apartments/sync/current")] HttpRequestData req,
+            [DurableClient] DurableTaskClient durableTaskClient)
+        {
+            var instanceId = await IdoBookingSyncStarter.GetActiveInstanceIdAsync(durableTaskClient, req.FunctionContext.CancellationToken);
+            if (instanceId is null)
+            {
+                var notFound = req.CreateResponse(HttpStatusCode.NotFound);
+                await notFound.WriteStringAsync("No IdoBooking synchronization is active.");
+                return notFound;
             }
+
+            return await GetIdoBookingApartmentSyncStatus(req, instanceId, durableTaskClient);
         }
 
 
