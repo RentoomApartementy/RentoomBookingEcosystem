@@ -30,4 +30,13 @@
   <data name="StatuteHeader" xml:space="preserve">
     <value>Pogoji uporabe</value>
   </data>
+  <data name="PageTitleFormat" xml:space="preserve">
+    <value>{0} - Rentoom | Pisarna za najem in upravljanje Toruń</value>
+  </data>
+  <data name="MetaDescription" xml:space="preserve">
+    <value>Pogoji in določila Rentooma – pogoji najema, rezervacije in bivanja v stanovanjih v Torunu. Pred rezervacijo prosimo preberite pravila.</value>
+  </data>
+  <data name="MetaKeywords" xml:space="preserve">
+    <value>Predpisi o najemu, predpisi o najemih v Toruńu, pogoji rezervacije stanovanj, predpisi o bivanju, pravila o najemu stanovanj</value>
+  </data>
 </root>

@@ -30,4 +30,13 @@
   <data name="StatuteHeader" xml:space="preserve">
     <value>Términos y Condiciones</value>
   </data>
+  <data name="PageTitleFormat" xml:space="preserve">
+    <value>{0} - Rentoom | Oficina de Servicios y Gestión de Alquiler Toruń</value>
+  </data>
+  <data name="MetaDescription" xml:space="preserve">
+    <value>Términos y condiciones de Rentoom: condiciones de alquiler, reserva y estancia en apartamentos en Toruń. Por favor, lee las normas antes de reservar.</value>
+  </data>
+  <data name="MetaKeywords" xml:space="preserve">
+    <value>Normativas de Rentoom, Normativas de alquiler en Toruń, Condiciones de reserva de apartamentos, Normas de estancia, Normas de alquiler de apartamentos</value>
+  </data>
 </root>

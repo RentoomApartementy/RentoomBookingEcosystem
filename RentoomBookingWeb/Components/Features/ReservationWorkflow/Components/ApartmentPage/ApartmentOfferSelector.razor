@@ -72,7 +72,14 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
         }
     </div>
     
-    <small style="margin-top: .5rem">@Localizer["CleaningIncluded"]</small>
+    @if (MandatoryAddonsFee > 0)
+    {
+        <small style="margin-top: .5rem">@Localizer["CleaningFeeIncludedLabel"] <PriceDisplay AmountPln="@MandatoryAddonsFee" /></small>
+    }
+    else
+    {
+        <small style="margin-top: .5rem">@Localizer["CleaningIncluded"]</small>
+    }
 }
 else
 {
@@ -124,6 +131,7 @@ else
     [Parameter] public string RefundableOfferText { get; set; } = "";
     [Parameter] public string? SelectedOfferType { get; set; }
     [Parameter] public bool HasActiveReservation { get; set; }
+    [Parameter] public decimal MandatoryAddonsFee { get; set; }
     [Parameter] public List<AvailableTerm> SuggestionDates { get; set; } = new();
     [Parameter] public AvailableTerm? SelectedSuggestionDate { get; set; }
     [Parameter] public bool IsSuggestionLoading { get; set; }

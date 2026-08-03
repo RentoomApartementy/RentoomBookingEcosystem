@@ -2,7 +2,6 @@ using System.Globalization;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.ReservationWorkflow;
 using RentoomBooking.SharedClasses.Models.RentoomBooking;
-using RentoomBooking.SharedClasses.Services;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 
 namespace RentoomBookingWeb.Services
@@ -71,13 +70,16 @@ namespace RentoomBookingWeb.Services
 
     public class ApartmentCalendarService : IApartmentCalendarService
     {
-        private readonly IIdoOfferService _offerService;
-        private readonly IAvailabilityFinderService2 _availabilityFinder;
+        /// <summary>How far ahead of today the "from X zł/night" search looks for the cheapest
+        /// available night — matches the window used by <see cref="ApartmentMinPriceService"/> for
+        /// the listing-card price, so both "from" prices are computed the same way.</summary>
+        private const int PriceSearchWindowMonths = 1;
 
-        public ApartmentCalendarService(IIdoOfferService offerService, IAvailabilityFinderService2 availabilityFinder)
+        private readonly IIdoOfferService _offerService;
+
+        public ApartmentCalendarService(IIdoOfferService offerService)
         {
             _offerService = offerService ?? throw new ArgumentNullException(nameof(offerService));
-            _availabilityFinder = availabilityFinder ?? throw new ArgumentNullException(nameof(availabilityFinder));
         }
 
         public async Task<ApartmentCalendarDto> GetCalendarAsync(
@@ -132,16 +134,8 @@ namespace RentoomBookingWeb.Services
                 }
             }
 
-            var today = DateOnly.FromDateTime(DateTime.Today);
-            var nearestAvailableDay = result.Days
-                .Where(day => day.Key >= today && day.Value.Available)
-                .Select(day => (DateOnly?)day.Key)
-                .OrderBy(day => day)
-                .FirstOrDefault() ?? today;
-
-            result.FromOffer = await GetNearestSuggestedOfferAsync(
+            result.FromOffer = await GetCheapestAvailableOfferAsync(
                 objectId,
-                nearestAvailableDay,
                 adults,
                 children,
                 applyMandatoryAddonsFee,
@@ -153,62 +147,68 @@ namespace RentoomBookingWeb.Services
             return result;
         }
 
-        /// <summary>"From X zł/night" anchor — the real, validated price (via the same suggested-date
-        /// mechanism used elsewhere for "no offer for these dates, try these" alternatives) of the
-        /// nearest available term to today, not an estimate. A 1-night reference range is used purely
-        /// to ask "what's the closest available date" — the underlying search still finds and prices
-        /// the actual nearest available term regardless of its real length/min-stay.
-        /// AvailableTerm.MinimalPrice is the TOTAL price for the whole stay, not a nightly rate — when
-        /// applyMandatoryAddonsFee is set (same flat-fee-adjusted divisor used by the apartments list
-        /// page's suggested-date price, see Apartment.razor's UpdateSuggestionFromPriceAsync), the
-        /// apartment's mandatory-addons total is added back per night rather than shown as a raw average.</summary>
-        private async Task<ApartmentFromOfferDto?> GetNearestSuggestedOfferAsync(
+        /// <summary>"From X zł/night" anchor — the cheapest available (ItemsNumber &gt; 0) night within
+        /// the next <see cref="PriceSearchWindowMonths"/> month(s) from today, sourced directly from
+        /// IdoBooking's per-day availability+price feed. Uses the same window and availability-filter
+        /// methodology as <see cref="ApartmentMinPriceService"/> (the listing-card "from" price), so
+        /// both numbers are computed the same way instead of one being "nearest available date" and
+        /// the other "cheapest in window".</summary>
+        private async Task<ApartmentFromOfferDto?> GetCheapestAvailableOfferAsync(
             int objectId,
-            DateOnly referenceDate,
             int adults,
             int children,
             bool applyMandatoryAddonsFee,
             IReadOnlyList<MandatoryAddonCharge>? mandatoryAddonCharges,
             CancellationToken cancellationToken)
         {
-            var referenceStart = referenceDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            var referenceEnd = referenceDate.AddDays(1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var windowEnd = today.AddMonths(PriceSearchWindowMonths);
 
-            var result = await _availabilityFinder
-                .FindAvailableTermsForApartmentAsync(objectId, referenceStart, referenceEnd, adults, children, cancellationToken)
+            var payload = new OfferAvailabilityAndPricesParamsSearchInternal
+            {
+                ObjectIds = new List<int> { objectId },
+                ParamsSearch = new OfferAvailabilityAndPricesParamsSearch
+                {
+                    DateFrom = today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    DateTo = windowEnd.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    AdultsNumber = adults,
+                    ChildrenNumber = children > 0 ? children : null,
+                    Language = "pol",
+                    Currency = "PLN"
+                }
+            };
+
+            var offerObjects = await _offerService
+                .GetAvailabilityAndPricesForDaysAsync(payload, cancellationToken)
                 .ConfigureAwait(false);
 
-            var term = result.AvailableTerms?.FirstOrDefault(t => t.MinimalPrice.HasValue);
-            if (term?.MinimalPrice is not decimal totalPrice)
+            var apartment = offerObjects?.FirstOrDefault(o => o.ObjectId == objectId);
+            if (apartment is null)
             {
                 return null;
             }
 
-            if (!DateOnly.TryParse(term.StartDate, CultureInfo.InvariantCulture, DateTimeStyles.None, out var start) ||
-                !DateOnly.TryParse(term.EndDate, CultureInfo.InvariantCulture, DateTimeStyles.None, out var end))
+            var availableDates = (apartment.ObjectAvailability ?? Enumerable.Empty<OfferAvailabilityDate>())
+                .Where(a => a.ItemsNumber > 0 && a.Date != null)
+                .Select(a => a.Date!)
+                .ToHashSet();
+
+            var cheapestDay = (apartment.ObjectPricesDates ?? Enumerable.Empty<OfferPriceDate>())
+                .Where(d => d.Price > 0 && d.Date != null && availableDates.Contains(d.Date!))
+                .OrderBy(d => d.Price)
+                .FirstOrDefault();
+
+            if (cheapestDay is null || !TryParseDate(cheapestDay.Date, out var start))
             {
                 return null;
             }
 
-            var nights = end.DayNumber - start.DayNumber;
-            if (nights <= 0)
-            {
-                return null;
-            }
+            var end = start.AddDays(1);
+            var fee = mandatoryAddonCharges?.Sum(c => AddonPricingCalculator.CalculateTotal(c.PaymentType, c.PriceGross, nights: 1, adults + children, quantity: 1)) ?? 0m;
+            var pricePerNight = applyMandatoryAddonsFee ? cheapestDay.Price + fee : cheapestDay.Price;
 
-            var fee = mandatoryAddonCharges?.Sum(c => AddonPricingCalculator.CalculateTotal(c.PaymentType, c.PriceGross, nights, adults + children, quantity: 1)) ?? 0m;
-
-            if (!applyMandatoryAddonsFee)
-            {
-                var plainPerNight = (totalPrice - fee) / nights;
-                return plainPerNight > 0
-                    ? CreateFromOffer(plainPerNight, start, end, nights, adults, children)
-                    : null;
-            }
-
-            var perNight = ((totalPrice - fee) / nights) + fee;
-            return perNight > 0
-                ? CreateFromOffer(perNight, start, end, nights, adults, children)
+            return pricePerNight > 0
+                ? CreateFromOffer(pricePerNight, start, end, nights: 1, adults, children)
                 : null;
         }
 

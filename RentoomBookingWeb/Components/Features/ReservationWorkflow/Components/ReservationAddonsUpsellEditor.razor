@@ -14,7 +14,7 @@
 @inject IReservationWorkflowService ReservationWorkflowService
 @inject IStringLocalizer<RentoomBookingWeb.Apartment> ApartmentLocalizer
 @inject IStringLocalizer<RentoomBookingWeb.Upsell> UpsellLocalizer
-
+@inject IWebHostEnvironment Environment
 @if (_pricingContext is not null)
 {
     <ApartmentAddonSelector
@@ -26,13 +26,15 @@
         Localizer="ApartmentLocalizer"
         OnToggleAddon="ToggleAddonWrapper"
         OnQuantityUpdate="HandleQuantityUpdate" />
-
-    <UpsellList
+    @if (Environment.IsDevelopment())
+    {
+        <UpsellList
         AvailableUpsellsList="_availableUpsells"
         ReservationContext="_pricingContext"
         InitialSelection="_selectedUpsells"
         OnSelectionChanged="HandleUpsellSelectionChanged"
         Texts="_upsellTexts" />
+    }
 }
 
 @code {

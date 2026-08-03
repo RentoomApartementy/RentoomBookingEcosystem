@@ -63,9 +63,9 @@ namespace RentoomBookingWeb.Services
 
         private async Task<Dictionary<int, ApartmentMinPrice>> BuildMinPricesAsync(DateOnly from, DateOnly to, CancellationToken cancellationToken)
         {
-            var payload = new OfferPricesForDaysParamsSearchInternal
+            var payload = new OfferAvailabilityAndPricesParamsSearchInternal
             {
-                ParamsSearch = new OfferPricesForDaysParamsSearch
+                ParamsSearch = new OfferAvailabilityAndPricesParamsSearch
                 {
                     DateFrom = from.ToString("yyyy-MM-dd"),
                     DateTo = to.ToString("yyyy-MM-dd"),
@@ -76,7 +76,7 @@ namespace RentoomBookingWeb.Services
                 }
             };
 
-            var offerObjects = await _offerService.GetPricesForDaysAsync(payload, cancellationToken) ?? new List<OfferPricesForDaysObject>();
+            var offerObjects = await _offerService.GetAvailabilityAndPricesForDaysAsync(payload, cancellationToken) ?? new List<OfferAvailabilityAndPricesForDaysObject>();
 
             var allApartments = await _apartmentsService.GetAllApartmentsList();
             var apartmentsById = allApartments.Items.ToDictionary(a => a.Id);
@@ -84,7 +84,14 @@ namespace RentoomBookingWeb.Services
             var result = new Dictionary<int, ApartmentMinPrice>();
             foreach (var offerObject in offerObjects)
             {
-                var pricedDays = offerObject.ObjectPricesDates?.Where(d => d.Price > 0).ToList();
+                var availableDates = (offerObject.ObjectAvailability ?? Enumerable.Empty<OfferAvailabilityDate>())
+                    .Where(a => a.ItemsNumber > 0 && a.Date != null)
+                    .Select(a => a.Date!)
+                    .ToHashSet();
+
+                var pricedDays = offerObject.ObjectPricesDates?
+                    .Where(d => d.Price > 0 && d.Date != null && availableDates.Contains(d.Date!))
+                    .ToList();
                 if (pricedDays is not { Count: > 0 })
                 {
                     continue;

@@ -160,7 +160,7 @@
     <value>Grundlegende Informationen</value>
   </data>
   <data name="ClientInfoSubtitle" xml:space="preserve">
-    <value>Füllen Sie die Details aus</value>
+    <value>Füllen Sie Ihre Daten aus</value>
   </data>
   <data name="YourStay" xml:space="preserve">
     <value>Dein Aufenthalt</value>
@@ -305,7 +305,7 @@
     <value>Erforderlich</value>
   </data>
   <data name="FillAllDataError" xml:space="preserve">
-    <value>Füllen Sie die Details aus</value>
+    <value>Füllen Sie Ihre Daten aus</value>
   </data>
   <data name="InvalidEmailError" xml:space="preserve">
     <value>Falsche E-Mail</value>
@@ -329,7 +329,7 @@
     <value>Wählen Sie alle Zustimmungen aus</value>
   </data>
   <data name="FillGuestData" xml:space="preserve">
-    <value>Füllen Sie die Details aus</value>
+    <value>Füllen Sie Ihre Daten aus</value>
   </data>
   <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
     <value>Rechnung</value>

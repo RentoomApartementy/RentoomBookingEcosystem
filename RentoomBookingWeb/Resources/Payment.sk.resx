@@ -160,7 +160,7 @@
     <value>Základné informácie</value>
   </data>
   <data name="ClientInfoSubtitle" xml:space="preserve">
-    <value>Doplňte detaily</value>
+    <value>Vyplňte svoje údaje</value>
   </data>
   <data name="YourStay" xml:space="preserve">
     <value>Tvoj pobyt</value>
@@ -305,7 +305,7 @@
     <value>Povinné</value>
   </data>
   <data name="FillAllDataError" xml:space="preserve">
-    <value>Doplňte detaily</value>
+    <value>Vyplňte svoje údaje</value>
   </data>
   <data name="InvalidEmailError" xml:space="preserve">
     <value>Nesprávny e-mail</value>
@@ -329,7 +329,7 @@
     <value>Vyberte všetky súhlasy</value>
   </data>
   <data name="FillGuestData" xml:space="preserve">
-    <value>Doplňte detaily</value>
+    <value>Vyplňte svoje údaje</value>
   </data>
   <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
     <value>Faktúra</value>

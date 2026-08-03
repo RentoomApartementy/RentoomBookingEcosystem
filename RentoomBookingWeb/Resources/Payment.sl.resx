@@ -160,7 +160,7 @@
     <value>Osnovne informacije</value>
   </data>
   <data name="ClientInfoSubtitle" xml:space="preserve">
-    <value>Izpolnite podrobnosti</value>
+    <value>Izpolnite svoje podatke</value>
   </data>
   <data name="YourStay" xml:space="preserve">
     <value>Tvoje bivanje</value>
@@ -305,7 +305,7 @@
     <value>Obvezno</value>
   </data>
   <data name="FillAllDataError" xml:space="preserve">
-    <value>Izpolnite podrobnosti</value>
+    <value>Izpolnite svoje podatke</value>
   </data>
   <data name="InvalidEmailError" xml:space="preserve">
     <value>Napačna e-pošta</value>
@@ -329,7 +329,7 @@
     <value>Izberite vsa soglasja</value>
   </data>
   <data name="FillGuestData" xml:space="preserve">
-    <value>Izpolnite podrobnosti</value>
+    <value>Izpolnite svoje podatke</value>
   </data>
   <data name="InvoiceSummaryBoxLabel" xml:space="preserve">
     <value>Račun</value>

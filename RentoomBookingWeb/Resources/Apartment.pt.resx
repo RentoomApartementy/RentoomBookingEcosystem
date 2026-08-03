@@ -528,4 +528,10 @@
   <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
     <value>{0} km</value>
   </data>
+  <data name="CalendarLoadingMoreMonths" xml:space="preserve">
+    <value>Estou carregando os próximos meses...</value>
+  </data>
+  <data name="CleaningFeeIncludedLabel" xml:space="preserve">
+    <value>Taxa de limpeza incluída</value>
+  </data>
 </root>

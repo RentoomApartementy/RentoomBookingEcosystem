@@ -6,6 +6,11 @@
     margin-top: .75rem;
 }
 
+.mini-offer-cleaning-fee {
+    color: #666;
+    font-size: .75rem;
+}
+
 .mini-offer-wrapper-horizontal {
     flex-direction: row;
     align-items: stretch;

@@ -1,41 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>1.3</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <data name="NoStatuteContent" xml:space="preserve">
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="NoStatuteContent" xml:space="preserve">
         <value>Brak treści regulaminu w wybranym języku.</value>
     </data>
-    <data name="OtherStatutes" xml:space="preserve">
+  <data name="OtherStatutes" xml:space="preserve">
         <value>Inne regulaminy</value>
     </data>
-    <data name="StatuteNotFound" xml:space="preserve">
+  <data name="StatuteNotFound" xml:space="preserve">
         <value>Nie znaleziono regulaminu</value>
     </data>
-    <data name="LoadingStatutes" xml:space="preserve">
+  <data name="LoadingStatutes" xml:space="preserve">
         <value>Ładowanie regulaminów...</value>
     </data>
-    <data name="PageTitle" xml:space="preserve">
+  <data name="PageTitle" xml:space="preserve">
         <value>Regulaminy - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</value>
     </data>
-    <data name="StatuteHeader" xml:space="preserve">
+  <data name="StatuteHeader" xml:space="preserve">
         <value>Regulaminy</value>
     </data>
-    <data name="PageTitleFormat" xml:space="preserve">
+  <data name="PageTitleFormat" xml:space="preserve">
         <value>{0} - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</value>
     </data>
-    <data name="MetaDescription" xml:space="preserve">
+  <data name="MetaDescription" xml:space="preserve">
         <value>Regulaminy Rentoom - warunki najmu, rezerwacji i pobytu w apartamentach w Toruniu. Zapoznaj się z zasadami przed dokonaniem rezerwacji.</value>
     </data>
-    <data name="MetaKeywords" xml:space="preserve">
+  <data name="MetaKeywords" xml:space="preserve">
         <value>regulamin rentoom, regulamin najmu toruń, warunki rezerwacji apartamentu, regulamin pobytu, zasady wynajmu apartamentów</value>
     </data>
 </root>

@@ -512,7 +512,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         // ---- Formatting helpers ------------------------------------------
 
         private string FormatPrice(decimal value)
-            => $"{Math.Round(value, 0, MidpointRounding.AwayFromZero).ToString("N0", CultureInfo.CurrentUICulture)} zł";
+            => $"{value.ToString("N2", CultureInfo.CurrentUICulture)} zł";
 
         private static IEnumerable<string> WeekdayHeaders()
         {
