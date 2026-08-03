@@ -1,6 +1,8 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Npgsql;
 using RentoomBooking.SharedClasses.Database;
 using RentoomBooking.SharedClasses.Models.ApartmentMedia;
 using RentoomBooking.SharedClasses.Models.Database.EFEntitites;
@@ -10,21 +12,30 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
 {
     public interface IApartmentMediaCatalogService
     {
-        Task<List<ObjectMedium>> GetApartmentMediaAsync(int apartmentId, CancellationToken cancellationToken = default);
+        /// <param name="culture">Culture for the alt texts. Null falls back to <see cref="CultureInfo.CurrentUICulture"/>.</param>
+        Task<List<ObjectMedium>> GetApartmentMediaAsync(int apartmentId, string? culture = null, CancellationToken cancellationToken = default);
         Task<IReadOnlyDictionary<int, List<ObjectMedium>>> GetApartmentMediaBatchAsync(
             IReadOnlyCollection<int> apartmentIds,
+            string? culture = null,
             CancellationToken cancellationToken = default);
         Task<List<ApartmentMediaAssetEntity>> GetAssetEntitiesAsync(int apartmentId, CancellationToken cancellationToken = default);
         Task UpsertAssetsAsync(
             int apartmentId,
             IReadOnlyCollection<ApartmentMediaSyncSourceState> sourceStates,
             ApartmentMediaSyncRunSummary summary,
+            IReadOnlyDictionary<string, ApartmentMediaDuplicateSource>? duplicateSources = null,
             CancellationToken cancellationToken = default);
         Task SaveRunSummaryAsync(ApartmentMediaSyncRunSummary summary, CancellationToken cancellationToken = default);
     }
 
     public sealed class ApartmentMediaCatalogService : IApartmentMediaCatalogService
     {
+        private static readonly IReadOnlyDictionary<int, string> EmptyAltTexts = new Dictionary<int, string>();
+
+        // Set once the alt-text table turns out to be absent, so a missing deployment does not cost a
+        // failing query on every media fetch. Cleared by an application restart.
+        private static volatile bool _altTextsTableMissing;
+
         private readonly IDbContextFactory<PostgresBookingDbContext> _dbContextFactory;
         private readonly IApartmentPhotoBlobStorage _blobStorage;
         private readonly ILogger<ApartmentMediaCatalogService> _logger;
@@ -39,7 +50,7 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
             _logger = logger;
         }
 
-        public async Task<List<ObjectMedium>> GetApartmentMediaAsync(int apartmentId, CancellationToken cancellationToken = default)
+        public async Task<List<ObjectMedium>> GetApartmentMediaAsync(int apartmentId, string? culture = null, CancellationToken cancellationToken = default)
         {
             await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
             var entities = await context.ApartmentMediaAssets
@@ -49,11 +60,14 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 .ThenBy(asset => asset.Id)
                 .ToListAsync(cancellationToken);
 
-            return entities.Select(MapAssetToObjectMedium).ToList();
+            var altTexts = await LoadAltTextsAsync(context, entities, culture, cancellationToken);
+
+            return entities.Select(asset => MapAssetToObjectMedium(asset, altTexts)).ToList();
         }
 
         public async Task<IReadOnlyDictionary<int, List<ObjectMedium>>> GetApartmentMediaBatchAsync(
             IReadOnlyCollection<int> apartmentIds,
+            string? culture = null,
             CancellationToken cancellationToken = default)
         {
             var requestedApartmentIds = apartmentIds?
@@ -75,13 +89,15 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 .ThenBy(asset => asset.Id)
                 .ToListAsync(cancellationToken);
 
+            var altTexts = await LoadAltTextsAsync(context, entities, culture, cancellationToken);
+
             var mediaByApartmentId = requestedApartmentIds.ToDictionary(
                 apartmentId => apartmentId,
                 _ => new List<ObjectMedium>());
 
             foreach (var entity in entities)
             {
-                mediaByApartmentId[entity.ApartmentId].Add(MapAssetToObjectMedium(entity));
+                mediaByApartmentId[entity.ApartmentId].Add(MapAssetToObjectMedium(entity, altTexts));
             }
 
             return mediaByApartmentId;
@@ -101,6 +117,7 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
             int apartmentId,
             IReadOnlyCollection<ApartmentMediaSyncSourceState> sourceStates,
             ApartmentMediaSyncRunSummary summary,
+            IReadOnlyDictionary<string, ApartmentMediaDuplicateSource>? duplicateSources = null,
             CancellationToken cancellationToken = default)
         {
             await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
@@ -109,44 +126,27 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 .ToListAsync(cancellationToken);
 
             var sourceMap = sourceStates.ToDictionary(state => state.SourceMedium.Url ?? string.Empty, StringComparer.Ordinal);
+            duplicateSources ??= new Dictionary<string, ApartmentMediaDuplicateSource>(StringComparer.Ordinal);
             var utcNow = DateTime.UtcNow;
+            var assetsToDelete = existingAssets
+                .Where(asset => !sourceMap.ContainsKey(asset.IdoSourceUrl))
+                .ToList();
+            var deletedAssetIds = assetsToDelete.Select(asset => asset.Id).ToHashSet();
+            var retainedBlobKeys = existingAssets
+                .Where(asset => !deletedAssetIds.Contains(asset.Id))
+                .SelectMany(asset => new[] { asset.StorageKey, asset.CardStorageKey })
+                .Where(key => !string.IsNullOrWhiteSpace(key))
+                .Cast<string>()
+                .ToHashSet(StringComparer.Ordinal);
 
-            foreach (var asset in existingAssets)
+            foreach (var asset in assetsToDelete)
             {
-                if (!sourceMap.ContainsKey(asset.IdoSourceUrl))
+                var isDuplicate = duplicateSources.TryGetValue(asset.IdoSourceUrl, out var duplicate);
+                var reason = isDuplicate ? "duplicate_checksum" : "source_removed";
+
+                if (!retainedBlobKeys.Contains(asset.StorageKey))
                 {
                     await _blobStorage.DeleteIfExistsAsync(asset.StorageKey, cancellationToken);
-                    if (!string.IsNullOrWhiteSpace(asset.CardStorageKey))
-                    {
-                        await _blobStorage.DeleteIfExistsAsync(asset.CardStorageKey, cancellationToken);
-                        summary.Changes.Add(new ApartmentMediaSyncChange
-                        {
-                            ApartmentId = apartmentId,
-                            IdoSourceUrl = asset.IdoSourceUrl,
-                            StorageKey = asset.CardStorageKey,
-                            Action = "deleted",
-                            Variant = "card",
-                            Reason = "source_removed",
-                            OldSequence = asset.PictureDisplaySequence,
-                            ContentType = asset.CardContentType
-                        });
-
-                        _logger.LogInformation(
-                            "Apartment media sync item processed. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Variant={Variant}, Action={Action}, Reason={Reason}, OldSequence={OldSequence}, NewSequence={NewSequence}, ContentType={ContentType}",
-                            summary.RunId,
-                            apartmentId,
-                            asset.IdoSourceUrl,
-                            asset.CardStorageKey,
-                            "card",
-                            "deleted",
-                            "source_removed",
-                            asset.PictureDisplaySequence,
-                            null,
-                            asset.CardContentType);
-                    }
-
-                    context.ApartmentMediaAssets.Remove(asset);
-                    summary.DeletedCount++;
                     summary.Changes.Add(new ApartmentMediaSyncChange
                     {
                         ApartmentId = apartmentId,
@@ -154,24 +154,70 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                         StorageKey = asset.StorageKey,
                         Action = "deleted",
                         Variant = "original",
-                        Reason = "source_removed",
+                        Reason = reason,
                         OldSequence = asset.PictureDisplaySequence,
-                        ContentType = asset.ContentType
+                        ContentType = asset.ContentType,
+                        ChecksumSha256 = duplicate?.ChecksumSha256,
+                        RetainedIdoSourceUrl = duplicate?.RetainedIdoSourceUrl
                     });
 
                     _logger.LogInformation(
-                        "Apartment media sync item processed. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Variant={Variant}, Action={Action}, Reason={Reason}, OldSequence={OldSequence}, NewSequence={NewSequence}, ContentType={ContentType}",
+                        "Apartment media asset deleted. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, DeletedIdoSourceUrl={DeletedIdoSourceUrl}, RetainedIdoSourceUrl={RetainedIdoSourceUrl}, ChecksumSha256={ChecksumSha256}, StorageKey={StorageKey}, Variant={Variant}, Reason={Reason}, OldSequence={OldSequence}, ContentType={ContentType}",
+                        summary.RunId,
+                        apartmentId,
+                        asset.IdoSourceUrl,
+                        duplicate?.RetainedIdoSourceUrl,
+                        duplicate?.ChecksumSha256,
+                        asset.StorageKey,
+                        "original",
+                        reason,
+                        asset.PictureDisplaySequence,
+                        asset.ContentType);
+                }
+                else
+                {
+                    _logger.LogWarning(
+                        "Skipping deletion of shared apartment media blob. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Variant={Variant}",
                         summary.RunId,
                         apartmentId,
                         asset.IdoSourceUrl,
                         asset.StorageKey,
-                        "original",
-                        "deleted",
-                        "source_removed",
-                        asset.PictureDisplaySequence,
-                        null,
-                        asset.ContentType);
+                        "original");
                 }
+
+                if (!string.IsNullOrWhiteSpace(asset.CardStorageKey) && !retainedBlobKeys.Contains(asset.CardStorageKey))
+                {
+                    await _blobStorage.DeleteIfExistsAsync(asset.CardStorageKey, cancellationToken);
+                    summary.Changes.Add(new ApartmentMediaSyncChange
+                    {
+                        ApartmentId = apartmentId,
+                        IdoSourceUrl = asset.IdoSourceUrl,
+                        StorageKey = asset.CardStorageKey,
+                        Action = "deleted",
+                        Variant = "card",
+                        Reason = reason,
+                        OldSequence = asset.PictureDisplaySequence,
+                        ContentType = asset.CardContentType,
+                        ChecksumSha256 = duplicate?.ChecksumSha256,
+                        RetainedIdoSourceUrl = duplicate?.RetainedIdoSourceUrl
+                    });
+
+                    _logger.LogInformation(
+                        "Apartment media asset deleted. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, DeletedIdoSourceUrl={DeletedIdoSourceUrl}, RetainedIdoSourceUrl={RetainedIdoSourceUrl}, ChecksumSha256={ChecksumSha256}, StorageKey={StorageKey}, Variant={Variant}, Reason={Reason}, OldSequence={OldSequence}, ContentType={ContentType}",
+                        summary.RunId,
+                        apartmentId,
+                        asset.IdoSourceUrl,
+                        duplicate?.RetainedIdoSourceUrl,
+                        duplicate?.ChecksumSha256,
+                        asset.CardStorageKey,
+                        "card",
+                        reason,
+                        asset.PictureDisplaySequence,
+                        asset.CardContentType);
+                }
+
+                context.ApartmentMediaAssets.Remove(asset);
+                summary.DeletedCount++;
             }
 
             foreach (var sourceState in sourceStates)
@@ -304,16 +350,85 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
             };
         }
 
-        private ObjectMedium MapAssetToObjectMedium(ApartmentMediaAssetEntity asset)
+        /// <summary>
+        /// Loads the alt texts for the given assets in a single query. The SQL filter keeps both the
+        /// requested culture family and the default one, so <see cref="AltTextCultureResolver.SelectBest"/>
+        /// can apply its full fallback chain without pulling every culture from the table.
+        /// </summary>
+        private async Task<IReadOnlyDictionary<int, string>> LoadAltTextsAsync(
+            PostgresBookingDbContext context,
+            IReadOnlyCollection<ApartmentMediaAssetEntity> assets,
+            string? culture,
+            CancellationToken cancellationToken)
+        {
+            if (assets.Count == 0 || _altTextsTableMissing)
+            {
+                return EmptyAltTexts;
+            }
+
+            var normalizedCulture = AltTextCultureResolver.NormalizeCulture(culture ?? CultureInfo.CurrentUICulture.Name);
+            var neutralCulture = AltTextCultureResolver.GetNeutralCulture(normalizedCulture);
+            var neutralDefaultCulture = AltTextCultureResolver.GetNeutralCulture(AltTextCultureResolver.DefaultCulture);
+            var neutralPrefix = neutralCulture + "-";
+            var neutralDefaultPrefix = neutralDefaultCulture + "-";
+
+            var assetIds = assets.Select(asset => asset.Id).ToList();
+
+            List<ApartmentMediaAltText> rows;
+            try
+            {
+                rows = await context.ApartmentMediaAltTexts
+                    .AsNoTracking()
+                    .Where(alt => assetIds.Contains(alt.MediaAssetId))
+                    .Where(alt => alt.Culture == neutralCulture
+                        || alt.Culture.StartsWith(neutralPrefix)
+                        || alt.Culture == neutralDefaultCulture
+                        || alt.Culture.StartsWith(neutralDefaultPrefix))
+                    .ToListAsync(cancellationToken);
+            }
+            catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UndefinedTable)
+            {
+                // The table is owned by the RentoomApp repository and may not be deployed yet. Photos must
+                // keep loading with their generated alt text instead of failing the whole media fetch.
+                _altTextsTableMissing = true;
+                _logger.LogWarning(ex, "apartment_media_alt_texts is missing; falling back to generated alt texts.");
+                return EmptyAltTexts;
+            }
+
+            if (rows.Count == 0)
+            {
+                return EmptyAltTexts;
+            }
+
+            var result = new Dictionary<int, string>();
+            foreach (var group in rows.GroupBy(alt => alt.MediaAssetId))
+            {
+                var best = AltTextCultureResolver.SelectBest(group, normalizedCulture);
+                if (best != null && !string.IsNullOrWhiteSpace(best.AltText))
+                {
+                    result[group.Key] = best.AltText.Trim();
+                }
+            }
+
+            return result;
+        }
+
+        private ObjectMedium MapAssetToObjectMedium(
+            ApartmentMediaAssetEntity asset,
+            IReadOnlyDictionary<int, string> altTexts)
         {
             return new ObjectMedium
             {
                 Id = asset.IdoObjectMediaId ?? asset.Id,
+                MediaAssetId = asset.Id,
+                Alt = altTexts.TryGetValue(asset.Id, out var alt) ? alt : null,
                 ObjectId = asset.ApartmentId,
                 Url = _blobStorage.BuildBlobUrl(asset.StorageKey),
                 CardUrl = string.IsNullOrWhiteSpace(asset.CardStorageKey)
                     ? _blobStorage.BuildBlobUrl(asset.StorageKey)
                     : _blobStorage.BuildBlobUrl(asset.CardStorageKey),
+                Width = asset.CardWidth,
+                Height = asset.CardHeight,
                 Extension = asset.Extension,
                 Position = asset.PictureDisplaySequence,
                 Type = asset.ContentType

@@ -33,13 +33,13 @@
   <data name="ReadTimeFormat" xml:space="preserve">
     <value>{0} min read</value>
   </data>
-    <data name="GoToSlideAriaLabel" xml:space="preserve">
-        <value>Go to slide {0} of {1}</value>
+  <data name="GoToSlideAriaLabel" xml:space="preserve">
+        <value>Go to slide {0} with {1}</value>
     </data>
-    <data name="CarouselPaginationLabel" xml:space="preserve">
+  <data name="CarouselPaginationLabel" xml:space="preserve">
         <value>Carousel pagination</value>
     </data>
-    <data name="AuthorLabel" xml:space="preserve">
+  <data name="AuthorLabel" xml:space="preserve">
     <value>Squirt</value>
   </data>
   <data name="PublishedLabel" xml:space="preserve">
@@ -61,7 +61,7 @@
     <value>Back to blog</value>
   </data>
   <data name="CheckLabel" xml:space="preserve">
-    <value>Check it out</value>
+    <value>Read</value>
   </data>
   <data name="CategoryLabel" xml:space="preserve">
     <value>Category</value>
@@ -90,17 +90,14 @@
   <data name="NextPostLabel" xml:space="preserve">
     <value>Next Post</value>
   </data>
-  <data name="ApartmentsListingPriceAfterDate" xml:space="preserve">
-    <value>Price after choosing dates</value>
-  </data>
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
-    <value>Breadcrumb navigation</value>
+    <value>Crumb navigation</value>
   </data>
   <data name="RelatedContentTitle" xml:space="preserve">
     <value>Related content</value>
   </data>
   <data name="RelatedContentTooltip" xml:space="preserve">
-    <value>Blog articles that mention this apartment</value>
+    <value>Blog posts mentioning this apartment</value>
   </data>
   <data name="LatestPostsInCategory" xml:space="preserve">
     <value>Latest posts: {0}</value>
@@ -109,6 +106,24 @@
     <value>All posts</value>
   </data>
   <data name="BlogCategories" xml:space="preserve">
-    <value>Post categories</value>
+    <value>Entry categories</value>
+  </data>
+  <data name="ShareArticle" xml:space="preserve">
+    <value>Share this article</value>
+  </data>
+  <data name="ShareOnFacebook" xml:space="preserve">
+    <value>Share on Facebook</value>
+  </data>
+  <data name="ShareOnLinkedIn" xml:space="preserve">
+    <value>Share on LinkedIn</value>
+  </data>
+  <data name="ShareOnWhatsApp" xml:space="preserve">
+    <value>Share on WhatsApp</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Copy link</value>
+  </data>
+  <data name="LinkCopied" xml:space="preserve">
+    <value>Link copied</value>
   </data>
 </root>

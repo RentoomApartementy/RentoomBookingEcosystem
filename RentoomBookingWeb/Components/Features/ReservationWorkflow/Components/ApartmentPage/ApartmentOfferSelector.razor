@@ -35,58 +35,40 @@ else if (OffersResponse?.Result?.PricingOffers?.Count > 0)
         
         @if (nonRefundableOffer != null)
         {
-            var nonRefundableStandardPrice = nonRefundableOffer.Price + TotalAdditionalPriceBeforeDiscount;
-            var nonRefundableDiscountedPrice = Math.Max(0m, nonRefundableStandardPrice - BonusDiscountAmount);
-            <div class="summary-offer-price @(IsSelectedOffer("nonrefundable") ? "selected-offer" : "")">
-                <b>@Localizer["Non-refundableOffer"]</b>
-                <small>@Localizer["NonRefundableText"]</small>
-                <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-                    <span class="summary-offer-price-button-price">
-                        <b><PriceDisplay AmountPln="@nonRefundableDiscountedPrice" /></b>
-                        @if (BonusDiscountAmount > 0m)
-                        {
-                            <span class="summary-offer-price-old"><PriceDisplay AmountPln="@nonRefundableStandardPrice" /></span>
-                        }
-                        <span class="stay-summary-text">@StaySummaryText</span>
-                    </span>
-                    <div class="offer-action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
-                        <div @onclick="OnSearchModalOpen" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
-                            <Button Type="ButtonType.Secondary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@Localizer["ChangeDatesButtonLabel"]</Button>
-                        </div>
-                        <div @onclick="@(() => OnBookNow.InvokeAsync("nonrefundable"))" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
-                            <Button Type="ButtonType.Tertiary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@GetOfferButtonLabel("nonrefundable")</Button>
-                        </div>
-                    </div>
-                </div>
-            </div>  
+            <SummaryOfferPriceCard
+                OfferTypeKey="nonrefundable"
+                TitleText="@Localizer["Non-refundableOffer"]"
+                DescriptionText="@Localizer["NonRefundableText"]"
+                Price="@nonRefundableOffer.Price"
+                TotalAdditionalPriceBeforeDiscount="TotalAdditionalPriceBeforeDiscount"
+                BonusDiscountAmount="BonusDiscountAmount"
+                StaySummaryText="@StaySummaryText"
+                StartDate="@StartDate"
+                EndDate="@EndDate"
+                SelectedOfferType="@SelectedOfferType"
+                HasActiveReservation="HasActiveReservation"
+                Localizer="Localizer"
+                OnSearchModalOpen="OnSearchModalOpen"
+                OnBookNow="OnBookNow" />
         }
-        
+
         @if (refundableOffer != null)
         {
-            var refundableStandardPrice = refundableOffer.Price + TotalAdditionalPriceBeforeDiscount;
-            var refundableDiscountedPrice = Math.Max(0m, refundableStandardPrice - BonusDiscountAmount);
-            <div class="summary-offer-price refundable @(IsSelectedOffer("refundable") ? "selected-offer" : "")">
-                <b>@Localizer["RefundableOffer"]</b>
-                <small>@RefundableOfferText</small>
-                <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-                    <span class="summary-offer-price-button-price">
-                        <b><PriceDisplay AmountPln="@refundableDiscountedPrice" /></b>
-                        @if (BonusDiscountAmount > 0m)
-                        {
-                            <span class="summary-offer-price-old"><PriceDisplay AmountPln="@refundableStandardPrice" /></span>
-                        }
-                        <span class="stay-summary-text">@StaySummaryText</span>
-                    </span>
-                    <div class="offer-action-buttons" style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
-                        <div @onclick="OnSearchModalOpen" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
-                            <Button Type="ButtonType.Secondary" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@Localizer["ChangeDatesButtonLabel"]</Button>
-                        </div>
-                        <div @onclick="@(() => OnBookNow.InvokeAsync("refundable"))" @onclick:stopPropagation="true" style="flex: 1; max-width: 200px;">
-                            <Button Type="@(nonRefundableOffer != null ? ButtonType.Primary : ButtonType.Tertiary)" Class="btn-offer-mobile" style="width: 100%; white-space: nowrap;">@GetOfferButtonLabel("refundable")</Button>
-                        </div>
-                    </div>
-                </div>
-            </div>   
+            <SummaryOfferPriceCard
+                OfferTypeKey="refundable"
+                TitleText="@Localizer["RefundableOffer"]"
+                DescriptionText="@RefundableOfferText"
+                Price="@refundableOffer.Price"
+                TotalAdditionalPriceBeforeDiscount="TotalAdditionalPriceBeforeDiscount"
+                BonusDiscountAmount="BonusDiscountAmount"
+                StaySummaryText="@StaySummaryText"
+                StartDate="@StartDate"
+                EndDate="@EndDate"
+                SelectedOfferType="@SelectedOfferType"
+                HasActiveReservation="HasActiveReservation"
+                Localizer="Localizer"
+                OnSearchModalOpen="OnSearchModalOpen"
+                OnBookNow="OnBookNow" />
         }
     </div>
     
@@ -159,10 +141,4 @@ else
         && !(OffersResponse?.Result?.PricingOffers?.Count > 0)
         && SuggestionDates.Count == 0
         && !IsSuggestionLoading;
-
-    private bool IsSelectedOffer(string offerType) =>
-        string.Equals(SelectedOfferType, offerType, StringComparison.OrdinalIgnoreCase);
-
-    private string GetOfferButtonLabel(string offerType) => 
-        HasActiveReservation && IsSelectedOffer(offerType) ? Localizer["ContinueReservation"] : Localizer["BookNow"];
 }

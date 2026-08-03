@@ -207,6 +207,8 @@ namespace RentoomBookingWeb
 
             builder.Services.AddScoped<IAvailabilityFinderService, AvailabilityFinderService>();
             builder.Services.AddScoped<IAvailabilityFinderService2, AvailabilityFinderService2>();
+            builder.Services.AddScoped<IApartmentCalendarService, ApartmentCalendarService>();
+            builder.Services.AddScoped<IApartmentMinPriceService, ApartmentMinPriceService>();
 
             //http context provider for absoulte urls - for tpay.
             builder.Services.AddHttpContextAccessor();

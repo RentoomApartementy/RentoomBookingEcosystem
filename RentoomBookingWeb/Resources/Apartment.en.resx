@@ -177,6 +177,15 @@
   <data name="From" xml:space="preserve">
     <value>From</value>
   </data>
+  <data name="BookingPanelTitle" xml:space="preserve">
+    <value>Book directly</value>
+  </data>
+  <data name="BookingPanelSubtitle" xml:space="preserve">
+    <value>Direct booking - no portal commissions</value>
+  </data>
+  <data name="ShowMapLabel" xml:space="preserve">
+    <value>See location on map</value>
+  </data>
   <data name="To" xml:space="preserve">
     <value>To</value>
   </data>
@@ -469,7 +478,7 @@
     <value>Contact</value>
   </data>
   <data name="NearbyAttractions_Title" xml:space="preserve">
-    <value>Property surroundings</value>
+    <value>Object surroundings</value>
   </data>
   <data name="NearbyAttractions_Subtitle" xml:space="preserve">
     <value>Excellent location</value>
@@ -482,5 +491,44 @@
   </data>
   <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
     <value>{0} km</value>
+  </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>Photo</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Main photo of apartment {0}</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Guests</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Adults</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Children</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>From {0} / night</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Clear selection</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Show more</value>
+  </data>
+  <data name="CalendarLoadingMoreMonths" xml:space="preserve">
+    <value>Loading more months...</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>The maximum number of guests is {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimum stay is {0} night</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Select your arrival date</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Choose your departure date</value>
   </data>
 </root>

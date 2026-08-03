@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -467,5 +467,41 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Greška 404</value>
+  </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>fotografija</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Glavna fotografija apartmana {0}</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Gosti</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Odrasli</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Deca</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Od {0} / noć</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Obriši izbor</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Prikaži više</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Maksimalan broj gostiju je {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimalni boravak je {0} noći</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Izaberite datum dolaska</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Izaberite datum odlaska</value>
   </data>
 </root>

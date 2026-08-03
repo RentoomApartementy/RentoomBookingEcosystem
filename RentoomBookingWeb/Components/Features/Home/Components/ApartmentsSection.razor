@@ -5,8 +5,8 @@
 
 <div class="apartments-section-container">
     <div class="apartments-section-container-text">
-        <h1 class="city-title">@Localizer["title3"]</h1>
-        <h2 class="city-subtitle">@Localizer["title2subtitle"]</h2>
+        <h2 class="city-title">@Localizer["title3"]</h2>
+        <h3 class="city-subtitle">@Localizer["title2subtitle"]</h3>
     </div>
 
     @if (!string.IsNullOrEmpty(ViewModel.Error))
@@ -28,6 +28,9 @@
                                    PublicOffer="@(ShowPublicOffer ? ViewModel.GetPublicOfferByObjectId(apartment.Id) : null)"
                                    OfferLength="@ViewModel.GetOfferLengthDays()"
                                    ShowPrice="true"
+                                   ApplyMandatoryAddonFeeToPrice="false"
+                                   MinPriceOverride="@(ShowOnlyFromMinPrice ? ViewModel.GetMinFromPriceByObjectId(apartment.Id, false) : null)"
+                                   MinPriceLoading="@(ShowOnlyFromMinPrice && ViewModel.IsMinPricesLoading)"
                                    SuggestionState="@(ShowSuggestions ? ViewModel.GetSuggestionStatusByObjectId(apartment.Id) : SuggestionStatus.NotStarted)"
                                    SuggestionDates="@(ShowSuggestions ? ViewModel.GetSuggestionsByObjectId(apartment.Id) : null)"
                                    ShowSuggestionPrice="true"

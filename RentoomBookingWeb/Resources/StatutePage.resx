@@ -36,4 +36,13 @@
     <data name="NoStatuteContent" xml:space="preserve">
         <value />
     </data>
+    <data name="PageTitleFormat" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MetaDescription" xml:space="preserve">
+        <value />
+    </data>
+    <data name="MetaKeywords" xml:space="preserve">
+        <value />
+    </data>
 </root>

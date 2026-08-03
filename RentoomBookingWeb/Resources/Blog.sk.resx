@@ -33,13 +33,13 @@
   <data name="ReadTimeFormat" xml:space="preserve">
     <value>{0} minúta čítania</value>
   </data>
-    <data name="GoToSlideAriaLabel" xml:space="preserve">
-        <value>Prejsť na snímku {0} z {1}</value>
+  <data name="GoToSlideAriaLabel" xml:space="preserve">
+        <value>Choď na slide {0} s {1}</value>
     </data>
-    <data name="CarouselPaginationLabel" xml:space="preserve">
-        <value>Stránkovanie karuselu</value>
+  <data name="CarouselPaginationLabel" xml:space="preserve">
+        <value>Stránkovanie kolotočov</value>
     </data>
-    <data name="AuthorLabel" xml:space="preserve">
+  <data name="AuthorLabel" xml:space="preserve">
     <value>Squirt</value>
   </data>
   <data name="PublishedLabel" xml:space="preserve">
@@ -61,7 +61,7 @@
     <value>Späť na blog</value>
   </data>
   <data name="CheckLabel" xml:space="preserve">
-    <value>Pozri sa na to</value>
+    <value>Prečítajte si</value>
   </data>
   <data name="CategoryLabel" xml:space="preserve">
     <value>Kategória</value>
@@ -91,12 +91,39 @@
     <value>Ďalší príspevok</value>
   </data>
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
-    <value>Omrvinková navigácia</value>
+    <value>Navigácia podľa omrvinkov</value>
   </data>
   <data name="AllPosts" xml:space="preserve">
     <value>Všetky príspevky</value>
   </data>
   <data name="BlogCategories" xml:space="preserve">
-    <value>Kategórie príspevkov</value>
+    <value>Kategórie prihlášok</value>
+  </data>
+  <data name="ShareArticle" xml:space="preserve">
+    <value>Zdieľajte tento článok</value>
+  </data>
+  <data name="ShareOnFacebook" xml:space="preserve">
+    <value>Zdieľať na Facebooku</value>
+  </data>
+  <data name="ShareOnLinkedIn" xml:space="preserve">
+    <value>Zdieľať na LinkedIn</value>
+  </data>
+  <data name="ShareOnWhatsApp" xml:space="preserve">
+    <value>Zdieľať na WhatsApp</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Kopírovať odkaz</value>
+  </data>
+  <data name="LinkCopied" xml:space="preserve">
+    <value>Odkaz skopírovaný</value>
+  </data>
+  <data name="RelatedContentTitle" xml:space="preserve">
+    <value>Súvisiaci obsah</value>
+  </data>
+  <data name="RelatedContentTooltip" xml:space="preserve">
+    <value>Blogové príspevky spomínajúce tento byt</value>
+  </data>
+  <data name="LatestPostsInCategory" xml:space="preserve">
+    <value>Najnovšie príspevky: {0}</value>
   </data>
 </root>

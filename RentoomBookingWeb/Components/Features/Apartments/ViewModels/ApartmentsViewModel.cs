@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Globalization;
 using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
@@ -28,6 +29,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         private readonly MediaCacheService _mediaCache;
         private readonly IApartmentMediaCatalogService _apartmentMediaCatalogService;
         private readonly IRouteLocalizationService _routeService;
+        private readonly IApartmentMinPriceService _minPriceService;
         private readonly ILogger<ApartmentsViewModel> _logger;
         private static readonly TimeSpan SuggestionsFetchTimeout = TimeSpan.FromSeconds(30);
         private static readonly TimeSpan MediaWarmTimeout = TimeSpan.FromSeconds(5);
@@ -43,6 +45,9 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
         private List<PricingOffer> _allMatchingOffers = new();
         private List<ApartmentObject> _matchingMetaItems = new();
+
+        private IReadOnlyDictionary<int, ApartmentMinPrice> _minPrices = new Dictionary<int, ApartmentMinPrice>();
+        private bool _minPricesLoaded;
 
         // Zakres dat faktycznie używany do pobierania ofert/sugestii - zawsze wypełniony (jawny wybór usera
         // albo domyślne okno jak na Home), niezależnie od publicznych StartDate/EndDate wiązanych do SearchBar.
@@ -65,6 +70,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public bool IsLoading { get; private set; } = true;
         public bool ApartmentsIsLoading { get; private set; } = false;
         public bool IsSuggestionsLoading { get; private set; } = false;
+        public bool IsMinPricesLoading { get; private set; } = false;
         public bool HasMore { get; private set; } = true;
         public string? Error { get; private set; }
         public bool IsMapView { get; private set; } = false;
@@ -100,6 +106,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             MediaCacheService mediaCache,
             IApartmentMediaCatalogService apartmentMediaCatalogService,
             IRouteLocalizationService routeService,
+            IApartmentMinPriceService minPriceService,
             ILogger<ApartmentsViewModel> logger)
         {
             _apartmentsService = apartmentsService;
@@ -113,6 +120,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             _mediaCache = mediaCache;
             _apartmentMediaCatalogService = apartmentMediaCatalogService;
             _routeService = routeService;
+            _minPriceService = minPriceService;
             _logger = logger;
         }
 
@@ -128,10 +136,54 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
         public IReadOnlyList<AvailableTerm>? GetSuggestionsByObjectId(int objectId) =>
             AvailableTerms.TryGetValue(objectId, out var terms) ? terms : null;
 
+        public decimal? GetMinFromPriceByObjectId(int objectId, bool applyMandatoryAddonFee)
+        {
+            if (!_minPrices.TryGetValue(objectId, out var price))
+            {
+                return null;
+            }
+
+            return applyMandatoryAddonFee ? price.PriceWithMandatoryFee : price.RawPrice;
+        }
+
+        // Fire-and-forget: kicks off the min-price fetch without blocking the caller's Initialize*
+        // flow (the cache is often warm across visitors, but on a cold start the SOAP round-trip
+        // shouldn't hold up rendering apartment cards/items).
+        private void StartMinPricesFetch()
+        {
+            if (_minPricesLoaded || IsMinPricesLoading)
+            {
+                return;
+            }
+
+            IsMinPricesLoading = true;
+            NotifyStateChanged(force: true);
+            _ = FetchMinPricesInBackgroundAsync();
+        }
+
+        private async Task FetchMinPricesInBackgroundAsync()
+        {
+            try
+            {
+                _minPrices = await _minPriceService.GetMinPricesAsync();
+                _minPricesLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to load apartment min-price cache.");
+            }
+            finally
+            {
+                IsMinPricesLoading = false;
+                NotifyStateChanged(force: true);
+            }
+        }
+
         public async Task InitializeAsync(CancellationToken ct = default)
         {
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
+            StartMinPricesFetch();
             var uri = _navManager.ToAbsoluteUri(_navManager.Uri);
             var query = QueryHelpers.ParseQuery(uri.Query);
             string GetVal(string key) => query.TryGetValue(key, out var val) ? val.ToString() : "";
@@ -220,6 +272,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             CancelSuggestionsFetch();
             CancelMediaWarmOperations();
+            StartMinPricesFetch();
 
             (StartDate, EndDate) = GetDefaultDateWindow();
             _effectiveStartDate = StartDate;
@@ -238,6 +291,68 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
             HasMore = true; ApartmentsIsLoading = false;
             ResetPriceScales();
             await LoadMoreAsync(ct);
+            if (_fetchSuggestions)
+            {
+                StartSuggestionsFetch(Items);
+            }
+
+            _isInitialized = true;
+            NotifyStateChanged();
+        }
+
+        public async Task InitializeForFixedApartmentsAsync(
+            IReadOnlyList<int> apartmentIds,
+            bool showSuggestions = true,
+            bool showPublicOffer = false,
+            bool fetchDatedOffers = true,
+            CancellationToken ct = default)
+        {
+            _fetchSuggestions = showSuggestions;
+            _fetchPublicOffers = showPublicOffer;
+            _fetchDatedOffers = fetchDatedOffers;
+
+            CancelSuggestionsFetch();
+            CancelMediaWarmOperations();
+            StartMinPricesFetch();
+
+            (StartDate, EndDate) = GetDefaultDateWindow();
+            _effectiveStartDate = StartDate;
+            _effectiveEndDate = EndDate;
+            Adults = "2";
+            Children = "0";
+            IsSearch = true;
+            FilterMinPrice = null;
+            FilterMaxPrice = null;
+            _currentFilters = null;
+
+            Items.Clear(); Offers.Clear(); PublicOffers.Clear(); ResetSuggestionState(); _allMatchingOffers.Clear(); _matchingMetaItems.Clear(); _token = null;
+            HasMore = false; // Fixed set - no pagination.
+
+            var allActive = await _apartmentsService.GetAllApartmentsList();
+            var resolved = RentoomBooking.SharedClasses.Services.Blog.BlogApartmentSelection.SelectOrdered(
+                allActive?.Items ?? new List<ApartmentObject>(),
+                apartmentIds);
+
+            Items.AddRange(resolved);
+            ApartmentsCount = Items.Count;
+            ApartmentsIsLoading = false;
+            ResetPriceScales();
+            NotifyStateChanged(force: true);
+
+            if (Items.Count > 0)
+            {
+                _ = StartWarmMediaCacheForItemsAsync(Items, ct);
+
+                if (_fetchDatedOffers)
+                {
+                    await FetchOffersForVisibleItems(Items);
+                }
+                if (_fetchPublicOffers)
+                {
+                    await FetchPublicOffersForVisibleItems(Items);
+                }
+            }
+
             if (_fetchSuggestions)
             {
                 StartSuggestionsFetch(Items);
@@ -409,6 +524,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             Items.AddRange(group1);
             Items.AddRange(group2);
+            ApartmentsCount = Items.Count;
         }
 
         private bool IsMetaFilterChanged(ApartmentFilters? newFilters)
@@ -654,13 +770,17 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(linkedCts.Token);
                 timeoutCts.CancelAfter(MediaWarmTimeout);
 
-                var mediaByApartmentId = await _apartmentMediaCatalogService.GetApartmentMediaBatchAsync(apartmentIds, timeoutCts.Token);
+                // Captured up front so the fetched alt texts and the cache key agree even if the
+                // ambient culture is no longer available on this background continuation.
+                var culture = CultureInfo.CurrentUICulture.Name;
+
+                var mediaByApartmentId = await _apartmentMediaCatalogService.GetApartmentMediaBatchAsync(apartmentIds, culture, timeoutCts.Token);
                 if (linkedCts.IsCancellationRequested)
                 {
                     return;
                 }
 
-                _mediaCache.PrimeMediaBatch(mediaByApartmentId);
+                _mediaCache.PrimeMediaBatch(mediaByApartmentId, culture);
 
                 _logger.LogInformation(
                     "Apartment media warm completed. ApartmentCount={ApartmentCount}, WarmedApartmentCount={WarmedApartmentCount}, ApartmentIds={ApartmentIds}, ElapsedMs={ElapsedMs}",

@@ -28,7 +28,7 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking.Public
         public int? NumberOfBigChildren { get; set; }
 
         [JsonProperty("language")]
-        public string? Language { get; set; }
+        public string? Language { get; set; } = "pol";
     }
 
     public class PricingOffersResponse

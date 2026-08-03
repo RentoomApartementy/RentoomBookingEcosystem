@@ -196,7 +196,7 @@
     <value>Zkontrolujte svůj e-mail a pokračujte na StayWell</value>
   </data>
   <data name="ReservationPending" xml:space="preserve">
-    <value>Během platby</value>
+    <value>Platba</value>
   </data>
   <data name="ReservationPendingInfo" xml:space="preserve">
     <value>Vaše rezervace byla potvrzena, ale zatím není zaplacena</value>
@@ -558,5 +558,23 @@
   </data>
   <data name="PaymentConfirmationInProgressMessage" xml:space="preserve">
     <value>Čekáte na potvrzení platby od Tpay. Za chvíli vám ukážeme aktuální stav vaší rezervace.</value>
+  </data>
+  <data name="StepperStep1" xml:space="preserve">
+    <value>Výběr nabídky</value>
+  </data>
+  <data name="StepperStep2" xml:space="preserve">
+    <value>Zákaznická data</value>
+  </data>
+  <data name="StepperStep3" xml:space="preserve">
+    <value>Shrnutí</value>
+  </data>
+  <data name="StepperStep4" xml:space="preserve">
+    <value>Platba</value>
+  </data>
+  <data name="StepperAriaLabel" xml:space="preserve">
+    <value>Kroky rezervace</value>
+  </data>
+  <data name="StepperCompletedAriaLabel" xml:space="preserve">
+    <value>Dokončena fáze</value>
   </data>
 </root>

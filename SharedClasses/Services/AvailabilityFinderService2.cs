@@ -248,7 +248,7 @@ namespace RentoomBooking.SharedClasses.Services
             return restrictions.Where(r => apartmentSet.Contains(r.ObjectId)).ToList();
         }
 
-        private async Task<List<OfferAvailabilityObject>> FetchAvailabilityAsync(
+        private async Task<List<OfferAvailabilityAndPricesForDaysObject>> FetchAvailabilityAsync(
             List<int>? apartmentIds,
             DateTime from,
             DateTime to,
@@ -271,12 +271,12 @@ namespace RentoomBooking.SharedClasses.Services
                 }
             };
 
-            return await _offerService.GetAvailabilityAndPricesForDaysAsync(request, cancellationToken) ?? new List<OfferAvailabilityObject>();
+            return await _offerService.GetAvailabilityAndPricesForDaysAsync(request, cancellationToken) ?? new List<OfferAvailabilityAndPricesForDaysObject>();
         }
 
         private static List<int> ResolveApartmentIdsToProcess(
             List<int>? apartmentIdsFilter,
-            List<OfferAvailabilityObject> availabilityObjects)
+            List<OfferAvailabilityAndPricesForDaysObject> availabilityObjects)
         {
             if (apartmentIdsFilter != null && apartmentIdsFilter.Count > 0)
             {
@@ -323,7 +323,7 @@ namespace RentoomBooking.SharedClasses.Services
             return result;
         }
 
-        private static Dictionary<int, HashSet<DateTime>> BuildAvailabilityLookup(List<OfferAvailabilityObject> availabilityObjects)
+        private static Dictionary<int, HashSet<DateTime>> BuildAvailabilityLookup(List<OfferAvailabilityAndPricesForDaysObject> availabilityObjects)
         {
             var result = new Dictionary<int, HashSet<DateTime>>();
 

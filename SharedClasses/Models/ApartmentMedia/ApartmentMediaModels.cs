@@ -39,6 +39,16 @@ namespace RentoomBooking.SharedClasses.Models.ApartmentMedia
         public int? OldSequence { get; set; }
         public int? NewSequence { get; set; }
         public string? Error { get; set; }
+        public string? ChecksumSha256 { get; set; }
+        public string? RetainedIdoSourceUrl { get; set; }
+    }
+
+    public sealed class ApartmentMediaDuplicateSource
+    {
+        public string ChecksumSha256 { get; init; } = string.Empty;
+        public string RetainedIdoSourceUrl { get; init; } = string.Empty;
+        public int RetainedSequence { get; init; }
+        public int DuplicateSequence { get; init; }
     }
 
     public sealed class ApartmentMediaSyncRunSummary

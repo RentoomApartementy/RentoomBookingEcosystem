@@ -21,21 +21,11 @@
     transition: all 0.2s;
 }
 
-.summary-offer-price.selected-offer {
-    border: #0c4128 2px solid;
-}
-
 .summary-offer-price b {
     display: block;
     font-size: 1.1rem;
     margin-bottom: 4px;
     color: #333;
-}
-
-.summary-offer-price small {
-    color: #666;
-    display: block;
-    margin-bottom: 0.5rem;
 }
 
 .summary-offer-price-button {
@@ -44,26 +34,6 @@
     align-items: center;
     justify-content: space-between;
     margin-top: 0.5rem;
-}
-
-.summary-offer-price-button-price b {
-    font-size: 1.4rem;
-    color: #1F5A41;
-}
-
-.summary-offer-price-old {
-    display: block;
-    margin-top: 0.1rem;
-    font-size: 0.85rem;
-    color: #888;
-    text-decoration: line-through;
-    line-height: 1.1;
-}
-
-.stay-summary-text {
-    font-size: 0.75rem;
-    color: #888;
-    font-weight: normal;
 }
 
 /* Placeholder for date selection */
@@ -167,13 +137,6 @@
 }
 
 @media (max-width: 576px) {
-    .btn-offer-mobile {
-        height: 30px !important;
-        padding: 0 8px !important;
-        font-size: 11px !important;
-        min-width: 0 !important;
-    }
-
     .placeholder-offer {
         padding: 2rem 1rem;
         margin-top: 1.5rem;

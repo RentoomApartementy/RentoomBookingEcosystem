@@ -13,7 +13,7 @@
         <div class="image-section">
             @if (!string.IsNullOrEmpty(_imageUrl))
             {
-                <img src="@_imageUrl" alt="@Name" loading="lazy" />
+                <img src="@_imageUrl" alt="@(string.IsNullOrWhiteSpace(_imageAlt) ? Name : _imageAlt)" loading="lazy" />
             }
             else
             {
@@ -24,7 +24,21 @@
         </div>
         <div class="content-section">
             <div class="info">
-                <h2 class="apartment-name">@Name</h2>
+                @switch (HeadingTag)
+                {
+                    case "h2":
+                        <h2 class="apartment-name">@Name</h2>
+                        break;
+                    case "h4":
+                        <h4 class="apartment-name">@Name</h4>
+                        break;
+                    case "p":
+                        <p class="apartment-name">@Name</p>
+                        break;
+                    default:
+                        <h3 class="apartment-name">@Name</h3>
+                        break;
+                }
                 <span class="apartment-city">
                     <GoogleIcon Name="location_on" Class="icon-small" AriaLabel="@Localizer["Location"]" />
                     @Location
@@ -43,8 +57,10 @@
     [Parameter] public string Name { get; set; } = string.Empty;
     [Parameter] public string Url { get; set; } = "#";
     [Parameter] public string Location { get; set; } = string.Empty;
+    [Parameter] public string HeadingTag { get; set; } = "h3";
 
     private string? _imageUrl;
+    private string? _imageAlt;
     private ElementReference _elementRef;
     private DotNetObjectReference<ApartmentListCard>? _objRef;
     private IJSObjectReference? _jsModule;
@@ -80,7 +96,8 @@
             var media = await MediaCache.GetOrFetchMediaAsync(Id, () => ApartmentMediaCatalogService.GetApartmentMediaAsync(Id));
             var first = media?.FirstOrDefault();
             _imageUrl = first?.CardUrl ?? first?.Url;
-            
+            _imageAlt = first?.Alt;
+
             await InvokeAsync(StateHasChanged);
         }
         catch (Exception ex)

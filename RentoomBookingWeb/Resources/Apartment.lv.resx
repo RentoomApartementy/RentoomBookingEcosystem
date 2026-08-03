@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -467,5 +467,41 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Kļūda 404</value>
+  </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>fotoattēls</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Dzīvokļa {0} galvenais foto</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Viesi</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Pieaugušie</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Bērni</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>No {0} / naktī</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Notīrīt atlasi</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Rādīt vairāk</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Maksimālais viesu skaits ir {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimālais uzturēšanās laiks ir {0} naktis</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Izvēlieties ierašanās datumu</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Izvēlieties izbraukšanas datumu</value>
   </data>
 </root>

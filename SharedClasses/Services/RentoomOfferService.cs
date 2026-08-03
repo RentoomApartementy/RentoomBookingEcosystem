@@ -71,13 +71,20 @@ namespace RentoomBooking.SharedClasses.Services
                 (regionFilter != null && regionFilter.Any()) ||
                 (addonFilter != null && addonFilter.Any()))
             {
-                var addonApartmentIds = new List<int>();
+                HashSet<int>? addonApartmentIds = null;
                 if (addonFilter != null && addonFilter.Any())
                 {
-                    foreach(var upsellId in addonFilter)
+                    foreach (var upsellId in addonFilter.Distinct())
                     {
                         var ids = await _upsellCatalogService.GetApartmentIdsForUpsellAsync(upsellId);
-                        if (ids.Any()) addonApartmentIds.AddRange(ids);
+                        if (addonApartmentIds == null)
+                        {
+                            addonApartmentIds = ids.ToHashSet();
+                        }
+                        else
+                        {
+                            addonApartmentIds.IntersectWith(ids);
+                        }
                     }
                 }
 
@@ -89,10 +96,7 @@ namespace RentoomBooking.SharedClasses.Services
 
                 if (addonFilter != null && addonFilter.Any())
                 {
-                    if (addonApartmentIds.Any())
-                    {
-                        apartmentFilter.ApartmentIds = addonApartmentIds.Distinct().ToList();
-                    }
+                    apartmentFilter.ApartmentIds = addonApartmentIds?.ToList() ?? new List<int>();
                 }
 
                 apartmentsFromAmenities = await _apartmentsService.GetApartmentsByFilterAsync(apartmentFilter);

@@ -33,13 +33,13 @@
   <data name="ReadTimeFormat" xml:space="preserve">
     <value>{0} Minuten Lesezeit</value>
   </data>
-    <data name="GoToSlideAriaLabel" xml:space="preserve">
-        <value>Zu Folie {0} von {1} wechseln</value>
+  <data name="GoToSlideAriaLabel" xml:space="preserve">
+        <value>Geh zu Slide {0} mit {1}</value>
     </data>
-    <data name="CarouselPaginationLabel" xml:space="preserve">
-        <value>Karussellnavigation</value>
+  <data name="CarouselPaginationLabel" xml:space="preserve">
+        <value>Karussell-Paginierung</value>
     </data>
-    <data name="AuthorLabel" xml:space="preserve">
+  <data name="AuthorLabel" xml:space="preserve">
     <value>Squirt</value>
   </data>
   <data name="PublishedLabel" xml:space="preserve">
@@ -61,7 +61,7 @@
     <value>Zurück zum Blog</value>
   </data>
   <data name="CheckLabel" xml:space="preserve">
-    <value>Schau es dir an</value>
+    <value>Lesen</value>
   </data>
   <data name="CategoryLabel" xml:space="preserve">
     <value>Kategorie</value>
@@ -91,12 +91,39 @@
     <value>Nächster Beitrag</value>
   </data>
   <data name="BreadcrumbNavigationLabel" xml:space="preserve">
-    <value>Brotkrümelnavigation</value>
+    <value>Crumb-Navigation</value>
   </data>
   <data name="AllPosts" xml:space="preserve">
     <value>Alle Beiträge</value>
   </data>
   <data name="BlogCategories" xml:space="preserve">
-    <value>Beitragskategorien</value>
+    <value>Eintragungskategorien</value>
+  </data>
+  <data name="ShareArticle" xml:space="preserve">
+    <value>Teilen Sie diesen Artikel</value>
+  </data>
+  <data name="ShareOnFacebook" xml:space="preserve">
+    <value>Auf Facebook teilen</value>
+  </data>
+  <data name="ShareOnLinkedIn" xml:space="preserve">
+    <value>Auf LinkedIn teilen</value>
+  </data>
+  <data name="ShareOnWhatsApp" xml:space="preserve">
+    <value>Auf WhatsApp teilen</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Link kopieren</value>
+  </data>
+  <data name="LinkCopied" xml:space="preserve">
+    <value>Link kopiert</value>
+  </data>
+  <data name="RelatedContentTitle" xml:space="preserve">
+    <value>Verwandte Inhalte</value>
+  </data>
+  <data name="RelatedContentTooltip" xml:space="preserve">
+    <value>Blogbeiträge, die diese Wohnung erwähnen</value>
+  </data>
+  <data name="LatestPostsInCategory" xml:space="preserve">
+    <value>Neueste Beiträge: {0}</value>
   </data>
 </root>

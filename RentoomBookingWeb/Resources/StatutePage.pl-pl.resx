@@ -29,4 +29,13 @@
     <data name="StatuteHeader" xml:space="preserve">
         <value>Regulaminy</value>
     </data>
+    <data name="PageTitleFormat" xml:space="preserve">
+        <value>{0} - Rentoom | Biuro Obsługi i Zarządzanie Najmem Toruń</value>
+    </data>
+    <data name="MetaDescription" xml:space="preserve">
+        <value>Regulaminy Rentoom - warunki najmu, rezerwacji i pobytu w apartamentach w Toruniu. Zapoznaj się z zasadami przed dokonaniem rezerwacji.</value>
+    </data>
+    <data name="MetaKeywords" xml:space="preserve">
+        <value>regulamin rentoom, regulamin najmu toruń, warunki rezerwacji apartamentu, regulamin pobytu, zasady wynajmu apartamentów</value>
+    </data>
 </root>

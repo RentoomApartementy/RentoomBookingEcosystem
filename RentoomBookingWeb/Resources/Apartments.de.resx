@@ -148,7 +148,7 @@
     <value>Vorgeschlagenes Datum</value>
   </data>
   <data name="NoOfferText2" xml:space="preserve">
-    <value>Kein Angebot am angegebenen Datum</value>
+    <value>Ausgewählte Aufenthaltsdaten</value>
   </data>
   <data name="FromText" xml:space="preserve">
     <value>Von</value>

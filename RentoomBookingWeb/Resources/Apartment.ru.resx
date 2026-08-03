@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -467,5 +467,41 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Ошибка 404</value>
+  </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>фото</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Главное фото апартаментов {0}</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Гости</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Взрослые</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Дети</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>От {0} / ночь</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Очистить выбор</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Показать больше</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Максимальное количество гостей: {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Минимальный срок проживания: {0} ночей</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Выберите дату заезда</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Выберите дату выезда</value>
   </data>
 </root>

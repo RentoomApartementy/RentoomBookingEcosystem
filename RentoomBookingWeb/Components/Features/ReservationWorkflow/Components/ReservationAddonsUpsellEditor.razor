@@ -1,0 +1,187 @@
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using RentoomBooking.SharedClasses.Models.IdoBooking
+@using RentoomBooking.SharedClasses.Models.Database.EFEntitites
+@using RentoomBooking.SharedClasses.Models.ReservationWorkflow
+@using RentoomBooking.SharedClasses.Models.Upsell
+@using RentoomBooking.SharedClasses.Services
+@using RentoomBooking.SharedClasses.Services.Upsell
+@using RentoomBooking.SharedClasses.Services.ReservationWorkflow
+@using RentoomBooking.SharedFrontend.Components.Shared.UpsellComponents
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
+@inject IApartmentsService ApartmentsService
+@inject IUpsellCatalogService UpsellCatalogService
+@inject IReservationWorkflowService ReservationWorkflowService
+@inject IStringLocalizer<RentoomBookingWeb.Apartment> ApartmentLocalizer
+@inject IStringLocalizer<RentoomBookingWeb.Upsell> UpsellLocalizer
+
+@if (_pricingContext is not null)
+{
+    <ApartmentAddonSelector
+        Addons="Apartment?.Addons"
+        DefinedAddons="_definedAddons"
+        SelectedAddons="_selectedAddons"
+        ReservationContext="_pricingContext"
+        CurrentAddonLanguage="CurrentAddonLanguage"
+        Localizer="ApartmentLocalizer"
+        OnToggleAddon="ToggleAddonWrapper"
+        OnQuantityUpdate="HandleQuantityUpdate" />
+
+    <UpsellList
+        AvailableUpsellsList="_availableUpsells"
+        ReservationContext="_pricingContext"
+        InitialSelection="_selectedUpsells"
+        OnSelectionChanged="HandleUpsellSelectionChanged"
+        Texts="_upsellTexts" />
+}
+
+@code {
+    [Parameter] public Guid ReservationTokenGuid { get; set; }
+    [Parameter] public StartReservationRequest StartRequest { get; set; } = default!;
+    [Parameter] public ApartmentObject? Apartment { get; set; }
+    [Parameter] public EventCallback OnUpdated { get; set; }
+
+    private List<DefinedAddonEntity>? _definedAddons;
+    private IReadOnlyList<UpsellTileDto> _availableUpsells = Array.Empty<UpsellTileDto>();
+    private List<SelectedAddonDto> _selectedAddons = new();
+    private List<SelectedUpsellDto> _selectedUpsells = new();
+    private ReservationPricingContext? _pricingContext;
+    private UpsellTextConfig _upsellTexts = new();
+    private bool _initialized;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _selectedAddons = new List<SelectedAddonDto>(StartRequest.SelectedAddons);
+        _selectedUpsells = new List<SelectedUpsellDto>(StartRequest.SelectedUpsells);
+
+        _pricingContext = new ReservationPricingContext
+        {
+            StartDate = StartRequest.StartDate,
+            EndDate = StartRequest.EndDate,
+            Adults = StartRequest.Adults,
+            Children = StartRequest.Children,
+            Currency = StartRequest.Currency
+        };
+
+        _upsellTexts = new UpsellTextConfig
+        {
+            Title = UpsellLocalizer["ListTitle"],
+            SubTitle = UpsellLocalizer["ListSubtitle"],
+            BadgeInfo = UpsellLocalizer["BadgeInfo"],
+            NightsText = UpsellLocalizer["Nights"],
+            GuestsText = UpsellLocalizer["Guests"],
+            DeleteText = UpsellLocalizer["Delete"],
+            AddText = UpsellLocalizer["Add"],
+            DescriptionText = UpsellLocalizer["Description"],
+            TermsTitleText = UpsellLocalizer["TermsTitle"],
+            TermsDescriptionText = UpsellLocalizer["TermsDescription"],
+            PricingPerApartmentPerDayText = UpsellLocalizer["PricingPerApartmentPerDay"],
+            PricingOneTimeText = UpsellLocalizer["PricingOneTime"],
+            PricingPerPersonPerDayText = UpsellLocalizer["PricingPerPersonPerDay"],
+            PriceLabel = UpsellLocalizer["Price"]
+        };
+
+        _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
+
+        if (Apartment is not null)
+        {
+            try
+            {
+                _availableUpsells = await UpsellCatalogService.GetUpsellTilesForApartmentAsync(
+                    Apartment.Id,
+                    CultureInfo.CurrentUICulture.Name,
+                    "rentoombooking");
+            }
+            catch (Exception)
+            {
+                _availableUpsells = Array.Empty<UpsellTileDto>();
+            }
+        }
+
+        _initialized = true;
+    }
+
+    private string CurrentAddonLanguage
+        => CultureInfo.CurrentUICulture.Name.Split('-')[0].ToUpperInvariant();
+
+    private bool IsAddonSelected(int? addonId)
+        => addonId.HasValue && _selectedAddons.Any(a => a.AddonId == addonId.Value);
+
+    private bool IsAddonMandatory(int? addonId)
+        => Apartment?.Addons?.FirstOrDefault(a => a.Id == addonId)?.Optional == false;
+
+    private void ToggleAddonWrapper(int? addonId)
+    {
+        if (IsAddonMandatory(addonId)) return;
+
+        if (IsAddonSelected(addonId))
+        {
+            var item = _selectedAddons.FirstOrDefault(x => x.AddonId == addonId!.Value);
+            if (item != null) _selectedAddons.Remove(item);
+        }
+        else
+        {
+            var addon = Apartment?.Addons?.FirstOrDefault(a => a.Id == addonId);
+            if (addon != null) AddAddonToList(addon);
+        }
+
+        _ = PersistAsync();
+    }
+
+    private void AddAddonToList(AddonType addon)
+    {
+        var definition = _definedAddons?.FirstOrDefault(d => d.IdoBookingId == addon.Id);
+
+        _selectedAddons.Add(new SelectedAddonDto
+        {
+            AddonId = addon.Id!.Value,
+            Quantity = 1,
+            Price = definition != null ? (float)definition.PriceGross : 0f,
+            Vat = 8f,
+            Persons = StartRequest.Adults + StartRequest.Children,
+            Nights = _pricingContext?.Nights ?? 1,
+            PaymentType = definition?.PaymentType,
+            DisplayText = definition?.AddonDefinition?.Details?.FirstOrDefault(d => d.Lang == CurrentAddonLanguage)?.Name ?? addon.Name ?? $"Addon {addon.Id}"
+        });
+    }
+
+    private void HandleQuantityUpdate(ApartmentAddonSelector.AddonQuantityUpdateArgs args)
+    {
+        var item = _selectedAddons.FirstOrDefault(x => x.AddonId == args.AddonId);
+        if (args.Quantity > 0)
+        {
+            if (item != null) item.Quantity = args.Quantity;
+        }
+        else
+        {
+            if (item != null) _selectedAddons.Remove(item);
+        }
+
+        _ = PersistAsync();
+    }
+
+    private void HandleUpsellSelectionChanged(List<SelectedUpsellDto> selectedUpsells)
+    {
+        _selectedUpsells = selectedUpsells ?? new List<SelectedUpsellDto>();
+        _ = PersistAsync();
+    }
+
+    private async Task PersistAsync()
+    {
+        if (_pricingContext is null) return;
+
+        StartRequest.SelectedAddons = _selectedAddons;
+        StartRequest.SelectedUpsells = _selectedUpsells;
+        StartRequest.SelectedAddonsTotalPrice = _selectedAddons.Sum(a =>
+            AddonPricingCalculator.CalculateTotal(a.PaymentType, (decimal)a.Price, a.Nights, _pricingContext.TotalGuests, a.Quantity));
+        StartRequest.SelectedUpsellsTotalPrice = _selectedUpsells.Sum(u =>
+        {
+            var tile = _availableUpsells.FirstOrDefault(t => t.PartnerServiceId == u.PartnerServiceId);
+            return tile is null ? 0m : UpsellPricingCalculator.CalculateTotal(tile.PricingModel, tile.Price, _pricingContext.Nights, _pricingContext.TotalGuests, u.Quantity);
+        });
+
+        await ReservationWorkflowService.UpdateStartRequestAsync(ReservationTokenGuid, StartRequest);
+        await OnUpdated.InvokeAsync();
+        StateHasChanged();
+    }
+}

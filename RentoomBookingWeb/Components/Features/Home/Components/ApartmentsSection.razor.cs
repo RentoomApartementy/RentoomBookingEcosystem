@@ -23,6 +23,10 @@ public partial class ApartmentsSection : ComponentBase, IAsyncDisposable
     /// <summary>Search for and show suggested available terms on the cards.</summary>
     [Parameter] public bool ShowSuggestions { get; set; } = true;
 
+    /// <summary>When true, always show only the cached backend "from" min-price on every card,
+    /// skipping the dated-offer/public-offer/suggestion cascade entirely.</summary>
+    [Parameter] public bool ShowOnlyFromMinPrice { get; set; } = false;
+
     // Enforce => always use the public price, so the dated offer is not fetched at all.
     private bool EnforcePublicOffer => ShowPublicOffer && ShowPublicOfferType == ShowPublicOfferTypes.Enforce;
 
@@ -43,9 +47,9 @@ public partial class ApartmentsSection : ComponentBase, IAsyncDisposable
     {
         ViewModel.OnChange += HandleViewModelChange;
         await ViewModel.InitializeForSliderAsync(
-            showSuggestions: ShowSuggestions,
-            showPublicOffer: ShowPublicOffer,
-            fetchDatedOffers: !EnforcePublicOffer,
+            showSuggestions: ShowOnlyFromMinPrice ? false : ShowSuggestions,
+            showPublicOffer: ShowOnlyFromMinPrice ? false : ShowPublicOffer,
+            fetchDatedOffers: ShowOnlyFromMinPrice ? false : !EnforcePublicOffer,
             _initCts.Token);
     }
 

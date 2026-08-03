@@ -177,6 +177,18 @@
   <data name="From" xml:space="preserve">
     <value />
   </data>
+  <data name="Night" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BookingPanelTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BookingPanelSubtitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ShowMapLabel" xml:space="preserve">
+    <value />
+  </data>
   <data name="To" xml:space="preserve">
     <value />
   </data>
@@ -353,5 +365,38 @@
   </data>
   <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
     <value>{0} km</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Goście</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Dorośli</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Dzieci</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Od {0} / noc</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Wyczyść zaznaczenie</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Pokaż więcej</value>
+  </data>
+  <data name="CalendarLoadingMoreMonths" xml:space="preserve">
+    <value>Ładuję kolejne miesiące...</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Maksymalna liczba gości to {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Minimalny pobyt to {0} nocy</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Wybierz datę przyjazdu</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Wybierz datę wyjazdu</value>
   </data>
 </root>

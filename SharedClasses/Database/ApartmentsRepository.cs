@@ -172,15 +172,19 @@ namespace RentoomBooking.SharedClasses.Database
       
         public async Task<List<ApartmentObject>?> GetApartmentsByFilterAsync(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
         {
-            var apartmentIds = apartmentFilter.ApartmentIds;
-         
-            var ids = (apartmentFilter.ApartmentIds ?? Enumerable.Empty<int>()).ToList();
+            var hasApartmentIdFilter = apartmentFilter.ApartmentIds != null;
+            var apartmentIds = (apartmentFilter.ApartmentIds ?? Enumerable.Empty<int>())
+                .Distinct()
+                .ToHashSet();
 
-            if (apartmentFilter.ApartmentAmenityIds != null && apartmentFilter.ApartmentAmenityIds.Any())
+            var hasAmenityFilter = apartmentFilter.ApartmentAmenityIds?.Any() == true;
+            var amenityApartmentIds = new HashSet<int>();
+            if (hasAmenityFilter)
             {
-                var amenityApartmentIds = await GetApartmentIdsByAmenitiesAsync(apartmentFilter.ApartmentAmenityIds, cancellationToken);
-
-                ids.AddRange(amenityApartmentIds);
+                amenityApartmentIds = (await GetApartmentIdsByAmenitiesAsync(
+                        apartmentFilter.ApartmentAmenityIds!,
+                        cancellationToken))
+                    .ToHashSet();
             }
 
 
@@ -194,9 +198,14 @@ namespace RentoomBooking.SharedClasses.Database
 
             var filtered = apObjects.AsQueryable();
 
-            if (ids.Count != 0)
+            if (hasApartmentIdFilter)
             {
-                filtered = filtered.Where(a => ids.Contains(a.Id));
+                filtered = filtered.Where(a => apartmentIds.Contains(a.Id));
+            }
+
+            if (hasAmenityFilter)
+            {
+                filtered = filtered.Where(a => amenityApartmentIds.Contains(a.Id));
             }
 
             if (regions.Count != 0)
@@ -306,7 +315,7 @@ namespace RentoomBooking.SharedClasses.Database
                 var entities = await context.ApartmentInfos
                     .AsNoTracking()
                     .Where(a => !a.IsArchived)
-                    .Where(a => context.ApartmentMediaAssets.LongCount(media => media.ApartmentId == a.Id)>5) // ilosc zdjec > 5 (to taki dummy guard zeby nie wyswietlał apartamentów bez zdjeci lub z niewielką ilościa (bo nie wielkia ilosc = nieprzygotowany apartament - a w api IDB nie mamy dostepu do flagi idobooking "nie pokazuj na stronie www")
+                    .Where(a => context.ApartmentMediaAssets.LongCount(media => media.ApartmentId == a.Id)>6) // ilosc zdjec > 6 (to taki dummy guard zeby nie wyswietlał apartamentów bez zdjeci lub z niewielką ilościa (bo nie wielkia ilosc = nieprzygotowany apartament - a w api IDB nie mamy dostepu do flagi idobooking "nie pokazuj na stronie www")
                     .OrderBy(a => a.Id)
                     .ToListAsync(cancellationToken);
 
@@ -319,7 +328,7 @@ namespace RentoomBooking.SharedClasses.Database
                     try
                     {
                         var apartment = JsonConvert.DeserializeObject<ApartmentObject>(entity.Payload);
-                        if (apartment != null)
+                        if (apartment != null && !apartment.Name.ToLowerInvariant().Contains("biuro"))
                         {
                             apartments.Add(apartment);
                         }

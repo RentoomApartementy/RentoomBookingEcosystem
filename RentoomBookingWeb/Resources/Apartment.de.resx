@@ -468,4 +468,64 @@
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Fehler 404</value>
   </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Hauptfoto der Wohnung {0}</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Gäste</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Erwachsene</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Kinder</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Von {0} / Nacht</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Klare Auswahl</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Mehr anzeigen</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Die maximale Anzahl an Gästen beträgt {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Der Mindestaufenthalt beträgt {0} Nacht</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Wählen Sie Ihr Ankunftsdatum</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Wählen Sie Ihr Abreisedatum</value>
+  </data>
+  <data name="BookingPanelTitle" xml:space="preserve">
+    <value>Buchen Sie direkt</value>
+  </data>
+  <data name="BookingPanelSubtitle" xml:space="preserve">
+    <value>Direktbuchung – keine Portalprovisionen</value>
+  </data>
+  <data name="ShowMapLabel" xml:space="preserve">
+    <value>Siehe Standort auf der Karte</value>
+  </data>
+  <data name="NearbyAttractions_Title" xml:space="preserve">
+    <value>Objektumgebung</value>
+  </data>
+  <data name="NearbyAttractions_Subtitle" xml:space="preserve">
+    <value>Ausgezeichnete Lage</value>
+  </data>
+  <data name="NearbyAttractions_WalkTime" xml:space="preserve">
+    <value>~{0} min</value>
+  </data>
+  <data name="NearbyAttractions_DistanceMeters" xml:space="preserve">
+    <value>{0} m</value>
+  </data>
+  <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
+    <value>{0} km</value>
+  </data>
 </root>

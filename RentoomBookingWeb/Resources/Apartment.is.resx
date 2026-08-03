@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -467,5 +467,41 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Villa 404</value>
+  </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>mynd</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Aðalmynd af íbúðinni {0}</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Gestir</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Fullorðnir</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Börn</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Frá {0} / nótt</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Hreinsa val</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Sýna meira</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Hámarksfjöldi gesta er {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Lágmarksdvöl er {0} nætur</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Veldu komudag</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Veldu brottfarardag</value>
   </data>
 </root>

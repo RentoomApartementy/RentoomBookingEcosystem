@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -467,5 +467,41 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Σφάλμα 404</value>
+  </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>φωτογραφία</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Κύρια φωτογραφία του διαμερίσματος {0}</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Επισκέπτες</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Ενήλικες</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Παιδιά</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Από {0} / διανυκτέρευση</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Καθαρισμός επιλογής</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Εμφάνιση περισσότερων</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Η μέγιστη πληρότητα είναι {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Η ελάχιστη διαμονή είναι {0} διανυκτερεύσεις</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Επιλέξτε ημερομηνία άφιξης</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Επιλέξτε ημερομηνία αναχώρησης</value>
   </data>
 </root>

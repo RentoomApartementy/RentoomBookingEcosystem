@@ -29,8 +29,19 @@
 <PageTitle>@Localizer["ClientInfoPageTitle"]</PageTitle>
 
 <div class="payment-container">
+    <div class="reservation-progress-band">
+        <ReservationStepper CurrentStep="2" Localizer="Localizer" />
+    </div>
     <div class="payment-wrapper">
         <div  class="client-form-section">
+            @if (_summary?.StartRequest is not null)
+        {
+            <ReservationAddonsUpsellEditor
+                ReservationTokenGuid="ReservationTokenGuid"
+                StartRequest="_summary.StartRequest"
+                Apartment="_apartment"
+                OnUpdated="RefreshDraftSummaryAsync" />
+        }
             <EditForm id="client-form" EditContext="_editContext" OnValidSubmit="SaveAsync">
                 <DataAnnotationsValidator />
 
@@ -228,9 +239,11 @@
                 </Button>
             </div>
         </EditForm>
+
+        
         </div>
 
-        <SummaryBox 
+        <SummaryBox
         Summary="_summary"
         Apartment="_apartment"
         />
@@ -274,8 +287,6 @@
     private IDisposable? _scrollObjRef;
     private IJSObjectReference? _scrollModule;
     private bool _observerInitialized = false;
-
-    private List<DefinedAddonEntity>? _definedAddons = null;
 
     [JSInvokable]
     public void UpdateScrollState(string elementId, bool isPastOrVisible)
@@ -437,7 +448,6 @@
             InitializeDummyClientData();
         }
         _editContext = new EditContext(_form);
-        _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
         _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
 
         if (_summary != null)
@@ -469,6 +479,12 @@
                 ["ReservationTokenGuid"] = ReservationTokenGuid.ToString(),
                 ["ApartmentId"] = _summary?.StartRequest?.ObjectId.ToString()
             });
+    }
+
+    private async Task RefreshDraftSummaryAsync()
+    {
+        _summary = await ReservationWorkflowService.BuildDraftSummaryAsync(ReservationTokenGuid);
+        StateHasChanged();
     }
 
     private async Task DownloadGusDataAsync()

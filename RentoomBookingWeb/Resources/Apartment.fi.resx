@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -467,5 +467,41 @@
   </data>
   <data name="NotFoundPopupSecondaryText" xml:space="preserve">
     <value>Virhe 404</value>
+  </data>
+  <data name="Apartment_PhotoAltSuffix" xml:space="preserve">
+    <value>kuva</value>
+  </data>
+  <data name="Apartment_MainPhotoAlt" xml:space="preserve">
+    <value>Asunnon {0} pääkuva</value>
+  </data>
+  <data name="CalendarGuestsTitle" xml:space="preserve">
+    <value>Vieraat</value>
+  </data>
+  <data name="CalendarAdults" xml:space="preserve">
+    <value>Aikuiset</value>
+  </data>
+  <data name="CalendarChildren" xml:space="preserve">
+    <value>Lapset</value>
+  </data>
+  <data name="CalendarFromPerNight" xml:space="preserve">
+    <value>Alkaen {0} / yö</value>
+  </data>
+  <data name="CalendarClearSelection" xml:space="preserve">
+    <value>Tyhjennä valinta</value>
+  </data>
+  <data name="CalendarLoadMore" xml:space="preserve">
+    <value>Näytä lisää</value>
+  </data>
+  <data name="CalendarMaxOccupancy" xml:space="preserve">
+    <value>Enimmäismäärä vieraita on {0}</value>
+  </data>
+  <data name="CalendarMinStayNotice" xml:space="preserve">
+    <value>Vähimmäisoleskeluaika on {0} yötä</value>
+  </data>
+  <data name="CalendarSelectCheckIn" xml:space="preserve">
+    <value>Valitse saapumispäivä</value>
+  </data>
+  <data name="CalendarSelectCheckOut" xml:space="preserve">
+    <value>Valitse lähtöpäivä</value>
   </data>
 </root>

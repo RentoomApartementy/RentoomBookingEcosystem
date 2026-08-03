@@ -621,6 +621,65 @@ namespace RentoomBooking.SharedClasses.Migrations
                     b.ToTable("ApartmentInfos");
                 });
 
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ApartmentMediaAltText", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AiAgentName")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar")
+                        .HasColumnName("ai_agent_name");
+
+                    b.Property<string>("AiAgentVersion")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar")
+                        .HasColumnName("ai_agent_version");
+
+                    b.Property<string>("AiResponseId")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar")
+                        .HasColumnName("ai_response_id");
+
+                    b.Property<string>("AltText")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar");
+
+                    b.Property<int>("MediaAssetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Source")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SourceContentHash")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar")
+                        .HasColumnName("source_content_hash");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MediaAssetId", "Culture")
+                        .IsUnique();
+
+                    b.ToTable("apartment_media_alt_texts");
+                });
+
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ApartmentMediaAssetEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -1478,6 +1537,15 @@ namespace RentoomBooking.SharedClasses.Migrations
                         .IsRequired();
 
                     b.Navigation("TermsSource");
+                });
+
+            modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ApartmentMediaAltText", b =>
+                {
+                    b.HasOne("RentoomBooking.SharedClasses.Models.Database.EFEntitites.ApartmentMediaAssetEntity", null)
+                        .WithMany()
+                        .HasForeignKey("MediaAssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RentoomBooking.SharedClasses.Models.Database.EFEntitites.UpsellOrderLineEntity", b =>

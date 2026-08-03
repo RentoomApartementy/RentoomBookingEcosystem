@@ -25,6 +25,14 @@
 
 <PageTitle>@Localizer["SummaryPageTitle"]</PageTitle>
 <div class="summary-container">
+    @if (!_loading && _summary is not null)
+    {
+        <div class="reservation-progress-band">
+            <ReservationStepper CurrentStep="CurrentStep"
+                                IsCurrentStepCompleted="IsPaid"
+                                Localizer="Localizer" />
+        </div>
+    }
     <AppError Message=@_error
               Title="@Localizer["SomethingWrong"]"
               Dismissible="false" />
@@ -316,7 +324,16 @@
                         DiscountAmount="@(_summary?.DiscountAmountPln ?? 0m)"
                         Localizer="Localizer" />
                 }
-                
+
+                @if (!IsPaid && !IsPaymentInitiated && _summary?.StartRequest is not null)
+                {
+                    <ReservationAddonsUpsellEditor
+                        ReservationTokenGuid="ReservationTokenGuid"
+                        StartRequest="_summary.StartRequest"
+                        Apartment="_apartment"
+                        OnUpdated="RefreshSummaryAndChecksAsync" />
+                }
+
                 <div class="guest-info">
                     <div class="box-text">
                         <GoogleIcon Name="person" Class="box-text-icon" AriaLabel="@Localizer["Summary_ReservationIconAriaLabel"]" />
@@ -425,6 +442,7 @@
     private bool ShouldShowRetryPaymentButton => IsPaymentInitiated || IsPaymentFailed;
     private bool IsRetryPaymentDisabled => _retryCountdownSeconds > 0;
     private bool ShouldShowCancelAction => true;// _enableCancelAction && ShouldShowTermsAndPayment && !IsPaid;
+    private int CurrentStep => (IsPaid || IsPaymentInitiated || IsPaymentFailed) ? 4 : 3;
     private bool ShouldShowTermsAndPayment => 
                                                  (  ( (
                                                       string.Equals(_summary?.IdoStatus, "waitingForPayment", StringComparison.OrdinalIgnoreCase)
@@ -649,6 +667,13 @@
                 ["PaymentStatus"] = _summary?.PaymentStatus
             });
         Navigation.NavigateTo($"/rezerwuj/{ReservationTokenGuid}/oplac");
+    }
+
+    private async Task RefreshSummaryAndChecksAsync()
+    {
+        await RefreshSummaryAsync();
+        await EnsureWorkflowChecksAsync();
+        StateHasChanged();
     }
 
     private async Task EnsureWorkflowChecksAsync()

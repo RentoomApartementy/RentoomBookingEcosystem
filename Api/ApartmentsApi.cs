@@ -67,7 +67,14 @@ public class ApartmentsApi
                 return response;
             }
 
-            List<ObjectMedium>? media = await _apartmentMediaCatalogService.GetApartmentMediaAsync(objectId);
+            // Functions has no request localization, so the alt-text culture comes from the query string.
+            var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+            var culture = query.Get("culture")
+                ?? query.Get("lang")
+                ?? query.Get("language")
+                ?? query.Get("locale");
+
+            List<ObjectMedium>? media = await _apartmentMediaCatalogService.GetApartmentMediaAsync(objectId, culture);
 
             if (media == null)
             {

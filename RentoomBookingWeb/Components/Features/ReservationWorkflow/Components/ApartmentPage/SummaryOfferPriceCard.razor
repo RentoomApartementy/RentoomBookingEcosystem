@@ -1,0 +1,53 @@
+@using Microsoft.Extensions.Localization
+
+<div class="summary-offer-price @(IsSelected ? "selected-offer" : "")" @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))">
+    <div class="summary-offer-price-header">
+        <b>@TitleText</b>
+        <div @onclick="OnSearchModalOpen" @onclick:stopPropagation="true">
+            <Button Type="ButtonType.Secondary" Class="btn-offer-change" title="@Localizer["ChangeDatesButtonLabel"]">
+                <GoogleIcon Name="edit_calendar" SizePx="18" AriaLabel="@Localizer["ChangeDatesButtonLabel"]" />
+            </Button>
+        </div>
+    </div>
+    <small>@DescriptionText</small>
+    <div class="summary-offer-price-button" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+        <span class="summary-offer-price-button-price">
+            <b><PriceDisplay AmountPln="@DiscountedPrice" /></b>
+            @if (BonusDiscountAmount > 0m)
+            {
+                <span class="summary-offer-price-old"><PriceDisplay AmountPln="@StandardPrice" /></span>
+            }
+            <span class="stay-summary-text">@StaySummaryText</span>
+            <span class="offer-dates">@DateRangeText</span>
+        </span>
+        <div @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))" @onclick:stopPropagation="true">
+            <Button Type="@(IsSelected ? ButtonType.Tertiary : ButtonType.Primary)" Class="btn-offer-book" style="white-space: nowrap;">@ButtonLabel</Button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string OfferTypeKey { get; set; } = "";
+    [Parameter] public string TitleText { get; set; } = "";
+    [Parameter] public string DescriptionText { get; set; } = "";
+    [Parameter] public decimal Price { get; set; }
+    [Parameter] public decimal TotalAdditionalPriceBeforeDiscount { get; set; }
+    [Parameter] public decimal BonusDiscountAmount { get; set; }
+    [Parameter] public string StaySummaryText { get; set; } = "";
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
+    [Parameter] public string? SelectedOfferType { get; set; }
+    [Parameter] public bool HasActiveReservation { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+    [Parameter] public EventCallback OnSearchModalOpen { get; set; }
+    [Parameter] public EventCallback<string> OnBookNow { get; set; }
+
+    private bool IsSelected => string.Equals(SelectedOfferType, OfferTypeKey, StringComparison.OrdinalIgnoreCase);
+    private decimal StandardPrice => Price + TotalAdditionalPriceBeforeDiscount;
+    private decimal DiscountedPrice => Math.Max(0m, StandardPrice - BonusDiscountAmount);
+    private string ButtonLabel => HasActiveReservation && IsSelected ? Localizer["ContinueReservation"] : Localizer["BookNow"];
+    private string DateRangeText =>
+        DateTime.TryParse(StartDate, out var s) && DateTime.TryParse(EndDate, out var e)
+            ? $"{s:dd.MM.yyyy} - {e:dd.MM.yyyy}"
+            : "";
+}

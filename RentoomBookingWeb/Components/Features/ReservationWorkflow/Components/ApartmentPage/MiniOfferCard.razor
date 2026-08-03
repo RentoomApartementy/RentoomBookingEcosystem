@@ -1,0 +1,37 @@
+@using Microsoft.Extensions.Localization
+
+<div class="mini-offer @(IsSelected ? "selected-offer" : "")" @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))">
+    <div class="mini-offer-header">
+        <span>@TitleText</span>
+        <span class="mini-offer-stay">@StaySummaryText</span>
+        <span class="mini-offer-dates">@DateRangeText</span>
+    </div>
+    <div class="mini-offer-desc">@DescriptionText</div>
+    <div class="mini-offer-footer">
+        <span class="mini-offer-price"><PriceDisplay AmountPln="@Price" /></span>
+        <div @onclick="@(() => OnBookNow.InvokeAsync(OfferTypeKey))" @onclick:stopPropagation="true">
+            <Button Type="@(IsSelected ? ButtonType.Tertiary : ButtonType.Primary)" Class="mini-offer-book-btn">@ButtonLabel</Button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string OfferTypeKey { get; set; } = "";
+    [Parameter] public string TitleText { get; set; } = "";
+    [Parameter] public string DescriptionText { get; set; } = "";
+    [Parameter] public decimal Price { get; set; }
+    [Parameter] public string StaySummaryText { get; set; } = "";
+    [Parameter] public string? StartDate { get; set; }
+    [Parameter] public string? EndDate { get; set; }
+    [Parameter] public string? SelectedOfferType { get; set; }
+    [Parameter] public bool HasActiveReservation { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+    [Parameter] public EventCallback<string> OnBookNow { get; set; }
+
+    private bool IsSelected => string.Equals(SelectedOfferType, OfferTypeKey, StringComparison.OrdinalIgnoreCase);
+    private string ButtonLabel => HasActiveReservation && IsSelected ? Localizer["ContinueReservation"] : Localizer["BookNow"];
+    private string DateRangeText =>
+        DateTime.TryParse(StartDate, out var s) && DateTime.TryParse(EndDate, out var e)
+            ? $"{s:dd.MM.yyyy} - {e:dd.MM.yyyy}"
+            : "";
+}
