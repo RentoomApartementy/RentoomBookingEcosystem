@@ -25,9 +25,10 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         [Parameter] public string? Children { get; set; }
         [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
         [Parameter] public EventCallback<decimal?> FromPriceChanged { get; set; }
+        [Parameter] public EventCallback<ApartmentFromOfferDto?> FromOfferChanged { get; set; }
         [Parameter] public EventCallback<Dictionary<string, string>?> OnRangeSelected { get; set; }
         // Whether the "from" price is adjusted by the apartment's mandatory-addons flat fee (see
-        // ApartmentCalendarService.GetNearestSuggestedPriceAsync). When false, shown as a plain average.
+        // ApartmentCalendarService's nearest suggested offer. When false, shown as a plain average.
         [Parameter] public bool ApplyMandatoryAddonsFee { get; set; } = true;
 
         [Inject] public IApartmentCalendarService CalendarService { get; set; } = default!;
@@ -54,6 +55,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
         // Frozen once resolved - the displayed "from" price shouldn't change as the visitor
         // adjusts guests or loads more months; only availability (_calendar.Days) keeps refreshing.
         private decimal? _frozenFromPrice;
+        private ApartmentFromOfferDto? _frozenFromOffer;
         private IReadOnlyList<MandatoryAddonCharge> _mandatoryAddonCharges = Array.Empty<MandatoryAddonCharge>();
         private int? _mandatoryAddonChargesApartmentId;
 
@@ -248,12 +250,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.A
 
                 RevalidateSelection();
 
-                if (_frozenFromPrice is null && _calendar?.FromPriceGross is decimal resolvedPrice)
+                if (_frozenFromOffer is null && _calendar?.FromOffer is not null)
                 {
-                    _frozenFromPrice = resolvedPrice;
+                    _frozenFromOffer = _calendar.FromOffer;
+                    _frozenFromPrice = _frozenFromOffer.PricePerNightGross;
                 }
 
                 await FromPriceChanged.InvokeAsync(_frozenFromPrice);
+                await FromOfferChanged.InvokeAsync(_frozenFromOffer);
             }
             finally
             {

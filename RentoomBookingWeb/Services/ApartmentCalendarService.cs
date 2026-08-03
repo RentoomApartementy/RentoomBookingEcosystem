@@ -39,7 +39,24 @@ namespace RentoomBookingWeb.Services
         /// carries no price data.</summary>
         public decimal? FromPriceGross { get; set; }
 
+        /// <summary>
+        /// The real term from which <see cref="FromPriceGross"/> was calculated. Unlike the
+        /// calendar day feed, this comes from a fully priced availability suggestion.
+        /// </summary>
+        public ApartmentFromOfferDto? FromOffer { get; set; }
+
         public string Currency { get; set; } = "PLN";
+    }
+
+    public sealed class ApartmentFromOfferDto
+    {
+        public decimal PricePerNightGross { get; init; }
+        public string Currency { get; init; } = "PLN";
+        public DateOnly AvailabilityStarts { get; init; }
+        public DateOnly AvailabilityEnds { get; init; }
+        public int Nights { get; init; }
+        public int Adults { get; init; }
+        public int Children { get; init; }
     }
 
     public class ApartmentCalendarDay
@@ -115,8 +132,23 @@ namespace RentoomBookingWeb.Services
                 }
             }
 
-            result.FromPriceGross = await GetNearestSuggestedPriceAsync(
-                objectId, adults, children, applyMandatoryAddonsFee, mandatoryAddonCharges, cancellationToken).ConfigureAwait(false);
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var nearestAvailableDay = result.Days
+                .Where(day => day.Key >= today && day.Value.Available)
+                .Select(day => (DateOnly?)day.Key)
+                .OrderBy(day => day)
+                .FirstOrDefault() ?? today;
+
+            result.FromOffer = await GetNearestSuggestedOfferAsync(
+                objectId,
+                nearestAvailableDay,
+                adults,
+                children,
+                applyMandatoryAddonsFee,
+                mandatoryAddonCharges,
+                cancellationToken).ConfigureAwait(false);
+            result.FromPriceGross = result.FromOffer?.PricePerNightGross;
+            result.Currency = result.FromOffer?.Currency ?? "PLN";
 
             return result;
         }
@@ -130,17 +162,17 @@ namespace RentoomBookingWeb.Services
         /// applyMandatoryAddonsFee is set (same flat-fee-adjusted divisor used by the apartments list
         /// page's suggested-date price, see Apartment.razor's UpdateSuggestionFromPriceAsync), the
         /// apartment's mandatory-addons total is added back per night rather than shown as a raw average.</summary>
-        private async Task<decimal?> GetNearestSuggestedPriceAsync(
+        private async Task<ApartmentFromOfferDto?> GetNearestSuggestedOfferAsync(
             int objectId,
+            DateOnly referenceDate,
             int adults,
             int children,
             bool applyMandatoryAddonsFee,
             IReadOnlyList<MandatoryAddonCharge>? mandatoryAddonCharges,
             CancellationToken cancellationToken)
         {
-            var today = DateOnly.FromDateTime(DateTime.Today);
-            var referenceStart = today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            var referenceEnd = today.AddDays(1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var referenceStart = referenceDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var referenceEnd = referenceDate.AddDays(1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
             var result = await _availabilityFinder
                 .FindAvailableTermsForApartmentAsync(objectId, referenceStart, referenceEnd, adults, children, cancellationToken)
@@ -168,14 +200,35 @@ namespace RentoomBookingWeb.Services
 
             if (!applyMandatoryAddonsFee)
             {
-                var plainPerNight = (totalPrice-fee) / nights;
-                return plainPerNight > 0 ? plainPerNight : null;
+                var plainPerNight = (totalPrice - fee) / nights;
+                return plainPerNight > 0
+                    ? CreateFromOffer(plainPerNight, start, end, nights, adults, children)
+                    : null;
             }
 
-            
             var perNight = ((totalPrice - fee) / nights) + fee;
-            return perNight > 0 ? perNight : null;
+            return perNight > 0
+                ? CreateFromOffer(perNight, start, end, nights, adults, children)
+                : null;
         }
+
+        private static ApartmentFromOfferDto CreateFromOffer(
+            decimal pricePerNight,
+            DateOnly start,
+            DateOnly end,
+            int nights,
+            int adults,
+            int children)
+            => new()
+            {
+                PricePerNightGross = pricePerNight,
+                Currency = "PLN",
+                AvailabilityStarts = start,
+                AvailabilityEnds = end,
+                Nights = nights,
+                Adults = adults,
+                Children = children
+            };
 
         private static bool TryParseDate(string? value, out DateOnly date)
         {

@@ -22,6 +22,7 @@ using RentoomBooking.SharedClasses.Services.Descriptions;
 using RentoomBooking.SharedClasses.Services.IdoBooking;
 using RentoomBooking.SharedClasses.Services.Bonuses;
 using RentoomBooking.SharedClasses.Services.ReservationWorkflow;
+using RentoomBooking.SharedClasses.Services.Seo;
 using RentoomBooking.SharedClasses.Services.Upsell;
 using RentoomBooking.SharedClasses.Services.Blog;
 using RentoomBookingWeb.Components.Enums;
@@ -74,6 +75,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected ApartmentSocialMediaDTO? _socialMedia = null;
         protected NearbyAttractionsResultDTO? _nearbyAttractions = null;
         protected List<ObjectAmenity>? _amenities = null;
+        protected List<ObjectAmenity>? _seoAmenities = null;
         protected int? _bedsCount = null;
         protected bool _isExpanded = false;
         protected PricingOffersResponse? _offersResponse;
@@ -111,6 +113,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected bool _isModalOpen = false;
         protected decimal? _calendarFromPrice;
+        protected ApartmentFromOfferDto? _calendarFromOffer;
+
+        private string? _seoRouteStartDate;
+        private string? _seoRouteEndDate;
+        private string? _seoRouteAdults;
+        private string? _seoRouteChildren;
+        private bool _seoRouteShouldNoIndex;
+        private VacationRentalDatedOfferInput? _seoDatedOffer;
 
         protected string? _pendingStartDate;
         protected string? _pendingEndDate;
@@ -157,6 +167,17 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected Task OnCalendarFromPriceChanged(decimal? price)
         {
             _calendarFromPrice = price;
+            StateHasChanged();
+            return Task.CompletedTask;
+        }
+
+        protected Task OnCalendarFromOfferChanged(ApartmentFromOfferDto? offer)
+        {
+            _calendarFromOffer = offer;
+            if (offer is not null)
+            {
+                _calendarFromPrice = offer.PricePerNightGross;
+            }
             StateHasChanged();
             return Task.CompletedTask;
         }
@@ -665,30 +686,10 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected string GetCanonicalUrl()
         {
             var localizedBase = RouteService.GetLocalizedUrl("ApartmentDetail");
-            return $"{NavManager.BaseUri.TrimEnd('/')}{localizedBase}/{Id}/{Slug}";
-        }
-
-        protected List<object> GetJsonLdImages()
-        {
-            if (_objectMediums != null && _objectMediums.Any())
-            {
-                return _objectMediums.Select((m, i) => (object)new Dictionary<string, object>
-                {
-                    ["@type"] = "ImageObject",
-                    ["url"] = m.Url ?? string.Empty,
-                    ["representativeOfPage"] = i == 0
-                }).ToList();
-            }
-
-            return new List<object>
-            {
-                new Dictionary<string, object>
-                {
-                    ["@type"] = "ImageObject",
-                    ["url"] = GetSeoImage(),
-                    ["representativeOfPage"] = true
-                }
-            };
+            var slug = !string.IsNullOrWhiteSpace(_apartment?.Name)
+                ? _apartment.Name.ToSlug()
+                : Slug;
+            return $"{NavManager.BaseUri.TrimEnd('/')}{localizedBase}/{Id}/{slug}";
         }
 
         protected MarkupString GetJsonLd()
@@ -696,79 +697,48 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             var apartment = _apartment;
             if (apartment == null) return new MarkupString("");
 
-            var apartmentUnit = new Dictionary<string, object>
-            {
-                ["@type"] = "Apartment",
-                ["name"] = apartment.Name ?? "",
-                ["numberOfRooms"] = apartment.BedroomsCount ?? 1,
-                ["occupancy"] = new Dictionary<string, object>
+            var images = (_objectMediums ?? new List<ObjectMedium>())
+                .SelectMany(static medium => new[] { medium.Url, medium.CardUrl })
+                .Append(GetSeoImage())
+                .ToList();
+
+            var fromOffer = _calendarFromOffer is null
+                ? null
+                : new VacationRentalFromOfferInput
                 {
-                    ["@type"] = "QuantitativeValue",
-                    ["minValue"] = apartment.MinCapacity ?? 1,
-                    ["maxValue"] = apartment.Capacity ?? 1,
-                    ["value"] = apartment.Capacity ?? 1
-                },
-                ["floorSize"] = new Dictionary<string, object>
-                {
-                    ["@type"] = "QuantitativeValue",
-                    ["value"] = string.IsNullOrEmpty(apartment.Area) ? "0" : apartment.Area,
-                    ["unitCode"] = "MTK"
-                }
-            };
+                    PricePerNight = _calendarFromOffer.PricePerNightGross,
+                    Currency = _calendarFromOffer.Currency,
+                    AvailabilityStarts = _calendarFromOffer.AvailabilityStarts,
+                    AvailabilityEnds = _calendarFromOffer.AvailabilityEnds,
+                    Nights = _calendarFromOffer.Nights,
+                    Adults = _calendarFromOffer.Adults,
+                    Children = _calendarFromOffer.Children,
+                    Name = $"{Localizer["From"]} {_calendarFromOffer.PricePerNightGross:0.00} {_calendarFromOffer.Currency} / {Localizer["Night"]}",
+                    Description = BuildSeoStayDescription(
+                        _calendarFromOffer.AvailabilityStarts,
+                        _calendarFromOffer.AvailabilityEnds,
+                        _calendarFromOffer.Adults,
+                        _calendarFromOffer.Children),
+                    Url = BuildPublicDatedUrl(
+                        _calendarFromOffer.AvailabilityStarts,
+                        _calendarFromOffer.AvailabilityEnds,
+                        _calendarFromOffer.Adults,
+                        _calendarFromOffer.Children)
+                };
 
-            if (_amenities != null && _amenities.Any())
+            var json = VacationRentalJsonLdBuilder.Build(new VacationRentalJsonLdInput
             {
-                apartmentUnit["amenityFeature"] = _amenities.Select(a => new Dictionary<string, object>
-                {
-                    ["@type"] = "LocationFeatureSpecification",
-                    ["name"] = a.Name,
-                    ["value"] = true
-                }).ToList();
-            }
+                Apartment = apartment,
+                CanonicalUrl = GetCanonicalUrl(),
+                Description = GetSeoDescription(),
+                Images = images,
+                EnglishAmenities = (_seoAmenities ?? _amenities ?? new List<ObjectAmenity>())
+                    .Select(static amenity => new VacationRentalAmenityInput(amenity.Id, amenity.Name))
+                    .ToList(),
+                FromOffer = fromOffer,
+                DatedOffer = _seoDatedOffer
+            });
 
-            var vacationRental = new Dictionary<string, object>
-            {
-                ["@type"] = "VacationRental",
-                ["identifier"] = apartment.Id.ToString(),
-                ["name"] = apartment.Name ?? "",
-                ["description"] = GetSeoDescription(),
-                ["url"] = GetCanonicalUrl(),
-                ["image"] = GetJsonLdImages(),
-
-                ["address"] = new Dictionary<string, object>
-                {
-                    ["@type"] = "PostalAddress",
-                    ["streetAddress"] = apartment.ObjectLocation?.LocalizationItem?.Street ?? "",
-                    ["addressLocality"] = apartment.ObjectLocation?.LocalizationItem?.City ?? "",
-                    ["postalCode"] = apartment.ObjectLocation?.LocalizationItem?.ZipCode ?? "",
-                    ["addressCountry"] = "PL"
-                },
-
-                ["geo"] = new Dictionary<string, object>
-                {
-                    ["@type"] = "GeoCoordinates",
-                    ["latitude"] = apartment.ObjectLocation?.LocalizationItem?.GeoLocationLat?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "",
-                    ["longitude"] = apartment.ObjectLocation?.LocalizationItem?.GeoLocationLng?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? ""
-                },
-
-                ["containsPlace"] = new[] { apartmentUnit }
-            };
-
-            var graphItems = new List<object> { vacationRental };
-
-            var jsonLd = new Dictionary<string, object>
-            {
-                ["@context"] = "https://schema.org",
-                ["@graph"] = graphItems
-            };
-
-            var options = new System.Text.Json.JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            };
-
-            string json = System.Text.Json.JsonSerializer.Serialize(jsonLd, options);
             return new MarkupString(json);
         }
 
@@ -778,11 +748,174 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected bool HasRouteDates => TryParseDate(StartDate, out _) && TryParseDate(EndDate, out _);
 
+        protected bool ShouldNoIndex => _seoRouteShouldNoIndex;
+
+        private void CaptureSeoRouteContext()
+        {
+            _seoRouteStartDate = StartDate;
+            _seoRouteEndDate = EndDate;
+            _seoRouteAdults = Adults;
+            _seoRouteChildren = Children;
+            _seoRouteShouldNoIndex = ApartmentSeoRoutePolicy.ShouldNoIndex(
+                ReservationTokenGuid,
+                StartDate,
+                EndDate,
+                Adults,
+                Children);
+        }
+
+        private bool TryGetSeoRouteStay(out DateOnly start, out DateOnly end, out int adults, out int children)
+        {
+            start = default;
+            end = default;
+            adults = 0;
+            children = 0;
+            var parsedStart = default(DateOnly);
+            var parsedEnd = default(DateOnly);
+            var parsedAdults = 0;
+            var parsedChildren = 0;
+
+            var valid = TryParseDate(_seoRouteStartDate, out parsedStart) &&
+                        TryParseDate(_seoRouteEndDate, out parsedEnd) &&
+                        parsedEnd > parsedStart &&
+                        int.TryParse(_seoRouteAdults, NumberStyles.Integer, CultureInfo.InvariantCulture, out parsedAdults) &&
+                        parsedAdults > 0 &&
+                        int.TryParse(_seoRouteChildren, NumberStyles.Integer, CultureInfo.InvariantCulture, out parsedChildren) &&
+                        parsedChildren >= 0 &&
+                        (_apartment?.Capacity is not > 0 || parsedAdults + parsedChildren <= _apartment.Capacity.Value);
+
+            if (!valid)
+            {
+                return false;
+            }
+
+            start = parsedStart;
+            end = parsedEnd;
+            adults = parsedAdults;
+            children = parsedChildren;
+            return true;
+        }
+
+        private async Task LoadSeoDatedOfferAsync()
+        {
+            if (_apartment is null || !TryGetSeoRouteStay(out var start, out var end, out var adults, out var children))
+            {
+                _seoDatedOffer = _seoRouteShouldNoIndex
+                    ? new VacationRentalDatedOfferInput { LoadState = DatedOfferLoadState.Failed }
+                    : null;
+                return;
+            }
+
+            try
+            {
+                var response = await OfferService.GetPricingOffersAsync(new PricingOffersRequest
+                {
+                    ObjectIds = new List<int> { _apartment.Id },
+                    DateFrom = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    DateTo = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                    NumberOfAdults = adults,
+                    NumberOfBigChildren = children,
+                    Currency = "PLN",
+                    Language = CurrentLanguage
+                });
+
+                if (response is null || response.Errors is not null || response.Result?.PricingOffers is null)
+                {
+                    _seoDatedOffer = BuildSeoDatedOfferInput(
+                        DatedOfferLoadState.Failed,
+                        start,
+                        end,
+                        adults,
+                        children,
+                        Array.Empty<VacationRentalRateInput>());
+                    return;
+                }
+
+                var pricingOffer = response.Result.PricingOffers
+                    .FirstOrDefault(offer => offer.ObjectId == _apartment.Id)
+                    ?? response.Result.PricingOffers.FirstOrDefault();
+
+                var rates = (pricingOffer?.Offers ?? new List<OfferItem>())
+                    .Where(static offer => offer is not null && offer.Price > 0)
+                    .Select(offer =>
+                    {
+                        var rateName = GetSeoRateName(offer);
+                        return new VacationRentalRateInput(
+                            rateName,
+                            $"{rateName}; {BuildSeoStayDescription(start, end, adults, children)}",
+                            offer.OfferType,
+                            offer.Price);
+                    })
+                    .ToList();
+
+                _seoDatedOffer = BuildSeoDatedOfferInput(
+                    DatedOfferLoadState.Succeeded,
+                    start,
+                    end,
+                    adults,
+                    children,
+                    rates);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning(ex, "Failed to load immutable SEO pricing for apartment {ApartmentId}.", _apartment.Id);
+                _seoDatedOffer = BuildSeoDatedOfferInput(
+                    DatedOfferLoadState.Failed,
+                    start,
+                    end,
+                    adults,
+                    children,
+                    Array.Empty<VacationRentalRateInput>());
+            }
+        }
+
+        private VacationRentalDatedOfferInput BuildSeoDatedOfferInput(
+            DatedOfferLoadState state,
+            DateOnly start,
+            DateOnly end,
+            int adults,
+            int children,
+            IReadOnlyList<VacationRentalRateInput> rates)
+            => new()
+            {
+                LoadState = state,
+                AvailabilityStarts = start,
+                AvailabilityEnds = end,
+                Adults = adults,
+                Children = children,
+                Currency = "PLN",
+                Url = BuildPublicDatedUrl(start, end, adults, children),
+                SoldOutName = Localizer["NoOffersAvailable"],
+                SoldOutDescription = BuildSeoStayDescription(start, end, adults, children),
+                Rates = rates
+            };
+
+        private string GetSeoRateName(OfferItem offer)
+        {
+            if (string.Equals(offer.OfferType, OfferTypeRefundable, StringComparison.OrdinalIgnoreCase))
+            {
+                return Localizer["RefundableOffer"];
+            }
+            if (string.Equals(offer.OfferType, OfferTypeNonrefundable, StringComparison.OrdinalIgnoreCase))
+            {
+                return Localizer["Non-refundableOffer"];
+            }
+            return string.IsNullOrWhiteSpace(offer.Name) ? offer.OfferType ?? "Offer" : offer.Name;
+        }
+
+        private string BuildSeoStayDescription(DateOnly start, DateOnly end, int adults, int children)
+            => $"{start:yyyy-MM-dd} – {end:yyyy-MM-dd}; {adults} {Localizer["Adults"]}, {children} {Localizer["Children"]}";
+
+        private string BuildPublicDatedUrl(DateOnly start, DateOnly end, int adults, int children)
+            => $"{GetCanonicalUrl()}/{start:yyyy-MM-dd}/{end:yyyy-MM-dd}/{adults}/{children}";
+
         protected override async Task OnInitializedAsync()
         {
+            CaptureSeoRouteContext();
             _reservationTokenGuid = ReservationTokenGuid;
 
             _apartment = await ApartmentsService.GetApartmentByIdAsync(Id);
+            await LoadSeoDatedOfferAsync();
             await GetObjectMedia();
             await GetApartmentSocialMedia();
             await GetNearbyAttractions();
@@ -830,6 +963,15 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                 }
 
                 _amenities = await GetAmenities(_apartment.Id);
+                try
+                {
+                    _seoAmenities = await GetAmenities(_apartment.Id, "eng");
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogWarning(ex, "Failed to load English JSON-LD amenities for apartment {ApartmentId}.", _apartment.Id);
+                    _seoAmenities = _amenities;
+                }
                 _bedsCount = _apartment?.BedsConfiguration?.Sum(item => item.Count);
 
                 _definedAddons = await ApartmentsService.GetDefinedAddonsAsync();
@@ -969,9 +1111,17 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
             StateHasChanged();
 
+            if (!TryGetCurrentPricingRequest(out var request))
+            {
+                _offersResponse = null;
+                _isOfferLoading = false;
+                EnsureSelectedOffer();
+                return;
+            }
+
             try
             {
-                _offersResponse = await OfferService.GetPricingOffersAsync(CurrentRequest);
+                _offersResponse = await OfferService.GetPricingOffersAsync(request);
             }
             finally
             {
@@ -981,8 +1131,10 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             EnsureSelectedOffer();
             await RecalculateActiveBonusPreviewAsync();
 
-            bool hasOffers = _offersResponse?.Result?.PricingOffers != null &&
-                             _offersResponse.Result.PricingOffers.Any();
+            bool hasOffers = _offersResponse?.Errors is null &&
+                             _offersResponse?.Result?.PricingOffers?
+                                 .SelectMany(static pricing => pricing.Offers ?? new List<OfferItem>())
+                                 .Any(static offer => offer.Price > 0) == true;
 
             WorkflowTelemetry.TrackEvent(
                 hasOffers ? "ReservationOfferLoaded" : "ReservationOfferUnavailable",
@@ -1274,9 +1426,9 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             _objectDescription = descriptions?.FirstOrDefault();
         }
 
-        protected async Task<List<ObjectAmenity>?> GetAmenities(int objectId)
+        protected async Task<List<ObjectAmenity>?> GetAmenities(int objectId, string? language = null)
         {
-            var amenities = await ApartmentsService.GetApartmentAmenitiesAsync(CurrentAmenityLanguage, objectId);
+            var amenities = await ApartmentsService.GetApartmentAmenitiesAsync(language ?? CurrentAmenityLanguage, objectId);
 
             return amenities
                 .Select(x => new ObjectAmenity
@@ -1295,8 +1447,29 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             DateFrom = StartDate,
             DateTo = EndDate,
             NumberOfAdults = int.TryParse(Adults, out var a) ? a : null,
-            NumberOfBigChildren = int.TryParse(Children, out var c) ? c : null
+            NumberOfBigChildren = int.TryParse(Children, out var c) ? c : null,
+            Currency = "PLN",
+            Language = CurrentLanguage
         };
+
+        private bool TryGetCurrentPricingRequest(out PricingOffersRequest request)
+        {
+            request = CurrentRequest;
+            if (_apartment is null ||
+                !TryParseDate(StartDate, out var start) ||
+                !TryParseDate(EndDate, out var end) ||
+                end <= start ||
+                request.NumberOfAdults is not > 0 ||
+                request.NumberOfBigChildren is not >= 0 ||
+                (_apartment.Capacity is > 0 && request.NumberOfAdults + request.NumberOfBigChildren > _apartment.Capacity))
+            {
+                return false;
+            }
+
+            request.DateFrom = start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            request.DateTo = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            return true;
+        }
 
         protected async Task GoToSuggestionDates(AvailableTerm? selectedTerm = null)
         {
