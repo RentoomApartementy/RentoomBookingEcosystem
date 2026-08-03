@@ -45,6 +45,15 @@
                     Localizer="Localizer"
                     OnBookNow="OnBookNow" />
             }
+
+            @if (MandatoryAddonsFee > 0)
+            {
+                <small class="mini-offer-cleaning-fee">@Localizer["CleaningFeeIncludedLabel"] <PriceDisplay AmountPln="@MandatoryAddonsFee" /></small>
+            }
+            else
+            {
+                <small class="mini-offer-cleaning-fee">@Localizer["CleaningIncluded"]</small>
+            }
         }
         else
         {
@@ -63,6 +72,7 @@
     [Parameter] public string RefundableOfferText { get; set; } = "";
     [Parameter] public string? SelectedOfferType { get; set; }
     [Parameter] public bool HasActiveReservation { get; set; }
+    [Parameter] public decimal MandatoryAddonsFee { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
     [Parameter] public EventCallback<string> OnBookNow { get; set; }
 }

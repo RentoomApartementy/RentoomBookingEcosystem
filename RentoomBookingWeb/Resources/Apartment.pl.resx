@@ -234,6 +234,9 @@
   <data name="CleaningIncluded" xml:space="preserve">
     <value>Sprzątanie jest wliczone w cene</value>
   </data>
+  <data name="CleaningFeeIncludedLabel" xml:space="preserve">
+    <value>Zawiera opłatę za sprzątanie</value>
+  </data>
   <data name="SelectOffer" xml:space="preserve">
     <value>Wybierz ofertę</value>
   </data>
