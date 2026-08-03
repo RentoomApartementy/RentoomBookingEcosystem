@@ -524,6 +524,7 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
 
             Items.AddRange(group1);
             Items.AddRange(group2);
+            ApartmentsCount = Items.Count;
         }
 
         private bool IsMetaFilterChanged(ApartmentFilters? newFilters)
