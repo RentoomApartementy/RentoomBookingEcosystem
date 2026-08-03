@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Globalization;
 using RentoomBooking.SharedClasses.Models.AvailableTerms;
 using RentoomBooking.SharedClasses.Models.IdoBooking;
 using RentoomBooking.SharedClasses.Models.IdoBooking.Public;
@@ -768,13 +769,17 @@ namespace RentoomBookingWeb.Components.Features.Apartments.ViewModels
                 using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(linkedCts.Token);
                 timeoutCts.CancelAfter(MediaWarmTimeout);
 
-                var mediaByApartmentId = await _apartmentMediaCatalogService.GetApartmentMediaBatchAsync(apartmentIds, timeoutCts.Token);
+                // Captured up front so the fetched alt texts and the cache key agree even if the
+                // ambient culture is no longer available on this background continuation.
+                var culture = CultureInfo.CurrentUICulture.Name;
+
+                var mediaByApartmentId = await _apartmentMediaCatalogService.GetApartmentMediaBatchAsync(apartmentIds, culture, timeoutCts.Token);
                 if (linkedCts.IsCancellationRequested)
                 {
                     return;
                 }
 
-                _mediaCache.PrimeMediaBatch(mediaByApartmentId);
+                _mediaCache.PrimeMediaBatch(mediaByApartmentId, culture);
 
                 _logger.LogInformation(
                     "Apartment media warm completed. ApartmentCount={ApartmentCount}, WarmedApartmentCount={WarmedApartmentCount}, ApartmentIds={ApartmentIds}, ElapsedMs={ElapsedMs}",

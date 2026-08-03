@@ -13,9 +13,28 @@ public partial class Images : ComponentBase, IAsyncDisposable
     [Inject] private IStringLocalizer<RentoomBookingWeb.Apartment> Localizer { get; set; } = default!;
     [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
 
-    private string PhotoAltFor(int index) => $"{ApartmentName} {Localizer["Apartment_PhotoAltSuffix"]} {index + 1}";
+    // Alt text authored per photo and culture wins; the generated "<name> photo N" stays as fallback.
+    private string PhotoAltFor(int index)
+    {
+        var alt = ImagesList is not null && index >= 0 && index < ImagesList.Count
+            ? ImagesList[index].Alt
+            : null;
 
-    private string MainPhotoAlt => string.Format(Localizer["Apartment_MainPhotoAlt"], ApartmentName);
+        return string.IsNullOrWhiteSpace(alt)
+            ? $"{ApartmentName} {Localizer["Apartment_PhotoAltSuffix"]} {index + 1}"
+            : alt;
+    }
+
+    private string MainPhotoAlt
+    {
+        get
+        {
+            var alt = ImagesList?.FirstOrDefault()?.Alt;
+            return string.IsNullOrWhiteSpace(alt)
+                ? string.Format(Localizer["Apartment_MainPhotoAlt"], ApartmentName)
+                : alt;
+        }
+    }
 
     private bool _isModalOpen = false;
     private bool _wasModalOpen = false;

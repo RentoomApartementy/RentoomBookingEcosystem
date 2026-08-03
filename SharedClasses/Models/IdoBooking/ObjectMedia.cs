@@ -43,5 +43,16 @@ namespace RentoomBooking.SharedClasses.Models.IdoBooking
         public string? CardUrl { get; set; }
         public int? Width { get; set; }
         public int? Height { get; set; }
+
+        /// <summary>
+        /// apartment_media_assets.Id. Id above falls back to IdoObjectMediaId, so it cannot be used
+        /// as the key into apartment_media_alt_texts.
+        /// </summary>
+        public int MediaAssetId { get; set; }
+
+        /// <summary>
+        /// Alt text in the requested culture, or null when no row exists for this asset.
+        /// </summary>
+        public string? Alt { get; set; }
     }
 }

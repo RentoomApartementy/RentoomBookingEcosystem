@@ -49,12 +49,16 @@ public sealed class VacationRentalDatedOfferInput
     public IReadOnlyList<VacationRentalRateInput> Rates { get; init; } = Array.Empty<VacationRentalRateInput>();
 }
 
+/// <param name="Url">Absolute image URL. Relative or non-http values are dropped.</param>
+/// <param name="Caption">Alt text in the page culture. When present the image is emitted as an ImageObject.</param>
+public sealed record VacationRentalImageInput(string? Url, string? Caption = null);
+
 public sealed record VacationRentalJsonLdInput
 {
     public required ApartmentObject Apartment { get; init; }
     public required string CanonicalUrl { get; init; }
     public string? Description { get; init; }
-    public IReadOnlyList<string?> Images { get; init; } = Array.Empty<string?>();
+    public IReadOnlyList<VacationRentalImageInput> Images { get; init; } = Array.Empty<VacationRentalImageInput>();
     public IReadOnlyList<VacationRentalAmenityInput> EnglishAmenities { get; init; } = Array.Empty<VacationRentalAmenityInput>();
     public VacationRentalFromOfferInput? FromOffer { get; init; }
     public VacationRentalDatedOfferInput? DatedOffer { get; init; }
@@ -173,10 +177,19 @@ public static class VacationRentalJsonLdBuilder
         };
 
         var images = input.Images
-            .Where(static image => TryGetHttpUri(image, out _))
-            .Select(static image => image!.Trim())
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Cast<object>()
+            .Where(static image => TryGetHttpUri(image.Url, out _))
+            .Select(static image => (Url: image.Url!.Trim(), Caption: NullIfWhiteSpace(image.Caption)))
+            .DistinctBy(static image => image.Url, StringComparer.OrdinalIgnoreCase)
+            .Select(static image => image.Caption is null
+                ? (object)image.Url
+                : new Dictionary<string, object?>
+                {
+                    ["@type"] = "ImageObject",
+                    ["url"] = image.Url,
+                    ["contentUrl"] = image.Url,
+                    ["name"] = image.Caption,
+                    ["caption"] = image.Caption
+                })
             .ToList();
         AddIfNotEmpty(rental, "image", images);
 

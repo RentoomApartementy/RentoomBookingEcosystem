@@ -19,6 +19,7 @@ namespace RentoomBooking.SharedClasses.Database
         public DbSet<ApartmentHashEntity> ApartmentHashes => Set<ApartmentHashEntity>();
         public DbSet<ApartmentMediaAssetEntity> ApartmentMediaAssets => Set<ApartmentMediaAssetEntity>();
         public DbSet<ApartmentMediaSyncRunEntity> ApartmentMediaSyncRuns => Set<ApartmentMediaSyncRunEntity>();
+        public DbSet<ApartmentMediaAltText> ApartmentMediaAltTexts => Set<ApartmentMediaAltText>();
         
         //MS: będziemy uzywac jednego z tych dwóch poniższych.... muszę pomyslec jak to zrefaktorowac odpowiednio.. 
         //MS: bo rezerwacje w ido NEW reservation vs Reservation to troche inne obiekty... 
@@ -91,6 +92,24 @@ namespace RentoomBooking.SharedClasses.Database
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
                 entity.HasIndex(e => new { e.ApartmentId, e.IdoSourceUrl }).IsUnique();
                 entity.HasIndex(e => new { e.ApartmentId, e.PictureDisplaySequence });
+            });
+
+            modelBuilder.Entity<ApartmentMediaAltText>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).UseIdentityByDefaultColumn();
+                entity.Property(e => e.Culture).HasColumnType("varchar").HasMaxLength(20).IsRequired();
+                entity.Property(e => e.AltText).HasColumnType("varchar").HasMaxLength(200).IsRequired();
+                entity.Property(e => e.UpdatedBy).HasColumnType("varchar");
+                entity.Property(e => e.SourceContentHash).HasColumnType("varchar");
+                entity.Property(e => e.AiAgentName).HasColumnType("varchar");
+                entity.Property(e => e.AiAgentVersion).HasColumnType("varchar");
+                entity.Property(e => e.AiResponseId).HasColumnType("varchar");
+                entity.HasIndex(e => new { e.MediaAssetId, e.Culture }).IsUnique();
+                entity.HasOne<ApartmentMediaAssetEntity>()
+                      .WithMany()
+                      .HasForeignKey(e => e.MediaAssetId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<ApartmentMediaSyncRunEntity>(entity =>

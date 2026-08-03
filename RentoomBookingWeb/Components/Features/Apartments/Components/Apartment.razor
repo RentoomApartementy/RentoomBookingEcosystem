@@ -606,15 +606,28 @@
         return medium?.CardUrl ?? medium?.Url;
     }
 
+    // Alt text authored per photo and culture wins; the generated "<name> photo N" stays as fallback.
     private string GetMainPhotoAlt()
     {
-        return string.Format(ApartmentLocalizer["Apartment_MainPhotoAlt"], Item?.Name);
+        var alt = (_currentObjectMedium ?? _objectMediums?.FirstOrDefault())?.Alt;
+        return string.IsNullOrWhiteSpace(alt)
+            ? string.Format(ApartmentLocalizer["Apartment_MainPhotoAlt"], Item?.Name)
+            : alt;
     }
 
     private string GetPhotoAlt(int index)
     {
+        var alt = _objectMediums is not null && index >= 0 && index < _objectMediums.Count
+            ? _objectMediums[index].Alt
+            : null;
+
+        if (!string.IsNullOrWhiteSpace(alt))
+        {
+            return alt;
+        }
+
         return index == 0
-            ? GetMainPhotoAlt()
+            ? string.Format(ApartmentLocalizer["Apartment_MainPhotoAlt"], Item?.Name)
             : $"{Item?.Name} – {ApartmentLocalizer["Apartment_PhotoAltSuffix"]} {index + 1}";
     }
 

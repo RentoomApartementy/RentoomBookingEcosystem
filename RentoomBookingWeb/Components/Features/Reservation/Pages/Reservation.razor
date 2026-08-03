@@ -70,7 +70,7 @@
                         <div class="image-wrapper">
                             <img 
                                 src="@_currentObjectMedium.Url"
-                                alt="@_apartment?.Name"
+                                alt="@(string.IsNullOrWhiteSpace(_currentObjectMedium.Alt) ? _apartment?.Name : _currentObjectMedium.Alt)"
                                 title="@_apartment?.Name"
                                 itemprop="photo"
                                 class="apartment-image" 

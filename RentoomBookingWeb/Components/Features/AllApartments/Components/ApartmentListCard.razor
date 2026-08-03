@@ -13,7 +13,7 @@
         <div class="image-section">
             @if (!string.IsNullOrEmpty(_imageUrl))
             {
-                <img src="@_imageUrl" alt="@Name" loading="lazy" />
+                <img src="@_imageUrl" alt="@(string.IsNullOrWhiteSpace(_imageAlt) ? Name : _imageAlt)" loading="lazy" />
             }
             else
             {
@@ -60,6 +60,7 @@
     [Parameter] public string HeadingTag { get; set; } = "h3";
 
     private string? _imageUrl;
+    private string? _imageAlt;
     private ElementReference _elementRef;
     private DotNetObjectReference<ApartmentListCard>? _objRef;
     private IJSObjectReference? _jsModule;
@@ -95,7 +96,8 @@
             var media = await MediaCache.GetOrFetchMediaAsync(Id, () => ApartmentMediaCatalogService.GetApartmentMediaAsync(Id));
             var first = media?.FirstOrDefault();
             _imageUrl = first?.CardUrl ?? first?.Url;
-            
+            _imageAlt = first?.Alt;
+
             await InvokeAsync(StateHasChanged);
         }
         catch (Exception ex)

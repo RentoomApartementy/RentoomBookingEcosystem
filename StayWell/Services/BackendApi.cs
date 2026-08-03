@@ -133,7 +133,9 @@ namespace RentoomBooking.StayWell.Services
 
         public async Task<List<ObjectMedium>> GetApartmentMediaAsync(int objectId)
         {
-            return await _http.GetFromJsonAsync<List<ObjectMedium>>($"apartments/{objectId}/media", _json)
+            // The API has no request localization, so the alt-text culture travels in the query string.
+            var culture = Uri.EscapeDataString(System.Globalization.CultureInfo.CurrentUICulture.Name);
+            return await _http.GetFromJsonAsync<List<ObjectMedium>>($"apartments/{objectId}/media?culture={culture}", _json)
                    ?? [];
         }
 

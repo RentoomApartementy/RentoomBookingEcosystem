@@ -148,7 +148,14 @@ public class VacationRentalJsonLdBuilderTests
         {
             LocalizationItem = new LocalizationItem { GeoLocationLat = 0, GeoLocationLng = 0 }
         };
-        input = input with { Images = new string?[] { "", "relative.jpg" } };
+        input = input with
+        {
+            Images = new[]
+            {
+                new VacationRentalImageInput(""),
+                new VacationRentalImageInput("relative.jpg")
+            }
+        };
 
         using var invalidDocument = JsonDocument.Parse(VacationRentalJsonLdBuilder.Build(input));
         var invalidRental = GetRental(invalidDocument);
@@ -212,7 +219,12 @@ public class VacationRentalJsonLdBuilderTests
             Apartment = apartment,
             CanonicalUrl = "https://rentoom.pl/apartament/17/test",
             Description = "Opis apartamentu",
-            Images = new string?[] { "https://cdn.example.test/a.jpg", "", "/relative.jpg" },
+            Images = new[]
+            {
+                new VacationRentalImageInput("https://cdn.example.test/a.jpg"),
+                new VacationRentalImageInput(""),
+                new VacationRentalImageInput("/relative.jpg")
+            },
             EnglishAmenities = new[]
             {
                 new VacationRentalAmenityInput(1, "Wi-Fi"),
@@ -220,6 +232,36 @@ public class VacationRentalJsonLdBuilderTests
                 new VacationRentalAmenityInput(3, "Unmapped amenity")
             }
         };
+    }
+
+    [Fact]
+    public void ImagesWithCaption_EmitImageObjectsAndKeepPlainUrlsWithout()
+    {
+        var input = CreateInput() with
+        {
+            Images = new[]
+            {
+                new VacationRentalImageInput("https://cdn.example.test/salon.jpg", "Jasny salon z aneksem kuchennym"),
+                new VacationRentalImageInput("https://cdn.example.test/sypialnia.jpg", "   "),
+                new VacationRentalImageInput("https://cdn.example.test/salon.jpg", "Duplikat tego samego zdjęcia")
+            }
+        };
+
+        using var document = JsonDocument.Parse(VacationRentalJsonLdBuilder.Build(input));
+        var images = GetRental(document).GetProperty("image").EnumerateArray().ToArray();
+
+        Assert.Equal(2, images.Length);
+
+        Assert.Equal(JsonValueKind.Object, images[0].ValueKind);
+        Assert.Equal("ImageObject", images[0].GetProperty("@type").GetString());
+        Assert.Equal("https://cdn.example.test/salon.jpg", images[0].GetProperty("url").GetString());
+        Assert.Equal("https://cdn.example.test/salon.jpg", images[0].GetProperty("contentUrl").GetString());
+        Assert.Equal("Jasny salon z aneksem kuchennym", images[0].GetProperty("caption").GetString());
+        Assert.Equal("Jasny salon z aneksem kuchennym", images[0].GetProperty("name").GetString());
+
+        // Whitespace-only captions are treated as missing, so the image stays a bare URL.
+        Assert.Equal(JsonValueKind.String, images[1].ValueKind);
+        Assert.Equal("https://cdn.example.test/sypialnia.jpg", images[1].GetString());
     }
 
     private static JsonElement GetRental(JsonDocument document)

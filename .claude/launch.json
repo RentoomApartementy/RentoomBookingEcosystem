@@ -4,6 +4,13 @@
     {
       "name": "rentoom-web-https-dev",
       "url": "https://localhost:7139"
+    },
+    {
+      "name": "rentoom-web-run",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "RentoomBookingWeb/RentoomBookingWeb.csproj", "--launch-profile", "https- dev"],
+      "port": 7139,
+      "url": "https://localhost:7139"
     }
   ]
 }

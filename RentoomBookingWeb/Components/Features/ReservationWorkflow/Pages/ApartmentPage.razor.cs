@@ -673,6 +673,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             return $"{NavManager.BaseUri}assets/images/header-bg-contact.jpeg";
         }
 
+        protected string GetSeoImageAlt()
+        {
+            var alt = _objectMediums?.FirstOrDefault()?.Alt;
+            return string.IsNullOrWhiteSpace(alt)
+                ? string.Format(Localizer["Apartment_MainPhotoAlt"], _apartment?.Name ?? string.Empty)
+                : alt;
+        }
+
         protected int? GetSeoImageWidth()
         {
             return _objectMediums?.FirstOrDefault()?.Width;
@@ -700,13 +708,13 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             var images = (_objectMediums ?? new List<ObjectMedium>())
                 .Where(medium => string.Equals(medium.Extension, "jpg", StringComparison.OrdinalIgnoreCase)
                                || string.Equals(medium.Extension, "jpeg", StringComparison.OrdinalIgnoreCase))
-                .Select(medium => medium.Url)
+                .Select(medium => new VacationRentalImageInput(medium.Url, medium.Alt))
                 .Take(10)
                 .ToList();
 
             if (images.Count == 0)
             {
-                images.Add(GetSeoImage());
+                images.Add(new VacationRentalImageInput(GetSeoImage()));
             }
 
             var fromOffer = _calendarFromOffer is null
