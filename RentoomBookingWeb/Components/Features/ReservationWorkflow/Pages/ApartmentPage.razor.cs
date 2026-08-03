@@ -830,8 +830,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
                     DateTo = end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                     NumberOfAdults = adults,
                     NumberOfBigChildren = children,
-                    Currency = "PLN",
-                    Language = CurrentLanguage
+                    Currency = "PLN"
+                    //Language = CurrentLanguage <-- zawsze dymślny polski uzywamy= "pol"
                 });
 
                 if (response is null || response.Errors is not null || response.Result?.PricingOffers is null)
@@ -1463,8 +1463,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             DateTo = EndDate,
             NumberOfAdults = int.TryParse(Adults, out var a) ? a : null,
             NumberOfBigChildren = int.TryParse(Children, out var c) ? c : null,
-            Currency = "PLN",
-            Language = CurrentLanguage
+            Currency = "PLN"
+            //Language = CurrentLanguage << zawsze "pol" bo nie ma sensu w tym miejscu zmieniać języka
         };
 
         private bool TryGetCurrentPricingRequest(out PricingOffersRequest request)
