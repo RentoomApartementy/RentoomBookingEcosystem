@@ -3,7 +3,7 @@
     "functionTimeout": "00:10:00",
     "extensions": {
         "durableTask": {
-            "hubName": "rentoombooking-idobooking-sync"
+            "hubName": "RentoomBookingIdoBookingSync"
         }
     },
     "logging": {
