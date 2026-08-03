@@ -302,6 +302,9 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
 
                     var existingAssets = await _apartmentMediaCatalogService.GetAssetEntitiesAsync(apartment.Id, ct);
                     var syncStates = new List<ApartmentMediaSyncSourceState>(sourceMedia.Count);
+                    var processedSourceUrls = new HashSet<string>(StringComparer.Ordinal);
+                    var retainedMediaByChecksum = new Dictionary<string, RetainedMediaSource>(StringComparer.OrdinalIgnoreCase);
+                    var duplicateSources = new Dictionary<string, ApartmentMediaDuplicateSource>(StringComparer.Ordinal);
 
                     for (var index = 0; index < sourceMedia.Count; index++)
                     {
@@ -314,6 +317,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                         }
 
                         var sequence = index + 1;
+                        if (!processedSourceUrls.Add(sourceUrl))
+                        {
+                            TrackDuplicateSourceSkip(summary, apartment.Id, sourceUrl, sequence, null, sourceUrl, sequence, "duplicate_source_url");
+                            continue;
+                        }
+
                         var existingAsset = existingAssets.FirstOrDefault(asset => asset.IdoSourceUrl == sourceUrl);
                         var remoteMetadata = await FetchRemoteMetadataAsync(sourceUrl, ct);
                         var storageKey = existingAsset?.StorageKey ?? _apartmentPhotoBlobStorage.BuildStorageKey(apartment.Id, sourceUrl, medium.Extension);
@@ -338,6 +347,29 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                                     ? "source_metadata_changed"
                                     : "missing_original_blob";
                             var downloadResult = await DownloadRemoteMediaAsync(sourceUrl, ct);
+
+                            if (TryRegisterDuplicate(
+                                    retainedMediaByChecksum,
+                                    duplicateSources,
+                                    downloadResult.ChecksumSha256,
+                                    sourceUrl,
+                                    sequence,
+                                    out var retainedMedia))
+                            {
+                                await downloadResult.Content.DisposeAsync();
+
+                                TrackDuplicateSourceSkip(
+                                    summary,
+                                    apartment.Id,
+                                    sourceUrl,
+                                    sequence,
+                                    downloadResult.ChecksumSha256,
+                                    retainedMedia.IdoSourceUrl,
+                                    retainedMedia.Sequence,
+                                    "duplicate_checksum");
+                                continue;
+                            }
+
                             long? downloadedSizeBytes = null;
 
                             await using (downloadResult.Content)
@@ -432,6 +464,32 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                         }
                         else
                         {
+                            remoteMetadata.ChecksumSha256 = existingAsset?.ChecksumSha256;
+                            if (string.IsNullOrWhiteSpace(remoteMetadata.ChecksumSha256) && existingAsset is not null)
+                            {
+                                remoteMetadata.ChecksumSha256 = await CalculateStoredChecksumAsync(existingAsset, ct);
+                            }
+
+                            if (TryRegisterDuplicate(
+                                    retainedMediaByChecksum,
+                                    duplicateSources,
+                                    remoteMetadata.ChecksumSha256,
+                                    sourceUrl,
+                                    sequence,
+                                    out var retainedMedia))
+                            {
+                                TrackDuplicateSourceSkip(
+                                    summary,
+                                    apartment.Id,
+                                    sourceUrl,
+                                    sequence,
+                                    remoteMetadata.ChecksumSha256,
+                                    retainedMedia.IdoSourceUrl,
+                                    retainedMedia.Sequence,
+                                    "duplicate_checksum");
+                                continue;
+                            }
+
                             LogMediaSyncEvent(
                                 summary.RunId,
                                 apartment.Id,
@@ -490,7 +548,12 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                         });
                     }
 
-                    await _apartmentMediaCatalogService.UpsertAssetsAsync(apartment.Id, syncStates, summary, ct);
+                    await _apartmentMediaCatalogService.UpsertAssetsAsync(
+                        apartment.Id,
+                        syncStates,
+                        summary,
+                        duplicateSources,
+                        ct);
                 }
 
                 summary.Status = "completed";
@@ -507,6 +570,95 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 summary.FinishedAt = DateTime.UtcNow;
                 await _apartmentMediaCatalogService.SaveRunSummaryAsync(summary, ct);
             }
+        }
+
+        private async Task<string?> CalculateStoredChecksumAsync(
+            ApartmentMediaAssetEntity asset,
+            CancellationToken ct)
+        {
+            if (!string.IsNullOrWhiteSpace(asset.ChecksumSha256))
+            {
+                return asset.ChecksumSha256;
+            }
+
+            if (string.IsNullOrWhiteSpace(asset.StorageKey))
+            {
+                return null;
+            }
+
+            var download = await _apartmentPhotoBlobStorage.DownloadAsync(asset.StorageKey, ct);
+            await using (download.Content)
+            {
+                using var sha256 = SHA256.Create();
+                var checksum = await sha256.ComputeHashAsync(download.Content, ct);
+                return Convert.ToHexString(checksum).ToLowerInvariant();
+            }
+        }
+
+        private static bool TryRegisterDuplicate(
+            IDictionary<string, RetainedMediaSource> retainedMediaByChecksum,
+            IDictionary<string, ApartmentMediaDuplicateSource> duplicateSources,
+            string? checksumSha256,
+            string sourceUrl,
+            int sequence,
+            out RetainedMediaSource retainedMedia)
+        {
+            retainedMedia = null!;
+            if (string.IsNullOrWhiteSpace(checksumSha256))
+            {
+                return false;
+            }
+
+            var normalizedChecksum = checksumSha256.Trim().ToLowerInvariant();
+            if (!retainedMediaByChecksum.TryGetValue(normalizedChecksum, out retainedMedia))
+            {
+                retainedMediaByChecksum[normalizedChecksum] = new RetainedMediaSource(sourceUrl, sequence);
+                return false;
+            }
+
+            duplicateSources[sourceUrl] = new ApartmentMediaDuplicateSource
+            {
+                ChecksumSha256 = normalizedChecksum,
+                RetainedIdoSourceUrl = retainedMedia.IdoSourceUrl,
+                RetainedSequence = retainedMedia.Sequence,
+                DuplicateSequence = sequence
+            };
+            return true;
+        }
+
+        private void TrackDuplicateSourceSkip(
+            ApartmentMediaSyncRunSummary summary,
+            int apartmentId,
+            string sourceUrl,
+            int sequence,
+            string? checksumSha256,
+            string retainedSourceUrl,
+            int retainedSequence,
+            string reason)
+        {
+            TrackSyncChange(
+                summary,
+                apartmentId,
+                sourceUrl,
+                storageKey: null,
+                action: "skipped",
+                variant: "original",
+                reason: reason,
+                oldSequence: null,
+                newSequence: sequence,
+                checksumSha256: checksumSha256,
+                retainedIdoSourceUrl: retainedSourceUrl);
+
+            _logger.LogInformation(
+                "Apartment media source skipped. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, RetainedIdoSourceUrl={RetainedIdoSourceUrl}, ChecksumSha256={ChecksumSha256}, RetainedSequence={RetainedSequence}, DuplicateSequence={DuplicateSequence}, Reason={Reason}",
+                summary.RunId,
+                apartmentId,
+                sourceUrl,
+                retainedSourceUrl,
+                checksumSha256,
+                retainedSequence,
+                sequence,
+                reason);
         }
 
         private async Task<ApartmentMediaSyncSourceState> FetchRemoteMetadataAsync(string sourceUrl, CancellationToken ct)
@@ -693,7 +845,7 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             ApartmentMediaSyncRunSummary summary,
             int apartmentId,
             string sourceUrl,
-            string storageKey,
+            string? storageKey,
             string action,
             string variant,
             string reason,
@@ -701,7 +853,9 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             int? newSequence,
             string? contentType = null,
             long? sizeBytes = null,
-            string? error = null)
+            string? error = null,
+            string? checksumSha256 = null,
+            string? retainedIdoSourceUrl = null)
         {
             summary.Changes.Add(new ApartmentMediaSyncChange
             {
@@ -715,7 +869,9 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
                 NewSequence = newSequence,
                 ContentType = contentType,
                 SizeBytes = sizeBytes,
-                Error = error
+                Error = error,
+                ChecksumSha256 = checksumSha256,
+                RetainedIdoSourceUrl = retainedIdoSourceUrl
             });
         }
 
@@ -789,6 +945,8 @@ namespace RentoomBooking.SharedClasses.Services.IdoBooking
             public long? OriginalSizeBytes { get; init; }
             public string? OriginalChecksumSha256 { get; init; }
         }
+
+        private sealed record RetainedMediaSource(string IdoSourceUrl, int Sequence);
 
     }
 }

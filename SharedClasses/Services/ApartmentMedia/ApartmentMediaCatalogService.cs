@@ -23,6 +23,7 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
             int apartmentId,
             IReadOnlyCollection<ApartmentMediaSyncSourceState> sourceStates,
             ApartmentMediaSyncRunSummary summary,
+            IReadOnlyDictionary<string, ApartmentMediaDuplicateSource>? duplicateSources = null,
             CancellationToken cancellationToken = default);
         Task SaveRunSummaryAsync(ApartmentMediaSyncRunSummary summary, CancellationToken cancellationToken = default);
     }
@@ -116,6 +117,7 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
             int apartmentId,
             IReadOnlyCollection<ApartmentMediaSyncSourceState> sourceStates,
             ApartmentMediaSyncRunSummary summary,
+            IReadOnlyDictionary<string, ApartmentMediaDuplicateSource>? duplicateSources = null,
             CancellationToken cancellationToken = default)
         {
             await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
@@ -124,44 +126,27 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                 .ToListAsync(cancellationToken);
 
             var sourceMap = sourceStates.ToDictionary(state => state.SourceMedium.Url ?? string.Empty, StringComparer.Ordinal);
+            duplicateSources ??= new Dictionary<string, ApartmentMediaDuplicateSource>(StringComparer.Ordinal);
             var utcNow = DateTime.UtcNow;
+            var assetsToDelete = existingAssets
+                .Where(asset => !sourceMap.ContainsKey(asset.IdoSourceUrl))
+                .ToList();
+            var deletedAssetIds = assetsToDelete.Select(asset => asset.Id).ToHashSet();
+            var retainedBlobKeys = existingAssets
+                .Where(asset => !deletedAssetIds.Contains(asset.Id))
+                .SelectMany(asset => new[] { asset.StorageKey, asset.CardStorageKey })
+                .Where(key => !string.IsNullOrWhiteSpace(key))
+                .Cast<string>()
+                .ToHashSet(StringComparer.Ordinal);
 
-            foreach (var asset in existingAssets)
+            foreach (var asset in assetsToDelete)
             {
-                if (!sourceMap.ContainsKey(asset.IdoSourceUrl))
+                var isDuplicate = duplicateSources.TryGetValue(asset.IdoSourceUrl, out var duplicate);
+                var reason = isDuplicate ? "duplicate_checksum" : "source_removed";
+
+                if (!retainedBlobKeys.Contains(asset.StorageKey))
                 {
                     await _blobStorage.DeleteIfExistsAsync(asset.StorageKey, cancellationToken);
-                    if (!string.IsNullOrWhiteSpace(asset.CardStorageKey))
-                    {
-                        await _blobStorage.DeleteIfExistsAsync(asset.CardStorageKey, cancellationToken);
-                        summary.Changes.Add(new ApartmentMediaSyncChange
-                        {
-                            ApartmentId = apartmentId,
-                            IdoSourceUrl = asset.IdoSourceUrl,
-                            StorageKey = asset.CardStorageKey,
-                            Action = "deleted",
-                            Variant = "card",
-                            Reason = "source_removed",
-                            OldSequence = asset.PictureDisplaySequence,
-                            ContentType = asset.CardContentType
-                        });
-
-                        _logger.LogInformation(
-                            "Apartment media sync item processed. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Variant={Variant}, Action={Action}, Reason={Reason}, OldSequence={OldSequence}, NewSequence={NewSequence}, ContentType={ContentType}",
-                            summary.RunId,
-                            apartmentId,
-                            asset.IdoSourceUrl,
-                            asset.CardStorageKey,
-                            "card",
-                            "deleted",
-                            "source_removed",
-                            asset.PictureDisplaySequence,
-                            null,
-                            asset.CardContentType);
-                    }
-
-                    context.ApartmentMediaAssets.Remove(asset);
-                    summary.DeletedCount++;
                     summary.Changes.Add(new ApartmentMediaSyncChange
                     {
                         ApartmentId = apartmentId,
@@ -169,24 +154,70 @@ namespace RentoomBooking.SharedClasses.Services.ApartmentMedia
                         StorageKey = asset.StorageKey,
                         Action = "deleted",
                         Variant = "original",
-                        Reason = "source_removed",
+                        Reason = reason,
                         OldSequence = asset.PictureDisplaySequence,
-                        ContentType = asset.ContentType
+                        ContentType = asset.ContentType,
+                        ChecksumSha256 = duplicate?.ChecksumSha256,
+                        RetainedIdoSourceUrl = duplicate?.RetainedIdoSourceUrl
                     });
 
                     _logger.LogInformation(
-                        "Apartment media sync item processed. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Variant={Variant}, Action={Action}, Reason={Reason}, OldSequence={OldSequence}, NewSequence={NewSequence}, ContentType={ContentType}",
+                        "Apartment media asset deleted. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, DeletedIdoSourceUrl={DeletedIdoSourceUrl}, RetainedIdoSourceUrl={RetainedIdoSourceUrl}, ChecksumSha256={ChecksumSha256}, StorageKey={StorageKey}, Variant={Variant}, Reason={Reason}, OldSequence={OldSequence}, ContentType={ContentType}",
+                        summary.RunId,
+                        apartmentId,
+                        asset.IdoSourceUrl,
+                        duplicate?.RetainedIdoSourceUrl,
+                        duplicate?.ChecksumSha256,
+                        asset.StorageKey,
+                        "original",
+                        reason,
+                        asset.PictureDisplaySequence,
+                        asset.ContentType);
+                }
+                else
+                {
+                    _logger.LogWarning(
+                        "Skipping deletion of shared apartment media blob. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, IdoSourceUrl={IdoSourceUrl}, StorageKey={StorageKey}, Variant={Variant}",
                         summary.RunId,
                         apartmentId,
                         asset.IdoSourceUrl,
                         asset.StorageKey,
-                        "original",
-                        "deleted",
-                        "source_removed",
-                        asset.PictureDisplaySequence,
-                        null,
-                        asset.ContentType);
+                        "original");
                 }
+
+                if (!string.IsNullOrWhiteSpace(asset.CardStorageKey) && !retainedBlobKeys.Contains(asset.CardStorageKey))
+                {
+                    await _blobStorage.DeleteIfExistsAsync(asset.CardStorageKey, cancellationToken);
+                    summary.Changes.Add(new ApartmentMediaSyncChange
+                    {
+                        ApartmentId = apartmentId,
+                        IdoSourceUrl = asset.IdoSourceUrl,
+                        StorageKey = asset.CardStorageKey,
+                        Action = "deleted",
+                        Variant = "card",
+                        Reason = reason,
+                        OldSequence = asset.PictureDisplaySequence,
+                        ContentType = asset.CardContentType,
+                        ChecksumSha256 = duplicate?.ChecksumSha256,
+                        RetainedIdoSourceUrl = duplicate?.RetainedIdoSourceUrl
+                    });
+
+                    _logger.LogInformation(
+                        "Apartment media asset deleted. RunId={MediaSyncRunId}, ApartmentId={ApartmentId}, DeletedIdoSourceUrl={DeletedIdoSourceUrl}, RetainedIdoSourceUrl={RetainedIdoSourceUrl}, ChecksumSha256={ChecksumSha256}, StorageKey={StorageKey}, Variant={Variant}, Reason={Reason}, OldSequence={OldSequence}, ContentType={ContentType}",
+                        summary.RunId,
+                        apartmentId,
+                        asset.IdoSourceUrl,
+                        duplicate?.RetainedIdoSourceUrl,
+                        duplicate?.ChecksumSha256,
+                        asset.CardStorageKey,
+                        "card",
+                        reason,
+                        asset.PictureDisplaySequence,
+                        asset.CardContentType);
+                }
+
+                context.ApartmentMediaAssets.Remove(asset);
+                summary.DeletedCount++;
             }
 
             foreach (var sourceState in sourceStates)
