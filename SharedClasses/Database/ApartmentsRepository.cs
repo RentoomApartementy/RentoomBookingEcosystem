@@ -172,15 +172,19 @@ namespace RentoomBooking.SharedClasses.Database
       
         public async Task<List<ApartmentObject>?> GetApartmentsByFilterAsync(ApartmentQueryFilter apartmentFilter, CancellationToken cancellationToken = default)
         {
-            var apartmentIds = apartmentFilter.ApartmentIds;
-         
-            var ids = (apartmentFilter.ApartmentIds ?? Enumerable.Empty<int>()).ToList();
+            var hasApartmentIdFilter = apartmentFilter.ApartmentIds != null;
+            var apartmentIds = (apartmentFilter.ApartmentIds ?? Enumerable.Empty<int>())
+                .Distinct()
+                .ToHashSet();
 
-            if (apartmentFilter.ApartmentAmenityIds != null && apartmentFilter.ApartmentAmenityIds.Any())
+            var hasAmenityFilter = apartmentFilter.ApartmentAmenityIds?.Any() == true;
+            var amenityApartmentIds = new HashSet<int>();
+            if (hasAmenityFilter)
             {
-                var amenityApartmentIds = await GetApartmentIdsByAmenitiesAsync(apartmentFilter.ApartmentAmenityIds, cancellationToken);
-
-                ids.AddRange(amenityApartmentIds);
+                amenityApartmentIds = (await GetApartmentIdsByAmenitiesAsync(
+                        apartmentFilter.ApartmentAmenityIds!,
+                        cancellationToken))
+                    .ToHashSet();
             }
 
 
@@ -194,9 +198,14 @@ namespace RentoomBooking.SharedClasses.Database
 
             var filtered = apObjects.AsQueryable();
 
-            if (ids.Count != 0)
+            if (hasApartmentIdFilter)
             {
-                filtered = filtered.Where(a => ids.Contains(a.Id));
+                filtered = filtered.Where(a => apartmentIds.Contains(a.Id));
+            }
+
+            if (hasAmenityFilter)
+            {
+                filtered = filtered.Where(a => amenityApartmentIds.Contains(a.Id));
             }
 
             if (regions.Count != 0)
