@@ -148,6 +148,7 @@
     "CalendarFromPerNight": "3f288e1f485d9e8c112e946995f752999949cff6928ab3f22226b5fd69df92dc",
     "CalendarClearSelection": "5b1bf360975254c9ae66d71bcf85faf15f39e78eea038e5b36165877e5738654",
     "CalendarLoadMore": "8beafb655e6a8d890d3f52b35e08ab09a94ffddfc812456010d9dba0dd685393",
+    "CalendarLoadingMoreMonths": "42d35089e235511fc87f5b93f065a1f6e2273c7b7efd64b7943883698a172e45",
     "CalendarMaxOccupancy": "6820218dae1a55fde31c2572344bab499649a1a3af0425c47df55283c1cbc530",
     "CalendarMinStayNotice": "aba3db79d034ef4c16595c797c8d9390b94f3e7b2b7e94829f39a1e4ed3a0bcd",
     "CalendarSelectCheckIn": "5a686d7d65460fff88bbd56fbe54aa1b6b4d2fda5f4451f32094c77b408e0170",
@@ -156,7 +157,8 @@
     "NearbyAttractions_Subtitle": "3a4478ce592958c2ae10e9ee99b290a82093537b0cf24ce4aae69568e3b1feb3",
     "NearbyAttractions_WalkTime": "a8b3e7e71be822683ae2156832a799bc545f1168268df373001e84b89ae3ac95",
     "NearbyAttractions_DistanceMeters": "b1c389bf7b772e6d9c68b2fe036af4be34df3ebcb5702f06ee9be624c805cba6",
-    "NearbyAttractions_DistanceKm": "bf227c0c7bbd6d67044f025ae484fb117949a90dc8e1a972e00e4fa7c7238bdf"
+    "NearbyAttractions_DistanceKm": "bf227c0c7bbd6d67044f025ae484fb117949a90dc8e1a972e00e4fa7c7238bdf",
+    "CleaningFeeIncludedLabel": "72f962682ceb5e61de9a7168a9b10c8c4ca47b007303782e2037b2b3e40de813"
   },
   "RentoomBookingWeb/Resources/Apartments.pl-pl.resx": {
     "ApartmentsText": "2bd7caa78cd2d1f3dbf04e7203892c82a3f225dc8633784d8323da4af79a60cb",
@@ -375,7 +377,7 @@
     "ClientInfoButton": "5787c9550a97c6c42a1d7fbb48385fd4193caf4404c179a71a5f99cc72a3ed5e",
     "ClientInfoButtonLoading": "770bde27f313b11e5eeb95a37995200d2c277207457175f36b02a8f4d6745da3",
     "ClientInfoTitle": "3ce7d792d77d6741fc5658dfdd1f754b55abcd2ab97b5d15291342585decef43",
-    "ClientInfoSubtitle": "3182894e77834fda45358ffb02891bdb99967bd0950cd64bc062abcec1969387",
+    "ClientInfoSubtitle": "90a96a72b02bf778c8da307dd77090b5c23af41ec874d4995441000e15dbdab6",
     "YourStay": "fb03dd9d83f58fff906f5d2712bb173583cb3a7c4c60165ad95d7c3761088ebd",
     "From": "87002e329a20288918ab3281e574956499f9e5d96f16fa787b4af2035dbf8acf",
     "To": "30094e0bec0046da8f925ebda9575f3d8377a75692436516260782fafd709a6f",
@@ -422,7 +424,7 @@
     "NoNipError": "826869154d3524f1ee9f9f626e545654ab83401f098c738551bebc6cc507ac6b",
     "Prefix": "b5889231e7d21e04eac4952f0c97c826b2f1599825836957e14217d6cbebe618",
     "Required": "6b62ef2c86fd8b61d61f87780d7c9dc1e61cd48ae9a303fb8488e94ca5a4bcdd",
-    "FillAllDataError": "3182894e77834fda45358ffb02891bdb99967bd0950cd64bc062abcec1969387",
+    "FillAllDataError": "90a96a72b02bf778c8da307dd77090b5c23af41ec874d4995441000e15dbdab6",
     "InvalidEmailError": "ac7e33b429516d4914bce91fd3fcae5354bfef9388a158a6787039c6290073be",
     "GoToStayWellQRCodePopupText": "37d3eddf7d11d5a581c09e16b8260d858f0c286aed1a8b53065e706d9850b8b1",
     "StaywellPopupTitle": "bfac65f60d9790c7136ef38dd2842eb37f3d1ccd51854280c689a6b389c9c051",
@@ -430,7 +432,7 @@
     "StaywellPopupDescriptionMobile": "6de61fd2ca5993b0292cadb7777bc926d73c2ae245926eaf84f45146f2e87942",
     "GoToStayWellQRCodePopupMobileText": "f23a36db2a4b052ff62734dac32f05c88c795940efd189a2aa1c0c908a5201ca",
     "SelectAllConsents": "c3196f7b5afb592a5aff7b72825c1c2efa0db5bf3d797d23a20a27021f3f82b8",
-    "FillGuestData": "3182894e77834fda45358ffb02891bdb99967bd0950cd64bc062abcec1969387",
+    "FillGuestData": "90a96a72b02bf778c8da307dd77090b5c23af41ec874d4995441000e15dbdab6",
     "InvoiceSummaryBoxLabel": "f77616334903c6ced65d2fdec519e549751f537d91beb7079b5e63d857c3d170",
     "InvoiceYes": "dae91306c776f85d429c08661595eeed0978fa501390279b0c37ef9e4c3d48b7",
     "InvoiceNo": "c38811a58a4b777b2810ebbba51832194686cb5d13c3827f74645722e418e22e",
@@ -583,7 +585,10 @@
     "StatuteNotFound": "c83800347b3cff26c40345c8e387f5b2b28de0cc32d764ee59cdcba4bdf827e1",
     "LoadingStatutes": "57b3a7f5e0f86faab9b0ec857a5dc3b36068cf9cdf14920f0ebf75d861b69722",
     "PageTitle": "b1d41e8c71a050accac4a70ed8cf08759ca10c95908cec87c14051fd780924b3",
-    "StatuteHeader": "5be48e24559d3e9d88ebaa040b95ea9ff938c3f1a9abca9c39f3a58c88a67bbf"
+    "StatuteHeader": "5be48e24559d3e9d88ebaa040b95ea9ff938c3f1a9abca9c39f3a58c88a67bbf",
+    "PageTitleFormat": "40cafd3cf2f0965652748a06e294839a017422b737199d0854bb5ddb43432f2d",
+    "MetaDescription": "ae90c423ff4c56e435ff44b128585385bf9ef211e9280aec3129350b3efa9908",
+    "MetaKeywords": "421fe467a24f546162bce896d719498cbb06d748cde097b6d9b8662410526392"
   },
   "RentoomBookingWeb/Resources/Upsell.pl-pl.resx": {
     "ListTitle": "5733ae6e486ce5d130e232609fd6ebbd7aa8e9ffc76927734aa93d0ee1e53db1",

@@ -531,4 +531,7 @@
   <data name="NearbyAttractions_DistanceKm" xml:space="preserve">
     <value>{0} km</value>
   </data>
+  <data name="CleaningFeeIncludedLabel" xml:space="preserve">
+    <value>Zawiera opłatę za sprzątanie</value>
+  </data>
 </root>

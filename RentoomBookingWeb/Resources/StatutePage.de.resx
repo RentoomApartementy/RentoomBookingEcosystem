@@ -30,4 +30,13 @@
   <data name="StatuteHeader" xml:space="preserve">
     <value>Geschäfts- und Kaufbedingungen</value>
   </data>
+  <data name="PageTitleFormat" xml:space="preserve">
+    <value>{0} - Rentoom | Vermietungs- und Verwaltungsbüro Toruń</value>
+  </data>
+  <data name="MetaDescription" xml:space="preserve">
+    <value>Rentoom-Geschäftsbedingungen – Bedingungen für Miete, Reservierung und Aufenthalt in Wohnungen in Toruń. Bitte lesen Sie die Regeln vor der Buchung.</value>
+  </data>
+  <data name="MetaKeywords" xml:space="preserve">
+    <value>Renttoom-Vorschriften, Toruń-Mietvorschriften, Bedingungen für Wohnungsreservierungen, Aufenthaltsregeln, Mietregeln für Wohnungen</value>
+  </data>
 </root>

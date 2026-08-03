@@ -235,7 +235,7 @@
     <value>Cleaning is included in the price</value>
   </data>
   <data name="CleaningFeeIncludedLabel" xml:space="preserve">
-    <value>Includes cleaning fee</value>
+    <value>Cleaning fee included</value>
   </data>
   <data name="SelectOffer" xml:space="preserve">
     <value>Select an offer</value>
@@ -520,7 +520,7 @@
     <value>Show more</value>
   </data>
   <data name="CalendarLoadingMoreMonths" xml:space="preserve">
-    <value>Loading more months...</value>
+    <value>I'm loading the next months...</value>
   </data>
   <data name="CalendarMaxOccupancy" xml:space="preserve">
     <value>The maximum number of guests is {0}</value>

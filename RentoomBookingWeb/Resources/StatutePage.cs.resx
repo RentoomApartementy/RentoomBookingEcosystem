@@ -30,4 +30,13 @@
   <data name="StatuteHeader" xml:space="preserve">
     <value>Podmínky</value>
   </data>
+  <data name="PageTitleFormat" xml:space="preserve">
+    <value>{0} - Rentoom | Kancelář pro pronájem a správu Toruń</value>
+  </data>
+  <data name="MetaDescription" xml:space="preserve">
+    <value>Podmínky Rentoom – podmínky pronájmu, rezervace a pobytu v apartmánech v Toruni. Před rezervací si prosím přečtěte pravidla.</value>
+  </data>
+  <data name="MetaKeywords" xml:space="preserve">
+    <value>Pravidla Rentoomu, pravidla pro pronájem v Toruni, podmínky rezervace bytů, pravidla pro pobyt, pravidla pro pronájem bytů</value>
+  </data>
 </root>
