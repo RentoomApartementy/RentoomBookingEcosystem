@@ -149,10 +149,12 @@
                 {
                     @if (StartDate != null && EndDate != null)
                     {
-                        <hr style="width: 100%;" />
-                        <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
+                        if (ShowApartmentUpsellsAddons)
+                        {
+                            <hr style="width: 100%;" />
+                            <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
 
-                        <ApartmentAddonSelector 
+                            <ApartmentAddonSelector 
                             Addons="_apartment?.Addons" 
                             DefinedAddons="_definedAddons" 
                             SelectedAddons="_selectedAddons" 
@@ -161,8 +163,8 @@
                             Localizer="Localizer"
                             OnToggleAddon="((id) => ToggleAddonWrapper(id, _apartment?.Addons?.FirstOrDefault(x => x.Id == id)?.Optional))" 
                             OnQuantityUpdate="((args) => UpdateAddonQuantity(args.AddonId, args.Quantity))" />
-
-                        @if (Environment.IsDevelopment() && _reservationPricingContext is not null)
+                        }
+                        @if (ShowApartmentUpsellsPartners)
                         {
                             <UpsellList AvailableUpsellsList="_availableUpsells"
                                         ReservationContext="_reservationPricingContext"
@@ -178,7 +180,9 @@
                         }
                     }
 
-                    <BonusCodeBox
+                    if (ShowOffersSection)
+                    {
+                        <BonusCodeBox
                         BonusCode="@_bonusInputName"
                         BonusCodeChanged="OnBonusCodeChanged"
                         OnApply="ApplyBonusOnApartmentPageAsync"
@@ -189,7 +193,7 @@
                         DiscountAmount="@_bonusDiscountAmount"
                         Localizer="Localizer" />
 
-                    <ApartmentOfferSelector
+                        <ApartmentOfferSelector
                         StartDate="@StartDate" 
                         EndDate="@EndDate" 
                         IsOfferLoading="_isOfferLoading" 
@@ -209,6 +213,7 @@
                         OnBookNow="GoToPayment"
                         OnSuggestionSelected="SelectSuggestionDate"
                         OnGoToSuggestion="GoToSuggestionDates" />
+                    }
                 }
             </div>
 
