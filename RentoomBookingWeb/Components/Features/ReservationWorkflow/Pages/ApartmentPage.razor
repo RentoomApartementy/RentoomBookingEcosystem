@@ -119,11 +119,6 @@
             </div>
 
             <div class="area-content">
-                @if (_socialMedia != null && FeatureFlags.FeatureAllowed("apartment-yt-ig-embed"))
-                {
-                    <ApartmentSocialMedia Data="_socialMedia" />
-                }
-
                 @if (_aiDescription != null)
                 {
                     <ApartmentAiDescription
@@ -132,10 +127,16 @@
                         NearbyAttractions="_nearbyAttractions"
                         IsExpanded="_isExpanded"
                         OnToggleExpand="ToggleExpand"
-                        Localizer="Localizer" />
+                        Localizer="Localizer"
+                        SocialMediaData="_socialMedia"
+                        ShowSocialMedia="@ShowSocialMedia" />
                 }
                 else
                 {
+                    @if (ShowSocialMedia)
+                    {
+                        <ApartmentSocialMedia Data="_socialMedia" />
+                    }
                     <ApartmentDescription
                         Description="_objectDescription"
                         Amenities="_amenities"

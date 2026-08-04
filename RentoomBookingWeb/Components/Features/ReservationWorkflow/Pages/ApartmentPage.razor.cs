@@ -1883,6 +1883,8 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected bool localHasOffers => localMinPrice != null;
 
+        protected bool ShowSocialMedia => _socialMedia != null && FeatureFlags.FeatureAllowed("apartment-yt-ig-embed");
+
         public void Dispose()
         {
             _scrollObjRef?.Dispose();

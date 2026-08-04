@@ -5,6 +5,21 @@
     margin-top: 1.5rem;
 }
 
+/* Top flow: YouTube/Instagram floats right, text wraps around it and
+   drops to full width once it runs taller than the video - no leftover gap */
+.ai-top-flow {
+    display: flow-root; /* contains the float so ai-details-wrapper below always starts full width */
+    margin-bottom: 1rem;
+}
+
+.ai-top-row__media {
+    float: right;
+    width: 40%;
+    max-width: 420px;
+    min-width: 280px;
+    margin: 0 0 1.5rem 2rem;
+}
+
 /* Intro Section - Tightened */
 .ai-intro-content {
     margin-bottom: 1rem;
@@ -31,8 +46,7 @@
 /* Highlights */
 .ai-highlights-section {
     margin-bottom: 1.5rem;
-    width: 100%;
-    overflow: hidden; /* Prevent horizontal scroll from any stray elements */
+    overflow: hidden; /* Prevent horizontal scroll from any stray elements; also lets it shrink beside the floated video instead of auto-clearing below it */
 }
 
 /* Collapsible Wrapper - No fade, clean cut */
@@ -116,6 +130,14 @@
 
     .ai-expand-btn-wrapper {
         justify-content: center;
+    }
+
+    .ai-top-row__media {
+        float: none;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0 0 1rem 0;
     }
 }
 
