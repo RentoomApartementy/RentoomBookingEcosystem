@@ -314,8 +314,14 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             _selectedOfferType = offerType ?? _pendingSelectedOfferType;
             _pendingSelectedOfferType = _selectedOfferType;
             StateHasChanged();
-
-            await ScrollToOffersSection();
+            if (ShowOffersSection)
+            {
+                await ScrollToOffersSection();
+            }
+            else
+            {
+                await GoToPayment(_selectedOfferType);
+            }
         }
 
         protected decimal TotalAddonsPrice
@@ -1883,6 +1889,11 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
 
         protected bool localHasOffers => localMinPrice != null;
 
+        protected bool ShowSocialMedia => _socialMedia != null && FeatureFlags.FeatureAllowed("apartment-yt-ig-embed");
+        protected bool ShowApartmentUpsellsPartners => _reservationPricingContext != null && FeatureFlags.FeatureAllowed("apartmentpage-upsells-partners");
+        protected bool ShowApartmentUpsellsAddons => _reservationPricingContext != null && FeatureFlags.FeatureAllowed("apartmentpage-upsells-addons");
+        protected bool ShowOffersSection => FeatureFlags.FeatureAllowed("apartmentpage-offerselector");
+        
         public void Dispose()
         {
             _scrollObjRef?.Dispose();

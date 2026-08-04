@@ -119,11 +119,6 @@
             </div>
 
             <div class="area-content">
-                @if (_socialMedia != null && FeatureFlags.FeatureAllowed("apartment-yt-ig-embed"))
-                {
-                    <ApartmentSocialMedia Data="_socialMedia" />
-                }
-
                 @if (_aiDescription != null)
                 {
                     <ApartmentAiDescription
@@ -132,10 +127,16 @@
                         NearbyAttractions="_nearbyAttractions"
                         IsExpanded="_isExpanded"
                         OnToggleExpand="ToggleExpand"
-                        Localizer="Localizer" />
+                        Localizer="Localizer"
+                        SocialMediaData="_socialMedia"
+                        ShowSocialMedia="@ShowSocialMedia" />
                 }
                 else
                 {
+                    @if (ShowSocialMedia)
+                    {
+                        <ApartmentSocialMedia Data="_socialMedia" />
+                    }
                     <ApartmentDescription
                         Description="_objectDescription"
                         Amenities="_amenities"
@@ -148,10 +149,12 @@
                 {
                     @if (StartDate != null && EndDate != null)
                     {
-                        <hr style="width: 100%;" />
-                        <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
+                        if (ShowApartmentUpsellsAddons)
+                        {
+                            <hr style="width: 100%;" />
+                            <h3 class="header-text text-lg">@Localizer["Summary"]</h3>
 
-                        <ApartmentAddonSelector 
+                            <ApartmentAddonSelector 
                             Addons="_apartment?.Addons" 
                             DefinedAddons="_definedAddons" 
                             SelectedAddons="_selectedAddons" 
@@ -160,8 +163,8 @@
                             Localizer="Localizer"
                             OnToggleAddon="((id) => ToggleAddonWrapper(id, _apartment?.Addons?.FirstOrDefault(x => x.Id == id)?.Optional))" 
                             OnQuantityUpdate="((args) => UpdateAddonQuantity(args.AddonId, args.Quantity))" />
-
-                        @if (Environment.IsDevelopment() && _reservationPricingContext is not null)
+                        }
+                        @if (ShowApartmentUpsellsPartners)
                         {
                             <UpsellList AvailableUpsellsList="_availableUpsells"
                                         ReservationContext="_reservationPricingContext"
@@ -177,7 +180,9 @@
                         }
                     }
 
-                    <BonusCodeBox
+                    if (ShowOffersSection)
+                    {
+                        <BonusCodeBox
                         BonusCode="@_bonusInputName"
                         BonusCodeChanged="OnBonusCodeChanged"
                         OnApply="ApplyBonusOnApartmentPageAsync"
@@ -188,7 +193,7 @@
                         DiscountAmount="@_bonusDiscountAmount"
                         Localizer="Localizer" />
 
-                    <ApartmentOfferSelector
+                        <ApartmentOfferSelector
                         StartDate="@StartDate" 
                         EndDate="@EndDate" 
                         IsOfferLoading="_isOfferLoading" 
@@ -208,6 +213,7 @@
                         OnBookNow="GoToPayment"
                         OnSuggestionSelected="SelectSuggestionDate"
                         OnGoToSuggestion="GoToSuggestionDates" />
+                    }
                 }
             </div>
 

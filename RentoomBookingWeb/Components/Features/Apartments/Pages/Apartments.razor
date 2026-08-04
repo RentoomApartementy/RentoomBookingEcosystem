@@ -97,7 +97,7 @@
                                     DeferGalleryImages="true"
                                     ShowPrice="true"
                                     ShowSuggestionPrice="true"
-                                    MinPriceOverride="@(!ViewModel.IsSearch ? ViewModel.GetMinFromPriceByObjectId(item.Id, true) : null)"
+                                    MinPriceOverride="@(!ViewModel.IsSearch ? ViewModel.GetMinFromPriceByObjectId(item.Id, false) : null)"
                                     MinPriceLoading="@(!ViewModel.IsSearch && ViewModel.IsMinPricesLoading)"
                                     StartDate="@ViewModel.StartDate"
                                     EndDate="@ViewModel.EndDate"
