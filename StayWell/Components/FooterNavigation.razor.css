@@ -1,6 +1,11 @@
 .footer-nav-wrapper {
     position: relative;
     width: 100%;
+    /* Lane reserved for the detached "more" bubble. The SAME lane is left empty on
+       the opposite side, so the pill — and its middle button (Home) — stays on the
+       layout's centre axis instead of being pushed aside by the bubble. */
+    --bubble: 56px;
+    --bubble-gap: 8px;
 }
 
 /* ── The flying pill ──────────────────────────── */
@@ -9,7 +14,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    /* Symmetric bubble lanes keep Home centred; the 420px cap stops the three
+       cells (and the indicator capsule with them) from ballooning on desktop. */
+    width: min(calc(100% - 2 * (var(--bubble) + var(--bubble-gap))), 420px);
+    margin: 0 auto;
     padding: 8px 12px;
     background: rgba(252, 253, 252, 0.74);
     backdrop-filter: blur(20px) saturate(160%);
@@ -31,7 +39,7 @@
 
 /* ── Sliding "liquid" indicator that travels to the active button ── */
 .footer-nav-indicator {
-    --cell: calc((100% - 24px) / 5);  /* one nav column inside the row's 12px side padding */
+    --cell: calc((100% - 24px) / 3);  /* one nav column inside the row's 12px side padding */
     --m: 2px;                          /* symmetric margin = half the gap between pills, and the inset at the row's two ends */
     position: absolute;
     box-sizing: border-box;
@@ -44,7 +52,7 @@
        toward their neighbour (leaving a 2*--m gap), and the first/last pill stops
        --m from the row's end — nearly to the edge, and identical spacing everywhere. */
     left: calc(12px + var(--i, 0) * var(--cell) + var(--m));
-    right: calc(12px + (4 - var(--i, 0)) * var(--cell) + var(--m));
+    right: calc(12px + (2 - var(--i, 0)) * var(--cell) + var(--m));
     /* Same capsule + green-tinted glass edge as the wrapper. */
     border-radius: 999px;
     background: rgba(33, 87, 62, 0.13);
@@ -120,48 +128,55 @@
     }
 }
 
-/* ── Burger button (mirrors NavigationButton styles, scoped here) ── */
-.footer-nav-btn-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-}
-
-.footer-nav-btn {
-    width: 100%;
-    max-width: 76px;
-    height: 64px;
+/* ── Detached "more" bubble ───────────────────── */
+/* Its own glass disc, deliberately broken off the pill: same frosted material,
+   hairline and shadow as the row, floating in the right-hand bubble lane. */
+.footer-more-bubble {
+    pointer-events: auto;
+    position: absolute;
+    /* Satellite of the pill: parked one --bubble-gap off the pill's right edge.
+       While the pill spans its full lane this resolves to 0 (the wrapper's edge);
+       once the 420px cap kicks in on wide screens, the bubble follows the pill
+       inward instead of being stranded at the far edge of the layout. */
+    right: max(0px, calc(50% - 210px - var(--bubble) - var(--bubble-gap)));
+    /* (82px row − 56px bubble) / 2 → optically centred on the pill's axis */
+    bottom: 13px;
+    width: var(--bubble);
+    height: var(--bubble);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: none;
-    border-radius: 999px;
-    padding: 6px 2px;
+    padding: 0;
     margin: 0;
+    background: rgba(252, 253, 252, 0.74);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(33, 87, 62, 0.20);
+    border-radius: 50%;
+    box-shadow:
+        0 18px 30px -16px rgba(16, 40, 28, 0.34),
+        0 8px 16px -10px rgba(16, 40, 28, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
     cursor: pointer;
-    outline: none;
-    box-shadow: none;
-    backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
+    /* Same layer as the pill: above the menu backdrop, so the burger→X stays tappable. */
+    z-index: 101;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
     -webkit-tap-highlight-color: transparent;
 }
 
-.footer-nav-btn.active {
-    transform: none;
-}
-
-.footer-nav-btn:not(.active) {
-    transform: translate3d(0, 0, 0);
-}
-
-.footer-nav-btn:active {
+.footer-more-bubble:active {
     transform: translate3d(0, 2px, 0) scale(0.96);
+}
+
+.footer-more-bubble.active {
+    /* Same green tint as the sliding indicator — the bubble becomes its own "active pill". */
+    background: rgba(33, 87, 62, 0.13);
+}
+
+.footer-more-bubble:focus-visible {
+    outline: 2px solid rgba(33, 87, 62, 0.55);
+    outline-offset: 2px;
 }
 
 .footer-nav-icon {
@@ -203,13 +218,18 @@
     transition: color 0.3s ease;
 }
 
-.footer-nav-btn.active .footer-nav-text {
+.footer-more-bubble.active .footer-nav-text {
     color: #21573e;
 }
 
 @media (max-width: 370px) {
-    .footer-nav-btn {
-        height: 60px;
+    .footer-nav-wrapper {
+        --bubble: 52px;
+    }
+
+    /* (78px row − 52px bubble) / 2 */
+    .footer-more-bubble {
+        bottom: 13px;
     }
 
     .footer-nav-text {
@@ -223,13 +243,18 @@
 }
 
 @media (min-width: 501px) {
+    .footer-nav-wrapper {
+        --bubble: 64px;
+        --bubble-gap: 12px;
+    }
+
     .footer-nav-indicator {
         --m: 4px;
     }
 
-    .footer-nav-btn {
-        max-width: 80px;
-        height: 70px;
+    /* (88px row − 64px bubble) / 2 */
+    .footer-more-bubble {
+        bottom: 12px;
     }
 
     .footer-nav-text {
@@ -273,12 +298,12 @@
 }
 
 /* Active (open) state — animate to X */
-.footer-nav-btn.active .burger-icon span:nth-child(1) {
+.footer-more-bubble.active .burger-icon span:nth-child(1) {
     transform: translateY(5px) rotate(45deg);
     background: #21573e;
 }
 
-.footer-nav-btn.active .burger-icon span:nth-child(2) {
+.footer-more-bubble.active .burger-icon span:nth-child(2) {
     opacity: 0;
     transform: scaleX(0);
     transition:
@@ -287,7 +312,7 @@
         opacity 0.18s ease-in;
 }
 
-.footer-nav-btn.active .burger-icon span:nth-child(3) {
+.footer-more-bubble.active .burger-icon span:nth-child(3) {
     transform: translateY(-5px) rotate(-45deg);
     background: #21573e;
 }
