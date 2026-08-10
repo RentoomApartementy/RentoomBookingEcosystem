@@ -28,7 +28,9 @@
                     SelectedOfferType="@SelectedOfferType"
                     HasActiveReservation="HasActiveReservation"
                     Localizer="Localizer"
-                    OnBookNow="OnBookNow" />
+                    OnBookNow="OnBookNow"
+                    ActionButtonLabelOverride="@ActionButtonLabel"
+                    OnActionButtonClick="OnActionButtonClick" />
             }
             @if (refundableOffer != null)
             {
@@ -43,7 +45,9 @@
                     SelectedOfferType="@SelectedOfferType"
                     HasActiveReservation="HasActiveReservation"
                     Localizer="Localizer"
-                    OnBookNow="OnBookNow" />
+                    OnBookNow="OnBookNow"
+                    ActionButtonLabelOverride="@ActionButtonLabel"
+                    OnActionButtonClick="OnActionButtonClick" />
             }
 
             @if (MandatoryAddonsFee > 0)
@@ -75,4 +79,6 @@
     [Parameter] public decimal MandatoryAddonsFee { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
     [Parameter] public EventCallback<string> OnBookNow { get; set; }
+    [Parameter] public string? ActionButtonLabel { get; set; }
+    [Parameter] public EventCallback<string> OnActionButtonClick { get; set; }
 }

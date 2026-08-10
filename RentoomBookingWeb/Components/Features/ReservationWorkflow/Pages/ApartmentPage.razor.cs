@@ -137,6 +137,7 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         private IJSObjectReference? _scrollModule;
 
         protected bool _isMobileExpanded = false;
+        protected bool _isBookingBarExpanded = false;
 
         [JSInvokable]
         public void UpdateScrollState(string elementId, bool isPastOrVisible)
@@ -1893,7 +1894,37 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
         protected bool ShowApartmentUpsellsPartners => _reservationPricingContext != null && FeatureFlags.FeatureAllowed("apartmentpage-upsells-partners");
         protected bool ShowApartmentUpsellsAddons => _reservationPricingContext != null && FeatureFlags.FeatureAllowed("apartmentpage-upsells-addons");
         protected bool ShowOffersSection => FeatureFlags.FeatureAllowed("apartmentpage-offerselector");
-        
+        protected bool ShowMobileBookingBar => FeatureFlags.FeatureAllowed("apartmentpage-mobile-booking-bar");
+
+        protected bool HasOfferForBar => localHasOffers;
+
+        protected decimal? TotalPriceForBar => HasOfferForBar
+            ? ((decimal?)GetOfferByType(_selectedOfferType)?.Price ?? localMinPrice) + TotalPriceAdjustment
+            : null;
+
+        protected Task OnMobileBarPrimaryClick()
+            => HasOfferForBar ? GoToPayment(_selectedOfferType) : ScrollToBookingPanel();
+
+        protected void OnMobileBarOfferPicked(string offerType)
+        {
+            _selectedOfferType = offerType;
+        }
+
+        protected Task OnPendingOfferBookNow(string? offerType)
+        {
+            if (ShowMobileBookingBar)
+            {
+                if (offerType is not null)
+                {
+                    _selectedOfferType = offerType;
+                    _pendingSelectedOfferType = offerType;
+                }
+                return Task.CompletedTask;
+            }
+
+            return ConfirmPendingBooking(offerType);
+        }
+
         public void Dispose()
         {
             _scrollObjRef?.Dispose();

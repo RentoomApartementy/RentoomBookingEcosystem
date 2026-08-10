@@ -1,0 +1,17 @@
+@using Microsoft.Extensions.Localization
+
+<div class="flat-step-indicator" role="list" aria-label="@Localizer["StepperAriaLabel"]">
+    @for (var i = 1; i <= TotalSteps; i++)
+    {
+        var step = i;
+        var isFilled = step <= CurrentStep;
+        <span class="step-dash @(isFilled ? "filled" : "")" role="listitem" aria-current="@(step == CurrentStep ? "step" : null)"></span>
+    }
+</div>
+
+@code {
+    [Parameter] public int CurrentStep { get; set; } = 1;
+    [Parameter] public int TotalSteps { get; set; } = 4;
+    [Parameter] public bool IsCurrentStepCompleted { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+}
