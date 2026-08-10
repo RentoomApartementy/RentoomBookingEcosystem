@@ -204,6 +204,18 @@
   <data name="BookNow" xml:space="preserve">
     <value>Book now</value>
   </data>
+  <data name="ChooseDatesCta" xml:space="preserve">
+    <value>Choose dates</value>
+  </data>
+  <data name="ChangeOffer" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="TotalPriceLabel" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="StepperAriaLabel" xml:space="preserve">
+    <value>Booking steps</value>
+  </data>
   <data name="BookNowStepButtonLabel" xml:space="preserve">
     <value>Show Details</value>
   </data>

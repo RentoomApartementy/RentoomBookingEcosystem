@@ -2,38 +2,46 @@
 @using Microsoft.Extensions.Localization
 @using RentoomBooking.SharedClasses.Models.RentoomBooking
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.NearbyAttractions.Models
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.SocialMedia.Models
 
 <div class="ai-description-container">
-    @* TOP: Always visible intro (Hook) *@
-    <article class="ai-intro-content">
-        @if (!string.IsNullOrEmpty(Data?.H1))
+    @* TOP: media floats right, intro/highlights/main description wrap around it and drop to full width once taller than the video *@
+    <div class="ai-top-flow">
+        @if (ShowSocialMedia)
         {
-            <h3 class="ai-h1">@Data.H1</h3>
-        }
-
-        @if (!string.IsNullOrEmpty(Data?.ShortDescription))
-        {
-            <div class="ai-short-description">
-                @((MarkupString)Data.ShortDescription)
+            <div class="ai-top-row__media">
+                <ApartmentSocialMedia Data="SocialMediaData" Layout="SocialMediaLayout.Stacked" />
             </div>
         }
-    </article>
 
-    @* MIDDLE: Highlights (Always visible) *@
-    <div class="ai-highlights-section">
-        <AiHighlightsGrid Highlights="Data?.Highlights" />
-    </div>
+        <article class="ai-intro-content">
+            @if (!string.IsNullOrEmpty(Data?.H1))
+            {
+                <h3 class="ai-h1">@Data.H1</h3>
+            }
 
-    @* BOTTOM: Collapsible details *@
-    <div class="ai-details-wrapper @(IsExpanded ? "expanded" : "collapsed")">
+            @if (!string.IsNullOrEmpty(Data?.ShortDescription))
+            {
+                <div class="ai-short-description">
+                    @((MarkupString)Data.ShortDescription)
+                </div>
+            }
+        </article>
 
-        
+        <div class="ai-highlights-section">
+            <AiHighlightsGrid Highlights="Data?.Highlights" />
+        </div>
+
         <div class="ai-main-description">
             @if (!string.IsNullOrEmpty(Data?.MainDescription))
             {
                 @((MarkupString)Data.MainDescription)
             }
         </div>
+    </div>
+
+    @* BOTTOM: Collapsible details (always full width, never wraps around the video) *@
+    <div class="ai-details-wrapper @(IsExpanded ? "expanded" : "collapsed")">
 
         <ApartmentAmenities Amenities="Amenities" Localizer="Localizer" />
 
@@ -63,4 +71,6 @@
     [Parameter] public bool IsExpanded { get; set; }
     [Parameter] public EventCallback OnToggleExpand { get; set; }
     [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+    [Parameter] public ApartmentSocialMediaDTO? SocialMediaData { get; set; }
+    [Parameter] public bool ShowSocialMedia { get; set; }
 }
