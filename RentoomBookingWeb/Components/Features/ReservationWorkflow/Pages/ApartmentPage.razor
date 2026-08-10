@@ -113,7 +113,7 @@
                             HasActiveReservation="false"
                             MandatoryAddonsFee="TotalMandatoryAddonsPrice"
                             Localizer="Localizer"
-                            OnBookNow="OnPendingOfferBookNow"
+                            OnBookNow="ConfirmPendingBooking"
                             Layout="Vertical"/> @*Można tez zrobić "Horizontal" (w dwóch kolumnach obok siebie) - narazie na testy bo niedokończony*@
                     </div>
                 }
@@ -183,17 +183,6 @@
 
                     if (ShowOffersSection)
                     {
-                        <BonusCodeBox
-                        BonusCode="@_bonusInputName"
-                        BonusCodeChanged="OnBonusCodeChanged"
-                        OnApply="ApplyBonusOnApartmentPageAsync"
-                        IsApplying="@_isApplyingBonus"
-                        StatusMessage="@_bonusStatusMessage"
-                        IsError="@_bonusStatusIsError"
-                        AppliedBonusName="@_bonusAppliedName"
-                        DiscountAmount="@_bonusDiscountAmount"
-                        Localizer="Localizer" />
-
                         <ApartmentOfferSelector
                         StartDate="@StartDate" 
                         EndDate="@EndDate" 
