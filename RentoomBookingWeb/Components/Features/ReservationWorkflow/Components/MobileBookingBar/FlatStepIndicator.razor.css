@@ -1,0 +1,20 @@
+.flat-step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 1rem 0;
+}
+
+.step-dash {
+    flex: 1;
+    height: 4px;
+    border-radius: 999px;
+    background: #dce5df;
+    transition: background-color 0.2s ease;
+}
+
+.step-dash.filled {
+    background: #1F5A41;
+}

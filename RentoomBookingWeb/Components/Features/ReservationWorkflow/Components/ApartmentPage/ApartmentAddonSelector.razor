@@ -33,7 +33,7 @@
                             
                             var paymentType = fa.PaymentType;
                             <div class="addon-item">
-                                <div class="addon-label" @onclick="@(() => OnToggleAddon.InvokeAsync(addon.Id))" @onclick:stopPropagation="true">
+                                <div class="addon-label @(IsAddonSelected(addon.Id) ? "selected" : "")" @onclick="@(() => OnToggleAddon.InvokeAsync(addon.Id))" @onclick:stopPropagation="true">
                                     <div class="addon-info-col">
                                         <span class="addon-name">@fadesc?.Name</span>
                                     </div>

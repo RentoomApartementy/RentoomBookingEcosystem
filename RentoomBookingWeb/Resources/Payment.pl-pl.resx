@@ -204,6 +204,9 @@
   <data name="ClickToPay" xml:space="preserve">
     <value>Kliknij, aby opłacić rezerwacje</value>
   </data>
+  <data name="MobileBarNextLabel" xml:space="preserve">
+    <value>Dalej</value>
+  </data>
   <data name="ReservationDanger" xml:space="preserve">
     <value>Brak potwierdzenia</value>
   </data>

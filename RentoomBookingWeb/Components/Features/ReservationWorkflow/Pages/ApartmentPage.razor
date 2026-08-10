@@ -1,5 +1,6 @@
 ﻿@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.MobileBookingBar
 @inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -38,7 +39,7 @@
     <SeoHreflangs />
 </HeadContent>
 
-<div class="apartment-container">
+<div class="apartment-container @(ShowMobileBookingBar ? "has-mobile-bar" : "")">
     @if (_apartment == null && !_isOfferLoading)
     {
         <div class="not-found-wrapper">
@@ -112,7 +113,7 @@
                             HasActiveReservation="false"
                             MandatoryAddonsFee="TotalMandatoryAddonsPrice"
                             Localizer="Localizer"
-                            OnBookNow="ConfirmPendingBooking"
+                            OnBookNow="OnPendingOfferBookNow"
                             Layout="Vertical"/> @*Można tez zrobić "Horizontal" (w dwóch kolumnach obok siebie) - narazie na testy bo niedokończony*@
                     </div>
                 }
@@ -224,20 +225,67 @@
                     MapId="apartmentMap-desktop"
                     OnSeeMore="OpenModal"
                     Localizer="Localizer" />
+                @if (ShowMobileBookingBar)
+                {
+                    @* The desktop map above is CSS-hidden below 910px (.desktop-only-map); when the
+                       old map bottom sheet is replaced by the booking bar, the mobile-only-map variant
+                       needs to live inline here instead so mobile still shows a map. *@
+                    <ApartmentLocationMap
+                        Location="_apartment?.ObjectLocation"
+                        IsMobile="true"
+                        MapId="apartmentMap-mobile"
+                        OnSeeMore="OpenModal"
+                        Localizer="Localizer" />
+                }
             </div>
         </div>
 
-        <ApartmentStickySummary
-            IsMobileExpanded="_isMobileExpanded"
-            Localizer="Localizer"
-            OnToggleMobileExpand="ToggleMobileExpand">
-            <ApartmentLocationMap
-                Location="_apartment?.ObjectLocation"
-                IsMobile="true"
-                MapId="apartmentMap-mobile"
-                OnSeeMore="OpenModal"
-                Localizer="Localizer" />
-        </ApartmentStickySummary>
+        @if (ShowMobileBookingBar)
+        {
+            <MobileBookingBar
+                CurrentStep="1"
+                TotalSteps="4"
+                IsLoading="_isOfferLoading"
+                ShowPriceSummary="HasOfferForBar"
+                TotalPriceAmount="TotalPriceForBar"
+                IsExpanded="_isBookingBarExpanded"
+                IsExpandedChanged="@((bool v) => _isBookingBarExpanded = v)"
+                PrimaryButtonText="@(HasOfferForBar ? Localizer["BookNow"] : Localizer["ChooseDatesCta"])"
+                OnPrimaryClick="OnMobileBarPrimaryClick"
+                Localizer="Localizer">
+                <ExpandedContent>
+                    <ApartmentOfferSelectorMini
+                        IsOfferLoading="_isOfferLoading"
+                        OffersResponse="_offersResponse"
+                        StaySummaryText="@GetStaySummaryText()"
+                        StartDate="@StartDate"
+                        EndDate="@EndDate"
+                        RefundableOfferText="@GetRefundableOfferText()"
+                        SelectedOfferType="@_selectedOfferType"
+                        HasActiveReservation="HasActiveReservation"
+                        MandatoryAddonsFee="TotalMandatoryAddonsPrice"
+                        Localizer="Localizer"
+                        OnBookNow="OnMobileBarOfferPicked"
+                        ActionButtonLabel="@Localizer["ChangeOffer"]"
+                        OnActionButtonClick="@((string _) => ScrollToBookingPanel())"
+                        Layout="Vertical" />
+                </ExpandedContent>
+            </MobileBookingBar>
+        }
+        else
+        {
+            <ApartmentStickySummary
+                IsMobileExpanded="_isMobileExpanded"
+                Localizer="Localizer"
+                OnToggleMobileExpand="ToggleMobileExpand">
+                <ApartmentLocationMap
+                    Location="_apartment?.ObjectLocation"
+                    IsMobile="true"
+                    MapId="apartmentMap-mobile"
+                    OnSeeMore="OpenModal"
+                    Localizer="Localizer" />
+            </ApartmentStickySummary>
+        }
 
         @if (_relatedPosts is { Count: > 0 })
         {

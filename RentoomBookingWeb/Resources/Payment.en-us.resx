@@ -204,6 +204,9 @@
   <data name="ClickToPay" xml:space="preserve">
     <value>Click to pay</value>
   </data>
+  <data name="MobileBarNextLabel" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="ReservationDanger" xml:space="preserve">
     <value>No confirmation</value>
   </data>

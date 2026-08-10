@@ -1,0 +1,71 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Components.Enums
+
+<div class="mobile-booking-bar">
+    <FlatStepIndicator CurrentStep="CurrentStep" TotalSteps="TotalSteps" IsCurrentStepCompleted="IsCurrentStepCompleted" Localizer="Localizer" />
+
+    @if (ShowPriceSummary)
+    {
+        <div class="mobile-booking-bar-drawer @(IsExpanded ? "expanded" : "")">
+            <div class="mobile-booking-bar-drawer-content">
+                @ExpandedContent
+            </div>
+        </div>
+    }
+
+    <div class="mobile-booking-bar-actions">
+        @if (ShowPriceSummary)
+        {
+            <button type="button" class="mobile-booking-bar-total" @onclick="ToggleExpand">
+                <span class="mobile-booking-bar-total-top">
+                    <span class="mobile-booking-bar-total-label">@Localizer["TotalPriceLabel"]</span>
+                    <GoogleIcon Name="@(IsExpanded ? "expand_more" : "expand_less")" SizePx="16" Class="mobile-booking-bar-chevron" AriaLabel="@Localizer["StepperAriaLabel"]" />
+                </span>
+                <span class="mobile-booking-bar-total-amount">
+                    @if (IsLoading)
+                    {
+                        <span class="mini-spinner"></span>
+                    }
+                    else
+                    {
+                        <PriceDisplay AmountPln="@TotalPriceAmount" />
+                    }
+                </span>
+            </button>
+        }
+
+        <Button Type="PrimaryButtonType"
+                Class="@("mobile-booking-bar-cta" + (ShowPriceSummary ? "" : " full-width"))"
+                Disabled="PrimaryButtonDisabled"
+                IsBusy="PrimaryButtonBusy"
+                OnClick="OnPrimaryClick">
+            @PrimaryButtonIcon
+            @PrimaryButtonText
+        </Button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int CurrentStep { get; set; } = 1;
+    [Parameter] public int TotalSteps { get; set; } = 4;
+    [Parameter] public bool IsCurrentStepCompleted { get; set; }
+    [Parameter] public bool IsLoading { get; set; }
+    [Parameter] public bool ShowPriceSummary { get; set; }
+    [Parameter] public decimal? TotalPriceAmount { get; set; }
+    [Parameter] public bool IsExpanded { get; set; }
+    [Parameter] public EventCallback<bool> IsExpandedChanged { get; set; }
+    [Parameter] public RenderFragment? ExpandedContent { get; set; }
+    [Parameter] public string PrimaryButtonText { get; set; } = string.Empty;
+    [Parameter] public RenderFragment? PrimaryButtonIcon { get; set; }
+    [Parameter] public ButtonType PrimaryButtonType { get; set; } = ButtonType.Primary;
+    [Parameter] public bool PrimaryButtonDisabled { get; set; }
+    [Parameter] public bool PrimaryButtonBusy { get; set; }
+    [Parameter] public EventCallback OnPrimaryClick { get; set; }
+    [Parameter] public IStringLocalizer Localizer { get; set; } = default!;
+
+    private async Task ToggleExpand()
+    {
+        IsExpanded = !IsExpanded;
+        await IsExpandedChanged.InvokeAsync(IsExpanded);
+    }
+}

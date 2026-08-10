@@ -21,6 +21,8 @@
 @inject IJSRuntime JSRuntime
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @inject GoogleAnalyticsService GoogleAnalytics
+@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.MobileBookingBar
 @implements IDisposable
 
 <PageTitle>@Localizer["SummaryPageTitle"]</PageTitle>
@@ -278,10 +280,11 @@
                             }
                         </div>
                         
-                        <Button OnClick="GoToPayment" 
+                        <Button OnClick="GoToPayment"
                                 Disabled="@(!CanProceedToPayment())"
                                 IsBusy="@_isSavingTerms"
                                 Type="ButtonType.Tertiary"
+                                Class="@(ShowMobileBookingBar ? "hide-on-mobile-bar" : "")"
                                 style="@(!CanProceedToPayment() ? "opacity: 0.6; filter: brightness(0.8); cursor: not-allowed;" : "")">
                             <img src="assets/svgs/tpay.svg" alt="@Localizer["Summary_TpayIconAlt"]"/>
                             @Localizer["ClickToPay"]
@@ -289,11 +292,29 @@
 
                         @if (ShouldShowCancelAction)
                         {
-                            <div class="payment-secondary-action-label">@CancelActionSeparatorText</div>
+                            <div class="payment-secondary-action-label @(ShowMobileBookingBar ? "hide-on-mobile-bar" : "")">@CancelActionSeparatorText</div>
                             <Button OnClick="CancelReservation"
                                     IsBusy="@_isCancellingReservation">
                                 @CancelReservationButtonText
                             </Button>
+                        }
+
+                        @if (ShowMobileBookingBar)
+                        {
+                            <MobileBookingBar
+                                CurrentStep="CurrentStep"
+                                TotalSteps="4"
+                                ShowPriceSummary="false"
+                                PrimaryButtonText="@Localizer["ClickToPay"]"
+                                PrimaryButtonType="ButtonType.Tertiary"
+                                PrimaryButtonDisabled="@(!CanProceedToPayment())"
+                                PrimaryButtonBusy="_isSavingTerms"
+                                OnPrimaryClick="GoToPayment"
+                                Localizer="Localizer">
+                                <PrimaryButtonIcon>
+                                    <img src="assets/svgs/tpay.svg" alt="@Localizer["Summary_TpayIconAlt"]" />
+                                </PrimaryButtonIcon>
+                            </MobileBookingBar>
                         }
                     }
                     else if (@_summary.IdoStatus != "accepted")
@@ -456,6 +477,8 @@
                                                 && !IsPaymentFailed;
     
     private string? staywellLink => BuildStaywellLink();
+
+    private bool ShowMobileBookingBar => FeatureFlags.FeatureAllowed("apartmentpage-mobile-booking-bar");
 
     protected override async Task OnInitializedAsync()
     {

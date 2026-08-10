@@ -25,6 +25,8 @@
 @inject ReservationWorkflowTelemetry WorkflowTelemetry
 @inject GoogleAnalyticsService GoogleAnalytics
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
+@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
+@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.MobileBookingBar
 
 <PageTitle>@Localizer["ClientInfoPageTitle"]</PageTitle>
 
@@ -234,7 +236,7 @@
                           Title="@Localizer["SomethingWrong"]"
                           Dismissible="false" />
 
-                <Button IsBusy="@_isSaving">
+                <Button IsBusy="@_isSaving" Class="@(FeatureFlags.FeatureAllowed("apartmentpage-mobile-booking-bar") ? "hide-on-mobile-bar" : "")">
                     @Localizer["ClientInfoButton"]
                 </Button>
             </div>
@@ -248,12 +250,23 @@
         Apartment="_apartment"
         />
         </div>    @* MOBILE FLOATING BUTTON *@
-    @if (!_isAtForm)
+    @if (FeatureFlags.FeatureAllowed("apartmentpage-mobile-booking-bar"))
+    {
+        <MobileBookingBar
+            CurrentStep="2"
+            TotalSteps="4"
+            ShowPriceSummary="false"
+            PrimaryButtonText="@Localizer["MobileBarNextLabel"]"
+            PrimaryButtonBusy="_isSaving"
+            OnPrimaryClick="SmartScrollAction"
+            Localizer="Localizer" />
+    }
+    else if (!_isAtForm)
     {
         <div class="mobile-sticky-action">
-            <Button Type="ButtonType.Tertiary" 
-                    Class="small" 
-                    style="width: 100%;" 
+            <Button Type="ButtonType.Tertiary"
+                    Class="small"
+                    style="width: 100%;"
                     OnClick="SmartScrollAction">
                 @Localizer["FillGuestData"]
             </Button>

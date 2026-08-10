@@ -317,4 +317,8 @@
         z-index: 2000; /* High z-index to stay on top of everything */
         border-radius: 16px 16px 0 0;
     }
+
+    ::deep .hide-on-mobile-bar {
+        display: none !important;
+    }
 }

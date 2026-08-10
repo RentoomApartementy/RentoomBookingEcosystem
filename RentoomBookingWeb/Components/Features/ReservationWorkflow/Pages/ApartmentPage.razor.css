@@ -159,6 +159,10 @@
         position: static;
         top: auto;
     }
+
+    .apartment-container.has-mobile-bar {
+        padding-bottom: 5rem;
+    }
 }
 
 @media (max-width: 768px) {
