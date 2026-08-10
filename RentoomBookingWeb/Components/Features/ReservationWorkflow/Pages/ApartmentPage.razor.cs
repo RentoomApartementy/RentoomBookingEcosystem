@@ -1910,21 +1910,6 @@ namespace RentoomBookingWeb.Components.Features.ReservationWorkflow.Pages
             _selectedOfferType = offerType;
         }
 
-        protected Task OnPendingOfferBookNow(string? offerType)
-        {
-            if (ShowMobileBookingBar)
-            {
-                if (offerType is not null)
-                {
-                    _selectedOfferType = offerType;
-                    _pendingSelectedOfferType = offerType;
-                }
-                return Task.CompletedTask;
-            }
-
-            return ConfirmPendingBooking(offerType);
-        }
-
         public void Dispose()
         {
             _scrollObjRef?.Dispose();
