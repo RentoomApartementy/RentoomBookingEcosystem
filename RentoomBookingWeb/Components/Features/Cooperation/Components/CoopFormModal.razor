@@ -1,0 +1,70 @@
+@using Microsoft.Extensions.Localization
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+@if (IsOpen)
+{
+    <div class="modal-backdrop">
+        <div id="@Id" class="modal-card animate-pop-in">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span>@L["Coop_Cta_Title"]</span>
+                </div>
+
+                <button class="close-btn" @onclick="CloseModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-form-wrapper">
+                <Form />
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+
+    private DotNetObjectReference<CoopFormModal>? objRef;
+    private string Id { get; } = $"coop-form-modal-{Guid.NewGuid()}";
+
+    [JSInvokable]
+    public async Task CloseModal()
+    {
+        if (IsOpen)
+        {
+            IsOpen = false;
+            await IsOpenChanged.InvokeAsync(false);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("registerClickOutside", Id, objRef);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("unregisterClickOutside", Id);
+        }
+        catch (Exception)
+        {
+        }
+        finally
+        {
+            objRef?.Dispose();
+        }
+    }
+}

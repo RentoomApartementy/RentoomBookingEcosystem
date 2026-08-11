@@ -1,0 +1,73 @@
+.coop-testimonials {
+    width: 100%;
+    background: #1F5A41;
+    color: #fff;
+    padding: 4rem 24px;
+    text-align: center;
+}
+
+.coop-eyebrow {
+    font-size: .8rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.7);
+    font-weight: 700;
+}
+
+.coop-section-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    margin: .75rem 0 2.5rem;
+}
+
+.coop-testimonials-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.coop-testimonial {
+    background: rgba(255,255,255,.1);
+    border-radius: 14px;
+    padding: 2rem 1.5rem;
+    margin: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.coop-testimonial p {
+    font-size: .95rem;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 0 0 1.25rem;
+    opacity: .95;
+}
+
+.coop-testimonial footer {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+}
+
+.coop-testimonial footer strong {
+    font-size: .95rem;
+}
+
+.coop-testimonial footer span {
+    font-size: .82rem;
+    opacity: .7;
+}
+
+@media (max-width: 768px) {
+    .coop-testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .coop-testimonials {
+        padding: 3rem 16px;
+    }
+}

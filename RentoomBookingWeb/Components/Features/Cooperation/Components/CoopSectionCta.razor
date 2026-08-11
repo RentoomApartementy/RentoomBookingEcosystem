@@ -1,0 +1,12 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<div class="coop-section-cta">
+    <Button Type="@Type" OnClick="OpenFormModal">@L["Coop_Section_Cta"]</Button>
+</div>
+
+@code {
+    [Parameter] public ButtonType Type { get; set; } = ButtonType.Primary;
+
+    [CascadingParameter] public EventCallback OpenFormModal { get; set; }
+}

@@ -1,0 +1,31 @@
+.coop-cta {
+    width: 100%;
+    background: #1F5A41;
+    color: #fff;
+    padding: 4rem 24px 3rem;
+    text-align: center;
+}
+
+.coop-cta-header {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+}
+
+.coop-cta-header h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    margin: 0 0 .75rem;
+}
+
+.coop-cta-header p {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    opacity: .9;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .coop-cta {
+        padding: 3rem 16px 2rem;
+    }
+}
