@@ -3,17 +3,25 @@
 @using Microsoft.Extensions.Localization;
 @inject IStringLocalizer<RentoomBookingWeb.Cooperation> Localizer;
 @inject RentoomBookingWeb.Services.Localization.IRouteLocalizationService RouteService
+@inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 
-<PageTitle>@Localizer["Cooperation_PageTitle"]</PageTitle>
+@{
+    var isV2 = FeatureFlags.FeatureAllowed("cooperation-landing-v2");
+    var pageTitle = isV2 ? Localizer["Coop_V2_PageTitle"] : Localizer["Cooperation_PageTitle"];
+    var metaDesc = isV2 ? Localizer["Coop_V2_MetaDescription"] : Localizer["Cooperation_MetaDescription"];
+    var ogTitle = isV2 ? Localizer["Coop_V2_OgTitle"] : Localizer["Cooperation_OgTitle"];
+}
+
+<PageTitle>@pageTitle</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow" />
-    <meta name="description" content="@Localizer["Cooperation_MetaDescription"]" />
+    <meta name="description" content="@metaDesc" />
     <meta name="keywords" content="@Localizer["Cooperation_MetaKeywords"]" />
     <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Cooperation")}")" />
 
-    <meta property="og:title" content="@Localizer["Cooperation_OgTitle"]" />
-    <meta property="og:description" content="@Localizer["Cooperation_MetaDescription"]" />
+    <meta property="og:title" content="@ogTitle" />
+    <meta property="og:description" content="@metaDesc" />
     <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-coop.jpeg")" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Cooperation")}")" />
@@ -21,12 +29,40 @@
     <SeoHreflangs />
 </HeadContent>
 
-<div class="cooperation-container">
-    <HeaderSection
-        ImagePath="/assets/images/header-bg-coop.jpeg"
-        Title="@Localizer["CooperationText1"]"
-        Height="230px"/>
-    <AboutUs/>
-    <Advantages/>
-    <Form/>
-</div>
+@if (isV2)
+{
+    <div class="cooperation-container-v2">
+        <CascadingValue Value="@OpenFormModalRequested">
+            <CoopHeroSection />
+            <CoopFeaturesSection />
+            <CoopCalculatorSection />
+            <CoopServicesSection />
+            <CoopTestimonialsSection />
+            <CoopComparisonSection />
+            <CoopProcessSection />
+            <CoopTeamSection />
+            <CoopFaqSection />
+            <CoopCtaSection />
+        </CascadingValue>
+    </div>
+    <CoopFormModal @bind-IsOpen="_isFormModalOpen" />
+}
+else
+{
+    <div class="cooperation-container">
+        <HeaderSection
+            ImagePath="/assets/images/header-bg-coop.jpeg"
+            Title="@Localizer["CooperationText1"]"
+            Height="230px"/>
+        <AboutUs/>
+        <Advantages/>
+        <Form/>
+    </div>
+}
+
+@code {
+    private bool _isFormModalOpen;
+
+    private EventCallback OpenFormModalRequested =>
+        EventCallback.Factory.Create(this, () => _isFormModalOpen = true);
+}

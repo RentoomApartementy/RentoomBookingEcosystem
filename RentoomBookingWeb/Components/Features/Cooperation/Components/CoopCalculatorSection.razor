@@ -1,0 +1,26 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-calculator" id="coop-calculator">
+    <span class="coop-eyebrow">@L["Coop_Calc_Eyebrow"]</span>
+    <h2 class="coop-section-title">@L["Coop_Calc_Title"]</h2>
+    <p class="coop-section-subtitle">@L["Coop_Calc_Subtitle"]</p>
+
+    <CoopSimpleCalculator />
+
+    <div class="coop-detailed-toggle">
+        <button class="coop-toggle-btn" @onclick="() => _showDetailed = !_showDetailed">
+            <span class="gicon">@(_showDetailed ? "expand_less" : "expand_more")</span>
+            @(_showDetailed ? L["Coop_Calc_HideDetailed"] : L["Coop_Calc_ShowDetailed"])
+        </button>
+    </div>
+
+    @if (_showDetailed)
+    {
+        <CoopDetailedCalculator />
+    }
+</section>
+
+@code {
+    private bool _showDetailed;
+}

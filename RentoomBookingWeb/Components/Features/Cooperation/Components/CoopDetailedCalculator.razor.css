@@ -1,0 +1,247 @@
+.coop-detailed-calc {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #E5E7EB;
+    overflow: hidden;
+    margin-top: 1.5rem;
+}
+
+.coop-calc-tabs {
+    display: flex;
+    background: #f5f5f5;
+    padding: .5rem;
+    gap: .35rem;
+}
+
+.coop-calc-tab {
+    flex: 1;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    padding: .75rem 1rem;
+    font-weight: 700;
+    font-size: .9rem;
+    color: #666;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+}
+
+.coop-calc-tab:hover {
+    color: #1A1A1A;
+}
+
+.coop-calc-tab.active {
+    background: #1F5A41;
+    color: #fff;
+}
+
+.coop-calc-panel {
+    padding: 2rem;
+}
+
+.coop-calc-panel h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1A1A1A;
+    margin: 0 0 .35rem;
+}
+
+.coop-calc-desc {
+    font-size: .9rem;
+    color: #666;
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+}
+
+.coop-calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.coop-calc-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.coop-calc-field label {
+    display: block;
+    font-size: .88rem;
+    font-weight: 600;
+    color: #1A1A1A;
+    margin-bottom: .4rem;
+}
+
+.coop-slider {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #E5E7EB;
+    border-radius: 3px;
+    outline: none;
+}
+
+.coop-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #1F5A41;
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+
+.coop-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #1F5A41;
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+
+.coop-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.coop-pill {
+    padding: .45rem .9rem;
+    border-radius: 100px;
+    border: 1px solid #E5E7EB;
+    background: #fff;
+    font-size: .82rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+}
+
+.coop-pill:hover {
+    border-color: #1F5A41;
+    color: #1F5A41;
+}
+
+.coop-pill.active {
+    background: #1F5A41;
+    color: #fff;
+    border-color: #1F5A41;
+}
+
+.coop-calc-results {
+    background: #F6F4EE;
+    border-radius: 14px;
+    padding: 1.5rem;
+}
+
+.coop-calc-results h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin: 0 0 .75rem;
+}
+
+.coop-calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .45rem 0;
+    font-size: .88rem;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.coop-calc-row:last-child {
+    border-bottom: none;
+}
+
+.coop-calc-row span {
+    color: #666;
+}
+
+.coop-calc-row strong {
+    color: #1A1A1A;
+    text-align: right;
+}
+
+.coop-row-sep {
+    border-top: 2px solid #E5E7EB;
+    margin-top: .35rem;
+    padding-top: .65rem;
+}
+
+.coop-calc-highlight {
+    background: #1F5A41;
+    color: #fff;
+    padding: .75rem 1rem;
+    border-radius: 10px;
+    margin-top: .75rem;
+}
+
+.coop-calc-highlight .coop-calc-row span,
+.coop-calc-highlight .coop-calc-row strong {
+    color: #fff;
+}
+
+.coop-calc-highlight .coop-calc-row {
+    border-bottom-color: rgba(255,255,255,.15);
+}
+
+.coop-calc-sub {
+    font-size: .78rem;
+    opacity: .75;
+    display: block;
+    margin-top: .25rem;
+}
+
+.coop-check {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.coop-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #1F5A41;
+}
+
+.coop-calc-disclaimer {
+    font-size: .78rem;
+    color: #999;
+    line-height: 1.45;
+    margin: .75rem 0 0;
+}
+
+.coop-calc-cta-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .coop-calc-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .coop-calc-panel {
+        padding: 1.25rem;
+    }
+
+    .coop-calc-tabs {
+        overflow-x: auto;
+    }
+
+    .coop-calc-tab {
+        min-width: 120px;
+    }
+}

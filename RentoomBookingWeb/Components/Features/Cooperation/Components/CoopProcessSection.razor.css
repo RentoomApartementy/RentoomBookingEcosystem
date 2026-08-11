@@ -1,0 +1,80 @@
+.coop-process {
+    background: #F6F4EE;
+    padding: 4rem 24px;
+    text-align: center;
+}
+
+.coop-eyebrow {
+    font-size: .8rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #945F28;
+    font-weight: 700;
+}
+
+.coop-section-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    color: #1A1A1A;
+    margin: .75rem 0 2.5rem;
+}
+
+.coop-process-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.coop-process-step {
+    background: #fff;
+    border-radius: 14px;
+    padding: 2rem 1.5rem;
+    border: 1px solid #E5E7EB;
+}
+
+.coop-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #945F28;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: .75rem;
+}
+
+.coop-process-step h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin: 0 0 .4rem;
+}
+
+.coop-process-step p {
+    font-size: .9rem;
+    line-height: 1.5;
+    color: #666;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .coop-process-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .coop-process-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .coop-process {
+        padding: 3rem 16px;
+    }
+}

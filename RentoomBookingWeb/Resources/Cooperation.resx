@@ -111,4 +111,654 @@
   <data name="ContactImageAlt" xml:space="preserve">
     <value>Contact</value>
   </data>
+
+  <!-- V2 Landing Page: Hero -->
+  <data name="Coop_Hero_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Subtitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Cta" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_CalcLink" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Stat1_Value" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Stat1_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Stat2_Value" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Stat2_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Stat3_Value" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Stat3_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Stat4_Value" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Hero_Stat4_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Features_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Features_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Feature1_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Feature1_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Feature2_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Feature2_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Feature3_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Feature3_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Feature4_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Feature4_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Subtitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Simple_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Location_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Rooms_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Standard_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_StareMiasto" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Centrum" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Rubinkowo" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Wrzosy" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Stawki" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_BydgoskieI" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_BydgoskieII" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_More" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Chelminskie" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_JakubskieMokre" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Bielawy" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Skarpa" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Kaszczorek" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Podgorz" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Rudak" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Loc_Czerniewice" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Std_Basic" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Std_Good" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Std_Premium" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Result_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Result_Label" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_AvgRate" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Occupancy" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_GrossRevenue" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_OpCosts" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Commission" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_CtaPrimary" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_CtaNote" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_ShowDetailed" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_HideDetailed" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Tab_Reservation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Tab_Monthly" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Tab_Investment" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Gross" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Guests" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Nights" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Area" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_AreaTo55" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_AreaTo70" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_AreaOver70" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Result_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_TotalGross" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_CleaningGross" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_AfterCleaning" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Net" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_ExtraBeds" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_SplitBase" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Owner" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Res_Rentoom" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_Income" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_Beds" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_OtherCosts" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_Linen" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_Result_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_Revenue" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_PrepCost" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_OwnerShare" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_LinenCost" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_OtherLabel" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_AfterCosts" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Mon_BeforeTax" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Income" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Admin" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Insurance" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Financing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Value" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Result_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_MonthlyOp" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_MonthlyCash" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_AnnualOp" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Yield" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Cta" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Inv_Disclaimer" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Netto" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Calc_Zl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Services_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Services_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service1_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service1_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service2_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service2_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service3_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service3_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service4_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service4_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service5_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service5_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service6_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Service6_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Services_BeforeAfterCaption" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonials_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonials_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial1_Quote" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial1_Author" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial1_Context" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial2_Quote" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial2_Author" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial2_Context" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial3_Quote" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial3_Author" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Testimonial3_Context" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Col_Self" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Col_LongTerm" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Col_Rentoom" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Time" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Time_Self" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Time_Long" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Time_Rentoom" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Revenue" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Self" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Long" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Revenue_Rentoom" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Support" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Cleaning" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Pricing" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Photos" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Inspection" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Self" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Long" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Inspection_Rentoom" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Accounting" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Compare_Row_Accounting_Long" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process1_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process1_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process2_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process2_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process3_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process3_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process4_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process4_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process5_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process5_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process6_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Process6_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team1_Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team1_Role" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team1_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team2_Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team2_Role" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team2_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team3_Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team3_Role" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team3_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team4_Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team4_Role" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team4_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team5_Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team5_Role" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team5_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team6_Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team6_Role" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Team6_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq_Eyebrow" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq1_Q" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq1_A" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq2_Q" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq2_A" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq3_Q" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq3_A" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq4_Q" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq4_A" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq5_Q" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq5_A" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq6_Q" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq6_A" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq7_Q" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Faq7_A" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Cta_Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Cta_Subtitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Cta_Button" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_Section_Cta" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_V2_PageTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_V2_MetaDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Coop_V2_OgTitle" xml:space="preserve">
+    <value />
+  </data>
 </root>
