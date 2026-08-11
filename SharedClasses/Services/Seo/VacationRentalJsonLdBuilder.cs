@@ -194,9 +194,11 @@ public static class VacationRentalJsonLdBuilder
         AddIfNotEmpty(rental, "image", images);
 
         AddLocation(rental, input.Apartment);
-        AddCheckTimes(rental, input.Apartment);
+        var (checkinTime, checkoutTime) = GetCheckTimes(input.Apartment);
+        if (checkinTime is not null) rental["checkinTime"] = checkinTime;
+        if (checkoutTime is not null) rental["checkoutTime"] = checkoutTime;
 
-        var offers = BuildOffers(input, canonicalUrl, accommodationId);
+        var offers = BuildOffers(input, canonicalUrl, accommodationId, checkinTime, checkoutTime);
         AddIfNotEmpty(rental, "makesOffer", offers);
 
         RemoveNullAndEmptyValues(rental);
@@ -219,7 +221,7 @@ public static class VacationRentalJsonLdBuilder
         var capacity = apartment.Capacity.GetValueOrDefault();
         var accommodation = new Dictionary<string, object?>
         {
-            ["@type"] = new[] { "Apartment", "Product" },
+            ["@type"] = "Apartment",
             ["@id"] = accommodationId,
             ["additionalType"] = "EntirePlace",
             ["name"] = NullIfWhiteSpace(apartment.Name),
@@ -321,20 +323,20 @@ public static class VacationRentalJsonLdBuilder
         }
     }
 
-    private static void AddCheckTimes(Dictionary<string, object?> rental, ApartmentObject apartment)
+    private static (string? CheckinTime, string? CheckoutTime) GetCheckTimes(ApartmentObject apartment)
     {
         var location = apartment.ObjectLocation?.LocalizationItem;
-        if (TryNormalizeTime(location?.CheckInHours?.From, out var checkin))
-        {
-            rental["checkinTime"] = checkin;
-        }
-        if (TryNormalizeTime(location?.CheckOutHours?.To, out var checkout))
-        {
-            rental["checkoutTime"] = checkout;
-        }
+        var checkin = TryNormalizeTime(location?.CheckInHours?.From, out var checkinValue) ? checkinValue : null;
+        var checkout = TryNormalizeTime(location?.CheckOutHours?.To, out var checkoutValue) ? checkoutValue : null;
+        return (checkin, checkout);
     }
 
-    private static List<object> BuildOffers(VacationRentalJsonLdInput input, string canonicalUrl, string accommodationId)
+    private static List<object> BuildOffers(
+        VacationRentalJsonLdInput input,
+        string canonicalUrl,
+        string accommodationId,
+        string? checkinTime,
+        string? checkoutTime)
     {
         if (input.DatedOffer is { } dated)
         {
@@ -349,12 +351,12 @@ public static class VacationRentalJsonLdBuilder
             {
                 return new List<object>
                 {
-                    BuildDatedOffer(dated, null, 0, canonicalUrl, accommodationId, soldOut: true)
+                    BuildDatedOffer(dated, null, 0, canonicalUrl, accommodationId, checkinTime, checkoutTime, soldOut: true)
                 };
             }
 
             return rates
-                .Select((rate, index) => (object)BuildDatedOffer(dated, rate, index, canonicalUrl, accommodationId, soldOut: false))
+                .Select((rate, index) => (object)BuildDatedOffer(dated, rate, index, canonicalUrl, accommodationId, checkinTime, checkoutTime, soldOut: false))
                 .ToList();
         }
 
@@ -364,31 +366,33 @@ public static class VacationRentalJsonLdBuilder
             IsValidStay(from.AvailabilityStarts, from.AvailabilityEnds))
         {
             var url = NormalizeOfferUrl(from.Url, canonicalUrl);
-            return new List<object>
+            var offer = new Dictionary<string, object?>
             {
-                new Dictionary<string, object?>
+                ["@type"] = "Offer",
+                ["@id"] = $"{canonicalUrl}#offer-from-{from.AvailabilityStarts:yyyyMMdd}-{from.AvailabilityEnds:yyyyMMdd}-{from.Adults}-{from.Children}",
+                ["name"] = NullIfWhiteSpace(from.Name),
+                ["description"] = NullIfWhiteSpace(from.Description),
+                ["url"] = url,
+                ["availability"] = $"{Schema}InStock",
+                ["availabilityStarts"] = from.AvailabilityStarts.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                ["availabilityEnds"] = from.AvailabilityEnds.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                ["checkinTime"] = checkinTime,
+                ["checkoutTime"] = checkoutTime,
+                ["businessFunction"] = LeaseOut,
+                ["itemOffered"] = new Dictionary<string, object?> { ["@type"] = "Apartment", ["@id"] = accommodationId },
+                ["priceSpecification"] = new Dictionary<string, object?>
                 {
-                    ["@type"] = "Offer",
-                    ["@id"] = $"{canonicalUrl}#offer-from-{from.AvailabilityStarts:yyyyMMdd}-{from.AvailabilityEnds:yyyyMMdd}-{from.Adults}-{from.Children}",
-                    ["name"] = NullIfWhiteSpace(from.Name),
-                    ["description"] = NullIfWhiteSpace(from.Description),
-                    ["url"] = url,
-                    ["availability"] = $"{Schema}InStock",
-                    ["availabilityStarts"] = from.AvailabilityStarts.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                    ["availabilityEnds"] = from.AvailabilityEnds.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                    ["businessFunction"] = LeaseOut,
-                    ["itemOffered"] = new Dictionary<string, object?> { ["@id"] = accommodationId },
-                    ["priceSpecification"] = new Dictionary<string, object?>
-                    {
-                        ["@type"] = "UnitPriceSpecification",
-                        ["price"] = from.PricePerNight,
-                        ["priceCurrency"] = NormalizeCurrency(from.Currency),
-                        ["unitCode"] = "DAY",
-                        ["unitText"] = "night"
-                    },
-                    ["eligibleDuration"] = BuildDuration(from.Nights)
-                }
+                    ["@type"] = "PriceSpecification",
+                    ["price"] = from.PricePerNight,
+                    ["priceCurrency"] = NormalizeCurrency(from.Currency),
+                    ["unitCode"] = "DAY",
+                    ["unitText"] = "night"
+                },
+                ["eligibleDuration"] = BuildDuration(from.Nights)
             };
+
+            RemoveNullAndEmptyValues(offer);
+            return new List<object> { offer };
         }
 
         return new List<object>();
@@ -400,6 +404,8 @@ public static class VacationRentalJsonLdBuilder
         int index,
         string canonicalUrl,
         string accommodationId,
+        string? checkinTime,
+        string? checkoutTime,
         bool soldOut)
     {
         var nights = dated.AvailabilityEnds.DayNumber - dated.AvailabilityStarts.DayNumber;
@@ -414,15 +420,21 @@ public static class VacationRentalJsonLdBuilder
             ["availability"] = $"{Schema}{(soldOut ? "SoldOut" : "InStock")}",
             ["availabilityStarts"] = dated.AvailabilityStarts.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
             ["availabilityEnds"] = dated.AvailabilityEnds.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+            ["checkinTime"] = checkinTime,
+            ["checkoutTime"] = checkoutTime,
             ["businessFunction"] = LeaseOut,
-            ["itemOffered"] = new Dictionary<string, object?> { ["@id"] = accommodationId },
+            ["itemOffered"] = new Dictionary<string, object?> { ["@type"] = "Apartment", ["@id"] = accommodationId },
             ["eligibleDuration"] = BuildDuration(nights)
         };
 
         if (!soldOut && rate is not null)
         {
-            offer["price"] = rate.Price;
-            offer["priceCurrency"] = NormalizeCurrency(dated.Currency);
+            offer["priceSpecification"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "PriceSpecification",
+                ["price"] = rate.Price,
+                ["priceCurrency"] = NormalizeCurrency(dated.Currency)
+            };
         }
 
         RemoveNullAndEmptyValues(offer);
