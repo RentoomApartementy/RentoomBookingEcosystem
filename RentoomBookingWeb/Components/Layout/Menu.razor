@@ -118,7 +118,7 @@
     private MenuVisualState NavState { get; set; } = new();
     private bool ShowMenu = false;
     private bool IsScrolling = false;
-    private string DefaultCooperationUrl => $"{RouteService.GetLocalizedUrl("Cooperation")}/v3";
+    private string DefaultCooperationUrl => $"{RouteService.GetLocalizedUrl("Cooperation")}/v2";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
