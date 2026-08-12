@@ -372,3 +372,4 @@ Tools/ResxTranslator/.resx-hashes.json
 /RentoomBooking.ResxTranslator/appsettings.local.json
 /RentoomBookingWeb/appsettings.Development.json
 /.azure
+/.tmpbuild
