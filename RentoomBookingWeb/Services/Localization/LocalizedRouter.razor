@@ -103,6 +103,7 @@ else if (!_isResolving)
                 var newUrl = RouteService.GetLocalizedUrl(legacyPageKey, targetCulture);
                 var remainingPath = !string.IsNullOrEmpty(routeSegments) ? $"/{routeSegments}" : "";
                 var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+
                 TryNavigateTo($"{newUrl}{remainingPath}{uri.Query}");
                 return;
             }
@@ -138,6 +139,17 @@ else if (!_isResolving)
 
         foreach (var candidate in candidates)
         {
+            if (candidate.Definition.MaxAllowedSegments is int maxAllowedSegments &&
+                remainingSegments.Length > maxAllowedSegments)
+            {
+                continue;
+            }
+
+            if (!IsRouteVariantAllowed(candidate.Key, remainingSegments))
+            {
+                continue;
+            }
+
             var template = candidate.Definition.RouteTemplate;
             var templateParts = string.IsNullOrEmpty(template) 
                 ? Array.Empty<string>() 
@@ -276,6 +288,31 @@ else if (!_isResolving)
         return pageKey is not ("BlogList" or "BlogPost") || FeatureFlags.FeatureAllowed("blog");
     }
 
+    private bool IsRouteVariantAllowed(string pageKey, string[] remainingSegments)
+    {
+        if (!string.Equals(pageKey, "Cooperation", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (remainingSegments.Length == 0)
+        {
+            return true;
+        }
+
+        if (remainingSegments.Length != 1)
+        {
+            return false;
+        }
+
+        return remainingSegments[0].ToLowerInvariant() switch
+        {
+            "v2" => FeatureFlags.FeatureAllowed("cooperation-landing-v2"),
+            "v3" => FeatureFlags.FeatureAllowed("cooperation-landing-v3"),
+            _ => false
+        };
+    }
+
     private void TryNavigateTo(string targetUri)
     {
         var currentUri = NavManager.ToAbsoluteUri(NavManager.Uri);
@@ -296,14 +333,10 @@ else if (!_isResolving)
             !string.Equals(destinationCultureSegment, cultureCode, StringComparison.OrdinalIgnoreCase) &&
             !string.Equals(destinationCultureSegment.Split('-')[0], cultureCode?.Split('-')[0], StringComparison.OrdinalIgnoreCase);
 
-        try
-        {
-            NavManager.NavigateTo(targetUri, forceLoad: crossesCulture, replace: true);
-        }
-        catch (NavigationException)
-        {
-            // During server-side prerender/SSR Blazor may throw to complete the redirect response.
-        }
+        // During static SSR NavigationManager throws NavigationException intentionally;
+        // allowing it to propagate lets ASP.NET complete the HTTP redirect. Interactive
+        // navigation does not throw and follows the same canonical target client-side.
+        NavManager.NavigateTo(targetUri, forceLoad: crossesCulture, replace: true);
     }
 
     private void MapParametersFromQueryString()

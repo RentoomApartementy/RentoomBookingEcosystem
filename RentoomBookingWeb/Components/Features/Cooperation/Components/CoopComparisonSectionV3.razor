@@ -1,0 +1,74 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-v3-table-section" aria-labelledby="coop-v3-models-title">
+    <div class="coop-v3-table-intro">
+        <span class="coop-v3-table-eyebrow">@L["Coop_Compare_Eyebrow"]</span>
+        <h2 id="coop-v3-models-title">@L["Coop_Compare_Title"]</h2>
+    </div>
+
+    <div class="coop-v3-table-wrap">
+        <table class="coop-v3-compare-table">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col" class="coop-v3-col-highlight">@L["Coop_Compare_Col_Rentoom"]</th>
+                    <th scope="col">@L["Coop_Compare_Col_Self"]</th>
+                    <th scope="col">@L["Coop_Compare_Col_LongTerm"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_Compare_Row_Time"]</th>
+                    <td class="coop-v3-col-highlight"><strong>@L["Coop_Compare_Row_Time_Rentoom"]</strong></td>
+                    <td>@L["Coop_Compare_Row_Time_Self"]</td>
+                    <td>@L["Coop_Compare_Row_Time_Long"]</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_Compare_Row_Revenue"]</th>
+                    <td class="coop-v3-col-highlight"><strong>@L["Coop_Compare_Row_Revenue_Rentoom"]</strong></td>
+                    <td>@L["Coop_Compare_Row_Revenue_Self"]</td>
+                    <td>@L["Coop_Compare_Row_Revenue_Long"]</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_Compare_Row_Support"]</th>
+                    <td class="coop-v3-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_Compare_Row_Cleaning"]</th>
+                    <td class="coop-v3-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_Compare_Row_Pricing"]</th>
+                    <td class="coop-v3-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_Compare_Row_Photos"]</th>
+                    <td class="coop-v3-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_Compare_Row_Inspection"]</th>
+                    <td class="coop-v3-col-highlight"><strong>@L["Coop_Compare_Row_Inspection_Rentoom"]</strong></td>
+                    <td>@L["Coop_Compare_Row_Inspection_Self"]</td>
+                    <td>@L["Coop_Compare_Row_Inspection_Long"]</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_Compare_Row_Accounting"]</th>
+                    <td class="coop-v3-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td>@L["Coop_Compare_Row_Accounting_Long"]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <CoopSectionCta />
+</section>

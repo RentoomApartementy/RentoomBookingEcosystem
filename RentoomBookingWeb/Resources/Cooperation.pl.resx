@@ -827,4 +827,68 @@
   <data name="Coop_V2_OgTitle" xml:space="preserve">
     <value>Współpraca z Rentoom — zarabiaj na apartamencie bez obowiązków</value>
   </data>
+  <!-- V3 Landing Page -->
+  <data name="Coop_V3_Hero_Title" xml:space="preserve"><value>Twój apartament. Nasza opieka. Twój zysk.</value></data>
+  <data name="Coop_V3_Hero_Subtitle" xml:space="preserve"><value>Przejmujemy rezerwacje, dynamiczne ceny, kontakt z gośćmi, sprzątanie, technikę i rozliczenia. Ty otrzymujesz raport i przelew.</value></data>
+  <data name="Coop_V3_Hero_Cta" xml:space="preserve"><value>Umów bezpłatny audyt mieszkania</value></data>
+  <data name="Coop_V3_Proof_Aria" xml:space="preserve"><value>Rentoom w liczbach</value></data>
+  <data name="Coop_V3_Stat_Investors" xml:space="preserve"><value>100+ inwestorów</value></data>
+  <data name="Coop_V3_Stat_Investors_Label" xml:space="preserve"><value>nam zaufało</value></data>
+  <data name="Coop_V3_Features_Eyebrow" xml:space="preserve"><value>Co robimy</value></data>
+  <data name="Coop_V3_Features_Title" xml:space="preserve"><value>Kompleksowa opieka nad Twoim apartamentem</value></data>
+  <data name="Coop_V3_Feature_Reservations_Title" xml:space="preserve"><value>Rezerwacje i ceny</value></data>
+  <data name="Coop_V3_Feature_Reservations_Desc" xml:space="preserve"><value>Dynamiczne zarządzanie cenami i kalendarzem na najważniejszych portalach.</value></data>
+  <data name="Coop_V3_Feature_Technical_Title" xml:space="preserve"><value>Technika</value></data>
+  <data name="Coop_V3_Feature_Technical_Desc" xml:space="preserve"><value>Szybkie naprawy i serwis, regularne przeglądy oraz pełna gotowość obiektu.</value></data>
+  <data name="Coop_V3_Feature_Settlements_Title" xml:space="preserve"><value>Rozliczenia</value></data>
+  <data name="Coop_V3_Feature_Settlements_Desc" xml:space="preserve"><value>Przejrzyste raporty miesięczne i dokumenty gotowe dla księgowości.</value></data>
+  <data name="Coop_V3_Feature_Photos_Title" xml:space="preserve"><value>Zdjęcia i publikacja ofert</value></data>
+  <data name="Coop_V3_Feature_Photos_Desc" xml:space="preserve"><value>Profesjonalne zdjęcia, home staging i publikacja ofert na Booking, Airbnb, Google i w kanale bezpośrednim.</value></data>
+  <data name="Coop_V3_Costs_Eyebrow" xml:space="preserve"><value>Dlaczego 20% to więcej niż 30%?</value></data>
+  <data name="Coop_V3_Costs_Title" xml:space="preserve"><value>Liczy się to, ile naprawdę zostaje właścicielowi</value></data>
+  <data name="Coop_V3_Costs_Intro" xml:space="preserve"><value>Porównaj łączne koszty współpracy, a nie tylko prowizję operatora widoczną w ofercie.</value></data>
+  <data name="Coop_V3_Costs_Row_Name" xml:space="preserve"><value>Pozycja kosztowa</value></data>
+  <data name="Coop_V3_Costs_Competitor_A" xml:space="preserve"><value>Konkurencja A</value></data>
+  <data name="Coop_V3_Costs_Competitor_B" xml:space="preserve"><value>Konkurencja B</value></data>
+  <data name="Coop_V3_Costs_Owner_Profit" xml:space="preserve"><value>Zysk właściciela</value></data>
+  <data name="Coop_V3_Costs_Portals" xml:space="preserve"><value>Prowizje portali</value></data>
+  <data name="Coop_V3_Costs_Operator" xml:space="preserve"><value>Prowizja operatora</value></data>
+  <data name="Coop_V3_Costs_Total" xml:space="preserve"><value>Łączne koszty</value></data>
+  <data name="Coop_V3_Costs_Note" xml:space="preserve"><value>Przykład dla 10 000 zł miesięcznego przychodu z rezerwacji.</value></data>
+  <data name="Coop_V3_Tech_Eyebrow" xml:space="preserve"><value>Własne systemy</value></data>
+  <data name="Coop_V3_Tech_Title" xml:space="preserve"><value>Technologia, która pracuje dla Twojego apartamentu</value></data>
+  <data name="Coop_V3_Tech_Intro" xml:space="preserve"><value>Nasze własne rozwiązania porządkują każdy etap pobytu — od przygotowania mieszkania, przez zameldowanie, po szybkie usuwanie usterek.</value></data>
+  <data name="Coop_V3_Tech_Cleaning_Title" xml:space="preserve"><value>System zarządzania pościelą i sprzątaniem</value></data>
+  <data name="Coop_V3_Tech_Cleaning_Desc" xml:space="preserve"><value>Terminowa obsługa każdego pobytu i stały standard apartamentu.</value></data>
+  <data name="Coop_V3_Tech_StayWell_Title" xml:space="preserve"><value>Aplikacja StayWell do zameldowań</value></data>
+  <data name="Coop_V3_Tech_StayWell_Desc" xml:space="preserve"><value>Zdalne zameldowanie, dane gościa, zasady pobytu, instrukcja dojazdu i otwieranie apartamentu w jednym miejscu.</value></data>
+  <data name="Coop_V3_Tech_Tickets_Title" xml:space="preserve"><value>System zgłoszeń</value></data>
+  <data name="Coop_V3_Tech_Tickets_Desc" xml:space="preserve"><value>Goście, serwis i koordynatorzy zgłaszają usterki, dzięki czemu możemy reagować od razu.</value></data>
+  <data name="Coop_V3_Tech_Image_Alt" xml:space="preserve"><value>Apartament Rentoom objęty opieką zespołu operacyjnego</value></data>
+  <data name="Coop_V3_Local_Eyebrow" xml:space="preserve"><value>Lokalna przewaga</value></data>
+  <data name="Coop_V3_Local_Title" xml:space="preserve"><value>Toruń znamy od środka.</value></data>
+  <data name="Coop_V3_Local_Intro" xml:space="preserve"><value>Nasz lokalny zespół zna budynki, dzielnice i rytm miasta. Jesteśmy blisko, gdy potrzebuje nas Twój apartament albo jego goście.</value></data>
+  <data name="Coop_V3_Process_Title" xml:space="preserve"><value>3 etapy, 6 konkretnych działań</value></data>
+  <data name="Coop_V3_Process_Stage1" xml:space="preserve"><value>Poznajemy potencjał</value></data>
+  <data name="Coop_V3_Process_Stage2" xml:space="preserve"><value>Przygotowujemy start</value></data>
+  <data name="Coop_V3_Process_Stage3" xml:space="preserve"><value>Uruchamiamy sprzedaż</value></data>
+  <data name="Coop_V3_Process_Audit" xml:space="preserve"><value>Bezpłatny audyt mieszkania</value></data>
+  <data name="Coop_V3_Process_Forecast" xml:space="preserve"><value>Prognoza przychodów</value></data>
+  <data name="Coop_V3_Process_Preparation" xml:space="preserve"><value>Przygotowanie apartamentu</value></data>
+  <data name="Coop_V3_Process_Publication" xml:space="preserve"><value>Publikacja ofert</value></data>
+  <data name="Coop_V3_Owner_Eyebrow" xml:space="preserve"><value>Obsługa właściciela</value></data>
+  <data name="Coop_V3_Owner_Title" xml:space="preserve"><value>Pełna kontrola bez codziennego zaangażowania</value></data>
+  <data name="Coop_V3_Owner_Intro" xml:space="preserve"><value>Ty podejmujesz decyzje. My dostarczamy dane, rozliczenia i bieżące wsparcie.</value></data>
+  <data name="Coop_V3_Owner_Panel" xml:space="preserve"><value>Panel właściciela online</value></data>
+  <data name="Coop_V3_Owner_Reports" xml:space="preserve"><value>Rozliczenia i raporty finansowe</value></data>
+  <data name="Coop_V3_Owner_Legal" xml:space="preserve"><value>Wsparcie prawne i administracyjne</value></data>
+  <data name="Coop_V3_Owner_Care" xml:space="preserve"><value>Dedykowana opieka właściciela</value></data>
+  <data name="Coop_V3_Faq1_A" xml:space="preserve"><value>Standardowy model to 30% all-in. Prowizje portali są po stronie Rentoom, dzięki czemu rozliczenie pozostaje czytelne i przewidywalne.</value></data>
+  <data name="Coop_V3_Floating_Cta" xml:space="preserve"><value>Umów bezpłatny audyt</value></data>
+  <data name="Coop_V3_Floating_Cta_Aria" xml:space="preserve"><value>Bezpłatny audyt apartamentu</value></data>
+  <data name="Coop_V3_Local_Intro_Start" xml:space="preserve"><value>Współpracujemy z toruńskimi markami z branży gastronomicznej, rozrywkowej i usługowej, dzięki czemu nasi goście mogą korzystać ze</value></data>
+  <data name="Coop_V3_Local_Intro_Discounts" xml:space="preserve"><value>specjalnych zniżek</value></data>
+  <data name="Coop_V3_Local_Intro_Middle" xml:space="preserve"><value>i atrakcyjnych ofert podczas pobytu. Dodatkowo organizujemy</value></data>
+  <data name="Coop_V3_Local_Intro_Business" xml:space="preserve"><value>noclegi dla firm</value></data>
+  <data name="Coop_V3_Local_Intro_End" xml:space="preserve"><value>, zapewniając komfortowe i elastyczne rozwiązania dla klientów biznesowych.</value></data>
 </root>

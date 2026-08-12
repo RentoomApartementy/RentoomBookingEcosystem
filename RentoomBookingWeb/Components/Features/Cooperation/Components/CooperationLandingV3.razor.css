@@ -1,0 +1,41 @@
+.coop-v3 {
+    --coop-v3-green: #1f5a41;
+    --coop-v3-bronze: #945f28;
+    --coop-v3-cream: #f7f3ec;
+    --coop-v3-sage: #eef4ef;
+    --coop-v3-border: #e5e7eb;
+    width: 100%;
+    overflow: hidden;
+    background: #fff;
+}
+
+.coop-v3-surface {
+    width: 100%;
+    border-top: 1px solid rgba(31, 90, 65, .08);
+    border-bottom: 1px solid rgba(31, 90, 65, .08);
+}
+
+.coop-v3-surface-sage {
+    background: var(--coop-v3-sage);
+}
+
+.coop-v3-surface-white {
+    background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .coop-v3 *,
+    .coop-v3 *::before,
+    .coop-v3 *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .coop-v3 {
+        padding-bottom: calc(72px + env(safe-area-inset-bottom));
+    }
+}

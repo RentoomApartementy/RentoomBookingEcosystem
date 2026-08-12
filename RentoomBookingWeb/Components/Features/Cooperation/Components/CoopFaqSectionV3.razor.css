@@ -1,0 +1,91 @@
+.coop-v3-faq {
+    width: 100%;
+    padding: 6rem max(24px, calc((100% - 840px) / 2));
+    background: #f7f3ec;
+    border-top: 1px solid rgba(148,95,40,.08);
+    border-bottom: 1px solid rgba(148,95,40,.08);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.coop-v3-eyebrow {
+    color: #945f28;
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.coop-v3-faq > h2 {
+    color: #111;
+    font-size: clamp(2rem, 4vw, 3.15rem);
+    line-height: 1.08;
+    letter-spacing: -.04em;
+    margin: .8rem 0 2.8rem;
+}
+
+.coop-v3-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+    text-align: left;
+}
+
+.coop-v3-faq-item {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.coop-v3-faq-item h3 {
+    margin: 0;
+}
+
+.coop-v3-faq-item button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.25rem;
+    border: 0;
+    color: #1a1a1a;
+    background: transparent;
+    font: inherit;
+    font-size: .96rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+}
+
+.coop-v3-faq-item button:hover,
+.coop-v3-faq-item button:focus-visible {
+    background: #fafafa;
+}
+
+.coop-v3-faq-item button .gicon {
+    color: #66706b;
+    transition: transform .2s ease;
+}
+
+.coop-v3-faq-item.open button .gicon {
+    transform: rotate(180deg);
+}
+
+.coop-v3-faq-answer {
+    padding: 0 1.25rem 1.25rem;
+}
+
+.coop-v3-faq-answer p {
+    color: #555;
+    font-size: .92rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+@media (max-width: 620px) {
+    .coop-v3-faq {
+        padding: 4.5rem 16px;
+    }
+}

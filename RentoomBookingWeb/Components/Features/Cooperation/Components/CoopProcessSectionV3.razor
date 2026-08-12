@@ -1,0 +1,36 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-v3-process" aria-labelledby="coop-v3-process-title">
+    <div class="coop-v3-process-heading">
+        <span>@L["Coop_Process_Eyebrow"]</span>
+        <h2 id="coop-v3-process-title">@L["Coop_V3_Process_Title"]</h2>
+    </div>
+
+    <div class="coop-v3-process-grid">
+        <article>
+            <div class="coop-v3-stage-number">1</div>
+            <h3>@L["Coop_V3_Process_Stage1"]</h3>
+            <div class="coop-v3-stage-actions">
+                <div><span class="gicon" aria-hidden="true">call</span><span>@L["Coop_Process1_Title"]</span></div>
+                <div><span class="gicon" aria-hidden="true">homesearch</span><span>@L["Coop_V3_Process_Audit"]</span></div>
+            </div>
+        </article>
+        <article>
+            <div class="coop-v3-stage-number">2</div>
+            <h3>@L["Coop_V3_Process_Stage2"]</h3>
+            <div class="coop-v3-stage-actions">
+                <div><span class="gicon" aria-hidden="true">monitoring</span><span>@L["Coop_V3_Process_Forecast"]</span></div>
+                <div><span class="gicon" aria-hidden="true">bedroom_parent</span><span>@L["Coop_V3_Process_Preparation"]</span></div>
+            </div>
+        </article>
+        <article>
+            <div class="coop-v3-stage-number">3</div>
+            <h3>@L["Coop_V3_Process_Stage3"]</h3>
+            <div class="coop-v3-stage-actions">
+                <div><span class="gicon" aria-hidden="true">contract</span><span>@L["Coop_Process5_Title"]</span></div>
+                <div><span class="gicon" aria-hidden="true">campaign</span><span>@L["Coop_V3_Process_Publication"]</span></div>
+            </div>
+        </article>
+    </div>
+</section>

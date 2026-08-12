@@ -222,6 +222,7 @@ namespace RentoomBookingWeb
 
             //config
             builder.Services.Configure<AnalyticsOptions>(builder.Configuration.GetSection("Analytics"));
+            builder.Services.Configure<CooperationHeroOptions>(builder.Configuration.GetSection(CooperationHeroOptions.SectionName));
           
 
             // TPAY

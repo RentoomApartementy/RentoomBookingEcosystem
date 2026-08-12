@@ -1,0 +1,36 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-v3-features" aria-labelledby="coop-v3-features-title">
+    <div class="coop-v3-section-heading">
+        <span>@L["Coop_V3_Features_Eyebrow"]</span>
+        <h2 id="coop-v3-features-title">@L["Coop_V3_Features_Title"]</h2>
+    </div>
+
+    <div class="coop-v3-features-grid">
+        @foreach (var item in Items)
+        {
+            <article class="coop-v3-feature">
+                <span class="gicon" aria-hidden="true">@item.Icon</span>
+                <div>
+                    <h3>@L[item.TitleKey]</h3>
+                    <p>@L[item.DescriptionKey]</p>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+@code {
+    private static readonly FeatureItem[] Items =
+    [
+        new("calendar_month", "Coop_V3_Feature_Reservations_Title", "Coop_V3_Feature_Reservations_Desc"),
+        new("chat", "Coop_Service4_Title", "Coop_Service4_Desc"),
+        new("cleaning_services", "Coop_Service5_Title", "Coop_Service5_Desc"),
+        new("build", "Coop_V3_Feature_Technical_Title", "Coop_V3_Feature_Technical_Desc"),
+        new("receipt_long", "Coop_V3_Feature_Settlements_Title", "Coop_V3_Feature_Settlements_Desc"),
+        new("photo_camera", "Coop_V3_Feature_Photos_Title", "Coop_V3_Feature_Photos_Desc")
+    ];
+
+    private sealed record FeatureItem(string Icon, string TitleKey, string DescriptionKey);
+}

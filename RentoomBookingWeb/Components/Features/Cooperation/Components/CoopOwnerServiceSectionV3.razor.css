@@ -1,0 +1,110 @@
+.coop-v3-owner {
+    display: grid;
+    grid-template-columns: minmax(280px, .82fr) minmax(520px, 1.18fr);
+    gap: clamp(3rem, 7vw, 7rem);
+    align-items: center;
+    width: 100%;
+    padding: 6rem max(24px, calc((100% - 1180px) / 2));
+    background: #eef4ef;
+    border-bottom: 1px solid rgba(31,90,65,.08);
+    box-sizing: border-box;
+}
+
+.coop-v3-owner-copy > span {
+    color: #945f28;
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.coop-v3-owner h2 {
+    color: #111;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -.04em;
+    margin: .8rem 0 1.25rem;
+}
+
+.coop-v3-owner-copy > p {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.coop-v3-owner-copy ::deep .coop-section-cta {
+    justify-content: flex-start;
+}
+
+.coop-v3-owner-benefits {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.coop-v3-owner-benefits article {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 122px;
+    padding: 1.5rem;
+    border-right: 1px solid rgba(31,90,65,.14);
+    border-bottom: 1px solid rgba(31,90,65,.14);
+    box-sizing: border-box;
+}
+
+.coop-v3-owner-benefits article:nth-child(2n) {
+    border-right: 0;
+}
+
+.coop-v3-owner-benefits article:nth-child(n+3) {
+    border-bottom: 0;
+}
+
+.coop-v3-owner-benefits .gicon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    color: #1f5a41;
+    background: #fff;
+    font-size: 1.8rem;
+    flex: 0 0 auto;
+}
+
+.coop-v3-owner-benefits h3 {
+    color: #222;
+    font-size: 1rem;
+    line-height: 1.45;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .coop-v3-owner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+}
+
+@media (max-width: 620px) {
+    .coop-v3-owner {
+        padding: 4.5rem 16px;
+    }
+
+    .coop-v3-owner-benefits {
+        grid-template-columns: 1fr;
+    }
+
+    .coop-v3-owner-benefits article,
+    .coop-v3-owner-benefits article:nth-child(2n),
+    .coop-v3-owner-benefits article:nth-child(n+3) {
+        border-right: 0;
+        border-bottom: 1px solid rgba(31,90,65,.14);
+    }
+
+    .coop-v3-owner-benefits article:last-child {
+        border-bottom: 0;
+    }
+}

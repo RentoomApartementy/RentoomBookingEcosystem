@@ -14,3 +14,9 @@
     display: flex;
     flex-direction: column;
 }
+
+.cooperation-container-v3 {
+    width: 100%;
+    min-height: 80vh;
+    background: #fff;
+}
