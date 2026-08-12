@@ -3,7 +3,12 @@ using System.Collections.Generic;
 
 namespace RentoomBookingWeb.Services.Localization
 {
-    public record RouteDefinition(Type ComponentType, string? RouteTemplate = null, int Priority = 0, int MinRequiredSegments = 0);
+    public record RouteDefinition(
+        Type ComponentType,
+        string? RouteTemplate = null,
+        int Priority = 0,
+        int MinRequiredSegments = 0,
+        int? MaxAllowedSegments = null);
 
     public static class PageMapping
     {
@@ -20,7 +25,12 @@ namespace RentoomBookingWeb.Services.Localization
             ["BlogList"] = new(typeof(RentoomBookingWeb.Components.Features.Blog.Pages.BlogListPage), "{Category}", Priority: 0, MinRequiredSegments: 0),
             ["Statute"] = new(typeof(RentoomBookingWeb.Components.Features.Statute.Pages.Statute), "{Id}/{Slug}", Priority: 10, MinRequiredSegments: 0), // Statute is special, ID is optional for main list
             ["Contact"] = new(typeof(RentoomBookingWeb.Components.Features.Contact.Pages.Contact), Priority: 0),
-            ["Cooperation"] = new(typeof(RentoomBookingWeb.Components.Features.Cooperation.Pages.Cooperation), Priority: 0),
+            ["Cooperation"] = new(
+                typeof(RentoomBookingWeb.Components.Features.Cooperation.Pages.Cooperation),
+                "{Version}",
+                Priority: 0,
+                MinRequiredSegments: 0,
+                MaxAllowedSegments: 1),
             ["AboutCity"] = new(typeof(RentoomBookingWeb.Components.Features.TorunLocation.Pages.TorunLocation), Priority: 0)
         };
     }

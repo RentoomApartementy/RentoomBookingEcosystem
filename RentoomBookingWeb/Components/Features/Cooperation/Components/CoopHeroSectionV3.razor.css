@@ -1,0 +1,216 @@
+.coop-v3-hero {
+    position: relative;
+    min-height: 760px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(520px, 1.08fr);
+    align-items: center;
+    padding: calc(var(--environment-banner-offset, 0px) + 7rem) max(24px, calc((100% - 1240px) / 2)) 8.5rem;
+    background-image:
+        linear-gradient(90deg, #fff 0%, rgba(255,255,255,.98) 39%, rgba(255,255,255,.22) 64%, rgba(255,255,255,0) 100%),
+        var(--coop-v3-hero-image);
+    background-position: center, right center;
+    background-size: cover, auto 100%;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+
+.coop-v3-hero-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    padding-right: 2rem;
+}
+
+.coop-v3-eyebrow {
+    display: block;
+    color: #945f28;
+    font-size: .78rem;
+    line-height: 1.4;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+}
+
+.coop-v3-hero h1 {
+    color: #111;
+    font-size: clamp(2.5rem, 4.2vw, 4.25rem);
+    line-height: .98;
+    letter-spacing: -.045em;
+    font-weight: 850;
+    max-width: 660px;
+    margin: 0;
+}
+
+.coop-v3-hero-copy p {
+    color: #353535;
+    font-size: 1.08rem;
+    line-height: 1.65;
+    max-width: 590px;
+    margin: 1.7rem 0 0;
+}
+
+.coop-v3-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+@media (min-width: 960px) {
+    .coop-v3-hero-actions {
+        flex-wrap: nowrap;
+    }
+}
+
+.coop-v3-hero-calc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .45rem;
+    min-height: 42px;
+    height: 42px;
+    padding: .35rem 1.15rem;
+    border: 1px solid rgba(31,90,65,.5);
+    border-radius: 10px;
+    color: #1f5a41;
+    background: rgba(255,255,255,.88);
+    font-weight: 700;
+    white-space: nowrap;
+    box-sizing: border-box;
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease;
+}
+
+.coop-v3-hero-calc:hover,
+.coop-v3-hero-calc:focus-visible {
+    background: #fff;
+    border-color: #1f5a41;
+}
+
+.coop-v3-stats {
+    position: absolute;
+    z-index: 2;
+    left: max(24px, calc((100% - 1240px) / 2));
+    right: max(24px, calc((100% - 1240px) / 2));
+    bottom: -3.33rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(31,90,65,.12);
+    border-radius: 16px;
+    box-shadow: 0 18px 50px rgba(28,45,37,.12);
+}
+
+.coop-v3-stat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 104px;
+    padding: 1rem 1.4rem;
+    box-sizing: border-box;
+}
+
+.coop-v3-stat + .coop-v3-stat {
+    border-left: 1px solid #e5e7eb;
+}
+
+.coop-v3-stat-icon {
+    color: #1f5a41;
+    font-size: 2.1rem;
+}
+
+.coop-v3-stat strong,
+.coop-v3-stat span {
+    display: block;
+}
+
+.coop-v3-stat strong {
+    color: #1f5a41;
+    font-size: 1.45rem;
+    line-height: 1.2;
+    font-weight: 850;
+}
+
+.coop-v3-stat span:not(.coop-v3-stat-icon) {
+    color: #333;
+    font-size: .86rem;
+    margin-top: .28rem;
+}
+
+@media (max-width: 1000px) {
+    .coop-v3-hero {
+        grid-template-columns: 1fr;
+        min-height: 800px;
+        padding-top: calc(var(--environment-banner-offset, 0px) + 6rem);
+        background-image:
+            linear-gradient(90deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.9) 55%, rgba(255,255,255,.32) 100%),
+            var(--coop-v3-hero-image);
+        background-size: cover;
+    }
+
+    .coop-v3-hero-copy {
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 767px) {
+    .coop-v3-hero {
+        display: block;
+        min-height: 720px;
+        padding: calc(var(--environment-banner-offset, 0px) + 4.5rem) 16px 1.25rem;
+        background-image:
+            linear-gradient(90deg, rgba(255,255,255,.97) 0%, rgba(255,255,255,.88) 50%, rgba(255,255,255,.3) 100%),
+            var(--coop-v3-hero-image);
+        background-position: center, 62% center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .coop-v3-hero-copy {
+        padding: 0;
+    }
+
+    .coop-v3-hero h1 {
+        font-size: clamp(2.2rem, 10.5vw, 3rem);
+    }
+
+    .coop-v3-hero-copy p {
+        font-size: 1rem;
+    }
+
+    .coop-v3-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: .75rem;
+    }
+
+    .coop-v3-hero-actions ::deep .custom-button,
+    .coop-v3-hero-calc {
+        width: 100%;
+        min-height: 48px;
+        height: auto;
+        box-sizing: border-box;
+    }
+
+    .coop-v3-stats {
+        position: relative;
+        inset: auto;
+        grid-template-columns: 1fr;
+        margin-top: 2.2rem;
+        box-shadow: 0 10px 28px rgba(28,45,37,.09);
+    }
+
+    .coop-v3-stat {
+        justify-content: flex-start;
+        min-height: 84px;
+        padding: 1rem 1.2rem;
+    }
+
+    .coop-v3-stat + .coop-v3-stat {
+        border-left: 0;
+        border-top: 1px solid #e5e7eb;
+    }
+}

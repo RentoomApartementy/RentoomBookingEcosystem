@@ -1,0 +1,242 @@
+.coop-v3-simple-calc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, .82fr);
+    gap: 2rem;
+    padding: 2rem;
+    border: 1px solid #e1e6e2;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 18px 48px rgba(31, 90, 65, .07);
+    text-align: left;
+}
+
+.coop-v3-calc-options,
+.coop-v3-calc-summary {
+    min-width: 0;
+}
+
+.coop-v3-calc-eyebrow {
+    color: #945f28;
+    font-size: .75rem;
+    font-weight: 750;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.coop-v3-calc-field {
+    margin-top: 1.5rem;
+}
+
+.coop-v3-calc-field label {
+    display: block;
+    color: #1a1a1a;
+    font-size: .9rem;
+    font-weight: 650;
+    margin-bottom: .55rem;
+}
+
+.coop-v3-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.coop-v3-pill {
+    min-height: 38px;
+    padding: .5rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 100px;
+    color: #666;
+    background: #fff;
+    font: inherit;
+    font-size: .85rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.coop-v3-pill:hover,
+.coop-v3-pill:focus-visible {
+    color: #1f5a41;
+    border-color: #1f5a41;
+}
+
+.coop-v3-pill.active {
+    color: #fff;
+    background: #1f5a41;
+    border-color: #1f5a41;
+}
+
+.coop-v3-pill-more {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    border-style: dashed;
+}
+
+.coop-v3-pill-more.active {
+    color: #1f5a41;
+    background: #f5f7f5;
+    border-color: #1f5a41;
+    border-style: dashed;
+}
+
+.coop-v3-pill-icon {
+    font-size: 1.1rem;
+}
+
+.coop-v3-pills-extra {
+    margin-top: .35rem;
+}
+
+.coop-v3-slider {
+    width: 100%;
+    height: 6px;
+    margin: .5rem 0 .25rem;
+    border-radius: 3px;
+    background: #e5e7eb;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.coop-v3-slider::-webkit-slider-thumb {
+    width: 22px;
+    height: 22px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    background: #1f5a41;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.coop-v3-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    background: #1f5a41;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    cursor: pointer;
+}
+
+.coop-v3-slider:focus-visible {
+    outline: 3px solid rgba(31, 90, 65, .2);
+    outline-offset: 5px;
+}
+
+.coop-v3-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2px;
+    color: #999;
+    font-size: .78rem;
+}
+
+.coop-v3-calc-summary {
+    display: flex;
+    flex-direction: column;
+}
+
+.coop-v3-calc-result-box {
+    flex: 1;
+    padding: 1.75rem;
+    border-radius: 16px;
+    background: #f6f4ee;
+}
+
+.coop-v3-calc-payout {
+    margin: .8rem 0 1.1rem;
+}
+
+.coop-v3-calc-range {
+    display: block;
+    color: #1f5a41;
+    font-size: 1.75rem;
+    font-weight: 850;
+}
+
+.coop-v3-calc-payout-label {
+    color: #666;
+    font-size: .85rem;
+}
+
+.coop-v3-calc-details {
+    padding-top: .75rem;
+    border-top: 1px solid #dedfdc;
+}
+
+.coop-v3-calc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .55rem 0;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    font-size: .88rem;
+}
+
+.coop-v3-calc-row:last-child {
+    border-bottom: 0;
+}
+
+.coop-v3-calc-row span {
+    color: #666;
+}
+
+.coop-v3-calc-row strong {
+    color: #1a1a1a;
+    text-align: right;
+}
+
+.coop-v3-calc-note {
+    color: #7b817d;
+    font-size: .82rem;
+    line-height: 1.5;
+    margin: 1.25rem 0 .75rem;
+    text-align: center;
+}
+
+.coop-v3-calc-cta-row {
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 959px) {
+    .coop-v3-simple-calc {
+        grid-template-columns: 1fr;
+    }
+
+    .coop-v3-calc-result-box {
+        margin-top: .25rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .coop-v3-simple-calc {
+        gap: 1.5rem;
+        padding: 1.25rem;
+        border-radius: 16px;
+    }
+
+    .coop-v3-pill {
+        min-height: 44px;
+    }
+
+    .coop-v3-calc-range {
+        font-size: 1.4rem;
+    }
+
+    .coop-v3-calc-cta-row ::deep .custom-button {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        height: auto;
+    }
+
+    .coop-v3-calc-cta-row ::deep .custom-button > span {
+        white-space: normal !important;
+    }
+}

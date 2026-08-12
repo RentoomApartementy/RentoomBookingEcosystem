@@ -6,61 +6,94 @@
 @inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 
 @{
-    var isV2 = FeatureFlags.FeatureAllowed("cooperation-landing-v2");
-    var pageTitle = isV2 ? Localizer["Coop_V2_PageTitle"] : Localizer["Cooperation_PageTitle"];
-    var metaDesc = isV2 ? Localizer["Coop_V2_MetaDescription"] : Localizer["Cooperation_MetaDescription"];
-    var ogTitle = isV2 ? Localizer["Coop_V2_OgTitle"] : Localizer["Cooperation_OgTitle"];
+    var normalizedVersion = Version?.Trim().ToLowerInvariant();
+    var isLegacy = string.IsNullOrEmpty(normalizedVersion);
+    var isV3 = normalizedVersion == "v3" && FeatureFlags.FeatureAllowed("cooperation-landing-v3");
+    var isV2 = normalizedVersion == "v2" && FeatureFlags.FeatureAllowed("cooperation-landing-v2");
+    var isNotFound = !isLegacy && !isV2 && !isV3;
+    var isModernLanding = isV3 || isV2;
+    var pageTitle = isModernLanding ? Localizer["Coop_V2_PageTitle"] : Localizer["Cooperation_PageTitle"];
+    var metaDesc = isModernLanding ? Localizer["Coop_V2_MetaDescription"] : Localizer["Cooperation_MetaDescription"];
+    var ogTitle = isModernLanding ? Localizer["Coop_V2_OgTitle"] : Localizer["Cooperation_OgTitle"];
+    var cooperationBasePath = RouteService.GetLocalizedUrl("Cooperation");
+    var currentPagePath = isV3
+        ? $"{cooperationBasePath}/v3"
+        : isV2
+            ? $"{cooperationBasePath}/v2"
+            : cooperationBasePath;
 }
 
-<PageTitle>@pageTitle</PageTitle>
-
-<HeadContent>
-    <meta name="robots" content="index, follow" />
-    <meta name="description" content="@metaDesc" />
-    <meta name="keywords" content="@Localizer["Cooperation_MetaKeywords"]" />
-    <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Cooperation")}")" />
-
-    <meta property="og:title" content="@ogTitle" />
-    <meta property="og:description" content="@metaDesc" />
-    <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-coop.jpeg")" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{RouteService.GetLocalizedUrl("Cooperation")}")" />
-    <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="@RouteService.GetLocalizedUrl("Cooperation")" />
-    <SeoHreflangs />
-</HeadContent>
-
-@if (isV2)
+@if (isNotFound)
 {
-    <div class="cooperation-container-v2">
-        <CascadingValue Value="@OpenFormModalRequested">
-            <CoopHeroSection />
-            <CoopFeaturesSection />
-            <CoopCalculatorSection />
-            <CoopServicesSection />
-            <CoopTestimonialsSection />
-            <CoopComparisonSection />
-            <CoopProcessSection />
-            <CoopTeamSection />
-            <CoopFaqSection />
-            <CoopCtaSection />
-        </CascadingValue>
-    </div>
-    <CoopFormModal @bind-IsOpen="_isFormModalOpen" />
+    <RentoomBookingWeb.Components.Pages.NotFoundPage />
 }
 else
 {
-    <div class="cooperation-container">
-        <HeaderSection
-            ImagePath="/assets/images/header-bg-coop.jpeg"
-            Title="@Localizer["CooperationText1"]"
-            Height="230px"/>
-        <AboutUs/>
-        <Advantages/>
-        <Form/>
-    </div>
+    <PageTitle>@pageTitle</PageTitle>
+
+    <HeadContent>
+        <meta name="robots" content="index, follow" />
+        <meta name="description" content="@metaDesc" />
+        <meta name="keywords" content="@Localizer["Cooperation_MetaKeywords"]" />
+        <link rel="canonical" href="@($"{NavManager.BaseUri.TrimEnd('/')}{currentPagePath}")" />
+
+        <meta property="og:title" content="@ogTitle" />
+        <meta property="og:description" content="@metaDesc" />
+        <meta property="og:image" content="@($"{NavManager.BaseUri}assets/images/header-bg-coop.jpeg")" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="@($"{NavManager.BaseUri.TrimEnd('/')}{currentPagePath}")" />
+        <BreadcrumbJsonLd CurrentPageName="@Localizer["Cooperation_BreadcrumbName"]" CurrentPagePath="@currentPagePath" />
+        <SeoHreflangs />
+        @if (isV3)
+        {
+            <link rel="stylesheet" href="/css/cooperation-tables-v3.css" />
+        }
+    </HeadContent>
+
+    @if (isV3)
+    {
+        <div class="cooperation-container-v3">
+            <CascadingValue Value="@OpenFormModalRequested">
+                <CooperationLandingV3 />
+            </CascadingValue>
+        </div>
+        <CoopFormModal @bind-IsOpen="_isFormModalOpen" />
+    }
+    else if (isV2)
+    {
+        <div class="cooperation-container-v2">
+            <CascadingValue Value="@OpenFormModalRequested">
+                <CoopHeroSectionRouteV2 />
+                <CoopFeaturesSection />
+                <CoopCalculatorSection />
+                <CoopServicesSection />
+                <CoopTestimonialsSection />
+                <CoopComparisonSection />
+                <CoopProcessSection />
+                <CoopTeamSection />
+                <CoopFaqSection />
+                <CoopCtaSection />
+            </CascadingValue>
+        </div>
+        <CoopFormModal @bind-IsOpen="_isFormModalOpen" />
+    }
+    else
+    {
+        <div class="cooperation-container">
+            <HeaderSection
+                ImagePath="/assets/images/header-bg-coop.jpeg"
+                Title="@Localizer["CooperationText1"]"
+                Height="230px"/>
+            <AboutUs/>
+            <Advantages/>
+            <Form/>
+        </div>
+    }
 }
 
 @code {
+    [Parameter] public string? Version { get; set; }
+
     private bool _isFormModalOpen;
 
     private EventCallback OpenFormModalRequested =>

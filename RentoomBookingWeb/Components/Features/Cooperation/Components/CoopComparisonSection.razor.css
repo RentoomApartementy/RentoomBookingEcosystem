@@ -74,12 +74,12 @@
     border-radius: 10px 10px 0 0;
 }
 
-.coop-icon-yes {
+.coop-compare-table ::deep .coop-icon-yes {
     color: #1F5A41;
     font-size: 1.3rem;
 }
 
-.coop-icon-no {
+.coop-compare-table ::deep .coop-icon-no {
     color: #ccc;
     font-size: 1.3rem;
 }

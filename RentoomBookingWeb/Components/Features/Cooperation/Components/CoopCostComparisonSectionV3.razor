@@ -1,0 +1,50 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-v3-table-section" aria-labelledby="coop-v3-costs-title">
+    <div class="coop-v3-table-intro">
+        <span class="coop-v3-table-eyebrow">@L["Coop_V3_Costs_Eyebrow"]</span>
+        <h2 id="coop-v3-costs-title">@L["Coop_V3_Costs_Title"]</h2>
+        <p>@L["Coop_V3_Costs_Intro"]</p>
+    </div>
+
+    <div class="coop-v3-table-wrap">
+        <table class="coop-v3-compare-table">
+            <thead>
+                <tr>
+                    <th scope="col"><span class="visually-hidden">@L["Coop_V3_Costs_Row_Name"]</span></th>
+                    <th scope="col" class="coop-v3-col-highlight">Rentoom</th>
+                    <th scope="col">@L["Coop_V3_Costs_Competitor_A"]</th>
+                    <th scope="col">@L["Coop_V3_Costs_Competitor_B"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_V3_Costs_Owner_Profit"]</th>
+                    <td class="coop-v3-col-highlight"><strong>6 481,48 zł</strong></td>
+                    <td>5 722,22 zł</td>
+                    <td>5 907,41 zł</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_V3_Costs_Portals"]</th>
+                    <td class="coop-v3-col-highlight"><strong>0 zł</strong></td>
+                    <td>1 500 zł</td>
+                    <td>1 500 zł</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_V3_Costs_Operator"]</th>
+                    <td class="coop-v3-col-highlight"><strong>2 777,78 zł</strong></td>
+                    <td>2 037,04 zł</td>
+                    <td>1 851,85 zł</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="coop-v3-row-label">@L["Coop_V3_Costs_Total"]</th>
+                    <td class="coop-v3-col-highlight"><strong>2 777,78 zł</strong></td>
+                    <td>3 537,04 zł</td>
+                    <td>3 351,85 zł</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="coop-v3-table-note">@L["Coop_V3_Costs_Note"]</p>
+    </div>
+</section>
