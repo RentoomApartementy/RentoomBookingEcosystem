@@ -32,6 +32,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
     public class BitrixService
     {
         public const string IdoReservationIdFieldName = "UF_CRM_1768835556855";
+        public const string ContactIdoReservationIdFieldName = "UF_CRM_1764281071779";
         private string? _portalTimeZoneId;
         private TimeSpan? _serverUtcOffset;
         //private readonly  _rentoomDbContext;
@@ -253,12 +254,16 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
                 ["PHONE"] = new[]
                 {
                     new { VALUE = NewContactData.Phone, VALUE_TYPE = "WORK" }
-                },
-                ["EMAIL"] = new[]
-                {
-                    new { VALUE = NewContactData.Email, VALUE_TYPE = "WORK" }
                 }
             };
+
+            if (!string.IsNullOrWhiteSpace(NewContactData.Email))
+            {
+                fields["EMAIL"] = new[]
+                {
+                    new { VALUE = NewContactData.Email, VALUE_TYPE = "WORK" }
+                };
+            }
 
             if (NewContactData.AssignedById.HasValue)
             {
@@ -267,7 +272,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
             if (NewContactData.ReservationId.HasValue)
             {
-                fields["UF_CRM_1764281071779"] = NewContactData.ReservationId.Value;
+                fields[ContactIdoReservationIdFieldName] = NewContactData.ReservationId.Value;
             }
 
             ApplyContactCustomFields(fields, NewContactData);
@@ -315,7 +320,7 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             return customerData;
         }
 
-        public async Task<int?> FindContactIdByEmailAsync(string email)
+        public async Task<int?> FindContactIdByEmailAsync(string? email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
@@ -325,6 +330,41 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
             using var doc = await PostAsync("crm.contact.list.json", new
             {
                 filter = new { EMAIL = email },
+                select = new[] { "ID" },
+                order = new { ID = "ASC" }
+            });
+
+            if (!doc.RootElement.TryGetProperty("result", out var resultElement)
+                || resultElement.ValueKind != JsonValueKind.Array)
+            {
+                return null;
+            }
+
+            foreach (var item in resultElement.EnumerateArray())
+            {
+                if (item.TryGetProperty("ID", out var idElement)
+                    && int.TryParse(idElement.GetString(), out var id))
+                {
+                    return id;
+                }
+            }
+
+            return null;
+        }
+
+        public async Task<int?> FindContactIdByReservationIdAsync(int reservationId)
+        {
+            if (reservationId <= 0)
+            {
+                return null;
+            }
+
+            using var doc = await PostAsync("crm.contact.list.json", new
+            {
+                filter = new Dictionary<string, object>
+                {
+                    [ContactIdoReservationIdFieldName] = reservationId
+                },
                 select = new[] { "ID" },
                 order = new { ID = "ASC" }
             });
@@ -396,16 +436,20 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
                 ["PHONE"] = new[]
                 {
                     new { VALUE = updatedContact.Phone, VALUE_TYPE = "WORK" }
-                },
-                ["EMAIL"] = new[]
-                {
-                    new { VALUE = updatedContact.Email, VALUE_TYPE = "WORK" }
                 }
             };
 
+            if (!string.IsNullOrWhiteSpace(updatedContact.Email))
+            {
+                fields["EMAIL"] = new[]
+                {
+                    new { VALUE = updatedContact.Email, VALUE_TYPE = "WORK" }
+                };
+            }
+
             if (updatedContact.ReservationId.HasValue)
             {
-                fields["UF_CRM_1764281071779"] = updatedContact.ReservationId.Value;
+                fields[ContactIdoReservationIdFieldName] = updatedContact.ReservationId.Value;
             }
 
             if (updatedContact.AssignedById.HasValue)
@@ -433,6 +477,21 @@ namespace RentoomBooking.SharedClasses.Integrations.Bitrix.Services
 
         public async Task<int> UpsertContactByEmailAsync(CreateContactRequest contact, string? contactTypeId = "UC_YIVWK8")
         {
+            if (string.IsNullOrWhiteSpace(contact.Email))
+            {
+                if (contact.ReservationId is > 0)
+                {
+                    var reservationContactId = await FindContactIdByReservationIdAsync(contact.ReservationId.Value);
+                    if (reservationContactId.HasValue)
+                    {
+                        await UpdateContactAsync(reservationContactId.Value, contact);
+                        return reservationContactId.Value;
+                    }
+                }
+
+                return await AddContactAsync(contact, contactTypeId);
+            }
+
             var existingId = await FindContactIdByEmailAsync(contact.Email);
             if (existingId.HasValue)
             {

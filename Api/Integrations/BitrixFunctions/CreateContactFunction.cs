@@ -28,7 +28,7 @@ public class CreateContactFunction
 
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
-        CreateContactRequest contactData;
+        CreateContactRequest? contactData;
         try
         {
             contactData = JsonSerializer.Deserialize<CreateContactRequest>(
@@ -46,10 +46,9 @@ public class CreateContactFunction
 
         if (contactData == null ||
             string.IsNullOrWhiteSpace(contactData.FirstName) ||
-            string.IsNullOrWhiteSpace(contactData.LastName) ||
-            string.IsNullOrWhiteSpace(contactData.Email))
+            string.IsNullOrWhiteSpace(contactData.LastName))
         {
-            return new BadRequestObjectResult("FirstName, LastName and Email nieuzupelnio e.");
+            return new BadRequestObjectResult("FirstName and LastName are required.");
         }
 
 
