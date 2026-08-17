@@ -395,3 +395,4 @@ Tools/ResxTranslator/.resx-hashes.json
 .impeccable/live/deferred-svelte-component-accepts.json
 .impeccable/live/*.png
 # impeccable-ignore-end
+/.tmp-authsettingsV2.json

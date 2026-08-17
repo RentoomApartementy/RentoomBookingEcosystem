@@ -26,7 +26,7 @@ public sealed class BitrixLinkBackfillServiceTests
         var item = Assert.Single(result.Results);
         Assert.True(result.DryRun);
         Assert.Equal(BitrixLinkBackfillStatuses.Planned, item.Status);
-        Assert.Equal(["EnsureClientBitrixLink", "EnsureDealBitrixLink"], item.Actions);
+        Assert.Equal(["EnsureClientBitrixLink", "EnsureDealBitrixLink", "SynchronizeDealFields"], item.Actions);
         syncOperations.VerifyNoOtherCalls();
     }
 
@@ -44,6 +44,12 @@ public sealed class BitrixLinkBackfillServiceTests
                 record.DealBitrixId = 801;
                 return record;
             });
+        syncOperations
+            .Setup(operation => operation.UpdateBitrixDealAsync(
+                record,
+                "Controlled Bitrix reservation link backfill",
+                null))
+            .Returns(Task.CompletedTask);
         var service = CreateService(store.Object, syncOperations.Object);
 
         var result = await service.BackfillBitrixLinksAsync(new BitrixLinkBackfillRequestDto
@@ -94,12 +100,12 @@ public sealed class BitrixLinkBackfillServiceTests
         Assert.Equal(BitrixLinkBackfillStatuses.Updated, item.Status);
         Assert.Equal(701, item.ClientBitrixId);
         Assert.Equal(801, item.DealBitrixId);
-        Assert.Contains("UpdateDealContactLink", item.Actions);
+        Assert.Contains("SynchronizeDealFields", item.Actions);
         syncOperations.VerifyAll();
     }
 
     [Fact]
-    public async Task Execute_WithOnlyDealLinkMissing_DoesNotRunSeparateDealUpdate()
+    public async Task Execute_WithOnlyDealLinkMissing_RunsFullDealUpdate()
     {
         var record = CreateValidRecord();
         record.ClientBitrixId = 701;
@@ -112,6 +118,12 @@ public sealed class BitrixLinkBackfillServiceTests
                 record.DealBitrixId = 801;
                 return record;
             });
+        syncOperations
+            .Setup(operation => operation.UpdateBitrixDealAsync(
+                record,
+                "Controlled Bitrix reservation link backfill",
+                null))
+            .Returns(Task.CompletedTask);
         var service = CreateService(store.Object, syncOperations.Object);
 
         var result = await service.BackfillBitrixLinksAsync(new BitrixLinkBackfillRequestDto
@@ -125,13 +137,22 @@ public sealed class BitrixLinkBackfillServiceTests
     }
 
     [Fact]
-    public async Task Execute_WhenBothLinksExist_SkipsRecord()
+    public async Task Execute_WhenBothLinksExist_RefreshesContactAndFullDealFields()
     {
         var record = CreateValidRecord();
         record.ClientBitrixId = 701;
         record.DealBitrixId = 801;
         var store = CreateStoreForGuid(record);
         var syncOperations = new Mock<IReservationWorkflowSyncOperations>(MockBehavior.Strict);
+        syncOperations
+            .Setup(operation => operation.EnsureBitrixContactAndDealAsync(record))
+            .ReturnsAsync(record);
+        syncOperations
+            .Setup(operation => operation.UpdateBitrixDealAsync(
+                record,
+                "Controlled Bitrix reservation link backfill",
+                null))
+            .Returns(Task.CompletedTask);
         var service = CreateService(store.Object, syncOperations.Object);
 
         var result = await service.BackfillBitrixLinksAsync(new BitrixLinkBackfillRequestDto
@@ -140,8 +161,10 @@ public sealed class BitrixLinkBackfillServiceTests
             DryRun = false
         });
 
-        Assert.Equal(BitrixLinkBackfillStatuses.Skipped, Assert.Single(result.Results).Status);
-        syncOperations.VerifyNoOtherCalls();
+        var item = Assert.Single(result.Results);
+        Assert.Equal(BitrixLinkBackfillStatuses.Updated, item.Status);
+        Assert.Equal(["SynchronizeDealFields"], item.Actions);
+        syncOperations.VerifyAll();
     }
 
     [Fact]
@@ -213,6 +236,12 @@ public sealed class BitrixLinkBackfillServiceTests
                 successfulRecord.DealBitrixId = 802;
                 return successfulRecord;
             });
+        syncOperations
+            .Setup(operation => operation.UpdateBitrixDealAsync(
+                successfulRecord,
+                "Controlled Bitrix reservation link backfill",
+                null))
+            .Returns(Task.CompletedTask);
         var service = CreateService(store.Object, syncOperations.Object);
 
         var result = await service.BackfillBitrixLinksAsync(new BitrixLinkBackfillRequestDto
@@ -228,7 +257,43 @@ public sealed class BitrixLinkBackfillServiceTests
     }
 
     [Fact]
-    public async Task RepeatedExecution_SkipsAlreadyBackfilledRecord()
+    public async Task FullDealUpdateFailure_ReturnsFailedWithPersistedLinkIdentifiers()
+    {
+        var record = CreateValidRecord();
+        var store = CreateStoreForGuid(record);
+        var syncOperations = new Mock<IReservationWorkflowSyncOperations>(MockBehavior.Strict);
+        syncOperations
+            .Setup(operation => operation.EnsureBitrixContactAndDealAsync(record))
+            .ReturnsAsync(() =>
+            {
+                record.ClientBitrixId = 703;
+                record.DealBitrixId = 803;
+                return record;
+            });
+        syncOperations
+            .Setup(operation => operation.UpdateBitrixDealAsync(
+                record,
+                "Controlled Bitrix reservation link backfill",
+                null))
+            .ThrowsAsync(new InvalidOperationException("Deal update failed"));
+        var service = CreateService(store.Object, syncOperations.Object);
+
+        var result = await service.BackfillBitrixLinksAsync(new BitrixLinkBackfillRequestDto
+        {
+            ReservationGuids = [record.ReservationGuid],
+            DryRun = false
+        });
+
+        var item = Assert.Single(result.Results);
+        Assert.Equal(BitrixLinkBackfillStatuses.Failed, item.Status);
+        Assert.Equal(703, item.ClientBitrixId);
+        Assert.Equal(803, item.DealBitrixId);
+        Assert.Equal("Deal update failed", item.Error);
+        syncOperations.VerifyAll();
+    }
+
+    [Fact]
+    public async Task RepeatedExecution_RefreshesFieldsWithoutCreatingNewLinks()
     {
         var record = CreateValidRecord();
         var store = CreateStoreForGuid(record);
@@ -241,6 +306,12 @@ public sealed class BitrixLinkBackfillServiceTests
                 record.DealBitrixId = 801;
                 return record;
             });
+        syncOperations
+            .Setup(operation => operation.UpdateBitrixDealAsync(
+                record,
+                "Controlled Bitrix reservation link backfill",
+                null))
+            .Returns(Task.CompletedTask);
         var service = CreateService(store.Object, syncOperations.Object);
         var request = new BitrixLinkBackfillRequestDto
         {
@@ -252,9 +323,11 @@ public sealed class BitrixLinkBackfillServiceTests
         var secondResult = await service.BackfillBitrixLinksAsync(request);
 
         Assert.Equal(BitrixLinkBackfillStatuses.Updated, Assert.Single(firstResult.Results).Status);
-        Assert.Equal(BitrixLinkBackfillStatuses.Skipped, Assert.Single(secondResult.Results).Status);
-        syncOperations.Verify(operation => operation.EnsureBitrixContactAndDealAsync(record), Times.Once);
-        syncOperations.VerifyNoOtherCalls();
+        Assert.Equal(BitrixLinkBackfillStatuses.Updated, Assert.Single(secondResult.Results).Status);
+        syncOperations.Verify(operation => operation.EnsureBitrixContactAndDealAsync(record), Times.Exactly(2));
+        syncOperations.Verify(
+            operation => operation.UpdateBitrixDealAsync(record, "Controlled Bitrix reservation link backfill", null),
+            Times.Exactly(2));
     }
 
     [Fact]

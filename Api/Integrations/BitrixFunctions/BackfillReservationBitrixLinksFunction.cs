@@ -42,7 +42,7 @@ public sealed class BackfillReservationBitrixLinksFunction
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning(ex, "Invalid JSON payload for controlled Bitrix link backfill.");
+            _logger.LogWarning(ex, "Invalid JSON payload for controlled Bitrix reservation backfill.");
             return new BadRequestObjectResult(new
             {
                 error = "Invalid JSON payload."
@@ -62,7 +62,7 @@ public sealed class BackfillReservationBitrixLinksFunction
             var result = await _reservationSyncService.BackfillBitrixLinksAsync(request, cancellationToken);
 
             _logger.LogInformation(
-                "Controlled Bitrix link backfill finished. DryRun={DryRun}, RequestedIdentifiers={RequestedIdentifierCount}, Resolved={ResolvedRecordCount}, Planned={PlannedCount}, Updated={UpdatedCount}, Skipped={SkippedCount}, Failed={FailedCount}.",
+                "Controlled Bitrix reservation backfill finished. DryRun={DryRun}, RequestedIdentifiers={RequestedIdentifierCount}, Resolved={ResolvedRecordCount}, Planned={PlannedCount}, Updated={UpdatedCount}, Skipped={SkippedCount}, Failed={FailedCount}.",
                 result.DryRun,
                 result.RequestedIdentifierCount,
                 result.ResolvedRecordCount,
