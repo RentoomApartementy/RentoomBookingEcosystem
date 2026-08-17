@@ -67,3 +67,9 @@
 .read-more-btn:hover {
     background-color: #e6f0eb;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .apartment-wrapper {
+        transition-duration: 0.01ms;
+    }
+}

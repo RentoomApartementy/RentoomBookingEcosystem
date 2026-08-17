@@ -49,6 +49,16 @@
     border-color: #abefd0;
 }
 
+.addon-label:focus-visible {
+    outline: 2px solid #1f5a41;
+    outline-offset: 2px;
+}
+
+.quantity-btn:focus-visible {
+    outline: 2px solid #1f5a41;
+    outline-offset: 2px;
+}
+
 .addon-info-col {
     grid-area: info;
     display: flex;
@@ -86,7 +96,7 @@
     -webkit-appearance: none;
     width: 24px;
     height: 24px;
-    border: 2px solid #8b7344;
+    border: 2px solid #945f28;
     border-radius: 6px;
     background-color: #fff;
     cursor: pointer;
@@ -99,12 +109,12 @@
     vertical-align: middle;
 }
 
-.addon-checkbox:checked {
-    background-color: #4a6755;
-    border-color: #8b7344;
+.addon-checkbox.checked {
+    background-color: #1f5a41;
+    border-color: #945f28;
 }
 
-.addon-checkbox:checked::after {
+.addon-checkbox.checked::after {
     content: '';
     position: absolute;
     width: 6px;
@@ -141,6 +151,7 @@
 }
 
 .quantity-btn {
+    position: relative;
     width: 28px;
     height: 28px;
     min-width: 28px;
@@ -156,6 +167,12 @@
     cursor: pointer;
     color: #333;
     font-size: 18px;
+}
+
+.quantity-btn::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
 }
 
 .quantity-value {

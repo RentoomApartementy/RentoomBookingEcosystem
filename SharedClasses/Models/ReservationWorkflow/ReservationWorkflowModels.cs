@@ -258,6 +258,50 @@ namespace RentoomBooking.SharedClasses.Models.ReservationWorkflow
         public string? Warning { get; set; }
     }
 
+    public class BitrixLinkBackfillRequestDto
+    {
+        public List<Guid> ReservationGuids { get; set; } = new();
+        public List<int> IdoReservationIds { get; set; } = new();
+        public bool DryRun { get; set; } = true;
+    }
+
+    public static class BitrixLinkBackfillStatuses
+    {
+        public const string Planned = "Planned";
+        public const string Updated = "Updated";
+        public const string Skipped = "Skipped";
+        public const string Failed = "Failed";
+    }
+
+    public class BitrixLinkBackfillItemResultDto
+    {
+        public Guid? RequestedReservationGuid { get; set; }
+        public int? RequestedIdoReservationId { get; set; }
+        public Guid? ReservationGuid { get; set; }
+        public int? IdoReservationId { get; set; }
+        public int? PreviousClientBitrixId { get; set; }
+        public int? PreviousDealBitrixId { get; set; }
+        public int? ClientBitrixId { get; set; }
+        public int? DealBitrixId { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public List<string> Actions { get; set; } = new();
+        public string? Message { get; set; }
+        public string? Error { get; set; }
+    }
+
+    public class BitrixLinkBackfillBatchResultDto
+    {
+        public bool DryRun { get; set; }
+        public int RequestedIdentifierCount { get; set; }
+        public int ResolvedRecordCount => Results.Count(result => result.ReservationGuid.HasValue);
+        public int ProcessedCount => Results.Count;
+        public int PlannedCount => Results.Count(result => result.Status == BitrixLinkBackfillStatuses.Planned);
+        public int UpdatedCount => Results.Count(result => result.Status == BitrixLinkBackfillStatuses.Updated);
+        public int SkippedCount => Results.Count(result => result.Status == BitrixLinkBackfillStatuses.Skipped);
+        public int FailedCount => Results.Count(result => result.Status == BitrixLinkBackfillStatuses.Failed);
+        public List<BitrixLinkBackfillItemResultDto> Results { get; set; } = new();
+    }
+
 
     public class DateOnlyJsonConverter : JsonConverter<DateOnly>
     {

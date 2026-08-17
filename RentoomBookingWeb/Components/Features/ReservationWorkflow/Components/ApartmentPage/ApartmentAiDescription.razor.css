@@ -35,11 +35,9 @@
 
 .ai-short-description {
     font-size: 1.05rem;
-    /*font-weight: 400;*/
+    font-weight: 500;
     color: #555;
     line-height: 1.5;
-    border-left: 3px solid #1f5a41;
-    padding-left: 1rem;
     margin: 0.75rem 0;
 }
 
@@ -120,6 +118,13 @@
 
 .chevron.up {
     transform: rotate(-135deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-details-wrapper,
+    .chevron {
+        transition-duration: 0.01ms;
+    }
 }
 
 /* RWD - Responsive Design */
