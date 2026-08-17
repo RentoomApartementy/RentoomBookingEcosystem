@@ -8,6 +8,9 @@ namespace RentoomBooking.SharedClasses.Services.ReservationWorkflow;
 
 public interface IReservationSyncService
 {
+    Task<BitrixLinkBackfillBatchResultDto> BackfillBitrixLinksAsync(
+        BitrixLinkBackfillRequestDto request,
+        CancellationToken cancellationToken = default);
     Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request);
     Task<ReservationStatusSyncResultDto> SyncReservationStatusAsync(Guid reservationGuid, CancellationToken cancellationToken = default);
     Task<ReservationStatusSyncResultDto> SyncReservationStatusAsync(Guid reservationGuid, Reservation? idoReservation, CancellationToken cancellationToken = default);
@@ -29,6 +32,8 @@ public interface IReservationWorkflowSyncOperations
 
 public class ReservationSyncService : IReservationSyncService
 {
+    public const int MaxBitrixLinkBackfillIdentifiers = 100;
+    private const string BitrixLinkBackfillUpdateReason = "Controlled Bitrix reservation link backfill";
     private readonly IReservationStore _store;
     private readonly IReservationWorkflowSyncOperations _workflowSyncOperations;
     private readonly ILogger<ReservationSyncService> _logger;
@@ -44,6 +49,241 @@ public class ReservationSyncService : IReservationSyncService
         _workflowSyncOperations = workflowSyncOperations ?? throw new ArgumentNullException(nameof(workflowSyncOperations));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _timeProvider = timeProvider ?? TimeProvider.System;
+    }
+
+    public async Task<BitrixLinkBackfillBatchResultDto> BackfillBitrixLinksAsync(
+        BitrixLinkBackfillRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var reservationGuids = (request.ReservationGuids ?? new List<Guid>())
+            .Where(guid => guid != Guid.Empty)
+            .Distinct()
+            .ToList();
+        var idoReservationIds = (request.IdoReservationIds ?? new List<int>())
+            .Where(id => id > 0)
+            .Distinct()
+            .ToList();
+        var requestedIdentifierCount = reservationGuids.Count + idoReservationIds.Count;
+
+        if (requestedIdentifierCount == 0)
+        {
+            throw new ArgumentException(
+                "Provide at least one valid identifier in reservationGuids or idoReservationIds.",
+                nameof(request));
+        }
+
+        if (requestedIdentifierCount > MaxBitrixLinkBackfillIdentifiers)
+        {
+            throw new ArgumentException(
+                $"A single request can contain at most {MaxBitrixLinkBackfillIdentifiers} distinct identifiers.",
+                nameof(request));
+        }
+
+        var batchResult = new BitrixLinkBackfillBatchResultDto
+        {
+            DryRun = request.DryRun,
+            RequestedIdentifierCount = requestedIdentifierCount
+        };
+        var resolvedReservationGuids = new HashSet<Guid>();
+
+        foreach (var reservationGuid in reservationGuids)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                var record = await _store.GetAsync(reservationGuid, cancellationToken);
+                if (record is null)
+                {
+                    batchResult.Results.Add(CreateNotFoundResult(reservationGuid, null));
+                    continue;
+                }
+
+                if (resolvedReservationGuids.Add(record.ReservationGuid))
+                {
+                    batchResult.Results.Add(await BackfillBitrixLinksForRecordAsync(record, request.DryRun, cancellationToken));
+                }
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to process Bitrix link backfill identifier {ReservationGuid}.", reservationGuid);
+                batchResult.Results.Add(CreateLookupFailureResult(reservationGuid, null, ex));
+            }
+        }
+
+        foreach (var idoReservationId in idoReservationIds)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                var record = await _store.GetByIdoReservationIdAsync(idoReservationId, cancellationToken);
+                if (record is null)
+                {
+                    batchResult.Results.Add(CreateNotFoundResult(null, idoReservationId));
+                    continue;
+                }
+
+                if (resolvedReservationGuids.Add(record.ReservationGuid))
+                {
+                    batchResult.Results.Add(await BackfillBitrixLinksForRecordAsync(record, request.DryRun, cancellationToken));
+                }
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to process Bitrix link backfill identifier {IdoReservationId}.", idoReservationId);
+                batchResult.Results.Add(CreateLookupFailureResult(null, idoReservationId, ex));
+            }
+        }
+
+        return batchResult;
+    }
+
+    private async Task<BitrixLinkBackfillItemResultDto> BackfillBitrixLinksForRecordAsync(
+        ReservationRecord record,
+        bool dryRun,
+        CancellationToken cancellationToken)
+    {
+        var result = new BitrixLinkBackfillItemResultDto
+        {
+            ReservationGuid = record.ReservationGuid,
+            IdoReservationId = record.IdoReservationId,
+            PreviousClientBitrixId = record.ClientBitrixId,
+            PreviousDealBitrixId = record.DealBitrixId,
+            ClientBitrixId = record.ClientBitrixId,
+            DealBitrixId = record.DealBitrixId
+        };
+
+        if (record.ClientBitrixId.HasValue && record.DealBitrixId.HasValue)
+        {
+            result.Status = BitrixLinkBackfillStatuses.Skipped;
+            result.Message = "Both Bitrix links are already populated.";
+            return result;
+        }
+
+        if (!record.IdoReservationId.HasValue || record.IdoReservationId.Value <= 0)
+        {
+            result.Status = BitrixLinkBackfillStatuses.Skipped;
+            result.Message = "Reservation does not have a valid ido_reservation_id.";
+            return result;
+        }
+
+        if (record.State.Client is null)
+        {
+            result.Status = BitrixLinkBackfillStatuses.Skipped;
+            result.Message = "Reservation state does not contain client data.";
+            return result;
+        }
+
+        if (string.IsNullOrWhiteSpace(record.State.Client.Email))
+        {
+            result.Status = BitrixLinkBackfillStatuses.Skipped;
+            result.Message = "Reservation client does not have an email address.";
+            return result;
+        }
+
+        if (record.State.StartRequest is null)
+        {
+            result.Status = BitrixLinkBackfillStatuses.Skipped;
+            result.Message = "Reservation state does not contain StartRequest data.";
+            return result;
+        }
+
+        if (!record.ClientBitrixId.HasValue)
+        {
+            result.Actions.Add("EnsureClientBitrixLink");
+        }
+
+        if (!record.DealBitrixId.HasValue)
+        {
+            result.Actions.Add("EnsureDealBitrixLink");
+        }
+        else if (!record.ClientBitrixId.HasValue)
+        {
+            result.Actions.Add("UpdateDealContactLink");
+        }
+
+        if (dryRun)
+        {
+            result.Status = BitrixLinkBackfillStatuses.Planned;
+            result.Message = "Bitrix links would be ensured; no external or database changes were made.";
+            return result;
+        }
+
+        var currentRecord = record;
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var shouldUpdateExistingDealContact = record.DealBitrixId.HasValue && !record.ClientBitrixId.HasValue;
+            currentRecord = await _workflowSyncOperations.EnsureBitrixContactAndDealAsync(record);
+
+            result.ClientBitrixId = currentRecord.ClientBitrixId;
+            result.DealBitrixId = currentRecord.DealBitrixId;
+
+            if (!currentRecord.ClientBitrixId.HasValue || !currentRecord.DealBitrixId.HasValue)
+            {
+                throw new InvalidOperationException("Bitrix link backfill completed without both required identifiers.");
+            }
+
+            if (shouldUpdateExistingDealContact)
+            {
+                await _workflowSyncOperations.UpdateBitrixDealAsync(currentRecord, BitrixLinkBackfillUpdateReason);
+            }
+
+            result.Status = BitrixLinkBackfillStatuses.Updated;
+            result.Message = "Bitrix links were ensured and saved to reservation_records.";
+            return result;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to backfill Bitrix links for reservation {ReservationGuid}.", record.ReservationGuid);
+            result.ClientBitrixId = currentRecord.ClientBitrixId;
+            result.DealBitrixId = currentRecord.DealBitrixId;
+            result.Status = BitrixLinkBackfillStatuses.Failed;
+            result.Error = ex.Message;
+            return result;
+        }
+    }
+
+    private static BitrixLinkBackfillItemResultDto CreateNotFoundResult(Guid? reservationGuid, int? idoReservationId)
+    {
+        return new BitrixLinkBackfillItemResultDto
+        {
+            RequestedReservationGuid = reservationGuid,
+            RequestedIdoReservationId = idoReservationId,
+            Status = BitrixLinkBackfillStatuses.Skipped,
+            Message = reservationGuid.HasValue
+                ? $"No reservation_record found for reservation GUID {reservationGuid:D}."
+                : $"No reservation_record found for IDO reservation id {idoReservationId}."
+        };
+    }
+
+    private static BitrixLinkBackfillItemResultDto CreateLookupFailureResult(
+        Guid? reservationGuid,
+        int? idoReservationId,
+        Exception exception)
+    {
+        return new BitrixLinkBackfillItemResultDto
+        {
+            RequestedReservationGuid = reservationGuid,
+            RequestedIdoReservationId = idoReservationId,
+            Status = BitrixLinkBackfillStatuses.Failed,
+            Error = exception.Message
+        };
     }
 
     public async Task FinalizeImportedReservationAsync(Guid reservationGuid, ImportedReservationFinalizationRequest request)
