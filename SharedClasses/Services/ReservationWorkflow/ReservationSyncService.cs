@@ -178,13 +178,6 @@ public class ReservationSyncService : IReservationSyncService
             return result;
         }
 
-        if (string.IsNullOrWhiteSpace(record.State.Client.Email))
-        {
-            result.Status = BitrixLinkBackfillStatuses.Skipped;
-            result.Message = "Reservation client does not have an email address.";
-            return result;
-        }
-
         if (record.State.StartRequest is null)
         {
             result.Status = BitrixLinkBackfillStatuses.Skipped;

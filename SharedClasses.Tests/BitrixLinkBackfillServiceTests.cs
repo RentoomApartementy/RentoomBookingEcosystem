@@ -69,6 +69,42 @@ public sealed class BitrixLinkBackfillServiceTests
     }
 
     [Fact]
+    public async Task Execute_WithoutClientEmail_StillEnsuresContactAndDeal()
+    {
+        var record = CreateValidRecord();
+        record.State.Client!.Email = string.Empty;
+        var store = CreateStoreForGuid(record);
+        var syncOperations = new Mock<IReservationWorkflowSyncOperations>(MockBehavior.Strict);
+        syncOperations
+            .Setup(operation => operation.EnsureBitrixContactAndDealAsync(record))
+            .ReturnsAsync(() =>
+            {
+                record.ClientBitrixId = 702;
+                record.DealBitrixId = 802;
+                return record;
+            });
+        syncOperations
+            .Setup(operation => operation.UpdateBitrixDealAsync(
+                record,
+                "Controlled Bitrix reservation link backfill",
+                null))
+            .Returns(Task.CompletedTask);
+        var service = CreateService(store.Object, syncOperations.Object);
+
+        var result = await service.BackfillBitrixLinksAsync(new BitrixLinkBackfillRequestDto
+        {
+            ReservationGuids = [record.ReservationGuid],
+            DryRun = false
+        });
+
+        var item = Assert.Single(result.Results);
+        Assert.Equal(BitrixLinkBackfillStatuses.Updated, item.Status);
+        Assert.Equal(702, item.ClientBitrixId);
+        Assert.Equal(802, item.DealBitrixId);
+        syncOperations.VerifyAll();
+    }
+
+    [Fact]
     public async Task Execute_WithOnlyClientLinkMissing_UpdatesExistingDealContactLink()
     {
         var record = CreateValidRecord();
