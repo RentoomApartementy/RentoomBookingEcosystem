@@ -74,71 +74,85 @@
                     <div class="form-item">
                         <div class="form-two-items">
                             <div class="input-wrapper">
-                                <small>@Localizer["Name"] <span style="color: red;">*</span></small>
-                                <Input Placeholder="@Localizer["Name"]" IsFull="true" @bind-Value="_form.Client.FirstName"/>
+                                <label for="ci-firstname">@Localizer["Name"] <span aria-hidden="true" style="color: red;">*</span></label>
+                                <Input Id="ci-firstname" Placeholder="@Localizer["Name"]" IsFull="true" @bind-Value="_form.Client.FirstName"
+                                       aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Client.FirstName)) ? "true" : "false")"
+                                       aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Client.FirstName) ? "ci-firstname-error" : null)"/>
                                 @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.FirstName))
                                 {
-                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    <small id="ci-firstname-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                 }
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["LastName"] <span style="color: red;">*</span></small>
-                                <Input Placeholder="@Localizer["LastName"]" IsFull="true" @bind-Value="_form.Client.LastName"/>
+                                <label for="ci-lastname">@Localizer["LastName"] <span aria-hidden="true" style="color: red;">*</span></label>
+                                <Input Id="ci-lastname" Placeholder="@Localizer["LastName"]" IsFull="true" @bind-Value="_form.Client.LastName"
+                                       aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Client.LastName)) ? "true" : "false")"
+                                       aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Client.LastName) ? "ci-lastname-error" : null)"/>
                                 @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.LastName))
                                 {
-                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    <small id="ci-lastname-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                 }
                             </div>
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["City"] <span style="color: red;">*</span></small>
-                            <Input Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Client.City"/>
+                            <label for="ci-city">@Localizer["City"] <span aria-hidden="true" style="color: red;">*</span></label>
+                            <Input Id="ci-city" Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Client.City"
+                                   aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Client.City)) ? "true" : "false")"
+                                   aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Client.City) ? "ci-city-error" : null)"/>
                             @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.City))
                             {
-                                <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                <small id="ci-city-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                             }
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["Address"] <span style="color: red;">*</span></small>
-                            <Input Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Client.Street"/>
+                            <label for="ci-street">@Localizer["Address"] <span aria-hidden="true" style="color: red;">*</span></label>
+                            <Input Id="ci-street" Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Client.Street"
+                                   aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Client.Street)) ? "true" : "false")"
+                                   aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Client.Street) ? "ci-street-error" : null)"/>
                             @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.Street))
                             {
-                                <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                <small id="ci-street-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                             }
                         </div>
                         <div class="input-wrapper">
-                            <small>@Localizer["PostalCode"] <span style="color: red;">*</span></small>
-                            <Input Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Client.ZipCode"/>
+                            <label for="ci-zipcode">@Localizer["PostalCode"] <span aria-hidden="true" style="color: red;">*</span></label>
+                            <Input Id="ci-zipcode" Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Client.ZipCode"
+                                   aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Client.ZipCode)) ? "true" : "false")"
+                                   aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Client.ZipCode) ? "ci-zipcode-error" : null)"/>
                             @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.ZipCode))
                             {
-                                <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                <small id="ci-zipcode-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                             }
                         </div>
                         <div class="form-two-items">
                             <div class="input-wrapper">
-                                <small>@Localizer["Email"] <span style="color: red;">*</span></small>
-                                <Input Placeholder="@Localizer["Email"]" IsFull="true"
+                                <label for="ci-email">@Localizer["Email"] <span aria-hidden="true" style="color: red;">*</span></label>
+                                <Input Id="ci-email" Placeholder="@Localizer["Email"]" IsFull="true"
                                        Type="email"
                                        UpdateOnInput="false"
                                        Value="@_form.Client.Email"
-                                       ValueChanged="@((string val) => { _form.Client.Email = val; _emailDirty = true; })"/>
+                                       ValueChanged="@((string val) => { _form.Client.Email = val; _emailDirty = true; })"
+                                       aria-required="true"
+                                       aria-invalid="@((( _submitted && string.IsNullOrWhiteSpace(_form.Client.Email)) || (_emailDirty && !string.IsNullOrWhiteSpace(_form.Client.Email) && !IsValidEmail(_form.Client.Email))) ? "true" : "false")"
+                                       aria-describedby="@((_submitted && string.IsNullOrWhiteSpace(_form.Client.Email)) || (_emailDirty && !string.IsNullOrWhiteSpace(_form.Client.Email) && !IsValidEmail(_form.Client.Email)) ? "ci-email-error" : null)"/>
                                 @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.Email))
                                 {
-                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    <small id="ci-email-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                 }
                                 else if (_emailDirty && !string.IsNullOrWhiteSpace(_form.Client.Email) && !IsValidEmail(_form.Client.Email))
                                 {
-                                    <small class="text-danger">@Localizer["InvalidEmailError"]</small>
+                                    <small id="ci-email-error" class="text-danger" role="alert">@Localizer["InvalidEmailError"]</small>
                                 }
                             </div>
                         </div>
-                        
+
                         <div class="input-wrapper">
-                            <small>@Localizer["Phone"] <span style="color: red;">*</span></small>
+                            <label for="ci-phone-number">@Localizer["Phone"] <span aria-hidden="true" style="color: red;">*</span></label>
                             <div class="phone-grid-container">
                                 <div class="input-wrapper phone-prefix-container">
                                     <div class="custom-input">
-                                        <select class="prefix-select" @bind="PhoneCountryCode">
+                                        <label for="ci-phone-prefix" class="sr-only">@Localizer["Phone"]</label>
+                                        <select id="ci-phone-prefix" class="prefix-select" @bind="PhoneCountryCode">
                                             @foreach (var prefix in _countryPrefixes)
                                             {
                                                 <option value="@prefix.Code">@prefix.Display</option>
@@ -148,21 +162,25 @@
                                 </div>
                                 <div class="input-wrapper phone-number-container">
                                     <div class="custom-input">
-                                        <input type="text"
+                                        <input id="ci-phone-number"
+                                               type="text"
                                                maxlength="20"
-                                               @bind="PhoneNumber" 
-                                               @bind:event="oninput" 
-                                               placeholder="@DynamicPlaceholder" />
+                                               @bind="PhoneNumber"
+                                               @bind:event="oninput"
+                                               placeholder="@DynamicPlaceholder"
+                                               aria-required="true"
+                                               aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Client.Phone)) || (_phoneDirty && !string.IsNullOrEmpty(_phoneError)) ? "true" : "false")"
+                                               aria-describedby="@((_submitted && string.IsNullOrWhiteSpace(_form.Client.Phone)) || (_phoneDirty && !string.IsNullOrEmpty(_phoneError)) ? "ci-phone-error" : null)" />
                                     </div>
                                 </div>
                             </div>
                             @if (_submitted && string.IsNullOrWhiteSpace(_form.Client.Phone))
                             {
-                                <small class="text-danger" style="display: block; margin-top: 4px;">@Localizer["FillAllDataError"]</small>
+                                <small id="ci-phone-error" class="text-danger" role="alert" style="display: block; margin-top: 4px;">@Localizer["FillAllDataError"]</small>
                             }
                             else if (_phoneDirty && !string.IsNullOrEmpty(_phoneError))
                             {
-                                <small class="text-danger" style="display: block; margin-top: 4px;">@_phoneError</small>
+                                <small id="ci-phone-error" class="text-danger" role="alert" style="display: block; margin-top: 4px;">@_phoneError</small>
                             }
                         </div>
                     </div>
@@ -178,66 +196,79 @@
                         @if (UseInvoice)
                         {
                             <div class="input-wrapper">
-                                <small>@Localizer["ClientInfoNipLabel"] <span style="color: red;">*</span></small>
+                                <label for="ci-inv-taxnumber">@Localizer["ClientInfoNipLabel"] <span aria-hidden="true" style="color: red;">*</span></label>
                                 <div class="">
-                                    <Input Placeholder="@Localizer["ClientInfoNipLabel"]" IsFull="true" @bind-Value="_form.Invoice.TaxNumber"/>
-                                    <small class="download-nip-button" @onclick="DownloadGusDataAsync" style="cursor: pointer; color: var(--primary);">
+                                    <Input Id="ci-inv-taxnumber" Placeholder="@Localizer["ClientInfoNipLabel"]" IsFull="true" @bind-Value="_form.Invoice.TaxNumber"
+                                           aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Invoice.TaxNumber)) ? "true" : "false")"
+                                           aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Invoice.TaxNumber) ? "ci-inv-taxnumber-error" : null)"/>
+                                    <button type="button" class="download-nip-button" @onclick="DownloadGusDataAsync" style="cursor: pointer; color: var(--primary); background: none; border: none; border-bottom: 1px solid #000000; font: inherit; padding: 0;">
                                         @(_isFetchingGus ? Localizer["Loading"] : Localizer["ClickToDownloadInfo"])
-                                    </small>
+                                    </button>
                                 </div>
                                 @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.TaxNumber))
                                 {
-                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    <small id="ci-inv-taxnumber-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                 }
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["CompanyName"] <span style="color: red;">*</span></small>
-                                <Input Placeholder="@Localizer["CompanyName"]" IsFull="true" @bind-Value="_form.Invoice.CompanyName"/>
+                                <label for="ci-inv-companyname">@Localizer["CompanyName"] <span aria-hidden="true" style="color: red;">*</span></label>
+                                <Input Id="ci-inv-companyname" Placeholder="@Localizer["CompanyName"]" IsFull="true" @bind-Value="_form.Invoice.CompanyName"
+                                       aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Invoice.CompanyName)) ? "true" : "false")"
+                                       aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Invoice.CompanyName) ? "ci-inv-companyname-error" : null)"/>
                                 @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.CompanyName))
                                 {
-                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    <small id="ci-inv-companyname-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                 }
                             </div>
                             <div class="form-two-items">
                                 <div class="input-wrapper">
-                                    <small>@Localizer["City"] <span style="color: red;">*</span></small>
-                                    <Input Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Invoice.City"/>
+                                    <label for="ci-inv-city">@Localizer["City"] <span aria-hidden="true" style="color: red;">*</span></label>
+                                    <Input Id="ci-inv-city" Placeholder="@Localizer["City"]" IsFull="true" @bind-Value="_form.Invoice.City"
+                                           aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Invoice.City)) ? "true" : "false")"
+                                           aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Invoice.City) ? "ci-inv-city-error" : null)"/>
                                     @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.City))
                                     {
-                                        <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                        <small id="ci-inv-city-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                     }
                                 </div>
                                 <div class="input-wrapper">
-                                    <small>@Localizer["Address"] <span style="color: red;">*</span></small>
-                                    <Input Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Invoice.Street"/>
+                                    <label for="ci-inv-street">@Localizer["Address"] <span aria-hidden="true" style="color: red;">*</span></label>
+                                    <Input Id="ci-inv-street" Placeholder="@Localizer["Address"]" IsFull="true" @bind-Value="_form.Invoice.Street"
+                                           aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Invoice.Street)) ? "true" : "false")"
+                                           aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Invoice.Street) ? "ci-inv-street-error" : null)"/>
                                     @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.Street))
                                     {
-                                        <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                        <small id="ci-inv-street-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                     }
                                 </div>
                                 <div class="input-wrapper">
-                                    <small>@Localizer["PostalCode"] <span style="color: red;">*</span></small>
-                                    <Input Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Invoice.ZipCode"/>
+                                    <label for="ci-inv-zipcode">@Localizer["PostalCode"] <span aria-hidden="true" style="color: red;">*</span></label>
+                                    <Input Id="ci-inv-zipcode" Placeholder="@Localizer["PostalCode"]" IsFull="true" @bind-Value="_form.Invoice.ZipCode"
+                                           aria-required="true" aria-invalid="@((_submitted && string.IsNullOrWhiteSpace(_form.Invoice.ZipCode)) ? "true" : "false")"
+                                           aria-describedby="@(_submitted && string.IsNullOrWhiteSpace(_form.Invoice.ZipCode) ? "ci-inv-zipcode-error" : null)"/>
                                     @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.ZipCode))
                                     {
-                                        <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                        <small id="ci-inv-zipcode-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                     }
                                 </div>
                             </div>
                             <div class="input-wrapper">
-                                <small>@Localizer["Email"] <span style="color: red;">*</span></small>
-                                <Input Placeholder="@Localizer["Email"]" IsFull="true"
+                                <label for="ci-inv-email">@Localizer["Email"] <span aria-hidden="true" style="color: red;">*</span></label>
+                                <Input Id="ci-inv-email" Placeholder="@Localizer["Email"]" IsFull="true"
                                        Type="email"
                                        UpdateOnInput="false"
                                        Value="@_form.Invoice.Email"
-                                       ValueChanged="@((string val) => { _form.Invoice.Email = val; _invoiceEmailDirty = true; })"/>
+                                       ValueChanged="@((string val) => { _form.Invoice.Email = val; _invoiceEmailDirty = true; })"
+                                       aria-required="true"
+                                       aria-invalid="@(((_submitted && string.IsNullOrWhiteSpace(_form.Invoice.Email)) || (_invoiceEmailDirty && !string.IsNullOrWhiteSpace(_form.Invoice.Email) && !IsValidEmail(_form.Invoice.Email))) ? "true" : "false")"
+                                       aria-describedby="@((_submitted && string.IsNullOrWhiteSpace(_form.Invoice.Email)) || (_invoiceEmailDirty && !string.IsNullOrWhiteSpace(_form.Invoice.Email) && !IsValidEmail(_form.Invoice.Email)) ? "ci-inv-email-error" : null)"/>
                                 @if (_submitted && string.IsNullOrWhiteSpace(_form.Invoice.Email))
                                 {
-                                    <small class="text-danger">@Localizer["FillAllDataError"]</small>
+                                    <small id="ci-inv-email-error" class="text-danger" role="alert">@Localizer["FillAllDataError"]</small>
                                 }
                                 else if (_invoiceEmailDirty && !string.IsNullOrWhiteSpace(_form.Invoice.Email) && !IsValidEmail(_form.Invoice.Email))
                                 {
-                                    <small class="text-danger">@Localizer["InvalidEmailError"]</small>
+                                    <small id="ci-inv-email-error" class="text-danger" role="alert">@Localizer["InvalidEmailError"]</small>
                                 }
                             </div>
                         }

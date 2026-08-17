@@ -150,6 +150,12 @@
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Additional options</value>
   </data>
+  <data name="DecreaseQuantity" xml:space="preserve">
+    <value>Decrease quantity</value>
+  </data>
+  <data name="IncreaseQuantity" xml:space="preserve">
+    <value>Increase quantity</value>
+  </data>
   <data name="Opłata serwisowa 139 x" xml:space="preserve">
     <value>Service fee 139 x</value>
   </data>

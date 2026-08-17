@@ -49,6 +49,16 @@
     border-color: #abefd0;
 }
 
+.addon-label:focus-visible {
+    outline: 2px solid #1f5a41;
+    outline-offset: 2px;
+}
+
+.quantity-btn:focus-visible {
+    outline: 2px solid #1f5a41;
+    outline-offset: 2px;
+}
+
 .addon-info-col {
     grid-area: info;
     display: flex;
@@ -99,12 +109,12 @@
     vertical-align: middle;
 }
 
-.addon-checkbox:checked {
+.addon-checkbox.checked {
     background-color: #4a6755;
     border-color: #8b7344;
 }
 
-.addon-checkbox:checked::after {
+.addon-checkbox.checked::after {
     content: '';
     position: absolute;
     width: 6px;
