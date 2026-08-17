@@ -1,0 +1,40 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-v3-technology" aria-labelledby="coop-v3-technology-title">
+    <div class="coop-v3-technology-content">
+        <span class="coop-v3-eyebrow">@L["Coop_V3_Tech_Eyebrow"]</span>
+        <h2 id="coop-v3-technology-title">@L["Coop_V3_Tech_Title"]</h2>
+        <p class="coop-v3-technology-intro">@L["Coop_V3_Tech_Intro"]</p>
+
+        <div class="coop-v3-technology-list">
+            <article>
+                <span class="gicon" aria-hidden="true">cleaning_services</span>
+                <div>
+                    <h3>@L["Coop_V3_Tech_Cleaning_Title"]</h3>
+                    <p>@L["Coop_V3_Tech_Cleaning_Desc"]</p>
+                </div>
+            </article>
+            <article>
+                <span class="gicon" aria-hidden="true">phonelink_lock</span>
+                <div>
+                    <h3>@L["Coop_V3_Tech_StayWell_Title"]</h3>
+                    <p>@L["Coop_V3_Tech_StayWell_Desc"]</p>
+                </div>
+            </article>
+            <article>
+                <span class="gicon" aria-hidden="true">support_agent</span>
+                <div>
+                    <h3>@L["Coop_V3_Tech_Tickets_Title"]</h3>
+                    <p>@L["Coop_V3_Tech_Tickets_Desc"]</p>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <figure class="coop-v3-technology-image">
+        <img src="/assets/images/cooperation/kopernik_apartment.jpg"
+             alt="@L["Coop_V3_Tech_Image_Alt"]"
+             loading="lazy" />
+    </figure>
+</section>

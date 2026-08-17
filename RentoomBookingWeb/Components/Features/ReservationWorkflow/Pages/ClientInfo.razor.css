@@ -79,8 +79,10 @@
     justify-content: center;
 }
 
-.form-wrapper-title-text > h3 {
+.form-wrapper-title-text > .client-info-h1 {
     margin: 0;
+    font-size: 1.17em;
+    font-weight: 700;
 }
 
 .form-wrapper-title-text > p {
@@ -275,7 +277,7 @@
         border-radius: 0.8rem;
     }
 
-    .form-wrapper-title-text h3 {
+    .form-wrapper-title-text .client-info-h1 {
         font-size: 1.25rem;
     }
 
@@ -311,7 +313,7 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        background-color: #945F28;
+        background-color: #945f28;
         padding: 0.8rem 1.2rem;
         box-shadow: 0 -4px 15px rgba(0,0,0,0.15);
         z-index: 2000; /* High z-index to stay on top of everything */

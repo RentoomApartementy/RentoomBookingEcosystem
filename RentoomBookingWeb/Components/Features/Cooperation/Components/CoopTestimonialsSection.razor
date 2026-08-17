@@ -1,0 +1,33 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-testimonials">
+    <span class="coop-eyebrow">@L["Coop_Testimonials_Eyebrow"]</span>
+    <h2 class="coop-section-title">@L["Coop_Testimonials_Title"]</h2>
+
+    <div class="coop-testimonials-grid">
+        <blockquote class="coop-testimonial">
+            <p>"@L["Coop_Testimonial1_Quote"]"</p>
+            <footer>
+                <strong>@L["Coop_Testimonial1_Author"]</strong>
+                <span>@L["Coop_Testimonial1_Context"]</span>
+            </footer>
+        </blockquote>
+        <blockquote class="coop-testimonial">
+            <p>"@L["Coop_Testimonial2_Quote"]"</p>
+            <footer>
+                <strong>@L["Coop_Testimonial2_Author"]</strong>
+                <span>@L["Coop_Testimonial2_Context"]</span>
+            </footer>
+        </blockquote>
+        <blockquote class="coop-testimonial">
+            <p>"@L["Coop_Testimonial3_Quote"]"</p>
+            <footer>
+                <strong>@L["Coop_Testimonial3_Author"]</strong>
+                <span>@L["Coop_Testimonial3_Context"]</span>
+            </footer>
+        </blockquote>
+    </div>
+
+    <CoopSectionCta Type="ButtonType.Secondary" />
+</section>

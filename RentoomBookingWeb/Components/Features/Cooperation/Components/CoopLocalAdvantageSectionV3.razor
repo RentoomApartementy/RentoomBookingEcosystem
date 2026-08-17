@@ -1,0 +1,15 @@
+@using Microsoft.Extensions.Localization
+@using RentoomBookingWeb.Components.Features.Home.Components
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-v3-local" aria-labelledby="coop-v3-local-title">
+    <div class="coop-v3-local-intro">
+        <span>@L["Coop_V3_Local_Eyebrow"]</span>
+        <h2 id="coop-v3-local-title">@L["Coop_V3_Local_Title"]</h2>
+        <p>@L["Coop_V3_Local_Intro_Start"] <strong>@L["Coop_V3_Local_Intro_Discounts"]</strong> @L["Coop_V3_Local_Intro_Middle"] <strong>@L["Coop_V3_Local_Intro_Business"]</strong>@L["Coop_V3_Local_Intro_End"]</p>
+    </div>
+
+    <div class="coop-v3-local-partners">
+        <HomePartnersSection />
+    </div>
+</section>

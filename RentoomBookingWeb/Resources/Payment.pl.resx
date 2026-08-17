@@ -156,6 +156,9 @@
   <data name="StepperAriaLabel" xml:space="preserve">
     <value>Etapy rezerwacji</value>
   </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value>Pokaż lub ukryj szczegóły ceny</value>
+  </data>
   <data name="StepperCompletedAriaLabel" xml:space="preserve">
     <value>Etap ukończony</value>
   </data>

@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-14T00:00:00Z",
+  "title": "Design System: RentoomBookingWeb",
+  "extensions": {
+    "colorMeta": {
+      "forest-green": { "role": "secondary", "displayName": "Forest Green", "canonical": "#1f5a41", "tonalRamp": ["#0c241a", "#123527", "#184634", "#1f5a41", "#2c7658", "#3f9271", "#71b096", "#aad0c1"] },
+      "bronze": { "role": "primary", "displayName": "Bronze", "canonical": "#945f28", "tonalRamp": ["#3b2610", "#563618", "#714720", "#945f28", "#a66e38", "#c08f5c", "#d6b28c", "#ecd7bf"] },
+      "bronze-hover": { "role": "primary-hover", "displayName": "Bronze (hover)", "canonical": "#a66e38" },
+      "cream": { "role": "neutral", "displayName": "Cream", "canonical": "#f7f3ec" },
+      "sage-tint": { "role": "neutral", "displayName": "Sage Tint", "canonical": "#eef4ef" },
+      "sage-line": { "role": "neutral", "displayName": "Sage Line", "canonical": "#8b9b8c" },
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#f7f7f7" },
+      "white": { "role": "neutral", "displayName": "White", "canonical": "#ffffff" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#111111" },
+      "border-neutral": { "role": "neutral", "displayName": "Border Neutral", "canonical": "#e5e7eb" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero and section H1s." },
+      "eyebrow": { "displayName": "Eyebrow", "purpose": "Uppercase label preceding a section's Display headline." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy." }
+    },
+    "shadows": [
+      { "name": "card-lift-green", "value": "0 18px 48px rgba(31,90,65,.07)", "purpose": "Default resting elevation for calculators, feature cards, technology panels." },
+      { "name": "card-lift-green-deep", "value": "0 24px 60px rgba(31,90,65,.14)", "purpose": "Deeper lift for the most prominent green-surfaced panels." },
+      { "name": "hero-image-frame", "value": "0 18px 50px rgba(28,45,37,.12)", "purpose": "The framed photo/stat card inside the cooperation hero." },
+      { "name": "bronze-cta-lift", "value": "0 14px 34px rgba(67,43,20,.28)", "purpose": "Floating audit/cooperation CTA at rest." },
+      { "name": "bronze-cta-hover", "value": "0 17px 40px rgba(67,43,20,.34)", "purpose": "Floating audit/cooperation CTA on hover." }
+    ],
+    "motion": [
+      { "name": "ripple", "value": "0.6s ease-out", "purpose": "Expanding-circle click feedback on all Button.razor variants." },
+      { "name": "ease-standard", "value": "0.2s ease (background-color, box-shadow)", "purpose": "Default button hover transition." }
+    ],
+    "breakpoints": [
+      { "name": "mobile-hero-boundary", "value": "767px" },
+      { "name": "calculator-two-column", "value": "960px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid bronze pill CTA — the site's primary action color.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Umów się na rozmowę</button>",
+      "css": ".ds-btn { border-radius: 999px; height: 42px; display: inline-flex; align-items: center; justify-content: center; outline: none; border: 0; padding: 0 2rem; cursor: pointer; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; position: relative; overflow: hidden; transition: background-color 0.2s, box-shadow 0.2s; } .ds-btn-primary { background-color: #945f28; color: #fff; } .ds-btn-primary:hover { background-color: #a66e38; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "White outline pill button with forest-green text.",
+      "html": "<button class=\"ds-btn ds-btn-secondary\">Dowiedz się więcej</button>",
+      "css": ".ds-btn-secondary { background-color: #fff; border: 1px solid #8b9b8c; color: #1f5a41; } .ds-btn-secondary:hover { background-color: #f8f9fa; }"
+    },
+    {
+      "name": "Tertiary Button",
+      "kind": "button",
+      "refersTo": "button-tertiary",
+      "description": "Solid forest-green pill button.",
+      "html": "<button class=\"ds-btn ds-btn-tertiary\">Sprawdź ofertę</button>",
+      "css": ".ds-btn-tertiary { background-color: #1f5a41; border: 1px solid #8b9b8c; color: #fff; } .ds-btn-tertiary:hover { background-color: #277051; }"
+    },
+    {
+      "name": "Feature Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Green-tinted-shadow panel used across the cooperation funnel's calculator/technology/feature sections.",
+      "html": "<div class=\"ds-card\"><span class=\"ds-eyebrow\">Współpraca</span><h3 class=\"ds-card-title\">Pełna transparentność wypłat</h3><p class=\"ds-card-body\">Sprawdź dokładny podział przychodu w naszym kalkulatorze.</p></div>",
+      "css": ".ds-card { background: #fff; border-radius: 20px; padding: 2rem; box-shadow: 0 18px 48px rgba(31,90,65,.07); border: 1px solid rgba(31,90,65,.08); } .ds-eyebrow { display: block; color: #945f28; font-size: .78rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 1.2rem; } .ds-card-title { color: #111; font-size: 2rem; font-weight: 800; margin: 0 0 .75rem; } .ds-card-body { color: #555; font-size: 1.05rem; line-height: 1.6; margin: 0; }"
+    },
+    {
+      "name": "Numbered Step Badge",
+      "kind": "custom",
+      "description": "Circular numbered marker used in the cooperation process/how-it-works section, haloed by the section's background color.",
+      "html": "<div class=\"ds-step\"><span class=\"ds-step-number\">1</span></div>",
+      "css": ".ds-step { width: 56px; height: 56px; border-radius: 50%; background: #1f5a41; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: 700; box-shadow: 0 0 0 10px #f7f3ec; }"
+    },
+    {
+      "name": "Hero Headline",
+      "kind": "custom",
+      "description": "The confident, tightly-tracked display headline pattern used at the top of every major landing section.",
+      "html": "<div class=\"ds-hero-copy\"><span class=\"ds-eyebrow\">Program Partnerski</span><h1 class=\"ds-hero-h1\">Twoje mieszkanie, nasza technologia</h1><p class=\"ds-hero-p\">Dołącz do właścicieli, którzy zwiększyli przychody dzięki self check-in i lokalnej obsłudze.</p></div>",
+      "css": ".ds-hero-copy { max-width: 640px; } .ds-eyebrow { display: block; color: #945f28; font-size: .78rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 1.2rem; } .ds-hero-h1 { color: #111; font-size: clamp(2.5rem, 4.2vw, 4.25rem); line-height: .98; letter-spacing: -.045em; font-weight: 850; margin: 0; } .ds-hero-p { color: #353535; font-size: 1.08rem; line-height: 1.65; max-width: 590px; margin: 1.7rem 0 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Owner's Prospectus",
+    "overview": "RentoomBookingWeb is a boutique property operator's investor prospectus, not a scrappy startup landing page: a huge, tightly-tracked headline (weight 850, letter-spacing -0.045em) states the claim with total confidence, an uppercase bronze eyebrow label frames each section like a document header, and the page alternates warm cream and sage bands the way a printed brochure alternates paper stock. Every shadow in the system is tinted to the color of the element casting it — green cards cast green-tinted shadows, the bronze floating CTA casts a brown-tinted one — so depth reads as material, not generic UI chrome. This is confident and editorial where StayWell (the guest app under the same brand) is warm and tactile: the two apps share a bronze/forest-green DNA but express it in completely different registers, because one is selling trust to a prospective partner or booker and the other is helping someone already in an apartment finish a task. The site is also unusually data-forward for a marketing surface: the cooperation funnel's payout calculators and cost-comparison tables are central to the pitch, not a footnote — the editorial confidence exists to make financial claims feel credible, not just to look good.",
+    "keyCharacteristics": [
+      "Bronze (#945f28) is the action color; forest green (#1f5a41) is the trust/heading/secondary color — the inverse of StayWell, where green is primary.",
+      "Huge, heavy, tightly-tracked display type (clamp 2.5–4.25rem, weight 850, -0.045em tracking, 0.98 line-height) on the plain system sans stack — no custom display webfont is loaded, only a Material Symbols icon font.",
+      "Uppercase bronze eyebrow labels (0.78rem, weight 800, 0.16em tracking) precede every major section heading.",
+      "Sections alternate white / cream (#f7f3ec) / sage (#eef4ef) backgrounds as a rhythm device, not randomly.",
+      "Every non-trivial shadow is tinted to match its element's own hue (green elements → green shadow, bronze elements → brown shadow) — shadows are never neutral black.",
+      "Pill-shaped buttons (999px) and circular numbered step badges are the only two 'shape signatures'; cards use a more restrained 16–20px radius than StayWell's looser range."
+    ],
+    "rules": [
+      { "name": "The Tinted Shadow Rule", "body": "Shadows take the hue of the element casting them: green cards and panels cast rgba(31,90,65,…) shadows, the bronze floating CTA casts rgba(67,43,20,…). A neutral black shadow on a colored surface is a deviation from the system, not a safe default.", "section": "colors" },
+      { "name": "The Weight-Over-Face Rule", "body": "Every type contrast in this system comes from weight/size/tracking on one system sans stack — introducing a second typeface would undercut the 'confident prospectus' read, which depends on typographic restraint.", "section": "typography" }
+    ],
+    "dos": [
+      "Do use bronze (#945f28) for the primary action and forest green (#1f5a41) for secondary/trust/data — that assignment is inverted from StayWell and both are correct for their own app.",
+      "Do tint every non-trivial shadow to the hue of the element casting it (The Tinted Shadow Rule); never fall back to neutral black.",
+      "Do precede a new major section with an uppercase bronze eyebrow label above the Display headline.",
+      "Do keep card/panel radius in the 16–20px range; reserve 999px/100px for pill buttons and CTAs only.",
+      "Do alternate white/cream/sage section backgrounds for rhythm rather than stacking same-color sections back to back."
+    ],
+    "donts": [
+      "Don't introduce a second typeface or a custom display webfont — the system's confidence comes from weight/tracking restraint on one system sans, not typographic variety.",
+      "Don't borrow StayWell's frosted-glass/backdrop-blur or neumorphic treatments here; this system is flat-surface-with-tinted-shadow, not glass-and-glow.",
+      "Don't treat the two brand greens (#1f5a41 here, #21573e in StayWell) as the same token — they're independently maintained today even though they represent the same brand color.",
+      "Don't ship a header that's permanently solid or permanently transparent; the scroll transition is load-bearing for the hero's full-bleed image treatment."
+    ]
+  }
+}

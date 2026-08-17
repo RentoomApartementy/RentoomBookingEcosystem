@@ -1,0 +1,72 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-comparison">
+    <span class="coop-eyebrow">@L["Coop_Compare_Eyebrow"]</span>
+    <h2 class="coop-section-title">@L["Coop_Compare_Title"]</h2>
+
+    <div class="coop-table-wrap">
+        <table class="coop-compare-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>@L["Coop_Compare_Col_Self"]</th>
+                    <th>@L["Coop_Compare_Col_LongTerm"]</th>
+                    <th class="coop-col-highlight">@L["Coop_Compare_Col_Rentoom"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="coop-row-label">@L["Coop_Compare_Row_Time"]</td>
+                    <td>@L["Coop_Compare_Row_Time_Self"]</td>
+                    <td>@L["Coop_Compare_Row_Time_Long"]</td>
+                    <td class="coop-col-highlight"><strong>@L["Coop_Compare_Row_Time_Rentoom"]</strong></td>
+                </tr>
+                <tr>
+                    <td class="coop-row-label">@L["Coop_Compare_Row_Revenue"]</td>
+                    <td>@L["Coop_Compare_Row_Revenue_Self"]</td>
+                    <td>@L["Coop_Compare_Row_Revenue_Long"]</td>
+                    <td class="coop-col-highlight"><strong>@L["Coop_Compare_Row_Revenue_Rentoom"]</strong></td>
+                </tr>
+                <tr>
+                    <td class="coop-row-label">@L["Coop_Compare_Row_Support"]</td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td class="coop-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                </tr>
+                <tr>
+                    <td class="coop-row-label">@L["Coop_Compare_Row_Cleaning"]</td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td class="coop-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                </tr>
+                <tr>
+                    <td class="coop-row-label">@L["Coop_Compare_Row_Pricing"]</td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td class="coop-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check"/></td>
+                </tr>
+                <tr>
+                    <td class="coop-row-label">@L["Coop_Compare_Row_Photos"]</td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td class="coop-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                </tr>
+                <tr>
+                    <td class="coop-row-label">@L["Coop_Compare_Row_Inspection"]</td>
+                    <td>@L["Coop_Compare_Row_Inspection_Self"]</td>
+                    <td>@L["Coop_Compare_Row_Inspection_Long"]</td>
+                    <td class="coop-col-highlight"><strong>@L["Coop_Compare_Row_Inspection_Rentoom"]</strong></td>
+                </tr>
+                <tr>
+                    <td class="coop-row-label">@L["Coop_Compare_Row_Accounting"]</td>
+                    <td><GoogleIcon Class="coop-icon-no" Name="close" /></td>
+                    <td>@L["Coop_Compare_Row_Accounting_Long"]</td>
+                    <td class="coop-col-highlight"><GoogleIcon Class="coop-icon-yes" Name="check" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <CoopSectionCta />
+</section>

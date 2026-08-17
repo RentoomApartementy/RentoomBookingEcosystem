@@ -1,0 +1,100 @@
+.coop-comparison {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 24px;
+    text-align: center;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.coop-eyebrow {
+    font-size: .8rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #945F28;
+    font-weight: 700;
+}
+
+.coop-section-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    color: #1A1A1A;
+    margin: .75rem 0 2.5rem;
+}
+
+.coop-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.coop-compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: center;
+    font-size: .92rem;
+}
+
+.coop-compare-table thead th {
+    padding: 1rem .75rem;
+    font-weight: 700;
+    color: #1A1A1A;
+    border-bottom: 2px solid #E5E7EB;
+    white-space: nowrap;
+}
+
+.coop-compare-table thead th:first-child {
+    text-align: left;
+}
+
+.coop-compare-table tbody td {
+    padding: .85rem .75rem;
+    border-bottom: 1px solid #E5E7EB;
+    color: #666;
+    vertical-align: middle;
+}
+
+.coop-row-label {
+    text-align: left;
+    font-weight: 600;
+    color: #1A1A1A;
+    white-space: nowrap;
+}
+
+.coop-col-highlight {
+    background: rgba(31, 90, 65, .06);
+    color: #1F5A41;
+    font-weight: 600;
+}
+
+.coop-compare-table thead .coop-col-highlight {
+    background: #1F5A41;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+}
+
+.coop-compare-table ::deep .coop-icon-yes {
+    color: #1F5A41;
+    font-size: 1.3rem;
+}
+
+.coop-compare-table ::deep .coop-icon-no {
+    color: #ccc;
+    font-size: 1.3rem;
+}
+
+@media (max-width: 600px) {
+    .coop-compare-table {
+        font-size: .82rem;
+    }
+
+    .coop-compare-table thead th,
+    .coop-compare-table tbody td {
+        padding: .65rem .5rem;
+    }
+
+    .coop-comparison {
+        padding: 3rem 16px;
+    }
+}

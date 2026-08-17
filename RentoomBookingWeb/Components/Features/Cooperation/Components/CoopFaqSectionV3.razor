@@ -1,0 +1,40 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<section class="coop-v3-faq" aria-labelledby="coop-v3-faq-title">
+    <span class="coop-v3-eyebrow">@L["Coop_Faq_Eyebrow"]</span>
+    <h2 id="coop-v3-faq-title">@L["Coop_Faq_Title"]</h2>
+
+    <div class="coop-v3-faq-list">
+        @for (int i = 1; i <= 7; i++)
+        {
+            var idx = i;
+            var isOpen = _openIndex == idx;
+            <article class="coop-v3-faq-item @(isOpen ? "open" : "")">
+                <h3>
+                    <button type="button"
+                            aria-expanded="@isOpen"
+                            aria-controls="coop-v3-faq-answer-@idx"
+                            @onclick="() => Toggle(idx)">
+                        <span>@L[$"Coop_Faq{idx}_Q"]</span>
+                        <span class="gicon" aria-hidden="true">expand_more</span>
+                    </button>
+                </h3>
+                @if (isOpen)
+                {
+                    <div id="coop-v3-faq-answer-@idx" class="coop-v3-faq-answer">
+                        <p>@(idx == 1 ? L["Coop_V3_Faq1_A"] : L[$"Coop_Faq{idx}_A"])</p>
+                    </div>
+                }
+            </article>
+        }
+    </div>
+
+    <CoopSectionCta />
+</section>
+
+@code {
+    private int? _openIndex = 1;
+
+    private void Toggle(int idx) => _openIndex = _openIndex == idx ? null : idx;
+}

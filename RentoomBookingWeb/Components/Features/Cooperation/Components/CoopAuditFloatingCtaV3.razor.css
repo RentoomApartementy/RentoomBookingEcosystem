@@ -1,0 +1,65 @@
+.coop-v3-audit-cta {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1100;
+}
+
+.coop-v3-audit-cta button {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    padding: .7rem 1.4rem;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    background: #945f28;
+    box-shadow: 0 14px 34px rgba(67, 43, 20, .28);
+    font: inherit;
+    font-size: .95rem;
+    font-weight: 750;
+    cursor: pointer;
+    transition: background-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.coop-v3-audit-cta button:hover {
+    background: #a66e38;
+    box-shadow: 0 17px 40px rgba(67, 43, 20, .34);
+    transform: translateY(-2px);
+}
+
+.coop-v3-audit-cta button:focus-visible {
+    outline: 3px solid rgba(148, 95, 40, .35);
+    outline-offset: 3px;
+}
+
+.coop-v3-audit-cta .gicon {
+    font-size: 1.25rem;
+}
+
+@media (max-width: 767px) {
+    .coop-v3-audit-cta {
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: .75rem 16px calc(.75rem + env(safe-area-inset-bottom));
+        background: rgba(255, 255, 255, .97);
+        border-top: 1px solid rgba(31, 90, 65, .14);
+        box-shadow: 0 -8px 28px rgba(28, 45, 37, .13);
+        backdrop-filter: blur(12px);
+    }
+
+    .coop-v3-audit-cta button {
+        width: 100%;
+        min-height: 48px;
+        box-shadow: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .coop-v3-audit-cta button {
+        transition: none;
+    }
+}

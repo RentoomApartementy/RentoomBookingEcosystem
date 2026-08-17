@@ -1,0 +1,263 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<div class="coop-detailed-calc">
+    <div class="coop-calc-tabs">
+        <button class="coop-calc-tab @(_activeTab == 0 ? "active" : "")" @onclick="() => _activeTab = 0">
+            @L["Coop_Calc_Tab_Reservation"]
+        </button>
+        <button class="coop-calc-tab @(_activeTab == 1 ? "active" : "")" @onclick="() => _activeTab = 1">
+            @L["Coop_Calc_Tab_Monthly"]
+        </button>
+        <button class="coop-calc-tab @(_activeTab == 2 ? "active" : "")" @onclick="() => _activeTab = 2">
+            @L["Coop_Calc_Tab_Investment"]
+        </button>
+    </div>
+
+    @if (_activeTab == 0)
+    {
+        <div class="coop-calc-panel">
+            <h3>@L["Coop_Calc_Res_Title"]</h3>
+            <p class="coop-calc-desc">@L["Coop_Calc_Res_Desc"]</p>
+
+            <div class="coop-calc-grid">
+                <div class="coop-calc-inputs">
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Res_Gross"]: <strong>@FormatPln(_resGross) @L["Coop_Calc_Zl"]</strong></label>
+                        <input type="range" min="200" max="10000" step="50" @bind="_resGross" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Res_Guests"]: <strong>@_resGuests</strong></label>
+                        <input type="range" min="1" max="12" step="1" @bind="_resGuests" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Res_Nights"]: <strong>@_resNights</strong></label>
+                        <input type="range" min="1" max="30" step="1" @bind="_resNights" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Res_Area"]</label>
+                        <div class="coop-pills">
+                            <button class="coop-pill @(_resArea == "to55" ? "active" : "")" @onclick='() => _resArea = "to55"'>@L["Coop_Calc_Res_AreaTo55"]</button>
+                            <button class="coop-pill @(_resArea == "to70" ? "active" : "")" @onclick='() => _resArea = "to70"'>@L["Coop_Calc_Res_AreaTo70"]</button>
+                            <button class="coop-pill @(_resArea == "over70" ? "active" : "")" @onclick='() => _resArea = "over70"'>@L["Coop_Calc_Res_AreaOver70"]</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="coop-calc-results">
+                    <h4>@L["Coop_Calc_Res_Result_Title"]</h4>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Res_TotalGross"]</span><strong>@FormatPln(ResResult.TotalGross) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Res_CleaningGross"]</span><strong>@FormatPln(ResResult.CleaningGross) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Res_AfterCleaning"]</span><strong>@FormatPln(ResResult.AfterCleaningGross) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Res_Net"] (@L["Coop_Calc_Netto"])</span><strong>@FormatPln(ResResult.AfterCleaningNet) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Res_ExtraBeds"]</span><strong>− @FormatPln(ResResult.PreparationCost) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row coop-row-sep"><span>@L["Coop_Calc_Res_SplitBase"]</span><strong>@FormatPln(ResResult.SplitBase) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-highlight">
+                        <div class="coop-calc-row"><span>@L["Coop_Calc_Res_Owner"]</span><strong>@FormatPln(ResResult.OwnerNet) @L["Coop_Calc_Zl"]</strong></div>
+                        <div class="coop-calc-row"><span>@L["Coop_Calc_Res_Rentoom"]</span><strong>@FormatPln(ResResult.RentoomNet) @L["Coop_Calc_Zl"]</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (_activeTab == 1)
+    {
+        <div class="coop-calc-panel">
+            <h3>@L["Coop_Calc_Mon_Title"]</h3>
+            <p class="coop-calc-desc">@L["Coop_Calc_Mon_Desc"]</p>
+
+            <div class="coop-calc-grid">
+                <div class="coop-calc-inputs">
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Mon_Income"]: <strong>@FormatPln(_monIncome) @L["Coop_Calc_Zl"]</strong></label>
+                        <input type="range" min="0" max="50000" step="500" @bind="_monIncome" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Mon_Beds"]: <strong>@_monBeds</strong></label>
+                        <input type="range" min="0" max="20" step="1" @bind="_monBeds" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Mon_OtherCosts"]: <strong>@FormatPln(_monOther) @L["Coop_Calc_Zl"]</strong></label>
+                        <input type="range" min="0" max="5000" step="50" @bind="_monOther" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label class="coop-check">
+                            <input type="checkbox" @bind="_monLinen" />
+                            @L["Coop_Calc_Mon_Linen"]
+                        </label>
+                    </div>
+                </div>
+
+                <div class="coop-calc-results">
+                    <h4>@L["Coop_Calc_Mon_Result_Title"]</h4>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Mon_Revenue"]</span><strong>@FormatPln(MonResult.MonthlyNet) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Mon_PrepCost"]</span><strong>− @FormatPln(MonResult.PreparationCost) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Mon_OwnerShare"]</span><strong>@FormatPln(MonResult.OwnerBeforeCosts) @L["Coop_Calc_Zl"]</strong></div>
+                    @if (MonResult.LinenCost > 0)
+                    {
+                        <div class="coop-calc-row"><span>@L["Coop_Calc_Mon_LinenCost"]</span><strong>− @FormatPln(MonResult.LinenCost) @L["Coop_Calc_Zl"]</strong></div>
+                    }
+                    @if (MonResult.OtherCosts > 0)
+                    {
+                        <div class="coop-calc-row"><span>@L["Coop_Calc_Mon_OtherLabel"]</span><strong>− @FormatPln(MonResult.OtherCosts) @L["Coop_Calc_Zl"]</strong></div>
+                    }
+                    <div class="coop-calc-highlight">
+                        <div class="coop-calc-row"><span>@L["Coop_Calc_Mon_AfterCosts"]</span><strong>@FormatPln(MonResult.OwnerAfterCosts) @L["Coop_Calc_Zl"]</strong></div>
+                        <span class="coop-calc-sub">@L["Coop_Calc_Mon_BeforeTax"]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="coop-calc-panel">
+            <h3>@L["Coop_Calc_Inv_Title"]</h3>
+
+            <div class="coop-calc-grid">
+                <div class="coop-calc-inputs">
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Inv_Income"]: <strong>@FormatPln(_invIncome) @L["Coop_Calc_Zl"]</strong></label>
+                        <input type="range" min="0" max="30000" step="500" @bind="_invIncome" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Inv_Admin"]: <strong>@FormatPln(_invAdmin) @L["Coop_Calc_Zl"]</strong></label>
+                        <input type="range" min="0" max="5000" step="50" @bind="_invAdmin" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Inv_Insurance"]: <strong>@FormatPln(_invInsurance) @L["Coop_Calc_Zl"]</strong></label>
+                        <input type="range" min="0" max="1000" step="10" @bind="_invInsurance" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Inv_Financing"]: <strong>@FormatPln(_invFinancing) @L["Coop_Calc_Zl"]</strong></label>
+                        <input type="range" min="0" max="10000" step="100" @bind="_invFinancing" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                    <div class="coop-calc-field">
+                        <label>@L["Coop_Calc_Inv_Value"]: <strong>@FormatPln(_invValue) @L["Coop_Calc_Zl"]</strong></label>
+                        <input type="range" min="100000" max="3000000" step="50000" @bind="_invValue" @bind:event="oninput" class="coop-slider" />
+                    </div>
+                </div>
+
+                <div class="coop-calc-results">
+                    <h4>@L["Coop_Calc_Inv_Result_Title"]</h4>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Inv_MonthlyOp"]</span><strong>@FormatPln(InvResult.MonthlyOperating) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Inv_MonthlyCash"]</span><strong>@FormatPln(InvResult.MonthlyCashflow) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-row"><span>@L["Coop_Calc_Inv_AnnualOp"]</span><strong>@FormatPln(InvResult.AnnualOperating) @L["Coop_Calc_Zl"]</strong></div>
+                    <div class="coop-calc-highlight">
+                        <div class="coop-calc-row"><span>@L["Coop_Calc_Inv_Yield"]</span><strong>@InvResult.OperatingYield.ToString("F2")%</strong></div>
+                    </div>
+                    <p class="coop-calc-disclaimer">@L["Coop_Calc_Inv_Disclaimer"]</p>
+                </div>
+            </div>
+
+            <div class="coop-calc-cta-row">
+                <Button Type="ButtonType.Primary" OnClick="OpenFormModal">@L["Coop_Calc_Inv_Cta"]</Button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [CascadingParameter] public EventCallback OpenFormModal { get; set; }
+
+    private int _activeTab;
+
+    // Reservation tab
+    private decimal _resGross = 2579;
+    private int _resGuests = 4;
+    private int _resNights = 2;
+    private string _resArea = "to55";
+
+    // Monthly tab
+    private decimal _monIncome = 10000;
+    private int _monBeds;
+    private decimal _monOther;
+    private bool _monLinen = true;
+
+    // Investment tab
+    private decimal _invIncome = 6000;
+    private decimal _invAdmin = 900;
+    private decimal _invInsurance = 100;
+    private decimal _invFinancing;
+    private decimal _invValue = 700000;
+
+    private const decimal VatRate = 0.08m;
+    private const decimal ExtraPersonRevenue = 64.81m;
+    private const decimal ExtraBedCost = 55.56m;
+    private const decimal OwnerShare = 0.7m;
+    private const decimal RentoomShare = 0.3m;
+    private const decimal LinenMonthlyNet = 81.3m;
+
+    private decimal CleaningFee => _resArea switch
+    {
+        "to55" => 139m,
+        "to70" => 169m,
+        _ => 179m
+    };
+
+    private record ResCalcResult(decimal TotalGross, decimal CleaningGross, decimal AfterCleaningGross,
+        decimal AfterCleaningNet, decimal PreparationCost, decimal SplitBase, decimal OwnerNet, decimal RentoomNet);
+
+    private ResCalcResult ResResult
+    {
+        get
+        {
+            var total = Math.Max(0, _resGross);
+            var guests = Math.Max(1, _resGuests);
+            var nights = Math.Max(1, _resNights);
+            var extraGuests = Math.Max(0, guests - 2);
+            var cleaningGross = CleaningFee;
+            var afterCleaningGross = Math.Max(0, total - cleaningGross);
+            var afterCleaningNet = afterCleaningGross / (1 + VatRate);
+            var prepCost = ExtraBedCost * extraGuests;
+            var splitBase = Math.Max(0, afterCleaningNet - prepCost);
+            return new ResCalcResult(
+                Round2(total), Round2(cleaningGross), Round2(afterCleaningGross),
+                Round2(afterCleaningNet), Round2(prepCost), Round2(splitBase),
+                Round2(splitBase * OwnerShare), Round2(splitBase * RentoomShare));
+        }
+    }
+
+    private record MonCalcResult(decimal MonthlyNet, decimal PreparationCost, decimal OwnerBeforeCosts,
+        decimal LinenCost, decimal OtherCosts, decimal OwnerAfterCosts);
+
+    private MonCalcResult MonResult
+    {
+        get
+        {
+            var monthlyNet = Math.Max(0, _monIncome);
+            var prepCost = _monBeds * ExtraBedCost;
+            var splitBase = Math.Max(0, monthlyNet - prepCost);
+            var ownerBefore = splitBase * OwnerShare;
+            var linen = _monLinen ? LinenMonthlyNet : 0m;
+            var other = Math.Max(0, _monOther);
+            var ownerAfter = ownerBefore - linen - other;
+            return new MonCalcResult(Round2(monthlyNet), Round2(prepCost), Round2(ownerBefore),
+                Round2(linen), Round2(other), Round2(ownerAfter));
+        }
+    }
+
+    private record InvCalcResult(decimal MonthlyOperating, decimal MonthlyCashflow,
+        decimal AnnualOperating, decimal OperatingYield);
+
+    private InvCalcResult InvResult
+    {
+        get
+        {
+            var income = _invIncome;
+            var operations = Math.Max(0, _invAdmin) + Math.Max(0, _invInsurance);
+            var financing = Math.Max(0, _invFinancing);
+            var value = Math.Max(0, _invValue);
+            var monthlyOp = income - operations;
+            var monthlyCash = monthlyOp - financing;
+            var annualOp = monthlyOp * 12;
+            var yield = value > 0 ? Round2(annualOp / value * 100) : 0;
+            return new InvCalcResult(Round2(monthlyOp), Round2(monthlyCash), Round2(annualOp), yield);
+        }
+    }
+
+    private static decimal Round2(decimal value) => Math.Round(value, 2);
+
+    private static string FormatPln(decimal value) =>
+        value.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("pl-PL"));
+}

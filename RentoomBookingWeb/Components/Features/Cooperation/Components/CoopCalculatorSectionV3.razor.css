@@ -1,0 +1,69 @@
+.coop-v3-calculator {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 6rem 24px;
+    text-align: center;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.coop-v3-calculator-intro {
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+}
+
+.coop-v3-calculator-eyebrow {
+    color: #945f28;
+    font-size: .8rem;
+    font-weight: 750;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.coop-v3-calculator h2 {
+    color: #1a1a1a;
+    font-size: clamp(1.75rem, 3vw, 2.35rem);
+    font-weight: 800;
+    margin: .75rem 0 .65rem;
+}
+
+.coop-v3-calculator-intro p {
+    color: #666;
+    font-size: .98rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.coop-v3-detailed-toggle {
+    margin-top: 1.5rem;
+}
+
+.coop-v3-toggle-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .6rem 1.25rem;
+    border: 1px solid #d9dfdb;
+    border-radius: 100px;
+    color: #1f5a41;
+    background: rgba(255, 255, 255, .72);
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.coop-v3-toggle-btn:hover,
+.coop-v3-toggle-btn:focus-visible {
+    background: #fff;
+    border-color: #1f5a41;
+}
+
+@media (max-width: 600px) {
+    .coop-v3-calculator {
+        padding: 4rem 16px;
+    }
+}

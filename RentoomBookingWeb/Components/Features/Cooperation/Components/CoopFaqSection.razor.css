@@ -1,0 +1,84 @@
+.coop-faq {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 24px;
+    text-align: center;
+}
+
+.coop-eyebrow {
+    font-size: .8rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #945F28;
+    font-weight: 700;
+}
+
+.coop-section-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    color: #1A1A1A;
+    margin: .75rem 0 2.5rem;
+}
+
+.coop-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-align: left;
+}
+
+.coop-faq-item {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.coop-faq-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: .95rem;
+    font-weight: 600;
+    color: #1A1A1A;
+    text-align: left;
+    font-family: inherit;
+}
+
+.coop-faq-toggle:hover {
+    background: #fafafa;
+}
+
+.coop-faq-chevron {
+    font-size: 1.5rem;
+    color: #666;
+    transition: transform .2s;
+    flex-shrink: 0;
+}
+
+.coop-faq-item.open .coop-faq-chevron {
+    transform: rotate(180deg);
+}
+
+.coop-faq-answer {
+    padding: 0 1.25rem 1.1rem;
+}
+
+.coop-faq-answer p {
+    font-size: .9rem;
+    line-height: 1.6;
+    color: #666;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .coop-faq {
+        padding: 3rem 16px;
+    }
+}

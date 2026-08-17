@@ -1,0 +1,13 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+
+<div class="coop-v3-audit-cta" role="complementary" aria-label="@L["Coop_V3_Floating_Cta_Aria"]">
+    <button type="button" @onclick="OpenFormModal">
+        <span class="gicon" aria-hidden="true">calendar_month</span>
+        <span>@L["Coop_V3_Floating_Cta"]</span>
+    </button>
+</div>
+
+@code {
+    [CascadingParameter] public EventCallback OpenFormModal { get; set; }
+}

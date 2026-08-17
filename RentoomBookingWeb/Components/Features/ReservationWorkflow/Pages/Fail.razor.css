@@ -74,7 +74,10 @@
     animation: spin 1s linear infinite;
 }
 
-h2 {
+h1 {
+    color: #111827;
+    font-size: 24px;
+    font-weight: 700;
     margin: 0 0 12px 0;
 }
 
@@ -85,7 +88,7 @@ h2 {
 }
 
 .sub-message {
-    color: #9ca3af;
+    color: #6b7280;
     font-size: 14px;
     margin: 0;
 }

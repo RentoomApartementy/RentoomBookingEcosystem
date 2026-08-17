@@ -7,21 +7,25 @@
     @if (UpdateOnInput)
     {
         <input
+            id="@Id"
             type="@Type"
             value="@Value"
             @oninput="OnValueChanged"
             placeholder="@Placeholder"
             min="0"
+            @attributes="AdditionalAttributes"
         />
     }
     else
     {
         <input
+            id="@Id"
             type="@Type"
             value="@Value"
             @onchange="OnValueChanged"
             placeholder="@Placeholder"
             min="0"
+            @attributes="AdditionalAttributes"
         />
     }
 </div>
@@ -35,6 +39,8 @@
     [Parameter] public bool IsFull { get; set; } = false;
     [Parameter] public bool IsMarginTop { get; set; } = false;
     [Parameter] public bool UpdateOnInput { get; set; } = true;
+    [Parameter] public string? Id { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
     private async Task OnValueChanged(ChangeEventArgs e)
     {

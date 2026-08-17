@@ -1,0 +1,54 @@
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
+@using RentoomBookingWeb.Configuration
+@inject IStringLocalizer<RentoomBookingWeb.Cooperation> L
+@inject IOptions<CooperationHeroOptions> HeroOptions
+@inject NavigationManager NavManager
+
+<section class="coop-v3-hero" style="@HeroStyle" aria-labelledby="coop-v3-hero-title">
+    <div class="coop-v3-hero-copy">
+        <span class="coop-v3-eyebrow">@L["Coop_Hero_Eyebrow"]</span>
+        <h1 id="coop-v3-hero-title">@L["Coop_V3_Hero_Title"]</h1>
+        <p>@L["Coop_V3_Hero_Subtitle"]</p>
+
+        <div class="coop-v3-hero-actions">
+            <Button Type="ButtonType.Primary" OnClick="OpenFormModal">@L["Coop_V3_Hero_Cta"]</Button>
+            <a href="@CalcHref" class="coop-v3-hero-calc">
+                <span class="gicon" aria-hidden="true">calculate</span>
+                @L["Coop_Hero_CalcLink"]
+            </a>
+        </div>
+    </div>
+
+    <div class="coop-v3-stats" aria-label="@L["Coop_V3_Proof_Aria"]">
+        <div class="coop-v3-stat">
+            <span class="gicon coop-v3-stat-icon" aria-hidden="true">groups</span>
+            <div>
+                <strong>@L["Coop_V3_Stat_Investors"]</strong>
+                <span>@L["Coop_V3_Stat_Investors_Label"]</span>
+            </div>
+        </div>
+        <div class="coop-v3-stat">
+            <span class="gicon coop-v3-stat-icon" aria-hidden="true">star</span>
+            <div>
+                <strong>4,86 / 5</strong>
+                <span>@L["Coop_Hero_Stat3_Label"]</span>
+            </div>
+        </div>
+        <div class="coop-v3-stat">
+            <span class="gicon coop-v3-stat-icon" aria-hidden="true">verified_user</span>
+            <div>
+                <strong>8 lat</strong>
+                <span>@L["Coop_Hero_Stat4_Label"]</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    [CascadingParameter] public EventCallback OpenFormModal { get; set; }
+
+    private string HeroImageUrl => HeroOptions.Value.ResolveSelectedPhoto();
+    private string HeroStyle => $"--coop-v3-hero-image: url('{HeroImageUrl}')";
+    private string CalcHref => $"{NavManager.ToAbsoluteUri(NavManager.Uri).AbsolutePath}#coop-calculator";
+}

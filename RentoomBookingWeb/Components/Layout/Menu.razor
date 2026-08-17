@@ -21,7 +21,7 @@
             @*     <NavLink href="/o-nas" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["About"]</NavLink> *@
             @* </li> *@
             <li>
-                <NavLink href="@RouteService.GetLocalizedUrl("Cooperation")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
+                <NavLink href="@DefaultCooperationUrl" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
             </li>
             <li>
                 <NavLink href="@RouteService.GetLocalizedUrl("Contact")" class="@NavState.NavLinkClass" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
@@ -84,7 +84,7 @@
             @*     <NavLink href="/o-nas" class="nav-link" ActiveClass="nav-link">@Localizer["About"]</NavLink> *@
             @* </div> *@
             <div>
-                <NavLink href="@RouteService.GetLocalizedUrl("Cooperation")" class="nav-link" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
+                <NavLink href="@DefaultCooperationUrl" class="nav-link" ActiveClass="nav-link">@Localizer["Cooperation"]</NavLink>
             </div>
             <div>
                 <NavLink href="@RouteService.GetLocalizedUrl("Contact")" class="nav-link" ActiveClass="nav-link">@Localizer["Contact"]</NavLink>
@@ -118,6 +118,7 @@
     private MenuVisualState NavState { get; set; } = new();
     private bool ShowMenu = false;
     private bool IsScrolling = false;
+    private string DefaultCooperationUrl => $"{RouteService.GetLocalizedUrl("Cooperation")}/v2";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

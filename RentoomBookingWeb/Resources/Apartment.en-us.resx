@@ -150,6 +150,12 @@
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Additional options</value>
   </data>
+  <data name="DecreaseQuantity" xml:space="preserve">
+    <value>Decrease quantity</value>
+  </data>
+  <data name="IncreaseQuantity" xml:space="preserve">
+    <value>Increase quantity</value>
+  </data>
   <data name="Opłata serwisowa 139 x" xml:space="preserve">
     <value>Service fee 139 x</value>
   </data>
@@ -218,6 +224,9 @@
   </data>
   <data name="StepperAriaLabel" xml:space="preserve">
     <value>Booking steps</value>
+  </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value>Show or hide price details</value>
   </data>
   <data name="BookNowStepButtonLabel" xml:space="preserve">
     <value>Show Details</value>

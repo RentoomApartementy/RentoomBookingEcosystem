@@ -39,7 +39,10 @@ public class VacationRentalJsonLdBuilderTests
         Assert.Equal("PLN", offer.GetProperty("priceSpecification").GetProperty("priceCurrency").GetString());
         Assert.Equal("DAY", offer.GetProperty("priceSpecification").GetProperty("unitCode").GetString());
         Assert.Equal(3, offer.GetProperty("eligibleDuration").GetProperty("value").GetInt32());
+        Assert.Equal("Apartment", offer.GetProperty("itemOffered").GetProperty("@type").GetString());
         Assert.Equal("https://rentoom.pl/apartament/17/test#accommodation", offer.GetProperty("itemOffered").GetProperty("@id").GetString());
+        Assert.Equal("15:00:00", offer.GetProperty("checkinTime").GetString());
+        Assert.Equal("11:00:00", offer.GetProperty("checkoutTime").GetString());
     }
 
     [Fact]
@@ -68,14 +71,17 @@ public class VacationRentalJsonLdBuilderTests
         var offers = GetRental(document).GetProperty("makesOffer");
 
         Assert.Equal(2, offers.GetArrayLength());
-        Assert.Equal(new[] { 2400m, 2100m }, offers.EnumerateArray().Select(offer => offer.GetProperty("price").GetDecimal()).ToArray());
+        Assert.Equal(new[] { 2400m, 2100m }, offers.EnumerateArray().Select(offer => offer.GetProperty("priceSpecification").GetProperty("price").GetDecimal()).ToArray());
         Assert.All(offers.EnumerateArray(), offer =>
         {
-            Assert.Equal("PLN", offer.GetProperty("priceCurrency").GetString());
+            Assert.Equal("PLN", offer.GetProperty("priceSpecification").GetProperty("priceCurrency").GetString());
             Assert.Equal("2026-10-01", offer.GetProperty("availabilityStarts").GetString());
             Assert.Equal("2026-10-05", offer.GetProperty("availabilityEnds").GetString());
             Assert.Equal("https://schema.org/InStock", offer.GetProperty("availability").GetString());
             Assert.Contains("3 Dorośli, 2 Dzieci", offer.GetProperty("description").GetString());
+            Assert.Equal("Apartment", offer.GetProperty("itemOffered").GetProperty("@type").GetString());
+            Assert.Equal("15:00:00", offer.GetProperty("checkinTime").GetString());
+            Assert.Equal("11:00:00", offer.GetProperty("checkoutTime").GetString());
         });
     }
 
@@ -100,8 +106,7 @@ public class VacationRentalJsonLdBuilderTests
         var offer = GetRental(document).GetProperty("makesOffer")[0];
 
         Assert.Equal("https://schema.org/SoldOut", offer.GetProperty("availability").GetString());
-        Assert.False(offer.TryGetProperty("price", out _));
-        Assert.False(offer.TryGetProperty("priceCurrency", out _));
+        Assert.False(offer.TryGetProperty("priceSpecification", out _));
     }
 
     [Fact]

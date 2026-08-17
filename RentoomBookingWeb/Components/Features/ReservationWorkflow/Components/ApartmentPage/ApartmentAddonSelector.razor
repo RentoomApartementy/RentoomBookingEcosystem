@@ -32,26 +32,34 @@
                                        ?? details.FirstOrDefault(a => a.Lang == "PL");
                             
                             var paymentType = fa.PaymentType;
+                            var isDisabled = addon.Optional == false;
                             <div class="addon-item">
-                                <div class="addon-label @(IsAddonSelected(addon.Id) ? "selected" : "")" @onclick="@(() => OnToggleAddon.InvokeAsync(addon.Id))" @onclick:stopPropagation="true">
+                                <div class="addon-label @(IsAddonSelected(addon.Id) ? "selected" : "")"
+                                     role="checkbox"
+                                     aria-checked="@(IsAddonSelected(addon.Id) ? "true" : "false")"
+                                     aria-disabled="@(isDisabled ? "true" : "false")"
+                                     tabindex="@(isDisabled ? "-1" : "0")"
+                                     @onclick="@(() => OnToggleAddon.InvokeAsync(addon.Id))" @onclick:stopPropagation="true"
+                                     @onkeydown="@((e) => HandleAddonKeyDown(e, addon.Id, isDisabled))" @onkeydown:stopPropagation="true">
                                     <div class="addon-info-col">
                                         <span class="addon-name">@fadesc?.Name</span>
                                     </div>
 
                                     <div class="addon-quantity-col @((IsAddonSelected(addon.Id) && paymentType == AddonPaymentType.PayPerAmount ) ? "" : "empty")"
                                          @onclick:stopPropagation="true"
-                                         @onclick:preventDefault="true">
+                                         @onclick:preventDefault="true"
+                                         @onkeydown:stopPropagation="true">
 
                                         @if (IsAddonSelected(addon.Id) && paymentType == AddonPaymentType.PayPerAmount)
                                         {
                                             var currentQty = GetSelectedAddonQuantity(addon.Id);
                                             <div class="quantity-selector">
-                                                <button class="quantity-btn" @onclick="@(() => OnQuantityUpdate.InvokeAsync(new AddonQuantityUpdateArgs { AddonId = addon.Id!.Value, Quantity = currentQty - 1 }))">
-                                                    <span>−</span>
+                                                <button type="button" class="quantity-btn" aria-label="@Localizer["DecreaseQuantity"]" @onclick="@(() => OnQuantityUpdate.InvokeAsync(new AddonQuantityUpdateArgs { AddonId = addon.Id!.Value, Quantity = currentQty - 1 }))">
+                                                    <span aria-hidden="true">−</span>
                                                 </button>
                                                 <span class="quantity-value">@currentQty</span>
-                                                <button class="quantity-btn" @onclick="@(() => OnQuantityUpdate.InvokeAsync(new AddonQuantityUpdateArgs { AddonId = addon.Id!.Value, Quantity = currentQty + 1 }))">
-                                                    <span>+</span>
+                                                <button type="button" class="quantity-btn" aria-label="@Localizer["IncreaseQuantity"]" @onclick="@(() => OnQuantityUpdate.InvokeAsync(new AddonQuantityUpdateArgs { AddonId = addon.Id!.Value, Quantity = currentQty + 1 }))">
+                                                    <span aria-hidden="true">+</span>
                                                 </button>
                                             </div>
                                         }
@@ -59,11 +67,7 @@
 
                                     <div class="price-box">
                                         <b class="addon-price">+<PriceDisplay AmountPln="@AddonPricingCalculator.CalculateTotal(fa.PaymentType, fa.PriceGross, ReservationContext.Nights, ReservationContext.TotalGuests, GetSelectedAddonQuantity(addon.Id))" /></b>
-                                        <input type="checkbox"
-                                               class="addon-checkbox"
-                                               checked="@(IsAddonSelected(addon.Id))"
-                                               disabled="@(addon.Optional == false)"
-                                               readonly />
+                                        <span class="addon-checkbox @(IsAddonSelected(addon.Id) ? "checked" : "")" aria-hidden="true"></span>
                                     </div>
                                 </div>
                             </div>
@@ -118,6 +122,12 @@
         if (!addonId.HasValue) return 1;
         var item = SelectedAddons.FirstOrDefault(x => x.AddonId == addonId.Value);
         return item?.Quantity ?? 1;
+    }
+
+    private Task HandleAddonKeyDown(KeyboardEventArgs e, int? addonId, bool isDisabled)
+    {
+        if (isDisabled) return Task.CompletedTask;
+        return e.Key is "Enter" or " " ? OnToggleAddon.InvokeAsync(addonId) : Task.CompletedTask;
     }
 
     public class AddonQuantityUpdateArgs
