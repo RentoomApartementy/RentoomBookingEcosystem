@@ -164,13 +164,6 @@ public class ReservationSyncService : IReservationSyncService
             DealBitrixId = record.DealBitrixId
         };
 
-        if (record.ClientBitrixId.HasValue && record.DealBitrixId.HasValue)
-        {
-            result.Status = BitrixLinkBackfillStatuses.Skipped;
-            result.Message = "Both Bitrix links are already populated.";
-            return result;
-        }
-
         if (!record.IdoReservationId.HasValue || record.IdoReservationId.Value <= 0)
         {
             result.Status = BitrixLinkBackfillStatuses.Skipped;
@@ -208,15 +201,12 @@ public class ReservationSyncService : IReservationSyncService
         {
             result.Actions.Add("EnsureDealBitrixLink");
         }
-        else if (!record.ClientBitrixId.HasValue)
-        {
-            result.Actions.Add("UpdateDealContactLink");
-        }
+        result.Actions.Add("SynchronizeDealFields");
 
         if (dryRun)
         {
             result.Status = BitrixLinkBackfillStatuses.Planned;
-            result.Message = "Bitrix links would be ensured; no external or database changes were made.";
+            result.Message = "Bitrix links and the complete reservation deal fields would be synchronized; no external or database changes were made.";
             return result;
         }
 
@@ -224,7 +214,6 @@ public class ReservationSyncService : IReservationSyncService
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var shouldUpdateExistingDealContact = record.DealBitrixId.HasValue && !record.ClientBitrixId.HasValue;
             currentRecord = await _workflowSyncOperations.EnsureBitrixContactAndDealAsync(record);
 
             result.ClientBitrixId = currentRecord.ClientBitrixId;
@@ -235,13 +224,10 @@ public class ReservationSyncService : IReservationSyncService
                 throw new InvalidOperationException("Bitrix link backfill completed without both required identifiers.");
             }
 
-            if (shouldUpdateExistingDealContact)
-            {
-                await _workflowSyncOperations.UpdateBitrixDealAsync(currentRecord, BitrixLinkBackfillUpdateReason);
-            }
+            await _workflowSyncOperations.UpdateBitrixDealAsync(currentRecord, BitrixLinkBackfillUpdateReason);
 
             result.Status = BitrixLinkBackfillStatuses.Updated;
-            result.Message = "Bitrix links were ensured and saved to reservation_records.";
+            result.Message = "Bitrix links were ensured and the complete reservation deal fields were synchronized.";
             return result;
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
