@@ -16,10 +16,10 @@
     <div class="mobile-booking-bar-actions">
         @if (ShowPriceSummary)
         {
-            <button type="button" class="mobile-booking-bar-total" @onclick="ToggleExpand">
+            <button type="button" class="mobile-booking-bar-total" aria-expanded="@(IsExpanded ? "true" : "false")" aria-label="@Localizer["PriceDetailsToggleAriaLabel"]" @onclick="ToggleExpand">
                 <span class="mobile-booking-bar-total-top">
                     <span class="mobile-booking-bar-total-label">@Localizer["TotalPriceLabel"]</span>
-                    <GoogleIcon Name="@(IsExpanded ? "expand_more" : "expand_less")" SizePx="16" Class="mobile-booking-bar-chevron" AriaLabel="@Localizer["StepperAriaLabel"]" />
+                    <GoogleIcon Name="@(IsExpanded ? "expand_more" : "expand_less")" SizePx="16" Class="mobile-booking-bar-chevron" AriaLabel="" />
                 </span>
                 <span class="mobile-booking-bar-total-amount">
                     @if (IsLoading)

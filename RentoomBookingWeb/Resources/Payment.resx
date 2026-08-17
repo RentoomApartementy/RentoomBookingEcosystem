@@ -156,6 +156,9 @@
   <data name="StepperAriaLabel" xml:space="preserve">
     <value />
   </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value />
+  </data>
   <data name="StepperCompletedAriaLabel" xml:space="preserve">
     <value />
   </data>

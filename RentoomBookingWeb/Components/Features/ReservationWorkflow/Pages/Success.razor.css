@@ -38,6 +38,13 @@
     align-items: center;
 }
 
+.state-content h1 {
+    color: #111827;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+}
+
 .spinner-container {
     display: flex;
     justify-content: center;
@@ -54,7 +61,7 @@
 }
 
 .sub-message {
-    color: #9ca3af;
+    color: #6b7280;
     font-size: 14px;
     margin: 0;
 }

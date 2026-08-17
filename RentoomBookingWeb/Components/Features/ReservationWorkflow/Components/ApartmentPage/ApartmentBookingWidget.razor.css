@@ -50,7 +50,7 @@
 }
 
 .abw-stepper-btn:hover:not(:disabled) {
-    border-color: #945F28;
+    border-color: #945f28;
 }
 
 .abw-stepper-btn:disabled {
@@ -102,7 +102,7 @@
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: .04em;
-    color: #9ca3af;
+    color: #6b7280;
 }
 
 .abw-months {
@@ -156,7 +156,7 @@
     height: 16px;
     border-radius: 50%;
     border: 1.5px solid #fff;
-    background: #945F28;
+    background: #945f28;
     color: #fff;
     font-size: 11px;
     line-height: 1;
@@ -204,7 +204,7 @@
 
 /* Available */
 .abw-day-available:hover {
-    border-color: #945F28;
+    border-color: #945f28;
 }
 
 /* Past / otherwise disabled — not booked, just not selectable right now */
@@ -273,9 +273,9 @@
 
 .abw-day-start,
 .abw-day-end {
-    background: #945F28;
+    background: #945f28;
     color: #fff;
-    border-color: #945F28;
+    border-color: #945f28;
 }
 
 /* ---- Load more ---- */

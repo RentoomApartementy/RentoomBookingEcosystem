@@ -150,6 +150,9 @@
   <data name="AdditionalOptions" xml:space="preserve">
     <value />
   </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value />
+  </data>
   <data name="DecreaseQuantity" xml:space="preserve">
     <value />
   </data>

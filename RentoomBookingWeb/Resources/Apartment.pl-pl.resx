@@ -222,6 +222,9 @@
   <data name="StepperAriaLabel" xml:space="preserve">
     <value>Etapy rezerwacji</value>
   </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value>Pokaż lub ukryj szczegóły ceny</value>
+  </data>
   <data name="BookNowStepButtonLabel" xml:space="preserve">
     <value>Szczegóły</value>
   </data>

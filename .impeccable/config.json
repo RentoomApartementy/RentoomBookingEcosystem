@@ -1,0 +1,80 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "RentoomBookingWeb/Components/Features/ReservationWorkflow/Pages/Payment.razor.css"
+        ],
+        "createdAt": "2026-08-14T11:12:29.942Z",
+        "reason": "border-top:4px solid on a border-radius:50% .loading-spinner is the standard CSS spinner rotation-indicator technique (paired with border:4px solid neutral + animation:spin), not a decorative accent on a card; removing it would break the spinner's visual rotation cue. Verified by inspection during /impeccable audit."
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "RentoomBookingWeb/Components/Features/ReservationWorkflow/Pages/Fail.razor.css"
+        ],
+        "createdAt": "2026-08-14T11:12:30.045Z",
+        "reason": "Same .loading-spinner rotation technique as Payment.razor.css; not a decorative card border. Verified during /impeccable audit."
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "RentoomBookingWeb/Components/Features/ReservationWorkflow/Pages/Success.razor.css"
+        ],
+        "createdAt": "2026-08-14T11:12:30.152Z",
+        "reason": "Same .loading-spinner rotation technique as Payment.razor.css; not a decorative card border. Verified during /impeccable audit."
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "RentoomBookingWeb/Components/Features/ReservationWorkflow/Pages/Summary.razor.css"
+        ],
+        "createdAt": "2026-08-14T11:12:30.257Z",
+        "reason": "Same .loading-spinner rotation technique as Payment.razor.css; not a decorative card border. Verified during /impeccable audit."
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "RentoomBookingWeb/Components/Features/ReservationWorkflow/Components/ApartmentPage/ApartmentAiDescription.razor.css"
+        ],
+        "createdAt": "2026-08-14T11:12:43.677Z",
+        "reason": "max-height on .ai-details-wrapper implements a fixed-preview-height 'read more' truncation (collapsed:200px, expanded:8000px cap) with a fade-mask overlay, not a 0-to-content toggle; grid-template-rows:0fr/1fr cannot represent a nonzero preview height, only fully-collapsed/expanded. Verified during /impeccable audit."
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "RentoomBookingWeb/Components/Features/ReservationWorkflow/Components/ApartmentPage/ApartmentDescription.razor.css"
+        ],
+        "createdAt": "2026-08-14T11:12:43.779Z",
+        "reason": "Same fixed-preview-height 'read more' truncation pattern (.apartment-wrapper collapsed:900px) with a fade-mask overlay as ApartmentAiDescription.razor.css; grid-template-rows can't represent a nonzero preview cap. Verified during /impeccable audit."
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "RentoomBookingWeb/Components/Features/ReservationWorkflow/Components/ApartmentPage/ApartmentStickySummary.razor.css"
+        ],
+        "createdAt": "2026-08-14T11:12:43.892Z",
+        "reason": "max-height on .info-box-content caps the expanded drawer at 60vh with overflow-y:auto for internal scrolling; grid-template-rows:1fr would size to full content height and remove the scroll cap, changing behavior. Verified during /impeccable audit."
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "RentoomBookingWeb/Components/Features/ReservationWorkflow/Components/MobileBookingBar/MobileBookingBar.razor.css"
+        ],
+        "createdAt": "2026-08-14T11:12:43.994Z",
+        "reason": "max-height on .mobile-booking-bar-drawer caps the expanded price-breakdown drawer at 70vh with overflow-y:auto for internal scrolling; same reasoning as ApartmentStickySummary.razor.css. Verified during /impeccable audit."
+      }
+    ]
+  }
+}

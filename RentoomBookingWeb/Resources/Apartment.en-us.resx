@@ -225,6 +225,9 @@
   <data name="StepperAriaLabel" xml:space="preserve">
     <value>Booking steps</value>
   </data>
+  <data name="PriceDetailsToggleAriaLabel" xml:space="preserve">
+    <value>Show or hide price details</value>
+  </data>
   <data name="BookNowStepButtonLabel" xml:space="preserve">
     <value>Show Details</value>
   </data>

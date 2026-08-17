@@ -96,7 +96,7 @@
     -webkit-appearance: none;
     width: 24px;
     height: 24px;
-    border: 2px solid #8b7344;
+    border: 2px solid #945f28;
     border-radius: 6px;
     background-color: #fff;
     cursor: pointer;
@@ -110,8 +110,8 @@
 }
 
 .addon-checkbox.checked {
-    background-color: #4a6755;
-    border-color: #8b7344;
+    background-color: #1f5a41;
+    border-color: #945f28;
 }
 
 .addon-checkbox.checked::after {
@@ -151,6 +151,7 @@
 }
 
 .quantity-btn {
+    position: relative;
     width: 28px;
     height: 28px;
     min-width: 28px;
@@ -166,6 +167,12 @@
     cursor: pointer;
     color: #333;
     font-size: 18px;
+}
+
+.quantity-btn::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
 }
 
 .quantity-value {
