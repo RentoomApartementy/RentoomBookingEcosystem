@@ -1564,6 +1564,9 @@ private static TimeZoneInfo GetWarsawTimeZone()
             if (!record.ClientBitrixId.HasValue)
             {
                 record.ClientBitrixId = await _bitrixService.UpsertContactByEmailAsync(contactRequest);
+                // Persist the contact link before creating the deal. This is especially important
+                // for contacts without an email, because they cannot be found by email on retry.
+                await _store.UpdateAsync(record);
                 updated = true;
                 _logger.LogInformation("Upserted Bitrix contact {ContactId} for reservation {ReservationGuid}.", record.ClientBitrixId, record.ReservationGuid);
             }
