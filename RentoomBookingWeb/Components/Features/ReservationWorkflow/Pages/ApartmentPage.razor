@@ -1,6 +1,7 @@
 ﻿@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.MobileBookingBar
+@using RentoomBookingWeb.Components.Features.Home.Components
 @inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -274,6 +275,13 @@
                     OnSeeMore="OpenModal"
                     Localizer="Localizer" />
             </ApartmentStickySummary>
+        }
+
+        @if (_apartment?.Id is int apartmentItemId) //biertze apartment id nie apartment item id - w rentoomdb jest zła nazwa kolumny!
+        {
+            <OpinionsSection ApartmentItemId="apartmentItemId"
+                             ShowApartmentName="false"
+                             MaximumItems="12" />
         }
 
         @if (_relatedPosts is { Count: > 0 })

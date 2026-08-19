@@ -1,0 +1,147 @@
+using System.Globalization;
+using Microsoft.EntityFrameworkCore;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Database;
+using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models;
+using Xunit;
+
+namespace SharedClasses.Tests;
+
+public sealed class ApartmentReviewReaderTests
+{
+    [Fact]
+    public async Task LatestPerApartment_AppliesPublicFiltersAndUsesNewestIdAsTieBreaker()
+    {
+        var factory = CreateFactory();
+        await SeedAsync(factory,
+            [
+                Item(1, "Apartament A"),
+                Item(2, "Apartament B"),
+                Item(3, "Apartament archiwalny", isArchived: true)
+            ],
+            [
+                Review(1, 1, Date(2026, 1, 1)),
+                Review(2, 1, Date(2026, 2, 1)),
+                Review(3, 1, Date(2026, 2, 1)),
+                Review(4, 1, Date(2026, 4, 1), isVisible: false),
+                Review(5, 1, Date(2026, 5, 1), source: 2),
+                Review(6, 1, Date(2026, 6, 1), score: 8.8),
+                Review(7, 1, Date(2026, 7, 1), positiveText: "   "),
+                Review(8, 1, Date(2026, 8, 1), language: "en"),
+                Review(9, 2, Date(2026, 3, 1), language: "pl-PL"),
+                Review(10, 3, Date(2026, 9, 1))
+            ]);
+
+        var reader = new ApartmentReviewReader(factory);
+        var result = await reader.GetLatestReviewsPerApartmentAsync("pl-PL");
+
+        Assert.Equal([9, 3], result.Select(review => review.Id));
+        Assert.Equal("Apartament B", result[0].ApartmentName);
+        Assert.Equal("Apartament A", result[1].ApartmentName);
+    }
+
+    [Fact]
+    public async Task ApartmentReviews_ReturnsAtMostTwelveNewestQualifyingReviews()
+    {
+        var factory = CreateFactory();
+        var reviews = Enumerable.Range(1, 14)
+            .Select(id => Review(id, 1, Date(2026, 1, id)))
+            .Append(Review(100, 1, Date(2026, 2, 1), language: "de"))
+            .ToArray();
+
+        await SeedAsync(factory, [Item(1, "Apartament A")], reviews);
+
+        var reader = new ApartmentReviewReader(factory);
+        var result = await reader.GetApartmentReviewsAsync(1, "pl", limit: 12);
+
+        Assert.Equal(12, result.Count);
+        Assert.Equal(Enumerable.Range(3, 12).Reverse(), result.Select(review => review.Id));
+    }
+
+    [Theory]
+    [InlineData("PL-pl", "pl")]
+    [InlineData("en_US", "en")]
+    [InlineData(" de ", "de")]
+    [InlineData("", "")]
+    public void NormalizeLanguageCode_ReturnsTwoLetterLowercaseCode(string input, string expected)
+    {
+        Assert.Equal(expected, ApartmentReviewReader.NormalizeLanguageCode(input));
+    }
+
+    [Fact]
+    public void PublicQueries_AreTranslatedByNpgsqlWithoutClientEvaluation()
+    {
+        var options = new DbContextOptionsBuilder<RappReviewsDbContext>()
+            .UseNpgsql("Host=localhost;Database=translation_only;Username=test;Password=test")
+            .Options;
+        using var dbContext = new RappReviewsDbContext(options);
+
+        var homeSql = ApartmentReviewReader
+            .BuildLatestReviewsPerApartmentQuery(dbContext, "pl-PL", 8.9)
+            .ToQueryString();
+        var apartmentSql = ApartmentReviewReader
+            .BuildApartmentReviewsQuery(dbContext, 42, "pl-PL", 8.9, 12)
+            .ToQueryString();
+
+        Assert.Contains("apartment_reviews", homeSql);
+        Assert.Contains("ApartmentItems", homeSql);
+        Assert.Contains("LIMIT", apartmentSql);
+    }
+
+    private static TestReviewsDbContextFactory CreateFactory()
+    {
+        var options = new DbContextOptionsBuilder<RappReviewsDbContext>()
+            .UseInMemoryDatabase($"reviews-{Guid.NewGuid():N}")
+            .Options;
+        return new TestReviewsDbContextFactory(options);
+    }
+
+    private static async Task SeedAsync(
+        IDbContextFactory<RappReviewsDbContext> factory,
+        IReadOnlyCollection<ApartmentItemReviewReadEntity> items,
+        IReadOnlyCollection<ApartmentReviewReadEntity> reviews)
+    {
+        await using var dbContext = await factory.CreateDbContextAsync();
+        dbContext.AddRange(items);
+        dbContext.AddRange(reviews);
+        await dbContext.SaveChangesAsync();
+    }
+
+    private static ApartmentItemReviewReadEntity Item(int id, string name, bool isArchived = false)
+        => new() { Id = id, Name = name, IsArchived = isArchived };
+
+    private static ApartmentReviewReadEntity Review(
+        int id,
+        int apartmentItemId,
+        DateTimeOffset reviewedAt,
+        bool isVisible = true,
+        int source = ApartmentReviewReader.BookingSource,
+        double score = 9.4,
+        string? positiveText = "Bardzo dobry pobyt.",
+        string language = "pl")
+        => new()
+        {
+            Id = id,
+            ApartmentItemId = apartmentItemId,
+            Source = source,
+            ReviewedAtUtc = reviewedAt,
+            Score = score,
+            RatingScale = 10,
+            PositiveText = positiveText,
+            OriginalLang = language,
+            GuestName = "Anna",
+            IsVisible = isVisible
+        };
+
+    private static DateTimeOffset Date(int year, int month, int day)
+        => new(year, month, day, 12, 0, 0, TimeSpan.Zero);
+
+    private sealed class TestReviewsDbContextFactory(DbContextOptions<RappReviewsDbContext> options)
+        : IDbContextFactory<RappReviewsDbContext>
+    {
+        public RappReviewsDbContext CreateDbContext() => new(options);
+
+        public Task<RappReviewsDbContext> CreateDbContextAsync(CancellationToken cancellationToken = default)
+            => Task.FromResult(CreateDbContext());
+    }
+}
