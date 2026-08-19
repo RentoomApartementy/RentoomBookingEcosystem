@@ -32,7 +32,6 @@ namespace RentoomBooking.StayWell.Services
         private readonly LocalStorageService _localStorage = localStorage;
 
         private const string CachePrefix = "staywell:backendapi:v1";
-        private const string NullMarker = "__null__";
 
         private static string BuildCacheKey(string scope, params string[] parts)
         {
@@ -56,16 +55,14 @@ namespace RentoomBooking.StayWell.Services
             }
         }
 
-        private async Task<T?> GetOrSetCacheAsync<T>(string key, Func<Task<T?>> fetch, bool cacheNull = false) where T : class
+        // Brak danych nie trafia do cache: nie da się odróżnić „naprawdę nie ma" od przejściowego
+        // błędu API, a zapamiętany brak karty/regulaminu blokował gościa w kreatorze meldunku
+        // nawet po wypełnieniu go na innym urządzeniu.
+        private async Task<T?> GetOrSetCacheAsync<T>(string key, Func<Task<T?>> fetch) where T : class
         {
             var raw = await _localStorage.GetItemAsync(key);
             if (!string.IsNullOrWhiteSpace(raw))
             {
-                if (cacheNull && string.Equals(raw, NullMarker, StringComparison.Ordinal))
-                {
-                    return null;
-                }
-
                 try
                 {
                     var cached = JsonSerializer.Deserialize<T>(raw, _json);
@@ -83,11 +80,6 @@ namespace RentoomBooking.StayWell.Services
 
             if (fresh is null)
             {
-                if (cacheNull)
-                {
-                    await _localStorage.SetItemAsync(key, NullMarker);
-                }
-
                 return null;
             }
 
@@ -203,8 +195,7 @@ namespace RentoomBooking.StayWell.Services
                     }
 
                     return await response.Content.ReadFromJsonAsync<TermsEntity>(_json);
-                },
-                cacheNull: true);
+                });
         }
 
         public async Task<List<CustomerTermDisplayDto>> GetTermsForDisplayAsync(string? language = null)
@@ -264,8 +255,7 @@ namespace RentoomBooking.StayWell.Services
                     }
 
                     return await response.Content.ReadFromJsonAsync<RegistrationCardEntity>(_json);
-                },
-                cacheNull: true);
+                });
         }
 
         public async Task<bool> SaveRegistrationCardAsync(RegistrationCardEntity entity)
@@ -508,7 +498,7 @@ namespace RentoomBooking.StayWell.Services
                 }
 
                 return await response.Content.ReadFromJsonAsync<CityParkingInfoDto>(_json, cancellationToken);
-            }, cacheNull: true);
+            });
         }
 
         public async Task<List<CustomerAgreedTermDto>> GetAgreedTermsByReservationAsync(string reservationToken, string? language = null)
