@@ -11,7 +11,7 @@
 {
     <section class="opinions-section" aria-labelledby="@HeadingId">
         <h2 class="opinions-title" id="@HeadingId">
-            @Localizer["opinionText"]
+            @SectionTitle
         </h2>
 
         <div class="options-slider-wrapper">
@@ -32,6 +32,11 @@
     [Parameter] public int? ApartmentItemId { get; set; }
     [Parameter] public bool ShowApartmentName { get; set; } = true;
     [Parameter] public int MaximumItems { get; set; } = 12;
+    [Parameter] public string? Title { get; set; }
+
+    private string SectionTitle => string.IsNullOrWhiteSpace(Title)
+        ? Localizer["opinionText"]
+        : Title;
 
     private string HeadingId => ApartmentItemId is int id
         ? $"apartment-opinions-{id}"

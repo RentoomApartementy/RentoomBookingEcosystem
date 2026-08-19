@@ -58,6 +58,71 @@ public sealed class ApartmentReviewReaderTests
         Assert.Equal(Enumerable.Range(3, 12).Reverse(), result.Select(review => review.Id));
     }
 
+    [Fact]
+    public async Task Aggregate_UsesAllScoredReviewsIncludingHiddenAndNonBookingReviews()
+    {
+        var factory = CreateFactory();
+        await SeedAsync(factory,
+            [Item(1, "Apartament A")],
+            [
+                Review(1, 1, Date(2026, 1, 1), score: 10),
+                Review(2, 1, Date(2026, 1, 2), isVisible: false, score: 8),
+                Review(3, 1, Date(2026, 1, 3), source: 2, score: 9),
+                Review(4, 1, Date(2026, 1, 4), score: null)
+            ]);
+
+        var reader = new ApartmentReviewReader(factory);
+        var result = await reader.GetApartmentReviewAggregateAsync(1);
+
+        Assert.Equal(9, result.AverageScore);
+        Assert.Equal(10, result.RatingScale);
+        Assert.Equal(3, result.ScoredCount);
+        Assert.False(result.HasMixedRatingScales);
+    }
+
+    [Fact]
+    public async Task Aggregate_NormalizesMixedRatingScalesToTen()
+    {
+        var factory = CreateFactory();
+        var booking = Review(1, 1, Date(2026, 1, 1), score: 8);
+        var fivePoint = Review(2, 1, Date(2026, 1, 2), source: 2, score: 4);
+        fivePoint.RatingScale = 5;
+        await SeedAsync(factory, [Item(1, "Apartament A")], [booking, fivePoint]);
+
+        var reader = new ApartmentReviewReader(factory);
+        var result = await reader.GetApartmentReviewAggregateAsync(1);
+
+        Assert.Equal(8, result.AverageScore);
+        Assert.Equal(10, result.RatingScale);
+        Assert.Equal(2, result.ScoredCount);
+        Assert.True(result.HasMixedRatingScales);
+    }
+
+    [Fact]
+    public void Aggregate_RoundsStoredAverageToTwoDecimalPlacesLikeRentoomApp()
+    {
+        var result = ApartmentReviewReader.CalculateAggregate(
+            [new ApartmentReviewScaleStat(10, 3, 25)]);
+
+        Assert.Equal(8.33, result.AverageScore);
+    }
+
+    [Fact]
+    public async Task Aggregate_ReturnsEmptyResultWhenApartmentHasNoScores()
+    {
+        var factory = CreateFactory();
+        await SeedAsync(factory,
+            [Item(1, "Apartament A")],
+            [Review(1, 1, Date(2026, 1, 1), score: null)]);
+
+        var reader = new ApartmentReviewReader(factory);
+        var result = await reader.GetApartmentReviewAggregateAsync(1);
+
+        Assert.Null(result.AverageScore);
+        Assert.Equal(0, result.ScoredCount);
+        Assert.Equal(10, result.RatingScale);
+    }
+
     [Theory]
     [InlineData("PL-pl", "pl")]
     [InlineData("en_US", "en")]
@@ -82,10 +147,14 @@ public sealed class ApartmentReviewReaderTests
         var apartmentSql = ApartmentReviewReader
             .BuildApartmentReviewsQuery(dbContext, 42, "pl-PL", 8.9, 12)
             .ToQueryString();
+        var aggregateSql = ApartmentReviewReader
+            .BuildAggregateScaleStatsQuery(dbContext, 42)
+            .ToQueryString();
 
         Assert.Contains("apartment_reviews", homeSql);
         Assert.Contains("ApartmentItems", homeSql);
         Assert.Contains("LIMIT", apartmentSql);
+        Assert.Contains("GROUP BY", aggregateSql);
     }
 
     private static TestReviewsDbContextFactory CreateFactory()
@@ -108,7 +177,14 @@ public sealed class ApartmentReviewReaderTests
     }
 
     private static ApartmentItemReviewReadEntity Item(int id, string name, bool isArchived = false)
-        => new() { Id = id, Name = name, IsArchived = isArchived };
+        => new()
+        {
+            Id = id,
+            ApartmentId = id,
+            Name = name,
+            IsArchived = isArchived,
+            Apartment = new RentoomAppApartmentReadEntity { Id = id, Name = name }
+        };
 
     private static ApartmentReviewReadEntity Review(
         int id,
@@ -116,7 +192,7 @@ public sealed class ApartmentReviewReaderTests
         DateTimeOffset reviewedAt,
         bool isVisible = true,
         int source = ApartmentReviewReader.BookingSource,
-        double score = 9.4,
+        double? score = 9.4,
         string? positiveText = "Bardzo dobry pobyt.",
         string language = "pl")
         => new()

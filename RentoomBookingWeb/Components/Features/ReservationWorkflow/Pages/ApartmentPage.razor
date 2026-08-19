@@ -74,6 +74,7 @@
             <div class="area-hero">
                 <ApartmentHero
                     Apartment="_apartment"
+                    ApartmentItemId="@_apartment?.Items?.FirstOrDefault()?.Id"
                     Mediums="_objectMediums"
                     BedsCount="_bedsCount" />
             </div>
@@ -277,10 +278,11 @@
             </ApartmentStickySummary>
         }
 
-        @if (_apartment?.Id is int apartmentItemId) //biertze apartment id nie apartment item id - w rentoomdb jest zła nazwa kolumny!
+        @if (_apartment?.Items?.FirstOrDefault()?.Id is int apartmentItemId)
         {
             <OpinionsSection ApartmentItemId="apartmentItemId"
                              ShowApartmentName="false"
+                             Title="@(Localizer["VerifiedGuestReviewsTitle"])"
                              MaximumItems="12" />
         }
 

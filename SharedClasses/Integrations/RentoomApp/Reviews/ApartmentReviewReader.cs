@@ -18,6 +18,10 @@ public interface IApartmentReviewReader
         double minimumScore = 8.9,
         int limit = 12,
         CancellationToken cancellationToken = default);
+
+    Task<ApartmentReviewAggregateDto> GetApartmentReviewAggregateAsync(
+        int apartmentItemId,
+        CancellationToken cancellationToken = default);
 }
 
 public sealed class ApartmentReviewReader : IApartmentReviewReader
@@ -59,6 +63,22 @@ public sealed class ApartmentReviewReader : IApartmentReviewReader
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<ApartmentReviewAggregateDto> GetApartmentReviewAggregateAsync(
+        int apartmentItemId,
+        CancellationToken cancellationToken = default)
+    {
+        if (apartmentItemId <= 0)
+        {
+            return EmptyAggregate();
+        }
+
+        await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var scaleStats = await BuildAggregateScaleStatsQuery(dbContext, apartmentItemId)
+            .ToListAsync(cancellationToken);
+
+        return CalculateAggregate(scaleStats);
+    }
+
     internal static IQueryable<ApartmentReviewCardDto> BuildLatestReviewsPerApartmentQuery(
         RappReviewsDbContext dbContext,
         string languageCode,
@@ -92,6 +112,51 @@ public sealed class ApartmentReviewReader : IApartmentReviewReader
             .ThenByDescending(review => review.Id)
             .Take(limit)
             .Select(ToCardDto());
+
+    internal static IQueryable<ApartmentReviewScaleStat> BuildAggregateScaleStatsQuery(
+        RappReviewsDbContext dbContext,
+        int apartmentItemId)
+        => dbContext.ApartmentReviews
+            .AsNoTracking()
+            .Where(review => review.ApartmentItemId == apartmentItemId && review.Score.HasValue)
+            .GroupBy(review => review.RatingScale)
+            .Select(group => new ApartmentReviewScaleStat(
+                group.Key,
+                group.Count(),
+                group.Sum(review => review.Score!.Value)));
+
+    internal static ApartmentReviewAggregateDto CalculateAggregate(
+        IReadOnlyCollection<ApartmentReviewScaleStat> scaleStats)
+    {
+        var scoredCount = scaleStats.Sum(stat => stat.Count);
+        if (scoredCount == 0)
+        {
+            return EmptyAggregate();
+        }
+
+        if (scaleStats.Count == 1)
+        {
+            var only = scaleStats.First();
+            return new ApartmentReviewAggregateDto
+            {
+                AverageScore = Math.Round(only.Sum / only.Count, 2),
+                RatingScale = only.Scale,
+                ScoredCount = scoredCount
+            };
+        }
+
+        const int normalizedScale = 10;
+        var normalizedSum = scaleStats.Sum(stat =>
+            stat.Scale <= 0 ? 0 : stat.Sum / stat.Scale * normalizedScale);
+
+        return new ApartmentReviewAggregateDto
+        {
+            AverageScore = Math.Round(normalizedSum / scoredCount, 2),
+            RatingScale = normalizedScale,
+            ScoredCount = scoredCount,
+            HasMixedRatingScales = true
+        };
+    }
 
     internal static string NormalizeLanguageCode(string? languageCode)
     {
@@ -157,4 +222,9 @@ public sealed class ApartmentReviewReader : IApartmentReviewReader
             GuestCountryName = review.GuestCountryName,
             GuestType = review.GuestType
         };
+
+    private static ApartmentReviewAggregateDto EmptyAggregate()
+        => new();
 }
+
+internal sealed record ApartmentReviewScaleStat(int Scale, int Count, double Sum);

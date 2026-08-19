@@ -60,6 +60,12 @@
   <data name="opinionText" xml:space="preserve">
     <value>Poznaj opinie osób, które spały w naszych apartamentach w Toruniu.</value>
   </data>
+  <data name="ReviewExpand" xml:space="preserve">
+    <value>Rozwiń</value>
+  </data>
+  <data name="ReviewCollapse" xml:space="preserve">
+    <value>Zwiń</value>
+  </data>
   <data name="formtext" xml:space="preserve">
     <value>Zostaw swoje informacje kontaktowe, a my się z tobą skontaktujemy!</value>
   </data>

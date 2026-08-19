@@ -7,6 +7,20 @@ namespace SharedClasses.Tests;
 
 public sealed class ReviewPresentationFormatterTests
 {
+    [Theory]
+    [InlineData("pl-PL", "9,6")]
+    [InlineData("en-US", "9.6")]
+    public void FormatsAggregateScoreUsingCurrentCulture(string cultureName, string expected)
+    {
+        var aggregate = new ApartmentReviewAggregateDto { AverageScore = 9.56 };
+
+        Assert.Equal(
+            expected,
+            ReviewPresentationFormatter.FormatAggregateScore(
+                aggregate,
+                CultureInfo.GetCultureInfo(cultureName)));
+    }
+
     [Fact]
     public void FormatsScoreAndCompleteMetadataUsingCurrentCulture()
     {

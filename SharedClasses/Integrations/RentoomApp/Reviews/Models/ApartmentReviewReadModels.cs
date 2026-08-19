@@ -1,4 +1,3 @@
-using RentoomBooking.SharedClasses.Integrations.RentoomApp.QrMaint;
 using System.Collections.ObjectModel;
 
 namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models;
@@ -25,17 +24,17 @@ internal sealed class ApartmentReviewReadEntity
 internal sealed class ApartmentItemReviewReadEntity
 {
     public int Id { get; set; }
+    public int ApartmentId { get; set; }
     public string Name { get; set; } = string.Empty;
     public bool IsArchived { get; set; }
-    public RentoomAppApartmentReadEntity? Apartment  { get; set; } 
+    public RentoomAppApartmentReadEntity Apartment { get; set; } = null!;
 }
 
-internal class RentoomAppApartmentReadEntity
+internal sealed class RentoomAppApartmentReadEntity
 {
     public int Id { get; set; }
-
-    public string? Name { get; set; } = string.Empty;
-    public virtual Collection<ApartmentItemReviewReadEntity> ApartmentItems { get; set; } 
+    public string Name { get; set; } = string.Empty;
+    public Collection<ApartmentItemReviewReadEntity> ApartmentItems { get; set; } = new();
 
 }
 
@@ -52,4 +51,12 @@ public sealed class ApartmentReviewCardDto
     public string? GuestName { get; init; }
     public string? GuestCountryName { get; init; }
     public string? GuestType { get; init; }
+}
+
+public sealed class ApartmentReviewAggregateDto
+{
+    public double? AverageScore { get; init; }
+    public int RatingScale { get; init; } = 10;
+    public int ScoredCount { get; init; }
+    public bool HasMixedRatingScales { get; init; }
 }

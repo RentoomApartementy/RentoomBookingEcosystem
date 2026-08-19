@@ -5,6 +5,9 @@ namespace RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews;
 
 public static class ReviewPresentationFormatter
 {
+    public static string FormatAggregateScore(ApartmentReviewAggregateDto aggregate, CultureInfo culture)
+        => aggregate.AverageScore?.ToString("0.0", culture) ?? string.Empty;
+
     public static string FormatScore(ApartmentReviewCardDto review, CultureInfo culture)
         => $"{review.Score.ToString("0.#", culture)}/{review.RatingScale.ToString(culture)}";
 

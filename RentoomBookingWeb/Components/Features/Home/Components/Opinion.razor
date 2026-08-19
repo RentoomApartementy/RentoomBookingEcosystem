@@ -1,8 +1,12 @@
 @using System.Globalization
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews
 @using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models
+@using Microsoft.JSInterop
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+@inject Microsoft.Extensions.Localization.IStringLocalizer<HomePage> Localizer
 
-<article class="option-container">
+<article class="option-container @(_isExpanded ? "is-expanded" : "")">
     <header class="review-card-head">
         <div class="review-rating">
             <span class="stars" aria-hidden="true">
@@ -27,9 +31,24 @@
         <p class="review-apartment">@Review.ApartmentName</p>
     }
 
-    <blockquote class="option-content">
-        @Review.PositiveText
-    </blockquote>
+    <div class="review-copy">
+        <blockquote class="option-content"
+                    id="@ContentId"
+                    @ref="_contentElement">
+            @Review.PositiveText
+        </blockquote>
+
+        @if (_hasOverflow || _isExpanded)
+        {
+            <button class="review-expand-button"
+                    type="button"
+                    aria-expanded="@(_isExpanded ? "true" : "false")"
+                    aria-controls="@ContentId"
+                    @onclick="ToggleExpandedAsync">
+                @(_isExpanded ? Localizer["ReviewCollapse"] : Localizer["ReviewExpand"])
+            </button>
+        }
+    </div>
 
     <footer class="review-author">
         <span class="review-avatar" aria-hidden="true">@AuthorInitial</span>
@@ -44,9 +63,85 @@
     [Parameter, EditorRequired] public ApartmentReviewCardDto Review { get; set; } = default!;
     [Parameter] public bool ShowApartmentName { get; set; } = true;
 
+    private ElementReference _contentElement;
+    private IJSObjectReference? _overflowModule;
+    private DotNetObjectReference<Opinion>? _dotNetReference;
+    private bool _hasOverflow;
+    private bool _isExpanded;
+    private int _reviewId;
+
     private CultureInfo Culture => CultureInfo.CurrentUICulture;
+    private string ContentId => $"review-content-{Review.Id}";
     private string Score => ReviewPresentationFormatter.FormatScore(Review, Culture);
     private string AuthorName => ReviewPresentationFormatter.GetAuthorName(Review);
     private string AuthorInitial => ReviewPresentationFormatter.GetAuthorInitial(Review, Culture);
     private string Metadata => ReviewPresentationFormatter.BuildMetadata(Review, Culture);
+
+    protected override void OnParametersSet()
+    {
+        if (_reviewId == Review.Id)
+        {
+            return;
+        }
+
+        _reviewId = Review.Id;
+        _isExpanded = false;
+        _hasOverflow = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _overflowModule = await JS.InvokeAsync<IJSObjectReference>(
+                "import",
+                "./js/reviewCardOverflow.js");
+            _dotNetReference = DotNetObjectReference.Create(this);
+            await _overflowModule.InvokeVoidAsync(
+                "observeOverflow",
+                _contentElement,
+                _dotNetReference);
+        }
+    }
+
+    [JSInvokable]
+    public Task SetReviewOverflow(bool hasOverflow)
+    {
+        if (_isExpanded || _hasOverflow == hasOverflow)
+        {
+            return Task.CompletedTask;
+        }
+
+        _hasOverflow = hasOverflow;
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ToggleExpandedAsync()
+    {
+        _isExpanded = !_isExpanded;
+        await InvokeAsync(StateHasChanged);
+
+        if (!_isExpanded && _overflowModule is not null)
+        {
+            await _overflowModule.InvokeVoidAsync("measureOverflow", _contentElement);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_overflowModule is not null)
+        {
+            try
+            {
+                await _overflowModule.InvokeVoidAsync("disconnectOverflow", _contentElement);
+                await _overflowModule.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The browser circuit has already ended.
+            }
+        }
+
+        _dotNetReference?.Dispose();
+    }
 }

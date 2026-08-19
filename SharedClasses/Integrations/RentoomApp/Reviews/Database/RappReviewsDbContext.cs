@@ -19,10 +19,9 @@ public sealed class RappReviewsDbContext : DbContext
             entity.ToTable("ApartmentItems", "rentoom");
             entity.HasKey(item => item.Id);
             entity.Property(item => item.Id).HasColumnName("id");
+            entity.Property(item => item.ApartmentId).HasColumnName("ApartmentId");
             entity.Property(item => item.Name).HasColumnName("name");
             entity.Property(item => item.IsArchived).HasColumnName("isArchived");
-            entity.HasOne(item => item.Apartment);
-             
         });
 
         modelBuilder.Entity<RentoomAppApartmentReadEntity>(entity =>
@@ -33,7 +32,7 @@ public sealed class RappReviewsDbContext : DbContext
             entity.Property(item => item.Name).HasColumnName("name");
             entity.HasMany(item => item.ApartmentItems)
                 .WithOne(item => item.Apartment)
-                .HasForeignKey(item => item.Id);
+                .HasForeignKey(item => item.ApartmentId);
         });
 
         modelBuilder.Entity<ApartmentReviewReadEntity>(entity =>
