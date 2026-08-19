@@ -32,6 +32,9 @@ public static class SupportedLanguagesProvider
         return string.IsNullOrWhiteSpace(noRegion) ? nativeName : noRegion;
     }
 
+    public static string GetFlagIconPath(CultureInfo culture) =>
+        $"/icons/flags/{culture.TwoLetterISOLanguageName.ToLowerInvariant()}.svg";
+
     public static string? GetCurrencyForCulture(CultureInfo culture)
     {
         return Snapshot.Value.CurrencyByCultureName.TryGetValue(culture.Name, out var currencyCode)

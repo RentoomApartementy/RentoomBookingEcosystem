@@ -2,6 +2,7 @@
 @using StayWell.Services
 @using Microsoft.Extensions.Localization
 @using System.Globalization
+@using RentoomBooking.SharedFrontend.Localization
 @inject ModalService ModalService
 @inject GlobalizationService GlobalizationService
 @implements IDisposable
@@ -26,8 +27,8 @@
 
         <div class="Languages">
             <button class="lang-btn" @onclick="@ChangeLangButton">
-                <img src="/icons/languages.svg" />
-                <span class="lang-code">@GlobalizationService.CurrentCulture.TwoLetterISOLanguageName.ToUpper()</span>
+                <img class="lang-icon" src="/icons/languages.svg" />
+                <img class="lang-flag" src="@SupportedLanguagesProvider.GetFlagIconPath(GlobalizationService.CurrentCulture)" alt="" />
             </button>
         </div>
 

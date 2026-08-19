@@ -17,17 +17,44 @@
     <p class="language-modal__disclaimer">@Localizer["TranslationDisclaimer"]</p>
 
     <div class="language-modal__options">
-        @foreach (var culture in _supportedCultures)
+        @foreach (var culture in _primaryCultures)
         {
-            <button class="language-option @ActiveClass(culture.Name)" @onclick='() => ChangeLang(culture.Name)'>
-                <span class="language-option__label">@SupportedLanguagesProvider.GetLanguageLabel(culture)</span>
-            </button>
+            @LanguageButton(culture)
+        }
+
+        @if (_primaryCultures.Count > 0 && _otherCultures.Count > 0)
+        {
+            <div class="language-modal__divider"></div>
+        }
+
+        @foreach (var culture in _otherCultures)
+        {
+            @LanguageButton(culture)
         }
     </div>
 </div>
 
 @code {
-    private readonly IReadOnlyList<CultureInfo> _supportedCultures = SupportedLanguagesProvider.SupportedCultures;
+    private static readonly string[] PrimaryCultureNames = ["pl-PL", "en"];
+
+    private readonly IReadOnlyList<CultureInfo> _primaryCultures = PrimaryCultureNames
+        .Select(name => SupportedLanguagesProvider.SupportedCultures
+            .FirstOrDefault(c => string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase)))
+        .OfType<CultureInfo>()
+        .ToList();
+
+    private readonly IReadOnlyList<CultureInfo> _otherCultures = SupportedLanguagesProvider.SupportedCultures
+        .Where(c => !PrimaryCultureNames.Contains(c.Name, StringComparer.OrdinalIgnoreCase))
+        .ToList();
+
+    private RenderFragment LanguageButton(CultureInfo culture) =>
+        @<button class="language-option @ActiveClass(culture.Name)" @onclick='() => ChangeLang(culture.Name)'>
+            <span class="language-option__label">@SupportedLanguagesProvider.GetLanguageLabel(culture)</span>
+            <img class="language-option__flag"
+                 src="@SupportedLanguagesProvider.GetFlagIconPath(culture)"
+                 alt=""
+                 loading="lazy" />
+        </button>;
 
     private async Task ChangeLang(string cultureName)
     {

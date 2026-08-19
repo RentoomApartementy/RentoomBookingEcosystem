@@ -113,18 +113,19 @@
     background: rgba(0, 0, 0, 0.06);
 }
 
-.lang-btn img {
+.lang-icon {
     width: 20px;
     height: 20px;
     display: block;
 }
 
-.lang-code {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #444;
-    letter-spacing: 0.04em;
-    line-height: 1;
+.lang-flag {
+    display: block;
+    width: 20px;
+    height: 14px;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .chat-badge {
