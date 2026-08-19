@@ -555,4 +555,10 @@
   <data name="CleaningFeeIncludedLabel" xml:space="preserve">
     <value>Zawiera opłatę za sprzątanie</value>
   </data>
+  <data name="VerifiedGuestReviewsTitle" xml:space="preserve">
+    <value>Przeczytaj zweryfikowane opinie od gości</value>
+  </data>
+  <data name="ApartmentReviewAverageLabel" xml:space="preserve">
+    <value>Średnia ocena gości: {0} na {1}</value>
+  </data>
 </root>

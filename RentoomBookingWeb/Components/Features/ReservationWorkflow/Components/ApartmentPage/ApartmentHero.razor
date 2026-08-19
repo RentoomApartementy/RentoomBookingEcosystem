@@ -5,7 +5,10 @@
 
 <div class="apartment-text-wrapper">
     <div class="apartment-title-address">
-        <h2>@Apartment?.Name</h2>
+        <div class="apartment-heading-row">
+            <ApartmentReviewScoreBadge ApartmentItemId="ApartmentItemId" />
+            <h2>@Apartment?.Name</h2>
+        </div>
         <span>@Apartment?.ObjectLocation?.LocalizationItem?.Street</span>,
         <span>@Apartment?.ObjectLocation?.LocalizationItem?.ZipCode</span>
         <span>@Apartment?.ObjectLocation?.LocalizationItem?.City</span>
@@ -37,6 +40,7 @@
 
 @code {
     [Parameter] public ApartmentObject? Apartment { get; set; }
+    [Parameter] public int? ApartmentItemId { get; set; }
     [Parameter] public List<ObjectMedium>? Mediums { get; set; }
     [Parameter] public int? BedsCount { get; set; }
 }

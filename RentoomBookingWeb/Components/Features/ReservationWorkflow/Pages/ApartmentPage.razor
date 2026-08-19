@@ -1,6 +1,7 @@
 ﻿@using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.ApartmentPage
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components
 @using RentoomBookingWeb.Components.Features.ReservationWorkflow.Components.MobileBookingBar
+@using RentoomBookingWeb.Components.Features.Home.Components
 @inject RentoomBookingWeb.Services.FeatureFlagsService FeatureFlags
 <PageTitle>@GetSeoTitle()</PageTitle>
 
@@ -73,6 +74,7 @@
             <div class="area-hero">
                 <ApartmentHero
                     Apartment="_apartment"
+                    ApartmentItemId="@_apartment?.Items?.FirstOrDefault()?.Id"
                     Mediums="_objectMediums"
                     BedsCount="_bedsCount" />
             </div>
@@ -274,6 +276,14 @@
                     OnSeeMore="OpenModal"
                     Localizer="Localizer" />
             </ApartmentStickySummary>
+        }
+
+        @if (_apartment?.Items?.FirstOrDefault()?.Id is int apartmentItemId)
+        {
+            <OpinionsSection ApartmentItemId="apartmentItemId"
+                             ShowApartmentName="false"
+                             Title="@(Localizer["VerifiedGuestReviewsTitle"])"
+                             MaximumItems="12" />
         }
 
         @if (_relatedPosts is { Count: > 0 })
