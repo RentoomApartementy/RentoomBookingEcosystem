@@ -1,0 +1,81 @@
+@using System.Globalization
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models
+@implements IDisposable
+@inject IApartmentReviewReader ReviewReader
+@inject Microsoft.Extensions.Localization.IStringLocalizer<RentoomBookingWeb.Apartment> Localizer
+@inject ILogger<ApartmentReviewScoreBadge> Logger
+
+@if (_aggregate?.AverageScore is not null)
+{
+    <span class="apartment-review-score"
+          aria-label="@AccessibleLabel"
+          title="@AccessibleLabel">
+        <span aria-hidden="true">@FormattedScore</span>
+    </span>
+}
+
+@code {
+    [Parameter] public int? ApartmentItemId { get; set; }
+
+    private ApartmentReviewAggregateDto? _aggregate;
+    private CancellationTokenSource? _loadCancellation;
+    private int? _loadedApartmentItemId;
+
+    private string FormattedScore => _aggregate is null
+        ? string.Empty
+        : ReviewPresentationFormatter.FormatAggregateScore(
+            _aggregate,
+            CultureInfo.CurrentUICulture);
+
+    private string AccessibleLabel => _aggregate is null
+        ? string.Empty
+        : Localizer[
+            "ApartmentReviewAverageLabel",
+            FormattedScore,
+            _aggregate.RatingScale.ToString(CultureInfo.CurrentUICulture)];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_loadedApartmentItemId == ApartmentItemId)
+        {
+            return;
+        }
+
+        _loadedApartmentItemId = ApartmentItemId;
+        _loadCancellation?.Cancel();
+        _loadCancellation?.Dispose();
+        _loadCancellation = new CancellationTokenSource();
+        _aggregate = null;
+
+        if (ApartmentItemId is not int apartmentItemId || apartmentItemId <= 0)
+        {
+            return;
+        }
+
+        try
+        {
+            _aggregate = await ReviewReader.GetApartmentReviewAggregateAsync(
+                apartmentItemId,
+                _loadCancellation.Token);
+        }
+        catch (OperationCanceledException) when (_loadCancellation.IsCancellationRequested)
+        {
+            _aggregate = null;
+        }
+        catch (Exception exception)
+        {
+            _aggregate = null;
+            Logger.LogWarning(
+                exception,
+                "Failed to load aggregate review score for apartment item {ApartmentItemId}.",
+                apartmentItemId);
+        }
+    }
+
+    public void Dispose()
+    {
+        _loadCancellation?.Cancel();
+        _loadCancellation?.Dispose();
+    }
+}

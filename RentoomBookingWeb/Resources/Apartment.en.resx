@@ -555,4 +555,10 @@
   <data name="CalendarSelectCheckOut" xml:space="preserve">
     <value>Choose your departure date</value>
   </data>
+  <data name="VerifiedGuestReviewsTitle" xml:space="preserve">
+    <value>Read verified guest reviews</value>
+  </data>
+  <data name="ApartmentReviewAverageLabel" xml:space="preserve">
+    <value>Average guest rating: {0} out of {1}</value>
+  </data>
 </root>

@@ -423,4 +423,10 @@
   <data name="CalendarSelectCheckOut" xml:space="preserve">
     <value>Wybierz datę wyjazdu</value>
   </data>
+  <data name="VerifiedGuestReviewsTitle" xml:space="preserve">
+    <value>Przeczytaj zweryfikowane opinie od gości</value>
+  </data>
+  <data name="ApartmentReviewAverageLabel" xml:space="preserve">
+    <value>Średnia ocena gości: {0} na {1}</value>
+  </data>
 </root>

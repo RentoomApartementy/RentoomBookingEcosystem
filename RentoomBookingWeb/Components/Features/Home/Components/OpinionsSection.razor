@@ -1,47 +1,85 @@
 @using System.Globalization
-@using RentoomBookingWeb.Components.Features.Home.Components
-@using Microsoft.Extensions.Localization;
-@inject IStringLocalizer<HomePage> Localizer;
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews
+@using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models
+@using Microsoft.Extensions.Localization
+@implements IDisposable
+@inject IApartmentReviewReader ReviewReader
+@inject IStringLocalizer<HomePage> Localizer
+@inject ILogger<OpinionsSection> Logger
 
-@* These sample testimonials only exist in Polish today, so the section is hidden for
-   every other language rather than showing untranslated Polish prose on e.g. /en. *@
-@if (IsPolish)
+@if (_reviews.Count > 0)
 {
-    <div class="opinions-title">
-        @Localizer["opinionText"]
-    </div>
+    <section class="opinions-section" aria-labelledby="@HeadingId">
+        <h2 class="opinions-title" id="@HeadingId">
+            @SectionTitle
+        </h2>
 
-    <div class="options-slider-wrapper">
-     <SimpleCarousel EnableAutoScroll="false">
-            <Opinion
-                Stars="4"
-                UserImage="assets/images/test-user-opinion.jpeg"
-                Title="Apartament Srebrny Sen by Rentoom"
-                Description="Mieszkanie było bardzo czyste, pokoje przestronne i jasne, dodatkowym atutem była dostępna na miejscu biblioteczka. Mimo że w czasie naszego pobytu panowały mrozy, w mieszkaniu we wszystkich pomieszczeniach było ciepło. Pościel i ręczniki były czyste i świeże, było ich dużo."/>
-
-            <Opinion
-                UserImage="assets/images/test-user-opinion.jpeg"
-                Title="Apartament Perła Torunia by Rentoom"
-                Description="Kamienica w której czuć klimat, mający swój urok. Świetna lokalizacja, wszędzie blisko starego miasta. Apartament przestronny, dobrze przygotowany."/>
-
-            <Opinion
-                UserImage="assets/images/test-user-opinion.jpeg"
-                Title="Apartament Logan by Rentoom"
-                Description="Jestem pod ogromnym wrażeniem apartamentu. Przede wszystkim przytulnie urządzony, idealnie czysty, komfortowy. Bardzo miłe są dodatki przygotowane dla gości, Czułam się jak gość, o którego się dba. Zdecydowanie polecam, wrócę ponownie."/>
-
-            <Opinion
-                UserImage="assets/images/test-user-opinion.jpeg"
-                Title="Apartament Dzikie Wino by Rentoom"
-                Description="Czysto i schludnie. Dobrze wyposażony apartament. Lokalizacja w samym centrum rynku."/>
-
-            <Opinion
-                UserImage="assets/images/test-user-opinion.jpeg"
-                Title="Apartament Katarzynki by Rentoom"
-                Description="Piękna, odnowiona kamienica. Przyjemny wystrój, bardzo wygodne łóżko - twardy materac. Doskonale wyposażona kuchnia. Jednym słowem jest wszystko co potrzebne."/>
-        </SimpleCarousel>
-    </div>
+        <div class="options-slider-wrapper">
+            <SimpleCarousel EnableAutoScroll="false" ShowNavigation="@(_reviews.Count > 1)">
+                @foreach (var review in _reviews)
+                {
+                    <Opinion Review="review" ShowApartmentName="ShowApartmentName" />
+                }
+            </SimpleCarousel>
+        </div>
+    </section>
 }
 
 @code {
-    private bool IsPolish => CultureInfo.CurrentUICulture.Name.StartsWith("pl", StringComparison.OrdinalIgnoreCase);
+    private IReadOnlyList<ApartmentReviewCardDto> _reviews = Array.Empty<ApartmentReviewCardDto>();
+    private CancellationTokenSource? _loadCancellation;
+
+    [Parameter] public int? ApartmentItemId { get; set; }
+    [Parameter] public bool ShowApartmentName { get; set; } = true;
+    [Parameter] public int MaximumItems { get; set; } = 12;
+    [Parameter] public string? Title { get; set; }
+
+    private string SectionTitle => string.IsNullOrWhiteSpace(Title)
+        ? Localizer["opinionText"]
+        : Title;
+
+    private string HeadingId => ApartmentItemId is int id
+        ? $"apartment-opinions-{id}"
+        : "home-opinions";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _loadCancellation?.Cancel();
+        _loadCancellation?.Dispose();
+        _loadCancellation = new CancellationTokenSource();
+
+        var language = CultureInfo.CurrentUICulture.Name;
+
+        try
+        {
+            _reviews = ApartmentItemId is int apartmentItemId
+                ? await ReviewReader.GetApartmentReviewsAsync(
+                    apartmentItemId,
+                    language,
+                    limit: MaximumItems,
+                    cancellationToken: _loadCancellation.Token)
+                : await ReviewReader.GetLatestReviewsPerApartmentAsync(
+                    language,
+                    cancellationToken: _loadCancellation.Token);
+        }
+        catch (OperationCanceledException) when (_loadCancellation.IsCancellationRequested)
+        {
+            _reviews = Array.Empty<ApartmentReviewCardDto>();
+        }
+        catch (Exception exception)
+        {
+            _reviews = Array.Empty<ApartmentReviewCardDto>();
+            Logger.LogWarning(
+                exception,
+                "Failed to load public Booking.com reviews for apartment item {ApartmentItemId} and language {Language}.",
+                ApartmentItemId,
+                language);
+        }
+    }
+
+    public void Dispose()
+    {
+        _loadCancellation?.Cancel();
+        _loadCancellation?.Dispose();
+    }
 }

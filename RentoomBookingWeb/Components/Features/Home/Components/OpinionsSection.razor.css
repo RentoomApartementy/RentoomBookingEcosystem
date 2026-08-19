@@ -1,9 +1,15 @@
+.opinions-section {
+    width: 100%;
+}
+
 .opinions-title {
     text-align: center;
     color: #1F5A41;
     font-size: 2.2rem;
-    margin-bottom: 5px;
+    margin: 0 1rem 5px;
     font-weight: 500;
+    line-height: 1.2;
+    text-wrap: balance;
 }
 
 @media (max-width: 900px) {
@@ -15,4 +21,5 @@
 .options-slider-wrapper {
     width: 100%;
     padding: 0 1rem;
+    box-sizing: border-box;
 }

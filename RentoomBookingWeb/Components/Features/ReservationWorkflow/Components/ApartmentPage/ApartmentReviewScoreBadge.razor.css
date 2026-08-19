@@ -1,0 +1,24 @@
+.apartment-review-score {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background: #1f5a41;
+    color: #ffffff;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 52px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .apartment-review-score {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+}
