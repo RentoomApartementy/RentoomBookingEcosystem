@@ -1,5 +1,6 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models;
 
@@ -9,13 +10,11 @@ public interface IApartmentReviewReader
 {
     Task<IReadOnlyList<ApartmentReviewCardDto>> GetLatestReviewsPerApartmentAsync(
         string languageCode,
-        double minimumScore = 8.9,
         CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<ApartmentReviewCardDto>> GetApartmentReviewsAsync(
         int apartmentItemId,
         string languageCode,
-        double minimumScore = 8.9,
         int limit = 12,
         CancellationToken cancellationToken = default);
 
@@ -29,26 +28,30 @@ public sealed class ApartmentReviewReader : IApartmentReviewReader
     internal const int BookingSource = 1;
 
     private readonly IDbContextFactory<RappReviewsDbContext> _dbContextFactory;
+    private readonly double _minimumScore;
 
-    public ApartmentReviewReader(IDbContextFactory<RappReviewsDbContext> dbContextFactory)
+    public ApartmentReviewReader(
+        IDbContextFactory<RappReviewsDbContext> dbContextFactory,
+        IOptions<ApartmentReviewsOptions> options)
     {
         _dbContextFactory = dbContextFactory;
+        _minimumScore = options.Value.MinimumScore
+            ?? throw new InvalidOperationException(
+                $"{ApartmentReviewsOptions.SectionName}:MinimumScore is required.");
     }
 
     public async Task<IReadOnlyList<ApartmentReviewCardDto>> GetLatestReviewsPerApartmentAsync(
         string languageCode,
-        double minimumScore = 8.9,
         CancellationToken cancellationToken = default)
     {
         await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
-        return await BuildLatestReviewsPerApartmentQuery(dbContext, languageCode, minimumScore)
+        return await BuildLatestReviewsPerApartmentQuery(dbContext, languageCode, _minimumScore)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<ApartmentReviewCardDto>> GetApartmentReviewsAsync(
         int apartmentItemId,
         string languageCode,
-        double minimumScore = 8.9,
         int limit = 12,
         CancellationToken cancellationToken = default)
     {
@@ -59,7 +62,7 @@ public sealed class ApartmentReviewReader : IApartmentReviewReader
 
         await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-        return await BuildApartmentReviewsQuery(dbContext, apartmentItemId, languageCode, minimumScore, limit)
+        return await BuildApartmentReviewsQuery(dbContext, apartmentItemId, languageCode, _minimumScore, limit)
             .ToListAsync(cancellationToken);
     }
 

@@ -1,5 +1,6 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Database;
 using RentoomBooking.SharedClasses.Integrations.RentoomApp.Reviews.Models;
@@ -32,7 +33,7 @@ public sealed class ApartmentReviewReaderTests
                 Review(10, 3, Date(2026, 9, 1))
             ]);
 
-        var reader = new ApartmentReviewReader(factory);
+        var reader = CreateReader(factory);
         var result = await reader.GetLatestReviewsPerApartmentAsync("pl-PL");
 
         Assert.Equal([9, 3], result.Select(review => review.Id));
@@ -51,7 +52,7 @@ public sealed class ApartmentReviewReaderTests
 
         await SeedAsync(factory, [Item(1, "Apartament A")], reviews);
 
-        var reader = new ApartmentReviewReader(factory);
+        var reader = CreateReader(factory);
         var result = await reader.GetApartmentReviewsAsync(1, "pl", limit: 12);
 
         Assert.Equal(12, result.Count);
@@ -71,7 +72,7 @@ public sealed class ApartmentReviewReaderTests
                 Review(4, 1, Date(2026, 1, 4), score: null)
             ]);
 
-        var reader = new ApartmentReviewReader(factory);
+        var reader = CreateReader(factory);
         var result = await reader.GetApartmentReviewAggregateAsync(1);
 
         Assert.Equal(9, result.AverageScore);
@@ -89,7 +90,7 @@ public sealed class ApartmentReviewReaderTests
         fivePoint.RatingScale = 5;
         await SeedAsync(factory, [Item(1, "Apartament A")], [booking, fivePoint]);
 
-        var reader = new ApartmentReviewReader(factory);
+        var reader = CreateReader(factory);
         var result = await reader.GetApartmentReviewAggregateAsync(1);
 
         Assert.Equal(8, result.AverageScore);
@@ -115,7 +116,7 @@ public sealed class ApartmentReviewReaderTests
             [Item(1, "Apartament A")],
             [Review(1, 1, Date(2026, 1, 1), score: null)]);
 
-        var reader = new ApartmentReviewReader(factory);
+        var reader = CreateReader(factory);
         var result = await reader.GetApartmentReviewAggregateAsync(1);
 
         Assert.Null(result.AverageScore);
@@ -131,6 +132,23 @@ public sealed class ApartmentReviewReaderTests
     public void NormalizeLanguageCode_ReturnsTwoLetterLowercaseCode(string input, string expected)
     {
         Assert.Equal(expected, ApartmentReviewReader.NormalizeLanguageCode(input));
+    }
+
+    [Fact]
+    public async Task PublicReviews_UseConfiguredMinimumScore()
+    {
+        var factory = CreateFactory();
+        await SeedAsync(factory,
+            [Item(1, "Apartament A")],
+            [
+                Review(1, 1, Date(2026, 1, 1), score: 9.3),
+                Review(2, 1, Date(2026, 1, 2), score: 9.4)
+            ]);
+
+        var reader = CreateReader(factory, minimumScore: 9.4);
+        var result = await reader.GetLatestReviewsPerApartmentAsync("pl");
+
+        Assert.Equal([2], result.Select(review => review.Id));
     }
 
     [Fact]
@@ -164,6 +182,14 @@ public sealed class ApartmentReviewReaderTests
             .Options;
         return new TestReviewsDbContextFactory(options);
     }
+
+    private static ApartmentReviewReader CreateReader(
+        IDbContextFactory<RappReviewsDbContext> factory,
+        double minimumScore = 8.9)
+        => new(factory, Options.Create(new ApartmentReviewsOptions
+        {
+            MinimumScore = minimumScore
+        }));
 
     private static async Task SeedAsync(
         IDbContextFactory<RappReviewsDbContext> factory,
